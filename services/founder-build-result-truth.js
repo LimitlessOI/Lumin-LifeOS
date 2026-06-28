@@ -11,6 +11,7 @@ import {
   fetchDeployCommitSha,
   fetchLiveOverlayHtml,
   resolveFounderBuildBaseUrl,
+  triggerRailwayRedeploy,
 } from './founder-build-success-gate.js';
 import { enforceExecutionTruth } from './lifeos-execution-truth.js';
 
@@ -78,6 +79,7 @@ export async function refreshFounderBuildResultTruth(result = {}, {
   commandKey = '',
   fetchDeployCommitShaImpl = fetchDeployCommitSha,
   fetchLiveOverlayHtmlImpl = fetchLiveOverlayHtml,
+  triggerRailwayRedeployImpl = triggerRailwayRedeploy,
 } = {}) {
   const normalized = hydrateFounderBuildResultTruth(result, task);
   if (!normalized || typeof normalized !== 'object') return normalized;
@@ -93,6 +95,15 @@ export async function refreshFounderBuildResultTruth(result = {}, {
 
   const baseCheck = assertFounderBuildBaseUrl(baseUrl);
   if (!baseCheck.ok) return normalized;
+
+  const originContainsCommit = detectOriginContainsCommit(commitSha);
+  if (commandKey && /COMMIT_ONLY_NOT_LIVE|ORIGIN_MAIN_NOT_UPDATED|DEPLOY_NOT_SYNCED/i.test(currentTransport)) {
+    await triggerRailwayRedeployImpl({
+      baseUrl: baseCheck.baseUrl,
+      commandKey,
+      commitSha,
+    }).catch(() => null);
+  }
 
   const deploySha = await fetchDeployCommitShaImpl(baseCheck.baseUrl, commandKey).catch(() => null);
   const deployMatches = shasMatch(commitSha, deploySha);
@@ -111,7 +122,7 @@ export async function refreshFounderBuildResultTruth(result = {}, {
   const proof = evaluateBuildProof({
     codeChanging: true,
     commitSha,
-    originContainsCommit: deployMatches ? true : normalized.origin_contains_commit ?? null,
+    originContainsCommit: deployMatches ? true : originContainsCommit,
     deployRequired: founderVerificationRequired,
     deployMatchesOriginMain: founderVerificationRequired ? (deployMatches ? true : null) : null,
     runtimeBehaviorVerified,
@@ -132,7 +143,7 @@ export async function refreshFounderBuildResultTruth(result = {}, {
 
   return {
     ...normalized,
-    origin_contains_commit: deployMatches ? true : normalized.origin_contains_commit ?? null,
+    origin_contains_commit: deployMatches ? true : originContainsCommit,
     transport_status: proof.transport_status || normalized.transport_status || null,
     founder_verification: founderVerification,
   };

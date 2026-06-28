@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-28T04:44:51.976Z",
+  "generated_at": "2026-06-28T04:56:59.378Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11260,
   "files": [
@@ -21969,9 +21969,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 28838,
-      "mtime": "2026-06-28T04:43:25.693Z",
-      "indexed_at": "2026-06-28T04:44:51.976Z",
+      "bytes": 28886,
+      "mtime": "2026-06-28T04:56:45.116Z",
+      "indexed_at": "2026-06-28T04:56:59.378Z",
       "synopsis_index_only": true
     },
     {
@@ -34716,9 +34716,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 5741,
-      "mtime": "2026-06-28T04:42:56.668Z",
-      "indexed_at": "2026-06-28T04:44:51.976Z"
+      "bytes": 5803,
+      "mtime": "2026-06-28T04:56:30.877Z",
+      "indexed_at": "2026-06-28T04:56:59.378Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -35575,9 +35575,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 143787,
-      "mtime": "2026-06-28T04:43:16.920Z",
-      "indexed_at": "2026-06-28T04:44:51.976Z"
+      "bytes": 144140,
+      "mtime": "2026-06-28T04:56:21.049Z",
+      "indexed_at": "2026-06-28T04:56:59.378Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -65524,9 +65524,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 51913,
-      "mtime": "2026-06-28T04:42:13.860Z",
-      "indexed_at": "2026-06-28T04:44:15.924Z",
+      "bytes": 52524,
+      "mtime": "2026-06-28T04:55:03.411Z",
+      "indexed_at": "2026-06-28T04:56:59.378Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81497,9 +81497,9 @@
     {
       "path": "services/founder-build-result-truth.js",
       "synopsis": "Normalize async founder build results into explicit execution-truth fields.",
-      "bytes": 5091,
-      "mtime": "2026-06-28T04:42:14.035Z",
-      "indexed_at": "2026-06-28T04:44:15.924Z",
+      "bytes": 5451,
+      "mtime": "2026-06-28T04:54:39.202Z",
+      "indexed_at": "2026-06-28T04:56:59.378Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -81507,9 +81507,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 40943,
-      "mtime": "2026-06-28T04:42:48.098Z",
-      "indexed_at": "2026-06-28T04:44:51.976Z",
+      "bytes": 39185,
+      "mtime": "2026-06-28T04:54:52.848Z",
+      "indexed_at": "2026-06-28T04:56:59.378Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]

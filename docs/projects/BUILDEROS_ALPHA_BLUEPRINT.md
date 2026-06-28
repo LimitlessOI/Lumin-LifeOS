@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-28 — founder surgical HTML-comment builds now redeploy exact commit and verify live marker before PASS; generic founder build redeploys are now pinned to the exact commit SHA they just created; generic founder build path now triggers redeploy + waits for deploy sync before final PASS; build proof timestamp bump in smoke-test comment (BuilderOS autonomy runner health ping); prior: autonomy closure harnesses added; founder async build jobs now hydrate transport truth before polling; closure acceptance/proof scripts wired without false-green certification.
+**Last Updated:** 2026-06-28 — founder async build jobs now persist committed-but-unproven truth instead of waiting inline on self-redeploy; founder poll/readback path now owns redeploy/proof refresh and must keep jobs in waiting-for-proof until live transport truth is real; founder surgical HTML-comment builds now emit pending live-marker proof instead of false final PASS; prior: founder surgical HTML-comment builds now redeploy exact commit and verify live marker before PASS; generic founder build redeploys are now pinned to the exact commit SHA they just created; generic founder build path now triggers redeploy + waits for deploy sync before final PASS; build proof timestamp bump in smoke-test comment (BuilderOS autonomy runner health ping); prior: autonomy closure harnesses added; founder async build jobs now hydrate transport truth before polling; closure acceptance/proof scripts wired without false-green certification.
 ---
 
 ## 0. Purpose

@@ -1024,6 +1024,18 @@ HOW TO RESPOND:
         }
       }
     }
+    if (job.result?.pass_fail === 'PASS'
+      && /^(COMMIT_ONLY_NOT_LIVE|DEPLOY_NOT_SYNCED|LIVE_BEHAVIOR_NOT_VERIFIED|ORIGIN_MAIN_NOT_UPDATED)$/i.test(String(job.result.transport_status || ''))) {
+      return res.status(202).json({
+        ok: true,
+        job_id: job.id,
+        status: job.status === 'completed' ? 'waiting_for_proof' : (job.status || 'waiting_for_proof'),
+        pass_fail: 'RUNNING',
+        command_truth: job.result.command_truth || 'COMMITTED',
+        ...(job.result || {}),
+        human_summary: job.result.human_summary || formatExecutionTruthReply(job.result),
+      });
+    }
     let control_plane_done = null;
     if (controlPlane && job.id) {
       try {

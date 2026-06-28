@@ -165,9 +165,9 @@
         "If origin/main does not move, the result must not claim PASS.",
         "If Railway still serves an older deploy SHA, the result must explicitly say the fix is not live yet.",
         "Founder build-job poll/readback must refresh pending transport proof from live deploy SHA and founder-surface evidence instead of relying on local git ancestry inside Railway.",
-        "Generic founder code builds must trigger redeploy and wait for deploy SHA sync before returning their final PASS receipt, not just CSS/visual founder paths.",
+        "Generic founder code builds must persist committed truth quickly and let founder build-job poll/readback own redeploy/proof promotion to final PASS.",
         "Founder-triggered redeploy must be pinned to the exact commit SHA created by the build, not a generic latest-head rebuild.",
-        "Surgical founder HTML-comment builds must also verify live marker presence after deploy sync before they can return PASS.",
+        "Surgical founder HTML-comment builds must return pending live-marker proof first; founder poll/readback may promote to PASS only after deploy sync plus live marker verification.",
         "Alpha battery must assert commit/deploy proof semantics on build probes instead of treating job PASS alone as enough."
       ],
       "exact_output_contract": {

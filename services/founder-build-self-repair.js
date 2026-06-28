@@ -39,7 +39,6 @@ import {
   fetchLiveOverlayHtml,
   runFounderSuccessGate,
   triggerRailwayRedeploy,
-  waitForDeployMatchingCommit,
   waitForLiveCssContent,
 } from './founder-build-success-gate.js';
 import {
@@ -637,39 +636,16 @@ async function runSurgicalHtmlPatchWithVerification({
   }
 
   const commitSha = execJson.sha || execJson.commit_sha || null;
-  let founderVerification = null;
-  if (commitSha) {
-    await triggerRailwayRedeploy({
-      baseUrl: baseCheck.baseUrl,
-      commandKey,
-      commitSha,
-    });
-    const deploy = await waitForDeployMatchingCommit({
-      baseUrl: baseCheck.baseUrl,
-      commandKey,
-      commitSha,
-      maxWaitMs: 60000,
-    });
-    const targetFile = patchResult.files?.[0]?.target_file || committedFiles[0] || null;
-    const live = targetFile
-      ? await fetchLiveOverlayHtml(baseCheck.baseUrl, targetFile)
-      : { ok: false, error: 'missing_target_file' };
-    const liveHasComment = live.ok && String(live.text || '').includes(String(patchResult.comment || '').trim());
-    founderVerification = {
-      ok: deploy.ok && liveHasComment,
-      code: deploy.ok
-        ? (liveHasComment ? 'LIVE_MARKER_VERIFIED' : 'LIVE_MARKER_MISSING')
-        : deploy.code || 'DEPLOY_NOT_SYNCED',
-      blocker: deploy.ok
-        ? (liveHasComment ? null : `Live ${targetFile} missing expected comment marker.`)
-        : deploy.blocker,
-      deploy_synced: deploy.ok,
-      deploy_sha: deploy.deploy_sha || null,
-      probe_type: 'html_comment',
-      probe_value: patchResult.comment,
-      surface: targetFile,
-    };
-  }
+  const founderVerification = {
+    ok: false,
+    code: 'LIVE_MARKER_PENDING',
+    blocker: 'Founder live verification pending deploy + overlay readback.',
+    deploy_synced: false,
+    deploy_sha: null,
+    probe_type: 'html_comment',
+    probe_value: patchResult.comment,
+    surface: patchResult.files?.[0]?.target_file || committedFiles[0] || null,
+  };
 
   return enforceExecutionTruth({
     ok: true,
@@ -1111,28 +1087,6 @@ export async function runFounderBuildWithSelfRepair(options) {
       });
 
       if (result.pass_fail === 'PASS' && result.committed) {
-        const commitSha = result.sha || execJson.sha || execJson.commit_sha || null;
-        const baseCheck = assertFounderBuildBaseUrl(base);
-        if (commitSha && baseCheck.ok) {
-          await triggerRailwayRedeploy({ baseUrl: baseCheck.baseUrl, commandKey, commitSha });
-          const deploy = await waitForDeployMatchingCommit({
-            baseUrl: baseCheck.baseUrl,
-            commandKey,
-            commitSha,
-            maxWaitMs: 60000,
-          });
-          if (deploy.ok) {
-            result = {
-              ...result,
-              origin_contains_commit: true,
-              transport_status: 'REMOTE_TRANSPORT_PASS',
-              human_summary: [
-                result.human_summary,
-                `Live deploy synced to ${String(commitSha).slice(0, 12)}.`,
-              ].filter(Boolean).join('\n'),
-            };
-          }
-        }
         return { ...result, self_repair: { attempts, repaired: attempt > 1, success_attempt: attempt } };
       }
 
