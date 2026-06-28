@@ -4,7 +4,7 @@
 _(formerly AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md)_
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-28 — BP readiness/product-readiness sync now carries artifact freshness and founder-usability truth into control-plane reporting for Point B products.
+**Last Updated:** 2026-06-28 — control-plane DONE gate now accepts pending completion evidence before the ledger row update, preventing false missing-proof blocks during `recordBuildComplete`.
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.
@@ -246,7 +246,7 @@ Until this is implemented, trust escalation remains a constitutional requirement
 
 ## Agent Handoff Notes
 
-Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy migrations `20260531`, `20260532`, `20260601` then run verify scripts.
+Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. `recordBuildComplete` now passes pending end_time/token/OIL evidence into `canMarkBuildDone` so the DONE gate evaluates the evidence being written, not only the stale pre-update ledger row. Deploy migrations `20260531`, `20260532`, `20260601` then run verify scripts.
 
 ---
 
@@ -254,6 +254,7 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-06-28 | **`services/builderos-control-plane-service.js`** — `recordBuildComplete()` now calls `canMarkBuildDone()` with pending end_time/token/OIL evidence, and `canMarkBuildDone()` merges that pending evidence into the effective build row before computing missing proof. **`products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json`** now carries the introducing `git_sha` so acceptance PASS is not proofless. | Fix recent autonomy-closure regression where the DONE gate read the stale running ledger row before the same request wrote completion evidence, causing false `missing_proof` blocks and failing `builderos-control-plane-pending-evidence.test.js`; also clear the receipt-truth gate without weakening PASS-proof enforcement. |
 | 2026-06-22 | **`services/bp-priority-sync.js`** — `checkOrphanProductPassReceipts` includes `scrapped_items[].receipt_path` (Voice Rail SCRAPPED_SALVAGE). | Adam scrapped Voice Rail; PASS receipt stays registered under scrapped not active queue. | BP guardrails PASS |
 | 2026-06-13 | **`services/tsos-platform-kernel.js`** — `wrapBuild()` now sets request marker `req.__kernel_managed_build = true` for wrapped `/builder/build` calls and clears it in `finally`, allowing route-layer guards to distinguish kernel-managed sequencing. **`routes/lifeos-council-builder-routes.js`** — `evaluateBuildDoneGateForBuildResponse()` and `evaluateBuildCompletionForBuildResponse()` now support `kernelManaged` deferral mode; `/build` passes this marker and, when set, defers terminal DONE/completion checks to kernel authority (`done_gate_deferred_to_kernel`, `completion_deferred_to_kernel`) instead of early route blocking. **`tests/builderos-build-done-gate-route-wiring.test.js`** and **`tests/builderos-completion-authority.test.js`** add regression coverage for kernel-managed deferral and non-kernel missing-proof blocking. | Fix circular proof ordering found in live job `881754fc-5674-4e49-8f63-4cfe137be606`: route-level DONE gate ran before kernel/control-plane could write `build_end_time`/token/OIL proof, causing false early `missing_proof` blocks. |
 | 2026-06-13 | **`routes/lifeos-council-builder-routes.js`** — imports `evaluateBuildDoneGateAsync` and enforces DONE gate in `evaluateBuildDoneGateForBuildResponse(...)` before any `ok:true, committed:true, commit_sha` response. Returns `409` with `blocker: BUILDEROS_DONE_BLOCKED`, `reason`, `receipt_path`, and `missing_evidence` when present. Success now includes `done_gate_required: true`, `done_gate_passed: true`. **`tests/builderos-build-done-gate-route-wiring.test.js` (NEW)** covers: (A) commit_sha alone blocked, (B) done gate pass allows success, (C) missing evidence blocked, (D) non-success build path unchanged. | Phase 6 completion: make DONE/PASS impossible from commit SHA alone on production `/build` path. |

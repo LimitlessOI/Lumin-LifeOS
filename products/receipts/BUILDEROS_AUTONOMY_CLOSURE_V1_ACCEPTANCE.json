@@ -2,6 +2,7 @@
   "schema": "builderos_autonomy_closure_v1_acceptance",
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
   "at": "2026-06-28T01:29:17.117Z",
+  "git_sha": "4f32073b455ba275eb9e88d82a0e110e9ee23135",
   "mode": "full_suite",
   "requested_check": null,
   "ok": true,

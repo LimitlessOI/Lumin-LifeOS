@@ -12,6 +12,22 @@ function todayStartUtc() {
 }
 
 export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logger = console }) {
+  function normalizePendingEvidence(pending = {}) {
+    return pending && typeof pending === 'object' && !Array.isArray(pending) ? pending : {};
+  }
+
+  function applyPendingEvidence(build, pending = {}) {
+    const evidence = normalizePendingEvidence(pending);
+    if (!build || !Object.keys(evidence).length) return build;
+    return {
+      ...build,
+      end_time: evidence.end_time || build.end_time,
+      token_receipt_id: evidence.token_receipt_id ?? build.token_receipt_id,
+      unmetered_exception_id: evidence.unmetered_exception_id ?? build.unmetered_exception_id,
+      oil_receipt_id: evidence.oil_receipt_id || build.oil_receipt_id,
+    };
+  }
+
   async function recordBuildStart(payload = {}) {
     if (!pool) throw new Error('database pool unavailable');
     const task_id = payload.task_id;
@@ -45,7 +61,16 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
     const task_id = payload.task_id;
     if (!task_id) throw new Error('task_id is required');
 
-    const gate = await canMarkBuildDone({ task_id, allow_exception: payload.allow_exception });
+    const gate = await canMarkBuildDone({
+      task_id,
+      allow_exception: payload.allow_exception,
+      pending: {
+        end_time: payload.end_time || new Date().toISOString(),
+        token_receipt_id: payload.token_receipt_id ?? null,
+        unmetered_exception_id: payload.unmetered_exception_id ?? null,
+        oil_receipt_id: payload.oil_receipt_id || null,
+      },
+    });
     if (!gate.allowed && payload.enforce !== false) {
       throw new Error(`BUILDEROS_DONE_BLOCKED: ${gate.reason}`);
     }
@@ -248,16 +273,17 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
     return rows;
   }
 
-  async function canMarkBuildDone({ task_id, allow_exception = false } = {}) {
+  async function canMarkBuildDone({ task_id, allow_exception = false, pending = null } = {}) {
     const health = await getMeasurementHealth();
     if (health.status === 'RED' && !allow_exception) {
       return { allowed: false, reason: 'measurement_coverage_red', proof_status: 'pending', health };
     }
 
-    const build = await getBuildByTaskId(task_id);
-    if (!build) {
+    const storedBuild = await getBuildByTaskId(task_id);
+    if (!storedBuild) {
       return { allowed: false, reason: 'no_build_ledger_row', proof_status: 'pending' };
     }
+    const build = applyPendingEvidence(storedBuild, pending);
 
     let hasToken = Boolean(build.token_receipt_id || build.unmetered_exception_id);
     let hasOil = Boolean(build.oil_receipt_id);
