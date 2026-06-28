@@ -125,3 +125,10 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - Founder surgical HTML-comment builds now return pending live-marker proof instead of false final PASS; founder poll/readback is responsible for promoting that job only after deploy parity plus live marker readback are both real.
 - Founder build-job readback no longer lets `job.result.ok` overwrite the route-level `ok` field; control-plane truth and build truth now share one final response envelope instead of contradicting each other.
 - `builderos-reboot/PRODUCT_READINESS_REPORT.json` is now part of the active LifeOS authority chain for readiness surfacing, but it does not override Point B or founder-usability truth.
+
+## 2026-06-28 V1 L0 truth boundary receipts
+
+- `services/build-proof-contract.js`: `COMMIT_ONLY_NOT_LIVE` returns `ok:false` — commit-only is not success for deploy-required actions.
+- `services/lifeos-execution-truth.js`: deploy-required founder builds fail closed when transport is not live.
+- `scripts/run-real-app-e2e.mjs`: `drawer_direct_build` requires terminal PASS + live transport; rejects started-only / commit-only theater.
+- `services/reality-ledger.js`: append-only Reality Record store (V1-00 recorders seam).

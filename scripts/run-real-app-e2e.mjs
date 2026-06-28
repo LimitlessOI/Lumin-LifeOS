@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Real-app E2E — Playwright drives the actual Railway UI like a founder would.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';
@@ -272,12 +272,19 @@ async function test_directBuildFromDrawer() {
       `do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: ${stamp}" near the top. Do not change runtime behavior and do not modify any other file.`,
     );
     await shot('06-direct-build-ui');
-    const looksExecuted = /PASS|RUNNING|COMMIT|Command:\s*COMMAND_RAN|Build job/i.test(reply);
-    const hasFailure = /FAIL|Blocker:/i.test(reply);
+    const hasFailure = /\bFAIL\b|Blocker:/i.test(reply);
+    const hasPass = /\bPASS\b/.test(reply);
+    const hasLiveTransport = /Transport:\s*(DEPLOY_SYNC_PASS|LIVE_BEHAVIOR_PASS|REMOTE_TRANSPORT_PASS)/i.test(reply);
+    const looksStartedOnly = /Build job started|poll until|pass_fail:\s*RUNNING/i.test(reply) && !hasPass;
+    const commitOnlyTransport = /Transport:\s*COMMIT_ONLY_NOT_LIVE/i.test(reply);
     if (hasFailure) {
       fail('drawer_direct_build', `build failed: "${reply.slice(0, 220)}"`);
-    } else if (!looksExecuted) {
-      fail('drawer_direct_build', `no execution proof in reply: "${reply.slice(0, 220)}"`);
+    } else if (looksStartedOnly) {
+      fail('drawer_direct_build', `build started but never reached terminal PASS: "${reply.slice(0, 220)}"`);
+    } else if (commitOnlyTransport) {
+      fail('drawer_direct_build', `commit-only transport is not LIVE: "${reply.slice(0, 220)}"`);
+    } else if (!hasPass || !hasLiveTransport) {
+      fail('drawer_direct_build', `missing terminal PASS + transport proof: "${reply.slice(0, 220)}"`);
     } else {
       pass('drawer_direct_build', reply.slice(0, 140).replace(/\s+/g, ' '));
     }

@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createMemoryIntelligenceService, LEVEL } from './memory-intelligence-service.js';
 import { classifyRepairLesson, enrichLessonsWithClassification } from './self-repair-lesson-classifier.js';
+import { appendRealityRecord } from './reality-ledger.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const SELF_REPAIR_MEMORY_LOG_PATH = path.join(ROOT, 'data', 'self-repair-memory.jsonl');
@@ -119,6 +120,19 @@ function maxAttemptsLabel(stepsExecuted) {
 function appendMemoryLog(event) {
   ensureDataDir();
   fs.appendFileSync(SELF_REPAIR_MEMORY_LOG_PATH, `${JSON.stringify(event)}\n`, 'utf8');
+  try {
+    appendRealityRecord({
+      type: 'repair_memory',
+      statement: event.lesson_learned || event.issue_detected || 'self-repair memory event',
+      owner: event.triggered_by || event.trigger || 'self-repair',
+      expected_outcome: event.prevention_rule || 'lesson captured',
+      actual_outcome: event.result || event.repair_chain_run || 'recorded',
+      evidence: [{ kind: 'self_repair_memory_log', path: 'data/self-repair-memory.jsonl' }],
+      lifecycle: 'closed',
+    });
+  } catch {
+    // ledger must never block repair memory
+  }
 }
 
 /** Read last N repair memory events from JSONL. */

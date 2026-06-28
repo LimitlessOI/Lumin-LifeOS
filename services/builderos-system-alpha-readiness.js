@@ -233,6 +233,12 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       statuses: hasStatuses('WIRED', (!memoryDb.error && memoryDb.total > 0) ? 'LIVE' : null, (!memoryDb.error && memoryDb.provenCount > 0) ? 'PROVEN' : null),
       runtime_proof: [
         proofSource(
+          'GET /api/v1/lifeos/command-center/memory/status',
+          memoryDb.error
+            ? `endpoint exists; DB mirror: ${memoryDb.error}`
+            : `endpoint exists; epistemic_facts total=${memoryDb.total} proven=${memoryDb.provenCount}`,
+        ),
+        proofSource(
           'epistemic_facts (Amendment 39 canonical path)',
           memoryDb.error
             ? `DB_ERROR: ${memoryDb.error} — epistemic_facts table may not exist yet`

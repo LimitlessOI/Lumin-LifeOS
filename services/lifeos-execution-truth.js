@@ -4,7 +4,7 @@
  * Fail-closed: when evidence is missing, downgrade to FAIL with explicit blocker.
  * Every FAIL includes an autopsy: what happened, lessons, executable fix steps.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { scrubCounselTheater, detectCounselTheater } from './chair-direct-connection-truth.js';
 import { evaluateBuildProof } from './build-proof-contract.js';
@@ -283,7 +283,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
         }
       }
       if (passCandidate) {
-        transport_status = evaluateBuildProof({
+        const transportProof = evaluateBuildProof({
           codeChanging: true,
           commitSha: sha,
           originContainsCommit: raw.origin_contains_commit === true
@@ -300,11 +300,23 @@ export function enforceExecutionTruth(raw, ctx = {}) {
                 : null)
             : null,
           runtimeBehaviorVerified: founderRequired ? founderVerification?.ok === true : null,
-        }).transport_status;
-        pass_fail = 'PASS';
-        command_truth = 'COMMITTED';
-        receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
-        first_blocker = null;
+        });
+        transport_status = transportProof.transport_status;
+        if (founderRequired && transportProof.ok !== true) {
+          passCandidate = false;
+          pass_fail = 'FAIL';
+          failure_code = transportProof.fail_code || transportProof.transport_status || 'TRANSPORT_NOT_LIVE';
+          first_blocker = first_blocker || `Deploy-required build not live: ${transport_status}`;
+          command_truth = 'COMMITTED';
+          receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+          lesson = lesson || 'PASS on deploy-required builds requires LIVE transport — commit-only is not done.';
+          fix = fix || 'Wait for deploy sync and live behavior verification before marking PASS.';
+        } else {
+          pass_fail = 'PASS';
+          command_truth = 'COMMITTED';
+          receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+          first_blocker = null;
+        }
       } else {
         pass_fail = 'FAIL';
       }

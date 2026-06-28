@@ -2,7 +2,7 @@
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
   "blueprint_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-v1",
   "blueprint_status": "complete",
-  "completed_at": "2026-06-28T01:33:55.583Z",
+  "completed_at": "2026-06-28T15:22:38.397Z",
   "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
   "receipt_verdict": "PASS",
   "scope": "builderos_autonomy_closure",
@@ -61,13 +61,34 @@
     "CHAIR_SNT_ARC_CONSENSUS_RECEIPT.json"
   ],
   "phases": [
-    { "phase_id": "P0", "title": "Build and deploy truth" },
-    { "phase_id": "P1", "title": "Completion truth" },
-    { "phase_id": "P2", "title": "Self-repair law" },
-    { "phase_id": "P3", "title": "Improvement and receipt enforcement" },
-    { "phase_id": "P4", "title": "UI and Studio proof truth" },
-    { "phase_id": "P5", "title": "Authority cleanup" },
-    { "phase_id": "P6", "title": "Proof and certification" }
+    {
+      "phase_id": "P0",
+      "title": "Build and deploy truth"
+    },
+    {
+      "phase_id": "P1",
+      "title": "Completion truth"
+    },
+    {
+      "phase_id": "P2",
+      "title": "Self-repair law"
+    },
+    {
+      "phase_id": "P3",
+      "title": "Improvement and receipt enforcement"
+    },
+    {
+      "phase_id": "P4",
+      "title": "UI and Studio proof truth"
+    },
+    {
+      "phase_id": "P5",
+      "title": "Authority cleanup"
+    },
+    {
+      "phase_id": "P6",
+      "title": "Proof and certification"
+    }
   ],
   "steps": [
     {
@@ -106,7 +127,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "builderos-reboot/MISSIONS/**",
       "authority_owner": "ChC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-000",
@@ -146,7 +170,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** tests/**",
       "authority_owner": "BPB",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-000A",
@@ -193,7 +220,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** scripts/** routes/**",
       "authority_owner": "CFO",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-001",
@@ -233,7 +263,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** tests/**",
       "authority_owner": "BPB",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-002",
@@ -282,7 +315,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** scripts/** factory-staging/**",
       "authority_owner": "BPB",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-003",
@@ -326,7 +362,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** tests/**",
       "authority_owner": "ChC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-004",
@@ -366,7 +405,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/**",
       "authority_owner": "Hist",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-005",
@@ -409,7 +451,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** tests/**",
       "authority_owner": "CFO",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-006",
@@ -453,7 +498,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** scripts/**",
       "authority_owner": "Hist",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-007",
@@ -502,7 +550,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/** services/**",
       "authority_owner": "SDO",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-008",
@@ -543,7 +594,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/** scripts/** builderos-reboot/**",
       "authority_owner": "SNT",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-009",
@@ -566,10 +620,10 @@
       "exact_output_contract": {
         "type": "behavioral_contract",
         "must_prove": [
-        "Closure acceptance can be run with one command.",
-        "UI proof and determinism proof are first-class citizens, not manual notes.",
-        "Build/deploy proof is machine-enforced rather than inferred from narrative."
-      ]
+          "Closure acceptance can be run with one command.",
+          "UI proof and determinism proof are first-class citizens, not manual notes.",
+          "Build/deploy proof is machine-enforced rather than inferred from narrative."
+        ]
       },
       "allowed_context_files": [
         "package.json",
@@ -587,7 +641,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/** package.json",
       "authority_owner": "CDR",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-010",
@@ -610,11 +667,11 @@
       "exact_output_contract": {
         "type": "behavioral_contract",
         "must_prove": [
-        "Same-tier coder outputs are materially equivalent.",
-        "The founder UI can move between counsel and build paths honestly.",
-        "Repair/escalation behavior is visible and receipted.",
-        "Build success, remote transport success, and live deploy success are separately visible and cannot be conflated."
-      ]
+          "Same-tier coder outputs are materially equivalent.",
+          "The founder UI can move between counsel and build paths honestly.",
+          "Repair/escalation behavior is visible and receipted.",
+          "Build success, remote transport success, and live deploy success are separately visible and cannot be conflated."
+        ]
       },
       "allowed_context_files": [
         "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
@@ -633,7 +690,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "products/receipts/**",
       "authority_owner": "SNT",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "BAC-011",
@@ -652,9 +712,9 @@
       "exact_output_contract": {
         "type": "behavioral_contract",
         "must_prove": [
-        "Certification state matches actual proof state.",
-        "Handoff status does not overclaim readiness."
-      ]
+          "Certification state matches actual proof state.",
+          "Handoff status does not overclaim readiness."
+        ]
       },
       "allowed_context_files": [
         "builderos-reboot/PROJECT_CERTIFICATION.json",
@@ -674,7 +734,14 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "builderos-reboot/** products/receipts/**",
       "authority_owner": "Hist",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-28T15:22:38.397Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     }
-  ]
+  ],
+  "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
+  "build_method": "system-build",
+  "ssot_last_updated": "2026-06-28",
+  "ssot_change_receipt": "V1 L0 truth boundary: build-proof-contract COMMIT_ONLY_NOT_LIVE fails closed; build-deploy-truth mirrors Reality Records; same-tier tier-lock config."
 }

@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { evaluateBuildProof } from '../services/build-proof-contract.js';
 import { syncMissionFromTechnicalReceipt } from '../services/bp-priority-sync.js';
+import { appendRealityRecordFromReceipt } from '../services/reality-ledger.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT = path.join(ROOT, 'products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json');
@@ -128,5 +129,16 @@ if (report.verdict === 'PASS') {
 
 fs.mkdirSync(path.dirname(RECEIPT), { recursive: true });
 fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
+try {
+  appendRealityRecordFromReceipt('products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json', {
+    owner: 'build-deploy-truth',
+    expected_outcome: 'DEPLOY_SYNC_PASS or LIVE_BEHAVIOR_PASS',
+    actual_outcome: report.proof.transport_status || report.verdict,
+    statement: `Build/deploy truth ${report.verdict} at ${report.at}`,
+  });
+} catch (ledgerErr) {
+  report.reality_ledger_warning = ledgerErr.message;
+  fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
+}
 console.log(JSON.stringify(report, null, 2));
 process.exit(report.ok ? 0 : 1);

@@ -33,7 +33,7 @@ export function evaluateBuildProof({
     return { ok: false, transport_status: 'LIVE_BEHAVIOR_NOT_VERIFIED', fail_code: 'LIVE_BEHAVIOR_NOT_VERIFIED' };
   }
   if (deployRequired && deployMatchesOriginMain !== true && runtimeBehaviorVerified !== true) {
-    return { ok: true, transport_status: 'COMMIT_ONLY_NOT_LIVE', fail_code: null };
+    return { ok: false, transport_status: 'COMMIT_ONLY_NOT_LIVE', fail_code: 'COMMIT_ONLY_NOT_LIVE' };
   }
   if (deployRequired && deployMatchesOriginMain === true) {
     return { ok: true, transport_status: 'DEPLOY_SYNC_PASS', fail_code: null };
@@ -41,5 +41,5 @@ export function evaluateBuildProof({
   if (originContainsCommit === true) {
     return { ok: true, transport_status: 'REMOTE_TRANSPORT_PASS', fail_code: null };
   }
-  return { ok: true, transport_status: 'COMMIT_ONLY_NOT_LIVE', fail_code: null };
+  return { ok: false, transport_status: 'COMMIT_ONLY_NOT_LIVE', fail_code: 'COMMIT_ONLY_NOT_LIVE' };
 }

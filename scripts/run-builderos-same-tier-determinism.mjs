@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolveBuilderTierLock } from '../config/builderos-tier-lock.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT = path.join(ROOT, 'products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json');
@@ -20,17 +21,7 @@ function readJson(relPath) {
   }
 }
 
-const intendedTier = String(
-  process.env.BUILDEROS_INTENDED_CODER_TIER
-  || process.env.BUILDEROS_CODER_TIER
-  || '',
-).trim();
-const testTier = String(
-  process.env.BUILDEROS_DETERMINISM_TEST_TIER
-  || process.env.BUILDEROS_CODER_TIER
-  || '',
-).trim();
-const strongerTier = String(process.env.BUILDEROS_STRONGER_MODEL_TIER || '').trim();
+const { intended: intendedTier, test: testTier, stronger: strongerTier } = resolveBuilderTierLock();
 
 const report = {
   schema: 'builderos_same_tier_determinism_v1',

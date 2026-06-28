@@ -5,7 +5,7 @@
 **Status:** `DRAFT`  
 **Owner:** Adam  
 **Verifier:** BuilderOS / OIL / PBB  
-**Last Updated:** 2026-05-25 (Instrumentation Consolidation + Legacy Quarantine phase)
+**Last Updated:** 2026-06-28 (V1 memory proof-source + alpha-readiness)
 
 ## Purpose
 
@@ -331,6 +331,7 @@ BuilderOS must learn from each phase by recording:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-06-28 | `services/builderos-system-alpha-readiness.js` | Memory component `runtime_proof` now includes `GET /api/v1/lifeos/command-center/memory/status` as approved proof source (route already live). | V1-04: memory LIVE must be endpoint-backed, not structural file existence alone. |
 | 2026-05-25 | `services/builderos-system-alpha-readiness.js` | Alpha score `usefulWork` now live from telemetry, not hardcoded. | Fake-green risk eliminated from scoring path. |
 | 2026-05-25 | `services/autonomous-telemetry-session.js` | Duplicate task_type names resolved: `prevention_hook.deploy_check` → `prevention_hook.deploy_drift`; `self_repair.executor_dry_run` → `self_repair.dry_run`. | Telemetry data was structurally noisy. Efficiency analysis was flagging both pairs as duplicates across all 9 overnight batches. |
 | 2026-05-25 | `services/autonomy-scheduler.js` | Explicit `LEGACY_SCHEDULER_ENABLED=true` gate added. File classified LEGACY PRODUCT-LEVEL. | Ungoverned AI calls in BuilderOS runtime are a Zero-Waste + PB governance violation. |
