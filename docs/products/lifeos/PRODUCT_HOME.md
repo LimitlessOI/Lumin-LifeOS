@@ -123,4 +123,5 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - Founder async build workers no longer try to finish deploy/live proof inline; they now persist committed truth and let founder poll/readback keep the job `RUNNING` until transport proof or live-marker proof is actually earned.
 - Founder-triggered proof refresh now carries the exact commit SHA the build just created, so the runtime does not accidentally rebuild an older `main` head while founder proof is still waiting.
 - Founder surgical HTML-comment builds now return pending live-marker proof instead of false final PASS; founder poll/readback is responsible for promoting that job only after deploy parity plus live marker readback are both real.
+- Founder build-job readback no longer lets `job.result.ok` overwrite the route-level `ok` field; control-plane truth and build truth now share one final response envelope instead of contradicting each other.
 - `builderos-reboot/PRODUCT_READINESS_REPORT.json` is now part of the active LifeOS authority chain for readiness surfacing, but it does not override Point B or founder-usability truth.

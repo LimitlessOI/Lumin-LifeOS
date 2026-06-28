@@ -1046,12 +1046,13 @@ HOW TO RESPOND:
     }
     const pass = job.result?.pass_fail === 'PASS';
     const doneAllowed = control_plane_done?.allowed !== false;
+    const resultPayload = job.result || {};
     return res.status(200).json({
-      ok: pass && doneAllowed,
+      ...resultPayload,
       job_id: job.id,
       status: job.status,
       control_plane_done: control_plane_done,
-      ...(job.result || {}),
+      ok: pass && doneAllowed,
       human_summary: job.result
         ? (job.result.human_summary || formatExecutionTruthReply(job.result))
         : null,

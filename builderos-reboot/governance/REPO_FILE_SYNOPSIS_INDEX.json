@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-28T05:10:01.563Z",
+  "generated_at": "2026-06-28T05:14:05.600Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11260,
   "files": [
@@ -34716,9 +34716,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 5803,
-      "mtime": "2026-06-28T05:09:32.594Z",
-      "indexed_at": "2026-06-28T05:10:00.135Z"
+      "bytes": 6012,
+      "mtime": "2026-06-28T05:13:43.225Z",
+      "indexed_at": "2026-06-28T05:14:05.600Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65524,9 +65524,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 52524,
-      "mtime": "2026-06-28T05:09:33.194Z",
-      "indexed_at": "2026-06-28T05:10:00.135Z",
+      "bytes": 52563,
+      "mtime": "2026-06-28T05:13:34.220Z",
+      "indexed_at": "2026-06-28T05:14:05.600Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
