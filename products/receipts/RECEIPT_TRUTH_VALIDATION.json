@@ -1,12 +1,18 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-06-26T21:03:41.502Z",
+  "at": "2026-06-28T11:06:41.517Z",
   "ok": true,
-  "checked": 22,
+  "checked": 24,
   "failures": [],
   "results": [
     {
       "file": "ACTION_INBOX_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
       "claims_pass": true
@@ -37,6 +43,12 @@
     },
     {
       "file": "FOUNDER_ALPHA_READINESS_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LIFEOS_DIRECT_ACTION_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
       "claims_pass": false
@@ -87,7 +99,7 @@
       "file": "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": true
     },
     {
       "file": "LUMIN_OVERLAY_ALPHA_READINESS.json",
