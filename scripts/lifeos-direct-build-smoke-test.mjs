@@ -10,10 +10,10 @@
 - and capable of deploying new `.mjs` files into the `scripts` directory.
 - It serves as a fundamental check for the builder's health and readiness.
  */
-// ui-e2e-build-proof: 2026-06-28T23:18:54.756Z
+// ui-e2e-build-proof: 2026-06-28T23:05:31.282Z
 // ui-switch-test-proof: boundary-check-3
 // raw-api-proof: duplicate-check
-// founder-chat-alpha-probe: 2026-06-28T23:16:04.688Z
+// founder-chat-alpha-probe: 2026-06-28T23:19:13.080Z
 // --- Constants ---
 /*
 - The version identifier for this specific smoke test script.
@@ -76,7 +76,7 @@ function logMessage(level, message) {
 - - @returns {{ ok: boolean, source: string }} An object indicating the success status
 -   and the source identifier of the test.
  */
-exp lifeosDirectBuildSmokeTest() {
+export function lifeosDirectBuildSmokeTest() {
   logMessage('INFO', `Starting LifeOS direct build smoke test (v${SMOKE_TEST_VERSION})...`);
   // Perform a simulated check for the expected source identifier.
   // This adds a layer of "logic" beyond a simple return.
