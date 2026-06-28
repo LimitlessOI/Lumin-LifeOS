@@ -116,6 +116,7 @@
     "scripts/run-overlay-alpha-battery.mjs",
     "scripts/run-provider-tool-action-proof.mjs",
     "scripts/run-real-app-e2e.mjs",
+    "scripts/run-ui-alpha-gate.mjs",
     "scripts/run-voice-rail-capability-proof.mjs",
     "scripts/run-wisdom-truth-audit.mjs",
     "scripts/strategy-benchmark-suite.mjs",

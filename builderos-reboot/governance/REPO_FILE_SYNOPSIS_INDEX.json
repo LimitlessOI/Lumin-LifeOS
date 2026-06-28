@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-28T02:09:30.727Z",
+  "generated_at": "2026-06-28T02:09:44.903Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11260,
   "files": [
@@ -34710,7 +34710,7 @@
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 13352,
       "mtime": "2026-06-28T02:08:48.119Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z",
       "synopsis_index_only": true
     },
     {
@@ -34739,7 +34739,7 @@
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 4434,
       "mtime": "2026-06-28T02:08:48.120Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z",
       "synopsis_index_only": true
     },
     {
@@ -63689,9 +63689,9 @@
     {
       "path": "prompts/00-LIFEOS-AGENT-CONTRACT.md",
       "synopsis": "Platform epistemic contract — READ THIS FIRST",
-      "bytes": 10144,
-      "mtime": "2026-06-27T23:29:26.542Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 10198,
+      "mtime": "2026-06-28T02:09:24.878Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/00-LIFEOS-SERVICE-DOCTRINE.md",
@@ -63731,9 +63731,9 @@
     {
       "path": "prompts/00-SSOT-READ-SEQUENCE.md",
       "synopsis": "SSOT read sequence — anti-hallucination, anti-drift",
-      "bytes": 4469,
-      "mtime": "2026-06-27T23:29:26.542Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 4536,
+      "mtime": "2026-06-28T02:09:24.878Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/00-SYSTEM-AUTHORITY-LAYERS.md",
@@ -63759,44 +63759,44 @@
     {
       "path": "prompts/lifeos-ambient.md",
       "synopsis": "Domain: Ambient Context (Opt-in Snapshots)",
-      "bytes": 2398,
-      "mtime": "2026-06-27T23:29:26.542Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 2464,
+      "mtime": "2026-06-28T02:09:24.804Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-builder-inner-supervisor.md",
       "synopsis": "Inner supervisor — self-audit protocol (builder trains its own reviewer)",
-      "bytes": 2663,
-      "mtime": "2026-06-27T23:29:26.542Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 2708,
+      "mtime": "2026-06-28T02:09:24.804Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-conflict.md",
       "synopsis": "Domain: Conflict Intelligence",
-      "bytes": 4355,
-      "mtime": "2026-06-27T23:29:26.542Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 4421,
+      "mtime": "2026-06-28T02:09:24.804Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-council-builder.md",
       "synopsis": "Domain: Council Builder (Coworker Architecture)",
-      "bytes": 10076,
-      "mtime": "2026-06-27T23:29:26.543Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 10142,
+      "mtime": "2026-06-28T02:09:24.805Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-cycle.md",
       "synopsis": "Domain: LifeOS Cycle Tracking",
-      "bytes": 4219,
-      "mtime": "2026-06-27T23:29:26.543Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 4214,
+      "mtime": "2026-06-28T02:09:24.805Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-emotional.md",
       "synopsis": "Domain: Emotional Intelligence",
-      "bytes": 5500,
-      "mtime": "2026-06-27T23:29:26.543Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 5566,
+      "mtime": "2026-06-28T02:09:24.805Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-gate-change-proposal.md",
@@ -63808,23 +63808,23 @@
     {
       "path": "prompts/lifeos-habits.md",
       "synopsis": "Domain: Habits (Identity Tracker)",
-      "bytes": 1071,
-      "mtime": "2026-06-27T23:29:26.543Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 1137,
+      "mtime": "2026-06-28T02:09:24.805Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-legacy.md",
       "synopsis": "Domain: Legacy Core",
-      "bytes": 1174,
-      "mtime": "2026-06-27T23:29:26.543Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 1240,
+      "mtime": "2026-06-28T02:09:24.805Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-lumin.md",
       "synopsis": "Domain: Lumin AI",
-      "bytes": 8825,
-      "mtime": "2026-06-27T23:29:26.543Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 8891,
+      "mtime": "2026-06-28T02:09:24.805Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-memory-intelligence.md",
@@ -63843,9 +63843,9 @@
     {
       "path": "prompts/lifeos-scorecard.md",
       "synopsis": "Domain: Daily Scorecard + MITs",
-      "bytes": 3990,
-      "mtime": "2026-06-27T23:29:26.544Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 4056,
+      "mtime": "2026-06-28T02:09:24.806Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-site-builder.md",
@@ -63857,23 +63857,23 @@
     {
       "path": "prompts/lifeos-truth-delivery.md",
       "synopsis": "Domain: Truth Delivery + Calibration",
-      "bytes": 4609,
-      "mtime": "2026-06-27T23:29:26.544Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 4675,
+      "mtime": "2026-06-28T02:09:24.806Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/lifeos-weekly-review.md",
       "synopsis": "Domain: Weekly Review",
-      "bytes": 4552,
-      "mtime": "2026-06-27T23:29:26.544Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 4618,
+      "mtime": "2026-06-28T02:09:24.806Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/README.md",
       "synopsis": "LifeOS Domain Prompt Files",
-      "bytes": 3847,
-      "mtime": "2026-06-27T23:29:26.542Z",
-      "indexed_at": "2026-06-28T02:09:03.389Z"
+      "bytes": 3959,
+      "mtime": "2026-06-28T02:09:24.878Z",
+      "indexed_at": "2026-06-28T02:09:44.903Z"
     },
     {
       "path": "prompts/tc-service.md",

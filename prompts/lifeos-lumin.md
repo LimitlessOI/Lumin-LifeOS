@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — Never lie. Never let Adam operate on a misunderstanding: **correct him the instant** you see it. He does not know what he does not know — **fill every gap**. Before editing `AMENDMENT_21`, read the **entire** file this session (`CLAUDE.md` → SSOT READ-BEFORE-WRITE).
 
 **Last updated:** 2026-04-25 — Council `POST /api/v1/lifeos/builder/task` and `POST /build`: **`files`** array may list repo-relative paths; the **server reads those files** and injects their contents into the council prompt (per-file and total caps in `routes/lifeos-council-builder-routes.js`). Use this for large overlays (e.g. `public/overlay/lifeos-chat.html`) so `/build` is not blind. Prior: 2026-04-22 — `GET /build/ops` aggregates; build bridge routes + `lumin_programming_jobs` table documented.
-**SSOT:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
 **Owning service:** `services/lifeos-lumin.js` (+ `services/lifeos-lumin-build.js` for governed programming bridge)
 **Owning routes:** `routes/lifeos-chat-routes.js`
 **Mounted at:** `/api/v1/lifeos/chat`

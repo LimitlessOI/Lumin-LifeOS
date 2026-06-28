@@ -22,7 +22,7 @@ Use this **before** writing or dispatching `/builder/build`.
 |------|------|---------|
 | A0 | `docs/AGENT_RULES.compact.md` | Token-light enforcement (generated; regen via `npm run gen:rules`). |
 | A1 | `docs/QUICK_LAUNCH.md` | Current queue + lane; don’t build the wrong priority. |
-| A1b | `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → **Approved Product Backlog** → **PRIORITY ALIGNMENT** | Operator **program** order (e.g. LifeOS = P1) — **must** re-read when LifeOS work conflicts with older “revenue-chain-first” memory. |
+| A1b | `docs/products/lifeos/PRODUCT_HOME.md` (product) · `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` (law/receipts) → **Approved Product Backlog** → **PRIORITY ALIGNMENT** | Operator **program** order (e.g. LifeOS = P1) — **must** re-read when LifeOS work conflicts with older “revenue-chain-first” memory. |
 | A2 | `docs/CONTINUITY_INDEX.md` → **your lane log** (newest entry) | What the last session actually did. |
 | A3 | `prompts/00-LIFEOS-AGENT-CONTRACT.md` | §2.6 / §2.11 / §2.15 baseline. |
 | A3b | `prompts/00-LIFEOS-SERVICE-DOCTRINE.md` | Service, sovereignty, epistemology — all stacks inherit. |

@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)
 
 **Last updated:** 2026-04-19  
-**SSOT:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`  
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`  
 **Owning service:** `services/lifeos-habits.js`  
 **Owning routes:** `routes/lifeos-habits-routes.js`  
 **Mounted at:** `/api/v1/lifeos/habits`

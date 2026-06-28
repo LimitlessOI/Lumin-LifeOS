@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — Never lie. Never let Adam operate on a misunderstanding: **correct him the instant** you see it. He does not know what he does not know — **fill every gap**. Before editing `AMENDMENT_21`, read the **entire** file this session (`CLAUDE.md` → SSOT READ-BEFORE-WRITE).
 
 **Last updated:** 2026-04-19
-**SSOT:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
 **Owning service:** `services/emotional-pattern-engine.js`
 **Owning routes:** `routes/lifeos-emotional-routes.js`
 **Mounted at:** `/api/v1/lifeos/emotional`
