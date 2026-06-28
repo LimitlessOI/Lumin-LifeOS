@@ -1,0 +1,676 @@
+{
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "blueprint_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-v1",
+  "blueprint_status": "complete",
+  "completed_at": "2026-06-28T01:33:55.583Z",
+  "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
+  "receipt_verdict": "PASS",
+  "scope": "builderos_autonomy_closure",
+  "summary": "Deterministic closure plan for BuilderOS: remove false green, harden self-repair, synchronize truth artifacts, make PASS require commit/deploy proof, prove through the founder surface Adam actually uses, freeze Studio usability authority, and only then certify machine readiness.",
+  "authority": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
+  "acceptance_command": "npm run builderos:autonomy-closure:v1-acceptance",
+  "allowed_action_types": [
+    "create_file",
+    "edit_file",
+    "run_acceptance",
+    "update_receipt"
+  ],
+  "comparison_hold": false,
+  "promotion_receipts": [
+    "ARCHITECT_COMPARISON_REPORT.md",
+    "ARCHITECT_GRADE_TEMPLATE.json",
+    "SNT_VS_ARCHITECT_AUDIT.md",
+    "SNT_TO_CHAIR_FINDINGS_RECEIPT.json",
+    "CHAIR_SNT_ARC_CONSENSUS_RECEIPT.json"
+  ],
+  "step_defaults": {
+    "coder_must_not_decide": [
+      "product behavior",
+      "UX or visual acceptance",
+      "scope expansion",
+      "priority order",
+      "release stage",
+      "what counts as founder success",
+      "what counts as proof if the blueprint did not define it",
+      "whether a semantic answer is good enough when acceptance is soft",
+      "whether stale authority can be reused",
+      "whether a lesson discovered by ARC or SNT can remain unpromoted"
+    ],
+    "on_ambiguity": "BLOCKED_RETURN_TO_ARC"
+  },
+  "blocked_return_schema": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLOCKED_RETURN_SCHEMA.json",
+  "non_goals": [
+    "Do not execute before architect comparison.",
+    "Do not widen into new product features.",
+    "Do not create a second active queue.",
+    "Do not upgrade FULLY_MACHINE_READY without final proof.",
+    "Do not manually patch around BuilderOS as the success path for this mission."
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "CURRENT_STATE_AUDIT.md",
+    "INTENT_BASELINE.json",
+    "INTENT_COVERAGE_MAP.json",
+    "ASSET_REUSE_DECISION.json",
+    "KNOWN_RISKS.json",
+    "KNOWN_CONTRADICTIONS.json",
+    "PRE_ARC_INPUT_PACKET.json",
+    "ARCHITECT_COMPARISON_REPORT.md",
+    "SNT_VS_ARCHITECT_AUDIT.md",
+    "SNT_TO_CHAIR_FINDINGS_RECEIPT.json",
+    "CHAIR_SNT_ARC_CONSENSUS_RECEIPT.json"
+  ],
+  "phases": [
+    { "phase_id": "P0", "title": "Build and deploy truth" },
+    { "phase_id": "P1", "title": "Completion truth" },
+    { "phase_id": "P2", "title": "Self-repair law" },
+    { "phase_id": "P3", "title": "Improvement and receipt enforcement" },
+    { "phase_id": "P4", "title": "UI and Studio proof truth" },
+    { "phase_id": "P5", "title": "Authority cleanup" },
+    { "phase_id": "P6", "title": "Proof and certification" }
+  ],
+  "steps": [
+    {
+      "step_id": "BAC-000B",
+      "phase_id": "P0",
+      "title": "Freeze architect handoff, SNT attack, and promotion contracts",
+      "target_files": [
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ARCHITECT_HANDOFF_PROMPT.md",
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/SNT_HANDOFF_PROMPT.md",
+        "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/README.md"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Architect handoffs must require both architecture output and machine-execution output.",
+        "SNT attacks must explicitly include founder-surface deception, transport truth, stale authority, and soft acceptance language.",
+        "Future promotion flow must route better answers into canonical authority instead of leaving them in chat."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "ARC cannot stop at high-level architecture only.",
+          "SNT attack categories are mandatory rather than optional.",
+          "Promotion of better answers is part of the governed path."
+        ]
+      },
+      "allowed_context_files": [
+        "FOUNDER_PACKET.md",
+        "ARCHITECT_COMPARISON_REPORT.md",
+        "SNT_VS_ARCHITECT_AUDIT.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [],
+      "acceptance_test_ids": [
+        "AT-BAC-000B-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "builderos-reboot/MISSIONS/**",
+      "authority_owner": "ChC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-000",
+      "phase_id": "P0",
+      "title": "Create one shared build-proof contract for founder/build actions",
+      "target_files": [
+        "services/build-proof-contract.js",
+        "tests/build-proof-contract.test.js",
+        "services/founder-build-job-store.js",
+        "services/lifeos-lumin-build.js"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Define one shared truth contract for code-changing build/repair actions.",
+        "A build/repair PASS must be illegal unless the contract records the exact commit SHA when commit transport is required.",
+        "The contract must distinguish local change, commit created, remote branch advanced, deploy queued, deploy live, and founder-runtime reproved.",
+        "If required proof is missing, the action must downgrade to FAIL or WAITING_FOR_PROOF rather than PASS."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "PASS without commit SHA is impossible for governed code-changing actions.",
+          "The proof contract has explicit states instead of one vague success flag."
+        ]
+      },
+      "allowed_context_files": [
+        "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
+        "products/receipts/REAL_APP_E2E.json",
+        "routes/railway-managed-env-routes.js"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [],
+      "acceptance_test_ids": [
+        "AT-BAC-000-1",
+        "AT-BAC-000-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** tests/**",
+      "authority_owner": "BPB",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-000A",
+      "phase_id": "P0",
+      "title": "Wire remote-transport and deploy-sync truth into founder build results",
+      "target_files": [
+        "services/lifeos-lumin-build.js",
+        "services/founder-build-self-repair.js",
+        "scripts/builderos-deploy-verify.mjs",
+        "routes/railway-managed-env-routes.js",
+        "scripts/run-founder-chat-alpha-battery.mjs"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Founder build results must report exact commit SHA, remote branch proof, and deploy state using the shared build-proof contract from BAC-000.",
+        "If origin/main does not move, the result must not claim PASS.",
+        "If Railway still serves an older deploy SHA, the result must explicitly say the fix is not live yet.",
+        "Alpha battery must assert commit/deploy proof semantics on build probes instead of treating job PASS alone as enough."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "A founder build cannot hide behind PASS while remote transport failed.",
+          "Deploy drift is surfaced as a first-class blocker."
+        ]
+      },
+      "allowed_context_files": [
+        "services/build-proof-contract.js",
+        "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
+        "products/receipts/REAL_APP_E2E.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-000"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-000A-1",
+        "AT-BAC-000A-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** scripts/** routes/**",
+      "authority_owner": "CFO",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-001",
+      "phase_id": "P1",
+      "title": "Create one canonical BP completion helper",
+      "target_files": [
+        "services/bp-priority-completion.js",
+        "tests/bp-priority-completion.test.js"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create a shared helper that distinguishes technical pass, founder pass, point-B-complete, and queue-runnable incomplete work.",
+        "The helper must not treat TECHNICAL_PASS as founder-complete.",
+        "The helper must export named functions that callers can share instead of duplicating completion logic."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "Point B mission with founder_usability_pass=false is not complete.",
+          "TECHNICAL_PASS can coexist with founder-incomplete.",
+          "SCRAPPED_SALVAGE items remain non-runnable."
+        ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "builderos-reboot/POINT_B_TARGET.json",
+        "services/product-readiness.js"
+      ],
+      "forbidden_context_files": [
+        "builderos-reboot/MISSION_QUEUE.json"
+      ],
+      "dependencies": [],
+      "acceptance_test_ids": [
+        "AT-BAC-001-1",
+        "AT-BAC-001-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** tests/**",
+      "authority_owner": "BPB",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-002",
+      "phase_id": "P1",
+      "title": "Rewire scheduler, runner, and readiness surfaces to the shared completion truth",
+      "target_files": [
+        "services/builderos-bp-priority-scheduler.js",
+        "scripts/bp-priority-never-stop.mjs",
+        "services/product-readiness.js",
+        "services/bp-priority-sync.js",
+        "factory-staging/factory-core/arc/point-b-gate.js",
+        "services/supervised-autonomy-readiness.js"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Replace local completion checks with the shared helper from BAC-001.",
+        "If Point B is technically passed but founder-incomplete, status must be awaiting founder alpha/usability, not queue complete.",
+        "Scheduler health must not report healthy idle or no_work while Point B is founder-incomplete.",
+        "Runner must not silently stop on Point B technical pass alone.",
+        "Any readiness/reporting surface that summarizes queue health must use the same shared semantics."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "False-green queue complete state is impossible while Point B remains founder-incomplete.",
+          "Queue status distinguishes technical pass from founder pass.",
+          "Status reason is explicit, not generic."
+        ]
+      },
+      "allowed_context_files": [
+        "services/bp-priority-completion.js",
+        "builderos-reboot/BP_PRIORITY.json",
+        "builderos-reboot/POINT_B_TARGET.json",
+        "products/receipts/LIFERE_ALPHA_READINESS.json"
+      ],
+      "forbidden_context_files": [
+        "builderos-reboot/MISSION_QUEUE.json"
+      ],
+      "dependencies": [
+        "BAC-001"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-002-1",
+        "AT-BAC-002-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** scripts/** factory-staging/**",
+      "authority_owner": "BPB",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-003",
+      "phase_id": "P2",
+      "title": "Create one shared self-repair escalation policy",
+      "target_files": [
+        "services/self-repair-escalation-policy.js",
+        "services/self-repair-executor.js",
+        "services/founder-build-self-repair.js",
+        "services/founder-build-quorum-escalation.js",
+        "tests/self-repair-escalation-policy.test.js"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Define one shared policy module for repair attempts and escalation stages.",
+        "Implement three attempts per stage before higher escalation.",
+        "Require lessons carry-forward on every attempt.",
+        "Require explicit research before the third attempt in a stage.",
+        "Require added model/authority consensus for escalated stages.",
+        "Replace hard-coded attempt limits and ad hoc escalation logic in callers."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "No bounded repair path stops at two attempts if the failure remains repairable.",
+          "All repair callers use the same shared escalation constants and rules."
+        ]
+      },
+      "allowed_context_files": [
+        "services/self-repair-executor.js",
+        "services/founder-build-self-repair.js",
+        "FOUNDER_PACKET.md"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-002"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-003-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** tests/**",
+      "authority_owner": "ChC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-004",
+      "phase_id": "P2",
+      "title": "Persist repair lessons and research carry-forward between attempts",
+      "target_files": [
+        "services/self-repair-memory.js",
+        "services/self-repair-execution-log.js",
+        "services/founder-build-self-repair.js",
+        "services/founder-build-quorum-escalation.js",
+        "services/self-repair-attempt-context.js"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Persist per-attempt context with prior_attempts_consulted, lessons_loaded, research_completed, consensus_participants, proposed_fix, and outcome.",
+        "Before any retry, load prior attempt context and attach it to the next attempt.",
+        "If carry-forward context is unavailable, return blocked instead of guessing."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "Retries are explainable and cumulative rather than stateless.",
+          "Escalated attempts can show the exact lessons and research they inherited."
+        ]
+      },
+      "allowed_context_files": [
+        "services/self-repair-memory.js",
+        "services/self-repair-execution-log.js"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-003"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-004-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "Hist",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-005",
+      "phase_id": "P3",
+      "title": "Convert improvement loop output into deterministic blueprint deltas",
+      "target_files": [
+        "services/builderos-improvement-loop.js",
+        "services/builderos-improvement-contract.js",
+        "tests/builderos-improvement-loop.test.js"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Do not create a second active queue.",
+        "Change improvement output from advisory prose to deterministic blueprint-delta contracts.",
+        "Each improvement item must name the affected mission/step, authority owner, proof required, and whether it is auto-applicable or must return to ARC.",
+        "If an improvement changes runtime behavior, it must map to a governed mission artifact, not a floating recommendation.",
+        "When ARC or SNT finds a stronger answer, promotion into canonical authority must be required or explicitly rejected with reason and owner."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "Improvement outputs can be consumed by ARC/BPB without new interpretation.",
+          "No secondary work queue is introduced."
+        ]
+      },
+      "allowed_context_files": [
+        "services/builderos-improvement-loop.js",
+        "builderos-reboot/BP_PRIORITY.json"
+      ],
+      "forbidden_context_files": [
+        "builderos-reboot/MISSION_QUEUE.json"
+      ],
+      "dependencies": [
+        "BAC-004"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-005-1",
+        "AT-BAC-005-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** tests/**",
+      "authority_owner": "CFO",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-006",
+      "phase_id": "P3",
+      "title": "Synchronize receipts, queue truth, objective verdicts, and readiness artifacts",
+      "target_files": [
+        "services/builderos-artifact-sync.js",
+        "scripts/lib/bp-acceptance-finish.mjs",
+        "services/bp-priority-sync.js",
+        "scripts/generate-product-readiness-report.mjs",
+        "services/founder-usability-confirm.js"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create one sync helper for post-acceptance artifact updates.",
+        "Successful acceptance must update BP item truth, objective verdict, readiness report, and freshness metadata together.",
+        "Founder usability confirmation must update Point B completion truth through the same governed sync path.",
+        "Artifacts that are no longer fresh must be marked stale rather than left looking current."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "No major artifact can remain falsely fresh after related runtime truth changes.",
+          "Product readiness report reflects current registry breadth after regeneration."
+        ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "docs/products/PRODUCT_REGISTRY.json",
+        "products/receipts/UI_ALPHA_GATE.json",
+        "products/receipts/LIFERE_ALPHA_READINESS.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-005"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-006-1",
+        "AT-BAC-006-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** scripts/**",
+      "authority_owner": "Hist",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-007",
+      "phase_id": "P4",
+      "title": "Tighten founder-UI alpha truth and Studio usability gating",
+      "target_files": [
+        "scripts/run-real-app-e2e.mjs",
+        "scripts/run-ui-alpha-gate.mjs",
+        "scripts/run-founder-chat-alpha-battery.mjs",
+        "scripts/audit-founder-alpha-ready.mjs",
+        "services/founder-usability-confirm.js",
+        "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Fail on console errors unless an explicit allowlist path with named justification exists.",
+        "Do not let ready_for_founder_alpha imply point_b_complete.",
+        "Founder usability must only become true through the explicit founder confirmation path.",
+        "Founder-facing receipts must say technical pass only when founder pass is still false.",
+        "Add the exact founder-surface failure that was observed live: generic knowledge/counsel prompts must not misroute into display/status theater.",
+        "Acceptance must preserve the distinction between API proof, scripted browser proof, and exact founder-surface proof.",
+        "Studio must freeze a founder usability contract covering response quality, conversation flow, responsiveness expectations, and adaptive surface behavior.",
+        "Soft semantic acceptance wording must be replaced or bounded by explicit corpus/schema criteria where possible."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "UI proof and queue proof do not drift apart.",
+          "Founder alpha readiness is distinguishable from founder alpha completion."
+        ]
+      },
+      "allowed_context_files": [
+        "products/receipts/REAL_APP_E2E.json",
+        "products/receipts/UI_ALPHA_GATE.json",
+        "products/receipts/LIFERE_ALPHA_READINESS.json",
+        "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-006"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-007-1",
+        "AT-BAC-007-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/** services/**",
+      "authority_owner": "SDO",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-008",
+      "phase_id": "P5",
+      "title": "Clean stale authority tags and harden legacy boundaries",
+      "target_files": [
+        "services/builderos-bp-priority-scheduler.js",
+        "scripts/bp-priority-never-stop.mjs",
+        "services/builderos-improvement-loop.js",
+        "scripts/lifeos-builder-continuous-queue.mjs",
+        "builderos-reboot/AGENTS.md"
+      ],
+      "action_type": "edit_file",
+      "required_edits": [
+        "Replace stale amendment-first @ssot tags in the active autonomy spine with the canonical authority chain.",
+        "Ensure legacy queue runners and Hist-owned artifacts cannot be mistaken for active authority.",
+        "Add explicit hard-stop or history-only guardrails where legacy files remain present."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+          "Active runtime no longer references MISSION_QUEUE authority.",
+          "Cold agents are less likely to confuse legacy and active orchestration."
+        ]
+      },
+      "allowed_context_files": [
+        "docs/products/AUTHORITY_BOUNDARIES.md",
+        "builderos-reboot/AGENTS.md",
+        "builderos-reboot/MISSION_QUEUE.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-007"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-008-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/** scripts/** builderos-reboot/**",
+      "authority_owner": "SNT",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-009",
+      "phase_id": "P6",
+      "title": "Create closure acceptance and proof harnesses",
+      "target_files": [
+        "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
+        "scripts/run-builderos-founder-ui-proof.mjs",
+        "scripts/run-builderos-same-tier-determinism.mjs",
+        "package.json"
+      ],
+      "action_type": "create_file",
+      "required_edits": [
+        "Create one acceptance command for this closure mission.",
+        "Create one founder-UI proof script that uses the real LifeOS founder path.",
+        "Create one same-tier determinism script that fails if a stronger model tier is used.",
+        "Create one build/deploy truth script that verifies commit SHA, remote branch movement, deploy SHA movement, and live reprobe.",
+        "Wire npm scripts for all of these."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+        "Closure acceptance can be run with one command.",
+        "UI proof and determinism proof are first-class citizens, not manual notes.",
+        "Build/deploy proof is machine-enforced rather than inferred from narrative."
+      ]
+      },
+      "allowed_context_files": [
+        "package.json",
+        "builderos-reboot/PROJECT_CERTIFICATION.json",
+        "products/receipts/REAL_APP_E2E.json",
+        "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-008"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-009-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/** package.json",
+      "authority_owner": "CDR",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-010",
+      "phase_id": "P6",
+      "title": "Run same-tier determinism and founder-UI sacrificial proof",
+      "target_files": [
+        "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
+        "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json",
+        "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
+        "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json"
+      ],
+      "action_type": "run_acceptance",
+      "required_edits": [
+        "Run the same-tier determinism proof on a sacrificial blueprint slice.",
+        "Run the founder-UI proof through the real LifeOS founder surface.",
+        "Run explicit build/deploy proof on at least one sacrificial live repair/build flow.",
+        "If the system misses or lies, fix the system, not the receipt.",
+        "Write explicit PASS/FAIL receipts with blockers if any proof fails."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+        "Same-tier coder outputs are materially equivalent.",
+        "The founder UI can move between counsel and build paths honestly.",
+        "Repair/escalation behavior is visible and receipted.",
+        "Build success, remote transport success, and live deploy success are separately visible and cannot be conflated."
+      ]
+      },
+      "allowed_context_files": [
+        "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
+        "scripts/run-builderos-founder-ui-proof.mjs",
+        "scripts/run-builderos-same-tier-determinism.mjs",
+        "scripts/run-builderos-build-deploy-truth.mjs"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-009"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-010-1",
+        "AT-BAC-010-2"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "products/receipts/**",
+      "authority_owner": "SNT",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "BAC-011",
+      "phase_id": "P6",
+      "title": "Upgrade certification only if all proof gates pass",
+      "target_files": [
+        "builderos-reboot/PROJECT_CERTIFICATION.json",
+        "builderos-reboot/HANDOFF.md",
+        "builderos-reboot/PRODUCT_READINESS_REPORT.json"
+      ],
+      "action_type": "update_receipt",
+      "required_edits": [
+        "Set FULLY_MACHINE_READY true only if closure acceptance, same-tier determinism, founder-UI proof, build/deploy truth proof, and Point B founder completion all pass.",
+        "If any proof is missing or failed, leave FULLY_MACHINE_READY false and record the blocker honestly."
+      ],
+      "exact_output_contract": {
+        "type": "behavioral_contract",
+        "must_prove": [
+        "Certification state matches actual proof state.",
+        "Handoff status does not overclaim readiness."
+      ]
+      },
+      "allowed_context_files": [
+        "builderos-reboot/PROJECT_CERTIFICATION.json",
+        "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
+        "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
+        "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json",
+        "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
+        "builderos-reboot/BP_PRIORITY.json"
+      ],
+      "forbidden_context_files": [],
+      "dependencies": [
+        "BAC-010"
+      ],
+      "acceptance_test_ids": [
+        "AT-BAC-011-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "builderos-reboot/** products/receipts/**",
+      "authority_owner": "Hist",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    }
+  ]
+}

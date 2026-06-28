@@ -1,0 +1,107 @@
+{
+  "schema": "mission_execution_tracker_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "IN_PROGRESS",
+  "blueprint_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-v1",
+  "execution_order": [
+    "BAC-000B",
+    "BAC-000",
+    "BAC-000A",
+    "BAC-001",
+    "BAC-002",
+    "BAC-003",
+    "BAC-004",
+    "BAC-005",
+    "BAC-006",
+    "BAC-007",
+    "BAC-008",
+    "BAC-009",
+    "BAC-010",
+    "BAC-011"
+  ],
+  "step_state": {
+    "BAC-000B": "complete",
+    "BAC-000": "pending",
+    "BAC-000A": "pending",
+    "BAC-001": "complete",
+    "BAC-002": "complete",
+    "BAC-003": "complete",
+    "BAC-004": "complete",
+    "BAC-005": "complete",
+    "BAC-006": "complete",
+    "BAC-007": "pending",
+    "BAC-008": "complete",
+    "BAC-009": "pending",
+    "BAC-010": "pending",
+    "BAC-011": "pending"
+  },
+  "completed_notes": [
+    {
+      "step_id": "BAC-000B",
+      "note": "Architect handoff, SNT attack, and promotion contracts frozen into canonical mission artifacts.",
+      "verified_by": [
+        "ARCHITECT_COMPARISON_REPORT.md",
+        "SNT_VS_ARCHITECT_AUDIT.md",
+        "CHAIR_SNT_ARC_CONSENSUS_RECEIPT.json"
+      ]
+    },
+    {
+      "step_id": "BAC-001",
+      "note": "Canonical completion helper created and tested; Point B TECHNICAL_PASS with founder false now remains incomplete for scheduler truth.",
+      "verified_by": [
+        "node --test tests/bp-priority-completion.test.js"
+      ]
+    },
+    {
+      "step_id": "BAC-002",
+      "note": "BP queue helper, scheduler, runner, and readiness surfaces rewired to shared completion semantics.",
+      "verified_by": [
+        "npm run lifeos:bp-priority:verify"
+      ]
+    },
+    {
+      "step_id": "BAC-003",
+      "note": "Shared self-repair escalation policy created; executor now uses three same-tier attempts with stage metadata, and founder build jobs no longer show completed from committed row state alone.",
+      "verified_by": [
+        "node --test tests/self-repair-escalation-policy.test.js tests/builderos-command-control-service.test.js tests/founder-build-quorum-escalation.test.js",
+        "node --test tests/build-proof-contract.test.js tests/lifeos-execution-truth.test.js"
+      ]
+    },
+    {
+      "step_id": "BAC-004",
+      "note": "Carry-forward retry context is now explicit: self-repair execution logs and memory persist attempt stage + required context, founder build retries attach attempt_context, and quorum escalation inherits prior attempts plus loaded lessons instead of deliberating statelessly.",
+      "verified_by": [
+        "node --test tests/self-repair-attempt-context.test.js tests/founder-build-job-store.test.js tests/builderos-command-control-service.test.js tests/build-proof-contract.test.js tests/lifeos-execution-truth.test.js tests/self-repair-escalation-policy.test.js tests/self-repair-execution-log.test.js tests/founder-build-quorum-escalation.test.js"
+      ]
+    },
+    {
+      "step_id": "BAC-005",
+      "note": "Improvement loop output is no longer advisory-only by structure: each item now carries a deterministic blueprint-delta contract with mission/step ownership, proof requirements, disposition, and canonical promotion requirements while keeping a single governed stream.",
+      "verified_by": [
+        "node --test tests/builderos-improvement-loop.test.js tests/self-repair-attempt-context.test.js tests/build-proof-contract.test.js tests/lifeos-execution-truth.test.js"
+      ]
+    },
+    {
+      "step_id": "BAC-006",
+      "note": "Post-acceptance artifact sync is now governed through one helper: technical PASS and founder usability confirmation both refresh BP truth, artifact freshness, and the product readiness report together; stale-looking current surfaces are explicitly marked against OBJECTIVE_VERDICT timestamps.",
+      "verified_by": [
+        "node --test tests/builderos-artifact-sync.test.js tests/founder-usability-confirm.test.js tests/bp-priority-sync.test.js tests/builderos-improvement-loop.test.js tests/self-repair-attempt-context.test.js tests/founder-build-job-store.test.js tests/builderos-command-control-service.test.js tests/build-proof-contract.test.js tests/lifeos-execution-truth.test.js"
+      ]
+    },
+    {
+      "step_id": "BAC-008",
+      "note": "Active autonomy spine files now point at the canonical authority chain instead of amendment-first drift, and the legacy shadow queue runner is explicitly marked HISTORY_ONLY so cold agents are less likely to confuse Hist artifacts with active BuilderOS orchestration.",
+      "verified_by": [
+        "node --check services/builderos-bp-priority-scheduler.js && node --check services/builderos-improvement-loop.js && node --check scripts/bp-priority-never-stop.mjs && node --check scripts/lifeos-builder-continuous-queue.mjs",
+        "rg -n \"@ssot .*AMENDMENT_|MISSION_QUEUE|HISTORY_ONLY|AUTHORITY_BOUNDARIES\" services/builderos-bp-priority-scheduler.js scripts/bp-priority-never-stop.mjs services/builderos-improvement-loop.js scripts/lifeos-builder-continuous-queue.mjs builderos-reboot/AGENTS.md"
+      ]
+    }
+  ],
+  "observation_policy": {
+    "do_not_silently_stop": true,
+    "every_blocker_must_emit_blocked_return": true,
+    "every_issue_must_append_to_issue_log": true,
+    "every_step_transition_requires_receipt_or_failure_note": true
+  },
+  "issue_log_path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/EXECUTION_ISSUES.md"
+}

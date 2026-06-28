@@ -1,0 +1,56 @@
+{
+  "schema": "architect_comparison_grade_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "candidate_label": "ARCHITECT-CANDIDATE-CODEX-2026-06-27",
+  "generated_at": "2026-06-27T00:00:00Z",
+  "categories": [
+    { "id": "supreme_law_alignment", "score_0_to_5": 4, "winner": "tie", "notes": "Candidate stayed inside founder packet law and one-queue law, but uses more abstract ARC/CDR phrasing than the private canonical execution pack." },
+    { "id": "point_b_truth", "score_0_to_5": 5, "winner": "tie", "notes": "Candidate clearly separates TECHNICAL_PASS, FOUNDER_USABILITY_PASS, and POINT_B_COMPLETE and makes founder false block Point B closure." },
+    { "id": "queue_determinism", "score_0_to_5": 5, "winner": "tie", "notes": "Candidate preserves BP_PRIORITY as the only active queue and explicitly rejects false-green idle states." },
+    { "id": "builder_no_decision_law", "score_0_to_5": 4, "winner": "canonical", "notes": "Candidate is correct in blocked-return doctrine, but the canonical blueprint is more explicit step-by-step about what Builder/CDR may not decide during execution." },
+    { "id": "self_repair_escalation_law", "score_0_to_5": 5, "winner": "architect", "notes": "Candidate states the three-attempt doctrine, lessons carry-forward, research, and tier expansion more cleanly in one repair contract." },
+    { "id": "receipt_twin_sync", "score_0_to_5": 5, "winner": "architect", "notes": "Reality-sync is stronger and clearer than the canonical artifact-sync wording because it binds receipt freshness to source hashes and deploy truth." },
+    { "id": "ui_proof", "score_0_to_5": 5, "winner": "architect", "notes": "Founder-surface regression corpus is stronger than generic UI proof alone and directly captures the known founder-only failure mode." },
+    { "id": "authority_hygiene", "score_0_to_5": 5, "winner": "architect", "notes": "Candidate did a better parts-car authority classification and caught amendment-era tag drift and dead proof alias drift explicitly." },
+    { "id": "parts_car_intelligence", "score_0_to_5": 5, "winner": "architect", "notes": "Asset decision map is the strongest delta: it preserves good machinery and retires bad authority paths cleanly." },
+    { "id": "mechanical_enforcement", "score_0_to_5": 4, "winner": "canonical", "notes": "Candidate is strong conceptually, but the canonical pack is more executable because it includes a fuller end-to-end proof harness plan and more explicit implementation order." },
+    { "id": "determinism_honesty", "score_0_to_5": 4, "winner": "canonical", "notes": "Candidate requires same-tier determinism, but the canonical blueprint is stronger because it explicitly creates and runs determinism scripts as first-class steps." },
+    { "id": "certification_honesty", "score_0_to_5": 5, "winner": "tie", "notes": "Both packs keep FULLY_MACHINE_READY false until proof is real; candidate's certification lock clause is strong." },
+    { "id": "commit_transport_truth", "score_0_to_5": 5, "winner": "architect", "notes": "Transport-proof helper is sharper than the canonical build-proof wording because it names origin/main and deploy-status states more rigorously." },
+    { "id": "deploy_runtime_truth", "score_0_to_5": 5, "winner": "architect", "notes": "Candidate better distinguishes local success, remote transport, deploy sync, and live behavior truth." },
+    { "id": "founder_surface_completeness", "score_0_to_5": 5, "winner": "architect", "notes": "Exact founder prompt corpus beats generic browser green and is the right answer to the Twisted Tea-style failure class." }
+  ],
+  "comparison_questions": {
+    "architect_caught_that_canonical_missed": [
+      "founder-surface regression corpus as a named durable artifact rather than only a proof run",
+      "dead-script proof alias risk around builderos:alpha:confirm",
+      "generated report freshness must bind to registry/BP/Point-B/deploy hashes, not only regeneration timing",
+      "already_present should downgrade to SKIPPED_ALREADY_VALID with proof instead of sounding like a code-changing PASS",
+      "active parts-car asset map with explicit REUSE/RETIRE/ARCHIVE classifications"
+    ],
+    "canonical_caught_that_architect_missed": [
+      "a more executable build order from BAC-000 through BAC-011",
+      "explicit creation of closure acceptance, founder UI proof, same-tier determinism, and build/deploy proof harness scripts",
+      "a stronger end-state path for certification update only after all proof receipts exist"
+    ],
+    "which_left_more_room_for_coder_interpretation": "architect",
+    "which_had_better_self_repair_law": "architect",
+    "which_had_better_commit_deploy_truth": "architect",
+    "which_had_better_founder_surface_coverage": "architect",
+    "promotion_decisions": [
+      "Promote founder-surface regression corpus into the canonical blueprint.",
+      "Promote transport-proof vocabulary and explicit transport states into the canonical build-proof contract.",
+      "Promote reality-sync freshness fields and stale markers into the canonical artifact-sync plan.",
+      "Promote the asset decision map judgments into canonical salvage/authority artifacts.",
+      "Retain the canonical execution order and proof harness creation steps."
+    ]
+  },
+  "overall_verdict": "Architect candidate is materially strong and found several real upgrades, but the private canonical blueprint remains the better execution blueprint once those upgrades are merged in.",
+  "promotion_actions": [
+    "Merge the architect's founder-surface regression corpus requirement into the canonical blueprint and acceptance plan.",
+    "Merge the architect's transport-proof helper semantics into the canonical build-proof contract.",
+    "Merge the architect's reality-sync freshness/hash rules into the canonical artifact-sync contract.",
+    "Add a dead-script verifier for active npm proof aliases.",
+    "Preserve the canonical step-by-step harness creation and execution phases as the final implementation spine."
+  ]
+}

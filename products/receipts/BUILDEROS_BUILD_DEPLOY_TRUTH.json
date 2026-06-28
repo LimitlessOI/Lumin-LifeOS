@@ -1,0 +1,29 @@
+{
+  "schema": "builderos_build_deploy_truth_v1",
+  "at": "2026-06-28T01:33:55.583Z",
+  "ok": true,
+  "verdict": "PASS",
+  "blocker": null,
+  "proof": {
+    "commit_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
+    "origin_main_sha": "ffa4d8656876b1d48d60b95db26530faf4b1959e",
+    "origin_contains_commit": true,
+    "deploy_required": true,
+    "deploy_sha": "ffa4d8656876b1d48d60b95db26530faf4b1959e",
+    "deploy_matches_origin_main": true,
+    "runtime_probe_url": "https://robust-magic-production.up.railway.app/api/v1/lifeos/builder/ready",
+    "runtime_probe_ok": true,
+    "runtime_behavior_verified": true,
+    "transport_status": "LIVE_BEHAVIOR_PASS"
+  },
+  "ready_snapshot": {
+    "route": "/api/v1/lifeos/builder/ready",
+    "status": 200,
+    "deploy_commit_sha": "ffa4d8656876b1d48d60b95db26530faf4b1959e"
+  },
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json"
+    ]
+  }
+}

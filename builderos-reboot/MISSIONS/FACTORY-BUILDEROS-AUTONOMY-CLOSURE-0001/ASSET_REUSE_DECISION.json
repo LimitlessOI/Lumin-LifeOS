@@ -1,0 +1,87 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "assets_reviewed": [
+    "builderos-reboot/BP_PRIORITY.json",
+    "builderos-reboot/POINT_B_TARGET.json",
+    "services/builderos-bp-priority-scheduler.js",
+    "scripts/bp-priority-never-stop.mjs",
+    "services/self-repair-executor.js",
+    "services/founder-build-self-repair.js",
+    "services/builderos-improvement-loop.js",
+    "services/product-readiness.js",
+    "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
+    "products/receipts/REAL_APP_E2E.json",
+    "products/receipts/UI_ALPHA_GATE.json",
+    "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/",
+    "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/"
+  ],
+  "reuse_candidates": [
+    {
+      "path": "builderos-reboot/BP_PRIORITY.json",
+      "decision": "REUSE",
+      "reason": "Canonical product queue already exists."
+    },
+    {
+      "path": "builderos-reboot/POINT_B_TARGET.json",
+      "decision": "REUSE",
+      "reason": "Canonical Point B lock already exists."
+    },
+    {
+      "path": "services/founder-build-self-repair.js",
+      "decision": "EXTEND",
+      "reason": "Useful repair path exists but escalation law is too weak."
+    },
+    {
+      "path": "services/self-repair-executor.js",
+      "decision": "EXTEND",
+      "reason": "Bounded executor exists but needs new policy and carry-forward rules."
+    },
+    {
+      "path": "services/builderos-improvement-loop.js",
+      "decision": "EXTEND",
+      "reason": "Proposal synthesis exists but needs enforceable blueprint-delta output."
+    },
+    {
+      "path": "products/receipts/REAL_APP_E2E.json",
+      "decision": "EXTEND",
+      "reason": "Real UI proof surface exists but truth thresholds are too weak."
+    }
+  ],
+  "parts_car_candidates": [
+    {
+      "path": "builderos-reboot/MISSION_QUEUE.json",
+      "decision": "PARTS_CAR",
+      "reason": "History-only evidence, not active orchestration."
+    },
+    {
+      "path": "scripts/lifeos-builder-continuous-queue.mjs",
+      "decision": "PARTS_CAR",
+      "reason": "Legacy queue runner should not remain near active authority without hard quarantine."
+    }
+  ],
+  "replacement_candidates": [
+    {
+      "path": "local duplicated completion checks",
+      "decision": "REPLACE",
+      "reason": "Completion semantics must live in one shared helper."
+    }
+  ],
+  "retirement_candidates": [
+    {
+      "path": "false-green use of TECHNICAL_PASS as queue complete",
+      "decision": "RETIRE",
+      "reason": "Load-bearing deception."
+    }
+  ],
+  "external_tool_candidates": [],
+  "wisdom_lessons": [
+    "Useful runtime pieces should be salvaged instead of rewritten from scratch.",
+    "History must remain history or cold agents drift.",
+    "UI proof catches what backend proof misses."
+  ],
+  "cfo_recommendation": "Prefer reuse and extension over rewrite where the existing part is structurally sound.",
+  "arc_decision": "Reuse the canonical queue and proof surfaces; replace duplicate completion logic and weak repair policy with shared enforced modules.",
+  "intent_fidelity_impact": "HIGH_POSITIVE"
+}
+

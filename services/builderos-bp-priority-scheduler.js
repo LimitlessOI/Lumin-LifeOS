@@ -1,12 +1,14 @@
 /**
  * SYNOPSIS: BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot builderos-reboot/BP_PRIORITY.json
+ * @ssot docs/products/AUTHORITY_BOUNDARIES.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createUsefulWorkGuard } from './useful-work-guard.js';
+import { isQueueItemIncomplete } from './bp-priority-completion.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';
 
@@ -28,10 +30,7 @@ function queueHasIncompleteWork() {
   try {
     const queue = JSON.parse(fs.readFileSync(BP_PATH, 'utf8'));
     const items = queue.items || [];
-    return items.some((i) => {
-      const v = String(i.verdict || '').toUpperCase();
-      return v !== 'TECHNICAL_PASS' && v !== 'PASS';
-    });
+    return items.some((i) => isQueueItemIncomplete(i));
   } catch {
     return false;
   }

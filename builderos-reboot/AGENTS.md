@@ -57,6 +57,12 @@ Every Hist-owned file has `_authority.domain: Hist`, `owner_department: Historia
 
 **To touch Hist artifacts:** Hist mandatory case (`HIST_LEGACY_SYSTEM_REGISTRY.md` §4) — default HALT.
 
+Hard stop:
+
+- `MISSION_QUEUE.json` is never active queue authority for current BuilderOS product work.
+- `scripts/lifeos-builder-continuous-queue.mjs` is legacy shadow automation, not canonical orchestration.
+- If a cold agent finds both `BP_PRIORITY.json` and `MISSION_QUEUE.json`, product execution must follow `BP_PRIORITY.json`.
+
 ---
 
 ## Verify (HARD)

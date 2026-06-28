@@ -1,0 +1,19 @@
+{
+  "schema": "snt_translation_attack_report_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "PASS_WITH_HOLD",
+  "translation_drift_found": false,
+  "attacks_run": [
+    "queue false-green attack",
+    "self-repair under-escalation attack",
+    "stale-receipt attack",
+    "legacy-authority bleed attack",
+    "premature certification attack"
+  ],
+  "blocking_condition": "architect_comparison_hold",
+  "notes": [
+    "Blueprint is intentionally held before execution per founder instruction.",
+    "No new strategy questions were introduced by the translation."
+  ]
+}
+

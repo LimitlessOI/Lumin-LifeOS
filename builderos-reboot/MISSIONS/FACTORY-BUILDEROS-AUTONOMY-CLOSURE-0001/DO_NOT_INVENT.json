@@ -1,0 +1,15 @@
+{
+  "schema": "do_not_invent_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "rules": [
+    "Do not create a second active work queue.",
+    "Do not create a new department or rename departments again.",
+    "Do not mark Point B complete from TECHNICAL_PASS alone.",
+    "Do not test coder determinism with a stronger model tier than the coder tier.",
+    "Do not keep stale receipts without explicit stale marking.",
+    "Do not execute this mission before architect comparison is complete.",
+    "Do not import runtime truth from builderos-reboot/MISSION_QUEUE.json or mission CONTENT snapshots.",
+    "Do not hand-wave self-repair with generic retries; lessons and research must carry forward."
+  ]
+}
+

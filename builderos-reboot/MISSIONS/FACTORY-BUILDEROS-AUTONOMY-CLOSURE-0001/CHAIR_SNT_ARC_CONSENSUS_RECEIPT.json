@@ -1,0 +1,47 @@
+{
+  "schema": "chair_snt_arc_consensus_receipt_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "CONSENSUS_REACHED_AND_SENT_TO_ARC",
+  "participants": [
+    "ChC",
+    "SNT",
+    "ARC"
+  ],
+  "inputs": [
+    "ARCHITECT_COMPARISON_REPORT.md",
+    "SNT_VS_ARCHITECT_AUDIT.md",
+    "SNT_TO_CHAIR_FINDINGS_RECEIPT.json"
+  ],
+  "consensus_points": [
+    {
+      "issue": "Architect output was better at diagnosis than execution detail.",
+      "resolution": "Keep the canonical execution spine and promote the architect's stronger truth upgrades into it."
+    },
+    {
+      "issue": "Future ARC handoffs can stop too early at architecture prose.",
+      "resolution": "Require both architecture output and machine-execution output in future architect handoffs."
+    },
+    {
+      "issue": "SNT attacks were not frozen as mandatory categories.",
+      "resolution": "Mandate founder-surface deception, transport truth, stale authority, and soft-acceptance attacks in all future SNT passes."
+    },
+    {
+      "issue": "Studio authority was too informal.",
+      "resolution": "Studio must own founder-usability and interaction-quality artifacts for founder-facing surfaces."
+    },
+    {
+      "issue": "Lower-tier coder ambiguity remained too high.",
+      "resolution": "Add default coder_must_not_decide boundaries and tighten step-level constraints."
+    },
+    {
+      "issue": "Better answers could remain in chat or side notes.",
+      "resolution": "Promotion into canonical authority must be required or explicitly rejected with reason."
+    }
+  ],
+  "arc_action_required": [
+    "Update the canonical founder packet with the new laws.",
+    "Update the canonical blueprint with promotion receipts, default coder boundaries, Studio usability authority, and stronger architect/SNT enforcement.",
+    "Update acceptance and authority artifacts to enforce the promoted rules."
+  ],
+  "created_at": "2026-06-27T23:34:10Z"
+}

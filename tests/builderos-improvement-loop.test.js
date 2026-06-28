@@ -30,6 +30,11 @@ function testImprovementLoopBuildsConsensusQueue() {
   assert.ok(report.proposals.length >= 3);
   assert.equal(report.proposals[0].source_code, 'BP_PRIORITY_SCHEDULER_DISABLED');
   assert.equal(report.departments.CFO.queue_has_incomplete_work, true);
+  assert.ok(Array.isArray(report.blueprint_deltas));
+  assert.ok(report.blueprint_deltas.length >= 3);
+  assert.equal(report.blueprint_deltas[0].mission_id, 'FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001');
+  assert.equal(report.blueprint_deltas[0].secondary_queue_created, false);
+  assert.ok(['AUTO_APPLY_MISSION_DELTA', 'RETURN_TO_ARC'].includes(report.blueprint_deltas[0].disposition));
 }
 
 testImprovementLoopBuildsConsensusQueue();

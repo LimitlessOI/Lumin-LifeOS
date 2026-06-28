@@ -1,0 +1,156 @@
+{
+  "schema": "builderos_blocked_return_v2",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "BLOCKED_RETURN_TO_ARC",
+  "purpose": "Canonical blocked return for Builder/CDR, repair loops, acceptance, deploy, and founder UI gates when execution would require unauthorized judgment, missing proof, stale authority, or unresolved promotion.",
+  "required_fields": [
+    "schema",
+    "blocked",
+    "status",
+    "block_code",
+    "severity",
+    "mission_id",
+    "blueprint_id",
+    "step_id",
+    "actor_role",
+    "authority_chain_checked",
+    "what_was_attempted",
+    "why_blocked",
+    "evidence",
+    "required_owner",
+    "minimum_unblock_action",
+    "safe_next_action",
+    "receipts_read",
+    "state_artifacts_checked",
+    "prior_attempts_consulted",
+    "lessons_loaded",
+    "research_completed",
+    "why_builder_would_decide",
+    "created_at"
+  ],
+  "optional_fields": [
+    "decision_type",
+    "transport_proof",
+    "deploy_truth",
+    "founder_surface_case",
+    "repair_attempt",
+    "prior_lessons",
+    "research_required",
+    "consensus_required",
+    "article_iii_trigger",
+    "stale_artifacts",
+    "candidate_patch_for_arc",
+    "do_not_retry_until",
+    "exact_artifact_to_update",
+    "exact_receipt_to_rerun",
+    "freeze_owner"
+  ],
+  "allowed_gap_type_values": [
+    "ambiguous_spec",
+    "missing_requirement",
+    "conflicting_instruction",
+    "hidden_dependency",
+    "out_of_scope_request",
+    "authority_violation",
+    "step_not_deterministic",
+    "external_failure",
+    "live_proof_mismatch",
+    "stale_receipt_conflict",
+    "promotion_missing",
+    "soft_acceptance_language",
+    "founder_surface_regression"
+  ],
+  "block_codes": [
+    {
+      "code": "BLOCKED_UNAUTHORIZED_DECISION",
+      "severity": "P0",
+      "when": "Builder/CDR would have to decide product, UX, architecture, scope, priority, acceptance, release, or founder success semantics.",
+      "required_owner": "ARC or IDC depending on ambiguity",
+      "minimum_unblock_action": "ARC updates blueprint or IDC clarifies intent."
+    },
+    {
+      "code": "BLOCKED_INTENT_AMBIGUITY",
+      "severity": "P0",
+      "when": "Mission intent cannot be resolved from Founder Packet, Product Home, BP_PRIORITY, Point B, receipts, or Wisdom.",
+      "required_owner": "IDC or Adam only if true founder intent gap",
+      "minimum_unblock_action": "Return the smallest unresolved intent question."
+    },
+    {
+      "code": "BLOCKED_TECHNICAL_PASS_NOT_POINT_B",
+      "severity": "P0",
+      "when": "A caller tries to mark Point B complete from TECHNICAL_PASS or generic acceptance only.",
+      "required_owner": "SNT + ARC",
+      "minimum_unblock_action": "Run founder success path or record awaiting founder usability confirmation."
+    },
+    {
+      "code": "BLOCKED_TRANSPORT_PROOF_MISSING",
+      "severity": "P0",
+      "when": "Build/repair claims PASS but lacks commit SHA, origin/main proof, or required remote transport evidence.",
+      "required_owner": "CDR platform GAP-FILL",
+      "minimum_unblock_action": "Fix transport proof wiring and rerun; do not retry product build as PASS."
+    },
+    {
+      "code": "BLOCKED_DEPLOY_NOT_SYNCED",
+      "severity": "P0",
+      "when": "Commit reached origin/main but Railway or live behavior still serves older code.",
+      "required_owner": "CDR with deploy truth path",
+      "minimum_unblock_action": "Redeploy/wait/probe. Report COMMIT_ONLY_NOT_LIVE until deploy sync and behavior proof pass."
+    },
+    {
+      "code": "BLOCKED_FOUNDER_SURFACE_REGRESSION",
+      "severity": "P0",
+      "when": "Exact founder UI path or founder prompt fails while API or generic browser probes pass.",
+      "required_owner": "Studio + SNT + ARC",
+      "minimum_unblock_action": "Add exact flow to founder regression corpus and fix through blueprint path."
+    },
+    {
+      "code": "BLOCKED_RECEIPT_SYNC_MISSING",
+      "severity": "P0",
+      "when": "Reality changed but BP_PRIORITY, OBJECTIVE_VERDICT, acceptance receipt, readiness, or twin/state artifacts were not updated in the same governed action.",
+      "required_owner": "Hist/Wisdom + CDR",
+      "minimum_unblock_action": "Run reality sync helper or return stale artifact list."
+    },
+    {
+      "code": "BLOCKED_REPAIR_DOCTRINE_VIOLATION",
+      "severity": "P0",
+      "when": "Repair loop stops early, omits prior lessons, omits receipts/local truth review, or escalates without three-attempt doctrine.",
+      "required_owner": "SNT + CDR",
+      "minimum_unblock_action": "Resume at correct attempt stage with lesson carry-forward or classify as non-repairable hard stop."
+    },
+    {
+      "code": "BLOCKED_PROMOTION_MISSING",
+      "severity": "P1",
+      "when": "ARC or SNT found a materially better answer but it was not promoted into canonical authority or explicitly rejected.",
+      "required_owner": "ChC + ARC",
+      "minimum_unblock_action": "Promote the answer or record explicit rejection with reason and owner."
+    },
+    {
+      "code": "BLOCKED_SOFT_ACCEPTANCE_LANGUAGE",
+      "severity": "P1",
+      "when": "A founder-surface or critical proof check relies on unconstrained semantic wording where a stricter corpus or schema check should exist.",
+      "required_owner": "SNT + Studio + ARC",
+      "minimum_unblock_action": "Replace soft wording with bounded corpus/schema acceptance or mark the remaining ambiguity explicitly."
+    },
+    {
+      "code": "BLOCKED_STALE_AUTHORITY",
+      "severity": "P1",
+      "when": "Active machine path uses history, mission CONTENT, MISSION_QUEUE, conversation dump, or amendment-first authority for product truth.",
+      "required_owner": "SNT + CDR",
+      "minimum_unblock_action": "Switch to product-home/BP_PRIORITY/Point B chain or mark artifact history-only."
+    },
+    {
+      "code": "BLOCKED_LIVE_PROOF_MISSING",
+      "severity": "P1",
+      "when": "Live env credentials or runtime access are unavailable for a live-required claim.",
+      "required_owner": "CDR or operator only if secret value is truly unavailable",
+      "minimum_unblock_action": "Return NOT COMPLETE with missing env/probe proof, not PASS."
+    },
+    {
+      "code": "BLOCKED_ARTICLE_III",
+      "severity": "P0",
+      "when": "Money, destructive DB, exposed secrets, irreversible public launch, legal/medical/high-stakes action, or constitutional change is involved.",
+      "required_owner": "Adam / Human Guardian",
+      "minimum_unblock_action": "Ask for explicit approval or veto."
+    }
+  ]
+}

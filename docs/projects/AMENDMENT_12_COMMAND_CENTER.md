@@ -16,7 +16,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-27 — canonical BP scheduler + improvement-loop runtime surfaces |
+| **Last Updated** | 2026-06-28 — self-repair escalation attempts, execution-log step detail, and deploy-repair runtime truth carried into the command cockpit |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -298,6 +298,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-06-28 | **Self-repair runtime carry-forward surfaced in Command Center** — `services/self-repair-deploy-scheduler.js` raises live deploy-repair retries to 3 attempts, `services/self-repair-execution-log.js` now persists `step_details[]` with attempt/required-context metadata, and `services/self-repair-executor.js` now stamps every executed step with attempt stage plus required carry-forward context before writing the runtime log. | The runtime cockpit was showing repair outcomes without enough truth to explain whether the system actually carried lessons/research forward across retries. These fields make the command layer report the real repair loop instead of a flattened “it tried” summary. | ✅ local syntax + executor/log tests; ⚠️ pending deploy parity | Command Center runtime truth |
 | 2026-06-27 | **Canonical scheduler + improvement-loop runtime surfaces** — `routes/lifeos-command-center-routes.js` now exposes `GET /api/v1/lifeos/command-center/bp-priority-scheduler` for the real BP queue liveness and `GET /api/v1/lifeos/command-center/improvement-loop/status` for deterministic runtime improvement proposals. The command center can now read whether the canonical queue is actually enabled/recent instead of inferring continuity from older overnight sidecars. | Runtime audit found a truth leak: the cockpit could report system maturity while the canonical autonomous queue was disabled. These endpoints make the cockpit read the real queue and the real improvement backlog, not theater. | ✅ local syntax + route import checks; ✅ readiness/improvement status builders exercised locally | BuilderOS runtime truth surfaces |
 | 2026-05-19 | **`routes/public-routes.js` + `lifeos-install.html`** — missing APK/IPA no longer returns JSON (Safari saved error as file); redirect to `/install`; iPhone saved-file alert. | Adam: download saved a file, not an app. | ✅ node --check | deploy |
 | 2026-05-19 | **`routes/public-routes.js` + `lifeos-install.html`** — iPhone install fix: hide APK card on iOS, promote Add to Home Screen; redirect `/download/lifeos.apk` on iPhone UA to `/install` (unsupported file type was Android APK/JSON on Apple). | Adam: unsupported file type on iPhone at install page. | ✅ node --check | deploy |

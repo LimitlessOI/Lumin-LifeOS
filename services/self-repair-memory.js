@@ -280,6 +280,12 @@ export async function writeRepairMemoryFromExecution(pool, {
     duration_ms: durationMs ?? null,
     repair_id: repairId,
     stopped_reason: stoppedReason || null,
+    attempt_stages: [...new Set((stepsExecuted || []).map((s) => s.attempt_stage).filter(Boolean))],
+    context_requirements_seen: [...new Set(
+      (stepsExecuted || []).flatMap((s) => Object.entries(s.required_context || {})
+        .filter(([, required]) => required === true)
+        .map(([key]) => key))
+    )],
   };
   const { classification, signals, verification_path } = classifyRepairLesson(draftEvent);
   const event = {

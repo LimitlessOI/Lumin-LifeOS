@@ -7,6 +7,7 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import { scrubCounselTheater, detectCounselTheater } from './chair-direct-connection-truth.js';
+import { evaluateBuildProof } from './build-proof-contract.js';
 
 const LARGE_OVERLAY_PATHS = [
   'public/overlay/lifeos-app.html',
@@ -134,6 +135,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
   let pass_fail = 'FAIL';
   let command_truth = 'NO_COMMAND_RAN';
   let receipt_truth = 'NO_RECEIPT';
+  let transport_status = null;
   let first_blocker = upstreamBlocker;
   let lesson = raw.execution_receipt?.lesson || null;
   let fix = raw.execution_receipt?.fix || null;
@@ -159,6 +161,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       : 'The system returned failure or no commit — nothing shipped.');
     fix = fix || 'Read the autopsy below and run Fix step 1.';
   } else if (apiOk && !committed && raw.task_meta?.already_present === true) {
+    transport_status = evaluateBuildProof({ codeChanging: true, alreadyPresent: true }).transport_status;
     failure_code = null;
     first_blocker = null;
     pass_fail = 'PASS';
@@ -222,7 +225,9 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       lesson = lesson || 'The builder cannot replace entire overlay shells. It produced placeholder theater while claiming success.';
       fix = fix || 'Use GAP-FILL scoped patch on #lumin-drawer only — never regenerate lifeos-app.html wholesale.';
     } else if (action === 'build' && !sha) {
-      failure_code = 'COMMIT_NO_SHA';
+      const proof = evaluateBuildProof({ codeChanging: true, commitSha: sha });
+      transport_status = proof.transport_status;
+      failure_code = proof.fail_code || 'COMMIT_NO_SHA';
       first_blocker = 'Commit claimed but no SHA returned — cannot verify git or deploy.';
       pass_fail = 'FAIL';
       command_truth = 'COMMITTED';
@@ -268,6 +273,24 @@ export function enforceExecutionTruth(raw, ctx = {}) {
         }
       }
       if (passCandidate) {
+        transport_status = evaluateBuildProof({
+          codeChanging: true,
+          commitSha: sha,
+          originContainsCommit: raw.origin_contains_commit === true
+            ? true
+            : raw.origin_contains_commit === false
+              ? false
+              : null,
+          deployRequired: founderRequired,
+          deployMatchesOriginMain: founderRequired
+            ? (founderVerification?.deploy_synced === true
+              ? true
+              : founderVerification?.deploy_synced === false
+                ? false
+                : null)
+            : null,
+          runtimeBehaviorVerified: founderRequired ? founderVerification?.ok === true : null,
+        }).transport_status;
         pass_fail = 'PASS';
         command_truth = 'COMMITTED';
         receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
@@ -316,6 +339,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
     pass_fail,
     command_truth,
     receipt_truth,
+    transport_status,
     failure_code,
     committed: pass_fail === 'PASS' && committed,
     target_file: targetFile || null,
@@ -485,6 +509,7 @@ export function formatExecutionTruthReply(truth) {
   lines.push(`${icon} ${truth.pass_fail || 'UNKNOWN'} · ${truth.action || 'response'}`);
   if (truth.command_truth) lines.push(`Command: ${truth.command_truth}`);
   if (truth.receipt_truth) lines.push(`Receipt: ${truth.receipt_truth}`);
+  if (truth.transport_status) lines.push(`Transport: ${truth.transport_status}`);
   if (truth.failure_code && truth.pass_fail === 'FAIL') lines.push(`Code: ${truth.failure_code}`);
   if (truth.execution_path) lines.push(`Path: ${truth.execution_path}`);
   if (truth.target_file) lines.push(`File: ${truth.target_file}`);
@@ -574,7 +599,12 @@ export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RA
   if (theater.violation && !scrubbed.trim()) {
     return 'I cannot claim that action ran — nothing executed. Tell me what to run.';
   }
-  if (scrubbed.trim()) return scrubbed;
+  if (scrubbed.trim()) {
+    if (command_truth !== 'NO_COMMAND_RAN') return scrubbed;
+    if (!FALSE_EXECUTION_CLAIM.test(scrubbed) && !/\b(COMMITTED|deployed to production|build triggered)\b/i.test(scrubbed)) {
+      return scrubbed;
+    }
+  }
 
   const reply = String(text || '').trim();
   if (!reply || command_truth !== 'NO_COMMAND_RAN') return reply;

@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-27",
+  "updated_at": "2026-06-28",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BPs in priority order ARE the queue.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
@@ -20,6 +20,20 @@
       "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
       "hist_doc": "docs/VOICE_RAIL_HISTORY_ONLY.md",
       "note": "NOT active queue. STT/TTS/wake-word salvage → Lumin Chair. Overlay redirects to /lifeos."
+    },
+    {
+      "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+      "status": "INTERNAL_PROOF_ONLY",
+      "operator_lock": "Internal factory proof receipt — not an active product queue item.",
+      "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
+      "note": "Canonical closure acceptance receipt for the BuilderOS autonomy-closure mission."
+    },
+    {
+      "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+      "status": "INTERNAL_PROOF_ONLY",
+      "operator_lock": "Internal transport/deploy proof receipt — not an active product queue item.",
+      "receipt_path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
+      "note": "Canonical build/deploy/runtime proof receipt for the BuilderOS autonomy-closure mission."
     }
   ],
   "items": [
@@ -62,12 +76,17 @@
       "verdict_note": "Code complete + node --check PASS. Acceptance pending Railway deploy. Re-run npm run lifeos:action-inbox:v1-acceptance after deploy.",
       "build_method": "GAP-FILL",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-16T11:19:55.949Z",
-      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
+      "technical_pass_at": "2026-06-28T02:03:08.398Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
       "production_base": "https://robust-magic-production.up.railway.app",
       "note": "Action Inbox v1 acceptance. BP build request boundary enforced.",
       "founder_usability_pass": false,
-      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/OBJECTIVE_VERDICT.json"
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/OBJECTIVE_VERDICT.json",
+      "artifact_sync": {
+        "at": "2026-06-28T02:03:08.398Z",
+        "mode": "technical_acceptance",
+        "status": "CURRENT"
+      }
     },
     {
       "rank": 3,
@@ -141,7 +160,56 @@
       "production_base": "",
       "build_method": "system-build",
       "founder_usability_pass": false,
-      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json"
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
+      "artifact_sync": {
+        "at": "2026-06-28T01:07:38.985Z",
+        "mode": "founder_usability",
+        "status": "CURRENT"
+      }
+    },
+    {
+      "rank": 6,
+      "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+      "product_id": "builderos",
+      "product_home": "builderos-reboot/",
+      "product_ssot": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
+      "objective_home": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/",
+      "founder_packet": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run builderos:autonomy-closure:v1-acceptance",
+      "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
+      "verdict": "TECHNICAL_PASS",
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-06-28T01:29:17.117Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
+      "production_base": "https://robust-magic-production.up.railway.app",
+      "build_method": "system-build",
+      "note": "Internal BuilderOS closure acceptance proof. Not an active founder product queue item.",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/OBJECTIVE_VERDICT.json"
+    },
+    {
+      "rank": 7,
+      "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-DEPLOY-TRUTH",
+      "product_id": "builderos",
+      "product_home": "builderos-reboot/",
+      "product_ssot": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
+      "objective_home": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/",
+      "founder_packet": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run builderos:autonomy-closure:build-deploy-truth",
+      "receipt_path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
+      "verdict": "TECHNICAL_PASS",
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-06-28T01:33:55.583Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
+      "production_base": "https://robust-magic-production.up.railway.app",
+      "build_method": "system-build",
+      "note": "Internal BuilderOS commit/origin/deploy/runtime proof. Not an active founder product queue item.",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/OBJECTIVE_VERDICT.json"
     }
   ]
 }

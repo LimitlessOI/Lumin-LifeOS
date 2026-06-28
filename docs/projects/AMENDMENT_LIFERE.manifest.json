@@ -22,7 +22,7 @@
     "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
     "config/lifeos-stack-registry.json"
   ],
-  "last_updated": "2026-06-26",
+  "last_updated": "2026-06-28",
   "last_receipt": "2026-06-26 sentry-ui-routes-workspace-comms",
   "last_change_summary": "GAP-FILL: buyer/seller workspace, suggest-vars, objection-coach, weekly-report routes + ensureDemoDealTwins; agent alpha 124/124"
 }

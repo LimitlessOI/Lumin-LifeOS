@@ -1,0 +1,216 @@
+{
+  "schema": "builderos_autonomy_closure_v1_acceptance",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "at": "2026-06-28T01:29:17.117Z",
+  "mode": "full_suite",
+  "requested_check": null,
+  "ok": true,
+  "passed": [
+    "architect-snt-promotion",
+    "queue-truth",
+    "repair-carry-forward",
+    "improvement-contract",
+    "receipt-sync",
+    "ui-truth",
+    "soft-acceptance-language"
+  ],
+  "failed": [],
+  "checks": {
+    "architect-snt-promotion": {
+      "ok": true,
+      "detail": "architect handoff, SNT attack categories, and promotion receipts are frozen",
+      "evidence": {
+        "architect_handoff_prompt": true,
+        "snt_handoff_prompt": true,
+        "arc_signoff_receipt": [
+          "founder-surface regression corpus requirement",
+          "transport-proof state vocabulary",
+          "receipt and report freshness bound to source hashes and deploy SHA",
+          "parts-car asset classification as canonical guidance",
+          "dead-script proof alias verification",
+          "mandatory architect machine-execution output",
+          "mandatory SNT attack categories",
+          "Studio-owned founder usability contract",
+          "default coder_must_not_decide boundaries",
+          "receipted promotion law"
+        ],
+        "chair_snt_arc_consensus_actions": [
+          {
+            "issue": "Architect output was better at diagnosis than execution detail.",
+            "resolution": "Keep the canonical execution spine and promote the architect's stronger truth upgrades into it."
+          },
+          {
+            "issue": "Future ARC handoffs can stop too early at architecture prose.",
+            "resolution": "Require both architecture output and machine-execution output in future architect handoffs."
+          },
+          {
+            "issue": "SNT attacks were not frozen as mandatory categories.",
+            "resolution": "Mandate founder-surface deception, transport truth, stale authority, and soft-acceptance attacks in all future SNT passes."
+          },
+          {
+            "issue": "Studio authority was too informal.",
+            "resolution": "Studio must own founder-usability and interaction-quality artifacts for founder-facing surfaces."
+          },
+          {
+            "issue": "Lower-tier coder ambiguity remained too high.",
+            "resolution": "Add default coder_must_not_decide boundaries and tighten step-level constraints."
+          },
+          {
+            "issue": "Better answers could remain in chat or side notes.",
+            "resolution": "Promotion into canonical authority must be required or explicitly rejected with reason."
+          }
+        ]
+      }
+    },
+    "queue-truth": {
+      "ok": true,
+      "detail": "Point B target remains incomplete while founder usability is false",
+      "evidence": {
+        "target_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+        "state": {
+          "verdict": "TECHNICAL_PASS",
+          "objective_verdict": "TECHNICAL_PASS",
+          "technical_pass": true,
+          "founder_usability_pass": false,
+          "point_b_mission": true,
+          "point_b_complete": false,
+          "queue_complete_for_scheduler": false,
+          "readiness_state": "TECHNICAL_PASS_ONLY",
+          "required_next_action": "founder_usability_confirmation",
+          "blocking_reason": "point_b_founder_confirmation_required"
+        }
+      }
+    },
+    "repair-carry-forward": {
+      "ok": true,
+      "detail": "repair retries must carry prior attempts, lessons, and proposed fix",
+      "evidence": {
+        "requirements": {
+          "attempt": 3,
+          "stage": "same_tier_research_consensus",
+          "require_prior_lessons": true,
+          "require_research": true,
+          "require_consensus_context": true
+        },
+        "good_context": {
+          "prior_attempts_consulted": [
+            1,
+            2
+          ],
+          "lessons_loaded": [
+            "deploy-proof-gap",
+            "target-file-gap"
+          ],
+          "research_completed": true,
+          "consensus_participants": [
+            "gemini_flash",
+            "claude_sonnet"
+          ],
+          "proposed_fix": "retry with explicit target_file and transport proof gate",
+          "outcome": "retry"
+        },
+        "bad_blocked_return": {
+          "code": "BLOCKED_CARRY_FORWARD_CONTEXT_MISSING",
+          "missing": [
+            "prior_attempts_consulted",
+            "lessons_loaded",
+            "proposed_fix"
+          ],
+          "attempt_number": 3
+        }
+      }
+    },
+    "improvement-contract": {
+      "ok": true,
+      "detail": "improvement loop emits deterministic blueprint deltas",
+      "evidence": {
+        "delta": {
+          "delta_id": "delta:sentry:POINT_B_QUEUE_SYNC",
+          "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+          "step_id": "BAC-002",
+          "authority_owner": "Chair",
+          "source": "sentry",
+          "source_code": "POINT_B_QUEUE_SYNC",
+          "title": "Keep Point B founder false visible",
+          "why_now": "QUEUE POINT_B READINESS SYNC proof must be deterministic",
+          "priority": "P1",
+          "proof_required": [
+            "commit_sha",
+            "origin_main_or_remote_transport",
+            "deploy_or_runtime_proof",
+            "artifact_sync_receipt"
+          ],
+          "auto_applicable": true,
+          "disposition": "AUTO_APPLY_MISSION_DELTA",
+          "canonical_promotion_required": true,
+          "rejection_requires_owner": "ARC",
+          "rejection_requires_reason": true,
+          "secondary_queue_created": false
+        }
+      }
+    },
+    "receipt-sync": {
+      "ok": true,
+      "detail": "artifact sync keeps BP item, readiness report, and founder false aligned",
+      "evidence": {
+        "bp_item": {
+          "at": "2026-06-28T01:07:38.985Z",
+          "mode": "founder_usability",
+          "status": "CURRENT"
+        },
+        "readiness_objective": {
+          "rank": 5,
+          "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": {
+            "at": "2026-06-28T01:07:38.985Z",
+            "mode": "founder_usability",
+            "status": "CURRENT"
+          }
+        },
+        "readiness_state": "TECHNICAL_PASS_ONLY"
+      }
+    },
+    "ui-truth": {
+      "ok": true,
+      "detail": "UI alpha truth distinguishes technical pass from founder completion",
+      "evidence": {
+        "ui_gate": {
+          "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+          "founder_usability_pass": false,
+          "technical_pass_only": "script_enforced_next_run"
+        },
+        "founder_alpha_audit": {
+          "founder_usability_pass": false,
+          "ready_for_adam_alpha": true,
+          "technical_pass_only": "script_enforced_next_run"
+        }
+      }
+    },
+    "soft-acceptance-language": {
+      "ok": true,
+      "detail": "founder-surface checks use structured truth and receipt fields",
+      "evidence": {
+        "founder_battery_structured_fields": {
+          "detectCounselTheater": true,
+          "expectTruth": true,
+          "expectChannel": true,
+          "finalTransport": true
+        },
+        "direct_action_structured_fields": {
+          "proof_record_id": true,
+          "readback_verified": true
+        }
+      }
+    }
+  },
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json"
+    ]
+  }
+}

@@ -32,6 +32,7 @@ test('confirmFounderUsability records fail without long quote', () => {
   });
   assert.equal(result.ok, true);
   assert.equal(result.founder_usability_pass, false);
+  assert.equal(result.artifact_sync.mode, 'founder_usability');
   fs.writeFileSync(VERDICT_PATH, `${JSON.stringify(before, null, 2)}\n`);
 });
 

@@ -55,6 +55,12 @@ const report = {
 let browser;
 let page;
 let errors = [];
+const CONSOLE_ERROR_ALLOWLIST = [];
+
+function isAllowlistedConsoleError(text = '') {
+  const msg = String(text || '');
+  return CONSOLE_ERROR_ALLOWLIST.some((pattern) => pattern.test(msg));
+}
 
 function pass(id, detail = '') {
   report.passed.push(id);
@@ -158,10 +164,15 @@ async function test_appLoads() {
 async function test_noJsErrors() {
   console.log('\n[2] No JS console errors on load');
   const fatal = errors.filter((e) => e.type === 'pageerror');
+  const consoleErrors = errors.filter(
+    (e) => e.type === 'console_error' && !isAllowlistedConsoleError(e.text),
+  );
   if (fatal.length) {
     fail('no_js_errors', fatal.map((e) => e.text.slice(0, 120)).join('; '));
+  } else if (consoleErrors.length) {
+    fail('no_js_errors', consoleErrors.map((e) => e.text.slice(0, 120)).join('; '));
   } else {
-    pass('no_js_errors', `${errors.filter((e) => e.type === 'console_error').length} console.error(s)`);
+    pass('no_js_errors', 'no unallowlisted pageerror/console.error signals');
   }
 }
 

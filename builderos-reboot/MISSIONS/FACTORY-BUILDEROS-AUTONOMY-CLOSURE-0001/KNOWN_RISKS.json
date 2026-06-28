@@ -1,0 +1,37 @@
+{
+  "schema": "known_risks_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "risks": [
+    {
+      "risk_id": "KR-001",
+      "severity": "P0",
+      "title": "False-green queue completion",
+      "detail": "Scheduler and runner can stop while Point B is still founder-incomplete."
+    },
+    {
+      "risk_id": "KR-002",
+      "severity": "P0",
+      "title": "Silent under-escalation in self-repair",
+      "detail": "Current executor policy stops earlier than founder doctrine requires."
+    },
+    {
+      "risk_id": "KR-003",
+      "severity": "P1",
+      "title": "Receipt truth lag",
+      "detail": "Receipts can remain fresh-looking while no longer describing the current live truth."
+    },
+    {
+      "risk_id": "KR-004",
+      "severity": "P1",
+      "title": "Legacy authority bleed",
+      "detail": "Cold agents can still confuse Hist-owned artifacts with active orchestration."
+    },
+    {
+      "risk_id": "KR-005",
+      "severity": "P1",
+      "title": "Blueprint comparison skipped",
+      "detail": "If architect comparison is skipped, execution may freeze drift into law."
+    }
+  ]
+}
+

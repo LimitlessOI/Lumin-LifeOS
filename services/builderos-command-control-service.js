@@ -3,6 +3,9 @@
  */
 // @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 
+import { isFounderBuildProofPending } from './founder-build-job-store.js';
+import { hydrateFounderBuildResultTruth } from './founder-build-result-truth.js';
+
 const MIN_INSTRUCTION_LENGTH = 12;
 const DANGEROUS_PATTERNS = [
   'DROP TABLE',
@@ -209,7 +212,10 @@ export async function createFounderInterfaceBuildJobRecord(pool, { id, instructi
 
 export function mapDbRowToFounderBuildJob(row) {
   if (!row || row.metadata_json?.kind !== FOUNDER_INTERFACE_JOB_KIND) return null;
-  const founderResult = row.result_json?.founder_result || row.result_json || {};
+  const founderResult = hydrateFounderBuildResultTruth(
+    row.result_json?.founder_result || row.result_json || {},
+    row.instruction,
+  );
   const running = row.status === 'running' || row.status === 'queued' || row.status === 'retrying';
   if (running) {
     return {
@@ -219,15 +225,20 @@ export function mapDbRowToFounderBuildJob(row) {
       result: null,
     };
   }
-  const pass = founderResult.pass_fail === 'PASS' || row.status === 'committed' || row.status === 'deployed';
+  const pass = founderResult.pass_fail === 'PASS';
+  const waitingForProof = pass && (
+    row.status === 'committed'
+    || isFounderBuildProofPending(founderResult)
+  );
   return {
     id: row.id,
     task: row.instruction,
-    status: pass ? 'completed' : 'failed',
+    status: waitingForProof ? 'waiting_for_proof' : pass ? 'completed' : 'failed',
     result: {
       ...founderResult,
       pass_fail: founderResult.pass_fail || (pass ? 'PASS' : 'FAIL'),
       first_blocker: founderResult.first_blocker || row.blocker || null,
+      persistence_status: row.status,
     },
   };
 }
@@ -239,17 +250,20 @@ export async function loadFounderBuildJobFromDb(pool, jobId) {
 
 export async function persistFounderBuildJobResult(pool, jobId, result = {}) {
   if (!pool || !jobId) return null;
-  const pass = result.pass_fail === 'PASS';
-  const status = pass ? 'committed' : 'failed';
+  const normalized = hydrateFounderBuildResultTruth(result);
+  const pass = normalized.pass_fail === 'PASS';
+  const status = pass
+    ? (isFounderBuildProofPending(normalized) ? 'committed' : 'completed')
+    : 'failed';
   return updateCommandControlJobExecution(pool, jobId, {
     status,
-    blocker: result.first_blocker || result.blocker || null,
+    blocker: normalized.first_blocker || normalized.blocker || null,
     result_json: {
-      founder_result: result,
-      pass_fail: result.pass_fail,
-      committed: result.committed === true,
-      target_file: result.target_file || null,
-      sha: result.sha || null,
+      founder_result: normalized,
+      pass_fail: normalized.pass_fail,
+      committed: normalized.committed === true,
+      target_file: normalized.target_file || null,
+      sha: normalized.sha || null,
     },
   });
 }

@@ -2,7 +2,7 @@
   "amendment_id": "AMENDMENT_46_BUILDEROS_CONTROL_PLANE",
   "title": "BuilderOS Control Plane",
   "status": "IN_BUILD",
-  "last_updated": "2026-06-22",
+  "last_updated": "2026-06-28",
   "supersedes_partial": ["AMENDMENT_44_TOKEN_ACCOUNTING_OS"],
   "owned_files": [
     "services/builderos-control-plane-service.js",

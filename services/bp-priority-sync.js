@@ -54,6 +54,8 @@ export function syncMissionFromTechnicalReceipt({
   const now = receipt.completed_at || new Date().toISOString();
   const gitSha = receipt.git_sha || buildRecord.git_sha || '';
   const productionBase = receipt.production_base || buildRecord.production_base || '';
+  const completionReceiptId =
+    receipt.completion_receipt_id || buildRecord.completion_receipt_id || null;
 
   item.blueprint_status = 'complete';
   item.verdict = 'TECHNICAL_PASS';
@@ -66,6 +68,7 @@ export function syncMissionFromTechnicalReceipt({
   if (buildRecord.build_method) item.build_method = buildRecord.build_method;
   if (buildRecord.intent_drift) item.intent_drift = buildRecord.intent_drift;
   if (buildRecord.note) item.note = buildRecord.note;
+  if (completionReceiptId) item.completion_receipt_id = completionReceiptId;
   item.founder_usability_pass = receipt.founder_usability_pass === true;
   item.objective_verdict = path.join(
     path.dirname(item.founder_packet),
@@ -84,6 +87,7 @@ export function syncMissionFromTechnicalReceipt({
       blueprint.git_sha = gitSha;
       blueprint.receipt_path = item.receipt_path || receipt.receipt_path;
       blueprint.receipt_verdict = 'PASS';
+      if (completionReceiptId) blueprint.completion_receipt_id = completionReceiptId;
       if (buildRecord.build_method) blueprint.build_method = buildRecord.build_method;
       for (const step of blueprint.steps || []) {
         step.status = 'complete';
@@ -112,6 +116,7 @@ export function syncMissionFromTechnicalReceipt({
       public_alias: buildRecord.public_alias,
       founder_usability_pass: receipt.founder_usability_pass === true,
       build_method: buildRecord.build_method,
+      completion_receipt_id: completionReceiptId,
     };
     writeJson(founderJsonRel, founder, { root });
     updated.push(founderJsonRel);

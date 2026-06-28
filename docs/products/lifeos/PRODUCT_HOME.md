@@ -110,3 +110,9 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - `GET /api/v1/lifeos/auth/me` now falls back to founder handle lookup for valid handle-only JWTs, not just command-key fallback, so founder-shell auth does not degrade into a false `404 User not found`.
 - Removed 66 probe-debris HTML comments (alpha/parity/point-b probe labels) from `public/overlay/lifeos-app.html` lines 2337-2402.
 - Replaced Tailwind CDN Play script (`cdn.tailwindcss.com`) with inline minimal CSS in `lifeos-dashboard.html`, `lifeos-victory-vault.html`, and `site-builder-command-center.html` — eliminates the "Tailwind CDN is for development only" console.warn from the founder shell iframe.
+
+## 2026-06-28 closure truth receipts
+
+- `scripts/run-ui-alpha-gate.mjs` and `scripts/audit-founder-alpha-ready.mjs` now explicitly preserve the difference between `CLEARED_FOR_FOUNDER_ALPHA` and founder-closed Alpha / Point B.
+- Founder chat/build proof now treats build transport as a first-class truth field; async founder-job results are hydrated before founder poll/readback so bare `PASS` cannot hide missing commit/deploy truth.
+- `builderos-reboot/PRODUCT_READINESS_REPORT.json` is now part of the active LifeOS authority chain for readiness surfacing, but it does not override Point B or founder-usability truth.

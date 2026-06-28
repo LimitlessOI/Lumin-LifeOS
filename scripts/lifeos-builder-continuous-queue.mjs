@@ -19,7 +19,9 @@
  * **`BUILDER_QUEUE_ENABLED=1`** is set explicitly. Product work uses **`builderos-reboot/BP_PRIORITY.json`**
  * (priority ranking) → mission **`BLUEPRINT.json`** (work plan) — not this JSON task list.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * HISTORY_ONLY: legacy shadow queue preserved for migration/audit; not active BuilderOS authority.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot builderos-reboot/AGENTS.md
  */
 
 import 'dotenv/config';

@@ -53,8 +53,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-16T11:19:55.949Z",
-      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
+      "completed_at": "2026-06-28T02:03:08.398Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "AIV1-S02",
@@ -89,8 +89,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-16T11:19:55.949Z",
-      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
+      "completed_at": "2026-06-28T02:03:08.398Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "AIV1-S03",
@@ -125,8 +125,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-16T11:19:55.949Z",
-      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
+      "completed_at": "2026-06-28T02:03:08.398Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "AIV1-S04",
@@ -161,8 +161,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-16T11:19:55.949Z",
-      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
+      "completed_at": "2026-06-28T02:03:08.398Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     },
     {
       "step_id": "AIV1-S05",
@@ -197,14 +197,14 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-16T11:19:55.949Z",
-      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
+      "completed_at": "2026-06-28T02:03:08.398Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
   "authored_by": "ARC",
-  "completed_at": "2026-06-16T11:19:55.949Z",
-  "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
+  "completed_at": "2026-06-28T02:03:08.398Z",
+  "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
   "receipt_path": "products/receipts/ACTION_INBOX_V1_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "GAP-FILL"

@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const CONTRACT_PATH = path.join(ROOT, 'docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md');
 function resolveBaseUrl() {
   if (process.env.LIFERE_ALPHA_BASE_URL) return process.env.LIFERE_ALPHA_BASE_URL.replace(/\/$/, '');
   if (process.env.PUBLIC_BASE_URL) return process.env.PUBLIC_BASE_URL.replace(/\/$/, '');
@@ -52,6 +53,7 @@ const verdict = JSON.parse(fs.readFileSync(
   'utf8',
 ));
 step('AR-v1_acceptance_pass', ['TECHNICAL_PASS', 'PASS'].includes(String(verdict.verdict || '').toUpperCase()));
+step('AR-founder_usability_contract', fs.existsSync(CONTRACT_PATH), 'missing founder usability contract');
 
 const markers = fs.readFileSync(path.join(ROOT, 'public/overlay/lifeos-lifere.html'), 'utf8');
 for (const [id, pattern] of [
@@ -118,6 +120,7 @@ report.ok = report.failed.length === 0;
 report.ready_for_alpha_testing = report.ok;
 report.ready_for_alpha_gate = report.ok && verdict.founder_usability_pass === true;
 report.alpha_ready = report.ready_for_alpha_testing;
+report.technical_pass_only = report.ready_for_alpha_testing && verdict.founder_usability_pass !== true;
 report.canonical_url = '/overlay/lifeos-app.html?page=lifeos-lifere.html';
 report.founder_close_path = 'Run Alpha Daily Cycle → Confirm Alpha PASS (12+ char quote) in LifeRE banner';
 

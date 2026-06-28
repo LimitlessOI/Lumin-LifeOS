@@ -194,7 +194,7 @@
     }
   ],
   "last_verified_at": "2026-05-31",
-  "last_updated": "2026-06-27",
+  "last_updated": "2026-06-28",
   "ssot_receipt_tail": "Canonical BP scheduler and deterministic improvement-loop status surfaces added so the cockpit reads real BuilderOS autonomy continuity instead of inferring it from older overnight sidecars.",
   "verification_passed": null
 }

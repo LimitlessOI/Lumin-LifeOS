@@ -1,0 +1,566 @@
+{
+  "schema": "architect_candidate_blueprint_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "candidate_id": "ARCHITECT-CANDIDATE-CODEX-2026-06-27",
+  "status": "ARCHITECT_CANDIDATE_ONLY_NOT_EXECUTED",
+  "blind_boundary": {
+    "canonical_blueprint_read": false,
+    "forbidden_artifact": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
+    "no_code_written_by_candidate_session": true,
+    "no_new_queue": true
+  },
+  "source_authority": [
+    "docs/SSOT_NORTH_STAR.md",
+    "docs/SSOT_COMPANION.md",
+    "docs/BUILDEROS_VOCABULARY.md",
+    "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+    "docs/products/AUTHORITY_BOUNDARIES.md",
+    "builderos-reboot/AGENTS.md",
+    "docs/products/PRODUCT_REGISTRY.json",
+    "builderos-reboot/BP_PRIORITY.json",
+    "builderos-reboot/POINT_B_TARGET.json",
+    "builderos-reboot/PROJECT_CERTIFICATION.json",
+    "builderos-reboot/HANDOFF.md",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/CURRENT_STATE_AUDIT.md",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/PRE_ARC_INPUT_PACKET.json",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ARCHITECT_INPUT_PACKET.json",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ARCHITECT_HANDOFF_PROMPT.md"
+  ],
+  "objective": "Close BuilderOS autonomy-truth gaps without adding a second queue: Point B, build/repair PASS, receipt sync, self-repair, deploy truth, and founder UI proof must all fail closed until the required evidence exists.",
+  "core_design": {
+    "one_queue": "builderos-reboot/BP_PRIORITY.json remains the only active product queue.",
+    "active_point_b": "builderos-reboot/POINT_B_TARGET.json defines current program lock and founder success test.",
+    "completion_notions": [
+      "TECHNICAL_PASS",
+      "FOUNDER_USABILITY_PASS",
+      "POINT_B_COMPLETE",
+      "RELEASE_PASS",
+      "FULLY_MACHINE_READY"
+    ],
+    "rule": "No caller may collapse these states. TECHNICAL_PASS can satisfy machine-path progress but cannot complete Point B while founder_usability_pass is false.",
+    "mechanical_strategy": "Create shared helpers/gates, then wire existing scheduler, runner, readiness, acceptance, founder build, and deploy paths to the helpers. Do not duplicate local completion logic."
+  },
+  "new_or_refactored_shared_contracts": [
+    {
+      "contract_id": "CLOSURE-01-COMPLETION-SEMANTICS",
+      "proposed_helper": "services/builderos-completion-semantics.js",
+      "purpose": "Single source for mission completion, queue incomplete work, Point B closure, and readiness labels.",
+      "inputs": [
+        "BP_PRIORITY item",
+        "POINT_B_TARGET target",
+        "OBJECTIVE_VERDICT",
+        "acceptance receipt",
+        "alpha readiness receipt"
+      ],
+      "outputs": [
+        "technical_pass",
+        "founder_usability_pass",
+        "point_b_mission",
+        "point_b_complete",
+        "queue_complete_for_scheduler",
+        "readiness_state",
+        "required_next_action",
+        "blocking_reason"
+      ],
+      "hard_rules": [
+        "queue_complete_for_scheduler is false when current Point B mission founder_usability_pass is not true.",
+        "POINT_B_COMPLETE requires target mission id match, technical pass, founder_usability_pass true, and objective verdict synchronized.",
+        "Readiness labels must include TECHNICAL_PASS_ONLY when technical pass exists without founder pass."
+      ],
+      "wire_to": [
+        "services/bp-priority-queue.js",
+        "services/builderos-bp-priority-scheduler.js",
+        "scripts/bp-priority-never-stop.mjs",
+        "services/product-readiness.js",
+        "services/point-b-navigator.js",
+        "factory-staging/factory-core/arc/point-b-gate.js"
+      ]
+    },
+    {
+      "contract_id": "CLOSURE-02-TRANSPORT-PROOF",
+      "proposed_helper": "services/builderos-transport-proof.js",
+      "purpose": "No build or repair PASS unless exact commit, origin/main transport, and required deploy truth are explicit.",
+      "required_for": [
+        "code-changing build PASS",
+        "code-changing repair PASS",
+        "founder build PASS",
+        "Point B affecting acceptance PASS",
+        "live runtime fixed claim"
+      ],
+      "minimum_fields": [
+        "commit_sha",
+        "local_head_sha",
+        "origin_main_sha",
+        "origin_contains_commit",
+        "remote_branch",
+        "push_verified_at",
+        "deploy_required",
+        "deploy_sha",
+        "deploy_matches_origin_main",
+        "runtime_probe_url",
+        "runtime_probe_ok",
+        "runtime_behavior_verified",
+        "transport_status"
+      ],
+      "pass_values": [
+        "COMMIT_ONLY_NOT_LIVE",
+        "REMOTE_TRANSPORT_PASS",
+        "DEPLOY_SYNC_PASS",
+        "LIVE_BEHAVIOR_PASS"
+      ],
+      "fail_values": [
+        "COMMIT_NO_SHA",
+        "ORIGIN_MAIN_NOT_UPDATED",
+        "DEPLOY_NOT_SYNCED",
+        "LIVE_BEHAVIOR_NOT_VERIFIED",
+        "RUNTIME_PROBE_STALE"
+      ],
+      "hard_rules": [
+        "If deploy_required is true, COMMIT_ONLY_NOT_LIVE cannot be PASS.",
+        "If origin_contains_commit is false, build/repair status is FAIL even when local commit exists.",
+        "If Railway serves an older deploy_sha, the system must say not live."
+      ],
+      "wire_to": [
+        "services/lifeos-execution-truth.js",
+        "services/founder-build-success-gate.js",
+        "services/builderos-command-control-service.js",
+        "services/builderos-completion-authority.js",
+        "routes/lifeos-council-builder-routes.js",
+        "scripts/builderos-deploy-verify.mjs",
+        "scripts/system-railway-redeploy.mjs"
+      ]
+    },
+    {
+      "contract_id": "CLOSURE-03-REALITY-SYNC",
+      "proposed_helper": "services/builderos-reality-sync.js",
+      "purpose": "Every accepted reality change updates receipts, BP_PRIORITY, OBJECTIVE_VERDICT, product readiness, and twin/state artifacts in the same governed action.",
+      "sync_sets": {
+        "technical_acceptance_pass": [
+          "products/receipts/<acceptance>.json",
+          "builderos-reboot/MISSIONS/<mission>/OBJECTIVE_VERDICT.json",
+          "builderos-reboot/BP_PRIORITY.json",
+          "builderos-reboot/MISSIONS/<mission>/BLUEPRINT.json if bp_sync applies"
+        ],
+        "founder_usability_confirm": [
+          "builderos-reboot/MISSIONS/<mission>/FOUNDER_USABILITY_CONFIRM.json",
+          "builderos-reboot/MISSIONS/<mission>/OBJECTIVE_VERDICT.json",
+          "builderos-reboot/BP_PRIORITY.json",
+          "products/receipts/<acceptance>.json",
+          "products/receipts/<alpha_readiness>.json",
+          "builderos-reboot/PRODUCT_READINESS_REPORT.json"
+        ],
+        "live_deploy_change": [
+          "products/receipts/DEPLOY_VERIFY.json",
+          "products/receipts/UI_ALPHA_GATE.json when UI proof is rerun",
+          "builderos-reboot/PRODUCT_READINESS_REPORT.json when readiness state changes"
+        ]
+      },
+      "hard_rules": [
+        "A receipt that says PASS without reality_sync.applied_paths is invalid.",
+        "A stale generated report must include stale=true or be regenerated before use as KNOW.",
+        "No department certifies its own work without an independent verification receipt."
+      ],
+      "wire_to": [
+        "scripts/lib/bp-acceptance-finish.mjs",
+        "services/founder-usability-confirm.js",
+        "services/product-readiness.js",
+        "scripts/run-ui-alpha-gate.mjs"
+      ]
+    },
+    {
+      "contract_id": "CLOSURE-04-FOUNDER-SURFACE-PROOF",
+      "proposed_helper": "services/founder-surface-regression-corpus.js",
+      "purpose": "Founder UI path becomes a first-class acceptance authority, including exact founder prompts that previously failed.",
+      "corpus_path": "products/receipts/founder-surface-regression-corpus.json",
+      "minimum_cases": [
+        {
+          "id": "FSR-calories-twisted-tea",
+          "prompt": "can you tell me how many calories are in a twisted tea?",
+          "surface": "/overlay/lifeos-app.html founder drawer",
+          "must_not_route_to": [
+            "display",
+            "fake overview",
+            "COUNSEL ONLY / Rendered overview display from live system data"
+          ],
+          "must_return": [
+            "answer-like nutrition response",
+            "uncertainty or web-search label if live search unavailable"
+          ]
+        },
+        {
+          "id": "FSR-point-b-status-honest",
+          "prompt": "what is point b right now?",
+          "must_include": [
+            "LifeRE Alpha",
+            "founder_usability_pass false or awaiting founder confirmation when false"
+          ],
+          "must_not_include": [
+            "Point B complete",
+            "done"
+          ]
+        },
+        {
+          "id": "FSR-build-pass-transport",
+          "prompt": "do: make a harmless scoped proof change",
+          "must_include_when_pass": [
+            "commit_sha",
+            "origin/main proof or explicit not-live status",
+            "deploy truth when live proof is required"
+          ]
+        }
+      ],
+      "wire_to": [
+        "scripts/run-real-app-e2e.mjs",
+        "scripts/run-founder-chat-alpha-battery.mjs",
+        "scripts/run-ui-alpha-gate.mjs"
+      ]
+    },
+    {
+      "contract_id": "CLOSURE-05-SELF-REPAIR-DOCTRINE",
+      "proposed_helper": "services/builderos-repair-doctrine.js",
+      "purpose": "Use founder doctrine for all repair loops: lessons carry-forward, three-attempt pattern, research and consensus escalation.",
+      "attempt_policy": {
+        "same_tier_attempts_before_expansion": 3,
+        "attempt_1": "same-tier repair with current receipts and local code truth",
+        "attempt_2": "same-tier repair with explicit prior lesson carry-forward",
+        "attempt_3": "expanded repair with research and consensus context",
+        "after_attempt_3": "add another model or authority tier and repeat the three-attempt pattern",
+        "silently_stop": "forbidden"
+      },
+      "required_fields_per_attempt": [
+        "attempt_number",
+        "model_tier",
+        "authority_tier",
+        "prior_lessons_read",
+        "receipts_read",
+        "local_code_truth_checked",
+        "hypothesis",
+        "change_attempted",
+        "verification_result",
+        "what_changed_from_prior_attempt",
+        "next_escalation_if_fail"
+      ],
+      "wire_to": [
+        "services/self-repair-executor.js",
+        "services/founder-build-self-repair.js",
+        "services/founder-build-quorum-escalation.js",
+        "services/self-repair-memory.js",
+        "services/builderos-improvement-loop.js"
+      ]
+    },
+    {
+      "contract_id": "CLOSURE-06-IMPROVEMENT-ENFORCEMENT",
+      "proposed_helper": "services/builderos-improvement-contract.js",
+      "purpose": "Convert improvement proposals into ARC-ready deltas consumed by the active blueprint path, not advisory-only summaries.",
+      "outputs": [
+        "proposal_id",
+        "source_finding",
+        "owner",
+        "priority",
+        "required_blueprint_delta",
+        "acceptance_test_delta",
+        "receipt_delta",
+        "consensus_required",
+        "status"
+      ],
+      "hard_rules": [
+        "P0 improvement proposals block healthy-idle status until resolved, parked with owner, or converted into a BP delta.",
+        "Improvement loop cannot create a queue; it annotates the active BP/Point B path only.",
+        "Recurring failure families must produce prevention hooks or a governed blocked return."
+      ],
+      "wire_to": [
+        "services/builderos-improvement-loop.js",
+        "services/builderos-bp-priority-scheduler.js",
+        "builderos-reboot/BP_PRIORITY.json receipts only through existing sync path"
+      ]
+    }
+  ],
+  "blueprint_steps": [
+    {
+      "step_id": "ACB-S01",
+      "title": "Install shared completion semantics",
+      "owner": "ARC -> CDR",
+      "decision_authority": "ARC defines states; CDR only implements exact helper and tests",
+      "target_files": [
+        "services/builderos-completion-semantics.js",
+        "tests/builderos-completion-semantics.test.js"
+      ],
+      "implementation_intent": "Define technical_pass, founder_usability_pass, point_b_complete, queue_complete_for_scheduler, and readiness_state from BP_PRIORITY plus POINT_B_TARGET plus objective verdicts.",
+      "blocked_if_coder_must_decide": [
+        "whether TECHNICAL_PASS means complete",
+        "whether founder confirmation is required",
+        "which queue is authoritative"
+      ],
+      "acceptance_refs": [
+        "ACT-S01",
+        "ACT-S02"
+      ]
+    },
+    {
+      "step_id": "ACB-S02",
+      "title": "Wire scheduler and never-stop runner to completion helper",
+      "owner": "CDR",
+      "target_files": [
+        "services/builderos-bp-priority-scheduler.js",
+        "scripts/bp-priority-never-stop.mjs",
+        "services/bp-priority-queue.js"
+      ],
+      "implementation_intent": "Remove local TECHNICAL_PASS/PASS completion checks. Scheduler healthy idle requires no incomplete queue work and current Point B complete or founder_stop active.",
+      "must_preserve": [
+        "useful-work guard",
+        "FOUNDER_STOP halt",
+        "single BP_PRIORITY queue"
+      ],
+      "acceptance_refs": [
+        "ACT-S03",
+        "ACT-S04"
+      ]
+    },
+    {
+      "step_id": "ACB-S03",
+      "title": "Add transport proof contract",
+      "owner": "ARC -> CDR",
+      "target_files": [
+        "services/builderos-transport-proof.js",
+        "tests/builderos-transport-proof.test.js"
+      ],
+      "implementation_intent": "Centralize commit SHA, origin/main, deploy SHA, and live behavior proof semantics. Return explicit COMMIT_ONLY_NOT_LIVE vs DEPLOY_SYNC_PASS vs LIVE_BEHAVIOR_PASS.",
+      "blocked_if_coder_must_decide": [
+        "when live proof is required",
+        "what remote branch counts",
+        "whether deploy lag can still PASS"
+      ],
+      "acceptance_refs": [
+        "ACT-S05",
+        "ACT-S06",
+        "ACT-S07"
+      ]
+    },
+    {
+      "step_id": "ACB-S04",
+      "title": "Apply transport proof to founder build and generic builder completion",
+      "owner": "CDR",
+      "target_files": [
+        "services/lifeos-execution-truth.js",
+        "services/founder-build-success-gate.js",
+        "services/builderos-command-control-service.js",
+        "services/builderos-completion-authority.js",
+        "routes/lifeos-council-builder-routes.js"
+      ],
+      "implementation_intent": "No PASS-like status can be returned from build/repair without transport proof appropriate to the action. Missing SHA, missing origin proof, or stale deploy becomes FAIL or explicit NOT_LIVE.",
+      "must_preserve": [
+        "existing autopsy output",
+        "stub/layer/scope protections",
+        "founder visual verification"
+      ],
+      "acceptance_refs": [
+        "ACT-S05",
+        "ACT-S08",
+        "ACT-L02"
+      ]
+    },
+    {
+      "step_id": "ACB-S05",
+      "title": "Install reality sync contract",
+      "owner": "ARC -> CDR",
+      "target_files": [
+        "services/builderos-reality-sync.js",
+        "scripts/lib/bp-acceptance-finish.mjs",
+        "services/founder-usability-confirm.js",
+        "services/product-readiness.js",
+        "tests/builderos-reality-sync.test.js"
+      ],
+      "implementation_intent": "Make receipt/state/twin sync a required proof object. Generated reports include source registry hash, BP hash, Point B hash, deploy SHA, generated_at, and stale marker.",
+      "acceptance_refs": [
+        "ACT-S09",
+        "ACT-S10"
+      ]
+    },
+    {
+      "step_id": "ACB-S06",
+      "title": "Harden product readiness freshness",
+      "owner": "CDR",
+      "target_files": [
+        "services/product-readiness.js",
+        "builderos-reboot/PRODUCT_READINESS_REPORT.json generation path"
+      ],
+      "implementation_intent": "Read all products from PRODUCT_REGISTRY, mark stale reports, and expose TECHNICAL_PASS_ONLY vs POINT_B_COMPLETE without hiding founder false.",
+      "acceptance_refs": [
+        "ACT-S10"
+      ]
+    },
+    {
+      "step_id": "ACB-S07",
+      "title": "Upgrade founder-surface regression corpus",
+      "owner": "Studio + SNT + CDR",
+      "target_files": [
+        "products/receipts/founder-surface-regression-corpus.json",
+        "scripts/run-real-app-e2e.mjs",
+        "scripts/run-founder-chat-alpha-battery.mjs",
+        "scripts/run-ui-alpha-gate.mjs"
+      ],
+      "implementation_intent": "Exact founder path and prompt failures become durable tests. Generic green cannot overrule corpus failure.",
+      "blocked_if_coder_must_decide": [
+        "what answer quality is acceptable for founder prompt",
+        "whether display route is acceptable",
+        "whether fake overview text is allowed"
+      ],
+      "acceptance_refs": [
+        "ACT-L01",
+        "ACT-L03",
+        "ACT-L04"
+      ]
+    },
+    {
+      "step_id": "ACB-S08",
+      "title": "Separate alpha-ready from Point B closed in UI gate",
+      "owner": "ARC -> CDR",
+      "target_files": [
+        "scripts/run-ui-alpha-gate.mjs",
+        "scripts/audit-founder-alpha-ready.mjs",
+        "public/overlay/lifeos-lifere.html if labels need correction"
+      ],
+      "implementation_intent": "UI gate may return CLEARED_FOR_FOUNDER_ALPHA, but Point B remains incomplete until founder_usability_pass true. Every receipt and UI label must say this explicitly.",
+      "acceptance_refs": [
+        "ACT-S11",
+        "ACT-L05"
+      ]
+    },
+    {
+      "step_id": "ACB-S09",
+      "title": "Replace weaker self-repair attempt law",
+      "owner": "ARC -> CDR",
+      "target_files": [
+        "services/builderos-repair-doctrine.js",
+        "services/self-repair-executor.js",
+        "services/founder-build-self-repair.js",
+        "services/founder-build-quorum-escalation.js",
+        "tests/builderos-repair-doctrine.test.js"
+      ],
+      "implementation_intent": "All repair loops use three-attempt doctrine with lessons, receipts, local truth, research, consensus, then tier expansion. Two-attempt cap becomes illegal except for non-repairable hard stops.",
+      "acceptance_refs": [
+        "ACT-S12",
+        "ACT-S13"
+      ]
+    },
+    {
+      "step_id": "ACB-S10",
+      "title": "Convert improvement loop from advisory to blocking deltas",
+      "owner": "SNT + CFO + Chair + ARC",
+      "target_files": [
+        "services/builderos-improvement-contract.js",
+        "services/builderos-improvement-loop.js",
+        "services/builderos-bp-priority-scheduler.js"
+      ],
+      "implementation_intent": "P0 improvement proposals must be consumed as ARC-ready deltas, parked with owner/risk, or block healthy idle. No secondary queue.",
+      "acceptance_refs": [
+        "ACT-S14",
+        "ACT-S15"
+      ]
+    },
+    {
+      "step_id": "ACB-S11",
+      "title": "Authority drift scanner for active machine paths",
+      "owner": "SNT -> CDR",
+      "target_files": [
+        "scripts/verify-builderos-active-authority.mjs",
+        "package.json",
+        "services/builderos-bp-priority-scheduler.js",
+        "scripts/bp-priority-never-stop.mjs",
+        "services/builderos-improvement-loop.js"
+      ],
+      "implementation_intent": "Active runtime files must point at product-home/queue/Point B authority, not amendment-era @ssot, unless explicitly marked history or law anchor.",
+      "acceptance_refs": [
+        "ACT-S16"
+      ]
+    },
+    {
+      "step_id": "ACB-S12",
+      "title": "Fix or remove dead alpha confirm alias",
+      "owner": "CDR",
+      "target_files": [
+        "package.json",
+        "scripts/run-alpha-confirm.mjs if retained"
+      ],
+      "implementation_intent": "The npm alias builderos:alpha:confirm must reference an existing script that drives founder usability confirm, or be removed from active proof surfaces.",
+      "acceptance_refs": [
+        "ACT-S17"
+      ]
+    },
+    {
+      "step_id": "ACB-S13",
+      "title": "Certification lock",
+      "owner": "SNT + CFO + Hist",
+      "target_files": [
+        "builderos-reboot/PROJECT_CERTIFICATION.json",
+        "scripts/verify-builderos-autonomy-closure.mjs"
+      ],
+      "implementation_intent": "FULLY_MACHINE_READY remains false until same-tier determinism, closure acceptance, deploy/runtime truth, and founder UI proof all pass. The verifier fails if the flag is upgraded prematurely.",
+      "acceptance_refs": [
+        "ACT-S18",
+        "ACT-L06"
+      ]
+    }
+  ],
+  "build_pass_standard": {
+    "required": [
+      "blueprint steps executed without unauthorized decisions",
+      "all code-changing steps have transport proof",
+      "all technical acceptance commands pass",
+      "reality_sync applied to receipts and state artifacts",
+      "SNT translation attack has no unresolved blocker"
+    ],
+    "not_sufficient_for": [
+      "Point B complete",
+      "release pass",
+      "fully machine ready"
+    ]
+  },
+  "point_b_closure_standard": {
+    "required": [
+      "LifeRE target mission technical acceptance pass",
+      "founder_usability_pass true from founder-confirm path with quote",
+      "BP_PRIORITY item verdict/founder fields synced",
+      "OBJECTIVE_VERDICT founder fields synced",
+      "acceptance and alpha readiness receipts synced",
+      "product readiness regenerated from current registry",
+      "founder UI path receipt references exact canonical URL and daily cycle/top-3/debrief visibility"
+    ],
+    "explicitly_not_enough": [
+      "TECHNICAL_PASS",
+      "UI alpha cleared for founder testing",
+      "generic API probe pass",
+      "scripted browser pass without founder confirmation"
+    ]
+  },
+  "release_pass_standard": {
+    "required": [
+      "BUILD_PASS",
+      "Point B closure if release claim is LifeRE Alpha complete",
+      "SNT release attack",
+      "CFO resource review",
+      "Wisdom lesson review",
+      "Result Scoreboard"
+    ]
+  },
+  "fully_machine_ready_standard": {
+    "required": [
+      "same-tier coder determinism true",
+      "no false healthy-idle when Point B incomplete",
+      "closure acceptance suite pass",
+      "founder UI regression corpus pass on live deploy",
+      "build/repair transport proof pass",
+      "deploy/runtime truth pass",
+      "certification verifier pass"
+    ],
+    "current_certification_expected": {
+      "FULLY_MACHINE_READY": false,
+      "SAME_TIER_CODER_DETERMINISM": false
+    }
+  },
+  "candidate_confidence": {
+    "level": "THINK",
+    "basis": "Direct reads of required authority files plus active services/scripts/receipts. No canonical BLUEPRINT.json read."
+  }
+}

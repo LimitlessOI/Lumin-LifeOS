@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const CONTRACT_PATH = path.join(ROOT, 'docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md');
 const BASE = (
   process.env.LIFERE_ALPHA_BASE_URL
   || process.env.PUBLIC_BASE_URL
@@ -61,6 +62,8 @@ for (const [id, script] of [
   step(`SUITE-${id}`, r.ok, r.tail);
 }
 
+step('CONTRACT-founder-usability', fs.existsSync(CONTRACT_PATH), 'founder usability contract missing');
+
 if (KEY) {
   const ready = await fetchJson(`${BASE}/api/v1/lifeos/builder/ready`, { 'x-command-key': KEY });
   report.deploy_sha = ready.body?.codegen?.deploy_commit_sha || ready.body?.deploy_commit_sha || null;
@@ -100,6 +103,7 @@ report.ready_for_adam_alpha = report.ok && !report.founder_usability_pass;
 report.conductor_verdict = report.ok
   ? (report.founder_usability_pass ? 'ALPHA_GATE_CLOSED' : 'CLEARED_FOR_FOUNDER_ALPHA')
   : 'NOT_READY';
+report.technical_pass_only = report.ready_for_adam_alpha === true;
 
 report.adam_first_session = {
   login: `${BASE}/overlay/lifeos-login.html`,

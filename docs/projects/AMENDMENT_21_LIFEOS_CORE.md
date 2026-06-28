@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-27 — restored parse-safe founder conversation routing and preserved service-file repair intent handling.
+**Last Updated:** 2026-06-28 — founder alpha/UI gate truth now distinguishes technical pass vs founder closure, founder chat acceptance requires structured transport proof, and async founder-build receipts hydrate commit/deploy truth fields before poll/readback.
 
 ---
 

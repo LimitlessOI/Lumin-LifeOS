@@ -6,6 +6,7 @@
  */
 import { createMemoryIntelligenceService } from './memory-intelligence-service.js';
 import { isCssOnlyUiFeedback } from './builder-instruction-target.js';
+import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
 
 export const FOUNDER_SOLO_ATTEMPT_MAX = Number(process.env.FOUNDER_SOLO_ATTEMPT_MAX || '3');
 
@@ -33,6 +34,7 @@ function buildFailureContext({ task, attempts, blocker, verification, targetFile
       blocker: a.blocker,
       repair_applied: a.repair_applied || null,
       target_file: a.target_file || null,
+      attempt_context: a.attempt_context || null,
     })),
   };
 }
@@ -55,6 +57,10 @@ ${lessons.map((l, i) => `${i + 1}. ${l}`).join('\n')}
 
 SOLO ATTEMPT LOG:
 ${JSON.stringify(context.solo_attempts, null, 2)}
+
+CARRY-FORWARD LAW:
+- Every new attempt must inherit prior attempts, loaded lessons, and a concrete proposed fix.
+- If prior attempt context is missing, the retry is invalid.
 
 ${priorDeliberations.length ? `PRIOR DELIBERATIONS:\n${priorDeliberations.join('\n---\n')}\n` : ''}
 
@@ -148,6 +154,22 @@ async function callMember(callCouncilMember, member, prompt, maxTokens) {
 }
 
 async function runQuorumDeliberation({ stage, members, callCouncilMember, context, lessons, priorDeliberations, maxTokens }) {
+  const carryForward = buildAttemptCarryForwardContext({
+    attemptNumber: context?.solo_attempts?.length + 1,
+    priorAttempts: context?.solo_attempts || [],
+    lessonsLoaded: lessons,
+    consensusParticipants: members,
+    proposedFix: priorDeliberations.at(-1) || context?.blocker || stage,
+  });
+  if (!carryForward.ok) {
+    return {
+      stage,
+      members,
+      ok: false,
+      error: carryForward.blocked_return.code,
+      blocked_return: carryForward.blocked_return,
+    };
+  }
   const prompt = buildQuorumPrompt({ stage, members, context, lessons, priorDeliberations });
   const responses = await Promise.all(
     members.map((m) => callMember(callCouncilMember, m, prompt, maxTokens)),
@@ -173,6 +195,7 @@ async function runQuorumDeliberation({ stage, members, callCouncilMember, contex
     stage,
     members,
     ok: true,
+    attempt_context: carryForward.attempt_context,
     plan: merged.plan,
     perspectives: okResponses.map((r) => ({
       member: r.member,
@@ -223,6 +246,13 @@ Produce the single best fix. JSON only:
     stage: 'chair',
     ok: true,
     member: CHAIR_MEMBER,
+    attempt_context: buildAttemptCarryForwardContext({
+      attemptNumber: context?.solo_attempts?.length + deliberations.length + 1,
+      priorAttempts: context?.solo_attempts || [],
+      lessonsLoaded: lessons,
+      consensusParticipants: [CHAIR_MEMBER],
+      proposedFix: parsed.plan?.augmented_task || parsed.plan?.root_cause || 'chair_synthesis',
+    }).attempt_context,
     plan: parsed.plan,
     rationale: parsed.plan.chair_rationale || null,
   };

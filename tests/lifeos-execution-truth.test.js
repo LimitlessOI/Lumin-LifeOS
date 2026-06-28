@@ -109,6 +109,34 @@ function testEnforceTruthPassWithSha() {
   assert.equal(truth.receipt_truth, 'COMMIT_SHA_PRESENT');
 }
 
+function testFounderVerifiedPassUsesLiveBehaviorTransport() {
+  const truth = enforceExecutionTruth({
+    ok: true,
+    committed: true,
+    target_file: 'public/overlay/lifeos-theme-overrides.css',
+    generated_output: '.msg.assistant{background:#f5e36b;color:#111;}',
+    sha: 'abc123def456',
+    execution_path: 'founder_css_patch',
+    founder_verification_required: true,
+    founder_verification: {
+      ok: true,
+      deploy_synced: false,
+      code: 'FOUNDER_VISUAL_VERIFIED',
+    },
+    task_meta: {
+      committed_files: [
+        'public/overlay/lifeos-theme-overrides.css',
+        'public/overlay/lifeos-dashboard.html',
+        'public/overlay/lifeos-app.html',
+        'public/overlay/sw.js',
+      ],
+    },
+  }, { action: 'build', task: 'patch public/overlay/lifeos-theme-overrides.css' });
+
+  assert.equal(truth.pass_fail, 'PASS');
+  assert.equal(truth.transport_status, 'LIVE_BEHAVIOR_PASS');
+}
+
 function testSanitizeFalseExecutionClaim() {
   const raw = 'Mission PRODUCT-LIFERE-OS-V1-0001 has been successfully executed. Build triggered.';
   const safe = sanitizeConversationReply(raw, { command_truth: 'NO_COMMAND_RAN' });
@@ -129,6 +157,7 @@ testEnforceTruthFailsCommsProofBuild();
 testEnforceTruthRequiresShaOnBuild();
 testValidationRejectedLabelsBuilderAttempted();
 testEnforceTruthPassWithSha();
+testFounderVerifiedPassUsesLiveBehaviorTransport();
 testSanitizeFalseExecutionClaim();
 testMissionPipelineIntentDetectsPointBPacket();
 console.log('✅ lifeos-execution-truth.test.js passed');

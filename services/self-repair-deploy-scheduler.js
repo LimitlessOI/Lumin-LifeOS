@@ -36,7 +36,7 @@ export function detectDeployProofDrift(readiness = {}) {
 }
 
 /**
- * Run deploy repair check — dry_run plans only; live invokes executor (max_attempts=2).
+ * Run deploy repair check — dry_run plans only; live invokes executor (max_attempts=3).
  * When viaPreventionHook=true, logs skip/execute to prevention hook JSONL (CAND-001 path).
  */
 export async function runDeployRepairCheck(pool, {

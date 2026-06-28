@@ -22,8 +22,12 @@ import {
 import { appendSelfRepairExecutionLog } from './self-repair-execution-log.js';
 import { writeRepairMemoryFromExecution } from './self-repair-memory.js';
 import { emitSelfRepairTelemetry } from './autonomous-telemetry-instrumentation.js';
+import {
+  SELF_REPAIR_MAX_ATTEMPTS,
+  buildSelfRepairAttemptRequirements,
+} from './self-repair-escalation-policy.js';
 
-export const EXECUTOR_MAX_ATTEMPTS = 2;
+export const EXECUTOR_MAX_ATTEMPTS = SELF_REPAIR_MAX_ATTEMPTS;
 
 const SUPPORTED_REPAIR_IDS = new Set([
   'DR-003-RECEIPT-STALE',
@@ -297,6 +301,14 @@ function finalizeExecutorRun({
       proof_status,
       repair_id: repairId,
       steps,
+      step_details: (result.steps_executed || []).map((s) => ({
+        code: s.code || null,
+        attempt: s.attempt ?? null,
+        attempt_stage: s.attempt_stage || null,
+        required_context: s.required_context || null,
+        ok: s.ok === true,
+        status: s.status ?? null,
+      })),
       receipts,
       duration_ms,
       result: result.audit_result,
@@ -442,6 +454,7 @@ export async function runSelfRepairExecutor({
 
   for (let attempt = 1; attempt <= EXECUTOR_MAX_ATTEMPTS; attempt += 1) {
     attemptsUsed = attempt;
+    const attemptPolicy = buildSelfRepairAttemptRequirements(attempt);
     const readiness = await buildSupervisedAutonomyReadiness(pool, { railwayDeploySha });
     if (hasP0OrAdamStop(readiness)) {
       stoppedReason = 'adam_required_or_p0_stop';
@@ -467,6 +480,12 @@ export async function runSelfRepairExecutor({
       });
       const shaped = sanitizeStepResult(step, response);
       shaped.attempt = attempt;
+      shaped.attempt_stage = attemptPolicy.stage;
+      shaped.required_context = {
+        prior_lessons: attemptPolicy.require_prior_lessons,
+        research: attemptPolicy.require_research,
+        consensus: attemptPolicy.require_consensus_context,
+      };
       stepsExecuted.push(shaped);
       if (shaped.receipt_ids?.length) {
         for (const id of shaped.receipt_ids) {

@@ -1,7 +1,7 @@
 {
   "schema": "action_inbox_v1_acceptance_v1",
   "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
-  "started_at": "2026-06-16T11:19:54.784Z",
+  "started_at": "2026-06-28T02:03:06.570Z",
   "production_base": "https://robust-magic-production.up.railway.app",
   "tests_passed": [
     "AIV1-T01_blueprint",
@@ -20,8 +20,8 @@
   ],
   "tests_failed": [],
   "founder_usability_pass": false,
-  "completed_at": "2026-06-16T11:19:55.949Z",
-  "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
+  "completed_at": "2026-06-28T02:03:08.398Z",
+  "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [
@@ -29,5 +29,10 @@
       "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/BLUEPRINT.json"
     ],
     "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
   }
 }

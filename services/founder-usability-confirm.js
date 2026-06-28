@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { findBpItem, writeJson, BP_PRIORITY_REL } from './bp-priority-sync.js';
 import { loadBpPriority } from './bp-priority-queue.js';
 import { createAdfPredictionLedger } from './adf-prediction-ledger.js';
+import { syncFounderUsabilityArtifacts } from './builderos-artifact-sync.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MISSIONS_ROOT = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS');
@@ -94,12 +95,24 @@ export function confirmFounderUsability({
   };
   fs.writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`);
 
+  const artifactSync = syncFounderUsabilityArtifacts({
+    missionId: id,
+    pass,
+    root,
+    at: now,
+  });
+
   return {
     ok: true,
     mission_id: id,
     founder_usability_pass: pass,
     receipt_path: receiptPath.replace(`${root}/`, '').replace(/\\/g, '/'),
-    point_b_reached: pass && technicalOk,
+    point_b_reached: artifactSync.point_b_complete === true,
+    artifact_sync: {
+      mode: artifactSync.mode,
+      readiness_report: artifactSync.readiness?.path || null,
+      freshness_status: artifactSync.freshness?.item?.artifact_sync?.status || null,
+    },
   };
 }
 

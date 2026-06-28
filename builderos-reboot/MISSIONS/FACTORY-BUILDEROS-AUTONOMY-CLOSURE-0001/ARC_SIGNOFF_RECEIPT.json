@@ -1,0 +1,31 @@
+{
+  "schema": "arc_signoff_receipt_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "ARC_SIGNOFF_COMPLETE",
+  "basis": [
+    "ARCHITECT_COMPARISON_REPORT.md",
+    "ARCHITECT_GRADE_TEMPLATE.json",
+    "SNT_VS_ARCHITECT_AUDIT.md",
+    "SNT_TO_CHAIR_FINDINGS_RECEIPT.json",
+    "CHAIR_SNT_ARC_CONSENSUS_RECEIPT.json"
+  ],
+  "arc_verdict": "Use the canonical blueprint as the execution spine with promoted architect and SNT upgrades merged in.",
+  "promoted_contributions": [
+    "founder-surface regression corpus requirement",
+    "transport-proof state vocabulary",
+    "receipt and report freshness bound to source hashes and deploy SHA",
+    "parts-car asset classification as canonical guidance",
+    "dead-script proof alias verification",
+    "mandatory architect machine-execution output",
+    "mandatory SNT attack categories",
+    "Studio-owned founder usability contract",
+    "default coder_must_not_decide boundaries",
+    "receipted promotion law"
+  ],
+  "non_promoted_or_deferred": [
+    "architect candidate as direct replacement for canonical execution order",
+    "execution before live implementation work exists"
+  ],
+  "next_owner": "CDR / system execution lane under canonical blueprint",
+  "created_at": "2026-06-27T23:34:10Z"
+}

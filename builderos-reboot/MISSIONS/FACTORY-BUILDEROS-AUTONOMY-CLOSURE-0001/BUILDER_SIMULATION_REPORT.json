@@ -1,0 +1,33 @@
+{
+  "schema": "builder_simulation_report_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "SIMULATED_READY_HOLD",
+  "simulated_steps": [
+    "BAC-001",
+    "BAC-002",
+    "BAC-003",
+    "BAC-004",
+    "BAC-005",
+    "BAC-006",
+    "BAC-007",
+    "BAC-008",
+    "BAC-009",
+    "BAC-010",
+    "BAC-011"
+  ],
+  "decision_gaps": [],
+  "blocked_by_strategic_ambiguity": false,
+  "blocked_by_execution_hold": true,
+  "execution_hold_reason": "Founder requested architect comparison before any build execution.",
+  "mechanical_risks": [
+    {
+      "risk_id": "MR-001",
+      "detail": "Dirty working tree may require careful merge discipline during eventual execution."
+    },
+    {
+      "risk_id": "MR-002",
+      "detail": "Live deploy truth must be re-checked during execution; this pack does not certify latest deploy state."
+    }
+  ]
+}
+

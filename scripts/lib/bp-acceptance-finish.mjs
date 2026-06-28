@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
-import { syncMissionFromTechnicalReceipt } from '../../services/bp-priority-sync.js';
+import { syncTechnicalAcceptanceArtifacts } from '../../services/builderos-artifact-sync.js';
 
 export const BP_SYNC_REQUIRED_PATH = 'builderos-reboot/BP_PRIORITY.json';
 export const BP_SYNC_TEST_ID = 'bp_sync_mandatory';
@@ -75,14 +75,19 @@ export function finishBpAcceptance({
 
   if (pass) {
     try {
-      const sync = syncMissionFromTechnicalReceipt({
+      const sync = syncTechnicalAcceptanceArtifacts({
         missionId,
         receipt: report,
         root,
         buildRecord: { git_sha: gitSha, production_base: base || report.production_base, ...buildRecord },
       });
-      report.bp_sync = sync;
-      const synced = (sync.updated || []).includes(BP_SYNC_REQUIRED_PATH);
+      report.bp_sync = sync.bp_sync;
+      report.artifact_sync = {
+        mode: sync.mode,
+        readiness_report: sync.readiness?.path || null,
+        freshness_status: sync.freshness?.item?.artifact_sync?.status || null,
+      };
+      const synced = (sync.bp_sync?.updated || []).includes(BP_SYNC_REQUIRED_PATH);
       if (synced) {
         for (const id of new Set([BP_SYNC_TEST_ID, syncTestId])) {
           if (id && !report.tests_passed.includes(id)) {
@@ -93,7 +98,7 @@ export function finishBpAcceptance({
         if (!report.tests_failed.includes(BP_SYNC_TEST_ID)) {
           report.tests_failed.push(BP_SYNC_TEST_ID);
         }
-        report[`fail_${BP_SYNC_TEST_ID}`] = sync.reason || 'BP_PRIORITY not updated';
+        report[`fail_${BP_SYNC_TEST_ID}`] = sync.bp_sync?.reason || 'BP_PRIORITY not updated';
         pass = false;
       }
       writeArtifacts();

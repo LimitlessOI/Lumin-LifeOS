@@ -1,0 +1,16 @@
+{
+  "schema": "idc_consensus_receipt_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "CONSENSUS_REACHED",
+  "consensus_scope": "Closure mission boundaries and required outcome",
+  "agreed_points": [
+    "The next machine priority is BuilderOS closure, not new product expansion.",
+    "The blueprint must close false-green queue semantics.",
+    "The blueprint must codify stronger self-repair escalation.",
+    "The blueprint must include founder-UI proof.",
+    "Execution is held until architect comparison is complete."
+  ],
+  "open_founder_questions": [],
+  "founder_return_required": false
+}
+

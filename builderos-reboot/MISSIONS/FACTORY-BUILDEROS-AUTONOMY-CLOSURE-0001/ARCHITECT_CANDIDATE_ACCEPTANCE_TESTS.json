@@ -1,0 +1,194 @@
+{
+  "schema": "architect_candidate_acceptance_tests_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "ARCHITECT_CANDIDATE_ONLY_NOT_EXECUTED",
+  "acceptance_command_proposal": "npm run builderos:autonomy-closure:acceptance",
+  "receipt_proposal": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_ACCEPTANCE.json",
+  "policy": {
+    "all_tests_required": true,
+    "fresh_receipts_must_bind_to_deploy_sha": true,
+    "generic_green_cannot_override_founder_specific_failure": true,
+    "technical_pass_does_not_close_point_b": true
+  },
+  "tests": [
+    {
+      "id": "ACT-S01",
+      "type": "unit",
+      "target": "services/builderos-completion-semantics.js",
+      "assertion": "A BP_PRIORITY item with verdict TECHNICAL_PASS and founder_usability_pass false returns technical_pass=true, point_b_complete=false, queue_complete_for_scheduler=false when it is the POINT_B_TARGET mission."
+    },
+    {
+      "id": "ACT-S02",
+      "type": "unit",
+      "target": "services/builderos-completion-semantics.js",
+      "assertion": "Point B complete requires target mission match, technical pass, founder_usability_pass true, OBJECTIVE_VERDICT founder_usability_pass true, and no stale sync marker."
+    },
+    {
+      "id": "ACT-S03",
+      "type": "static",
+      "target": "services/builderos-bp-priority-scheduler.js",
+      "assertion": "Scheduler does not contain local logic equivalent to verdict !== TECHNICAL_PASS && verdict !== PASS for queue incompleteness; it imports the shared completion helper."
+    },
+    {
+      "id": "ACT-S04",
+      "type": "static",
+      "target": "scripts/bp-priority-never-stop.mjs",
+      "assertion": "Never-stop runner does not define local isComplete based only on TECHNICAL_PASS/PASS; it imports the shared completion helper and treats Point B founder false as actionable incomplete work."
+    },
+    {
+      "id": "ACT-S05",
+      "type": "unit",
+      "target": "services/builderos-transport-proof.js",
+      "assertion": "Missing commit_sha returns pass=false with code COMMIT_NO_SHA for code-changing build/repair claims."
+    },
+    {
+      "id": "ACT-S06",
+      "type": "unit",
+      "target": "services/builderos-transport-proof.js",
+      "assertion": "Commit SHA that is not contained in origin/main returns pass=false with code ORIGIN_MAIN_NOT_UPDATED when remote transport is required."
+    },
+    {
+      "id": "ACT-S07",
+      "type": "unit",
+      "target": "services/builderos-transport-proof.js",
+      "assertion": "Deploy SHA mismatch returns pass=false with code DEPLOY_NOT_SYNCED when live runtime proof is required, even if commit and origin/main proof pass."
+    },
+    {
+      "id": "ACT-S08",
+      "type": "integration",
+      "target": "services/lifeos-execution-truth.js and services/builderos-command-control-service.js",
+      "assertion": "A founder build job with pass_fail PASS but no transport_proof object is downgraded to FAIL or NOT_LIVE and cannot map to status completed."
+    },
+    {
+      "id": "ACT-S09",
+      "type": "unit",
+      "target": "services/builderos-reality-sync.js",
+      "assertion": "technical_acceptance_pass sync set writes acceptance receipt, OBJECTIVE_VERDICT, BP_PRIORITY, and bp_sync proof atomically or returns fail with missing_paths."
+    },
+    {
+      "id": "ACT-S10",
+      "type": "integration",
+      "target": "services/product-readiness.js",
+      "assertion": "Generated PRODUCT_READINESS_REPORT product count equals PRODUCT_REGISTRY active product entries plus salvage entries as defined by registry, and stale source hashes fail the closure acceptance."
+    },
+    {
+      "id": "ACT-S11",
+      "type": "integration",
+      "target": "scripts/run-ui-alpha-gate.mjs",
+      "assertion": "UI_ALPHA_GATE may emit CLEARED_FOR_FOUNDER_ALPHA while founder_usability_pass=false, but must set point_b_complete=false and must not set verdict ALPHA_GATE_CLOSED."
+    },
+    {
+      "id": "ACT-S12",
+      "type": "unit",
+      "target": "services/builderos-repair-doctrine.js",
+      "assertion": "Repairable failures require three same-tier attempts before tier expansion unless a non-repairable hard stop code is returned."
+    },
+    {
+      "id": "ACT-S13",
+      "type": "integration",
+      "target": "services/self-repair-executor.js and services/founder-build-self-repair.js",
+      "assertion": "Each attempt receipt contains prior_lessons_read, receipts_read, local_code_truth_checked, what_changed_from_prior_attempt, and next_escalation_if_fail."
+    },
+    {
+      "id": "ACT-S14",
+      "type": "unit",
+      "target": "services/builderos-improvement-contract.js",
+      "assertion": "P0 improvement proposal generated from false-green or deploy-proof finding blocks scheduler healthy-idle unless resolved, parked_with_owner, or attached to an active BP delta."
+    },
+    {
+      "id": "ACT-S15",
+      "type": "static",
+      "target": "services/builderos-improvement-loop.js",
+      "assertion": "Improvement loop output does not create or reference a secondary queue; it references BP_PRIORITY and Point B only."
+    },
+    {
+      "id": "ACT-S16",
+      "type": "static",
+      "target": "scripts/verify-builderos-active-authority.mjs",
+      "assertion": "Active machine files do not use amendment-era @ssot as primary product authority unless classified as law/history anchor; product-home, BP_PRIORITY, and POINT_B are the active chain."
+    },
+    {
+      "id": "ACT-S17",
+      "type": "static",
+      "target": "package.json",
+      "assertion": "Every npm script referenced by BuilderOS closure acceptance points at an existing script file, including builderos:alpha:confirm if retained."
+    },
+    {
+      "id": "ACT-S18",
+      "type": "static",
+      "target": "builderos-reboot/PROJECT_CERTIFICATION.json",
+      "assertion": "FULLY_MACHINE_READY and SAME_TIER_CODER_DETERMINISM remain false unless all closure readiness receipts exist and pass."
+    },
+    {
+      "id": "ACT-L01",
+      "type": "live_founder_ui",
+      "target": "scripts/run-real-app-e2e.mjs",
+      "requires_env": [
+        "PUBLIC_BASE_URL",
+        "COMMAND_CENTER_KEY"
+      ],
+      "assertion": "The exact founder prompt 'can you tell me how many calories are in a twisted tea?' in /overlay/lifeos-app.html founder drawer must not route to fake display/overview and must return answer-like nutrition/search/uncertainty content."
+    },
+    {
+      "id": "ACT-L02",
+      "type": "live_founder_build",
+      "target": "scripts/run-founder-chat-alpha-battery.mjs",
+      "requires_env": [
+        "PUBLIC_BASE_URL",
+        "COMMAND_CENTER_KEY"
+      ],
+      "assertion": "Any final PASS for build probes includes commit_sha, origin/main proof, and explicit deploy/runtime state. PASS with 'Commit claimed; SHA not returned' fails."
+    },
+    {
+      "id": "ACT-L03",
+      "type": "live_founder_ui",
+      "target": "products/receipts/founder-surface-regression-corpus.json",
+      "requires_env": [
+        "PUBLIC_BASE_URL",
+        "COMMAND_CENTER_KEY"
+      ],
+      "assertion": "All founder-specific corpus cases pass on the exact founder UI path before UI_ALPHA_GATE can be ok."
+    },
+    {
+      "id": "ACT-L04",
+      "type": "live_ui_gate",
+      "target": "scripts/run-ui-alpha-gate.mjs",
+      "requires_env": [
+        "PUBLIC_BASE_URL",
+        "COMMAND_CENTER_KEY"
+      ],
+      "assertion": "A fresh green UI_ALPHA_GATE receipt includes deploy_sha, corpus_version, and source receipt deploy_sha parity. Mtime freshness alone is not enough."
+    },
+    {
+      "id": "ACT-L05",
+      "type": "live_founder_ui",
+      "target": "LifeRE founder path",
+      "requires_env": [
+        "PUBLIC_BASE_URL",
+        "COMMAND_CENTER_KEY"
+      ],
+      "assertion": "LifeRE path shows daily command center, top-3 priorities, and nightly debrief draft. If founder_usability_pass=false, UI says awaiting founder confirmation and does not say Alpha closed."
+    },
+    {
+      "id": "ACT-L06",
+      "type": "live_deploy",
+      "target": "scripts/builderos-deploy-verify.mjs and scripts/system-railway-redeploy.mjs",
+      "requires_env": [
+        "PUBLIC_BASE_URL",
+        "COMMAND_CENTER_KEY"
+      ],
+      "assertion": "Closure acceptance fails if Railway /builder/ready deploy SHA does not match origin/main for live-required steps."
+    }
+  ],
+  "exit_criteria": {
+    "pass": "All ACT-S* static/unit/integration tests pass and all ACT-L* live tests pass when live env is available.",
+    "blocked": "If live env credentials are unavailable, static/unit tests may pass but closure receipt must be BLOCKED_LIVE_PROOF_MISSING, not PASS.",
+    "forbidden_pass_conditions": [
+      "TECHNICAL_PASS used as Point B closure",
+      "PASS without commit_sha for code-changing build/repair",
+      "PASS while deploy_required and deploy_sha does not match origin/main",
+      "UI alpha ok without founder-specific corpus pass",
+      "FULLY_MACHINE_READY true before same-tier determinism and founder UI proof"
+    ]
+  }
+}

@@ -5,7 +5,7 @@
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
 **Priority:** High  
 **Owner:** Adam  
-**Last Updated:** 2026-06-01
+**Last Updated:** 2026-06-28
 **Stability:** Stable (Phase 1 + builder sync complete; Phases 2–4 in backlog)
 
 ---
@@ -309,6 +309,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-06-28 | `services/self-repair-memory.js` | Self-repair memory events now persist `attempt_stages[]` and `context_requirements_seen[]` derived from executed repair steps, so memory records whether lessons/research/consensus were actually required in the run that produced the lesson. | BuilderOS closure work needed memory to track not just that a repair happened, but what escalation/carry-forward context shaped that lesson. |
 | 2026-06-24 | `services/truth-scoreboard-worker.js` + `config/truth-governance-hypotheses.json` | Closed-loop scoreboard: parity/verify receipts → `addEvidence` → promote/demote `epistemic_facts`; twin drift ingest; scheduled tick on boot | Adam: truth level from results not fancy — GUESS watched until reality promotes |
 | 2026-06-01 | Governance-only constitutional alignment | Added historian prediction→outcome wording, Founder Intent Model support fields, and mission-linkage requirement language that is explicit about current runtime limits. | Align evidence memory with trust-calibrated governance without claiming full mission-object enforcement exists already. |
 | 2026-05-24 | `services/self-repair-memory.js` | Phase 2+3 hardening: `writeRepairMemoryFromExecution` now writes to `self_repair_memory_events` table first (DB-first), reports `{db_written, jsonl_written, fallback_used}`; back-fills `fact_id` FK. Added `readRepairMemoryFromDedicatedTable(pool, limit)` — queries `self_repair_memory_events` with all named columns, `source='db'`. `readLatestRepairMemory` priority: JSONL → DB (self_repair_memory_events) → epistemic_facts. | Durable per-field schema for self-repair memory — prior state stored lessons as JSON blob in epistemic_facts.context_required with no queryable fields |

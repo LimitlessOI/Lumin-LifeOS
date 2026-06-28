@@ -1,0 +1,155 @@
+{
+  "schema": "architect_candidate_authority_check_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "ARCHITECT_CANDIDATE_ONLY",
+  "active_authority_chain": [
+    {
+      "rank": 1,
+      "artifact": "docs/SSOT_NORTH_STAR.md",
+      "role": "Supreme law"
+    },
+    {
+      "rank": 2,
+      "artifact": "docs/SSOT_COMPANION.md",
+      "role": "Operational law"
+    },
+    {
+      "rank": 3,
+      "artifact": "docs/BUILDEROS_VOCABULARY.md",
+      "role": "Canonical vocabulary"
+    },
+    {
+      "rank": 4,
+      "artifact": "docs/products/PRODUCT_REGISTRY.json",
+      "role": "Canonical product homes and readiness anchors"
+    },
+    {
+      "rank": 5,
+      "artifact": "docs/products/<product-id>/PRODUCT_HOME.md",
+      "role": "Human-facing product truth"
+    },
+    {
+      "rank": 6,
+      "artifact": "docs/products/<product-id>/FILE_MANIFEST.json",
+      "role": "Machine ownership map"
+    },
+    {
+      "rank": 7,
+      "artifact": "builderos-reboot/BP_PRIORITY.json",
+      "role": "Only active product BP queue"
+    },
+    {
+      "rank": 8,
+      "artifact": "builderos-reboot/POINT_B_TARGET.json",
+      "role": "Current program lock and founder success test"
+    },
+    {
+      "rank": 9,
+      "artifact": "builderos-reboot/MISSIONS/<mission>/FOUNDER_PACKET.md",
+      "role": "Mission intent for one objective"
+    },
+    {
+      "rank": 10,
+      "artifact": "builderos-reboot/MISSIONS/<mission>/BLUEPRINT.json",
+      "role": "Machine-buildable twin for one objective, not read by this candidate session"
+    },
+    {
+      "rank": 11,
+      "artifact": "OBJECTIVE_VERDICT and receipt files",
+      "role": "Measured result, not authority unless synced and fresh"
+    }
+  ],
+  "history_only_sources": [
+    "builderos-reboot/MISSION_QUEUE.json",
+    "builderos-reboot/OVERNIGHT_SCOREBOARD.json",
+    "builderos-reboot/CURRENT_STATE.json",
+    "builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json",
+    "builderos-reboot/MISSIONS/*/CONTENT/**",
+    "docs/conversation_dumps/**",
+    "docs/projects/AMENDMENT_* as product behavior source before product home",
+    "builderos-reboot/_hist/**"
+  ],
+  "hard_checks": [
+    {
+      "id": "AUTH-01",
+      "name": "No second queue",
+      "rule": "Any active scheduler, runner, readiness, or improvement path must read builderos-reboot/BP_PRIORITY.json for product work and must not activate MISSION_QUEUE.json.",
+      "fail_code": "SECOND_QUEUE_DRIFT"
+    },
+    {
+      "id": "AUTH-02",
+      "name": "Product home first",
+      "rule": "Runtime/product context must load PRODUCT_REGISTRY -> PRODUCT_HOME -> FILE_MANIFEST before amendment history.",
+      "fail_code": "PRODUCT_HOME_BYPASS"
+    },
+    {
+      "id": "AUTH-03",
+      "name": "Point B governs closure",
+      "rule": "Current Point B mission cannot be marked complete unless POINT_B_TARGET mission founder_success_test is satisfied and founder_usability_pass is true.",
+      "fail_code": "POINT_B_FALSE_COMPLETE"
+    },
+    {
+      "id": "AUTH-04",
+      "name": "Blueprint before build",
+      "rule": "CDR/Builder may execute only frozen blueprint steps or true platform GAP-FILL. Unauthorized product, UX, architecture, scope, priority, or acceptance decisions return blocked.",
+      "fail_code": "BUILDER_UNAUTHORIZED_DECISION"
+    },
+    {
+      "id": "AUTH-05",
+      "name": "Receipt is not live truth",
+      "rule": "Receipts support claims only when fresh against source registry hashes, BP/Point B hashes, commit SHA, and deploy SHA where applicable.",
+      "fail_code": "STALE_RECEIPT_AS_TRUTH"
+    },
+    {
+      "id": "AUTH-06",
+      "name": "Deploy truth wins",
+      "rule": "Railway runtime deploy SHA and live behavior probes override local commit, origin/main, acceptance receipt, and narrative success.",
+      "fail_code": "DEPLOY_TRUTH_BYPASS"
+    },
+    {
+      "id": "AUTH-07",
+      "name": "Founder surface is first-class",
+      "rule": "Founder UI failures on /overlay/lifeos-app.html founder path must be promoted into acceptance corpus and block UI_ALPHA_GATE until fixed.",
+      "fail_code": "FOUNDER_SURFACE_BYPASS"
+    },
+    {
+      "id": "AUTH-08",
+      "name": "Certification lock",
+      "rule": "PROJECT_CERTIFICATION.FULLY_MACHINE_READY must remain false until same-tier determinism, closure acceptance, deploy truth, and founder UI proof all pass.",
+      "fail_code": "PREMATURE_CERTIFICATION"
+    }
+  ],
+  "builder_coder_boundary": {
+    "may_do": [
+      "execute exact blueprint steps",
+      "apply exact file changes specified by ARC",
+      "run specified acceptance commands",
+      "return blocked with evidence",
+      "perform true platform GAP-FILL when the builder path is missing or broken and the gap is receipted"
+    ],
+    "must_not_decide": [
+      "product behavior",
+      "UX or visual acceptance",
+      "scope expansion",
+      "priority order",
+      "release stage",
+      "what counts as founder success",
+      "whether a generic probe can override a founder failure",
+      "whether deploy lag is acceptable for PASS"
+    ],
+    "blocked_return_required": "ARCHITECT_CANDIDATE_BLOCKED_RETURN_SCHEMA.json"
+  },
+  "authority_scan_targets": [
+    "services/builderos-bp-priority-scheduler.js",
+    "scripts/bp-priority-never-stop.mjs",
+    "services/builderos-improvement-loop.js",
+    "services/self-repair-executor.js",
+    "services/founder-build-self-repair.js",
+    "scripts/run-real-app-e2e.mjs",
+    "scripts/run-founder-chat-alpha-battery.mjs",
+    "scripts/run-ui-alpha-gate.mjs",
+    "services/product-readiness.js",
+    "scripts/builderos-deploy-verify.mjs",
+    "scripts/system-railway-redeploy.mjs"
+  ]
+}

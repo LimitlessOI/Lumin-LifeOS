@@ -1,0 +1,128 @@
+[
+  {
+    "test_id": "AT-BAC-000B-1",
+    "step_id": "BAC-000B",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check architect-snt-promotion",
+    "expected": "architect handoff requires machine-execution output, SNT attack categories are explicit, and better-answer promotion is receipted"
+  },
+  {
+    "test_id": "AT-BAC-001-1",
+    "step_id": "BAC-001",
+    "type": "file_exists",
+    "target": "services/bp-priority-completion.js"
+  },
+  {
+    "test_id": "AT-BAC-001-2",
+    "step_id": "BAC-001",
+    "type": "node_test",
+    "command": "node --test tests/bp-priority-completion.test.js"
+  },
+  {
+    "test_id": "AT-BAC-002-1",
+    "step_id": "BAC-002",
+    "type": "npm_exit_zero",
+    "command": "npm run lifeos:bp-priority:verify"
+  },
+  {
+    "test_id": "AT-BAC-002-2",
+    "step_id": "BAC-002",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check queue-truth",
+    "expected": "scheduler cannot report no_work or healthy idle while POINT_B founder_usability_pass is false"
+  },
+  {
+    "test_id": "AT-BAC-003-1",
+    "step_id": "BAC-003",
+    "type": "node_test",
+    "command": "node --test tests/self-repair-escalation-policy.test.js"
+  },
+  {
+    "test_id": "AT-BAC-004-1",
+    "step_id": "BAC-004",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check repair-carry-forward",
+    "expected": "retry stages must persist lessons_loaded, research_completed, and prior_attempts_consulted"
+  },
+  {
+    "test_id": "AT-BAC-005-1",
+    "step_id": "BAC-005",
+    "type": "node_test",
+    "command": "node --test tests/builderos-improvement-loop.test.js"
+  },
+  {
+    "test_id": "AT-BAC-005-2",
+    "step_id": "BAC-005",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check improvement-contract",
+    "expected": "improvement loop emits deterministic blueprint deltas rather than free-form advisory output"
+  },
+  {
+    "test_id": "AT-BAC-006-1",
+    "step_id": "BAC-006",
+    "type": "npm_exit_zero",
+    "command": "node scripts/generate-product-readiness-report.mjs"
+  },
+  {
+    "test_id": "AT-BAC-006-2",
+    "step_id": "BAC-006",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check receipt-sync",
+    "expected": "acceptance finish updates objective verdict, BP item state, readiness report, and freshness fields together"
+  },
+  {
+    "test_id": "AT-BAC-007-1",
+    "step_id": "BAC-007",
+    "type": "npm_exit_zero",
+    "command": "npm run lifeos:ui-alpha-gate"
+  },
+  {
+    "test_id": "AT-BAC-007-2",
+    "step_id": "BAC-007",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check ui-truth",
+    "expected": "console errors fail unless explicitly allowlisted; founder alpha readiness does not imply point_b_complete; founder usability contract artifacts exist and govern founder-facing pass/fail"
+  },
+  {
+    "test_id": "AT-BAC-008-1",
+    "step_id": "BAC-008",
+    "type": "rg_absent",
+    "target": "services/builderos-bp-priority-scheduler.js scripts/bp-priority-never-stop.mjs services/builderos-improvement-loop.js",
+    "pattern": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md|MISSION_QUEUE.json"
+  },
+  {
+    "test_id": "AT-BAC-008-2",
+    "step_id": "BAC-008",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check soft-acceptance-language",
+    "expected": "founder-surface acceptance checks do not rely on unconstrained semantic wording where stricter corpus or schema checks can be defined"
+  },
+  {
+    "test_id": "AT-BAC-009-1",
+    "step_id": "BAC-009",
+    "type": "npm_exit_zero",
+    "command": "npm run builderos:autonomy-closure:v1-acceptance"
+  },
+  {
+    "test_id": "AT-BAC-010-1",
+    "step_id": "BAC-010",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-same-tier-determinism.mjs",
+    "expected": "three same-tier coder runs produce materially equivalent output on the sacrificial blueprint"
+  },
+  {
+    "test_id": "AT-BAC-010-2",
+    "step_id": "BAC-010",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-founder-ui-proof.mjs",
+    "expected": "real founder UI path can counsel, build, repair/escalate, and return honest result receipts"
+  },
+  {
+    "test_id": "AT-BAC-011-1",
+    "step_id": "BAC-011",
+    "type": "json_field_equals",
+    "target": "builderos-reboot/PROJECT_CERTIFICATION.json",
+    "field_path": "levels.FULLY_MACHINE_READY",
+    "expected": true
+  }
+]

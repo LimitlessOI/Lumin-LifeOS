@@ -67,6 +67,7 @@ async function send(id, text, opts = {}) {
     channel: json.chair_channel,
     truth: json.command_truth,
     pass_fail: json.pass_fail,
+    transport_status: json.transport_status || null,
     action: json.action || json.action_type,
     job_id: json.job_id,
     summary_head: summary.slice(0, 220),
@@ -219,6 +220,8 @@ for (const probe of PROBES) {
     if (probe.poll && json.job_id) {
       const polled = await pollBuildJob(json.job_id, json.poll_url);
       report.results[probe.id].final_pass_fail = polled.pf;
+      report.results[probe.id].final_transport_status =
+        polled.json.transport_status || polled.json.result?.transport_status || null;
       if (polled.pf === 'TIMEOUT') {
         if (probe.allowBuildStarted && json.job_id) {
           report.passed.push(probe.id);
@@ -230,6 +233,17 @@ for (const probe of PROBES) {
       if (probe.requirePass && polled.pf !== 'PASS') {
         fail(probe.id, `final ${polled.pf}: ${polled.json.first_blocker || ''}`);
         continue;
+      }
+      if (probe.requirePass) {
+        const finalTransport = report.results[probe.id].final_transport_status;
+        if (!finalTransport) {
+          fail(probe.id, 'missing final transport_status on build proof');
+          continue;
+        }
+        if (/COMMIT_ONLY_NOT_LIVE|COMMIT_NO_SHA|ORIGIN_MAIN_NOT_UPDATED|DEPLOY_NOT_SYNCED|LIVE_BEHAVIOR_NOT_VERIFIED/i.test(finalTransport)) {
+          fail(probe.id, `insufficient final transport proof: ${finalTransport}`);
+          continue;
+        }
       }
       if (polled.pf === 'FAIL') {
         const already = /already|no change|already_present/i.test(String(polled.json.human_summary || polled.json.first_blocker || ''));

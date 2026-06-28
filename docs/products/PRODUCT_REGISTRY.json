@@ -10,7 +10,7 @@
     ]
   },
   "schema": "product_registry_v1",
-  "updated_at": "2026-06-27",
+  "updated_at": "2026-06-28",
   "source_of_truth": [
     "docs/products/PRODUCT_REGISTRY.json",
     "docs/products/*/PRODUCT_HOME.md",

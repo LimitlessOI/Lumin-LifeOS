@@ -8,7 +8,7 @@
 | **Status** | **FOUNDING** — doctrine + twin blueprint shipped 2026-06-13 |
 | **Authority** | Subordinate to SSOT North Star Constitution |
 | **Lifecycle** | `active` (program) / Alpha slice `technical_pass` |
-| **Last Updated** | 2026-06-26 — sentry UI routes (workspace, comms suggest-vars, objection, weekly) + agent alpha 124/124 |
+| **Last Updated** | 2026-06-28 — founder usability contract, alpha readiness/UI gate truth split, and product-readiness sync for LifeRE Point B |
 | **Verification (Alpha)** | `npm run lifeos:lifere-os:v1-acceptance` |
 | **Verification (Alpha readiness)** | `npm run lifeos:lifere-alpha-readiness` |
 | **Audit agent prompt** | `docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md` |

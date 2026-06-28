@@ -1,0 +1,47 @@
+{
+  "schema": "known_contradictions_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "contradictions": [
+    {
+      "contradiction_id": "KC-001",
+      "title": "Point B founder-incomplete but queue can say no_work",
+      "evidence": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "builderos-reboot/POINT_B_TARGET.json",
+        "services/builderos-bp-priority-scheduler.js",
+        "scripts/bp-priority-never-stop.mjs"
+      ],
+      "required_resolution_step_id": "BAC-002"
+    },
+    {
+      "contradiction_id": "KC-002",
+      "title": "Self-repair doctrine says stronger escalation than current executor enforces",
+      "evidence": [
+        "services/self-repair-executor.js",
+        "services/founder-build-self-repair.js",
+        "FOUNDER_PACKET.md"
+      ],
+      "required_resolution_step_id": "BAC-003"
+    },
+    {
+      "contradiction_id": "KC-003",
+      "title": "UI alpha gate says founder alpha is ready while founder usability remains false",
+      "evidence": [
+        "products/receipts/UI_ALPHA_GATE.json",
+        "products/receipts/LIFERE_ALPHA_READINESS.json",
+        "builderos-reboot/BP_PRIORITY.json"
+      ],
+      "required_resolution_step_id": "BAC-007"
+    },
+    {
+      "contradiction_id": "KC-004",
+      "title": "Product readiness artifact does not match current registry breadth",
+      "evidence": [
+        "docs/products/PRODUCT_REGISTRY.json",
+        "builderos-reboot/PRODUCT_READINESS_REPORT.json"
+      ],
+      "required_resolution_step_id": "BAC-006"
+    }
+  ]
+}
+

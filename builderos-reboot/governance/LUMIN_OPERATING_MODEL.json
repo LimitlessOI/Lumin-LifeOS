@@ -1,0 +1,164 @@
+{
+  "schema": "lumin_operating_model_v1",
+  "updated_at": "2026-06-27",
+  "operator_lock": "Adam 2026-06-27 — Lumin is the Chair, not theater. Separate lanes. Label truth honestly. Product home first.",
+  "supreme_authorities": [
+    "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+    "docs/products/lifeos/PRODUCT_HOME.md",
+    "docs/products/lifere/PRODUCT_HOME.md",
+    "docs/products/PRODUCT_REGISTRY.json",
+    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+    "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json",
+    "builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json",
+    "builderos-reboot/governance/LIFEOS_SERVICE_DOCTRINE_RUNTIME.json",
+    "prompts/00-SYSTEM-AUTHORITY-LAYERS.md"
+  ],
+  "chair_identity": {
+    "name": "Lumin",
+    "role": "Chair",
+    "law": "Translation is human language for system truth; personality never invents state or execution."
+  },
+  "model_tiering": {
+    "default_policy": "cheapest_capable_first",
+    "escalation_rule": "Escalate only for complexity, failure, or load-bearing ambiguity.",
+    "non_negotiable": "Do not spend premium model cost on a task a cheaper model can do within the same quality bar."
+  },
+  "truth_scale": [
+    {
+      "label": "KNOW",
+      "meaning": "Supported by files, receipts, command output, runtime probes, or direct evidence."
+    },
+    {
+      "label": "THINK",
+      "meaning": "Strong inference from evidence, but not directly proven."
+    },
+    {
+      "label": "GUESS",
+      "meaning": "Best current hypothesis; must not be treated as settled truth."
+    },
+    {
+      "label": "UNVERIFIED",
+      "meaning": "Claim exists without current evidence in hand."
+    },
+    {
+      "label": "PARKED",
+      "meaning": "Intentionally deferred; not blocking this phase."
+    }
+  ],
+  "runtime_lanes": [
+    {
+      "lane_id": "conversation",
+      "chair_channels": [
+        "chair",
+        "counsel",
+        "life_admin",
+        "lumin"
+      ],
+      "purpose": "Natural conversation, counsel, coaching, strategy, expert guidance.",
+      "execution_rule": "No fake execution. Command truth must remain NO_COMMAND_RAN unless a real action occurred."
+    },
+    {
+      "lane_id": "system_action",
+      "chair_channels": [
+        "system_action",
+        "display"
+      ],
+      "purpose": "Direct system reads/writes, receipts, harmless actions, status probes.",
+      "execution_rule": "Matched system actions bypass counsel theater and return real result or exact blocker."
+    },
+    {
+      "lane_id": "product_development",
+      "chair_channels": [
+        "mission_pipeline",
+        "point_b"
+      ],
+      "purpose": "Founder intent shaping, Point B anchoring, product-development completeness, blueprint gating.",
+      "execution_rule": "Strategic ambiguity must stop here; it must not leak downward into Builder execution."
+    },
+    {
+      "lane_id": "build_execution",
+      "chair_channels": [
+        "work_execute",
+        "blueprint_execute",
+        "execute",
+        "build_async",
+        "build_terminal",
+        "terminal_default"
+      ],
+      "purpose": "Real work requests, blueprint execution, code and repo changes.",
+      "execution_rule": "Builder executes frozen intent; if it finds a non-code decision, return the blocker upward."
+    }
+  ],
+  "product_readiness_states": [
+    {
+      "state": "BRAINSTORM_ONLY",
+      "meaning": "Idea exists, but product development is not complete enough for blueprinting."
+    },
+    {
+      "state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "meaning": "Worth shaping with Chair/AIC, but not ready for BPB output."
+    },
+    {
+      "state": "READY_FOR_BLUEPRINT",
+      "meaning": "Founder packet / product home resolves strategic ambiguity."
+    },
+    {
+      "state": "BLUEPRINT_ACTIVE",
+      "meaning": "Mission is on BP_PRIORITY and buildable."
+    },
+    {
+      "state": "TECHNICAL_PASS_ONLY",
+      "meaning": "Acceptance passed mechanically; real founder usability or Point B proof is still open."
+    },
+    {
+      "state": "POINT_B_COMPLETE",
+      "meaning": "Technical and founder-usable proof both exist."
+    },
+    {
+      "state": "SCRAPPED_SALVAGE_ONLY",
+      "meaning": "Reference and salvage only; not active product work."
+    }
+  ],
+  "authority_roots": [
+    {
+      "id": "doctrine",
+      "paths": [
+        "docs/architecture/factory-v1-blueprint-pack/"
+      ],
+      "role": "Law and doctrine only; not runtime proof."
+    },
+    {
+      "id": "machine",
+      "paths": [
+        "builderos-reboot/"
+      ],
+      "role": "Mission-pack authority and product queue."
+    },
+    {
+      "id": "factory_runtime",
+      "paths": [
+        "factory-staging/"
+      ],
+      "role": "Canonical governed factory runtime."
+    },
+    {
+      "id": "production_spine",
+      "paths": [
+        "routes/",
+        "services/",
+        "startup/",
+        "server.js"
+      ],
+      "role": "Live LifeOS runtime today; valuable, callable, but not factory law."
+    },
+    {
+      "id": "hist",
+      "paths": [
+        "builderos-reboot/_hist/",
+        "docs/conversation_dumps/",
+        "builderos-reboot/MISSION_QUEUE.json"
+      ],
+      "role": "History, research, salvage, and receipts that cannot silently drive active runtime."
+    }
+  ]
+}

@@ -26,6 +26,7 @@ export function appendSelfRepairExecutionLog(entry = {}) {
     proof_status: entry.proof_status || null,
     repair_id: entry.repair_id || null,
     steps: entry.steps || [],
+    step_details: entry.step_details || [],
     receipts: entry.receipts || [],
     duration_ms: entry.duration_ms ?? null,
     result: entry.result || null,
@@ -85,6 +86,12 @@ export async function readLatestExecutorReceiptFromPool(pool) {
     proof_status: fj.verification?.readiness?.proof_freshness_overall || fj.verification?.proof_freshness?.freshness?.overall || null,
     repair_id: fj.repair_id || null,
     steps: (fj.steps_executed || []).map((s) => s.code).filter(Boolean),
+    step_details: (fj.steps_executed || []).map((s) => ({
+      code: s.code,
+      attempt: s.attempt ?? null,
+      attempt_stage: s.attempt_stage || null,
+      required_context: s.required_context || null,
+    })),
     receipts: (fj.steps_executed || [])
       .flatMap((s) => s.receipt_ids || [])
       .concat(fj.receipt_id ? [fj.receipt_id] : []),

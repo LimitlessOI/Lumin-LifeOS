@@ -1,0 +1,69 @@
+{
+  "schema": "architect_input_packet_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "purpose": "Give another architect model the same high-authority context and ask it to produce its own blueprint, not code.",
+  "boundary": {
+    "do_not_receive_canonical_blueprint": true,
+    "forbidden_artifacts": [
+      "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
+      "any private canonical comparison notes derived from that blueprint"
+    ]
+  },
+  "read_order": [
+    "docs/SSOT_NORTH_STAR.md",
+    "docs/SSOT_COMPANION.md",
+    "docs/BUILDEROS_VOCABULARY.md",
+    "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+    "docs/products/AUTHORITY_BOUNDARIES.md",
+    "builderos-reboot/AGENTS.md",
+    "docs/products/PRODUCT_REGISTRY.json",
+    "builderos-reboot/BP_PRIORITY.json",
+    "builderos-reboot/POINT_B_TARGET.json",
+    "builderos-reboot/PROJECT_CERTIFICATION.json",
+    "builderos-reboot/HANDOFF.md",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/CURRENT_STATE_AUDIT.md",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/PRE_ARC_INPUT_PACKET.json",
+    "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ARCHITECT_HANDOFF_PROMPT.md"
+  ],
+  "repo_evidence_focus": [
+    "docs/architecture/BUILDEROS_SYSTEM_INVENTORY.md",
+    "docs/architecture/BUILDEROS_SALVAGE_REGISTRY.md",
+    "services/builderos-bp-priority-scheduler.js",
+    "scripts/bp-priority-never-stop.mjs",
+    "services/self-repair-executor.js",
+    "services/founder-build-self-repair.js",
+    "services/builderos-improvement-loop.js",
+    "services/lumin-chair-orchestrator.js",
+    "services/lumin-conversation-routing.js",
+    "routes/railway-managed-env-routes.js",
+    "scripts/builderos-deploy-verify.mjs",
+    "services/product-readiness.js",
+    "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
+    "products/receipts/REAL_APP_E2E.json",
+    "products/receipts/UI_ALPHA_GATE.json",
+    "products/receipts/LIFERE_ALPHA_READINESS.json",
+    "builderos-reboot/PRODUCT_READINESS_REPORT.json"
+  ],
+  "required_output_artifacts": [
+    "FOUNDER_PACKET completeness delta",
+    "BLUEPRINT.json",
+    "ACCEPTANCE_TESTS.json",
+    "AUTHORITY_CHECK.json",
+    "BLOCKED_RETURN_SCHEMA.json",
+    "asset reuse / retire / archive decision map",
+    "list of better ideas or misses",
+    "explicit treatment of commit-proof truth, deploy-sync truth, and founder-surface proof completeness"
+  ],
+  "hard_rules": [
+    "Do not write code.",
+    "Do not execute the mission.",
+    "Do not create a new queue.",
+    "Do not mark TECHNICAL_PASS as Point B complete.",
+    "Do not solve by adding a stronger model where a stronger blueprint is required.",
+    "Do not claim a build/repair PASS without explicit commit/deploy proof semantics.",
+    "Do not read the canonical blueprint before generating your own.",
+    "Do not ignore existing working system assets; audit them and classify reuse vs retire vs archive explicitly."
+  ],
+  "compare_against": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ARCHITECT_COMPARISON_RUBRIC.md"
+}

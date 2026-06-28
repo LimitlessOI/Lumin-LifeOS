@@ -7,6 +7,7 @@
 **Mandatory prompt (read before edits):** **`prompts/00-HIST-LEGACY-BOUNDARY.md`** — first-class law, not a README  
 **Authority:** Supplements `prompts/00-SYSTEM-AUTHORITY-LAYERS.md`; does not replace North Star  
 **Amendment:** `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md` (Hist dept definition)
+**Last Updated:** 2026-06-28 — active closure scripts now use canonical product-home / BP_PRIORITY / Point B authority instead of amendment-era or mission-queue legacy anchors.
 
 ---
 

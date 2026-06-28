@@ -1,0 +1,16 @@
+{
+  "schema": "snt_intent_attack_receipt_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "PASS_WITH_BLOCKING_EXECUTION_HOLD",
+  "intent_preserved": true,
+  "blocking_findings": [],
+  "required_enforcement": [
+    "Do not let TECHNICAL_PASS imply Point B completion.",
+    "Do not let self-repair stop at two attempts.",
+    "Do not let stale receipts masquerade as live truth.",
+    "Do not let active runtime pull authority from Hist-owned artifacts.",
+    "Do not execute before architect comparison."
+  ],
+  "founder_return_required": false
+}
+

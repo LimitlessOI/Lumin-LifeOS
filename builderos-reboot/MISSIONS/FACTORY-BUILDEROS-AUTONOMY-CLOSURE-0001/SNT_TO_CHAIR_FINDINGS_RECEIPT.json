@@ -1,0 +1,22 @@
+{
+  "schema": "snt_to_chair_findings_receipt_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "FINDINGS_SENT_TO_CHAIR",
+  "sender": "SNT",
+  "receiver": "ChC",
+  "source_audit": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/SNT_VS_ARCHITECT_AUDIT.md",
+  "top_findings": [
+    "Studio/founder usability authority is still under-defined and must become an enforceable contract.",
+    "Some architect step language is still too abstract for lower-tier coders.",
+    "Soft semantic founder-surface acceptance wording must be tightened.",
+    "Promotion of better answers must become a governed canonical path rather than side-note drift."
+  ],
+  "recommended_promotions": [
+    "Require architect handoffs to output both architecture and machine-execution artifacts.",
+    "Make SNT attack categories explicit and mandatory.",
+    "Freeze a Studio-owned founder usability contract artifact.",
+    "Add stronger coder_must_not_decide defaults to the canonical blueprint.",
+    "Require receipted promotion whenever ARC or SNT finds a better answer."
+  ],
+  "created_at": "2026-06-27T23:34:10Z"
+}

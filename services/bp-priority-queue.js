@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getActiveQueueItem } from './bp-priority-completion.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const BP_PRIORITY_REL = 'builderos-reboot/BP_PRIORITY.json';
@@ -30,17 +31,7 @@ export function loadBpPriority({ root = REPO_ROOT } = {}) {
 }
 
 export function getActiveProductItem(bpPriority = loadBpPriority()) {
-  const sorted = [...bpPriority.items].sort((a, b) => a.rank - b.rank);
-  return (
-    sorted.find((item) => {
-      const status = String(item.blueprint_status || '').toLowerCase();
-      const verdict = String(item.verdict || '').toUpperCase();
-      if (verdict === 'PASS' || verdict === 'OBJECTIVE_COMPLETE' || verdict === 'TECHNICAL_PASS') {
-        return false;
-      }
-      return status !== 'complete' && status !== 'complete_archived';
-    }) || null
-  );
+  return getActiveQueueItem(bpPriority.items || []);
 }
 
 export function loadLegacyMissionQueue({ root = REPO_ROOT } = {}) {

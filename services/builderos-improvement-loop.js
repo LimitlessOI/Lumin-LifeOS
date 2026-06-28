@@ -2,12 +2,13 @@
  * SYNOPSIS: Deterministic BuilderOS improvement loop planner.
  * SNT finds gaps, Wisdom contributes lessons, CFO ranks spend/ROI, Chair prepares ARC-ready proposals.
  *
- * @ssot docs/products/builderos/PRODUCT_SSOT.md
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot builderos-reboot/BP_PRIORITY.json
+ * @ssot docs/products/AUTHORITY_BOUNDARIES.md
  */
 
 import { getCompoundImprovementSummary } from './builderos-compound-improvement.js';
 import { getBpPrioritySchedulerStatus } from './builderos-bp-priority-scheduler.js';
+import { buildImprovementDeltaContract } from './builderos-improvement-contract.js';
 
 function uniq(list = []) {
   return [...new Set(list.filter(Boolean))];
@@ -33,7 +34,7 @@ function proposalPriority(code = '', blocker = true) {
 
 function buildProposalFromFinding(finding = {}, kind = 'blocker') {
   const code = String(finding.code || finding.id || 'UNKNOWN');
-  return {
+  const proposal = {
     proposal_id: `${kind}:${code}`,
     source: kind,
     source_code: code,
@@ -45,10 +46,21 @@ function buildProposalFromFinding(finding = {}, kind = 'blocker') {
     consensus_path: ['SNT', 'CFO', 'Chair', 'ARC'],
     arc_handoff_required: true,
   };
+  return {
+    ...proposal,
+    blueprint_delta: buildImprovementDeltaContract({
+      source: proposal.source,
+      sourceCode: proposal.source_code,
+      priority: proposal.priority,
+      owner: proposal.owner,
+      title: proposal.title,
+      whyNow: proposal.why_now,
+    }),
+  };
 }
 
 function buildProposalFromLever(lever = {}) {
-  return {
+  const proposal = {
     proposal_id: `lever:${lever.playbook || 'UNKNOWN'}:${lever.lever || 'unknown'}`,
     source: 'wisdom',
     source_code: lever.playbook || 'UNKNOWN',
@@ -59,6 +71,17 @@ function buildProposalFromLever(lever = {}) {
     why_now: `Compound improvement log shows repeated ${lever.playbook || 'unknown'} failures. Convert repeated repair into permanent prevention.`,
     consensus_path: ['Wisdom', 'SNT', 'Chair', 'ARC'],
     arc_handoff_required: true,
+  };
+  return {
+    ...proposal,
+    blueprint_delta: buildImprovementDeltaContract({
+      source: proposal.source,
+      sourceCode: proposal.source_code,
+      priority: proposal.priority,
+      owner: proposal.owner,
+      title: proposal.title,
+      whyNow: proposal.why_now,
+    }),
   };
 }
 
@@ -124,10 +147,11 @@ export function buildBuilderOSImprovementLoopStatus({
     scheduler: schedulerStatus.scheduler,
     departments,
     proposals,
+    blueprint_deltas: proposals.map((proposal) => proposal.blueprint_delta),
     consensus_contract: {
       required: true,
       path: ['SNT', 'CFO', 'Chair', 'ARC'],
-      note: 'Improvement proposals are recommendations until consensus and ARC handoff freeze them.',
+      note: 'Improvement output is a deterministic blueprint-delta contract. No secondary queue is allowed.',
     },
   };
 }

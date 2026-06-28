@@ -1,0 +1,351 @@
+{
+  "schema": "architect_candidate_asset_decision_map_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "ARCHITECT_CANDIDATE_ONLY",
+  "parts_car_salvage_judgment": "The repo is not a teardown. Keep the active product-home, BP priority, Point B, founder UI, deploy, receipt, and execution-truth machinery as the parts car. Retire or archive duplicate authority, stale completion semantics, and history-owned runners from active decision paths.",
+  "decision_values": [
+    "REUSE_AS_IS",
+    "REUSE_WITH_REMEDIATION",
+    "RETIRE_FROM_ACTIVE_AUTHORITY",
+    "ARCHIVE_HISTORY_ONLY"
+  ],
+  "assets": [
+    {
+      "asset_id": "A01_PRODUCT_HOME_CHAIN",
+      "paths": [
+        "docs/products/PRODUCT_REGISTRY.json",
+        "docs/products/*/PRODUCT_HOME.md",
+        "docs/products/*/FILE_MANIFEST.json",
+        "docs/products/AUTHORITY_BOUNDARIES.md"
+      ],
+      "decision": "REUSE_AS_IS",
+      "reason": "This is the current canonical product authority chain and directly solves amendment-first sprawl.",
+      "risk": "Generated reports can lag registry truth if not refreshed.",
+      "required_remediation": []
+    },
+    {
+      "asset_id": "A02_BP_PRIORITY_QUEUE",
+      "paths": [
+        "builderos-reboot/BP_PRIORITY.json",
+        "services/bp-priority-queue.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "BP_PRIORITY is the only active queue and must remain. Existing helper still treats TECHNICAL_PASS as complete in getActiveProductItem.",
+      "required_remediation": [
+        "Wire shared completion semantics helper.",
+        "Expose TECHNICAL_PASS_ONLY and POINT_B_COMPLETE as separate states.",
+        "Keep Voice Rail scrapped item outside active queue."
+      ]
+    },
+    {
+      "asset_id": "A03_POINT_B_TARGET",
+      "paths": [
+        "builderos-reboot/POINT_B_TARGET.json",
+        "services/point-b-target-lite.js",
+        "services/point-b-navigator.js",
+        "factory-staging/factory-core/arc/point-b-gate.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Point B lock is explicit and correct. Some downstream progress/runner behavior still lets machine path or TECHNICAL_PASS look stronger than founder closure.",
+      "required_remediation": [
+        "Completion helper must make founder_usability_pass false block Point B complete.",
+        "Navigator summaries must always say awaiting founder confirmation when true.",
+        "Point B gate must feed scheduler status and readiness surfaces."
+      ]
+    },
+    {
+      "asset_id": "A04_BP_PRIORITY_SCHEDULER",
+      "paths": [
+        "services/builderos-bp-priority-scheduler.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Useful-work guard and founder_stop handling are valuable. Current queueHasIncompleteWork can false-green when all items are TECHNICAL_PASS but Point B founder pass is false.",
+      "required_remediation": [
+        "Replace local queueHasIncompleteWork with shared completion helper.",
+        "healthy idle requires Point B complete or founder_stop.",
+        "Update @ssot tag away from amendment-era primary authority."
+      ]
+    },
+    {
+      "asset_id": "A05_NEVER_STOP_RUNNER",
+      "paths": [
+        "scripts/bp-priority-never-stop.mjs"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Correct canonical runner idea and foundation loop connection. Current isComplete stops at TECHNICAL_PASS/PASS.",
+      "required_remediation": [
+        "Replace isComplete with shared completion semantics.",
+        "For Point B, continue or return founder_usability_check until founder pass or founder_stop.",
+        "Do not spawn acceptance as closure when founder pass is missing."
+      ]
+    },
+    {
+      "asset_id": "A06_FOUNDER_CHAT_AND_BUILD_PATH",
+      "paths": [
+        "routes/lifeos-builderos-command-control-routes.js",
+        "services/builderos-command-control-service.js",
+        "services/founder-build-self-repair.js",
+        "services/founder-build-success-gate.js",
+        "services/lifeos-execution-truth.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "The founder path is real and valuable. It already has async jobs, live CSS proof, autopsies, and scoped patchers. PASS can still leak without full transport/deploy proof in some paths.",
+      "required_remediation": [
+        "Apply transport proof helper to all PASS mapping.",
+        "For already_present cases, return SKIPPED_ALREADY_VALID with proof, not build PASS.",
+        "Persist job result only after completion authority grants PASS.",
+        "Founder-visible reply must say COMMIT_ONLY_NOT_LIVE when deploy is stale."
+      ]
+    },
+    {
+      "asset_id": "A07_EXECUTION_TRUTH_GATE",
+      "paths": [
+        "services/lifeos-execution-truth.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Strong existing anti-theater gate: rejects missing SHA, stubs, layer violations, scope misses, and emits autopsies.",
+      "required_remediation": [
+        "Replace commit-only PASS with transport-proof-aware states.",
+        "Do not let deploy_warning coexist with PASS when live proof is required.",
+        "Require origin/main evidence for code-changing founder/build PASS."
+      ]
+    },
+    {
+      "asset_id": "A08_SELF_REPAIR_EXECUTOR",
+      "paths": [
+        "services/self-repair-executor.js",
+        "services/self-repair-memory.js",
+        "services/self-repair-execution-log.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "PB authority, receipt writing, memory, and telemetry are useful. EXECUTOR_MAX_ATTEMPTS=2 is weaker than founder doctrine.",
+      "required_remediation": [
+        "Adopt three-attempt repair doctrine.",
+        "Require prior lessons and local code truth fields.",
+        "Add research+consensus escalation before higher tier.",
+        "Do not silently stop on repairable failures."
+      ]
+    },
+    {
+      "asset_id": "A09_FOUNDER_BUILD_QUORUM_ESCALATION",
+      "paths": [
+        "services/founder-build-quorum-escalation.js",
+        "services/founder-build-self-repair.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Quorum escalation is aligned with doctrine, but must be normalized under one repair doctrine helper and transport proof.",
+      "required_remediation": [
+        "Ensure three-attempt pattern and lessons carry-forward are visible in all receipts.",
+        "Consensus/research context must be explicit after repeated failure."
+      ]
+    },
+    {
+      "asset_id": "A10_IMPROVEMENT_LOOP",
+      "paths": [
+        "services/builderos-improvement-loop.js",
+        "services/builderos-compound-improvement.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Good SNT/Wisdom/CFO proposal generator, currently advisory. It must become enforceable deltas without creating a queue.",
+      "required_remediation": [
+        "P0 proposals block healthy idle until resolved/parked/attached to BP delta.",
+        "Emit blueprint_delta and acceptance_delta fields.",
+        "Reference BP_PRIORITY only, never secondary queue."
+      ]
+    },
+    {
+      "asset_id": "A11_REAL_APP_E2E",
+      "paths": [
+        "scripts/run-real-app-e2e.mjs",
+        "products/receipts/REAL_APP_E2E.json"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Playwright founder-like path is valuable. It currently misses exact founder-specific prompt failures and can accept generic green.",
+      "required_remediation": [
+        "Load founder-surface regression corpus.",
+        "Bind receipt to deploy SHA and corpus version.",
+        "Fail on fake display/overview routing for founder factual questions."
+      ]
+    },
+    {
+      "asset_id": "A12_FOUNDER_CHAT_ALPHA_BATTERY",
+      "paths": [
+        "scripts/run-founder-chat-alpha-battery.mjs",
+        "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Good direct founder-interface API battery. Build probes can record final PASS without exposing commit/origin/deploy proof.",
+      "required_remediation": [
+        "Require polled PASS payload to include transport_proof.",
+        "Fail final PASS if commit_sha absent.",
+        "Add exact founder prompt regression cases."
+      ]
+    },
+    {
+      "asset_id": "A13_UI_ALPHA_GATE",
+      "paths": [
+        "scripts/run-ui-alpha-gate.mjs",
+        "products/receipts/UI_ALPHA_GATE.json"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Useful aggregator. Current fresh receipt reuse is based on mtime and can say ready_for_founder_alpha while Point B is still incomplete.",
+      "required_remediation": [
+        "Freshness must include deploy SHA and corpus version.",
+        "Expose point_b_complete=false when founder pass false.",
+        "CLEARED_FOR_FOUNDER_ALPHA cannot be interpreted as Point B PASS."
+      ]
+    },
+    {
+      "asset_id": "A14_LIFERE_ALPHA_READINESS",
+      "paths": [
+        "scripts/run-lifere-alpha-readiness.mjs",
+        "products/receipts/LIFERE_ALPHA_READINESS.json"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Correctly distinguishes ready_for_alpha_testing from ready_for_alpha_gate, but must be enforced everywhere else.",
+      "required_remediation": [
+        "Require downstream gates to preserve ready_for_alpha_gate=false until founder pass.",
+        "Bind live_e2e and deploy SHA to freshness."
+      ]
+    },
+    {
+      "asset_id": "A15_DEPLOY_VERIFY_AND_RAILWAY_TRUTH",
+      "paths": [
+        "scripts/builderos-deploy-verify.mjs",
+        "scripts/system-railway-redeploy.mjs",
+        "routes/railway-managed-env-routes.js",
+        "services/builderos-dispatch-gate.js",
+        "services/builderos-harness-toolkit.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Deploy verification already knows runtime SHA parity is stronger than local success. It needs to be mandatory for PASS where live proof is required.",
+      "required_remediation": [
+        "Expose transport proof object reusable by execution truth and acceptance.",
+        "No --allow-stale path for closure PASS.",
+        "Receipt latest Railway deployment id/status/log tail on failure."
+      ]
+    },
+    {
+      "asset_id": "A16_BP_ACCEPTANCE_FINISH",
+      "paths": [
+        "scripts/lib/bp-acceptance-finish.mjs",
+        "services/bp-priority-sync.js",
+        "scripts/verify-bp-priority-guardrails.mjs"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Strong choke point for acceptance, OBJECTIVE_VERDICT, and BP sync. Needs reality_sync and Point B distinction.",
+      "required_remediation": [
+        "Receipt PASS requires reality_sync.applied_paths.",
+        "Do not let technical acceptance set founder_usability_pass.",
+        "Guardrails detect Point B false complete."
+      ]
+    },
+    {
+      "asset_id": "A17_PRODUCT_READINESS_REPORT",
+      "paths": [
+        "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+        "services/product-readiness.js"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Generated report concept is useful. Existing artifact is stale relative to PRODUCT_REGISTRY count and must not be treated as current without regeneration.",
+      "required_remediation": [
+        "Include registry_hash, bp_priority_hash, point_b_hash, generated_from_count.",
+        "Mark stale=true when source hashes differ.",
+        "Closure acceptance fails on stale report."
+      ]
+    },
+    {
+      "asset_id": "A18_PROJECT_CERTIFICATION",
+      "paths": [
+        "builderos-reboot/PROJECT_CERTIFICATION.json"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Honest current certification already keeps FULLY_MACHINE_READY false and same-tier determinism false.",
+      "required_remediation": [
+        "Add closure-specific proof requirements before any future upgrade.",
+        "Verifier blocks premature true flags."
+      ]
+    },
+    {
+      "asset_id": "A19_MISSION_QUEUE_AND_OVERNIGHT_LEGACY",
+      "paths": [
+        "builderos-reboot/MISSION_QUEUE.json",
+        "builderos-reboot/OVERNIGHT_SCOREBOARD.json",
+        "scripts/lifeos-builder-continuous-queue.mjs",
+        "scripts/governed-overnight-backlog-run.mjs"
+      ],
+      "decision": "ARCHIVE_HISTORY_ONLY",
+      "reason": "AGENTS.md says Hist owns legacy queue/overnight artifacts. They may be read for lessons but not active product orchestration.",
+      "required_remediation": [
+        "Keep Hist banners and guardrails.",
+        "Do not import these paths from active scheduler or closure acceptance."
+      ]
+    },
+    {
+      "asset_id": "A20_MISSION_CONTENT_SNAPSHOTS",
+      "paths": [
+        "builderos-reboot/MISSIONS/*/CONTENT/**"
+      ],
+      "decision": "ARCHIVE_HISTORY_ONLY",
+      "reason": "Authority boundaries say CONTENT is snapshot/salvage, not runtime authority.",
+      "required_remediation": [
+        "Use only through blueprint-defined copy steps.",
+        "Require HISTORY_SNAPSHOT header where amendment @ssot appears."
+      ]
+    },
+    {
+      "asset_id": "A21_VOICE_RAIL",
+      "paths": [
+        "docs/VOICE_RAIL_HISTORY_ONLY.md",
+        "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/SALVAGE_MANIFEST.json",
+        "services/voice-rail-*"
+      ],
+      "decision": "RETIRE_FROM_ACTIVE_AUTHORITY",
+      "reason": "Operator lock says Voice Rail is scrapped salvage only. STT/TTS/wake-word patterns may be parts-car salvage, but product lane is not active.",
+      "required_remediation": [
+        "No active queue entry.",
+        "No runtime authority claim from Voice Rail receipts.",
+        "Salvage patterns only through LifeOS/Chair blueprint when explicitly needed."
+      ]
+    },
+    {
+      "asset_id": "A22_BUILDEROS_SYSTEM_INVENTORY_AND_SALVAGE_REGISTRY",
+      "paths": [
+        "docs/architecture/BUILDEROS_SYSTEM_INVENTORY.md",
+        "docs/architecture/BUILDEROS_SALVAGE_REGISTRY.md"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Useful parts-car inventory, but draft and dated. Must not override current audit or live probes.",
+      "required_remediation": [
+        "Mark as structural inventory, not current truth.",
+        "Refresh after closure acceptance with deploy SHA and source hashes."
+      ]
+    },
+    {
+      "asset_id": "A23_DELIBERATION_V27_ASSETS",
+      "paths": [
+        "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001",
+        "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "Deliberation governance assets are valuable but HANDOFF says wired, not shipped, with commit/deploy/Neon/Railway verification gaps.",
+      "required_remediation": [
+        "Use as governance parts only after commit/deploy/runtime proof.",
+        "Do not count as shipped maturity until live receipts pass."
+      ]
+    },
+    {
+      "asset_id": "A24_DEAD_ALPHA_CONFIRM_SCRIPT_ALIAS",
+      "paths": [
+        "package.json script builderos:alpha:confirm",
+        "scripts/run-alpha-confirm.mjs"
+      ],
+      "decision": "REUSE_WITH_REMEDIATION",
+      "reason": "The alias is conceptually useful, but the referenced script was not present during inspection.",
+      "required_remediation": [
+        "Create script that calls founder confirm path or remove alias from active proof surface.",
+        "Closure verifier must detect missing npm script targets."
+      ]
+    }
+  ]
+}

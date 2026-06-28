@@ -1,0 +1,148 @@
+{
+  "schema": "architect_candidate_blocked_return_schema_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "status": "ARCHITECT_CANDIDATE_ONLY",
+  "purpose": "Standard blocked return for Builder/CDR, repair loops, acceptance, deploy, and founder UI gates when execution would require unauthorized judgment or missing proof.",
+  "required_fields": [
+    "schema",
+    "blocked",
+    "block_code",
+    "severity",
+    "mission_id",
+    "step_id",
+    "actor_role",
+    "authority_chain_checked",
+    "what_was_attempted",
+    "why_blocked",
+    "evidence",
+    "required_owner",
+    "minimum_unblock_action",
+    "safe_next_action",
+    "receipts_read",
+    "state_artifacts_checked",
+    "created_at"
+  ],
+  "optional_fields": [
+    "decision_type",
+    "transport_proof",
+    "deploy_truth",
+    "founder_surface_case",
+    "repair_attempt",
+    "prior_lessons",
+    "research_required",
+    "consensus_required",
+    "article_iii_trigger",
+    "stale_artifacts",
+    "candidate_patch_for_arc",
+    "do_not_retry_until"
+  ],
+  "block_codes": [
+    {
+      "code": "BLOCKED_UNAUTHORIZED_DECISION",
+      "severity": "P0",
+      "when": "Builder/CDR would have to decide product, UX, architecture, scope, priority, acceptance, release, or founder success semantics.",
+      "required_owner": "ARC or IDC depending on ambiguity",
+      "minimum_unblock_action": "ARC updates blueprint or IDC clarifies intent."
+    },
+    {
+      "code": "BLOCKED_INTENT_AMBIGUITY",
+      "severity": "P0",
+      "when": "Mission intent cannot be resolved from Founder Packet, Product Home, BP_PRIORITY, Point B, receipts, or Wisdom.",
+      "required_owner": "IDC or Adam only if true founder intent gap",
+      "minimum_unblock_action": "Return the smallest unresolved intent question."
+    },
+    {
+      "code": "BLOCKED_TECHNICAL_PASS_NOT_POINT_B",
+      "severity": "P0",
+      "when": "A caller tries to mark Point B complete from TECHNICAL_PASS or generic acceptance only.",
+      "required_owner": "SNT + ARC",
+      "minimum_unblock_action": "Run founder success path or record awaiting founder usability confirmation."
+    },
+    {
+      "code": "BLOCKED_TRANSPORT_PROOF_MISSING",
+      "severity": "P0",
+      "when": "Build/repair claims PASS but lacks commit SHA, origin/main proof, or required remote transport evidence.",
+      "required_owner": "CDR platform GAP-FILL",
+      "minimum_unblock_action": "Fix transport proof wiring and rerun; do not retry product build as PASS."
+    },
+    {
+      "code": "BLOCKED_DEPLOY_NOT_SYNCED",
+      "severity": "P0",
+      "when": "Commit reached origin/main but Railway /builder/ready or live behavior still serves older code.",
+      "required_owner": "CDR with deploy truth path",
+      "minimum_unblock_action": "Redeploy/wait/probe. Report COMMIT_ONLY_NOT_LIVE until deploy sync and behavior proof pass."
+    },
+    {
+      "code": "BLOCKED_FOUNDER_SURFACE_REGRESSION",
+      "severity": "P0",
+      "when": "Exact founder UI path or founder prompt fails while API or generic browser probes pass.",
+      "required_owner": "Studio + SNT + ARC",
+      "minimum_unblock_action": "Add exact flow to founder regression corpus and fix through blueprint path."
+    },
+    {
+      "code": "BLOCKED_RECEIPT_SYNC_MISSING",
+      "severity": "P0",
+      "when": "Reality changed but BP_PRIORITY, OBJECTIVE_VERDICT, acceptance receipt, readiness, or twin/state artifacts were not updated in the same governed action.",
+      "required_owner": "Hist/Wisdom + CDR",
+      "minimum_unblock_action": "Run reality sync helper or return stale artifact list."
+    },
+    {
+      "code": "BLOCKED_REPAIR_DOCTRINE_VIOLATION",
+      "severity": "P0",
+      "when": "Repair loop stops early, omits prior lessons, omits receipts/local truth review, or escalates without three-attempt doctrine.",
+      "required_owner": "SNT + CDR",
+      "minimum_unblock_action": "Resume at correct attempt stage with lesson carry-forward or classify as non-repairable hard stop."
+    },
+    {
+      "code": "BLOCKED_ARTICLE_III",
+      "severity": "P0",
+      "when": "Money, destructive DB, exposed secrets, irreversible public launch, legal/medical/high-stakes action, or constitutional change is involved.",
+      "required_owner": "Adam / Human Guardian",
+      "minimum_unblock_action": "Ask for explicit approval or veto."
+    },
+    {
+      "code": "BLOCKED_STALE_AUTHORITY",
+      "severity": "P1",
+      "when": "Active machine path uses history, mission CONTENT, MISSION_QUEUE, conversation dump, or amendment-first authority for product truth.",
+      "required_owner": "SNT + CDR",
+      "minimum_unblock_action": "Switch to product-home/BP_PRIORITY/Point B chain or mark artifact history-only."
+    },
+    {
+      "code": "BLOCKED_LIVE_PROOF_MISSING",
+      "severity": "P1",
+      "when": "Live env credentials or runtime access are unavailable for a live-required claim.",
+      "required_owner": "CDR or operator only if secret value is truly unavailable",
+      "minimum_unblock_action": "Return NOT COMPLETE with missing env/probe proof, not PASS."
+    }
+  ],
+  "example": {
+    "schema": "builderos_blocked_return_v1",
+    "blocked": true,
+    "block_code": "BLOCKED_TRANSPORT_PROOF_MISSING",
+    "severity": "P0",
+    "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+    "step_id": "ACB-S04",
+    "actor_role": "CDR",
+    "authority_chain_checked": [
+      "PRODUCT_REGISTRY",
+      "BP_PRIORITY",
+      "POINT_B_TARGET",
+      "mission blueprint"
+    ],
+    "what_was_attempted": "Founder build job returned PASS-like result",
+    "why_blocked": "Receipt lacked commit_sha and origin/main proof; live deploy proof required for the claimed result.",
+    "evidence": [
+      {
+        "path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
+        "claim": "final_pass_fail PASS",
+        "missing": "commit_sha"
+      }
+    ],
+    "required_owner": "CDR platform GAP-FILL",
+    "minimum_unblock_action": "Wire builder response to transport proof helper and rerun exact founder build probe.",
+    "safe_next_action": "Do not claim PASS; return FAIL with autopsy.",
+    "receipts_read": [],
+    "state_artifacts_checked": [],
+    "created_at": "ISO8601"
+  }
+}

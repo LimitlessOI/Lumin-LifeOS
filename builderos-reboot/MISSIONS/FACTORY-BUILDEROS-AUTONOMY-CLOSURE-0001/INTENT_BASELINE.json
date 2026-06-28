@@ -1,0 +1,26 @@
+{
+  "schema": "intent_baseline_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "intent_statement": "Make BuilderOS itself truthful, mechanically enforceable, self-improving, and founder-UI-proven before further expansion.",
+  "primary_user": "Adam in Founder Mode through the LifeOS/Lumin UI",
+  "required_outcome": [
+    "No false-green queue completion while Point B is founder-incomplete",
+    "No builder strategic decisions",
+    "No silent stop on repairable failure",
+    "No stale receipt pretending live truth",
+    "No FULLY_MACHINE_READY claim before proof"
+  ],
+  "definition_of_done": [
+    "Closure acceptance script exists and passes",
+    "Point-B false-green regression is impossible under the acceptance suite",
+    "Self-repair escalation policy is shared and enforced",
+    "Founder-UI proof path succeeds or blocks honestly",
+    "Certification and readiness artifacts reflect actual proof state"
+  ],
+  "founder_return_boundary": [
+    "true unresolved intent ambiguity",
+    "Article III constitutional veto conditions",
+    "final founder usability confirmation"
+  ]
+}
+

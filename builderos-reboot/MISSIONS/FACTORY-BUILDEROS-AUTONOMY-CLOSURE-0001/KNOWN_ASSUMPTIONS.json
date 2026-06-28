@@ -1,0 +1,27 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "assumptions": [
+    {
+      "assumption_id": "KA-001",
+      "label": "Point B remains LifeRE Alpha during closure work",
+      "confidence": "KNOW"
+    },
+    {
+      "assumption_id": "KA-002",
+      "label": "Product-home registry + BP priority model is the canonical authority chain",
+      "confidence": "KNOW"
+    },
+    {
+      "assumption_id": "KA-003",
+      "label": "Founder UI proof is required for honest machine-ready claims",
+      "confidence": "KNOW"
+    },
+    {
+      "assumption_id": "KA-004",
+      "label": "The existing runtime has enough reusable parts that closure should be extension-first, not rewrite-first",
+      "confidence": "THINK"
+    }
+  ]
+}
+

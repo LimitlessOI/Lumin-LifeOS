@@ -2,12 +2,14 @@
 /**
  * SYNOPSIS: Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.
  * Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot builderos-reboot/BP_PRIORITY.json
+ * @ssot docs/products/AUTHORITY_BOUNDARIES.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { getActiveQueueItem } from '../services/bp-priority-completion.js';
 import { runFoundationPipelineLoop } from '../factory-staging/factory-core/arc/run-foundation.js';
 import { founderStopActive } from '../factory-staging/factory-core/arc/gate-enforcement.js';
 import { loadPointBTarget } from '../factory-staging/factory-core/arc/foundation/point-b-target.js';
@@ -28,16 +30,9 @@ function loadQueue() {
   return JSON.parse(fs.readFileSync(BP_PATH, 'utf8'));
 }
 
-function isComplete(item) {
-  const v = String(item.verdict || '').toUpperCase();
-  return v === 'TECHNICAL_PASS' || v === 'PASS';
-}
-
 function activeMission(items) {
   const pointB = loadPointBTarget();
-  const lifere = (items || []).find((i) => i.mission_id === pointB?.mission_id);
-  if (lifere && !isComplete(lifere)) return lifere;
-  return [...(items || [])].sort((a, b) => a.rank - b.rank).find((i) => !isComplete(i));
+  return getActiveQueueItem(items || [], { pointBTarget: pointB });
 }
 
 function tryRedeploy() {

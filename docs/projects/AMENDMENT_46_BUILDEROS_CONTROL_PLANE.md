@@ -4,7 +4,7 @@
 _(formerly AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md)_
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-22 — `bp-priority-sync.js` registers scrapped_items receipt_path for orphan PASS guard.
+**Last Updated:** 2026-06-28 — BP readiness/product-readiness sync now carries artifact freshness and founder-usability truth into control-plane reporting for Point B products.
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.

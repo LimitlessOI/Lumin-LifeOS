@@ -1,0 +1,20 @@
+{
+  "schema": "intent_coverage_map_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "dimensions": [
+    { "dimension": "outcome", "status": "LOCKED", "note": "BuilderOS closure before new expansion" },
+    { "dimension": "user", "status": "LOCKED", "note": "Adam through LifeOS founder UI" },
+    { "dimension": "success_metric", "status": "LOCKED", "note": "Point-B truth + closure acceptance + same-tier determinism + UI proof" },
+    { "dimension": "failure_metric", "status": "LOCKED", "note": "false green, silent stop, stale receipts, builder decision drift, premature certification" },
+    { "dimension": "constraints", "status": "LOCKED", "note": "no new queue, no new departments, no execution yet" },
+    { "dimension": "tradeoffs", "status": "SUFFICIENT", "note": "machine truth beats expansion speed" },
+    { "dimension": "priority_fit", "status": "LOCKED", "note": "Builder-first; refine the builder before more churn" },
+    { "dimension": "dependencies", "status": "SUFFICIENT", "note": "existing queue, point-B lock, founder UI, acceptance harnesses, repair lane" },
+    { "dimension": "rollback_condition", "status": "SUFFICIENT", "note": "if closure changes reduce truth or add theater, revert and block" },
+    { "dimension": "phase_target", "status": "LOCKED", "note": "architect comparison pack first; execution second" },
+    { "dimension": "non_goals", "status": "LOCKED", "note": "no new product expansion" },
+    { "dimension": "market_reality", "status": "PARKED", "note": "This mission is machine closure, not market expansion; revisit after closure" }
+  ],
+  "minimum_sufficiency_passed": true
+}
+

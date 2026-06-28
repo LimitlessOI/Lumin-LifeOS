@@ -1,0 +1,13 @@
+{
+  "schema": "pre_build_validation_packet_v1",
+  "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+  "builder_simulation_ref": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BUILDER_SIMULATION_REPORT.json",
+  "snt_translation_ref": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
+  "arc_simulation_ref": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
+  "studio_simulation_ref": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
+  "blocking_gaps": 0,
+  "builder_clearance": "hold_for_architect_comparison",
+  "execution_hold": true,
+  "execution_hold_reason": "Founder explicitly requested architect comparison before code execution."
+}
+
