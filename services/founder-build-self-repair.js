@@ -1076,7 +1076,7 @@ export async function runFounderBuildWithSelfRepair(options) {
         const commitSha = result.sha || execJson.sha || execJson.commit_sha || null;
         const baseCheck = assertFounderBuildBaseUrl(base);
         if (commitSha && baseCheck.ok) {
-          await triggerRailwayRedeploy({ baseUrl: baseCheck.baseUrl, commandKey });
+          await triggerRailwayRedeploy({ baseUrl: baseCheck.baseUrl, commandKey, commitSha });
           const deploy = await waitForDeployMatchingCommit({
             baseUrl: baseCheck.baseUrl,
             commandKey,

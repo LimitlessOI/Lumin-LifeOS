@@ -166,6 +166,7 @@
         "If Railway still serves an older deploy SHA, the result must explicitly say the fix is not live yet.",
         "Founder build-job poll/readback must refresh pending transport proof from live deploy SHA and founder-surface evidence instead of relying on local git ancestry inside Railway.",
         "Generic founder code builds must trigger redeploy and wait for deploy SHA sync before returning their final PASS receipt, not just CSS/visual founder paths.",
+        "Founder-triggered redeploy must be pinned to the exact commit SHA created by the build, not a generic latest-head rebuild.",
         "Alpha battery must assert commit/deploy proof semantics on build probes instead of treating job PASS alone as enough."
       ],
       "exact_output_contract": {

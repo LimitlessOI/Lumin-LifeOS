@@ -117,11 +117,12 @@ export async function waitForDeployMatchingCommit({
   };
 }
 
-export async function triggerRailwayRedeploy({ baseUrl, commandKey }) {
+export async function triggerRailwayRedeploy({ baseUrl, commandKey, commitSha = null }) {
   const base = String(baseUrl || '').replace(/\/$/, '');
   if (!base || !commandKey) {
     return { ok: false, error: 'missing_base_or_key' };
   }
+  const body = commitSha ? JSON.stringify({ commit_sha: commitSha }) : '{}';
   for (const url of [
     `${base}/api/v1/railway/deploy`,
     `${base}/api/v1/railway/managed-env/build-from-latest`,
@@ -130,7 +131,7 @@ export async function triggerRailwayRedeploy({ baseUrl, commandKey }) {
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-command-key': commandKey },
-        body: '{}',
+        body,
         signal: AbortSignal.timeout(30000),
       });
       const json = await res.json().catch(() => ({}));
