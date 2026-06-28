@@ -111,6 +111,10 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - Removed 66 probe-debris HTML comments (alpha/parity/point-b probe labels) from `public/overlay/lifeos-app.html` lines 2337-2402.
 - Replaced Tailwind CDN Play script (`cdn.tailwindcss.com`) with inline minimal CSS in `lifeos-dashboard.html`, `lifeos-victory-vault.html`, and `site-builder-command-center.html` — eliminates the "Tailwind CDN is for development only" console.warn from the founder shell iframe.
 
+## 2026-06-28 merge receipts
+
+- `public/overlay/sw.js` CACHE_NAME bump (`lifeos-1782610487963`) from BuilderOS CSS patch autonomy run — flushes service worker cache to deliver CSS overlay changes to founder shell.
+
 ## 2026-06-28 closure truth receipts
 
 - `scripts/run-ui-alpha-gate.mjs` and `scripts/audit-founder-alpha-ready.mjs` now explicitly preserve the difference between `CLEARED_FOR_FOUNDER_ALPHA` and founder-closed Alpha / Point B.

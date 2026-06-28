@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-28 — autonomy closure harnesses added; founder async build jobs now hydrate transport truth before polling; closure acceptance/proof scripts wired without false-green certification.
+**Last Updated:** 2026-06-28 — build proof timestamp bump in smoke-test comment (BuilderOS autonomy runner health ping); prior: autonomy closure harnesses added; founder async build jobs now hydrate transport truth before polling; closure acceptance/proof scripts wired without false-green certification.
 ---
 
 ## 0. Purpose

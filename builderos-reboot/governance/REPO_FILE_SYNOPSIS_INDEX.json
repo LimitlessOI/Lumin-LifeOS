@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-28T02:03:53.175Z",
+  "generated_at": "2026-06-28T02:05:25.884Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11260,
   "files": [
@@ -34716,9 +34716,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 4748,
-      "mtime": "2026-06-28T01:40:15.592Z",
-      "indexed_at": "2026-06-28T02:03:53.175Z"
+      "bytes": 4965,
+      "mtime": "2026-06-28T02:05:14.659Z",
+      "indexed_at": "2026-06-28T02:05:25.884Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -35575,9 +35575,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 142485,
-      "mtime": "2026-06-28T01:40:15.372Z",
-      "indexed_at": "2026-06-28T02:03:53.175Z"
+      "bytes": 142582,
+      "mtime": "2026-06-28T02:05:08.394Z",
+      "indexed_at": "2026-06-28T02:05:25.884Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -64216,9 +64216,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 156150,
-      "mtime": "2026-06-27T23:30:07.592Z",
-      "indexed_at": "2026-06-28T01:55:01.713Z"
+      "bytes": 156185,
+      "mtime": "2026-06-28T02:04:09.840Z",
+      "indexed_at": "2026-06-28T02:05:25.884Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -64334,9 +64334,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 41165,
-      "mtime": "2026-06-27T23:29:27.350Z",
-      "indexed_at": "2026-06-28T01:55:01.713Z"
+      "bytes": 41166,
+      "mtime": "2026-06-28T02:04:09.840Z",
+      "indexed_at": "2026-06-28T02:05:25.884Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -64695,8 +64695,8 @@
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
       "bytes": 7261,
-      "mtime": "2026-06-27T23:29:27.350Z",
-      "indexed_at": "2026-06-28T01:55:01.713Z",
+      "mtime": "2026-06-28T02:04:09.841Z",
+      "indexed_at": "2026-06-28T02:05:25.884Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -67564,8 +67564,8 @@
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
       "bytes": 6002,
-      "mtime": "2026-06-27T23:29:27.353Z",
-      "indexed_at": "2026-06-28T01:55:01.713Z",
+      "mtime": "2026-06-28T02:04:09.841Z",
+      "indexed_at": "2026-06-28T02:05:25.884Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
