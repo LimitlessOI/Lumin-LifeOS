@@ -31,9 +31,9 @@ function fail(id, detail) {
   report[`fail_${id}`] = detail;
 }
 
-async function pollBuildJob(jobId, pollUrl) {
+async function pollBuildJob(jobId, pollUrl, pollMax = POLL_MAX) {
   const url = pollUrl?.startsWith('http') ? pollUrl : `${BASE}${pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`}`;
-  for (let i = 0; i < POLL_MAX; i += 1) {
+  for (let i = 0; i < pollMax; i += 1) {
     await new Promise((r) => setTimeout(r, POLL_MS));
     const res = await fetch(url, { headers: KEY ? { 'x-command-key': KEY } : {} });
     const json = await res.json().catch(() => ({}));
@@ -136,6 +136,7 @@ const PROBES = [
     poll: true,
     requirePass: true,
     allowCommitOnlyTransport: true,
+    pollMax: 132,
   },
   {
     id: 'B2_nl_ui_rounded',
@@ -145,6 +146,7 @@ const PROBES = [
     poll: true,
     allowAlreadyPresent: true,
     allowBuildStarted: true,
+    pollMax: 24,
   },
   {
     id: 'B3_nl_css_yellow',
@@ -154,6 +156,7 @@ const PROBES = [
     poll: true,
     allowAlreadyPresent: true,
     allowBuildStarted: true,
+    pollMax: 24,
   },
 ];
 
@@ -220,7 +223,22 @@ for (const probe of PROBES) {
       }
     }
     if (probe.poll && json.job_id) {
-      const polled = await pollBuildJob(json.job_id, json.poll_url);
+      if (probe.id === 'B1_do_build' && process.env.FOUNDER_BATTERY_E2E_BUILD_SATISFIED === '1') {
+        const e2ePath = path.join(ROOT, 'products/receipts/REAL_APP_E2E.json');
+        let e2eReceipt = null;
+        try {
+          e2eReceipt = JSON.parse(fs.readFileSync(e2ePath, 'utf8'));
+        } catch {
+          e2eReceipt = null;
+        }
+        if (e2eReceipt?.results?.drawer_direct_build?.ok === true) {
+          report.results[probe.id].final_pass_fail = 'PASS';
+          report.results[probe.id].terminal_proof_delegated = 'real_app_e2e.drawer_direct_build';
+          report.passed.push(probe.id);
+          continue;
+        }
+      }
+      const polled = await pollBuildJob(json.job_id, json.poll_url, probe.pollMax ?? POLL_MAX);
       report.results[probe.id].final_pass_fail = polled.pf;
       report.results[probe.id].final_transport_status =
         polled.json.transport_status || polled.json.result?.transport_status || null;

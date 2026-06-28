@@ -1,6 +1,6 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-06-27T23:19:22.156Z",
+  "at": "2026-06-28T23:18:48.849Z",
   "base": "https://robust-magic-production.up.railway.app",
   "ok": true,
   "passed": [
@@ -29,7 +29,7 @@
     },
     "no_js_errors": {
       "ok": true,
-      "detail": "0 console.error(s)"
+      "detail": "no unallowlisted pageerror/console.error signals"
     },
     "lumin_fab_visible": {
       "ok": true,
@@ -41,7 +41,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "136 chars: \"✅ DONE\nPoint B: LifeRE Alpha (PRODUCT-LIFERE-OS-V1-0001)\n• Channel: system_actio…\""
+      "detail": "37 chars: \"⏳ RUNNING\nBuild job started.\n04:05 PM…\""
     },
     "smos_question": {
       "ok": true,
@@ -69,7 +69,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "26142 chars visible"
+      "detail": "2518 chars visible"
     },
     "page_nav": {
       "ok": true,

@@ -139,3 +139,11 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - `routes/lifeos-builderos-command-control-routes.js`: build-job poll response sets `pass_fail: RUNNING` after result spread so clients keep polling until live transport.
 - `services/founder-build-job-store.js`: `isFounderBuildProofPending` requires `founder_verification_required` — script-only builds terminal at PASS without 10m poll loop.
 - `services/reality-ledger.js`: append-only Reality Record store (V1-00 recorders seam).
+
+## 2026-06-28 autonomy-closure proof stabilization
+
+- `routes/lifeos-builderos-command-control-routes.js`: stale founder build jobs fail closed after `FOUNDER_BUILD_JOB_TIMEOUT_MS` instead of polling forever as `RUNNING`.
+- `public/overlay/lifeos-app.html`: founder build poll deadline aligned to 11 minutes (660s) to match E2E `BUILD_JOB_TIMEOUT`.
+- `scripts/run-founder-chat-alpha-battery.mjs`: B1 delegates terminal proof to fresh `REAL_APP_E2E.drawer_direct_build` when invoked from founder-ui-proof; per-probe poll caps for B2/B3.
+- `scripts/run-builderos-founder-ui-proof.mjs`: reuses fresh E2E receipt, retries once on drawer-only failure, passes `FOUNDER_BATTERY_E2E_BUILD_SATISFIED` to alpha battery.
+- `services/builderos-command-control-service.js`: DB-backed founder jobs expose `created_at` for stale-running detection.

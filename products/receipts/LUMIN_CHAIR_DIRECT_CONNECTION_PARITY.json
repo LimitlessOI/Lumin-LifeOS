@@ -1,6 +1,6 @@
 {
   "schema": "lumin_chair_direct_connection_parity_v1",
-  "at": "2026-06-26T21:05:08.903Z",
+  "at": "2026-06-28T23:31:44.229Z",
   "base": "https://robust-magic-production.up.railway.app",
   "passed": [
     "T1_open_lifere",
@@ -50,14 +50,14 @@
       "chair_channel": "build_async",
       "command_truth": "BUILD_ATTEMPTED",
       "pass_fail": "RUNNING",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job db6fec08… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job db6fec08-d0ad-4eb3-982f-9f49518e5191"
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 4814b80e… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 4814b80e-c847-4798-b1f2-60606e2b46d1"
     },
     "T6_fail_carries_lesson": {
       "status": 202,
       "chair_channel": "build_async",
       "command_truth": "BUILD_ATTEMPTED",
       "pass_fail": "RUNNING",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 1451dc2e… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 1451dc2e-e9e4-43a4-82ca-0c9b814e2101"
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job bff967ac… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job bff967ac-aee0-4caa-88ce-51bfdb00a1c1"
     },
     "T7_display_no_execute_claim": {
       "status": 200,

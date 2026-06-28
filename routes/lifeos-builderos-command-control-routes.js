@@ -67,6 +67,15 @@ import {
   scorePredictionsForMissionUsability,
 } from '../services/founder-usability-confirm.js';
 
+const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
+
+function founderBuildJobAgeMs(job) {
+  const raw = job?.created_at;
+  if (!raw) return 0;
+  const t = typeof raw === 'number' ? raw : new Date(raw).getTime();
+  return Number.isFinite(t) ? Date.now() - t : 0;
+}
+
 export function resolveFounderCommandControlHandle(req) {
   return req?.auth_mode === 'command_key_fallback'
     ? 'adam'
@@ -977,6 +986,17 @@ HOW TO RESPOND:
     }
     if (!job) {
       return res.status(404).json({ ok: false, pass_fail: 'FAIL', error: 'Build job not found' });
+    }
+    if (job.status === 'running' && founderBuildJobAgeMs(job) > FOUNDER_BUILD_JOB_TIMEOUT_MS + 60_000) {
+      return res.status(200).json({
+        ok: false,
+        job_id: job.id,
+        status: 'failed',
+        pass_fail: 'FAIL',
+        first_blocker: 'Build job exceeded maximum runtime without terminal result.',
+        failure_code: 'FOUNDER_BUILD_JOB_STALE_RUNNING',
+        command_truth: 'BUILD_ATTEMPTED',
+      });
     }
     if (job.status === 'running') {
       return res.status(202).json({

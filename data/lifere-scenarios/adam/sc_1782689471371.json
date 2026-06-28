@@ -1,0 +1,32 @@
+{
+  "horizon_days": 90,
+  "paths": [
+    {
+      "id": "b",
+      "allocations": {
+        "prospecting_hours": 20
+      },
+      "goal_scores": {
+        "composite": 21.6
+      }
+    },
+    {
+      "id": "a",
+      "allocations": {
+        "builderos_hours": 20
+      },
+      "goal_scores": {
+        "composite": -5.6
+      }
+    }
+  ],
+  "goal_weights": {
+    "income": 0.5,
+    "family": 0.3,
+    "freedom": 0.2
+  },
+  "opportunity_cost_notes": [
+    "Choosing b over a trades a upside for b goal fit."
+  ],
+  "label": "THINK"
+}

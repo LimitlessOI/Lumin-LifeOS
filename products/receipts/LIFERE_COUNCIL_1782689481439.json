@@ -1,0 +1,12 @@
+{
+  "schema": "lifere_council_v1",
+  "intent": "content",
+  "userId": "adam",
+  "roles": [
+    "Chair",
+    "Marketing_Director",
+    "CFO"
+  ],
+  "chair_answer": "Chair reviewed: What video next?",
+  "at": "2026-06-28T23:31:21.439Z"
+}

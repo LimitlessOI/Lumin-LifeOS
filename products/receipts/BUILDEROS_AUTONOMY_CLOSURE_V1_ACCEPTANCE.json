@@ -1,7 +1,7 @@
 {
   "schema": "builderos_autonomy_closure_v1_acceptance",
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
-  "at": "2026-06-28T01:29:17.117Z",
+  "at": "2026-06-28T23:35:48.337Z",
   "mode": "full_suite",
   "requested_check": null,
   "ok": true,
@@ -154,7 +154,7 @@
       "detail": "artifact sync keeps BP item, readiness report, and founder false aligned",
       "evidence": {
         "bp_item": {
-          "at": "2026-06-28T01:07:38.985Z",
+          "at": "2026-06-28T23:35:42.855Z",
           "mode": "founder_usability",
           "status": "CURRENT"
         },
@@ -166,7 +166,7 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-06-28T01:07:38.985Z",
+            "at": "2026-06-28T23:35:42.855Z",
             "mode": "founder_usability",
             "status": "CURRENT"
           }
@@ -181,7 +181,8 @@
         "ui_gate": {
           "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
           "founder_usability_pass": false,
-          "technical_pass_only": "script_enforced_next_run"
+          "technical_pass_only": true,
+          "founder_usability_contract": "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md"
         },
         "founder_alpha_audit": {
           "founder_usability_pass": false,
@@ -208,9 +209,14 @@
     }
   },
   "verdict": "PASS",
+  "completed_at": "2026-06-28T23:35:48.337Z",
+  "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
+  "production_base": "https://robust-magic-production.up.railway.app",
   "bp_sync": {
     "updated": [
-      "builderos-reboot/BP_PRIORITY.json"
-    ]
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
   }
 }

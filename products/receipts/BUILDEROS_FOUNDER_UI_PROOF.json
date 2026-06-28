@@ -1,0 +1,330 @@
+{
+  "schema": "builderos_founder_ui_proof_v1",
+  "at": "2026-06-28T23:18:48.489Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "ok": true,
+  "verdict": "PASS",
+  "blocker": null,
+  "suites": {
+    "real_app_e2e": {
+      "label": "real_app_e2e",
+      "exit": 0,
+      "stdout": "      Close Alpha gate (founder only)\n        Agent alpha must PASS first (every button + API tested). Then confirm u\"\n\n[12] Dashboard page loads\n  ✅ dashboard_loads — 2518 chars visible\n\n[13] Page navigation: today / finance / health load\n  ✅ page_nav — 3 pages loaded cleanly\n\n[14] Login page reachable (not 404)\n  ✅ login_page — HTTP 200\n\n[15] Logged-out LifeOS redirect preserves a single clean next target\n  ✅ logged_out_redirect_shape — /lifeos?layout=desktop&direct_system=1\n\n[16] Logged-out overlay shell redirect does not double-append next\n  ✅ logged_out_overlay_redirect_shape — /overlay/lifeos-app.html?direct_system=1\n\n────────────────────────────────────────────────────────\n✅ PASSED  16\nScreenshots → products/receipts/e2e-screenshots/\nReceipt    → products/receipts/REAL_APP_E2E.json\n",
+      "stderr": "",
+      "receipt": {
+        "schema": "real_app_e2e_v1",
+        "at": "2026-06-28T23:18:48.849Z",
+        "base": "https://robust-magic-production.up.railway.app",
+        "ok": true,
+        "passed": [
+          "app_loads",
+          "no_js_errors",
+          "lumin_fab_visible",
+          "lumin_drawer_opens",
+          "chat_response",
+          "smos_question",
+          "counsel_only_bypass",
+          "drawer_direct_build",
+          "navigate_lifere",
+          "alpha_readiness",
+          "alpha_daily_cycle",
+          "dashboard_loads",
+          "page_nav",
+          "login_page",
+          "logged_out_redirect_shape",
+          "logged_out_overlay_redirect_shape"
+        ],
+        "failed": [],
+        "results": {
+          "app_loads": {
+            "ok": true,
+            "detail": "HTTP 200, title=\"LifeOS\""
+          },
+          "no_js_errors": {
+            "ok": true,
+            "detail": "no unallowlisted pageerror/console.error signals"
+          },
+          "lumin_fab_visible": {
+            "ok": true,
+            "detail": ""
+          },
+          "lumin_drawer_opens": {
+            "ok": true,
+            "detail": ""
+          },
+          "chat_response": {
+            "ok": true,
+            "detail": "37 chars: \"⏳ RUNNING\nBuild job started.\n04:05 PM…\""
+          },
+          "smos_question": {
+            "ok": true,
+            "detail": "workflow present, no bleed"
+          },
+          "counsel_only_bypass": {
+            "ok": true,
+            "detail": "counseled without running build"
+          },
+          "drawer_direct_build": {
+            "ok": true,
+            "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Path: builder_task_execute File: scripts/lifeos-direct-build-smoke-test.mjs Co"
+          },
+          "navigate_lifere": {
+            "ok": true,
+            "detail": "LifeRE page loaded with alpha cycle button"
+          },
+          "alpha_readiness": {
+            "ok": true,
+            "detail": "alpha cycle btn: \"Run Alpha Daily Cycle\""
+          },
+          "alpha_daily_cycle": {
+            "ok": true,
+            "detail": "cycle ran: \"\n        Close Alpha gate (founder only)\n        Agent alpha must PASS first (every button + API tested). Then confirm u\""
+          },
+          "dashboard_loads": {
+            "ok": true,
+            "detail": "2518 chars visible"
+          },
+          "page_nav": {
+            "ok": true,
+            "detail": "3 pages loaded cleanly"
+          },
+          "login_page": {
+            "ok": true,
+            "detail": "HTTP 200"
+          },
+          "logged_out_redirect_shape": {
+            "ok": true,
+            "detail": "/lifeos?layout=desktop&direct_system=1"
+          },
+          "logged_out_overlay_redirect_shape": {
+            "ok": true,
+            "detail": "/overlay/lifeos-app.html?direct_system=1"
+          }
+        }
+      }
+    },
+    "founder_chat_alpha": {
+      "label": "founder_chat_alpha",
+      "exit": 0,
+      "stdout": "\n> ai-counsel-os@1.0.0 lifeos:founder-chat:alpha:battery\n> node scripts/run-founder-chat-alpha-battery.mjs\n\n{\n  \"ok\": true,\n  \"passed\": 9,\n  \"failed\": 0,\n  \"failures\": []\n}\n",
+      "stderr": "",
+      "receipt": {
+        "schema": "founder_chat_alpha_battery_v1",
+        "at": "2026-06-28T23:19:13.080Z",
+        "base": "https://robust-magic-production.up.railway.app",
+        "ok": true,
+        "passed": [
+          "Q1_counsel_no_clarify",
+          "Q2_smos_workflow_question",
+          "Q2b_smos_steps",
+          "Q_chair_builder",
+          "Q3_factual_search",
+          "Q4_connection_truth",
+          "B1_do_build",
+          "B2_nl_ui_rounded",
+          "B3_nl_css_yellow"
+        ],
+        "failed": [],
+        "results": {
+          "Q1_counsel_no_clarify": {
+            "http": 200,
+            "channel": "chair",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "NO_COMMAND_RAN",
+            "transport_status": null,
+            "action": "chair",
+            "summary_head": "Based on your personal twin's motivations, which include family, freedom, and impact, I'd like to know: what's the most important outcome to achieve today that aligns with these motivations?",
+            "has_verified_search": false,
+            "has_system_knowledge": true,
+            "program_context": null
+          },
+          "Q2_smos_workflow_question": {
+            "http": 200,
+            "channel": "chair",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "NO_COMMAND_RAN",
+            "transport_status": null,
+            "action": "chair",
+            "summary_head": "Our Social Media OS workflow (LifeRE, from your SSOT and `lifere-socialmediaos-bridge.js`):\n\nFor **relocation content**: brief topic = relocation market you serve; hooks come from brief + research pack, then scripts per ",
+            "has_verified_search": true,
+            "has_system_knowledge": true,
+            "program_context": [
+              {
+                "id": "smos",
+                "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                "services": [
+                  "services/lifere-socialmediaos-bridge.js",
+                  "services/lifere-content-brief-engine.js",
+                  "services/founder-smos-content-executor.js"
+                ],
+                "canonical": {
+                  "program": "Social Media OS (LifeRE)",
+                  "authority": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                  "workflow_order": [
+                    "content_brief",
+                    "coach",
+                    "record",
+                    "post",
+                    "publish"
+                  ],
+                  "brief_gate": "Approved content brief required before coach/scripts/record",
+                  "founder_chat_executor": "founder-smos-content-executor.js → lifere-socialmediaos-bridge.js",
+                  "api_prefix": "/api/v1/lifere/marketing/socialmediaos/",
+                  "overlay": "public/overlay/lifeos-lifere.html"
+                }
+              }
+            ]
+          },
+          "Q2b_smos_steps": {
+            "http": 200,
+            "channel": "chair",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "NO_COMMAND_RAN",
+            "transport_status": null,
+            "action": "chair",
+            "summary_head": "Our Social Media OS workflow (LifeRE, from your SSOT and `lifere-socialmediaos-bridge.js`):\n\n1. **Content brief** — topic/market locked; founder approves brief before scripts. 2. **Coach** — council session on the approv",
+            "has_verified_search": false,
+            "has_system_knowledge": true,
+            "program_context": [
+              {
+                "id": "smos",
+                "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                "services": [
+                  "services/lifere-socialmediaos-bridge.js",
+                  "services/lifere-content-brief-engine.js",
+                  "services/founder-smos-content-executor.js"
+                ],
+                "canonical": {
+                  "program": "Social Media OS (LifeRE)",
+                  "authority": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                  "workflow_order": [
+                    "content_brief",
+                    "coach",
+                    "record",
+                    "post",
+                    "publish"
+                  ],
+                  "brief_gate": "Approved content brief required before coach/scripts/record",
+                  "founder_chat_executor": "founder-smos-content-executor.js → lifere-socialmediaos-bridge.js",
+                  "api_prefix": "/api/v1/lifere/marketing/socialmediaos/",
+                  "overlay": "public/overlay/lifeos-lifere.html"
+                }
+              }
+            ]
+          },
+          "Q_chair_builder": {
+            "http": 200,
+            "channel": "chair",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "NO_COMMAND_RAN",
+            "transport_status": null,
+            "action": "chair",
+            "summary_head": "Yes. Lumin is the Chair — product changes go through BuilderOS, not theater. **How:** say what you want in the founder drawer (`/founder-interface/message`). UI/CSS orders route to `build_async` (council + commit). Expli",
+            "has_verified_search": false,
+            "has_system_knowledge": true,
+            "program_context": [
+              {
+                "id": "builderos",
+                "amendment": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+                "services": [
+                  "routes/lifeos-council-builder-routes.js",
+                  "services/builderos-command-control-service.js"
+                ],
+                "canonical": null
+              },
+              {
+                "id": "lumin_chair",
+                "amendment": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+                "services": [
+                  "services/lumin-chair-orchestrator.js",
+                  "services/chair-lumin-unified.js",
+                  "routes/lifeos-builderos-command-control-routes.js"
+                ],
+                "canonical": null
+              }
+            ]
+          },
+          "Q3_factual_search": {
+            "http": 200,
+            "channel": "chair",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "NO_COMMAND_RAN",
+            "transport_status": null,
+            "action": "chair",
+            "summary_head": "From verified web search: the federal funds rate federal funds rate?. Full search:\nLive search unavailable for: what is the current federal funds rate?.",
+            "has_verified_search": true,
+            "has_system_knowledge": true,
+            "program_context": null
+          },
+          "Q4_connection_truth": {
+            "http": 200,
+            "channel": "chair",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "NO_COMMAND_RAN",
+            "transport_status": null,
+            "action": "chair",
+            "summary_head": "Yes — same system, same API. Lumin IS the Chair. This drawer hits `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` — the same path the platform uses. I load your **digital twin**, **DB thread**, ",
+            "has_verified_search": true,
+            "has_system_knowledge": true,
+            "program_context": null
+          },
+          "B1_do_build": {
+            "http": 202,
+            "channel": "build_async",
+            "truth": "BUILD_ATTEMPTED",
+            "pass_fail": "RUNNING",
+            "transport_status": null,
+            "action": "build",
+            "job_id": "ff4bbf09-da26-4cd0-b705-10c6ba9d832f",
+            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ff4bbf09… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ff4bbf09-da26-4cd0-b705-10c6ba9d832f",
+            "has_verified_search": false,
+            "has_system_knowledge": false,
+            "program_context": null,
+            "final_pass_fail": "PASS",
+            "terminal_proof_delegated": "real_app_e2e.drawer_direct_build"
+          },
+          "B2_nl_ui_rounded": {
+            "http": 202,
+            "channel": "build_async",
+            "truth": "BUILD_ATTEMPTED",
+            "pass_fail": "RUNNING",
+            "transport_status": null,
+            "action": "build",
+            "job_id": "ec67c064-e7a6-4e4f-893f-63e92d186535",
+            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ec67c064… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ec67c064-e7a6-4e4f-893f-63e92d186535",
+            "has_verified_search": false,
+            "has_system_knowledge": false,
+            "program_context": null,
+            "final_pass_fail": "PASS",
+            "final_transport_status": "COMMIT_ONLY_NOT_LIVE"
+          },
+          "B3_nl_css_yellow": {
+            "http": 202,
+            "channel": "build_async",
+            "truth": "BUILD_ATTEMPTED",
+            "pass_fail": "RUNNING",
+            "transport_status": null,
+            "action": "build",
+            "job_id": "3441ba2b-4d7a-4f52-bffe-0463320f772c",
+            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 3441ba2b… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 3441ba2b-4d7a-4f52-bffe-0463320f772c",
+            "has_verified_search": false,
+            "has_system_knowledge": false,
+            "program_context": null,
+            "final_pass_fail": "TIMEOUT",
+            "final_transport_status": null
+          }
+        }
+      }
+    }
+  },
+  "completed_at": "2026-06-28T23:18:48.489Z",
+  "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  }
+}

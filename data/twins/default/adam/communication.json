@@ -1,0 +1,12 @@
+{
+  "schema": "lifere_communication_twin_v1",
+  "phrases": [
+    "Direct and warm follow-up."
+  ],
+  "tone_vector": {
+    "formal": 0.3,
+    "casual": 0.7,
+    "empathy": 0.8
+  },
+  "updated_at": "2026-06-28T23:31:21.441Z"
+}

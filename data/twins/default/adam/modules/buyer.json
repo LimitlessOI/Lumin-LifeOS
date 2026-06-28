@@ -9,7 +9,7 @@
       "search_criteria": {
         "beds": 3
       },
-      "updated_at": "2026-06-23T11:48:47.771Z"
+      "updated_at": "2026-06-28T23:31:21.127Z"
     },
     "demo_buyer_001": {
       "search_criteria": {
@@ -29,10 +29,76 @@
             "question": "What would need to be true for you to feel confident moving forward this week?",
             "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
           }
+        },
+        {
+          "at": "2026-06-28T23:25:56.772Z",
+          "objection": "agent alpha probe",
+          "coaching": {
+            "acknowledge": "I hear your concern about \"agent alpha probe\".",
+            "reframe": "Many buyers pause here — it usually means you want clarity before committing.",
+            "question": "What would need to be true for you to feel confident moving forward this week?",
+            "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
+          }
+        },
+        {
+          "at": "2026-06-28T23:25:58.359Z",
+          "objection": "agent alpha probe",
+          "coaching": {
+            "acknowledge": "I hear your concern about \"agent alpha probe\".",
+            "reframe": "Many buyers pause here — it usually means you want clarity before committing.",
+            "question": "What would need to be true for you to feel confident moving forward this week?",
+            "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
+          }
+        },
+        {
+          "at": "2026-06-28T23:26:07.692Z",
+          "objection": "agent alpha probe",
+          "coaching": {
+            "acknowledge": "I hear your concern about \"agent alpha probe\".",
+            "reframe": "Many buyers pause here — it usually means you want clarity before committing.",
+            "question": "What would need to be true for you to feel confident moving forward this week?",
+            "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
+          }
+        },
+        {
+          "at": "2026-06-28T23:31:11.374Z",
+          "objection": "agent alpha probe",
+          "coaching": {
+            "acknowledge": "I hear your concern about \"agent alpha probe\".",
+            "reframe": "Many buyers pause here — it usually means you want clarity before committing.",
+            "question": "What would need to be true for you to feel confident moving forward this week?",
+            "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
+          }
+        },
+        {
+          "at": "2026-06-28T23:31:12.937Z",
+          "objection": "agent alpha probe",
+          "coaching": {
+            "acknowledge": "I hear your concern about \"agent alpha probe\".",
+            "reframe": "Many buyers pause here — it usually means you want clarity before committing.",
+            "question": "What would need to be true for you to feel confident moving forward this week?",
+            "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
+          }
+        },
+        {
+          "at": "2026-06-28T23:31:21.442Z",
+          "objection": "agent alpha probe",
+          "coaching": {
+            "acknowledge": "I hear your concern about \"agent alpha probe\".",
+            "reframe": "Many buyers pause here — it usually means you want clarity before committing.",
+            "question": "What would need to be true for you to feel confident moving forward this week?",
+            "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
+          }
         }
       ],
-      "updated_at": "2026-06-26T06:37:21.909Z"
+      "updated_at": "2026-06-28T23:31:21.442Z"
+    },
+    "client-rt": {
+      "search_criteria": {
+        "beds": 4
+      },
+      "updated_at": "2026-06-28T23:31:21.169Z"
     }
   },
-  "updated_at": "2026-06-26T06:37:21.909Z"
+  "updated_at": "2026-06-28T23:31:21.442Z"
 }

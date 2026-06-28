@@ -1,7 +1,7 @@
 {
   "schema": "lifere_alpha_readiness_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-26T21:04:41.843Z",
+  "at": "2026-06-28T23:31:09.965Z",
   "checks": {
     "lifeos:lifere-alpha-gate": {
       "exit": 0
@@ -37,6 +37,7 @@
     "AR-lifeos:lifere-alpha-gate",
     "AR-lifeos:lifere-self-audit",
     "AR-v1_acceptance_pass",
+    "AR-founder_usability_contract",
     "AR-ui_daily",
     "AR-ui_top3",
     "AR-ui_debrief",
@@ -65,6 +66,7 @@
   "ready_for_alpha_testing": true,
   "ready_for_alpha_gate": false,
   "alpha_ready": true,
+  "technical_pass_only": true,
   "canonical_url": "/overlay/lifeos-app.html?page=lifeos-lifere.html",
   "founder_close_path": "Run Alpha Daily Cycle → Confirm Alpha PASS (12+ char quote) in LifeRE banner"
 }

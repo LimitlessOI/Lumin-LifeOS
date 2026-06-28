@@ -1,0 +1,17 @@
+{
+  "schema": "ui_alpha_gate_v1",
+  "at": "2026-06-28T23:35:15.546Z",
+  "ok": true,
+  "passed": [
+    "real_app_e2e",
+    "founder_chat_alpha",
+    "founder_alpha_audit"
+  ],
+  "failed": [],
+  "founder_usability_pass": false,
+  "ready_for_founder_alpha": true,
+  "technical_pass_only": true,
+  "founder_usability_contract": "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md",
+  "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+  "reused_from_fresh_receipts": true
+}

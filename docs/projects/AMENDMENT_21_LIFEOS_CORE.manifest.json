@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-28",
-  "last_receipt": "2026-06-27 founder-proof-pending-transport-law",
+  "last_receipt": "2026-06-28 autonomy-closure founder proof stabilization",
   "last_change_summary": "Founder build truth no longer collapses committed-but-unverified founder UI work into immediate FAIL. Pending founder proof now stays pollable through transport truth, and the founder build job store treats origin/deploy drift as waiting-for-proof instead of terminal failure.",
   "ssot_receipt_tail": "Live founder probe proved the worker stopped false-greening, but the truth gate still downgraded pending founder proof to FAIL. The amendment now records the fix: keep pending founder proof as PASS + transport-pending so founder poll/readback can finish the loop honestly."
 }

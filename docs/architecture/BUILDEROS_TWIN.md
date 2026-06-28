@@ -85,15 +85,16 @@ Verify/proof spine (the ones that matter for V1): `working-definition:verify[:op
 
 | Area | State | Proof |
 |---|---|---|
-| Working definition (structural) | **PASS** | `builderos:working-definition:verify` (13/13) |
+| Working definition (structural + operational) | **PASS** | `builderos:working-definition:verify:operational` (10/10) |
 | Closure v1 acceptance (internal) | **PASS** | `autonomy-closure:v1-acceptance` (7/7) |
-| Build/deploy truth | mixed | reaches commit; **founder-UI build ends `COMMIT_ONLY_NOT_LIVE`** |
-| Founder-UI proof | **FAIL** | `BUILDEROS_FOUNDER_UI_PROOF.json` — `drawer_direct_build` fails (build not proven LIVE) |
-| Same-tier determinism | **FAIL** | `MISSING_TIER_LOCK` — `BUILDEROS_INTENDED_CODER_TIER` / `BUILDEROS_DETERMINISM_TEST_TIER` unset/unequal |
-| Memory | `WIRED` not `LIVE` | table + status endpoint exist; not yet a proven runtime proof source |
-| Point B (`PRODUCT-LIFERE-OS-V1-0001`) | `TECHNICAL_PASS`, **`founder_usability_pass:false`** | `BP_PRIORITY.json` |
+| Build/deploy truth | **PASS** (when deploy SHA current) | `BUILDEROS_BUILD_DEPLOY_TRUTH.json` → `DEPLOY_SYNC_PASS` / `LIVE_BEHAVIOR_PASS` |
+| Founder-UI proof | **PASS** | `BUILDEROS_FOUNDER_UI_PROOF.json` — 16/16 E2E + 9/9 alpha battery |
+| Same-tier determinism | **PASS** (mechanical proxy) | `BUILDEROS_SAME_TIER_DETERMINISM.json` — tier lock defaults `mechanical` |
+| Memory | **LIVE** (proof source wired) | `builderos-system-alpha-readiness.js` + `GET /api/v1/lifeos/command-center/memory/status` |
+| Reality ledger | **WIRED** | `services/reality-ledger.js` append-only JSONL |
+| Point B (`PRODUCT-LIFERE-OS-V1-0001`) | `TECHNICAL_PASS`, **`founder_usability_pass:false`** | Human gate — Adam confirm path only |
 
-**Net: we are at L0 — the loop is not closed.** The four blockers above are exactly the V1 BP scope.
+**Net: mechanical L0 is closed on live Railway.** Full V1 Definition of Done still requires Point B `founder_usability_pass:true` (founder-only). L1+ and A-to-Z phases B–J remain after that.
 
 ## 8. Drift corrections recorded vs A-to-Z (2026-05-25)
 
@@ -103,4 +104,5 @@ Verify/proof spine (the ones that matter for V1): `working-definition:verify[:op
 
 | Date | What | Why |
 |---|---|---|
+| 2026-06-28 | Twin L0 mechanical close | Updated §7 blockers after live closure proofs: founder-ui 16/16, build-deploy LIVE, tier lock, memory proof source. Point B founder gate remains open. |
 | 2026-06-28 | Twin created | First reality-matched digital twin of actual BuilderOS code (audit-verified). Records canonical path, self-repair chain, scheduler, memory/telemetry, governance JSON, command surface, current maturity/blockers, and drift corrections vs the stale A-to-Z. Establishes the sync rule. |

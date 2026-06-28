@@ -239,6 +239,7 @@ export function mapDbRowToFounderBuildJob(row) {
       task: row.instruction,
       status: 'running',
       result: null,
+      created_at: row.created_at,
     };
   }
   const pass = founderResult.pass_fail === 'PASS';
@@ -250,6 +251,7 @@ export function mapDbRowToFounderBuildJob(row) {
     id: row.id,
     task: row.instruction,
     status: waitingForProof ? 'waiting_for_proof' : pass ? 'completed' : 'failed',
+    created_at: row.created_at,
     result: {
       ...founderResult,
       pass_fail: founderResult.pass_fail || (pass ? 'PASS' : 'FAIL'),

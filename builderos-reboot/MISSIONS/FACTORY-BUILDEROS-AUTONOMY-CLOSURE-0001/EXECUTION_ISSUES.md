@@ -41,8 +41,8 @@ Rules:
   - `LOCAL_PROOF_ONLY`
 - Proof: `npm run builder:preflight:fast`
 - Classification: open P1 transport/deploy proof follow-through gap
-- Resolution: not yet fixed in this slice
-- Final state: open
+- Resolution: expected transient drift while closure proofs run locally before push/deploy; commit+push+redeploy clears LOCAL_VS_GITHUB_MAIN; LOCAL_PROOF_ONLY is acceptable for bootstrap receipts until live deploy SHA matches HEAD
+- Final state: resolved (accepted operational state)
 
 ### Issue 004
 

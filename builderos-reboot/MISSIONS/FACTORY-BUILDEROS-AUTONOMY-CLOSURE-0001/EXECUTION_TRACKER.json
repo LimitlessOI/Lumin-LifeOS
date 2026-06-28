@@ -1,7 +1,7 @@
 {
   "schema": "mission_execution_tracker_v1",
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
-  "status": "IN_PROGRESS",
+  "status": "TECHNICAL_COMPLETE",
   "blueprint_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-v1",
   "execution_order": [
     "BAC-000B",
@@ -21,19 +21,19 @@
   ],
   "step_state": {
     "BAC-000B": "complete",
-    "BAC-000": "pending",
-    "BAC-000A": "pending",
+    "BAC-000": "complete",
+    "BAC-000A": "complete",
     "BAC-001": "complete",
     "BAC-002": "complete",
     "BAC-003": "complete",
     "BAC-004": "complete",
     "BAC-005": "complete",
     "BAC-006": "complete",
-    "BAC-007": "pending",
+    "BAC-007": "complete",
     "BAC-008": "complete",
-    "BAC-009": "pending",
-    "BAC-010": "pending",
-    "BAC-011": "pending"
+    "BAC-009": "complete",
+    "BAC-010": "complete",
+    "BAC-011": "complete"
   },
   "completed_notes": [
     {
@@ -43,6 +43,20 @@
         "ARCHITECT_COMPARISON_REPORT.md",
         "SNT_VS_ARCHITECT_AUDIT.md",
         "CHAIR_SNT_ARC_CONSENSUS_RECEIPT.json"
+      ]
+    },
+    {
+      "step_id": "BAC-000",
+      "note": "Shared build-proof contract fails closed on commit-only and missing SHA.",
+      "verified_by": [
+        "node --test tests/build-proof-contract.test.js tests/lifeos-execution-truth.test.js"
+      ]
+    },
+    {
+      "step_id": "BAC-000A",
+      "note": "Founder build poll/readback and transport truth wired through build-proof contract.",
+      "verified_by": [
+        "node --test tests/build-proof-contract.test.js tests/founder-build-job-store.test.js"
       ]
     },
     {
@@ -76,7 +90,7 @@
     },
     {
       "step_id": "BAC-005",
-      "note": "Improvement loop output is no longer advisory-only by structure: each item now carries a deterministic blueprint-delta contract with mission/step ownership, proof requirements, disposition, and canonical promotion requirements while keeping a single governed stream.",
+      "note": "Improvement loop output is no longer advisory-only by structure: each item now carries a deterministic blueprint-delta contract with mission/step ownership, proof requirements, disposition, and promotion requirements while keeping a single governed stream.",
       "verified_by": [
         "node --test tests/builderos-improvement-loop.test.js tests/self-repair-attempt-context.test.js tests/build-proof-contract.test.js tests/lifeos-execution-truth.test.js"
       ]
@@ -89,11 +103,45 @@
       ]
     },
     {
+      "step_id": "BAC-007",
+      "note": "Founder UI alpha truth scripts hardened; founder-ui-proof reuses fresh E2E drawer build proof and delegates B1 terminal proof to real_app_e2e when satisfied.",
+      "verified_by": [
+        "npm run builderos:autonomy-closure:founder-ui-proof",
+        "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json"
+      ]
+    },
+    {
       "step_id": "BAC-008",
       "note": "Active autonomy spine files now point at the canonical authority chain instead of amendment-first drift, and the legacy shadow queue runner is explicitly marked HISTORY_ONLY so cold agents are less likely to confuse Hist artifacts with active BuilderOS orchestration.",
       "verified_by": [
         "node --check services/builderos-bp-priority-scheduler.js && node --check services/builderos-improvement-loop.js && node --check scripts/bp-priority-never-stop.mjs && node --check scripts/lifeos-builder-continuous-queue.mjs",
         "rg -n \"@ssot .*AMENDMENT_|MISSION_QUEUE|HISTORY_ONLY|AUTHORITY_BOUNDARIES\" services/builderos-bp-priority-scheduler.js scripts/bp-priority-never-stop.mjs services/builderos-improvement-loop.js scripts/lifeos-builder-continuous-queue.mjs builderos-reboot/AGENTS.md"
+      ]
+    },
+    {
+      "step_id": "BAC-009",
+      "note": "Closure acceptance and live proof harness npm scripts wired.",
+      "verified_by": [
+        "npm run builderos:autonomy-closure:v1-acceptance",
+        "npm run builderos:autonomy-closure:founder-ui-proof",
+        "npm run builderos:autonomy-closure:same-tier-determinism",
+        "npm run builderos:autonomy-closure:build-deploy-truth"
+      ]
+    },
+    {
+      "step_id": "BAC-010",
+      "note": "Same-tier determinism mechanical proxy PASS; founder-ui-proof PASS with E2E 16/16 and alpha battery 9/9; build-deploy-truth requires deploy sync after push.",
+      "verified_by": [
+        "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
+        "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json",
+        "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json"
+      ]
+    },
+    {
+      "step_id": "BAC-011",
+      "note": "Certification updated honestly: autonomy closure TECHNICAL_PASS; FULLY_MACHINE_READY remains false until Point B founder_usability_pass and deploy-synced live proofs all green together.",
+      "verified_by": [
+        "builderos-reboot/PROJECT_CERTIFICATION.json"
       ]
     }
   ],

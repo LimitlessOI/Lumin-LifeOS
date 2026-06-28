@@ -1,6 +1,6 @@
 {
   "schema": "bp_priority_guardrails_v1",
-  "checked_at": "2026-06-27T20:54:25.885Z",
+  "checked_at": "2026-06-28T23:36:45.298Z",
   "verdict": "PASS",
   "owner_department": "Historian",
   "registry": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
@@ -13,7 +13,7 @@
     },
     {
       "id": "BP_PRIORITY_SHAPE",
-      "detail": "items=5"
+      "detail": "items=9"
     },
     {
       "id": "HIST_QUEUE_NO_ACTIVE_PRODUCT",

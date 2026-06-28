@@ -2,8 +2,8 @@
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
   "blueprint_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-v1",
   "blueprint_status": "complete",
-  "completed_at": "2026-06-28T15:22:38.397Z",
-  "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
+  "completed_at": "2026-06-28T23:35:48.337Z",
+  "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
   "receipt_verdict": "PASS",
   "scope": "builderos_autonomy_closure",
   "summary": "Deterministic closure plan for BuilderOS: remove false green, harden self-repair, synchronize truth artifacts, make PASS require commit/deploy proof, prove through the founder surface Adam actually uses, freeze Studio usability authority, and only then certify machine readiness.",
@@ -129,8 +129,8 @@
       "authority_owner": "ChC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-000",
@@ -172,8 +172,8 @@
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-000A",
@@ -222,8 +222,8 @@
       "authority_owner": "CFO",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-001",
@@ -265,8 +265,8 @@
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-002",
@@ -317,8 +317,8 @@
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-003",
@@ -364,8 +364,8 @@
       "authority_owner": "ChC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-004",
@@ -407,8 +407,8 @@
       "authority_owner": "Hist",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-005",
@@ -453,8 +453,8 @@
       "authority_owner": "CFO",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-006",
@@ -500,8 +500,8 @@
       "authority_owner": "Hist",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-007",
@@ -552,8 +552,8 @@
       "authority_owner": "SDO",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-008",
@@ -596,8 +596,8 @@
       "authority_owner": "SNT",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-009",
@@ -643,8 +643,8 @@
       "authority_owner": "CDR",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-010",
@@ -692,8 +692,8 @@
       "authority_owner": "SNT",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     },
     {
       "step_id": "BAC-011",
@@ -736,8 +736,8 @@
       "authority_owner": "Hist",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T15:22:38.397Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d"
+      "completed_at": "2026-06-28T23:35:48.337Z",
+      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
     }
   ],
   "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",

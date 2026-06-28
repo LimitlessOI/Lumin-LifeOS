@@ -1,0 +1,9 @@
+{
+  "schema": "lifere_personality_twin_v1",
+  "humor": 0.5,
+  "confidence": 0.5,
+  "warmth": 0.6200000000000001,
+  "directness": 0.5,
+  "calibration_drafts_rated": 6,
+  "updated_at": "2026-06-28T23:31:21.441Z"
+}

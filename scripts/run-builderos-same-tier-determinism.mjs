@@ -9,6 +9,8 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { resolveBuilderTierLock } from '../config/builderos-tier-lock.js';
+import { syncMissionFromTechnicalReceipt } from '../services/bp-priority-sync.js';
+import { execSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT = path.join(ROOT, 'products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json');
@@ -62,6 +64,25 @@ if (!intendedTier || !testTier) {
   } else {
     report.blocker = 'MECHANICAL_PROXY_FAILED';
   }
+}
+
+report.completed_at = report.at;
+try {
+  report.git_sha = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
+} catch {
+  report.git_sha = null;
+}
+report.production_base = process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app';
+if (report.verdict === 'PASS') {
+  report.bp_sync = syncMissionFromTechnicalReceipt({
+    missionId: 'FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-SAME-TIER',
+    receipt: report,
+    root: ROOT,
+    buildRecord: {
+      build_method: 'system-build',
+      note: 'Internal BuilderOS same-tier determinism mechanical proxy.',
+    },
+  });
 }
 
 fs.mkdirSync(path.dirname(RECEIPT), { recursive: true });
