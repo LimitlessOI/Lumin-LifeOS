@@ -134,4 +134,5 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - `scripts/run-real-app-e2e.mjs`: async founder builds use `BUILD_JOB_TIMEOUT` (660s) — Playwright default 30s was killing long poll jobs; accepts terminal PASS with transport or commit proof.
 - `public/overlay/lifeos-app.html`: founder build job poll deadline raised to 10 minutes (was 5).
 - `scripts/lifeos-direct-build-smoke-test.mjs`: repaired `export function` syntax (`exp` corruption blocked E2E comment-only builds).
+- `services/lifeos-execution-truth.js`: `LIVE_MARKER_PENDING` founder builds stay PASS (poll promotes transport); V1 fail-closed no longer kills async HTML builds mid-proof.
 - `services/reality-ledger.js`: append-only Reality Record store (V1-00 recorders seam).

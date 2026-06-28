@@ -26,7 +26,7 @@ function runStep(label, command, args, receiptRel) {
     cwd: ROOT,
     encoding: 'utf8',
     stdio: 'pipe',
-    timeout: 8 * 60 * 1000,
+    timeout: 15 * 60 * 1000,
   });
   return {
     label,

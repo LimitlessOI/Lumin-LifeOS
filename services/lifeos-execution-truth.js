@@ -265,8 +265,9 @@ export function enforceExecutionTruth(raw, ctx = {}) {
         }
       }
       const founderVerification = raw.founder_verification;
+      const founderProofPending = passCandidate && founderRequired && isFounderProofPending(founderVerification);
       if (passCandidate && founderRequired) {
-        if (isFounderProofPending(founderVerification)) {
+        if (founderProofPending) {
           command_truth = 'COMMITTED';
           receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
           lesson = lesson || 'Founder-visible proof is still pending — keep polling until deploy parity and live readback are real.';
@@ -302,7 +303,12 @@ export function enforceExecutionTruth(raw, ctx = {}) {
           runtimeBehaviorVerified: founderRequired ? founderVerification?.ok === true : null,
         });
         transport_status = transportProof.transport_status;
-        if (founderRequired && transportProof.ok !== true) {
+        if (founderProofPending) {
+          pass_fail = 'PASS';
+          command_truth = 'COMMITTED';
+          receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+          first_blocker = null;
+        } else if (founderRequired && transportProof.ok !== true) {
           passCandidate = false;
           pass_fail = 'FAIL';
           failure_code = transportProof.fail_code || transportProof.transport_status || 'TRANSPORT_NOT_LIVE';

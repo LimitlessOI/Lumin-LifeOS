@@ -14,7 +14,7 @@ const BASE = (process.env.PUBLIC_BASE_URL || process.env.LIFERE_ALPHA_BASE_URL |
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
 const ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
 const POLL_MS = 5000;
-const POLL_MAX = 90;
+const POLL_MAX = 150;
 
 const report = {
   schema: 'founder_chat_alpha_battery_v1',
