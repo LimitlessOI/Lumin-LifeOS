@@ -13,7 +13,7 @@
 // ui-e2e-build-proof: 2026-06-28T21:26:58.482Z
 // ui-switch-test-proof: boundary-check-3
 // raw-api-proof: duplicate-check
-// founder-chat-alpha-probe: 2026-06-28T21:23:09.010Z
+// founder-chat-alpha-probe: 2026-06-28T21:27:16.242Z
 // --- Constants ---
 /*
 - The version identifier for this specific smoke test script.
