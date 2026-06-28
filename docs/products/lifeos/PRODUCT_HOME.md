@@ -119,4 +119,5 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 
 - `scripts/run-ui-alpha-gate.mjs` and `scripts/audit-founder-alpha-ready.mjs` now explicitly preserve the difference between `CLEARED_FOR_FOUNDER_ALPHA` and founder-closed Alpha / Point B.
 - Founder chat/build proof now treats build transport as a first-class truth field; async founder-job results are hydrated before founder poll/readback so bare `PASS` cannot hide missing commit/deploy truth.
+- Founder async build-job polling now refreshes transport proof from live deploy SHA and founder-surface evidence instead of assuming Railway can prove ancestry from local git state.
 - `builderos-reboot/PRODUCT_READINESS_REPORT.json` is now part of the active LifeOS authority chain for readiness surfacing, but it does not override Point B or founder-usability truth.

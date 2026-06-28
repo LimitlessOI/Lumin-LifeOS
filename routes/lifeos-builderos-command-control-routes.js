@@ -24,6 +24,7 @@ import { expandFounderBuildTask, isFounderShipOrUsabilityIntent } from '../servi
 import { isFounderConfirmIntent } from '../services/founder-intent-clarify.js';
 import { runFounderBuildWithSelfRepair, startFounderBuildJob, getFounderBuildJobStatus } from '../services/founder-build-self-repair.js';
 import { resolveFounderBuildBaseUrl, assertFounderBuildBaseUrl } from '../services/founder-build-success-gate.js';
+import { refreshFounderBuildResultTruth } from '../services/founder-build-result-truth.js';
 import {
   createCommandControlJob,
   getCommandControlJob,
@@ -984,6 +985,44 @@ HOW TO RESPOND:
         pass_fail: 'RUNNING',
         command_truth: 'BUILD_ATTEMPTED',
       });
+    }
+    if (job.result?.pass_fail === 'PASS' && job.result?.committed === true) {
+      const operatorKey = getForwardedOperatorKey(req)
+        || process.env.COMMAND_CENTER_KEY
+        || process.env.LIFEOS_KEY
+        || process.env.API_KEY
+        || '';
+      const refreshed = await refreshFounderBuildResultTruth(job.result, {
+        task: job.task,
+        baseUrl: resolveFounderBuildBaseUrl(),
+        commandKey: operatorKey,
+      }).catch(() => job.result);
+      if (refreshed && refreshed !== job.result) {
+        const proofStillPending = refreshed.pass_fail === 'PASS'
+          && /^(COMMIT_ONLY_NOT_LIVE|DEPLOY_NOT_SYNCED|LIVE_BEHAVIOR_NOT_VERIFIED)$/i.test(String(refreshed.transport_status || ''));
+        job = {
+          ...job,
+          status: proofStillPending
+            ? 'waiting_for_proof'
+            : refreshed.pass_fail === 'PASS'
+              ? 'completed'
+              : 'failed',
+          result: refreshed,
+        };
+        if (pool && job.id) {
+          await updateCommandControlJobExecution(pool, job.id, {
+            status: job.status === 'completed' ? 'completed' : job.status === 'waiting_for_proof' ? 'committed' : 'failed',
+            blocker: refreshed.first_blocker || refreshed.blocker || null,
+            result_json: {
+              founder_result: refreshed,
+              pass_fail: refreshed.pass_fail,
+              committed: refreshed.committed === true,
+              target_file: refreshed.target_file || null,
+              sha: refreshed.sha || null,
+            },
+          }).catch(() => {});
+        }
+      }
     }
     let control_plane_done = null;
     if (controlPlane && job.id) {
