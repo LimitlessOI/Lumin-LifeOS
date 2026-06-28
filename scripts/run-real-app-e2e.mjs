@@ -14,6 +14,7 @@ const ROOT    = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const BASE    = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
 const KEY     = process.env.COMMAND_CENTER_KEY || '';
 const TIMEOUT = 30_000;
+const BUILD_JOB_TIMEOUT = 360_000;
 
 if (!BASE || !KEY) {
   console.error('PUBLIC_BASE_URL and COMMAND_CENTER_KEY required');
@@ -138,7 +139,7 @@ async function sendLuminBuildMessage(text) {
   await page.waitForFunction(() => {
     const msgs = document.querySelectorAll('.lumin-msg.assistant:not(.thinking)');
     return msgs.length > 0 && !document.querySelector('.lumin-msg.thinking');
-  }, { timeout: 330_000 });
+  }, { timeout: BUILD_JOB_TIMEOUT });
   return page.evaluate(() => {
     const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
     return msgs[msgs.length - 1]?.innerText?.trim() || '';
@@ -483,6 +484,7 @@ await ctx.addCookies([{
 }]);
 
 page = await ctx.newPage();
+page.setDefaultTimeout(BUILD_JOB_TIMEOUT);
 
 // Intercept all requests to Railway and inject x-command-key header
 // setExtraHTTPHeaders alone doesn't always fire on top-level navigations in headless Chromium

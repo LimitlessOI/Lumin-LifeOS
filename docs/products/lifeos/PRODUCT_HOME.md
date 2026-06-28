@@ -131,4 +131,5 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - `services/build-proof-contract.js`: `COMMIT_ONLY_NOT_LIVE` returns `ok:false` — commit-only is not success for deploy-required actions.
 - `services/lifeos-execution-truth.js`: deploy-required founder builds fail closed when transport is not live.
 - `scripts/run-real-app-e2e.mjs`: `drawer_direct_build` requires terminal PASS + live transport; rejects started-only / commit-only theater.
+- `scripts/run-real-app-e2e.mjs`: async founder builds use `BUILD_JOB_TIMEOUT` (360s) — Playwright default 30s was killing long poll jobs.
 - `services/reality-ledger.js`: append-only Reality Record store (V1-00 recorders seam).
