@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-28T05:16:19.650Z",
+  "generated_at": "2026-06-28T05:21:17.488Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11260,
   "files": [
@@ -35575,9 +35575,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 144329,
-      "mtime": "2026-06-28T05:15:43.883Z",
-      "indexed_at": "2026-06-28T05:16:17.957Z"
+      "bytes": 144575,
+      "mtime": "2026-06-28T05:20:49.625Z",
+      "indexed_at": "2026-06-28T05:21:17.488Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -80193,9 +80193,9 @@
     {
       "path": "services/builderos-command-control-service.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 9206,
-      "mtime": "2026-06-28T05:15:44.392Z",
-      "indexed_at": "2026-06-28T05:16:17.957Z",
+      "bytes": 11034,
+      "mtime": "2026-06-28T05:20:30.259Z",
+      "indexed_at": "2026-06-28T05:21:17.488Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"

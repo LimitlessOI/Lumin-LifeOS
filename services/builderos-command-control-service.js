@@ -207,6 +207,22 @@ export async function createFounderInterfaceBuildJobRecord(pool, { id, instructi
       JSON.stringify({ pass_fail: 'RUNNING', async: true }),
     ],
   );
+  await pool.query(
+    `INSERT INTO build_task_ledger (
+       task_id, blueprint_id, product_lane, source, status, start_time,
+       files_planned, model_used, agent_used, human_intervention, proof_required, metadata
+     )
+     SELECT $1, NULL, 'lifeos', 'founder_interface_build', 'running', NOW(),
+            NULL, NULL, 'founder_interface_async', FALSE, $2::jsonb, $3::jsonb
+     WHERE NOT EXISTS (
+       SELECT 1 FROM build_task_ledger WHERE task_id = $1 AND status = 'running'
+     )`,
+    [
+      id,
+      JSON.stringify(['build', 'deploy', 'founder_live']),
+      JSON.stringify({ kind: FOUNDER_INTERFACE_JOB_KIND, user_id: userId }),
+    ],
+  ).catch(() => null);
   return result.rows[0] || null;
 }
 
@@ -255,6 +271,39 @@ export async function persistFounderBuildJobResult(pool, jobId, result = {}) {
   const status = pass
     ? (isFounderBuildProofPending(normalized) ? 'committed' : 'completed')
     : 'failed';
+  const proofStatus = pass
+    ? (isFounderBuildProofPending(normalized) ? 'partial' : 'complete')
+    : 'partial';
+  const founderVerification = normalized.founder_verification || null;
+  const metadata = {
+    kind: FOUNDER_INTERFACE_JOB_KIND,
+    execution_path: normalized.execution_path || null,
+    transport_status: normalized.transport_status || null,
+    founder_verification,
+  };
+  await pool.query(
+    `UPDATE build_task_ledger SET
+       status = CASE
+         WHEN $2 = 'completed' THEN 'done'
+         WHEN $2 = 'failed' THEN 'failed'
+         ELSE 'running'
+       END,
+       end_time = CASE WHEN $2 IN ('completed','failed') THEN NOW() ELSE end_time END,
+       files_changed = COALESCE($3::text[], files_changed),
+       deploy_status = COALESCE($4, deploy_status),
+       proof_status = $5,
+       metadata = COALESCE(metadata, '{}'::jsonb) || $6::jsonb,
+       updated_at = NOW()
+     WHERE task_id = $1`,
+    [
+      jobId,
+      status,
+      normalized.target_file ? [normalized.target_file] : null,
+      normalized.transport_status || null,
+      proofStatus,
+      JSON.stringify(metadata),
+    ],
+  ).catch(() => null);
   return updateCommandControlJobExecution(pool, jobId, {
     status,
     blocker: normalized.first_blocker || normalized.blocker || null,
