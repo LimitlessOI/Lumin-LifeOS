@@ -75,7 +75,7 @@ function logMessage(level, message) {
 - - @returns {{ ok: boolean, source: string }} An object indicating the success status
 -   and the source identifier of the test.
  */
-exp lifeosDirectBuildSmokeTest() {
+export function lifeosDirectBuildSmokeTest() {
   logMessage('INFO', `Starting LifeOS direct build smoke test (v${SMOKE_TEST_VERSION})...`);
   // Perform a simulated check for the expected source identifier.
   // This adds a layer of "logic" beyond a simple return.
