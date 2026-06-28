@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-28T05:00:20.081Z",
+  "generated_at": "2026-06-28T05:08:31.185Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11260,
   "files": [
@@ -21609,8 +21609,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3407630,
-      "mtime": "2026-06-28T05:00:07.647Z",
-      "indexed_at": "2026-06-28T05:00:20.081Z"
+      "mtime": "2026-06-28T05:08:05.996Z",
+      "indexed_at": "2026-06-28T05:08:31.185Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -35061,17 +35061,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 27191,
-      "mtime": "2026-06-28T04:59:28.954Z",
-      "indexed_at": "2026-06-28T05:00:06.830Z",
+      "bytes": 27085,
+      "mtime": "2026-06-28T05:07:48.282Z",
+      "indexed_at": "2026-06-28T05:08:31.185Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 517121,
-      "mtime": "2026-06-28T04:59:28.956Z",
-      "indexed_at": "2026-06-28T05:00:06.830Z"
+      "bytes": 518187,
+      "mtime": "2026-06-28T05:07:37.954Z",
+      "indexed_at": "2026-06-28T05:08:31.185Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -35575,9 +35575,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 144140,
-      "mtime": "2026-06-28T04:59:44.124Z",
-      "indexed_at": "2026-06-28T05:00:06.830Z"
+      "bytes": 144329,
+      "mtime": "2026-06-28T05:06:15.299Z",
+      "indexed_at": "2026-06-28T05:08:31.185Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -81467,9 +81467,9 @@
     {
       "path": "services/founder-build-job-store.js",
       "synopsis": "In-process founder build job store — avoids Railway proxy 502 on long CSS verify loops.",
-      "bytes": 1742,
-      "mtime": "2026-06-28T04:59:29.703Z",
-      "indexed_at": "2026-06-28T05:00:06.830Z",
+      "bytes": 1771,
+      "mtime": "2026-06-28T05:04:48.621Z",
+      "indexed_at": "2026-06-28T05:08:31.185Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -82389,9 +82389,9 @@
     {
       "path": "services/lifeos-execution-truth.js",
       "synopsis": "Hard execution-truth gate — never emit PASS / COMMITTED without proof.",
-      "bytes": 29570,
-      "mtime": "2026-06-28T04:59:29.717Z",
-      "indexed_at": "2026-06-28T05:00:06.830Z",
+      "bytes": 30185,
+      "mtime": "2026-06-28T05:04:41.674Z",
+      "indexed_at": "2026-06-28T05:08:31.185Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86597,9 +86597,9 @@
     {
       "path": "tests/lifeos-execution-truth.test.js",
       "synopsis": "Exports createLifeOSBuilderOSCommandControlRoutes — tests/lifeos-execution-truth.test.js.",
-      "bytes": 5815,
-      "mtime": "2026-06-28T04:59:29.831Z",
-      "indexed_at": "2026-06-28T05:00:06.830Z"
+      "bytes": 6802,
+      "mtime": "2026-06-28T05:05:16.484Z",
+      "indexed_at": "2026-06-28T05:08:31.185Z"
     },
     {
       "path": "tests/lifeos-service-doctrine.test.js",

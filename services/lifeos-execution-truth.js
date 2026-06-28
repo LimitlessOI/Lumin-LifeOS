@@ -34,6 +34,11 @@ const SERVER_MODULE_MARKERS = [
   /\bimport\s+.+\s+from\s+['"]node:/,
 ];
 
+function isFounderProofPending(founderVerification = null) {
+  const code = String(founderVerification?.code || '');
+  return /LIVE_MARKER_PENDING|DEPLOY_PENDING|PROOF_PENDING/i.test(code);
+}
+
 /**
  * Detect browser/UI code or destructive shrink committed to server route/service files.
  * @returns {{ code: string, detail: string } | null}
@@ -261,7 +266,12 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       }
       const founderVerification = raw.founder_verification;
       if (passCandidate && founderRequired) {
-        if (!founderVerification || founderVerification.ok !== true) {
+        if (isFounderProofPending(founderVerification)) {
+          command_truth = 'COMMITTED';
+          receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+          lesson = lesson || 'Founder-visible proof is still pending — keep polling until deploy parity and live readback are real.';
+          fix = fix || 'Keep polling the founder build job; do not treat commit-only truth as done.';
+        } else if (!founderVerification || founderVerification.ok !== true) {
           failure_code = founderVerification?.code || 'FOUNDER_VISUAL_NOT_VERIFIED';
           first_blocker = founderVerification?.blocker
             || 'Commit succeeded but founder-visible outcome was not verified on live deploy.';

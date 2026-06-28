@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-28",
-  "last_receipt": "2026-06-27 founder-conversation-routing-boot-restore-and-service-repair-intent-preservation",
-  "last_change_summary": "Restored the parse-safe founder conversation-routing module after Railway logs proved origin/main held a malformed compressed artifact, while preserving the intended behavior that founder fix/repair asks targeting services/*.js must route as build or repair work instead of display-only theater.",
-  "ssot_receipt_tail": "Railway boot advanced beyond the first readiness crash and immediately exposed a second syntax failure in services/lumin-conversation-routing.js. The fix restored the valid canonical module and kept the intended service-file repair intent marker so live founder advice/build switching can be tested after redeploy."
+  "last_receipt": "2026-06-27 founder-proof-pending-transport-law",
+  "last_change_summary": "Founder build truth no longer collapses committed-but-unverified founder UI work into immediate FAIL. Pending founder proof now stays pollable through transport truth, and the founder build job store treats origin/deploy drift as waiting-for-proof instead of terminal failure.",
+  "ssot_receipt_tail": "Live founder probe proved the worker stopped false-greening, but the truth gate still downgraded pending founder proof to FAIL. The amendment now records the fix: keep pending founder proof as PASS + transport-pending so founder poll/readback can finish the loop honestly."
 }

@@ -137,6 +137,29 @@ function testFounderVerifiedPassUsesLiveBehaviorTransport() {
   assert.equal(truth.transport_status, 'LIVE_BEHAVIOR_PASS');
 }
 
+function testFounderPendingProofStaysPassButNotDone() {
+  const generatedOutput = ['<html>', '<body>', '<!-- founder-chat-alpha-probe -->', ...Array.from({ length: 2205 }, (_, i) => `<div>${i}</div>`), '</body>', '</html>'].join('\n');
+  const truth = enforceExecutionTruth({
+    ok: true,
+    committed: true,
+    target_file: 'public/overlay/lifeos-app.html',
+    generated_output: generatedOutput,
+    sha: 'abc123def456',
+    execution_path: 'founder_surgical_html_patch',
+    founder_verification_required: true,
+    founder_verification: {
+      ok: false,
+      code: 'LIVE_MARKER_PENDING',
+      blocker: 'Founder live verification pending deploy + overlay readback.',
+      deploy_synced: false,
+    },
+  }, { action: 'build', task: 'patch public/overlay/lifeos-app.html' });
+
+  assert.equal(truth.pass_fail, 'PASS');
+  assert.equal(truth.command_truth, 'COMMITTED');
+  assert.equal(truth.transport_status, 'DEPLOY_NOT_SYNCED');
+}
+
 function testSanitizeFalseExecutionClaim() {
   const raw = 'Mission PRODUCT-LIFERE-OS-V1-0001 has been successfully executed. Build triggered.';
   const safe = sanitizeConversationReply(raw, { command_truth: 'NO_COMMAND_RAN' });
@@ -158,6 +181,7 @@ testEnforceTruthRequiresShaOnBuild();
 testValidationRejectedLabelsBuilderAttempted();
 testEnforceTruthPassWithSha();
 testFounderVerifiedPassUsesLiveBehaviorTransport();
+testFounderPendingProofStaysPassButNotDone();
 testSanitizeFalseExecutionClaim();
 testMissionPipelineIntentDetectsPointBPacket();
 console.log('✅ lifeos-execution-truth.test.js passed');
