@@ -38,6 +38,7 @@ import {
   assertFounderBuildBaseUrl,
   runFounderSuccessGate,
   triggerRailwayRedeploy,
+  waitForDeployMatchingCommit,
   waitForLiveCssContent,
 } from './founder-build-success-gate.js';
 import {
@@ -55,8 +56,10 @@ import {
   runFounderBuildQuorumEscalation,
   buildQuorumFailureEnvelope,
   recordFounderEscalationLesson,
+  loadFounderBuildLessons,
 } from './founder-build-quorum-escalation.js';
 import { enforceBeforeBuilderDispatch, formatUnifiedGateBlockSummary } from './founder-packet-v2-unified-gate.js';
+import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
@@ -97,6 +100,23 @@ function pickRepairTarget(task, currentTarget, blocker) {
     if (resolved) return { targetFile: resolved, repair: 'pre_dispatch_infer' };
   }
   return null;
+}
+
+function prepareRetryContext({
+  attempt,
+  attempts,
+  lessons,
+  proposedFix,
+  consensusParticipants = [],
+}) {
+  return buildAttemptCarryForwardContext({
+    attemptNumber: attempt,
+    priorAttempts: attempts,
+    lessonsLoaded: lessons,
+    researchCompleted: false,
+    consensusParticipants,
+    proposedFix,
+  });
 }
 
 async function postJson(url, headers, body) {
@@ -313,15 +333,42 @@ async function runCssPatchWithVerification({
   let lastExec = null;
   let lastVerification = null;
   let redeployTriggered = false;
+  const loadedLessons = await loadFounderBuildLessons(pool);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const carryForward = prepareRetryContext({
+      attempt,
+      attempts,
+      lessons: loadedLessons,
+      proposedFix: attempt === 1 ? 'direct_css_patch' : (attempts.at(-1)?.repair_applied || 'retry_css_patch'),
+    });
+    if (!carryForward.ok) {
+      const blocked = enforceExecutionTruth({
+        ok: false,
+        committed: false,
+        first_blocker: carryForward.blocked_return.code,
+        failure_code: carryForward.blocked_return.code,
+        execution_path: executionPath,
+      }, { action: 'build', task });
+      return {
+        ...blocked,
+        blocked_return: carryForward.blocked_return,
+        self_repair: { attempts, exhausted: true },
+      };
+    }
     const patchResult = patchFn({
       root: repoRoot,
       task,
       cacheBust: cacheBust || undefined,
     });
     if (!patchResult.ok) {
-      attempts.push({ attempt, pass_fail: 'FAIL', blocker: patchResult.reason, repair: null });
+      attempts.push({
+        attempt,
+        pass_fail: 'FAIL',
+        blocker: patchResult.reason,
+        repair: null,
+        attempt_context: carryForward.attempt_context,
+      });
       break;
     }
     lastPatch = patchResult;
@@ -330,7 +377,13 @@ async function runCssPatchWithVerification({
     try {
       execRes = await commitCssPatchViaBuilder({ baseUrl: verifiedBase, commandKey, patchResult });
     } catch (err) {
-      attempts.push({ attempt, pass_fail: 'FAIL', blocker: err.message, repair: null });
+      attempts.push({
+        attempt,
+        pass_fail: 'FAIL',
+        blocker: err.message,
+        repair: null,
+        attempt_context: carryForward.attempt_context,
+      });
       break;
     }
     lastExec = execRes;
@@ -346,6 +399,7 @@ async function runCssPatchWithVerification({
         pass_fail: 'FAIL',
         blocker: receipt.blocker,
         repair: null,
+        attempt_context: carryForward.attempt_context,
       });
       break;
     }
@@ -401,6 +455,7 @@ async function runCssPatchWithVerification({
       sha,
       verification_code: verification.code,
       repair: null,
+      attempt_context: carryForward.attempt_context,
     });
 
     if (verification.ok) {
@@ -891,8 +946,29 @@ export async function runFounderBuildWithSelfRepair(options) {
   }
 
   const attempts = [];
+  const loadedLessons = await loadFounderBuildLessons(pool);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const carryForward = prepareRetryContext({
+      attempt,
+      attempts,
+      lessons: loadedLessons,
+      proposedFix: attempt === 1 ? (targetFile || 'initial_builder_dispatch') : (attempts.at(-1)?.repair_applied || targetFile || 'retry_builder_dispatch'),
+    });
+    if (!carryForward.ok) {
+      const blocked = enforceExecutionTruth({
+        ok: false,
+        committed: false,
+        first_blocker: carryForward.blocked_return.code,
+        failure_code: carryForward.blocked_return.code,
+        execution_path: 'builder_task_execute',
+      }, { action: 'build', task: currentTask });
+      return {
+        ...blocked,
+        blocked_return: carryForward.blocked_return,
+        self_repair: { attempts, exhausted: true },
+      };
+    }
     const taskBody = {
       task: currentTask,
       mode: 'code',
@@ -919,7 +995,14 @@ export async function runFounderBuildWithSelfRepair(options) {
           execution_path: 'builder_task_execute',
           task_meta: { cache_hit: taskJson.cache_hit === true, output_bytes: 0, error: taskJson.error || null },
         }, { action: 'build', task: currentTask });
-        attempts.push({ attempt, target_file: targetFile, pass_fail: failure.pass_fail, blocker: failure.first_blocker, repair: null });
+        attempts.push({
+          attempt,
+          target_file: targetFile,
+          pass_fail: failure.pass_fail,
+          blocker: failure.first_blocker,
+          repair: null,
+          attempt_context: carryForward.attempt_context,
+        });
         const repair = pickRepairTarget(currentTask, targetFile, failure.first_blocker);
         if (repair && attempt < maxAttempts && isRetriableBlocker(failure.first_blocker)) {
           targetFile = repair.targetFile;
@@ -986,9 +1069,32 @@ export async function runFounderBuildWithSelfRepair(options) {
         blocker: result.first_blocker,
         repair: null,
         sha: result.sha || null,
+        attempt_context: carryForward.attempt_context,
       });
 
       if (result.pass_fail === 'PASS' && result.committed) {
+        const commitSha = result.sha || execJson.sha || execJson.commit_sha || null;
+        const baseCheck = assertFounderBuildBaseUrl(base);
+        if (commitSha && baseCheck.ok) {
+          await triggerRailwayRedeploy({ baseUrl: baseCheck.baseUrl, commandKey });
+          const deploy = await waitForDeployMatchingCommit({
+            baseUrl: baseCheck.baseUrl,
+            commandKey,
+            commitSha,
+            maxWaitMs: 60000,
+          });
+          if (deploy.ok) {
+            result = {
+              ...result,
+              origin_contains_commit: true,
+              transport_status: 'REMOTE_TRANSPORT_PASS',
+              human_summary: [
+                result.human_summary,
+                `Live deploy synced to ${String(commitSha).slice(0, 12)}.`,
+              ].filter(Boolean).join('\n'),
+            };
+          }
+        }
         return { ...result, self_repair: { attempts, repaired: attempt > 1, success_attempt: attempt } };
       }
 
@@ -1029,7 +1135,14 @@ export async function runFounderBuildWithSelfRepair(options) {
         execution_receipt: receipt,
         execution_path: 'builder_task_execute',
       }, { action: 'build', task: currentTask });
-      attempts.push({ attempt, target_file: targetFile, pass_fail: 'FAIL', blocker: err.message, repair: null });
+      attempts.push({
+        attempt,
+        target_file: targetFile,
+        pass_fail: 'FAIL',
+        blocker: err.message,
+        repair: null,
+        attempt_context: carryForward.attempt_context,
+      });
       return { ...failure, self_repair: { attempts, exhausted: true } };
     }
   }
