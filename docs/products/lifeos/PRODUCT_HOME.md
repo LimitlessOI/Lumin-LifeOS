@@ -8,7 +8,7 @@
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
 **Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
 **Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`  
-**Last Updated:** 2026-06-28 — proof-pending poll only for founder_verification_required builds; script-only commits terminal at PASS.
+**Last Updated:** 2026-06-28 — preserve `founder_verification_required` through execution-truth hydration; proof-pending poll scoped to overlay builds.
 
 ## Mission
 

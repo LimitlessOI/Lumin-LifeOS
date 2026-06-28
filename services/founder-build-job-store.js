@@ -53,9 +53,11 @@ export function getFounderBuildJob(id) {
 }
 
 export function isFounderBuildProofPending(result = {}) {
+  const founderRequired = result?.founder_verification_required === true
+    || /^founder_(surgical_html_patch|css_patch)/.test(String(result?.execution_path || ''));
   return result?.pass_fail === 'PASS'
     && result?.committed === true
-    && result?.founder_verification_required === true
+    && founderRequired
     && PROOF_PENDING_TRANSPORT.has(result?.transport_status);
 }
 

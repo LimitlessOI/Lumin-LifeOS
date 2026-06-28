@@ -384,6 +384,8 @@ export function enforceExecutionTruth(raw, ctx = {}) {
     human_summary,
     action,
     execution_path: raw.execution_path || null,
+    founder_verification_required: raw.founder_verification_required === true
+      || (raw.execution_path === 'founder_css_patch' && raw.founder_verification_required !== false),
     founder_verification: raw.founder_verification || null,
   };
 }

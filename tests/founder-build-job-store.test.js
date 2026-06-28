@@ -19,6 +19,17 @@ test('founder build proof pending is true for commit-only pass when founder veri
   assert.equal(deriveFounderBuildJobStatus(result), 'waiting_for_proof');
 });
 
+test('founder build proof pending uses execution_path fallback for surgical html', () => {
+  const result = {
+    pass_fail: 'PASS',
+    committed: true,
+    execution_path: 'founder_surgical_html_patch',
+    transport_status: 'DEPLOY_NOT_SYNCED',
+  };
+  assert.equal(isFounderBuildProofPending(result), true);
+  assert.equal(deriveFounderBuildJobStatus(result), 'waiting_for_proof');
+});
+
 test('script-only commit-only pass is completed not waiting_for_proof', () => {
   const result = {
     pass_fail: 'PASS',
