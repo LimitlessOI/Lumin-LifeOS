@@ -3408,7 +3408,7 @@ async function luminFetchJsonWithTimeout(url, init = {}, timeoutMs = LUMIN_SEND_
 }
 
 async function pollFounderBuildJob(jobId, pollUrl) {
-  const deadline = Date.now() + 300000;
+  const deadline = Date.now() + 600000;
   while (Date.now() < deadline) {
     const res = await fetch(pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`, {
       credentials: 'same-origin',
@@ -3421,7 +3421,7 @@ async function pollFounderBuildJob(jobId, pollUrl) {
     }
     return { res, data };
   }
-  return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 5 minutes.' } };
+  return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 10 minutes.' } };
 }
 
 function applyLuminShellAction(data) {

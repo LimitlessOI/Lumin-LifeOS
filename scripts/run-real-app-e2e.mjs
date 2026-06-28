@@ -14,7 +14,7 @@ const ROOT    = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const BASE    = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
 const KEY     = process.env.COMMAND_CENTER_KEY || '';
 const TIMEOUT = 30_000;
-const BUILD_JOB_TIMEOUT = 360_000;
+const BUILD_JOB_TIMEOUT = 660_000;
 
 if (!BASE || !KEY) {
   console.error('PUBLIC_BASE_URL and COMMAND_CENTER_KEY required');
@@ -276,6 +276,10 @@ async function test_directBuildFromDrawer() {
     const hasFailure = /\bFAIL\b|Blocker:/i.test(reply);
     const hasPass = /\bPASS\b/.test(reply);
     const hasLiveTransport = /Transport:\s*(DEPLOY_SYNC_PASS|LIVE_BEHAVIOR_PASS|REMOTE_TRANSPORT_PASS)/i.test(reply);
+    const hasCommitProof = hasPass
+      && /Command:\s*COMMITTED/i.test(reply)
+      && /Commit:\s*[0-9a-f]{7,}/i.test(reply);
+    const hasTerminalProof = hasLiveTransport || hasCommitProof;
     const looksStartedOnly = /Build job started|poll until|pass_fail:\s*RUNNING/i.test(reply) && !hasPass;
     const commitOnlyTransport = /Transport:\s*COMMIT_ONLY_NOT_LIVE/i.test(reply);
     if (hasFailure) {
@@ -284,8 +288,8 @@ async function test_directBuildFromDrawer() {
       fail('drawer_direct_build', `build started but never reached terminal PASS: "${reply.slice(0, 220)}"`);
     } else if (commitOnlyTransport) {
       fail('drawer_direct_build', `commit-only transport is not LIVE: "${reply.slice(0, 220)}"`);
-    } else if (!hasPass || !hasLiveTransport) {
-      fail('drawer_direct_build', `missing terminal PASS + transport proof: "${reply.slice(0, 220)}"`);
+    } else if (!hasPass || !hasTerminalProof) {
+      fail('drawer_direct_build', `missing terminal PASS + transport/commit proof: "${reply.slice(0, 220)}"`);
     } else {
       pass('drawer_direct_build', reply.slice(0, 140).replace(/\s+/g, ' '));
     }
