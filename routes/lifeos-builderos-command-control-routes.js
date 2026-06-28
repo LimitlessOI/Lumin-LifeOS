@@ -1030,9 +1030,9 @@ HOW TO RESPOND:
         ok: true,
         job_id: job.id,
         status: job.status === 'completed' ? 'waiting_for_proof' : (job.status || 'waiting_for_proof'),
-        pass_fail: 'RUNNING',
         command_truth: job.result.command_truth || 'COMMITTED',
         ...(job.result || {}),
+        pass_fail: 'RUNNING',
         human_summary: job.result.human_summary || formatExecutionTruthReply(job.result),
       });
     }

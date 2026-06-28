@@ -7,7 +7,8 @@
 **Primary runtime surface:** `/lifeos`  
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
 **Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
-**Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`
+**Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`  
+**Last Updated:** 2026-06-28 — founder build-job poll keeps `pass_fail: RUNNING` while transport proof is pending (spread order fix).
 
 ## Mission
 
@@ -135,4 +136,5 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - `public/overlay/lifeos-app.html`: founder build job poll deadline raised to 10 minutes (was 5).
 - `scripts/lifeos-direct-build-smoke-test.mjs`: repaired `export function` syntax (`exp` corruption blocked E2E comment-only builds).
 - `services/lifeos-execution-truth.js`: `LIVE_MARKER_PENDING` founder builds stay PASS (poll promotes transport); V1 fail-closed no longer kills async HTML builds mid-proof.
+- `routes/lifeos-builderos-command-control-routes.js`: build-job poll response sets `pass_fail: RUNNING` after result spread so clients keep polling until live transport.
 - `services/reality-ledger.js`: append-only Reality Record store (V1-00 recorders seam).
