@@ -8,7 +8,7 @@
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
 **Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
 **Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`  
-**Last Updated:** 2026-06-28 — preserve `founder_verification_required` through execution-truth hydration; proof-pending poll scoped to overlay builds.
+**Last Updated:** 2026-06-28 — alpha battery B1 uses smoke-test commit proof; founder-ui-proof suite timeout 25m.
 
 ## Mission
 

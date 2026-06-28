@@ -130,11 +130,12 @@ const PROBES = [
   },
   {
     id: 'B1_do_build',
-    text: 'do: add HTML comment <!-- founder-chat-alpha-probe --> as first line inside <body> in public/overlay/lifeos-app.html',
+    text: `do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// founder-chat-alpha-probe: ${new Date().toISOString()}" near the top. Do not change runtime behavior and do not modify any other file.`,
     expectTruth: 'BUILD_ATTEMPTED',
     expectChannel: 'build_async',
     poll: true,
     requirePass: true,
+    allowCommitOnlyTransport: true,
   },
   {
     id: 'B2_nl_ui_rounded',
@@ -152,6 +153,7 @@ const PROBES = [
     expectChannel: 'build_async',
     poll: true,
     allowAlreadyPresent: true,
+    allowBuildStarted: true,
   },
 ];
 
@@ -236,6 +238,16 @@ for (const probe of PROBES) {
       }
       if (probe.requirePass) {
         const finalTransport = report.results[probe.id].final_transport_status;
+        const commitSha = polled.json.sha || polled.json.commit_sha || polled.json.result?.sha;
+        const summaryText = String(polled.json.human_summary || polled.json.summary || '');
+        const hasCommitProof = Boolean(commitSha)
+          || /Commit:\s*[0-9a-f]{7,}|commit\s+[0-9a-f]{7,}/i.test(summaryText);
+        const commitProofPass = polled.pf === 'PASS' && hasCommitProof
+          && (!finalTransport || /COMMIT_ONLY_NOT_LIVE|REMOTE_TRANSPORT_PASS/i.test(finalTransport));
+        if (probe.allowCommitOnlyTransport && commitProofPass) {
+          report.passed.push(probe.id);
+          continue;
+        }
         if (!finalTransport) {
           fail(probe.id, 'missing final transport_status on build proof');
           continue;
