@@ -25,6 +25,7 @@ import { isFounderConfirmIntent } from '../services/founder-intent-clarify.js';
 import { runFounderBuildWithSelfRepair, startFounderBuildJob, getFounderBuildJobStatus } from '../services/founder-build-self-repair.js';
 import { resolveFounderBuildBaseUrl, assertFounderBuildBaseUrl } from '../services/founder-build-success-gate.js';
 import { refreshFounderBuildResultTruth } from '../services/founder-build-result-truth.js';
+import { isFounderBuildProofPending } from '../services/founder-build-job-store.js';
 import {
   createCommandControlJob,
   getCommandControlJob,
@@ -998,8 +999,7 @@ HOW TO RESPOND:
         commandKey: operatorKey,
       }).catch(() => job.result);
       if (refreshed && refreshed !== job.result) {
-        const proofStillPending = refreshed.pass_fail === 'PASS'
-          && /^(COMMIT_ONLY_NOT_LIVE|DEPLOY_NOT_SYNCED|LIVE_BEHAVIOR_NOT_VERIFIED)$/i.test(String(refreshed.transport_status || ''));
+        const proofStillPending = isFounderBuildProofPending(refreshed);
         job = {
           ...job,
           status: proofStillPending
@@ -1024,8 +1024,7 @@ HOW TO RESPOND:
         }
       }
     }
-    if (job.result?.pass_fail === 'PASS'
-      && /^(COMMIT_ONLY_NOT_LIVE|DEPLOY_NOT_SYNCED|LIVE_BEHAVIOR_NOT_VERIFIED|ORIGIN_MAIN_NOT_UPDATED)$/i.test(String(job.result.transport_status || ''))) {
+    if (isFounderBuildProofPending(job.result)) {
       return res.status(202).json({
         ok: true,
         job_id: job.id,

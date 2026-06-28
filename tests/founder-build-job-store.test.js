@@ -8,14 +8,25 @@ import {
   isFounderBuildProofPending,
 } from '../services/founder-build-job-store.js';
 
-test('founder build proof pending is true for commit-only pass', () => {
+test('founder build proof pending is true for commit-only pass when founder verification required', () => {
+  const result = {
+    pass_fail: 'PASS',
+    committed: true,
+    founder_verification_required: true,
+    transport_status: 'COMMIT_ONLY_NOT_LIVE',
+  };
+  assert.equal(isFounderBuildProofPending(result), true);
+  assert.equal(deriveFounderBuildJobStatus(result), 'waiting_for_proof');
+});
+
+test('script-only commit-only pass is completed not waiting_for_proof', () => {
   const result = {
     pass_fail: 'PASS',
     committed: true,
     transport_status: 'COMMIT_ONLY_NOT_LIVE',
   };
-  assert.equal(isFounderBuildProofPending(result), true);
-  assert.equal(deriveFounderBuildJobStatus(result), 'waiting_for_proof');
+  assert.equal(isFounderBuildProofPending(result), false);
+  assert.equal(deriveFounderBuildJobStatus(result), 'completed');
 });
 
 test('founder build proof pending is false for live verified pass', () => {

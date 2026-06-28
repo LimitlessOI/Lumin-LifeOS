@@ -55,6 +55,7 @@ export function getFounderBuildJob(id) {
 export function isFounderBuildProofPending(result = {}) {
   return result?.pass_fail === 'PASS'
     && result?.committed === true
+    && result?.founder_verification_required === true
     && PROOF_PENDING_TRANSPORT.has(result?.transport_status);
 }
 
