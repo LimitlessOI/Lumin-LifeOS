@@ -36,6 +36,7 @@ import {
 } from './founder-enter-send-patch.js';
 import {
   assertFounderBuildBaseUrl,
+  fetchLiveOverlayHtml,
   runFounderSuccessGate,
   triggerRailwayRedeploy,
   waitForDeployMatchingCommit,
@@ -635,15 +636,52 @@ async function runSurgicalHtmlPatchWithVerification({
     }, { action: 'build', task });
   }
 
+  const commitSha = execJson.sha || execJson.commit_sha || null;
+  let founderVerification = null;
+  if (commitSha) {
+    await triggerRailwayRedeploy({
+      baseUrl: baseCheck.baseUrl,
+      commandKey,
+      commitSha,
+    });
+    const deploy = await waitForDeployMatchingCommit({
+      baseUrl: baseCheck.baseUrl,
+      commandKey,
+      commitSha,
+      maxWaitMs: 60000,
+    });
+    const targetFile = patchResult.files?.[0]?.target_file || committedFiles[0] || null;
+    const live = targetFile
+      ? await fetchLiveOverlayHtml(baseCheck.baseUrl, targetFile)
+      : { ok: false, error: 'missing_target_file' };
+    const liveHasComment = live.ok && String(live.text || '').includes(String(patchResult.comment || '').trim());
+    founderVerification = {
+      ok: deploy.ok && liveHasComment,
+      code: deploy.ok
+        ? (liveHasComment ? 'LIVE_MARKER_VERIFIED' : 'LIVE_MARKER_MISSING')
+        : deploy.code || 'DEPLOY_NOT_SYNCED',
+      blocker: deploy.ok
+        ? (liveHasComment ? null : `Live ${targetFile} missing expected comment marker.`)
+        : deploy.blocker,
+      deploy_synced: deploy.ok,
+      deploy_sha: deploy.deploy_sha || null,
+      probe_type: 'html_comment',
+      probe_value: patchResult.comment,
+      surface: targetFile,
+    };
+  }
+
   return enforceExecutionTruth({
     ok: true,
     committed: true,
     target_file: committedFiles.join(', ') || patchResult.files?.[0]?.target_file,
-    sha: execJson.sha || execJson.commit_sha || null,
+    sha: commitSha,
     human_summary: patchResult.already_present
       ? `Comment already present in ${patchResult.files?.[0]?.target_file}`
       : `Surgical HTML comment applied to ${patchResult.files?.[0]?.target_file}`,
     execution_path: 'founder_surgical_html_patch',
+    founder_verification: founderVerification,
+    founder_verification_required: true,
     task_meta: { patch: patchResult.patch, comment: patchResult.comment },
     exec_meta: execJson,
   }, { action: 'build', task });

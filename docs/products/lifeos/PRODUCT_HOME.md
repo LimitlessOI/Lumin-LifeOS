@@ -122,4 +122,5 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - Founder async build-job polling now refreshes transport proof from live deploy SHA and founder-surface evidence instead of assuming Railway can prove ancestry from local git state.
 - Generic founder code builds now trigger redeploy and wait for deploy SHA sync before returning final `PASS`, so a founder-surface build cannot settle at commit-only truth unless deploy proof is still genuinely pending.
 - Founder-triggered redeploy now carries the exact commit SHA the build just created, so the runtime does not accidentally rebuild an older `main` head while founder proof is still waiting.
+- Founder surgical HTML-comment builds now use the same closure rule: redeploy exact commit, wait for deploy parity, then verify the live marker before founder PASS can be returned.
 - `builderos-reboot/PRODUCT_READINESS_REPORT.json` is now part of the active LifeOS authority chain for readiness surfacing, but it does not override Point B or founder-usability truth.
