@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Conversation routing — personal talk never display theater.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -16,7 +17,7 @@ test('oil change is conversation not display', () => {
   assert.equal(isConversationTurn(text), true);
   assert.equal(isExplicitDisplayOnlyRequest(text, 'auto'), false);
   const ctx = resolveChairContext(text, { shouldDisplayOnly: true, explicitAction: 'auto' });
-  assert.equal(ctx.channel, 'chair');
+  assert.equal(ctx.channel, 'lumin');
   assert.equal(ctx.domain, 'personal_life');
 });
 
