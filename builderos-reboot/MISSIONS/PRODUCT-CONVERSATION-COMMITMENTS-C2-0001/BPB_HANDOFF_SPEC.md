@@ -200,7 +200,7 @@ BPB assigns `step_id`, `dependencies`, `exact_inputs`, `sha256` contracts, and `
 | Step intent | Target | Notes |
 |-------------|--------|-------|
 | Acceptance script | `scripts/verify-product-commitments-7day.mjs` | Static checks: routes exist, evidence fields in schema, no forbidden imports |
-| SSOT receipt | `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` | Change receipt row only |
+| SSOT receipt | `docs/products/lifeos/PRODUCT_HOME.md` | Change receipt row only |
 
 ---
 

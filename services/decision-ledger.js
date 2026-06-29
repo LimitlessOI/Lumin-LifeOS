@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Unified founder decision ledger — governance spine (GAP-002 / GAP-017).
  * Unified founder decision ledger — governance spine (GAP-002 / GAP-017).
- * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md §4.4
+ * @ssot docs/products/builderos/PRODUCT_HOME.md §4.4
  */
 
 import { randomUUID } from 'node:crypto';

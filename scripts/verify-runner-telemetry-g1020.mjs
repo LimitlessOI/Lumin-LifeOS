@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Verifies runner telemetry for Generation 1020 by fetching health and efficiency data.
  * This module operates within the governed loop, adhering to strict read-only audit requirements.

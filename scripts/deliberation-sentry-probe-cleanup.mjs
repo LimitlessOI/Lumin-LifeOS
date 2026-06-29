@@ -7,7 +7,7 @@
  *   node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs --confirm
  *   node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs --confirm --verify-railway
  *
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 const confirm = process.argv.includes('--confirm');

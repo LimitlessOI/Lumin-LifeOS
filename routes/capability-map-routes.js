@@ -9,7 +9,7 @@
  * GET  /api/v1/capability-map/:id         — get a single analysis
  * POST /api/v1/capability-map/:id/act     — accept | reject | insert
  *
- * @ssot docs/projects/AMENDMENT_20_CAPABILITY_MAP.md
+ * @ssot docs/products/capability-map/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

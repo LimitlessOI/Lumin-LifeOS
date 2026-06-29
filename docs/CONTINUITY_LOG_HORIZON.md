@@ -15,7 +15,7 @@
 ## [BUILD] Update 2026-04-19 #1 — MVP shipped
 
 - Tables `lane_intel_runs` / `lane_intel_findings`; API `GET/POST /api/v1/lifeos/intel/horizon/*`; scheduler via `bootLaneIntel` + `LANE_INTEL_ENABLE_SCHEDULED=1`.
-- Default queries + council synthesis — see `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` → Configuration.
+- Default queries + council synthesis — see `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` → Configuration.
 
 ### Next agent (horizon lane)
 

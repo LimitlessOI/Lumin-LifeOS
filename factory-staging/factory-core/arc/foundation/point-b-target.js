@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Canonical Point B — LifeRE Alpha.
  * SYNOPSIS: Alpha requires founder usability; technical pass alone must not claim Point B reached.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

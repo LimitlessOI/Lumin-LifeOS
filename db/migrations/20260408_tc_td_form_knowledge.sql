@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260408_tc_td_form_knowledge.sql.
--- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+-- @ssot docs/products/tc-service/PRODUCT_HOME.md
 -- Persist TransactionDesk form inventory and operator handling guidance.
 
 CREATE TABLE IF NOT EXISTS tc_td_form_knowledge (

@@ -27,8 +27,8 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 | `public/overlay/site-builder-command-center.html` | Operator dashboard: analyze prospects, build & send, pipeline table |
 | `prompts/lifeos-site-builder.md` | THIS FILE — builder domain context |
 | `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` | Monthly design/SEO/conversion brief for AI generation prompts |
-| `docs/projects/AMENDMENT_05_SITE_BUILDER.md` | SSOT amendment |
-| `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` | Lane verifier manifest |
+| `docs/products/site-builder/PRODUCT_HOME.md` | SSOT amendment |
+| `docs/products/site-builder/FILE_MANIFEST.json` | Lane verifier manifest |
 
 ## DB Tables (ALL confirmed in Neon production)
 | Table | Key columns |
@@ -114,7 +114,7 @@ The quality scorer (`services/site-builder-quality-scorer.js`) grades GENERATED 
 ## Pattern for new services in this domain
 ```js
 /**
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Brief description of what this service does.
  */
 
@@ -131,7 +131,7 @@ export function createMyService(pool) {
 ```js
 #!/usr/bin/env node
 /**
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Brief description and CLI usage.
  */
 

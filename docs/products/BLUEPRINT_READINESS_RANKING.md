@@ -12,7 +12,7 @@
 
 ### 1. LifeRE — 9/10
 **Canonical home:** `docs/products/lifere/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_LIFERE.md`  
+**Law:** `docs/products/lifere/PRODUCT_HOME.md`  
 **Mission:** `PRODUCT-LIFERE-OS-V1-0001`
 
 **Evidence:**
@@ -29,7 +29,7 @@ One action: `/overlay/lifeos-app.html → click "Run Alpha Daily Cycle" → conf
 
 ### 2. LifeOS — 8/10
 **Canonical home:** `docs/products/lifeos/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`  
+**Law:** `docs/products/lifeos/PRODUCT_HOME.md`  
 **Missions:** 4 in BP_PRIORITY
 
 **Evidence:**
@@ -47,7 +47,7 @@ One action: `/overlay/lifeos-app.html → click "Run Alpha Daily Cycle" → conf
 
 ### 3. TC Service — 7/10
 **Canonical home:** `docs/products/tc-service/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_17_TC_SERVICE.md`  
+**Law:** `docs/products/tc-service/PRODUCT_HOME.md`  
 **Mission:** none yet
 
 **Evidence:**
@@ -69,7 +69,7 @@ One action: `/overlay/lifeos-app.html → click "Run Alpha Daily Cycle" → conf
 
 ### 4. Site Builder — 7/10
 **Canonical home:** `docs/products/site-builder/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_05_SITE_BUILDER.md`  
+**Law:** `docs/products/site-builder/PRODUCT_HOME.md`  
 **Mission:** none yet
 
 **Evidence:**
@@ -89,7 +89,7 @@ One action: `/overlay/lifeos-app.html → click "Run Alpha Daily Cycle" → conf
 
 ### 5. BoldTrail — 6/10
 **Canonical home:** `docs/products/boldtrail/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md`  
+**Law:** `docs/products/boldtrail/PRODUCT_HOME.md`  
 **Mission:** none yet
 
 **Evidence:**
@@ -110,7 +110,7 @@ One action: `/overlay/lifeos-app.html → click "Run Alpha Daily Cycle" → conf
 
 ### 6. API Cost Savings — 6/10
 **Canonical home:** `docs/products/api-cost-savings/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md`  
+**Law:** `docs/products/api-cost-savings/PRODUCT_HOME.md`  
 **Mission:** none yet
 
 **Evidence:**
@@ -130,7 +130,7 @@ One action: `/overlay/lifeos-app.html → click "Run Alpha Daily Cycle" → conf
 
 ### 7. ClientCare Billing Recovery — 5/10
 **Canonical home:** `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md`  
+**Law:** `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md`  
 **Mission:** none yet
 
 **Evidence:**
@@ -148,29 +148,28 @@ One action: `/overlay/lifeos-app.html → click "Run Alpha Daily Cycle" → conf
 
 ---
 
-### 8. MarketingOS — 5/10
-**Canonical home:** none yet (no product home folder exists)  
-**Law:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`  
+### 8. SocialMediaOS — 5/10
+**Canonical home:** `docs/products/marketingos/PRODUCT_HOME.md`  
+**Law:** `docs/products/marketingos/PRODUCT_HOME.md` (formerly Amendment 41)  
 **Mission:** none yet
 
 **Evidence (THINK — not verified this session):**
+- Full A-to-Z blueprint migrated to product home; MarketingOS is parent platform name
+- Intake scaffold: `/api/v1/socialmediaos/*` + LifeRE bridge adapter
 - Blueprint locked per memory: Earn-It Philosophy, Retention Ladder, Platform Playbooks (7 channels), SocialMediaOS Studio System, Video Intelligence Engine
-- Compute model decided: Hetzner VPS ($8/mo) for video encoding vs. Railway
-- Pricing: ~$0.50/video cost (Replicate Kling 1.6 / Wan 2.1)
 
 **Blockers:**
-- No product home folder
-- No code verified this session (blueprint may be spec-only)
-- No FOUNDER_PACKET, no mission
-- Hetzner VPS not provisioned
+- Phase 1 MVP not built (coach → whisper → extract → generate → export)
+- §12 open Adam decisions unresolved
+- No FOUNDER_PACKET mission pack
 
-**Next:** Create `docs/products/marketingos/` product home → verify what code exists → FOUNDER_PACKET
+**Next:** Resolve §12 decisions → deploy schema align migration → FOUNDER_PACKET for Phase 1 MVP
 
 ---
 
 ### 9. IdeaVault — 4/10
 **Canonical home:** `docs/products/ideavault/PRODUCT_HOME.md`  
-**Law:** `docs/projects/AMENDMENT_38_IDEA_VAULT.md`  
+**Law:** `docs/products/ideavault/PRODUCT_HOME.md`  
 **Mission:** none yet
 
 **Evidence:**

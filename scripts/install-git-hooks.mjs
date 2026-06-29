@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Install tracked git hooks — sets core.hooksPath=githooks so hooks cannot drift or be skipped by stale copies.
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

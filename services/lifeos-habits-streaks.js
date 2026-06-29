@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Streak calculation service for habit tracking.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * Streak calculation service for habit tracking.
  * Table: lifeos_habit_completions (habit_id, user_id, completed_date DATE)
  */

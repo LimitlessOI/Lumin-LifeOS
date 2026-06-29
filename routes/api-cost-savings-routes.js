@@ -2,7 +2,7 @@
  * SYNOPSIS: API Cost Savings Routes
  * API Cost Savings Routes
  * Extracted from server.js
- * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
+ * @ssot docs/products/api-cost-savings/PRODUCT_HOME.md
  */
 import logger from '../services/logger.js';
 

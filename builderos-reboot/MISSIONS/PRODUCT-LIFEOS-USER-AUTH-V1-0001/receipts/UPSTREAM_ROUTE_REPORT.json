@@ -7,7 +7,13 @@
   "escalate_to_founder": true,
   "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
   "violations": [
-    "department:CFO invalid JSON"
+    "phantom acceptance_test_id AT-UAT-001-1 — not in ACCEPTANCE_TESTS.json",
+    "phantom acceptance_test_id AT-UAT-002-1 — not in ACCEPTANCE_TESTS.json",
+    "phantom acceptance_test_id AT-UAT-003-1 — not in ACCEPTANCE_TESTS.json",
+    "phantom acceptance_test_id AT-UAT-004-1 — not in ACCEPTANCE_TESTS.json",
+    "phantom acceptance_test_id AT-UAT-005-1 — not in ACCEPTANCE_TESTS.json",
+    "phantom acceptance_test_id AT-UAT-006-1 — not in ACCEPTANCE_TESTS.json",
+    "phantom acceptance_test_id AT-UAT-007-1 — not in ACCEPTANCE_TESTS.json"
   ],
   "flow": [
     "ARC → Chair (handoff incomplete)",

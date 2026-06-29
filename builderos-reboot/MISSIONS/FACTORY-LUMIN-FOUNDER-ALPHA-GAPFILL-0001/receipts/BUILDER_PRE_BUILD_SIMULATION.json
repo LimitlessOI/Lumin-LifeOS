@@ -1,0 +1,195 @@
+{
+  "schema": "builder_pre_build_simulation_v1",
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "blueprint_id": "LUMIN-FOUNDER-ALPHA-GAPFILL-2026-06-28",
+  "simulated_at": "2026-06-29T01:15:03.895Z",
+  "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
+  "procedure": [
+    "simulate_blueprint_steps",
+    "cold_builder_walk",
+    "sha256_content_contracts",
+    "blueprint_freeze_check",
+    "assemble_pre_build_packet"
+  ],
+  "decision_table": [
+    {
+      "step_id": "LFA-S01",
+      "title": "Remove Lumin name from product-build markers; guard identity intent",
+      "target_file": "services/chair-context-classifier.js",
+      "builder_action": "unsupported action_type undefined",
+      "decision_gaps": [
+        "missing required field action_type",
+        "missing required field sandbox_boundary",
+        "missing required field authority_owner",
+        "missing required field on_block",
+        "action_type \"undefined\" not executable by execute-mission.mjs",
+        "Target services/chair-context-classifier.js blocked by monorepo legacy quarantine — step lacks frozen blueprint contract",
+        "action_type \"undefined\" not executable by builderos-reboot/scripts/execute-mission.mjs"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "LFA-S02",
+      "title": "Skip strategic brief on personal_turn",
+      "target_file": "services/chair-lumin-unified.js",
+      "builder_action": "unsupported action_type undefined",
+      "decision_gaps": [
+        "missing required field action_type",
+        "missing required field sandbox_boundary",
+        "missing required field authority_owner",
+        "missing required field on_block",
+        "action_type \"undefined\" not executable by execute-mission.mjs",
+        "Target services/chair-lumin-unified.js blocked by monorepo legacy quarantine — step lacks frozen blueprint contract",
+        "action_type \"undefined\" not executable by builderos-reboot/scripts/execute-mission.mjs"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "LFA-S03",
+      "title": "Preserve personal_turn on identity asks; skip Point B attach",
+      "target_file": "services/chair-native-facts.js",
+      "builder_action": "unsupported action_type undefined",
+      "decision_gaps": [
+        "missing required field action_type",
+        "missing required field sandbox_boundary",
+        "missing required field authority_owner",
+        "missing required field on_block",
+        "action_type \"undefined\" not executable by execute-mission.mjs",
+        "Target services/chair-native-facts.js blocked by monorepo legacy quarantine — step lacks frozen blueprint contract",
+        "action_type \"undefined\" not executable by builderos-reboot/scripts/execute-mission.mjs"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "LFA-S04",
+      "title": "Export isFounderIdentityIntent helper",
+      "target_file": "services/founder-life-admin-intent.js",
+      "builder_action": "unsupported action_type undefined",
+      "decision_gaps": [
+        "missing required field action_type",
+        "missing required field sandbox_boundary",
+        "missing required field authority_owner",
+        "missing required field on_block",
+        "action_type \"undefined\" not executable by execute-mission.mjs",
+        "Target services/founder-life-admin-intent.js blocked by monorepo legacy quarantine — step lacks frozen blueprint contract",
+        "action_type \"undefined\" not executable by builderos-reboot/scripts/execute-mission.mjs"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "LFA-S05",
+      "title": "Alpha battery identity twin probe",
+      "target_file": "scripts/run-founder-chat-alpha-battery.mjs",
+      "builder_action": "unsupported action_type undefined",
+      "decision_gaps": [
+        "missing required field action_type",
+        "missing required field sandbox_boundary",
+        "missing required field authority_owner",
+        "missing required field on_block",
+        "action_type \"undefined\" not executable by execute-mission.mjs",
+        "action_type \"undefined\" not executable by builderos-reboot/scripts/execute-mission.mjs"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "LFA-S06",
+      "title": "Boot seeder overwrites literal null emails",
+      "target_file": "server.js",
+      "builder_action": "unsupported action_type undefined",
+      "decision_gaps": [
+        "missing required field action_type",
+        "missing required field sandbox_boundary",
+        "missing required field authority_owner",
+        "missing required field on_block",
+        "action_type \"undefined\" not executable by execute-mission.mjs",
+        "Target server.js blocked by monorepo legacy quarantine — step lacks frozen blueprint contract",
+        "action_type \"undefined\" not executable by builderos-reboot/scripts/execute-mission.mjs"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "LFA-S07",
+      "title": "Alpha auditor provision cred diagnosis",
+      "target_file": "routes/lifeos-auth-routes.js",
+      "builder_action": "unsupported action_type undefined",
+      "decision_gaps": [
+        "missing required field action_type",
+        "missing required field sandbox_boundary",
+        "missing required field authority_owner",
+        "missing required field on_block",
+        "action_type \"undefined\" not executable by execute-mission.mjs",
+        "Target routes/lifeos-auth-routes.js blocked by monorepo legacy quarantine — step lacks frozen blueprint contract",
+        "action_type \"undefined\" not executable by builderos-reboot/scripts/execute-mission.mjs"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    }
+  ],
+  "summary": {
+    "steps_total": 7,
+    "steps_blocked": 7,
+    "steps_clear": 0,
+    "blocking_gaps": 69,
+    "clear_to_build": false,
+    "freeze_pass": false
+  },
+  "simulation_summary": {
+    "evaluated_steps": 7,
+    "total_gaps": 69,
+    "blocking_gaps": 69,
+    "clear_to_build": false
+  },
+  "cold_walk_summary": {
+    "decision_gaps": 7,
+    "total_gaps": 7,
+    "handoff_to_builder": false,
+    "architect_pass": false
+  },
+  "freeze": {
+    "blueprint_status": "REVIEW_REQUIRED",
+    "pass": false,
+    "blocking": [
+      "LFA-S01: missing action_type",
+      "LFA-S01: missing sandbox_boundary",
+      "LFA-S01: missing authority_owner",
+      "LFA-S01: missing on_block",
+      "LFA-S02: missing action_type",
+      "LFA-S02: missing sandbox_boundary",
+      "LFA-S02: missing authority_owner",
+      "LFA-S02: missing on_block",
+      "LFA-S03: missing action_type",
+      "LFA-S03: missing sandbox_boundary",
+      "LFA-S03: missing authority_owner",
+      "LFA-S03: missing on_block",
+      "LFA-S04: missing action_type",
+      "LFA-S04: missing sandbox_boundary",
+      "LFA-S04: missing authority_owner",
+      "LFA-S04: missing on_block",
+      "LFA-S05: missing action_type",
+      "LFA-S05: missing sandbox_boundary",
+      "LFA-S05: missing authority_owner",
+      "LFA-S05: missing on_block",
+      "LFA-S06: missing action_type",
+      "LFA-S06: missing sandbox_boundary",
+      "LFA-S06: missing authority_owner",
+      "LFA-S06: missing on_block",
+      "LFA-S07: missing action_type",
+      "LFA-S07: missing sandbox_boundary",
+      "LFA-S07: missing authority_owner",
+      "LFA-S07: missing on_block"
+    ],
+    "checks": [
+      "deterministic_step_set",
+      "authority_lock",
+      "exact_output_contract_present",
+      "non_goals_present"
+    ],
+    "blueprintId": "LUMIN-FOUNDER-ALPHA-GAPFILL-2026-06-28"
+  }
+}

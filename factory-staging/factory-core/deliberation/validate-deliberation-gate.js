@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Factory deliberation gate v2.7 — Hist case + CFO receipt required; load-bearing adds consensus.
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

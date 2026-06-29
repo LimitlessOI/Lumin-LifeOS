@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Routes ambient utterances to calendar, CRM inbox, BoldTrail notes, and coachable-moment logs.
  * Runs alongside commitment/note classification — no raw audio stored.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import {

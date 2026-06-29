@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Mechanical department simulations — each seat touches the packet per founder doctrine.
  * Stub receipts = system failure. Agent skip = agent drift failure.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

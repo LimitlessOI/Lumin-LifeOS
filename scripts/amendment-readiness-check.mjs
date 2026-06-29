@@ -4,7 +4,7 @@
  * Flags manifests with build_ready: true whose linked amendment lacks
  * Pre-Build Readiness / Gate markers (from AMENDMENT_READINESS_CHECKLIST.md).
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';

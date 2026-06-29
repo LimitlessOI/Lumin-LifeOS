@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 // Helper function to fetch JSON data with x-command-key header

@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Verifies the operational telemetry for Runner Generation 413.
  * Fetches health and efficiency data from the BuilderOS and LifeOS control planes.

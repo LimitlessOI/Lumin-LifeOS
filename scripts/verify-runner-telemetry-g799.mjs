@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides functions to verify runner telemetry for Generation 799.
  * It fetches health and efficiency data from BuilderOS and LifeOS control planes

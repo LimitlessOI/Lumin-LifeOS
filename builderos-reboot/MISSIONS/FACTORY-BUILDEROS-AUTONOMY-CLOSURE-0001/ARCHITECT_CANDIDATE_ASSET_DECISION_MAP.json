@@ -325,7 +325,7 @@
       "asset_id": "A23_DELIBERATION_V27_ASSETS",
       "paths": [
         "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001",
-        "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md"
+        "docs/products/builderos/PRODUCT_HOME.md"
       ],
       "decision": "REUSE_WITH_REMEDIATION",
       "reason": "Deliberation governance assets are valuable but HANDOFF says wired, not shipped, with commit/deploy/Neon/Railway verification gaps.",

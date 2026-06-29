@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE finance runway and GCI forecast.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export function createLifeREFinanceRunway({ pool = null } = {}) {

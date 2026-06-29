@@ -14,7 +14,7 @@
  * lock is skipped by default — use LuminVoice.configure({ wakeLock: 'always' })
  * only if you accept extra drain.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function () {
   'use strict';

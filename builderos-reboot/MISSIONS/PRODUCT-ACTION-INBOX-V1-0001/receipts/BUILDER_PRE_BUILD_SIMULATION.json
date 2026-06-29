@@ -1,0 +1,113 @@
+{
+  "schema": "builder_pre_build_simulation_v1",
+  "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+  "blueprint_id": "ACTION-INBOX-V1-2026-06-12",
+  "simulated_at": "2026-06-29T01:15:03.576Z",
+  "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
+  "procedure": [
+    "simulate_blueprint_steps",
+    "cold_builder_walk",
+    "sha256_content_contracts",
+    "blueprint_freeze_check",
+    "assemble_pre_build_packet"
+  ],
+  "decision_table": [
+    {
+      "step_id": "AIV1-S01",
+      "title": "Action Inbox schema migration",
+      "target_file": "db/migrations/20260612_action_inbox_v1.sql",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S01/20260612_action_inbox_v1.sql → db/migrations/20260612_action_inbox_v1.sql",
+      "decision_gaps": [
+        "CONTENT file missing: builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S01/20260612_action_inbox_v1.sql",
+        "phantom acceptance_test_id AT-AIV1-S01-1 — not in ACCEPTANCE_TESTS.json"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "AIV1-S02",
+      "title": "Action Inbox service — capture, classify, stage, route, receipts",
+      "target_file": "services/action-inbox.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S02/action-inbox.js → services/action-inbox.js",
+      "decision_gaps": [
+        "CONTENT file missing: builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S02/action-inbox.js",
+        "phantom acceptance_test_id AT-AIV1-S02-1 — not in ACCEPTANCE_TESTS.json"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "AIV1-S03",
+      "title": "Action Inbox API routes",
+      "target_file": "routes/action-inbox-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S03/action-inbox-routes.js → routes/action-inbox-routes.js",
+      "decision_gaps": [
+        "CONTENT file missing: builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S03/action-inbox-routes.js",
+        "phantom acceptance_test_id AT-AIV1-S03-1 — not in ACCEPTANCE_TESTS.json"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "AIV1-S04",
+      "title": "Startup wiring in register-runtime-routes.js",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S04/register-runtime-routes.js → startup/register-runtime-routes.js",
+      "decision_gaps": [
+        "CONTENT file missing: builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S04/register-runtime-routes.js",
+        "phantom acceptance_test_id AT-AIV1-S04-1 — not in ACCEPTANCE_TESTS.json"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    },
+    {
+      "step_id": "AIV1-S05",
+      "title": "Acceptance test script",
+      "target_file": "scripts/run-action-inbox-v1-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S05/run-action-inbox-v1-acceptance.mjs → scripts/run-action-inbox-v1-acceptance.mjs",
+      "decision_gaps": [
+        "CONTENT file missing: builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S05/run-action-inbox-v1-acceptance.mjs",
+        "phantom acceptance_test_id AT-AIV1-S05-1 — not in ACCEPTANCE_TESTS.json"
+      ],
+      "blocked": true,
+      "clear_to_execute": false
+    }
+  ],
+  "summary": {
+    "steps_total": 5,
+    "steps_blocked": 5,
+    "steps_clear": 0,
+    "blocking_gaps": 11,
+    "clear_to_build": false,
+    "freeze_pass": true
+  },
+  "simulation_summary": {
+    "evaluated_steps": 5,
+    "total_gaps": 11,
+    "blocking_gaps": 11,
+    "clear_to_build": false
+  },
+  "cold_walk_summary": {
+    "decision_gaps": 5,
+    "total_gaps": 5,
+    "handoff_to_builder": false,
+    "architect_pass": false
+  },
+  "freeze": {
+    "blueprint_status": "FROZEN",
+    "pass": true,
+    "blocking": [],
+    "checks": [
+      "deterministic_step_set",
+      "authority_lock",
+      "exact_output_contract_present",
+      "non_goals_present"
+    ],
+    "blueprintId": "ACTION-INBOX-V1-2026-06-12"
+  }
+}

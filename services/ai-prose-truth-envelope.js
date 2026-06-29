@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Universal AI prose envelope — every council output scrubbed vs execution truth.
  * One degree off compounds. 95% true + 5% false execution claim = drift disaster.
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 import {

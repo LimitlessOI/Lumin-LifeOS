@@ -22,13 +22,13 @@ Use this **before** writing or dispatching `/builder/build`.
 |------|------|---------|
 | A0 | `docs/AGENT_RULES.compact.md` | Token-light enforcement (generated; regen via `npm run gen:rules`). |
 | A1 | `docs/QUICK_LAUNCH.md` | Current queue + lane; don’t build the wrong priority. |
-| A1b | `docs/products/lifeos/PRODUCT_HOME.md` (product) · `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` (law/receipts) → **Approved Product Backlog** → **PRIORITY ALIGNMENT** | Operator **program** order (e.g. LifeOS = P1) — **must** re-read when LifeOS work conflicts with older “revenue-chain-first” memory. |
+| A1b | `docs/products/lifeos/PRODUCT_HOME.md` (product) · `docs/products/lifeos/PRODUCT_HOME.md` (law/receipts) → **Approved Product Backlog** → **PRIORITY ALIGNMENT** | Operator **program** order (e.g. LifeOS = P1) — **must** re-read when LifeOS work conflicts with older “revenue-chain-first” memory. |
 | A2 | `docs/CONTINUITY_INDEX.md` → **your lane log** (newest entry) | What the last session actually did. |
 | A3 | `prompts/00-LIFEOS-AGENT-CONTRACT.md` | §2.6 / §2.11 / §2.15 baseline. |
 | A3b | `prompts/00-LIFEOS-SERVICE-DOCTRINE.md` | Service, sovereignty, epistemology — all stacks inherit. |
 | A4 | `prompts/<domain>.md` (if any) | 30-second domain truth. |
 | A5 | Owning amendment: **Agent Handoff** + last **3–5 Change Receipts** | Specced state vs stubbed. |
-| A6 | **Only if** editing constitutional text: full `docs/SSOT_NORTH_STAR.md` and/or `docs/SSOT_COMPANION.md` (read-before-write) | Supreme law edits. |
+| A6 | **Only if** editing constitutional text: full `docs/constitution/NORTH_STAR_SSOT.md` and/or `docs/SSOT_COMPANION.md` (read-before-write) | Supreme law edits. |
 | **A★** | **`docs/projects/OPERATOR_BRAINSTORM_SESSION_ENTRY.md`** — **only when** Adam asked for brainstorming / **25 ideas** / “read brainstorming” | Locks continuity: audits prior brainstorm rows **before** new `N01–N25`, routes ideas to **`BRAINSTORM_SESSIONS_PROTOCOL`** + vault + queue. |
 
 **Laws while reading**
@@ -47,7 +47,7 @@ Use when you need **how the platform fits together**, not just the current task.
 
 | Step | Read | Purpose |
 |------|------|---------|
-| B1 | `docs/SSOT_NORTH_STAR.md` | Mission, non-negotiables, what wins conflicts. |
+| B1 | `docs/constitution/NORTH_STAR_SSOT.md` | Mission, non-negotiables, what wins conflicts. |
 | B2 | `docs/SSOT_COMPANION.md` | Operations, gates, builder/council HTTP, enforcement. |
 | B3 | `docs/projects/INDEX.md` | Amendment registry + revenue order. |
 | B4 | `docs/SYSTEM_CAPABILITIES.md` + `docs/ENV_REGISTRY.md` | What runtime can do; env names. |

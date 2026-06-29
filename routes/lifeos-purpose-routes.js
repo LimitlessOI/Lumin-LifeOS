@@ -32,7 +32,7 @@
  *   GET  /monetization/outreach               — list drafts (optional ?path_id, ?status)
  *   POST /monetization/outreach/:id/status    — draft → approved/sent/declined/archived
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: TSOS Platform Kernel API routes.
  * TSOS Platform Kernel API routes.
- * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { Router } from 'express';
 

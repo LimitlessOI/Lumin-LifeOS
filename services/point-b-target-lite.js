@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Read POINT_B_TARGET.json without factory-staging boot dependency.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

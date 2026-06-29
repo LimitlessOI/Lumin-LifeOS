@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE strategy evolution — update recommendation weights only.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeREPermissionTwin } from './lifere-permission-twin.js';
 

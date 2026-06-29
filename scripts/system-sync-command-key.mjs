@@ -17,7 +17,7 @@
  *   node scripts/system-sync-command-key.mjs
  *   # or: npm run system:sync-command-key
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';

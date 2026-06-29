@@ -1,12 +1,12 @@
 {
   "schema": "product_file_manifest_v1",
   "product_id": "tc-service",
+  "project_id": "tc_service",
+  "name": "Transaction Coordinator Service",
   "canonical_home": "docs/products/tc-service/PRODUCT_HOME.md",
-  "updated_at": "2026-06-27",
+  "amendment_path": "docs/products/tc-service/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
   "ownership_policy": "pointer_not_duplication",
-  "readiness_state": "PARTIAL_CODE_PRESENT",
-  "mission_pack": null,
-  "acceptance_command": null,
   "owned_files": [
     "docs/products/tc-service/PRODUCT_HOME.md",
     "docs/products/tc-service/FILE_MANIFEST.json",
@@ -59,21 +59,39 @@
     "services/tc-td-workflow-runner.js",
     "services/tc-webhook-validator.js",
     "services/tc-workflow-service.js",
-    "services/tc-workflow-specs.js"
+    "services/tc-workflow-specs.js",
+    "scripts/tc-r4r-do-upload.mjs",
+    "services/credential-aliases.js",
+    "db/migrations/20260322_tc_transactions.sql",
+    "db/migrations/20260323_tc_fees.sql",
+    "db/migrations/20260323_email_triage.sql",
+    "db/migrations/20260323_glvar_dues.sql",
+    "db/migrations/20260323_mls_investors.sql",
+    "db/migrations/20260325_tc_alerts.sql",
+    "db/migrations/20260325_tc_approvals_automation.sql",
+    "db/migrations/20260325_tc_portal.sql",
+    "db/migrations/20260325_tc_reporting.sql",
+    "db/migrations/20260326_tc_external_refs.sql",
+    "db/migrations/20260326_tc_interactions.sql",
+    "db/migrations/20260326_tc_review_packages.sql",
+    "db/migrations/20260327_email_triage_enrichment.sql",
+    "db/migrations/20260327_tc_inspections.sql",
+    "db/migrations/20260408_tc_td_form_knowledge.sql",
+    "Dockerfile"
   ],
   "shared_dependencies": [
     {
-      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "AI council for email drafting, deal scoring, coaching"
     },
     {
-      "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+      "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "agent and client history"
     },
     {
-      "path": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+      "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "Stripe billing for TC plan tiers"
     },
@@ -84,7 +102,144 @@
     }
   ],
   "history_anchors": [
-    "docs/projects/AMENDMENT_17_TC_SERVICE.md",
-    "docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json"
+    "docs/products/tc-service/PRODUCT_HOME.md",
+    "docs/products/tc-service/FILE_MANIFEST.json"
+  ],
+  "required_routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/tc/transactions",
+      "expected_status": 200,
+      "description": "List transactions"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/transactions",
+      "expected_status": 200,
+      "description": "Create transaction"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tc/access/readiness",
+      "expected_status": 200,
+      "description": "TC access readiness status"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/access/bootstrap",
+      "expected_status": 200,
+      "description": "TC access bootstrap"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tc/intake/workspace",
+      "expected_status": 200,
+      "description": "TC intake workspace summary"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/email/triage/:id/create-transaction",
+      "expected_status": 200,
+      "description": "Create placeholder transaction from triaged contract email"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/email/triage/:id/link-transaction",
+      "expected_status": 200,
+      "description": "Link triaged email to an existing transaction"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/email/send-attachment-package",
+      "expected_status": 200,
+      "description": "Find attachment email, combine photos, and send package"
+    }
+  ],
+  "required_tables": [
+    {
+      "name": "tc_transactions",
+      "required_columns": [
+        "id",
+        "address",
+        "status",
+        "parties",
+        "documents",
+        "source_email_id"
+      ]
+    },
+    {
+      "name": "tc_transaction_events",
+      "required_columns": [
+        "id",
+        "transaction_id",
+        "event_type",
+        "created_at"
+      ]
+    },
+    {
+      "name": "tc_document_requests",
+      "required_columns": [
+        "id",
+        "transaction_id",
+        "title",
+        "status"
+      ]
+    },
+    {
+      "name": "tc_communications",
+      "required_columns": [
+        "id",
+        "transaction_id",
+        "channel",
+        "sent_at"
+      ]
+    }
+  ],
+  "required_env": [
+    "DATABASE_URL",
+    "COMMAND_CENTER_KEY"
+  ],
+  "assertions": [
+    {
+      "type": "node_check",
+      "check": "routes/tc-routes.js",
+      "label": "tc-routes syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "services/tc-coordinator.js",
+      "label": "tc-coordinator syntax"
+    },
+    {
+      "type": "table_exists",
+      "check": "tc_transactions",
+      "label": "tc_transactions table exists"
+    }
+  ],
+  "completion_checks": [
+    "TC access readiness route accurately reports missing/present IMAP and vault-backed browser credentials",
+    "Agent portal without a transaction id shows the intake workspace with readiness, triage, and suggested transaction matches",
+    "Email triage stores preview text and message identity when enrichment columns are available, improving workspace routing quality",
+    "The intake workspace can create a placeholder transaction directly from a triaged contract email",
+    "The intake workspace can link a triaged email to an existing transaction and record the routing event",
+    "The intake workspace shows recent intake activity so the operator can audit routing work without leaving the portal",
+    "The intake workspace exposes manual document validation and dry-run upload controls before live filing",
+    "The intake workspace can launch a dry-run intake for a target address before live filing credentials are used",
+    "Failed workspace QA checks can be converted into transaction-scoped document requests without leaving the portal",
+    "The intake workspace can seed the known TC env defaults automatically while leaving secret values for manual entry",
+    "The intake workspace detects when secret envs already exist and does not falsely present them as missing",
+    "The intake workspace shows a managed-env snapshot so runtime env presence and sync state are visible together",
+    "First live transaction (6453 Mahogany Peak) created and tracked in DB",
+    "Email triage picks up TC-related emails and routes to correct transaction",
+    "Deadline tracker fires reminders at correct intervals",
+    "Agent portal accessible and shows transaction status",
+    "GLVAR dues check runs monthly without manual intervention",
+    "Billing tracks per-transaction and subscription revenue",
+    "The intake workspace shows active files as red/yellow/green transaction cards with client/contact context and hover summaries of what is happening",
+    "Clicking a workspace transaction opens the exact action surface, and the transaction detail page provides direct jump targets for approvals, alerts, and document review",
+    "The intake workspace can find an email, combine photo attachments into one PDF, and send the package from the portal without curl",
+    "The transaction detail page shows a visible due-diligence / contingency countdown when a file is under time pressure",
+    "The transaction detail page shows a todo list with owner tags so Adam can see what the system is handling versus what needs his action",
+    "The alert surface supports a one-click handle-in-the-morning snooze that keeps escalation follow-up alive"
   ]
 }

@@ -2,7 +2,7 @@
 
 # Council builder: production 404 on `/domains` — diagnosis & fix
 
-**Authority:** Operational; `docs/SSOT_NORTH_STAR.md` **§2.11a** (builder is P0).  
+**Authority:** Operational; `docs/constitution/NORTH_STAR_SSOT.md` **§2.11a** (builder is P0).  
 **For Adam:** you do not need to “test harder.” This is a **deploy / image** gap, not a skills gap.
 
 ---

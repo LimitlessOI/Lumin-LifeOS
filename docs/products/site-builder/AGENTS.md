@@ -8,7 +8,7 @@
 
 1. `docs/products/site-builder/PRODUCT_HOME.md` — mission, ownership, readiness state, hard blocker
 2. `docs/products/site-builder/FILE_MANIFEST.json` — every file this product owns
-3. `docs/projects/AMENDMENT_05_SITE_BUILDER.md` — law, technical spec, DB schema, session receipts
+3. `docs/products/site-builder/PRODUCT_HOME.md` — law, technical spec, DB schema, session receipts
 4. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
 
 ## What this product does

@@ -1,0 +1,51 @@
+[
+  {
+    "test_id": "AT-UAT-001-1",
+    "step_id": "UAT-001",
+    "type": "file_sha256_matches",
+    "target": "routes/lifeos-auth-routes.js",
+    "expected_sha256": "757d5875a9b9402ed911ed083c77f5e0a759707f4d5741e5d909a011a1db3823"
+  },
+  {
+    "test_id": "AT-UAT-002-1",
+    "step_id": "UAT-002",
+    "type": "file_sha256_matches",
+    "target": "services/lifeos-user-service.js",
+    "expected_sha256": "cbffe9a279b9a1d2166632de7398cde52a37cefff3d0243b7d9acb54a9721ab6"
+  },
+  {
+    "test_id": "AT-UAT-003-1",
+    "step_id": "UAT-003",
+    "type": "file_sha256_matches",
+    "target": "db/migrations/20260629_lifeos_user_auth.sql",
+    "expected_sha256": "85c611cd8466cb99cdc0da625842384fbc2b437f7c0285c860686406d8dce73d"
+  },
+  {
+    "test_id": "AT-UAT-004-1",
+    "step_id": "UAT-004",
+    "type": "file_sha256_matches",
+    "target": "middleware/lifeos-tier-guard.js",
+    "expected_sha256": "51626dc83944cba2f5f6396f7ea4d3770ec327a28293610acd71508ce2bb51cb"
+  },
+  {
+    "test_id": "AT-UAT-005-1",
+    "step_id": "UAT-005",
+    "type": "file_sha256_matches",
+    "target": "public/overlay/lifeos-app.html",
+    "expected_sha256": "045e5f00268af03b21db0c27fd93b45896863946b31ff6dac48717aae2ae47e1"
+  },
+  {
+    "test_id": "AT-UAT-006-1",
+    "step_id": "UAT-006",
+    "type": "file_sha256_matches",
+    "target": "routes/lifeos-builderos-command-control-routes.js",
+    "expected_sha256": "698f6c5e6e2dd8dadf7fcb8c51d847b7a48a773844a64042497b63a1131aa1a1"
+  },
+  {
+    "test_id": "AT-UAT-007-1",
+    "step_id": "UAT-007",
+    "type": "file_sha256_matches",
+    "target": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
+    "expected_sha256": "349dfb67f1fa94b3c70b2e90007966f94e910a0970638d054a98c6e0d46a498c"
+  }
+]

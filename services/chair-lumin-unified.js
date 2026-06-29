@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Chair native turn — Lumin IS the Chair; personality translates real facts only.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { detectDualIntent } from './chair-context-classifier.js';
 import { gatherChairNativeFacts } from './chair-native-facts.js';

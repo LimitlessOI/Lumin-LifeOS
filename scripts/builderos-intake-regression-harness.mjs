@@ -5,7 +5,7 @@
  *   npm run builderos:intake:regression:acceptance
  *   node scripts/builderos-intake-regression-harness.mjs --dry-run
  *   node scripts/builderos-intake-regression-harness.mjs --full
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

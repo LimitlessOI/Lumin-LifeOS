@@ -5,7 +5,7 @@
  * Horizon: web search (Brave / Perplexity) + optional council synthesis; Zero-Waste cooldown.
  * Red team: local `npm audit` (critical/high) — no active pentest until scope is configured.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { execFile } from 'node:child_process';

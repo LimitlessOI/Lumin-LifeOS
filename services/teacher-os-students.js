@@ -19,7 +19,7 @@
  * The real issue was Irlen Syndrome — a $2 colored overlay fixed everything.
  * This system catches that before it becomes a clinical crisis.
  *
- * @ssot docs/projects/AMENDMENT_31_TEACHER_OS.md
+ * @ssot docs/products/teacher-os/PRODUCT_HOME.md
  */
 
 const MISIDENTIFICATION_FIRST_STEPS = {

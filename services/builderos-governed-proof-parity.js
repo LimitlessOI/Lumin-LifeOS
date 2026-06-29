@@ -3,7 +3,7 @@
  * Uses the existing deploy-check → self-repair executor chain (PF-001→PF-002→PF-003).
  * Never manipulates alpha status directly; fail-closed if refresh fails.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { evaluateProofFreshnessFromPool } from './oil-proof-freshness.js';

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: SMOS Content Brief engine — competitor intel, persona, SEO — gate before coach/script/record.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeRETwinStore } from './lifere-twin-store.js';
 import { enrichPersonalTwin } from './lifeos-service-doctrine.js';

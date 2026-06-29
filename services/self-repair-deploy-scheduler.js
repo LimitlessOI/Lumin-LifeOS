@@ -3,8 +3,8 @@
  * Deploy-triggered self-repair check — runs once on boot or when called.
  * No constant polling. No autonomy escalation beyond approved PB.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
- * @ssot docs/SSOT_NORTH_STAR.md Article II §2.16
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
+ * @ssot docs/constitution/NORTH_STAR_SSOT.md Article II §2.16
  */
 
 import { buildSupervisedAutonomyReadiness } from './supervised-autonomy-readiness.js';

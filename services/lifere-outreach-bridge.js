@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE Outreach bridge — Am 08 outreach-engine integration.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createOutreachEngine } from './outreach-engine.js';
 import { resolveLifeOSUserId } from './lifere-outreach-user-resolve.js';

@@ -11,7 +11,7 @@
  * Chronic deferral detection: if the same item gets pushed 3+ times, it surfaces
  * as a pattern — not a reminder, a mirror.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const GRADE_THRESHOLDS = [

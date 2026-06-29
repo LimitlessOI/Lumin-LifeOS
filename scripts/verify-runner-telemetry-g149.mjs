@@ -1,5 +1,5 @@
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * - Verifies runner telemetry by fetching health and efficiency data from BuilderOS control plane.
  * This module is part of the governed loop for autonomous operations.
  */

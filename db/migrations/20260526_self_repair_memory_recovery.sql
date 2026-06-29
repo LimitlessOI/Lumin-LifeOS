@@ -5,7 +5,7 @@
 -- marked-applied-without-commit by the migration runner. This migration omits
 -- the epistemic_facts FK reference (which may have caused the prior rollback)
 -- and uses bare DDL with no BEGIN/COMMIT wrapper.
--- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+-- @ssot docs/products/command-center/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS self_repair_memory_events (
     id                   SERIAL PRIMARY KEY,

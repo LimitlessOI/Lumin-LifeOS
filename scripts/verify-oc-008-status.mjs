@@ -2,7 +2,7 @@
  * SYNOPSIS: Fetches JSON data from a specified URL path with an x-command-key header.
  */
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * This module provides functionality to verify the status of BuilderOS and Kernel
  * health endpoints to audit the product boundary contradiction OC-008.
  */

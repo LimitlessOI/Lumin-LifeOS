@@ -9,7 +9,7 @@
  * - Usage:
  *   npm run lifeos:builder:build-chat
  *   npm run lifeos:builder:build-chat -- --dry-run    print JSON body only
- * - @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * - @ssot docs/products/lifeos/PRODUCT_HOME.md
  * - Loads repo-root `.env` when present (see `council-builder-preflight.mjs`) so `PUBLIC_BASE_URL` + key work from disk.
  */
 import 'dotenv/config';

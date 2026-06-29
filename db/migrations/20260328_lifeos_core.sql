@@ -3,7 +3,7 @@
 -- LifeOS Phase 1 — The Mirror
 -- Commitments, Integrity Score, Joy Score, daily mirror log
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

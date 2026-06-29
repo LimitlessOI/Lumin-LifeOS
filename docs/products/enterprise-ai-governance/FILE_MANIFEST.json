@@ -1,0 +1,41 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "enterprise-ai-governance",
+  "project_id": "enterprise_ai_governance",
+  "name": "Enterprise AI Governance",
+  "canonical_home": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
+    "docs/products/enterprise-ai-governance/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [],
+  "required_tables": [
+    "enterprise_clients",
+    "ai_audit_logs",
+    "governance_risk_register"
+  ],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/enterprise-ai-governance/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "Policy Pack templates written and reviewed",
+    "Risk Assessment Sprint offer sheet created",
+    "Vendor Runbooks (OpenAI/Anthropic/Gemini/xAI) written",
+    "First Risk Assessment Sprint booked",
+    "LLM Egress Proxy architecture designed and approved",
+    "DPA and ToS templates created for managed proxy service"
+  ]
+}

@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Wire council builder /build to deliberation v2.7 pipeline (seed before codegen, finalize after commit).
  * Wire council builder /build to deliberation v2.7 pipeline (seed before codegen, finalize after commit).
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { createDeliberationGovernanceService } from './deliberation-governance-service.js';

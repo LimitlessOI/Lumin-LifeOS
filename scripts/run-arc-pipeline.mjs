@@ -6,7 +6,7 @@
  *   npm run blueprint:intake:execute -- --session <uuid>
  *   or: node scripts/run-blueprint-intake.mjs --session <uuid> --execute
  * Exit 0 = passed and (optionally) executed. Exit 1 = failed.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { execSync, spawnSync } from 'node:child_process';

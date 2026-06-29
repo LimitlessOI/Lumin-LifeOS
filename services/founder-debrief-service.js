@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: layer1,
  * Founder Debrief generator — Layer 1 synopsis + Layer 2 pack from session bundle.
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 function gradeLine(grade, why) {

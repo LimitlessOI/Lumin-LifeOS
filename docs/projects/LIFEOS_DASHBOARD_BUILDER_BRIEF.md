@@ -31,7 +31,7 @@ This brief constrains the builder so dashboard work is grounded in the LifeOS SS
 The builder must treat these as primary grounding inputs before modifying dashboard code:
 
 1. `docs/LIFEOS_PROGRAM_MAP_SSOT.md`
-2. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+2. `docs/products/lifeos/PRODUCT_HOME.md`
 3. `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md`
 4. `public/overlay/lifeos-app.html`
 5. `public/overlay/lifeos-dashboard.html`

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Static proof — truth lockdown wired on all founder exit paths.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

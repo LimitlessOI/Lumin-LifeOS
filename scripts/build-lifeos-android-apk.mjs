@@ -3,7 +3,7 @@
  * SYNOPSIS: Build LifeOS Android APK (debug, sideload-ready) and copy to public/downloads/.
  * Build LifeOS Android APK (debug, sideload-ready) and copy to public/downloads/.
  * Requires: Android Studio / SDK, `npm run mobile:add:android` once.
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';

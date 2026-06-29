@@ -3,7 +3,7 @@
  * Efficiency intelligence — aggregates from autonomous_telemetry_events only.
  * No invented scores; every metric cites row counts / receipt evidence.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 function pct(num, den) {

@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: System path — delegates to full foundation pipeline.
  * System path — delegates to full foundation pipeline.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { runFoundationPipeline } from '../factory-staging/factory-core/arc/run-foundation.js';
 

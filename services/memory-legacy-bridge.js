@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-legacy-bridge.js
  */
 // services/memory-legacy-bridge.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { randomUUID } from 'crypto';
 
 const allowedImportMethods = ['conversation_memory_migration', 'knowledge_base_upload', 'ssot_doc_sync'];

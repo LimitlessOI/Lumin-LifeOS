@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE receptionist bridge — inbound lead → Lead Twin + optional action inbox.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createActionInbox } from './action-inbox.js';
 import { createLifeRETwinStore } from './lifere-twin-store.js';

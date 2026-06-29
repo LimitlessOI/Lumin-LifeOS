@@ -215,7 +215,7 @@ Run `npm run operator:status` to confirm FRESH snapshot after push. Then watch f
 ### What changed
 - **`scripts/tsos-compliance-officer.mjs`** — `writeReceipt()` now adds `severity: "critical"` or `severity: "advisory"` to each step before writing `data/tsos-compliance-officer-last-run.json`. Purely additive — zero logic change.
 - **Mixed-scope recovery (operator-approved waiver):** 5 prior unstaged hunks also committed in the same diff: JSDoc header updates, `import { writeOperatorDashboard/writeRuntimeRealitySnapshot }`, `repo:sync-check` conditional block, `lifeos:verify:ui-map` step, post-receipt snapshot/dashboard writes. All were already running on disk.
-- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — SC1 Change Receipt row added.
+- **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** — SC1 Change Receipt row added.
 - **`docs/CONTINUITY_LOG_LIFEOS.md`** — this entry.
 
 ### Verification results
@@ -240,11 +240,11 @@ Did Forge log `task_skip_already_shipped` after 22:15 UTC? If yes: SIS1 confirme
 ## [BUILD] Update 2026-05-12 — NSSOT §2.10 ¶8–10 constitutional clarification
 
 ### What changed
-- **`docs/SSOT_NORTH_STAR.md`** version updated to 2026-05-12; three paragraphs added to **§2.10** after ¶7 (no existing text removed or weakened):
+- **`docs/constitution/NORTH_STAR_SSOT.md`** version updated to 2026-05-12; three paragraphs added to **§2.10** after ¶7 (no existing text removed or weakened):
   - **¶8 Audit epistemic format** — every audit finding must be classified VERIFIED/KNOW, THINK, or UNKNOWN; blending tiers or implying states without evidence is a §2.6 violation.
   - **¶9 Improvement-idea council rule** — improvement brainstorming is a separate phase from auditing; up to 25+25 ranked ideas; smallest winning slice; no implementation while `FAIL_CLOSED` or `PENDING_CONFIRMATION` unresolved without a receipted operator waiver.
   - **¶10 Truth-first order** — audit → ideas → vote/rank → implement, non-collapsible, non-reorderable; skipping or reordering is a §2.6 violation.
-- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — Last Updated + Change Receipts row added.
+- **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** — Last Updated + Change Receipts row added.
 - **`docs/CONTINUITY_LOG_LIFEOS.md`** — this entry.
 - `npm test`: 8 pass, 0 fail (unchanged by this constitutional edit).
 
@@ -260,7 +260,7 @@ Adam requested these three clarifications be codified as law to prevent: (1) aud
 ## [BUILD] Update 2026-05-11 #2 — Privacy & AI governance SSOT wired (navigation only)
 
 ### Doc / SSOT
-- **`docs/projects/AMENDMENT_40_PRIVACY_MENTAL_SOVEREIGNTY.md`**, **`docs/AI_MANAGEMENT_SYSTEM_SSOT.md`** — now linked from **`docs/projects/INDEX.md`**, **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`**, **`docs/QUICK_LAUNCH.md`** LifeOS lane, and **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** (**Constitutional LifeOS UX SSOT** bullet **4**, **Agent Handoff** row, **Change Receipts**).
+- **`docs/projects/AMENDMENT_40_PRIVACY_MENTAL_SOVEREIGNTY.md`**, **`docs/AI_MANAGEMENT_SYSTEM_SSOT.md`** — now linked from **`docs/projects/INDEX.md`**, **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`**, **`docs/QUICK_LAUNCH.md`** LifeOS lane, and **`docs/products/lifeos/PRODUCT_HOME.md`** (**Constitutional LifeOS UX SSOT** bullet **4**, **Agent Handoff** row, **Change Receipts**).
 - Cross-cutting receipt: **`docs/CONTINUITY_LOG.md`** — **[BUILD] Update 2026-05-11 #8**.
 
 ### Next
@@ -277,7 +277,7 @@ Adam requested these three clarifications be codified as law to prevent: (1) aud
 - **`routes/lifeos-council-builder-routes.js`** — **`mirrorCommittedContentToRepoRoot`** after **`autoWireRoute`** register commit (**chained **`files[]`** FS parity).
 
 ### Doc / SSOT
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipts + **`## Agent Handoff Notes`**: next **`dashboard-import-tokens`**. **`docs/CONTINUITY_LOG.md`** **`[BUILD]`** block.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — receipts + **`## Agent Handoff Notes`**: next **`dashboard-import-tokens`**. **`docs/CONTINUITY_LOG.md`** **`[BUILD]`** block.
 
 ### Next
 - **`npm run lifeos:builder:overnight -- --task dashboard-import-tokens`** (minimal `<link>` in **`lifeos-dashboard.html`**).
@@ -306,7 +306,7 @@ Adam requested these three clarifications be codified as law to prevent: (1) aud
 - `services/lifeos-lumin-build.js` — plan/draft now consult Memory Intelligence routing before selecting a model; blocked tasks fail closed instead of silently falling back.
 - `routes/lifeos-gate-change-routes.js` — gate-change debate persists structured debate memory and filters unauthorized models before council runs.
 - `startup/register-runtime-routes.js`, `routes/memory-intelligence-routes.js` — `/api/v1/memory/*` mounted into runtime so LifeOS lanes can log debates, intent drift, authority, and violations.
-- `docs/SSOT_COMPANION.md`, `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — future-back and anti-corner-cutting rules now part of the operating law, not just the brainstorm brief.
+- `docs/SSOT_COMPANION.md`, `docs/products/memory-intelligence/PRODUCT_HOME.md` — future-back and anti-corner-cutting rules now part of the operating law, not just the brainstorm brief.
 
 **State after this session:**
 - Lumin plan/draft and gate-change flows now use the same evidence/routing system instead of static model preference only.
@@ -332,7 +332,7 @@ Adam requested these three clarifications be codified as law to prevent: (1) aud
 
 **Shipped:** Opt-in coarse device hints (`battery`, `network_type`, `visibility`, timezone, PWA standalone) stored in `lifeos_ambient_snapshots`; API `/api/v1/lifeos/ambient/snapshot` + `/recent` (no AI on ingest); client `lifeos-ambient-sense.js` with 10–20 min cadence while the shell is visible; Settings toggle persists `lifeos_ambient_sense=1`. Lumin `buildContextSnapshot` includes `ambient_hints`. Always-on voice in `lifeos-voice.js` now **releases the mic** when the tab is hidden and skips screen wake lock on touch-first devices by default (`LuminVoice.configure`).
 
-**Files:** `db/migrations/20260423_lifeos_ambient_snapshots.sql`, `services/lifeos-ambient-context.js`, `routes/lifeos-ambient-routes.js`, `startup/register-runtime-routes.js`, `public/overlay/lifeos-ambient-sense.js`, `public/overlay/lifeos-app.html`, `public/overlay/lifeos-voice.js`, `services/lifeos-lumin.js`, `scripts/lifeos-verify.mjs`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`, `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`
+**Files:** `db/migrations/20260423_lifeos_ambient_snapshots.sql`, `services/lifeos-ambient-context.js`, `routes/lifeos-ambient-routes.js`, `startup/register-runtime-routes.js`, `public/overlay/lifeos-ambient-sense.js`, `public/overlay/lifeos-app.html`, `public/overlay/lifeos-voice.js`, `services/lifeos-lumin.js`, `scripts/lifeos-verify.mjs`, `docs/products/lifeos/PRODUCT_HOME.md`, `docs/products/lifeos/FILE_MANIFEST.json`, `docs/products/project-governance/PRODUCT_HOME.md`
 
 **Next:** Apply migration on Neon (boot auto if migrations run at deploy). Smoke: enable ambient in Settings → wait one interval or trigger tab switch → confirm `GET /api/v1/lifeos/ambient/recent?user=` returns rows. **THINK:** continuous environmental *audio* capture is a separate product slice (VAD, consent, cost) — not this ship.
 
@@ -342,7 +342,7 @@ Adam requested these three clarifications be codified as law to prevent: (1) aud
 
 **Shipped:** Shareable signup URLs from API; admin creates/copies in shell Settings; login accepts `?code=` or `?invite=`; JWT role/tier synced for admin gate; sign-out clears tokens; Lumin contract line for optional context-grounded relational prompts (no fake “always listening” claims).
 
-**Files:** `routes/lifeos-auth-routes.js`, `public/overlay/lifeos-app.html`, `public/overlay/lifeos-bootstrap.js`, `public/overlay/lifeos-login.html`, `services/lifeos-lumin.js`, `prompts/lifeos-lumin.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+**Files:** `routes/lifeos-auth-routes.js`, `public/overlay/lifeos-app.html`, `public/overlay/lifeos-bootstrap.js`, `public/overlay/lifeos-login.html`, `services/lifeos-lumin.js`, `prompts/lifeos-lumin.md`, `docs/products/lifeos/PRODUCT_HOME.md`
 
 **Next:** E2E test: admin creates invite → open copied link in private window → register Sherry (or test user) → confirm `lifeos_role` admin panel appears for adam only.
 
@@ -379,7 +379,7 @@ Full cycle tracking lane shipped. Zero AI cost — pure math + SQL.
 
 **Files modified:**
 - `startup/register-runtime-routes.js` — import + mount `createLifeOSCycleRoutes`
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — change receipt + handoff notes updated
+- `docs/products/lifeos/PRODUCT_HOME.md` — change receipt + handoff notes updated
 
 **Next agent:** Build `public/overlay/lifeos-cycle.html` — phase badge, log entry form, energy ring, history view. All backend endpoints are live.
 
@@ -441,7 +441,7 @@ Epistemic § + receipts + Last Updated: gate-change hypotheses go to **AI Counci
 
 ## [BUILD] Update 2026-04-19 #2 — Amendment 36 handoff stack
 
-Zero-drift protocol, per-lane logs, `docs/AI_COLD_START.md`, builder `GET /next-task`, and governance scripts shipped. See main `docs/CONTINUITY_LOG.md` **Update #6** for the full file list and `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` for rules.
+Zero-drift protocol, per-lane logs, `docs/AI_COLD_START.md`, builder `GET /next-task`, and governance scripts shipped. See main `docs/CONTINUITY_LOG.md` **Update #6** for the full file list and `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` for rules.
 
 ---
 
@@ -453,6 +453,6 @@ Full file list and revenue-alignment edits for Amendment 21 / INDEX / `callAI` b
 ### Next agent (LifeOS lane): start here
 1. `prompts/lifeos-conflict.md` → **Next Approved Task** (Conflict Interrupt System).
 2. `prompts/lifeos-lumin.md` → engagement feedback on reactions.
-3. Read `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → `## Agent Handoff Notes` + last 3 rows of `## Change Receipts`.
+3. Read `docs/products/lifeos/PRODUCT_HOME.md` → `## Agent Handoff Notes` + last 3 rows of `## Change Receipts`.
 
 ---

@@ -2,7 +2,7 @@
  * SYNOPSIS: Point B navigator — reads POINT_B_TARGET.json and returns next gate action.
  * SYNOPSIS: Point B navigator — subroutine of Lumin Chair (orchestrated via lumin-chair-orchestrator.js).
  * WIRED: Lumin Chair point_b channel + GET point-b/status + lifeos-app strip
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

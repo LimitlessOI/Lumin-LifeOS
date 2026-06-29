@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeOS user service — CRUD + auth helpers over lifeos_users, lifeos_sessions, lifeos_invites.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
 import { hashPassword, verifyPassword, signToken, generateRefreshToken } from './lifeos-auth.js';

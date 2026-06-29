@@ -105,7 +105,7 @@ core/
 .env
 .github/
 CLAUDE.md
-docs/SSOT_NORTH_STAR.md
+docs/constitution/NORTH_STAR_SSOT.md
 docs/SSOT_COMPANION.md
 ```
 

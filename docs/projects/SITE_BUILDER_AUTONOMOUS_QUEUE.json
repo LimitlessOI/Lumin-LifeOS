@@ -1,16 +1,16 @@
 {
   "$comment": "Autonomous Site Builder queue for Forge. Product code tasks dominate the lane and continue past the current cursor so the daemon does not fall back into governance theater. Grounded in Amendment 05.",
-  "brief": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+  "brief": "docs/products/site-builder/PRODUCT_HOME.md",
   "tasks": [
     {
       "id": "site-builder-postmark-send",
       "domain": "lifeos-site-builder",
       "target_file": "services/site-builder-postmark-helper.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md"
+        "docs/products/site-builder/PRODUCT_HOME.md"
       ],
       "task": "Create a NEW standalone Postmark email helper for the site builder. Do NOT modify prospect-pipeline.js (it is complete). Create services/site-builder-postmark-helper.js with: sendProspectOutreach(prospect, opts) async — calls Postmark API when POSTMARK_SERVER_TOKEN is set, no-op when absent, dry_run mode returns payload. Under 60 lines total.",
-      "spec": "JS ES module. NEW file only — do not touch prospect-pipeline.js. Export: sendProspectOutreach(prospect, opts). opts.dry_run=true returns payload without sending. Graceful when POSTMARK_SERVER_TOKEN absent: return { sent: false, error: 'POSTMARK_SERVER_TOKEN not set' }. Uses fetch to call https://api.postmarkapp.com/email. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md. Keep under 60 lines.",
+      "spec": "JS ES module. NEW file only — do not touch prospect-pipeline.js. Export: sendProspectOutreach(prospect, opts). opts.dry_run=true returns payload without sending. Graceful when POSTMARK_SERVER_TOKEN absent: return { sent: false, error: 'POSTMARK_SERVER_TOKEN not set' }. Uses fetch to call https://api.postmarkapp.com/email. @ssot docs/products/site-builder/PRODUCT_HOME.md. Keep under 60 lines.",
       "commit_message": "[system-build] Site Builder Postmark helper — standalone email send utility",
       "branch": "main",
       "model": "gemini_flash",
@@ -21,12 +21,12 @@
       "domain": "lifeos-site-builder",
       "target_file": "services/site-builder-quality-scorer.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "services/site-builder-quality-scorer.js",
         "services/site-builder.js"
       ],
       "task": "Improve the site quality scorer with conversion-critical detection: (1) CTA button count and prominence score, (2) social proof signals (testimonials, reviews, star ratings), (3) contact information completeness (phone, email, form), (4) mobile viewport meta tag, (5) performance signals (image count, inline vs external CSS). Return structured breakdown with subscores. Better scoring = better prospect targeting.",
-      "spec": "JS ES module. Enhance existing site-builder-quality-scorer.js. scoreHtml(html, url) returns { total_score: number 0-100, subscores: { cta: number, social_proof: number, contact: number, mobile_ready: number, performance: number }, findings: string[], grade: 'A'|'B'|'C'|'D'|'F' }. Grade: A>=80, B>=65, C>=50, D>=35, F<35. All existing exports preserved. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "spec": "JS ES module. Enhance existing site-builder-quality-scorer.js. scoreHtml(html, url) returns { total_score: number 0-100, subscores: { cta: number, social_proof: number, contact: number, mobile_ready: number, performance: number }, findings: string[], grade: 'A'|'B'|'C'|'D'|'F' }. Grade: A>=80, B>=65, C>=50, D>=35, F<35. All existing exports preserved. @ssot docs/products/site-builder/PRODUCT_HOME.md",
       "commit_message": "[system-build] Site Builder quality scorer v2 — CTA, social proof, contact, mobile detection",
       "branch": "main",
       "model": "gemini_flash",
@@ -37,12 +37,12 @@
       "domain": "lifeos-site-builder",
       "target_file": "public/overlay/site-builder-command-center.html",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "public/overlay/site-builder-command-center.html",
         "routes/site-builder-routes.js"
       ],
       "task": "Polish the Site Builder command center HTML: (1) prominent GO/NO-GO launch banner at top (green when 3 required env vars set, red with missing items listed), (2) prospect pipeline summary card (discovered, outreach sent, converted counts), (3) recent activity feed (last 5 prospects + quality score + status), (4) one-click Run Prospect Discovery button calling the API with results inline. Retain ALL existing functionality and auth headers. Output must be valid HTML only.",
-      "spec": "Single HTML file. Retain all existing fetch/auth calls. Add: #launch-banner section (green/red based on env readiness), #pipeline-summary (fetch /api/v1/site-builder/pipeline-report or equivalent), #recent-activity (last 5 prospects), #run-discovery button. Mobile responsive. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "spec": "Single HTML file. Retain all existing fetch/auth calls. Add: #launch-banner section (green/red based on env readiness), #pipeline-summary (fetch /api/v1/site-builder/pipeline-report or equivalent), #recent-activity (last 5 prospects), #run-discovery button. Mobile responsive. @ssot docs/products/site-builder/PRODUCT_HOME.md",
       "commit_message": "[system-build] Site Builder command center v2 — GO/NO-GO banner + pipeline summary",
       "branch": "main",
       "model": "gemini_flash",
@@ -53,12 +53,12 @@
       "domain": "lifeos-site-builder",
       "target_file": "services/site-builder-prospect-ranker.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "services/prospect-pipeline.js",
         "services/site-builder-quality-scorer.js"
       ],
       "task": "Build a prospect ranking service that scores prospects by conversion likelihood and ROI. Criteria: (1) quality score (lower = more opportunity for improvement), (2) business type (wellness/spa/fitness = highest affiliate value at $50-200/referral), (3) contact completeness (phone + email = easier to reach), (4) recency (avoid re-contacting too soon). Returns ranked list with priority_score and recommended_action.",
-      "spec": "JS ES module. New file. Exports: rankProspects(prospects) -> prospects[] sorted desc by priority_score, scoreProspect(prospect) -> number 0-100, getRecommendedAction(prospect) -> 'send_outreach'|'follow_up'|'skip'|'high_priority'. Pure scoring — no DB calls. priority_score weights: quality_opportunity 40%, business_value 30%, contact_completeness 20%, recency 10%. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "spec": "JS ES module. New file. Exports: rankProspects(prospects) -> prospects[] sorted desc by priority_score, scoreProspect(prospect) -> number 0-100, getRecommendedAction(prospect) -> 'send_outreach'|'follow_up'|'skip'|'high_priority'. Pure scoring — no DB calls. priority_score weights: quality_opportunity 40%, business_value 30%, contact_completeness 20%, recency 10%. @ssot docs/products/site-builder/PRODUCT_HOME.md",
       "commit_message": "[system-build] Site Builder prospect ranker — priority scoring + recommended action",
       "branch": "main",
       "model": "gemini_flash",
@@ -69,11 +69,11 @@
       "domain": "lifeos-site-builder",
       "target_file": "services/site-builder-revenue-service.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "services/prospect-pipeline.js"
       ],
       "task": "Build a Site Builder revenue tracking service. Tracks: prospects discovered, outreach sent, conversions, MRR from clients, affiliate revenue forecast (Jane App=$50/referral, Mindbody=$200/referral, Square=$500/referral). Graceful no-op when prospect_sites table missing.",
-      "spec": "JS ES module. New file. Exports: getSiteBuilderRevenueSummary(pool) async -> { pipeline: { discovered, outreach_sent, converted }, mrr: number, affiliate_pipeline: number, top_prospects: [] }, getAffiliateRevenueForecast(converted_count) sync -> { jane_app, mindbody, square, total }. Handle missing table gracefully (return zeros). @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "spec": "JS ES module. New file. Exports: getSiteBuilderRevenueSummary(pool) async -> { pipeline: { discovered, outreach_sent, converted }, mrr: number, affiliate_pipeline: number, top_prospects: [] }, getAffiliateRevenueForecast(converted_count) sync -> { jane_app, mindbody, square, total }. Handle missing table gracefully (return zeros). @ssot docs/products/site-builder/PRODUCT_HOME.md",
       "commit_message": "[system-build] Site Builder revenue service — pipeline funnel + affiliate forecast",
       "branch": "main",
       "model": "gemini_flash",
@@ -84,7 +84,7 @@
       "domain": "lifeos-site-builder",
       "target_file": "docs/projects/SITE_BUILDER_LIVE_OPS_RUNBOOK.md",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "docs/CONTINUITY_LOG_SITE_BUILDER.md",
         "scripts/site-builder-live-smoke.mjs",
         "scripts/site-builder-pipeline-report.mjs"
@@ -101,7 +101,7 @@
       "domain": "lifeos-site-builder",
       "target_file": "docs/projects/SITE_BUILDER_COMMAND_CENTER_AUDIT.md",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "routes/site-builder-routes.js"
       ],
       "task": "Audit the Site Builder command center against the amendment and current route surface. Call out shipped operator actions, missing operator actions, and any route assumptions the HTML depends on. No runtime edits in this task.",
@@ -116,7 +116,7 @@
       "domain": "lifeos-site-builder",
       "target_file": "docs/projects/SITE_BUILDER_PREVIEW_QUALITY_PLAYBOOK.md",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "services/site-builder-quality-scorer.js",
         "scripts/site-builder-quality-audit.mjs"
       ],
@@ -132,12 +132,12 @@
       "domain": "lifeos-site-builder",
       "target_file": "routes/site-builder-launch-readiness-routes.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "routes/site-builder-routes.js",
         "services/env-registry-map.js"
       ],
       "task": "Create a new standalone Express router file that adds a launch-readiness endpoint. This is a NEW file that will be mounted separately — do NOT modify routes/site-builder-routes.js.",
-      "spec": "Create a new ESM file routes/site-builder-launch-readiness-routes.js. Export a default function createLaunchReadinessRoutes(app, { requireKey }) that mounts GET /api/v1/sites/launch-readiness. Response: { ok: true, ready: boolean, missing_needed: string[], revenue_blockers: string[], checked_at: string }. Check for SITE_BASE_URL, EMAIL_FROM, POSTMARK_SERVER_TOKEN. Do not expose secret values. File must have @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md header comment. Full valid ESM module, no HTML, no truncation. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "spec": "Create a new ESM file routes/site-builder-launch-readiness-routes.js. Export a default function createLaunchReadinessRoutes(app, { requireKey }) that mounts GET /api/v1/sites/launch-readiness. Response: { ok: true, ready: boolean, missing_needed: string[], revenue_blockers: string[], checked_at: string }. Check for SITE_BASE_URL, EMAIL_FROM, POSTMARK_SERVER_TOKEN. Do not expose secret values. File must have @ssot docs/products/site-builder/PRODUCT_HOME.md header comment. Full valid ESM module, no HTML, no truncation. @ssot docs/products/site-builder/PRODUCT_HOME.md",
       "commit_message": "[system-build] Site Builder launch readiness route for command center truth",
       "branch": "main",
       "model": "gemini_flash",
@@ -148,13 +148,13 @@
       "domain": "lifeos-site-builder",
       "target_file": "routes/site-builder-pipeline-report-routes.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "routes/site-builder-routes.js",
         "services/prospect-pipeline.js",
         "scripts/site-builder-pipeline-report.mjs"
       ],
       "task": "Create a new standalone Express router file for the pipeline report endpoint. This is a NEW file — do NOT modify routes/site-builder-routes.js.",
-      "spec": "Create a new ESM file routes/site-builder-pipeline-report-routes.js. Export a default function createPipelineReportRoutes(app, { pool, requireKey }) that mounts GET /api/v1/sites/pipeline-report. Return { ok: true, pipeline: { total, built, qa_hold, sent, viewed, replied, converted, total_revenue } }. Query the prospect_sites table directly via pool. Graceful zeroed payload if no rows exist. Full valid ESM module. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "spec": "Create a new ESM file routes/site-builder-pipeline-report-routes.js. Export a default function createPipelineReportRoutes(app, { pool, requireKey }) that mounts GET /api/v1/sites/pipeline-report. Return { ok: true, pipeline: { total, built, qa_hold, sent, viewed, replied, converted, total_revenue } }. Query the prospect_sites table directly via pool. Graceful zeroed payload if no rows exist. Full valid ESM module. @ssot docs/products/site-builder/PRODUCT_HOME.md",
       "commit_message": "[system-build] Site Builder pipeline report route for dashboard metrics",
       "branch": "main",
       "model": "gemini_flash",
@@ -165,13 +165,13 @@
       "domain": "lifeos-site-builder",
       "target_file": "routes/site-builder-discovery-routes.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/products/site-builder/PRODUCT_HOME.md",
         "routes/site-builder-routes.js",
         "scripts/site-builder-prospect-discovery.mjs",
         "services/prospect-pipeline.js"
       ],
       "task": "Create a new standalone Express router file for the discovery action endpoint. This is a NEW file — do NOT modify routes/site-builder-routes.js.",
-      "spec": "Create a new ESM file routes/site-builder-discovery-routes.js. Export a default function createDiscoveryRoutes(app, { pool, requireKey }) that mounts POST /api/v1/sites/discover. Request body: { city?: string, niche?: string, count?: number }. Response: { ok: true, discovered: number, prospects: object[], receipt: { source: string, city: string|null, niche: string|null } }. Use child_process to call the discovery script or implement inline. No HTML output. Full valid ESM module. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "spec": "Create a new ESM file routes/site-builder-discovery-routes.js. Export a default function createDiscoveryRoutes(app, { pool, requireKey }) that mounts POST /api/v1/sites/discover. Request body: { city?: string, niche?: string, count?: number }. Response: { ok: true, discovered: number, prospects: object[], receipt: { source: string, city: string|null, niche: string|null } }. Use child_process to call the discovery script or implement inline. No HTML output. Full valid ESM module. @ssot docs/products/site-builder/PRODUCT_HOME.md",
       "commit_message": "[system-build] Site Builder discovery action route for command center",
       "branch": "main",
       "model": "gemini_flash",

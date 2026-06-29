@@ -4,7 +4,7 @@
  *
  * Base: /api/v1/lifeos/deliberation
  *
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

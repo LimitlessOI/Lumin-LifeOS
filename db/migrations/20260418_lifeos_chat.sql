@@ -10,7 +10,7 @@
 -- so Lumin can reference what was said and build on it over time.
 -- The response variety + communication profile engines are applied to every reply.
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

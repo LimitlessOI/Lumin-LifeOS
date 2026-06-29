@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)
 
 **Last updated:** 2026-04-22  
-**SSOT:** `docs/projects/AMENDMENT_17_TC_SERVICE.md`  
+**SSOT:** `docs/products/tc-service/PRODUCT_HOME.md`  
 **Lane log:** `docs/CONTINUITY_LOG_TC.md`  
 **Owning services:** `services/tc-coordinator.js`, `services/tc-doc-intake.js`, `services/tc-browser-agent.js`, `services/tc-pricing.js`, `services/glvar-monitor.js`, `services/tc-status-engine.js`, `services/tc-document-validator.js`, `services/tc-portal-service.js`  
 **Owning routes:** `routes/tc-routes.js`, `routes/mls-routes.js`  

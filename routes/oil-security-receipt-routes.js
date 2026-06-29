@@ -2,7 +2,7 @@
  * SYNOPSIS: routes/oil-security-receipt-routes.js
  */
 // routes/oil-security-receipt-routes.js
-/** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
+/** @ssot docs/products/project-governance/PRODUCT_HOME.md */
 
 import express from 'express';
 import {

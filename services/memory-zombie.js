@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-zombie.js
  */
 // services/memory-zombie.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 
 async function isZombie(capsuleId, pool) {
   const result = await pool.query(

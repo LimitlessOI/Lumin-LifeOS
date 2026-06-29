@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260417_lifeos_notification_escalation.sql.
 -- LifeOS notification escalation support.
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 ALTER TABLE lifeos_notification_queue
   ADD COLUMN IF NOT EXISTS escalation_group TEXT,

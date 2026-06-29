@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE alpha surface — routes UI expects but were missing from lifere-os-routes.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeREMotivationTwin } from './lifere-motivation-twin.js';
 import { createLifeRETwinStore } from './lifere-twin-store.js';

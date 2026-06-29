@@ -11,7 +11,7 @@
  *   POST /api/v1/admin/ai/enable      → POST /api/v1/lifeos/admin/ai/enable
  *   POST /api/v1/admin/ai/disable     → POST /api/v1/lifeos/admin/ai/disable
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import express from 'express';

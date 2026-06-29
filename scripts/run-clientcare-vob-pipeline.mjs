@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Upload an insurance card image and run the full ClientCare pipeline on the LifeOS server:
- * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
+ * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
  *
  * Upload an insurance card image and run the full ClientCare pipeline on the LifeOS server:
  * card OCR → fill empty portal fields → VOB retries → sync parsed VOB text.

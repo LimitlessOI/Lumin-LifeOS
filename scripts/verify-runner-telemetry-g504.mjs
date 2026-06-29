@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This script provides a verification function for runner telemetry,
  * specifically for generation 504. It fetches health and efficiency

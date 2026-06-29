@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS — unified 4-gate output verification pipeline.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * BuilderOS — unified 4-gate output verification pipeline.
  *
  * Gates: syntax (node --check) → antipattern scan → stub detection → runtime execution.

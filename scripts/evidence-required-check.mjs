@@ -4,7 +4,7 @@
  * When high-risk paths are staged, require evidence in commit message body
  * (e.g. "evidence:" or "tested:") so deploy/railway changes are not blind.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { execSync } from 'child_process';

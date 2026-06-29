@@ -16,7 +16,7 @@ This is the operational **police / enforcer** for **everything that can be check
 
 | Layer | Examples | What Compliance Officer can enforce |
 |-------|-----------|-------------------------------------|
-| **NSSOT** (`docs/SSOT_NORTH_STAR.md`) | §2.6 honesty, §2.10 observe→fix, §2.11 builder path | **Indirectly:** failing tests, SSOT drift, builder unreachable on prod = **evidence** something violated operational law |
+| **NSSOT** (`docs/constitution/NORTH_STAR_SSOT.md`) | §2.6 honesty, §2.10 observe→fix, §2.11 builder path | **Indirectly:** failing tests, SSOT drift, builder unreachable on prod = **evidence** something violated operational law |
 | **Companion** (`docs/SSOT_COMPANION.md`) | Self-programming loop, env diagnosis | **Indirectly:** same + remote probes when `--remote` |
 | **Every amendment / lane** (`docs/projects/AMENDMENT_*.md`) | Per-project spec, Change Receipts | **`ssot:validate`** — changed `routes|services|core|startup` files must update their owning amendment when touched in the same change set; **`readiness:check`** — `build_ready` manifests vs gates (**warn**); **`ssot:compact:dryrun`** (**`--deep`**) — oversized amendment files |
 
@@ -101,5 +101,5 @@ Without keys, remote tier is **skipped** with a **THINK** machine line (not a fa
 
 ## SSOT
 
-- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — owns script + handoff tooling.
+- **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** — owns script + handoff tooling.
 - **`docs/SYSTEM_CAPABILITIES.md`** — capability matrix row **CO1**.

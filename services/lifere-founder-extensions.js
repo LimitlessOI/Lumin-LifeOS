@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE founder extension twins — Adam/Sherry household only.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

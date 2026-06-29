@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: TSOS hook evidence quality aggregates — read-only, for routing readiness (TSOS-G2).
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { REQUIRED_METADATA_KEYS, TSOS_HOOK_TASK_TYPE } from './builderos-tsos-hook-service.js';

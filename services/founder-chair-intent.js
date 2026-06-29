@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Founder natural language → structured build task + explicit Chair channel map.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import {
   augmentTaskWithGapFillScope,

@@ -8,7 +8,7 @@
  *   node scripts/lifeos-provision-member.mjs --invite-only --label sherry
  *   node scripts/lifeos-provision-member.mjs --handle sherry --email sherry@example.com --display-name Sherry --password 'ChangeMeNow1!' --link-adam
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import dotenv from 'dotenv';

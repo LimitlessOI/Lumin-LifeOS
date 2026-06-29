@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Script for verifying runner telemetry generation 261.
  * Fetches health and efficiency data from LifeOS control plane and autonomous telemetry endpoints.

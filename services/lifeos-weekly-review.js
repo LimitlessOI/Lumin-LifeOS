@@ -16,7 +16,7 @@
  * The conversation is grounded in that week's data snapshot — not general AI
  * chat. Every response the AI gives has the actual numbers behind it.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const WEEK_LETTER_PROMPT = ({ displayName, weekStr, snapshot }) => `You are the LifeOS system writing a personal weekly review letter for ${displayName}.

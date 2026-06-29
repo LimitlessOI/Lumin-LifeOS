@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Founder alpha readiness audit — one receipt Adam/conductor trust before founder session.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';

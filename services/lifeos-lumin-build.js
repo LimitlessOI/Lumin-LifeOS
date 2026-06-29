@@ -5,7 +5,7 @@
  * Outputs are advisory (council text). Applying patches to the repo still flows through
  * human + builder / governance (`pending_adam`, project segments, verify scripts).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { readFile } from 'fs/promises';

@@ -4,7 +4,7 @@
 
 **Status:** `governing_artifact`  
 **Purpose:** Minimum Alpha Neon/Postgres table contract for the Memory Capsule System. Distinguishes canonical tables from derived-only tables.  
-**Derived from:** [BLUEPRINT.md](/Users/adamhopkins/Projects/Lumin-LifeOS/docs/projects/memory-capsules/BLUEPRINT.md:1), [MEMORY_AUTHORITY_BRIDGE.md](/Users/adamhopkins/Projects/Lumin-LifeOS/docs/projects/memory-capsules/MEMORY_AUTHORITY_BRIDGE.md:1), [AMENDMENT_39_MEMORY_INTELLIGENCE.md](/Users/adamhopkins/Projects/Lumin-LifeOS/docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md:1)  
+**Derived from:** [BLUEPRINT.md](/Users/adamhopkins/Projects/Lumin-LifeOS/docs/projects/memory-capsules/BLUEPRINT.md:1), [MEMORY_AUTHORITY_BRIDGE.md](/Users/adamhopkins/Projects/Lumin-LifeOS/docs/projects/memory-capsules/MEMORY_AUTHORITY_BRIDGE.md:1), [AMENDMENT_39_MEMORY_INTELLIGENCE.md](/Users/adamhopkins/Projects/Lumin-LifeOS/docs/products/memory-intelligence/PRODUCT_HOME.md:1)  
 **Last revised:** 2026-05-21
 
 ---

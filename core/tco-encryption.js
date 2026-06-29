@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: AES-256-GCM encryption/decryption for customer API keys stored in DB.
- * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
+ * @ssot docs/products/api-cost-savings/PRODUCT_HOME.md
  * AES-256-GCM encryption/decryption for customer API keys stored in DB.
  * Requires TCO_ENCRYPTION_KEY env var (hex, 32 bytes). Set DEBUG_ENCRYPTION=1 to log key-mismatch warnings.
  */

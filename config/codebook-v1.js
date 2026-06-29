@@ -23,7 +23,7 @@
  * matches longest-first to prevent partial collisions (e.g. "*uid" matching
  * inside "*luid" if order is wrong).
  *
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 export const CODEBOOK_VERSION = 'v1';

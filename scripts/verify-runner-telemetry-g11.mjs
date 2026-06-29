@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides a verification function for Runner Telemetry Generation 11.
  * It fetches health and efficiency data from BuilderOS control plane and autonomous telemetry

@@ -1,8 +1,8 @@
 /**
  * SYNOPSIS: Voice Rail STT — Whisper prompt terms + post-transcription corrections.
  * Voice Rail STT — Whisper prompt terms + post-transcription corrections.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { VOICE_RAIL_DEPARTMENT_IDS } from './voice-rail-departments.js';
 

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Appends a standard letter-size acknowledgment page to a PDF for TC review flows.
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * Appends a standard letter-size acknowledgment page to a PDF for TC review flows.
  * Not a substitute for lawfully required e-sign platforms where mandates apply.
  */

@@ -4,7 +4,7 @@
  * For AI-powered review, use: POST /api/v1/blueprint/intake/:id/arc
  * Usage: node scripts/run-arc-entry-gate.mjs <blueprint-file-path>
  * Exit 0 = structurally valid. Exit 1 = gaps or missing fields.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

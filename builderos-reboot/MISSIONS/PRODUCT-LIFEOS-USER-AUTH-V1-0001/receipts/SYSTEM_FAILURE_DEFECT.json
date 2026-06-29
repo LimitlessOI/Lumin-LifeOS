@@ -1,0 +1,77 @@
+{
+  "schema": "system_failure_defect_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "recorded_at": "2026-06-29T20:03:31.299Z",
+  "classification": "intent_not_cleared_before_handoff",
+  "route": "system_fix_not_founder",
+  "reason": "Intent gap after handoff — should have been caught in development (Chair failure)",
+  "defect_owner_seat": "Chair",
+  "which_phase_should_have_caught_it": "Pre-ARC",
+  "intake_category_to_add": "",
+  "gaps": [
+    {
+      "step_id": "UAT-001",
+      "decision_gap": "phantom acceptance_test_id AT-UAT-001-1 — not in ACCEPTANCE_TESTS.json",
+      "decision_type": "mechanical",
+      "forced_decision_reason": "phantom acceptance_test_id AT-UAT-001-1 — not in ACCEPTANCE_TESTS.json",
+      "required_owner": "ARC",
+      "severity": "blocking",
+      "blocked": true
+    },
+    {
+      "step_id": "UAT-002",
+      "decision_gap": "phantom acceptance_test_id AT-UAT-002-1 — not in ACCEPTANCE_TESTS.json",
+      "decision_type": "mechanical",
+      "forced_decision_reason": "phantom acceptance_test_id AT-UAT-002-1 — not in ACCEPTANCE_TESTS.json",
+      "required_owner": "ARC",
+      "severity": "blocking",
+      "blocked": true
+    },
+    {
+      "step_id": "UAT-003",
+      "decision_gap": "phantom acceptance_test_id AT-UAT-003-1 — not in ACCEPTANCE_TESTS.json",
+      "decision_type": "mechanical",
+      "forced_decision_reason": "phantom acceptance_test_id AT-UAT-003-1 — not in ACCEPTANCE_TESTS.json",
+      "required_owner": "ARC",
+      "severity": "blocking",
+      "blocked": true
+    },
+    {
+      "step_id": "UAT-004",
+      "decision_gap": "phantom acceptance_test_id AT-UAT-004-1 — not in ACCEPTANCE_TESTS.json",
+      "decision_type": "mechanical",
+      "forced_decision_reason": "phantom acceptance_test_id AT-UAT-004-1 — not in ACCEPTANCE_TESTS.json",
+      "required_owner": "ARC",
+      "severity": "blocking",
+      "blocked": true
+    },
+    {
+      "step_id": "UAT-005",
+      "decision_gap": "phantom acceptance_test_id AT-UAT-005-1 — not in ACCEPTANCE_TESTS.json",
+      "decision_type": "mechanical",
+      "forced_decision_reason": "phantom acceptance_test_id AT-UAT-005-1 — not in ACCEPTANCE_TESTS.json",
+      "required_owner": "ARC",
+      "severity": "blocking",
+      "blocked": true
+    },
+    {
+      "step_id": "UAT-006",
+      "decision_gap": "phantom acceptance_test_id AT-UAT-006-1 — not in ACCEPTANCE_TESTS.json",
+      "decision_type": "mechanical",
+      "forced_decision_reason": "phantom acceptance_test_id AT-UAT-006-1 — not in ACCEPTANCE_TESTS.json",
+      "required_owner": "ARC",
+      "severity": "blocking",
+      "blocked": true
+    },
+    {
+      "step_id": "UAT-007",
+      "decision_gap": "phantom acceptance_test_id AT-UAT-007-1 — not in ACCEPTANCE_TESTS.json",
+      "decision_type": "mechanical",
+      "forced_decision_reason": "phantom acceptance_test_id AT-UAT-007-1 — not in ACCEPTANCE_TESTS.json",
+      "required_owner": "ARC",
+      "severity": "blocking",
+      "blocked": true
+    }
+  ],
+  "lesson": "Corridor started but intent gap found — system failure, not founder re-question."
+}

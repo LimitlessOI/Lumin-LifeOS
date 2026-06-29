@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Fail-closed exit gate — no Chair response leaves without receipt-backed PASS.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const FOUNDER_ALPHA_CLAIMS = [

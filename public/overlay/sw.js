@@ -8,7 +8,7 @@
  * - API calls (/api/) — network-first, fallback to offline placeholder
  * - Everything else — network-first, no fallback
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const CACHE_NAME   = 'lifeos-1782693875656';

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Pipeline analytics report — fetches live data from Railway and prints a
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Pipeline analytics report — fetches live data from Railway and prints a
  * formatted performance summary.
  *

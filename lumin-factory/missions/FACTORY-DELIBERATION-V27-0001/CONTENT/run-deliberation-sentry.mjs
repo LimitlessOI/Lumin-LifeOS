@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: SENTRY review for FACTORY-DELIBERATION-V27-0001 — mechanical + qualitative emit.
  * SENTRY review for FACTORY-DELIBERATION-V27-0001 — mechanical + qualitative emit.
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -3,7 +3,7 @@
  * Standalone Postmark email helper for Site Builder prospect outreach.
  * Queue `site-builder-postmark-send` kept truncating via council; shipped as GAP-FILL (repair loop RL1).
  *
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 
 const POSTMARK_API = "https://api.postmarkapp.com/email";

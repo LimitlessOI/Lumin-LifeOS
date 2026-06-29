@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: BuilderOS ARC pipeline API — system runs entry/simulate/translate, not agents.
  * BuilderOS ARC pipeline API — system runs entry/simulate/translate, not agents.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { Router } from 'express';
 import { runArcPipeline } from '../factory-staging/factory-core/arc/run-pipeline.js';

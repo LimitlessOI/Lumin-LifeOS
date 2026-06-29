@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BoldTrail / kvCORE Public API v2 client for CRM data flows.
- * @ssot docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md
+ * @ssot docs/products/boldtrail/PRODUCT_HOME.md
  *
  * Inside Real Estate Public API → kvCORE v2. Base URL: https://api.kvcore.com
  * Auth: Authorization: Bearer JWT. No public AI assistant API — CRM data flows only.

@@ -1,0 +1,16 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "white-label",
+  "project_id": "white_label",
+  "name": "White Label",
+  "canonical_home": "docs/products/white-label/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/white-label/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/white-label/PRODUCT_HOME.md",
+    "docs/products/white-label/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": []
+}

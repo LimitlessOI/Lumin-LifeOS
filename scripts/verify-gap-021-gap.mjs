@@ -2,7 +2,7 @@
  * SYNOPSIS: Exports runGAP021GapVerification — scripts/verify-gap-021-gap.mjs.
  */
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * This script verifies the status of GAP-021 by checking the health endpoints
  * of the Kernel and BuilderOS Control Plane.
  * GAP-021: Am 44 vs Am 46 supremacy text unresolved in amendments (kernel orchestrates — doc only)

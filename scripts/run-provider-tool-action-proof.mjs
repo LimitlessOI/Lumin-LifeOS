@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Provider API → tool → LifeOS system proof event — production regression proof.
  * Provider API → tool → LifeOS system proof event — production regression proof.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';

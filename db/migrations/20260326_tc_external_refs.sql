@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260326_tc_external_refs.sql.
--- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+-- @ssot docs/products/tc-service/PRODUCT_HOME.md
 -- Generic external-sync reference map for TC -> Asana and future systems.
 
 CREATE TABLE IF NOT EXISTS tc_external_refs (

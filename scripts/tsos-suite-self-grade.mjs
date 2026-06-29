@@ -4,7 +4,7 @@
  * Deterministic 1–10 self-grade helpers for `npm run tsos:builder` (builder-operator-suite).
  * Not an LLM opinion — maps exit codes + JSON receipts (doctor / tokens / operational / daemon state).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from "node:fs";
 import path from "node:path";

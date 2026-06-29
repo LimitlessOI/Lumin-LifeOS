@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Chair intent signal helpers — shared by orchestrator and context classifier.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { isFounderShipOrUsabilityIntent } from './founder-chair-intent.js';
 import {

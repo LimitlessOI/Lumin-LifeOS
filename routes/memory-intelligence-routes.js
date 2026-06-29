@@ -8,7 +8,7 @@
  *
  * All routes require x-command-key authentication.
  *
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
 'use strict';

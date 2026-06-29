@@ -17,7 +17,7 @@
  *   - 2+ lenses say STOP    → adversarial debate (DeepSeek R1, free) → Claude Opus fallback
  *   - Still no consensus    → NEEDS_HUMAN → logged to pending_adam
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  *
  * ⚠️ KERNEL BYPASS (OC-009): This module uses direct provider fetch — NOT wrapped by
  * `services/tsos-platform-kernel.js`. See `docs/architecture/AI_CALL_BYPASS_REPORT.md`.

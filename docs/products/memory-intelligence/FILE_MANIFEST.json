@@ -1,0 +1,41 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "memory-intelligence",
+  "project_id": "memory_intelligence",
+  "name": "Memory Intelligence System",
+  "canonical_home": "docs/products/memory-intelligence/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "db/migrations/20260426_memory_intelligence.sql",
+    "db/migrations/20260426_memory_intelligence_hardening.sql",
+    "db/migrations/20260426_memory_protocol_enforcement.sql",
+    "services/memory-intelligence-service.js",
+    "routes/memory-intelligence-routes.js",
+    "scripts/seed-epistemic-facts.mjs",
+    "scripts/seed-lessons-learned.mjs",
+    "scripts/record-ci-evidence.mjs",
+    "prompts/lifeos-memory-intelligence.md",
+    "docs/INSTITUTIONAL_MEMORY_DIGEST.md",
+    "docs/products/memory-intelligence/PRODUCT_HOME.md",
+    "docs/products/memory-intelligence/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/memory/evidence/health"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/memory/evidence/facts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/memory/evidence/facts"
+    }
+  ],
+  "required_env": []
+}

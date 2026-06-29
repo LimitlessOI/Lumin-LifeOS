@@ -25,7 +25,7 @@ Treat any of these (and close variants) as “**entry mode**”:
 3. **`docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md`** — pooled ideas + **Doing now / Next / Market**.
 4. **Capsule ⇄ SSOT / TSOS convergence (2026-05-13):** **`docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-05-13_capsule-ssot-convergence/`** — read **`01_CONVERGENCE_CHRONICLE.md`**, **`10_IDEAS_OPERATOR_PHASE1.md`**, and (for ranking / CAI) **`20_RANKINGS_PHASE2.md`**: preserve **independent sources** (**A/C/N/G/O**), score overlaps, **`independent_convergence_score`** — do **not** collapse duplicates before scoring.
 5. **Latest dated folders** under **`docs/projects/BRAINSTORM_SESSIONS/<program>/`** (e.g. `lifeos/`) — skim **`50_TRIAGE.md`** and **`00_CHARTER.md`** for what was chosen / discarded **last time**.
-6. **Where we actually are:** **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** (LifeOS IA + URLs), **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → Approved Product Backlog + Agent Handoff + last Change Receipts**, **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.{json,md}`**, **`docs/CONTINUITY_LOG.md`** (newest blocks).
+6. **Where we actually are:** **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** (LifeOS IA + URLs), **`docs/products/lifeos/PRODUCT_HOME.md` → Approved Product Backlog + Agent Handoff + last Change Receipts**, **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.{json,md}`**, **`docs/CONTINUITY_LOG.md`** (newest blocks).
 7. **Optional machine truth:** **`npm run builder:preflight`**, **`npm run lifeos:builder:throughput-meter`**, last **`npm run lifeos:operational-grade`** receipt if Adam has keys (don’t pretend you ran receipts you didn’t).
 
 Only **after** that inventory may you invent or rank ideas honestly.

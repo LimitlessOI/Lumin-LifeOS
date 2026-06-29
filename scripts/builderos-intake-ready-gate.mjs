@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Founder gate — is BuilderOS ready for blueprint intake (greenfield/backfill/adjust)?
  * Usage: npm run builderos:intake:ready
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';
@@ -79,7 +79,7 @@ async function main() {
       },
       body: JSON.stringify({
         product_name: 'IntakeGateProbe',
-        amendment_file: 'docs/projects/AMENDMENT_41_MARKETINGOS.md',
+        amendment_file: 'docs/products/marketingos/PRODUCT_HOME.md',
       }),
     });
     const backfillJson = await backfillHint.json().catch(() => ({}));

@@ -3,7 +3,7 @@
  * services/mission-ledger.js
  * Mission Runtime DB service layer — all DB logic, no Express.
  * Authority: docs/projects/BPB-0001-MISSION-RUNTIME-V1.md §Section 4.
- * @ssot docs/projects/AMENDMENT_47_MISSION_RUNTIME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * GAP-FILL: builder /build returned "generated JS is too short (10 lines); likely
  * token-limit truncation — refusing to commit" on 2 consecutive attempts (attempts at

@@ -4,7 +4,7 @@
 
 **Status:** Builder handoff — ready for `POST /api/v1/lifeos/builder/build`
 **Target file:** `public/overlay/lifeos-command-center.html`
-**SSOT:** `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`
+**SSOT:** `docs/products/command-center/PRODUCT_HOME.md`
 **Governs:** Adam's executive oversight cockpit for Builder, OIL, AI Council, queues, runtime health, and product progress
 
 ## Canonical Boundary
@@ -708,7 +708,7 @@ This halves page-load time and simplifies client JS.
 
 ## SSOT Amendment Additions Needed
 
-Add to `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`:
+Add to `docs/products/command-center/PRODUCT_HOME.md`:
 
 **Owned Files (add):**
 - `public/overlay/lifeos-command-center.html` — v2 executive oversight cockpit

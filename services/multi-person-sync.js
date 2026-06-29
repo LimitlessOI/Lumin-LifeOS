@@ -22,7 +22,7 @@
  *   lifeos_calendar_rules          — source for calendar_rules shared view
  *   lifeos_health_summaries        — source for health_summary shared view
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 /** Features that users are allowed to share with a linked partner. */

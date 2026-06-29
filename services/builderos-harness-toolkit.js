@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS harness toolkit — manifest, wiring audit, platform gap rollup.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

@@ -16,7 +16,7 @@
  *   - otherwise → trim + lowercase + look up by user_handle (LifeOS always
  *     stores handles lowercase; see routes/lifeos-core-routes.js POST /users)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const NUMERIC_RE = /^\d+$/;

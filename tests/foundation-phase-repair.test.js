@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Foundation never-stop loop — phase repair unit tests.
  * Foundation never-stop loop — phase repair unit tests.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';

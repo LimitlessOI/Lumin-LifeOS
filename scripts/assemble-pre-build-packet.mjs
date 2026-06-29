@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Assemble PRE_BUILD_VALIDATION_PACKET from post-ARC receipts.
  * Assemble PRE_BUILD_VALIDATION_PACKET from post-ARC receipts.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

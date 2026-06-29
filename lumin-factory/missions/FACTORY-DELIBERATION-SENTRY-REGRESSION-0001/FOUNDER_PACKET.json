@@ -69,7 +69,7 @@
     "service": "services/deliberation-governance-service.js",
     "routes": "routes/deliberation-governance-routes.js",
     "vocabulary": "docs/BUILDEROS_VOCABULARY.md",
-    "amendment": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md"
+    "amendment": "docs/products/builderos/PRODUCT_HOME.md"
   },
   "founder_attention_budget": {
     "level": "zero_during_build",

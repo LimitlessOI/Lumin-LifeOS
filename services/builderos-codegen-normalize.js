@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Expand LCL codebook symbols in builder codegen output before syntax/governance gates.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { CODE_SYMBOLS, SYMBOL_TO_FULL } from '../config/codebook-v1.js';

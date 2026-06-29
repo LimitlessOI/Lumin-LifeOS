@@ -2,7 +2,7 @@
  * SYNOPSIS: Scans the live project for patterns a blueprint generator must know before writing specs.
  * Grounding source — prevents the #1 blueprint failure: importing packages that aren't installed
  * or assuming middleware behaviour that doesn't match reality.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

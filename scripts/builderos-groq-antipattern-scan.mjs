@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS Phase R2 — groq_llama anti-pattern scanner.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * BuilderOS Phase R2 — groq_llama anti-pattern scanner.
  *
  * READ-ONLY. Scans a JS file for the 9 confirmed groq_llama failure patterns.

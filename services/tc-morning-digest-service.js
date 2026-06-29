@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: TC morning digest service — daily briefing aggregator for Adam.
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * TC morning digest service — daily briefing aggregator for Adam.
  */
 

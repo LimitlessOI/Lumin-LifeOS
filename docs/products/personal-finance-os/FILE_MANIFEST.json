@@ -1,0 +1,42 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "personal-finance-os",
+  "project_id": "personal_finance_os",
+  "name": "Personal Finance OS",
+  "canonical_home": "docs/products/personal-finance-os/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/personal-finance-os/PRODUCT_HOME.md",
+    "docs/products/personal-finance-os/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [],
+  "required_tables": [
+    "cashflow_records",
+    "budget_modes",
+    "debt_accounts",
+    "savings_goals",
+    "financial_checkins"
+  ],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/personal-finance-os/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/personal-finance-os/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "IPS module reviewed by attorney — no RIA trigger",
+    "Past-performance disclosure language approved for any simulation UI",
+    "Terms of service financial disclaimer drafted and reviewed",
+    "Plaid vs CSV-only decision made for MVP bank connection",
+    "LifeOS Core Layer 12 DB schema migrated"
+  ]
+}

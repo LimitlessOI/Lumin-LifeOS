@@ -23,7 +23,7 @@
  *   luteal_early → detail work, planning, steady focus
  *   luteal_late  → protect capacity, avoid major commitments
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 // ── Phase computation ─────────────────────────────────────────────────────────

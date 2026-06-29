@@ -320,7 +320,7 @@ No classroom. No campus. No debt trap. Learning that happens in the context of l
 
 The accreditation process is a long game. It begins with the track record the K-12 system builds. It is funded by the platform's success. It is the capstone of the mission to prove that education does not require the institutions we have assumed it requires.
 
-*See `docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md` for full specification.*
+*See `docs/products/lumin-university/PRODUCT_HOME.md` for full specification.*
 
 ---
 

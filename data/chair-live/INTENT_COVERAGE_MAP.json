@@ -1,0 +1,43 @@
+{
+  "schema": "intent_coverage_map_live_v1",
+  "authority": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+  "updated_at": "2026-06-29T02:06:45.191Z",
+  "tier1_load_bearing_ready": false,
+  "dimensions": [
+    {
+      "name": "outcome",
+      "coverage_level": "MISSING",
+      "load_bearing": true,
+      "source": "live_chair_turn"
+    },
+    {
+      "name": "success_metric",
+      "coverage_level": "PARTIAL",
+      "load_bearing": true,
+      "source": "live_chair_turn"
+    },
+    {
+      "name": "done_definition",
+      "coverage_level": "PARTIAL",
+      "load_bearing": true,
+      "source": "live_chair_turn"
+    },
+    {
+      "name": "scope_boundary",
+      "coverage_level": "MISSING",
+      "load_bearing": true,
+      "source": "live_chair_turn"
+    },
+    {
+      "name": "unacceptable_result",
+      "coverage_level": "MENTIONED",
+      "load_bearing": true,
+      "source": "live_chair_turn"
+    }
+  ],
+  "blocking_gaps": [
+    "outcome:MISSING",
+    "scope_boundary:MISSING",
+    "unacceptable_result:MENTIONED"
+  ]
+}

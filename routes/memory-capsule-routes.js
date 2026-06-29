@@ -2,7 +2,7 @@
  * SYNOPSIS: routes/memory-capsule-routes.js
  */
 // routes/memory-capsule-routes.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { Router } from 'express';
 import * as memorySignalIntakeService from '../services/memory-signal-intake.js';
 import * as memoryCandidateService from '../services/memory-candidate.js';

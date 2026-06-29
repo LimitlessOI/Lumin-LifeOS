@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Metered AI call helper — delegates to Token Accounting OS.
  * Metered AI call helper — delegates to Token Accounting OS.
- * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+ * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
 
 export function createMeteredAICall({ tokenAccounting, savingsLedger, logger = console }) {

@@ -8,7 +8,7 @@
  *
  * Exports: createChildLearningEngine({ pool, callAI })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createChildLearningEngine({ pool, callAI }) {

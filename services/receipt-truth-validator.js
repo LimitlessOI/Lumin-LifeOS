@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Receipt truth validator — PASS claims must carry proof, not theater.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

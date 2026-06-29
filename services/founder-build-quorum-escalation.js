@@ -2,7 +2,7 @@
  * SYNOPSIS: Founder build quorum escalation — solo cap → 2-AI → 3-AI → Chair → Adam.
  * Each tier gets 3 rounds; web search fires before the final round of each tier.
  * All prior context (attempts, lessons, web research, deliberations) is shared with every new tier.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { createMemoryIntelligenceService } from './memory-intelligence-service.js';
 import { isCssOnlyUiFeedback } from './builder-instruction-target.js';

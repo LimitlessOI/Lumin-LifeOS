@@ -74,4 +74,4 @@ Digital twin + communication profile apply to **every account**. Apps and UI are
 - `docs/architecture/DIGITAL_TWIN_DOCTRINE.md` — twin = understanding layer
 - `docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md` — translation + cost routing
 
-@ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+@ssot docs/products/lifeos/PRODUCT_HOME.md

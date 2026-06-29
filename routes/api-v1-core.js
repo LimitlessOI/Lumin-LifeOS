@@ -6,7 +6,7 @@
  *   createSystemSnapshot, rollbackToSnapshot, implementNextQueuedIdea, incomeDroneSystem, callCouncilMember }
  * and mutable refs for comprehensiveIdeaTracker, vapiIntegration (lazy init in handlers).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from "node:fs/promises";
 import path from "node:path";

@@ -1,6 +1,6 @@
 <!-- SYNOPSIS: Site Builder Preview Quality Playbook -->
 
-The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file is missing from the repository. This response is grounded in `services/site-builder-quality-scorer.js` and `scripts/site-builder-quality-audit.mjs`.
+The `docs/products/site-builder/PRODUCT_HOME.md` file is missing from the repository. This response is grounded in `services/site-builder-quality-scorer.js` and `scripts/site-builder-quality-audit.mjs`.
 
 # Site Builder Preview Quality Playbook
 

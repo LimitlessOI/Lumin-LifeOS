@@ -8,7 +8,7 @@
  * - Invalid CSS-style single-slash "comments" inside <style> blocks (lines starting with / that are not // or /*)
  * - Known builder foot-gun substrings (/ ──, property; /)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import "dotenv/config";
 

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: js — tests/builderos-governed-loop-platform-gap-fill.test.js.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';

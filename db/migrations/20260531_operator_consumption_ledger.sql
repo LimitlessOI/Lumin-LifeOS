@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260531_operator_consumption_ledger.sql.
 -- Migration: 20260531_operator_consumption_ledger
 -- Token Accounting OS — OCL1 operator/Cursor ledger + unmetered exceptions + free-tier ledger + CCL placeholder columns
--- @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+-- @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
 
 BEGIN;
 

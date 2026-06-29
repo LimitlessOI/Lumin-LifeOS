@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This script provides a verification function for Runner Telemetry Generation 802.
  * It fetches health and efficiency data from the LifeOS control plane and autonomous telemetry

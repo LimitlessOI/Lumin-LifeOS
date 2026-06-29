@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-intake-workspace-service.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-intake-workspace-service.js
  * Agent-facing workspace for TC access readiness, inbox triage, and
  * transaction intake matching before live filing runs.

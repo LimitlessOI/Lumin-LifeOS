@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: services/lifeos-ambient-intelligence.js — contextual proactive nudge assembly (calendar, MITs, habits)
  * services/lifeos-ambient-intelligence.js — contextual proactive nudge assembly (calendar, MITs, habits)
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 import { makeLifeOSCalendarEventsResolver } from '../services/lifeos-calendar-events-resolver.js';

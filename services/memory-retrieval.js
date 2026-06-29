@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-retrieval.js
  */
 // services/memory-retrieval.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { buildProvenanceChain } from './memory-provenance.js';
 
 const TRUST_TO_PERMISSION = {

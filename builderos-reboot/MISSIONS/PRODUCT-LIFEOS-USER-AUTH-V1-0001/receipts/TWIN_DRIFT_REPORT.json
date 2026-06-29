@@ -1,0 +1,77 @@
+{
+  "schema": "twin_drift_report_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "scored_at": "2026-06-29T17:19:18.959Z",
+  "scored_by": "Hist",
+  "simulation_vs_reality": [
+    {
+      "metric_id": "acceptance_pass",
+      "seat": "Builder",
+      "predicted": "PASS",
+      "actual": "PASS",
+      "how_we_know_if_wrong": "BUILDER_RUN_RECEIPT.acceptance_exit_code and acceptance receipt verdict",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "technical_pass",
+      "seat": "CFO",
+      "predicted": "LIKELY",
+      "actual": "NOT_COMPLETE",
+      "how_we_know_if_wrong": "OBJECTIVE_VERDICT.verdict after acceptance",
+      "match": false,
+      "variance": "predicted \"LIKELY\" got \"NOT_COMPLETE\"",
+      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "deploy_required",
+      "seat": "CFO",
+      "predicted": true,
+      "actual": true,
+      "how_we_know_if_wrong": "Production acceptance implies deploy occurred or was unnecessary",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "production_route_probe",
+      "seat": "SNT",
+      "predicted": "routes_missing",
+      "actual": "routes_live",
+      "how_we_know_if_wrong": "Set PUBLIC_BASE_URL + COMMAND_CENTER_KEY to probe production routes",
+      "match": false,
+      "variance": "predicted \"routes_missing\" got \"routes_live\"",
+      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "intent_measurable",
+      "seat": "SNT",
+      "predicted": "clear",
+      "actual": "FAIL",
+      "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
+      "match": false,
+      "variance": "predicted \"clear\" got \"FAIL\"",
+      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "blocking_attack_count",
+      "seat": "SNT",
+      "predicted": 0,
+      "actual": "FAIL",
+      "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
+      "match": false,
+      "variance": "predicted 0 got \"FAIL\"",
+      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_by": "Hist"
+    }
+  ],
+  "drift_count": 4,
+  "pass": false,
+  "lesson": "Simulation diverged from reality — update department models and gates."
+}

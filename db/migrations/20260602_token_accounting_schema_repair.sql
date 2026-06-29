@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260602_token_accounting_schema_repair.sql.
 -- Migration: 20260602_token_accounting_schema_repair
 -- Repair partial 20260531 apply — add missing OCL/token_usage_log columns + unmetered + unified view
--- @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+-- @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
 
 BEGIN;
 

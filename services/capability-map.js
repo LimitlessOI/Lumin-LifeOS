@@ -12,7 +12,7 @@
  * Uses Gemini 2.5 Pro (1M context) to read the full amendment index in one
  * call, so it cross-references all 19+ amendments simultaneously.
  *
- * @ssot docs/projects/AMENDMENT_20_CAPABILITY_MAP.md
+ * @ssot docs/products/capability-map/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

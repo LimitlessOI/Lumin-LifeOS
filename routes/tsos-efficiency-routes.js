@@ -6,7 +6,7 @@ import { buildTsosEvidenceQuality } from '../services/builderos-tsos-evidence.js
 import { listRoutingDecisions } from '../services/builderos-tsos-routing.js';
 
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 export function createTsosEfficiencyRoutes({ requireKey, pool }) {
   const router = express.Router();

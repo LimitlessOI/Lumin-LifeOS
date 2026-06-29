@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE social comment/DM engagement suggestions.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeREClientComms } from './lifere-client-comms.js';
 

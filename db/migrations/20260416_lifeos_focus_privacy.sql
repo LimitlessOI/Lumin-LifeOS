@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260416_lifeos_focus_privacy.sql.
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 -- LifeOS focus sessions, privacy windows, redaction jobs, and command log
 
 CREATE TABLE IF NOT EXISTS lifeos_focus_sessions (

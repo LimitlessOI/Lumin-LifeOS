@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Token Accounting OS — universal metered ledger + budget gates + health.
- * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+ * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
 
 import { createOperatorConsumptionLedgerService } from './operator-consumption-ledger-service.js';

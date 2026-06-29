@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|--------|
 | **Status** | **Phase 0 IMPLEMENTED on disk — deploy proof BLOCKED until Railway redeploy** |
-| **Authority** | Subordinate to `docs/SSOT_NORTH_STAR.md`; does **not** amend North Star |
+| **Authority** | Subordinate to `docs/constitution/NORTH_STAR_SSOT.md`; does **not** amend North Star |
 | **Last Updated** | 2026-05-24 |
 | **Operating prompt** | `prompts/00-RESIDENT-ARCHITECT.md` |
 | **Contradiction register** | `docs/architecture/OPEN_CONTRADICTIONS.md` |
@@ -55,7 +55,7 @@ It is **not** an HTTP router. It is the **syscall surface** that:
 | **LifeOS Kernel** | Sounds like consumer product core | **THINK** — **avoid** without qualifier |
 | **TSOS Platform Kernel** | Platform execution governance | **THINK** — **preferred name** |
 
-`docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md`: *“BuilderOS is not LifeOS… LifeOS is a product built by BuilderOS.”*
+`docs/products/builderos/PRODUCT_HOME.md`: *“BuilderOS is not LifeOS… LifeOS is a product built by BuilderOS.”*
 
 The kernel governs **platform execution**; LifeOS apps **invoke** it.
 

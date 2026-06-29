@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Runtime route composition for the main Express app.
  * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  * Runtime route composition for the main Express app.
  * This keeps server.js as a composition root instead of a second implementation file.

@@ -3,7 +3,7 @@
  * OIL self-repair detectors — runtime proof parity, proof-store alignment,
  * and OIL missed-issue receipts. No secrets in output.
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { execSync } from 'node:child_process';

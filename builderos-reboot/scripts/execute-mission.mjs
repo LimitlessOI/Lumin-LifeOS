@@ -4,7 +4,7 @@
  * Execute all steps in a mission blueprint, then run acceptance tests.
  * Procedure (mandatory): pre-build simulate → map decision gaps → execute → acceptance → receipt.
  * Usage: node execute-mission.mjs <mission-id> [--from STEP] [--dry-run]
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';

@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * Verifies runner telemetry for Generation 555 by fetching control plane health and autonomous telemetry efficiency.
  * This module is part of the governed loop for BuilderOS.
  */

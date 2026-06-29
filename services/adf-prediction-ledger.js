@@ -3,7 +3,7 @@
  * ADF Prediction Ledger — predict founder behavior, score against reality, adjust weights.
  * Assistive oracle only — predicted never overrides actual (NSSOT §2.0Q).
  *
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';

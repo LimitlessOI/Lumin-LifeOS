@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: clientcare-sellable-service.js
- * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
+ * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
  * clientcare-sellable-service.js
  * Multi-tenant packaging, onboarding, and audit helpers for ClientCare billing recovery.
  */

@@ -16,7 +16,7 @@
  * Constitutional constraint: every screening result must include the plain-language
  * framing: "pattern consistent with X — here's a free thing to try first."
  *
- * @ssot docs/projects/AMENDMENT_34_KIDS_OS.md
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
  */
 
 export const SCREENING_PATTERNS = {

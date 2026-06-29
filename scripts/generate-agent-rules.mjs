@@ -14,7 +14,7 @@
  * Run: npm run gen:rules
  * Auto-run: pre-commit hook regenerates this if NSSOT or Companion staged.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';
@@ -27,14 +27,13 @@ const BASELINE = path.join(ROOT, 'docs', '.compact-rules-baseline');
 
 async function main() {
   const out = `# AGENT RULES — COMPACT ENFORCEMENT
-> Generated: ${new Date().toISOString()} | Regenerate: \`npm run gen:rules\`
-> NSSOT only for constitutional edits. **Next:** \`prompts/00-HIST-LEGACY-BOUNDARY.md\` (do not skip).
+> gen:\`npm run gen:rules\` | NSSOT=\`docs/constitution/NORTH_STAR_SSOT.md\` | Next:\`prompts/00-HIST-LEGACY-BOUNDARY.md\`
 
 ## HIST (mandatory first)
-Legacy=Hist-owned; salvage-only. Law:\`prompts/00-HIST-LEGACY-BOUNDARY.md\`. Factory:\`builderos-reboot/MISSIONS/\`. Live:\`routes/\`/\`services/\`.
+Legacy=Hist-owned;salvage-only. Law:\`prompts/00-HIST-LEGACY-BOUNDARY.md\`. Factory:\`builderos-reboot/MISSIONS/\`. Live:\`routes/\`/\`services/\`.
 
 ## HIERARCHY
-NSSOT > Companion > \`CLAUDE.md\` > Amendments > repo
+NSSOT > Companion > \`CLAUDE.md\` > product homes > repo
 
 ## SUPREME LAWS
 - §2.6: truth labels; no silent fail.
@@ -61,13 +60,13 @@ CLAIM→INVARIANT. Violations \`/memory/agents/violations\`.
 START:Hist,preflight,QL. BUILD:/build→GAP-FILL. END:receipts. PUSH unless hold. HARD:\`lifeos:bp-priority:verify\`.
 
 ## SSOT
-Read full file before edit SSOT-class docs. Atomic file→receipt.
+Read full SSOT before edit. Atomic file→receipt. History=parts car only.
 
 ## PROHIBITED
 Lie; extend legacy; done w/o receipts; \`--no-verify\`; env gaslight; IDE when system owed.
 
 ## STATE
-\`QUICK_LAUNCH\` queue · \`CONTINUITY_LOG\` · AM21/17/39 handoffs
+\`QUICK_LAUNCH\` · \`CONTINUITY_LOG\` · product handoffs
 `
 
   // TOKEN BUDGET LAW: new output must be <= baseline (system must improve, never regress)

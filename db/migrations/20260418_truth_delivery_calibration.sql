@@ -5,7 +5,7 @@
 -- likely to receive hard truths (not just which style).
 -- Also adds a convenience view `truth_deliveries` because the scheduler previously
 -- referenced that name and fell through as zero on every DB (drift fix).
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

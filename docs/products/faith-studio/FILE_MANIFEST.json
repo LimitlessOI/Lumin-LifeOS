@@ -1,0 +1,34 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "faith-studio",
+  "project_id": "faith_studio",
+  "name": "Faith Studio",
+  "canonical_home": "docs/products/faith-studio/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/faith-studio/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/faith-studio/PRODUCT_HOME.md",
+    "docs/products/faith-studio/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/faith-studio/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/faith-studio/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "Source vs tradition vs interpretation are distinct and visible",
+    "Private witness mode is defined separately from public sacred publishing",
+    "Tradition-specific rendering is explicit rather than hidden in prompts"
+  ]
+}

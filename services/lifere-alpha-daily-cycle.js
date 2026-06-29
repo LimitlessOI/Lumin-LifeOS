@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE alpha daily cycle — one-shot founder success test orchestration.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeRECommandCenter } from './lifere-command-center.js';
 import { createLifeREPerformanceTwin } from './lifere-performance-twin.js';

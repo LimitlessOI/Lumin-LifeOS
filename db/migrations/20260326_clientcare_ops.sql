@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260326_clientcare_ops.sql.
--- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
+-- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
 -- ClientCare billing ops assistant + capability queue
 
 CREATE TABLE IF NOT EXISTS clientcare_capability_requests (

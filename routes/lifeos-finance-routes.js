@@ -3,7 +3,7 @@
  * LifeOS Personal Finance API — mirror / clarity only; not investment advice.
  * Mounted at /api/v1/lifeos/finance
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

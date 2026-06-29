@@ -3,7 +3,7 @@
 # LifeOS Version Roadmap — Machine Path
 
 **Authority:** `builderos-reboot/LIFEOS_VERSION_QUEUE.json` (machine queue)  
-**Amendment:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`  
+**Amendment:** `docs/products/lifeos/PRODUCT_HOME.md`  
 **Last Updated:** 2026-06-16
 
 Adam's machine Alpha: foundation pipeline PASS + acceptance command PASS. Not app usage.

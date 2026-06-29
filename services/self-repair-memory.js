@@ -2,8 +2,8 @@
  * SYNOPSIS: Self-repair memory write-back — lessons from real execution logs only.
  * Self-repair memory write-back — lessons from real execution logs only.
  *
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

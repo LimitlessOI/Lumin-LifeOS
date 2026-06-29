@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-provenance.js
  */
 // services/memory-provenance.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 
 const buildProvenanceChain = async (capsuleId, retrievalLane, whyRetrieved, allowedUse, pool) => {
   if (!whyRetrieved || !allowedUse) {

@@ -3,8 +3,8 @@
  * Classify self-repair memory lessons from observable lesson fields only.
  * Unknown → UNKNOWN (never guessed).
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
 export const LESSON_CLASSIFICATIONS = Object.freeze([

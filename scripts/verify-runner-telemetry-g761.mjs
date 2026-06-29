@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 /**
@@ -28,7 +28,7 @@ async function fetchJson(baseUrl, path, commandKey) {
 }
 
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 export async function runRunnerTelemetryG761Verification({ baseUrl, commandKey }) {
   try {

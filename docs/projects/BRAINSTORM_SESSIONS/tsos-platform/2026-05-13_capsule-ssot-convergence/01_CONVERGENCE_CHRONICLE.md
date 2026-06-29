@@ -38,7 +38,7 @@ The architecture exists because of a recurring failure mode: **chat continuity i
 
 **Convergence thesis:** Older Capsule ideas and current SSOT/TSOS/Lumin are **complementary**, not opposing. Capsule-era patterns were often **more alive and operator-readable**; the current stack is **stronger at governance, evidence, runtime truth, and safe autonomy**. The correct next move is **activation** (populate and wire what already exists), not a wholesale redesign and not a return to unstructured swarm behavior.
 
-**Major vocabulary tension (must not be lost):** In `docs/SSOT_NORTH_STAR.md`, **TokenSaverOS (TSOS)** is defined today as the **canonical name of the unified platform** (one stack). Adam’s convergence framing narrows **TSOS** to an **efficiency / token-saving metabolism layer** distinct from **SSOT governance**. That is a **load-bearing definition change**. Until NSSOT language is updated via the **lawful amendment path** (Article II §2.12 where applicable), treat the **narrow TSOS** definition as a **brainstorm target**, not as already-constitutional fact. The **machine channel** lexicon (`docs/TSOS_SYSTEM_LANGUAGE.md`, NSSOT §2.14) already partially separates “TSOS as compression/control prose” from human-facing reports.
+**Major vocabulary tension (must not be lost):** In `docs/constitution/NORTH_STAR_SSOT.md`, **TokenSaverOS (TSOS)** is defined today as the **canonical name of the unified platform** (one stack). Adam’s convergence framing narrows **TSOS** to an **efficiency / token-saving metabolism layer** distinct from **SSOT governance**. That is a **load-bearing definition change**. Until NSSOT language is updated via the **lawful amendment path** (Article II §2.12 where applicable), treat the **narrow TSOS** definition as a **brainstorm target**, not as already-constitutional fact. The **machine channel** lexicon (`docs/TSOS_SYSTEM_LANGUAGE.md`, NSSOT §2.14) already partially separates “TSOS as compression/control prose” from human-facing reports.
 
 ---
 
@@ -76,7 +76,7 @@ Legend: **VERIFIED** (in repo, evidenced) · **PARTIAL** · **INERT** (designed 
 
 | # | Topic | Status | Notes |
 |---|--------|--------|------|
-| A | SSOT as constitutional truth | **VERIFIED** | `docs/SSOT_NORTH_STAR.md`, amendments, Companion |
+| A | SSOT as constitutional truth | **VERIFIED** | `docs/constitution/NORTH_STAR_SSOT.md`, amendments, Companion |
 | B | TSOS *only* as metabolism (narrow) | **PARTIAL** / **UNKNOWN** as law | NSSOT §2.11a currently names TSOS as whole platform; narrow layer is convergence **target** |
 | C | Capsule named as cognition layer in SSOT | **MISSING** | Informal in brainstorm only; AM39 is closest formal owner |
 | D | Evidence ladder (AM39) | **VERIFIED** | Levels 0–6; governance ladder kept separate |
@@ -98,10 +98,10 @@ Legend: **VERIFIED** (in repo, evidenced) · **PARTIAL** · **INERT** (designed 
 
 | Concept | Class | Evidence (repo) |
 |---------|--------|-------------------|
-| SSOT / epistemic law | **VERIFIED** | `docs/SSOT_NORTH_STAR.md` (e.g. §2.6, §2.10, §2.12, audit tiers) |
+| SSOT / epistemic law | **VERIFIED** | `docs/constitution/NORTH_STAR_SSOT.md` (e.g. §2.6, §2.10, §2.12, audit tiers) |
 | TSOS as platform name + efficiency machinery | **VERIFIED** | Same NSSOT **§2.11a** names TSOS; `docs/TSOS_SYSTEM_LANGUAGE.md`, `services/token-optimizer.js`, `npm run tsos:tokens` / suite per **AMENDMENT_21** handoff |
 | TSOS *only* = metabolism (narrow) | **PARTIAL / target** | Vocabulary tension called out in §1 above — **not** NSSOT-aligned until **Article VII / §2.12** path |
-| Memory Intelligence (evidence ladder 0–6) | **VERIFIED** spec + routes | `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`; `db/migrations/20260426_memory_intelligence*.sql`; `services/memory-intelligence-service.js`; `routes/memory-intelligence-routes.js`; mount **`startup/register-runtime-routes.js`** → `app.use('/api/v1/memory', …)` |
+| Memory Intelligence (evidence ladder 0–6) | **VERIFIED** spec + routes | `docs/products/memory-intelligence/PRODUCT_HOME.md`; `db/migrations/20260426_memory_intelligence*.sql`; `services/memory-intelligence-service.js`; `routes/memory-intelligence-routes.js`; mount **`startup/register-runtime-routes.js`** → `app.use('/api/v1/memory', …)` |
 | Memory tables **populated** on prod | **UNKNOWN** | Requires Neon query or `GET /api/v1/memory/health` on deployed env |
 | Council / gate-change persistence | **PARTIAL** | `db/migrations/20260422_gate_change_proposals.sql` + `services/lifeos-gate-change-proposals.js`; **AM39** `debate_records` for richer debate shape — **not** one unified “ledger row” UX |
 | `data/memories.json` (legacy file store) | **VERIFIED** non-empty | Sample rows present (e.g. `system_foundation` facts); **parallel** to AM39, not replacement |
@@ -300,7 +300,7 @@ The following are smaller than the §10 slices and should be considered first pe
 
 ### 16e. TSOS vocabulary tension (confirm §1 note is accurate)
 
-`docs/SSOT_NORTH_STAR.md` — `grep` confirms §2.11a uses "TokenSaverOS (TSOS)" as the canonical platform name for the entire system, not as a metabolism-only sublayer. The narrow definition (TSOS = efficiency metabolism only) is Adam's convergence intent from this brainstorm session. Until the North Star is formally amended via Article VII / §2.12 process, **both definitions coexist** and the narrow one is **brainstorm-target, not law**. §1 of this chronicle correctly identifies this tension.
+`docs/constitution/NORTH_STAR_SSOT.md` — `grep` confirms §2.11a uses "TokenSaverOS (TSOS)" as the canonical platform name for the entire system, not as a metabolism-only sublayer. The narrow definition (TSOS = efficiency metabolism only) is Adam's convergence intent from this brainstorm session. Until the North Star is formally amended via Article VII / §2.12 process, **both definitions coexist** and the narrow one is **brainstorm-target, not law**. §1 of this chronicle correctly identifies this tension.
 
 ### 16f. What the audit proves about the current system
 

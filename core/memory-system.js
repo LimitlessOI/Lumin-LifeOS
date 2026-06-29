@@ -2,7 +2,7 @@
  * SYNOPSIS: MEMORY SYSTEM - LEGACY CRUD MEMORY STORE
  * MEMORY SYSTEM - LEGACY CRUD MEMORY STORE
  *
- * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
  * @legacy STATUS: LEGACY_KEEP — flat-file memory store preserved for historical
  * compatibility and migration reference only. Not canonical for BuilderOS alpha
  * proof, capsule governance, or Amendment 39 evidence memory.

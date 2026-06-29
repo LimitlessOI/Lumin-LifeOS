@@ -2,7 +2,7 @@
  * SYNOPSIS: Focus sessions, privacy windows, and lightweight command execution for LifeOS.
  * Focus sessions, privacy windows, and lightweight command execution for LifeOS.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 function toMinutes(value, unit) {

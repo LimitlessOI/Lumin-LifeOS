@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-relationship.js
  */
 // services/memory-relationship.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 
 const LANE_ORDER = [
   'context_lane',

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS TSOS internal hook — emits tsos_internal_hook telemetry row
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * after a governed loop job commits. Proof source for tsos_internal_hooks
  * maturity scoring (TSOS_HOOK_BOUNDARY.md). Only emits on actual commit.
  */

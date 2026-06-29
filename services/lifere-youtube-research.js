@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE YouTube research (501 without API key, manual fallback).
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export function createLifeREYouTubeResearch() {

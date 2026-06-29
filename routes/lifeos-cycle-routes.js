@@ -15,7 +15,7 @@
  * Zero AI cost — all computation is pure math + SQL.
  * Data sovereignty: tracking is opt-in via cycle_settings.tracking_enabled.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { createCycleService } from '../services/lifeos-cycle.js';

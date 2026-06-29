@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: This utility provides functionality to audit zone mutations within the BuilderOS platform.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This utility provides functionality to audit zone mutations within the BuilderOS platform.
  * It processes a collection of zone mutation records and categorizes them by their

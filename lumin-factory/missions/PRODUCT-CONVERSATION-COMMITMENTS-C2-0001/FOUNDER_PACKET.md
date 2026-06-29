@@ -283,7 +283,7 @@ Full v1 success table (§What v1 must prove) remains the **product mission north
 
 ## References
 
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Commitment → execution desk
+- `docs/products/lifeos/PRODUCT_HOME.md` — Commitment → execution desk
 - `docs/C2_CANONICAL_DEFINITION.md`
 - `prompts/00-PROVIDER-STRATEGY-LOCK.md`
 - `docs/architecture/COUNCIL_ROUTING_AUDIT_V1.md`

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: This module provides read-only audit capabilities for the LifeOS platform.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * This module provides read-only audit capabilities for the LifeOS platform.
  * It fetches data from specified internal apiEPs to assess system status
  * and identify potential issues without performing any mutations or direct db access.

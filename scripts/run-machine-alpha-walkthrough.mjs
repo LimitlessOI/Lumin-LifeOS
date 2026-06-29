@@ -3,7 +3,7 @@
  * SYNOPSIS: Machine Alpha Walkthrough — simulates founder UI session before Point B handoff.
  * Runs: open app URL, LifeRE daily cycle, Lumin counsel chat, build command via chat.
  * All steps must PASS before MACHINE_ALPHA_WALKTHROUGH.json is written as green.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -5,7 +5,7 @@
  * OIL-only audit probes — run inside Railway with runtime secrets.
  * Not general Builder execution; requires x-command-center-key.
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

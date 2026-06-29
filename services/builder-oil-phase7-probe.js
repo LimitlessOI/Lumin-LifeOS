@@ -5,7 +5,7 @@
  * OIL-only Phase 7 live Gemini audit-before-done probe (Railway runtime).
  * Never returns or logs API key values.
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

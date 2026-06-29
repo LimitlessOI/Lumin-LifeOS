@@ -1,25 +1,550 @@
 {
   "schema": "product_readiness_report_v1",
-  "updated_at": "2026-06-29T08:35:05.946Z",
+  "updated_at": "2026-06-29T17:24:44.666Z",
   "authority": {
     "product_registry": "docs/products/PRODUCT_REGISTRY.json",
     "bp_priority": "builderos-reboot/BP_PRIORITY.json",
     "point_b_target": "builderos-reboot/POINT_B_TARGET.json"
   },
   "summary": {
-    "products": 9,
+    "products": 43,
     "missing_product_homes": 0,
-    "active_bp_products": 2,
+    "active_bp_products": 3,
     "point_b_complete_products": 0
   },
   "missing_homes": [],
   "products": [
     {
+      "product_id": "ai-council",
+      "name": "Ai Council",
+      "canonical_home": "docs/products/ai-council/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/ai-council/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "ai-receptionist",
+      "name": "Ai Receptionist",
+      "canonical_home": "docs/products/ai-receptionist/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/ai-receptionist/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "api-cost-savings",
+      "name": "API Cost Savings",
+      "canonical_home": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": "/",
+      "bp_priority": [],
+      "notes": [
+        "5-layer stack built. Landing page live (products/api-service/index.html).",
+        "No paying B2B customer yet. Gap is customer acquisition spec, not code.",
+        "No FOUNDER_PACKET or BLUEPRINT.json yet."
+      ]
+    },
+    {
+      "product_id": "boldtrail",
+      "name": "BoldTrail",
+      "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/boldtrail/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "SHARED_PLATFORM_MODULE",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "LIVE shared CRM adapter — part of LifeRE stack, available to any product that needs CRM access.",
+        "No standalone mission. No FOUNDER_PACKET or BLUEPRINT.json needed.",
+        "Will eventually be replaced; isolation is in this module so consumers are unaffected."
+      ]
+    },
+    {
+      "product_id": "builderos",
+      "name": "Builderos",
+      "canonical_home": "docs/products/builderos/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/builderos/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "BLUEPRINT_ACTIVE",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [
+        {
+          "rank": 6,
+          "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": null
+        },
+        {
+          "rank": 7,
+          "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-DEPLOY-TRUTH",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": null
+        },
+        {
+          "rank": 8,
+          "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-FOUNDER-UI",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": null
+        },
+        {
+          "rank": 9,
+          "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-SAME-TIER",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": null
+        }
+      ],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "business-tools",
+      "name": "Business Tools",
+      "canonical_home": "docs/products/business-tools/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/business-tools/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "capability-map",
+      "name": "Capability Map",
+      "canonical_home": "docs/products/capability-map/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/capability-map/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "clientcare-billing-recovery",
+      "name": "ClientCare Billing Recovery",
+      "canonical_home": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Core services exist. Browser-automation approach (Puppeteer — no vendor API).",
+        "No FOUNDER_PACKET, BLUEPRINT.json, or acceptance criteria.",
+        "Sensitive domain: submissions require human approval gate."
+      ]
+    },
+    {
+      "product_id": "command-center",
+      "name": "Command Center",
+      "canonical_home": "docs/products/command-center/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/command-center/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "conflict-arbitrator",
+      "name": "Conflict Arbitrator",
+      "canonical_home": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "creator-media-os",
+      "name": "Creator Media Os",
+      "canonical_home": "docs/products/creator-media-os/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/creator-media-os/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "enterprise-ai-governance",
+      "name": "Enterprise Ai Governance",
+      "canonical_home": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "faith-studio",
+      "name": "Faith Studio",
+      "canonical_home": "docs/products/faith-studio/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/faith-studio/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "financial-revenue",
+      "name": "Financial Revenue",
+      "canonical_home": "docs/products/financial-revenue/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/financial-revenue/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "game-publisher",
+      "name": "Game Publisher",
+      "canonical_home": "docs/products/game-publisher/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/game-publisher/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "ideavault",
+      "name": "IdeaVault",
+      "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/ideavault/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "PLATFORM_TOOL",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Platform tool — not a product, not in BuilderOS mission queue.",
+        "Intake and routing engine: routes conversations/ideas to docs/products/<id>/conversations/ or AMENDMENT_38 catalog.",
+        "idea-queue-routes.js and idea-engine.js are platform utilities any product can call."
+      ]
+    },
+    {
+      "product_id": "kids-os",
+      "name": "Kids Os",
+      "canonical_home": "docs/products/kids-os/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/kids-os/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "kingsman-protocol",
+      "name": "Kingsman Protocol",
+      "canonical_home": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "knowledge-base",
+      "name": "Knowledge Base",
+      "canonical_home": "docs/products/knowledge-base/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/knowledge-base/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "life-coaching",
+      "name": "Life Coaching",
+      "canonical_home": "docs/products/life-coaching/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/life-coaching/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
       "product_id": "lifeos",
       "name": "LifeOS",
       "canonical_home": "docs/products/lifeos/PRODUCT_HOME.md",
       "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "law_path": "docs/products/lifeos/PRODUCT_HOME.md",
       "law_path_exists": true,
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "BLUEPRINT_ACTIVE",
@@ -90,6 +615,19 @@
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
+        },
+        {
+          "rank": 11,
+          "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": {
+            "at": "2026-06-29T17:24:44.666Z",
+            "mode": "technical_acceptance",
+            "status": "CURRENT"
+          }
         }
       ],
       "notes": [
@@ -102,7 +640,7 @@
       "name": "LifeRE",
       "canonical_home": "docs/products/lifere/PRODUCT_HOME.md",
       "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_LIFERE.md",
+      "law_path": "docs/products/lifere/PRODUCT_HOME.md",
       "law_path_exists": true,
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "TECHNICAL_PASS_ONLY",
@@ -142,11 +680,11 @@
       ]
     },
     {
-      "product_id": "tc-service",
-      "name": "TC Service",
-      "canonical_home": "docs/products/tc-service/PRODUCT_HOME.md",
+      "product_id": "lumin-university",
+      "name": "Lumin University",
+      "canonical_home": "docs/products/lumin-university/PRODUCT_HOME.md",
       "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "law_path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "law_path_exists": true,
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
@@ -159,11 +697,227 @@
       "alpha_readiness": null,
       "point_b_mission_id": null,
       "point_b_locked": false,
-      "default_runtime_surface": "/tc",
+      "default_runtime_surface": null,
       "bp_priority": [],
       "notes": [
-        "Most code-complete unmissioned product in the repo (40+ services, 3 portals).",
-        "No FOUNDER_PACKET or BLUEPRINT.json. Needs mission formalization to enter BuilderOS queue."
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "marketingos",
+      "name": "MarketingOS",
+      "canonical_home": "docs/products/marketingos/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/marketingos/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": "/api/v1/socialmediaos",
+      "bp_priority": [],
+      "notes": [
+        "Formerly Amendment 41.",
+        "SocialMediaOS is the first module — see modules.socialmediaos."
+      ]
+    },
+    {
+      "product_id": "memory-intelligence",
+      "name": "Memory Intelligence",
+      "canonical_home": "docs/products/memory-intelligence/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "memory-system",
+      "name": "Memory System",
+      "canonical_home": "docs/products/memory-system/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/memory-system/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "music-talent-studio",
+      "name": "Music Talent Studio",
+      "canonical_home": "docs/products/music-talent-studio/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "oil-security-divisions",
+      "name": "Oil Security Divisions",
+      "canonical_home": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "outreach-crm",
+      "name": "Outreach Crm",
+      "canonical_home": "docs/products/outreach-crm/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/outreach-crm/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "personal-finance-os",
+      "name": "Personal Finance Os",
+      "canonical_home": "docs/products/personal-finance-os/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "productized-sprint",
+      "name": "Productized Sprint",
+      "canonical_home": "docs/products/productized-sprint/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/productized-sprint/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "project-governance",
+      "name": "Project Governance",
+      "canonical_home": "docs/products/project-governance/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/project-governance/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
       ]
     },
     {
@@ -171,7 +925,7 @@
       "name": "Site Builder",
       "canonical_home": "docs/products/site-builder/PRODUCT_HOME.md",
       "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "law_path": "docs/products/site-builder/PRODUCT_HOME.md",
       "law_path_exists": true,
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
@@ -193,11 +947,11 @@
       ]
     },
     {
-      "product_id": "clientcare-billing-recovery",
-      "name": "ClientCare Billing Recovery",
-      "canonical_home": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+      "product_id": "story-studio",
+      "name": "Story Studio",
+      "canonical_home": "docs/products/story-studio/PRODUCT_HOME.md",
       "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+      "law_path": "docs/products/story-studio/PRODUCT_HOME.md",
       "law_path_exists": true,
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
@@ -213,69 +967,15 @@
       "default_runtime_surface": null,
       "bp_priority": [],
       "notes": [
-        "Core services exist. Browser-automation approach (Puppeteer — no vendor API).",
-        "No FOUNDER_PACKET, BLUEPRINT.json, or acceptance criteria.",
-        "Sensitive domain: submissions require human approval gate."
+        "Canonical product home migrated from amendment."
       ]
     },
     {
-      "product_id": "ideavault",
-      "name": "IdeaVault",
-      "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
+      "product_id": "tc-service",
+      "name": "TC Service",
+      "canonical_home": "docs/products/tc-service/PRODUCT_HOME.md",
       "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
-      "law_path_exists": true,
-      "status": "PLATFORM_TOOL",
-      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
-      "ui_alpha_gate": {
-        "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": true,
-        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
-        "stale_against_objective": false
-      },
-      "alpha_readiness": null,
-      "point_b_mission_id": null,
-      "point_b_locked": false,
-      "default_runtime_surface": null,
-      "bp_priority": [],
-      "notes": [
-        "Platform tool — not a product, not in BuilderOS mission queue.",
-        "Intake and routing engine: routes conversations/ideas to docs/products/<id>/conversations/ or AMENDMENT_38 catalog.",
-        "idea-queue-routes.js and idea-engine.js are platform utilities any product can call."
-      ]
-    },
-    {
-      "product_id": "boldtrail",
-      "name": "BoldTrail",
-      "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
-      "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
-      "law_path_exists": true,
-      "status": "SHARED_PLATFORM_MODULE",
-      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
-      "ui_alpha_gate": {
-        "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": true,
-        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
-        "stale_against_objective": false
-      },
-      "alpha_readiness": null,
-      "point_b_mission_id": null,
-      "point_b_locked": false,
-      "default_runtime_surface": null,
-      "bp_priority": [],
-      "notes": [
-        "LIVE shared CRM adapter — part of LifeRE stack, available to any product that needs CRM access.",
-        "No standalone mission. No FOUNDER_PACKET or BLUEPRINT.json needed.",
-        "Will eventually be replaced; isolation is in this module so consumers are unaffected."
-      ]
-    },
-    {
-      "product_id": "api-cost-savings",
-      "name": "API Cost Savings",
-      "canonical_home": "docs/products/api-cost-savings/PRODUCT_HOME.md",
-      "canonical_home_exists": true,
-      "law_path": "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+      "law_path": "docs/products/tc-service/PRODUCT_HOME.md",
       "law_path_exists": true,
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
@@ -288,23 +988,22 @@
       "alpha_readiness": null,
       "point_b_mission_id": null,
       "point_b_locked": false,
-      "default_runtime_surface": "/",
+      "default_runtime_surface": "/tc",
       "bp_priority": [],
       "notes": [
-        "5-layer stack built. Landing page live (products/api-service/index.html).",
-        "No paying B2B customer yet. Gap is customer acquisition spec, not code.",
-        "No FOUNDER_PACKET or BLUEPRINT.json yet."
+        "Most code-complete unmissioned product in the repo (40+ services, 3 portals).",
+        "No FOUNDER_PACKET or BLUEPRINT.json. Needs mission formalization to enter BuilderOS queue."
       ]
     },
     {
-      "product_id": "voice_rail",
-      "name": "Voice Rail",
-      "canonical_home": "docs/VOICE_RAIL_HISTORY_ONLY.md",
+      "product_id": "teacher-os",
+      "name": "Teacher Os",
+      "canonical_home": "docs/products/teacher-os/PRODUCT_HOME.md",
       "canonical_home_exists": true,
-      "law_path": "builderos-reboot/BP_PRIORITY.json",
+      "law_path": "docs/products/teacher-os/PRODUCT_HOME.md",
       "law_path_exists": true,
-      "status": "SCRAPPED_SALVAGE_ONLY",
-      "readiness_state": "SCRAPPED_SALVAGE_ONLY",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
         "ok": true,
@@ -317,14 +1016,181 @@
       "default_runtime_surface": null,
       "bp_priority": [],
       "notes": [
-        "Not an active product queue item.",
-        "Salvage STT/TTS/wake-word patterns only."
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "token-accounting-os",
+      "name": "Token Accounting Os",
+      "canonical_home": "docs/products/token-accounting-os/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "universal-overlay",
+      "name": "Universal Overlay",
+      "canonical_home": "docs/products/universal-overlay/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/universal-overlay/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "video-pipeline",
+      "name": "Video Pipeline",
+      "canonical_home": "docs/products/video-pipeline/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/video-pipeline/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "wellness-studio",
+      "name": "Wellness Studio",
+      "canonical_home": "docs/products/wellness-studio/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/wellness-studio/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "white-label",
+      "name": "White Label",
+      "canonical_home": "docs/products/white-label/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/white-label/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "word-keeper",
+      "name": "Word Keeper",
+      "canonical_home": "docs/products/word-keeper/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/word-keeper/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "zero-drift-handoff-protocol",
+      "name": "Zero Drift Handoff Protocol",
+      "canonical_home": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Canonical product home migrated from amendment."
       ]
     }
   ],
   "freshness": {
     "status": "CURRENT",
-    "updated_at": "2026-06-29T08:35:05.946Z",
+    "updated_at": "2026-06-29T17:24:44.666Z",
     "authority_paths": [
       "docs/products/PRODUCT_REGISTRY.json",
       "builderos-reboot/BP_PRIORITY.json",

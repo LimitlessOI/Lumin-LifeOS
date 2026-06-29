@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Commitment tracker API — add, complete, and list upcoming/overdue commitments.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * Commitment tracker API — add, complete, and list upcoming/overdue commitments.
  * Mounted at /api/v1/lifeos/commitments
  */

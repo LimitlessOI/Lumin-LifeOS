@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260325_tc_alerts.sql.
--- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+-- @ssot docs/products/tc-service/PRODUCT_HOME.md
 -- TC closed-loop alerting and escalation state.
 
 CREATE TABLE IF NOT EXISTS tc_alerts (

@@ -15,7 +15,7 @@
  *  - getOpen()             — list open commitments for a user
  *  - getOverdue()          — commitments past due_at that are still open
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const DEFAULT_PROD_INTERVAL_HOURS = 24;

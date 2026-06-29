@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Local clip vault — encrypted-at-rest IndexedDB audio on device only (conflict/win/commitment).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function (global) {
   const DB_NAME = 'lifeos_local_vault_v1';

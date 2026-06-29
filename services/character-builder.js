@@ -16,7 +16,7 @@
  *
  * No moralizing. No grades. No shame for wrong choices — the story shows the outcome.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const TRAITS = ['integrity', 'generosity', 'courage'];

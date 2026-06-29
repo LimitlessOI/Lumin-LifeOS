@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Lazy-load factory-staging arc modules (avoids boot crash if tree missing).
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 let cached = null;

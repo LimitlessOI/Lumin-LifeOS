@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE unified command center — BoldTrail + Performance + LifeOS crosscheck.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { enrichDailyCommandCenter } from './lifere-boldtrail-bridge.js';
 import { createLifeREOSService } from './lifere-os-v1.js';

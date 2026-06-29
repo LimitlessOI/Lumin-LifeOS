@@ -4,7 +4,7 @@
  * Warns (or fails in strict mode) when routes/services changed without
  * continuity / cold-start docs updated in the same change set.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { execSync } from 'child_process';
@@ -31,8 +31,8 @@ const continuityPaths = [
   'docs/CONTINUITY_LOG_LIFEOS.md',
   'docs/CONTINUITY_LOG_COUNCIL.md',
   'docs/AI_COLD_START.md',
-  'docs/projects/AMENDMENT_21_LIFEOS_CORE.md',
-  'docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md',
+  'docs/products/lifeos/PRODUCT_HOME.md',
+  'docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md',
 ];
 
 function main() {

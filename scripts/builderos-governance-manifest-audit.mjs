@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: This module fetches manifest data from the LifeOS platform via internal APIs and performs
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * @file scripts/builderos-governance-manifest-audit.mjs
  * @module builderos-governance-manifest-audit
  * @description Zone 1 read-only audit module for reporting AMENDMENT manifest.json validation counts.

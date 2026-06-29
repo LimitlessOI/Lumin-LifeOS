@@ -1,0 +1,35 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "conflict-arbitrator",
+  "project_id": "conflict_arbitrator",
+  "name": "Conflict Arbitrator",
+  "canonical_home": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
+    "docs/products/conflict-arbitrator/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/conflict-arbitrator/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/conflict-arbitrator/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "Overlay PWA designed and architecture approved",
+    "Legal review of 'mediation' terminology completed — must be labeled 'AI-assisted conflict resolution'",
+    "Two-party consent architecture hardened before any voice recording feature ships",
+    "Abuse detection safety protocols defined before public launch"
+  ]
+}

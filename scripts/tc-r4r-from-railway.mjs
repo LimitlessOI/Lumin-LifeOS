@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Uses an active local Railway CLI session to read **COMMAND_CENTER_KEY** from a
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  *
  * Uses an active local Railway CLI session to read **COMMAND_CENTER_KEY** from a
  * **linked** project directory, then runs **`tc-r4r-do-upload.mjs`** (mailbox → TD → optional seller reject).

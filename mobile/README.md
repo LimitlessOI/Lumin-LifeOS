@@ -2,7 +2,7 @@
 
 # LifeOS Native App — Universal Overlay Platform
 
-This is **not** a separate product. It is the **same universal overlay** described in `docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md`:
+This is **not** a separate product. It is the **same universal overlay** described in `docs/products/universal-overlay/PRODUCT_HOME.md`:
 
 > **This is the platform layer.** Every LifeOS program runs inside it.
 
@@ -87,5 +87,5 @@ Then `npm run mobile:sync`.
 
 - `public/shared/lifeos-native-shell.js` — native bridge
 - `public/overlay/lifeos-app.html` — universal shell UI
-- `docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md` — overlay law
+- `docs/products/universal-overlay/PRODUCT_HOME.md` — overlay law
 - `config/lifeos-stack-registry.json` — stack registry

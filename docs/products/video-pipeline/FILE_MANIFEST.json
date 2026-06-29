@@ -1,0 +1,16 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "video-pipeline",
+  "project_id": "video_pipeline",
+  "name": "Video Pipeline",
+  "canonical_home": "docs/products/video-pipeline/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/video-pipeline/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/video-pipeline/PRODUCT_HOME.md",
+    "docs/products/video-pipeline/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": []
+}

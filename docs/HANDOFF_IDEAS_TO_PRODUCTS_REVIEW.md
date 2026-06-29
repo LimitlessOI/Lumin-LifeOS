@@ -10,7 +10,7 @@
 
 ## 1. SSOT Hierarchy (Read First)
 
-1. **`docs/SSOT_NORTH_STAR.md`** — Constitution: mission, principles, change control, self-programming rules. **Wins all conflicts.**
+1. **`docs/constitution/NORTH_STAR_SSOT.md`** — Constitution: mission, principles, change control, self-programming rules. **Wins all conflicts.**
 2. **`docs/SSOT_COMPANION.md`** — Operations, enforcement, technical specs.
 3. **`docs/SOURCE_OF_TRUTH.md`** — Outcome targets, philosophy, “build our ideas” context.
 4. **`docs/TRUE_VISION.md`** — BE → DO → HAVE, phases, revenue targets.
@@ -43,7 +43,7 @@
 | Council / AI | `services/council-service.js`, `services/knowledge-context.js` |
 | Self-programming | `services/self-programming.js`, `modules/system/self-programming-module.js` |
 | Data/storage | `data/ideas/`, `knowledge/`, DB via `core/database.js` / `services/db.js` |
-| Docs (SSOT, vision) | `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `docs/SOURCE_OF_TRUTH.md`, `docs/TRUE_VISION.md`, `docs/architecture/target.md` |
+| Docs (SSOT, vision) | `docs/constitution/NORTH_STAR_SSOT.md`, `docs/SSOT_COMPANION.md`, `docs/SOURCE_OF_TRUTH.md`, `docs/TRUE_VISION.md`, `docs/architecture/target.md` |
 
 ---
 

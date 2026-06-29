@@ -8,7 +8,7 @@ This audit was built from direct reads of the current canonical files, not chat 
 
 Primary files read:
 
-- `docs/SSOT_NORTH_STAR.md`
+- `docs/constitution/NORTH_STAR_SSOT.md`
 - `docs/SSOT_COMPANION.md`
 - `docs/BUILDEROS_VOCABULARY.md`
 - `docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md`

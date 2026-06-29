@@ -23,7 +23,7 @@
  *   GET  /daily/recent                    — last N daily check-ins
  *   GET  /daily/trend                     — 14-day emotional trend summary (no AI)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

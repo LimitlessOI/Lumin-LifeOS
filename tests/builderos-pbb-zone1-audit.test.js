@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Regression: Zone-1 audit script PBB spec must not contradict operator instructions.
  * Regression: Zone-1 audit script PBB spec must not contradict operator instructions.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { describe, it } from 'node:test';

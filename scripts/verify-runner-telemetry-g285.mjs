@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * Script to verify runner telemetry for Generation 285.
  * Fetches health and efficiency data from BuilderOS and LifeOS APIs.
  */

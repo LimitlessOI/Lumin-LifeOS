@@ -36,7 +36,7 @@
  *   GET    /teachers/:id/impact                        — celebrate impact
  *   POST   /teachers/:id/guidance                      — new teacher guidance
  *
- * @ssot docs/projects/AMENDMENT_31_TEACHER_OS.md
+ * @ssot docs/products/teacher-os/PRODUCT_HOME.md
  */
 
 import express from 'express';

@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260327_model_performance.sql.
 -- Model Performance Ledger: tracks per-model, per-lens verdicts and outcome correlation
--- @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+-- @ssot docs/products/builderos/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS model_verdict_log (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -9,7 +9,7 @@
  *   - Respond to content.js queries about auth state
  *   - Handle extension install / update events
  *
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
 const STORAGE_KEY_TOKEN   = 'lumin_access_token';

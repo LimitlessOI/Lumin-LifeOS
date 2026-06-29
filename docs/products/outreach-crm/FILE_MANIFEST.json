@@ -1,0 +1,16 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "outreach-crm",
+  "project_id": "outreach_crm",
+  "name": "Outreach CRM",
+  "canonical_home": "docs/products/outreach-crm/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/outreach-crm/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/outreach-crm/PRODUCT_HOME.md",
+    "docs/products/outreach-crm/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": []
+}

@@ -4,7 +4,7 @@
 import express from 'express';
 
 /**
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 export function createCanonicalBacklogRoutes({ requireKey, pool }) {
   const router = express.Router();

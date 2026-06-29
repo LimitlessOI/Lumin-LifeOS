@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260405_future_self_simulator.sql.
 -- Migration: 20260405_future_self_simulator.sql
 -- Future Self Simulator + Commitment Simulator + Workshop of the Mind
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 -- ── Future Self Simulator ─────────────────────────────────────────────────────
 

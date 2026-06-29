@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-signal-intake.js
  */
 // services/memory-signal-intake.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { Pool } from 'pg';
 import crypto from 'node:crypto';
 

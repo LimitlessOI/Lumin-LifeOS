@@ -78,7 +78,7 @@
 
 | Name | What it is | Primary SSOT / code |
 |------|------------|---------------------|
-| **TCO / TokenSaverOS (product)** | Five-layer stack: prompt IR → **`token-optimizer`** → delta context → **free-tier cascade** → **savings ledger**; B2B proxy + dashboard. | `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md`, `docs/TCO_ANNEX.md`, `services/token-optimizer.js`, `services/free-tier-governor.js`, `services/council-service.js`, `services/savings-ledger.js` |
+| **TCO / TokenSaverOS (product)** | Five-layer stack: prompt IR → **`token-optimizer`** → delta context → **free-tier cascade** → **savings ledger**; B2B proxy + dashboard. | `docs/products/api-cost-savings/PRODUCT_HOME.md`, `docs/TCO_ANNEX.md`, `services/token-optimizer.js`, `services/free-tier-governor.js`, `services/council-service.js`, `services/savings-ledger.js` |
 | **TSOS (supervision)** | Machine scorecard: **`npm run tsos:builder`** runs preflight, probe, doctor, **`tsos-token-efficiency.mjs`**, daemon leg, operational grade. Token leg grades **today’s avg savings %**, free-tier headroom, DoD trend, 7d stability bonus. | `scripts/tsos-token-efficiency.mjs` (**`@ssot`** `AMENDMENT_21`), `scripts/tsos-suite-self-grade.mjs`, `docs/TSOS_TEN_UPLIFT_IDEAS.md` |
 
 **Honest constraint:** **75%** is an aggressive target vs typical blended council traffic; hitting it requires **routing + compression + cache + delta context** working together, not one knob. The TSOS scorecard’s savings component is **`min(60, (todayAvg/30)*60)`** — so **≥30% today** already maxes that slice; **75%** means **baseline-vs-actual** is dominated by **free/cheap routing + compression**, with quality gates still passing (**`tokenos-quality-check.js`**).
@@ -356,7 +356,7 @@
 ## Cross-links
 
 - **`docs/TSOS_TEN_UPLIFT_IDEAS.md`** — TSOS runner + platform ideas (overlap intentional).
-- **`docs/projects/AMENDMENT_10_API_COST_SAVINGS.md`** — component IDs (TCO-Axx, TCO-Bxx, …).
+- **`docs/products/api-cost-savings/PRODUCT_HOME.md`** — component IDs (TCO-Axx, TCO-Bxx, …).
 - **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`** — evaluate → fix → improve after each slice.
 
 ---

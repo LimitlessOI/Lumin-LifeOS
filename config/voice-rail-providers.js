@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Voice Rail — pickable council engines per department (not Anthropic-only).
  * Voice Rail — pickable council engines per department (not Anthropic-only).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 /** Default picks shown in UI; memberKey must exist in council config on Railway. */
 export const VOICE_RAIL_PROVIDER_PICKS = Object.freeze([

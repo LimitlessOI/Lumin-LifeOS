@@ -19,7 +19,7 @@
 - No files were deleted.
 - No files were merged, consolidated, or rewritten.
 - No constitutional text was summarized or paraphrased into new law.
-- `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`, or any amendment was not touched.
+- `docs/constitution/NORTH_STAR_SSOT.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`, or any amendment was not touched.
 
 ## Phase 2 gate
 
@@ -27,8 +27,8 @@ Phase 2 (consolidation/reorganization) requires founder review of `CONSTITUTION_
 
 ## Files read during this pass (no edits)
 
-- `docs/SSOT_NORTH_STAR.md` (partial — headers + first 280 lines for article structure)
-- `docs/constitution/NORTH_STAR.md` (full — 103 lines)
+- `docs/constitution/NORTH_STAR_SSOT.md` (partial — headers + first 280 lines for article structure)
+- `docs/constitution/NORTH_STAR_SSOT.md` (full — 103 lines)
 - `docs/SSOT_COMPANION.md` (headers only — 883 lines)
 - `docs/NORTH_STAR_EDUCATION_HEALING.md` (headers only)
 - `CLAUDE.md` (full — 184 lines)

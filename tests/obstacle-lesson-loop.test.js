@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Obstacle lesson loop tests.
  * Obstacle lesson loop tests.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';

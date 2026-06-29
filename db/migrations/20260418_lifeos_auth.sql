@@ -4,7 +4,7 @@
 -- Adds auth fields to lifeos_users; creates sessions + invites tables.
 -- No new tables break existing FK chains — all additions are ALTER + CREATE IF NOT EXISTS.
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

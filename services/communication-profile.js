@@ -15,7 +15,7 @@
  * Exports:
  *   createCommunicationProfile({ pool, callAI, logger }) → CommunicationProfile
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 // ── Style dimension option sets (must stay in sync with response-variety.js) ──

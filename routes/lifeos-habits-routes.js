@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeOS Habits API — CRUD + streak queries.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * LifeOS Habits API — CRUD + streak queries.
  * Mounted at /api/v1/lifeos/habits
  */

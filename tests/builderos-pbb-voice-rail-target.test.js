@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Regression: PBB must resolve target_file from instruction when metadata omits it.
  * Regression: PBB must resolve target_file from instruction when metadata omits it.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { describe, it } from 'node:test';

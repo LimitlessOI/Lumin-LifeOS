@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Supreme fail-closed truth gate — no founder reply leaves without receipt-backed claims.
  * Results are the scoreboard. FAIL is as valuable as PASS when it carries lessons.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import {

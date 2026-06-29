@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Tracks commitments Adam makes and surfaces upcoming/overdue ones.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * Tracks commitments Adam makes and surfaces upcoming/overdue ones.
  * Table: lifeos_commitments (id, user_id, text, due_date, source, status, created_at, completed_at)
  */

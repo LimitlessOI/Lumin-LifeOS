@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: When to attach product/strategic brief vs pure personal Lumin reply.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { isFounderPersonalLifeIntent } from './founder-life-admin-intent.js';
 import { hasProductBuildContext } from './chair-context-classifier.js';

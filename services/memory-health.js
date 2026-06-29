@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-health.js
  */
 // services/memory-health.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 
 const getStaleCapsules = async (pool) => {
   const result = await pool.query(`

@@ -11,7 +11,7 @@
 - `docs/BUILDEROS_VOCABULARY.md` v2.7
 - `docs/architecture/DELIBERATION_ARCHITECTURE.md`
 - `docs/architecture/FOUNDER_VOCABULARY_CONSENSUS_REPORT.md`
-- `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md`
+- `docs/products/builderos/PRODUCT_HOME.md`
 
 ## Verify
 

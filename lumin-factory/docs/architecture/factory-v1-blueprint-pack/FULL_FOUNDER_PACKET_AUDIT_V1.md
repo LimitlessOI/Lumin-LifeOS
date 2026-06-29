@@ -34,7 +34,7 @@ The missing runtime-builder laws must be pulled back in and locked under it.
 
 ### 1. The current founder packet dropped the runtime state machine
 
-The current packet defines loops, but it does not define the explicit mission-state machine already present in `docs/SSOT_NORTH_STAR.md`.
+The current packet defines loops, but it does not define the explicit mission-state machine already present in `docs/constitution/NORTH_STAR_SSOT.md`.
 
 Missing states include:
 

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE outreach scheduler — processes approved outreach tasks on interval.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createUsefulWorkGuard, requireTableRows } from './useful-work-guard.js';
 import { createLifeREOutreachBridge } from './lifere-outreach-bridge.js';

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Regression: TC morning digest module loads (syntax + exports) without DB.
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * Regression: TC morning digest module loads (syntax + exports) without DB.
  */
 import test from "node:test";

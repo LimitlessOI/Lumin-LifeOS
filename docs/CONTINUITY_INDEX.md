@@ -23,4 +23,4 @@ Example first line of an update:
 
 `## [BUILD] Update 2026-04-19 #1`
 
-**SSOT:** `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`
+**SSOT:** `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`

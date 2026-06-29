@@ -5,7 +5,7 @@
  *
  * Usage: node scripts/oil-phase14-railway-canonical.mjs
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

@@ -4,7 +4,7 @@
  * Generates a pre-appointment medical context brief.
  * Pulls 90 days of data, patterns, medications, correlations.
  * Produces a structured summary the user can share with a doctor.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 'use strict';

@@ -2,7 +2,7 @@
 -- Migration: 20260329_lifeos_growth.sql
 -- Module A: Growth & Mastery (Wisdom Library, 10,000 Hours Tracker, Deliberate Practice)
 -- Module B: Relationship Intelligence (Health Score, Apology Engine, Emotional Weather, Family Values)
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

@@ -6,7 +6,7 @@
  * Maps the real autonomous/system execution paths to useful-work guard evidence,
  * PB governance, success conditions, and stop conditions.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { readFileSync, writeFileSync } from 'fs';

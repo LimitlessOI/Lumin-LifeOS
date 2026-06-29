@@ -3,7 +3,7 @@
  * PB execution authority — no unnecessary Adam bottlenecks inside approved PB boundary.
  *
  * @ssot docs/SSOT_COMPANION.md §0.5J
- * @ssot docs/SSOT_NORTH_STAR.md Article II §2.16
+ * @ssot docs/constitution/NORTH_STAR_SSOT.md Article II §2.16
  */
 
 /** True stop conditions — Human Guardian required (§2.16). */

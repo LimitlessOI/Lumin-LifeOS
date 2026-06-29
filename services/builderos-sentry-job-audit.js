@@ -5,7 +5,7 @@
  * extract-helper patch mode so Builder creates a new Zone 1 helper
  * instead of rewriting the large file.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { isSafeTarget } from '../config/builder-safe-scope.js';

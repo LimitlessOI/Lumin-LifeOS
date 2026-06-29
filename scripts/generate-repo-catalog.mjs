@@ -8,7 +8,7 @@
  *
  * Human verdicts live in docs/REPO_TRIAGE_NOTES.md
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';
@@ -187,7 +187,7 @@ async function main() {
 > **AUTO-GENERATED** — \`npm run repo:catalog\`  
 > **Do not hand-edit** the tables below (regenerate). **Human triage** (gold / trash / keep): \`docs/REPO_TRIAGE_NOTES.md\`  
 > **Compact buckets only:** \`docs/REPO_BUCKET_INDEX.md\` — **All indexes map:** \`docs/REPO_MASTER_INDEX.md\`  
-> **Parent protocol:** \`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md\`
+> **Parent protocol:** \`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md\`
 
 ## Summary
 

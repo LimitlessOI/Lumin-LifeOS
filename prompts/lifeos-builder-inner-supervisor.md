@@ -2,7 +2,7 @@
 
 # Inner supervisor — self-audit protocol (builder trains its own reviewer)
 
-**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`  
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/products/lifeos/PRODUCT_HOME.md`  
 **Use with:** `POST /api/v1/lifeos/builder/task` + `mode: "review"` and `files[]` containing the artifact under review plus this file; or **`npm run lifeos:builder:inner-review`** (wraps the same HTTP path).
 
 **Purpose:** Move supervision *into* the builder stack: every serious slice can be gated by an explicit **think** pass (cheap review model via `council.builder.review`) before or after codegen, without inventing APIs or pretending a human graded it.

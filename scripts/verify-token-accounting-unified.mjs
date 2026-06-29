@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Verify unified Token Accounting OS API + view.
  * Verify unified Token Accounting OS API + view.
- * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+ * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';

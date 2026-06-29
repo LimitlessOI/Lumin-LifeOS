@@ -1,6 +1,6 @@
 /*
 - SYNOPSIS: This script provides a direct build smoke test for the LifeOS platform.
-- @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+- @ssot docs/products/builderos/PRODUCT_HOME.md
 - - This script provides a direct build smoke test for the LifeOS platform.
 - It verifies basic build system functionality by exporting a simple,
 - self-contained function that returns a predefined success object.

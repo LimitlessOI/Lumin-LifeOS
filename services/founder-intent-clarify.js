@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Detect ambiguous founder build asks — paraphrase, assumptions, confirm before execute.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import {
   extractTargetFileFromInstruction,

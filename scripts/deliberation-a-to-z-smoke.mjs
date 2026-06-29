@@ -4,7 +4,7 @@
  * A→Z deliberation governance smoke — factory local + optional Railway API.
  * Usage: npm run lifeos:deliberation:a-to-z-smoke
  * Env: PUBLIC_BASE_URL + COMMAND_CENTER_KEY for API leg (optional)
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { spawnSync } from 'node:child_process';

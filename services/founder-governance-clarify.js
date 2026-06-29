@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Governance / SSOT / North Star asks — clarify layer + right-way routing.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { paraphraseFounderAsk } from './founder-intent-clarify.js';
 
@@ -19,9 +19,9 @@ export function inferGovernanceAmendment(text = '') {
   const t = String(text || '');
   const m = t.match(/\bAMENDMENT[_\s-]?(\d+)\b/i) || t.match(/\bamendment\s+(\d+)\b/i);
   if (m) return `docs/projects/AMENDMENT_${String(m[1]).padStart(2, '0')}_*.md (verify exact file)`;
-  if (/lifeos|lumin|chair|founder interface/i.test(t)) return 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md';
-  if (/builder|builderos|c2|command control/i.test(t)) return 'docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md + owning amendment';
-  if (/north star|nssot|constitution/i.test(t)) return 'docs/SSOT_NORTH_STAR.md (full read before any edit — Article VII path)';
+  if (/lifeos|lumin|chair|founder interface/i.test(t)) return 'docs/products/lifeos/PRODUCT_HOME.md';
+  if (/builder|builderos|c2|command control/i.test(t)) return 'docs/products/builderos/PRODUCT_HOME.md + owning amendment';
+  if (/north star|nssot|constitution/i.test(t)) return 'docs/constitution/NORTH_STAR_SSOT.md (full read before any edit — Article VII path)';
   return null;
 }
 
@@ -63,7 +63,7 @@ function governancePathOptions(text) {
       label: 'Constitutional / North Star / NSSOT text change',
       channel: 'counsel',
       right_way: [
-        'Read entire docs/SSOT_NORTH_STAR.md in session before writing (SSOT READ-BEFORE-WRITE).',
+        'Read entire docs/constitution/NORTH_STAR_SSOT.md in session before writing (SSOT READ-BEFORE-WRITE).',
         'Draft standalone amendment doc — do NOT silently edit supreme law.',
         'Article VII path + AI Council debate; founder authorization required before merge.',
       ],

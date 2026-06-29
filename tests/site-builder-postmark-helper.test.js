@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Regression tests for `services/site-builder-postmark-helper.js` (no live Postmark calls).
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Regression tests for `services/site-builder-postmark-helper.js` (no live Postmark calls).
  */
 import test from "node:test";

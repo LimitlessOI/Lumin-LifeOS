@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)
 
 **Last updated:** 2026-04-22  
-**SSOT:** `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md`  
+**SSOT:** `docs/products/api-cost-savings/PRODUCT_HOME.md`  
 **Owning service:** `services/tokenos-service.js` + `services/tokenos-quality-check.js`  
 **Owning routes:** `routes/tokenos-routes.js`  
 **Mounted at:** `/api/v1/tokenos` + `/token-os` (static pages)

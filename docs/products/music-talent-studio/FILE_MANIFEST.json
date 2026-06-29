@@ -1,0 +1,52 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "music-talent-studio",
+  "project_id": "AMENDMENT_32_MUSIC_TALENT_STUDIO",
+  "name": "Music Talent Studio",
+  "canonical_home": "docs/products/music-talent-studio/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "routes/music-talent-studio-routes.js",
+    "services/music-practice-analyzer.js",
+    "services/music-talent-evaluator.js",
+    "services/music-lesson-planner.js",
+    "services/music-development-planner.js",
+    "db/migrations/*_music_talent_studio_schema.sql",
+    "docs/products/music-talent-studio/PRODUCT_HOME.md",
+    "docs/products/music-talent-studio/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    "POST /api/v1/music/practice-sessions",
+    "GET  /api/v1/music/students/:id/analysis",
+    "POST /api/v1/music/talent/evaluate",
+    "GET  /api/v1/music/talent/leaderboard",
+    "POST /api/v1/music/development-plans/:studentId",
+    "GET  /api/v1/music/opportunities"
+  ],
+  "required_tables": [
+    "music_students",
+    "music_teachers",
+    "music_practice_sessions",
+    "music_talent_evaluations",
+    "music_development_plans",
+    "music_opportunities"
+  ],
+  "required_env": [
+    "STRIPE_SECRET_KEY",
+    "CLOUDINARY_URL"
+  ],
+  "assertions": [
+    "Song-first learning increases student retention vs. theory-first approaches",
+    "Rate of improvement is more predictive of potential than current ability level",
+    "No existing platform bridges instruction + AI analysis + talent discovery + industry pipeline"
+  ],
+  "completion_checks": [
+    "node --check routes/music-talent-studio-routes.js",
+    "node --check services/music-practice-analyzer.js",
+    "node --check services/music-talent-evaluator.js"
+  ]
+}

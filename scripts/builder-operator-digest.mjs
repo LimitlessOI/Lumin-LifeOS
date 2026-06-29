@@ -9,7 +9,7 @@
  * - BUILDER_DIGEST_QUEUE_LOG — default data/builder-continuous-queue-log.jsonl
  * - BUILDER_DIGEST_DAEMON_LOG — default data/builder-daemon-log.jsonl (skip if missing)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from "fs";
 import path from "path";

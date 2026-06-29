@@ -10,7 +10,7 @@
  * Custom proposals still use: POST /proposals + POST /proposals/:id/run-council.
  * **List presets (local, no HTTP):** `node scripts/council-gate-change-run.mjs --list-presets`
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

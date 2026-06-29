@@ -100,7 +100,7 @@ These are **not** official architecture truth. Agents must not treat them as law
 **Official authority stack** for resolving conflicts and ownership:
 
 ```
-1. docs/SSOT_NORTH_STAR.md                    [SUPREME — constitutional]
+1. docs/constitution/NORTH_STAR_SSOT.md                    [SUPREME — constitutional]
 2. docs/SSOT_COMPANION.md                     [Operational law]
 3. CLAUDE.md + docs/AGENT_RULES.compact.md    [Agent operating law]
 4. prompts/00-HIST-LEGACY-BOUNDARY.md         [STOP gate — Hist vs Machine]

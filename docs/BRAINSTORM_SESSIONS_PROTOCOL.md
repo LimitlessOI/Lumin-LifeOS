@@ -81,7 +81,7 @@ Participants (including Adam on vision-heavy calls) assign each **surviving** me
 
 **Discard tests (any one can disqualify)**
 
-- Contradicts **`docs/SSOT_NORTH_STAR.md`** mission / sovereignty / honesty.
+- Contradicts **`docs/constitution/NORTH_STAR_SSOT.md`** mission / sovereignty / honesty.
 - Duplicate of shipped work **without** a new measurable lift (cite receipt).
 - **THINK-only** hype with **no verification path** and **high irreversibility**.
 - Ethics / compliance / dark-pattern shape (even if “could make money”).
@@ -147,8 +147,8 @@ Preferred order:
 
 - **Builder autonomy idea pool:** `docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md`
 - **Compound loop (routine improvement):** `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`
-- **Council / gate-change:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/SSOT_COMPANION.md` §5.5
-- **LifeOS handoff:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **Agent Handoff Notes** link row
+- **Council / gate-change:** `docs/products/ai-council/PRODUCT_HOME.md`, `docs/SSOT_COMPANION.md` §5.5
+- **LifeOS handoff:** `docs/products/lifeos/PRODUCT_HOME.md` — **Agent Handoff Notes** link row
 
 ---
 

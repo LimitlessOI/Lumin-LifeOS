@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Chair context classifier — life vs code vs command (default help, not builder theater).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { isRepairContinuationIntent, extractTargetFileFromInstruction, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { isFounderConfirmIntent } from './founder-intent-clarify.js';

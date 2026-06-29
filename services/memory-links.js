@@ -5,7 +5,7 @@
 import { randomUUID } from 'crypto';
 
 /**
- * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
  */
 export async function createLink(fromId, toId, linkType, pool) {
   if (!['project', 'person', 'failure_pattern', 'decision_pattern', 'lesson'].includes(linkType)) {

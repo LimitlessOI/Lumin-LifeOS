@@ -13,7 +13,7 @@
  *   npm run env:certify
  *   npm run env:certify -- --scope builder   # default: healthz + railway/env + builder/domains[/ready]
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { mkdir, appendFile } from 'fs/promises';

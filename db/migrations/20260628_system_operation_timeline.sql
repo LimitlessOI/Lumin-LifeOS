@@ -1,6 +1,6 @@
 -- SYNOPSIS: System operation timeline — duration + token correlation.
 -- Migration: 20260628_system_operation_timeline
--- @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+-- @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
 
 BEGIN;
 

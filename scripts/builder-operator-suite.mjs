@@ -19,7 +19,7 @@
  * Env: same as `docs/BUILDER_OPERATOR_ENV.md` (PUBLIC_BASE_URL + command key aliases).
  * Loads dotenv + .env.local like preflight.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import "dotenv/config";
 import dotenv from "dotenv";

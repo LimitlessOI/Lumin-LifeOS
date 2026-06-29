@@ -4,7 +4,7 @@
 // config/memory-truth-classes.js
 
 /**
- * @see @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @see @ssot docs/products/memory-system/PRODUCT_HOME.md
  */
 export const TRUTH_CLASSES = {
   objective: {

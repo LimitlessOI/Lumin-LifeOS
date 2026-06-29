@@ -2,7 +2,7 @@
 -- Migration: 20260329_lifeos_engine
 -- LifeOS Phase 2 — The Engine
 -- Outreach tasks, communication gateway, calendar rules
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

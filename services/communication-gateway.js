@@ -20,7 +20,7 @@
  *   3. Blocked numbers → reject silently
  *   4. Emergency keywords in SMS → immediate alert regardless of source
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const EMERGENCY_KEYWORDS = ['emergency', 'urgent', '911', 'help me', 'accident', 'hospital'];

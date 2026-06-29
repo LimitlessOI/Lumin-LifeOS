@@ -1,0 +1,16 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "business-tools",
+  "project_id": "business_tools",
+  "name": "Business Tools",
+  "canonical_home": "docs/products/business-tools/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/business-tools/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/business-tools/PRODUCT_HOME.md",
+    "docs/products/business-tools/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": []
+}

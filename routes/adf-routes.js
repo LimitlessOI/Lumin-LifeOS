@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Exports createAdfRoutes — routes/adf-routes.js.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import express from 'express';

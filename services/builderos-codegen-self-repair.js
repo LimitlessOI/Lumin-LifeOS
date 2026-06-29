@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS codegen failure classifier + repair dispatch (industry harness patterns).
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { getBuilderRoutingPolicy } from './builderos-routing-policy.js';

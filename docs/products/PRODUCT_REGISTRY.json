@@ -3,14 +3,29 @@
     "domain": "Product",
     "status": "CANONICAL",
     "owner": "AIC -> BPB -> Chair runtime",
-    "purpose": "Canonical product homes and readiness anchors for cold agents and runtime context shaping.",
+    "purpose": "Canonical product homes and readiness anchors for cold agents and runtime context shaping. Registry also serves as the index for product-development completeness, blueprint readiness, and product-local conversation/history routing.",
     "mandatory_read_before": [
       "builderos-reboot/MISSIONS/*",
-      "docs/projects/AMENDMENT_*.md"
+      "docs/products/*/PRODUCT_HOME.md"
     ]
   },
   "schema": "product_registry_v1",
-  "updated_at": "2026-06-28",
+  "updated_at": "2026-06-29",
+  "registry_rules": {
+    "canonical_folder_rule": "Each product has one canonical folder under docs/products/<product-id>/.",
+    "completeness_gate_rule": "A product must not advance to founder-packet or blueprint generation until blocking gaps in vision, intent, tradeoffs, and scope are surfaced.",
+    "conversation_routing_rule": "Product-specific conversations, transcripts, and analysis should be routed into that product's folder.",
+    "history_rule": "Product-local history should preserve enough evidence for later agents to reconstruct what changed and why."
+  },
+  "recommended_product_fields": [
+    "readiness_state",
+    "blueprint_score",
+    "blocking_gaps",
+    "open_decisions",
+    "recommended_next_conversation_topics",
+    "ready_for_founder_packet",
+    "ready_for_blueprint"
+  ],
   "source_of_truth": [
     "docs/products/PRODUCT_REGISTRY.json",
     "docs/products/*/PRODUCT_HOME.md",
@@ -20,11 +35,327 @@
   ],
   "products": [
     {
+      "product_id": "ai-council",
+      "name": "Ai Council",
+      "canonical_home": "docs/products/ai-council/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/ai-council/FILE_MANIFEST.json",
+      "law_path": "docs/products/ai-council/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "ai-receptionist",
+      "name": "Ai Receptionist",
+      "canonical_home": "docs/products/ai-receptionist/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/ai-receptionist/FILE_MANIFEST.json",
+      "law_path": "docs/products/ai-receptionist/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "api-cost-savings",
+      "name": "API Cost Savings",
+      "canonical_home": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/api-cost-savings/FILE_MANIFEST.json",
+      "law_path": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": "/",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 6,
+      "notes": [
+        "5-layer stack built. Landing page live (products/api-service/index.html).",
+        "No paying B2B customer yet. Gap is customer acquisition spec, not code.",
+        "No FOUNDER_PACKET or BLUEPRINT.json yet."
+      ]
+    },
+    {
+      "product_id": "boldtrail",
+      "name": "BoldTrail",
+      "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/boldtrail/FILE_MANIFEST.json",
+      "law_path": "docs/products/boldtrail/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "SHARED_PLATFORM_MODULE",
+      "readiness_state": "SHARED_PLATFORM_MODULE",
+      "blueprint_score": null,
+      "notes": [
+        "LIVE shared CRM adapter — part of LifeRE stack, available to any product that needs CRM access.",
+        "No standalone mission. No FOUNDER_PACKET or BLUEPRINT.json needed.",
+        "Will eventually be replaced; isolation is in this module so consumers are unaffected."
+      ]
+    },
+    {
+      "product_id": "builderos",
+      "name": "Builderos",
+      "canonical_home": "docs/products/builderos/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/builderos/FILE_MANIFEST.json",
+      "law_path": "docs/products/builderos/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "business-tools",
+      "name": "Business Tools",
+      "canonical_home": "docs/products/business-tools/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/business-tools/FILE_MANIFEST.json",
+      "law_path": "docs/products/business-tools/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "capability-map",
+      "name": "Capability Map",
+      "canonical_home": "docs/products/capability-map/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/capability-map/FILE_MANIFEST.json",
+      "law_path": "docs/products/capability-map/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "clientcare-billing-recovery",
+      "name": "ClientCare Billing Recovery",
+      "canonical_home": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
+      "law_path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 5,
+      "notes": [
+        "Core services exist. Browser-automation approach (Puppeteer — no vendor API).",
+        "No FOUNDER_PACKET, BLUEPRINT.json, or acceptance criteria.",
+        "Sensitive domain: submissions require human approval gate."
+      ]
+    },
+    {
+      "product_id": "command-center",
+      "name": "Command Center",
+      "canonical_home": "docs/products/command-center/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/command-center/FILE_MANIFEST.json",
+      "law_path": "docs/products/command-center/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "conflict-arbitrator",
+      "name": "Conflict Arbitrator",
+      "canonical_home": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/conflict-arbitrator/FILE_MANIFEST.json",
+      "law_path": "docs/products/conflict-arbitrator/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "creator-media-os",
+      "name": "Creator Media Os",
+      "canonical_home": "docs/products/creator-media-os/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/creator-media-os/FILE_MANIFEST.json",
+      "law_path": "docs/products/creator-media-os/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "enterprise-ai-governance",
+      "name": "Enterprise Ai Governance",
+      "canonical_home": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/enterprise-ai-governance/FILE_MANIFEST.json",
+      "law_path": "docs/products/enterprise-ai-governance/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "faith-studio",
+      "name": "Faith Studio",
+      "canonical_home": "docs/products/faith-studio/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/faith-studio/FILE_MANIFEST.json",
+      "law_path": "docs/products/faith-studio/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "financial-revenue",
+      "name": "Financial Revenue",
+      "canonical_home": "docs/products/financial-revenue/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/financial-revenue/FILE_MANIFEST.json",
+      "law_path": "docs/products/financial-revenue/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "game-publisher",
+      "name": "Game Publisher",
+      "canonical_home": "docs/products/game-publisher/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/game-publisher/FILE_MANIFEST.json",
+      "law_path": "docs/products/game-publisher/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "ideavault",
+      "name": "IdeaVault",
+      "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/ideavault/FILE_MANIFEST.json",
+      "law_path": "docs/products/ideavault/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "PLATFORM_TOOL",
+      "readiness_state": "PLATFORM_TOOL",
+      "blueprint_score": null,
+      "notes": [
+        "Platform tool — not a product, not in BuilderOS mission queue.",
+        "Intake and routing engine: routes conversations/ideas to docs/products/<id>/conversations/ or AMENDMENT_38 catalog.",
+        "idea-queue-routes.js and idea-engine.js are platform utilities any product can call."
+      ]
+    },
+    {
+      "product_id": "kids-os",
+      "name": "Kids Os",
+      "canonical_home": "docs/products/kids-os/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/kids-os/FILE_MANIFEST.json",
+      "law_path": "docs/products/kids-os/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "kingsman-protocol",
+      "name": "Kingsman Protocol",
+      "canonical_home": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/kingsman-protocol/FILE_MANIFEST.json",
+      "law_path": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "knowledge-base",
+      "name": "Knowledge Base",
+      "canonical_home": "docs/products/knowledge-base/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/knowledge-base/FILE_MANIFEST.json",
+      "law_path": "docs/products/knowledge-base/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "life-coaching",
+      "name": "Life Coaching",
+      "canonical_home": "docs/products/life-coaching/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/life-coaching/FILE_MANIFEST.json",
+      "law_path": "docs/products/life-coaching/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
       "product_id": "lifeos",
       "name": "LifeOS",
       "canonical_home": "docs/products/lifeos/PRODUCT_HOME.md",
       "file_manifest": "docs/products/lifeos/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "law_path": "docs/products/lifeos/PRODUCT_HOME.md",
       "point_b_mission_id": null,
       "point_b_authority": "builderos-reboot/POINT_B_TARGET.json",
       "bp_priority_mission_ids": [
@@ -45,7 +376,7 @@
       "name": "LifeRE",
       "canonical_home": "docs/products/lifere/PRODUCT_HOME.md",
       "file_manifest": "docs/products/lifere/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_LIFERE.md",
+      "law_path": "docs/products/lifere/PRODUCT_HOME.md",
       "point_b_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
       "point_b_authority": "builderos-reboot/POINT_B_TARGET.json",
       "bp_priority_mission_ids": [
@@ -59,21 +390,164 @@
       ]
     },
     {
-      "product_id": "tc-service",
-      "name": "TC Service",
-      "canonical_home": "docs/products/tc-service/PRODUCT_HOME.md",
-      "file_manifest": "docs/products/tc-service/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "product_id": "lumin-university",
+      "name": "Lumin University",
+      "canonical_home": "docs/products/lumin-university/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/lumin-university/FILE_MANIFEST.json",
+      "law_path": "docs/products/lumin-university/PRODUCT_HOME.md",
       "point_b_mission_id": null,
       "point_b_authority": null,
       "bp_priority_mission_ids": [],
-      "default_runtime_surface": "/tc",
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "marketingos",
+      "name": "MarketingOS",
+      "canonical_home": "docs/products/marketingos/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/marketingos/FILE_MANIFEST.json",
+      "law_path": "docs/products/marketingos/PRODUCT_HOME.md",
+      "modules": [
+        {
+          "module_id": "socialmediaos",
+          "name": "SocialMediaOS",
+          "canonical_home": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
+          "file_manifest": "docs/products/marketingos/socialmediaos/FILE_MANIFEST.json"
+        }
+      ],
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": "/api/v1/socialmediaos",
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "PARTIAL_CODE_PRESENT",
-      "blueprint_score": 7,
+      "blueprint_score": 5,
       "notes": [
-        "Most code-complete unmissioned product in the repo (40+ services, 3 portals).",
-        "No FOUNDER_PACKET or BLUEPRINT.json. Needs mission formalization to enter BuilderOS queue."
+        "Formerly Amendment 41.",
+        "SocialMediaOS is the first module — see modules.socialmediaos."
+      ]
+    },
+    {
+      "product_id": "memory-intelligence",
+      "name": "Memory Intelligence",
+      "canonical_home": "docs/products/memory-intelligence/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/memory-intelligence/FILE_MANIFEST.json",
+      "law_path": "docs/products/memory-intelligence/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "memory-system",
+      "name": "Memory System",
+      "canonical_home": "docs/products/memory-system/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/memory-system/FILE_MANIFEST.json",
+      "law_path": "docs/products/memory-system/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "music-talent-studio",
+      "name": "Music Talent Studio",
+      "canonical_home": "docs/products/music-talent-studio/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/music-talent-studio/FILE_MANIFEST.json",
+      "law_path": "docs/products/music-talent-studio/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "oil-security-divisions",
+      "name": "Oil Security Divisions",
+      "canonical_home": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/oil-security-divisions/FILE_MANIFEST.json",
+      "law_path": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "outreach-crm",
+      "name": "Outreach Crm",
+      "canonical_home": "docs/products/outreach-crm/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/outreach-crm/FILE_MANIFEST.json",
+      "law_path": "docs/products/outreach-crm/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "personal-finance-os",
+      "name": "Personal Finance Os",
+      "canonical_home": "docs/products/personal-finance-os/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/personal-finance-os/FILE_MANIFEST.json",
+      "law_path": "docs/products/personal-finance-os/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "productized-sprint",
+      "name": "Productized Sprint",
+      "canonical_home": "docs/products/productized-sprint/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/productized-sprint/FILE_MANIFEST.json",
+      "law_path": "docs/products/productized-sprint/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "project-governance",
+      "name": "Project Governance",
+      "canonical_home": "docs/products/project-governance/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/project-governance/FILE_MANIFEST.json",
+      "law_path": "docs/products/project-governance/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
       ]
     },
     {
@@ -81,7 +555,7 @@
       "name": "Site Builder",
       "canonical_home": "docs/products/site-builder/PRODUCT_HOME.md",
       "file_manifest": "docs/products/site-builder/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "law_path": "docs/products/site-builder/PRODUCT_HOME.md",
       "point_b_mission_id": null,
       "point_b_authority": null,
       "bp_priority_mission_ids": [],
@@ -96,98 +570,161 @@
       ]
     },
     {
-      "product_id": "clientcare-billing-recovery",
-      "name": "ClientCare Billing Recovery",
-      "canonical_home": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
-      "file_manifest": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+      "product_id": "story-studio",
+      "name": "Story Studio",
+      "canonical_home": "docs/products/story-studio/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/story-studio/FILE_MANIFEST.json",
+      "law_path": "docs/products/story-studio/PRODUCT_HOME.md",
       "point_b_mission_id": null,
       "point_b_authority": null,
       "bp_priority_mission_ids": [],
       "default_runtime_surface": null,
       "status": "ACTIVE_PRODUCT_HOME",
-      "readiness_state": "PARTIAL_CODE_PRESENT",
-      "blueprint_score": 5,
       "notes": [
-        "Core services exist. Browser-automation approach (Puppeteer — no vendor API).",
-        "No FOUNDER_PACKET, BLUEPRINT.json, or acceptance criteria.",
-        "Sensitive domain: submissions require human approval gate."
+        "Canonical product home migrated from amendment."
       ]
     },
     {
-      "product_id": "ideavault",
-      "name": "IdeaVault",
-      "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
-      "file_manifest": "docs/products/ideavault/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+      "product_id": "tc-service",
+      "name": "TC Service",
+      "canonical_home": "docs/products/tc-service/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/tc-service/FILE_MANIFEST.json",
+      "law_path": "docs/products/tc-service/PRODUCT_HOME.md",
       "point_b_mission_id": null,
       "point_b_authority": null,
       "bp_priority_mission_ids": [],
-      "default_runtime_surface": null,
-      "status": "PLATFORM_TOOL",
-      "readiness_state": "PLATFORM_TOOL",
-      "blueprint_score": null,
-      "notes": [
-        "Platform tool — not a product, not in BuilderOS mission queue.",
-        "Intake and routing engine: routes conversations/ideas to docs/products/<id>/conversations/ or AMENDMENT_38 catalog.",
-        "idea-queue-routes.js and idea-engine.js are platform utilities any product can call."
-      ]
-    },
-    {
-      "product_id": "boldtrail",
-      "name": "BoldTrail",
-      "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
-      "file_manifest": "docs/products/boldtrail/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
-      "point_b_mission_id": null,
-      "point_b_authority": null,
-      "bp_priority_mission_ids": [],
-      "default_runtime_surface": null,
-      "status": "SHARED_PLATFORM_MODULE",
-      "readiness_state": "SHARED_PLATFORM_MODULE",
-      "blueprint_score": null,
-      "notes": [
-        "LIVE shared CRM adapter — part of LifeRE stack, available to any product that needs CRM access.",
-        "No standalone mission. No FOUNDER_PACKET or BLUEPRINT.json needed.",
-        "Will eventually be replaced; isolation is in this module so consumers are unaffected."
-      ]
-    },
-    {
-      "product_id": "api-cost-savings",
-      "name": "API Cost Savings",
-      "canonical_home": "docs/products/api-cost-savings/PRODUCT_HOME.md",
-      "file_manifest": "docs/products/api-cost-savings/FILE_MANIFEST.json",
-      "law_path": "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
-      "point_b_mission_id": null,
-      "point_b_authority": null,
-      "bp_priority_mission_ids": [],
-      "default_runtime_surface": "/",
+      "default_runtime_surface": "/tc",
       "status": "ACTIVE_PRODUCT_HOME",
       "readiness_state": "PARTIAL_CODE_PRESENT",
-      "blueprint_score": 6,
+      "blueprint_score": 7,
       "notes": [
-        "5-layer stack built. Landing page live (products/api-service/index.html).",
-        "No paying B2B customer yet. Gap is customer acquisition spec, not code.",
-        "No FOUNDER_PACKET or BLUEPRINT.json yet."
+        "Most code-complete unmissioned product in the repo (40+ services, 3 portals).",
+        "No FOUNDER_PACKET or BLUEPRINT.json. Needs mission formalization to enter BuilderOS queue."
       ]
     },
     {
-      "product_id": "voice_rail",
-      "name": "Voice Rail",
-      "canonical_home": "docs/VOICE_RAIL_HISTORY_ONLY.md",
-      "file_manifest": null,
-      "law_path": "builderos-reboot/BP_PRIORITY.json",
+      "product_id": "teacher-os",
+      "name": "Teacher Os",
+      "canonical_home": "docs/products/teacher-os/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/teacher-os/FILE_MANIFEST.json",
+      "law_path": "docs/products/teacher-os/PRODUCT_HOME.md",
       "point_b_mission_id": null,
       "point_b_authority": null,
-      "bp_priority_mission_ids": [
-        "PRODUCT-VOICE-RAIL-V1-0001"
-      ],
+      "bp_priority_mission_ids": [],
       "default_runtime_surface": null,
-      "status": "SCRAPPED_SALVAGE_ONLY",
+      "status": "ACTIVE_PRODUCT_HOME",
       "notes": [
-        "Not an active product queue item.",
-        "Salvage STT/TTS/wake-word patterns only."
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "token-accounting-os",
+      "name": "Token Accounting Os",
+      "canonical_home": "docs/products/token-accounting-os/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/token-accounting-os/FILE_MANIFEST.json",
+      "law_path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "universal-overlay",
+      "name": "Universal Overlay",
+      "canonical_home": "docs/products/universal-overlay/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/universal-overlay/FILE_MANIFEST.json",
+      "law_path": "docs/products/universal-overlay/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "video-pipeline",
+      "name": "Video Pipeline",
+      "canonical_home": "docs/products/video-pipeline/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/video-pipeline/FILE_MANIFEST.json",
+      "law_path": "docs/products/video-pipeline/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "wellness-studio",
+      "name": "Wellness Studio",
+      "canonical_home": "docs/products/wellness-studio/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/wellness-studio/FILE_MANIFEST.json",
+      "law_path": "docs/products/wellness-studio/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "white-label",
+      "name": "White Label",
+      "canonical_home": "docs/products/white-label/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/white-label/FILE_MANIFEST.json",
+      "law_path": "docs/products/white-label/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "word-keeper",
+      "name": "Word Keeper",
+      "canonical_home": "docs/products/word-keeper/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/word-keeper/FILE_MANIFEST.json",
+      "law_path": "docs/products/word-keeper/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
+      ]
+    },
+    {
+      "product_id": "zero-drift-handoff-protocol",
+      "name": "Zero Drift Handoff Protocol",
+      "canonical_home": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json",
+      "law_path": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Canonical product home migrated from amendment."
       ]
     }
+  ],
+  "mandatory_read_before": [
+    "builderos-reboot/MISSIONS/*",
+    "docs/products/*/PRODUCT_HOME.md"
   ]
 }

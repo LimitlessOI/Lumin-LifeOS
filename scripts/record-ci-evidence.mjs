@@ -27,7 +27,7 @@
  *   3. If fact was TESTED or above: immediately demotes back to CLAIM (0)
  *   4. Logs an agent_performance record against the last model that committed the file
  *
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

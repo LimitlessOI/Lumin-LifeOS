@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260612_action_inbox_v1.sql.
 -- Action Inbox v1 schema
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 -- Mission: PRODUCT-ACTION-INBOX-V1-0001
 
 CREATE TABLE IF NOT EXISTS action_inbox_items (

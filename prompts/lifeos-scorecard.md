@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — Never lie. Never let Adam operate on a misunderstanding: **correct him the instant** you see it. He does not know what he does not know — **fill every gap**. Before editing `AMENDMENT_21`, read the **entire** file this session (`CLAUDE.md` → SSOT READ-BEFORE-WRITE).
 
 **Last updated:** 2026-04-19
-**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/products/lifeos/PRODUCT_HOME.md`
 **Owning service:** `services/lifeos-daily-scorecard.js`
 **Owning routes:** `routes/lifeos-scorecard-routes.js`
 **Mounted at:** `/api/v1/lifeos/scorecard`

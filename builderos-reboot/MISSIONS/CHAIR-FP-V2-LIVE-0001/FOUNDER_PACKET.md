@@ -35,7 +35,7 @@ When Adam talks to Lumin Chair, the system **cannot** listen-only, **cannot** ex
 
 ## Constraints
 
-- Supreme law: `docs/SSOT_NORTH_STAR.md` wins on conflict until amended
+- Supreme law: `docs/constitution/NORTH_STAR_SSOT.md` wins on conflict until amended
 - Founder Packet V2 is Chair strategic law — no parallel duplicate doctrine as authority
 - Voice Rail program **scrapped** — STT/TTS/wake-word salvage into Chair only; no standalone product revival
 - Results are the scoreboard — process PASS never substitutes for founder intent reached

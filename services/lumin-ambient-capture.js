@@ -2,7 +2,7 @@
  * SYNOPSIS: Classifies ambient voice utterances — ignore, note, commitment, renegotiate;
  * routes calendar, CRM, and coachable moments via lumin-ambient-moment-router.
  * Opt-in only; no raw audio stored.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { detectMomentSignals } from './lumin-ambient-moment-router.js';

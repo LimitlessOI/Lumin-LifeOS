@@ -1,0 +1,34 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "story-studio",
+  "project_id": "story_studio",
+  "name": "Story Studio",
+  "canonical_home": "docs/products/story-studio/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/story-studio/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/story-studio/PRODUCT_HOME.md",
+    "docs/products/story-studio/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/story-studio/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/story-studio/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "Story bible and canon model are explicit",
+    "Rights/privacy/collaboration modes are specified",
+    "MVP format ladder is chosen before build starts"
+  ]
+}

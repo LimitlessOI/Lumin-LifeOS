@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Voice Rail — execution truth enforcement (no background-work theater).
  * Voice Rail — execution truth enforcement (no background-work theater).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { isVoiceRailCommandExecuteEnabled } from './voice-rail-command-executor.js';
 

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Seed minimum deliberation records for a factory mission (jsonl + DELIBERATION_GATE.json).
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

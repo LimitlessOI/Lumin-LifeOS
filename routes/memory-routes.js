@@ -2,7 +2,7 @@
  * SYNOPSIS: MEMORY ROUTES - LEGACY CRUD MEMORY
  * MEMORY ROUTES - LEGACY CRUD MEMORY
  *
- * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
  * @legacy STATUS: LEGACY_KEEP — non-canonical pre-capsule memory surface.
  * Preserved for historical compatibility and migration reference.
  * Canonical BuilderOS evidence memory is Amendment 39.

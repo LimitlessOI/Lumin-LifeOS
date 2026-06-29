@@ -44,7 +44,7 @@ The repo **explicitly forbids** collapsing these into one table or one vocabular
 **Code:** `services/memory-intelligence-service.js`  
 **Schema:** `epistemic_facts`, `fact_evidence`, `fact_level_history`  
 **Design:** `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` §3  
-**Law:** `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`
+**Law:** `docs/products/memory-intelligence/PRODUCT_HOME.md`
 
 **Promotion inputs:** trial count, adversarial trial count, source diversity, exception count, decay rate.
 
@@ -60,7 +60,7 @@ The repo **explicitly forbids** collapsing these into one table or one vocabular
 | 5 | Foundational Law | Deeply validated system identity | NSSOT §2.0B |
 
 **Storage:** Markdown amendments + Change Receipts — **not DB-promoted by trial count**  
-**Law:** `docs/SSOT_NORTH_STAR.md` §2.0A–C  
+**Law:** `docs/constitution/NORTH_STAR_SSOT.md` §2.0A–C  
 **Challenge requirements:** origin, evidence, proof/failure conditions, review cadence, promotion/demotion/retirement criteria
 
 **Critical rule (KNOW):** A fact at INVARIANT **cannot** auto-promote to constitutional LAW. Article VII amends law — not evidence volume.

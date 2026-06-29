@@ -6,7 +6,7 @@
 **Owner department:** **Hist** (Historian) — ledger + mandatory case for all legacy material  
 **Mandatory prompt (read before edits):** **`prompts/00-HIST-LEGACY-BOUNDARY.md`** — first-class law, not a README  
 **Authority:** Supplements `prompts/00-SYSTEM-AUTHORITY-LAYERS.md`; does not replace North Star  
-**Amendment:** `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md` (Hist dept definition)
+**Amendment:** `docs/products/builderos/PRODUCT_HOME.md` (Hist dept definition)
 **Last Updated:** 2026-06-28 — active closure scripts now use canonical product-home / BP_PRIORITY / Point B authority instead of amendment-era or mission-queue legacy anchors.
 
 ---
@@ -72,7 +72,7 @@
 | **HIST-SPINE-005** | `council/enhanced-consensus.js` (consensus v1) | Pre–gate-change | Multi-model consensus | `routes/lifeos-gate-change-routes.js`, deliberation v2.7 | Document which caller still hits v1 before delete |
 | **HIST-SPINE-006** | `src/`, root `frontend/`, `apps/`, `workflow-server/` | 2024–2025 | Parallel app attempts | Production overlays under `public/overlay/` | **Not mounted** from spine — Hist archive |
 | **HIST-SPINE-007** | Root `migrations/`, `database/` vs `db/migrations/` | Drift era | Multiple migration roots | **`db/migrations/`** only for new schema | Hist — do not add to dead roots |
-| **HIST-SPINE-008** | `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` (early memory) | 2025 | First memory SSOT | `AMENDMENT_48`, memory authority map | Reference only |
+| **HIST-SPINE-008** | `docs/products/memory-system/PRODUCT_HOME.md` (early memory) | 2025 | First memory SSOT | `AMENDMENT_48`, memory authority map | Reference only |
 
 ### 2C — In-repo experiment buckets (not separate Git repos — Hist archive)
 

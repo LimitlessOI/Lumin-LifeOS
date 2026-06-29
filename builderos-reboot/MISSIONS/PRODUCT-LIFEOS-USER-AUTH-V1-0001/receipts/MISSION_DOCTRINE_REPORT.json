@@ -1,0 +1,230 @@
+{
+  "schema": "mission_doctrine_report_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "evaluated_at": "2026-06-29T17:19:18.971Z",
+  "pass": false,
+  "enforcement": "HARD",
+  "violations": [
+    "doctrine:corridor:missing ARC_RUN_RECEIPT (ARC_RUN_RECEIPT.json)",
+    "doctrine:acceptance FAIL tests=UAT-STUB_pending_build",
+    "doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission",
+    "doctrine:verdict/objective mismatch (NOT_COMPLETE)"
+  ],
+  "checks": {
+    "phases": {
+      "development": {
+        "phase": "development",
+        "gate": "IDC_EXIT",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "INTENT_BASELINE": {
+            "pass": true,
+            "path": "INTENT_BASELINE.json"
+          },
+          "INTENT_COVERAGE_MAP": {
+            "pass": true,
+            "path": "INTENT_COVERAGE_MAP.json"
+          },
+          "IDC_CONSENSUS_RECEIPT": {
+            "pass": true,
+            "path": "IDC_CONSENSUS_RECEIPT.json"
+          },
+          "KNOWN_RISKS": {
+            "pass": true,
+            "path": "KNOWN_RISKS.json"
+          },
+          "KNOWN_ASSUMPTIONS": {
+            "pass": true,
+            "path": "KNOWN_ASSUMPTIONS.json"
+          },
+          "PREDICTION_RECEIPT": {
+            "pass": true,
+            "path": "PREDICTION_RECEIPT.json"
+          },
+          "MODE_A_TO_B_TRANSITION_RECEIPT": {
+            "pass": true,
+            "path": "MODE_A_TO_B_TRANSITION_RECEIPT.json"
+          },
+          "PRE_ARC_INPUT_PACKET": {
+            "pass": true,
+            "path": "PRE_ARC_INPUT_PACKET.json"
+          },
+          "ASSET_REUSE_DECISION": {
+            "pass": true,
+            "path": "ASSET_REUSE_DECISION.json"
+          },
+          "CHAIR_HANDOFF_RECEIPT": {
+            "pass": true,
+            "path": "CHAIR_HANDOFF_RECEIPT.json"
+          },
+          "SNT_INTENT_ATTACK_RECEIPT": {
+            "pass": true,
+            "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+          },
+          "CHAIR_FORECAST_SIMULATION_RECEIPT": {
+            "pass": true,
+            "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+          },
+          "CFO_RESOURCE_SIMULATION_RECEIPT": {
+            "pass": true,
+            "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+          },
+          "WISDOM_REVIEW_RECEIPT": {
+            "pass": true,
+            "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      },
+      "corridor": {
+        "phase": "corridor",
+        "gate": "ARC_ENTRY",
+        "pass": false,
+        "violations": [
+          "doctrine:corridor:missing ARC_RUN_RECEIPT (ARC_RUN_RECEIPT.json)"
+        ],
+        "checks": {
+          "BLUEPRINT_TWIN": {
+            "pass": true,
+            "path": "BLUEPRINT.json"
+          },
+          "ARC_RUN_RECEIPT": {
+            "pass": false,
+            "path": "ARC_RUN_RECEIPT.json"
+          },
+          "ARC_TWIN_SIMULATION_RECEIPT": {
+            "pass": true,
+            "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+          },
+          "BUILDER_SIMULATION_REPORT": {
+            "pass": true,
+            "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+          },
+          "SNT_TRANSLATION_ATTACK_REPORT": {
+            "pass": true,
+            "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+          },
+          "PRE_BUILD_VALIDATION_PACKET": {
+            "pass": true,
+            "path": "PRE_BUILD_VALIDATION_PACKET.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      },
+      "builder": {
+        "phase": "builder",
+        "gate": "BUILDER_ENTRY",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "BUILDER_RUN_RECEIPT": {
+            "pass": true,
+            "path": "BUILDER_RUN_RECEIPT.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      },
+      "technical_pass": {
+        "phase": "technical_pass",
+        "gate": "BUILD_PASS_CLAIM",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "OBJECTIVE_VERDICT": {
+            "pass": true,
+            "path": "OBJECTIVE_VERDICT.json"
+          },
+          "RESULT_SCOREBOARD": {
+            "pass": true,
+            "path": "RESULT_SCOREBOARD.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      }
+    },
+    "blueprint_no_discard": {
+      "pass": true,
+      "violations": [],
+      "steps_required": 7,
+      "steps_done": 7
+    },
+    "result_truth": {
+      "pass": false,
+      "violations": [
+        "doctrine:acceptance FAIL tests=UAT-STUB_pending_build",
+        "doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission",
+        "doctrine:verdict/objective mismatch (NOT_COMPLETE)"
+      ],
+      "acceptance_verdict": "FAIL",
+      "exit_code": 0
+    },
+    "simulation_fidelity": {
+      "pass": true,
+      "violations": []
+    },
+    "department_roles": {
+      "pass": true,
+      "violations": [],
+      "checks": {
+        "SNT": {
+          "pass": true,
+          "violations": [],
+          "seat": "SNT"
+        },
+        "CHAIR": {
+          "pass": true,
+          "violations": [],
+          "seat": "CHAIR"
+        },
+        "CFO": {
+          "pass": true,
+          "violations": [],
+          "seat": "CFO"
+        },
+        "WISDOM": {
+          "pass": true,
+          "violations": [],
+          "seat": "WISDOM"
+        }
+      },
+      "departments": {
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "SNT": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "intent_clearance_yes"
+          },
+          "CHAIR": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "forecast_acceptable"
+          },
+          "CFO": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "within_budget"
+          },
+          "WISDOM": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "proceed"
+          }
+        },
+        "defect_owner_seat": null,
+        "route_to": "ARC"
+      }
+    }
+  },
+  "lesson": "Doctrine violation — fix before claiming healthy or advancing queue."
+}

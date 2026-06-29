@@ -1,0 +1,16 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "word-keeper",
+  "project_id": "word_keeper",
+  "name": "Word Keeper",
+  "canonical_home": "docs/products/word-keeper/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/word-keeper/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/word-keeper/PRODUCT_HOME.md",
+    "docs/products/word-keeper/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": []
+}

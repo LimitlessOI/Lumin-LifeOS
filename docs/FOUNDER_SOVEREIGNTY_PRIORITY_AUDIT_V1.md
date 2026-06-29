@@ -280,7 +280,7 @@ The TSOS vocabulary ambiguity (platform name vs. efficiency layer) is flagged in
 The risk: A future agent reads NSSOT broadly (TSOS = platform) and a brainstorm doc narrowly (TSOS = efficiency layer) and makes a product decision based on the wrong scope. This compounds over time as more agents enter the system with stale context.
 
 **Scope:**
-1. Read current NSSOT `docs/SSOT_NORTH_STAR.md` — find every reference to TSOS, TokenSaver, and related vocabulary
+1. Read current NSSOT `docs/constitution/NORTH_STAR_SSOT.md` — find every reference to TSOS, TokenSaver, and related vocabulary
 2. Read `docs/ARCHITECTURE_CONSOLIDATION_DECISION_PACK_V1.md` R-12 and §15 for the accepted governance position
 3. Draft an NSSOT amendment that:
    - Formally defines TSOS as platform metabolism under CFO, not a separate department seat or platform name

@@ -1,11 +1,11 @@
 /**
  * SYNOPSIS: Founder Value Engine v0 — ranks work by founder-visible impact.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * @ssot docs/architecture/BUILDEROS_CONTINUOUS_AUDIT_TO_EXCELLENCE_PROTOCOL.md
  */
 
 const PROOF_DOC_RE = /builderos-remediation\/.*-proof-g\d+/;
-const MARKETING_RE = /marketing|routes\/marketing|AMENDMENT_41|socialmediaos/i;
+const MARKETING_RE = /marketing|routes\/marketing|socialmediaos|PRODUCT_HOME\.md.*socialmediaos/i;
 const HOUSEHOLD_RE = /household|lifeos-household|commitment|sherry/i;
 const LIFEOS_UI_RE = /lifeos-app|lifeos-dashboard|lifeos-communication|overlay\/lifeos/i;
 const GOVERNANCE_LOW_RE = /decision-ledger|proof-g\d|builderos-remediation|telemetry|alpha-readiness|model.benchmark/i;

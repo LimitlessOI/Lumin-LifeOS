@@ -8,7 +8,7 @@
 
 1. `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` — mission, ownership, readiness state
 2. `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` — every file this product owns
-3. `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` — law, vendor model, operating constraints
+3. `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` — law, vendor model, operating constraints
 4. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
 
 ## What this product does

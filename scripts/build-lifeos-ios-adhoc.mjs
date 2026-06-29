@@ -3,7 +3,7 @@
  * SYNOPSIS: iOS ad-hoc IPA + OTA manifest for direct install (no App Store).
  * iOS ad-hoc IPA + OTA manifest for direct install (no App Store).
  * Requires: Mac, Xcode, Apple Developer account, devices registered in profile.
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';

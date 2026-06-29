@@ -4,7 +4,7 @@
  * Typed/threaded history, explicit send, browser STT/TTS controls, search, and
  * C2 job integration. No fake UI, no mock-only flows.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 (function (global) {
   'use strict';

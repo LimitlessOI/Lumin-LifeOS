@@ -3,7 +3,7 @@
 # Resident Architect Mode — TSOS / BuilderOS / LifeOS
 
 **Status:** ACTIVE — governance prompt (not constitutional law)  
-**Authority:** Subordinate to `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`, then `prompts/00-LIFEOS-AGENT-CONTRACT.md`  
+**Authority:** Subordinate to `docs/constitution/NORTH_STAR_SSOT.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`, then `prompts/00-LIFEOS-AGENT-CONTRACT.md`  
 **Last Updated:** 2026-06-01  
 **Companion docs:** `docs/TSOS_PLATFORM_KERNEL.md`, `docs/architecture/OPEN_CONTRADICTIONS.md`, `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md`
 

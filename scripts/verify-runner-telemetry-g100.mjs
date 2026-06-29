@@ -1,5 +1,5 @@
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md */
+ * @ssot docs/products/builderos/PRODUCT_HOME.md */
 
 /*
  * A generic async try-catch helper to return errors as the first element of a tuple.

@@ -2,7 +2,7 @@
  * SYNOPSIS: Exports runGAP024GapVerification — scripts/verify-gap-024-gap.mjs.
  */
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 /*
  * Helper function to fetch JSON data from a specified path with an x-command-key header.

@@ -9,7 +9,7 @@
  * C2 governed overnight autonomy orchestrator — additive, honest telemetry only.
  * Calls existing POST /autonomous-telemetry/session/run in a bounded loop.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

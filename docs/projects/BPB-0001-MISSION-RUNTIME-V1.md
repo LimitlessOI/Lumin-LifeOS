@@ -7,8 +7,8 @@
 **Mission:** MISSION-0001 — Adam + Sherry Household Reliability and Income Engine  
 **State:** Approved (founder-directed, 2026-06-01)  
 **Authority Class:** Founder Required  
-**Constitutional Authority:** `docs/SSOT_NORTH_STAR.md` §2.0D (Mission State Machine Law), §2.0E (BPB Determinism Law)  
-**SSOT Amendment:** `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` ← to be created as part of Phase 1 build  
+**Constitutional Authority:** `docs/constitution/NORTH_STAR_SSOT.md` §2.0D (Mission State Machine Law), §2.0E (BPB Determinism Law)  
+**SSOT Amendment:** `docs/products/builderos/PRODUCT_HOME.md` ← to be created as part of Phase 1 build  
 **Owner:** Adam Hopkins  
 **Participants:** Adam, Sherry  
 **Created:** 2026-06-01  
@@ -67,7 +67,7 @@ These are Phase 5+ features. If a builder is tempted to add any of these, they m
 | `services/mission-ledger.js` | Service | All DB logic, no Express |
 | `routes/mission-routes.js` | Routes | Mounts at `/api/v1/lifeos` |
 | `public/overlay/lifeos-household.html` | UI | Standalone HTML, no build step |
-| `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` | SSOT | Register domain, receipts |
+| `docs/products/builderos/PRODUCT_HOME.md` | SSOT | Register domain, receipts |
 
 **Wiring required (existing files, surgical edits only):**
 - `startup/register-runtime-routes.js` — add `import + registerMissionRoutes(app, pool)` call
@@ -399,7 +399,7 @@ export const MISSION_STATE_TRANSITIONS
 
 ```js
 /**
- * @ssot docs/projects/AMENDMENT_47_MISSION_RUNTIME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * Mission Runtime v1 — missions, commitments, household board.
  */
 import { Router } from 'express';
@@ -501,8 +501,8 @@ grep -r "lifeos-household" routes/public-routes.js
 test -f public/overlay/lifeos-household.html
 
 # 7. @ssot tag in both JS files
-grep "@ssot docs/projects/AMENDMENT_47_MISSION_RUNTIME.md" services/mission-ledger.js
-grep "@ssot docs/projects/AMENDMENT_47_MISSION_RUNTIME.md" routes/mission-routes.js
+grep "@ssot docs/products/builderos/PRODUCT_HOME.md" services/mission-ledger.js
+grep "@ssot docs/products/builderos/PRODUCT_HOME.md" routes/mission-routes.js
 
 # 8. State machine constant exported
 grep "MISSION_STATE_TRANSITIONS" services/mission-ledger.js
@@ -557,9 +557,9 @@ The household board defaults to showing MISSION-0001.
 
 ## Section 12: Amendment Required
 
-`docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` must be created as part of the Phase 1 build.  
+`docs/products/builderos/PRODUCT_HOME.md` must be created as part of the Phase 1 build.  
 Minimum required sections: Mission, Owned Files, API Surface, DB Tables, Build Plan (checked off as built), Change Receipts.  
-All files with `@ssot docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` must point to it.
+All files with `@ssot docs/products/builderos/PRODUCT_HOME.md` must point to it.
 
 ---
 
@@ -728,7 +728,7 @@ Builder failure was caught. The Conductor did not stop. The correct response was
 The prescription check is what caught the truncation. Without the BPB prescription checks defined in §Section 9, this failure would have been silently accepted. BPB determinism law exists precisely for this: the prescription outlives the builder.
 
 **Lesson 4 — Pattern: gemini_flash truncation on large files.**  
-This is not the first occurrence. Historical receipts in `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` show gemini_flash truncating large file commits at least twice. For files > 50 lines, always verify line count after builder commit.
+This is not the first occurrence. Historical receipts in `docs/products/builderos/PRODUCT_HOME.md` show gemini_flash truncating large file commits at least twice. For files > 50 lines, always verify line count after builder commit.
 
 ### 16.3 Enforcement additions (required in Phase 2+)
 

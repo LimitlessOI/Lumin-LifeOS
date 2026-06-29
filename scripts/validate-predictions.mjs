@@ -12,7 +12,7 @@
  * Warn-only: never exits non-zero due to misses.
  * If no records exist yet, reports 0 and exits 0.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';

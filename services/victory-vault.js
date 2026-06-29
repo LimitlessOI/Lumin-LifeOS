@@ -11,7 +11,7 @@
  * Exports:
  *   createVictoryVault({ pool, callAI, logger })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const ALLOWED_MOMENT_TYPES = new Set([

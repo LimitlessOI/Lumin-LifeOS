@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260529_command_center_communications.sql.
 -- Command Center communication history (NOT BuilderOS epistemic proof memory)
--- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+-- @ssot docs/products/command-center/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS command_center_communications (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),

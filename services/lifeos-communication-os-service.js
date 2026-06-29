@@ -3,7 +3,7 @@
  * LifeOS Communication OS — identity layer, meeting mode, search, revenue brief.
  * NOT BuilderOS epistemic proof memory.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import {

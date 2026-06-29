@@ -7,7 +7,7 @@
 -- preserve earnest money. System fires an urgent alert immediately on
 -- reject decision and drafts the cancellation notice automatically.
 --
--- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+-- @ssot docs/products/tc-service/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS tc_inspections (
   id                        BIGSERIAL PRIMARY KEY,

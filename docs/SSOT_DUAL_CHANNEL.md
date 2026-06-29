@@ -3,7 +3,7 @@
 # SSOT dual channel — agents vs system
 
 **Purpose:** Separate *who needs what* without maintaining two copies of the same law.  
-**Parent authority:** `docs/SSOT_NORTH_STAR.md` (NSSOT) and `docs/SSOT_COMPANION.md` (Companion) — nothing in this file overrides them.
+**Parent authority:** `docs/constitution/NORTH_STAR_SSOT.md` (NSSOT) and `docs/SSOT_COMPANION.md` (Companion) — nothing in this file overrides them.
 
 ---
 
@@ -61,7 +61,7 @@ You do **not** want: **two prose SSOTs** that both change every time policy move
 
 **Read order (architecture / audit):**
 
-1. `docs/SSOT_NORTH_STAR.md` — mission, non-negotiables, priority law.
+1. `docs/constitution/NORTH_STAR_SSOT.md` — mission, non-negotiables, priority law.
 2. `docs/SSOT_COMPANION.md` — operations, enforcement, technical specs, gate-change HTTP, etc.
 3. `docs/projects/INDEX.md` — amendment registry + revenue priority.
 4. `docs/SYSTEM_CAPABILITIES.md` + `docs/ENV_REGISTRY.md` — what the running system can do and what it needs.
@@ -73,7 +73,7 @@ You do **not** want: **two prose SSOTs** that both change every time policy move
 
 ## Relationship to “NSSOT” naming
 
-- **NSSOT** = **North Star SSOT** = `docs/SSOT_NORTH_STAR.md` only (constitution).
+- **NSSOT** = **North Star SSOT** = `docs/constitution/NORTH_STAR_SSOT.md` only (constitution).
 - **SSOT** in conversation = the whole canonical tree (NSSOT + Companion + amendments + operational docs above).
 - **This file** = **routing document** only — it does not add new law.
 

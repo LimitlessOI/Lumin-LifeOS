@@ -1,0 +1,21 @@
+{
+  "schema": "product_module_manifest_v1",
+  "product_id": "socialmediaos",
+  "parent_product_id": "marketingos",
+  "parent_home": "docs/products/marketingos/PRODUCT_HOME.md",
+  "canonical_home": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "owned_files": [
+    "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
+    "docs/products/marketingos/socialmediaos/FILE_MANIFEST.json",
+    "routes/socialmediaos-routes.js",
+    "services/socialmediaos-service.js",
+    "services/lifere-socialmediaos-bridge.js",
+    "services/founder-smos-content-executor.js",
+    "db/migrations/20260626_socialmediaos.sql",
+    "db/migrations/20260629_socialmediaos_schema_align.sql",
+    "scripts/verify-socialmediaos.mjs",
+    "scripts/run-founder-socialmediaos-chat-a2z.mjs",
+    "products/receipts/SOCIALMEDIAOS_FOUNDER_CHAT_A2Z.json"
+  ]
+}

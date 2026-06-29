@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Alpha test CRM — BoldTrail connection, create bogus contact, ambient CRM capture, note write-back.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Minimal hello-world stub used for builder smoke tests.
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * Minimal hello-world stub used for builder smoke tests.
  */
 export function helloWorld() {

@@ -13,7 +13,7 @@
  *
  * Exports: createCommitmentSimulator({ pool, callAI })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const WAKING_MINUTES_PER_DAY = 960;  // 16 hours

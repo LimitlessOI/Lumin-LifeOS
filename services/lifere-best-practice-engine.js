@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE best practice engine — promote winning experiments.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 const PLAYBOOK = [];

@@ -5,7 +5,7 @@
 > **AUTO-GENERATED** — `npm run repo:catalog`  
 > **Do not hand-edit** the tables below (regenerate). **Human triage** (gold / trash / keep): `docs/REPO_TRIAGE_NOTES.md`  
 > **Compact buckets only:** `docs/REPO_BUCKET_INDEX.md` — **All indexes map:** `docs/REPO_MASTER_INDEX.md`  
-> **Parent protocol:** `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`
+> **Parent protocol:** `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`
 
 ## Summary
 
@@ -1903,7 +1903,7 @@
 | `config/rabbitmq.config` | 122 | 10 | config | 2025-12-10 | ```ini |
 | `config/redis_config.js` | 297 | 16 | js | 2025-12-10 | ```javascript |
 | `config/redis.js` | 197 | 10 | js | 2025-12-10 | ```javascript |
-| `config/runtime-env.js` | 9682 | 286 | js | 2026-03-30 | @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md — council/env overlap (Ollama policy, spend caps) */ |
+| `config/runtime-env.js` | 9682 | 286 | js | 2026-03-30 | @ssot docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps) */ |
 | `config/stripeConfig.js` | 108 | 5 | js | 2025-12-10 | ```javascript |
 | `config/supplychain-networks.json` | 280 | 18 | json | 2025-12-10 | ```json |
 | `config/task-model-routing.js` | 7151 | 134 | js | 2026-04-25 | (js) |
@@ -2262,22 +2262,22 @@
 | `db/migrations/20260323_glvar_dues.sql` | 1241 | 38 | sql | 2026-03-23 | -- GLVAR Membership Dues Monitoring |
 | `db/migrations/20260323_mls_investors.sql` | 3400 | 77 | sql | 2026-03-23 | -- MLS Investor Registry + Deal Match Engine |
 | `db/migrations/20260323_tc_fees.sql` | 3216 | 66 | sql | 2026-03-23 | -- TC Fee Tracking + Agent Client Registry |
-| `db/migrations/20260325_tc_alerts.sql` | 1810 | 41 | sql | 2026-03-25 | -- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md |
-| `db/migrations/20260325_tc_approvals_automation.sql` | 1631 | 32 | sql | 2026-03-25 | -- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md |
+| `db/migrations/20260325_tc_alerts.sql` | 1810 | 41 | sql | 2026-03-25 | -- @ssot docs/products/tc-service/PRODUCT_HOME.md |
+| `db/migrations/20260325_tc_approvals_automation.sql` | 1631 | 32 | sql | 2026-03-25 | -- @ssot docs/products/tc-service/PRODUCT_HOME.md |
 | `db/migrations/20260325_tc_portal.sql` | 2495 | 49 | sql | 2026-03-25 | -- TC portal + communication layer |
 | `db/migrations/20260325_tc_reporting.sql` | 4340 | 93 | sql | 2026-03-25 | -- TC reporting + seller update support |
-| `db/migrations/20260326_clientcare_billing.sql` | 2643 | 71 | sql | 2026-03-26 | -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md |
-| `db/migrations/20260326_clientcare_ops.sql` | 663 | 18 | sql | 2026-03-26 | -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md |
-| `db/migrations/20260326_tc_external_refs.sql` | 1067 | 24 | sql | 2026-03-26 | -- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md |
+| `db/migrations/20260326_clientcare_billing.sql` | 2643 | 71 | sql | 2026-03-26 | -- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md |
+| `db/migrations/20260326_clientcare_ops.sql` | 663 | 18 | sql | 2026-03-26 | -- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md |
+| `db/migrations/20260326_tc_external_refs.sql` | 1067 | 24 | sql | 2026-03-26 | -- @ssot docs/products/tc-service/PRODUCT_HOME.md |
 | `db/migrations/20260326_tc_interactions.sql` | 1568 | 38 | sql | 2026-03-26 | -- Migration: 20260326_tc_interactions |
 | `db/migrations/20260326_tc_review_packages.sql` | 1076 | 27 | sql | 2026-03-28 | -- Migration: 20260326_tc_review_packages |
 | `db/migrations/20260327_build_ready_gate.sql` | 1899 | 33 | sql | 2026-03-28 | -- ============================================================ |
 | `db/migrations/20260327_builder_council.sql` | 4823 | 79 | sql | 2026-03-28 | -- ============================================================ |
 | `db/migrations/20260327_capability_map.sql` | 1278 | 21 | sql | 2026-03-28 | -- Capability Map: stores analyzed competitor/industry ideas mapped to architecture |
-| `db/migrations/20260327_clientcare_patient_ar_controls.sql` | 1125 | 32 | sql | 2026-03-28 | -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md |
-| `db/migrations/20260327_clientcare_payer_rule_overrides.sql` | 559 | 15 | sql | 2026-03-28 | -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md |
-| `db/migrations/20260327_clientcare_sellable_controls.sql` | 1999 | 53 | sql | 2026-03-28 | -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md |
-| `db/migrations/20260327_clientcare_sellable_v1_hardening.sql` | 502 | 9 | sql | 2026-03-28 | -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md |
+| `db/migrations/20260327_clientcare_patient_ar_controls.sql` | 1125 | 32 | sql | 2026-03-28 | -- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md |
+| `db/migrations/20260327_clientcare_payer_rule_overrides.sql` | 559 | 15 | sql | 2026-03-28 | -- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md |
+| `db/migrations/20260327_clientcare_sellable_controls.sql` | 1999 | 53 | sql | 2026-03-28 | -- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md |
+| `db/migrations/20260327_clientcare_sellable_v1_hardening.sql` | 502 | 9 | sql | 2026-03-28 | -- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md |
 | `db/migrations/20260327_dissent_tracking.sql` | 3491 | 67 | sql | 2026-03-28 | -- Dissent tracking: adds consensus position flag and rebuilds performance views |
 | `db/migrations/20260327_email_triage_enrichment.sql` | 327 | 8 | sql | 2026-03-28 | -- TC email triage enrichment |
 | `db/migrations/20260327_governance_spec.sql` | 2718 | 57 | sql | 2026-03-28 | -- ============================================================ |
@@ -2303,21 +2303,21 @@
 | `db/migrations/20260401_email_triage_intelligence.sql` | 1596 | 29 | sql | 2026-04-01 | -- Email triage intelligence upgrade |
 | `db/migrations/20260401_lifeos_emotional.sql` | 3399 | 67 | sql | 2026-03-29 | -- Migration: 20260401_lifeos_emotional.sql |
 | `db/migrations/20260402_lifeos_purpose.sql` | 3763 | 74 | sql | 2026-03-29 | -- Migration: 20260402_lifeos_purpose.sql |
-| `db/migrations/20260403_clientcare_vob_prospects.sql` | 1240 | 35 | sql | 2026-04-04 | -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md |
+| `db/migrations/20260403_clientcare_vob_prospects.sql` | 1240 | 35 | sql | 2026-04-04 | -- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md |
 | `db/migrations/20260403_lifeos_children.sql` | 2535 | 60 | sql | 2026-03-29 | -- Migration: 20260403_lifeos_children.sql |
 | `db/migrations/20260404_lifeos_copilot_sabotage.sql` | 3003 | 78 | sql | 2026-04-04 | -- ============================================================ |
 | `db/migrations/20260404_lifeos_data_ethics.sql` | 4139 | 79 | sql | 2026-03-29 | -- Migration: 20260404_lifeos_data_ethics.sql |
 | `db/migrations/20260405_future_self_simulator.sql` | 2538 | 53 | sql | 2026-04-05 | -- Migration: 20260405_future_self_simulator.sql |
-| `db/migrations/20260405_kids_os.sql` | 5691 | 123 | sql | 2026-04-05 | -- @ssot docs/projects/AMENDMENT_34_KIDS_OS.md |
+| `db/migrations/20260405_kids_os.sql` | 5691 | 123 | sql | 2026-04-05 | -- @ssot docs/products/kids-os/PRODUCT_HOME.md |
 | `db/migrations/20260405_lifeos_mediation.sql` | 4437 | 93 | sql | 2026-03-29 | -- Migration: 20260405_lifeos_mediation.sql |
-| `db/migrations/20260405_teacher_os.sql` | 3465 | 80 | sql | 2026-04-05 | -- @ssot docs/projects/AMENDMENT_31_TEACHER_OS.md |
+| `db/migrations/20260405_teacher_os.sql` | 3465 | 80 | sql | 2026-04-05 | -- @ssot docs/products/teacher-os/PRODUCT_HOME.md |
 | `db/migrations/20260406_lifeos_conflict.sql` | 6752 | 129 | sql | 2026-03-29 | -- Migration: 20260406_lifeos_conflict.sql |
 | `db/migrations/20260406b_lifeos_conflict_clarity.sql` | 951 | 19 | sql | 2026-03-29 | -- Migration: 20260406b_lifeos_conflict_clarity.sql |
 | `db/migrations/20260407_communication_profile.sql` | 3422 | 74 | sql | 2026-03-29 | BEGIN; |
 | `db/migrations/20260407_response_variety.sql` | 618 | 18 | sql | 2026-03-29 | BEGIN; |
 | `db/migrations/20260408_lifeos_finance_and_prefs.sql` | 2933 | 74 | sql | 2026-04-04 | -- LifeOS: personal finance v1 + flourishing preference bag (Amendment 21 Phase 16 + backlog) |
-| `db/migrations/20260408_tc_td_form_knowledge.sql` | 1032 | 24 | sql | 2026-03-31 | -- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md |
-| `db/migrations/20260416_lifeos_focus_privacy.sql` | 4146 | 88 | sql | 2026-04-17 | -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md |
+| `db/migrations/20260408_tc_td_form_knowledge.sql` | 1032 | 24 | sql | 2026-03-31 | -- @ssot docs/products/tc-service/PRODUCT_HOME.md |
+| `db/migrations/20260416_lifeos_focus_privacy.sql` | 4146 | 88 | sql | 2026-04-17 | -- @ssot docs/products/lifeos/PRODUCT_HOME.md |
 | `db/migrations/20260417_lifeos_calendar.sql` | 2855 | 71 | sql | 2026-04-17 | -- Migration: 20260417_lifeos_calendar |
 | `db/migrations/20260417_lifeos_event_ingest_control.sql` | 242 | 5 | sql | 2026-04-18 | CREATE TABLE IF NOT EXISTS lifeos_event_ingest_control ( |
 | `db/migrations/20260417_lifeos_event_stream.sql` | 2285 | 58 | sql | 2026-04-17 | -- LifeOS unified capture/event stream |
@@ -2481,65 +2481,65 @@
 | `docs/products/conflict-arbitrator.md` | 10219 | 285 | markdown | 2025-12-18 | Conflict Arbitrator - AI-Powered Mediation Overlay |
 | `docs/products/LLM_FEEDBACK_REQUEST.md` | 5085 | 135 | markdown | 2025-12-18 | LLM Feedback Request - AI Counsel OS Product Specification |
 | `docs/PROJECT_CONTEXT.md` | 820 | 31 | markdown | 2026-01-14 | PROJECT CONTEXT |
-| `docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json` | 4529 | 150 | json | 2026-04-25 | { |
-| `docs/projects/AMENDMENT_01_AI_COUNCIL.md` | 35562 | 493 | markdown | 2026-04-25 | AMENDMENT 01 — AI Council System |
-| `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` | 6329 | 106 | markdown | 2026-03-28 | AMENDMENT 02 — Memory System |
-| `docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md` | 6953 | 120 | markdown | 2026-03-28 | AMENDMENT 03 — Financial & Revenue System |
-| `docs/projects/AMENDMENT_04_AUTO_BUILDER.md` | 18305 | 207 | markdown | 2026-04-25 | AMENDMENT 04 — Auto-Builder / Self-Programming System |
-| `docs/projects/AMENDMENT_05_SITE_BUILDER.md` | 12500 | 214 | markdown | 2026-03-28 | AMENDMENT 05 — Site Builder & Prospect Pipeline |
-| `docs/projects/AMENDMENT_06_GAME_PUBLISHER.md` | 6721 | 125 | markdown | 2026-03-28 | AMENDMENT 06 — Game Publisher |
-| `docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md` | 7616 | 129 | markdown | 2026-03-28 | AMENDMENT 07 — Video Pipeline |
-| `docs/projects/AMENDMENT_08_OUTREACH_CRM.md` | 8067 | 130 | markdown | 2026-03-28 | AMENDMENT 08 — Outreach Automation & CRM |
-| `docs/projects/AMENDMENT_09_LIFE_COACHING.md` | 11190 | 158 | markdown | 2026-04-19 | AMENDMENT 09 — Life Coaching / Personal OS + Digital Twin |
-| `docs/projects/AMENDMENT_10_API_COST_SAVINGS.manifest.json` | 3087 | 95 | json | 2026-04-25 | { |
-| `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md` | 22424 | 277 | markdown | 2026-04-25 | AMENDMENT 10 — API Cost Savings Service (TokenOS) — *TokenSaverOS (TSOS) B2B lane* |
-| `docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md` | 6349 | 119 | markdown | 2026-03-28 | AMENDMENT 11 — BoldTrail Real Estate CRM Integration |
-| `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` | 5065 | 169 | json | 2026-04-25 | { |
-| `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` | 20606 | 298 | markdown | 2026-04-25 | AMENDMENT 12 — Command & Control Center |
-| `docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md` | 7863 | 123 | markdown | 2026-03-28 | AMENDMENT 13 — Knowledge Base & Web Intelligence |
-| `docs/projects/AMENDMENT_14_WHITE_LABEL.md` | 7290 | 121 | markdown | 2026-03-28 | AMENDMENT 14 — White-Label Platform |
-| `docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md` | 8510 | 138 | markdown | 2026-03-28 | AMENDMENT 15 — Business Tools Suite |
-| `docs/projects/AMENDMENT_16_WORD_KEEPER.md` | 16821 | 323 | markdown | 2026-03-28 | AMENDMENT 16 — Word Keeper & Integrity Engine |
-| `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` | 9694 | 239 | json | 2026-04-25 | { |
-| `docs/projects/AMENDMENT_17_TC_SERVICE.md` | 82810 | 985 | markdown | 2026-04-25 | AMENDMENT 17 — Transaction Coordinator (TC) Service |
-| `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json` | 16045 | 445 | json | 2026-04-25 | { |
-| `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` | 77114 | 529 | markdown | 2026-04-25 | AMENDMENT 18 — ClientCare Billing Recovery |
-| `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json` | 6120 | 190 | json | 2026-04-06 | { |
-| `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` | 17110 | 226 | markdown | 2026-04-25 | AMENDMENT 19 — Project Governance |
-| `docs/projects/AMENDMENT_20_CAPABILITY_MAP.md` | 4572 | 123 | markdown | 2026-03-28 | AMENDMENT 20 — Capability Map |
-| `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` | 23615 | 827 | json | 2026-04-25 | { |
-| `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` | 279426 | — | markdown | 2026-04-26 | AMENDMENT 21 — LifeOS Core |
-| `docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json` | 2010 | 47 | json | 2026-03-29 | { |
-| `docs/projects/AMENDMENT_22_STORY_STUDIO.md` | 12596 | 265 | markdown | 2026-03-29 | AMENDMENT 22 — Story Studio |
-| `docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.manifest.json` | 1994 | 47 | json | 2026-03-29 | { |
-| `docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md` | 10299 | 243 | markdown | 2026-03-29 | AMENDMENT 23 — Creator Media OS |
-| `docs/projects/AMENDMENT_24_FAITH_STUDIO.manifest.json` | 2082 | 47 | json | 2026-03-29 | { |
-| `docs/projects/AMENDMENT_24_FAITH_STUDIO.md` | 10571 | 237 | markdown | 2026-03-29 | AMENDMENT 24 — Faith Studio |
-| `docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.manifest.json` | 2498 | 51 | json | 2026-04-04 | { |
-| `docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md` | 10807 | 178 | markdown | 2026-04-04 | AMENDMENT 25 — Conflict Arbitrator |
-| `docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.manifest.json` | 2549 | 56 | json | 2026-04-04 | { |
-| `docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md` | 12499 | 184 | markdown | 2026-04-04 | AMENDMENT 26 — Personal Finance OS |
-| `docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.manifest.json` | 2271 | 50 | json | 2026-04-04 | { |
-| `docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md` | 8669 | 215 | markdown | 2026-04-04 | AMENDMENT 27 — Productized Sprint Offers |
-| `docs/projects/AMENDMENT_28_WELLNESS_STUDIO.manifest.json` | 2939 | 58 | json | 2026-04-04 | { |
-| `docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md` | 14205 | 174 | markdown | 2026-04-04 | AMENDMENT 28 — Wellness Studio |
-| `docs/projects/AMENDMENT_29_AI_RECEPTIONIST.manifest.json` | 2937 | 70 | json | 2026-04-04 | { |
-| `docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md` | 7332 | 173 | markdown | 2026-04-04 | AMENDMENT 29 — AI Receptionist (Zoom Phone Overlay) |
-| `docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.manifest.json` | 2543 | 53 | json | 2026-04-04 | { |
-| `docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md` | 8606 | 178 | markdown | 2026-04-04 | AMENDMENT 30 — Enterprise AI Governance |
-| `docs/projects/AMENDMENT_31_TEACHER_OS.manifest.json` | 3013 | 77 | json | 2026-04-05 | { |
-| `docs/projects/AMENDMENT_31_TEACHER_OS.md` | 20121 | 365 | markdown | 2026-04-05 | AMENDMENT_31: Teacher OS |
-| `docs/projects/AMENDMENT_32_MUSIC_TALENT_STUDIO.manifest.json` | 3549 | 82 | json | 2026-04-05 | { |
-| `docs/projects/AMENDMENT_32_MUSIC_TALENT_STUDIO.md` | 20869 | 364 | markdown | 2026-04-05 | AMENDMENT_32: Music Talent Studio |
-| `docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.manifest.json` | 2773 | 61 | json | 2026-04-25 | { |
-| `docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md` | 15290 | 201 | markdown | 2026-04-25 | AMENDMENT_33: The Kingsman Protocol |
-| `docs/projects/AMENDMENT_34_KIDS_OS.manifest.json` | 4096 | 87 | json | 2026-04-05 | { |
-| `docs/projects/AMENDMENT_34_KIDS_OS.md` | 29628 | 513 | markdown | 2026-04-05 | AMENDMENT_34: Kids OS |
-| `docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.manifest.json` | 4040 | 79 | json | 2026-04-05 | { |
-| `docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md` | 16521 | 320 | markdown | 2026-04-05 | AMENDMENT_35: Lumin University |
-| `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.manifest.json` | 1923 | 48 | json | 2026-04-26 | { |
-| `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` | 32836 | 240 | markdown | 2026-04-26 | AMENDMENT 36 — Zero-Drift Handoff & Cold-Start Protocol |
-| `docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md` | 13935 | 301 | markdown | 2026-04-21 | AMENDMENT 37 — Universal Overlay Platform |
+| `docs/products/ai-council/FILE_MANIFEST.json` | 4529 | 150 | json | 2026-04-25 | { |
+| `docs/products/ai-council/PRODUCT_HOME.md` | 35562 | 493 | markdown | 2026-04-25 | AMENDMENT 01 — AI Council System |
+| `docs/products/memory-system/PRODUCT_HOME.md` | 6329 | 106 | markdown | 2026-03-28 | AMENDMENT 02 — Memory System |
+| `docs/products/financial-revenue/PRODUCT_HOME.md` | 6953 | 120 | markdown | 2026-03-28 | AMENDMENT 03 — Financial & Revenue System |
+| `docs/products/builderos/PRODUCT_HOME.md` | 18305 | 207 | markdown | 2026-04-25 | AMENDMENT 04 — Auto-Builder / Self-Programming System |
+| `docs/products/site-builder/PRODUCT_HOME.md` | 12500 | 214 | markdown | 2026-03-28 | AMENDMENT 05 — Site Builder & Prospect Pipeline |
+| `docs/products/game-publisher/PRODUCT_HOME.md` | 6721 | 125 | markdown | 2026-03-28 | AMENDMENT 06 — Game Publisher |
+| `docs/products/video-pipeline/PRODUCT_HOME.md` | 7616 | 129 | markdown | 2026-03-28 | AMENDMENT 07 — Video Pipeline |
+| `docs/products/outreach-crm/PRODUCT_HOME.md` | 8067 | 130 | markdown | 2026-03-28 | AMENDMENT 08 — Outreach Automation & CRM |
+| `docs/products/life-coaching/PRODUCT_HOME.md` | 11190 | 158 | markdown | 2026-04-19 | AMENDMENT 09 — Life Coaching / Personal OS + Digital Twin |
+| `docs/products/api-cost-savings/FILE_MANIFEST.json` | 3087 | 95 | json | 2026-04-25 | { |
+| `docs/products/api-cost-savings/PRODUCT_HOME.md` | 22424 | 277 | markdown | 2026-04-25 | AMENDMENT 10 — API Cost Savings Service (TokenOS) — *TokenSaverOS (TSOS) B2B lane* |
+| `docs/products/boldtrail/PRODUCT_HOME.md` | 6349 | 119 | markdown | 2026-03-28 | AMENDMENT 11 — BoldTrail Real Estate CRM Integration |
+| `docs/products/command-center/FILE_MANIFEST.json` | 5065 | 169 | json | 2026-04-25 | { |
+| `docs/products/command-center/PRODUCT_HOME.md` | 20606 | 298 | markdown | 2026-04-25 | AMENDMENT 12 — Command & Control Center |
+| `docs/products/knowledge-base/PRODUCT_HOME.md` | 7863 | 123 | markdown | 2026-03-28 | AMENDMENT 13 — Knowledge Base & Web Intelligence |
+| `docs/products/white-label/PRODUCT_HOME.md` | 7290 | 121 | markdown | 2026-03-28 | AMENDMENT 14 — White-Label Platform |
+| `docs/products/business-tools/PRODUCT_HOME.md` | 8510 | 138 | markdown | 2026-03-28 | AMENDMENT 15 — Business Tools Suite |
+| `docs/products/word-keeper/PRODUCT_HOME.md` | 16821 | 323 | markdown | 2026-03-28 | AMENDMENT 16 — Word Keeper & Integrity Engine |
+| `docs/products/tc-service/FILE_MANIFEST.json` | 9694 | 239 | json | 2026-04-25 | { |
+| `docs/products/tc-service/PRODUCT_HOME.md` | 82810 | 985 | markdown | 2026-04-25 | AMENDMENT 17 — Transaction Coordinator (TC) Service |
+| `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` | 16045 | 445 | json | 2026-04-25 | { |
+| `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` | 77114 | 529 | markdown | 2026-04-25 | AMENDMENT 18 — ClientCare Billing Recovery |
+| `docs/products/project-governance/FILE_MANIFEST.json` | 6120 | 190 | json | 2026-04-06 | { |
+| `docs/products/project-governance/PRODUCT_HOME.md` | 17110 | 226 | markdown | 2026-04-25 | AMENDMENT 19 — Project Governance |
+| `docs/products/capability-map/PRODUCT_HOME.md` | 4572 | 123 | markdown | 2026-03-28 | AMENDMENT 20 — Capability Map |
+| `docs/products/lifeos/FILE_MANIFEST.json` | 23615 | 827 | json | 2026-04-25 | { |
+| `docs/products/lifeos/PRODUCT_HOME.md` | 279426 | — | markdown | 2026-04-26 | AMENDMENT 21 — LifeOS Core |
+| `docs/products/story-studio/FILE_MANIFEST.json` | 2010 | 47 | json | 2026-03-29 | { |
+| `docs/products/story-studio/PRODUCT_HOME.md` | 12596 | 265 | markdown | 2026-03-29 | AMENDMENT 22 — Story Studio |
+| `docs/products/creator-media-os/FILE_MANIFEST.json` | 1994 | 47 | json | 2026-03-29 | { |
+| `docs/products/creator-media-os/PRODUCT_HOME.md` | 10299 | 243 | markdown | 2026-03-29 | AMENDMENT 23 — Creator Media OS |
+| `docs/products/faith-studio/FILE_MANIFEST.json` | 2082 | 47 | json | 2026-03-29 | { |
+| `docs/products/faith-studio/PRODUCT_HOME.md` | 10571 | 237 | markdown | 2026-03-29 | AMENDMENT 24 — Faith Studio |
+| `docs/products/conflict-arbitrator/FILE_MANIFEST.json` | 2498 | 51 | json | 2026-04-04 | { |
+| `docs/products/conflict-arbitrator/PRODUCT_HOME.md` | 10807 | 178 | markdown | 2026-04-04 | AMENDMENT 25 — Conflict Arbitrator |
+| `docs/products/personal-finance-os/FILE_MANIFEST.json` | 2549 | 56 | json | 2026-04-04 | { |
+| `docs/products/personal-finance-os/PRODUCT_HOME.md` | 12499 | 184 | markdown | 2026-04-04 | AMENDMENT 26 — Personal Finance OS |
+| `docs/products/productized-sprint/FILE_MANIFEST.json` | 2271 | 50 | json | 2026-04-04 | { |
+| `docs/products/productized-sprint/PRODUCT_HOME.md` | 8669 | 215 | markdown | 2026-04-04 | AMENDMENT 27 — Productized Sprint Offers |
+| `docs/products/wellness-studio/FILE_MANIFEST.json` | 2939 | 58 | json | 2026-04-04 | { |
+| `docs/products/wellness-studio/PRODUCT_HOME.md` | 14205 | 174 | markdown | 2026-04-04 | AMENDMENT 28 — Wellness Studio |
+| `docs/products/ai-receptionist/FILE_MANIFEST.json` | 2937 | 70 | json | 2026-04-04 | { |
+| `docs/products/ai-receptionist/PRODUCT_HOME.md` | 7332 | 173 | markdown | 2026-04-04 | AMENDMENT 29 — AI Receptionist (Zoom Phone Overlay) |
+| `docs/products/enterprise-ai-governance/FILE_MANIFEST.json` | 2543 | 53 | json | 2026-04-04 | { |
+| `docs/products/enterprise-ai-governance/PRODUCT_HOME.md` | 8606 | 178 | markdown | 2026-04-04 | AMENDMENT 30 — Enterprise AI Governance |
+| `docs/products/teacher-os/FILE_MANIFEST.json` | 3013 | 77 | json | 2026-04-05 | { |
+| `docs/products/teacher-os/PRODUCT_HOME.md` | 20121 | 365 | markdown | 2026-04-05 | AMENDMENT_31: Teacher OS |
+| `docs/products/music-talent-studio/FILE_MANIFEST.json` | 3549 | 82 | json | 2026-04-05 | { |
+| `docs/products/music-talent-studio/PRODUCT_HOME.md` | 20869 | 364 | markdown | 2026-04-05 | AMENDMENT_32: Music Talent Studio |
+| `docs/products/kingsman-protocol/FILE_MANIFEST.json` | 2773 | 61 | json | 2026-04-25 | { |
+| `docs/products/kingsman-protocol/PRODUCT_HOME.md` | 15290 | 201 | markdown | 2026-04-25 | AMENDMENT_33: The Kingsman Protocol |
+| `docs/products/kids-os/FILE_MANIFEST.json` | 4096 | 87 | json | 2026-04-05 | { |
+| `docs/products/kids-os/PRODUCT_HOME.md` | 29628 | 513 | markdown | 2026-04-05 | AMENDMENT_34: Kids OS |
+| `docs/products/lumin-university/FILE_MANIFEST.json` | 4040 | 79 | json | 2026-04-05 | { |
+| `docs/products/lumin-university/PRODUCT_HOME.md` | 16521 | 320 | markdown | 2026-04-05 | AMENDMENT_35: Lumin University |
+| `docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json` | 1923 | 48 | json | 2026-04-26 | { |
+| `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` | 32836 | 240 | markdown | 2026-04-26 | AMENDMENT 36 — Zero-Drift Handoff & Cold-Start Protocol |
+| `docs/products/universal-overlay/PRODUCT_HOME.md` | 13935 | 301 | markdown | 2026-04-21 | AMENDMENT 37 — Universal Overlay Platform |
 | `docs/projects/AMENDMENT_READINESS_CHECKLIST.md` | 5384 | 127 | markdown | 2026-03-28 | Pre-Build Readiness Checklist |
 | `docs/projects/AMENDMENT_TEMPLATE.md` | 6324 | 212 | markdown | 2026-03-27 | AMENDMENT_XX — [Project Name] |
 | `docs/projects/INDEX.md` | 20140 | 254 | markdown | 2026-04-26 | PROJECT AMENDMENTS INDEX |
@@ -2575,7 +2575,7 @@
 | `docs/SSOT_AMENDMENT_BUILD_READINESS_AUDIT.md` | 5343 | 80 | markdown | 2026-04-25 | Amendment build-readiness audit |
 | `docs/SSOT_COMPANION.md` | 44918 | 722 | markdown | 2026-04-25 | LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT |
 | `docs/SSOT_DUAL_CHANNEL.md` | 5814 | 96 | markdown | 2026-04-25 | SSOT dual channel — agents vs system |
-| `docs/SSOT_NORTH_STAR.md` | 48293 | 412 | markdown | 2026-04-25 | LIFEOS / LIMITLESSOS — NORTH STAR CONSTITUTION |
+| `docs/constitution/NORTH_STAR_SSOT.md` | 48293 | 412 | markdown | 2026-04-25 | LIFEOS / LIMITLESSOS — NORTH STAR CONSTITUTION |
 | `docs/SYSTEM_CAPABILITIES.md` | 6625 | 58 | markdown | 2026-04-25 | System capabilities matrix (TokenSaverOS / LifeOS) |
 | `docs/SYSTEM_MATURITY_PROGRAM.md` | 4993 | 74 | markdown | 2026-04-25 | System Maturity Program — path to exceptional (10/10) operations |
 | `docs/TCO_ANNEX.md` | 16157 | 346 | markdown | 2026-03-21 | SSOT ANNEX — TOTALCOSTOPTIMIZER (TCO) |
@@ -3334,7 +3334,7 @@
 | `public/overlay/chat-panel.js` | 1316 | 41 | js | 2025-12-04 | Chat Panel JavaScript |
 | `public/overlay/code-installation-test.js` | 507 | 10 | js | 2026-01-14 | TEST FILE - Created by LifeOS Command Center |
 | `public/overlay/command-center.css` | 7181 | 112 | css | 2025-12-04 | { margin: 0; padding: 0; box-sizing: border-box; } |
-| `public/overlay/command-center.html` | 84352 | 1759 | html | 2026-03-28 | <!-- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md --> |
+| `public/overlay/command-center.html` | 84352 | 1759 | html | 2026-03-28 | <!-- @ssot docs/products/command-center/PRODUCT_HOME.md --> |
 | `public/overlay/command-center.js` | 39008 | 1121 | js | 2026-03-28 | (js) |
 | `public/overlay/control.html` | 5789 | 150 | html | 2026-01-14 | <!DOCTYPE html> |
 | `public/overlay/extract-conversations.html` | 12574 | 432 | html | 2026-01-14 | <!DOCTYPE html> |

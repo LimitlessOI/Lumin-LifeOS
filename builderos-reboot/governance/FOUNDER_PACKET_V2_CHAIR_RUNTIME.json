@@ -3,7 +3,7 @@
   "updated_at": "2026-06-22",
   "operator_lock": "Adam 2026-06-22 — Live Lumin Chair MUST follow Founder Packet V2. No duplicate doctrine.",
   "supreme_authority": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
-  "nssot_override": "docs/SSOT_NORTH_STAR.md wins on conflict until amended",
+  "nssot_override": "docs/constitution/NORTH_STAR_SSOT.md wins on conflict until amended",
   "enforced_on": [
     "POST /api/v1/lifeos/builderos/command-control/founder-interface/message",
     "services/lumin-chair-orchestrator.js"

@@ -7,7 +7,7 @@ import { validateConsensusSession } from '../canon/deliberation-governance.js';
 
 /**
  * Persist consensus session to Historian jsonl + deliberation gate ledger.
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 export function recordConsensusSession(entry) {
   const v = validateConsensusSession(entry);

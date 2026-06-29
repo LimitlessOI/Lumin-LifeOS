@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: services/conversation-store.js — conversation persistence with truth scrub on assistant writes.
- * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
  */
 
 import { scrubProseForStorage } from './truth-enforcement-spine.js';

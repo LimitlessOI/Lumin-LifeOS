@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-browser-agent.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-browser-agent.js
  * Browser automation for TC workflows:
  *   - GLVAR MLS → TransactionDesk (via Clareity IAM SSO)

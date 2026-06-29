@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: LifeOS System Agent — repo-aware answers from actual filesystem + git, not canned BP text.
  * LifeOS System Agent — repo-aware answers from actual filesystem + git, not canned BP text.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
@@ -291,7 +291,7 @@ export async function findOriginalLifeOSBlueprint({ root = REPO_ROOT } = {}) {
 
   const knownCandidates = [
     {
-      path: 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md',
+      path: 'docs/products/lifeos/PRODUCT_HOME.md',
       why: 'Constitutional LifeOS amendment — Mission, scope, backlog; voice-rail product brief reads this file (docs/products/LIFEOS.md was removed in doc restructure).',
     },
     {
@@ -348,7 +348,7 @@ export async function findOriginalLifeOSBlueprint({ root = REPO_ROOT } = {}) {
   }
 
   const primary = candidateResults.find(
-    (c) => c.path === 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md' && c.exists,
+    (c) => c.path === 'docs/products/lifeos/PRODUCT_HOME.md' && c.exists,
   );
   if (!primary) {
     const ghToken = process.env.GITHUB_TOKEN?.trim();
@@ -358,7 +358,7 @@ export async function findOriginalLifeOSBlueprint({ root = REPO_ROOT } = {}) {
         status: 'BLOCKED',
         question: 'where is the original LifeOS blueprint?',
         blocker: 'lifeos_ssot_not_on_deployed_filesystem',
-        detail: `${'docs/projects/AMENDMENT_21_LIFEOS_CORE.md'} excluded from Railway image (.dockerignore docs/*). GitHub fallback needs GITHUB_TOKEN + GITHUB_REPO.`,
+        detail: `${'docs/products/lifeos/PRODUCT_HOME.md'} excluded from Railway image (.dockerignore docs/*). GitHub fallback needs GITHUB_TOKEN + GITHUB_REPO.`,
         missing: [!ghToken && 'GITHUB_TOKEN', !ghRepo && 'GITHUB_REPO'].filter(Boolean),
         methods_used: ['readRepoFileAsync', 'searchRepoByTerms'],
         search_terms: searchTerms,

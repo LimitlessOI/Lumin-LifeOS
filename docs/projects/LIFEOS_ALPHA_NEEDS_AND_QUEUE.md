@@ -45,7 +45,7 @@ Cursor file does **not** auto-reset: after pulling this reorder run:
 
 ## Two-AI minimum consensus (enforceable pattern)
 
-Per **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`** and **`docs/AI_COLD_START.md`**, IDE chat is **never** authoritative “multi-model consensus.”  
+Per **`docs/products/ai-council/PRODUCT_HOME.md`** and **`docs/AI_COLD_START.md`**, IDE chat is **never** authoritative “multi-model consensus.”  
 
 **Minimal pair**
 

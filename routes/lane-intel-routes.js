@@ -3,7 +3,7 @@
  * Horizon + Red-team intel API (Amendment 36).
  * Mounted at /api/v1/lifeos/intel
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import express from 'express';

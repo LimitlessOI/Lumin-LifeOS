@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE ClickFunnels webhook ingress (stub without secret).
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export function createLifeREFunnelIngress({ pool = null } = {}) {

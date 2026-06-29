@@ -11,7 +11,7 @@
  * Requires: PUBLIC_BUILDER_BASE_URL (or BUILDER_BASE_URL / PUBLIC_BASE_URL / LUMIN_SMOKE_BASE_URL)
  *           COMMAND_CENTER_KEY (or LIFEOS_KEY / API_KEY)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

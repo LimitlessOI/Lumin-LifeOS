@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE client communication templates and draft queue.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export const CLIENT_COMMS_TEMPLATES = {

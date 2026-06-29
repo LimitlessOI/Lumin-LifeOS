@@ -23,7 +23,7 @@
       "shell_entry": "/overlay/lifeos-app.html?page=lifeos-lifere.html",
       "api_namespace": "/api/v1/lifere",
       "doctrine_proxy": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
-      "amendment": "docs/projects/AMENDMENT_LIFERE.md"
+      "amendment": "docs/products/lifere/PRODUCT_HOME.md"
     },
     {
       "stack_id": "socialmediaos",
@@ -32,7 +32,7 @@
       "is_separate_product": false,
       "adapter": "services/lifere-socialmediaos-bridge.js",
       "doctrine_proxy": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
-      "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+      "amendment": "docs/products/marketingos/PRODUCT_HOME.md"
     },
     {
       "stack_id": "builderos",

@@ -16,7 +16,7 @@
 
 **Next:** (1) commit deliberation slice, (2) deploy Railway, (3) `DELIBERATION_SENTRY_PROVEN=1 npm run factory:deliberation-v27:sentry-loop`, (4) fix any P0 from Claude/Cursor SENTRY audits.
 
-Docs: `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md`, `builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/SESSION_SENTRY_LOOP_REPORT.md`
+Docs: `docs/products/builderos/PRODUCT_HOME.md`, `builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/SESSION_SENTRY_LOOP_REPORT.md`
 
 ---
 

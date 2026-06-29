@@ -10,7 +10,7 @@
  *   LIFEOS_CHAT_COUNCIL_MEMBER / LUMIN_COUNCIL_MEMBER — council member key (default `anthropic`,
  *   which resolves via COUNCIL_ALIAS_MAP in config/council-members.js).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 /**

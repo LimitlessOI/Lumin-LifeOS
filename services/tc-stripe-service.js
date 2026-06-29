@@ -2,7 +2,7 @@
  * SYNOPSIS: services/tc-stripe-service.js
  */
 // services/tc-stripe-service.js
-// @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+// @ssot docs/products/tc-service/PRODUCT_HOME.md
 import Stripe from 'stripe';
 import { PLANS, PLAN_DETAILS } from './tc-pricing.js';
 import { Pool } from 'pg';

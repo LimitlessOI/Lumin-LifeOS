@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE LifeOS crosscheck — life-optimal vs business-optimal tradeoffs.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeRETwinStore } from './lifere-twin-store.js';
 

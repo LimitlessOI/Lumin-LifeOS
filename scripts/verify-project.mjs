@@ -15,7 +15,7 @@
  *   node scripts/verify-project.mjs --project clientcare_billing_recovery --strict-manifest-env
  *     (fail if manifest required_env keys are missing in local process env)
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';
@@ -104,11 +104,29 @@ try {
 
 // ── Find all manifests ─────────────────────────────────────────────────────────
 async function findManifests() {
-  const docsDir = path.join(ROOT, 'docs', 'projects');
-  const files = await fs.readdir(docsDir);
-  return files
-    .filter(f => f.endsWith('.manifest.json'))
-    .map(f => path.join(docsDir, f));
+  const paths = [];
+  const projectsDir = path.join(ROOT, 'docs', 'projects');
+  try {
+    const projectFiles = await fs.readdir(projectsDir);
+    for (const f of projectFiles.filter((name) => name.endsWith('.manifest.json'))) {
+      paths.push(path.join(projectsDir, f));
+    }
+  } catch { /* no docs/projects */ }
+
+  const productsDir = path.join(ROOT, 'docs', 'products');
+  try {
+    const productDirs = await fs.readdir(productsDir, { withFileTypes: true });
+    for (const ent of productDirs) {
+      if (!ent.isDirectory()) continue;
+      const manifestPath = path.join(productsDir, ent.name, 'FILE_MANIFEST.json');
+      try {
+        await fs.access(manifestPath);
+        paths.push(manifestPath);
+      } catch { /* no manifest in this product folder */ }
+    }
+  } catch { /* no docs/products */ }
+
+  return paths;
 }
 
 async function loadManifest(manifestPath) {
@@ -384,7 +402,7 @@ if (runAll) {
   for (const m of all) {
     try {
       const data = JSON.parse(await fs.readFile(m, 'utf8'));
-      if (data.project_id === projectArg || data.project === projectArg) { manifests = [m]; break; }
+      if (data.project_id === projectArg || data.project === projectArg || data.product_id === projectArg) { manifests = [m]; break; }
     } catch { continue; }
   }
   if (manifests.length === 0) {

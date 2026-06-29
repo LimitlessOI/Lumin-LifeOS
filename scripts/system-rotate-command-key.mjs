@@ -19,7 +19,7 @@
  *   3. This script rewrites COMMAND_CENTER_KEY in .env.local to match
  *   4. Triggers a redeploy so Railway picks up the new value
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';

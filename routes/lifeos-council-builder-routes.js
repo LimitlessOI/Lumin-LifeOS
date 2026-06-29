@@ -27,7 +27,7 @@
  *     `council.builder.code_execute` (fast literal codegen). Use only after a frozen spec (see prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md).
  *
  * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime (factory-staging/).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { readdir, readFile, writeFile, unlink, mkdtemp, mkdir } from 'fs/promises';

@@ -13,7 +13,7 @@
  * req.lifeosUser shape after passing:
  *   { sub: <user_id string>, handle: <user_handle>, role: 'admin'|'member', tier: 'free'|'core'|'premium'|'family' }
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { verifyToken } from '../services/lifeos-auth.js';

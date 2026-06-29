@@ -3,7 +3,7 @@
 -- Governance Spec Upgrade
 -- Adds segment spec fields, review tiers, market sensitivity,
 -- and outcome scoring to the builder system.
--- @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+-- @ssot docs/products/project-governance/PRODUCT_HOME.md
 -- ============================================================
 
 -- Review tier and segment spec on project_segments

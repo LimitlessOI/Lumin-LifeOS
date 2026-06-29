@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Listening Profile routes — preferences, Lumen onboarding, privacy matrix.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

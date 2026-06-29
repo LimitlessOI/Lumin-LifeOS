@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Verify mission doctrine — artifacts, roles, measurements, result truth.
  * Verify mission doctrine — artifacts, roles, measurements, result truth.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { evaluateMissionDoctrine } from '../factory-staging/factory-core/arc/foundation/doctrine-enforcement.js';
 import { resolveMissionFolder } from '../factory-staging/factory-core/arc/mission-paths.js';

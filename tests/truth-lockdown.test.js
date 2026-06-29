@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Truth lockdown — fail-closed compliance tests.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';

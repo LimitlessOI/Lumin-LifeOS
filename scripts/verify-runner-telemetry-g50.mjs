@@ -1,5 +1,5 @@
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md */
+ * @ssot docs/products/builderos/PRODUCT_HOME.md */
 // Helper to fetch JSON from an apiEP
 async function fetchJson(baseUrl, path, key) {
   const url = `${baseUrl}${path}`;

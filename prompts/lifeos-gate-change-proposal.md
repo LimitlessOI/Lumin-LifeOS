@@ -4,7 +4,7 @@
 
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)
 
-**SSOT:** `docs/SSOT_NORTH_STAR.md` §2.6 ¶8, `docs/SSOT_COMPANION.md` §5.5, `docs/projects/AMENDMENT_01_AI_COUNCIL.md` (Gate-change subsection)  
+**SSOT:** `docs/constitution/NORTH_STAR_SSOT.md` §2.6 ¶8, `docs/SSOT_COMPANION.md` §5.5, `docs/products/ai-council/PRODUCT_HOME.md` (Gate-change subsection)  
 **API:** `routes/lifeos-gate-change-routes.js` → `/api/v1/lifeos/gate-change`
 
 - `GET /presets` — list `run-preset` keys + titles (no AI). Auth: `x-command-key` / `x-command-center-key` **or** LifeOS **admin** JWT (`Authorization: Bearer`)

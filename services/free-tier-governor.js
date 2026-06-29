@@ -3,7 +3,7 @@
  * services/free-tier-governor.js
  * Governs usage of free-tier AI providers so we never go over limits.
  *
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  *
  * Priority chain (all free, in order):
  *   1. Groq … 5. Mistral — see PROVIDER_PRIORITY

@@ -24,7 +24,7 @@
  *   (margin-style amplification). Labeled in trade rows — not spot unlevered performance.
  *   `--optimize-in-sample --optimize-allow-leverage` searches formula × leverage to hit `--optimize-target-mult`.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

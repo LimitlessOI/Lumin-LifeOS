@@ -7,7 +7,7 @@
 -- asking questions, challenging observations, making commitments, changing priorities.
 -- Any actions agreed to in the conversation are extracted and written back into LifeOS.
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

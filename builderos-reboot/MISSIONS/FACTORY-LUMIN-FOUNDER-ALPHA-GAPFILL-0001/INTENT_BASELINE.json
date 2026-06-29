@@ -5,7 +5,7 @@
   "tier": 1,
   "status": "HANDOFF_READY",
   "created_at": "2026-06-28",
-  "amendment_pack": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+  "amendment_pack": "docs/products/lifeos/PRODUCT_HOME.md",
   "proof_lap_only": false,
   "outcome_statement": "Lumin knows Adam personally, executes builds, answers real questions — no pattern theater",
   "user": "Adam (founder)",

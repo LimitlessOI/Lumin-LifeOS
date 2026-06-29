@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Mechanical visual UI patches (border-radius, etc.) — fast path, not full council HTML rewrite.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

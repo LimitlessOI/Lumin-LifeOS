@@ -2,7 +2,7 @@
  * SYNOPSIS: JSONL log for governed prevention hook runs — skip/execute only, no secrets.
  * JSONL log for governed prevention hook runs — skip/execute only, no secrets.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

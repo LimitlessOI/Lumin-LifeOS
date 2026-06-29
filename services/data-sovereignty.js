@@ -9,7 +9,7 @@
  * Exports:
  *   createDataSovereignty({ pool, logger }) → DataSovereignty
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import crypto from 'node:crypto';

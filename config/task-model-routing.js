@@ -18,7 +18,7 @@
  * IMPORTANT: Use `maxOutputTokens` (NOT `maxTokens`) to override output length.
  * council-service reads `options.maxOutputTokens`; `options.maxTokens` is silently ignored.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 /**

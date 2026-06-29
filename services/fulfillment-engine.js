@@ -10,7 +10,7 @@
  *
  * Exports: createFulfillmentEngine({ pool })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createFulfillmentEngine({ pool }) {

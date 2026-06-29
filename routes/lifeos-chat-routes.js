@@ -9,7 +9,7 @@
  * POST /build/pending-adam, GET /build/jobs, GET /build/jobs/:id — plan/draft/queue are council-backed;
  * governance via `pending_adam` / verify scripts.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

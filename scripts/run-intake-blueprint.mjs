@@ -5,7 +5,7 @@
  *   node scripts/run-intake-blueprint.mjs --session <uuid>
  *   node scripts/run-intake-blueprint.mjs --session <uuid> --dry-run
  *   node scripts/run-intake-blueprint.mjs --session <uuid> --from MOS-P1-002
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

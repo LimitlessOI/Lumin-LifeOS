@@ -3,7 +3,7 @@
  * Compute all 15 required BuilderOS metrics from autonomous_telemetry_events.
  * All 15 fields always present in return value — null means NO_DATA, not absent.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 function round3(v) {

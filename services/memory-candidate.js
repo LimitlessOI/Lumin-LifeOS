@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-candidate.js
  */
 // services/memory-candidate.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { randomUUID } from 'crypto';
 
 const detectDuplicate = async (text, domain, pool) => {

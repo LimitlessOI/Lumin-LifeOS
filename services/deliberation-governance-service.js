@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Deliberation governance v2.7 — CnclRoster, consensus, scorecard, Hist case, CFO receipts, gate.
  * Deliberation governance v2.7 — CnclRoster, consensus, scorecard, Hist case, CFO receipts, gate.
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import {

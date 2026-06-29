@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Fail-closed blueprint gate for POST /build on product spine paths (§2.18).
  * Fail-closed blueprint gate for POST /build on product spine paths (§2.18).
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

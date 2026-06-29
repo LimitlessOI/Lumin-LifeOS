@@ -11,7 +11,7 @@
  * GET  /api/v1/model-performance/lens/:lens     — verdict history for one lens
  * POST /api/v1/model-performance/score-outcome  — manually trigger outcome correlation
  *
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

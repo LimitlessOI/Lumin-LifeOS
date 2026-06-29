@@ -1,0 +1,149 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "project-governance",
+  "project_id": "project_governance",
+  "name": "Project Governance",
+  "canonical_home": "docs/products/project-governance/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/project-governance/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "routes/project-governance-routes.js",
+    "startup/register-runtime-routes.js",
+    "startup/boot-domains.js",
+    "db/migrations/20260327_project_governance.sql",
+    "docs/projects/manifest.schema.json",
+    "routes/builder-supervisor-routes.js",
+    "scripts/verify-project.mjs",
+    "scripts/check-coupling.mjs",
+    "scripts/ssot-staleness-check.mjs",
+    "scripts/seed-projects.mjs",
+    ".github/workflows/ssot-compliance.yml",
+    "docs/products/project-governance/PRODUCT_HOME.md",
+    "docs/products/project-governance/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/projects",
+      "expected_status": 200,
+      "description": "Project list"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/pending-adam",
+      "expected_status": 200,
+      "description": "Pending Adam list"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/estimation/accuracy",
+      "expected_status": 200,
+      "description": "Estimation accuracy report"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects/readiness/queue",
+      "expected_status": 200,
+      "description": "Build readiness queue"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/builder/status",
+      "expected_status": 200,
+      "description": "Builder supervisor status"
+    }
+  ],
+  "required_tables": [
+    {
+      "name": "projects",
+      "required_columns": [
+        "id",
+        "slug",
+        "name",
+        "status",
+        "lifecycle"
+      ]
+    },
+    {
+      "name": "project_segments",
+      "required_columns": [
+        "id",
+        "project_id",
+        "title",
+        "status",
+        "estimated_hours"
+      ]
+    },
+    {
+      "name": "estimation_log",
+      "required_columns": [
+        "id",
+        "project_id",
+        "segment_id",
+        "estimated_hours",
+        "actual_hours"
+      ]
+    },
+    {
+      "name": "pending_adam",
+      "required_columns": [
+        "id",
+        "title",
+        "type",
+        "priority",
+        "is_resolved"
+      ]
+    }
+  ],
+  "required_env": [
+    "DATABASE_URL",
+    "COMMAND_CENTER_KEY"
+  ],
+  "assertions": [
+    {
+      "type": "node_check",
+      "check": "routes/project-governance-routes.js",
+      "label": "project-governance-routes syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/verify-project.mjs",
+      "label": "verify-project syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/check-coupling.mjs",
+      "label": "check-coupling syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/ssot-staleness-check.mjs",
+      "label": "staleness script syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/seed-projects.mjs",
+      "label": "seed-projects syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/builder-supervisor-routes.js",
+      "label": "builder-supervisor-routes syntax"
+    }
+  ],
+  "completion_checks": [
+    "Governance routes mount once at /api/v1 without path duplication",
+    "Manifest schema validates all project manifests",
+    "Verifier can evaluate a single project or all manifests",
+    "Coupling and staleness scripts run in CI",
+    "Seed script can populate projects and segments from amendment build plans",
+    "Projects dashboard can read seeded governance data from DB",
+    "Readiness queue differentiates build-ready and not-ready projects",
+    "Builder supervisor routes are mounted and report queue/run status",
+    "Governance captures estimate vs actual timing so forecast accuracy can improve over time",
+    "Build-time env awareness is visible through the env registry and can be checked without exposing secret values"
+  ]
+}

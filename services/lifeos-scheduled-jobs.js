@@ -12,7 +12,7 @@
  * See the individual tick declarations below; each one declares its own
  * prereq + workCheck so this file is the single enforcement point.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { createCommitmentTracker } from './commitment-tracker.js';

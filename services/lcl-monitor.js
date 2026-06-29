@@ -24,7 +24,7 @@
  * The monitor is non-blocking — all DB writes are fire-and-forget. A monitor
  * failure never affects the response path.
  *
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 // ── Config ────────────────────────────────────────────────────────────────────

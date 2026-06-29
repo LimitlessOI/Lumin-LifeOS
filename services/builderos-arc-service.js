@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS ARC translate — system mechanical compile + optional council fallback.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { runArcTranslate } from '../factory-staging/factory-core/arc/translate-mission.js';
 import { runArcEntryGate } from '../factory-staging/factory-core/arc/entry-gate.js';

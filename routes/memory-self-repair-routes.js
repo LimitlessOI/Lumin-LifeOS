@@ -5,7 +5,7 @@
  * Read-only runtime diagnostics for repair-memory state.
  *
  * @ssot docs/architecture/MEMORY_AUTHORITY_MAP.md
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

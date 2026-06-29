@@ -1,6 +1,6 @@
 /**
  * @file scripts/verify-runner-telemetry-g148.mjs
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * @description Verifies runner telemetry and control plane health for Generation 148.
  */
 

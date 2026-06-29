@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Helper function to fetch JSON data from a given URL with a command key header.
  * Handles network errors and non-2xx HTTP responses.
@@ -29,7 +29,7 @@ async function fetchJson(baseUrl, path, key) {
 }
 
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Executes a verification of runner telemetry for Generation 259.
  * Fetches control plane health and autonomous telemetry efficiency concurrently.

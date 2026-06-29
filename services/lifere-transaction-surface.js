@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE transaction surface — Am 17 tc-status-engine integration.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createTCStatusEngine } from './tc-status-engine.js';
 

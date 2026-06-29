@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: LifeOS founder System Direct — API-only comms (no council, no department personas).
  * LifeOS founder System Direct — API-only comms (no council, no department personas).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { listCommandControlJobs } from './builderos-command-control-service.js';
 import {

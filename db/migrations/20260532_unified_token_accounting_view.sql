@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260532_unified_token_accounting_view.sql.
 -- Migration: 20260532_unified_token_accounting_view
 -- Token Accounting OS — supreme reporting view across all ledger sources
--- @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+-- @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
 
 BEGIN;
 

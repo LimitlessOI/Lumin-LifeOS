@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Archive all parent Cursor agent transcripts for this workspace.
- * @ssot docs/projects/AMENDMENT_38_IDEA_VAULT.md
+ * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

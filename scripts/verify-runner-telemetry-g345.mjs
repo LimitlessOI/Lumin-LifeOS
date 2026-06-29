@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Script for verifying runner telemetry and control plane health for Generation 345.
  * Fetches data from control plane and autonomous telemetry endpoints to assess operational status.

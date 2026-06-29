@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Script for verifying runner telemetry and control plane health for Generation 428.
  * This module fetches data from BuilderOS control plane and LifeOS autonomous telemetry endpoints

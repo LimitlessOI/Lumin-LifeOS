@@ -7,7 +7,7 @@
  *
  * Usage: node scripts/seed-projects.mjs [--dry-run]
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';
@@ -29,8 +29,8 @@ const PROJECTS = [
     priority: 'critical',
     phase: 'optimization',
     stability_class: 'needs-review',
-    amendment_path: 'docs/projects/AMENDMENT_01_AI_COUNCIL.md',
-    manifest_path: 'docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json',
+    amendment_path: 'docs/products/ai-council/PRODUCT_HOME.md',
+    manifest_path: 'docs/products/ai-council/FILE_MANIFEST.json',
     current_focus: 'Token savings optimization — general/codegen task types at 4% savings vs target 20%+',
     segments: [
       { title: 'Council routing + failover',            status: 'done',        estimated_hours: 8,  actual_hours: 10, stability_class: 'high-risk',    sort_order: 1 },
@@ -58,8 +58,8 @@ const PROJECTS = [
     priority: 'critical',
     phase: 'expansion',
     stability_class: 'needs-review',
-    amendment_path: 'docs/projects/AMENDMENT_12_COMMAND_CENTER.md',
-    manifest_path: 'docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json',
+    amendment_path: 'docs/products/command-center/PRODUCT_HOME.md',
+    manifest_path: 'docs/products/command-center/FILE_MANIFEST.json',
     current_focus: 'Projects Dashboard panel and Pending Adam panel — just built',
     segments: [
       { title: 'Extract routes to command-center-routes.js', status: 'done',  estimated_hours: 2,  actual_hours: 2,  stability_class: 'safe',         sort_order: 1 },
@@ -84,8 +84,8 @@ const PROJECTS = [
     priority: 'high',
     phase: 'core-infrastructure',
     stability_class: 'needs-review',
-    amendment_path: 'docs/projects/AMENDMENT_17_TC_SERVICE.md',
-    manifest_path: 'docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json',
+    amendment_path: 'docs/products/tc-service/PRODUCT_HOME.md',
+    manifest_path: 'docs/products/tc-service/FILE_MANIFEST.json',
     current_focus: 'First real transaction intake end-to-end (6453 Mahogany Peak)',
     segments: [
       { title: 'TC coordinator — core transaction/deadline/party model', status: 'done', estimated_hours: 8,  actual_hours: 10, stability_class: 'high-risk',   sort_order: 1 },
@@ -116,8 +116,8 @@ const PROJECTS = [
     priority: 'high',
     phase: 'core-infrastructure',
     stability_class: 'needs-review',
-    amendment_path: 'docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md',
-    manifest_path: 'docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json',
+    amendment_path: 'docs/products/project-governance/PRODUCT_HOME.md',
+    manifest_path: 'docs/products/project-governance/FILE_MANIFEST.json',
     current_focus: 'Governance infrastructure live — seed data, C&C panels, CI pipeline',
     segments: [
       { title: 'DB schema (projects, segments, estimation_log, pending_adam)', status: 'done', estimated_hours: 3, actual_hours: 3, stability_class: 'safe', sort_order: 1 },

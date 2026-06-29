@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260325_tc_approvals_automation.sql.
--- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+-- @ssot docs/products/tc-service/PRODUCT_HOME.md
 -- TC approvals + automation surface for one-click review/approve/send flows.
 
 CREATE TABLE IF NOT EXISTS tc_approval_items (

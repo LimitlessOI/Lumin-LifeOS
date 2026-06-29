@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-06-29 — Repo + Neon organization pass (files + database cleanup)
+
+Adam: *go deeper — fix our files, organize them, organize Neon (useless crap).* **Files:** BuilderOS docs consolidated under `docs/products/builderos/` — `TWIN.md`, `specs/BP_V1.md`; alpha blueprint archived to `docs/history/builderos/`; redirect stubs left at old paths; **1,108** `@ssot`/path references updated to canonical product home. **Neon:** Created `archive` schema; moved **49** tables out of `public` (29 empty prototypes + 20 legacy orphan-data tables including `task_outputs` 68k rows, `compression_stats` 54k rows). **Result:** `public` **509 → 460** tables; **88** with live data; **372** empty schema-ready (code-referenced, kept); **0** orphan/review left. Audit script: `scripts/neon-schema-audit.mjs`; guide: `docs/database/README.md`. **Not done:** LifeOS 2k-line PRODUCT_HOME trim; `docs/projects/` dashboard spec sprawl; 372 empty schema-ready tables (wait until products ship or Adam approves deeper cut). **Next:** commit when Adam asks; optional LifeOS spec folder migration.
+
+---
+
 ## [SESSION] 2026-06-27 — Founder overlay auth redirect v1 was still split-brain; callers still built nested `next=`
 
 Adam: *run a live ui run and repair and observe; do not stop.* After the first redirect hardening pass was committed and pushed, Railway was verified on the new SHA and the anonymous `/overlay/lifeos-app.html?direct_system=1` probe was rerun. That probe still failed live even though the bootstrap helper code was updated: the login URL was now a single `next` param, but its value still contained a nested `?next=`. That proved the remaining problem was architectural, not deployment lag. The helper had been fixed, but the overlay shell and ambient listener were still hand-building `/overlay/lifeos-login.html?next=...` and then delegating to a helper that also owns redirect construction. **Fixed locally:** `public/overlay/lifeos-app.html` and `public/shared/lifeos-ambient-listener.js` now call `requireAuth('/overlay/lifeos-login.html')` only, leaving `lifeos-bootstrap.js` as the single source of truth for `next` generation. **Next:** commit this second redirect slice, redeploy Railway, rerun the anonymous overlay probe until the login URL is clean, then continue founder-path break testing.
@@ -249,7 +255,7 @@ Adam: on laptop browser, Voice Rail mic button used **iPhone** input (Apple Cont
 
 ## [CONSTITUTION] 2026-06-12 — Article II §2.18 Compound Drift Law
 
-Adam: one-degree navigation error compounds (Hawaii→NY → Florida); decisions on false premises stack. **Shipped:** **Article II §2.18** in `docs/SSOT_NORTH_STAR.md` (Foundational Law) — zero tolerated angular error; mandatory course correction before build-on-error; mechanical enforcement must be **impossible** not “hard.” Cross-refs: §2.4, TL;DR table, `docs/constitution/NORTH_STAR.md` digest, Companion **§0.11**, `npm run gen:rules` → compact rules. **Next:** wire enforcement gaps Adam named (CI `lifeos:bp-priority:verify`, runtime `/build` blueprint gate, orphan PASS impossible on merge).
+Adam: one-degree navigation error compounds (Hawaii→NY → Florida); decisions on false premises stack. **Shipped:** **Article II §2.18** in `docs/constitution/NORTH_STAR_SSOT.md` (Foundational Law) — zero tolerated angular error; mandatory course correction before build-on-error; mechanical enforcement must be **impossible** not “hard.” Cross-refs: §2.4, TL;DR table, `docs/constitution/NORTH_STAR_SSOT.md` digest, Companion **§0.11**, `npm run gen:rules` → compact rules. **Next:** wire enforcement gaps Adam named (CI `lifeos:bp-priority:verify`, runtime `/build` blueprint gate, orphan PASS impossible on merge).
 
 ---
 
@@ -529,7 +535,7 @@ Adam directive: **commit + push + deploy after every agreed change** unless he e
 - `docs/architecture/DELIBERATION_ARCHITECTURE.md` (rewrite)
 - `docs/architecture/FOUNDER_VOCABULARY_CONSENSUS_REPORT.md` v2.7
 - `docs/architecture/FOUNDER_DEBRIEF_TEMPLATE.md` (new)
-- `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md` (receipts + handoff)
+- `docs/products/builderos/PRODUCT_HOME.md` (receipts + handoff)
 
 **Morning archaeology (unchanged, cross-linked):** `MEMORY_ARCHITECTURE_ARCHAEOLOGY.md`, `TRUTH_SYSTEM_ARCHITECTURE.md`, `PERSONAL_MEMORY_ARCHITECTURE.md`, `docs/archive/EVIDENCE_VAULT/`
 
@@ -668,7 +674,7 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 - `public/overlay/lifeos-household.html` — NEW. 8-section household board. 30s poll, ?key= auth, state pills, approve button, add commitment form.
 - `startup/register-runtime-routes.js` — MODIFIED. createMissionRoutes import + mount at /api/v1/lifeos.
 - `routes/public-routes.js` — MODIFIED. /lifeos-household route added per §Section 7.
-- `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` — MODIFIED. Status = PHASE 2 COMPLETE. Agent Handoff Notes added.
+- `docs/products/builderos/PRODUCT_HOME.md` — MODIFIED. Status = PHASE 2 COMPLETE. Agent Handoff Notes added.
 
 **Commits (all on main, pushed to origin/main):**
 - `d937bc46` — mission-ledger.js + AMENDMENT_47
@@ -698,7 +704,7 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 
 **Files changed:**
 - `scripts/governed-overnight-backlog-run.mjs` — 11 targeted changes: lower thresholds (3/6 from 8/15), `classifyWorkAdvancement()`, `runLocalTask()` (3 local-only action types), `generateInfraRecoveryTasks()`, `generateNextTaskBatch()` gated on `infrastructure_degraded`, task-level 502 counter (`consecutive_infra_failures`), local task dispatch via `requires_api`, progressive backoff sleep, work classification update after each task, `consecutive_infra_failures` reset on recovery, new state fields
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt added
+- `docs/products/builderos/PRODUCT_HOME.md` — change receipt added
 
 **Verified in production:**
 - `infrastructure_degraded` guard fired after 3 task-level 502 failures (not 1,488)
@@ -727,8 +733,8 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 **Files changed:**
 - `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md` — v2: 24/7 framing (not overnight mode), Identity/Terminology table, Builder Gap Escalation Protocol (10-step Builder→BPB→AIC→Adam ladder), updated binding table
 - `docs/projects/BPB-0001-MISSION-RUNTIME-V1.md` — §§13–16 added: Existing Asset Inventory + reuse plan (commitments table/route collision + resolution), Blocked Work Handling (escalation ladder), Mission Continuity Doctrine classification (open gap, not law), Builder Failure Lesson (gemini_flash truncation incident)
-- `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` — status updated to Phase 2 BLOCKED; Known Gaps expanded with commitments conflict + governance gaps
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt for builder failure lesson + doctrine updates
+- `docs/products/builderos/PRODUCT_HOME.md` — status updated to Phase 2 BLOCKED; Known Gaps expanded with commitments conflict + governance gaps
+- `docs/products/builderos/PRODUCT_HOME.md` — change receipt for builder failure lesson + doctrine updates
 
 **Critical findings from BPB asset inventory:**
 1. `commitments` table already exists (SERIAL PK, different schema) — BPB migration will silently no-op; patch migration required
@@ -757,7 +763,7 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 - `scripts/governed-overnight-backlog-run.mjs` — `founder_value_deliveries`, no-retry on 502/same blocker, infra redirect + local verify burst
 - `prompts/00-RESIDENT-ARCHITECT.md` — architectural depth + copy/paste fatigue + cross-link
 - `docs/QUICK_LAUNCH.md` — autonomous ops section
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt
+- `docs/products/builderos/PRODUCT_HOME.md` — change receipt
 
 **Next:** Mission dashboard should surface `founder_value_deliveries` vs `failed_repairs` ratio; council redirect hook when same blocker repeats across jobs.
 
@@ -804,7 +810,7 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 - `routes/lifeos-command-center-routes.js` — added import `listCommandControlJobs`, `getCommandControlHaltState` from `builderos-command-control-service.js`; added `GET /api/v1/lifeos/command-center/mission-dashboard` route (requireKey) returning 9 sections
 - `public/overlay/c2-mission-dashboard.html` (NEW) — standalone dark dashboard, 10s auto-poll, key from URL param or localStorage, 9 sections rendered
 - `routes/public-routes.js` — added `GET /mission-dashboard` serving the HTML with no-cache headers
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — updated API surface, owned files, build plan, change receipt
+- `docs/products/command-center/PRODUCT_HOME.md` — updated API surface, owned files, build plan, change receipt
 
 **Data sources (real, no mock):** `builderos_command_control_jobs` (50 most recent), `data/governed-autonomy-backlog-state.json` (try/catch — local runner only, unavailable on Railway), `pending_adam WHERE is_resolved=false`
 
@@ -834,7 +840,7 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 
 **Receipts / files:**
 - `scripts/governed-overnight-backlog-run.mjs` — blueprint-first queue logic
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt row
+- `docs/products/builderos/PRODUCT_HOME.md` — change receipt row
 - `docs/CONTINUITY_LOG.md` — this receipt
 
 **Verification status before restart:**
@@ -1025,8 +1031,8 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 - `routes/lifeos-council-builder-routes.js`: Added `await writeSecurityReceipt` — commit `31672bb8b1`
 
 **SSOT updates:**
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md`: Last Updated + 2 change receipt rows added
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`: Last Updated + change receipt row added
+- `docs/products/builderos/PRODUCT_HOME.md`: Last Updated + 2 change receipt rows added
+- `docs/products/lifeos/PRODUCT_HOME.md`: Last Updated + change receipt row added
 - `docs/architecture/OPEN_CONTRADICTIONS.md`: OC-014 marked RESOLVED, resolved table updated
 
 **Remaining after this session:**
@@ -1116,7 +1122,7 @@ Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and pro
 **SSOT updates:**
 - `docs/architecture/OPEN_CONTRADICTIONS.md`: OC-010 RESOLVED, OC-015 NEW, v3 history entry
 - `docs/architecture/PLATFORM_GAP_REGISTER.md`: GAP-003/005/013 RESOLVED, v2 history entry
-- `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`: 2 change receipt rows added
+- `docs/products/builderos/PRODUCT_HOME.md`: 2 change receipt rows added
 
 **Commits this session:**
 - `e896a68a95` — OC-014 executor fix (tryExecuteFallback + SUPERVISED case)
@@ -1220,7 +1226,7 @@ Built **BuilderOS Control Plane** — supreme measurement layer (Amendment 46; A
 **Core law:** If it is not in the ledger, it did not happen.
 
 **Phase 1 delivered:**
-- `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md` + manifest
+- `docs/products/builderos/PRODUCT_HOME.md` + manifest
 - `db/migrations/20260601_build_task_ledger.sql` — `build_task_ledger` + legacy `builder_task_ledger`
 - `services/builderos-control-plane-service.js` — health, summary, DONE gate, build ledger
 - `routes/builderos-control-plane-routes.js` — `GET /api/v1/builderos/control-plane/health`
@@ -1249,7 +1255,7 @@ Built **Token Accounting OS** — unified enforced token ledger layer (GAP-FILL 
 **Core law shipped:** council paths use `recordMetered` → `tokenAccounting.recordMeteredCall` → `token_usage_log` or `ai_unmetered_exceptions`.
 
 **Files created:**
-- `docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md` + manifest
+- `docs/products/token-accounting-os/PRODUCT_HOME.md` + manifest
 - `db/migrations/20260531_operator_consumption_ledger.sql` (OCL + unmetered + free-tier + CCL cols)
 - `db/migrations/20260532_unified_token_accounting_view.sql`
 - `services/token-accounting-service.js`, `services/operator-consumption-ledger-service.js`, `services/metered-ai-call.js`
@@ -1335,8 +1341,8 @@ Closed 6 of 11 BuilderOS decision gaps in Amendment 41 and manifest. No code wri
 **Gap 6 — Team Accounts:** Phase 1 is owner-only. `business_id` UUID field included in schema for future migration readiness. Multi-user deferred to Phase 2.
 
 **Files changed:**
-- `docs/projects/AMENDMENT_41_MARKETINGOS.md` — 12 edits: features-excluded list, storage API entry, readiness gate, export format header, autosave error-handling bullet, acceptance tests expanded to 11, Rule 8 storage comment, Rules 12–13–14 added, Task 15 env vars, §12 split into RESOLVED/OPEN, §13 blockers + gaps-closed subsection, Gate 1 checklist updated, Change Receipts row appended
-- `docs/projects/AMENDMENT_41_MARKETINGOS.manifest.json` — current_focus, next_task, required_env (R2 naming), storage_decision block added
+- `docs/products/marketingos/PRODUCT_HOME.md` — 12 edits: features-excluded list, storage API entry, readiness gate, export format header, autosave error-handling bullet, acceptance tests expanded to 11, Rule 8 storage comment, Rules 12–13–14 added, Task 15 env vars, §12 split into RESOLVED/OPEN, §13 blockers + gaps-closed subsection, Gate 1 checklist updated, Change Receipts row appended
+- `docs/products/marketingos/FILE_MANIFEST.json` — current_focus, next_task, required_env (R2 naming), storage_decision block added
 
 ### State after this session
 - Amendment 41: 6 gaps RESOLVED, 5 remaining OPEN (require Adam input)
@@ -1371,8 +1377,8 @@ Closed 6 of 11 BuilderOS decision gaps in Amendment 41 and manifest. No code wri
 - Confirmed: Whisper transcription (word-keeper-transcriber.js) VERIFIED working
 - Confirmed: Video pipeline FFmpeg on Railway UNCONFIRMED — blocks Phase 3
 - Confirmed: Social media was marked DEFERRED in roadmap — updated to ACTIVE
-- Created `docs/projects/AMENDMENT_41_MARKETINGOS.md` — full A-to-Z blueprint: Phase 0–10, MVP technical spec (exact schema + routes + services + prompts + model routing), consent contract, BuilderOS execution contract, revenue plan, build order checklist, open questions for Adam
-- Created `docs/projects/AMENDMENT_41_MARKETINGOS.manifest.json`
+- Created `docs/products/marketingos/PRODUCT_HOME.md` — full A-to-Z blueprint: Phase 0–10, MVP technical spec (exact schema + routes + services + prompts + model routing), consent contract, BuilderOS execution contract, revenue plan, build order checklist, open questions for Adam
+- Created `docs/products/marketingos/FILE_MANIFEST.json`
 - Updated `docs/projects/INDEX.md` — Amendment 41 added at row 41
 - Updated `docs/roadmap/social-media.md` — DEFERRED status replaced with ACTIVE, Amendment 41 reference
 
@@ -1466,9 +1472,9 @@ Closed 6 of 11 BuilderOS decision gaps in Amendment 41 and manifest. No code wri
 
 ### Files changed
 - `public/overlay/lifeos-command-center.html` (+25 lines): (1) CSS snap-row `repeat(7,1fr)` → `repeat(8,1fr)`. (2) 8th SNAP_DEFS entry `memory-proof`. (3) `rmp` fetch in `loadSnapshot()` updates `cards[7]`: green PROVEN (100%/ok) when `builderos_memory_proven:true`, yellow NOT PROVEN (30%/warn) when reachable-but-false, red ERROR (0%/err) on endpoint failure. `snapData['memory-proof']` stores all proof fields + disclaimer. Click-to-drawer via existing generic path. 9/9 sanity checks pass.
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipt row added.
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` — current_focus updated.
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — receipt row added.
+- `docs/products/command-center/PRODUCT_HOME.md` — receipt row added.
+- `docs/products/command-center/FILE_MANIFEST.json` — current_focus updated.
+- `docs/products/builderos/PRODUCT_HOME.md` — receipt row added.
 
 ### State after this session
 - No JS files changed — HTML only
@@ -1486,9 +1492,9 @@ Closed 6 of 11 BuilderOS decision gaps in Amendment 41 and manifest. No code wri
 
 ### Files changed
 - `public/overlay/lifeos-command-center.html` (+63 lines): added `section-memory-proof` full-width card and `loadMemoryProof()` async function. Renders: maturity pill, proven/not-proven pill, 3 stat cards (Total Facts, Tested+, Multi-Source), authority row, legacy-excluded row, legacy-free-for-proof row, generated_at, and disclaimer. Added `loadMemoryProof()` to `Promise.allSettled` in `loadAll()`.
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipt row added.
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` — `current_focus` updated.
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — receipt row added.
+- `docs/products/command-center/PRODUCT_HOME.md` — receipt row added.
+- `docs/products/command-center/FILE_MANIFEST.json` — `current_focus` updated.
+- `docs/products/builderos/PRODUCT_HOME.md` — receipt row added.
 
 ### State after this session
 - HTML sanity: 7/7 presence checks pass, 2331 lines
@@ -1507,8 +1513,8 @@ Closed 6 of 11 BuilderOS decision gaps in Amendment 41 and manifest. No code wri
 ### Files changed
 - `routes/lifeos-command-center-routes.js` (+36 lines): added `GET /api/v1/lifeos/command-center/memory/proof` — read-only BuilderOS memory proof surface. Queries `epistemic_facts` only (3 parallel COUNTs: total, level>=2, level>=2 AND source_count>1). Returns `ok`, `memory_authority:"CANONICAL_EVIDENCE"`, `proof_source:"epistemic_facts"`, `total_facts`, `tested_or_above_count`, `multi_source_fact_count`, `builderos_memory_proven` (true when multi_source>=1), `do_not_use_legacy_memory_for_builderos_proof:true`, `legacy_sources_excluded:true`, `maturity`, `contract_ref`, `generated_at`. No legacy memory tables touched.
 - `services/builderos-system-alpha-readiness.js` (4 targeted changes): replaced stale fakeGreenRisks memory entry; removed "Memory still lacks BuilderOS-approved runtime proof maturity." from unknowns; added `memory_proof` to `proof_sources`; updated next_10 item 3 from "Add" to "Wire...into overlay".
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipt row added.
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` — added memory/proof to required_routes; updated current_focus.
+- `docs/products/command-center/PRODUCT_HOME.md` — receipt row added.
+- `docs/products/command-center/FILE_MANIFEST.json` — added memory/proof to required_routes; updated current_focus.
 
 ### State after this session
 - `node --check` PASS: both changed source files
@@ -1529,9 +1535,9 @@ Closed 6 of 11 BuilderOS decision gaps in Amendment 41 and manifest. No code wri
 - `routes/memory-routes.js` — added `LEGACY_META` constant (`memory_authority: 'LEGACY_COMPAT'`, `canonical_replacement: '/api/v1/memory/evidence or /api/v1/memory/capsules'`, `do_not_use_for_builderos_proof: true`) spread into all 5 legacy route success responses. Routes at `/api/memories/*` and `/api/v1/memory/legacy/*` now self-report authority class to callers.
 - `routes/api-v1-core.js` — added same three authority fields to `/api/v1/memory/search` inline route response (uses `recallConversationMemory` / `conversation_memory` table → LEGACY_COMPAT).
 - `startup/register-runtime-routes.js` — clarified comment on `/api/v1/memory` compat alias: CANONICAL_EVIDENCE compat path (same handler as `/evidence`; not a legacy route; `do_not_use_for_builderos_proof: false`). Logger message updated to match.
-- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` — receipt row added (memory namespace audit Phase 2).
-- `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — receipt row added (register-runtime-routes.js compat alias comment update).
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipt row added (api-v1-core.js memory search metadata annotation).
+- `docs/products/memory-system/PRODUCT_HOME.md` — receipt row added (memory namespace audit Phase 2).
+- `docs/products/project-governance/PRODUCT_HOME.md` — receipt row added (register-runtime-routes.js compat alias comment update).
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipt row added (api-v1-core.js memory search metadata annotation).
 
 ### Memory authority classification (confirmed)
 - `/api/v1/memory/capsules` → CANONICAL_CAPSULE (Amendment 02)
@@ -1748,7 +1754,7 @@ Phase D mission: run one real governed job, prove TSOS hook fires, clear TSOS_IN
 ## [FIX] Update 2026-05-27 — BR-01 constitutional alignment (BuilderOS machine identity)
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — BuilderOS is now the canonical autonomous machine identity; TSOS retained only as the external efficiency/routing product and machine-channel lexicon file name
+- `docs/constitution/NORTH_STAR_SSOT.md` — BuilderOS is now the canonical autonomous machine identity; TSOS retained only as the external efficiency/routing product and machine-channel lexicon file name
 - `docs/SSOT_COMPANION.md` — aligned machine identity, build priority wording, and §0.5F/§0.5G references to BuilderOS
 - `docs/AGENT_RULES.compact.md` — compact rule summary updated so cold agents no longer inherit TSOS-as-machine drift
 
@@ -1897,7 +1903,7 @@ Phase D mission: run one real governed job, prove TSOS hook fires, clear TSOS_IN
 ## [BUILD] Update 2026-05-24 #25 — PB execution authority (§2.16 governance correction)
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — Article II **§2.16** No unnecessary Adam bottlenecks
+- `docs/constitution/NORTH_STAR_SSOT.md` — Article II **§2.16** No unnecessary Adam bottlenecks
 - `docs/SSOT_COMPANION.md` — **§0.5J** PB execution authority
 - `docs/AGENT_RULES.compact.md` — §2.16 one-line enforcement
 - `services/pb-execution-authority.js` — `SYSTEM_AUTHORIZED_UNDER_PB` vs `ADAM_REQUIRED` classifier
@@ -1923,9 +1929,9 @@ Phase D mission: run one real governed job, prove TSOS hook fires, clear TSOS_IN
 - `routes/oil-security-receipt-routes.js` — moved from stub auth to real `requireKey`; added builder-safe latest summary endpoint and optional core-only receipt reads
 - `routes/lifeos-command-center-routes.js` — added read-only `/api/v1/lifeos/command-center/security` aggregate returning only real receipt-backed state plus explicit `NOT_WIRED` placeholders for unfrozen security lanes
 - `startup/register-runtime-routes.js` — now passes `requireKey` into OIL security route factories and exposes `/security` in the aggregate route log line
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` + manifest — documented the new SEC-F01 security aggregate endpoint
-- `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — added SEC-F01 freeze change receipt
-- `docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md` + manifest — narrowed Security Alpha to receipt spine only; active defense/deception remains `NOT_WIRED`
+- `docs/products/command-center/PRODUCT_HOME.md` + manifest — documented the new SEC-F01 security aggregate endpoint
+- `docs/products/project-governance/PRODUCT_HOME.md` — added SEC-F01 freeze change receipt
+- `docs/products/oil-security-divisions/PRODUCT_HOME.md` + manifest — narrowed Security Alpha to receipt spine only; active defense/deception remains `NOT_WIRED`
 
 ### State after this session
 - SEC-F01 remains receipt-spine only: no kill switches, no auto-remediation, no fake data, no new Builder mutations
@@ -1977,7 +1983,7 @@ Phase D mission: run one real governed job, prove TSOS hook fires, clear TSOS_IN
 ### Files changed
 - `routes/memory-capsule-routes.js` — Fixed import from empty `authMiddleware.js` stub → `auth.js` (proper default export). Was causing Railway boot crash: `SyntaxError: does not provide an export named 'default'`
 - `db/migrations/20260523_memory_capsule_constraint_repair.sql` (NEW) — Dropped and recreated `memory_capsules_source_type_check` to include `user_input`; added `working_memory_entries.entry_content` and `promoted_to_candidate`; guarded `epistemic_facts.review_by`. Root cause: the `CREATE TABLE IF NOT EXISTS` in f962de86 was a no-op (table existed); node-pg-migrate won't re-run applied migrations so the constraint never applied to Neon.
-- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` — Last Updated, Change Receipts, Agent Handoff Notes updated with live proof.
+- `docs/products/memory-system/PRODUCT_HOME.md` — Last Updated, Change Receipts, Agent Handoff Notes updated with live proof.
 
 ### Deploy cutover diagnosis (OIL BLOCKED → CERTIFIED)
 - Railway watches `main` only; 7 governance commits were exclusively on `phase7-railway-probe`
@@ -2006,7 +2012,7 @@ Memory Capsule Alpha is LIVE and CERTIFIED. No remaining blockers.
 - `services/memory-oil-bridge.js` — Fixed: removed dead `Pool`+`LEVEL` imports (wrong path `../memory-intelligence-service.js`), fixed `WHERE id = $1` → `WHERE capsule_id = $1`, fixed `enforceRetrievalCeiling` from broken string comparison to `indexOf`-based numeric comparison, fixed `TRUSTED_FOR_CONTEXT` ceiling from `decision_support` to `action_authority` (now consistent with memory-retrieval.js TRUST_TO_PERMISSION)
 - `services/memory-trust-bridge.js` — Fixed: removed dead pool import (`db/pool.js` DNE), fixed LEVEL import path to `./memory-intelligence-service.js`, rebuilt TRUST_MAP ceiling values (were using undefined `LEVEL.BLOCKED`/`LEVEL.CONTEXT_ONLY` etc., now string permission values), fixed `WHERE id = $1` → `WHERE capsule_id = $1` in assignTrust, fixed `factLevel.level` → `factLevel.rows[0].level`, fixed INSERT target `capsule_receipts` → `memory_use_receipts`, CANONICAL guard now checks string `'CANONICAL'` not undefined `LEVEL.CANONICAL`
 - `services/memory-explanation.js` — Fixed: removed dead `LEVEL` import with wrong `../memory-intelligence-service.js` path; LEVEL was unused in this file
-- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` — Last Updated, Change Receipts, Agent Handoff Notes updated with pressure test results and gap tracking
+- `docs/products/memory-system/PRODUCT_HOME.md` — Last Updated, Change Receipts, Agent Handoff Notes updated with pressure test results and gap tracking
 - `scripts/memory-pressure-test.mjs` — Pre-existing; re-ran after import fixes. 18/20 PASS, 2 PARTIAL (MC-F22 gap + intermediate promotion gate), 0 FAIL
 
 ### State after this session
@@ -2034,7 +2040,7 @@ Two options (Adam decides):
 - `db/migrations/20260513_repair_phase3_users_monetization.sql` (NEW) — assessment_results, decision_review_queue, dashboard_widgets/preferences, client_metrics_cache, monetization_paths status column, monetization_outreach (full table — original transaction aborted before creating it).
 - `db/migrations/20260427_lifeos_conflict_interrupts.sql` — users→lifeos_users BIGINT, metadata block removed.
 - `db/migrations/20260427_lifeos_sleep_logs.sql` — `::INT` → `CAST(... AS INTEGER)`.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — full receipt + handoff updated.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — full receipt + handoff updated.
 
 ### State after this session
 - All 12 failed migrations have repair migrations. On next Railway deploy, the 3 repair migration files will apply and all 12 failed tables/columns will exist.
@@ -2049,7 +2055,7 @@ Two options (Adam decides):
 - `scripts/founder-decoder.mjs` (NEW) — reads existing runtime data, renders plain-English in 4 modes. No new schema, no daemon, no governance logic. Handles list/object quarantine format difference. Coalesces daemons sharing same root cause in --calm mode.
 - `tests/founder-decoder.test.js` (NEW) — 5 tests, all modes + no-args usage.
 - `package.json` — 4 `founder:*` shortcuts + test wired.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S6 receipt + handoff (Phase 2 sequence complete).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — S6 receipt + handoff (Phase 2 sequence complete).
 
 ### State after this session
 - `npm test`: **49 pass, 0 fail, 4 skipped**. `node --check`: PASS.
@@ -2071,7 +2077,7 @@ Two options (Adam decides):
 - `scripts/generate-cold-start.mjs` — prediction summary section wired (line 306 of AI_COLD_START.md).
 - `tests/prediction-loop.test.js` (NEW) — 10 tests: pure function coverage, synthetic proof round-trip, validator structure tests.
 - `package.json` — test script + `predictions:validate` shortcut added.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S5 receipt + handoff notes updated (S5 ✅, next = S6 Founder Decoder).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — S5 receipt + handoff notes updated (S5 ✅, next = S6 Founder Decoder).
 
 ### State after this session
 - `npm test`: **44 pass, 0 fail, 4 skipped**. `node --check`: PASS all files.
@@ -2095,7 +2101,7 @@ Two options (Adam decides):
 - `docs/AI_COLD_START.md` — regenerated; now includes per-lane DNA coverage counts.
 - `tests/validate-task-dna.test.js` (NEW) — 6 tests covering lane presence, grandTotal, populated ≥ 1, nextTaskDNA structure, math identity, formatReport string shape.
 - `package.json` — added `tests/validate-task-dna.test.js` to test script + `dna:validate` shortcut.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S4 receipt row added; Agent Handoff Notes updated (S4 ✅, next = S5 Prediction loop).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — S4 receipt row added; Agent Handoff Notes updated (S4 ✅, next = S5 Prediction loop).
 
 ### State after this session
 - `npm test`: **34 pass, 0 fail, 4 skipped**. `node --check`: PASS all files.
@@ -2116,7 +2122,7 @@ Two options (Adam decides):
 - `scripts/lifeos-builder-continuous-queue.mjs` — Wired C09 at 6 exit points: SIS1 skip, FPM1 level-3 quarantine, syntax/413 quarantine, hard fail, exception throw, build ok. Every task exit now emits `closure_contract_result` event.
 - `tests/closure-contract.test.js` — NEW. 14 tests: all closure types, all violation paths, synthetic proof event round-trip.
 - `package.json` — Added test to suite.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Receipt + handoff updated.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Receipt + handoff updated.
 - `docs/CONTINUITY_LOG.md` — This entry.
 
 ### State after this session
@@ -2139,7 +2145,7 @@ Two options (Adam decides):
 - `scripts/generate-cold-start.mjs` — Modified. Reads `docs/INSTITUTIONAL_MEMORY_DIGEST.md`; cold-start packet now includes "Institutional Memory — top lessons (RECEIPT-class, not FACT)" section at line 225.
 - `docs/INSTITUTIONAL_MEMORY_DIGEST.md` — NEW (generated). Auto-generated digest from DB rows. Committed so cold agents can read without DB.
 - `package.json` — Added `memory:seed-lessons` script.
-- `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — Agent Handoff + Change Receipts updated.
+- `docs/products/memory-intelligence/PRODUCT_HOME.md` — Agent Handoff + Change Receipts updated.
 - `docs/CONTINUITY_LOG.md` — This entry.
 
 ### State after this session
@@ -2159,7 +2165,7 @@ Two options (Adam decides):
 
 ### Files changed
 - `scripts/lib/autonomy-write-lock.mjs` — auto-expiry added: `expires_at` + `ttl_minutes` written by `acquireLock()`; `DEFAULT_TTL_MINUTES=120` (env `AUTONOMY_LOCK_TTL_MINUTES`). `readLock()` auto-deletes and returns null if expired. `releaseLock()` now ENOENT-tolerant (idempotent). Error message improved: includes `locked_by`, `locked_at`, `reason`. Uncommitted from prior session — now committed.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — C21 handoff row updated to CONFIRMED LIVE; new receipt row added for proof run + auto-expiry; PENDING_CONFIRMATION row removed.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — C21 handoff row updated to CONFIRMED LIVE; new receipt row added for proof run + auto-expiry; PENDING_CONFIRMATION row removed.
 - `docs/CONTINUITY_LOG.md` — this entry.
 
 ### State after this session
@@ -2179,7 +2185,7 @@ Two options (Adam decides):
 - `scripts/lifeos-builder-continuous-queue.mjs` — wired C21: imports lock lib; after `assertReady()` checks lock; if locked → logs `autonomy_write_lock_active` + sets `lockStagingBranch = "autonomy/staging"`; per-task `branchResolved = lockStagingBranch || resolveQueueTaskCommitBranch(task)`; `autonomy_lock_active` field on `task_start` log.
 - `public/overlay/lifeos-dashboard.html` — fixed builder output corruption: 7x `asyncFn funcName()` → `async function funcName()`, 1x `2  Math.PI  radius` → `2 * Math.PI * radius`. Restores `check:overlay` PASS. Unblocks Forge from 9-cycle failure streak.
 - `.gitignore` — added `data/autonomy.lock`.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — SIS1 CONFIRMED receipt, C21 receipt, Agent Handoff Notes updated.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — SIS1 CONFIRMED receipt, C21 receipt, Agent Handoff Notes updated.
 - `docs/projects/BRAINSTORM_SESSIONS/.../11_IDEAS_CLAUDE_CODE_PHASE1.md` — new: C01–C25 Claude Code independent ideas.
 - `docs/projects/BRAINSTORM_SESSIONS/.../20_RANKINGS_PHASE2.md` — C-series populated, §9 global rank with ICS scores, §10 operator-finalized 6-slice sequence.
 
@@ -2224,7 +2230,7 @@ Two options (Adam decides):
 ## [FIX] Update 2026-05-12 #9 — Governance correction: PENDING_CONFIRMATION marker + prove-the-loop rule
 
 ### Files changed
-- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — (1) **Prove-the-loop rule** added to Pre-Flight / Post-Flight Rules: do not start the next repair/build slice until the previous slice has at least one live runtime confirmation or is explicitly marked `PENDING_CONFIRMATION` by the operator. (2) Two new Change Receipts rows: `⚠️ PENDING_CONFIRMATION — SIS1 not yet verified live on Forge` (Forge resumes 22:15 UTC; confirmation target is `task_skip_already_shipped` event in daemon log) + `FPM1 known risks` (spec hint pollution, quarantine mislabel, JSON vs Neon). (3) Agent Handoff Notes updated to show PENDING_CONFIRMATION state and blocked next-task order.
+- **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** — (1) **Prove-the-loop rule** added to Pre-Flight / Post-Flight Rules: do not start the next repair/build slice until the previous slice has at least one live runtime confirmation or is explicitly marked `PENDING_CONFIRMATION` by the operator. (2) Two new Change Receipts rows: `⚠️ PENDING_CONFIRMATION — SIS1 not yet verified live on Forge` (Forge resumes 22:15 UTC; confirmation target is `task_skip_already_shipped` event in daemon log) + `FPM1 known risks` (spec hint pollution, quarantine mislabel, JSON vs Neon). (3) Agent Handoff Notes updated to show PENDING_CONFIRMATION state and blocked next-task order.
 - **`docs/CONTINUITY_LOG.md`** — this entry.
 
 ### State after this session
@@ -2245,7 +2251,7 @@ Two options (Adam decides):
 - **`scripts/lib/builder-failure-memory.mjs`** (new) — reads/writes `data/builder-failure-patterns.json`; tracks cumulative failure count per task across daemon restarts and circuit-breaker cycles. Exports: `recordFailure(taskId, lane, sig, targetFile)`, `getEscalationHint(taskId)`, `resolveTask(taskId)`. Escalation ladder: level 0 (0–2 fails) = normal; level 1 (3–5) = TOKEN_HINT in spec; level 2 (6–9) = SCOPE_HINT; level 3 (10+) = OPERATOR_ALERT + auto-quarantine.
 - **`scripts/lifeos-builder-continuous-queue.mjs`** — imports the three functions; checks escalation before `runBuild` (hint appended to spec copy); records failure after `!ok`; level-3 path auto-quarantines + continues; resolves after `ok`. New log events: `task_escalation_hint_injected`, `task_skip_failure_pattern_quarantine`. `failure_memory_count` + `failure_memory_level` added to `task_fail` log.
 - **`.gitignore`** — `data/builder-failure-patterns.json` added.
-- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — FPM1 Done backlog entry + Change Receipt row.
+- **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** — FPM1 Done backlog entry + Change Receipt row.
 
 ### State after this session
 - `npm test`: 8 pass, 0 fail. `node --check` passes on both modified files.
@@ -2262,7 +2268,7 @@ Two options (Adam decides):
 ## [FIX] Update 2026-05-12 #7 — Receipt correction: SIS1 commit `5f6d5ebb` is mixed-scope + standing pre-commit hunk-audit rule
 
 ### Files changed
-- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — New Change Receipts row documenting that commit `5f6d5ebb` (SIS1) is mixed-scope: 2 SIS1 hunks (`checkIfAlreadyShipped` function + pre-build block) + 4 previously-unstaged LA1 hunks (`DASHBOARD_UI_GROUNDING_FILES`, `loadQuarantinedTaskIds` lane-scoping, `runBuild` files merge). All hunks are functionally valid; only the causality trail was unclear. New **Pre-commit hunk audit** rule added to the Pre-Flight / Post-Flight Rules section: before every commit, run `git diff --cached`, report staged files + hunk categories + whether any hunk is outside the current slice + pure vs mixed-scope; STOP if mixed-scope unless operator approves or commit is split.
+- **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** — New Change Receipts row documenting that commit `5f6d5ebb` (SIS1) is mixed-scope: 2 SIS1 hunks (`checkIfAlreadyShipped` function + pre-build block) + 4 previously-unstaged LA1 hunks (`DASHBOARD_UI_GROUNDING_FILES`, `loadQuarantinedTaskIds` lane-scoping, `runBuild` files merge). All hunks are functionally valid; only the causality trail was unclear. New **Pre-commit hunk audit** rule added to the Pre-Flight / Post-Flight Rules section: before every commit, run `git diff --cached`, report staged files + hunk categories + whether any hunk is outside the current slice + pure vs mixed-scope; STOP if mixed-scope unless operator approves or commit is split.
 - **`docs/CONTINUITY_LOG.md`** — this entry.
 
 ### State after this session
@@ -2284,8 +2290,8 @@ Two options (Adam decides):
 - **`config/council-members.js`** — `github_llama` (DeepSeek-V3-0324 via GitHub Models) + `fireworks_llama` added.
 - **`services/free-tier-governor.js`** — `github_models` (4850 req/day) + `fireworks` (97 req/day) in `PROVIDER_LIMITS` + `PROVIDER_PRIORITY`.
 - **`services/savings-ledger.js`** — both new providers in `COST_PER_M` + `FREE_PROVIDERS`.
-- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — SIS1 receipt + Done backlog entry.
-- **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`** — new provider integration receipt.
+- **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** — SIS1 receipt + Done backlog entry.
+- **`docs/products/ai-council/PRODUCT_HOME.md`** — new provider integration receipt.
 
 ### State after this session
 - Compliance officer: all 12 gates GREEN (`exit_fail=false`), `DRIFT_SEVERITY_HINT=INFO`, repo aligned.
@@ -2303,7 +2309,7 @@ Two options (Adam decides):
 
 ### Files changed
 - **`scripts/operator-stale-failure-detect.mjs`**, **`npm run operator:stale-failure-detect`** — quarantine vs queue **`target_file`** + **`node --check`** for **`.js`**; verdicts **STALE_LIKELY_SYNTAX_GHOST** / **REAL_*** / **UNKNOWN_***; append **`data/operator-stale-failure-log.jsonl`** (gitignored) unless **`--no-log`**; **`--json`** for machine output.
-- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`package.json`**, **`.gitignore`**.
+- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`package.json`**, **`.gitignore`**.
 
 ### State after this session
 - Operator can run **`npm run operator:stale-failure-detect`** before spending builder/council tokens to see whether a quarantine row still matches disk reality (heuristic; **UNKNOWN** stays unknown).
@@ -2319,7 +2325,7 @@ Two options (Adam decides):
 - **`scripts/operator-repair-loop-r2-once.mjs`**, **`npm run operator:repair-loop:r2`** — detect stale **`tc-morning-digest-service`** quarantine (`'party…` / **`Invalid or unexpected token`**) while **`services/tc-morning-digest-service.js`** is shipped → **`node --check`** → prune matching **`data/quarantined-tasks.json`** rows → **`quarantine-cleared-tasks.json`** → **`npm test`** → **`data/operator-repair-loop-log.jsonl`**.
 - **`tests/tc-morning-digest-service-module.test.js`** — regression: module imports (**`getTCMorningDigest`**, **`formatTCDigestForEmail`**, **`formatTCDigestForSMS`**) without DB.
 - **`package.json`** — **`test`** list + **`operator:repair-loop:r2`** script.
-- **`docs/OPERATOR_DASHBOARD_JSON.md`** (Heart monitor row, execution **2e**, changelog), **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/projects/AMENDMENT_17_TC_SERVICE.md`**, **`docs/SYSTEM_CAPABILITIES.md`**.
+- **`docs/OPERATOR_DASHBOARD_JSON.md`** (Heart monitor row, execution **2e**, changelog), **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, **`docs/products/tc-service/PRODUCT_HOME.md`**, **`docs/SYSTEM_CAPABILITIES.md`**.
 
 ### State after this session
 - **`npm test`** and **`npm run operator:repair-loop:r2`** exit **0**; **`quarantine_removed=2`**. **`npm run operator:status`** — **`last_failed_task`** advances past digest (e.g. to **`tc-stripe-billing-service`**). **`fail_closed`** may still reflect compliance/overseer rows until **`git pull`** / compliance re-run when appropriate.
@@ -2335,7 +2341,7 @@ Two options (Adam decides):
 - **`services/site-builder-postmark-helper.js`** — Postmark **`sendProspectOutreach`** (GAP-FILL for truncated builder output on **`site-builder-postmark-send`**).
 - **`scripts/operator-repair-loop-once.mjs`**, **`npm run operator:repair-loop`** — detect matching quarantine → **`node --check`** → prune **`data/quarantined-tasks.json`** → **`quarantine-cleared-tasks.json`** → **`npm test`** → **`data/operator-repair-loop-log.jsonl`** (gitignored).
 - **`tests/site-builder-postmark-helper.test.js`** — regression (no-token + **`dry_run`**); follow-up: **`import path from "node:path"`** + **`@ssot`** so **`npm test`** passes.
-- **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** ( **`Last Updated`** chain: SW1 vs OH1 restored), **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`package.json`**, **`.gitignore`**.
+- **`docs/products/site-builder/PRODUCT_HOME.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`** ( **`Last Updated`** chain: SW1 vs OH1 restored), **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`package.json`**, **`.gitignore`**.
 
 ### State after this session
 - **RL1** is the first finished **detect → diagnose → repair → verify → receipt → regression** slice tied to **`operator:status`** / quarantine receipts; **`npm test`** green after **`path`** import fix. Next dominant wound from status is **`RL2`** (separate narrow script per Amendment **36** — no grab-bag **`elseif`** in RL1).
@@ -2349,7 +2355,7 @@ Two options (Adam decides):
 
 ### Files changed
 - **`services/tc-webhook-validator.js`** — **`timingSafeEqualUtf8`** (length check before **`crypto.timingSafeEqual`**); **`missing_signature`** when secret configured but header absent.
-- **`docs/projects/AMENDMENT_17_TC_SERVICE.md`** — **Last Updated** + Audit Pass change receipt row.
+- **`docs/products/tc-service/PRODUCT_HOME.md`** — **Last Updated** + Audit Pass change receipt row.
 
 ### State after this session
 - **`node --check`** + **`npm test`** pass. TC builder lane may still show **`queue_paused`** until operator clears pause / queue; overseer **`degraded_warn`** unchanged until lane healthy.
@@ -2364,7 +2370,7 @@ Two options (Adam decides):
 ### Files changed
 - **`scripts/tsos-overseer-daemon.mjs`** — **`childEnvForChecks()`**; **ENOENT** stderr hint; JSDoc.
 - **`scripts/tsos-system-watch.mjs`**, **`npm run tsos:system-watch`**, **`data/system-watch-log.jsonl`** (gitignored).
-- **`package.json`**, **`.gitignore`**, **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**.
+- **`package.json`**, **`.gitignore`**, **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**.
 
 ### State after this session
 - **`TSOS_OVERSEER_STRICT=0 node scripts/tsos-overseer-daemon.mjs --once`** — all **`npm`** checks show realistic **`elapsedMs`**; **`overall_status`** **`degraded_warn`** only for **`degraded_lanes`** (**`tc`**), not bogus required-check failures.
@@ -2379,7 +2385,7 @@ Two options (Adam decides):
 
 ### Files changed
 - **`scripts/operator-runtime-status.mjs`**, **`npm run operator:status`** / **`tsos:operator-status`**, optional **`--html`** → **`data/operator-runtime-status.html`**; append-only **`data/operator-status-log.jsonl`** (gitignored).
-- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/RUNTIME_REALITY_SNAPSHOT.md`**, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`.gitignore`**, **`package.json`**.
+- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/RUNTIME_REALITY_SNAPSHOT.md`**, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, **`.gitignore`**, **`package.json`**.
 
 ### State after this session
 - Read-only: reads **`data/runtime-reality-snapshot.json`** (or in-memory snapshot if missing); uses **`buildOperatorDashboard()`** in memory only (does not write **`operator-dashboard.json`**).
@@ -2396,7 +2402,7 @@ Two options (Adam decides):
 - **`scripts/tsos-compliance-officer.mjs`** — **`writeOperatorDashboard()`** after runtime snapshot.
 - **`scripts/tsos-overseer-daemon.mjs`** — **`TSOS_OVERSEER_STRICT`**, **`resolveCheckSeverities()`**, **`--once`** + strict → exit **1** on required failures; **`@ssot`**.
 - **`.github/workflows/ci.yml`**, **`.github/workflows/ci-cd.yml`** — overseer step after compliance.
-- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/RUNTIME_REALITY_SNAPSHOT.md`** (triage row), **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`.gitignore`**, **`package.json`**.
+- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/RUNTIME_REALITY_SNAPSHOT.md`** (triage row), **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, **`.gitignore`**, **`package.json`**.
 
 ### State after this session
 - **`npm run operator:dashboard`** writes JSON; **`npm run tsos:compliance-officer`** refreshes it. Local **`overseer --once`** fails if another overseer holds the lock (expected on dev laptops; CI is clean).
@@ -2412,7 +2418,7 @@ Two options (Adam decides):
 - **`scripts/lib/git-origin-alignment.mjs`** — shared **`getGitOriginAlignment()`** for **`repo:sync-check`** + snapshot.
 - **`scripts/generate-runtime-reality-snapshot.mjs`**, **`npm run runtime:reality-snapshot`** — **`data/runtime-reality-snapshot.json`** (gitignored): **`SYSTEM_STATE_ID`**, **`COMMIT_SHA`**, **`SSOT_VERSION`**, **`DICT_VERSION`**, **`SCHEMA_VERSION`**, **`QUEUE_VERSION`**, **`DEPLOY_VERSION`**, **`DRIFT_SEVERITY_HINT`** (includes compliance **`exit_fail`**).
 - **`scripts/repo-sync-check.mjs`**, **`scripts/tsos-compliance-officer.mjs`** — compliance calls **`writeRuntimeRealitySnapshot()`** after receipt.
-- **`docs/RUNTIME_REALITY_SNAPSHOT.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`** §5, **`docs/QUICK_LAUNCH.md`** 6b, **`docs/SYSTEM_CAPABILITIES.md`** **RRS1** + **CO1** note + changelog, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`.gitignore`**, **`package.json`**.
+- **`docs/RUNTIME_REALITY_SNAPSHOT.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`** §5, **`docs/QUICK_LAUNCH.md`** 6b, **`docs/SYSTEM_CAPABILITIES.md`** **RRS1** + **CO1** note + changelog, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, **`.gitignore`**, **`package.json`**.
 
 ### State after this session
 - **`npm run runtime:reality-snapshot`** generates snapshot; **`npm run tsos:compliance-officer`** refreshes it at end of run.
@@ -2429,7 +2435,7 @@ Two options (Adam decides):
 - **`docs/OPERATIONAL_REALITY_SYNC.md`** — single commit-graph rule, governance tier vocabulary (1 advisory / 2 degraded / 3 fail-closed), compliance hook.
 - **`scripts/repo-sync-check.mjs`**, **`package.json`** **`repo:sync-check`**.
 - **`scripts/tsos-compliance-officer.mjs`** — first gate **`repo:sync-check`**; **`TSOS_COMPLIANCE_SKIP_REPO_SYNC`**.
-- **`docs/QUICK_LAUNCH.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**.
+- **`docs/QUICK_LAUNCH.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**.
 
 ### State after this session
 - **`npm run tsos:compliance-officer`** includes **`repo_sync_check`**; **`npm run repo:sync-check`** **0** when aligned.
@@ -2443,7 +2449,7 @@ Two options (Adam decides):
 
 ### Files changed
 - **`scripts/ssot-check.js`** — **`getAmendmentLastUpdated()`** uses amendment **head** (table **Last Updated** row, else first **`**Last Updated:**`** in first **120** lines) instead of first match file-wide.
-- **`docs/projects/INDEX.md`**, **`docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`** — receipts / **Last Updated** table row.
+- **`docs/projects/INDEX.md`**, **`docs/products/project-governance/PRODUCT_HOME.md`** — receipts / **Last Updated** table row.
 
 ### State after this session
 - **`npm run ssot:validate`** and **`npm run tsos:compliance-officer`** **PASS** on current tree.
@@ -2457,15 +2463,15 @@ Two options (Adam decides):
 
 ### Files changed
 - **`public/overlay/lifeos-dashboard.html`** — **`asyncFn`** → **`async function`**; **`makeRing`** circumference formula; **`<style>`** **`/* */`** comments (invalid **`/ … /`**).
-- **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`** — Change Receipt (**`protocolLabel`** / idea-generation path); **Pre-Build Readiness** **`Last Updated`** synced (**`ssot-check`** first-match).
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Change Receipt + Agent Handoff (**`ssot_validate`** / overlay **`KNOW`**).
+- **`docs/products/ai-council/PRODUCT_HOME.md`** — Change Receipt (**`protocolLabel`** / idea-generation path); **Pre-Build Readiness** **`Last Updated`** synced (**`ssot-check`** first-match).
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — Change Receipt + Agent Handoff (**`ssot_validate`** / overlay **`KNOW`**).
 
 ### State after this session
 - **`npm run check:overlay`**, **`npm run lifeos:supervise:static`**, **`npm test`** (local unit pass; HTTP skipped) verified; **~5 min** watch all green on overlay gates.
 - **`npm run tsos:compliance-officer`** requires **`ssot:validate`** — passes when **`lifeos-gate-change-council-run.js`** + **`AMENDMENT_01`** ship together.
 
 ### Next agent: start here
-- Commit **`services/lifeos-gate-change-council-run.js`** with **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`** + dashboard overlay in one slice so **`ssot:validate`** stays green; continue **modes v1** UX slice per Amendment **21** handoff when ready.
+- Commit **`services/lifeos-gate-change-council-run.js`** with **`docs/products/ai-council/PRODUCT_HOME.md`** + dashboard overlay in one slice so **`ssot:validate`** stays green; continue **modes v1** UX slice per Amendment **21** handoff when ready.
 
 ---
 
@@ -2477,7 +2483,7 @@ Two options (Adam decides):
 - **`docs/projects/AMENDMENT_40_PRIVACY_MENTAL_SOVEREIGNTY.md`** — Last Updated + Change Receipt (wiring pass).
 - **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** — Related index rows for Amendment 40, AI Management SSOT, INDEX.
 - **`docs/QUICK_LAUNCH.md`** — LifeOS lane: Amendment 40 + AI Management SSOT before new capture/consent/training/ranking surfaces.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Constitutional LifeOS UX SSOT bullet **4**; **Last Updated**; **Agent Handoff** row **Privacy & AI governance**; **Change Receipt** row.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — Constitutional LifeOS UX SSOT bullet **4**; **Last Updated**; **Agent Handoff** row **Privacy & AI governance**; **Change Receipt** row.
 - **`docs/CONTINUITY_LOG_LIFEOS.md`** — LifeOS lane pointer to cross-cutting **[BUILD] #8**.
 
 ### State after this session
@@ -2493,7 +2499,7 @@ Two options (Adam decides):
 
 ### Files changed
 - **`docs/projects/LIFEOS_UX_ARCHITECTURE.md`** — **## v1 modes (spec anchor — four only)** wide table + NSSOT alignment + persistence **THINK** note; Layer B text points to v1 four; **v1 build guidance** bullet 1 updated.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Change Receipt row, **Last Updated**, **Agent Handoff Notes** new **Next UX slice (modes v1)** row.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — Change Receipt row, **Last Updated**, **Agent Handoff Notes** new **Next UX slice (modes v1)** row.
 - **`docs/QUICK_LAUNCH.md`** — LifeOS lane pointer to **`LIFEOS_UX_ARCHITECTURE.md`**.
 - **`docs/CONTINUITY_LOG.md`** — this entry.
 
@@ -2511,7 +2517,7 @@ Two options (Adam decides):
 - **`docs/projects/LIFEOS_UX_ARCHITECTURE.md`** — already present from prior slice; confirmed as principles hub.
 - **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`**, **`docs/mockups/DASHBOARD_UI_MAP.md`**, **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** — pointers and **LifeOS interaction model (2026+)** summary.
 - **`scripts/lifeos-builder-continuous-queue.mjs`**, **`scripts/verify-dashboard-ui-map.mjs`** — UX doc in dashboard UI grounding + verifier.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Constitutional UX bullet, Visual SSOT row, Change Receipt, Last Updated.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — Constitutional UX bullet, Visual SSOT row, Change Receipt, Last Updated.
 
 ### State after this session
 - Cold agents and **`lifeos:verify:ui-map`** treat Lumin-first hierarchy as required reading alongside the pixel map and brief.
@@ -2535,7 +2541,7 @@ Two options (Adam decides):
 ## [BUILD] Update 2026-05-11 #4 — OCL1 Neon + HTTP (system-backed ledger)
 
 ### Files changed
-- **`db/migrations/20260511_operator_consumption_ledger.sql`**, **`services/operator-consumption-ledger-service.js`**, **`routes/operator-consumption-ledger-routes.js`**, **`startup/register-runtime-routes.js`**, **`scripts/operator-consumption-ledger.mjs`**, **`docs/OPERATOR_CONSUMPTION_LEDGER.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`**.
+- **`db/migrations/20260511_operator_consumption_ledger.sql`**, **`services/operator-consumption-ledger-service.js`**, **`routes/operator-consumption-ledger-routes.js`**, **`startup/register-runtime-routes.js`**, **`scripts/operator-consumption-ledger.mjs`**, **`docs/OPERATOR_CONSUMPTION_LEDGER.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, **`docs/products/project-governance/PRODUCT_HOME.md`**.
 
 ### State after this session
 - **`POST /api/v1/lifeos/operator-consumption/entries`** and **`GET .../summary?days=N`** persist/query **`operator_consumption_ledger`** (same JSON shape as CLI). CLI uses API when **`PUBLIC_BASE_URL`** + command key; otherwise local JSONL.
@@ -2548,7 +2554,7 @@ Two options (Adam decides):
 ## [BUILD] Update 2026-05-11 #3 — Operator consumption ledger (OCL1)
 
 ### Files changed
-- **`scripts/operator-consumption-ledger.mjs`**, **`package.json`** (`operator:consumption`), **`docs/OPERATOR_CONSUMPTION_LEDGER.md`**, **`data/operator-consumption-ledger.example.jsonl`**, **`.gitignore`**, **`docs/SYSTEM_CAPABILITIES.md`** (OCL1), **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**.
+- **`scripts/operator-consumption-ledger.mjs`**, **`package.json`** (`operator:consumption`), **`docs/OPERATOR_CONSUMPTION_LEDGER.md`**, **`data/operator-consumption-ledger.example.jsonl`**, **`.gitignore`**, **`docs/SYSTEM_CAPABILITIES.md`** (OCL1), **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**.
 
 ### State after this session
 - **Local append-only ledger** for Cursor (or other) dashboard numbers — **`data/operator-consumption-ledger.jsonl`** is **gitignored**; use **`npm run operator:consumption -- summary`** / **`append --json '…'`**. Grading rubric: **split** integrity (compliance-officer / preflight) vs consumption (DONT_KNOW until enough KNOW rows) per doc.
@@ -2565,7 +2571,7 @@ Two options (Adam decides):
 - **`package.json`** — **`tsos:compliance-officer`**, **`compliance-officer`**, **`lifeos:compliance-officer`**.
 - **`.github/workflows/ci.yml`** — root **`npm test`** + **`npm run compliance-officer`**, Node **22** (removed deleted **frontend/backend** paths).
 - **`.github/workflows/ci-cd.yml`** — Node **22**, **`npm ci`**, **`compliance-officer`** step.
-- **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/QUICK_LAUNCH.md`**.
+- **`docs/products/ai-council/PRODUCT_HOME.md`**, **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/QUICK_LAUNCH.md`**.
 
 ### Audit evidence (KNOW)
 - **`npm run compliance-officer`** — **exit 0** after **`@ssot`** fix + receipts in same diff (**`ssot:validate`** green).
@@ -2584,8 +2590,8 @@ Two options (Adam decides):
 
 ### Files changed
 - **`scripts/lifeos-builder-daemon.mjs`** — Fix 8: `STATE_PATH`, `LOCK_PATH`, `LOG_PATH`, `QUEUE_LAST_RUN_PATH` changed from `const` to `let`; `main()` overrides all 4 with lane-slug suffix when `BUILDER_TASK_LANE` is set. TC and SiteBuilder daemons no longer collide with Nova's lock file.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Fix 8 receipt row added; Agent Handoff Notes updated.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`** — `ssot_receipt_tail` updated to Fix 8.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — Fix 8 receipt row added; Agent Handoff Notes updated.
+- **`docs/products/lifeos/FILE_MANIFEST.json`** — `ssot_receipt_tail` updated to Fix 8.
 
 ### Root cause discovered (Fix 8)
 Post-commit audit of Fixes 6+7 revealed: TC and SiteBuilder daemons were immediately dying on startup because they shared `builder-daemon.lock` with Nova. Every guardian restart cycle, TC and SiteBuilder daemons exited within seconds with "builder daemon already running (pid=Nova)". This meant their state files were stale from yesterday, auditor read 24h-old data, and grades stayed F.
@@ -2615,7 +2621,7 @@ All task commits (product_ratio) are blocked by HTTP 413 on Railway `POST /build
 - **`scripts/lifeos-builder-continuous-queue.mjs`** — Fix 2: `selfQuarantineTask()` + `skipOnSyntaxFail()` helpers; task failure handler now detects `isSyntaxFail` and quarantines+skips the task instead of `process.exit(1)`; `task_skip_syntax_quarantine` JSONL event.
 - **`scripts/tsos-builder-auditor.mjs`** — Fix 3: `computeMetrics` returns `proxyCycles`, `proxySuccessRate`, `lastTaskOkAt`; `gradeWorker` uses these so a worker with real queue commits doesn't get auto-F when daemon `cycle_ok` count is 0; stale detection falls back to `lastTaskOkAt` when daemon `lastSuccessAt` is null.
 - **`scripts/tsos-overseer-daemon.mjs`** — Fix 4: checks classified `severity: "required"` (tsos_doctor, static_supervise) vs `"advisory"` (builder_preflight, ssot_validate, evidence_check, zero_drift); `overallStatus` is `"healthy"` when required checks pass; `lastSuccessAt` set on `healthy` or `degraded_warn` — overseer no longer permanently "degraded" from detecting degraded lanes.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipt row added.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — receipt row added.
 
 ### State after this session
 - All 4 scripts pass `node --check`. Nova/Atlas/Forge daemons are unpaused with streak=1.
@@ -2642,9 +2648,9 @@ All task commits (product_ratio) are blocked by HTTP 413 on Railway `POST /build
 - **`services/tc-webhook-validator.js`** — complete rebuild from 11-line builder-truncated stub; full `createTCWebhookValidator({ postmarkSecret, twilioAuthToken, logger })` factory with timing-safe HMAC verification.
 - **`routes/site-builder-routes.js`** — removed phantom `getPipelineReportStats` import (function never existed in `prospect-pipeline.js`); restored to valid state with `GET /launch-readiness`.
 - **`public/overlay/lifeos-dashboard.html`** — 13 CSS pseudo-comment violations fixed (`/ ── / ` → `/* ── */`).
-- **`docs/projects/AMENDMENT_17_TC_SERVICE.md`** — receipt rows for TC service rebuilds.
-- **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`** — receipt row for site-builder-routes fix.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipt rows for builder hardening + CSS fix; Agent Handoff Notes updated.
+- **`docs/products/tc-service/PRODUCT_HOME.md`** — receipt rows for TC service rebuilds.
+- **`docs/products/site-builder/PRODUCT_HOME.md`** — receipt row for site-builder-routes fix.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — receipt rows for builder hardening + CSS fix; Agent Handoff Notes updated.
 
 ### State after this session
 - **`npm run tsos:compliance-officer`** (or equivalent): 9/10 gates PASS — `syntax_check_all_js` (841 files), `npm_test`, `handoff_self_test`, `evidence_check`, `supervise_static`, `check_overlay`, `zero_drift_check`, `readiness_check`, `builder_auditor_health`. One remaining failure: `ssot_validate` — `services/lifeos-gate-change-council-run.js` has unstaged builder-daemon changes without SSOT receipt; builder daemon self-resolves on next cycle.
@@ -2665,8 +2671,8 @@ All task commits (product_ratio) are blocked by HTTP 413 on Railway `POST /build
 - **231 files deleted via `git rm`** — 15 root junk JS files (A.js, B.js, test1-3.js, cron*.js, deepseek-bridge.js, discoveryScanner.js, routes.js, etc.), routes/ahni.js, routes/api.js (empty/dead), services/tc-webhook-validator.js (truncated+not imported), entire `frontend/` (159 files) and `backend/` (45 files) directories (zero server references), 7 stale screenshot PNGs in `assets/`.
 - **`routes/tsos-task-ledger-routes.js`** — fixed builder-committed `exp` typo → `export function`; added missing `import express from 'express'`. Node syntax check now PASS.
 - **`package.json`** — removed dead `test:smoke` script (referenced non-existent `scripts/smoke-test-server.js`).
-- **`docs/projects/AMENDMENT_04_AUTO_BUILDER.md`** — receipt row added for cleanup (2026-05-09c).
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipt row added for cleanup (2026-05-09).
+- **`docs/products/builderos/PRODUCT_HOME.md`** — receipt row added for cleanup (2026-05-09c).
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — receipt row added for cleanup (2026-05-09).
 
 ### State
 - All remaining JS files: `node --check` PASS. Builder daemon continues autonomous pushes to origin/main (managed via rebase loop).
@@ -2715,9 +2721,9 @@ Say **“read brainstorming”** → next AI opens **`OPERATOR_BRAINSTORM_SESSIO
 ## [BUILD] Update 2026-05-08 #1 — Operator expectations + feedback → SSOT → queue
 
 ### Files changed
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — plain-language expectations (machine ~10 min corridor vs human test + ~30 min feedback budget; dislike/ideas → receipts + **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**; council via **`lifeos:gate-change-run`**).
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — plain-language expectations (machine ~10 min corridor vs human test + ~30 min feedback budget; dislike/ideas → receipts + **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**; council via **`lifeos:gate-change-run`**).
 - **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md`**, **`docs/projects/LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`** — matching short sections for Adam-facing reading.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`** — **`last_updated`**.
+- **`docs/products/lifeos/FILE_MANIFEST.json`** — **`last_updated`**.
 
 ### State
 - **`lifeos:builder:throughput-meter` KNOW:** rolling ~**0.57 min/slice**, ~**15** MVP-corridor slices left → ~**9 min** machine ETA if pace holds—not “all features perfected.” **`lifeos:supervise:static`** + **`check:overlay`** ✅ this session.
@@ -2731,7 +2737,7 @@ Say **“read brainstorming”** → next AI opens **`OPERATOR_BRAINSTORM_SESSIO
 
 ### Files changed
 - **`tests/smoke.test.js`** — integration cases **`t.skip`** on **`fetch`** failure (server not running / wrong **`TEST_BASE_URL`**); unit **`parseInsuranceCardText`** unchanged.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — **`## Change Receipts`** row.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — **`## Change Receipts`** row.
 
 ### State after this session
 - **`npm test`** **KNOW:** exit **0** locally without **`node server.js`** (4 skipped, 2 passed).
@@ -2767,7 +2773,7 @@ After queue runs accumulate **`build_wall_ms`**: **`npm run lifeos:builder:throu
 
 ### Files changed
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` — **28** tasks, alpha head + foundation tail; `$comment` updated.
-- `docs/projects/LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`, `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md`, `docs/SUPERVISION_CODE_READ_CONTRACT.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+- `docs/projects/LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`, `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md`, `docs/SUPERVISION_CODE_READ_CONTRACT.md`, `docs/products/lifeos/PRODUCT_HOME.md`.
 
 ### Operator
 - **`npm run lifeos:builder:queue -- --reset-cursor`** then run queue/daemon against Railway keys.
@@ -2779,7 +2785,7 @@ After queue runs accumulate **`build_wall_ms`**: **`npm run lifeos:builder:throu
 
 ### Files changed
 - `docs/SUPERVISION_CODE_READ_CONTRACT.md` — new § **No drift / no hallucination** (table, minimum checks, epistemic receipts).
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **`## Agent Handoff Notes`** supervision row + **`## Change Receipts`** row.
+- `docs/products/lifeos/PRODUCT_HOME.md` — **`## Agent Handoff Notes`** supervision row + **`## Change Receipts`** row.
 
 ### Next agent: start here
 - On any “supervise” slice, explicitly verify SSOT↔repo and summary↔artifact; record drift/hallucination finds in receipts.
@@ -2793,7 +2799,7 @@ After queue runs accumulate **`build_wall_ms`**: **`npm run lifeos:builder:throu
 - `scripts/supervise-code-static-pass.mjs`, `package.json` — **`npm run lifeos:supervise:static`**.
 - `scripts/check-overlay-syntax.js` — **`lifeos-app.html`**, **`lifeos-dashboard.html`** in **`FILES_TO_CHECK`**.
 - `scripts/lifeos-builder-daemon.mjs` — opt-in **`BUILDER_DAEMON_STATIC_CODE_PASS*`**, **`BUILDER_DAEMON_PULL_MAIN_BEFORE_STATIC`**; JSONL **`static_code_supervise_result`**.
-- `docs/BUILDER_OPERATOR_ENV.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` (receipt + handoff).
+- `docs/BUILDER_OPERATOR_ENV.md`, `docs/products/lifeos/PRODUCT_HOME.md` (receipt + handoff).
 
 ### State after this session
 - Deterministic overlay gate runs clean (**`npm run lifeos:supervise:static`** exit **0**). Still **does not** prove Brief/mockup compliance — **`full`** supervise + Conductor read remain required for that bar.
@@ -3046,7 +3052,7 @@ Restart **`lifeos-builder-daemon`** (or **`npm run lifeos:builder:daemon:7h`**) 
 ## [BUILD] Update 2026-05-01 #10 — Agent Handoff: bounded autonomy runbook row
 
 ### Files changed
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **`Bounded autonomy (~7h)`** in **Agent Handoff Notes** (+ Change Receipt).
+- `docs/products/lifeos/PRODUCT_HOME.md` — **`Bounded autonomy (~7h)`** in **Agent Handoff Notes** (+ Change Receipt).
 
 ### State after this session
 - **Preflight OK** (`builder:preflight` exit 0) against prod; builder **`codegen.policy_revision`** **`2026-05-01a`**.
@@ -3103,7 +3109,7 @@ Use the lens after **large** autonomy, **schema/billing/auth** changes, or **rel
 ### Files changed
 - `docs/QUICK_LAUNCH.md` — operator-facing *Consensus protocol* subsection (links to Amendment 01, Companion 5.5, North Star Article II, evidence ladder docs). Answers “where is my consensus protocol?” without duplicating constitutional text.
 - `scripts/lifeos-builder-supervisor.mjs` — end-of-run output is §2.11b-shaped: KNOW/THINK/NOT-PROVEN, residue risk, no unlabeled “healthy enough” verdict; JS smoke logs an explicit KNOW line when it passes.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` + manifest — Change Receipts + Platform handoff row + `Last Updated`.
+- `docs/products/lifeos/PRODUCT_HOME.md` + manifest — Change Receipts + Platform handoff row + `Last Updated`.
 
 ### State after this session
 - Recorded multi-model consensus was already shipped (`run-council`, Amendment 01); Adam now has a **single plain-language entry point** in QUICK_LAUNCH.
@@ -3128,8 +3134,8 @@ The live smoke test was scoring 35.6%/F. Three root causes found and fixed in on
 - `services/prospect-pipeline.js` — cold email call fixed to `groq_llama` + `maxOutputTokens:900` (email JSON is ~400 tokens; groq is ideal for this)
 - `scripts/site-builder-quality-audit.mjs` — complete rewrite: local file scan (`--id=prev_xxx`), `--live` Railway re-score, `--json` output, color-coded grade table, per-site issue detail for weak previews
 - `config/task-model-routing.js` — added `site_builder.*` task routes; documented `maxOutputTokens` API in header
-- `docs/projects/AMENDMENT_05_SITE_BUILDER.md` — 3 new change receipt rows; Last Updated header updated
-- `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` — bumped to 2026-04-30j
+- `docs/products/site-builder/PRODUCT_HOME.md` — 3 new change receipt rows; Last Updated header updated
+- `docs/products/site-builder/FILE_MANIFEST.json` — bumped to 2026-04-30j
 - `package.json` — added `npm run site-builder:qa`
 
 ### State after this session
@@ -3150,7 +3156,7 @@ Production `GET /api/v1/lifeos/builder/gaps` showed repeated failures with patte
 
 ### Files changed
 - `routes/lifeos-council-builder-routes.js` — added `fixAsteriskShorthandParams(s)` (preserves generator `function*`, strips `*` before plain identifiers); wired into both `POST /execute` JS branch and `POST /build` JS branch before `node --check`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — new Change Receipts row; `⚠️ IN PROGRESS` updated.
+- `docs/products/lifeos/PRODUCT_HOME.md` — new Change Receipts row; `⚠️ IN PROGRESS` updated.
 
 ### State after this session
 Builder now strips asterisk-shorthand hallucinations before the syntax gate. Will need to be deployed to Railway for the fix to take effect on live builds. Once deployed, watch `builder/gaps` — this class of failure should stop accumulating.
@@ -3164,7 +3170,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 
 ### Files changed
 - `routes/lifeos-council-builder-routes.js` — added `builderTargetsJavaScript()` and `jsFullFileCodegenHints()` so JS targets get the same kind of explicit full-file contract HTML targets already had; the builder prompt now tells the model to return only valid JS/ESM source, no repo markers, no prose, no mixed-format wrappers.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — updated `Last Updated`, `Change Receipts`, `Completed this session`, `Known gaps`, and `⚠️ IN PROGRESS` so cold agents can distinguish the shipped sanitizer fix from the new prompt-level prevention layer.
+- `docs/products/lifeos/PRODUCT_HOME.md` — updated `Last Updated`, `Change Receipts`, `Completed this session`, `Known gaps`, and `⚠️ IN PROGRESS` so cold agents can distinguish the shipped sanitizer fix from the new prompt-level prevention layer.
 
 ### State after this session
 - The builder platform now attacks the same JS failure class in two layers: prompt-level prevention before generation and output sanitization before `node --check`.
@@ -3184,8 +3190,8 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 - `db/migrations/20260313_site_builder_prospect_pipeline.sql` — added `last_viewed_at TIMESTAMPTZ` column
 - `scripts/site-builder-batch-rank.mjs` — new: batch-scores a JSON list of prospects, sorts by opportunity score DESC, prints color-coded table with chain flag; `npm run site-builder:rank`
 - `scripts/site-builder-pipeline-report.mjs` — new: fetches live dashboard + prospects, prints pipeline funnel with ASCII bars + conversion rates + warm leads list; `npm run site-builder:report`
-- `docs/projects/AMENDMENT_05_SITE_BUILDER.md` — updated header, added 7 change receipt rows
-- `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` — added new scripts to owned_files, assertions, required_routes
+- `docs/products/site-builder/PRODUCT_HOME.md` — updated header, added 7 change receipt rows
+- `docs/products/site-builder/FILE_MANIFEST.json` — added new scripts to owned_files, assertions, required_routes
 
 ### State after this session
 - **31/33 verifier checks pass** — only `SITE_BASE_URL` + `EMAIL_FROM` fail (env vars Adam must set in Railway)
@@ -3218,7 +3224,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 
 ### Files changed
 - `routes/lifeos-council-builder-routes.js` — `extractJavaScriptFromOutput()` now strips leaked builder file markers like `--- REPO FILE ... ---` and trims leading commentary until the first line that looks like real JS/ESM code.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — `Last Updated`, `Change Receipts`, and `Agent Handoff Notes` updated so this platform hardening is visible to cold agents under the §2.11 supervisor path.
+- `docs/products/lifeos/PRODUCT_HOME.md` — `Last Updated`, `Change Receipts`, and `Agent Handoff Notes` updated so this platform hardening is visible to cold agents under the §2.11 supervisor path.
 
 ### Why this was needed
 - `GET /api/v1/lifeos/builder/gaps` showed repeated wasted builder failures on JS targets where the syntax gate was correctly blocking commits, but the raw output was often recoverable if builder wrapper noise was stripped first.
@@ -3238,7 +3244,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 - `scripts/council-builder-preflight.mjs` — readiness JSON includes **`codegen`**; **`[TSOS-MACHINE]`** line when **`policy_revision`** returned.
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json` — **`dashboard-ai-rail-css`**, **`dashboard-ai-rail-js`**, **`dashboard-ai-rail-wire`** (**45k** `max_output_tokens`), **`dashboard-customization-state-contract`**.
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — **2026-04-30** + split rail + **`policy_revision`** note.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **Change Receipt**, **Agent Handoff**, **Last Updated**.
+- `docs/products/lifeos/PRODUCT_HOME.md` — **Change Receipt**, **Agent Handoff**, **Last Updated**.
 
 ### State after this session
 - **Idle overnight cursor at index 5** now resumes on **`dashboard-ai-rail-css`** once daemon/overnight runs against extended JSON **and** Railway serves **`codegen.policy_revision`** **`2026-04-30e`** (otherwise redeploy **`main`**).
@@ -3256,7 +3262,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 - `docs/SYSTEM_CAPABILITIES.md` — **B4** notes + changelog row.
 - `docs/BUILDER_OPERATOR_ENV.md` — optional server tuning table.
 - `docs/ENV_REGISTRY.md` — optional **`BUILDER_*_MAX_OUTPUT_TOKENS_CAP`** rows.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **Last Updated**, **Change Receipts**, **Agent Handoff** IN PROGRESS pointer (redeploy → retry **`dashboard-ai-rail`** **`/build`**).
+- `docs/products/lifeos/PRODUCT_HOME.md` — **Last Updated**, **Change Receipts**, **Agent Handoff** IN PROGRESS pointer (redeploy → retry **`dashboard-ai-rail`** **`/build`**).
 
 ### State after this session
 - **KNOW (local/repo):** platform fix addresses **`/builder/gaps`** failures where HTML output had **`<!DOCTYPE`/`<html`/`<head>`** but provider stopped before **`<body>`**, tripping structure validation after **`gemini_flash`** hit the old **~16k** completion ceiling.
@@ -3273,7 +3279,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 ## [PLAN] Update 2026-04-30 #18 — Universal overlay distribution law (install-one/access-all, shared data fabric)
 
 ### Files changed
-- `docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md` — elevated the explicit operating model Adam stated:
+- `docs/products/universal-overlay/PRODUCT_HOME.md` — elevated the explicit operating model Adam stated:
   - one universal overlay container
   - separate apps/modules with their own product SSOTs
   - permissioned cross-app data sharing
@@ -3291,8 +3297,8 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 ## [PLAN] Update 2026-04-30 #17 — NSSOT: LifeOS mockup conformance + consumer/B2B split + defer Command Center omnibus
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — **Article II §2.11a** new **¶6** (distinct programs despite one stack), **¶7** (LifeOS conforms to **`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** + **`docs/mockups/`** boards), **¶8** (Command Center omnibus deferred until supervised builder maturity / gap closure with receipts). **Version** line 2026-04-30.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **`### Constitutional LifeOS UX SSOT`** under **`## Scope`**; **`## Agent Handoff Notes`** Visual SSOT row; **Change Receipt**; **Last Updated** (table + footer).
+- `docs/constitution/NORTH_STAR_SSOT.md` — **Article II §2.11a** new **¶6** (distinct programs despite one stack), **¶7** (LifeOS conforms to **`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** + **`docs/mockups/`** boards), **¶8** (Command Center omnibus deferred until supervised builder maturity / gap closure with receipts). **Version** line 2026-04-30.
+- `docs/products/lifeos/PRODUCT_HOME.md` — **`### Constitutional LifeOS UX SSOT`** under **`## Scope`**; **`## Agent Handoff Notes`** Visual SSOT row; **Change Receipt**; **Last Updated** (table + footer).
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — **Constitutional anchor** row (§2.11a ¶7 pointer).
 - `products/api-service/index.html` — copy clarifies **separate programs** (NSSOT ¶6), not blended app.
 
@@ -3318,7 +3324,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 - Optional: redirect **`GET /`** to **`/lifeos`** if product decision demotes API landing (needs explicit Adam call — revenue lane vs LifeOS home).
 
 ### SSOT
-- `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md` — Change Receipt + handoff root note.
+- `docs/products/api-cost-savings/PRODUCT_HOME.md` — Change Receipt + handoff root note.
 
 ---
 
@@ -3326,7 +3332,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 
 ### Files changed
 - `public/overlay/lifeos-app.html` — `?layout=auto` default (responsive ≤599px mobile chrome unchanged); `?layout=mobile` and `?layout=desktop` force shell chrome via `html.lifeos-layout-*` (sidebar, mobile top/bottom nav, Lumin drawer geometry, FAB offset). `data-lifeos-layout` on `<html>`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change Receipt + handoff **`Shell layout (bookmarks)`** row + footer **Last Updated**.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Change Receipt + handoff **`Shell layout (bookmarks)`** row + footer **Last Updated**.
 
 ### State after this session
 - **KNOW:** No server change; overlays only. Existing users keep automatic layout from viewport width.
@@ -3385,7 +3391,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 - `package.json` — new `tsos:tokens` script.
 - `docs/SYSTEM_CAPABILITIES.md` — V7 notes expanded with gate env vars.
 - `docs/BUILDER_OPERATOR_ENV.md` — token gate command example for unattended runs.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — handoff + receipt update.
+- `docs/products/lifeos/PRODUCT_HOME.md` — handoff + receipt update.
 
 ### State after this session
 - Daily token efficiency is now machine-measured and can be fail-closed in unattended mode; builder suite now reports it every run.
@@ -3403,7 +3409,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 - `docs/SYSTEM_CAPABILITIES.md` — **V6** row + capability changelog
 - `docs/BUILDER_OPERATOR_ENV.md` — **One composite check** section
 - `docs/QUICK_LAUNCH.md` — execution step 3 **fast path**
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Agent Handoff + Change Receipt
+- `docs/products/lifeos/PRODUCT_HOME.md` — Agent Handoff + Change Receipt
 
 ### State after this session
 - Operators can run **`npm run tsos:builder`** instead of juggling three scripts; exit code = first failing leg; all legs still print.
@@ -3416,7 +3422,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 ## [BUILD] Update 2026-04-29 #11 — **Truth ⇄ reliability bridge + memory stance (§2.6 + Am.39)**
 
 ### Files changed
-- `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`, `scripts/lifeos-builder-daemon.mjs` (`reliability_cues` JSONL), `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`, `prompts/lifeos-council-builder.md`, `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`, `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+- `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`, `scripts/lifeos-builder-daemon.mjs` (`reliability_cues` JSONL), `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`, `prompts/lifeos-council-builder.md`, `docs/products/memory-intelligence/PRODUCT_HOME.md`, `docs/products/memory-system/PRODUCT_HOME.md`, `docs/products/lifeos/PRODUCT_HOME.md`.
 
 ### State after this session
 - Autonomous builder logs now carry **`reliability_cues`** tied to NSSOT §2.6 / Evidence Ladder; **Amendment 39** = institutional **`epistemic_facts`** plane; **Amendment 02** = conversational memory plane (explicit split).
@@ -3429,7 +3435,7 @@ Builder now strips asterisk-shorthand hallucinations before the syntax gate. Wil
 ## [BUILD] Update 2026-04-29 #10 — **Compound improvement loop between every slice**
 
 ### Files changed
-- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`, `docs/BUILDER_24_7_ALPHA_CHECKLIST.md`, `prompts/lifeos-council-builder.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`, `docs/BUILDER_24_7_ALPHA_CHECKLIST.md`, `prompts/lifeos-council-builder.md`, `docs/products/lifeos/PRODUCT_HOME.md`.
 
 ### State after this session
 - Habit encoded: finish each slice with **evaluation + fix + one lever improvement**, then **SSOT receipt** so the pipeline compounds.
@@ -3506,7 +3512,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 - **`prompts/lifeos-builder-inner-supervisor.md`** — protocol: when to run review, output contract, METADATA, token discipline.
 - **`scripts/builder-inner-supervisor.mjs`** — `npm run lifeos:builder:inner-review -- <paths>` → `POST …/builder/task` `mode: review`, `useCache: false`, injects inner prompt + files.
 - **`prompts/lifeos-council-builder.md`** — section + last-updated.
-- **`package.json`**, **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`**.
+- **`package.json`**, **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/products/lifeos/PRODUCT_HOME.md`**.
 
 ### Next agent
 - After major `/build` commits, spot-check with **`npm run lifeos:builder:inner-review -- <touched files>`** (needs live `PUBLIC_BASE_URL` + key).
@@ -3519,7 +3525,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 - **`routes/api-v1-core.js`** — authenticated `GET /api/v1/system/builder-health` reads `data/builder-daemon-state.json` and optionally last N lines of `data/builder-daemon-log.jsonl` (`log_lines` ≤ 80); honest empty/missing state. **`@ssot`** → Amendment 21.
 - **`docs/SYSTEM_CAPABILITIES.md`** — matrix row **B6** + capability changelog.
 - **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`** — HTTP polling section.
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Change Receipts + handoff + `Last Updated`.
+- **`docs/products/lifeos/PRODUCT_HOME.md`** — Change Receipts + handoff + `Last Updated`.
 
 ### Verified
 - `node --check routes/api-v1-core.js`
@@ -3549,7 +3555,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 
 ### Files changed
 - `routes/lifeos-council-builder-routes.js` — after `commitToGitHub` in `autoWireRoute()`, **`mirrorCommittedContentToRepoRoot(REGISTER_PATH, current)`** so `startup/register-runtime-routes.js` on disk matches the GitHub commit (same chained-FS issue as `/build`/`/execute`; previously only primary target mirrored).
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change Receipt row, `Last Updated`, Agent Handoff, Known gaps (**`/execute` JS lacks `node --check`** documented as residual THINK-gap).
+- `docs/products/lifeos/PRODUCT_HOME.md` — Change Receipt row, `Last Updated`, Agent Handoff, Known gaps (**`/execute` JS lacks `node --check`** documented as residual THINK-gap).
 
 ### State after this session
 - **KNOW:** `node --check routes/lifeos-council-builder-routes.js` exits 0.
@@ -3610,7 +3616,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — constrained task order for unattended dashboard work.
 - `scripts/lifeos-builder-supervisor.mjs` — supervisor runner that checks readiness and runs deterministic doc + JS smoke objectives before overnight queue work.
 - `package.json` — adds `npm run lifeos:builder:supervise`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipts and handoff updated for builder supervision state.
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipts and handoff updated for builder supervision state.
 
 ### State after this session
 - The main routing bug is patched locally: Railway should stop drifting onto Ollama when no valid remote endpoint exists.
@@ -3660,7 +3666,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 - `.dockerignore` — include `docs/SOURCE_OF_TRUTH.md` in image (`docs/*` + `!docs/SOURCE_OF_TRUTH.md`).
 - `db/migrations/20260428_commitments_reminder_compat.sql` — Word Keeper / LifeOS `commitments` column bridge + backfill.
 - `services/reminder-cron.js` — `COALESCE` across column names for `processDueReminders`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `AMENDMENT_16_WORD_KEEPER.md` — receipts.
+- `docs/products/lifeos/PRODUCT_HOME.md`, `AMENDMENT_16_WORD_KEEPER.md` — receipts.
 
 ### State
 - Fixes logs: **Could not load Source of Truth** (docs excluded from Docker) and **`column c.to_person does not exist`** (LifeOS `commitments` shape).
@@ -3671,7 +3677,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 
 ### Files changed
 - `public/overlay/lifeos-app.html` — sidebar + mobile **More** + **PAGE_META** + section color tokens for dashboard and victory vault.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipts (**GAP-FILL:** `POST …/builder/build` → council `fetch failed` from Railway).
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipts (**GAP-FILL:** `POST …/builder/build` → council `fetch failed` from Railway).
 
 ### Honesty
 - Intended path was **`POST /api/v1/lifeos/builder/build`** with `files: [lifeos-app.html]`; provider fetch from deploy failed — Conductor applied minimal shell edit and receipted.
@@ -3686,7 +3692,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 ### Files changed
 - `startup/register-runtime-routes.js` — add missing import for `createAssessmentBatteryRoutes` (line ~197 already mounted the router).
 - `routes/lifeos-assessment-battery-routes.js` — auth via `middleware/lifeos-auth-middleware.js`; `req.lifeosUser.sub`; `saveResult({ userId, … })` matches service.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — receipts + Last Updated.
+- `docs/products/lifeos/PRODUCT_HOME.md`, `docs/products/project-governance/PRODUCT_HOME.md` — receipts + Last Updated.
 
 ### State
 - Production was crash-looping after route registration with `ReferenceError: createAssessmentBatteryRoutes is not defined` (Railway `/healthz` unavailable).
@@ -3700,7 +3706,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 
 ### Files changed
 - `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md` — **§0** governance/infra tensions; full **stream map**; **Session A** (Stream A clusters); **B-bis** Grok 25; **G-bis** IMMEDIATE 10 + revolutionary 25; **Session H** = **J** ten-gap list; **Session I** includes **K**; **Mission (H)** + **21** merge grammar + **39** / `MEMORY_FRAMEWORK_DESIGN_BRIEF` pointers; expanded route hints.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Last Updated**; **Change Receipts** row.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Last Updated**; **Change Receipts** row.
 
 ### State
 - Catalog is still **extracted**, not a byte-audit of dumps; verbatim remains in **`raw/`** + inbox.
@@ -3715,8 +3721,8 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 ### Files changed
 - `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md` *(new)* — idea bullets from Streams **M–R**, **S** (L4-001), **O** (UCP 20), **Q** (governance clusters), **J/L** (L4 notes), **N**, **R**, **P** pointer.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§12.3** → catalog; §12.4 inbox; footer.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — canonical path row; **Last Updated**; **Change Receipts**.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files`, `current_focus`.
+- `docs/products/ideavault/PRODUCT_HOME.md` — canonical path row; **Last Updated**; **Change Receipts**.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `owned_files`, `current_focus`.
 - `docs/projects/INDEX.md` — HOW THIS WORKS (catalog link).
 
 ### Honesty
@@ -3728,7 +3734,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 
 ### Files changed
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§12** (Streams **M–R** verbatim regions, L4 note, `rg` counts, inbox).
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Last Updated** + **Change Receipts**.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Last Updated** + **Change Receipts**.
 
 ### Next agent
 - Re-run **`rg -c -i brainstorm`** on `raw/` after new exports; extend §12 if new streams get **brainstorm-dense** hints in **38**.
@@ -3740,9 +3746,9 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 ### Files changed
 - `docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md` — **Cloud-first** section; push = canonical.
 - `docs/conversation_dumps/README.md` — commit+push / no Ollama note.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — operator corpus intro; **§B**; **§C**; **Last Updated**; handoff; **Change Receipts**.
+- `docs/products/ideavault/PRODUCT_HOME.md` — operator corpus intro; **§B**; **§C**; **Last Updated**; handoff; **Change Receipts**.
 - `scripts/operator-corpus-pipeline.mjs` — posture banner + JSDoc.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `next_task`, `current_focus`, `anti_drift_notes`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `next_task`, `current_focus`, `anti_drift_notes`.
 
 ### State
 - Operator laptop: **edit + push** only when needed; **Neon** for twin ingest; **Railway** for council/builder — aligns with Adam shutting down **Ollama** until dedicated servers.
@@ -3756,9 +3762,9 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 - `docs/conversation_dumps/README.md` — points at inbox.
 - `scripts/catalog-dump-keywords.mjs` — keyword pass includes inbox as `_(inbox)_` hits.
 - `scripts/operator-corpus-pipeline.mjs` — prints inbox path.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — canonical path row; **Streams M/N/O/P/Q/R** brainstorm-dense regions; **§C** **1a**; receipts + handoff.
+- `docs/products/ideavault/PRODUCT_HOME.md` — canonical path row; **Streams M/N/O/P/Q/R** brainstorm-dense regions; **§C** **1a**; receipts + handoff.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — §1 table row for inbox.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files`, `current_focus`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `owned_files`, `current_focus`.
 - `docs/projects/INDEX.md` — HOW THIS WORKS + **Last Updated** (inbox pointer).
 
 ### Next agent
@@ -3769,9 +3775,9 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 ## [BUILD] Update 2026-04-25 #113 — **Idea Vault — operator rule: brainstorm verbatim vs programming churn archival**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§6** step **5**; **§A.1** rule + nuances; **§B** table row; **Last Updated** + **Change Receipts**.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **§6** step **5**; **§A.1** rule + nuances; **§B** table row; **Last Updated** + **Change Receipts**.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** operator priority blurb; footer.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `next_task`, `current_focus`, `anti_drift_notes`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `next_task`, `current_focus`, `anti_drift_notes`.
 
 ### State
 - **L4** counting unchanged (**3**/12). Policy: future **§A.1** rows **bias** to brainstorm/product/governance spans; coding transcripts stay **provenance** unless they encode durable integration facts.
@@ -3781,10 +3787,10 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 ## [BUILD] Update 2026-04-25 #112 — **Idea Vault — L4-003 (`GPT dump 03` smoke cookbook) + §11 → ~68%**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§A.1** row **L4-003** (~L8330 anchor verified in raw export); **Last Updated** + **Change Receipts**.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **§A.1** row **L4-003** (~L8330 anchor verified in raw export); **Last Updated** + **Change Receipts**.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** L4 **3**/12, composite **~68% / ~32%**; **§11.4** count.
 - `docs/projects/INDEX.md` — **Last Updated** (§11 % + **L4-003**).
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `current_focus`.
 
 ### Report
 - **L4:** **3**/12 (**25%** of L4 layer); **composite ~68%** complete, **~32%** remaining.
@@ -3795,10 +3801,10 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 ## [BUILD] Update 2026-04-25 #111 — **Idea Vault — L4 chunk receipts (§A.1) + §11 → ~65%**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§ Seed catalog §A.1** (`L4-001`, `L4-002`); **Last Updated** + **Change Receipts**.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **§ Seed catalog §A.1** (`L4-001`, `L4-002`); **Last Updated** + **Change Receipts**.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** L4 (**2**/12), composite **~65% / ~35%**; **§11.4** registry.
 - `docs/projects/INDEX.md` — **Last Updated** (§11 %).
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `current_focus`.
 
 ### Report
 - **Composite:** **~65%** complete, **~35%** remaining.
@@ -3810,9 +3816,9 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 
 ### Files changed
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** (L1–L5 weights, composite **~62% / ~38%**, fast tracks).
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Streams A,B,D,E,F,G** `rg` heading-pass receipts; **Stream C** pointer to **P**; **Last Updated**, **Change Receipts**, **Agent Handoff**.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Streams A,B,D,E,F,G** `rg` heading-pass receipts; **Stream C** pointer to **P**; **Last Updated**, **Change Receipts**, **Agent Handoff**.
 - `docs/projects/INDEX.md` — HOW THIS WORKS + **Last Updated**.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `current_focus`.
 
 ### Report (operator)
 - **Index + skim track (L1–L3):** **100%** done, **0%** left.
@@ -3824,8 +3830,8 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 
 ### Files changed
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — new **§10** (every §9.1 + §9.2 source × Stream × themes; stub-path + dedupe + key hygiene).
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Last Updated**, **Anti-Drift**, **Change Receipts**, **Agent Handoff** (§10 as cold-start map).
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Last Updated**, **Anti-Drift**, **Change Receipts**, **Agent Handoff** (§10 as cold-start map).
+- `docs/products/ideavault/FILE_MANIFEST.json` — `current_focus`.
 - `docs/projects/INDEX.md` — HOW THIS WORKS pointer to §10; **Last Updated**.
 
 ### State
@@ -3837,8 +3843,8 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 
 ### Files changed
 - `docs/projects/INDEX.md` — removed *Candidate Concepts* row for ASH Ranch; **Last Updated**.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream O/S**, **§A**, **§B** nuance, **Change Receipts**; **Last Updated**.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `anti_drift_notes`.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Stream O/S**, **§A**, **§B** nuance, **Change Receipts**; **Last Updated**.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `anti_drift_notes`.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — §3 example list + footer.
 
 ### State
@@ -3851,7 +3857,7 @@ Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want
 ### Files changed
 - `scripts/generate-agent-rules.mjs` — new **IDEA VAULT (Lane A/B)** section; tighter adjacent bullets (token budget law).
 - `docs/AGENT_RULES.compact.md`, `docs/.compact-rules-baseline` — regen via `npm run gen:rules` (smaller byte count than prior baseline).
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — **Last Updated** + **Change Receipts** row.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — **Last Updated** + **Change Receipts** row.
 
 ### Next agent
 Cold agents reading **Channel A** now see: vault = map; nuance = source threads + `raw/`; promote via chunk + **38** §A or twin ingest; queue order **INDEX**.
@@ -3862,8 +3868,8 @@ Cold agents reading **Channel A** now see: vault = map; nuance = source threads 
 
 ### Files changed
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§9** multi‑MB byte total corrected to **113,636,593** (sum of files **> 1 MB** in §9.1; replaces stale **112,804,796**); footer notes reconciliation.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus` aligned with **Streams A–S**, **100%** §9.1 file map, no “002 residue” wording.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Change Receipts** — **2026-05-01** row extended with §9 multi‑MB total.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `current_focus` aligned with **Streams A–S**, **100%** §9.1 file map, no “002 residue” wording.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Change Receipts** — **2026-05-01** row extended with §9 multi‑MB total.
 
 ### State after this session
 - Canonical **`•`+TAB+`Lumin-Memory/00_INBOX/raw/`** inventory: **19/19** files have exactly one bucket in **§9.1** (**Stream A–S**, **H**, or **—** for README).
@@ -3876,9 +3882,9 @@ Cold agents reading **Channel A** now see: vault = map; nuance = source threads 
 ## [BUILD] Update 2026-04-29 #104 — **Idea Vault — Streams O/Q (Gemini 003, DeepSeek 001, GPT 06)**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream O** (Gemini 003, dedupe **F**), **P** (DeepSeek 001, dedupe **C**), **Q** (GPT 06, Tier 0 / autonomous builder; duplicate AURO prefix noted); **§A** rows; **Last Updated**; **A–Q**; portfolio capsule note; Change Receipt.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Stream O** (Gemini 003, dedupe **F**), **P** (DeepSeek 001, dedupe **C**), **Q** (GPT 06, Tier 0 / autonomous builder; duplicate AURO prefix noted); **§A** rows; **Last Updated**; **A–Q**; portfolio capsule note; Change Receipt.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§4H**, **§8** rows O–Q, **§7** snapshot date, next-queue refresh, footer.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `current_focus`.
 
 ### Next agent
 Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule SSOT paragraph; optional deep TOC on **GPT dump 01**.
@@ -3888,7 +3894,7 @@ Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule 
 ## [BUILD] Update 2026-04-30 #105 — **Idea Vault — Stream R + §9 corpus %**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream R** (`Gemini Dump 004`); **Stream A** + **`LifeOS dump 002`** note; **§A** TheraVerse row; **Last Updated**; **A–R**; receipt (**~99.9%** bytes indexed).
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Stream R** (`Gemini Dump 004`); **Stream A** + **`LifeOS dump 002`** note; **§A** TheraVerse row; **Last Updated**; **A–R**; receipt (**~99.9%** bytes indexed).
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§9** coverage table (exact bytes + KNOW/THINK); **§8** row **R**; **§4I**; next-queue shrink.
 
 ### Report (Adam)
@@ -3904,7 +3910,7 @@ New exports → new **Stream** + refresh **§9** sums; optional one-paragraph **
 ### Files changed
 - `services/memory-intelligence-service.js`, `routes/memory-intelligence-routes.js`, `db/migrations/20260426_memory_intelligence_hardening.sql`, `db/migrations/20260426_memory_protocol_enforcement.sql` — task authority, protocol violations, routing recommendation, future-lookback, source-count hardening.
 - `routes/lifeos-council-builder-routes.js`, `routes/lifeos-gate-change-routes.js`, `services/lifeos-lumin-build.js`, `services/lifeos-gate-change-council-run.js`, `config/task-model-routing.js`, `prompts/lifeos-gate-change-proposal.md` — runtime authority checks, fail-closed model selection, future-back consensus, builder violation logging.
-- `docs/SSOT_COMPANION.md`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — anti-corner-cutting and future-back promoted into operating law.
+- `docs/SSOT_COMPANION.md`, `docs/products/ai-council/PRODUCT_HOME.md`, `docs/products/memory-intelligence/PRODUCT_HOME.md` — anti-corner-cutting and future-back promoted into operating law.
 - `scripts/generate-agent-rules.mjs`, `docs/AGENT_RULES.compact.md`, `docs/.compact-rules-baseline` — compact rules now include Memory Intelligence + anti-corner-cutting and still shrink under the token-budget law.
 - `docs/CONTINUITY_LOG_COUNCIL.md`, `docs/CONTINUITY_LOG_LIFEOS.md` — lane-specific receipts for the new routing/authority behavior.
 
@@ -3923,7 +3929,7 @@ New exports → new **Stream** + refresh **§9** sums; optional one-paragraph **
 ## [BUILD] Update 2026-04-28 #103 — **Idea Vault — Streams L/N + §7.5**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream L** (`GPT dump 03`), **M** (`Gemini 002`), **N** (`LifeOS 003`); **§A** rows (cookbook, AASHA, Zapier glue); **A–N** references; receipt.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Stream L** (`GPT dump 03`), **M** (`Gemini 002`), **N** (`LifeOS 003`); **§A** rows (cookbook, AASHA, Zapier glue); **A–N** references; receipt.
 - `scripts/catalog-dump-keywords.mjs` — **`Zapier`**, **`WebSocket`**, **`Stripe`**, **`AASHA`** in defaults.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§7** snapshot **2026-04-28**, **§7.5**, **§8** rows L–N, **§4G**.
 
@@ -3935,7 +3941,7 @@ Heading-pass **Gemini 003**, **DeepSeek 001**, **GPT 06**; update **§8** + opti
 ## [BUILD] Update 2026-04-27 #102 — **Idea Vault — Streams J/K + §7.4 + §8**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream J** (`GPT dump 04`): MICRO, API savings GTM, overlay triple, team/judge, 10-gap audit. **Stream K** (`GPT dump 05`): env canvas, LCTP curls, MicroProtocol phases, overlay self-heal. **§ Seed catalog §A** rows; **A–K** stream references; handoff + receipt.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Stream J** (`GPT dump 04`): MICRO, API savings GTM, overlay triple, team/judge, 10-gap audit. **Stream K** (`GPT dump 05`): env canvas, LCTP curls, MicroProtocol phases, overlay self-heal. **§ Seed catalog §A** rows; **A–K** stream references; handoff + receipt.
 - `scripts/catalog-dump-keywords.mjs` — defaults + **`MICRO`**, **`Ollama`**, **`VAPI`**, **`Calendly`**, **`bookmarklet`**.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§7** snapshot date, **§7.4**, **§8** heading-pass table, **§4F**, **§5** step 7, **§6** regenerate line.
 
@@ -3949,7 +3955,7 @@ Heading-pass + Stream letter for **`GPT dump 03`**, **`Gemini Dump 002` or `003`
 ### Files changed
 - `scripts/catalog-dump-keywords.mjs` — default keyword set expanded (media/creator + platform/ops + trust lane: LCTP, Twilio, Neon, Railway, pgvector, capsule, council, builder, BoldTrail, ClientCare, migration, receipt, token, digital twin, IFS, VoiceGuard, Kingsman).
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — new **§7** with snapshot tables (2026-04-26); **§6** snapshot refreshed; **§5** pointer.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — Stream I machine evidence, §C step **1b**, Last Updated, Change Receipt.
+- `docs/products/ideavault/PRODUCT_HOME.md` — Stream I machine evidence, §C step **1b**, Last Updated, Change Receipt.
 
 ### Next agent
 After new raw exports: run `npm run idea-vault:catalog-keywords`, paste updated counts into **§7** (or extend script to emit markdown). Add new high-value keywords to the script when themes stabilize.
@@ -3959,7 +3965,7 @@ After new raw exports: run `npm run idea-vault:catalog-keywords`, paste updated 
 ## [BUILD] Update 2026-04-26 #100 — **Idea Vault + indexes — Memory Intelligence navigation squeeze**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Scope** lists §D + §A–D seed catalog + **39** in implementation-spec routing; **Change Receipt** row for cross-index wiring.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Scope** lists §D + §A–D seed catalog + **39** in implementation-spec routing; **Change Receipt** row for cross-index wiring.
 - `docs/projects/INDEX.md` — already held registry **39** + HOW THIS WORKS; no further edit this slice.
 - `docs/REPO_MASTER_INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — confirm **39** + **`MEMORY_FRAMEWORK_DESIGN_BRIEF.md`** linked from master map and dump index.
 - `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` — **Indexed in SSOT** adds **`projects/INDEX`** row 39 + **`REPO_MASTER_INDEX`** §B.
@@ -3991,7 +3997,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 - `services/memory-intelligence-service.js` — full evidence engine: recordFact, getFact, queryFacts, addEvidence, promoteFact, demoteFact, recordRetrieval, recordDebate, getDebatesByProblemClass, recordLesson, getLessonsByDomain, recordAgentPerformance, getAgentAccuracy, recordIntentDrift, getStaleHypotheses, getLessonROI, getSystemSummary
 - `routes/memory-intelligence-routes.js` — 16 endpoints mounted at /api/v1/memory
 - `startup/register-runtime-routes.js` — import + mount added
-- `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — new amendment, full spec
+- `docs/products/memory-intelligence/PRODUCT_HOME.md` — new amendment, full spec
 - `docs/AGENT_RULES.compact.md` — Memory Intelligence section added (design sentence, evidence ladder, INVARIANT gate, API pointers)
 - `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` — LAW → INVARIANT fix, two-ladder documentation, design sentence, residue risk + disproof recipe added, amendment number corrected
 
@@ -4016,7 +4022,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ## [BUILD] Update 2026-04-25 #98 — **Amendment 38 Seed catalog (ideas + nuances)**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — new **§ Seed catalog** (product clusters, chat-loss nuances, TSOS operator table, next actions); scope + receipts + handoff.
+- `docs/products/ideavault/PRODUCT_HOME.md` — new **§ Seed catalog** (product clusters, chat-loss nuances, TSOS operator table, next actions); scope + receipts + handoff.
 - `docs/projects/INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md`, `AMENDMENT_38` manifest — pointers.
 
 ### Next agent
@@ -4027,10 +4033,10 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ## [BUILD] Update 2026-04-25 #97 — **Operator corpus dual lane (vault + Digital Twin)**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§ Operator corpus — dual lane**; `operator-corpus:pipeline`; Build Plan; receipts; scope bullet.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **§ Operator corpus — dual lane**; `operator-corpus:pipeline`; Build Plan; receipts; scope bullet.
 - `scripts/operator-corpus-pipeline.mjs` + `package.json` — checklist runner (keyword map + Lane B commands).
-- `docs/projects/AMENDMENT_09_LIFE_COACHING.md` — **Historical multi‑MB exports → Digital Twin** + receipt row.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files` / `next_task`.
+- `docs/products/life-coaching/PRODUCT_HOME.md` — **Historical multi‑MB exports → Digital Twin** + receipt row.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `owned_files` / `next_task`.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — owning SSOT pointer + §5 step 6.
 
 ### Next agent
@@ -4041,11 +4047,11 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ## [BUILD] Update 2026-04-25 #96 — **Idea Vault Stream I + keyword catalog script**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream I** (video/story/creator/media) + **§ Portfolio triage queue** body (was referenced by INDEX/CONTINUITY but missing); §6 step **0**; Build Plan; Change Receipt.
+- `docs/products/ideavault/PRODUCT_HOME.md` — **Stream I** (video/story/creator/media) + **§ Portfolio triage queue** body (was referenced by INDEX/CONTINUITY but missing); §6 step **0**; Build Plan; Change Receipt.
 - `scripts/catalog-dump-keywords.mjs` + `package.json` — `npm run idea-vault:catalog-keywords` (`rg` keyword → dump files).
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files` + `next_task`.
+- `docs/products/ideavault/FILE_MANIFEST.json` — `owned_files` + `next_task`.
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§6** video/media + §5 bullet 5; ordered §5 before §6.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Idea Vault variation map rows for **07**/**22**/**23**/**37**/**28** media themes; Change Receipt + `Last Updated` footer.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Idea Vault variation map rows for **07**/**22**/**23**/**37**/**28** media themes; Change Receipt + `Last Updated` footer.
 
 ### Next agent
 - After new exports: run `idea-vault:catalog-keywords`; refresh Stream I snapshot lines if file list shifts.
@@ -4055,8 +4061,8 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ## [BUILD] Update 2026-04-25 #95 — **LifeOS variation map + portfolio triage**
 
 ### Files changed
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — new **`## Idea Vault → LifeOS-native consolidation`**: variation table (CoPilot/Lumea aliases → LifeOS surfaces), **`### Operator personal context`** (**Pewds** in hospital — not backlog), **ADD/DEFER/NOT_ADD**; `Last Updated` + Change Receipt.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — Stream A pointer to **21**; new **§ Portfolio triage queue**; receipt row.
+- `docs/products/lifeos/PRODUCT_HOME.md` — new **`## Idea Vault → LifeOS-native consolidation`**: variation table (CoPilot/Lumea aliases → LifeOS surfaces), **`### Operator personal context`** (**Pewds** in hospital — not backlog), **ADD/DEFER/NOT_ADD**; `Last Updated` + Change Receipt.
+- `docs/products/ideavault/PRODUCT_HOME.md` — Stream A pointer to **21**; new **§ Portfolio triage queue**; receipt row.
 - `docs/projects/INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — cross-links.
 
 ### Next agent
@@ -4067,10 +4073,10 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ## [BUILD] Update 2026-04-25 #94 — **Amendment 38 Idea Vault**
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md`, `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — consolidated **streams A–H** from multi‑MB exports + routing to owning amendments; **§6** review protocol (heading pass, split_dumps, optional council).
+- `docs/products/ideavault/PRODUCT_HOME.md`, `docs/products/ideavault/FILE_MANIFEST.json` — consolidated **streams A–H** from multi‑MB exports + routing to owning amendments; **§6** review protocol (heading pass, split_dumps, optional council).
 - `docs/projects/INDEX.md` — amendment **38** registry row + “forgotten ideas” pointer.
 - `docs/REPO_MASTER_INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — cross-links / owning SSOT pointer.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Change Receipt row only (manifest **38** owns vault + `CONVERSATION_DUMP_IDEAS_INDEX`).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Change Receipt row only (manifest **38** owns vault + `CONVERSATION_DUMP_IDEAS_INDEX`).
 
 ### State after this session
 - **Single SSOT** for “everything we said in the big chats” at the **theme + provenance** level; implementation truth stays in domain amendments.
@@ -4086,7 +4092,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ### Files changed
 - `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — new: canonical **`•`+TAB+`Lumin-Memory`** dump inventory, placeholder warning for `Lumin-Memory/` 404 files, theme clusters from Mission & North Star, Directives log, Miscellaneous, system-ideas, root immediate-features doc.
 - `docs/REPO_MASTER_INDEX.md`, `docs/projects/INDEX.md` — links + **9 new** candidate concept rows.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` + `.manifest.json` — receipts / `owned_files`.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` + `.manifest.json` — receipts / `owned_files`.
 
 ### State after this session
 - Cold agents can find dump **paths** and **mined themes** without opening 10MB logs; **INDEX** candidate table extended.
@@ -4126,7 +4132,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 - `docs/SSOT_DUAL_CHANNEL.md` — Channel A (agents: derived compact + launch + lanes) vs Channel B (system: NSSOT, Companion, INDEX, capabilities, amendments); maintenance cheatsheet (one canonical tree).
 - `docs/SSOT_AMENDMENT_BUILD_READINESS_AUDIT.md` — criteria for building from SSOT alone; KNOW gaps (INDEX vs `routes/`, council prompt SSOT, CI readiness, Docker docs).
 - `docs/projects/INDEX.md` — pointer under HOW THIS WORKS.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — receipt + handoff.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — receipt + handoff.
 
 ### State after this session
 - No change to NSSOT/Companion text; avoids duplicate “two SSOTs” by formalizing **canonical vs derived** pattern already used by `generate-agent-rules.mjs`.
@@ -4139,7 +4145,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ### Files changed
 - `services/council-service.js` — optional `options.maxOutputTokens` overrides task-type output caps (clamped to 128k); fixes codegen being stuck at 1500 completion tokens when callers need long files.
 - `routes/lifeos-council-builder-routes.js` — builder passes scaled `maxOutputTokens` from injected `files[]`; HTML-specific prompt hints; strip leading markdown fence before metadata; `/task` returns `files_injected` + `max_output_tokens_requested`; `/build` includes council `detail` on failure; stricter HTML validation (must start with `<`).
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md` — change receipts + handoff.
+- `docs/products/lifeos/PRODUCT_HOME.md`, `docs/products/ai-council/PRODUCT_HOME.md` — change receipts + handoff.
 
 ### State after this session
 - Local: `node --check` clean on touched JS. Truncation class that produced 14-byte HTML should be addressed at the provider budget layer; validation still blocks bad commits.
@@ -4153,7 +4159,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ### Files changed
 - `routes/lifeos-council-builder-routes.js` — builder `dispatchTask()` now passes `allowModelDowngrade:false` plus task type into `callCouncilMember`, so `/api/v1/lifeos/builder/build` honors `config/task-model-routing.js` (for chat codegen, `gemini_flash`) instead of silently auto-routing code prompts to a smaller-context provider. Added `validateGeneratedOutputForTarget()` in `/build` and `/execute` so `.html` commits are rejected if empty/truncated or missing document markers.
 - `scripts/system-rotate-command-key.mjs` — added `@ssot` and hid the generated/provided `COMMAND_CENTER_KEY` in stdout/stderr so the key-rotation recovery path does not leak secrets into logs.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` and `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipts updated with the exact 401/413 repair state.
+- `docs/products/lifeos/PRODUCT_HOME.md` and `docs/products/command-center/PRODUCT_HOME.md` — receipts updated with the exact 401/413 repair state.
 
 ### State after this session
 - Production auth is no longer the blocker when the local shell uses the documented command key: `/lifeos/builder/ready`, `/domains`, `/model-map`, `/gate-change/presets`, `/council/health`, and `/railway/env` all returned 200; `npm run tsos:doctor` scored **100/100 green** and `npm run builder:preflight` passed.
@@ -4240,7 +4246,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ## [BUILD] Update 2026-04-22 #81 — **§2.15** operator trust (instruction supremacy, anti-steering, **INTENT DRIFT**)
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` **§2.15** + TL;DR + Version; `docs/SSOT_COMPANION.md` **§0.5I**; `docs/QUICK_LAUNCH.md`; `prompts/00-LIFEOS-AGENT-CONTRACT.md`; `CLAUDE.md` checklist **#7**; `docs/TSOS_SYSTEM_LANGUAGE.md` dual-channel table; `docs/projects/INDEX.md`; `scripts/generate-agent-rules.mjs` + `docs/AGENT_RULES.compact.md`; `AMENDMENT_21` / `AMENDMENT_36` receipts; **Handoff** Platform row.
+- `docs/constitution/NORTH_STAR_SSOT.md` **§2.15** + TL;DR + Version; `docs/SSOT_COMPANION.md` **§0.5I**; `docs/QUICK_LAUNCH.md`; `prompts/00-LIFEOS-AGENT-CONTRACT.md`; `CLAUDE.md` checklist **#7**; `docs/TSOS_SYSTEM_LANGUAGE.md` dual-channel table; `docs/projects/INDEX.md`; `scripts/generate-agent-rules.mjs` + `docs/AGENT_RULES.compact.md`; `AMENDMENT_21` / `AMENDMENT_36` receipts; **Handoff** Platform row.
 
 ### State after this session
 - **Constitutional:** clear operator ask must be **obeyed or HALT**; **hiding** deviation is **§2.6**; **KNOW** stated that markdown **cannot** cryptographically compel a remote LLM — **receipts + §2.11b INTENT DRIFT** are the trust mechanism for narrative work; **verifiers** remain the hard proof for code/deploy.
@@ -4251,7 +4257,7 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 ## [BUILD] Update 2026-04-25 #82 — **North Star §2.11c** (Conductor = supervisor; system codes at scale)
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` **§2.11b** ¶4 + **§2.11c**; TL;DR + Version. `docs/SSOT_COMPANION.md` **§0.5D** *Supervisor mandate*. `CLAUDE.md`, `prompts/00`, `docs/QUICK_LAUNCH.md`, `docs/ENV_REGISTRY.md`, `scripts/generate-agent-rules.mjs` + `docs/AGENT_RULES.compact.md`, `docs/projects/INDEX.md`, `AMENDMENT_21` / `AMENDMENT_36` receipts.
+- `docs/constitution/NORTH_STAR_SSOT.md` **§2.11b** ¶4 + **§2.11c**; TL;DR + Version. `docs/SSOT_COMPANION.md` **§0.5D** *Supervisor mandate*. `CLAUDE.md`, `prompts/00`, `docs/QUICK_LAUNCH.md`, `docs/ENV_REGISTRY.md`, `scripts/generate-agent-rules.mjs` + `docs/AGENT_RULES.compact.md`, `docs/projects/INDEX.md`, `AMENDMENT_21` / `AMENDMENT_36` receipts.
 
 ### State after this session
 - SSOT encodes: **supervise** builder/council output; **report** system intent, failure modes, platform GAP-FILL; **forbid** default IDE product authorship; **read** `ENV_REGISTRY` before “missing env”; **404 `/domains`** = **deploy drift**.
@@ -4266,10 +4272,10 @@ Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framewor
 - `db/migrations/20260423_tsos_savings_ledger.sql` — `tcos_baseline_config` (audit trail of reference token counts, seeded), `conductor_session_savings` (one row per Conductor cold-start with generated columns for saved_tokens/savings_pct/cost_avoided_usd), `tsos_savings_report` view (daily: AI compression savings + Conductor session savings combined), `tsos_savings_totals` view (cumulative pitch-ready totals).
 - `services/savings-ledger.js` — `conductorSession()` (log one cold-start savings event) + `getSavingsReport({ days })` (unified report for the monetization proof endpoint).
 - `routes/api-cost-savings-routes.js` — 3 new endpoints: `GET /api/v1/tsos/savings/report`, `POST /api/v1/tsos/savings/session`, `GET /api/v1/tsos/savings/baselines`. All return TSOS machine receipt lines where applicable.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change Receipt added.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Change Receipt added.
 - `scripts/generate-agent-rules.mjs` — §2.13 no-regression law (system must improve never regress); baseline enforcement: exits 1 if output > baseline; `docs/.compact-rules-baseline` auto-updated on each improvement.
 - `.git/hooks/pre-commit` — check #7 TOKEN BUDGET LAW: blocks if AGENT_RULES.compact.md grows past baseline.
-- `docs/SSOT_NORTH_STAR.md` — §2.13 constitutional law added (System Must Always Improve — Non-Derogable).
+- `docs/constitution/NORTH_STAR_SSOT.md` — §2.13 constitutional law added (System Must Always Improve — Non-Derogable).
 - `docs/AGENT_RULES.compact.md` — cut from ~3807 tokens → **1007 tokens** (96% reduction vs full stack).
 
 ### Why
@@ -4295,7 +4301,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 ## [BUILD] Update 2026-04-22 #79 — **North Star §2.14 + `docs/TSOS_SYSTEM_LANGUAGE.md`**
 
 ### Files changed
-- `docs/TSOS_SYSTEM_LANGUAGE.md` (new), `docs/SSOT_NORTH_STAR.md` §2.14 + TL;DR + Version, `docs/SSOT_COMPANION.md` §0.5H + §0.4 + Version, `docs/QUICK_LAUNCH.md`, `docs/SYSTEM_CAPABILITIES.md`, `docs/projects/INDEX.md`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `scripts/generate-agent-rules.mjs`, `docs/AGENT_RULES.compact.md` (regen), `AMENDMENT_21` + `AMENDMENT_36` receipts.
+- `docs/TSOS_SYSTEM_LANGUAGE.md` (new), `docs/constitution/NORTH_STAR_SSOT.md` §2.14 + TL;DR + Version, `docs/SSOT_COMPANION.md` §0.5H + §0.4 + Version, `docs/QUICK_LAUNCH.md`, `docs/SYSTEM_CAPABILITIES.md`, `docs/projects/INDEX.md`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `scripts/generate-agent-rules.mjs`, `docs/AGENT_RULES.compact.md` (regen), `AMENDMENT_21` + `AMENDMENT_36` receipts.
 
 ### State after this session
 - **Machine channel** (builder probes, preflight/redeploy/env scripts, `[TSOS-MACHINE]` lines) has a **followable** closed-token spec + templates; **§2.11b** human reports to Adam explicitly preserved. **Next:** optional code emitters (`preflight`, `env-certify`) can print first line in lexicon form; prod builder still **404** until redeploy per prior continuity.
@@ -4361,7 +4367,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 ## [FIX] Update 2026-04-22 #74 — Constitutional **operator-supplied Railway evidence** hard stop
 
 ### Files changed
-- `docs/ENV_DIAGNOSIS_PROTOCOL.md`, `docs/SSOT_NORTH_STAR.md` §2.3 + version/TL;DR, `docs/SSOT_COMPANION.md` §0.4, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `CLAUDE.md` (session checklist #6), `scripts/generate-agent-rules.mjs` + regen `docs/AGENT_RULES.compact.md`, `AMENDMENT_21` + `AMENDMENT_36` receipts.
+- `docs/ENV_DIAGNOSIS_PROTOCOL.md`, `docs/constitution/NORTH_STAR_SSOT.md` §2.3 + version/TL;DR, `docs/SSOT_COMPANION.md` §0.4, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `CLAUDE.md` (session checklist #6), `scripts/generate-agent-rules.mjs` + regen `docs/AGENT_RULES.compact.md`, `AMENDMENT_21` + `AMENDMENT_36` receipts.
 
 ### State after this session
 - **Law:** If Adam proved a var **name** in Railway **this thread**, agents **must not** re-ask him to set it or claim “not in prod” from an empty IDE shell alone — only diagnose shell/URL/auth/deploy/verifier (`ENV_DIAGNOSIS_PROTOCOL` *Operator-supplied evidence*).
@@ -4390,7 +4396,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 ## [BUILD] Update 2026-04-26 #72 — Env diagnosis protocol + NSSOT §2.3 + full Railway name inventory
 
 ### Files changed
-- `docs/ENV_DIAGNOSIS_PROTOCOL.md` (new), `docs/ENV_REGISTRY.md` (deploy list + certification log + changelog), `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `docs/BUILDER_OPERATOR_ENV.md`, `docs/QUICK_LAUNCH.md`, `CLAUDE.md`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `docs/projects/INDEX.md`, `AMENDMENT_21` receipt.
+- `docs/ENV_DIAGNOSIS_PROTOCOL.md` (new), `docs/ENV_REGISTRY.md` (deploy list + certification log + changelog), `docs/constitution/NORTH_STAR_SSOT.md`, `docs/SSOT_COMPANION.md`, `docs/BUILDER_OPERATOR_ENV.md`, `docs/QUICK_LAUNCH.md`, `CLAUDE.md`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `docs/projects/INDEX.md`, `AMENDMENT_21` receipt.
 
 ### State after this session
 - **Law:** No **KNOW** “env missing in prod” without `ENV_REGISTRY` + `ENV_DIAGNOSIS_PROTOCOL`; if name on list → troubleshoot shell/Railway/auth first; **Railway env bulk** before asking Adam to rotate secrets.
@@ -4454,7 +4460,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 ## [BUILD] Update 2026-04-24 #68 — TokenSaverOS (TSOS) in NSSOT; §2.11a builder law; Adam report
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — platform name **TokenSaverOS (TSOS)**; new **Article II §2.11a**; Article VI “not” bullet for operator code intuition trap.
+- `docs/constitution/NORTH_STAR_SSOT.md` — platform name **TokenSaverOS (TSOS)**; new **Article II §2.11a**; Article VI “not” bullet for operator code intuition trap.
 - `docs/SSOT_COMPANION.md` — **§0.5F**; P0 list; infrastructure renamed to TSOS.
 - `docs/QUICK_LAUNCH.md` — P0 queue item **0** (builder + grading); execution protocol **Adam report**; NSSOT read pointer.
 - `docs/projects/INDEX.md`, `AMENDMENT_10_API_COST_SAVINGS.md`, `AMENDMENT_21_LIFEOS_CORE.md` (receipts + handoff), `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `CLAUDE.md`, `scripts/generate-agent-rules.mjs`, `docs/AGENT_RULES.compact.md` (regen).
@@ -4492,7 +4498,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 - `scripts/ssot-check.js` — `checkChangedFiles` skips paths not on disk (deleted in `git diff`) so verify does not falsely warn “missing @ssot”.
 - `services/council-service.js` — top JSDoc + `@ssot` → `AMENDMENT_01_AI_COUNCIL.md`.
 - `core/sales-technique-analyzer.js` — `@ssot` → `AMENDMENT_21_LIFEOS_CORE.md`.
-- `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `AMENDMENT_19_PROJECT_GOVERNANCE.md`, `AMENDMENT_21_LIFEOS_CORE.md`, `INDEX.md` — change receipts / Last Updated.
+- `docs/products/ai-council/PRODUCT_HOME.md`, `AMENDMENT_19_PROJECT_GOVERNANCE.md`, `AMENDMENT_21_LIFEOS_CORE.md`, `INDEX.md` — change receipts / Last Updated.
 
 ### State after this session
 - `CI=true npm run verify:maturity` passes; SSOT check reports green for changed files (no bogus missing-tag warnings for deleted routes).
@@ -4509,7 +4515,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 - `routes/lifeos-gate-change-routes.js` — `requireKeyOrLifeOSAdmin` for **GET /presets** (command key or admin JWT via `verifyToken`).
 - `public/overlay/lifeos-app.html` — admin Settings section **Gate-change (council presets)** with Refresh + Copy CLI.
 - `prompts/lifeos-gate-change-proposal.md`, `docs/QUICK_LAUNCH.md`, `scripts/generate-agent-rules.mjs` → `npm run gen:rules` → `docs/AGENT_RULES.compact.md`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipt + handoff Completed line.
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipt + handoff Completed line.
 
 ### Next agent
 - Optional: non-admin operators with command key only can use CLI `--list-presets`; overlay panel stays admin-only by product choice.
@@ -4539,7 +4545,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 ### Files changed
 - `scripts/generate-agent-rules.mjs` — §3/§6/§7 expanded: real gate-change/CLI only; if blocked, `COUNCIL: NOT RUN` + `OPINION ONLY — NOT COUNCIL`; never mislead by omission; `npm run lifeos:gate-change-run` + env vars documented.
 - `docs/AGENT_RULES.compact.md` — regenerated via `npm run gen:rules`.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — `Last Updated` + Change Receipts row (owns generator).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — `Last Updated` + Change Receipts row (owns generator).
 
 ### State after this session
 - **KNOW:** Real multi-model council runs on **deployed** server via `POST .../gate-change/...` or `scripts/council-gate-change-run.mjs` with `COMMAND_CENTER_KEY` + `PUBLIC_BASE_URL`. IDE models cannot in-process `callCouncilMember` (already stated in `QUICK_LAUNCH.md`).
@@ -4553,7 +4559,7 @@ Adam named me (Claude Code) as CC — Cursor agent has no name yet. Adam: "the s
 ## [BUILD] Update 2026-04-22 #62 — SSOT organization + token compression system
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — TL;DR agent quick-reference box added to top: top-5 laws table, read-chain pointer, "read compact rules for normal sessions" instruction. SSOT READ-BEFORE-WRITE rule obeyed: file fully read this session.
+- `docs/constitution/NORTH_STAR_SSOT.md` — TL;DR agent quick-reference box added to top: top-5 laws table, read-chain pointer, "read compact rules for normal sessions" instruction. SSOT READ-BEFORE-WRITE rule obeyed: file fully read this session.
 - `docs/SSOT_COMPANION.md` — §0.4 Active Build Priority updated to current state (LifeOS E2E invite is #1, TC on hold, ClientCare #3, TCO blocked on schema divergence). Canonical-priority pointer to `QUICK_LAUNCH.md` added. SSOT READ-BEFORE-WRITE rule obeyed: file fully read this session.
 - `CLAUDE.md` — READ NEXT section rewritten: `docs/AGENT_RULES.compact.md` is the first read for normal sessions (~800 tokens); full NSSOT+Companion only for constitutional sessions.
 - `docs/QUICK_LAUNCH.md` — Required Read Order rewritten: `AGENT_RULES.compact.md` is now step 1 (replaces full NSSOT + Companion for normal sessions). Token-budget note added.
@@ -4624,8 +4630,8 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 - `prompts/tokenos.md` — new domain context for TokenOS B2B lane
 - `prompts/tc-service.md` — new domain context for TC Service lane
 - `prompts/lifeos-ambient.md` — new domain context for ambient snapshots lane
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change Receipts + Agent Handoff Notes updated (drift corrected: overlays marked done, already-shipped items documented)
-- `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md` — schema divergence warning added for old `tco-routes.js` column mismatch
+- `docs/products/lifeos/PRODUCT_HOME.md` — Change Receipts + Agent Handoff Notes updated (drift corrected: overlays marked done, already-shipped items documented)
+- `docs/products/api-cost-savings/PRODUCT_HOME.md` — schema divergence warning added for old `tco-routes.js` column mismatch
 - `docs/QUICK_LAUNCH.md` — priority queue corrected (overlays already shipped 2026-04-20)
 
 ### Problem fixed
@@ -4678,7 +4684,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 - `package.json` — `lifeos:gate-change-run`.
 - `docs/QUICK_LAUNCH.md` — *Real multi-model AI Council* (KNOW: IDE chat ≠ deployed council).
 - `CLAUDE.md` — real debate = `run-council` HTTP.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipt.
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipt.
 
 ### State
 - **KNOW:** Requires live server + `COMMAND_CENTER_KEY` + provider keys on host; costs tokens.
@@ -4688,10 +4694,10 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 ## [BUILD] Update 2026-04-22 #55 — North Star §2.12: technical decisions + supervision anti-drift (law)
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — new **Article II §2.12** (council + research + consensus/deadlock; Conductor/Construction supervisor SSOT re-read + drift vs verifiers; **non-derogable**; amend only via **Article VII**); **Article VI** negative space.
+- `docs/constitution/NORTH_STAR_SSOT.md` — new **Article II §2.12** (council + research + consensus/deadlock; Conductor/Construction supervisor SSOT re-read + drift vs verifiers; **non-derogable**; amend only via **Article VII**); **Article VI** negative space.
 - `docs/SSOT_COMPANION.md` **§0.5E** — operational checklist; version bump.
 - `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `docs/QUICK_LAUNCH.md`, `CLAUDE.md` — cross-links.
-- `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — mission § + epistemic line + **Change Receipts** / `Last Updated`.
+- `docs/products/ai-council/PRODUCT_HOME.md`, `docs/products/lifeos/PRODUCT_HOME.md` — mission § + epistemic line + **Change Receipts** / `Last Updated`.
 
 ### State
 - **KNOW:** Constitutional text is in North Star; lower docs cannot soften §2.12.
@@ -4704,7 +4710,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 - `docs/ENV_REGISTRY.md` — deploy inventory (Lumin / robust-magic) + DB sandbox/SSL, BASE_URL, runtime cost cap, eXp Okta table, email/Cerebras status sync.
 - `services/env-registry-map.js` — same names mirrored for `getRegistryHealth()`.
 - `docs/SSOT_COMPANION.md` §0.4 — pointer to deploy name inventory and rotation note.
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — change receipt.
+- `docs/products/command-center/PRODUCT_HOME.md` — change receipt.
 
 ### State
 - **KNOW:** Names-only; no secrets committed. If `DATABASE_URL` was ever visible in a UI capture, rotate Neon + Railway.
@@ -4719,7 +4725,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 - `public/overlay/lifeos-chat.html` — Build ops panel, P1 goal button, load ops on panel open.
 - `public/overlay/lifeos-app.html` — Cmd/Ctrl+L opens Lumin drawer (when not typing in an input).
 - `scripts/lifeos-build-ops.mjs`, `scripts/lumin-invoke-plan.mjs`; `package.json` scripts `lifeos:build-ops`, `lifeos:lumin-plan`.
-- `prompts/lifeos-lumin.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipts.
+- `prompts/lifeos-lumin.md`, `docs/products/lifeos/PRODUCT_HOME.md` — receipts.
 
 ### State
 - **KNOW:** Syntax clean. **THINK:** Full `/build/ops` and council `/build/plan` need valid `DATABASE_URL` + keys on the target host; prior local runs hit `28P01` with stale creds.
@@ -4739,7 +4745,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 - `startup/register-runtime-routes.js` — Added import + mount call for TokenOS routes. No server.js mutation.
 - `public/overlay/tokenos-landing.html` — NEW: Marketing page at `/token-os`. Live ticker (animated placeholder), compression stack explainer, pricing plans, sign-up form that calls `POST /api/v1/tokenos/register` and displays API key.
 - `public/overlay/tokenos-dashboard.html` — NEW: Full client dashboard at `/token-os/dashboard`. Auth via Bearer key (session storage). Pages: overview (savings cards + bar chart + model table), savings chart, detailed report, invoice generator, by-model breakdown, settings (key rotation), quickstart docs.
-- `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md` — Status updated to IN_BUILD (B2B built, awaiting first customer). Component table updated (TCO-C01/C02 now LIVE). New files added. API endpoint table added. Agent Handoff Notes + Change Receipts appended.
+- `docs/products/api-cost-savings/PRODUCT_HOME.md` — Status updated to IN_BUILD (B2B built, awaiting first customer). Component table updated (TCO-C01/C02 now LIVE). New files added. API endpoint table added. Agent Handoff Notes + Change Receipts appended.
 
 ### State after this session
 - All 9 new files pass `node --check` (syntax clean)
@@ -4766,7 +4772,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 - `scripts/lumin-build-smoke.mjs` — operator fetch to health; optional `LUMIN_SMOKE_PLAN=1` for one POST `/build/plan`.
 - `package.json` — `npm run lifeos:lumin-build-smoke`.
 - `prompts/lifeos-lumin.md` — route surface line for health.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipt + Last Updated table field.
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipt + Last Updated table field.
 
 ### State after this session
 - **KNOW:** Code is present; **GUESS:** Not executed here against a live Railway instance (no `COMMAND_CENTER_KEY` in this environment).
@@ -4781,7 +4787,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 ### Files changed
 - `routes/lifeos-chat-routes.js` — `/api/v1/lifeos/chat/build/health` now includes `lumin_programming_jobs_diagnosis` (auth/migration/connectivity hints) when the table probe fails.
 - `scripts/lumin-build-smoke.mjs` — now exits non-zero when jobs table is unreachable and translates common error codes (`28P01`, `42P01`, `ECONNREFUSED`) into actionable messages.
-- `prompts/lifeos-lumin.md` + `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` receipt text updated for diagnosis behavior.
+- `prompts/lifeos-lumin.md` + `docs/products/lifeos/PRODUCT_HOME.md` receipt text updated for diagnosis behavior.
 
 ### State after this session
 - **KNOW:** smoke against `http://127.0.0.1:8083` reports `database_auth_failed` (`28P01`) before plan execution, preventing false-green bridge status.
@@ -4794,7 +4800,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 ## [PLAN] Update 2026-04-21 #50 — Article II §2.11: system code vs. amendment/project (Adam)
 
 ### Files
-- `docs/SSOT_NORTH_STAR.md` **§2.11** rewrite — *The System Programs Projects; You Code Only the System*; `docs/SSOT_COMPANION.md` **§0.5D** system vs. project; `prompts/00`, `CLAUDE.md`, `QUICK_LAUNCH`, **Article IV §4.2**, `AMENDMENT_21`.
+- `docs/constitution/NORTH_STAR_SSOT.md` **§2.11** rewrite — *The System Programs Projects; You Code Only the System*; `docs/SSOT_COMPANION.md` **§0.5D** system vs. project; `prompts/00`, `CLAUDE.md`, `QUICK_LAUNCH`, **Article IV §4.2**, `AMENDMENT_21`.
 
 ### Rule (KNOW)
 - **External** coding = **platform** (gaps, breakage, Lumin parity) + **`GAP-FILL:`** receipts.
@@ -4803,7 +4809,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 ## [PLAN] Update 2026-04-21 #49 — Article II §2.11: licensed external coding (Conductor / GAP-FILL)
 
 ### Files
-- `docs/SSOT_NORTH_STAR.md` **§2.11** + `docs/SSOT_COMPANION.md` **§0.5D** + cross-links: `Article IV §4.2`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `docs/QUICK_LAUNCH.md`, `CLAUDE.md`, `AMENDMENT_21` epistemic + Change Receipts.
+- `docs/constitution/NORTH_STAR_SSOT.md` **§2.11** + `docs/SSOT_COMPANION.md` **§0.5D** + cross-links: `Article IV §4.2`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `docs/QUICK_LAUNCH.md`, `CLAUDE.md`, `AMENDMENT_21` epistemic + Change Receipts.
 
 ### State
 - **THINK / policy:** Stops ad-hoc “IDE agent” product coding without Conductor/Construction-supervisor discipline; **only** GAP-FILL is an authorized excuse for “external” code when the **system** can’t run yet. Enforcement is SSOT + receipts + culture until CI can detect (hard).
@@ -4813,7 +4819,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 ### Files changed
 - `public/overlay/lifeos-chat.html` — Build panel (plan/draft, job list, hints); commands `/plan`, `/draft`, `/queue` and `lumin plan:` / `lumin draft:` / `lumin queue:`; status strip; `Cmd/Ctrl+L` focuses input.
 - `services/lifeos-lumin.js` — `buildContextSnapshot(userId, { mode })` with per-mode SQL slices; commitments count `IN ('active','open','in_progress')`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Lumin Expansions + Change Receipts + handoff Known gaps.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Lumin Expansions + Change Receipts + handoff Known gaps.
 
 ### State after this session
 - Governed build bridge is usable from the **full** chat page without knowing REST paths; council calls remain synchronous (no streaming %).
@@ -4822,9 +4828,9 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 ## [BUILD] Update 2026-04-21 #47 — NSSOT §2.10 platform law + Companion §0.5C
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — **Article II §2.10** (governed observability, grading, remediation, tooling-gap closure, LLM roles, earned self-correction, core vs adaptive truth); **Article IV §4.2** cross-link; version bump.
+- `docs/constitution/NORTH_STAR_SSOT.md` — **Article II §2.10** (governed observability, grading, remediation, tooling-gap closure, LLM roles, earned self-correction, core vs adaptive truth); **Article IV §4.2** cross-link; version bump.
 - `docs/SSOT_COMPANION.md` — **§0.5C** (Core vs Adaptive Lumin, classification, seamless vs guided, promotion pipeline, LLM responsibilities); version bump; ties §0.5A to §2.10.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — epistemic § implements §2.10; `### Core LifeOS vs Adaptive Lumin (idea routing)`; Change Receipt + Agent Handoff Known gaps (**§2.10** vs runtime automation depth); `Last Updated` fields.
+- `docs/products/lifeos/PRODUCT_HOME.md` — epistemic § implements §2.10; `### Core LifeOS vs Adaptive Lumin (idea routing)`; Change Receipt + Agent Handoff Known gaps (**§2.10** vs runtime automation depth); `Last Updated` fields.
 - `docs/QUICK_LAUNCH.md` — NSSOT read order + execution protocol reference **§2.10** / **§0.5C**.
 - `prompts/00-LIFEOS-AGENT-CONTRACT.md` — supreme law line includes **§2.10**.
 
@@ -4858,7 +4864,7 @@ Use the builder for the next product task. Full protocol in `CLAUDE.md → BUILD
 
 ### Files changed
 - `public/overlay/lifeos-app.html` — **Ask Lumin…** quick bar under topbars; `openLuminFromQuickBar()`; Lumin drawer/FAB z-index 960/970/980; compact subtitle hidden below 420px width.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — `### Lumin — companion front door` (conversational-first, anti-interview, variety + communication-profile); handoff next build; change receipt + Last Updated.
+- `docs/products/lifeos/PRODUCT_HOME.md` — `### Lumin — companion front door` (conversational-first, anti-interview, variety + communication-profile); handoff next build; change receipt + Last Updated.
 - `prompts/lifeos-lumin.md` — documents shell entry surfaces + conversational-first direction.
 
 ### Next agent: start here
@@ -4873,7 +4879,7 @@ Implement **conversation → structured memory / MIT** with explicit user-visibl
 - `services/joy-score.js` — 2x same fix on `checkin_date` and `score_date` queries.
 - `routes/lifeos-healing-routes.js` — replaced inline `resolveUser()` (returned raw handle string) with async `makeLifeOSUserResolver`-backed resolver; updated all handlers to `await resolveUser(req)`; was causing `invalid input syntax for type bigint: "adam"` on all healing endpoints.
 - `routes/lifeos-children-routes.js` — GET `/profiles` now accepts `?user=adam` as fallback when `?parent_user` absent.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — added Change Receipt row for this pass.
+- `docs/products/lifeos/PRODUCT_HOME.md` — added Change Receipt row for this pass.
 
 ### State after this session
 - **KNOW (smoke test verified):** 23/24 LifeOS API endpoints return `ok: true` or valid data with `user=adam` params. All core flows operational: mirror, commitments, scorecard, joy, emotional, health, decisions, identity, conflict, mediation, finance, legacy, healing, habits, cycle, weekly review, growth, purpose, vision, scoreboard, children.
@@ -4894,8 +4900,8 @@ Implement **conversation → structured memory / MIT** with explicit user-visibl
 
 ### Files changed
 - `scripts/verify-project.mjs` — each manifest `required_routes` row now passes **`method`** into route assertions (POST was previously sent as GET). On **401**, retries once with **`LIFEOS_KEY`** when it differs from the primary env key.
-- `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` — `## Machine verification` documents **KNOW** (this agent: billing dashboard GET on `robust-magic-production.up.railway.app` → **401** with workspace `.env` only) vs **Railway Variables / overlay Save access** as separate evidence; forbids implying “untestable in prod” when the failure is shell key drift.
-- `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — receipt correction: manifest `required_routes` → route assertions omitted `method` until this fix.
+- `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` — `## Machine verification` documents **KNOW** (this agent: billing dashboard GET on `robust-magic-production.up.railway.app` → **401** with workspace `.env` only) vs **Railway Variables / overlay Save access** as separate evidence; forbids implying “untestable in prod” when the failure is shell key drift.
+- `docs/products/project-governance/PRODUCT_HOME.md` — receipt correction: manifest `required_routes` → route assertions omitted `method` until this fix.
 
 ### State after this session
 - **KNOW:** Remote billing API probes still **401** from this Cursor environment because local `COMMAND_CENTER_KEY` does not match production (no `LIFEOS_KEY` in `.env` to recover).
@@ -4910,7 +4916,7 @@ To record **green** remote verifier receipts: run `node scripts/verify-project.m
 
 ### Files changed
 - `public/overlay/lifeos-app.html` — persistent **Ask Lumin…** bar under topbars; `openLuminFromQuickBar()`; drawer/FAB z-index 960/970/980; mobile hides subtitle &lt;420px.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — `### Lumin — companion front door`; handoff next build; change receipt; Last Updated sync.
+- `docs/products/lifeos/PRODUCT_HOME.md` — `### Lumin — companion front door`; handoff next build; change receipt; Last Updated sync.
 - `prompts/lifeos-lumin.md` — shell surfaces + conversational-first direction.
 
 ### Next agent: start here
@@ -4924,7 +4930,7 @@ Ship **conversation → structured memory / MIT** with visible receipts (see Ame
 - `public/clientcare-billing/overlay.html` — page title, section-label / panel CSS, script `?v=20260423a`.
 - `public/clientcare-billing/clientcare-billing.js` — hero + main column reorder (queue/chat/VOB first); KPI strip simplified + “More metrics”; collapsible secondary panels; copy for assistant framing.
 - `tests/smoke.test.js` — skip auth-gated API tests on 401/403 when `LIFEOS_KEY` unset.
-- `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` — **Operator quick start** section + change receipt.
+- `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` — **Operator quick start** section + change receipt.
 
 ### Next agent: start here
 Live demo: confirm `/clientcare-billing` cache-bust loads `clientcare-billing.js?v=20260423a`.
@@ -4938,7 +4944,7 @@ Live demo: confirm `/clientcare-billing` cache-bust loads `clientcare-billing.js
 - `docs/ENV_REGISTRY.md` — Public URL / remote verify section; ClientCare billing vars; changelog row.
 - `services/env-registry-map.js` — Same vars + `@ssot` Amendment 12; `PUBLIC_BASE_URL` / `REMOTE_VERIFY_BASE_URL`.
 - `docs/SSOT_COMPANION.md` §0.4 — Pointers to registry, map, remote verify semantics.
-- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`, `AMENDMENT_18_*.md`, `AMENDMENT_19_*.md` — receipts + verifier docs.
+- `docs/products/command-center/PRODUCT_HOME.md`, `AMENDMENT_18_*.md`, `AMENDMENT_19_*.md` — receipts + verifier docs.
 - `package.json` — `npm run verify:clientcare-billing:remote` (requires `PUBLIC_BASE_URL` in shell).
 
 ### Next agent: start here
@@ -4968,7 +4974,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `startup/register-runtime-routes.js` — Added import + mount for extension routes at `/api/v1/extension`.
 - `docs/projects/INDEX.md` — Registered Amendment 37 (Universal Overlay Platform) in project registry.
 - All extension files created this session: `extension/manifest.json`, `extension/content.js`, `extension/background.js`, `extension/popup.html`, `extension/popup.js`, `public/extension/frame.html`, `public/extension/frame.js`, `public/extension/version.json`.
-- `docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md` — New full domain SSOT.
+- `docs/products/universal-overlay/PRODUCT_HOME.md` — New full domain SSOT.
 - `public/overlay/lifeos-cycle.html` — NEW. Cycle tracking overlay. Resolves numeric user_id at boot via `GET /api/v1/lifeos/users/:handle`.
 - `public/overlay/lifeos-habits.html` — NEW. Habits overlay. Check-ins, create/archive habits, reflection prompts.
 - `public/overlay/lifeos-app.html` — Added Habits + Cycle to sidebar nav and bottom sheet.
@@ -5076,7 +5082,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `routes/clientcare-billing-routes.js` — `POST /insurance/vob-transcript`; `POST /assistant/message` passes `billing_context`; merges `capability_request` into saved chat metadata.
 - `public/clientcare-billing/clientcare-billing.js` — VOB transcript panel; **Sherry & AI Council** chat in **main** workspace with `billing_context`; sidebar chat → pointer card.
 - `public/clientcare-billing/overlay.html` — script cache-bust `?v=20260420c`.
-- `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` and `AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json` — receipts / `current_focus`.
+- `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` and `AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json` — receipts / `current_focus`.
 
 ### State after this session
 - Transcript ingest is **server + UI wired**; filing into ClientCare remains **operator manual** (copy-paste). **THINK:** E2E not run against live Railway in this session.
@@ -5091,7 +5097,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ### Files changed
 - LifeOS auth/invite UX — see **`docs/CONTINUITY_LOG_LIFEOS.md` Update #14** (invite `signup_url`, admin Settings, bootstrap JWT role sync, login `?code=`, Lumin contract).
 - `docs/QUICK_LAUNCH.md` — **Latest Completed** bullet for LifeOS invites (§2.6 ¶9 Quick Launch contract).
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — **Last Updated** + **Change Receipts** for Quick Launch touch + cold-start regen receipt.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — **Last Updated** + **Change Receipts** for Quick Launch touch + cold-start regen receipt.
 - `docs/AI_COLD_START.md` — regenerated via `npm run cold-start:gen`.
 
 ### State after this session
@@ -5107,10 +5113,10 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 
 ### Files changed
 - `docs/CONTINUITY_LOG_TC.md` — TC lane update #2 (handoff template, verify pointer, parallel-conductor reminder).
-- `docs/projects/AMENDMENT_17_TC_SERVICE.md` — **Agent Handoff Notes (TC lane)**, Owned Files ↔ manifest sync, **Change Receipts** row, single **Last Updated** row.
-- `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` — `last_verified_at` → 2026-04-20.
+- `docs/products/tc-service/PRODUCT_HOME.md` — **Agent Handoff Notes (TC lane)**, Owned Files ↔ manifest sync, **Change Receipts** row, single **Last Updated** row.
+- `docs/products/tc-service/FILE_MANIFEST.json` — `last_verified_at` → 2026-04-20.
 - `docs/QUICK_LAUNCH.md` — **Latest Completed** + TC queue line 4 clarified for next code work.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — **Last Updated** + **Change Receipts** (Quick Launch touched as protocol surface).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — **Last Updated** + **Change Receipts** (Quick Launch touched as protocol surface).
 
 ### State after this session
 - TC conductor has a lane-local handoff on par with LifeOS routing; no application runtime behavior changed.
@@ -5124,11 +5130,11 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [BUILD] Update 2026-04-19 #24
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — §2.6 ¶9 now defines **NSSOT** alias semantics and parallel-conductor non-overlap rule.
+- `docs/constitution/NORTH_STAR_SSOT.md` — §2.6 ¶9 now defines **NSSOT** alias semantics and parallel-conductor non-overlap rule.
 - `docs/QUICK_LAUNCH.md` — lane router + NSSOT shorthand + dual-conductor protocol.
 - `docs/CONTINUITY_INDEX.md` — new `tc` lane row.
 - `docs/CONTINUITY_LOG_TC.md` — initialized TC lane handoff log.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Last Updated + Change Receipt for NSSOT/Quick Launch protocol.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Last Updated + Change Receipt for NSSOT/Quick Launch protocol.
 
 ### State after this session
 - You can say “read NSSOT” and any conductor now has a canonical path to the right files/lane, including parallel LifeOS + TC execution guardrails.
@@ -5145,8 +5151,8 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `services/lifeos-legacy-core.js` — trusted contacts CRUD, cadence get/update, time-capsule create/list, digital will upsert/get, completeness scoring.
 - `routes/lifeos-legacy-routes.js` — new legacy-core endpoints (`/trusted-contacts`, `/check-in-cadence`, `/time-capsule`, `/digital-will`, `/completeness`).
 - `scripts/lifeos-verify.mjs` — legacy-core migration + service required.
-- `prompts/lifeos-legacy.md` + `prompts/README.md` + `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipts + handoff next-build now cycle tracking.
+- `prompts/lifeos-legacy.md` + `prompts/README.md` + `docs/products/lifeos/FILE_MANIFEST.json`.
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipts + handoff next-build now cycle tracking.
 
 ### State after this session
 - Legacy Core P1 now has deployable backend APIs and persistence; habits + conflict interruption are also shipped in this run sequence.
@@ -5164,8 +5170,8 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `routes/lifeos-habits-routes.js` — `/api/v1/lifeos/habits` API.
 - `startup/register-runtime-routes.js` — mounts habits routes.
 - `scripts/lifeos-verify.mjs` — adds habits migration/service/route requirements.
-- `prompts/lifeos-habits.md` + `prompts/README.md` + `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` + `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` receipts.
+- `prompts/lifeos-habits.md` + `prompts/README.md` + `docs/products/lifeos/FILE_MANIFEST.json`.
+- `docs/products/lifeos/PRODUCT_HOME.md` + `docs/products/project-governance/PRODUCT_HOME.md` receipts.
 
 ### State after this session
 - Habits P1 gap now has deployable backend lane and route composition. Conflict interruption also has in-chat settings controls.
@@ -5180,7 +5186,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ### Files changed
 - `public/overlay/lifeos-chat.html` — adds in-chat controls for conflict interrupt enable/disable and sensitivity cycling; loads/saves settings via conflict interrupt endpoints and suppresses checks when disabled.
 - `prompts/lifeos-conflict.md` — marks settings controls shipped and updates next task.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipt row for settings UI completion.
+- `docs/products/lifeos/PRODUCT_HOME.md` — receipt row for settings UI completion.
 
 ### State after this session
 - Conflict interruption now includes both backend detection and user-facing settings controls in the Lumin chat surface.
@@ -5199,7 +5205,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `public/overlay/lifeos-chat.html` — 1.5s debounce interrupt check while typing + gentle intervention toast.
 - `scripts/lifeos-verify.mjs` — requires migration `20260419_conflict_interrupt.sql`.
 - `prompts/lifeos-conflict.md` — marks interruption system shipped and moves next task to settings UI.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` + manifest — receipts, handoff next-build update, migration ownership/assertion.
+- `docs/products/lifeos/PRODUCT_HOME.md` + manifest — receipts, handoff next-build update, migration ownership/assertion.
 
 ### State after this session
 - Conflict Interruption System is now live in API + service + chat surface; users can be gently warned pre-send and can control enable/sensitivity via settings endpoints.
@@ -5216,7 +5222,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `services/lifeos-gate-change-proposals.js` — `markDebated` now stores `council_rounds_json`, `consensus_reached`, `consensus_summary`.
 - `db/migrations/20260422_gate_change_proposals.sql` — new columns for round trace + consensus flags.
 - `prompts/lifeos-gate-change-proposal.md` — opposite-argument requirement clarified.
-- `docs/SSOT_COMPANION.md`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — protocol documentation + receipts + known-gaps update.
+- `docs/SSOT_COMPANION.md`, `docs/products/ai-council/PRODUCT_HOME.md`, `docs/products/lifeos/PRODUCT_HOME.md` — protocol documentation + receipts + known-gaps update.
 
 ### State after this session
 - Gate-change council run now matches requested debate behavior: disagreement triggers forced opposite-side argument before final verdict.
@@ -5231,7 +5237,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ### Files changed
 - `routes/lifeos-council-builder-routes.js` — `POST /task` now defaults to conductor-style autonomy (`autonomy_mode: "max"`, `internet_research: true`) and injects explicit instructions to proceed with best-guess assumptions without routine clarification loops.
 - `prompts/lifeos-council-builder.md` — documents the new autonomy toggles and behavior.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change Receipt row for builder autonomy defaults.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Change Receipt row for builder autonomy defaults.
 
 ### State after this session
 - Builder dispatch now biases toward autonomous continuation instead of asking follow-up questions for normal ambiguity; still stops for hard blockers (credentials/external systems/high-risk authorization).
@@ -5251,9 +5257,9 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `config/task-model-routing.js` — `council.gate_change.debate`.
 - `prompts/lifeos-gate-change-proposal.md`, `prompts/lifeos-council-builder.md`, `prompts/README.md`.
 - `scripts/lifeos-verify.mjs` — migration + service + route required.
-- `docs/SSOT_NORTH_STAR.md` §2.6 ¶8 — API sentence; `docs/SSOT_COMPANION.md` §5.5 — HTTP paragraph; `docs/projects/AMENDMENT_01_AI_COUNCIL.md` — owned files + HTTP list + receipts + Last Updated; `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipts + Last Updated + handoff Known gaps; `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`.
-- `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — `register-runtime-routes` receipt + Last Updated.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — receipt + Last Updated.
+- `docs/constitution/NORTH_STAR_SSOT.md` §2.6 ¶8 — API sentence; `docs/SSOT_COMPANION.md` §5.5 — HTTP paragraph; `docs/products/ai-council/PRODUCT_HOME.md` — owned files + HTTP list + receipts + Last Updated; `docs/products/lifeos/PRODUCT_HOME.md` — receipts + Last Updated + handoff Known gaps; `docs/products/lifeos/FILE_MANIFEST.json`.
+- `docs/products/project-governance/PRODUCT_HOME.md` — `register-runtime-routes` receipt + Last Updated.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — receipt + Last Updated.
 
 ### State after this session
 - Governed efficiency path is **executable**: proposals persist; **user-triggered** `run-council` calls AI once (Zero-Waste: no scheduler); human PATCH dispositions after `debated`.
@@ -5266,11 +5272,11 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [PLAN] Update 2026-04-19 #16
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — **Article II §2.6 ¶8** governed efficiency path (report → council debate → change + receipts); Article VI bullet (no gate weaken without council+receipt).
+- `docs/constitution/NORTH_STAR_SSOT.md` — **Article II §2.6 ¶8** governed efficiency path (report → council debate → change + receipts); Article VI bullet (no gate weaken without council+receipt).
 - `docs/SSOT_COMPANION.md` — **§5.5** Gate-change & efficiency proposals; version string.
-- `docs/projects/AMENDMENT_01_AI_COUNCIL.md` — operational subsection + duplicate `---` cleanup; Last Updated; Change Receipt.
+- `docs/products/ai-council/PRODUCT_HOME.md` — operational subsection + duplicate `---` cleanup; Last Updated; Change Receipt.
 - `prompts/00-LIFEOS-AGENT-CONTRACT.md` — *Legitimate efficiency* bullet.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — epistemic ¶8 one-liner; Last Updated; Change Receipt.
+- `docs/products/lifeos/PRODUCT_HOME.md` — epistemic ¶8 one-liner; Last Updated; Change Receipt.
 - `CLAUDE.md` — truth channel ¶8 sentence.
 
 ### Next agent
@@ -5281,12 +5287,12 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [PLAN] Update 2026-04-19 #15
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — **Article II §2.6** new **¶5–7**: law is mandatory (cannot “not happen”), **no cutting corners**, **no laziness** on reads/verify/receipts; **Article VI** new “not optional for speed” bullet; version note in header.
+- `docs/constitution/NORTH_STAR_SSOT.md` — **Article II §2.6** new **¶5–7**: law is mandatory (cannot “not happen”), **no cutting corners**, **no laziness** on reads/verify/receipts; **Article VI** new “not optional for speed” bullet; version note in header.
 - `prompts/00-LIFEOS-AGENT-CONTRACT.md` — **Law is mandatory** section (mirrors ¶5–7).
 - `CLAUDE.md` — truth channel: §2.6 mandatory, no corners/laziness.
 - `docs/SSOT_COMPANION.md` — §0.5B ¶5–7 posture.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — epistemic § one-line mandatory rule; Last Updated; Change Receipt; Agent Handoff Known gaps (§2.6 enforcement = agents+CI).
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Last Updated + Change Receipt.
+- `docs/products/lifeos/PRODUCT_HOME.md` — epistemic § one-line mandatory rule; Last Updated; Change Receipt; Agent Handoff Known gaps (§2.6 enforcement = agents+CI).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Last Updated + Change Receipt.
 - `services/lifeos-lumin.js` — `LUMIN_EPISTEMIC_CONTRACT` + JSDoc typo fix (Article II).
 
 ### State after this session
@@ -5300,14 +5306,14 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [PLAN] Update 2026-04-19 #14
 
 ### Files changed
-- `docs/SSOT_NORTH_STAR.md` — **Article II §2.6 System Epistemic Oath** + Article VI bullet; version 2026-04-19.
+- `docs/constitution/NORTH_STAR_SSOT.md` — **Article II §2.6 System Epistemic Oath** + Article VI bullet; version 2026-04-19.
 - `docs/SSOT_COMPANION.md` — §0.5B + Appendix A + version note.
 - `CLAUDE.md` — truth channel = §2.6 constitutional.
 - `prompts/00-LIFEOS-AGENT-CONTRACT.md` — platform-wide scope + North Star pointer.
 - `prompts/README.md` — table row.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — epistemic § implements §2.6; Last Updated + Change Receipt.
+- `docs/products/lifeos/PRODUCT_HOME.md` — epistemic § implements §2.6; Last Updated + Change Receipt.
 - `services/lifeos-lumin.js` — contract text + comment.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Last Updated + receipt.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Last Updated + receipt.
 
 ### Next agent
 - Any feature that could show false “healthy” or hide failures → violates §2.6; fix or document honestly.
@@ -5317,13 +5323,13 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [PLAN] Update 2026-04-19 #13
 
 ### Files changed
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **## Adam ↔ Agent epistemic contract**; continuity step **0**; Last Updated + Change Receipt.
+- `docs/products/lifeos/PRODUCT_HOME.md` — **## Adam ↔ Agent epistemic contract**; continuity step **0**; Last Updated + Change Receipt.
 - `prompts/00-LIFEOS-AGENT-CONTRACT.md` — canonical copy.
 - `prompts/README.md`, `prompts/lifeos-*.md`, `prompts/CODEX_SYSTEM_WRAPPER.md` — READ FIRST block + table row for `00`.
 - `CLAUDE.md` — truth-channel paragraph under continuity.
 - `services/lifeos-lumin.js` — `LUMIN_EPISTEMIC_CONTRACT` prepended in `buildSystemPrompt`.
 - `docs/SSOT_COMPANION.md` — §0.5B bullet + version string.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Last Updated + receipt.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Last Updated + receipt.
 
 ### Next agent
 - Treat misunderstanding as stop-the-line; Lumin runtime now includes contract in system prompt.
@@ -5335,7 +5341,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ### Files changed
 - `CLAUDE.md` — **SSOT READ-BEFORE-WRITE** hard rule (full read of target SSOT in session before add/remove/material reword); session checklist item 5.
 - `docs/SSOT_COMPANION.md` — **§0.5B** mirrors rule; Appendix A bootstrap; version bump 2026-04-19.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Pre-flight + Last Updated + Change Receipt.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Pre-flight + Last Updated + Change Receipt.
 
 ### Next agent
 - Before any SSOT edit: read entire file (chunked OK); see `CLAUDE.md` + Companion §0.5B.
@@ -5345,7 +5351,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [PLAN] Update 2026-04-19 #11
 
 ### Files changed
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **Commitment → execution desk** backlog: **Phase B graduated autonomy** (trust tiers, proactive “sending now,” cancel / NL override / self-handle, fail-closed sensitive paths, policy + route checklist).
+- `docs/products/lifeos/PRODUCT_HOME.md` — **Commitment → execution desk** backlog: **Phase B graduated autonomy** (trust tiers, proactive “sending now,” cancel / NL override / self-handle, fail-closed sensitive paths, policy + route checklist).
 
 ### Next agent
 - Implement tiers only with explicit user scope + tests in amendment checklist; no silent global auto-send.
@@ -5355,7 +5361,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [PLAN] Update 2026-04-19 #10
 
 ### Files changed
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — new **Approved Product Backlog** subsection **Commitment → execution desk (cross-device)** (promise → offer assist → review gate → send or MIT; cross-device runner note links Amendment 36); Agent Handoff **Known gaps** + **Last Updated** + **Change Receipts**.
+- `docs/products/lifeos/PRODUCT_HOME.md` — new **Approved Product Backlog** subsection **Commitment → execution desk (cross-device)** (promise → offer assist → review gate → send or MIT; cross-device runner note links Amendment 36); Agent Handoff **Known gaps** + **Last Updated** + **Change Receipts**.
 
 ### State after this session
 - Ultimate “coworker for integrity” flow is **specified**, not implemented. Builds on existing commitments, event ingest, MITs, notifications, Postmark env.
@@ -5368,7 +5374,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 ## [RESEARCH] Update 2026-04-19 #9
 
 ### Files changed
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — added **Cross-amendment map (01–36) vs Claude Cowork**, **~2 year (2028) projection** (KNOW/THINK/GUESS), and **API vs public-repo “idea theft”** framing with [Anthropic Privacy Center — commercial API training default](https://privacy.anthropic.com/en/articles/7996885-how-does-anthropic-process-data-sent-through-the-api) citation.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — added **Cross-amendment map (01–36) vs Claude Cowork**, **~2 year (2028) projection** (KNOW/THINK/GUESS), and **API vs public-repo “idea theft”** framing with [Anthropic Privacy Center — commercial API training default](https://privacy.anthropic.com/en/articles/7996885-how-does-anthropic-process-data-sent-through-the-api) citation.
 
 ### State after this session
 - Strategic memo is **durable in SSOT** (Amendment 36); not a one-off chat answer.
@@ -5401,7 +5407,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `startup/boot-domains.js` — `bootLaneIntel` when `LANE_INTEL_ENABLE_SCHEDULED=1`.
 - `scripts/lifeos-verify.mjs` — migration + service + route entries.
 - `docs/CONTINUITY_INDEX.md` — `horizon` + `security` lane rows.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — MVP marked shipped; **Configuration you must supply** table for full execution.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — MVP marked shipped; **Configuration you must supply** table for full execution.
 
 ### State after this session
 - Intel API is live behind `requireKey`. Scheduled ticks are **off** until `LANE_INTEL_ENABLE_SCHEDULED=1`. Horizon needs Brave/Perplexity **or** `LANE_INTEL_HORIZON_ALLOW_AI_ONLY=1`.
@@ -5419,7 +5425,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `docs/CONTINUITY_INDEX.md` — lane routing table + session-tag rule.
 - `docs/CONTINUITY_LOG_COUNCIL.md` — council/LCL/builder continuity (seeded from former single-log council work).
 - `docs/CONTINUITY_LOG_LIFEOS.md` — LifeOS-only continuity lane.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Zero-Drift / cold-start / governance SSOT.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — Zero-Drift / cold-start / governance SSOT.
 - `docs/AI_COLD_START.md` — generated handoff packet (regen: `npm run cold-start:gen`).
 - `scripts/generate-cold-start.mjs`, `scripts/zero-drift-check.mjs`, `scripts/amendment-readiness-check.mjs`, `scripts/handoff-self-test.mjs`, `scripts/evidence-required-check.mjs`, `scripts/ssot-compact-receipts-dryrun.mjs`, `scripts/git-diff-summary.mjs`
 - `config/codebook-domains.js` — optional domain symbol overlays for LCL.
@@ -5434,10 +5440,10 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `services/council-service.js` — static `CODE_SYMBOLS` import for LCL; `lclMonitor.inspect` on Ollama path; `kingsmanAudit` call.
 - `services/prompt-translator.js` — `translate(..., { domain })` merges domain codebook overlay.
 - `prompts/lifeos-council-builder.md` — documented `GET /next-task`, `lcl-stats`, metadata tail on `POST /task`.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — new `## Agent Handoff Notes`; Change Receipts row; `Last Updated` in header table.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` — `lane_read_manifest`, `handoff_protocol` pointer.
+- `docs/products/lifeos/PRODUCT_HOME.md` — new `## Agent Handoff Notes`; Change Receipts row; `Last Updated` in header table.
+- `docs/products/lifeos/FILE_MANIFEST.json` — `lane_read_manifest`, `handoff_protocol` pointer.
 - `docs/projects/INDEX.md` — registry row for Amendment 36.
-- `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`, `docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md` — receipts for touched areas.
+- `docs/products/ai-council/PRODUCT_HOME.md`, `docs/products/project-governance/PRODUCT_HOME.md`, `docs/products/kingsman-protocol/PRODUCT_HOME.md` — receipts for touched areas.
 - `package.json`, `.github/workflows/ssot-compliance.yml` — new npm scripts + CI steps (warn-only where noted).
 
 ### State after this session
@@ -5457,7 +5463,7 @@ Then: **"Hey Lumin" wake word** — opt-in Web Speech API listener in `lifeos-bo
 - `core/sales-technique-analyzer.js` — Bug fix: curly/smart apostrophes in `'can't', 'won't', 'don't'` inside single-quoted JS strings caused `SyntaxError: Unexpected identifier 't'` at boot. Changed to double-quoted strings. Node `--check` now passes.
 - `routes/lifeos-scorecard-routes.js` — Bug fix: POST `/balance-wheel` was broken when `notes` was in the request body. `notes` was pushed to `cols`+`params` but not `vals`; the VALUES clause used `vals.map(...)` so the INSERT got wrong placeholder count (n cols, n-1 `$N` placeholders) → Postgres error. Removed `vals` array, switched to `cols.map(...)` throughout. Also removed two dead variables (`setClause`, `upsertCols`).
 - `db/migrations/20260421_lifeos_missing_tables.sql` — Created 5 tables that were referenced in production code but missing from all migrations: `user_preferences` (key/value per-user settings with `UNIQUE(user_id,key)`), `health_readings` (HRV/sleep/steps wearable data), `lifeos_notes` (freeform notes from weekly review/coaching), `lifeos_priorities` (per-area priorities with `UNIQUE(user_id,area)`), `lifeos_events` (lightweight calendar events). All 5 were silently failing with caught errors before this migration.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change receipt added for this session's bug fixes.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Change receipt added for this session's bug fixes.
 
 ### Audit results
 Full-codebase audit pass completed:
@@ -5534,7 +5540,7 @@ LifeOS uses two integrity systems: legacy Word Keeper (`integrity_scores`, TEXT 
 - `routes/lifeos-council-builder-routes.js` — Added GET /api/v1/lifeos/builder/lcl-stats. Accepts lclMonitor in factory params.
 - `startup/register-runtime-routes.js` — Passes lclMonitor to builder route factory.
 - `server.js` — Destructures lclMonitor from createCouncilService(). Passes to registerRuntimeRoutes().
-- `docs/projects/AMENDMENT_01_AI_COUNCIL.md` — Added full LCL architecture vision (3 phases, cost table, versioning rules). Updated token stack. Updated build plan. Added decision log entry.
+- `docs/products/ai-council/PRODUCT_HOME.md` — Added full LCL architecture vision (3 phases, cost table, versioning rules). Updated token stack. Updated build plan. Added decision log entry.
 
 ### State after this session
 - LCL compression LIVE — every callCouncilMember call runs Layer 1.5
@@ -5597,7 +5603,7 @@ Read `prompts/lifeos-conflict.md` → Next Approved Task. The full spec is there
 ## Update 2026-04-19 #3
 
 ### Files changed this session
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — (1) Added cross-amendment hygiene reference table at top of Competitive Gap Analysis section: 6 items converted from duplicated specs to links pointing at their owning sibling amendments (Amendments 25, 26, 28, 34). (2) Added Priority Alignment block at top of Approved Product Backlog: revenue chain is 18→17→10→11; LifeOS parallel work pre-authorized for only 3 items (habit tracker, legacy core, cycle tracking); all 20 signature features are queued. (3) Added Household Features — Asymmetric Consent Rule to Data Sovereignty & Ethics section: 5-rule protocol (independent opt-in, instant revocation, quarterly re-confirm, privacy floor, explains the surveillance failure mode it prevents).
+- `docs/products/lifeos/PRODUCT_HOME.md` — (1) Added cross-amendment hygiene reference table at top of Competitive Gap Analysis section: 6 items converted from duplicated specs to links pointing at their owning sibling amendments (Amendments 25, 26, 28, 34). (2) Added Priority Alignment block at top of Approved Product Backlog: revenue chain is 18→17→10→11; LifeOS parallel work pre-authorized for only 3 items (habit tracker, legacy core, cycle tracking); all 20 signature features are queued. (3) Added Household Features — Asymmetric Consent Rule to Data Sovereignty & Ethics section: 5-rule protocol (independent opt-in, instant revocation, quarterly re-confirm, privacy floor, explains the surveillance failure mode it prevents).
 - `docs/projects/INDEX.md` — Updated Last Updated to 2026-04-19; added all 26 LifeOS route files; added 21 LifeOS service files; expanded DB migrations section; updated production readiness checklist (added all new ✅ items, flagged callAI bug as 🔲 fixed in server.js); removed deleted `routes/outreach.js` reference.
 - `server.js` — Added `callAI` to `bootAllDomains()` call. Without this, all LifeOS scheduled AI features (weekly review generation, early warning tick, event ingest classification, truth calibration) were silently no-opping on every interval because `callAI` was `undefined`. Routes to `gemini_flash` (free, better reasoning for LifeOS tasks). `node --check` passes.
 
@@ -5631,7 +5637,7 @@ The "Claude coworker" question from this session: Claude Code IS the conductor. 
 - `services/lifeos-lumin.js` — Added `import { createResponseVariety }` at top. Instantiated `variety` once in the factory. In `chat()`: replaced `varietyGuidance = null` stub and manual profile query with `variety.wrapPromptWithVariety({ userId, systemPrompt: baseSystemPrompt, userPrompt, callAI })`. Added `variety.logResponse()` call after AI reply so the engine learns per user. The variety + communication profile is now fully wired into every Lumin response. `node --check` passes.
 - `public/overlay/lifeos-today.html` — Fixed 3 variable name mismatches in the MIT/scorecard block appended last session: replaced all `LIFEOS_USER` with `USER`; replaced all `getH()` calls with `H()`; removed duplicate `function H()` definition (conflicted with `const H = () => CTX.headers()` at line 1105).
 - `routes/ecommerceRoutes.js`, `routes/funnelRoutes.js`, `routes/learning-routes.js`, `routes/microgridRoutes.js`, `routes/trust-mesh.js`, `routes/voting.js`, `routes/vr-routes.js`, `routes/outreach.js` — DELETED. All were CommonJS in an ESM project, never imported in any startup or server file. Verified before deletion via grep.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Updated Agent Handoff Notes: all 3 known bug markers changed to ✅ FIXED; Priority Build Order updated to remove completed items and renumber; new token-aware model routing spec added to queue as item 9; Change Receipt added for this session.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Updated Agent Handoff Notes: all 3 known bug markers changed to ✅ FIXED; Priority Build Order updated to remove completed items and renumber; new token-aware model routing spec added to queue as item 9; Change Receipt added for this session.
 
 ### State after this session
 - Lumin AI is now fully production-wired: mode-specific prompts + communication profile + response variety on every response
@@ -5651,7 +5657,7 @@ Files to create/edit:
 4. Update `startup/register-runtime-routes.js` if conflict routes aren't mounted yet
 5. SSOT: update AMENDMENT_21 Change Receipts + this file
 
-Full spec is in `docs/projects/AMENDMENT_21_LIFEOS_CORE.md → Approved Product Backlog → Conflict Intelligence Expansion → item 1`.
+Full spec is in `docs/products/lifeos/PRODUCT_HOME.md → Approved Product Backlog → Conflict Intelligence Expansion → item 1`.
 
 ---
 
@@ -5660,7 +5666,7 @@ Full spec is in `docs/projects/AMENDMENT_21_LIFEOS_CORE.md → Approved Product 
 ### Files changed this session
 - `CLAUDE.md` — Added `⚠️ AGENT CONTINUITY PROTOCOL` section at the very top as the first thing any agent reads. Defines session start/end checklists, SSOT update standard, and consequences of skipping.
 - `docs/CONTINUITY_LOG.md` (this file) — Added protocol header + update format template. Most recent entries now at top.
-- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Added continuity notice at top; added `## Approved Product Backlog` section with all approved-not-yet-built items fully specced; expanded `## Agent Handoff Notes` to exact current state (all routes, all DB migrations, all overlays, 3 known bugs flagged with ⚠️, 10-item priority build queue); Added Change Receipts entry for this session.
+- `docs/products/lifeos/PRODUCT_HOME.md` — Added continuity notice at top; added `## Approved Product Backlog` section with all approved-not-yet-built items fully specced; expanded `## Agent Handoff Notes` to exact current state (all routes, all DB migrations, all overlays, 3 known bugs flagged with ⚠️, 10-item priority build queue); Added Change Receipts entry for this session.
 - `db/migrations/20260418_lifeos_weekly_review.sql` — 4 tables: weekly_reviews, weekly_review_sessions, weekly_review_messages, weekly_review_actions
 - `services/lifeos-weekly-review.js` — generateReview (builds data snapshot from 8 data sources, AI writes 4-6 paragraph letter), openSession (creates or resumes conversation), sendMessage (back-and-forth grounded in week's data, extracts actions), applyActions (writes commitments/notes/events back to LifeOS), weekBounds helper
 - `routes/lifeos-weekly-review-routes.js` — 9 endpoints: GET /latest, GET /history, GET /week/:date, POST /generate, POST /:id/session, POST /session/:id/message, GET /session/:id/actions, POST /session/:id/apply, POST /session/:id/close
@@ -5786,7 +5792,7 @@ Full spec in `AMENDMENT_21 → ## Approved Product Backlog → Conflict Intellig
 
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.
-- New amendment added: `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` defines the no-API-first operating model for ClientCare West billing rescue.
+- New amendment added: `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` defines the no-API-first operating model for ClientCare West billing rescue.
 - New backend foundation added for ClientCare billing rescue:
   - `services/clientcare-billing-service.js` — claim classification, timely-filing triage, rescue buckets, action planning
   - `services/clientcare-browser-service.js` — browser/export fallback readiness contract and workflow templates
@@ -5897,9 +5903,9 @@ Full spec in `AMENDMENT_21 → ## Approved Product Backlog → Conflict Intellig
   - replaced both prior partial/comment-only checks with executable dry-run assertions using mock pools
   - `MC-BENCH-02` now verifies mismatch -> quarantine + halt receipt + halt code
   - `MC-BENCH-04` now verifies intermediate promotion is blocked without `audit_completion_receipt`
-- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md`
+- `docs/products/memory-system/PRODUCT_HOME.md`
   - updated Change Receipts and Agent Handoff Notes
-- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.manifest.json`
+- `docs/products/memory-system/FILE_MANIFEST.json`
   - advanced stability from `alpha-pass-with-gaps` to `alpha-pass-static`
 - Verification:
   - `node --check services/memory-capsule.js`

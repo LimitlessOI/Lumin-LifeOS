@@ -17,7 +17,7 @@
  *   node scripts/import-dumps-to-twin.js
  *   node scripts/import-dumps-to-twin.js --build-profile   (also triggers rebuild after import)
  *
- * @ssot docs/projects/AMENDMENT_09_LIFE_COACHING.md
+ * @ssot docs/products/life-coaching/PRODUCT_HOME.md
  */
 
 import pg from 'pg';

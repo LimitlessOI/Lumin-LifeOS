@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: LifeRE Agent Alpha — conductor tests every UI button wiring + API surface before founder alpha.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import http from 'node:http';

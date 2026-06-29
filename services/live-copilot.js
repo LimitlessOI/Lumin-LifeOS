@@ -23,7 +23,7 @@
  * This service uses cheaper/faster models for sub-5s latency.
  * Heavy analysis uses the council only at session close.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const SESSION_TYPES = ['negotiation', 'hard_conversation', 'decision', 'presentation', 'interview', 'other'];

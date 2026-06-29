@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Lumin Chair system actions — real execution before counsel theater.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { createLifeREAlphaDailyCycle } from './lifere-alpha-daily-cycle.js';

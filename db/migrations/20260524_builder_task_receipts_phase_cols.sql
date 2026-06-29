@@ -3,7 +3,7 @@
 -- Adds: prompt_hash, prompt_version, failure_family, builder_lane
 -- These columns were added locally via ad-hoc ALTER TABLE but were never committed
 -- in a migration file. Railway's DB is missing them. This migration closes the gap.
--- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+-- @ssot docs/products/command-center/PRODUCT_HOME.md
 
 ALTER TABLE builder_task_receipts
   ADD COLUMN IF NOT EXISTS prompt_hash     TEXT,

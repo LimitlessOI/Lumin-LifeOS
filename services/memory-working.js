@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-working.js
  */
 // services/memory-working.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { createCandidate } from './memory-candidate.js';
 
 export async function writeWorkingMemoryEntry(sessionId, capsuleId, taskScope, lane, content, pool) {

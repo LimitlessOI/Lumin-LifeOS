@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: NotificationService
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * NotificationService
  * - Email via SMTP (Gmail/Workspace) or Postmark, with suppression + event logging
  * - Intended as the single abstraction for outbound comms

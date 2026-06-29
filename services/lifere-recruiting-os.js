@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE recruiting OS pipeline.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export function createLifeRERecruitingOS({ pool = null } = {}) {

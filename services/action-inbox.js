@@ -2,7 +2,7 @@
  * SYNOPSIS: Capture/classify/stage messages; blocks auto-routing bp_build_request to builder.
  * WIRED: partial — HTTP /api/v1/lifeos/action-inbox mounted; founder build bypasses inbox
  * INTEGRATE: founder-interface/message build branch — stage before /build per AM21
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { classifyIntent } from './voice-rail-v1.js';
 

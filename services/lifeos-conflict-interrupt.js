@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Manages conflict interrupts triggered by escalation detection.
  * @fileoverview Conflict Interrupt Service
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * 
  * Manages conflict interrupts triggered by escalation detection.
  * Tracks interrupt lifecycle: pending → resolved/escalated/dismissed

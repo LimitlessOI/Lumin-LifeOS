@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: LifeRE A-to-Z acceptance — runs W1–W6 + unit + runtime integration.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';

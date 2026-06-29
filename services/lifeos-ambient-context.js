@@ -4,7 +4,7 @@
  * (battery, network class, visibility) for Lumin grounding. No microphone data,
  * no continuous AI on ingest.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const MAX_SIGNALS_BYTES = 16_384;

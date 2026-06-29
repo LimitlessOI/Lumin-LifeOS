@@ -2,7 +2,7 @@
  * SYNOPSIS: Action Inbox v1 API routes — capture, classify, stage, approve, route, receipt.
  * Action Inbox v1 API routes — capture, classify, stage, approve, route, receipt.
  * Mount at: /api/v1/lifeos/action-inbox
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import express from 'express';
 import { createActionInbox } from '../services/action-inbox.js';

@@ -1,0 +1,111 @@
+{
+  "schema": "builder_pre_build_simulation_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "blueprint_id": null,
+  "simulated_at": "2026-06-29T17:19:18.645Z",
+  "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
+  "procedure": [
+    "simulate_blueprint_steps",
+    "cold_builder_walk",
+    "sha256_content_contracts",
+    "blueprint_freeze_check",
+    "assemble_pre_build_packet"
+  ],
+  "decision_table": [
+    {
+      "step_id": "UAT-001",
+      "target_file": "routes/lifeos-auth-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-001/lifeos-auth-routes.js → routes/lifeos-auth-routes.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "UAT-002",
+      "target_file": "services/lifeos-user-service.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-002/lifeos-user-service.js → services/lifeos-user-service.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "UAT-003",
+      "target_file": "db/migrations/20260629_lifeos_user_auth.sql",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-003/20260629_lifeos_user_auth.sql → db/migrations/20260629_lifeos_user_auth.sql",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "UAT-004",
+      "target_file": "middleware/lifeos-tier-guard.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-004/lifeos-tier-guard.js → middleware/lifeos-tier-guard.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "UAT-005",
+      "target_file": "public/overlay/lifeos-app.html",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-005/lifeos-app.html → public/overlay/lifeos-app.html",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "UAT-006",
+      "target_file": "routes/lifeos-builderos-command-control-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-006/lifeos-builderos-command-control-routes.js → routes/lifeos-builderos-command-control-routes.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "UAT-007",
+      "target_file": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-007/run-lifeos-user-auth-v1-acceptance.mjs → scripts/run-lifeos-user-auth-v1-acceptance.mjs",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    }
+  ],
+  "summary": {
+    "steps_total": 7,
+    "steps_blocked": 0,
+    "steps_clear": 7,
+    "blocking_gaps": 0,
+    "clear_to_build": true,
+    "freeze_pass": true
+  },
+  "simulation_summary": {
+    "evaluated_steps": 7,
+    "total_gaps": 0,
+    "blocking_gaps": 0,
+    "clear_to_build": true
+  },
+  "cold_walk_summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  },
+  "freeze": {
+    "blueprint_status": "FROZEN",
+    "pass": true,
+    "blocking": [],
+    "checks": [
+      "deterministic_step_set",
+      "authority_lock",
+      "exact_output_contract_present",
+      "non_goals_present"
+    ],
+    "blueprintId": "PRODUCT-LIFEOS-USER-AUTH-V1-0001"
+  }
+}

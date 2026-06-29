@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260405_kids_os.sql.
--- @ssot docs/projects/AMENDMENT_34_KIDS_OS.md
+-- @ssot docs/products/kids-os/PRODUCT_HOME.md
 --
 -- Kids OS: personal development OS for children
 -- Enrollment, win log, learning profile, sessions, integrity, welfare flags, future projections

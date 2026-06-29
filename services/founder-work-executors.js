@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Founder work executors — SMOS content + system deliverables (not template theater).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { executeSocialMediaContentPackage } from './founder-smos-content-executor.js';
 

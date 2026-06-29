@@ -9,7 +9,7 @@
 1. `docs/products/lifere/PRODUCT_HOME.md` — **canonical product truth**
 2. `docs/products/lifere/FILE_MANIFEST.json` — owned paths + `@ssot` targets
 3. `docs/products/AUTHORITY_BOUNDARIES.md` — canonical vs history
-4. `docs/projects/AMENDMENT_LIFERE.md` — law / receipts only (not first product read)
+4. `docs/products/lifere/PRODUCT_HOME.md` — law / receipts only (not first product read)
 
 ## Do not treat as product authority
 

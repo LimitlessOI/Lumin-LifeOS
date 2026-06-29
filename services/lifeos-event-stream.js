@@ -3,7 +3,7 @@
  * LifeOS unified capture/event stream.
  * Turns freeform text into tracked suggestions and optionally applies them.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 function safeJsonParse(text, fallback) {

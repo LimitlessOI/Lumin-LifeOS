@@ -1684,7 +1684,7 @@ Read:
 3. services/builderos-system-alpha-readiness.js
 4. services/builderos-tsos-hook-service.js
 5. routes/tsos-efficiency-routes.js
-6. docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+6. docs/products/builderos/PRODUCT_HOME.md
 
 Verify live:
 - GitHub HEAD

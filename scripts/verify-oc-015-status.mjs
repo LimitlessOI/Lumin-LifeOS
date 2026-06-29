@@ -2,7 +2,7 @@
  * SYNOPSIS: Exports runOC015StatusVerification — scripts/verify-oc-015-status.mjs.
  */
 /*
-- @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+- @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 /*
 - Fetches JSON data from a specified URL path with an x-command-key header.

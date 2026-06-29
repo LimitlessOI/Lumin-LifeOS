@@ -1,0 +1,28 @@
+{
+  "schema": "socialmediaos_founder_chat_a2z_v1",
+  "at": "2026-06-29T03:56:10.297Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "session_id": "3e6105c4-f5e9-4037-bb57-5451acc2ea59",
+  "ok": false,
+  "auth_path": "command_key_fallback",
+  "steps": {
+    "login": {
+      "ok": true,
+      "note": "no local founder creds — using command key for chat drive only"
+    },
+    "intake_chat": {
+      "ok": true,
+      "status": 200,
+      "auth_mode": "command_key_fallback",
+      "pass_fail": "FAIL",
+      "command_truth": "NO_COMMAND_RAN",
+      "action": "intake_blueprint",
+      "chair_channel": "intake_blueprint",
+      "session_id": "3e6105c4-f5e9-4037-bb57-5451acc2ea59",
+      "first_blocker": "step_failed",
+      "summary": "❌ NOT DONE\nintake blueprint failed.\n• Channel: intake_blueprint\n• Kind: UNKNOWN\n• Command: NO_COMMAND_RAN\n• Path: intake_blueprint_executor\n• Blocker: step_failed\n\nNEXT\nFix: step_failed\n\n── Technical ──\n❌ FAIL · intake_blueprint"
+    }
+  },
+  "duration_ms": 148004,
+  "blocker": "step_failed"
+}

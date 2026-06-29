@@ -16,7 +16,7 @@
  * Use createDeploymentService(deps) to get bound functions.
  *
  * @authority Legacy production spine — see services/AGENTS.md. Not canonical factory runtime.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import path from 'path';

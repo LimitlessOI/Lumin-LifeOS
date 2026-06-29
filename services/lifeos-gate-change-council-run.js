@@ -5,7 +5,7 @@
  * Used by routes/lifeos-gate-change-routes.js — runs on the **server** where
  * callCouncilMember and provider keys already exist (e.g. Railway).
  *
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { parseCouncilVerdict } from './lifeos-gate-change-proposals.js';

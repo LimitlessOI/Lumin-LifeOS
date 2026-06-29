@@ -128,7 +128,7 @@ export async function buildRuntimeRealitySnapshot() {
   const pkg = readJsonSafe("package.json") || {};
   const align = getGitOriginAlignment(ROOT);
 
-  const nssotPaths = ["docs/SSOT_NORTH_STAR.md", "docs/SSOT_COMPANION.md"];
+  const nssotPaths = ["docs/constitution/NORTH_STAR_SSOT.md", "docs/SSOT_COMPANION.md"];
   const ssot_version = sha256Concat(nssotPaths);
 
   const codebook = sha256File(path.join(ROOT, "config", "codebook-v1.js"));

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Founder build success gate — PASS requires atomic commit + outcome + live content + client proof spec.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
 import fs from 'node:fs';

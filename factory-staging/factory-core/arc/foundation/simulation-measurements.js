@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Simulation measurement envelope — every sim records falsifiable predictions for Hist to score later.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: clientcare-browser-service.js
- * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
+ * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
  * clientcare-browser-service.js
  * Browser-first fallback contract and discovery automation for ClientCare when API access is unavailable.
  */

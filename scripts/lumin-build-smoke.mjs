@@ -8,7 +8,7 @@
  *   LUMIN_SMOKE_BASE_URL=http://localhost:3000 COMMAND_CENTER_KEY=... node scripts/lumin-build-smoke.mjs
  *   LUMIN_SMOKE_PLAN=1 node scripts/lumin-build-smoke.mjs   # also POST /build/plan (tiny goal)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const base = (process.env.LUMIN_SMOKE_BASE_URL || process.env.PUBLIC_BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');

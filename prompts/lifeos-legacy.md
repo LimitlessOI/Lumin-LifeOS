@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)
 
 **Last updated:** 2026-04-19  
-**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`  
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/products/lifeos/PRODUCT_HOME.md`  
 **Owning routes:** `routes/lifeos-legacy-routes.js`  
 **Owning service:** `services/lifeos-legacy-core.js`  
 **Mounted at:** `/api/v1/lifeos/legacy`

@@ -20,7 +20,7 @@
 - docs/FSAR.md
 - docs/QUALITY_REGRESSION.md
 - docs/SOURCE_OF_TRUTH.md
-- docs/SSOT_NORTH_STAR.md
+- docs/constitution/NORTH_STAR_SSOT.md
 - env.template
 - package-lock.json
 - package.json

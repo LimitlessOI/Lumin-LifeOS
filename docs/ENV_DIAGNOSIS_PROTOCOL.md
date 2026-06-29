@@ -2,7 +2,7 @@
 
 # Environment diagnosis protocol (mandatory before “env is missing”)
 
-**Authority:** Implements `docs/SSOT_NORTH_STAR.md` **Article II §2.3** (evidence) for variable claims.  
+**Authority:** Implements `docs/constitution/NORTH_STAR_SSOT.md` **Article II §2.3** (evidence) for variable claims.  
 **Canonical map:** `docs/ENV_REGISTRY.md` (including **Deploy inventory — Lumin / robust-magic**).  
 **Machine mirror:** `services/env-registry-map.js` + `GET /api/v1/railway/managed-env/registry` (when authenticated).
 

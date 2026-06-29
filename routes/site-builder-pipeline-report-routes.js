@@ -5,7 +5,7 @@ import { Router } from 'express';
 import logger from '../services/logger.js';
 
 /**
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Standalone Express router for the pipeline report endpoint.
  */
 export default function createPipelineReportRoutes(app, { pool, requireKey }) {

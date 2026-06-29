@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Record system failure when corridor discovers intent should have been cleared pre-handoff.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -14,7 +14,7 @@
  *   - Self-worth is structurally separated from performance metrics
  *   - Misidentification screening routes to professionals, never diagnoses
  *
- * @ssot docs/projects/AMENDMENT_34_KIDS_OS.md
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
  */
 
 const INTEGRITY_POINTS = {

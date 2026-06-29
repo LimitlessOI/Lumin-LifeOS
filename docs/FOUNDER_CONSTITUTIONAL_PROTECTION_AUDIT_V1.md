@@ -23,7 +23,7 @@
 
 | Status | Meaning |
 |---|---|
-| **Constitutional** | Encoded in `docs/SSOT_NORTH_STAR.md` (supreme law) as an explicit protection |
+| **Constitutional** | Encoded in `docs/constitution/NORTH_STAR_SSOT.md` (supreme law) as an explicit protection |
 | **Implied** | Derivable from NSSOT intent but not explicitly stated |
 | **Documented** | Written somewhere in governance corpus but not NSSOT supreme law |
 | **Enforced** | Has runtime enforcement today (code, pre-commit, CI) |
@@ -445,7 +445,7 @@ The live build execution receipt closes a technical gap (U-02, U-03). The veto a
 The NSSOT article described in Action 1 should be drafted as a standalone amendment document that Adam can read, modify, and authorize in a single session.
 
 **Scope:**
-1. Read `docs/SSOT_NORTH_STAR.md` in full — find every reference to founder authority, healing, Sherry, council, and escalation
+1. Read `docs/constitution/NORTH_STAR_SSOT.md` in full — find every reference to founder authority, healing, Sherry, council, and escalation
 2. Identify which existing NSSOT articles would be affected by the new sovereignty article (avoid conflicts)
 3. Draft a new NSSOT Article I (or amendment to existing Article I if one exists) with explicit clauses for:
    - Founder sovereignty as supreme authority
@@ -540,7 +540,7 @@ I cited NSSOT §2.11, §2.17, §2.18, and Article V-B from prior audit documents
 
 **If I am wrong:** The score should be higher. The constitutional gap claims for healing mission, council escalation, and founder sovereignty may already be closed. Codex or Claude reading NSSOT directly (not through audit summaries) would reveal this.
 
-**How to verify:** Read `docs/SSOT_NORTH_STAR.md` in full. Search for "sovereign," "Adam," "healing," "Sherry," "escalation threshold," "usability," and "veto." If these concepts appear in explicit article language, the score rises to 5-6/10.
+**How to verify:** Read `docs/constitution/NORTH_STAR_SSOT.md` in full. Search for "sovereign," "Adam," "healing," "Sherry," "escalation threshold," "usability," and "veto." If these concepts appear in explicit article language, the score rises to 5-6/10.
 
 ### Counter-argument 2: `founder_usability_pass` may be further along than I assessed
 

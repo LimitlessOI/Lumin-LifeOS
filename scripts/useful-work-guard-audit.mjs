@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS Phase 01 — Useful-Work-Guard Coverage Audit
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * BuilderOS Phase 01 — Useful-Work-Guard Coverage Audit
  *
  * READ-ONLY static analysis. No AI calls. No DB writes. No runtime mutations.

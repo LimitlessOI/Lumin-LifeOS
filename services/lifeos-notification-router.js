@@ -5,7 +5,7 @@
  * Routes LifeOS notifications to the right channel for each user and supports
  * a simple escalation ladder: overlay -> sms -> alarm -> call.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const DEFAULT_POLICY = Object.freeze({

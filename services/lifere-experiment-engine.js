@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE experiment engine — A/B with receipts.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export function createLifeREExperimentEngine({ pool = null } = {}) {

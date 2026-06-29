@@ -5,7 +5,7 @@
  * Runtime task authority can only make sensible choices if the candidate set
  * excludes models that are impossible to call on the current runtime.
  *
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 import { createCouncilMembers } from '../config/council-members.js';

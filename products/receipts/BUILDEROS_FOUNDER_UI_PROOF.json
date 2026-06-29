@@ -151,7 +151,7 @@
             "program_context": [
               {
                 "id": "smos",
-                "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                "amendment": "docs/products/marketingos/PRODUCT_HOME.md",
                 "services": [
                   "services/lifere-socialmediaos-bridge.js",
                   "services/lifere-content-brief-engine.js",
@@ -159,7 +159,7 @@
                 ],
                 "canonical": {
                   "program": "Social Media OS (LifeRE)",
-                  "authority": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                  "authority": "docs/products/marketingos/PRODUCT_HOME.md",
                   "workflow_order": [
                     "content_brief",
                     "coach",
@@ -188,7 +188,7 @@
             "program_context": [
               {
                 "id": "smos",
-                "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                "amendment": "docs/products/marketingos/PRODUCT_HOME.md",
                 "services": [
                   "services/lifere-socialmediaos-bridge.js",
                   "services/lifere-content-brief-engine.js",
@@ -196,7 +196,7 @@
                 ],
                 "canonical": {
                   "program": "Social Media OS (LifeRE)",
-                  "authority": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+                  "authority": "docs/products/marketingos/PRODUCT_HOME.md",
                   "workflow_order": [
                     "content_brief",
                     "coach",
@@ -234,7 +234,7 @@
               },
               {
                 "id": "lumin_chair",
-                "amendment": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+                "amendment": "docs/products/lifeos/PRODUCT_HOME.md",
                 "services": [
                   "services/lumin-chair-orchestrator.js",
                   "services/chair-lumin-unified.js",

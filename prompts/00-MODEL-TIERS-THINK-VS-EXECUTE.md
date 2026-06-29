@@ -4,7 +4,7 @@
 
 **Read after:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)  
 **Config:** `config/task-model-routing.js` → `getModelForTask()`  
-**SSOT:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
+**SSOT:** `docs/products/ai-council/PRODUCT_HOME.md`
 
 ---
 

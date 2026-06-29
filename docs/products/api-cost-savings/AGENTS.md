@@ -8,7 +8,7 @@
 
 1. `docs/products/api-cost-savings/PRODUCT_HOME.md` — mission, ownership, readiness state, revenue model
 2. `docs/products/api-cost-savings/FILE_MANIFEST.json` — every file this product owns
-3. `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md` — law, 5-layer stack spec, session receipts
+3. `docs/products/api-cost-savings/PRODUCT_HOME.md` — law, 5-layer stack spec, session receipts
 4. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
 
 ## What this product does

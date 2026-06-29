@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE learning pipeline — experiment → best practice → strategy evolution.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeREExperimentEngine } from './lifere-experiment-engine.js';
 import { createLifeREBestPracticeEngine } from './lifere-best-practice-engine.js';

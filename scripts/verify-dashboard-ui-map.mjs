@@ -4,7 +4,7 @@
  * Verifies LifeOS dashboard visual SSOT is present on disk and queue targets stay grounded.
  * No network. Used by CI / compliance-officer / pre-queue sanity.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { readFile, access } from 'node:fs/promises';
 import { join } from 'node:path';

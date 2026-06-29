@@ -1,0 +1,171 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "command-center",
+  "project_id": "command_center",
+  "name": "Command & Control Center",
+  "canonical_home": "docs/products/command-center/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/command-center/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "middleware/apply-middleware.js",
+    "routes/command-center-routes.js",
+    "routes/lifeos-command-center-routes.js",
+    "routes/public-routes.js",
+    "public/overlay/command-center.html",
+    "public/overlay/lifeos-command-center.html",
+    "public/overlay/command-center-communication.js",
+    "public/overlay/command-center.js",
+    "public/overlay/index.html",
+    "public/shared/lifeos-voice-chat.js",
+    "services/command-center-communication-service.js",
+    "docs/ENV_REGISTRY.md",
+    "services/builderos-system-alpha-readiness.js",
+    "docs/products/command-center/PRODUCT_HOME.md",
+    "docs/products/command-center/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "expected_status": 200,
+      "description": "Health check (no auth)"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/ai/status",
+      "expected_status": 200,
+      "description": "AI safety controls"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/chat",
+      "expected_status": 200,
+      "description": "Main AI chat"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects",
+      "expected_status": 200,
+      "description": "Projects dashboard data"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/pending-adam",
+      "expected_status": 200,
+      "description": "Pending items for Adam"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/security",
+      "expected_status": 200,
+      "description": "SEC-F01 security aggregate"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/system-alpha-readiness",
+      "expected_status": 200,
+      "description": "BuilderOS Alpha readiness from runtime truth + structural consolidation docs"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/communications",
+      "expected_status": 200,
+      "description": "Command Center communication history (not proof memory)"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/memory/proof",
+      "expected_status": 200,
+      "description": "BuilderOS memory proof receipt — canonical epistemic_facts only, legacy excluded"
+    }
+  ],
+  "required_tables": [
+    {
+      "name": "ideas",
+      "required_columns": [
+        "id",
+        "title",
+        "approval_status",
+        "build_priority"
+      ]
+    },
+    {
+      "name": "projects",
+      "required_columns": [
+        "id",
+        "slug",
+        "name",
+        "status",
+        "lifecycle"
+      ]
+    },
+    {
+      "name": "project_segments",
+      "required_columns": [
+        "id",
+        "project_id",
+        "title",
+        "status",
+        "estimated_hours"
+      ]
+    },
+    {
+      "name": "pending_adam",
+      "required_columns": [
+        "id",
+        "title",
+        "type",
+        "priority",
+        "is_resolved"
+      ]
+    }
+  ],
+  "required_env": [
+    "COMMAND_CENTER_KEY",
+    "DATABASE_URL"
+  ],
+  "assertions": [
+    {
+      "type": "env_any",
+      "check": [
+        "ANTHROPIC_API_KEY",
+        "GOOGLE_AI_KEY",
+        "GEMINI_API_KEY",
+        "GROQ_API_KEY",
+        "CEREBRAS_API_KEY"
+      ],
+      "label": "at least one AI provider key is configured"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/command-center-routes.js",
+      "label": "command-center-routes syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "public/overlay/command-center.js",
+      "label": "command-center.js syntax"
+    },
+    {
+      "type": "env_with_default",
+      "check": "LIFEOS_DIRECTED_MODE",
+      "expect": "true",
+      "default": "true",
+      "label": "directed mode is on"
+    }
+  ],
+  "completion_checks": [
+    "Chat works end-to-end from browser → Railway → AI → response",
+    "System Health shows green checkmark",
+    "Ideas Queue shows real data from DB",
+    "Projects Dashboard panel shows active projects with hover + click",
+    "Pending Adam panel shows unresolved items",
+    "AI Safety Controls toggle works",
+    "Reality snapshot endpoint works",
+    "Operator Chat supports browser voice input and optional spoken replies",
+    "Secrets Vault shows env-registry health, including missing critical and revenue-blocking vars without exposing secret values"
+  ]
+}

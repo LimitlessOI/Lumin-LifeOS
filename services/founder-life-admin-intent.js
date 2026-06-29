@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Founder personal-life asks — errands, coupons, appointments (not builder/code).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const PERSONAL_LIFE_MARKERS = [

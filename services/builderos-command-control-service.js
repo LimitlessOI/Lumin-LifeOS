@@ -1,7 +1,7 @@
 /**
- * SYNOPSIS: @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * SYNOPSIS: @ssot docs/products/builderos/PRODUCT_HOME.md
  */
-// @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+// @ssot docs/products/builderos/PRODUCT_HOME.md
 
 import { isFounderBuildProofPending } from './founder-build-job-store.js';
 import { hydrateFounderBuildResultTruth } from './founder-build-result-truth.js';

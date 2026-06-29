@@ -13,7 +13,7 @@ The vault is Railway → Project → Variables. This file is the map.
 
 **Working vs present:** Category tables + deploy inventory = **what exists**. **`## Env certification playbook`** + **`## Env certification log`** = **what is proven correct on a live deploy** (run `npm run env:certify` and paste the printed row after each relevant slice).
 
-**Before claiming a var is “missing” in production:** read **`docs/ENV_DIAGNOSIS_PROTOCOL.md`** — if the **name** is listed below, agents **must** exhaust non-secret causes (shell vs Railway, wrong base URL, auth header, typos) before blaming the vault. **North Star:** `docs/SSOT_NORTH_STAR.md` **Article II §2.3**.
+**Before claiming a var is “missing” in production:** read **`docs/ENV_DIAGNOSIS_PROTOCOL.md`** — if the **name** is listed below, agents **must** exhaust non-secret causes (shell vs Railway, wrong base URL, auth header, typos) before blaming the vault. **North Star:** `docs/constitution/NORTH_STAR_SSOT.md` **Article II §2.3**.
 
 ### For every Conductor session (read before “missing env” or “I can’t reach builder”)
 

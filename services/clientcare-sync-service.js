@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: clientcare-sync-service.js
- * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
+ * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
  * clientcare-sync-service.js
  * Snapshot parsing and reconciliation for ClientCare when exports or browser copies are all we have.
  */

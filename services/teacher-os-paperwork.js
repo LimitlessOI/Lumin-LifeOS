@@ -10,7 +10,7 @@
  * Teacher is always the decision-maker: AI drafts, teacher approves.
  * Student display names (aliases) are used in all AI calls — never real names.
  *
- * @ssot docs/projects/AMENDMENT_31_TEACHER_OS.md
+ * @ssot docs/products/teacher-os/PRODUCT_HOME.md
  */
 
 const DOC_PROMPTS = {

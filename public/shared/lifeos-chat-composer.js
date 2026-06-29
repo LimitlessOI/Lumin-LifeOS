@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: ChatGPT-style attachment picker — images, PDFs, paste screenshots.
  * ChatGPT-style attachment picker — images, PDFs, paste screenshots.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function attachLifeOSChatComposer(global) {
   'use strict';

@@ -19,7 +19,7 @@
  *   POST   /children/:id/belonging-check      — run belonging guarantee check
  *   GET    /children/:id/welfare              — get open welfare flags
  *
- * @ssot docs/projects/AMENDMENT_34_KIDS_OS.md
+ * @ssot docs/products/kids-os/PRODUCT_HOME.md
  */
 
 import express from 'express';

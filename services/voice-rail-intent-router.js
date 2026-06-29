@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Intent-first routing — LifeOS infers lane from utterance; mode buttons are overrides only.
  * Intent-first routing — LifeOS infers lane from utterance; mode buttons are overrides only.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

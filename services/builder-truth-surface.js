@@ -16,7 +16,7 @@ import path from 'node:path';
  *
  * Surfaces: deploy | migration | queue | environment | operator
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 const VALID_SURFACES = new Set(['deploy', 'migration', 'queue', 'environment', 'operator']);

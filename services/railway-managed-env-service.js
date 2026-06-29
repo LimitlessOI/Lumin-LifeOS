@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from "crypto";
 import { encrypt, decrypt } from "../core/tco-encryption.js";

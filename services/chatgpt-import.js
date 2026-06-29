@@ -14,7 +14,7 @@
  * The export format is an array of conversation objects, each with a mapping
  * of messages keyed by node ID with parent/children links.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createChatGPTImport({ pool, callAI, logger }) {

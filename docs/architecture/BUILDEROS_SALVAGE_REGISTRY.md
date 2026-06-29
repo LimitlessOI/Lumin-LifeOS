@@ -56,7 +56,7 @@ This registry preserves good ideas without preserving bad execution paths.
 
 ## 4. Amendment 02 Legacy Memory
 
-- `source_file_or_path`: `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md`
+- `source_file_or_path`: `docs/products/memory-system/PRODUCT_HOME.md`
 - `idea_quality`: `medium`
 - `execution_quality`: `legacy`
 - `useful_idea`:

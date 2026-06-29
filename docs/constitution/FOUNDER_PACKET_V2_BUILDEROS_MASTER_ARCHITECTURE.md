@@ -3,7 +3,7 @@
 # FOUNDER_PACKET_V2 — BuilderOS / Lumin Company Foundation
 
 **Status:** IDC HANDOFF — not supreme law
-**Supreme law:** `docs/SSOT_NORTH_STAR.md`
+**Supreme law:** `docs/constitution/NORTH_STAR_SSOT.md`
 **Operating detail:** `docs/SSOT_COMPANION.md` §0.12
 **Purpose:** Pre-ARC Consensus Review Packet — Intent-to-Reality Constitutional Handoff, final pre-ARC pass before ARC creates the BuilderOS Master Blueprint V1.
 
@@ -68,12 +68,12 @@ No process score, governance score, narrative, code quality claim, or "mostly do
 
 Current supreme authority remains:
 
-docs/SSOT_NORTH_STAR.md
+docs/constitution/NORTH_STAR_SSOT.md
 
 Supporting operational law:
 
 docs/SSOT_COMPANION.md
-docs/constitution/NORTH_STAR.md
+docs/constitution/NORTH_STAR_SSOT.md
 docs/AGENT_RULES.compact.md
 docs/projects/AMENDMENT_*.md
 
@@ -536,12 +536,12 @@ If something is missing, propose the fix. If a gate is missing, define the gate.
 
 ## CLAUDE REVIEW — AREAS TO IMPROVE (IDC pass on V2 itself)
 
-**Reviewer:** Claude (Sonnet 4.6) · **Role:** general council / SNT-adjacent · **Confidence:** stated per item · **Method:** read full V2 text against `docs/SSOT_NORTH_STAR.md`, `docs/constitution/NORTH_STAR.md`, `docs/CONTINUITY_LOG.md`, `builderos-reboot/` artifacts, and the parallel Codex `ADAM_DECISION_FILTER_V1` package. Not praise — attack and fix, per the packet's own Final Instruction.
+**Reviewer:** Claude (Sonnet 4.6) · **Role:** general council / SNT-adjacent · **Confidence:** stated per item · **Method:** read full V2 text against `docs/constitution/NORTH_STAR_SSOT.md`, `docs/constitution/NORTH_STAR_SSOT.md`, `docs/CONTINUITY_LOG.md`, `builderos-reboot/` artifacts, and the parallel Codex `ADAM_DECISION_FILTER_V1` package. Not praise — attack and fix, per the packet's own Final Instruction.
 
 This is a critique of the packet's completeness as a governance document, not a rejection of its direction. Verdict is at the bottom.
 
 ### 1. No reconciliation with Article III money/risk veto — **HIGH** — KNOW
-`docs/constitution/NORTH_STAR.md` Article III gives Adam absolute veto on money >$100, irreversible actions, data destruction, and public release without proof. V2's CFO and Builder Entry Gate sections never cite this veto or say how/when it fires inside the Pre-ARC / Post-ARC flow.
+`docs/constitution/NORTH_STAR_SSOT.md` Article III gives Adam absolute veto on money >$100, irreversible actions, data destruction, and public release without proof. V2's CFO and Builder Entry Gate sections never cite this veto or say how/when it fires inside the Pre-ARC / Post-ARC flow.
 **Fix:** Add an explicit clause to CFO and to the Builder Entry Gate: "Any path requiring spend >$100, an irreversible action, or data destruction routes to Adam for Article III veto regardless of consensus state — this is not a CFO or Chair decision."
 
 ### 2. No Mission-Pillar override tier for Healing / Education / Hardship — **HIGH** — KNOW

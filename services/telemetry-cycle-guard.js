@@ -13,7 +13,7 @@
  * != null or !== '' checks. Fixed with typeof === 'string' guards.
  * JSDoc was also inside function bodies; moved to correct position.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 /**

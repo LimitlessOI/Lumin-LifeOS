@@ -3,7 +3,7 @@
  * scripts/verify-builder-output.mjs
  * Detect when the council builder emitted a stub instead of a real implementation.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Usage:
  *   node scripts/verify-builder-output.mjs <filepath> [original-line-count]

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Run truth scoreboard tick + receipt validation report.
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import path from 'node:path';

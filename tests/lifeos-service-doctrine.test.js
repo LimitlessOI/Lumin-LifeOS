@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: js — tests/lifeos-service-doctrine.test.js.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';

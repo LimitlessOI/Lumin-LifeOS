@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS coder tier lock — intended tier must equal determinism test tier.
- * @ssot docs/projects/BUILDEROS_BP_V1.md
+ * @ssot docs/products/builderos/specs/BP_V1.md
  */
 
 export function resolveBuilderTierLock() {

@@ -1,0 +1,117 @@
+{
+  "schema": "studio_experience_simulation_v1",
+  "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+  "seat": "Studio",
+  "simulated_at": "2026-06-29T02:06:45.720Z",
+  "simulated_by": "factory-core/arc/foundation/studio-simulation.js",
+  "in_scope": true,
+  "checks": [
+    {
+      "check": "Founder can see staged items in one place",
+      "pass": true,
+      "friction_if_fail": "Adam cannot trust staging visibility"
+    },
+    {
+      "check": "Approval gate before action",
+      "pass": true,
+      "friction_if_fail": "Trust collapse at Alpha"
+    },
+    {
+      "check": "Typography direction is explicit",
+      "pass": true,
+      "friction_if_fail": "UI can collapse into generic SaaS typography"
+    },
+    {
+      "check": "Color and visual atmosphere are explicit",
+      "pass": false,
+      "friction_if_fail": "UI can become flat or visually forgettable"
+    },
+    {
+      "check": "Desktop and mobile feel are both named",
+      "pass": false,
+      "friction_if_fail": "Experience can pass desktop and fail real mobile use"
+    },
+    {
+      "check": "Generic-template failure is explicitly forbidden",
+      "pass": false,
+      "friction_if_fail": "Builder can ship technically correct but market-weak design"
+    },
+    {
+      "check": "Studio design packet exists",
+      "pass": true,
+      "friction_if_fail": "Builder would still be inventing visual direction instead of following Studio"
+    },
+    {
+      "check": "Studio packet defines explicit typography",
+      "pass": true,
+      "friction_if_fail": "Typography direction remains too vague for deterministic build"
+    },
+    {
+      "check": "Studio packet defines implementation contract",
+      "pass": true,
+      "friction_if_fail": "Design system is not concrete enough for Builder handoff"
+    },
+    {
+      "check": "Studio packet forbids generic founder-facing patterns",
+      "pass": true,
+      "friction_if_fail": "Studio has not explicitly blocked the generic failure modes"
+    },
+    {
+      "check": "Design artifact source exists for UI review",
+      "pass": false,
+      "friction_if_fail": "Studio is judging founder-facing design without actual UI artifacts"
+    },
+    {
+      "check": "Typography is not default system-stack only",
+      "pass": false,
+      "friction_if_fail": "UI still reads like default SaaS typography"
+    },
+    {
+      "check": "Visual atmosphere is encoded in the artifact",
+      "pass": false,
+      "friction_if_fail": "UI likely renders flat without strong visual atmosphere"
+    },
+    {
+      "check": "Responsive behavior is visible in the artifact",
+      "pass": false,
+      "friction_if_fail": "Founder-facing surface may pass desktop and fail mobile"
+    },
+    {
+      "check": "Design tokens exist for consistent visual control",
+      "pass": false,
+      "friction_if_fail": "Visual system is likely ad-hoc instead of governed"
+    }
+  ],
+  "friction_points": [
+    "UI can become flat or visually forgettable",
+    "Experience can pass desktop and fail real mobile use",
+    "Builder can ship technically correct but market-weak design",
+    "Studio is judging founder-facing design without actual UI artifacts",
+    "UI still reads like default SaaS typography",
+    "UI likely renders flat without strong visual atmosphere",
+    "Founder-facing surface may pass desktop and fail mobile",
+    "Visual system is likely ad-hoc instead of governed"
+  ],
+  "verdict": "STUDIO_CONCERNS",
+  "pass": false,
+  "role_contract": {
+    "seat": "Studio",
+    "contract_version": "2.0A",
+    "title": "Design / UX",
+    "role": "Design engine + experience simulation when UI/product feel in scope — emits a governed design packet and blocks generic template-grade design before build"
+  },
+  "measurements": [
+    {
+      "metric_id": "design_distinctiveness",
+      "seat": "Studio",
+      "predicted": "design gate incomplete before build",
+      "confidence": "THINK",
+      "how_we_know_if_wrong": "Founder alpha or SENTRY UI testing flags the result as generic, flat, or trust-damaging despite the simulation pass.",
+      "evidence_path": "receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
+      "predicted_at": "2026-06-29T02:06:45.720Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ]
+}

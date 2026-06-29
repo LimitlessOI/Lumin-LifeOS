@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Founder Direct Provider production regression proof.
  * Founder Direct Provider production regression proof.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_DIRECT_PROVIDER_PROOF_SPEC.md
  */
 import 'dotenv/config';

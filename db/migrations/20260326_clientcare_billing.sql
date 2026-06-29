@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260326_clientcare_billing.sql.
--- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
+-- @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
 -- ClientCare billing recovery foundation
 
 CREATE TABLE IF NOT EXISTS clientcare_claims (

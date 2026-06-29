@@ -26,7 +26,7 @@
  *   Phase 3 (later) — LoRA fine-tune: codebook baked into model weights,
  *                      0 tokens ever for the key, 10-25x efficiency vs generic LLMs
  *
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 import {

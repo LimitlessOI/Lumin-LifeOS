@@ -1,5 +1,5 @@
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 export async function runRunnerTelemetryG219Verification({ baseUrl, commandKey }) {
   const controlPlaneUrl = `${baseUrl}/api/v1/builderos/control-plane/health`;

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Unified builder gap failure-family classifier (gaps API + supervisor + verify).
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { classifyCodegenFailure } from './builderos-codegen-self-repair.js';

@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Regression: wrong commit content cannot pass requested-outcome verification.
  * Regression: wrong commit content cannot pass requested-outcome verification.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { describe, it } from 'node:test';
@@ -36,7 +36,7 @@ describe('builder-outcome-verifier wrong-outcome guard', () => {
         ok: true,
         commit_sha: 'f2555dfeee6a775063aea39db65f6facfd3868f9',
         commit_message: 'GAP-FILL: builder patch pipeline, §2.18 law, BP CI guard, Voice Rail v2.19',
-        changed_files: ['docs/SSOT_NORTH_STAR.md', 'docs/CONTINUITY_LOG.md'],
+        changed_files: ['docs/constitution/NORTH_STAR_SSOT.md', 'docs/CONTINUITY_LOG.md'],
         patch_text: '### 2.18 Compound Drift Law — Zero Tolerated Angular Error',
       }),
     });
@@ -62,7 +62,7 @@ describe('builder-outcome-verifier wrong-outcome guard', () => {
         ok: true,
         commit_sha: 'abc123',
         commit_message: 'Add Multi-Lane Execution Governance section',
-        changed_files: ['docs/SSOT_NORTH_STAR.md'],
+        changed_files: ['docs/constitution/NORTH_STAR_SSOT.md'],
         patch_text: '### Multi-Lane Execution Governance',
       }),
     });

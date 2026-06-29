@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260326_project_governance.sql.
 -- ============================================================
 -- Project Governance System
--- Amendment: docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+-- Amendment: docs/products/project-governance/PRODUCT_HOME.md
 --
 -- Tables:
 --   projects          — one row per active project, links to SSOT amendment

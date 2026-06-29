@@ -37,7 +37,7 @@ The `public/overlay/site-builder-command-center.html` (Operator dashboard) would
 
 ### Risks
 
-*   **Missing Amendment Document:** The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file is referenced as the SSOT but was not found (`ENOENT`). This means the audit is based on an incomplete specification, risking misinterpretation of intended features or missing critical requirements.
+*   **Missing Amendment Document:** The `docs/products/site-builder/PRODUCT_HOME.md` file is referenced as the SSOT but was not found (`ENOENT`). This means the audit is based on an incomplete specification, risking misinterpretation of intended features or missing critical requirements.
 *   **Lack of Single Prospect Detail Endpoint:** There is no `GET /api/v1/sites/prospects/:clientId` endpoint. This prevents operators from viewing detailed information for a single prospect, such as their full `metadata`, `qualityReport`, `opportunityReport`, or `outreach_log` entries, which is crucial for QA, troubleshooting, and personalized engagement.
 *   **Limited QA Workflow for `qa_hold`:** While `PATCH /api/v1/sites/prospects/:clientId/status` allows changing a prospect's status out of `qa_hold`, there's no explicit API to trigger a *rebuild* or *repair* for a specific `clientId` if a site is in `qa_hold`. Operators would need to use generic build routes, potentially leading to manual data reconciliation.
 *   **No Direct Email Send for QA-Approved Sites:** If a site is manually moved from `qa_hold` to `sent` status, there's no dedicated API to *just send the initial cold email* for that specific `clientId` without re-running the entire `/prospect` pipeline. The `/prospect` route has `skipEmail`, but no `sendOnlyEmail` option for existing prospects.

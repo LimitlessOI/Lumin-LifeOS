@@ -3,7 +3,7 @@
  * SYNOPSIS: Regenerates docs/AI_COLD_START.md from continuity lane files + INDEX pointer.
  * Regenerates docs/AI_COLD_START.md from continuity lane files + INDEX pointer.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';
@@ -47,8 +47,8 @@ async function main() {
   const mainLog = await readSafe('docs/CONTINUITY_LOG.md');
   const lifeos = await readSafe('docs/CONTINUITY_LOG_LIFEOS.md');
   const council = await readSafe('docs/CONTINUITY_LOG_COUNCIL.md');
-  const amd36 = await readSafe('docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md');
-  const amd21h = await readSafe('docs/projects/AMENDMENT_21_LIFEOS_CORE.md');
+  const amd36 = await readSafe('docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md');
+  const amd21h = await readSafe('docs/products/lifeos/PRODUCT_HOME.md');
   const memoryDigest = await readSafe('docs/INSTITUTIONAL_MEMORY_DIGEST.md');
 
   const handoff = amd21h.includes('## Agent Handoff Notes')
@@ -80,7 +80,7 @@ async function main() {
 
 ${directiveLine}
 
-**In practice:** execution is \`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json\`, LifeOS routes/overlays in **Amendment 21** scope, and honest **Change Receipts**. **No** scope outside the approved backlog without Adam or a load-bearing **§2.12** path (\`run-council\` / gate-change on the running app). Full legal text: \`docs/projects/AMENDMENT_21_LIFEOS_CORE.md\` → **Approved Product Backlog** → **PRIORITY ALIGNMENT**.
+**In practice:** execution is \`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json\`, LifeOS routes/overlays in **Amendment 21** scope, and honest **Change Receipts**. **No** scope outside the approved backlog without Adam or a load-bearing **§2.12** path (\`run-council\` / gate-change on the running app). Full legal text: \`docs/products/lifeos/PRODUCT_HOME.md\` → **Approved Product Backlog** → **PRIORITY ALIGNMENT**.
 
 ## CONTINUITY_INDEX.md
 

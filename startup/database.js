@@ -8,7 +8,7 @@
  * Each migration runs in its own transaction.
  * Already-applied migrations are skipped. Safe to restart at any time.
  *
- * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
+ * @ssot docs/products/financial-revenue/PRODUCT_HOME.md
  */
 import { promises as fsPromises } from "fs";
 import path from "path";

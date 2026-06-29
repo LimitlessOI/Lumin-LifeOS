@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Founder direct provider test — live API only, no council, no simulation.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';
 const PROVIDERS = {

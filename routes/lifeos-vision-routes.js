@@ -21,7 +21,7 @@
  *   GET  /videos?user=              — all videos for user
  *   GET  /videos/:id/status         — check Replicate status
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

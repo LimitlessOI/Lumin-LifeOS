@@ -17,7 +17,7 @@
  *
  * High-risk route: POST /erase requires { confirm_hash: "ERASE_ALL_MY_DATA" } in body.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

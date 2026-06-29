@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: LifeOS Communication OS — primary conversation interface.
  * LifeOS Communication OS — primary conversation interface.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function (global) {
   'use strict';

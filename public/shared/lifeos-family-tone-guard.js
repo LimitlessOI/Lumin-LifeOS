@@ -2,7 +2,7 @@
  * SYNOPSIS: Family Tone Guard — opt-in mic watch for yelling (continuous vibrate until calm)
  * Family Tone Guard — opt-in mic watch for yelling (continuous vibrate until calm)
  * and snippy/mean speech (single vibrate). Client-only; no audio stored.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function (global) {
   const STORAGE_ENABLED = 'lifeos_family_tone_guard';

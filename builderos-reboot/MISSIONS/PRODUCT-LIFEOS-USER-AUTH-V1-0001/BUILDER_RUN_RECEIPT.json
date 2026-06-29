@@ -1,0 +1,92 @@
+{
+  "schema": "builder_run_receipt_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "blueprint_id": null,
+  "run_at": "2026-06-29T17:19:18.955Z",
+  "runner": "builderos-reboot/scripts/execute-mission.mjs",
+  "procedure": [
+    "builder_pre_build_simulate",
+    "decision_gap_map",
+    "pre_build_validation_packet",
+    "write_file_exact_steps",
+    "acceptance_tests",
+    "point_b_gate"
+  ],
+  "pre_build": {
+    "status": "PRE_BUILD_PASS",
+    "blocking_gaps": 0,
+    "receipt": "receipts/BUILDER_PRE_BUILD_SIMULATION.json"
+  },
+  "steps_executed": 7,
+  "step_results": [
+    {
+      "step_id": "UAT-001",
+      "status": "DONE",
+      "target_file": "routes/lifeos-auth-routes.js",
+      "sha256": "757d5875a9b9402ed911ed083c77f5e0a759707f4d5741e5d909a011a1db3823"
+    },
+    {
+      "step_id": "UAT-002",
+      "status": "DONE",
+      "target_file": "services/lifeos-user-service.js",
+      "sha256": "15f32f0e6d0c16bfa867d011febbe06699c5e77c0f813afa4da308422bd7474e"
+    },
+    {
+      "step_id": "UAT-003",
+      "status": "DONE",
+      "target_file": "db/migrations/20260629_lifeos_user_auth.sql",
+      "sha256": "85c611cd8466cb99cdc0da625842384fbc2b437f7c0285c860686406d8dce73d"
+    },
+    {
+      "step_id": "UAT-004",
+      "status": "DONE",
+      "target_file": "middleware/lifeos-tier-guard.js",
+      "sha256": "adac76f70794ad0eedfa127800d9d0b263d2294cd57a150f45ee05cc08482782"
+    },
+    {
+      "step_id": "UAT-005",
+      "status": "DONE",
+      "target_file": "public/overlay/lifeos-app.html",
+      "sha256": "045e5f00268af03b21db0c27fd93b45896863946b31ff6dac48717aae2ae47e1"
+    },
+    {
+      "step_id": "UAT-006",
+      "status": "DONE",
+      "target_file": "routes/lifeos-builderos-command-control-routes.js",
+      "sha256": "698f6c5e6e2dd8dadf7fcb8c51d847b7a48a773844a64042497b63a1131aa1a1"
+    },
+    {
+      "step_id": "UAT-007",
+      "status": "DONE",
+      "target_file": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
+      "sha256": "0340fd1fe7d2ec0e839c72c9f249608b9e14a9b32a60674386253d9eb01de739"
+    }
+  ],
+  "acceptance_exit_code": 0,
+  "verdict": "FAIL",
+  "point_b": {
+    "handoff_pass": true,
+    "machine_path_complete": false,
+    "alpha_reached": false,
+    "status": "BLOCKED_MACHINE_PATH",
+    "proof_lap_only": false,
+    "awaiting_founder_alpha": false,
+    "violations": [
+      "machine:roadmap FUTURE P4",
+      "machine:acceptance FAIL — result truth wins over corridor pass",
+      "machine:ARC mechanical handoff not pass"
+    ]
+  },
+  "machine_path_complete": false,
+  "alpha_reached": false,
+  "awaiting_founder_alpha": false,
+  "doctrine": {
+    "pass": false,
+    "violations": [
+      "doctrine:corridor:missing ARC_RUN_RECEIPT (ARC_RUN_RECEIPT.json)",
+      "doctrine:acceptance FAIL tests=UAT-STUB_pending_build",
+      "doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission",
+      "doctrine:verdict/objective mismatch (NOT_COMPLETE)"
+    ]
+  }
+}

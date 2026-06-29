@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Exports runStrictModeGateVerification — scripts/verify-strict-mode-gate.mjs.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 /**

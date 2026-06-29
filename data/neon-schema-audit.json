@@ -1,0 +1,3232 @@
+{
+  "summary": {
+    "generated_at": "2026-06-29T17:44:56.454Z",
+    "total": 460,
+    "with_data": 88,
+    "schema_ready": 372,
+    "archive_candidate": 0,
+    "review": 0
+  },
+  "tables": [
+    {
+      "table": "ai_performance",
+      "rows": 195406,
+      "kb": 28568,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "railway_env_sync_audit",
+      "rows": 92128,
+      "kb": 30008,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "conversation_memory",
+      "rows": 91038,
+      "kb": 233304,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "execution_tasks",
+      "rows": 36029,
+      "kb": 62168,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "blind_spots",
+      "rows": 30314,
+      "kb": 42400,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "log_fixes",
+      "rows": 18652,
+      "kb": 4000,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "drone_opportunities",
+      "rows": 15784,
+      "kb": 14592,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "loss_log",
+      "rows": 10402,
+      "kb": 3216,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "ai_rotation_log",
+      "rows": 8493,
+      "kb": 1416,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "system_snapshots",
+      "rows": 5949,
+      "kb": 10048,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "daily_ideas",
+      "rows": 5415,
+      "kb": 2416,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "model_routing_log",
+      "rows": 4996,
+      "kb": 544,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "sandbox_tests",
+      "rows": 4775,
+      "kb": 2312,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "epistemic_facts",
+      "rows": 3693,
+      "kb": 1560,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "revenue_opportunities",
+      "rows": 3494,
+      "kb": 1512,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "fact_evidence",
+      "rows": 2696,
+      "kb": 1184,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "error_appearance_times",
+      "rows": 1998,
+      "kb": 360,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "income_drones",
+      "rows": 1169,
+      "kb": 344,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "marketing_research",
+      "rows": 1098,
+      "kb": 2072,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "task_tracking",
+      "rows": 889,
+      "kb": 55640,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "build_history",
+      "rows": 888,
+      "kb": 2424,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "build_artifacts",
+      "rows": 473,
+      "kb": 1440,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "deployments",
+      "rows": 472,
+      "kb": 168,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "marketing_campaigns",
+      "rows": 386,
+      "kb": 416,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "schema_migrations",
+      "rows": 184,
+      "kb": 128,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "orch_tasks",
+      "rows": 79,
+      "kb": 144,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lumin_messages",
+      "rows": 60,
+      "kb": 232,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "token_usage_log",
+      "rows": 52,
+      "kb": 144,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_audit_receipts",
+      "rows": 51,
+      "kb": 208,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "memory_use_receipts",
+      "rows": 32,
+      "kb": 80,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "action_inbox_items",
+      "rows": 30,
+      "kb": 96,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "communication_engagements",
+      "rows": 30,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "daily_spend",
+      "rows": 29,
+      "kb": 88,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "cost_analysis_log",
+      "rows": 25,
+      "kb": 120,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_active_tasks",
+      "rows": 21,
+      "kb": 96,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "memory_capsules",
+      "rows": 21,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifere_performance_snapshot",
+      "rows": 15,
+      "kb": 72,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "project_backlog",
+      "rows": 15,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_halt_log",
+      "rows": 14,
+      "kb": 80,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builderos_command_control_jobs",
+      "rows": 11,
+      "kb": 96,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "rep_catalog_entries",
+      "rows": 11,
+      "kb": 152,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "fact_level_history",
+      "rows": 10,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lessons_learned",
+      "rows": 10,
+      "kb": 88,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_failure_log",
+      "rows": 9,
+      "kb": 72,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "tco_agent_config",
+      "rows": 9,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifere_approval_queue",
+      "rows": 7,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifere_permission_grants",
+      "rows": 6,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "protected_files",
+      "rows": 6,
+      "kb": 64,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_truth_surfaces",
+      "rows": 5,
+      "kb": 80,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "consensus_proposals",
+      "rows": 5,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifeos_sessions",
+      "rows": 5,
+      "kb": 96,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "tcos_baseline_config",
+      "rows": 5,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "virtual_class_modules",
+      "rows": 5,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_queue_state",
+      "rows": 4,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_task_receipts",
+      "rows": 4,
+      "kb": 152,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifeos_invites",
+      "rows": 4,
+      "kb": 64,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "contradiction_records",
+      "rows": 3,
+      "kb": 80,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "marketing_content",
+      "rows": 3,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "financial_ledger",
+      "rows": 2,
+      "kb": 80,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifeos_users",
+      "rows": 2,
+      "kb": 64,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifere_activity_log",
+      "rows": 2,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "managed_railway_env_vars",
+      "rows": 2,
+      "kb": 128,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "mission_participants",
+      "rows": 2,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "pods",
+      "rows": 2,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "self_modifications",
+      "rows": 2,
+      "kb": 64,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "boldtrail_agents",
+      "rows": 1,
+      "kb": 64,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builder_replay_baselines",
+      "rows": 1,
+      "kb": 80,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "builderos_command_control_state",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "clientcare_patient_ar_policy",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "clientcare_tenants",
+      "rows": 1,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "clients",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "cncl_rosters",
+      "rows": 1,
+      "kb": 96,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "communication_profiles",
+      "rows": 1,
+      "kb": 64,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "composition_scorecard_entries",
+      "rows": 1,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "consensus_votes",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "consequence_evaluations",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "constitutional_lock",
+      "rows": 1,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "customers",
+      "rows": 1,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "deliberation_gate_records",
+      "rows": 1,
+      "kb": 64,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "evidence_vault_entries",
+      "rows": 1,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "integrity_scores",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lifere_finance_forecast",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "lumin_threads",
+      "rows": 1,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "marketing_playbook",
+      "rows": 1,
+      "kb": 112,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "missions",
+      "rows": 1,
+      "kb": 48,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "projects",
+      "rows": 1,
+      "kb": 112,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "sales_call_recordings",
+      "rows": 1,
+      "kb": 80,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "tc_pricing_config",
+      "rows": 1,
+      "kb": 32,
+      "referenced": true,
+      "tier": "KEEP"
+    },
+    {
+      "table": "accountability_partnerships",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "action_inbox_receipts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "activity_analytics",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "adam_decision_profile",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "adam_decisions",
+      "rows": 0,
+      "kb": 56,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "adam_profile",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_activities",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_calendar_events",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_call_simulations",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_daily_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_feature_unlocks",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_goal_commitments",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_goals",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_integrity_tracking",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_meaningful_moments",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_perfect_day",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_performance",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_progression",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_protocol_violations",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_relationship_mediation",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agent_task_authority",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "agents",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "ai_effectiveness_ratings",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "ai_platform_credentials",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "ai_response_cache",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "ai_unmetered_exceptions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "api_cost_savings_analyses",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "api_cost_savings_clients",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "api_cost_savings_metrics",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "apology_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "approval_requests",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "assessment_results",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "autonomous_businesses",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "autonomous_telemetry_events",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "balance_wheel_scores",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "belief_patterns",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "bias_detections",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "billing_projects",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "bioprinters",
+      "rows": 0,
+      "kb": 8,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "blog_posts",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "blueprint_intake_sessions",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "boldtrail_email_drafts",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "boldtrail_showings",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "build_outcomes",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "build_task_ledger",
+      "rows": 0,
+      "kb": 56,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "builder_council_reviews",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "builder_queue",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "builder_task_ledger",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "builderos_tsos_routing_decisions",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "business_duplications",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "calls",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "cfo_deliberation_receipts",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "character_moments",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "character_profiles",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "character_stories",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "character_story_responses",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "child_dreams",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "child_profiles",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "child_sessions",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "client_metrics_cache",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_audit_log",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_capability_requests",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_claim_actions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_claims",
+      "rows": 0,
+      "kb": 56,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_onboarding",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_operator_access",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_payer_rule_overrides",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "clientcare_vob_prospects",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "coaching_clips",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "coaching_sessions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "code_services",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "command_center_communications",
+      "rows": 0,
+      "kb": 96,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "commitment_prods",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "commitment_reminders",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "commitments",
+      "rows": 0,
+      "kb": 64,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "communication_patterns",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "completion_conversations",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "comprehensive_ideas",
+      "rows": 0,
+      "kb": 72,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "conductor_builder_audit",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "conductor_session_savings",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "conflict_consent",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "conflict_interrupts",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "conflict_recordings",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "consensus_sessions",
+      "rows": 0,
+      "kb": 64,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "consent_registry",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "content_assets",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "contradiction_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "conversation_debriefs",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "conversations",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "copilot_messages",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "copilot_sessions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "creator_ab_tests",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "creator_analytics",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "creator_content",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "creator_enhancements",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "creator_posts",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "creator_profiles",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "crm_contact_notes",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "crm_contacts",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "crm_messages",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "crm_replies",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "crm_sequence_enrollments",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "crm_sequence_steps",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "crm_sequences",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "curiosity_threads",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "cycle_entries",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "cycle_phases",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "cycle_settings",
+      "rows": 0,
+      "kb": 8,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "daily_emotional_checkins",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "daily_mirror_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "daily_mits",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "daily_scorecards",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "dashboard_preferences",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "dashboard_widgets",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "data_deletion_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "death_meditation_sessions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "debate_arguments",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "debate_records",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "decision_review_queue",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "decisions",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "digital_wills",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "dreams",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "email_campaigns",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "email_events",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "email_spam_senders",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "email_suppressions",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "email_triage_log",
+      "rows": 0,
+      "kb": 72,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "emergency_contacts",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "emergency_events",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "emergency_repairs",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "emotional_patterns",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "energy_forecasts",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "energy_grid_nodes",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "energy_observations",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "energy_patterns",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "energy_transactions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "estimation_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "family_values",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "finance_share_scopes",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "flourishing_contributions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "food_insights",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "founder_debriefs",
+      "rows": 0,
+      "kb": 80,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "founder_decision_ledger",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "free_tier_usage",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "fulfillment_orders",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "future_self_projections",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "future_videos",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "gate_change_proposals",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "generated_games",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "glvar_dues_log",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "glvar_violations_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "group_coaching_rooms",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "habit_completions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "habits",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "healing_artifacts",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "healing_sessions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "healing_videos",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "health_checkins",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "health_correlations",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "health_readings",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "health_warnings",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "hist_dept_cases",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "honest_witness_sessions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "household_links",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "idea_batch_items",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "idea_batches",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "ideas",
+      "rows": 0,
+      "kb": 56,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "identity_reviews",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "improvement_proposals",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "inner_work_effectiveness",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "inner_work_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "integrity_events",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "integrity_score_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "intent_drift_events",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "investments",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "joy_checkins",
+      "rows": 0,
+      "kb": 64,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "joy_score_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kids_future_projections",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kids_os_children",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kids_os_integrity_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kids_os_learning_profile",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kids_os_sessions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kids_os_welfare_flags",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kids_os_wins",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "kingsman_audit_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "knowledge_base_files",
+      "rows": 0,
+      "kb": 64,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lane_intel_findings",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lane_intel_runs",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lcl_quality_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "leads",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "learning_profiles",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "legacy_messages",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "legacy_projects",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "legacy_trusted_contacts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "life_reviews",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_ambient_snapshots",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_calendar_events",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_calendar_rules",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_calendars",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_coaching_monitor_control",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_command_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_commitments",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_communication_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_event_actions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_event_ingest_control",
+      "rows": 0,
+      "kb": 8,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_event_stream",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_events",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_finance_accounts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_finance_categories",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_finance_goals",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_finance_ips",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_finance_transactions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_focus_interventions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_focus_sessions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_habit_completions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_listening_profiles",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_notes",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_notification_queue",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_outreach_tasks",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_priorities",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_privacy_windows",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifeos_redaction_jobs",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_ad_spend",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_call_logs",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_client_comms_log",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_content_briefs",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_content_calendar",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_experiments",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_funnel_events",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_hook_library",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_opportunity_signals",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_recruiting_pipeline",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_relationship_edges",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_scenarios",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_skill_drill_log",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_twin_pg_mirror",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lifere_voice_calibration",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lumin_contact_update_queue",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lumin_moment_clips",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lumin_preference_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "lumin_programming_jobs",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "maintenance_alerts",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "makecom_scenarios",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "managed_accounts",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "managed_accounts_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "master_log",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "mediation_agreements",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "mediation_sessions",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "mediation_turns",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "mediator_sessions",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "memory_import_receipts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "memory_palace",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "mission_state_transitions",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "mls_deal_matches",
+      "rows": 0,
+      "kb": 56,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "mls_investors",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "monetization_outreach",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "monetization_paths",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "operator_consumption_ledger",
+      "rows": 0,
+      "kb": 64,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "organs",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "outcomes",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "outreach_log",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "outreach_recipients",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "parenting_moments",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "patient_scans",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "payment_events",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "payments",
+      "rows": 0,
+      "kb": 8,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "pending_adam",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "practice_protocols",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "practice_sessions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "project_entitlements",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "project_segments",
+      "rows": 0,
+      "kb": 72,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "project_subscriptions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "promotion_analytics",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "prospect_sites",
+      "rows": 0,
+      "kb": 56,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "provider_free_tier_ledger",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "purpose_profiles",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "real_time_coaching_events",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "recruitment_calls",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "recruitment_enrollments",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "recruitment_leads",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "recruitment_webinars",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "relationship_checkins",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "relationship_health_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "repair_actions",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "research_aggregate_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "response_variety_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "retrieval_events",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "roi_tracker",
+      "rows": 0,
+      "kb": 8,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "sales_technique_patterns",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "second_opinions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "security_receipts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "self_funding_spending",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "self_repair_memory_events",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "self_sabotage_log",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "service_proposals",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "shared_commitments",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "skill_tracks",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "sleep_logs",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "social_media_posts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "socialmediaos_content_packs",
+      "rows": 0,
+      "kb": 56,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "socialmediaos_sessions",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "sovereign_mentor_sessions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "stripe_webhook_events",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "system_health_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "system_source_of_truth",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "task_deferrals",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "task_improvement_reports",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tasks",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_agent_clients",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_alert_deliveries",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_alerts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_approval_items",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_communications",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_document_requests",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_external_refs",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_inspections",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_interactions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_market_snapshots",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_review_packages",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_showing_feedback",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_showings",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_td_form_knowledge",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_transaction_events",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_transactions",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tc_weekly_reports",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tco_agent_interactions",
+      "rows": 0,
+      "kb": 64,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tco_agent_negotiations",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tco_agent_stats",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tco_customers",
+      "rows": 0,
+      "kb": 80,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tco_invoices",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tco_leads",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tco_requests",
+      "rows": 0,
+      "kb": 64,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "teacher_os_documents",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "teacher_os_students",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "teacher_os_teachers",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "teacher_os_wellbeing",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "teacher_os_win_log",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tier0_improvement_ideas",
+      "rows": 0,
+      "kb": 40,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "tier1_pending_ideas",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "timeline_projections",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "transplant_logs",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "truth_delivery_log",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "twin_ingest_control",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "user_decision_history",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "user_decisions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "user_integrations",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "user_preferences",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "user_style_profile",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "user_trials",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "vapi_calls",
+      "rows": 0,
+      "kb": 48,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "victory_moments",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "victory_reels",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "virtual_class_enrollments",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "vision_sessions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "voice_rail_messages",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "voice_rail_sessions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "voice_rail_staged_commands",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "wearable_data",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "weather_forecasts",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "web_scrapes",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "weekly_review_actions",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "weekly_review_messages",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "weekly_review_sessions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "weekly_reviews",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "white_label_configs",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "wisdom_entries",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "wk_commitments_backup",
+      "rows": 0,
+      "kb": 8,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "word_keeper_transcripts",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "working_memory_entries",
+      "rows": 0,
+      "kb": 16,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "workshop_sessions",
+      "rows": 0,
+      "kb": 32,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "youtube_video_projects",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    },
+    {
+      "table": "zapier_zaps",
+      "rows": 0,
+      "kb": 24,
+      "referenced": true,
+      "tier": "SCHEMA_READY"
+    }
+  ]
+}

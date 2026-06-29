@@ -1,8 +1,8 @@
 /**
  * SYNOPSIS: Voice Rail — direct line to each BuilderOS department seat (ChC + six depts).
  * Voice Rail — direct line to each BuilderOS department seat (ChC + six depts).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import { VALID_AUTHORITIES } from './deliberation-governance.js';
 import { buildExecutionTruthPromptBlock } from '../services/voice-rail-execution-truth.js';

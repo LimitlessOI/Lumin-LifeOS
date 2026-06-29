@@ -37,7 +37,7 @@
  *   POST /coaching/:id/assess-state    — assess / update emotional state for a session
  *   POST /coaching/:id/prep            — generate pre-conversation prep
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

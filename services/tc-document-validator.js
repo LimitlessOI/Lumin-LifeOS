@@ -4,7 +4,7 @@
  * Validates real-estate transaction documents before upload to Transaction Desk.
  * Checks file type, expected address match, price field presence, and date presence.
  *
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 import fs from 'fs/promises';
 import path from 'path';

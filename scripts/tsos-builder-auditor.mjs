@@ -28,7 +28,7 @@
  *   npm run tsos:auditor                             # alias for --daemon
  *   npm run tsos:auditor:once                        # alias for single run
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { promises as fs } from "node:fs";

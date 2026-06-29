@@ -8,7 +8,7 @@
  *   DIAGNOSE_BASE_URL — default: https://robust-magic-production.up.railway.app
  *
  * @ssot docs/ops/BUILDER_PRODUCTION_FIX.md
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

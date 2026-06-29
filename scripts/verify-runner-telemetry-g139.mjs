@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides a verification function for runner telemetry within the LifeOS platform,
  * specifically targeting BuilderOS Generation 139. It performs read-only API calls

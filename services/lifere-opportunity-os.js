@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE opportunity OS — expireds, FSBOs, niche signals.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export function createLifeREOpportunityOS({ pool = null } = {}) {

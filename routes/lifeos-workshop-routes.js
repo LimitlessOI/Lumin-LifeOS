@@ -11,7 +11,7 @@
  * GET  /sessions              — session history
  * GET  /anchors               — all anchor phrases from completed sessions
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

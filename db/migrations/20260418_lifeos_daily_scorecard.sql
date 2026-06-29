@@ -6,7 +6,7 @@
 -- The system scores your day based on MITs completed, commitments hit,
 -- joy logged, integrity signals, and deferred items. One number. Honest.
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

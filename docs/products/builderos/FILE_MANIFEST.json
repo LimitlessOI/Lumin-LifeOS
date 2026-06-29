@@ -1,0 +1,57 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "builderos",
+  "project_id": "builderos_vocabulary",
+  "name": "BuilderOS Vocabulary & Deliberation Governance v2.7",
+  "canonical_home": "docs/products/builderos/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/builderos/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/builderos/PRODUCT_HOME.md",
+    "docs/products/builderos/FILE_MANIFEST.json",
+    "services/builderos-control-plane-service.js",
+    "routes/builderos-control-plane-routes.js",
+    "db/migrations/20260601_build_task_ledger.sql",
+    "db/migrations/20260606_decision_ledger.sql",
+    "services/decision-ledger.js",
+    "scripts/verify-builderos-control-plane.mjs",
+    "docs/BUILDEROS_VOCABULARY.md",
+    "docs/architecture/DELIBERATION_ARCHITECTURE.md",
+    "config/deliberation-governance.js",
+    "config/rep-catalog.json",
+    "db/migrations/20260609_deliberation_governance_v27.sql",
+    "db/migrations/20260609b_founder_debrief_rep_catalog.sql",
+    "routes/deliberation-governance-routes.js",
+    "services/deliberation-governance-service.js",
+    "services/builder-deliberation-hook.js",
+    "services/founder-debrief-service.js",
+    "scripts/deliberation-a-to-z-smoke.mjs",
+    "scripts/deliberation-sentry-probe-cleanup.mjs",
+    "scripts/deliberation-governance-behavior.mjs",
+    "scripts/deliberation-snt-live-verify.mjs",
+    "scripts/verify-deliberation-governance.mjs",
+    "factory-staging/factory-core/deliberation/seed-mission-deliberation.js",
+    "factory-staging/factory-core/deliberation/validate-deliberation-gate.js"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "config/deliberation-governance.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/deliberation-governance-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/deliberation-governance-service.js"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/deliberation-governance-behavior.mjs"
+    }
+  ]
+}

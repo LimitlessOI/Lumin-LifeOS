@@ -2,7 +2,7 @@
  * SYNOPSIS: Blueprint Intake Service — three flows: backfill existing amendment, greenfield
  * conversation, and adjustment patch. Scans codebase patterns before generation so every import,
  * auth ref, and AI call matches reality. GAP_FLAG surfaces unknowns for founder conversation.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

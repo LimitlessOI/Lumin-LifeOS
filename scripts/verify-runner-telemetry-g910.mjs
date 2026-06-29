@@ -1,6 +1,6 @@
 /**
  * @file scripts/verify-runner-telemetry-g910.mjs
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * @module RunnerTelemetryVerificationG910
  */
 

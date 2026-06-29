@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides functions for verifying runner telemetry and control plane health
  * for Generation 167 of the BuilderOS platform. It fetches data from specified

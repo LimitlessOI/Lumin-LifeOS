@@ -6,7 +6,7 @@ import { URL } from 'node:url';
 import { Pool } from 'pg';
 
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Read-only audit module for summarizing Ollama provider token usage via internal API.
  * @throws {Error} If any required envVar is missing or invalid.

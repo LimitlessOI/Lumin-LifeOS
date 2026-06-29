@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE council router — invokes live council when callCouncilMember provided.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

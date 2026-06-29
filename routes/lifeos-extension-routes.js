@@ -15,7 +15,7 @@
  * The iframe is served from this same server, so same-origin requests work.
  * For development, the allowed origin list includes localhost.
  *
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
 import express from 'express';

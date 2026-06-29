@@ -3,8 +3,8 @@
  * Autonomous telemetry — durable Neon storage for PB-governed autonomous work.
  * Honest token estimates only. No secrets. No prompt contents.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 import { randomUUID } from 'node:crypto';

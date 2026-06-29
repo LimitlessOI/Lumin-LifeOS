@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Agent alpha battery — Lumin + LifeRE overlay readiness (local + optional live).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';

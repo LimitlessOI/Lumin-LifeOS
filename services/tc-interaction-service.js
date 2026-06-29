@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-interaction-service.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-interaction-service.js
  * Lawful interaction capture, transcript analysis, commitment extraction, client-memory suggestions,
  * and coaching review for TC workflows. Recording fails closed when disclosure/consent requirements

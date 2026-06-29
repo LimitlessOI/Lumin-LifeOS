@@ -4,7 +4,7 @@
  * Voice Rail capability proof — fails if the system claims what it cannot do.
  * Run against production: PUBLIC_BASE_URL + COMMAND_CENTER_KEY required.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CAPABILITY_PROOF_SPEC.md
  */
 import 'dotenv/config';

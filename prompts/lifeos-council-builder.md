@@ -7,7 +7,7 @@
 > **LifeOS shell / dashboard / queue:** [`docs/LIFEOS_PROGRAM_MAP_SSOT.md`](../docs/LIFEOS_PROGRAM_MAP_SSOT.md) — canonical IA + mockups + **next `tasks[]` slice**; no alternate “dashboard vision” without updating that file or Amendment 21.
 
 **Last updated:** 2026-04-29 — **`docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`** — KNOW/THINK for probe vs full supervise + Am.39 evidence ladder cues in daemon JSONL **`reliability_cues`**. Prior: **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`** — between every slice: **evaluate → fix → improve** (receipt-required). Prior: **`prompts/lifeos-builder-inner-supervisor.md`** — inner supervisor protocol (cheap `mode: review` pass + `npm run lifeos:builder:inner-review`). Prior: **Conductor does not hand-edit implementation** (including routes): use **`POST /api/v1/lifeos/builder/build`**; **`GAP-FILL:`** only after logged failed `/build`. Prior: 2026-04-19
-**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/products/lifeos/PRODUCT_HOME.md`
 **Owning routes:** `routes/lifeos-council-builder-routes.js`
 **Mounted at:** `/api/v1/lifeos/builder`
 **Config:** `config/task-model-routing.js`

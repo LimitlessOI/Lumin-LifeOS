@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE Permission Twin — autonomy ladder 0–5 per action type.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

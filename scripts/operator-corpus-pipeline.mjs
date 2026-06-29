@@ -9,7 +9,7 @@
  * This script does **not** connect to the database or call LLMs (safe offline / CI).
  * For full ingestion, run the commands it prints under Lane B.
  *
- * @ssot docs/projects/AMENDMENT_38_IDEA_VAULT.md
+ * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
 import { spawnSync } from 'child_process';
 import path from 'path';
@@ -32,7 +32,7 @@ function main() {
   console.log(
     `- Verbatim **brainstorm** paste (ChatGPT / external, limited context OK): \`${path.relative(REPO, brainstormInbox)}\` — ${fs.existsSync(brainstormInbox) ? '**found**' : '**missing**'}`,
   );
-  console.log('- Owning doc: `docs/projects/AMENDMENT_38_IDEA_VAULT.md`');
+  console.log('- Owning doc: `docs/products/ideavault/PRODUCT_HOME.md`');
   console.log('- Companion: `docs/CONVERSATION_DUMP_IDEAS_INDEX.md`\n');
 
   if (!skipKeywords) {
@@ -47,7 +47,7 @@ function main() {
   }
 
   console.log('\n## Lane B — Digital Twin (“study me”, predict stance)\n');
-  console.log('SSOT: `docs/projects/AMENDMENT_09_LIFE_COACHING.md` — Digital Twin tables + `services/twin-auto-ingest.js`.');
+  console.log('SSOT: `docs/products/life-coaching/PRODUCT_HOME.md` — Digital Twin tables + `services/twin-auto-ingest.js`.');
   console.log('Prediction surface: `POST /api/v1/twin/simulate` (`routes/twin-routes.js`).\n');
   console.log('**Historical exports → DB (operator-run, with `DATABASE_URL`):**');
   console.log('1. `node scripts/run-memory-import.mjs` — GitHub tree → `memory_dump_chunks` (optional per-chunk AI if `ANTHROPIC_API_KEY`).');

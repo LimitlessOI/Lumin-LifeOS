@@ -13,7 +13,7 @@
 -- Together with token_usage_log (AI call savings), these power the unified
 -- tsos_savings_report view — the monetization proof surface.
 --
--- @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
+-- @ssot docs/products/api-cost-savings/PRODUCT_HOME.md
 
 BEGIN;
 

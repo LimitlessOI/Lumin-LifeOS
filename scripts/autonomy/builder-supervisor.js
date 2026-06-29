@@ -29,7 +29,7 @@
  *   node scripts/autonomy/builder-supervisor.js --dry-run
  *   node scripts/autonomy/builder-supervisor.js --max-concurrent 2
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { spawn } from 'node:child_process';

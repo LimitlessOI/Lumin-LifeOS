@@ -4,7 +4,7 @@
  * Logs a one-row audit for every council call so Amendment 33 is not "paper only."
  * Future: policy engine can block or require human approval based on risk_score.
  *
- * @ssot docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md
+ * @ssot docs/products/kingsman-protocol/PRODUCT_HOME.md
  */
 
 import crypto from 'crypto';

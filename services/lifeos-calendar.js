@@ -6,7 +6,7 @@
  * Stores LifeOS events locally and can import/sync upcoming events
  * from the user's connected Google primary calendar.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const GOOGLE_PROVIDER = 'google_calendar';

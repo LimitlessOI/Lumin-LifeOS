@@ -17,7 +17,7 @@ When Cursor hits a usage limit and a new agent starts cold, it reads the relevan
 0c. **`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`** — when to use think-tier vs execute-tier models (maps to `config/task-model-routing.js`).
 1. Identify which domain you're working on
 2. Read `prompts/<domain>.md` — this is your full context in one file
-3. Then read the SSOT amendment it points to for deeper detail (for LifeOS: `docs/products/lifeos/PRODUCT_HOME.md` + `docs/products/lifeos/FILE_MANIFEST.json` for product work; read **entire** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` only before editing that amendment)
+3. Then read the SSOT amendment it points to for deeper detail (for LifeOS: `docs/products/lifeos/PRODUCT_HOME.md` + `docs/products/lifeos/FILE_MANIFEST.json` for product work; read **entire** `docs/products/lifeos/PRODUCT_HOME.md` only before editing that amendment)
 4. Do NOT re-build what the prompt file says already exists
 
 **When you ship a change:**

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Vapi phone system integration — calls + webhook; fans out call-ended to LifeRE.
- * @ssot docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md
+ * @ssot docs/products/ai-receptionist/PRODUCT_HOME.md
  */
 
 export class VapiIntegration {

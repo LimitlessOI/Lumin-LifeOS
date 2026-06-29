@@ -1,10 +1,10 @@
 <!-- SYNOPSIS: LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT -->
 
-> **DIGEST:** `docs/constitution/NORTH_STAR.md` + `docs/AGENT_RULES.compact.md` cover operational rules for routine sessions. Read this full document only for constitutional sessions or when a specific section is referenced.
+> **DIGEST:** `docs/constitution/NORTH_STAR_SSOT.md` + `docs/AGENT_RULES.compact.md` cover operational rules for routine sessions. Read this full document only for constitutional sessions or when a specific section is referenced.
 
 # LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT
 ## Zero-Context Operational Manual + Enforcement Contract
-**System (canonical machine name):** **BuilderOS** — same stack as `docs/SSOT_NORTH_STAR.md`: council, builder, memory, governance, proof chain, and runtime machinery. **TSOS** is the external efficiency/routing product; **LifeOS** is a product built by BuilderOS.
+**System (canonical machine name):** **BuilderOS** — same stack as `docs/constitution/NORTH_STAR_SSOT.md`: council, builder, memory, governance, proof chain, and runtime machinery. **TSOS** is the external efficiency/routing product; **LifeOS** is a product built by BuilderOS.
 
 **Version:** 2026-06-12 (**§0.11** — aligned to North Star **Article II §2.18** compound drift law: zero tolerated angular error; course-correct or HALT). Prior: 2026-05-27 (**BuilderOS machine identity correction** — Companion now matches North Star: BuilderOS is the autonomous machine; TSOS is the external efficiency/routing product and retained machine-channel lexicon name). Prior: 2026-04-26 (**§5.2 / §5.5** — mandatory **future-back** consensus artifact; **§6.4 / §7.2** anti-corner-cutting + evidence-engine memory enforcement). Prior: 2026-04-25 (**§0.5D** — new **supervisor mandate** / North Star **§2.11c**; Conductor = audit + system `/build`, not default IDE product authorship). Prior: **§0.5I** operator instruction + **§2.15**; **§0.5H** TSOS machine-channel (**§2.14**); **§0.4** `SYSTEM_CAPABILITIES.md`. Prior: 2026-04-22 self-serve ops + `ENV_REGISTRY`; **§2.3**; prior **§0.5F** / **§0.5G**; **§0.5D**; **§2.12** + **§2.11**)  
 **Status:** CANONICAL COMPANION (SSOT-adjacent)  
@@ -113,16 +113,16 @@ Constitutional additions:
 - any proposal that seeks policy or governance promotion must include promotion and failure criteria
 
 ## 0.5B SSOT read-before-write — HARD RULE
-- **No append/edit to any SSOT-class document without reading that entire file in the same session first** (top-to-bottom; chunked reads through EOF are fine). SSOT-class paths are listed in repo root `CLAUDE.md` under **`## SSOT READ-BEFORE-WRITE`** — they include `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `docs/NORTH_STAR_*.md`, `docs/projects/AMENDMENT_*.md`, authoritative `docs/projects/INDEX.md` / template / readiness edits, and **policy-bearing** changes to `docs/CONTINUITY_LOG*.md` / `docs/CONTINUITY_INDEX.md`.
+- **No append/edit to any SSOT-class document without reading that entire file in the same session first** (top-to-bottom; chunked reads through EOF are fine). SSOT-class paths are listed in repo root `CLAUDE.md` under **`## SSOT READ-BEFORE-WRITE`** — they include `docs/constitution/NORTH_STAR_SSOT.md`, `docs/SSOT_COMPANION.md`, `docs/NORTH_STAR_*.md`, `docs/projects/AMENDMENT_*.md`, authoritative `docs/projects/INDEX.md` / template / readiness edits, and **policy-bearing** changes to `docs/CONTINUITY_LOG*.md` / `docs/CONTINUITY_INDEX.md`.
 - **Why:** A single unseen paragraph can change mission, priorities, or legal posture; the next cold agent treats it as law.
 - **Material edits** (priorities, constitution, backlog ordering, gates, compliance, “what ships next”) **never** skip the full read.
 - **Thin exceptions:** typo / broken-link / formatting only, **and** only in a file already fully read this session; one new Change Receipt row only if the full amendment was read this session before editing.
 - If token limits apply → **sequential multi-pass read**, not memory from prior sessions. If you cannot complete the read → **HALT** and ask for a split doc — do not patch blind.
-- **All agent and automation work:** obey **`docs/SSOT_NORTH_STAR.md` → Article II §2.6** (no lies, no misleading — to operators, users, or system state). **§2.6 ¶5–7:** law is **mandatory** (cannot “not happen”); **no cutting corners**; **no laziness** on reads, verify, or receipts — HALT or full compliance, never silent shortcut. Also obey `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → **Adam ↔ Agent epistemic contract** and `prompts/00-LIFEOS-AGENT-CONTRACT.md`; §2.6 is supreme if anything conflicts.
+- **All agent and automation work:** obey **`docs/constitution/NORTH_STAR_SSOT.md` → Article II §2.6** (no lies, no misleading — to operators, users, or system state). **§2.6 ¶5–7:** law is **mandatory** (cannot “not happen”); **no cutting corners**; **no laziness** on reads, verify, or receipts — HALT or full compliance, never silent shortcut. Also obey `docs/products/lifeos/PRODUCT_HOME.md` → **Adam ↔ Agent epistemic contract** and `prompts/00-LIFEOS-AGENT-CONTRACT.md`; §2.6 is supreme if anything conflicts.
 
 ## 0.5C Core LifeOS vs Adaptive Lumin + Governed Improvement Loop (NEW)
 
-**Supreme alignment:** **`docs/SSOT_NORTH_STAR.md` → Article II §2.10** is constitutional platform law (observe → grade → fix → close tooling gaps → LLM blueprint/supervise/repair → **earned** self-correction with receipts). This section is the **operational companion**: how product ideas route without hiding truth or bypassing §2.6 / Article III.
+**Supreme alignment:** **`docs/constitution/NORTH_STAR_SSOT.md` → Article II §2.10** is constitutional platform law (observe → grade → fix → close tooling gaps → LLM blueprint/supervise/repair → **earned** self-correction with receipts). This section is the **operational companion**: how product ideas route without hiding truth or bypassing §2.6 / Article III.
 
 **Relationship to §0.5A:** The six-part self-programming loop (proposal → score → execute → verify → repair → receipt) **implements** §2.10 for build work. A session that skips **verify** or **receipt** violates both §0.5A and §2.10.
 
@@ -214,11 +214,11 @@ POST /api/v1/lifeos/builder/build
 
 ## 0.5E Technical decisions, council, best-practice research, and anti-drift (supreme: North Star **Article II §2.12**)
 
-**Companion role:** `docs/SSOT_NORTH_STAR.md` **§2.12** is the constitutional source. This section is the **operational checklist**; it **cannot** narrow §2.12.
+**Companion role:** `docs/constitution/NORTH_STAR_SSOT.md` **§2.12** is the constitutional source. This section is the **operational checklist**; it **cannot** narrow §2.12.
 
 ### Load-bearing technical decisions
 - **Before** a council recommendation is requested: review **relevant** authoritative guidance (docs in repo, vendor docs, and when needed **web** research on **current** best practice — not stale chat memory). Label **THINK** / **GUESS**; do not fake **KNOW**.
-- **Run** the **AI Council** (multi-model) with **consensus** bias. **Implementation detail:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md` (evaluation contract, gate-change / `run-council` where applicable) and **§5.5** below.
+- **Run** the **AI Council** (multi-model) with **consensus** bias. **Implementation detail:** `docs/products/ai-council/PRODUCT_HOME.md` (evaluation contract, gate-change / `run-council` where applicable) and **§5.5** below.
 - If **no consensus:** **steel-man** both sides, **opposite-argument** rounds, persisted verdict — not “strongest model wins in private.”
 - **Escalate to Adam** only for §2.12 **human scope** (blueprint, infeasibility, prohibitive cost, legal/constitutional, Article III) — not to skip debate.
 

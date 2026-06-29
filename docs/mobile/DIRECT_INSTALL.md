@@ -78,4 +78,4 @@ Apple Enterprise Program ($299/yr) allows wider internal distribution without li
 | `public/downloads/lifeos-ios.plist` | OTA manifest for iPhone |
 | `routes/public-routes.js` | `/install`, `/download/*` |
 
-@ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+@ssot docs/products/universal-overlay/PRODUCT_HOME.md

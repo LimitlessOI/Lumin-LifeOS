@@ -21,7 +21,7 @@ Do not:
 
 ## Read In This Order
 
-1. `docs/SSOT_NORTH_STAR.md`
+1. `docs/constitution/NORTH_STAR_SSOT.md`
 2. `docs/SSOT_COMPANION.md`
 3. `docs/BUILDEROS_VOCABULARY.md`
 4. `docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md`

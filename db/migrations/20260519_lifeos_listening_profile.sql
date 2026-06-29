@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260519_lifeos_listening_profile.sql.
 -- LifeOS Listening Profile — opt-in ambient / capture / family guard preferences
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS lifeos_listening_profiles (
   user_id           BIGINT PRIMARY KEY REFERENCES lifeos_users(id) ON DELETE CASCADE,

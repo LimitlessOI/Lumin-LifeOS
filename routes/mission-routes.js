@@ -3,7 +3,7 @@
  * routes/mission-routes.js
  * Mission Runtime Express router — missions, participants, household board.
  * Authority: docs/projects/BPB-0001-MISSION-RUNTIME-V1.md §§3.1–3.3, 3.5, 13.3.
- * @ssot docs/projects/AMENDMENT_47_MISSION_RUNTIME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * NOTE (§13.3): Commitment CRUD (POST/GET /commitments, PUT /commitments/:id) is NOT
  * here — it stays in routes/lifeos-commitment-routes.js which is already mounted at

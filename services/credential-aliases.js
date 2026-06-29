@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: credential-aliases.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  *
  * credential-aliases.js
  * Resolves the legacy/custom env names already present in Railway so the app

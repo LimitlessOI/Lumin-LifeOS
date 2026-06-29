@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: WebSocket connection handler — extracted from server.js.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { truthGateOutbound } from './truth-enforcement-spine.js';

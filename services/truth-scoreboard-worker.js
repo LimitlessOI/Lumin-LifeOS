@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Truth scoreboard worker — reality results promote/demote epistemic facts.
  * GUESS → watch scoreboard → TESTED/RECEIPT or demote on FAIL. Results not fancy.
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 import fs from 'node:fs/promises';
 import fsSync from 'node:fs';

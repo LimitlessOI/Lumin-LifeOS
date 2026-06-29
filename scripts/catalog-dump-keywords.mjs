@@ -9,7 +9,7 @@
  * Also scans `docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md` when present (verbatim brainstorm paste target).
  * Pass CLI args to run a custom list only: `node scripts/catalog-dump-keywords.mjs epistemic SSOT`
  *
- * @ssot docs/projects/AMENDMENT_38_IDEA_VAULT.md
+ * @ssot docs/products/ideavault/PRODUCT_HOME.md
  */
 import { execFileSync } from 'child_process';
 import path from 'path';

@@ -2,7 +2,7 @@
  * SYNOPSIS: services/oil-security-receipts.js
  */
 // services/oil-security-receipts.js
-/** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
+/** @ssot docs/products/project-governance/PRODUCT_HOME.md */
 
 const SECURITY_RECEIPT_TYPES = Object.freeze({
   GEMINI_LIVE_PROOF: "gemini_live_proof",

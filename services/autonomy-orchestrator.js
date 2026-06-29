@@ -2,7 +2,7 @@
  * SYNOPSIS: services/autonomy-orchestrator.js
  * services/autonomy-orchestrator.js
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  * @legacy STATUS: LEGACY_INACTIVE
  *
  * The autonomous loop described below (runCycle, 15-min interval) is NEVER STARTED.

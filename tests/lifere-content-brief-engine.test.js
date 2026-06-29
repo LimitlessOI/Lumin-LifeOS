@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: js — tests/lifere-content-brief-engine.test.js.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';

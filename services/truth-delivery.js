@@ -12,7 +12,7 @@
  * Starts with the user's stated preference (truth_style on lifeos_users).
  * Over time, observed acknowledgment patterns override stated preference.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { createResponseVariety } from './response-variety.js';

@@ -24,7 +24,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 1. BUILDEROS (Internal Autonomous Programming Machine)
 
-**Amendment:** `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`, `AMENDMENT_04_AUTO_BUILDER.md`
+**Amendment:** `docs/products/builderos/PRODUCT_HOME.md`, `AMENDMENT_04_AUTO_BUILDER.md`
 **SSOT file:** `docs/architecture/BUILDEROS_SYSTEM_INVENTORY.md`
 
 | Capability | Status | Key Files |
@@ -66,7 +66,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 2. C2 — COMMAND CENTER / CONTROL PLANE
 
-**Amendment:** `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`
+**Amendment:** `docs/products/command-center/PRODUCT_HOME.md`
 
 | Capability | Status | Key Files |
 |---|---|---|
@@ -105,7 +105,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 3. LIFEOS — PERSONAL OPERATING SYSTEM
 
-**Amendment:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+**Amendment:** `docs/products/lifeos/PRODUCT_HOME.md`
 **Route count:** 48 lifeos-prefixed route files
 
 | Phase / Domain | Status | Key Route File |
@@ -161,7 +161,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 4. VOICE RAIL
 
-**Amendment:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` (§Voice Rail)
+**Amendment:** `docs/products/lifeos/PRODUCT_HOME.md` (§Voice Rail)
 
 | Capability | Status | Key Files |
 |---|---|---|
@@ -184,7 +184,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 5. MEMORY / HISTORIAN
 
-**Amendment:** `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md`, `AMENDMENT_39_MEMORY_INTELLIGENCE.md`
+**Amendment:** `docs/products/memory-system/PRODUCT_HOME.md`, `AMENDMENT_39_MEMORY_INTELLIGENCE.md`
 
 | Capability | Status | Key Files |
 |---|---|---|
@@ -218,7 +218,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 6. PROOF / SENTRY (OIL)
 
-**Amendment:** `docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md`
+**Amendment:** `docs/products/oil-security-divisions/PRODUCT_HOME.md`
 
 | Capability | Status | Key Files |
 |---|---|---|
@@ -253,7 +253,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 7. TSOS — TOKEN SAVER OS (External AI Efficiency Product)
 
-**Amendment:** `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md`, `AMENDMENT_44_TOKEN_ACCOUNTING_OS.md`
+**Amendment:** `docs/products/api-cost-savings/PRODUCT_HOME.md`, `AMENDMENT_44_TOKEN_ACCOUNTING_OS.md`
 
 | Capability | Status | Key Files |
 |---|---|---|
@@ -280,7 +280,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 8. DEPLOYMENT
 
-**Amendment:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`
+**Amendment:** `docs/products/project-governance/PRODUCT_HOME.md`
 
 | Capability | Status | Key Files |
 |---|---|---|
@@ -305,7 +305,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 9. TC — TRANSACTION COORDINATOR (Real Estate)
 
-**Amendment:** `docs/projects/AMENDMENT_17_TC_SERVICE.md`
+**Amendment:** `docs/products/tc-service/PRODUCT_HOME.md`
 
 | Capability | Status | Key Files |
 |---|---|---|
@@ -346,7 +346,7 @@ The repo has more capability than any single document admits. The problem is not
 
 ## 10. MARKETING / SITE BUILDER / OUTREACH
 
-**Amendment:** `docs/projects/AMENDMENT_05_SITE_BUILDER.md`, `AMENDMENT_08_OUTREACH_CRM.md`, `AMENDMENT_41_MARKETINGOS.md`
+**Amendment:** `docs/products/site-builder/PRODUCT_HOME.md`, `AMENDMENT_08_OUTREACH_CRM.md`, `AMENDMENT_41_MARKETINGOS.md`
 
 | Capability | Status | Key Files |
 |---|---|---|

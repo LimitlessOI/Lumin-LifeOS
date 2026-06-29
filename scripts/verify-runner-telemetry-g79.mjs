@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * This module provides functionality to verify the operational telemetry
  * of the runner for generation G79 by fetching health and efficiency data
  * from the BuilderOS control plane and autonomous telemetry services.

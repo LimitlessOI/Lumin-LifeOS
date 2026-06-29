@@ -1,0 +1,54 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "ai-receptionist",
+  "project_id": "ai_receptionist",
+  "name": "AI Receptionist",
+  "canonical_home": "docs/products/ai-receptionist/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/ai-receptionist/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "routes/receptionist-routes.js",
+    "services/receptionist-service.js",
+    "public/ai-receptionist.html",
+    "public/checkout-success.html",
+    "docs/products/ai-receptionist/PRODUCT_HOME.md",
+    "docs/products/ai-receptionist/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    "POST /api/v1/receptionist/provision",
+    "POST /api/v1/receptionist/webhook/call",
+    "GET /api/v1/receptionist/calls",
+    "POST /api/v1/receptionist/webhook/stripe"
+  ],
+  "required_tables": [
+    "receptionist_configs",
+    "call_logs"
+  ],
+  "required_env": [
+    "VAPI_API_KEY",
+    "STRIPE_PRICE_ID_RECEPTIONIST_STARTER",
+    "STRIPE_PRICE_ID_RECEPTIONIST_PRO",
+    "STRIPE_PRICE_ID_RECEPTIONIST_AGENCY"
+  ],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/ai-receptionist/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/ai-receptionist/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "Landing page renders at /ai-receptionist",
+    "Stripe checkout opens and completes successfully",
+    "Post-checkout webhook provisions Vapi agent automatically",
+    "Call to provisioned number is answered by AI",
+    "Call summary appears in Command Center within 60 seconds",
+    "Qualified lead syncs to BoldTrail CRM"
+  ]
+}

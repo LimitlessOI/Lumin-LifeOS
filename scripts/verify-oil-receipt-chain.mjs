@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: This script provides functionality to verify the status of the Kernel
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This script provides functionality to verify the status of the Kernel
  * by fetching its health endpoint. It is designed to be part of the

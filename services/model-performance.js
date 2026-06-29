@@ -16,7 +16,7 @@
  *   // To get the best model for a lens (used by routing):
  *   const winner = await getBestModelForLens(pool, 'consequences');
  *
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 // ── Verdict logging ────────────────────────────────────────────────────────────

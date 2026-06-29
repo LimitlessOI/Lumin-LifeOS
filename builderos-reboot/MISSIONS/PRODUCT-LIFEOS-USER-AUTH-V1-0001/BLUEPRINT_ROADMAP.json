@@ -9,15 +9,23 @@
   "full_map_note": "A→Z for this product scope; P4/P5 BUILDER_READY when blueprint complete",
   "phases": [
     {
+      "phase_id": "P1",
+      "name": "Phase P1",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged P1",
+      "builder_outcome": "Steps marked complete in legacy blueprint — ARC re-hosts as write_file_exact",
+      "alpha_signal": "Phase P1 artifacts exist"
+    },
+    {
       "phase_id": "P4",
       "name": "Builder Execution",
-      "status": "FUTURE",
+      "status": "BUILDER_READY",
       "intent": "System Builder executes ARC-emitted write_file_exact steps"
     },
     {
       "phase_id": "P5",
       "name": "Alpha Acceptance",
-      "status": "FUTURE",
+      "status": "BUILDER_READY",
       "intent": "Acceptance command + founder usability verdict"
     }
   ],

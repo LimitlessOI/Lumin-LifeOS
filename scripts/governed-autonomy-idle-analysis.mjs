@@ -5,7 +5,7 @@
  * Inspects telemetry gaps, NOT_WIRED, bottlenecks, deploy drift, wasted repairs.
  * Writes honest JSONL only; no fake metrics.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

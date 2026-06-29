@@ -11,7 +11,7 @@
  * Exit: 0 if `score >= TSOS_MIN_OPERATIONAL_SCORE` (default 90) and all **critical** checks pass; 1 otherwise.
  * Optional: `TSOS_ENFORCE_OPERATIONAL_GRADE=0` to print only (exit 0 unless critical fail).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import "dotenv/config";
 import dotenv from "dotenv";

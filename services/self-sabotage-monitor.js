@@ -16,7 +16,7 @@
  * This service OBSERVES and SURFACES patterns. It does not intervene,
  * prescribe, or label the user. Sovereignty is preserved absolutely.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const SABOTAGE_PATTERNS = [

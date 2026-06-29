@@ -1,8 +1,11 @@
 {
   "schema": "product_file_manifest_v1",
   "product_id": "lifere",
+  "project_id": "lifere",
+  "name": "LifeRE Real Estate Business OS",
   "canonical_home": "docs/products/lifere/PRODUCT_HOME.md",
-  "updated_at": "2026-06-27",
+  "amendment_path": "docs/products/lifere/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "config/lifere-action-types.json",
@@ -78,7 +81,20 @@
     "services/lifere-youtube-research.js",
     "tests/lifere-chair-service.test.js",
     "tests/lifere-content-brief-engine.test.js",
-    "tests/lifere-performance-twin.test.js"
+    "tests/lifere-performance-twin.test.js",
+    "docs/products/LIFERE.md",
+    "docs/LIFERE_MASTER_BLUEPRINT.md",
+    "docs/LIFERE_BUILDER_DIGITAL_TWIN.md",
+    "docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md",
+    "config/lifere-*.json",
+    "services/lifere-*.js",
+    "db/migrations/20260613_lifere_twin_framework.sql",
+    "db/migrations/20260624_lifere_call_logs.sql",
+    "scripts/run-lifere-*-acceptance.mjs",
+    "tests/lifere-*.test.js",
+    "products/receipts/LIFEOS_SERVICE_DOCTRINE_WIRED.json",
+    "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+    "config/lifeos-stack-registry.json"
   ],
   "shared_dependencies": [
     {
@@ -97,18 +113,18 @@
       "reason": "transaction execution spine"
     },
     {
-      "path": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+      "path": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
       "owner": "MarketingOS",
       "reason": "shared marketing module doctrine"
     },
     {
-      "path": "docs/projects/AMENDMENT_LIFERE.md",
+      "path": "docs/products/lifere/PRODUCT_HOME.md",
       "owner": "History / law anchor",
       "reason": "full history and receipts"
     }
   ],
   "history_anchors": [
-    "docs/projects/AMENDMENT_LIFERE.md",
+    "docs/products/lifere/PRODUCT_HOME.md",
     "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/",
     "docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md",
     "docs/LIFERE_MASTER_BLUEPRINT.md",

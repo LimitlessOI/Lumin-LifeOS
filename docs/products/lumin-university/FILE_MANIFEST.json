@@ -1,0 +1,51 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "lumin-university",
+  "project_id": "AMENDMENT_35_LUMIN_UNIVERSITY",
+  "name": "Lumin University",
+  "canonical_home": "docs/products/lumin-university/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/lumin-university/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "routes/lumin-university-routes.js",
+    "services/lumin-university-enrollment.js",
+    "services/lumin-university-credits.js",
+    "services/lumin-university-cohort-matcher.js",
+    "services/lumin-university-credentials.js",
+    "db/migrations/*_lumin_university_schema.sql",
+    "docs/products/lumin-university/PRODUCT_HOME.md",
+    "docs/products/lumin-university/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    "POST /api/v1/lumin-university/enroll",
+    "GET  /api/v1/lumin-university/students/:id/profile",
+    "POST /api/v1/lumin-university/students/:id/credits",
+    "GET  /api/v1/lumin-university/students/:id/transcript",
+    "POST /api/v1/lumin-university/credentials/:studentId/issue",
+    "GET  /api/v1/lumin-university/credentials/verify/:hash"
+  ],
+  "required_tables": [
+    "lumin_university_students",
+    "lumin_university_credits",
+    "lumin_university_cohorts",
+    "lumin_university_credentials",
+    "lumin_university_mentors"
+  ],
+  "required_env": [
+    "STRIPE_SECRET_KEY"
+  ],
+  "assertions": [
+    "Students who know how they learn outperform students who don't, regardless of raw ability",
+    "Competency-based credentials are more meaningful to employers than time-based degrees",
+    "The most durable learning happens in the context of real stakes, not simulated ones",
+    "Kids OS graduates will enter higher education with measurably better self-knowledge than traditional students"
+  ],
+  "completion_checks": [
+    "node --check routes/lumin-university-routes.js",
+    "node --check services/lumin-university-enrollment.js",
+    "node --check services/lumin-university-credits.js"
+  ]
+}

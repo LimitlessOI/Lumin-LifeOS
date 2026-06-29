@@ -15,7 +15,7 @@
  *   1 — timeout (120s), loop did not close
  *   2 — precondition failure (missing env vars, API unreachable)
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { readFileSync } from 'fs';

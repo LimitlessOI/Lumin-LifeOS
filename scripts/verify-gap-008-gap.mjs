@@ -2,7 +2,7 @@
  * SYNOPSIS: Exports runGAP008GapVerification — scripts/verify-gap-008-gap.mjs.
  */
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * - Verifies GAP-008 by checking the health status of Kernel and BuilderOS Control Plane.
  * - This gap relates to potential bypasses of the useful-work-guard by CI/scheduler AI paths,
  * - indicating an incomplete audit of these critical system components.

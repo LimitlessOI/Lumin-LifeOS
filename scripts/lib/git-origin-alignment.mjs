@@ -2,7 +2,7 @@
  * SYNOPSIS: Shared git alignment: local HEAD vs `origin/main` (fast-forward behind detection).
  * Shared git alignment: local HEAD vs `origin/main` (fast-forward behind detection).
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { execSync } from "node:child_process";

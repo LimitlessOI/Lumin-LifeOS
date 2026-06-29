@@ -115,4 +115,4 @@ Smaller model + **rich twin** beats frontier model + amnesia.
 - `docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md` — full twin taxonomy
 - `docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md` — serve don't decide
 
-@ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+@ssot docs/products/lifeos/PRODUCT_HOME.md

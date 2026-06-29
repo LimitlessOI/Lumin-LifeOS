@@ -1,0 +1,149 @@
+{"at":"2026-06-29T07:26:15.753Z","event":"daemon_start","never_stop":true,"sleep_ms":90000}
+{"at":"2026-06-29T07:26:16.906Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFERE-OS-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T07:41:16.914Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T07:41:16.918Z","event":"cycle","cycles":1,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T07:42:48.322Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFERE-OS-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T07:57:48.460Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T07:57:48.461Z","event":"cycle","cycles":2,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T07:59:18.959Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFERE-OS-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T08:14:18.982Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T08:14:18.985Z","event":"cycle","cycles":3,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T08:15:49.609Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFERE-OS-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T08:30:49.653Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T08:30:49.654Z","event":"cycle","cycles":4,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T08:32:20.228Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFERE-OS-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T08:47:20.217Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T08:47:20.219Z","event":"cycle","cycles":5,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T08:48:50.792Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T09:03:50.806Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:03:50.808Z","event":"cycle","cycles":6,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:05:21.246Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T09:20:21.277Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:20:21.280Z","event":"cycle","cycles":7,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:21:51.732Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T09:21:56.826Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:21:56.827Z","event":"cycle","cycles":8,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:23:27.491Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T09:38:27.529Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:38:27.532Z","event":"cycle","cycles":9,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:39:58.160Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T09:54:58.191Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:54:58.194Z","event":"cycle","cycles":10,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T09:56:28.693Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T10:11:28.617Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T10:11:28.619Z","event":"cycle","cycles":11,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T10:12:59.435Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T10:27:59.442Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T10:27:59.447Z","event":"cycle","cycles":12,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T10:29:29.982Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T10:44:30.079Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T10:44:30.082Z","event":"cycle","cycles":13,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T10:46:00.537Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T11:01:00.559Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:01:00.562Z","event":"cycle","cycles":14,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:02:31.060Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T11:17:31.110Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:17:31.113Z","event":"cycle","cycles":15,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:19:01.590Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T11:34:01.598Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:34:01.601Z","event":"cycle","cycles":16,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:35:32.122Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T11:50:32.158Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:50:32.160Z","event":"cycle","cycles":17,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T11:52:02.855Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T12:07:02.851Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:07:02.854Z","event":"cycle","cycles":18,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:08:33.385Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T12:23:33.418Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:23:33.421Z","event":"cycle","cycles":19,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:25:04.111Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T12:40:04.261Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:40:04.265Z","event":"cycle","cycles":20,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:41:35.060Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T12:56:35.126Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:56:35.129Z","event":"cycle","cycles":21,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T12:58:05.658Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T13:13:05.732Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T13:13:05.736Z","event":"cycle","cycles":22,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T13:14:36.492Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T13:29:36.487Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T13:29:36.489Z","event":"cycle","cycles":23,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T13:31:07.000Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T13:46:07.036Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T13:46:07.039Z","event":"cycle","cycles":24,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T13:47:37.569Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T14:02:37.621Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:02:37.624Z","event":"cycle","cycles":25,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:04:08.119Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T14:19:08.119Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:19:08.122Z","event":"cycle","cycles":26,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:20:38.654Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T14:35:38.687Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:35:38.690Z","event":"cycle","cycles":27,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:37:09.320Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T14:52:09.374Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:52:09.378Z","event":"cycle","cycles":28,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T14:53:40.171Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T15:08:40.199Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:08:40.202Z","event":"cycle","cycles":29,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:10:10.965Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T15:25:11.011Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:25:11.013Z","event":"cycle","cycles":30,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:26:41.596Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T15:41:41.613Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:41:41.616Z","event":"cycle","cycles":31,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:43:12.141Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T15:58:12.215Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:58:12.217Z","event":"cycle","cycles":32,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T15:59:42.815Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T16:14:42.834Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:14:42.839Z","event":"cycle","cycles":33,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:16:45.007Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T16:31:44.999Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:31:45.002Z","event":"cycle","cycles":34,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:40:15.076Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T16:44:41.313Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:44:41.314Z","event":"cycle","cycles":35,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:53:11.346Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T16:54:05.447Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:54:05.448Z","event":"cycle","cycles":36,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T16:55:36.121Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T17:10:36.107Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T17:10:36.108Z","event":"cycle","cycles":37,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T17:12:06.540Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T17:27:06.550Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T17:27:06.551Z","event":"cycle","cycles":38,"ok":false,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T17:35:36.530Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T17:40:37.104Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T17:40:37.105Z","event":"cycle","cycles":39,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T17:49:07.111Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T17:54:07.713Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T17:54:07.714Z","event":"cycle","cycles":40,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:02:37.776Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T18:07:38.436Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:07:38.437Z","event":"cycle","cycles":41,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:16:08.452Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T18:21:08.968Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:21:08.969Z","event":"cycle","cycles":42,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:29:39.062Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T18:34:39.615Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:34:39.617Z","event":"cycle","cycles":43,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:43:09.641Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T18:48:10.210Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:48:10.211Z","event":"cycle","cycles":44,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T18:56:40.231Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T19:01:40.838Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:01:40.839Z","event":"cycle","cycles":45,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:10:10.862Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T19:15:11.354Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:15:11.355Z","event":"cycle","cycles":46,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:23:41.366Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T19:28:41.900Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:28:41.902Z","event":"cycle","cycles":47,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:37:11.940Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T19:42:12.450Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:42:12.452Z","event":"cycle","cycles":48,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:50:42.468Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-06-29T19:55:42.984Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T19:55:42.986Z","event":"cycle","cycles":49,"ok":true,"detail":"bp_never_stop_once"}
+{"at":"2026-06-29T20:04:13.003Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}

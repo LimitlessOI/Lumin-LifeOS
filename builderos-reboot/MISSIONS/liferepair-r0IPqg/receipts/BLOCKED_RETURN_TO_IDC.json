@@ -1,0 +1,14 @@
+{
+  "schema": "blocked_return_to_idc_v1",
+  "mission_id": "liferepair-r0IPqg",
+  "at": "2026-06-29T02:06:34.152Z",
+  "status": "BLOCKED_CORRIDOR",
+  "violations": [
+    "mission folder missing",
+    "asset_reuse:missing ASSET_REUSE_DECISION.json",
+    "roadmap:no BUILDER_READY phases",
+    "corridor:handoff not locked (missing)",
+    "corridor:missing CHAIR_HANDOFF_RECEIPT — development handoff not recorded"
+  ],
+  "idc_questions": []
+}

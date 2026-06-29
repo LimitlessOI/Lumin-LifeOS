@@ -1,0 +1,58 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "oil-security-divisions",
+  "project_id": "oil_security",
+  "name": "OIL Security Divisions",
+  "canonical_home": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/oil-security-divisions/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "db/migrations/20260524_oil_security_receipts.sql",
+    "services/oil-security-receipts.js",
+    "services/oil-daily-summary.js",
+    "routes/oil-security-receipt-routes.js",
+    "routes/gemini-proof-routes.js",
+    "routes/lifeos-command-center-routes.js",
+    "docs/products/oil-security-divisions/PRODUCT_HOME.md",
+    "docs/products/oil-security-divisions/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/oil/receipts",
+      "expected_status": 200,
+      "description": "Builder-safe security receipt stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/oil/receipts/summary/latest",
+      "expected_status": 200,
+      "description": "Latest daily OIL security summary"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/gemini/proof",
+      "expected_status": 200,
+      "description": "Gemini live proof writes canonical receipt"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/security",
+      "expected_status": 200,
+      "description": "Command Center live security aggregate"
+    }
+  ],
+  "required_env": [
+    "DATABASE_URL",
+    "COMMAND_CENTER_KEY"
+  ],
+  "completion_checks": [
+    "Gemini live proof writes canonical security receipt",
+    "Daily summary aggregates security receipts",
+    "Command Center renders live security state from real receipt data only",
+    "OIL Phase 14 remains VERIFIED after integration"
+  ]
+}

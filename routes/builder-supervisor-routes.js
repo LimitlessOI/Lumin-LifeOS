@@ -12,7 +12,7 @@
  *   POST /api/v1/builder/pause        set PAUSE_AUTONOMY-equivalent in memory
  *   POST /api/v1/builder/resume       clear the pause
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

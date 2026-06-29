@@ -2,7 +2,7 @@
  * SYNOPSIS: config/builder-safe-scope.js
  */
 // config/builder-safe-scope.js
-/** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
+/** @ssot docs/products/project-governance/PRODUCT_HOME.md */
 
 function normalizeTargetPath(targetFile) {
   if (!targetFile || typeof targetFile !== 'string') return null;
@@ -40,7 +40,7 @@ export const BLOCKED_WRITE_PATHS = Object.freeze([
   '.env',
   '.github/',
   'CLAUDE.md',
-  'docs/SSOT_NORTH_STAR.md',
+  'docs/constitution/NORTH_STAR_SSOT.md',
   'docs/SSOT_COMPANION.md',
 ]);
 

@@ -8,7 +8,7 @@
  *   node scripts/oil-self-repair-audit.mjs --write-receipts
  *   node scripts/oil-self-repair-audit.mjs --strict   # exit 1 on P0
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

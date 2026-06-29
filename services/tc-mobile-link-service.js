@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-mobile-link-service.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-mobile-link-service.js
  * Signed mobile action links for one-tap approval and alert actions.
  */

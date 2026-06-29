@@ -11,7 +11,7 @@
  * - Coaching suggestions
  * - Bad habit patterns over time
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export class SalesTechniqueAnalyzer {

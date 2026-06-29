@@ -4,7 +4,7 @@
 
 **Mission ID:** PRODUCT-LIFEOS-USER-AUTH-V1-0001  
 **Product:** LifeOS (consumer app)  
-**SSOT:** docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+**SSOT:** docs/products/lifeos/PRODUCT_HOME.md
 
 ## WHAT
 

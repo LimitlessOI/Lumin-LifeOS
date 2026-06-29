@@ -3,18 +3,18 @@
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "seat": "SNT",
   "review": "translation_attack",
-  "simulated_at": "2026-06-29T17:12:28.618Z",
+  "simulated_at": "2026-06-29T20:06:14.845Z",
   "simulated_by": "factory-core/arc/foundation/snt-translation-attack.js",
   "core_question": "If this claim is wrong, how would we know?",
   "attacks_run": 6,
   "attacks": [
     {
       "claim": "ARC preserved intent sources",
-      "pass": false,
+      "pass": true,
       "failure_scenario": "ARC invented scope",
       "severity": "blocking",
-      "evidence_if_wrong": "missing intent_sources in BLUEPRINT.json",
-      "recommended_action": "ARC revises blueprint"
+      "evidence_if_wrong": "intent_sources=5 in BLUEPRINT.json",
+      "recommended_action": "none"
     },
     {
       "claim": "Blueprint has acceptance command",
@@ -57,7 +57,7 @@
       "recommended_action": "ARC revises blueprint"
     }
   ],
-  "blocking_count": 3,
+  "blocking_count": 2,
   "verdict": "builder_clearance_no",
   "pass": false
 }

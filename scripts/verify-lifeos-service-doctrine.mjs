@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: HARD verify LifeOS service doctrine wired across LifeOS + stack proxies.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,12 +23,12 @@ for (const rel of required) {
   if (!fs.existsSync(path.join(ROOT, rel))) fail(`Missing required artifact: ${rel}`);
 }
 
-const am21 = read('docs/projects/AMENDMENT_21_LIFEOS_CORE.md');
+const am21 = read('docs/products/lifeos/PRODUCT_HOME.md');
 if (!am21.includes('LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE')) {
   fail('AMENDMENT_21 must reference LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE');
 }
 
-const amLifere = read('docs/projects/AMENDMENT_LIFERE.md');
+const amLifere = read('docs/products/lifere/PRODUCT_HOME.md');
 if (!amLifere.includes('LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE')) {
   fail('AMENDMENT_LIFERE must proxy LifeOS service doctrine');
 }

@@ -11,7 +11,7 @@
  * Evidence Ladder (NEVER call level 6 "LAW" — that is the governance ladder):
  *   0=CLAIM, 1=HYPOTHESIS, 2=TESTED, 3=RECEIPT, 4=VERIFIED, 5=FACT, 6=INVARIANT
  *
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
 'use strict';

@@ -506,7 +506,7 @@ Start with:
 ## Related docs
 
 - `docs/LIFEOS_PROGRAM_MAP_SSOT.md`
-- `docs/SSOT_NORTH_STAR.md`
+- `docs/constitution/NORTH_STAR_SSOT.md`
 - `docs/SSOT_COMPANION.md`
 - `services/tc-interaction-service.js`
 - `routes/lifeos-family-routes.js`

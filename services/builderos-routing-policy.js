@@ -2,7 +2,7 @@
  * SYNOPSIS: BuilderOS routing policy — classify Builder tasks and constrain model choice
  * before runtime availability and memory-based routing are applied.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 const RISKY_CODE_EXTENSIONS = ['.js', '.mjs', '.cjs', '.sql'];

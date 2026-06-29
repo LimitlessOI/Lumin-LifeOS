@@ -6,7 +6,7 @@
  * Does not mock data — reads real or absent data files (graceful on missing).
  * Display-only: no assertions on specific values, only structural correctness.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { test } from 'node:test';

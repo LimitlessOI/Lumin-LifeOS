@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: LifeOS Capture Pipeline v2 — unit tests (no production required).
  * LifeOS Capture Pipeline v2 — unit tests (no production required).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';

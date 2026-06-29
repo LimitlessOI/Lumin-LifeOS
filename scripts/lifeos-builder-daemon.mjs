@@ -21,7 +21,7 @@
  *   npm run lifeos:builder:daemon -- --run-for-min 420   # bounded soak slice (releases lock)
  *   BUILDER_DAEMON_RUN_FOR_MIN=420 npm run lifeos:builder:daemon
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import "dotenv/config";
 

@@ -139,5 +139,5 @@ This is **not** decoration; it is **safety and sovereignty** in UX form.
 | `docs/mockups/DASHBOARD_UI_MAP.md` | Shell IA checklist (sidebar, tabs, rail, breakpoints) |
 | `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` | Builder + density + category list |
 | `docs/LIFEOS_PROGRAM_MAP_SSOT.md` | URLs, queue pointer, authority order |
-| `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` | Product layers, Lumin intent, backlog |
+| `docs/products/lifeos/PRODUCT_HOME.md` | Product layers, Lumin intent, backlog |
 | `docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md` | AI rail behavior contract |

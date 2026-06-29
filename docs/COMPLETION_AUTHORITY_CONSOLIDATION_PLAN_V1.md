@@ -148,8 +148,8 @@ Thin orchestrator over existing verifiers. Does **not** re-implement syntax/OIL;
 | `services/builderos-governed-loop-executor.js` | Replace inline outcome block with completion authority call |
 | `tests/builder-outcome-verifier.test.js` | Extend for authority integration |
 | `tests/builderos-completion-authority.test.js` | **NEW** — unit + regression (Multi-Lane vs §2.18) |
-| `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` | Change receipt |
-| `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md` | Done gate demotion note |
+| `docs/products/builderos/PRODUCT_HOME.md` | Change receipt |
+| `docs/products/builderos/PRODUCT_HOME.md` | Done gate demotion note |
 
 ### Phase 2 — Control plane + done gate demotion
 

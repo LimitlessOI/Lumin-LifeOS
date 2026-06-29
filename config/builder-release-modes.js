@@ -2,7 +2,7 @@
  * SYNOPSIS: config/builder-release-modes.js
  */
 // config/builder-release-modes.js
-/** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
+/** @ssot docs/products/project-governance/PRODUCT_HOME.md */
 
 export const BUILDER_MODE = Object.freeze({
   MANUAL: 'MANUAL',

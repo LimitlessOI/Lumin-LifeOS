@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Voice Rail — attachment validation + OpenAI vision describe for screenshots.
  * Voice Rail — attachment validation + OpenAI vision describe for screenshots.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 const MAX_ATTACHMENTS = 6;
 const MAX_BYTES = 8 * 1024 * 1024;

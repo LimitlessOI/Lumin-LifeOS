@@ -13,7 +13,7 @@
  *
  * Framing: slower slices are **data** (bigger targets, retries, infra) — use alongside **`GET …/builder/gaps`** for system defects vs load.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import "dotenv/config";
 

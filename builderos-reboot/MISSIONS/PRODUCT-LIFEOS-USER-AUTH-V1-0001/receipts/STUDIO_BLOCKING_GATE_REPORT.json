@@ -1,0 +1,16 @@
+{
+  "schema": "studio_blocking_gate_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "pass": false,
+  "in_scope": true,
+  "verdict": "STUDIO_CONCERNS",
+  "violations": [
+    "studio:STUDIO_CONCERNS",
+    "studio:friction:UI can collapse into generic SaaS typography",
+    "studio:friction:UI can become flat or visually forgettable",
+    "studio:friction:Experience can pass desktop and fail real mobile use",
+    "studio:friction:Builder can ship technically correct but market-weak design",
+    "studio:friction:UI still reads like default SaaS typography"
+  ],
+  "enforcement": "HARD"
+}

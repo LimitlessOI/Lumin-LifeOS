@@ -2,7 +2,7 @@
  * SYNOPSIS: Exports runGAP018GapVerification — scripts/verify-gap-018-gap.mjs.
  */
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * - Verifies the status of critical kernel and BuilderOS control plane health endpoints
  *   to assess the operational status related to GAP-018.
  * - GAP-018: Contradiction resolution system manual only — no automated OC closure verifier.

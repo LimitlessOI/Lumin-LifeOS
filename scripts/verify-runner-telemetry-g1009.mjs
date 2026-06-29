@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides a verification function for runner telemetry,
  * specifically for Generation 1009. It fetches health and efficiency

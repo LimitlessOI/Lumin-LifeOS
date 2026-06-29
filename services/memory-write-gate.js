@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Memory write gate — no AI prose stored without epistemic stamp + envelope scrub.
- * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @ssot docs/products/memory-system/PRODUCT_HOME.md
  */
 
 import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';

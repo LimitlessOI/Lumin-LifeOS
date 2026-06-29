@@ -3,7 +3,7 @@
  * Parse repo-relative target paths and domains from operator/build instructions.
  * Shared by Voice Rail command executor and BuilderOS PBB planner.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 const TARGET_FILE_RE =

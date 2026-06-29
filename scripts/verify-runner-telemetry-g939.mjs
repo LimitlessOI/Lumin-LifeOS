@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides a function to verify the operational status and telemetry
  * of a runner, specifically for generation 939. It fetches health and efficiency

@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260327_mark_build_ready.sql.
 -- ============================================================
 -- Mark build_ready=TRUE for projects that passed the 5-gate checklist.
--- Amendment: docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+-- Amendment: docs/products/project-governance/PRODUCT_HOME.md
 --
 -- Only these projects have:
 --   - Implementation detail specific enough for headless AI

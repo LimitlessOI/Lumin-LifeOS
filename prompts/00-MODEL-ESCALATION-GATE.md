@@ -3,7 +3,7 @@
 # Model Escalation Gate
 
 **Status:** ACTIVE — mandatory before any stronger/more expensive model dispatch  
-**Authority:** Subordinate to `docs/SSOT_NORTH_STAR.md`, `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md`, `prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`  
+**Authority:** Subordinate to `docs/constitution/NORTH_STAR_SSOT.md`, `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md`, `prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`  
 **Enforced in:** `services/builderos-model-escalation-gate.js`, `services/builderos-routing-policy.js`, `routes/lifeos-council-builder-routes.js`  
 **Receipts:** `founder_decision_ledger` rows with `decision_type = 'model_escalation'`  
 **Last Updated:** 2026-06-02

@@ -46,7 +46,7 @@
  * STATUS
  *   GET  /api/v1/lifeos/status                  — DB probes + finance + scheduler config (ops)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

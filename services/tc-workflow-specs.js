@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-workflow-specs.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-workflow-specs.js
  * Machine-readable listing and buyer workflow specs derived from the current TC operating templates.
  */

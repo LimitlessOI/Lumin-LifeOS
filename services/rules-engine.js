@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: services/rules-engine.js
  * services/rules-engine.js
- * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
+ * @ssot docs/products/api-cost-savings/PRODUCT_HOME.md
  *
  * Deterministic pre-flight decision engine for council-service.
  *

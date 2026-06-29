@@ -14,7 +14,7 @@
  *   POST   /api/v1/pending-adam/:id/resolve      mark resolved
  *   GET    /api/v1/estimation/accuracy           accuracy report
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

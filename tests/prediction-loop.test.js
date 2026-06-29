@@ -6,7 +6,7 @@
  * Also emits one synthetic prediction+evaluation pair to prove the log shape is valid.
  * Tests validatePredictions() against a real or empty JSONL file (warn-only).
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { test } from 'node:test';

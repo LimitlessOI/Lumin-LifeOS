@@ -2,7 +2,7 @@
 
 # TSOS system language — Conductor ↔ machinery channel
 
-**Authority:** `docs/SSOT_NORTH_STAR.md` → **Article II §2.14**. This file is the **normative lexicon** (tokens, line grammar, templates). **Operational detail:** `docs/SSOT_COMPANION.md` → **§0.5H**.
+**Authority:** `docs/constitution/NORTH_STAR_SSOT.md` → **Article II §2.14**. This file is the **normative lexicon** (tokens, line grammar, templates). **Operational detail:** `docs/SSOT_COMPANION.md` → **§0.5H**.
 
 **Purpose:** Messages on the **machine channel** must stay **receipt-parsable**, **auditable**, and **non-ambiguous**. CC (Command Center / governance authors) extends this file by **Article VII** constitutional path or Companion change-control — not ad-hoc synonyms in product copy.
 

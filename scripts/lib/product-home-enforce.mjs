@@ -9,12 +9,12 @@ import { execSync } from 'node:child_process';
 
 export const PRODUCT_CONFIG = {
   lifeos: {
-    law_anchor: 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md',
+    law_anchor: 'docs/products/lifeos/PRODUCT_HOME.md',
     canonical_home: 'docs/products/lifeos/PRODUCT_HOME.md',
     deprecated_flat: 'docs/products/LIFEOS.md',
   },
   lifere: {
-    law_anchor: 'docs/projects/AMENDMENT_LIFERE.md',
+    law_anchor: 'docs/products/lifere/PRODUCT_HOME.md',
     canonical_home: 'docs/products/lifere/PRODUCT_HOME.md',
     deprecated_flat: 'docs/products/LIFERE.md',
   },

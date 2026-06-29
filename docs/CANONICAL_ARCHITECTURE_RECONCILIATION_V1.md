@@ -55,8 +55,8 @@ RUNTIME TRUTH:
 ### Claimed authority hierarchy (NSSOT → Companion → CLAUDE.md → Amendments)
 
 ```
-docs/SSOT_NORTH_STAR.md [SUPREME — 688 lines]
-  └── docs/constitution/NORTH_STAR.md [digest — 103 lines]
+docs/constitution/NORTH_STAR_SSOT.md [SUPREME — 688 lines]
+  └── docs/constitution/NORTH_STAR_SSOT.md [digest — 103 lines]
 docs/SSOT_COMPANION.md [Companion — 883 lines]
 CLAUDE.md [Operating law — 184 lines]
   └── docs/AGENT_RULES.compact.md [generated enforcement packet — 42 lines]
@@ -209,7 +209,7 @@ Systems that were built for a prior architecture and have not been removed.
 ## 7. CURRENT AUTHORITY CHAIN
 
 ```
-NSSOT (docs/SSOT_NORTH_STAR.md) — SUPREME
+NSSOT (docs/constitution/NORTH_STAR_SSOT.md) — SUPREME
   │  Wins all conflicts
   │
   ├── docs/SSOT_COMPANION.md — Operational law
@@ -223,7 +223,7 @@ NSSOT (docs/SSOT_NORTH_STAR.md) — SUPREME
   │     ├── prompts/00-SYSTEM-AUTHORITY-LAYERS.md (layer map)
   │     └── prompts/00-SSOT-READ-SEQUENCE.md
   │
-  ├── docs/constitution/NORTH_STAR.md — Digest (NOT a second supreme source)
+  ├── docs/constitution/NORTH_STAR_SSOT.md — Digest (NOT a second supreme source)
   │
   ├── docs/projects/AMENDMENT_01–AMENDMENT_48 — Product law
   │     Each amendment is canonical for its own lane only

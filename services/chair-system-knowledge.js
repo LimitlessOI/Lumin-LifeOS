@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Chair system knowledge — SSOT, repo synopsis, program context for Lumin counsel.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,7 +13,7 @@ const AMENDMENTS_DIR = path.join(ROOT, 'docs/projects');
 
 const SMOS_CANONICAL = {
   program: 'Social Media OS (LifeRE)',
-  authority: 'docs/projects/AMENDMENT_41_MARKETINGOS.md',
+  authority: 'docs/products/marketingos/socialmediaos/PRODUCT_HOME.md',
   workflow_order: ['content_brief', 'coach', 'record', 'post', 'publish'],
   brief_gate: 'Approved content brief required before coach/scripts/record',
   founder_chat_executor: 'founder-smos-content-executor.js → lifere-socialmediaos-bridge.js',
@@ -25,7 +25,7 @@ const PROGRAM_REGISTRY = [
   {
     id: 'smos',
     match: /\b(smos|social media os|socialmediaos|content brief|relocation content|marketing os)\b/i,
-    amendment: 'docs/projects/AMENDMENT_41_MARKETINGOS.md',
+    amendment: 'docs/products/marketingos/socialmediaos/PRODUCT_HOME.md',
     services: [
       'services/lifere-socialmediaos-bridge.js',
       'services/lifere-content-brief-engine.js',
@@ -36,7 +36,7 @@ const PROGRAM_REGISTRY = [
   {
     id: 'builderos',
     match: /\b(builderos|builder os|builder pipeline|council builder|system-build|gap-fill)\b/i,
-    amendment: 'docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md',
+    amendment: 'docs/products/builderos/PRODUCT_HOME.md',
     services: [
       'routes/lifeos-council-builder-routes.js',
       'services/builderos-command-control-service.js',
@@ -45,7 +45,7 @@ const PROGRAM_REGISTRY = [
   {
     id: 'lumin_chair',
     match: /\b(lumin|the chair|founder interface|command.control)\b/i,
-    amendment: 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md',
+    amendment: 'docs/products/lifeos/PRODUCT_HOME.md',
     services: [
       'services/lumin-chair-orchestrator.js',
       'services/chair-lumin-unified.js',
@@ -55,13 +55,13 @@ const PROGRAM_REGISTRY = [
   {
     id: 'lifere',
     match: /\b(lifere|life-?re alpha|real estate os)\b/i,
-    amendment: 'docs/projects/AMENDMENT_LIFERE.md',
+    amendment: 'docs/products/lifere/PRODUCT_HOME.md',
     services: ['services/lifere-alpha-readiness-surface.js', 'public/overlay/lifeos-lifere.html'],
   },
   {
     id: 'ssot',
     match: /\b(ssot|north star|amendment|companion|continuity)\b/i,
-    amendment: 'docs/SSOT_NORTH_STAR.md',
+    amendment: 'docs/constitution/NORTH_STAR_SSOT.md',
     services: ['docs/SSOT_COMPANION.md', 'scripts/ssot-check.js'],
   },
 ];

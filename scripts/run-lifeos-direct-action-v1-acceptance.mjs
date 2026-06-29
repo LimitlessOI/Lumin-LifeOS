@@ -3,7 +3,7 @@
  * SYNOPSIS: LifeOS direct action v1 acceptance.
  * LifeOS direct action v1 acceptance.
  * Founder UI path -> direct action endpoint -> provider proof -> DB readback.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';

@@ -8,7 +8,7 @@
 
 1. `docs/products/ideavault/PRODUCT_HOME.md` — mission, ownership, scope decision required
 2. `docs/products/ideavault/FILE_MANIFEST.json` — every file this product owns
-3. `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — law, idea catalog, routing rules
+3. `docs/products/ideavault/PRODUCT_HOME.md` — law, idea catalog, routing rules
 4. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
 
 ## What this product does

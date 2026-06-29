@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Prospect Pipeline — Find a business → build their mock site → email it to them
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Prospect Pipeline — Find a business → build their mock site → email it to them
  *
  * Flow:

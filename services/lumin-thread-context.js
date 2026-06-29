@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Server-side founder thread — DB history for unified Lumin conversation.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export async function loadFounderThreadHistory(luminPersist, userId, { limit = 24 } = {}) {

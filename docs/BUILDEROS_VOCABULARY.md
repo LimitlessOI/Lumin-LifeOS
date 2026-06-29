@@ -4,8 +4,8 @@
 
 **Status:** LANGUAGE LAW — **SEALED v2.7 for build** (2026-06-09 founder consensus)  
 **Sealed for build:** No terminology debate unless SNT finds active drift or build proves a term fails (receipt required). Not “done forever.”  
-**Authority:** Supplements `docs/SSOT_NORTH_STAR.md`; does not override constitution  
-**Amendment registry:** `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md`  
+**Authority:** Supplements `docs/constitution/NORTH_STAR_SSOT.md`; does not override constitution  
+**Amendment registry:** `docs/products/builderos/PRODUCT_HOME.md`  
 **Governance architecture:** `docs/architecture/DELIBERATION_ARCHITECTURE.md`  
 **Shareable report:** `docs/architecture/FOUNDER_VOCABULARY_CONSENSUS_REPORT.md` v2.7  
 

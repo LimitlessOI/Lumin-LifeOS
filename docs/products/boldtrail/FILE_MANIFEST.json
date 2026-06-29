@@ -1,14 +1,12 @@
 {
   "schema": "product_file_manifest_v1",
   "product_id": "boldtrail",
+  "project_id": "boldtrail_real_estate",
+  "name": "BoldTrail Real Estate CRM",
   "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
-  "updated_at": "2026-06-27",
+  "amendment_path": "docs/products/boldtrail/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
   "ownership_policy": "pointer_not_duplication",
-  "readiness_state": "SHARED_PLATFORM_MODULE",
-  "mission_pack": null,
-  "acceptance_command": null,
-  "status_as_of": "2026-06-27",
-  "status_note": "LIVE shared module — consumed by LifeRE and TC Service. No standalone mission needed. Future replacement isolated here.",
   "owned_files": [
     "docs/products/boldtrail/PRODUCT_HOME.md",
     "docs/products/boldtrail/FILE_MANIFEST.json",
@@ -18,33 +16,12 @@
     "routes/boldtrail-routes.js",
     "routes/outreach-crm-routes.js",
     "services/lifere-boldtrail-bridge.js",
-    "src/integrations/boldtrail.js"
-  ],
-  "db_tables": [
-    {
-      "name": "boldtrail_agents",
-      "purpose": "agent profiles and settings"
-    },
-    {
-      "name": "boldtrail_email_drafts",
-      "purpose": "AI-generated emails pending review/send"
-    },
-    {
-      "name": "boldtrail_leads",
-      "purpose": "synced leads with status"
-    },
-    {
-      "name": "boldtrail_showings",
-      "purpose": "scheduled property showings"
-    }
-  ],
-  "required_env_vars": [
-    "BOLDTRAIL_API_KEY",
-    "BOLDTRAIL_WEBHOOK_SECRET"
+    "src/integrations/boldtrail.js",
+    "public/overlay/boldtrail.html"
   ],
   "shared_dependencies": [
     {
-      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "AI council for email drafting and coaching"
     },
@@ -60,7 +37,6 @@
     }
   ],
   "history_anchors": [
-    "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md"
-  ],
-  "replacement_note": "BoldTrail will eventually be replaced. Only this module changes on replacement — consuming products (LifeRE, TC Service, others) are isolated."
+    "docs/products/boldtrail/PRODUCT_HOME.md"
+  ]
 }

@@ -9,7 +9,7 @@
  *
  * Exports: createFutureVision({ pool, callAI, logger })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 // ── Vision guide system prompt ─────────────────────────────────────────────

@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Direct paid-provider API → tool call → LifeOS system proof event.
  * No council, no simulation, no repo edits.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import {
   createSystemProofEvent,

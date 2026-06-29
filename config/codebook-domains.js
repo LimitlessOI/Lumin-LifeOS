@@ -4,7 +4,7 @@
  * `services/prompt-translator.js` when `translate(..., { domain })` is set.
  * Keep each list **longest-match-first** (same rule as codebook-v1).
  *
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 /** @type {Record<string, [string, string][]>} */

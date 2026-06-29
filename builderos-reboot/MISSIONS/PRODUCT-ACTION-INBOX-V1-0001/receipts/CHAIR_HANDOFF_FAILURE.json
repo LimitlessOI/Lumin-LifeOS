@@ -1,0 +1,18 @@
+{
+  "schema": "chair_handoff_failure_v1",
+  "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+  "recorded_at": "2026-06-29T02:06:45.523Z",
+  "chair_failed": true,
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "violations": [
+    "development:INTENT_BASELINE not HANDOFF_READY (missing)"
+  ],
+  "escalate_to_founder": true,
+  "founder_message": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "next": [
+    "ARC → Chair (handoff incomplete)",
+    "Chair → Adam (Chair acknowledges synthesis failure)",
+    "resolve → back down chain"
+  ]
+}

@@ -42,6 +42,6 @@ COMMENT ON COLUMN self_repair_memory_events.triggered_by IS 'Triggered by for th
 
 COMMENT ON COLUMN self_repair_memory_events.fact_id IS 'Foreign key referencing epistemic_facts table';
 
--- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+-- @ssot docs/products/command-center/PRODUCT_HOME.md
 
 COMMIT;

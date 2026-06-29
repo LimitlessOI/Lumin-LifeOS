@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Live remote smoke for Site Builder.
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Live remote smoke for Site Builder.
  *
  * Verifies the real Railway route can build a preview and returns the quality gate payload

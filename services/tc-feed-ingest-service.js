@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-feed-ingest-service.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-feed-ingest-service.js
  * Normalizes official MLS/showing-system feed payloads into canonical TC reporting data.
  */

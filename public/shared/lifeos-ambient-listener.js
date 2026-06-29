@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Opt-in ambient voice listener — sleeps when silent, wakes on speech, sends finals to /ambient/process.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function (global) {
   const SpeechRecognitionCtor = global.SpeechRecognition || global.webkitSpeechRecognition || null;

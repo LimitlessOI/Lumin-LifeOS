@@ -12,7 +12,7 @@
  * Password storage: scrypt (CPU-hard, Node built-in) with random salt.
  * JWT signing: HMAC-SHA256 over base64url-encoded header.payload.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import crypto from 'node:crypto';

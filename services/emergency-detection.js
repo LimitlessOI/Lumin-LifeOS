@@ -3,7 +3,7 @@
  * services/emergency-detection.js
  * Watches wearable data for emergency signals. Fires alert chain within 60s.
  * Never fires false positives without learning from feedback.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 'use strict';

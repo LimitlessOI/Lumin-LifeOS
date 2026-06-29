@@ -4,7 +4,7 @@
  * Validates inbound webhook signatures from Postmark (email events) and Twilio (SMS events).
  * Exports createTCWebhookValidator({ secret, logger }) → { validatePostmark, validateTwilio }.
  *
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 import crypto from 'crypto';
 

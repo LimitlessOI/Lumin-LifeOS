@@ -6,7 +6,7 @@
 - @overview This module provides functionality to transcribe audio content from a given URL.
 -           It acts as a wrapper, fetching audio from a URL, saving it temporarily,
 -           and then delegating the actual transcription to the `word-keeper-transcriber` service.
-- @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+- @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import path from 'node:path';
 import { promises as fs } from 'node:fs';

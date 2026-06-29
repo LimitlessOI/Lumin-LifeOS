@@ -2,7 +2,7 @@
 -- Migration: 20260403_lifeos_children.sql
 -- LifeOS Phase 7 — Children's App schema
 -- Child profiles, dreams, sessions, curiosity threads
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

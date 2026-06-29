@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260417_lifeos_calendar.sql.
 -- Migration: 20260417_lifeos_calendar
 -- Native LifeOS calendar domain plus external provider sync scaffolding.
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

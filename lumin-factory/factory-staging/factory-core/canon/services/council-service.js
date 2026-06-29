@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Council routing, token/LCL/savings, and model failover for platform AI calls.
  * Council routing, token/LCL/savings, and model failover for platform AI calls.
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 import dayjs from "dayjs";
 import { injectKnowledgeContext, buildSystemContext } from "./knowledge-context.js";

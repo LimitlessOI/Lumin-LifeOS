@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Wisdom truth auditor — red-team truth gates, scan enforcement gaps, challenge assumptions.
  * No moral judgment: does it work for the system or not? Deception never works. Founder input = GUESS until confirmed.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

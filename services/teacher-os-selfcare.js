@@ -14,7 +14,7 @@
  * receive feedback that they specifically mattered. This system delivers that
  * in real time from data it already tracks.
  *
- * @ssot docs/projects/AMENDMENT_31_TEACHER_OS.md
+ * @ssot docs/products/teacher-os/PRODUCT_HOME.md
  */
 
 /**

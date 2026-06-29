@@ -21,7 +21,7 @@
 --   - `depletion_tags` is a string array aligned with the Amendment 21
 --     backlog item "Depletion taxonomy" (people/pace/meaning/body/money).
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

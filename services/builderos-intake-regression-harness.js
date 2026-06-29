@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Golden intake blueprint regression — acceptance-only and dry-run dispatch probes.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

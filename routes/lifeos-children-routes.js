@@ -26,7 +26,7 @@
  *   POST /dreams/:id/progress      — log progress note
  *   POST /dreams/:id/complete      — complete dream
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

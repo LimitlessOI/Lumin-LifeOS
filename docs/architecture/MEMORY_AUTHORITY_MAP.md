@@ -13,7 +13,7 @@
 | `routes/memory-capsule-routes.js` + Amendment 02 capsule layer | `CANONICAL`, `PRODUCT_MEMORY` | Governed capsule intake, retrieval, provenance, contradiction, correction | `/api/v1/memory/capsules/*` | `memory_capsules`, `retrieval_events`, `memory_use_receipts`, `contradiction_records` | No | Product/runtime memory, not BuilderOS maturity proof |
 | `services/self-repair-memory.js` + self-repair routes | `CANONICAL`, `SELF_REPAIR_MEMORY` | Repair lessons, prevention candidates, runtime repair memory diagnostics | `/api/v1/memory/self-repair/*` | `self_repair_memory_events`, `data/self-repair-memory.jsonl` | No | Diagnostic and prevention support only |
 | `routes/memory-routes.js` + `core/memory-system.js` | `LEGACY_KEEP` | Old CRUD/session memory model | `/api/v1/memory/legacy/*` and legacy `/api/*` mount | `data/memories.json` | No | Preserve for history/migration; non-canonical |
-| `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` legacy current-state sections | `LEGACY_ARCHIVE` | Historical narrative from pre-capsule memory era | Archive-only in doc | n/a | No | Must not define current authority |
+| `docs/products/memory-system/PRODUCT_HOME.md` legacy current-state sections | `LEGACY_ARCHIVE` | Historical narrative from pre-capsule memory era | Archive-only in doc | n/a | No | Must not define current authority |
 
 ## Canonical Proof Rules
 

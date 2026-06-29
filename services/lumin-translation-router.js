@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Lumin translation routing — cheapest model first, escalate by difficulty + account role.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { estimateTokens } from './token-optimizer.js';
 

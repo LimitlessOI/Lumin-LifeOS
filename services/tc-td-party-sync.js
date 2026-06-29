@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Open TransactionDesk → scrape party emails → merge into tc_transactions.parties.
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * Open TransactionDesk → scrape party emails → merge into tc_transactions.parties.
  */
 

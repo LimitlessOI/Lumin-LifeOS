@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Learns preferences, contacts, CRM notes, and success moments from conversations → twin.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { createAdamLogger, EVENTS } from './adam-logger.js';
 import { createCommunicationProfile } from './communication-profile.js';

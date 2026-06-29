@@ -14,7 +14,7 @@
  *   blocks              — task id(s) that cannot start until this one closes (array or string)
  *   proof_required_to_close — what evidence must exist before this task is marked done
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';

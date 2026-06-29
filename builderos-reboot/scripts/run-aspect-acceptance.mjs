@@ -3,7 +3,7 @@
  * SYNOPSIS: Run ACCEPTANCE_TESTS.json for a mission aspect folder.
  * Run ACCEPTANCE_TESTS.json for a mission aspect folder.
  * Usage: node builderos-reboot/scripts/run-aspect-acceptance.mjs <path-to-ACCEPTANCE_TESTS.json>
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -2,7 +2,7 @@
  * SYNOPSIS: Founder -> LifeOS direct action bridge.
  * Founder -> LifeOS direct action bridge.
  * Hard-routed system actions only. No council, no personas, no builder staging.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import {
   executeProviderToolProofAction,

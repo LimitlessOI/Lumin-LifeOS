@@ -14,7 +14,7 @@
  * Safe to run multiple times — uses ON CONFLICT DO NOTHING on canonical_id dedup.
  * Requires DATABASE_URL in env.
  *
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

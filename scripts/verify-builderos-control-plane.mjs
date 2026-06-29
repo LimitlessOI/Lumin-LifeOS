@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Verify BuilderOS Control Plane — measurement layer readiness.
  * Verify BuilderOS Control Plane — measurement layer readiness.
- * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';
@@ -23,7 +23,7 @@ function add(name, ok, detail) {
 }
 
 async function main() {
-  add('amendment_46', fs.existsSync(path.join(ROOT, 'docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md')), 'SSOT amendment');
+  add('amendment_46', fs.existsSync(path.join(ROOT, 'docs/products/builderos/PRODUCT_HOME.md')), 'SSOT amendment');
   add('migration_build_task_ledger', fs.existsSync(path.join(ROOT, 'db/migrations/20260601_build_task_ledger.sql')), 'build_task_ledger migration');
   add('service_control_plane', fs.existsSync(path.join(ROOT, 'services/builderos-control-plane-service.js')), 'control plane service');
   add('routes_control_plane', fs.existsSync(path.join(ROOT, 'routes/builderos-control-plane-routes.js')), 'control plane routes');

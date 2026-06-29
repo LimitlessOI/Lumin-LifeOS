@@ -7,7 +7,7 @@
  * and the phase14 certify/run-proofs endpoints which write OIL audit receipts.
  *
  * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

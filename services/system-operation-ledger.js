@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Timestamped operation ledger — duration + token correlation by task_id.
- * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+ * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
 
 function newTaskId(prefix = 'op') {

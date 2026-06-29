@@ -2,8 +2,8 @@
 
 # LifeOS Service, Sovereignty & Epistemology Doctrine
 
-**Status:** CONSTITUTIONAL — subordinate only to `docs/SSOT_NORTH_STAR.md` and `docs/SSOT_COMPANION.md`  
-**Authority:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` (LifeOS lane)  
+**Status:** CONSTITUTIONAL — subordinate only to `docs/constitution/NORTH_STAR_SSOT.md` and `docs/SSOT_COMPANION.md`  
+**Authority:** `docs/products/lifeos/PRODUCT_HOME.md` (LifeOS lane)  
 **Proxy law:** All stack modules (LifeRE, SocialMediaOS, LimitlessOS slices, etc.) **inherit** this doctrine — they may add domain detail; they **may not** weaken it.  
 **Machine runtime:** `builderos-reboot/governance/LIFEOS_SERVICE_DOCTRINE_RUNTIME.json`  
 **Verification:** `npm run lifeos:service-doctrine:verify` (HARD — `builder:preflight`)  

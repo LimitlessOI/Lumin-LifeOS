@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE Chair service unit tests.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';

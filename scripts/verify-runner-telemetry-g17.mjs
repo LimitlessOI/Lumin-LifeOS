@@ -1,5 +1,5 @@
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * @file scripts/verify-runner-telemetry-g17.mjs
  * @description Verifies runner telemetry for Generation 17 by fetching control plane health and efficiency data.
  */

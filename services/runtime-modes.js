@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Central runtime safety defaults for autonomy-related env flags.
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  *
  * Central runtime safety defaults for autonomy-related env flags.
  * These defaults intentionally fail closed when vars are omitted.

@@ -26,7 +26,7 @@
 --   saved_by_cache_usd         = saved_cost_usd where cache_hit=true, provider_was_free=false
 --     (full avoided cost on cache-hit calls against paid providers)
 --
--- @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
+-- @ssot docs/products/api-cost-savings/PRODUCT_HOME.md
 
 BEGIN;
 

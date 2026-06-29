@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Enforce single canonical Lumin connection — block legacy generative chat paths.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

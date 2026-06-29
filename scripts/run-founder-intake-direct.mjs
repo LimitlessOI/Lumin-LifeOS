@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Direct terminal intake: raw founder text -> BuilderOS mission -> Chair pre-handoff/system path.
  * Direct terminal intake: raw founder text -> BuilderOS mission -> Chair pre-handoff/system path.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

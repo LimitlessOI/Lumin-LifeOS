@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-capsule.js
  */
 // services/memory-capsule.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 
 const createCapsule = async (candidate, fields, pool) => {
   if (!fields.title || !fields.capsule_type || !fields.truth_class || !fields.source_type) {

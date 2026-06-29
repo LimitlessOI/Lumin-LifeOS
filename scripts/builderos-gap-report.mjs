@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: BuilderOS Phase R3 — component maturity gap navigator.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * BuilderOS Phase R3 — component maturity gap navigator.
  *
  * READ-ONLY diagnostic. Reads COMPONENT_MATURITY_MAP (hardcoded from OIL audit

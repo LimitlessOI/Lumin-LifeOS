@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE buyer and seller OS — module twin projections.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeRETwinStore } from './lifere-twin-store.js';
 

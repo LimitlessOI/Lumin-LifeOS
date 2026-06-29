@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: BuilderOS canonical execution — single autonomous programming entry point.
  * Planner/worker pattern: mission step → isolated build → verify → compound improve.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

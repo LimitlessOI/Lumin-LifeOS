@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Web research for obstacle lessons — how others solved similar blockers.
  * WIRED: point-b-navigator + obstacle-lesson-loop
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { createWebSearchService } from './web-search-service.js';

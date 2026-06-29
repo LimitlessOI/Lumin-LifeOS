@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: AI prose truth envelope tests.
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';

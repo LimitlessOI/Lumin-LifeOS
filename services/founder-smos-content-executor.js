@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Social Media OS content executor — brief → coach → pack (not generic video templates).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { createLifeRESocialMediaOSBridge } from './lifere-socialmediaos-bridge.js';
 
@@ -158,7 +158,7 @@ export async function executeSocialMediaContentPackage({
     }),
     receipt: {
       executor: 'socialmediaos_content',
-      authority: 'docs/projects/AMENDMENT_41_MARKETINGOS.md',
+      authority: 'docs/products/marketingos/socialmediaos/PRODUCT_HOME.md',
       brief_id: brief.id || brief.brief_id,
       auto_approved: autoApproved,
       video_count: videos.length,

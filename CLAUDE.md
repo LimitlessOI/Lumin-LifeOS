@@ -31,8 +31,8 @@ Claude, CUR, Codex, and C2 **fight disagreements out here first**. Adam is not t
 6. `docs/products/[product].md` — the product you're building (e.g. `docs/products/LIFEOS.md`)
 7. `docs/CONTINUITY_LOG.md` — latest session summary and handoff state
 
-**Constitutional sessions only** (editing NSSOT, constitutional conflict, first onboarding):
-→ Read `docs/constitution/NORTH_STAR.md` (law digest) and `docs/SSOT_NORTH_STAR.md` (full text)
+**Constitutional sessions only** (editing Force of Truth / North Star SSOT, constitutional conflict, first onboarding):
+→ Read **`docs/constitution/NORTH_STAR_SSOT.md`** in full (top to bottom in this session)
 
 ---
 
@@ -41,7 +41,7 @@ Claude, CUR, Codex, and C2 **fight disagreements out here first**. Adam is not t
 Before writing a single line of code:
 1. Read the files above in order
 2. Read the relevant product file's `## CURRENT BP` section
-3. Read last 3–5 rows of `## Change Receipts` in the owning amendment
+3. Read last 3–5 rows of `## Change Receipts` in the owning product home
 4. Run `npm run builder:preflight` — if EXIT 1, fix before any product work
 5. If Railway env names were proved in this thread → never re-ask Adam to prove them (§2.6)
 6. If Adam's ask is clear → execute it or HALT with one named blocker (§2.15)
@@ -52,11 +52,11 @@ Before stopping (even if cut off mid-task):
 1. Update the owning amendment's `## Change Receipts` (what / why / current state / next)
 2. Update `## Agent Handoff Notes` with exact state + next priority
 3. Update `docs/CONTINUITY_LOG.md` with one-paragraph summary
-4. Mark anything in-progress with `⚠️ IN PROGRESS:` in the amendment
+4. Mark anything in-progress with `⚠️ IN PROGRESS:` in the product home
 
 ---
 
-## HARD RULES (always apply — priority: NSSOT > Companion > this file > everything else)
+## HARD RULES (always apply — priority: North Star SSOT > Companion > this file > everything else)
 
 **Zero-Degree Protocol:** Every action maps to North Star or Outcome Target. If not → HALT and ask.
 
@@ -133,26 +133,25 @@ If you are about to add code to `server.js` — STOP. Find the correct target fi
 
 ## SSOT MAINTENANCE — ATOMIC, PER-FILE (non-negotiable)
 
-Every .js file must have a `@ssot` JSDoc tag pointing to its amendment.
-IMMEDIATELY after writing or editing each file — before moving to the next — update the amendment:
+Every .js file must have a `@ssot` JSDoc tag pointing to its product `PRODUCT_HOME.md`.
+IMMEDIATELY after writing or editing each file — before moving to the next — update the product home:
 - `Last Updated` date
 - Relevant sections (Current State, Build Plan, Change Receipts row)
 
-Pre-commit hook blocks commits if a staged .js file's amendment was not also updated.
+Pre-commit hook blocks commits if a staged .js file's product home was not also updated.
 
-**File pattern → Amendment:**
+**File pattern → Product home:**
 
-| File pattern | Amendment |
+| File pattern | Product home |
 |---|---|
-| `routes/tc-*.js`, `services/tc-*.js`, `services/glvar-*.js` | `AMENDMENT_17_TC_SERVICE.md` |
-| `routes/mls-*.js` | `AMENDMENT_17_TC_SERVICE.md` |
-| `services/council-*.js`, `services/token-*.js`, `services/free-tier-*.js`, `services/savings-*.js`, `config/council-*.js` | `AMENDMENT_01_AI_COUNCIL.md` |
-| `services/memory*.js`, `routes/conversation-*.js`, `routes/memory-*.js` | `AMENDMENT_02_MEMORY_SYSTEM.md` |
-| `routes/revenue*.js`, `services/billing*.js`, `routes/api-cost-savings*.js` | `AMENDMENT_03_FINANCIAL_REVENUE.md` |
-| `routes/site-builder*.js`, `services/site-builder*.js`, `services/prospect*.js` | `AMENDMENT_05_SITE_BUILDER.md` |
-| `routes/boldtrail*.js`, `services/boldtrail*.js`, `services/crm*.js` | `AMENDMENT_11_BOLDTRAIL_REALESTATE.md` |
-| `routes/command-center*.js`, `public/overlay/command-center*` | `AMENDMENT_12_COMMAND_CENTER.md` |
-| `routes/project-governance*.js`, `scripts/verify-project*`, `db/migrations/*project_governance*` | `AMENDMENT_18_PROJECT_GOVERNANCE.md` |
+| `routes/tc-*.js`, `services/tc-*.js`, `services/glvar-*.js` | `docs/products/tc-service/PRODUCT_HOME.md` |
+| `routes/mls-*.js` | `docs/products/tc-service/PRODUCT_HOME.md` |
+| `services/council-*.js`, `services/token-*.js`, `services/free-tier-*.js`, `services/savings-*.js`, `config/council-*.js` | `docs/products/ai-council/PRODUCT_HOME.md` |
+| `services/memory*.js`, `routes/conversation-*.js`, `routes/memory-*.js` | `docs/products/memory-system/PRODUCT_HOME.md` |
+| `routes/revenue*.js`, `services/billing*.js`, `routes/api-cost-savings*.js` | `docs/products/financial-revenue/PRODUCT_HOME.md` |
+| `routes/site-builder*.js`, `services/site-builder*.js`, `services/prospect*.js` | `docs/products/site-builder/PRODUCT_HOME.md` |
+| `routes/boldtrail*.js`, `services/boldtrail*.js`, `services/crm*.js` | `docs/products/boldtrail/PRODUCT_HOME.md` |
+| `routes/project-governance*.js`, `scripts/verify-project*`, `db/migrations/*project_governance*` | `docs/products/project-governance/PRODUCT_HOME.md` |
 
 **Verify compliance:** `node scripts/ssot-check.js --all`
 
@@ -162,7 +161,7 @@ Pre-commit hook blocks commits if a staged .js file's amendment was not also upd
 
 You may not add, remove, or materially reword any SSOT document until you have read that entire file in this session.
 
-**In scope:** `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `docs/NORTH_STAR_*.md`, `docs/projects/AMENDMENT_*.md`, `docs/constitution/NORTH_STAR.md`, `docs/products/*.md`, `docs/CONTINUITY_LOG.md` when changing policy.
+**In scope:** `docs/constitution/NORTH_STAR_SSOT.md`, `docs/SSOT_COMPANION.md`, `docs/NORTH_STAR_*.md`, `docs/products/*/PRODUCT_HOME.md`, `docs/CONTINUITY_LOG.md` when changing policy.
 
 ---
 

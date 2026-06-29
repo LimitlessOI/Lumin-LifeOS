@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE ↔ BoldTrail bridge — pipeline read + approval-gated write-back.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import {
   extractContactsFromResponse,

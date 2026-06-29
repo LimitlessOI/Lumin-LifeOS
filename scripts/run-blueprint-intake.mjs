@@ -5,13 +5,13 @@
  * need to be in the Railway Docker image.
  *
  * Usage:
- *   node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md
+ *   node scripts/run-blueprint-intake.mjs --amendment docs/products/marketingos/PRODUCT_HOME.md
  *   node scripts/run-blueprint-intake.mjs --list
  *   node scripts/run-blueprint-intake.mjs --session <id>
  *   node scripts/run-blueprint-intake.mjs --session <id> --arc
  *   node scripts/run-blueprint-intake.mjs --session <id> --answer gap_1 "the answer"
  *
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';
@@ -72,10 +72,10 @@ async function main() {
 Blueprint Intake CLI
 ────────────────────
 Backfill an existing amendment:
-  node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md
+  node scripts/run-blueprint-intake.mjs --amendment docs/products/marketingos/PRODUCT_HOME.md
 
 Backfill with explicit product name:
-  node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md --product "SocialMediaOS"
+  node scripts/run-blueprint-intake.mjs --amendment docs/products/marketingos/PRODUCT_HOME.md --product "SocialMediaOS"
 
 List all intake sessions:
   node scripts/run-blueprint-intake.mjs --list

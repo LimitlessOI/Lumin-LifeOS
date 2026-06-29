@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE boot — seed twins, permissions, founder extensions on startup.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

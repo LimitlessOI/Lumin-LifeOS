@@ -3,7 +3,7 @@
 # Deliberation & Governance Architecture
 
 **Status:** Ratified — **v2.7 seal** (2026-06-09 founder consensus)  
-**Authority:** Supplements `docs/BUILDEROS_VOCABULARY.md`, `docs/SSOT_NORTH_STAR.md` §2.12, `docs/SSOT_COMPANION.md` §5  
+**Authority:** Supplements `docs/BUILDEROS_VOCABULARY.md`, `docs/constitution/NORTH_STAR_SSOT.md` §2.12, `docs/SSOT_COMPANION.md` §5  
 **Shareable summary:** `docs/architecture/FOUNDER_VOCABULARY_CONSENSUS_REPORT.md` (v2.7)
 
 ---
@@ -297,4 +297,4 @@ Org may propose split/merge when results show redundancy — load-bearing org ch
 - `docs/architecture/TRUTH_SYSTEM_ARCHITECTURE.md`  
 - `docs/architecture/FOUNDER_VOCABULARY_CONSENSUS_REPORT.md`  
 - `docs/architecture/factory-v1-blueprint-pack/CODER_ZERO_DECISION_BUILD_SPEC_V1.md`  
-- `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md`
+- `docs/products/builderos/PRODUCT_HOME.md`

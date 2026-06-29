@@ -5,7 +5,7 @@
 -- loops. That migration included an invalid ssot_tag constraint on a non-existent column
 -- which caused the full BEGIN/COMMIT block to roll back. This migration uses IF NOT EXISTS
 -- to safely recover without risk of duplicate-table errors.
--- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+-- @ssot docs/products/command-center/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS self_repair_memory_events (
     id                   SERIAL PRIMARY KEY,

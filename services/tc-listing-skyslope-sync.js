@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-listing-skyslope-sync.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-listing-skyslope-sync.js
  *
  * Orchestrates: GLVAR → TransactionDesk → find file → download executed

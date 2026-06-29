@@ -1,6 +1,6 @@
 /**
  * @file scripts/verify-runner-telemetry-g822.mjs
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 /** Fetches JSON from URL with x-command-key. Throws on non-OK response. */

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Compound improvement — every failure must improve the platform (Cursor/Codex lesson).
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

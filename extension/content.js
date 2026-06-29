@@ -13,7 +13,7 @@
  * which is served from the Railway server. Changes to overlay UI/features
  * deploy to ALL users instantly without an extension store update.
  *
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 
 (function () {

@@ -13,7 +13,7 @@ import { isVisualUiPatchRequest } from '../services/founder-visual-ui-patch.js';
 const SMOS_FACTS = {
   lumin_is_chair: true,
   personal_turn: false,
-  program_context: [{ id: 'smos', amendment: 'docs/projects/AMENDMENT_41_MARKETINGOS.md' }],
+  program_context: [{ id: 'smos', amendment: 'docs/products/marketingos/PRODUCT_HOME.md' }],
   system_knowledge: 'Lumin IS the Chair — SMOS workflow brief → coach → record → post → publish',
   builder_capability: { build_async: true },
 };

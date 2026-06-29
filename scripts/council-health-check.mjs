@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Script — Council Health Check.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * @file scripts/council-health-check.mjs
  * @description Tests the health of various council members by sending a trivial build request.
  */

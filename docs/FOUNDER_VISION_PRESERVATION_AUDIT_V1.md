@@ -524,7 +524,7 @@ Claude should write the NSSOT amendment that closes the TSOS vocabulary split. T
 - The governance pack flagged it as "NSSOT amendment recommended" but no one wrote it
 
 Specifically:
-- Read NSSOT `docs/SSOT_NORTH_STAR.md` current TSOS definition
+- Read NSSOT `docs/constitution/NORTH_STAR_SSOT.md` current TSOS definition
 - Read `docs/ARCHITECTURE_CONSOLIDATION_DECISION_PACK_V1.md` R-12 and §15
 - Draft an NSSOT amendment that: (a) formally defines TSOS as platform metabolism under CFO, not a separate department or platform name, (b) defines what IS the platform name (NSSOT's current choice), (c) closes "eight-department" ambiguity by specifying exactly seven departments and their roles, (d) defines when Council escalation is mandatory vs. optional on a build path
 - Get explicit SNT review before committing (SNT = adversarial challenge)

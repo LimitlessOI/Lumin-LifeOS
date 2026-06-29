@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE OS routes — full A-to-Z API (W1–W6).
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import express from 'express';
 import { createLifeREOSService } from '../services/lifere-os-v1.js';

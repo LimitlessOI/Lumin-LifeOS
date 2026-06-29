@@ -3,7 +3,7 @@
  * extension/popup.js — Lumin Universal Overlay
  * Manages the extension popup: login status, connect/disconnect.
  *
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 'use strict';
 

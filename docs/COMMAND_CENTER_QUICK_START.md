@@ -239,7 +239,7 @@ Shows which AIs are active in current conversation
 
 - Test Report: `docs/COMMAND_CENTER_TEST_REPORT.md`
 - Summary: `docs/FINAL_TESTING_SUMMARY.md`
-- Architecture: `docs/SSOT_NORTH_STAR.md`
+- Architecture: `docs/constitution/NORTH_STAR_SSOT.md`
 
 ---
 

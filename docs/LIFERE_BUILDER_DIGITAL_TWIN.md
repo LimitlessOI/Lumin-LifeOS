@@ -20,7 +20,7 @@ If a spec conflicts with code, **spec wins** — file a GAP receipt, do not impr
 Every new `.js` file:
 
 ```js
-/** @ssot docs/projects/AMENDMENT_LIFERE.md */
+/** @ssot docs/products/lifere/PRODUCT_HOME.md */
 ```
 
 ---

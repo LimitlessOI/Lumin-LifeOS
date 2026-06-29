@@ -9,7 +9,7 @@
  * Exports:
  *   createConsentRegistry({ pool }) → ConsentRegistry
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 /** All features that require explicit consent before activation */

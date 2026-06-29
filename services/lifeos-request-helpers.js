@@ -12,7 +12,7 @@
  *   `LIMIT NaN` clauses, crashing the route with a Postgres error. This file
  *   provides a single, consistent way to clamp integer inputs.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 /**

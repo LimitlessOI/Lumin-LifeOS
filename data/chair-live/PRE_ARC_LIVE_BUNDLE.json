@@ -1,0 +1,136 @@
+{
+  "schema": "pre_arc_live_bundle_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-06-29T02:06:45.199Z",
+  "idc_exit": {
+    "schema": "idc_exit_gate_v1",
+    "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+    "pass": true,
+    "status": "IDC_EXIT_PASS",
+    "route_to": "ARC",
+    "defect_owner_seat": null,
+    "violations": [],
+    "checks": {
+      "intent_baseline": {
+        "pass": true,
+        "status": "HANDOFF_READY"
+      },
+      "coverage": {
+        "pass": true,
+        "gaps": []
+      },
+      "departments": {
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "SNT": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "intent_clearance_yes"
+          },
+          "CHAIR": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "forecast_acceptable"
+          },
+          "CFO": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "within_budget"
+          },
+          "WISDOM": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "proceed"
+          }
+        },
+        "defect_owner_seat": null,
+        "route_to": "ARC"
+      },
+      "IDC_CONSENSUS_RECEIPT.json": {
+        "pass": true
+      },
+      "KNOWN_RISKS.json": {
+        "pass": true
+      },
+      "KNOWN_ASSUMPTIONS.json": {
+        "pass": true
+      },
+      "CHAIR_HANDOFF_RECEIPT.json": {
+        "pass": true
+      },
+      "PRE_ARC_INPUT_PACKET.json": {
+        "pass": true
+      },
+      "asset_reuse": {
+        "pass": true
+      },
+      "prediction_receipt": {
+        "pass": true
+      },
+      "mode_a_to_b": {
+        "pass": true
+      }
+    }
+  },
+  "builder_entry": {
+    "schema": "builder_entry_gate_v1",
+    "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+    "pass": true,
+    "status": "BUILDER_ENTRY_PASS",
+    "violations": [],
+    "checks": {
+      "post_arc": {
+        "schema": "post_arc_bundle_gate_v1",
+        "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "ARC_TWIN_SIM": {
+            "pass": true,
+            "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+          },
+          "BUILDER_SIM": {
+            "pass": true,
+            "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+          },
+          "SNT_TRANSLATION": {
+            "pass": true,
+            "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+          },
+          "PRE_BUILD": {
+            "pass": true,
+            "path": "PRE_BUILD_VALIDATION_PACKET.json"
+          },
+          "builder_clearance": {
+            "pass": true
+          },
+          "builder_sim_blocking": {
+            "pass": true,
+            "blocking_gaps": 0
+          }
+        },
+        "enforcement": "HARD"
+      },
+      "studio": {
+        "schema": "studio_blocking_gate_v1",
+        "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+        "pass": true,
+        "in_scope": true,
+        "verdict": "experience_acceptable",
+        "violations": [],
+        "enforcement": "HARD"
+      }
+    },
+    "enforcement": "HARD"
+  },
+  "source": "evaluateMissionFpV2GateSync"
+}

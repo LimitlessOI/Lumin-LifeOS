@@ -1,12 +1,12 @@
 {
   "schema": "product_file_manifest_v1",
   "product_id": "api-cost-savings",
+  "project_id": "api_cost_savings",
+  "name": "TokenSaverOS (TSOS) — API Cost Savings Service",
   "canonical_home": "docs/products/api-cost-savings/PRODUCT_HOME.md",
-  "updated_at": "2026-06-27",
+  "amendment_path": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
   "ownership_policy": "pointer_not_duplication",
-  "readiness_state": "PARTIAL_CODE_PRESENT",
-  "mission_pack": null,
-  "acceptance_command": null,
   "owned_files": [
     "docs/products/api-cost-savings/PRODUCT_HOME.md",
     "docs/products/api-cost-savings/FILE_MANIFEST.json",
@@ -25,21 +25,92 @@
     "services/token-optimizer.js",
     "services/tokenos-quality-check.js",
     "services/tokenos-service.js",
-    "services/tsos-platform-kernel.js"
+    "services/tsos-platform-kernel.js",
+    "docs/projects/TCO_TSOS_75_PERCENT_SAVINGS_BRAINSTORM.md",
+    "services/savings-ledger.js",
+    "core/tco-tracker.js",
+    "core/tco-encryption.js",
+    "config/codebook-v1.js",
+    "public/overlay/tokenos-landing.html",
+    "public/overlay/tokenos-dashboard.html",
+    "db/migrations/20260321_token_usage_log.sql",
+    "db/migrations/20260422_tokenos_customers.sql",
+    "db/migrations/20260423_tsos_savings_ledger.sql",
+    "db/migrations/20260424_tsos_monetization_view.sql"
   ],
   "shared_dependencies": [
     {
-      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "AI council is the primary consumer of the cost-savings kernel; also provides provider routing logic"
     },
     {
-      "path": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+      "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "Stripe billing for B2B subscription plans"
     }
   ],
   "history_anchors": [
-    "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md"
+    "docs/products/api-cost-savings/PRODUCT_HOME.md"
+  ],
+  "required_routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/tsos/savings/report",
+      "expected_status": 200,
+      "description": "Unified savings proof — baseline, actual, savings%, per-mechanism breakdown"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tsos/savings/session",
+      "expected_status": 200,
+      "description": "Log a Conductor cold-start savings event"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tsos/savings/baselines",
+      "expected_status": 200,
+      "description": "Reference token counts (audit trail)"
+    }
+  ],
+  "required_tables": [
+    {
+      "name": "token_usage_log",
+      "required_columns": [
+        "id",
+        "provider",
+        "cost_usd",
+        "saved_cost_usd",
+        "original_tokens",
+        "compressed_tokens",
+        "provider_was_free",
+        "cache_hit"
+      ]
+    },
+    {
+      "name": "conductor_session_savings",
+      "required_columns": [
+        "id",
+        "compact_tokens",
+        "full_tokens",
+        "saved_tokens",
+        "savings_pct",
+        "cost_avoided_usd"
+      ]
+    },
+    {
+      "name": "tcos_baseline_config",
+      "required_columns": [
+        "label",
+        "token_count",
+        "cost_per_m_usd"
+      ]
+    }
+  ],
+  "completion_checks": [
+    "GET /api/v1/tsos/savings/report returns baseline_cost_usd, actual_cost_usd, savings_pct in totals",
+    "GET /api/v1/tsos/savings/report daily rows include saved_by_free_routing_usd, saved_by_compression_usd",
+    "tsos_savings_report view includes savings_pct column",
+    "tsos_savings_totals view includes overall_savings_pct column"
   ]
 }

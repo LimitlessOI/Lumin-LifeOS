@@ -5,7 +5,7 @@
  * Persistence for North Star §2.6 ¶8 / Companion §5.5 — gate-change & efficiency
  * proposals (raise → council review → human status). Does not call AI.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const VALID_LABEL = new Set(['THINK', 'GUESS']);

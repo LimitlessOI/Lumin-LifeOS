@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Pre-handoff intent gate — development stage ONLY.
  * ARC tells Chair intent is incomplete. Adam is NOT re-questioned after handoff.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

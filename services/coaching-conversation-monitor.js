@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Monitors conversation_messages → coaching lessons + commitments + calendar.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { createLuminContextLoader } from './lumin-context-loader.js';

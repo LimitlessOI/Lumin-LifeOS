@@ -1,8 +1,11 @@
 {
   "schema": "product_file_manifest_v1",
   "product_id": "lifeos",
+  "project_id": "lifeos_core",
+  "name": "LifeOS Core",
   "canonical_home": "docs/products/lifeos/PRODUCT_HOME.md",
-  "updated_at": "2026-06-27",
+  "amendment_path": "docs/products/lifeos/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "config/gate-change-presets.js",
@@ -296,7 +299,110 @@
     "tests/lifeos-service-doctrine.test.js",
     "tests/smoke.test.js",
     "tests/truth-lockdown.test.js",
-    "tests/wisdom-truth-auditor.test.js"
+    "tests/wisdom-truth-auditor.test.js",
+    "services/health-intelligence.js",
+    "db/migrations/20260328_lifeos_core.sql",
+    "db/migrations/20260404_lifeos_data_ethics.sql",
+    "public/overlay/lifeos-mirror.html",
+    "db/migrations/20260329_lifeos_decisions.sql",
+    "db/migrations/20260329_lifeos_growth.sql",
+    "db/migrations/20260329_lifeos_identity.sql",
+    "db/migrations/20260329_lifeos_vision.sql",
+    "db/migrations/20260405_lifeos_mediation.sql",
+    "db/migrations/20260406_lifeos_conflict.sql",
+    "db/migrations/20260406b_lifeos_conflict_clarity.sql",
+    "db/migrations/20260407_communication_profile.sql",
+    "db/migrations/20260407_response_variety.sql",
+    "public/overlay/lifeos-family.html",
+    "public/overlay/lifeos-inner.html",
+    "public/overlay/lifeos-purpose.html",
+    "public/overlay/lifeos-child.html",
+    "public/overlay/lifeos-parent-view.html",
+    "public/overlay/lifeos-mediation.html",
+    "public/overlay/lifeos-coach.html",
+    "public/overlay/lifeos-growth.html",
+    "public/overlay/lifeos-vision.html",
+    "public/overlay/lifeos-identity.html",
+    "public/overlay/lifeos-decisions.html",
+    "db/migrations/20260329_lifeos_community.sql",
+    "db/migrations/20260330_lifeos_victory_vault.sql",
+    "db/migrations/20260408_lifeos_finance_and_prefs.sql",
+    "public/overlay/lifeos-today.html",
+    "public/overlay/lifeos-quick-entry.html",
+    "db/migrations/20260416_lifeos_focus_privacy.sql",
+    "public/overlay/lifeos-engine.html",
+    "db/migrations/20260417_lifeos_calendar.sql",
+    "db/migrations/20260417_lifeos_event_stream.sql",
+    "public/overlay/lifeos-finance.html",
+    "public/overlay/lifeos-notifications.html",
+    "db/migrations/20260417_lifeos_notification_escalation.sql",
+    "db/migrations/20260417_lifeos_event_ingest_control.sql",
+    "startup/boot-domains.js",
+    "scripts/provision-alpha-auditor.mjs",
+    "public/overlay/lifeos-app.html",
+    "public/overlay/lifeos-dashboard.html",
+    "public/shared/lifeos-system-reply.js",
+    "tests/lifeos-execution-truth.test.js",
+    "docs/LIFEOS_PROGRAM_MAP_SSOT.md",
+    "docs/TSOS_TEN_UPLIFT_IDEAS.md",
+    "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+    "docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
+    "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md",
+    "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json",
+    "docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md",
+    "docs/BRAINSTORM_SESSIONS_PROTOCOL.md",
+    "docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md",
+    "docs/BUILDER_IDEA_FILTERS_REFINEMENT.md",
+    "docs/projects/BRAINSTORM_SESSIONS/README.md",
+    "docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md",
+    "docs/LIFEOS_SHELL_ACCEPTANCE.md",
+    "public/shared/lifeos-dashboard-tokens.css",
+    "public/overlay/lifeos-feature.html",
+    "public/overlay/lifeos-feature-data.js",
+    "public/overlay/lifeos-control-help.js",
+    "db/migrations/20260418_lifeos_daily_emotional_checkins.sql",
+    "db/migrations/20260418_truth_delivery_calibration.sql",
+    "db/migrations/20260418_lifeos_character.sql",
+    "db/migrations/20260418_lifeos_monetization.sql",
+    "db/migrations/20260418_lifeos_finance_share_scopes.sql",
+    "db/migrations/20260419_conflict_interrupt.sql",
+    "db/migrations/20260422_lifeos_habits.sql",
+    "prompts/lifeos-habits.md",
+    "db/migrations/20260422_lifeos_legacy_core.sql",
+    "prompts/lifeos-legacy.md",
+    "public/overlay/lifeos-backtest.html",
+    "startup/register-runtime-routes.js",
+    "db/migrations/20260422_gate_change_proposals.sql",
+    "prompts/lifeos-gate-change-proposal.md",
+    "routes/public-routes.js",
+    "public/overlay/lifeos-health.html",
+    "public/overlay/lifeos-healing.html",
+    "public/overlay/lifeos-ethics.html",
+    "public/overlay/lifeos-onboarding.html",
+    "public/overlay/lifeos-theme.js",
+    "public/overlay/lifeos-theme-overrides.css",
+    "public/overlay/lifeos.webmanifest",
+    "public/overlay/icons/icon-192.png",
+    "public/overlay/icons/icon-512.png",
+    "db/migrations/20260418_lifeos_auth.sql",
+    "public/overlay/lifeos-login.html",
+    "db/migrations/20260418_lifeos_weekly_review.sql",
+    "public/overlay/lifeos-weekly-review.html",
+    "db/migrations/20260423_lifeos_ambient_snapshots.sql",
+    "db/migrations/20260612_voice_rail_command_execution.sql",
+    "services/voice-rail-usage-receipt.js",
+    "db/migrations/20260612_voice_rail_founder_routing_state.sql",
+    "routes/lifere-os-routes.js",
+    "services/lifere-os-v1.js",
+    "services/lifere-boldtrail-bridge.js",
+    "public/overlay/lifeos-lifere.html",
+    "scripts/run-lifere-os-v1-acceptance.mjs",
+    "scripts/verify-lifeos-service-doctrine.mjs",
+    "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+    "prompts/00-LIFEOS-SERVICE-DOCTRINE.md",
+    "config/lifeos-personal-twin-schema.json",
+    "config/lifeos-stack-registry.json",
+    "builderos-reboot/governance/LIFEOS_SERVICE_DOCTRINE_RUNTIME.json"
   ],
   "shared_dependencies": [
     {
@@ -315,17 +421,519 @@
       "reason": "lane and truth contract"
     },
     {
-      "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "owner": "History / law anchor",
       "reason": "full history and receipts"
     }
   ],
   "history_anchors": [
-    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+    "docs/products/lifeos/PRODUCT_HOME.md",
     "docs/conversation_dumps/",
     "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/",
     "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/",
     "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/",
     "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/"
+  ],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/lifeos/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-ethics-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260422_gate_change_proposals.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260419_conflict_interrupt.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260422_lifeos_habits.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-habits.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-habits-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260422_lifeos_legacy_core.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260423_lifeos_ambient_snapshots.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-ambient-context.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-ambient-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-ambient-sense.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-legacy-core.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-gate-change-proposals.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-gate-change-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/data-sovereignty.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/consent-registry.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/constitutional-lock.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/research-aggregator.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/sovereignty-check.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/multi-person-sync.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260404_lifeos_data_ethics.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-ethics-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/data-sovereignty.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/consent-registry.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/constitutional-lock.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/research-aggregator.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/sovereignty-check.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/multi-person-sync.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-growth-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-vision-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/community-growth.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260329_lifeos_growth.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-engine-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-growth-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-vision-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/community-growth.js"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/lifeos-verify.mjs"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260329_lifeos_community.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/communication-coach.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/contradiction-engine.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/video-production.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/victory-vault.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260330_lifeos_victory_vault.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/victory-vault.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260408_lifeos_finance_and_prefs.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-finance.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-finance.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-scheduled-jobs.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-scheduled-jobs.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-finance-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-finance-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-focus-privacy.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260416_lifeos_focus_privacy.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-calendar.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260417_lifeos_calendar.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-calendar.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-health-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-notification-router.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-notifications.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260417_lifeos_notification_escalation.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-event-stream.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-notification-router.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260417_lifeos_event_ingest_control.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "startup/boot-domains.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-scoreboard.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-scoreboard.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-app.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-feature.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-feature-data.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-bootstrap.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-control-help.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "scripts/lifeos-smoke.mjs"
+    },
+    {
+      "type": "node_check",
+      "check": "public/overlay/lifeos-feature-data.js"
+    },
+    {
+      "type": "node_check",
+      "check": "public/overlay/lifeos-bootstrap.js"
+    },
+    {
+      "type": "node_check",
+      "check": "public/overlay/lifeos-control-help.js"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/lifeos-smoke.mjs"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-request-helpers.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-request-helpers.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_daily_emotional_checkins.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-money-decision-bridge.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-money-decision-bridge.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_truth_delivery_calibration.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/truth-delivery.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_character.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/character-builder.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/character-builder.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-children-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_monetization.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/monetization-map.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/monetization-map.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-purpose-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_finance_share_scopes.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-finance.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-finance-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-backtest-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-backtest.html"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-backtest-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/public-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-health.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-healing.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-ethics.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-onboarding.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-theme.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-theme-overrides.css"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos.webmanifest"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/icons/icon-192.png"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/icons/icon-512.png"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_auth.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-auth.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-auth-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "middleware/lifeos-auth-middleware.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-login.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_weekly_review.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-weekly-review.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-weekly-review-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-weekly-review.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/sw.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/public-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-auth.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-auth-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "middleware/lifeos-auth-middleware.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-weekly-review.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-weekly-review-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "public/overlay/lifeos-theme.js"
+    }
   ]
 }

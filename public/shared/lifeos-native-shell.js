@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Native Universal Overlay shell — Capacitor bridge; same platform as lifeos-app + extension overlay.
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 (function (global) {
   const PARAM_NATIVE = 'native';

@@ -14,7 +14,7 @@
  *   - Show proactive help toasts on struggle signals
  *   - Handle update-available notifications
  *
- * @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+ * @ssot docs/products/universal-overlay/PRODUCT_HOME.md
  */
 'use strict';
 

@@ -21,7 +21,7 @@
  * The twin is permanent. Messages are never deleted from adam_decisions.
  * Profile rebuilds replace the current profile but all history is preserved.
  *
- * @ssot docs/projects/AMENDMENT_09_LIFE_COACHING.md (Digital Twin)
+ * @ssot docs/products/life-coaching/PRODUCT_HOME.md (Digital Twin)
  */
 
 import { createAdamLogger, EVENTS } from './adam-logger.js';

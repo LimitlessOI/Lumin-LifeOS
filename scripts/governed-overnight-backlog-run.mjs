@@ -25,7 +25,7 @@
  * Gap/contradiction verifier scripts are fallback support work only. They are
  * not the primary queue while blueprint work exists.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';
@@ -342,7 +342,7 @@ const BLOCKED_TARGET_PREFIXES = Object.freeze([
   'core/',
   '.env',
   '.github/',
-  'docs/SSOT_NORTH_STAR.md',
+  'docs/constitution/NORTH_STAR_SSOT.md',
   'docs/SSOT_COMPANION.md',
 ]);
 
@@ -354,7 +354,7 @@ const PRIORITY_RULES = Object.freeze([
   {
     lane: 'socialmediaos',
     rank: 1,
-    patterns: [/AMENDMENT_41_MARKETINGOS/i, /SOCIALMEDIAOS/i, /MARKETINGOS/i],
+    patterns: [/socialmediaos\/PRODUCT_HOME/i, /SOCIALMEDIAOS/i, /MARKETINGOS/i],
   },
   {
     lane: 'c2_command_control',
@@ -552,7 +552,7 @@ function buildPatchPlanTask(blueprint, sourceTask, generation, reason) {
       '5. Required verifier checks.',
       '6. What BuilderOS should attempt next through C2.',
       '7. What must not be changed.',
-      'Do not touch product features. 60-120 lines. Include @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md in the opening note.',
+      'Do not touch product features. 60-120 lines. Include @ssot docs/products/builderos/PRODUCT_HOME.md in the opening note.',
     ].join(' '),
   };
 }
@@ -1634,7 +1634,7 @@ async function main() {
     }
 
     state.current_task = task.id;
-    if (task.blueprint_path?.includes('AMENDMENT_41')) {
+    if (task.blueprint_path?.includes('socialmediaos/PRODUCT_HOME')) {
       state.active_mission = 'MarketingOS / Am 41';
     }
     state.tasks_total = state.tasks_done + workQueue.length + 1;

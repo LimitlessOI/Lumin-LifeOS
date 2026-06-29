@@ -4,7 +4,7 @@
 -- Integrity, generosity, and courage taught through story and action.
 -- No lectures. No grades. Only story-driven moments and a living evidence record.
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

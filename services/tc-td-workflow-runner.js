@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Named TransactionDesk browser workflows — credential session (GLVAR → SSO TD), not a public API.
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * Named TransactionDesk browser workflows — credential session (GLVAR → SSO TD), not a public API.
  */
 

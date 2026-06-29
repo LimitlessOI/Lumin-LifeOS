@@ -2,7 +2,7 @@
  * SYNOPSIS: TSOS compact JSONL log for self-repair executor runs.
  * TSOS compact JSONL log for self-repair executor runs.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

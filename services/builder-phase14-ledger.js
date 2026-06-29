@@ -3,7 +3,7 @@
  * Shared Phase 14 phase ledger — single source for Railway certify/run-proofs
  * and local certification. Reads only builder_audit_receipts (no local JSON files).
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { createHash } from 'node:crypto';

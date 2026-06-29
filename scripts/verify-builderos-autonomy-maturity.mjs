@@ -2,7 +2,7 @@
  * SYNOPSIS: Fetches JSON data from a specified URL with an x-command-key header.
  */
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 /**

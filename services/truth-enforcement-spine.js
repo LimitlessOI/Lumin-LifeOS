@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Truth enforcement spine — single import for all truth gates in production.
  * No path may bypass: council envelope → response lockdown → memory gate → receipt validator.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';

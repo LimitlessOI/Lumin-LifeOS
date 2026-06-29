@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Exports and — tests/builderos-codegen-normalize.test.js.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';

@@ -1,0 +1,245 @@
+{
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "blueprint_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST",
+  "blueprint_status": "ready_for_builder",
+  "scope": "product_host",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:user-auth:v1-acceptance",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "non_goals": [
+    "No shell_command steps in Builder — acceptance at blueprint root only"
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
+  ],
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/BLUEPRINT.json",
+  "steps": [
+    {
+      "step_id": "UAT-001",
+      "phase_id": "P1",
+      "title": "UAT-001",
+      "target_file": "routes/lifeos-auth-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-001/lifeos-auth-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "757d5875a9b9402ed911ed083c77f5e0a759707f4d5741e5d909a011a1db3823"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-001/lifeos-auth-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-UAT-001-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "UAT-002",
+      "phase_id": "P1",
+      "title": "UAT-002",
+      "target_file": "services/lifeos-user-service.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-002/lifeos-user-service.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "cbffe9a279b9a1d2166632de7398cde52a37cefff3d0243b7d9acb54a9721ab6"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-002/lifeos-user-service.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-UAT-002-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "UAT-003",
+      "phase_id": "P1",
+      "title": "UAT-003",
+      "target_file": "db/migrations/20260629_lifeos_user_auth.sql",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-003/20260629_lifeos_user_auth.sql"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "85c611cd8466cb99cdc0da625842384fbc2b437f7c0285c860686406d8dce73d"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-003/20260629_lifeos_user_auth.sql"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-UAT-003-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "db/migrations/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "UAT-004",
+      "phase_id": "P1",
+      "title": "UAT-004",
+      "target_file": "middleware/lifeos-tier-guard.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-004/lifeos-tier-guard.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "51626dc83944cba2f5f6396f7ea4d3770ec327a28293610acd71508ce2bb51cb"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-004/lifeos-tier-guard.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-UAT-004-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "middleware/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "UAT-005",
+      "phase_id": "P1",
+      "title": "UAT-005",
+      "target_file": "public/overlay/lifeos-app.html",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-005/lifeos-app.html"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "045e5f00268af03b21db0c27fd93b45896863946b31ff6dac48717aae2ae47e1"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-005/lifeos-app.html"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-UAT-005-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "public/overlay/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "UAT-006",
+      "phase_id": "P1",
+      "title": "UAT-006",
+      "target_file": "routes/lifeos-builderos-command-control-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-006/lifeos-builderos-command-control-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "698f6c5e6e2dd8dadf7fcb8c51d847b7a48a773844a64042497b63a1131aa1a1"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-006/lifeos-builderos-command-control-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-UAT-006-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "UAT-007",
+      "phase_id": "P1",
+      "title": "UAT-007",
+      "target_file": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-007/run-lifeos-user-auth-v1-acceptance.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "349dfb67f1fa94b3c70b2e90007966f94e910a0970638d054a98c6e0d46a498c"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-007/run-lifeos-user-auth-v1-acceptance.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-UAT-007-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    }
+  ],
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC"
+}

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: browser-agent.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  *
  * browser-agent.js
  * Puppeteer-based headless browser for autonomous web interactions.

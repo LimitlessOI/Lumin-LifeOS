@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Import AI Council service (assumed to exist and export generateCompletion)
  * @file services/marketing-coach.js
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * @description Implements the AI marketing coach service, providing conversational guidance and identifying actionable next steps.
  */
 // Import AI Council service (assumed to exist and export generateCompletion)

@@ -79,4 +79,4 @@ From `docs/projects/INDEX.md` status column:
 ## SSOT
 
 - `docs/SSOT_DUAL_CHANNEL.md` — agent vs system channels without duplicate law.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — handoff + readiness tooling owner.
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — handoff + readiness tooling owner.

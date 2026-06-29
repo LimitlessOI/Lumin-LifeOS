@@ -11,7 +11,7 @@
  * - The cycle marker helps in tracking specific operational phases, such as
  * stability runs, feature rollouts, or maintenance windows, ensuring that
  * dependent systems can react appropriately to the current operational context.
- * - @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * - @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 // Define constants for the current TSOS cycle.
 // These values are hardcoded as per the current specification for Zone 1

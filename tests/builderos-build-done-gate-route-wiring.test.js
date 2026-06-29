@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: /build DONE-gate route wiring behavior.
  * /build DONE-gate route wiring behavior.
- * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';

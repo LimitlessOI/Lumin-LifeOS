@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-coordinator.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-coordinator.js
  * Main Transaction Coordinator orchestrator — from contract email to close of escrow.
  *
@@ -112,7 +112,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
   // ── Core flows ─────────────────────────────────────────────────────────────
 
   /**
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
    * Full new-contract flow: parse email → DB → TransactionDesk → party intro.
    * TransactionDesk failures are non-blocking.
    */
@@ -174,7 +174,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
   }
 
   /**
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
    * Check all active transactions for upcoming deadlines and send reminders.
    * Runs on cron every 15 minutes.
    */
@@ -214,7 +214,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
   }
 
   /**
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
    * Generate a full status report for a transaction.
    */
   async function getTransactionEvents(transactionId, limit = 20) {
@@ -240,7 +240,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
   }
 
   /**
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
    * Dashboard summary stats.
    */
   async function getDashboard() {
@@ -276,7 +276,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
 }
 
 /**
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * Start the TC deadline cron — runs checkDeadlines() every 15 minutes.
  */
 export function startTCDeadlineCron(poolOrDeps, coordinatorArg) {

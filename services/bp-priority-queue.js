@@ -2,7 +2,7 @@
  * SYNOPSIS: Canonical product work queue — BP_PRIORITY.json loader.
  * Canonical product work queue — BP_PRIORITY.json loader.
  * NOT Hist domain — active orchestration lives here; historian owns legacy MISSION_QUEUE etc.
- * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

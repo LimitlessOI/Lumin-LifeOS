@@ -3,7 +3,7 @@
  * Apply Middleware — registers all Express middleware for the app: body parsers,
  * static file serving, and CORS with same-origin + allowlist enforcement.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  *
  * Rate limiting is intentionally disabled. The system uses free-tier providers
  * (Groq, Gemini, Cerebras, etc.) and exhausts them in order rather than

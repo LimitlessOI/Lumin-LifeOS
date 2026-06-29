@@ -2,7 +2,7 @@
  * SYNOPSIS: Exports runGAP014GapVerification — scripts/verify-gap-014-gap.mjs.
  */
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * - This script verifies GAP-014, checking for the absence of a platform coverage score
  * in the control plane API, which currently only provides RED/YELLOW health status.
  * It fetches health data from both the kernel and control plane APIs.

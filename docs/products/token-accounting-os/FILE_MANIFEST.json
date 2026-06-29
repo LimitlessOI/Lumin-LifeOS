@@ -1,0 +1,30 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "token-accounting-os",
+  "project_id": "token_accounting_os",
+  "name": "Token Accounting OS",
+  "canonical_home": "docs/products/token-accounting-os/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/token-accounting-os/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "services/token-accounting-service.js",
+    "services/operator-consumption-ledger-service.js",
+    "services/metered-ai-call.js",
+    "routes/token-accounting-routes.js",
+    "routes/operator-consumption-ledger-routes.js",
+    "db/migrations/20260531_operator_consumption_ledger.sql",
+    "db/migrations/20260532_unified_token_accounting_view.sql",
+    "scripts/verify-token-accounting-current-state.mjs",
+    "scripts/verify-token-accounting-unified.mjs",
+    "scripts/verify-token-accounting-enforcement.mjs",
+    "scripts/verify-operator-consumption-ledger.mjs",
+    "scripts/operator-consumption-ledger.mjs",
+    "scripts/tokens-health.mjs",
+    "services/voice-rail-usage-receipt.js",
+    "docs/products/token-accounting-os/PRODUCT_HOME.md",
+    "docs/products/token-accounting-os/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": []
+}

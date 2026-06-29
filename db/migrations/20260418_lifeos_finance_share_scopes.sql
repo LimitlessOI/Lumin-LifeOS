@@ -7,7 +7,7 @@
 -- All other transactions remain private. This is additive — default state is
 -- "nothing shared" even when a household_link exists.
 --
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

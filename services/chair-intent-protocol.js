@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Chair Intent Protocol — ask until understood, then execute toward founder Point B.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { isMissionPipelineIntent } from './lifeos-mission-pipeline-executor.js';

@@ -17,7 +17,7 @@
  *   node scripts/ssot-staleness-check.mjs --warn-only   (exit 0 even on violations)
  *   node scripts/ssot-staleness-check.mjs --fix          (prints remediation steps)
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';

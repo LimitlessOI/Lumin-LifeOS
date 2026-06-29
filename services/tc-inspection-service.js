@@ -18,7 +18,7 @@
  *
  * Nevada default: 10 calendar days from acceptance date for inspection contingency.
  *
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 
 const INSPECTION_CONTINGENCY_DAYS = 10; // Nevada default

@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260601_build_task_ledger.sql.
 -- Migration: 20260601_build_task_ledger
 -- BuilderOS Control Plane — canonical build measurement ledger
--- @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+-- @ssot docs/products/builderos/PRODUCT_HOME.md
 
 BEGIN;
 

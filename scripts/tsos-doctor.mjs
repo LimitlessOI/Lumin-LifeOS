@@ -15,7 +15,7 @@
  *   COMMAND_CENTER_KEY | COMMAND_KEY | LIFEOS_KEY | API_KEY
  *   RAILWAY_TOKEN (local fallback only; presence is reported, value is never printed)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

@@ -331,7 +331,7 @@ Execution architecture is moving in that direction, but governance interpretatio
 **Mission:** A council corpus has repeatedly framed **founder involvement in execution** as the sovereignty solution. The founder has clarified that **sovereignty = mission alignment without founder-in-the-loop execution**. This document audits that clarification against prior audits — seeking truth, not agreement.
 
 **Inputs read:**
-- `docs/FOUNDER_PACKET.md` — **NOT FOUND** at requested path; substituted `docs/constitution/NORTH_STAR.md`, `docs/architecture/factory-v1-blueprint-pack/FOUNDER_PACKET_TEMPLATE_V1.md`, and NSSOT digest for founder-packet intent (WHAT + constraints, not build plans)
+- `docs/FOUNDER_PACKET.md` — **NOT FOUND** at requested path; substituted `docs/constitution/NORTH_STAR_SSOT.md`, `docs/architecture/factory-v1-blueprint-pack/FOUNDER_PACKET_TEMPLATE_V1.md`, and NSSOT digest for founder-packet intent (WHAT + constraints, not build plans)
 - `docs/FOUNDER_VISION_PRESERVATION_AUDIT_V1.md`
 - `docs/FOUNDER_CONSTITUTIONAL_PROTECTION_AUDIT_V1.md`
 - `docs/COUNCIL_RECONCILIATION_REVIEW_V1.md`
@@ -434,7 +434,7 @@ Goal: **remove founder from execution while preserving alignment** — not "keep
 
 ## 5. What should be added to the North Star?
 
-Add to `docs/constitution/NORTH_STAR.md` (digest level — full NSSOT amendment separate):
+Add to `docs/constitution/NORTH_STAR_SSOT.md` (digest level — full NSSOT amendment separate):
 
 ### Article I-B: Founder role boundary (proposed)
 
@@ -462,7 +462,7 @@ Add to `docs/constitution/NORTH_STAR.md` (digest level — full NSSOT amendment 
 
 ## 6. What should be added to NSSOT?
 
-Full `docs/SSOT_NORTH_STAR.md` amendment (Claude draft mission — not merged here):
+Full `docs/constitution/NORTH_STAR_SSOT.md` amendment (Claude draft mission — not merged here):
 
 1. **Explicit negation:** Founder is not completion/deploy/implement authority for routine governed builds.
 2. **Affirmation:** `§2.11`, `§2.17`, `§2.18` govern **machine** completion — align wording with "receipted proof" = machine receipts.
@@ -801,9 +801,9 @@ Both prior agents in this file agreed. This remains a valid gap.
 
 ### Where I might be wrong
 
-If `docs/SSOT_NORTH_STAR.md` already contains explicit founder non-runtime authority clauses, explicit four-touchpoint interaction model, and explicit healing mission protection, then the drift problem is less severe than all three audits concluded. The prior agents could not read the full NSSOT; their findings are based on NSSOT summaries in other audit documents.
+If `docs/constitution/NORTH_STAR_SSOT.md` already contains explicit founder non-runtime authority clauses, explicit four-touchpoint interaction model, and explicit healing mission protection, then the drift problem is less severe than all three audits concluded. The prior agents could not read the full NSSOT; their findings are based on NSSOT summaries in other audit documents.
 
-**Verification needed:** Read `docs/SSOT_NORTH_STAR.md` in full. If it already has these clauses, the score rises and the amendment work is smaller than described.
+**Verification needed:** Read `docs/constitution/NORTH_STAR_SSOT.md` in full. If it already has these clauses, the score rises and the amendment work is smaller than described.
 
 ---
 
@@ -889,7 +889,7 @@ Deliverable: `docs/FOUNDER_PACKET.md` (canonical slim version) + `products/recei
 
 Both Codex and Composer recommended a NSSOT amendment on founder role boundary. This is the same mission under different names. Claude should execute it with the following scope:
 
-1. Read `docs/SSOT_NORTH_STAR.md` in full — verify what is already there before drafting
+1. Read `docs/constitution/NORTH_STAR_SSOT.md` in full — verify what is already there before drafting
 2. Identify existing clauses that already encode founder non-runtime status (may be more than audit corpus summaries suggested)
 3. Draft amendment covering: (a) founder non-runtime authority clause, (b) four-touchpoint review stage model, (c) healing mission as system direction, (d) autonomous quality standard for product lanes, (e) `founder_usability_pass` redefined as beta-stage signal only, (f) required_outcome mandatory doctrine, (g) `grantBuildCompletion()` requires council evidence bundle
 4. Mark every clause requiring SNT adversarial review

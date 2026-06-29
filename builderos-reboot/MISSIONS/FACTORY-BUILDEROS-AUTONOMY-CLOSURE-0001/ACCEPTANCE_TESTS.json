@@ -88,7 +88,7 @@
     "step_id": "BAC-008",
     "type": "rg_absent",
     "target": "services/builderos-bp-priority-scheduler.js scripts/bp-priority-never-stop.mjs services/builderos-improvement-loop.js",
-    "pattern": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md|MISSION_QUEUE.json"
+    "pattern": "docs/products/builderos/PRODUCT_HOME.md|MISSION_QUEUE.json"
   },
   {
     "test_id": "AT-BAC-008-2",

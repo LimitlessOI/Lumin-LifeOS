@@ -8,7 +8,7 @@
  *
  * Exports: createVideoProduction({ pool, callAI, logger })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const REPLICATE_API_BASE = 'https://api.replicate.com/v1';

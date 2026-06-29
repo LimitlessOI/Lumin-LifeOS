@@ -3,7 +3,7 @@
  * Supervised autonomy readiness — aggregates preflight, self-repair, Phase 14,
  * OIL misses, and proof freshness into one read-only report. No auto-run.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import { proofStoreFingerprint, readLatestPhase14Cert } from './builder-phase14-ledger.js';

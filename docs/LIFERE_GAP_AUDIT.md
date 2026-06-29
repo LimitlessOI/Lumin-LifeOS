@@ -35,7 +35,7 @@ Epistemic labels on status claims below.
 | Asset | Path | Maturity |
 |-------|------|----------|
 | Product doctrine | `docs/products/LIFERE.md` | **New 2026-06-13** |
-| Founding amendment | `docs/projects/AMENDMENT_LIFERE.md` | **New 2026-06-13** |
+| Founding amendment | `docs/products/lifere/PRODUCT_HOME.md` | **New 2026-06-13** |
 | Twin blueprint | `docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md` | **New** |
 | Feature map | `docs/LIFERE_A_TO_Z_FEATURE_MAP.md` | **New** |
 | Service (12 pillars lite) | `services/lifere-os-v1.js` | Alpha |
@@ -58,7 +58,7 @@ Epistemic labels on status claims below.
 | Outreach + consent | 08 | `core/outreach-automation.js` | LIVE partial |
 | RE training + recruiting | 15 | `server.js` legacy blocks | LIVE unused |
 | AI receptionist | 29 | Planning docs | NEAR_READY |
-| MarketingOS platform | 41 | `docs/projects/AMENDMENT_41_MARKETINGOS.md` | Platform draft |
+| MarketingOS platform | 41 | `docs/products/marketingos/PRODUCT_HOME.md` | Platform draft |
 | Lumin / LifeOS | 21 | `lifeos-app`, chair routes | LIVE |
 
 ---

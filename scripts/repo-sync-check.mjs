@@ -7,7 +7,7 @@
  * Exit: 0 — in sync with origin/main (or ahead), or not on main / no origin
  *        1 — behind origin/main (needs `git pull --ff-only origin main` or merge)
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import path from "node:path";

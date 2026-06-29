@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Drive SocialMediaOS intake blueprint A→Z through founder chat (JWT path).
- * @ssot docs/projects/AMENDMENT_41_MARKETINGOS.md
+ * @ssot docs/products/marketingos/socialmediaos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';

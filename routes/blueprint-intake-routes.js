@@ -2,7 +2,7 @@
  * SYNOPSIS: Blueprint Intake API — backfill existing amendments, greenfield conversations,
  * and adjustment patches. Three flows: founder describes → system builds the spec → ARC
  * validates → executor runs. Gap conversation lives here too.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { createBlueprintIntakeService, amendmentReadableOnDisk } from '../services/blueprint-intake.js';

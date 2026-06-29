@@ -1,6 +1,6 @@
 /**
  * @file scripts/verify-runner-telemetry-g1041.mjs
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Verifies runner telemetry and control plane health for Generation 1041.
  * Fetches data from BuilderOS control plane and LifeOS autonomous telemetry endpoints.

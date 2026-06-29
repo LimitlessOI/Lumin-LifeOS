@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE personality calibration — 10-draft voice learning.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeRETwinStore } from './lifere-twin-store.js';
 

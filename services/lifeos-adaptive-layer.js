@@ -7,7 +7,7 @@
  * user's actual state. When an adaptation proves broadly useful, it should be
  * promoted into the product intentionally.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 function cleanObject(value, fallback = {}) {

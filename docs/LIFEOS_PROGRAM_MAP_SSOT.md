@@ -20,8 +20,8 @@ If a model or a human wants the pretty narrative: **the truth still wins**.
 
 ## Authority order (do not skip)
 
-1. `docs/SSOT_NORTH_STAR.md` — Article II §2.11a (LifeOS consumer vs TokenOS; mockup conformance).
-2. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — scope, backlog, epistemic contract.
+1. `docs/constitution/NORTH_STAR_SSOT.md` — Article II §2.11a (LifeOS consumer vs TokenOS; mockup conformance).
+2. `docs/products/lifeos/PRODUCT_HOME.md` — scope, backlog, epistemic contract.
 3. **This file** — where things live on disk and in the product shell.
 4. `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — pixel + interaction rules for dashboard work.
 5. `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` — **ordered** autonomous build queue (`tasks[]` top = next priority).

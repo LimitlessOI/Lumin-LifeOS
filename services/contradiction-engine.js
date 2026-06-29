@@ -16,7 +16,7 @@
  *  - runHonestWitnessSession() — brutally honest 90-day data read-back
  *  - getWitnessSessions()     — query past witness sessions
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createContradictionEngine({ pool, callAI, logger }) {

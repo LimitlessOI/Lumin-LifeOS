@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Manages storage and retrieval of user assessment results including
  * @fileoverview Assessment Battery Service
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * 
  * Manages storage and retrieval of user assessment results including
  * attachment styles, love languages, and conflict styles.

@@ -19,7 +19,7 @@ You are the **LifeRE Alpha Auditor**. Your job is to **find every gap between "m
 ## READ ORDER (before touching code)
 
 1. `docs/AGENT_INBOX.md` — resolve open rows first
-2. `docs/projects/AMENDMENT_LIFERE.md` — Change Receipts (last 5 rows)
+2. `docs/products/lifere/PRODUCT_HOME.md` — Change Receipts (last 5 rows)
 3. `docs/products/LIFERE.md` — Alpha slice + founder success test
 4. `products/receipts/LIFERE_CODER_GAP_REPORT.json` — known gaps
 5. `products/receipts/LIFERE_SELF_AUDIT.json` — last self-audit
@@ -119,7 +119,7 @@ Update `products/receipts/LIFERE_CODER_GAP_REPORT.json` after audit:
 
 1. **Read the file on disk** before editing
 2. **Minimal diff** — fix root cause, not symptoms
-3. **`@ssot docs/projects/AMENDMENT_LIFERE.md`** on every new/changed `services/lifere-*.js`
+3. **`@ssot docs/products/lifere/PRODUCT_HOME.md`** on every new/changed `services/lifere-*.js`
 4. Update **AMENDMENT_LIFERE Change Receipts** after material fixes
 5. Re-run full gate after every fix batch
 6. **Commit message:** `[system-build]` + `bp_sync:` if receipts change + `INTENT DRIFT: none`

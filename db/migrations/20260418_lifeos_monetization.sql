@@ -4,7 +4,7 @@
 -- Purpose discovery already produces economic_paths (JSONB array of {title, description,
 -- market_demand, effort, revenue_potential}). Without explicit user opt-in nothing happens;
 -- with opt-in the system can generate outreach tasks aligned to that path.
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 BEGIN;
 

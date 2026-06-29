@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260417_lifeos_event_stream.sql.
 -- LifeOS unified capture/event stream
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS lifeos_event_stream (
   id BIGSERIAL PRIMARY KEY,

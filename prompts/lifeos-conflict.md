@@ -5,7 +5,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — Never lie. Never let Adam operate on a misunderstanding: **correct him the instant** you see it. He does not know what he does not know — **fill every gap**. Before editing `AMENDMENT_21`, read the **entire** file this session (`CLAUDE.md` → SSOT READ-BEFORE-WRITE).
 
 **Last updated:** 2026-04-19
-**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+**Product home:** `docs/products/lifeos/PRODUCT_HOME.md` · **Law anchor:** `docs/products/lifeos/PRODUCT_HOME.md`
 **Owning service:** `services/conflict-intelligence.js` (+ `services/mediation-engine.js`)
 **Owning routes:** `routes/lifeos-conflict-routes.js`
 **Mounted at:** `/api/v1/lifeos/conflict`
@@ -18,7 +18,7 @@ Helps couples navigate conflict in the healthiest way possible. Two levels:
 1. **Interruption system** — detects Gottman's Four Horsemen (contempt, criticism, defensiveness, stonewalling) in text; sends a gentle intervention if the user has it turned on
 2. **Mediation** — structured joint session where both sides are heard; the AI facilitates without taking sides
 
-This domain is also linked to [Amendment 25 — Conflict Arbitrator](../docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md) for the deeper arbitration product.
+This domain is also linked to [Amendment 25 — Conflict Arbitrator](../docs/products/conflict-arbitrator/PRODUCT_HOME.md) for the deeper arbitration product.
 
 ---
 

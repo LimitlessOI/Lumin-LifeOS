@@ -20,7 +20,7 @@
 
 **Operator directive (2026-05-03 — supersedes conflicting text below until Article VII amends this):** Adam declares **LifeOS shipped + stabilized + approved backlog features working** as **program priority one**. Agents shall **execute** the LifeOS build plan ( **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**, overlay/API routes, verifiers, SSOT receipts) and **not** idle LifeOS solely because of the historical revenue-chain ordering in the next paragraph. Revenue lanes remain important; **this directive is explicit portfolio reordering** (North Star **§2.15** — clear operator instruction).
 
-**In practice:** execution is `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json`, LifeOS routes/overlays in **Amendment 21** scope, and honest **Change Receipts**. **No** scope outside the approved backlog without Adam or a load-bearing **§2.12** path (`run-council` / gate-change on the running app). Full legal text: `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → **Approved Product Backlog** → **PRIORITY ALIGNMENT**.
+**In practice:** execution is `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json`, LifeOS routes/overlays in **Amendment 21** scope, and honest **Change Receipts**. **No** scope outside the approved backlog without Adam or a load-bearing **§2.12** path (`run-council` / gate-change on the running app). Full legal text: `docs/products/lifeos/PRODUCT_HOME.md` → **Approved Product Backlog** → **PRIORITY ALIGNMENT**.
 
 ## CONTINUITY_INDEX.md
 
@@ -47,7 +47,7 @@ Example first line of an update:
 
 `## [BUILD] Update 2026-04-19 #1`
 
-**SSOT:** `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`
+**SSOT:** `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`
 
 
 ## Snippet — main CONTINUITY_LOG (first update block)
@@ -88,7 +88,7 @@ Example first line of an update:
 - `scripts/founder-decoder.mjs` (NEW) — reads existing runtime data, renders plain-English in 4 modes. No new schema, no daemon, no governance logic. Handles list/object quarantine format difference. Coalesces daemons sharing same root cause in --calm mode.
 - `tests/founder-decoder.test.js` (NEW) — 5 tests, all modes + no-args usage.
 - `package.json` — 4 `founder:*` shortcuts + test wired.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S6 receipt + handoff (Phase 2 sequence complete).
+- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — S6 receipt + handoff (Phase 2 sequence complete).
 
 ### State after this session
 - `npm test`: **49 pass, 0 fail, 4 skipped**. `node --check`: PASS.
@@ -163,7 +163,7 @@ Confirm SIS1. Then tc-webhook-validator quality review. Then post-commit smoke r
 - `routes/lifeos-gate-change-routes.js`, `services/lifeos-gate-change-council-run.js`, `prompts/lifeos-gate-change-proposal.md` — gate-change debate now requires future-back analysis, filters blocked models, and persists debate artifacts into memory.
 - `config/task-model-routing.js` — static routing is now preference only; candidate-model ordering exported for runtime authority filtering.
 - `services/memory-intelligence-service.js`, `routes/memory-intelligence-routes.js`, `db/migrations/20260426_memory_intelligence_hardening.sql`, `db/migrations/20260426_memory_protocol_enforcement.sql` — protocol violations, task authority, routing recommendation, debate future-lookback.
-- `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/SSOT_COMPANION.md`, `docs/AGENT_RULES.compact.md`, `scripts/generate-agent-rules.mjs` — council law, anti-corner-cutting rule, and compact cold-start packet updated; generator now keeps the rule durable.
+- `docs/products/ai-council/PRODUCT_HOME.md`, `docs/SSOT_COMPANION.md`, `docs/AGENT_RULES.compact.md`, `scripts/generate-agent-rules.mjs` — council law, anti-corner-cutting rule, and compact cold-start packet updated; generator now keeps the rule durable.
 
 ### State after this session
 - Builder, gate-change, and Lumin plan/draft lanes can now reject blocked models at runtime instead of blindly trusting static routing.
@@ -180,7 +180,7 @@ Confirm SIS1. Then tc-webhook-validator quality review. Then post-commit smoke r
 ## [BUILD] Update 2026-04-19 #1 — LCL + builder surface (migrated from main log #5)
 
 ### Files changed (canonical list — see also main `CONTINUITY_LOG.md` history)
-- `config/codebook-v1.js`, `services/prompt-translator.js`, `services/lcl-monitor.js`, `db/migrations/20260419_lcl_quality_log.sql`, `services/council-service.js`, `routes/lifeos-council-builder-routes.js`, `startup/register-runtime-routes.js`, `server.js`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
+- `config/codebook-v1.js`, `services/prompt-translator.js`, `services/lcl-monitor.js`, `db/migrations/20260419_lcl_quality_log.sql`, `services/council-service.js`, `routes/lifeos-council-builder-routes.js`, `startup/register-runtime-routes.js`, `server.js`, `docs/products/ai-council/PRODUCT_HOME.md`
 
 ### State after that session
 - LCL Layer 1.5 live on `callCouncilMember`; drift monitor with per-(member, taskType) rollback.
@@ -203,7 +203,7 @@ Confirm SIS1. Then tc-webhook-validator quality review. Then post-commit smoke r
 | **Lifecycle** | `infrastructure` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-05-12 — **NSSOT §2.10 ¶8–10** (audit epistemic format, improvement-idea council rule, truth-first order — constitutional clarification, no existing law changed). Prior: **OF1 + QP1 + LA1** — operator freshness fail-closed (`scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `tests/operator-runtime-status-freshness.test.js`, `package.json` test list); LifeOS product queue split (`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` code-only, docs/spec backlog in `LIFEOS_DOCS_QUEUE.json`); lane accountability hardening (`scripts/lifeos-builder-continuous-queue.mjs`, `scripts/tsos-builder-auditor.mjs`, `scripts/operator-stale-failure-detect.mjs`, RL1/RL2 lane scoping) plus quarantine normalization so Nova no longer inherits TC / Site Builder rows. Prior: **SF1** — **`npm run operator:stale-failure-detect`** → **`scripts/operator-stale-failure-detect.mjs`**; **`data/operator-stale-failure-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2f**; **`package.json`**; **`.gitignore`** — Prior: **RL2** — **`npm run operator:repair-loop:r2`** → **`scripts/operator-repair-loop-r2-once.mjs`**; **`tests/tc-morning-digest-service-module.test.js`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2e**; **`docs/projects/AMENDMENT_17_TC_SERVICE.md`**; **`package.json`** — Prior: **RL1 + RL1-test-verify** — **`npm run operator:repair-loop`** → **`scripts/operator-repair-loop-once.mjs`**; **`services/site-builder-postmark-helper.js`** + **`tests/site-builder-postmark-helper.test.js`** (**`node:path`** import — **`npm test`** gate); **`data/operator-repair-loop-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2d**; **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`**; **`docs/CONTINUITY_LOG.md`**; **`package.json`** — Prior: **SW1 + OS1 PATH** — **`npm run tsos:system-watch`** → **`scripts/tsos-system-watch.mjs`**; **`data/system-watch-log.jsonl`**; **`scripts/tsos-overseer-daemon.mjs`** — **`childEnvForChecks()`** (Homebrew **`PATH`** for **`npm`**); **`SYSTEM_CAPABILITIES`** **SW1**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2c**; **`docs/OPERATIONAL_REALITY_SYNC.md`** §5 — Prior: **OH1** — **`npm run operator:status`** / **`tsos:operator-status`** → **`scripts/operator-runtime-status.mjs`**; **`data/operator-s
+| **Last Updated** | 2026-05-12 — **NSSOT §2.10 ¶8–10** (audit epistemic format, improvement-idea council rule, truth-first order — constitutional clarification, no existing law changed). Prior: **OF1 + QP1 + LA1** — operator freshness fail-closed (`scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `tests/operator-runtime-status-freshness.test.js`, `package.json` test list); LifeOS product queue split (`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` code-only, docs/spec backlog in `LIFEOS_DOCS_QUEUE.json`); lane accountability hardening (`scripts/lifeos-builder-continuous-queue.mjs`, `scripts/tsos-builder-auditor.mjs`, `scripts/operator-stale-failure-detect.mjs`, RL1/RL2 lane scoping) plus quarantine normalization so Nova no longer inherits TC / Site Builder rows. Prior: **SF1** — **`npm run operator:stale-failure-detect`** → **`scripts/operator-stale-failure-detect.mjs`**; **`data/operator-stale-failure-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2f**; **`package.json`**; **`.gitignore`** — Prior: **RL2** — **`npm run operator:repair-loop:r2`** → **`scripts/operator-repair-loop-r2-once.mjs`**; **`tests/tc-morning-digest-service-module.test.js`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2e**; **`docs/products/tc-service/PRODUCT_HOME.md`**; **`package.json`** — Prior: **RL1 + RL1-test-verify** — **`npm run operator:repair-loop`** → **`scripts/operator-repair-loop-once.mjs`**; **`services/site-builder-postmark-helper.js`** + **`tests/site-builder-postmark-helper.test.js`** (**`node:path`** import — **`npm test`** gate); **`data/operator-repair-loop-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2d**; **`docs/products/site-builder/PRODUCT_HOME.md`**; **`docs/CONTINUITY_LOG.md`**; **`package.json`** — Prior: **SW1 + OS1 PATH** — **`npm run tsos:system-watch`** → **`scripts/tsos-system-watch.mjs`**; **`data/system-watch-log.jsonl`**; **`scripts/tsos-overseer-daemon.mjs`** — **`childEnvForChecks()`** (Homebrew **`PATH`** for **`npm`**); **`SYSTEM_CAPABILITIES`** **SW1**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2c**; **`docs/OPERATIONAL_REALITY_SYNC.md`** §5 — Prior: **OH1** — **`npm run operator:status`** / **`tsos:operator-status`** → **`scripts/operator-runtime-status.mjs`**; **`data/operator-s
 
 ## Amendment 21 — Agent Handoff Notes region
 
@@ -227,7 +227,7 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 
 ## Adam ↔ Agent epistemic contract (NON-NEGOTIABLE)
 
-**Supreme law:** This section **implements** `docs/SSOT_NORTH_STAR.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, and **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, or **§2.15**.
+**Supreme law:** This section **implements** `docs/constitution/NORTH_STAR_SSOT.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, and **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, or **§2.15**.
 
 **§2.6 is mandatory:** law cannot be skipped for speed; **cutting corners** and **laziness** (skipped reads, sk
 

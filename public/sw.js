@@ -7,7 +7,7 @@
  * Operator overlays (e.g. ClientCare billing) bypass the SW entirely — caching
  * there hid fresh HTML/JS after deploy (symptom: “no insurance card upload”).
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 const CACHE_NAME = 'lifeos-shell-v3';

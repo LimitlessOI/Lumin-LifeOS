@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Express middleware — every res.json passes through truth spine before leaving.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { enforceTruthOnResponseBody, TRUTH_SPINE_VERSION } from '../services/truth-enforcement-spine.js';
 

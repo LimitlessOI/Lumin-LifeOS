@@ -1,40 +1,57 @@
 {
   "schema": "product_file_manifest_v1",
   "product_id": "ideavault",
+  "project_id": "idea_vault",
+  "name": "Idea Vault — Captured Conversation Backlog (Amendment 38)",
   "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
-  "updated_at": "2026-06-27",
+  "amendment_path": "docs/products/ideavault/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
   "ownership_policy": "pointer_not_duplication",
-  "readiness_state": "PLATFORM_TOOL",
-  "mission_pack": null,
-  "acceptance_command": null,
-  "note": "Platform tool — not a product, not in BuilderOS mission queue. Intake and routing engine for ideas and conversations. Routes to docs/products/<id>/conversations/ or AMENDMENT_38 catalog.",
   "owned_files": [
     "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/FILE_MANIFEST.json",
     "docs/products/ideavault/AGENTS.md",
     "routes/idea-queue-routes.js",
     "services/idea-engine.js",
-    "services/idea-engine/index.js"
-  ],
-  "canonical_docs": [
-    "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+    "services/idea-engine/index.js",
+    "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
     "docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md",
-    "IMMEDIATE_FEATURES_AND_REVOLUTIONARY_IDEAS.md"
+    "docs/conversation_dumps/README.md",
+    "docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md",
+    "scripts/catalog-dump-keywords.mjs",
+    "scripts/operator-corpus-pipeline.mjs"
   ],
   "shared_dependencies": [
     {
-      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "AI council for idea classification and routing"
     },
     {
-      "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+      "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "owner": "Platform",
       "reason": "idea provenance and history tracking"
     }
   ],
   "history_anchors": [
-    "docs/projects/AMENDMENT_38_IDEA_VAULT.md"
+    "docs/products/ideavault/PRODUCT_HOME.md"
   ],
-  "conversations_convention": "docs/products/<product-id>/conversations/ — IdeaVault routes incoming ideas and conversations to the correct product's conversations/ folder"
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/ideavault/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/ideavault/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "Canonical dump path documented (bullet+TAB Lumin-Memory)",
+    "projects/INDEX.md lists Amendment 38 and Amendment 39",
+    "CONVERSATION_DUMP_IDEAS_INDEX.md points at Amendment 38, 39, and MEMORY_FRAMEWORK_DESIGN_BRIEF"
+  ]
 }

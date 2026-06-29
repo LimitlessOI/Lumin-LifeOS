@@ -8,7 +8,7 @@
 
 1. `docs/products/boldtrail/PRODUCT_HOME.md` — mission, ownership, scope decision required
 2. `docs/products/boldtrail/FILE_MANIFEST.json` — every file this product owns
-3. `docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md` — law, DB schema, API spec, receipts
+3. `docs/products/boldtrail/PRODUCT_HOME.md` — law, DB schema, API spec, receipts
 4. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
 
 ## What this product does

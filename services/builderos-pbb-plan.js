@@ -2,7 +2,7 @@
  * SYNOPSIS: BuilderOS BP/PBB planner — turns OIL findings into one executable build plan.
  * Deterministic planner for the minimal governed loop bridge.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { randomUUID } from 'crypto';
@@ -77,7 +77,7 @@ function buildJsOutputRequirements(targetFile) {
     '- Plain JavaScript ESM only: no TypeScript types, no ": void", no generics, no markdown fences.',
     '- No external npm package imports. Node built-ins (node:path, node:url) allowed if needed.',
     '- No TODO, PLACEHOLDER, stub bodies, or "not implemented" comments.',
-    '- Include a file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
+    '- Include a file-level JSDoc with @ssot docs/products/builderos/PRODUCT_HOME.md.',
     '- Every exported function must contain real logic — not a one-line console.log stub.',
     '- Do NOT add a process.argv / process.exit CLI entry — no CLI scaffolding in governed loop output.',
     '- Do NOT emit ---METADATA--- blocks for this governed loop job.',
@@ -132,7 +132,7 @@ function buildZone1AuditJsRequirements(targetFile) {
     '- NO direct database connections, NO SQL, NO production DB writes, NO mutations.',
     '- Export async functions that return structured JSON objects — NOT console.log stubs.',
     '- Do NOT add process.argv / process.exit CLI scaffolding — orchestrator invokes exports directly.',
-    '- Include file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
+    '- Include file-level JSDoc with @ssot docs/products/builderos/PRODUCT_HOME.md.',
     '- File must be syntactically complete: every brace/bracket/paren closed; no truncated tail.',
   ].join('\n');
 }
@@ -167,7 +167,7 @@ function buildProofFileSpec(instruction, targetFile, exportNames) {
     '',
     'START FROM THIS SKELETON — fill every IMPLEMENT section; keep all braces closed:',
     '---',
-    `/** @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md */`,
+    `/** @ssot docs/products/builderos/PRODUCT_HOME.md */`,
     `const BUILDEROS_C2_PROOF_VERSION = '1.0.0';`,
     `const PROOF_SOURCE = 'builderos-command-control';`,
     '',
@@ -222,7 +222,7 @@ function buildUpdateJsSpec(instruction, targetFile, exportNames, existingContent
     '- Plain JavaScript ESM only. No TypeScript. No markdown fences. No ---METADATA---.',
     '- File must be syntactically complete: every brace/bracket/paren closed; no truncated tail.',
     `- Minimum ${MIN_JS_LINES_UPDATE} lines (match or exceed current ${lineCount} lines unless instruction removes code).`,
-    '- Include file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
+    '- Include file-level JSDoc with @ssot docs/products/builderos/PRODUCT_HOME.md.',
     '- Do NOT add process.argv CLI scaffolding.',
     '- REPO FILE CONTENTS (if injected separately) is authoritative — emit the full updated file.',
     '- Do NOT refuse or ask for file content — it is provided in EXISTING FILE and/or REPO FILE CONTENTS.',

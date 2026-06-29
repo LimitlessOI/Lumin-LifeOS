@@ -5,8 +5,8 @@
  * Runs only SYSTEM_AUTHORIZED_UNDER_PB repairs inside the approved Builder/OIL PB.
  * No secret logging, no destructive DB operations, no autonomy escalation.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
- * @ssot docs/SSOT_NORTH_STAR.md Article II §2.16
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
+ * @ssot docs/constitution/NORTH_STAR_SSOT.md Article II §2.16
  * @ssot docs/SSOT_COMPANION.md §0.5J
  */
 

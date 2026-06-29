@@ -11,7 +11,7 @@
  * Sovereignty rule: Every action is traceable to a user-approved task.
  * The engine never contacts anyone without a logged, approved task.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createOutreachEngine({ pool, notificationService, sendSMS, logger }) {

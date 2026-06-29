@@ -18,7 +18,7 @@
  *   # (--gaps-limit / --gaps-domain override env for GET /builder/gaps pattern summary)
  *   npm run lifeos:builder:supervise -- --queue --queue-max 2   # chain autonomous continuous `/build` queue after smoke (legacy: --overnight / --overnight-max)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';
@@ -117,7 +117,7 @@ const key =
 const DEFAULT_MODEL = process.env.BUILDER_SUPERVISE_MODEL || 'gemini_flash';
 const BRIEF = 'docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md';
 const QUEUE = 'docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md';
-const AMENDMENT = 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md';
+const AMENDMENT = 'docs/products/lifeos/PRODUCT_HOME.md';
 const CATALOG = 'docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md';
 const SHELL = 'public/overlay/lifeos-app.html';
 const DASHBOARD = 'public/overlay/lifeos-dashboard.html';

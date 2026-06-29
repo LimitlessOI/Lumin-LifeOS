@@ -15,7 +15,7 @@
  *  - getEnergyProfile()        — The Energy Calendar: per-hour cognitive state from decision data
  *  - updateEnergyPatterns()    — Internal: running-average energy quality after each outcome
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createDecisionIntelligence({ pool, callAI, logger }) {

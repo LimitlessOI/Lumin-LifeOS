@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Site Builder Routes — Done-for-you website pipeline
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Site Builder Routes — Done-for-you website pipeline
  *
  * Endpoints:

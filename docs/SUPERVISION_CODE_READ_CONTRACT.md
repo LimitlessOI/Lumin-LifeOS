@@ -9,7 +9,7 @@ When Adam says **“supervise”** he means:
 3. If **below bar**, **say why** (specific lines / patterns / missing acceptance) — no vague “looks fine.”
 4. **Fix** or queue a **GAP-FILL** receipt with builder failure evidence; iterate until bar is met (**rolling stone**).
 
-5. **No drift / no hallucination** — The supervisor **stops the line** when truth channels disagree. This matches **`docs/SSOT_NORTH_STAR.md`** §2.6 (**evidence-bearing status only**).
+5. **No drift / no hallucination** — The supervisor **stops the line** when truth channels disagree. This matches **`docs/constitution/NORTH_STAR_SSOT.md`** §2.6 (**evidence-bearing status only**).
 
 6. **Measure every slice duration** — use **`npm run lifeos:builder:throughput-meter`** (**`docs/BUILDER_TRUTH_AND_THROUGHPUT.md`**). Variance is diagnostic: slower may mean heavier files, verifier discipline, retries, infra — correlate with **`/builder/gaps`**, not hope.
 

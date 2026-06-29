@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeOS tier gate middleware — enforces free/core/premium/family tier access at the route level.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const TIER_RANK = { free: 0, core: 1, premium: 2, family: 3 };

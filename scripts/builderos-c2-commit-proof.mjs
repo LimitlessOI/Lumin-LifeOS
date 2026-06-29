@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports getBuilderOSC2CommitProof — scripts/builderos-c2-commit-proof.mjs. @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md */
+ * SYNOPSIS: Exports getBuilderOSC2CommitProof — scripts/builderos-c2-commit-proof.mjs. @ssot docs/products/builderos/PRODUCT_HOME.md */
 const BUILDEROS_C2_PROOF_VERSION = '2.0.0';
 const PROOF_SOURCE = 'builderos-command-control';
 

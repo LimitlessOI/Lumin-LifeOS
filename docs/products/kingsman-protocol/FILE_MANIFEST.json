@@ -1,0 +1,39 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "kingsman-protocol",
+  "project_id": "AMENDMENT_33_KINGSMAN_PROTOCOL",
+  "name": "The Kingsman Protocol",
+  "canonical_home": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/kingsman-protocol/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/kingsman-protocol/PRODUCT_HOME.md",
+    "docs/products/kingsman-protocol/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_tables": [
+    "kingsman_threat_log",
+    "kingsman_council_actions",
+    "kingsman_documentation_chain",
+    "kingsman_human_members",
+    "kingsman_routing_log"
+  ],
+  "required_env": [],
+  "assertions": [
+    "Council is operationally independent of LifeOS platform governance",
+    "No single human can silence AI member findings",
+    "Human members are rotational with staggered terms",
+    "All council actions are documented with full reasoning chains",
+    "Sunset clause preserved in all future amendments"
+  ],
+  "completion_checks": [
+    "Kingsman Constitution document created and ratified by founding members",
+    "Funding trust legally established",
+    "Founding human members selected and sworn",
+    "AI member roster defined and integrated",
+    "External oversight board established",
+    "Threat monitoring infrastructure operational"
+  ]
+}

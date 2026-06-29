@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE model router — CFO cheap-model-first ladder.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export function pickModel({ taskComplexity = 'low', costSensitive = true }) {

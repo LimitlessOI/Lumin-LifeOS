@@ -11,7 +11,7 @@
  *   GET /api/health                      → GET /api/v1/lifeos/system/health
  *   GET /api/v1/ai/effectiveness         → GET /api/v1/lifeos/admin/ai/effectiveness
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import express from 'express';

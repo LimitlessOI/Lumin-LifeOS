@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Lumin Communication Law — anti-formula enforcement + wiring audit for human translation layer.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

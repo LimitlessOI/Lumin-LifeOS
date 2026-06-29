@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Mechanical CSS patches for founder UI feedback — no whole-file HTML rewrite.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Shared helpers — detect, infer, inject SYNOPSIS headers; index entry builders.
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import path from 'node:path';

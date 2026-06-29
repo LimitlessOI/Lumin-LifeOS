@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Exports createMemoryHandlers — startup/memory.js.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { gateMemoryWrite } from '../services/memory-write-gate.js';
 

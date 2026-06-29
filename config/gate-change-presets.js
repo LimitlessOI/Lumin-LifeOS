@@ -3,7 +3,7 @@
  * Named bodies for POST /api/v1/lifeos/gate-change/run-preset
  * (shared with scripts/council-gate-change-run.mjs via same keys).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export const GATE_CHANGE_PRESETS = {

@@ -30,8 +30,8 @@
     "services/lifere-marketing-module.js"
   ],
   "amendments_updated": [
-    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
-    "docs/projects/AMENDMENT_LIFERE.md",
+    "docs/products/lifeos/PRODUCT_HOME.md",
+    "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/LIFEOS.md"
   ],
   "founder_packet_fields": ["ASSUMPTIONS_I_MAKE", "NOT_THIS", "ALWAYS", "WHY_STATEMENTS", "OPEN_QUESTIONS"],

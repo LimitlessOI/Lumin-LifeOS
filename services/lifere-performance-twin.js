@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE Performance Twin — funnel math, bottleneck, goal reverse calculator.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 const FUNNEL_STAGES = [

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Resolve LifeRE string user keys to lifeos_users.id for Am 08 outreach tables.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 
 export async function resolveLifeOSUserId(pool, userKey = 'adam') {

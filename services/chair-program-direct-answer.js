@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { needsSystemKnowledge } from './chair-system-knowledge.js';
 
@@ -105,7 +105,7 @@ export function formatDirectProgramAnswer(input = '', systemFacts = {}) {
       '',
       'Founder chat can run this via the SMOS content executor (brief → coach → scripts from your hooks, not template videos).',
       'LifeRE UI: Social Media OS tab + `/api/v1/lifere/marketing/socialmediaos/*`.',
-      'Authority: `docs/projects/AMENDMENT_41_MARKETINGOS.md`.',
+      'Authority: `docs/products/marketingos/socialmediaos/PRODUCT_HOME.md`.',
     ];
     if (/relocation/i.test(input)) {
       lines.splice(2, 0, 'For **relocation content**: brief topic = relocation market you serve; hooks come from brief + research pack, then scripts per video type.');

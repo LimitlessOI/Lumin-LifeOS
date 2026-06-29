@@ -17,7 +17,7 @@
  * Run: node scripts/seed-lessons-learned.mjs
  * Or:  npm run memory:seed-lessons
  *
- * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+ * @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';

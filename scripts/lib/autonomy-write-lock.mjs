@@ -8,7 +8,7 @@
  * Default TTL is 120 minutes (acquireLock ttl_minutes param or AUTONOMY_LOCK_TTL_MINUTES env).
  * This prevents a forgotten lock from silently routing work to staging forever.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { join } from 'path';

@@ -2,7 +2,7 @@
  * SYNOPSIS: Shared command-key gate for operator routes (builder, Railway env, etc.).
  * Shared command-key gate for operator routes (builder, Railway env, etc.).
  * Accepts LifeOS account JWT (Bearer) when it is not the operator command key.
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import { verifyToken } from '../../../services/lifeos-auth.js';

@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This script verifies the operational status and telemetry of a runner
  * by fetching data from the control plane health and autonomous telemetry

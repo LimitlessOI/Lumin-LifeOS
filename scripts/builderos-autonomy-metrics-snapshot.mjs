@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: This module provides a read-only audit function to fetch autonomous telemetry metrics
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * This module provides a read-only audit function to fetch autonomous telemetry metrics
  * summary via the internal LifeOS API. It operates within Zone 1 constraints,
  * using Node.js built-in fetch and environment variables for configuration.

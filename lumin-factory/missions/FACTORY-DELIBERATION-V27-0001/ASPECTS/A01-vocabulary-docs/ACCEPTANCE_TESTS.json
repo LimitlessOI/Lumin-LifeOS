@@ -12,7 +12,7 @@
   {
     "test_id": "AT-A01-3",
     "type": "file_exists",
-    "target": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md"
+    "target": "docs/products/builderos/PRODUCT_HOME.md"
   },
   {
     "test_id": "AT-A01-4",

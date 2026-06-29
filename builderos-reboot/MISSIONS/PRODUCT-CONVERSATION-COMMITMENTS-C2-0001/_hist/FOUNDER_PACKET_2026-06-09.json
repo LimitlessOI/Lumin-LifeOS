@@ -121,7 +121,7 @@
     "factory_mission_separate": "FACTORY-REBOOT-0031"
   },
   "canonical_refs": [
-    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+    "docs/products/lifeos/PRODUCT_HOME.md",
     "docs/C2_CANONICAL_DEFINITION.md",
     "prompts/00-PROVIDER-STRATEGY-LOCK.md",
     "prompts/00-SYSTEM-AUTHORITY-LAYERS.md",

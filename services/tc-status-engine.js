@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-status-engine.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-status-engine.js
  * Derives the at-a-glance transaction/file state for agent and client portal views.
  */

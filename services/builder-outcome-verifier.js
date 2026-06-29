@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Governed outcome verifier — fail closed on wrong-deliverable commits.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { execFile } from 'child_process';

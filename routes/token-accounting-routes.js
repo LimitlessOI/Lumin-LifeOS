@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Token Accounting OS — unified API.
  * Token Accounting OS — unified API.
- * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+ * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
 import { Router } from 'express';
 

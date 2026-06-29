@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: email-triage.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  *
  * email-triage.js
  * Full inbox intelligence — reads every email, classifies it, and acts:

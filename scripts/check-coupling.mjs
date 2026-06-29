@@ -10,7 +10,7 @@
  *   node scripts/check-coupling.mjs --all        (checks all tracked files vs HEAD)
  *   node scripts/check-coupling.mjs --warn-only  (exit 0, just report)
  *
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import fs from 'fs/promises';

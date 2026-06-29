@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Direct Founder -> LifeOS action bridge.
  * Direct Founder -> LifeOS action bridge.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import express from 'express';
 import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';

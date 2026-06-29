@@ -5,10 +5,10 @@
     {
       "id": "br-01-constitutional-alignment",
       "domain": "builderos-platform",
-      "target_file": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+      "target_file": "docs/products/builderos/PRODUCT_HOME.md",
       "files": [
-        "docs/SSOT_NORTH_STAR.md",
-        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+        "docs/constitution/NORTH_STAR_SSOT.md",
+        "docs/products/builderos/PRODUCT_HOME.md",
         "docs/projects/builderos-remediation/BLUEPRINT.md",
         "docs/projects/builderos-remediation/FEATURE_MAP.md",
         "docs/projects/builderos-remediation/ALPHA_SCOPE.md"
@@ -117,7 +117,7 @@
       "files": [
         "services/builderos-system-alpha-readiness.js",
         "routes/tsos-efficiency-routes.js",
-        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+        "docs/products/builderos/PRODUCT_HOME.md",
         "docs/projects/builderos-remediation/BLUEPRINT.md"
       ],
       "task": "Define the BuilderOS-internal TSOS hook boundary. State what counts as a real internal hook, what generic token telemetry proves, what it does not prove, and how maturity should be scored until a dedicated proof surface exists.",

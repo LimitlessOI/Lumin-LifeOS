@@ -8,7 +8,7 @@
 
 1. `docs/products/tc-service/PRODUCT_HOME.md` — mission, ownership, readiness state
 2. `docs/products/tc-service/FILE_MANIFEST.json` — every file this product owns
-3. `docs/projects/AMENDMENT_17_TC_SERVICE.md` — law, technical spec, session receipts
+3. `docs/products/tc-service/PRODUCT_HOME.md` — law, technical spec, session receipts
 4. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
 
 ## What this product does

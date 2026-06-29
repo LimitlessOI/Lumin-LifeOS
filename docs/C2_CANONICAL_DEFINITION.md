@@ -105,7 +105,7 @@ Source: `lifeos/c2/C2_ESCALATION_RULES.json`
 
 1. This file (`docs/C2_CANONICAL_DEFINITION.md`)
 2. `factory-staging/lifeos/c2/C2_MODULE_CHARTER.md`
-3. `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` (runtime implementation)
+3. `docs/products/command-center/PRODUCT_HOME.md` (runtime implementation)
 4. `docs/architecture/BUILDEROS_COMMAND_CONTROL_PROTOCOL.md` — "C2 remains intake/control"
 
 ---

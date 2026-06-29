@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260327_capability_map.sql.
 -- Capability Map: stores analyzed competitor/industry ideas mapped to architecture
--- @ssot docs/projects/AMENDMENT_20_CAPABILITY_MAP.md
+-- @ssot docs/products/capability-map/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS capability_map (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),

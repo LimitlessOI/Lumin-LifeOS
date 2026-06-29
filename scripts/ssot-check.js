@@ -292,19 +292,23 @@ function scanAllForMissingTags() {
 }
 
 function fullReport() {
-  const amendments = readdirSync(path.join(ROOT, 'docs/projects'))
-    .filter(f => f.startsWith('AMENDMENT_'));
+  const productHomes = [];
+  const productsRoot = path.join(ROOT, 'docs/products');
+  for (const ent of readdirSync(productsRoot, { withFileTypes: true })) {
+    if (!ent.isDirectory()) continue;
+    const home = path.join('docs/products', ent.name, 'PRODUCT_HOME.md');
+    if (existsSync(path.join(ROOT, home))) productHomes.push(home);
+  }
 
-  console.log(c('bold', '\n📊 SSOT Amendment Status Report\n'));
-  console.log(`${'Amendment'.padEnd(50)} ${'Last Updated'.padEnd(20)} Status`);
-  console.log('─'.repeat(85));
+  console.log(c('bold', '\n📊 SSOT Product Home Status Report\n'));
+  console.log(`${'Product Home'.padEnd(55)} ${'Last Updated'.padEnd(20)} Status`);
+  console.log('─'.repeat(90));
 
-  for (const amendment of amendments) {
-    const fullPath = `docs/projects/${amendment}`;
-    const lastUpdated = getAmendmentLastUpdated(fullPath);
+  for (const home of productHomes.sort()) {
+    const lastUpdated = getAmendmentLastUpdated(home);
     const isStale = lastUpdated === 'unknown' || lastUpdated < '2026-03-20';
     const status = isStale ? c('yellow', '⚠ may be stale') : c('green', '✅ recent');
-    console.log(`${amendment.padEnd(50)} ${lastUpdated.padEnd(20)} ${status}`);
+    console.log(`${home.padEnd(55)} ${lastUpdated.padEnd(20)} ${status}`);
   }
 
   console.log('');

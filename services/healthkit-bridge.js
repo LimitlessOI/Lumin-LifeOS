@@ -3,7 +3,7 @@
  * services/healthkit-bridge.js
  * Receives Apple Watch / HealthKit data via iOS Shortcuts webhook.
  * Normalizes and stores in wearable_data.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 'use strict';

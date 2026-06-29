@@ -7,7 +7,7 @@
  *
  * Factory autopilot cron invoker — factory recovery scope only.
  * Spawns `factory:autopilot` when recovery candidates or failed missions exist.
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

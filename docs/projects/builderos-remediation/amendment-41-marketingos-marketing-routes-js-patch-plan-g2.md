@@ -1,6 +1,6 @@
 <!-- SYNOPSIS: Amendment 41: MarketingOS - routes/marketing-routes.js Patch Plan (G2) -->
 
-@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+@ssot docs/products/builderos/PRODUCT_HOME.md
 
 # Amendment 41: MarketingOS - routes/marketing-routes.js Patch Plan (G2)
 

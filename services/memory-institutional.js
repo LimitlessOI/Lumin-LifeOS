@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-institutional.js
  */
 // services/memory-institutional.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 
 async function recordViolation(incidentType, details, capsuleRef, pool) {
   const result = await pool.query(

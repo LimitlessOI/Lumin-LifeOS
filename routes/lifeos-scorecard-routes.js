@@ -10,7 +10,7 @@
  *   GET  /balance-wheel         — get most recent score
  *   GET  /balance-wheel/history — last N scores (default 12)
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

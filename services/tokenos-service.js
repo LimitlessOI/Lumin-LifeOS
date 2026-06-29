@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
- * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
+ * @ssot docs/products/api-cost-savings/PRODUCT_HOME.md
  *
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                         TOKENOS CORE SERVICE                                      ║

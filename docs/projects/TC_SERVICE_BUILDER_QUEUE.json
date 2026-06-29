@@ -1,18 +1,18 @@
 {
   "$comment": "Autonomous TC queue for the parallel TC lane. Product code tasks only — specs belong in cheap pre-pass tasks, not blocking the product lane. All tasks bounded, receiptable, and grounded in Amendment 17.",
-  "brief": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+  "brief": "docs/products/tc-service/PRODUCT_HOME.md",
   "tasks": [
     {
       "id": "tc-document-qa-validator",
       "domain": "tc-service",
       "target_file": "services/tc-document-validator.js",
       "files": [
-        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/products/tc-service/PRODUCT_HOME.md",
         "services/tc-document-validator.js",
         "services/tc-doc-intake.js"
       ],
       "task": "Enhance the TC document validator with missing-signature detection and missing-field detection for Nevada real estate contracts. The validator must: (1) detect missing signature blocks (RPA buyer/seller signatures, agent signatures, initials pages), (2) detect blank required fields (price, close date, property address, earnest money amount), (3) return a structured result with verdict (pass/review/fail), missing_items array, extracted_facts, and confidence score. Must fail closed — if confidence < 0.6 and required facts missing, verdict=fail. No auto-filing until verdict=pass or force_upload=true. Pure document analysis from extracted text/PDF buffer — no external AI council calls needed for basic validation.",
-      "spec": "JS ES module. Exports: validateDocument(buffer, filename, opts) async, extractDocumentFacts(text) async, checkSignatureCompleteness(text) sync, checkRequiredFields(facts) sync. validateDocument returns { verdict: 'pass'|'review'|'fail', missing_items: string[], extracted_facts: { address, price, parties, close_date, earnest_money }, confidence: number 0-1, reason: string }. Fail closed: confidence < 0.6 with no facts → verdict='fail'. Handles PDF Buffer or pre-extracted string. @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "spec": "JS ES module. Exports: validateDocument(buffer, filename, opts) async, extractDocumentFacts(text) async, checkSignatureCompleteness(text) sync, checkRequiredFields(facts) sync. validateDocument returns { verdict: 'pass'|'review'|'fail', missing_items: string[], extracted_facts: { address, price, parties, close_date, earnest_money }, confidence: number 0-1, reason: string }. Fail closed: confidence < 0.6 with no facts → verdict='fail'. Handles PDF Buffer or pre-extracted string. @ssot docs/products/tc-service/PRODUCT_HOME.md",
       "commit_message": "[system-build] TC document validator — missing-signature + required-field detection",
       "branch": "main",
       "model": "gemini_flash",
@@ -23,11 +23,11 @@
       "domain": "tc-service",
       "target_file": "services/tc-stripe-service.js",
       "files": [
-        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/products/tc-service/PRODUCT_HOME.md",
         "services/tc-pricing.js"
       ],
       "task": "Build the TC Stripe billing service that wires the three TC plan tiers (Founding Member $249/mo locked, Monthly Standard $149/mo, Pay at Closing $349/transaction) to Stripe. Must: create Stripe customers on agent enrollment, create subscriptions for monthly plan agents, record closing charges for per-transaction agents, expose a billing revenue summary (MRR, ARR, pending closing fees). Closing fees for per-transaction clients are recorded from escrow only — never charged if deal falls. Adam reviews all billing events. Graceful no-op when STRIPE_SECRET_KEY env var is absent (log warning, return null).",
-      "spec": "JS ES module. Exports: createAgentStripeCustomer(agentClient) async, createTCSubscription(agentClientId, planTier) async, recordClosingCharge(agentClientId, transactionId, amountCents) async, getTCBillingRevenue() async, cancelTCSubscription(agentClientId) async. Returns structured objects with stripe IDs. No-op pattern: if !process.env.STRIPE_SECRET_KEY log warn and return null — never throw. planTier values: 'founding_member' | 'monthly_standard' | 'pay_at_closing'. @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "spec": "JS ES module. Exports: createAgentStripeCustomer(agentClient) async, createTCSubscription(agentClientId, planTier) async, recordClosingCharge(agentClientId, transactionId, amountCents) async, getTCBillingRevenue() async, cancelTCSubscription(agentClientId) async. Returns structured objects with stripe IDs. No-op pattern: if !process.env.STRIPE_SECRET_KEY log warn and return null — never throw. planTier values: 'founding_member' | 'monthly_standard' | 'pay_at_closing'. @ssot docs/products/tc-service/PRODUCT_HOME.md",
       "commit_message": "[system-build] TC Stripe billing service — plan tiers + closing fee recording",
       "branch": "main",
       "model": "gemini_flash",
@@ -38,11 +38,11 @@
       "domain": "tc-service",
       "target_file": "services/tc-webhook-validator.js",
       "files": [
-        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/products/tc-service/PRODUCT_HOME.md",
         "services/tc-webhook-validator.js"
       ],
       "task": "Extend the existing TC webhook validation service. The current file exports createWebhookValidator({ postmarkSecret, twilioAuthToken }) which returns { validatePostmark, validateTwilio }. Add two additional exports to the returned object: normalizeDeliveryCallback(provider, payload) and normalizeShowingFeedbackReply(provider, payload). Do NOT include any routes code, TC routes imports, PDF generation code, or multer — this is a pure service module only.",
-      "spec": "JS ES module. Keep existing factory export createWebhookValidator unchanged. Add to the returned object: normalizeDeliveryCallback(provider, payload) — maps Postmark/Twilio delivery events to { status: 'delivered'|'opened'|'bounced'|'failed'|'replied', provider, raw_event: string, ts: string }; normalizeShowingFeedbackReply(provider, payload) — same shape for showing feedback webhook payloads. Fail closed on missing sig. NO imports from routes/ or services/tc-routes or multer. Keep file under 80 lines total. @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "spec": "JS ES module. Keep existing factory export createWebhookValidator unchanged. Add to the returned object: normalizeDeliveryCallback(provider, payload) — maps Postmark/Twilio delivery events to { status: 'delivered'|'opened'|'bounced'|'failed'|'replied', provider, raw_event: string, ts: string }; normalizeShowingFeedbackReply(provider, payload) — same shape for showing feedback webhook payloads. Fail closed on missing sig. NO imports from routes/ or services/tc-routes or multer. Keep file under 80 lines total. @ssot docs/products/tc-service/PRODUCT_HOME.md",
       "commit_message": "[system-build] TC webhook validator — add normalize functions for delivery + showing feedback",
       "branch": "main",
       "model": "gemini_flash",
@@ -53,12 +53,12 @@
       "domain": "tc-service",
       "target_file": "public/tc/agent-portal.html",
       "files": [
-        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/products/tc-service/PRODUCT_HOME.md",
         "public/tc/agent-portal.html",
         "public/tc/tc-portal.js"
       ],
       "task": "Polish the TC agent portal HTML to improve at-a-glance usability and mobile responsiveness. Improvements: (1) sticky header with file search/filter bar, (2) collapsible critical alerts banner at top showing open urgent/critical alerts with one-tap acknowledge link, (3) approval queue section showing pending approvals ordered by priority with approve/reject/snooze buttons, (4) cleaner typography and tighter card layout on file cards with prominent 'Next Action' pill, (5) mobile breakpoints at 768px so file cards stack cleanly. Retain ALL existing JS fetch calls, auth headers, and API paths intact — this is UI/CSS/layout work only. Important: output must be valid HTML only, no raw inline PHP or server-side template syntax.",
-      "spec": "Single HTML file. Retain all existing JS API calls (HDR(), fetch paths, ws logic). Add: sticky .header-bar { position: sticky; top: 0 } with search input, #alerts-banner collapsible section populated from /api/v1/tc/alerts?status=open&severity=urgent,critical, #approval-queue section loaded from /api/v1/tc/approvals?status=pending, file cards get .next-action-pill chip. Mobile: @media (max-width:768px) cards stack full-width. Status pill colors: green=healthy, amber=watch, red=urgent/critical. @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "spec": "Single HTML file. Retain all existing JS API calls (HDR(), fetch paths, ws logic). Add: sticky .header-bar { position: sticky; top: 0 } with search input, #alerts-banner collapsible section populated from /api/v1/tc/alerts?status=open&severity=urgent,critical, #approval-queue section loaded from /api/v1/tc/approvals?status=pending, file cards get .next-action-pill chip. Mobile: @media (max-width:768px) cards stack full-width. Status pill colors: green=healthy, amber=watch, red=urgent/critical. @ssot docs/products/tc-service/PRODUCT_HOME.md",
       "commit_message": "[system-build] TC agent portal UI polish — sticky header, alerts banner, approval queue",
       "branch": "main",
       "model": "gemini_flash",
@@ -69,13 +69,13 @@
       "domain": "tc-service",
       "target_file": "services/tc-morning-digest-service.js",
       "files": [
-        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/products/tc-service/PRODUCT_HOME.md",
         "services/tc-coordinator.js",
         "services/tc-status-engine.js",
         "services/tc-alert-service.js"
       ],
       "task": "Build a TC morning digest service that generates a structured daily briefing for Adam covering: (1) transactions with deadlines today or within 3 days (sorted by urgency), (2) open critical/urgent alerts with their prepared next steps, (3) pending approvals count by priority level, (4) files where a client update is overdue (last_client_update_at > 3 days ago), (5) missing document counts per active file. Return structured JSON for dashboard display. Also provide SMS-friendly (under 320 chars) and email-friendly (subject + html + text) formatters. Pure DB query aggregation — no AI council calls.",
-      "spec": "JS ES module. Exports: getTCMorningDigest(pool) async -> { generated_at, urgent_deadlines: [{tx_id, address, deadline_label, days_out}], critical_alerts: [{tx_id, address, message, severity}], pending_approvals: {total, critical, urgent, normal}, stale_client_updates: [{tx_id, address, days_since_update}], missing_docs: [{tx_id, address, count}], summary: string }, formatTCDigestForSMS(digest) -> string, formatTCDigestForEmail(digest) -> { subject, html, text }. DB queries only — no external calls. Handle missing tables gracefully (return empty arrays). @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "spec": "JS ES module. Exports: getTCMorningDigest(pool) async -> { generated_at, urgent_deadlines: [{tx_id, address, deadline_label, days_out}], critical_alerts: [{tx_id, address, message, severity}], pending_approvals: {total, critical, urgent, normal}, stale_client_updates: [{tx_id, address, days_since_update}], missing_docs: [{tx_id, address, count}], summary: string }, formatTCDigestForSMS(digest) -> string, formatTCDigestForEmail(digest) -> { subject, html, text }. DB queries only — no external calls. Handle missing tables gracefully (return empty arrays). @ssot docs/products/tc-service/PRODUCT_HOME.md",
       "commit_message": "[system-build] TC morning digest service — daily briefing aggregator for Adam",
       "branch": "main",
       "model": "gemini_flash",

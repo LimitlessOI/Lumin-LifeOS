@@ -8,7 +8,7 @@
  * Exports:
  *   createInnerWorkEffectiveness({ pool, callAI }) → InnerWorkEffectiveness
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createInnerWorkEffectiveness({ pool, callAI }) {

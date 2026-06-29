@@ -12,7 +12,7 @@
  *
  * The twin is the memory. LifeOS is the action layer. This bridge keeps them in sync.
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export function createLifeOSTwinBridge({ pool, callAI, logger }) {

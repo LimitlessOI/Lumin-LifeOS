@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: LifeOS Capture Pipeline v2 acceptance — Voice Rail → Action Inbox staging.
  * LifeOS Capture Pipeline v2 acceptance — Voice Rail → Action Inbox staging.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import 'dotenv/config';

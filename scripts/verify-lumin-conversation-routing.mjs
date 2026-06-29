@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Verify conversation never misroutes to display — structural + optional live T4.
  * Usage: node scripts/verify-lumin-conversation-routing.mjs [--live]
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import dotenv from 'dotenv';

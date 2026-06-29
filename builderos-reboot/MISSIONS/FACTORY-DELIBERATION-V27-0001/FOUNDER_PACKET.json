@@ -61,7 +61,7 @@
   "resources": {
     "design_source": "docs/architecture/DELIBERATION_ARCHITECTURE.md",
     "vocabulary": "docs/BUILDEROS_VOCABULARY.md",
-    "amendment": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md"
+    "amendment": "docs/products/builderos/PRODUCT_HOME.md"
   },
   "founder_attention_budget": {
     "level": "low_after_consensus",

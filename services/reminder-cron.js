@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: services/reminder-cron.js — Amendment 16 (Word Keeper)
  * services/reminder-cron.js — Amendment 16 (Word Keeper)
- * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
+ * @ssot docs/products/word-keeper/PRODUCT_HOME.md
  *
  * Runs every 60 seconds. Checks commitment_reminders for anything due.
  * Sends SMS via Twilio. Marks sent. Handles audible reminders via ElevenLabs TTS.

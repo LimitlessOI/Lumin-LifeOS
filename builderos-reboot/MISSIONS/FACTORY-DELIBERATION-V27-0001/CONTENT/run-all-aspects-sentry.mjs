@@ -5,7 +5,7 @@
  * FP slice → aspect BP (registry) → acceptance → per-aspect SENTRY verdict.
  *
  * Usage: npm run factory:deliberation-v27:sentry-loop
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import fs from 'node:fs';

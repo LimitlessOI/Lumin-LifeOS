@@ -3,7 +3,7 @@
  * SYNOPSIS: Prints a short summary of the current git diff for CI / PR descriptions.
  * Prints a short summary of the current git diff for CI / PR descriptions.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import { execSync } from 'child_process';

@@ -13,7 +13,7 @@
  *   0 — all checks passed
  *   1 — one or more checks failed
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

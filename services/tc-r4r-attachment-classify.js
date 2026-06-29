@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Filename-only classification for buyer inspection / repair-request packages (R4R).
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * Filename-only classification for buyer inspection / repair-request packages (R4R).
  */
 

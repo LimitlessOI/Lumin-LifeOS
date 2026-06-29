@@ -9,7 +9,7 @@
  * - serves public routes through a minimal Express app and verifies the URLs
  * - confirms in-page hover help wiring exists on the current high-use surfaces
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import fs from 'fs';

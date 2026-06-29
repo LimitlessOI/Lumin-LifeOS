@@ -3,7 +3,7 @@
  * routes/lifeos-health-routes.js
  * LifeOS Phase 3 — Health Intelligence API
  * Mounted at /api/v1/lifeos/health
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 'use strict';

@@ -1,0 +1,16 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "knowledge-base",
+  "project_id": "knowledge_base",
+  "name": "Knowledge Base",
+  "canonical_home": "docs/products/knowledge-base/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/knowledge-base/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/knowledge-base/PRODUCT_HOME.md",
+    "docs/products/knowledge-base/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": []
+}

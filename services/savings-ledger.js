@@ -10,7 +10,7 @@
  *
  * Exports: createSavingsLedger(pool) → { record, getReport, getDashboard, getReceipt, conductorSession, getSavingsReport }
  *
- * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 // Cost per 1M tokens by provider/model (USD). Used when provider doesn't return usage.

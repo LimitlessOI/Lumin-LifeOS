@@ -14,7 +14,7 @@ Read `docs/QUICK_LAUNCH.md` and run in conductor mode: follow SSOT, pick up from
 
 If Adam says **"read NSSOT"**, interpret it as: **run the same path as the Required Read Order below** — for **normal** sessions that means **`docs/AGENT_RULES.compact.md` first** (enforcement packet), not necessarily pasting 300 lines of full North Star + Companion into context.
 
-**Full** `docs/SSOT_NORTH_STAR.md` + `docs/SSOT_COMPANION.md` (including **§2.10–§2.12**, **§0.5A / §0.5C / §0.5D**) are required when: editing a constitutional file, a constitutional conflict, or first-time onboarding — see the block *Full read required* under Required Read Order.
+**Full** `docs/constitution/NORTH_STAR_SSOT.md` + `docs/SSOT_COMPANION.md` (including **§2.10–§2.12**, **§0.5A / §0.5C / §0.5D**) are required when: editing a constitutional file, a constitutional conflict, or first-time onboarding — see the block *Full read required* under Required Read Order.
 
 Then: read this file (`docs/QUICK_LAUNCH.md`) for lane routing and execution, and follow the lane table below.
 
@@ -44,11 +44,11 @@ Then: read this file (`docs/QUICK_LAUNCH.md`) for lane routing and execution, an
 6. `docs/AI_COLD_START.md`
 7. `docs/CONTINUITY_LOG.md` (latest update first)
 8. `docs/CONTINUITY_LOG_LIFEOS.md` (latest update first)
-9. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`:
+9. `docs/products/lifeos/PRODUCT_HOME.md`:
    - `## Agent Handoff Notes`
    - latest 3–5 rows in `## Change Receipts`
 
-> **Full read required for:** `docs/SSOT_NORTH_STAR.md` + `docs/SSOT_COMPANION.md`
+> **Full read required for:** `docs/constitution/NORTH_STAR_SSOT.md` + `docs/SSOT_COMPANION.md`
 > Only when editing constitutional docs, constitutional conflict, or first-time onboarding.
 
 ## Lane Router (what to read next by project)
@@ -56,15 +56,15 @@ Then: read this file (`docs/QUICK_LAUNCH.md`) for lane routing and execution, an
 - **LifeOS lane**
   - `docs/LIFEOS_PROGRAM_MAP_SSOT.md` — **program map** (mockups, URLs, queue next slice); read before dashboard/nav/queue edits
   - `docs/CONTINUITY_LOG_LIFEOS.md`
-  - `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+  - `docs/products/lifeos/PRODUCT_HOME.md`
   - `prompts/lifeos-*.md` relevant to the task
 - **TC lane**
   - `docs/CONTINUITY_LOG_TC.md`
-  - `docs/projects/AMENDMENT_17_TC_SERVICE.md`
+  - `docs/products/tc-service/PRODUCT_HOME.md`
   - `docs/CONTINUITY_LOG_COUNCIL.md` (if task touches council/model routing)
 - **Council lane**
   - `docs/CONTINUITY_LOG_COUNCIL.md`
-  - `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
+  - `docs/products/ai-council/PRODUCT_HOME.md`
 - **Cross-cutting**
   - `docs/CONTINUITY_LOG.md` + the owning amendment for touched files
 
@@ -112,7 +112,7 @@ When running or supervising **autonomous overnight work**, **C2 backlog runners*
 
 **KNOW:** A single model in Cursor/Claude/ChatGPT **cannot** invoke your **deployed** multi-model `callCouncilMember` graph. “**Synthetic consensus**” in a chat = one model’s **guess** at what a panel **might** agree on — it is **not** a recorded `run-council` result.
 
-**Real debate** (round 1 + **opposite-argument** round 2 on disagreement) is implemented at **`POST /api/v1/lifeos/gate-change/proposals/:id/run-council`** — see `routes/lifeos-gate-change-routes.js`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, North Star **§2.6 ¶8** / **§2.12**.
+**Real debate** (round 1 + **opposite-argument** round 2 on disagreement) is implemented at **`POST /api/v1/lifeos/gate-change/proposals/:id/run-council`** — see `routes/lifeos-gate-change-routes.js`, `docs/products/ai-council/PRODUCT_HOME.md`, North Star **§2.6 ¶8** / **§2.12**.
 
 **To run a real council (costs API tokens; debate runs on the **server** with Railway’s model keys when you use `--preset` or `POST /run-preset` — you only need **`COMMAND_CENTER_KEY` + `PUBLIC_BASE_URL`**, not local Groq/Gemini keys):**
 ```bash
@@ -133,10 +133,10 @@ Then `GET` the proposal by id to read `council_rounds_json` and receipts. **Chat
 
 Your job is direction and judgment; **recorded consensus** is what turns “many opinions” into an **auditable** decision:
 
-1. **What “consensus” means here** — Several models debate on the **live server**, rounds are stored (`council_rounds_json`), and disagreement triggers an **opposite-argument** pass. **Supreme law:** `docs/SSOT_NORTH_STAR.md` (Article II: governed-efficiency changes and technical forks). **Operations:** `docs/SSOT_COMPANION.md` section 5.5. **Routes + receipts:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.
+1. **What “consensus” means here** — Several models debate on the **live server**, rounds are stored (`council_rounds_json`), and disagreement triggers an **opposite-argument** pass. **Supreme law:** `docs/constitution/NORTH_STAR_SSOT.md` (Article II: governed-efficiency changes and technical forks). **Operations:** `docs/SSOT_COMPANION.md` section 5.5. **Routes + receipts:** `docs/products/ai-council/PRODUCT_HOME.md`.
 2. **When you use it** — Load-bearing forks (architecture, security, removing checks, irreversible integrations), “this feels inefficient” hypotheses that would remove gates, or anything SSOT marks as council-gated.
 3. **When you still need research** — Council output is structured debate, not guaranteed web search. Agents may label inference as THINK/GUESS and cite best-practice research before or during drafting; receipts stay honest (same North Star Article II fork rules).
-4. **What you receive** — A plain **session report**: what was verified, grade with evidence, what could still fail (Companion **§0.5G**). For **persisted institutional facts**, the numeric evidence ladder is `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`; for builder/daemon cues, `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`.
+4. **What you receive** — A plain **session report**: what was verified, grade with evidence, what could still fail (Companion **§0.5G**). For **persisted institutional facts**, the numeric evidence ladder is `docs/products/memory-intelligence/PRODUCT_HOME.md`; for builder/daemon cues, `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`.
 
 Compact agent reminder (same hierarchy): **`docs/AGENT_RULES.compact.md`** → section **Council / Technical forks**.
 

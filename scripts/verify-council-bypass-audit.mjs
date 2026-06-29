@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Audit module for verifying council bypasses in the LifeOS platform.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Audit module for verifying council bypasses in the LifeOS platform.
  * This script checks the health status of core kernel and token accounting services

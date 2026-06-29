@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-explanation.js
  */
 // services/memory-explanation.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 export function buildExplanation(capsuleId, influenceType, decisionContext) {
   if (!['classification', 'routing', 'bounded_action', 'trusted_state_mutation', 'escalation'].includes(influenceType)) {
     throw new Error(`Invalid influenceType: ${influenceType}`);

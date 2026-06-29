@@ -87,8 +87,8 @@ LifeOS product features do not raise BuilderOS maturity unless they directly pro
 
 Conflict:
 
-- `docs/SSOT_NORTH_STAR.md` names TSOS as the unified platform
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` names BuilderOS as the autonomous machine
+- `docs/constitution/NORTH_STAR_SSOT.md` names TSOS as the unified platform
+- `docs/products/builderos/PRODUCT_HOME.md` names BuilderOS as the autonomous machine
 
 Required outcome:
 
@@ -205,8 +205,8 @@ Create one ratified BuilderOS/TSOS/LifeOS separation across top-level docs.
 
 Inputs:
 
-- `docs/SSOT_NORTH_STAR.md`
-- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md`
+- `docs/constitution/NORTH_STAR_SSOT.md`
+- `docs/products/builderos/PRODUCT_HOME.md`
 - current BuilderOS runtime routes
 
 Outputs:

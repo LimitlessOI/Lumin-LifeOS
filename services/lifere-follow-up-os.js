@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: LifeRE follow-up OS — BoldTrail queue + permission + approval.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { fetchBoldTrailPipeline } from './lifere-boldtrail-bridge.js';
 import { createLifeREPermissionTwin } from './lifere-permission-twin.js';

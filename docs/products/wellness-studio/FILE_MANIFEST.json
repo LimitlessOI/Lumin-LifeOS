@@ -1,0 +1,43 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "wellness-studio",
+  "project_id": "wellness_studio",
+  "name": "Wellness Studio",
+  "canonical_home": "docs/products/wellness-studio/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/wellness-studio/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "docs/products/wellness-studio/PRODUCT_HOME.md",
+    "docs/products/wellness-studio/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [],
+  "required_tables": [
+    "recovery_baselines",
+    "recovery_milestones",
+    "therapist_profiles",
+    "session_briefs",
+    "boundary_inventory",
+    "partner_sync_sessions"
+  ],
+  "required_env": [],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/products/wellness-studio/PRODUCT_HOME.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/wellness-studio/FILE_MANIFEST.json"
+    }
+  ],
+  "completion_checks": [
+    "LifeOS Core Phase 1-8 deployed and stable",
+    "No schema conflicts with existing joy_checkins, integrity_score_log, wearable_data, emotional_patterns tables",
+    "HIPAA implications reviewed before therapist dashboard feature is built",
+    "Overdose detection false-positive calibration defined before build",
+    "Crisis routing tested — must be instant and unambiguous before any recovery feature ships"
+  ]
+}

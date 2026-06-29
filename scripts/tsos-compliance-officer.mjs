@@ -25,7 +25,7 @@
  *
  * Writes: `data/tsos-compliance-officer-last-run.json` — then **`data/runtime-reality-snapshot.json`** + **`data/operator-dashboard.json`** (gitignored) via **`writeRuntimeRealitySnapshot()`** / **`writeOperatorDashboard()`** (`docs/RUNTIME_REALITY_SNAPSHOT.md`, `docs/OPERATOR_DASHBOARD_JSON.md`).
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 import "dotenv/config";

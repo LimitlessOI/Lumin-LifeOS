@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Voice Rail — reuse ElevenLabs voice catalog (same IDs as video-pipeline + founder env).
  * Voice Rail — reuse ElevenLabs voice catalog (same IDs as video-pipeline + founder env).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 /** ElevenLabs built-in / project voices (also used by services/video-pipeline.js). */

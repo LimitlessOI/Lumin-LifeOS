@@ -11,7 +11,7 @@
  * Requires explicit opt-in: set LEGACY_SCHEDULER_ENABLED=true in Railway env.
  * Backward compat: LIFEOS_DIRECTED_MODE=false also enables (legacy gate preserved).
  *
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import path from "path";
 import { pathToFileURL } from "url";

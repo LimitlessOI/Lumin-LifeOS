@@ -4,7 +4,7 @@
 
 **Status:** Point B target for mission `PRODUCT-LIFERE-MASTER-BLUEPRINT-0001`
 **Point B means:** Full digital twin architecture + builder-ready decisions — **not** production app complete
-**Authority:** `docs/products/LIFERE.md` · `docs/projects/AMENDMENT_LIFERE.md`
+**Authority:** `docs/products/LIFERE.md` · `docs/products/lifere/PRODUCT_HOME.md`
 **Twin law:** `docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md`
 **Coder pack (send this to builder):** `docs/LIFERE_BUILDER_DIGITAL_TWIN.md`
 **Roadmap:** `docs/LIFERE_BLUEPRINT_ROADMAP.json`

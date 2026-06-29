@@ -1,5 +1,5 @@
 -- SYNOPSIS: Database migration — 20260426_memory_protocol_enforcement.sql.
--- @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
+-- @ssot docs/products/memory-intelligence/PRODUCT_HOME.md
 -- Anti-corner-cutting enforcement: protocol violations + task authority.
 
 CREATE TABLE IF NOT EXISTS agent_protocol_violations (

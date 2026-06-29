@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-imap-config.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  *
  * tc-imap-config.js
  * Canonical IMAP config resolver for TC/GLVAR inbox-driven workflows.

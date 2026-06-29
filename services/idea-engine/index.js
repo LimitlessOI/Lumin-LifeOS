@@ -2,7 +2,7 @@
  * SYNOPSIS: Idea Engine Service — autonomous idea generation (NOT imported in production boot path).
  * Idea Engine Service — autonomous idea generation (NOT imported in production boot path).
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  * @legacy STATUS: LEGACY_INACTIVE
  *
  * Verified 2026-05-26: this file is not imported by server.js, startup/, or any route file.

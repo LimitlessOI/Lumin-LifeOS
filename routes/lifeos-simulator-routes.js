@@ -12,7 +12,7 @@
  * GET  /velocity/:domain       — get current velocity for a domain
  * GET  /history/:domain        — get projection history for a domain
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

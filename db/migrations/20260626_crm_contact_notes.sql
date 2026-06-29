@@ -1,5 +1,5 @@
 -- SYNOPSIS: CRM contact notes for ambient capture and internal CRM write-back.
--- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-- @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 CREATE TABLE IF NOT EXISTS crm_contact_notes (
   id SERIAL PRIMARY KEY,

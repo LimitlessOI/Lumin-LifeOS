@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Zone 1 audit module for verifying MarketingOS Phase 1 readiness.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Zone 1 audit module for verifying MarketingOS Phase 1 readiness.
  * This script performs a suite of read-only acceptance tests against

@@ -1,0 +1,51 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "teacher-os",
+  "project_id": "AMENDMENT_31_TEACHER_OS",
+  "name": "Teacher OS",
+  "canonical_home": "docs/products/teacher-os/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/teacher-os/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "ownership_policy": "pointer_not_duplication",
+  "owned_files": [
+    "routes/teacher-os-routes.js",
+    "services/teacher-os-paperwork.js",
+    "services/teacher-os-students.js",
+    "services/teacher-os-selfcare.js",
+    "db/migrations/20260405_teacher_os.sql",
+    "docs/products/teacher-os/PRODUCT_HOME.md",
+    "docs/products/teacher-os/FILE_MANIFEST.json"
+  ],
+  "shared_dependencies": [],
+  "history_anchors": [],
+  "required_routes": [
+    "POST /api/v1/teacher/teachers",
+    "GET  /api/v1/teacher/teachers/:id/dashboard",
+    "POST /api/v1/teacher/teachers/:id/students",
+    "GET  /api/v1/teacher/teachers/:id/belonging",
+    "POST /api/v1/teacher/teachers/:id/students/:studentId/entry-points",
+    "POST /api/v1/teacher/teachers/:id/documents",
+    "GET  /api/v1/teacher/teachers/:id/impact"
+  ],
+  "required_tables": [
+    "teacher_os_teachers",
+    "teacher_os_students",
+    "teacher_os_documents",
+    "teacher_os_win_log",
+    "teacher_os_wellbeing"
+  ],
+  "required_env": [
+    "STRIPE_SECRET_KEY"
+  ],
+  "assertions": [
+    "Teachers spend 40-50% of time on non-student work",
+    "Individualized instruction is mandated but practically impossible at 30:1",
+    "Song-first learning increases student retention"
+  ],
+  "completion_checks": [
+    "node --check routes/teacher-os-routes.js",
+    "node --check services/teacher-os-paperwork.js",
+    "node --check services/teacher-os-students.js",
+    "node --check services/teacher-os-selfcare.js"
+  ]
+}

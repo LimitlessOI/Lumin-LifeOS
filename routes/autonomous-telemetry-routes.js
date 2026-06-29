@@ -2,7 +2,7 @@
  * SYNOPSIS: Autonomous telemetry + efficiency API routes.
  * Autonomous telemetry + efficiency API routes.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import express from 'express';

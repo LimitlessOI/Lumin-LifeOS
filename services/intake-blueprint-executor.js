@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { isSafeTarget } from '../config/builder-safe-scope.js';

@@ -1,7 +1,7 @@
 /**
- * SYNOPSIS: @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * SYNOPSIS: @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
-// @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+// @ssot docs/products/site-builder/PRODUCT_HOME.md
 // Launch Readiness Routes — Provides an endpoint to check system readiness.
 import { Router } from 'express';
 import { getRegistryHealth } from '../services/env-registry-map.js';

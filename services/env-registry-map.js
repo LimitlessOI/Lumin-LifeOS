@@ -4,7 +4,7 @@
  * Machine-readable version of docs/ENV_REGISTRY.md
  * Single source of truth for every env var the system uses.
  *
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  *
  * Status values:
  *   SET      — confirmed present in Railway production

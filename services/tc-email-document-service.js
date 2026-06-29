@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-email-document-service.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-email-document-service.js
  * Finds attachment emails in the TC mailbox, combines photo attachments into a
  * single PDF, and sends the package to a recipient immediately.

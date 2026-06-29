@@ -15,7 +15,7 @@
  * Exports:
  *   createCommunicationCoach({ pool, callAI, logger }) → CommunicationCoach
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { createResponseVariety } from './response-variety.js';

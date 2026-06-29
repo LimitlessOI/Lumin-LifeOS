@@ -27,7 +27,7 @@ You are **not** the primary code executor — cross-check claims against files; 
 | Vocabulary law | `docs/BUILDEROS_VOCABULARY.md` |
 | Governance architecture | `docs/architecture/DELIBERATION_ARCHITECTURE.md` |
 | Founder consensus | `docs/architecture/FOUNDER_VOCABULARY_CONSENSUS_REPORT.md` |
-| Amendment + receipts | `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md` |
+| Amendment + receipts | `docs/products/builderos/PRODUCT_HOME.md` |
 | Mission pack | `builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/` |
 | Aspect registry | `.../ASPECTS/aspects.registry.json` |
 | Session SENTRY report | `.../SESSION_SENTRY_LOOP_REPORT.md` |
@@ -54,7 +54,7 @@ You are **not** the primary code executor — cross-check claims against files; 
 
 1. `docs/BUILDEROS_VOCABULARY.md` — v2.7 language law
 2. `docs/architecture/DELIBERATION_ARCHITECTURE.md` — implementation backlog §15
-3. `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md` — Change Receipts + handoff
+3. `docs/products/builderos/PRODUCT_HOME.md` — Change Receipts + handoff
 4. `docs/CONTINUITY_LOG.md` — top session seal blocks only
 5. `builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/FOUNDER_PACKET.json`
 6. `builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/BLUEPRINT.json`

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Listening Profile — opt-in ambient, capture, family guard, schedule prefs for Lumen onboarding.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export const DEFAULT_LISTENING_PROFILE = {

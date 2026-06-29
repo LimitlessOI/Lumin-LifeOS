@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Listening orchestrator — profile sync, schedule, family guard, ambient, vault, mediation offer.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function (global) {
   const LS_PROFILE = 'lifeos_listening_profile_cache_v1';

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: lumin-memory-fetcher.js
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * lumin-memory-fetcher.js
  *
  * Fetches raw AI conversation dump files from the GitHub repo

@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Voice Rail — server-side TTS (ElevenLabs primary, OpenAI tts-1-hd fallback).
  * Voice Rail — server-side TTS (ElevenLabs primary, OpenAI tts-1-hd fallback).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import {
   listDepartmentVoiceMap,

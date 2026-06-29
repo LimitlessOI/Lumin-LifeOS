@@ -7,7 +7,7 @@
     "docs/products/lifeos/PRODUCT_HOME.md",
     "docs/products/lifere/PRODUCT_HOME.md",
     "docs/products/PRODUCT_REGISTRY.json",
-    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+    "docs/products/lifeos/PRODUCT_HOME.md",
     "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json",
     "builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json",
     "builderos-reboot/governance/LIFEOS_SERVICE_DOCTRINE_RUNTIME.json",
@@ -21,7 +21,16 @@
   "model_tiering": {
     "default_policy": "cheapest_capable_first",
     "escalation_rule": "Escalate only for complexity, failure, or load-bearing ambiguity.",
-    "non_negotiable": "Do not spend premium model cost on a task a cheaper model can do within the same quality bar."
+    "non_negotiable": "Do not spend premium model cost on a task a cheaper model can do within the same quality bar.",
+    "time_efficiency_rule": "Optimize for elapsed-time efficiency as well as token cost. Parallel lower-tier workers are allowed when governance, determinism, and verification boundaries remain explicit.",
+    "parallel_worker_rule": "Multiple cheaper-capable workers may run in parallel on separable tasks such as product-gap discovery, file classification, conversation routing, registry maintenance, and bounded blueprint prep while higher-tier workers handle load-bearing architecture or repair.",
+    "parallel_guardrails": [
+      "each worker must have a bounded scope",
+      "shared files require explicit ownership or serialized merge",
+      "verification remains centralized and fail-closed",
+      "parallelism must not create competing truths",
+      "premium escalation is still required for repeated failure or load-bearing ambiguity"
+    ]
   },
   "truth_scale": [
     {
@@ -73,7 +82,7 @@
         "point_b"
       ],
       "purpose": "Founder intent shaping, Point B anchoring, product-development completeness, blueprint gating.",
-      "execution_rule": "Strategic ambiguity must stop here; it must not leak downward into Builder execution."
+      "execution_rule": "Strategic ambiguity must stop here; it must not leak downward into Builder execution. Missing intent, unresolved tradeoffs, and vision gaps must be surfaced back to Adam through Lumin before architect handoff."
     },
     {
       "lane_id": "build_execution",

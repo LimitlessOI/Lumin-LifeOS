@@ -2,7 +2,7 @@
  * SYNOPSIS: Point B corridor + B→C machine path + Point C Alpha gates.
  * Intent thin/incomplete is ONLY valid in development (pre-handoff-intent-gate → Chair).
  * After handoff: intent gaps = system failure, not founder re-question.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

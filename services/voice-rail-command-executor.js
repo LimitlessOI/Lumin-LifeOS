@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Voice Rail — founder commands → BuilderOS command-control → builder receipt.
  * Voice Rail — founder commands → BuilderOS command-control → builder receipt.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { createCommandControlJob, getCommandControlJob } from './builderos-command-control-service.js';
 import { executeCommandControlJob } from './builderos-governed-loop-executor.js';

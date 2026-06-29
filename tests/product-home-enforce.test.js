@@ -27,7 +27,7 @@ test('classifySourceSsot accepts canonical home and shared registry', () => {
   };
   assert.equal(classifySourceSsot('docs/products/lifeos/PRODUCT_HOME.md', ctx).ok, true);
   assert.equal(classifySourceSsot('docs/products/PRODUCT_REGISTRY.json', ctx).ok, true);
-  assert.equal(classifySourceSsot('docs/projects/AMENDMENT_21_LIFEOS_CORE.md', ctx).ok, false);
+  assert.equal(classifySourceSsot('docs/products/lifeos/PRODUCT_HOME.md', ctx).ok, false);
   assert.equal(classifySourceSsot('docs/products/LIFEOS.md', ctx).kind, 'flat-stub-ssot');
 });
 

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Exports runOvernightAutonomyMetricsVerification — scripts/verify-overnight-autonomy-metrics.mjs.
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { URL } from 'node:url';

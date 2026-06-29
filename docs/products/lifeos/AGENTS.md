@@ -9,7 +9,7 @@
 1. `docs/products/lifeos/PRODUCT_HOME.md` — **canonical product truth**
 2. `docs/products/lifeos/FILE_MANIFEST.json` — owned paths + `@ssot` targets
 3. `docs/products/AUTHORITY_BOUNDARIES.md` — canonical vs history
-4. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — law / receipts only (not first product read)
+4. `docs/products/lifeos/PRODUCT_HOME.md` — law / receipts only (not first product read)
 
 ## Do not treat as product authority
 

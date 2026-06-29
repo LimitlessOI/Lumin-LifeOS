@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Verifies runner telemetry for Generation 274 by fetching health and efficiency data
  * from the BuilderOS control plane and LifeOS autonomous telemetry endpoints.

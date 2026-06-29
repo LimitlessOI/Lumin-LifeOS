@@ -16,7 +16,7 @@
  *   node scripts/strategy-benchmark-suite.mjs
  *   node scripts/strategy-benchmark-suite.mjs --wf-folds 4 --max-avg-dd 0.25
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';

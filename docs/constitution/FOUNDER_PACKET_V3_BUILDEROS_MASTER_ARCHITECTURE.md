@@ -3,7 +3,7 @@
 # FOUNDER_PACKET_V3 — BuilderOS Master Architecture
 
 **Status:** `CANONICAL HANDOFF — supersedes V2` · not supreme law
-**Supreme law:** `docs/SSOT_NORTH_STAR.md` (NSSOT) · operating detail `docs/SSOT_COMPANION.md`
+**Supreme law:** `docs/constitution/NORTH_STAR_SSOT.md` (NSSOT) · operating detail `docs/SSOT_COMPANION.md`
 **Supersedes:** `docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md` (retained for history; V3 is canonical)
 **Absorbs:** `docs/projects/BUILDEROS_FULL_VISION_BP.md` (vision capture folded in here)
 **Owner:** Adam · **Source:** FP V2 + six founder conversations (2026-06-28)
@@ -137,7 +137,7 @@ Sacred Cow Hunter (examines below-North-Star tiers; respects §I.4 thresholds), 
 
 **Ordered path:** (1) transport truth → LIVE; (2) unify mission path (self == project); (3) lock determinism/tier; (4) prove memory LIVE; (5) founder-live close on Point B. Bake the §III.6 recorders + Reality Ledger seam in *while* doing this. The one invariant to protect: **self-modification uses the same governed, proven, LIVE-reaching path as everything else, every action recorded as an owned Reality Record with expected vs actual outcome.**
 
-**Sequence (founder-confirmed, now materialized):** FP V3 (this doc) → **complete Blueprint = digital twin of actual code** (`docs/architecture/BUILDEROS_TWIN.md`) → **BP Version 1** (`docs/projects/BUILDEROS_BP_V1.md`, executable L0 close-the-loop) → Digital Twin runtime + V1 execution. The twin is kept in exact sync with code (§0.3); BP V1 is inert-gated to L0 (§0.1).
+**Sequence (founder-confirmed, now materialized):** FP V3 (this doc) → **complete Blueprint = digital twin of actual code** (`docs/products/builderos/TWIN.md`) → **BP Version 1** (`docs/products/builderos/specs/BP_V1.md`, executable L0 close-the-loop) → Digital Twin runtime + V1 execution. The twin is kept in exact sync with code (§0.3); BP V1 is inert-gated to L0 (§0.1).
 
 ---
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Local never-stop product factory daemon — runs forever; only pauses on token exhaustion.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
 import fs from 'node:fs';

@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: tc-report-service.js
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  * tc-report-service.js
  * Showings, feedback, health scoring, and weekly seller/agent reports.
  */

@@ -18,7 +18,7 @@
  *   POST  /biases/:id/acknowledge — mark a bias as acknowledged
  *   GET   /energy                — per-hour energy + cognitive state profile
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

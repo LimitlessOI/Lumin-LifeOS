@@ -2,7 +2,7 @@
 
 # Prime-Time Autonomous Builder Roadmap — **v3 SSOT Candidate**
 
-**Status:** `SSOT_CANDIDATE` — **not constitutional law** until Adam approves, CAI verifies **no NSSOT conflict**, links land in **`docs/QUICK_LAUNCH.md`**, **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`**, and **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, and (where load-bearing) **Article II §2.12** / **Article VII** paths are satisfied.  
+**Status:** `SSOT_CANDIDATE` — **not constitutional law** until Adam approves, CAI verifies **no NSSOT conflict**, links land in **`docs/QUICK_LAUNCH.md`**, **`docs/products/lifeos/PRODUCT_HOME.md`**, and **`docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md`**, and (where load-bearing) **Article II §2.12** / **Article VII** paths are satisfied.  
 **Audience:** Adam · **CC** (Claude Code) · **CAI** (Cursor AI) · **Codex** · **Council** (live Railway `run-council` / gate-change — **not** IDE chat).  
 **Implementation:** **Out of scope for this file** — this document is the **canonical plan candidate** only.
 

@@ -3,7 +3,7 @@
  * Remote integration smoke tests — require a running API (local or Railway).
  * When nothing listens at TEST_BASE_URL, tests skip instead of failing (local `npm test` without `node server.js`).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { test } from 'node:test';
 import assert from 'node:assert';

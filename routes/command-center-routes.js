@@ -46,7 +46,7 @@
  *   POST /api/v1/projects/backlog/:id/reactivate — backlog reactivate
  *
  * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 import logger from '../services/logger.js';
 

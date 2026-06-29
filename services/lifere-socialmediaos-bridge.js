@@ -1,6 +1,6 @@
 /**
- * SYNOPSIS: LifeRE SocialMediaOS bridge — Am 41 coach/content-pack via LifeRE approval gate.
- * @ssot docs/projects/AMENDMENT_LIFERE.md
+ * SYNOPSIS: LifeRE SocialMediaOS bridge — coach/content-pack via LifeRE approval gate.
+ * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { createLifeREMarketingModule } from './lifere-marketing-module.js';
 import { createLifeREClientComms } from './lifere-client-comms.js';
@@ -25,7 +25,7 @@ export function createLifeRESocialMediaOSBridge({
     return {
       ok: true,
       stack: 'lifere_socialmediaos_v1',
-      authority: 'docs/projects/AMENDMENT_41_MARKETINGOS.md',
+      authority: 'docs/products/marketingos/socialmediaos/PRODUCT_HOME.md',
       adapter: 'lifere-socialmediaos-bridge',
       doctrine: 'docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md',
       modules: {

@@ -12,7 +12,7 @@
  *     → createSkill, logPracticeSession, getProgressCoaching, designPracticeProtocol,
  *        extractWisdom, searchWisdom, getAllWisdom, getSkills
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 // Plateau detection: last N sessions evaluated for quality

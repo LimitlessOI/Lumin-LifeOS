@@ -5,7 +5,7 @@
  * LifeOS Weekly Review API — narrative generation + interactive conversation
  * Mounted at /api/v1/lifeos/weekly-review
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';

@@ -1,9 +1,9 @@
 {
   "schema": "builder_simulation_report_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "blueprint_id": null,
+  "blueprint_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST",
   "simulated_by": "factory-core/arc/simulate-blueprint-steps.js",
-  "simulated_at": "2026-06-29T17:12:28.601Z",
+  "simulated_at": "2026-06-29T20:06:14.817Z",
   "steps": [],
   "all_gaps": [],
   "summary": {

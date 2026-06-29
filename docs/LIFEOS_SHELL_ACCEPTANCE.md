@@ -27,4 +27,4 @@ Runs preflight → probe → doctor → token scorecard → daemon state summary
 1. Open **`/overlay/lifeos-app.html`** — shell chrome loads; navigate to dashboard route per **`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**.
 2. **`/overlay/lifeos-dashboard.html`** — widgets render without console errors (browser devtools).
 
-SSOT: **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**, **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`**.
+SSOT: **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**, **`docs/products/lifeos/PRODUCT_HOME.md`**.

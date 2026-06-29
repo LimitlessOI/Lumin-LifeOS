@@ -1,7 +1,7 @@
 -- SYNOPSIS: Database migration — 20260327_build_ready_gate.sql.
 -- ============================================================
 -- Build Ready Gate
--- Amendment: docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+-- Amendment: docs/products/project-governance/PRODUCT_HOME.md
 --
 -- Adds build_ready flag and readiness_checklist to projects.
 -- The builder supervisor WILL NOT touch a project until

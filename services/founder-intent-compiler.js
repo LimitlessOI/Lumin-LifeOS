@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Founder intent compiler — English + thread context → structured work execution.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const FRUSTRATION_MARKERS = /\b(just do|do what i|stop repeating|don't repeat|do not repeat|what i asked|what i fucking|see how you do|shut up and|enough questions|quit asking)\b/i;

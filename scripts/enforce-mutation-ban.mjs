@@ -3,7 +3,7 @@
  * scripts/enforce-mutation-ban.mjs
  * Enforce Zone 3/4 large-file mutation ban before builder attempts.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Zone 3 (large existing JS, >150 lines): allowed only with GAP-FILL: or [system-build] in commit message.
  * Zone 4 (runtime/infra): always blocked.

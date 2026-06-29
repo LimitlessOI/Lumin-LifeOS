@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-contradiction.js
  */
 // services/memory-contradiction.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 
 async function checkContradiction(capsuleId, domain, statement, factFamilyId, pool) {
   const result = await pool.query(

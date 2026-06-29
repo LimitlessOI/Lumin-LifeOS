@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: SNT verify — builder safe-scope fail-fast + mission pack path.
  * SNT verify — builder safe-scope fail-fast + mission pack path.
- * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import { isSafeTarget, SAFE_WRITE_PATHS } from '../config/builder-safe-scope.js';

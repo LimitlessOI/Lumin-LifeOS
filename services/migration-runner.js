@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: services/migration-runner.js
  * services/migration-runner.js
- * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
+ * @ssot docs/products/financial-revenue/PRODUCT_HOME.md
  * Runs SQL migration files automatically at server startup.
  *
  * How it works:

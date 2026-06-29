@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This script verifies the operational status and telemetry of a runner
  * by fetching health and efficiency data from the LifeOS control plane.

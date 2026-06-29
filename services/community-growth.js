@@ -21,7 +21,7 @@
  *
  * Exports: createCommunityGrowth({ pool, callAI, logger })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 'use strict';

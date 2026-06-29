@@ -26,7 +26,7 @@
  *
  * Exports: createWorkshopOfMind({ pool, callAI })
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const VALID_SESSION_TYPES = new Set([

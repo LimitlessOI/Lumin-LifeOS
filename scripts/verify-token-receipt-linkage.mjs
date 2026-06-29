@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: This module provides functionality to verify the linkage between token receipts
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides functionality to verify the linkage between token receipts
  * and the build task ledger by querying the kernel's health endpoint.

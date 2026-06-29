@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 // No npm imports, Node built-ins only.
 // Native fetch is available in Node.js 18+ without explicit import.

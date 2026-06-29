@@ -2,7 +2,7 @@
  * SYNOPSIS: services/memory-trust-bridge.js
  */
 // services/memory-trust-bridge.js
-/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
+/** @ssot docs/products/memory-system/PRODUCT_HOME.md */
 import { LEVEL } from './memory-intelligence-service.js';
 
 // floor = minimum evidence level (numeric) required for this trust tier

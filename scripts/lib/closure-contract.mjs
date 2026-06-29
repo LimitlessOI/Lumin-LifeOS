@@ -13,7 +13,7 @@
  * The caller (queue) passes the result to logLine().
  * The test suite can import and exercise it without network or filesystem.
  *
- * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
 
 const VALID_TYPES = ['committed_success', 'skipped_already_valid', 'explicit_noncommit_reason'];

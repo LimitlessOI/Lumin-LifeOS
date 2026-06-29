@@ -108,4 +108,4 @@ When a user says *"pin communication here"*:
 4. 🔲 Twin reaction simulator before auto-applying layout changes
 5. 🔲 Member feedback → product intake queue (not builder execute)
 
-@ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+@ssot docs/products/lifeos/PRODUCT_HOME.md

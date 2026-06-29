@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Site Builder — Scrape existing site → AI-generates complete click-funnel website
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  * Site Builder — Scrape existing site → AI-generates complete click-funnel website
  *
  * Pipeline:

@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Verify Token Accounting enforcement wiring (metered council path + unmetered exceptions).
  * Verify Token Accounting enforcement wiring (metered council path + unmetered exceptions).
- * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+ * @ssot docs/products/token-accounting-os/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -27,7 +27,7 @@ async function main() {
   add('no_direct_savings_record', (council.match(/savingsLedger\.record\(/g) || []).length <= 1, 'only recordMetered fallback uses savingsLedger.record');
   add('unmetered_table', migration.includes('ai_unmetered_exceptions'), 'ai_unmetered_exceptions migration');
   add('metered_service', fs.existsSync(path.join(ROOT, 'services/metered-ai-call.js')), 'metered-ai-call.js exists');
-  add('strict_env_documented', fs.existsSync(path.join(ROOT, 'docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md')), 'AMENDMENT_44 documents TOKEN_ACCOUNTING_STRICT');
+  add('strict_env_documented', fs.existsSync(path.join(ROOT, 'docs/products/token-accounting-os/PRODUCT_HOME.md')), 'AMENDMENT_44 documents TOKEN_ACCOUNTING_STRICT');
 
   const passed = checks.filter((c) => c.ok).length;
   const label = passed === checks.length ? 'VERIFIED' : passed >= checks.length - 1 ? 'PARTIALLY VERIFIED' : 'UNVERIFIED';

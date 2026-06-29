@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Lumin Chair — single front door for founder messages (orchestrates all channels).
  * WIRED: founder-interface/message via lifeos-builderos-command-control-routes.js
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { spawn } from 'node:child_process';

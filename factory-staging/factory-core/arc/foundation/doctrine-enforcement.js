@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Fail-closed doctrine enforcement — no discards, role compliance, result truth wins.
- * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -31,7 +31,7 @@
  * Erasure:
  *   DELETE /erase                    — delete all healing data for user
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';

@@ -1,6 +1,6 @@
 -- SYNOPSIS: Database migration — 20260609_deliberation_governance_v27.sql.
 -- Deliberation governance v2.7 — CnclRoster, consensus, scorecard, Hist case, CFO receipts, evidence vault
--- @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md v2.7
+-- @ssot docs/products/builderos/PRODUCT_HOME.md v2.7
 
 CREATE TABLE IF NOT EXISTS cncl_rosters (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Provides REST endpoints for managing assessment battery results,
  * @fileoverview Assessment Battery Routes
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * 
  * Provides REST endpoints for managing assessment battery results,
  * compatibility profiles, and battery completion status.

@@ -2,7 +2,7 @@
  * SYNOPSIS: Capture Pipeline v2 API — Voice Rail → Action Inbox bridge status.
  * Capture Pipeline v2 API — Voice Rail → Action Inbox bridge status.
  * Mount at: /api/v1/lifeos/capture-pipeline
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import express from 'express';

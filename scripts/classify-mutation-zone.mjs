@@ -3,7 +3,7 @@
  * scripts/classify-mutation-zone.mjs
  * Classify a file path into Zone 1-4 before any builder mutation.
  *
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * Zones:
  *   Zone 1 = new file (does not exist)      — SAFE    — builder OK

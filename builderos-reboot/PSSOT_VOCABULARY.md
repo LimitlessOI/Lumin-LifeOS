@@ -5,7 +5,7 @@
 **Superseded as standalone glossary.** Full definitions:
 
 → **`docs/BUILDEROS_VOCABULARY.md`** (language law)  
-→ **`docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md`** (registry)
+→ **`docs/products/builderos/PRODUCT_HOME.md`** (registry)
 
 ---
 

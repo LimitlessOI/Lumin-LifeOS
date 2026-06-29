@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: clientcare-billing-routes.js
- * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
+ * @ssot docs/products/clientcare-billing-recovery/PRODUCT_HOME.md
  * clientcare-billing-routes.js
  * ClientCare billing rescue, browser fallback readiness, and claim action queue.
  */

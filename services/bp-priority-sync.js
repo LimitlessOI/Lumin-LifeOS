@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Sync BP_PRIORITY + mission BLUEPRINT from acceptance receipts (machine law).
  * Sync BP_PRIORITY + mission BLUEPRINT from acceptance receipts (machine law).
- * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

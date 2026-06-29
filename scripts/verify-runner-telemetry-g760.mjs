@@ -1,5 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * This module provides a function to verify runner telemetry by fetching data
  * from the BuilderOS control plane and LifeOS autonomous telemetry endpoints.

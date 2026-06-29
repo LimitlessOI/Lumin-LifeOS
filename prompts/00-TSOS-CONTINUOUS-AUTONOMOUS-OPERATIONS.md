@@ -3,7 +3,7 @@
 # TSOS Continuous Autonomous Operations Directive
 
 **Status:** ACTIVE — 24/7 Continuous Autonomous Operations law for BuilderOS, C2 missions, and Conductor supervision  
-**Authority:** Subordinate to `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`  
+**Authority:** Subordinate to `docs/constitution/NORTH_STAR_SSOT.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`, `prompts/00-LIFEOS-AGENT-CONTRACT.md`  
 **Last Updated:** 2026-06-01  
 **Enforced in:** `scripts/governed-overnight-backlog-run.mjs` (24/7 runner), C2 job metadata, Conductor handoffs  
 **Companion:** `prompts/00-RESIDENT-ARCHITECT.md`, `docs/QUICK_LAUNCH.md`, `docs/architecture/PLATFORM_GAP_REGISTER.md`

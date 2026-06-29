@@ -12,7 +12,7 @@ Do not write code. Do not certify execution readiness without receipt proof.
 
 ## Read In This Order
 
-1. `docs/SSOT_NORTH_STAR.md` (Article II §2.6 truth)
+1. `docs/constitution/NORTH_STAR_SSOT.md` (Article II §2.6 truth)
 2. `docs/LUMIN_DOCTRINE.md`
 3. `builderos-reboot/governance/LUMIN_CONNECTION_LAW.json`
 4. `builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/FOUNDER_PACKET.md`

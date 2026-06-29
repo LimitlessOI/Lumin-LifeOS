@@ -4,8 +4,8 @@
 
 This document ties together:
 
-- **`docs/SSOT_NORTH_STAR.md` → Article II §2.6** — operational honesty; misleading status = lying.
-- **`docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — Evidence Ladder** — what machine output is allowed to weigh (CLAIM → … → INVARIANT), separate from the **governance** ladder.
+- **`docs/constitution/NORTH_STAR_SSOT.md` → Article II §2.6** — operational honesty; misleading status = lying.
+- **`docs/products/memory-intelligence/PRODUCT_HOME.md` — Evidence Ladder** — what machine output is allowed to weigh (CLAIM → … → INVARIANT), separate from the **governance** ladder.
 - **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`** — between slices: evaluate → fix → improve.
 - **`docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md`** — subconscious built from receipts and verifiers, not vibes.
 
