@@ -1,9 +1,10 @@
 {
   "schema": "founder_chat_alpha_battery_v1",
-  "at": "2026-06-28T23:19:13.080Z",
+  "at": "2026-06-29T00:44:13.156Z",
   "base": "https://robust-magic-production.up.railway.app",
   "ok": true,
   "passed": [
+    "Q_identity_twin",
     "Q1_counsel_no_clarify",
     "Q2_smos_workflow_question",
     "Q2b_smos_steps",
@@ -16,6 +17,29 @@
   ],
   "failed": [],
   "results": {
+    "Q_identity_twin": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "transport_status": null,
+      "action": "chair",
+      "summary_head": "Lumin IS the Chair — connected to LifeOS files, SSOT amendments, BuilderOS, and founder thread. Build path: Founder UI/code orders → build_async job → council commit via BuilderOS\n\n[KERNEL]\nMission: Speed to validated re",
+      "has_verified_search": false,
+      "has_system_knowledge": true,
+      "program_context": [
+        {
+          "id": "lumin_chair",
+          "amendment": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+          "services": [
+            "services/lumin-chair-orchestrator.js",
+            "services/chair-lumin-unified.js",
+            "routes/lifeos-builderos-command-control-routes.js"
+          ],
+          "canonical": null
+        }
+      ]
+    },
     "Q1_counsel_no_clarify": {
       "http": 200,
       "channel": "chair",
@@ -165,13 +189,13 @@
       "pass_fail": "RUNNING",
       "transport_status": null,
       "action": "build",
-      "job_id": "ff4bbf09-da26-4cd0-b705-10c6ba9d832f",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ff4bbf09… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ff4bbf09-da26-4cd0-b705-10c6ba9d832f",
+      "job_id": "822cbd02-f5a7-4c00-b20b-f5f83956ba15",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 822cbd02… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 822cbd02-f5a7-4c00-b20b-f5f83956ba15",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
       "final_pass_fail": "PASS",
-      "terminal_proof_delegated": "real_app_e2e.drawer_direct_build"
+      "final_transport_status": "COMMIT_ONLY_NOT_LIVE"
     },
     "B2_nl_ui_rounded": {
       "http": 202,
@@ -180,8 +204,8 @@
       "pass_fail": "RUNNING",
       "transport_status": null,
       "action": "build",
-      "job_id": "ec67c064-e7a6-4e4f-893f-63e92d186535",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ec67c064… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ec67c064-e7a6-4e4f-893f-63e92d186535",
+      "job_id": "73c1b4cc-6638-4b0b-b5fa-ba26bae63fae",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 73c1b4cc… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 73c1b4cc-6638-4b0b-b5fa-ba26bae63fae",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
@@ -195,13 +219,46 @@
       "pass_fail": "RUNNING",
       "transport_status": null,
       "action": "build",
-      "job_id": "3441ba2b-4d7a-4f52-bffe-0463320f772c",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 3441ba2b… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 3441ba2b-4d7a-4f52-bffe-0463320f772c",
+      "job_id": "ecf94451-4aae-4a1e-b369-db67538ae430",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ecf94451… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ecf94451-4aae-4a1e-b369-db67538ae430",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
-      "final_pass_fail": "TIMEOUT",
-      "final_transport_status": null
+      "final_pass_fail": "PASS",
+      "final_transport_status": "REMOTE_TRANSPORT_PASS"
     }
+  },
+  "tests_passed": [
+    "Q_identity_twin",
+    "Q1_counsel_no_clarify",
+    "Q2_smos_workflow_question",
+    "Q2b_smos_steps",
+    "Q_chair_builder",
+    "Q3_factual_search",
+    "Q4_connection_truth",
+    "B1_do_build",
+    "B2_nl_ui_rounded",
+    "B3_nl_css_yellow",
+    "bp_sync_mandatory"
+  ],
+  "tests_failed": [],
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "started_at": "2026-06-29T00:44:13.156Z",
+  "founder_usability_pass": false,
+  "completed_at": "2026-06-29T00:46:42.880Z",
+  "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
   }
 }

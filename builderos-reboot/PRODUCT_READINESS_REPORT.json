@@ -1,6 +1,6 @@
 {
   "schema": "product_readiness_report_v1",
-  "updated_at": "2026-06-28T23:31:20.247Z",
+  "updated_at": "2026-06-29T00:46:42.880Z",
   "authority": {
     "product_registry": "docs/products/PRODUCT_REGISTRY.json",
     "bp_priority": "builderos-reboot/BP_PRIORITY.json",
@@ -25,8 +25,8 @@
       "readiness_state": "BLUEPRINT_ACTIVE",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -73,6 +73,19 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": null
+        },
+        {
+          "rank": 10,
+          "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": {
+            "at": "2026-06-29T00:46:42.880Z",
+            "mode": "technical_acceptance",
+            "status": "CURRENT"
+          }
         }
       ],
       "notes": [
@@ -91,15 +104,15 @@
       "readiness_state": "TECHNICAL_PASS_ONLY",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": {
         "ok": true,
         "ready_for_alpha_testing": true,
         "ready_for_alpha_gate": false,
-        "stale_against_objective": true
+        "stale_against_objective": false
       },
       "point_b_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
       "point_b_locked": false,
@@ -135,8 +148,8 @@
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -160,8 +173,8 @@
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -186,8 +199,8 @@
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -212,8 +225,8 @@
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -238,8 +251,8 @@
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -264,8 +277,8 @@
       "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -290,8 +303,8 @@
       "readiness_state": "SCRAPPED_SALVAGE_ONLY",
       "ui_alpha_gate": {
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
-        "ok": false,
-        "verdict": null,
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
         "stale_against_objective": false
       },
       "alpha_readiness": null,
@@ -307,7 +320,7 @@
   ],
   "freshness": {
     "status": "CURRENT",
-    "updated_at": "2026-06-28T23:31:20.247Z",
+    "updated_at": "2026-06-29T00:46:42.880Z",
     "authority_paths": [
       "docs/products/PRODUCT_REGISTRY.json",
       "builderos-reboot/BP_PRIORITY.json",

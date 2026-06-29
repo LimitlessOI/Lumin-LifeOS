@@ -1,11 +1,11 @@
 {
   "schema": "bp_priority_guardrails_v1",
-  "checked_at": "2026-06-29T00:41:55.410Z",
-  "verdict": "FAIL",
+  "checked_at": "2026-06-29T00:43:10.541Z",
+  "verdict": "PASS",
   "owner_department": "Historian",
   "registry": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
-  "pass_count": 26,
-  "fail_count": 2,
+  "pass_count": 27,
+  "fail_count": 0,
   "passes": [
     {
       "id": "HIST_LAW",
@@ -25,6 +25,10 @@
     },
     {
       "id": "BP_RECEIPT_ALIGNMENT",
+      "detail": ""
+    },
+    {
+      "id": "BP_ACCEPTANCE_SYNC_WIRED",
       "detail": ""
     },
     {
@@ -112,15 +116,6 @@
       "detail": ""
     }
   ],
-  "failures": [
-    {
-      "id": "BP_PRIORITY_RANKS",
-      "detail": "ranks must be 1..n sequential; got 0,1,2,3,4,5,6,7,8,9"
-    },
-    {
-      "id": "BP_ACCEPTANCE_NO_SYNC",
-      "detail": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001: scripts/run-founder-chat-alpha-battery.mjs must call finishBpAcceptance or syncMissionFromTechnicalReceipt"
-    }
-  ],
+  "failures": [],
   "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
 }

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T00:43:10.601Z",
+  "generated_at": "2026-06-29T00:47:00.969Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11324,
+  "file_count": 11325,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21329,9 +21329,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 15510,
-      "mtime": "2026-06-29T00:43:01.098Z",
-      "indexed_at": "2026-06-29T00:43:08.646Z",
+      "bytes": 15926,
+      "mtime": "2026-06-29T00:46:42.883Z",
+      "indexed_at": "2026-06-29T00:47:00.969Z",
       "synopsis_index_only": true
     },
     {
@@ -21608,9 +21608,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3428143,
-      "mtime": "2026-06-29T00:43:09.943Z",
-      "indexed_at": "2026-06-29T00:43:10.601Z"
+      "bytes": 3428472,
+      "mtime": "2026-06-29T00:46:54.038Z",
+      "indexed_at": "2026-06-29T00:47:00.969Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22901,9 +22901,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 2031,
-      "mtime": "2026-06-29T00:43:01.098Z",
-      "indexed_at": "2026-06-29T00:43:08.646Z",
+      "bytes": 3049,
+      "mtime": "2026-06-29T00:46:42.882Z",
+      "indexed_at": "2026-06-29T00:47:00.969Z",
       "synopsis_index_only": true
     },
     {
@@ -22983,6 +22983,14 @@
       "bytes": 347,
       "mtime": "2026-06-29T00:43:01.100Z",
       "indexed_at": "2026-06-29T00:43:08.646Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 779,
+      "mtime": "2026-06-29T00:46:42.886Z",
+      "indexed_at": "2026-06-29T00:47:00.969Z",
       "synopsis_index_only": true
     },
     {
@@ -27733,9 +27741,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 11147,
-      "mtime": "2026-06-28T23:37:30.189Z",
-      "indexed_at": "2026-06-29T00:43:08.646Z",
+      "bytes": 11785,
+      "mtime": "2026-06-29T00:46:42.885Z",
+      "indexed_at": "2026-06-29T00:47:00.969Z",
       "synopsis_index_only": true
     },
     {
@@ -29987,9 +29995,9 @@
     {
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
-      "bytes": 3489,
-      "mtime": "2026-06-29T00:43:01.107Z",
-      "indexed_at": "2026-06-29T00:43:08.646Z",
+      "bytes": 3223,
+      "mtime": "2026-06-29T00:47:00.906Z",
+      "indexed_at": "2026-06-29T00:47:00.969Z",
       "synopsis_index_only": true
     },
     {
@@ -63576,9 +63584,9 @@
     {
       "path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — FOUNDER CHAT ALPHA BATTERY.",
-      "bytes": 8260,
-      "mtime": "2026-06-29T00:29:42.448Z",
-      "indexed_at": "2026-06-29T00:43:08.646Z",
+      "bytes": 10217,
+      "mtime": "2026-06-29T00:46:42.886Z",
+      "indexed_at": "2026-06-29T00:47:00.969Z",
       "synopsis_index_only": true
     },
     {
