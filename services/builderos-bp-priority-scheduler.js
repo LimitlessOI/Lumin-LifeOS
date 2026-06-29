@@ -168,6 +168,64 @@ export function runBpPriorityOnce({ logger } = {}) {
   });
 }
 
+export async function runBpPriorityExpansionOnce({ logger, expansionCycle = runProductExpansionCycle } = {}) {
+  if (state.running) {
+    return { ok: false, skipped: true, reason: 'already_running' };
+  }
+
+  state.running = true;
+  state.lastRunAt = new Date().toISOString();
+  state.lastError = null;
+  state.totalRuns += 1;
+
+  try {
+    const result = await expansionCycle({ logger });
+    state.lastExitCode = result?.ok === false ? 1 : 0;
+    writeReceipt({
+      ok: result?.ok !== false,
+      expansion: true,
+      task_id: result?.task_id,
+      detail: result?.detail,
+      ran_at: state.lastRunAt,
+    });
+    return result;
+  } catch (err) {
+    state.lastExitCode = 1;
+    state.lastError = err.message;
+    writeReceipt({ ok: false, expansion: true, error: err.message, ran_at: state.lastRunAt });
+    logger?.warn?.({ err: err.message }, '[BP-PRIORITY-SCHEDULER] expansion cycle threw');
+    return { ok: false, error: err.message };
+  } finally {
+    state.running = false;
+  }
+}
+
+export async function evaluateBpPrioritySchedulerPrerequisites() {
+  if (process.env.BUILDEROS_AUTOPILOT !== '1') {
+    return { ok: false, reason: 'BUILDEROS_AUTOPILOT not enabled' };
+  }
+  if (state.running) {
+    return { ok: false, reason: 'already_running' };
+  }
+  const token = hasTokenCapacity();
+  if (!token.ok && neverStopProductsEnabled()) {
+    return { ok: false, reason: `token_capacity: ${token.reason}` };
+  }
+  try {
+    const { founderStopActive } = await loadFactoryArcModules();
+    const stop = founderStopActive();
+    if (stop.active) {
+      return { ok: false, reason: 'founder_stop_active' };
+    }
+  } catch {
+    return { ok: false, reason: 'factory_staging_unavailable' };
+  }
+  if (!fs.existsSync(RUNNER_SCRIPT)) {
+    return { ok: false, reason: 'runner_script_missing' };
+  }
+  return { ok: true, reason: null };
+}
+
 function recordGuardedOutcome(outcome, { logger } = {}) {
   const ranAt = new Date().toISOString();
   state.lastRunAt = ranAt;
@@ -200,28 +258,7 @@ const guardedBpPriorityTick = createUsefulWorkGuard({
   // Canonical BuilderOS autopilot is an explicit PB-authorized runtime lane.
   // Directed mode should block generic schedulers, not the governed BP queue.
   allowInDirectedMode: true,
-  prerequisites: async () => {
-    if (process.env.BUILDEROS_AUTOPILOT !== '1') {
-      return { ok: false, reason: 'BUILDEROS_AUTOPILOT not enabled' };
-    }
-    const token = hasTokenCapacity();
-    if (!token.ok && neverStopProductsEnabled()) {
-      return { ok: false, reason: `token_capacity: ${token.reason}` };
-    }
-    try {
-      const { founderStopActive } = await loadFactoryArcModules();
-      const stop = founderStopActive();
-      if (stop.active && !neverStopProductsEnabled()) {
-        return { ok: false, reason: 'founder_stop_active' };
-      }
-    } catch {
-      return { ok: false, reason: 'factory_staging_unavailable' };
-    }
-    if (!fs.existsSync(RUNNER_SCRIPT)) {
-      return { ok: false, reason: 'runner_script_missing' };
-    }
-    return { ok: true, reason: null };
-  },
+  prerequisites: evaluateBpPrioritySchedulerPrerequisites,
   workCheck: async () => {
     const token = hasTokenCapacity();
     if (!token.ok) {
@@ -241,15 +278,7 @@ const guardedBpPriorityTick = createUsefulWorkGuard({
   },
   execute: async ({ logger } = {}) => {
     if (!queueHasIncompleteWork() && neverStopProductsEnabled()) {
-      const result = await runProductExpansionCycle({ logger });
-      writeReceipt({
-        ok: result.ok !== false,
-        expansion: true,
-        task_id: result.task_id,
-        detail: result.detail,
-        ran_at: new Date().toISOString(),
-      });
-      return result;
+      return runBpPriorityExpansionOnce({ logger });
     }
     return runBpPriorityOnce({ logger });
   },
