@@ -1,10 +1,10 @@
 {
   "schema": "lifeos_direct_install_v1",
-  "updated_at": "2026-06-25T19:24:55.633Z",
+  "updated_at": "2026-06-29T20:15:55.002Z",
   "android": {
     "available": true,
     "version": "1.0.0",
-    "build": "2026-06-25",
+    "build": "2026-06-29",
     "download_url": "/download/lifeos.apk",
     "min_android": "8.0",
     "notes": "Enable Settings → Install unknown apps for your browser, then tap Download."
