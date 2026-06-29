@@ -1,0 +1,21 @@
+{
+  "schema": "upstream_route_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "route_to": "CHAIR",
+  "escalate_to_founder": true,
+  "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "violations": [
+    "development:FOUNDER_PACKET missing Problem",
+    "development:FOUNDER_PACKET missing Desired Outcome",
+    "development:FOUNDER_PACKET missing FOUNDER SUCCESS TEST",
+    "development:intent_not_clear pain:MISSING,value:MISSING"
+  ],
+  "flow": [
+    "ARC → Chair (handoff incomplete)",
+    "Chair → Adam (Chair acknowledges synthesis failure)",
+    "resolve → back down chain"
+  ],
+  "lesson": "Incomplete handoff clarity = Chair failure. Architect pushes upstream."
+}

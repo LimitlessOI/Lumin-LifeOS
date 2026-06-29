@@ -1,0 +1,80 @@
+{
+  "schema": "pre_handoff_intent_gate_v2",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "stage": "development",
+  "pass": true,
+  "route_to": "ARC",
+  "pushed_by": "ARC",
+  "defect_owner_seat": null,
+  "escalate_to_founder": false,
+  "founder_frame": null,
+  "audience": "CHAIR",
+  "violations": [],
+  "checks": {
+    "founder_packet": {
+      "pass": true,
+      "sections": {
+        "has_packet": true,
+        "has_problem": true,
+        "has_outcome": true,
+        "has_success_test": true,
+        "has_acceptance": true,
+        "bytes": 1648
+      }
+    },
+    "intent_coverage": {
+      "pass": true,
+      "gaps": []
+    },
+    "intent_baseline": {
+      "pass": true,
+      "status": "HANDOFF_READY"
+    },
+    "departments": {
+      "SNT": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "intent_clearance_yes"
+      },
+      "CHAIR": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "forecast_acceptable"
+      },
+      "CFO": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "within_budget"
+      },
+      "WISDOM": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "proceed"
+      }
+    }
+  },
+  "upstream": {
+    "schema": "upstream_route_v1",
+    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+    "pushed_by": "ARC",
+    "defect_owner_seat": "Chair",
+    "route_to": "CHAIR",
+    "escalate_to_founder": false,
+    "founder_frame": null,
+    "violations": [],
+    "flow": [
+      "ARC → Chair (handoff incomplete)",
+      "Chair resolves from conversation → re-run department sims → ARC"
+    ],
+    "lesson": "Incomplete handoff clarity = Chair failure. Architect pushes upstream."
+  },
+  "lesson": "All departments touched. Chair may lock handoff and enter protected corridor."
+}

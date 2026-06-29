@@ -1,0 +1,5416 @@
+{
+  "schema": "foundation_loop_receipt_v3",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "point_b_target": "LifeOS Consumer Alpha",
+  "point_b_mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "mode": "obstacle_lesson_never_stop",
+  "doctrine": {
+    "stopping_is_failure": true,
+    "obstacle_is_lesson": true,
+    "must_adjust_system": true
+  },
+  "started_at": "2026-06-29T08:40:07.799Z",
+  "cooking_slice_size": 32,
+  "attempts": [
+    {
+      "phase": "development",
+      "attempt": 1,
+      "slice": 1,
+      "cooking_spent": 1,
+      "at": "2026-06-29T08:40:07.813Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407817_1",
+        "at": "2026-06-29T08:40:07.817Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 1,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.824Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 2,
+      "slice": 1,
+      "cooking_spent": 2,
+      "at": "2026-06-29T08:40:07.833Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407834_2",
+        "at": "2026-06-29T08:40:07.834Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 2,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.839Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 3,
+      "slice": 1,
+      "cooking_spent": 3,
+      "at": "2026-06-29T08:40:07.846Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407847_3",
+        "at": "2026-06-29T08:40:07.847Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 3,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.851Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 4,
+      "slice": 1,
+      "cooking_spent": 4,
+      "at": "2026-06-29T08:40:07.857Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407858_4",
+        "at": "2026-06-29T08:40:07.858Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 4,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.862Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 5,
+      "slice": 1,
+      "cooking_spent": 5,
+      "at": "2026-06-29T08:40:07.867Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407868_5",
+        "at": "2026-06-29T08:40:07.868Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 5,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.872Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 6,
+      "slice": 1,
+      "cooking_spent": 6,
+      "at": "2026-06-29T08:40:07.876Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407877_6",
+        "at": "2026-06-29T08:40:07.877Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 6,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.881Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 7,
+      "slice": 1,
+      "cooking_spent": 7,
+      "at": "2026-06-29T08:40:07.885Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407886_7",
+        "at": "2026-06-29T08:40:07.886Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 7,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.889Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 8,
+      "slice": 1,
+      "cooking_spent": 8,
+      "at": "2026-06-29T08:40:07.894Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407895_8",
+        "at": "2026-06-29T08:40:07.895Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 8,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.898Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 9,
+      "slice": 1,
+      "cooking_spent": 9,
+      "at": "2026-06-29T08:40:07.903Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407904_9",
+        "at": "2026-06-29T08:40:07.904Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 9,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.907Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 10,
+      "slice": 1,
+      "cooking_spent": 10,
+      "at": "2026-06-29T08:40:07.912Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407913_10",
+        "at": "2026-06-29T08:40:07.913Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 10,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.916Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 11,
+      "slice": 1,
+      "cooking_spent": 11,
+      "at": "2026-06-29T08:40:07.921Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407922_11",
+        "at": "2026-06-29T08:40:07.922Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 11,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.925Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 12,
+      "slice": 1,
+      "cooking_spent": 12,
+      "at": "2026-06-29T08:40:07.930Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407930_12",
+        "at": "2026-06-29T08:40:07.930Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 12,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.933Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 13,
+      "slice": 1,
+      "cooking_spent": 13,
+      "at": "2026-06-29T08:40:07.938Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407938_13",
+        "at": "2026-06-29T08:40:07.938Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 13,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.941Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 14,
+      "slice": 1,
+      "cooking_spent": 14,
+      "at": "2026-06-29T08:40:07.946Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407947_14",
+        "at": "2026-06-29T08:40:07.947Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 14,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.952Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 15,
+      "slice": 1,
+      "cooking_spent": 15,
+      "at": "2026-06-29T08:40:07.956Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407957_15",
+        "at": "2026-06-29T08:40:07.957Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 15,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.960Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 16,
+      "slice": 1,
+      "cooking_spent": 16,
+      "at": "2026-06-29T08:40:07.964Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407964_16",
+        "at": "2026-06-29T08:40:07.964Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 16,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.967Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 17,
+      "slice": 1,
+      "cooking_spent": 17,
+      "at": "2026-06-29T08:40:07.972Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407973_17",
+        "at": "2026-06-29T08:40:07.973Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 17,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.975Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 18,
+      "slice": 1,
+      "cooking_spent": 18,
+      "at": "2026-06-29T08:40:07.980Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407981_18",
+        "at": "2026-06-29T08:40:07.981Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 18,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.984Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 19,
+      "slice": 1,
+      "cooking_spent": 19,
+      "at": "2026-06-29T08:40:07.988Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407989_19",
+        "at": "2026-06-29T08:40:07.989Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 19,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:07.992Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 20,
+      "slice": 1,
+      "cooking_spent": 20,
+      "at": "2026-06-29T08:40:07.996Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722407997_20",
+        "at": "2026-06-29T08:40:07.997Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 20,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.000Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 21,
+      "slice": 1,
+      "cooking_spent": 21,
+      "at": "2026-06-29T08:40:08.005Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408005_21",
+        "at": "2026-06-29T08:40:08.005Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 21,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.009Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 22,
+      "slice": 1,
+      "cooking_spent": 22,
+      "at": "2026-06-29T08:40:08.013Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408014_22",
+        "at": "2026-06-29T08:40:08.014Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 22,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.016Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 23,
+      "slice": 1,
+      "cooking_spent": 23,
+      "at": "2026-06-29T08:40:08.021Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408022_23",
+        "at": "2026-06-29T08:40:08.022Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 23,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.024Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 24,
+      "slice": 1,
+      "cooking_spent": 24,
+      "at": "2026-06-29T08:40:08.029Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408030_24",
+        "at": "2026-06-29T08:40:08.030Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 24,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.032Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 25,
+      "slice": 1,
+      "cooking_spent": 25,
+      "at": "2026-06-29T08:40:08.037Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408037_25",
+        "at": "2026-06-29T08:40:08.037Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 25,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.040Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 26,
+      "slice": 1,
+      "cooking_spent": 26,
+      "at": "2026-06-29T08:40:08.046Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408046_26",
+        "at": "2026-06-29T08:40:08.046Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 26,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.050Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 27,
+      "slice": 1,
+      "cooking_spent": 27,
+      "at": "2026-06-29T08:40:08.054Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408055_27",
+        "at": "2026-06-29T08:40:08.055Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 27,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.058Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 28,
+      "slice": 1,
+      "cooking_spent": 28,
+      "at": "2026-06-29T08:40:08.063Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408063_28",
+        "at": "2026-06-29T08:40:08.063Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 28,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.067Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 29,
+      "slice": 1,
+      "cooking_spent": 29,
+      "at": "2026-06-29T08:40:08.071Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408072_29",
+        "at": "2026-06-29T08:40:08.072Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 29,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.074Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 30,
+      "slice": 1,
+      "cooking_spent": 30,
+      "at": "2026-06-29T08:40:08.079Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408079_30",
+        "at": "2026-06-29T08:40:08.079Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 30,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.082Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 31,
+      "slice": 1,
+      "cooking_spent": 31,
+      "at": "2026-06-29T08:40:08.087Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408088_31",
+        "at": "2026-06-29T08:40:08.088Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 31,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.090Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 32,
+      "slice": 1,
+      "cooking_spent": 32,
+      "at": "2026-06-29T08:40:08.095Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408095_32",
+        "at": "2026-06-29T08:40:08.095Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 32,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.098Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 33,
+      "slice": 2,
+      "cooking_spent": 33,
+      "at": "2026-06-29T08:40:08.105Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408106_33",
+        "at": "2026-06-29T08:40:08.106Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 33,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.109Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 34,
+      "slice": 2,
+      "cooking_spent": 34,
+      "at": "2026-06-29T08:40:08.114Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408115_34",
+        "at": "2026-06-29T08:40:08.115Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 34,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.117Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 35,
+      "slice": 2,
+      "cooking_spent": 35,
+      "at": "2026-06-29T08:40:08.122Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408123_35",
+        "at": "2026-06-29T08:40:08.123Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 35,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.126Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 36,
+      "slice": 2,
+      "cooking_spent": 36,
+      "at": "2026-06-29T08:40:08.131Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408132_36",
+        "at": "2026-06-29T08:40:08.132Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 36,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.135Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 37,
+      "slice": 2,
+      "cooking_spent": 37,
+      "at": "2026-06-29T08:40:08.140Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408140_37",
+        "at": "2026-06-29T08:40:08.140Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 37,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.143Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 38,
+      "slice": 2,
+      "cooking_spent": 38,
+      "at": "2026-06-29T08:40:08.148Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408149_38",
+        "at": "2026-06-29T08:40:08.149Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 38,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.152Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 39,
+      "slice": 2,
+      "cooking_spent": 39,
+      "at": "2026-06-29T08:40:08.156Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408157_39",
+        "at": "2026-06-29T08:40:08.157Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 39,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.160Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 40,
+      "slice": 2,
+      "cooking_spent": 40,
+      "at": "2026-06-29T08:40:08.165Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408166_40",
+        "at": "2026-06-29T08:40:08.166Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 40,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.169Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 41,
+      "slice": 2,
+      "cooking_spent": 41,
+      "at": "2026-06-29T08:40:08.173Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408174_41",
+        "at": "2026-06-29T08:40:08.174Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 41,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.177Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 42,
+      "slice": 2,
+      "cooking_spent": 42,
+      "at": "2026-06-29T08:40:08.181Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408182_42",
+        "at": "2026-06-29T08:40:08.182Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 42,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.185Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 43,
+      "slice": 2,
+      "cooking_spent": 43,
+      "at": "2026-06-29T08:40:08.189Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408190_43",
+        "at": "2026-06-29T08:40:08.190Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 43,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.193Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 44,
+      "slice": 2,
+      "cooking_spent": 44,
+      "at": "2026-06-29T08:40:08.197Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408198_44",
+        "at": "2026-06-29T08:40:08.198Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 44,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.201Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 45,
+      "slice": 2,
+      "cooking_spent": 45,
+      "at": "2026-06-29T08:40:08.206Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408207_45",
+        "at": "2026-06-29T08:40:08.207Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 45,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.210Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 46,
+      "slice": 2,
+      "cooking_spent": 46,
+      "at": "2026-06-29T08:40:08.215Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408215_46",
+        "at": "2026-06-29T08:40:08.215Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 46,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.218Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 47,
+      "slice": 2,
+      "cooking_spent": 47,
+      "at": "2026-06-29T08:40:08.222Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408223_47",
+        "at": "2026-06-29T08:40:08.223Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 47,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.227Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 48,
+      "slice": 2,
+      "cooking_spent": 48,
+      "at": "2026-06-29T08:40:08.232Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408233_48",
+        "at": "2026-06-29T08:40:08.233Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 48,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.236Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 49,
+      "slice": 2,
+      "cooking_spent": 49,
+      "at": "2026-06-29T08:40:08.241Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408242_49",
+        "at": "2026-06-29T08:40:08.242Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 49,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.245Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 50,
+      "slice": 2,
+      "cooking_spent": 50,
+      "at": "2026-06-29T08:40:08.249Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408250_50",
+        "at": "2026-06-29T08:40:08.250Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 50,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.253Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 51,
+      "slice": 2,
+      "cooking_spent": 51,
+      "at": "2026-06-29T08:40:08.258Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408258_51",
+        "at": "2026-06-29T08:40:08.258Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 51,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.262Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 52,
+      "slice": 2,
+      "cooking_spent": 52,
+      "at": "2026-06-29T08:40:08.266Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408267_52",
+        "at": "2026-06-29T08:40:08.267Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 52,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.270Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 53,
+      "slice": 2,
+      "cooking_spent": 53,
+      "at": "2026-06-29T08:40:08.275Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408276_53",
+        "at": "2026-06-29T08:40:08.276Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 53,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.279Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 54,
+      "slice": 2,
+      "cooking_spent": 54,
+      "at": "2026-06-29T08:40:08.284Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408285_54",
+        "at": "2026-06-29T08:40:08.285Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 54,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.288Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 55,
+      "slice": 2,
+      "cooking_spent": 55,
+      "at": "2026-06-29T08:40:08.292Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408293_55",
+        "at": "2026-06-29T08:40:08.293Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 55,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.296Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 56,
+      "slice": 2,
+      "cooking_spent": 56,
+      "at": "2026-06-29T08:40:08.300Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408301_56",
+        "at": "2026-06-29T08:40:08.301Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 56,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.304Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 57,
+      "slice": 2,
+      "cooking_spent": 57,
+      "at": "2026-06-29T08:40:08.309Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408310_57",
+        "at": "2026-06-29T08:40:08.310Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 57,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.312Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 58,
+      "slice": 2,
+      "cooking_spent": 58,
+      "at": "2026-06-29T08:40:08.317Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408318_58",
+        "at": "2026-06-29T08:40:08.318Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 58,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.321Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 59,
+      "slice": 2,
+      "cooking_spent": 59,
+      "at": "2026-06-29T08:40:08.325Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408326_59",
+        "at": "2026-06-29T08:40:08.326Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 59,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.329Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 60,
+      "slice": 2,
+      "cooking_spent": 60,
+      "at": "2026-06-29T08:40:08.334Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408334_60",
+        "at": "2026-06-29T08:40:08.334Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 60,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.338Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 61,
+      "slice": 2,
+      "cooking_spent": 61,
+      "at": "2026-06-29T08:40:08.342Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408343_61",
+        "at": "2026-06-29T08:40:08.343Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 61,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.346Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 62,
+      "slice": 2,
+      "cooking_spent": 62,
+      "at": "2026-06-29T08:40:08.350Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408351_62",
+        "at": "2026-06-29T08:40:08.351Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 62,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.354Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 63,
+      "slice": 2,
+      "cooking_spent": 63,
+      "at": "2026-06-29T08:40:08.358Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408359_63",
+        "at": "2026-06-29T08:40:08.359Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 63,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.362Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    },
+    {
+      "phase": "development",
+      "attempt": 64,
+      "slice": 2,
+      "cooking_spent": 64,
+      "at": "2026-06-29T08:40:08.367Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782722408367_64",
+        "at": "2026-06-29T08:40:08.367Z",
+        "kind": "phase_fail",
+        "phase": "development",
+        "attempt": 64,
+        "what_happened": "idc:missing ASSET_REUSE_DECISION",
+        "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+        "route_strategy": "repair_in_place",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: repair_in_place (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "development",
+        "violations": [
+          "idc:missing ASSET_REUSE_DECISION"
+        ],
+        "route": "repair_in_place",
+        "repairs": [
+          "founder_packet_ok",
+          "unknown"
+        ],
+        "canRetry": true,
+        "at": "2026-06-29T08:40:08.370Z"
+      },
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ]
+    }
+  ],
+  "phases": {},
+  "repairs": [
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.824Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.839Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.851Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.862Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.872Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.881Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.889Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.898Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.907Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.916Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.925Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.933Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.941Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.952Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.960Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.967Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.975Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.984Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:07.992Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.000Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.009Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.016Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.024Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.032Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.040Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.050Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.058Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.067Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.074Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.082Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.090Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.098Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.109Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.117Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.126Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.135Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.143Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.152Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.160Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.169Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.177Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.185Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.193Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.201Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.210Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.218Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.227Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.236Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.245Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.253Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.262Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.270Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.279Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.288Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.296Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.304Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.312Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.321Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.329Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.338Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.346Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.354Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.362Z"
+    },
+    {
+      "stage": "development",
+      "violations": [
+        "idc:missing ASSET_REUSE_DECISION"
+      ],
+      "route": "repair_in_place",
+      "repairs": [
+        "founder_packet_ok",
+        "unknown"
+      ],
+      "canRetry": true,
+      "at": "2026-06-29T08:40:08.370Z"
+    }
+  ],
+  "obstacles": [
+    {
+      "obstacle_id": "obs_1782722407817_1",
+      "at": "2026-06-29T08:40:07.817Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 1,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407834_2",
+      "at": "2026-06-29T08:40:07.834Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 2,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407847_3",
+      "at": "2026-06-29T08:40:07.847Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 3,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407858_4",
+      "at": "2026-06-29T08:40:07.858Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 4,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407868_5",
+      "at": "2026-06-29T08:40:07.868Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 5,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407877_6",
+      "at": "2026-06-29T08:40:07.877Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 6,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407886_7",
+      "at": "2026-06-29T08:40:07.886Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 7,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407895_8",
+      "at": "2026-06-29T08:40:07.895Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 8,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407904_9",
+      "at": "2026-06-29T08:40:07.904Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 9,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407913_10",
+      "at": "2026-06-29T08:40:07.913Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 10,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407922_11",
+      "at": "2026-06-29T08:40:07.922Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 11,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407930_12",
+      "at": "2026-06-29T08:40:07.930Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 12,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407938_13",
+      "at": "2026-06-29T08:40:07.938Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 13,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407947_14",
+      "at": "2026-06-29T08:40:07.947Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 14,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407957_15",
+      "at": "2026-06-29T08:40:07.957Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 15,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407964_16",
+      "at": "2026-06-29T08:40:07.964Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 16,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407973_17",
+      "at": "2026-06-29T08:40:07.973Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 17,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407981_18",
+      "at": "2026-06-29T08:40:07.981Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 18,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407989_19",
+      "at": "2026-06-29T08:40:07.989Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 19,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722407997_20",
+      "at": "2026-06-29T08:40:07.997Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 20,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408005_21",
+      "at": "2026-06-29T08:40:08.005Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 21,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408014_22",
+      "at": "2026-06-29T08:40:08.014Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 22,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408022_23",
+      "at": "2026-06-29T08:40:08.022Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 23,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408030_24",
+      "at": "2026-06-29T08:40:08.030Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 24,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408037_25",
+      "at": "2026-06-29T08:40:08.037Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 25,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408046_26",
+      "at": "2026-06-29T08:40:08.046Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 26,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408055_27",
+      "at": "2026-06-29T08:40:08.055Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 27,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408063_28",
+      "at": "2026-06-29T08:40:08.063Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 28,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408072_29",
+      "at": "2026-06-29T08:40:08.072Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 29,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408079_30",
+      "at": "2026-06-29T08:40:08.079Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 30,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408088_31",
+      "at": "2026-06-29T08:40:08.088Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 31,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408095_32",
+      "at": "2026-06-29T08:40:08.095Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 32,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408100_32",
+      "at": "2026-06-29T08:40:08.100Z",
+      "kind": "cooking_slice_exhausted",
+      "phase": "development",
+      "attempt": 32,
+      "what_happened": "cooking_slice_exhausted slice=1 size=32 total=32; Stopping is failure — opening new slice and continuing",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408106_33",
+      "at": "2026-06-29T08:40:08.106Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 33,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408115_34",
+      "at": "2026-06-29T08:40:08.115Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 34,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408123_35",
+      "at": "2026-06-29T08:40:08.123Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 35,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408132_36",
+      "at": "2026-06-29T08:40:08.132Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 36,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408140_37",
+      "at": "2026-06-29T08:40:08.140Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 37,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408149_38",
+      "at": "2026-06-29T08:40:08.149Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 38,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408157_39",
+      "at": "2026-06-29T08:40:08.157Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 39,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408166_40",
+      "at": "2026-06-29T08:40:08.166Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 40,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408174_41",
+      "at": "2026-06-29T08:40:08.174Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 41,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408182_42",
+      "at": "2026-06-29T08:40:08.182Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 42,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408190_43",
+      "at": "2026-06-29T08:40:08.190Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 43,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408198_44",
+      "at": "2026-06-29T08:40:08.198Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 44,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408207_45",
+      "at": "2026-06-29T08:40:08.207Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 45,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408215_46",
+      "at": "2026-06-29T08:40:08.215Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 46,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408223_47",
+      "at": "2026-06-29T08:40:08.223Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 47,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408233_48",
+      "at": "2026-06-29T08:40:08.233Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 48,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408242_49",
+      "at": "2026-06-29T08:40:08.242Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 49,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408250_50",
+      "at": "2026-06-29T08:40:08.250Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 50,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408258_51",
+      "at": "2026-06-29T08:40:08.258Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 51,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408267_52",
+      "at": "2026-06-29T08:40:08.267Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 52,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408276_53",
+      "at": "2026-06-29T08:40:08.276Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 53,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408285_54",
+      "at": "2026-06-29T08:40:08.285Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 54,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408293_55",
+      "at": "2026-06-29T08:40:08.293Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 55,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408301_56",
+      "at": "2026-06-29T08:40:08.301Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 56,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408310_57",
+      "at": "2026-06-29T08:40:08.310Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 57,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408318_58",
+      "at": "2026-06-29T08:40:08.318Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 58,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408326_59",
+      "at": "2026-06-29T08:40:08.326Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 59,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408334_60",
+      "at": "2026-06-29T08:40:08.334Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 60,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408343_61",
+      "at": "2026-06-29T08:40:08.343Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 61,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408351_62",
+      "at": "2026-06-29T08:40:08.351Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 62,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408359_63",
+      "at": "2026-06-29T08:40:08.359Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 63,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408367_64",
+      "at": "2026-06-29T08:40:08.367Z",
+      "kind": "phase_fail",
+      "phase": "development",
+      "attempt": 64,
+      "what_happened": "idc:missing ASSET_REUSE_DECISION",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "repair_in_place",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: repair_in_place (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408372_64",
+      "at": "2026-06-29T08:40:08.372Z",
+      "kind": "cooking_slice_exhausted",
+      "phase": "development",
+      "attempt": 64,
+      "what_happened": "cooking_slice_exhausted slice=2 size=32 total=64; Stopping is failure — opening new slice and continuing",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782722408374_64",
+      "at": "2026-06-29T08:40:08.374Z",
+      "kind": "attempt_budget_per_run",
+      "phase": "development",
+      "attempt": 64,
+      "what_happened": "attempt_budget_per_run exhausted at 64",
+      "lesson": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    }
+  ],
+  "budget_slices": 2,
+  "stoppage": {
+    "reason": "attempt_budget_per_run",
+    "phase": "development",
+    "stoppage_is_failure": true,
+    "stopping_is_failure": true,
+    "lesson": "Per-run attempt cap hit — outer loop must continue toward Point B"
+  },
+  "finished_at": "2026-06-29T08:40:08.375Z",
+  "ok": false,
+  "point_b_reached": false,
+  "total_attempts": 64,
+  "latency_ms": 576,
+  "point_b": null
+}

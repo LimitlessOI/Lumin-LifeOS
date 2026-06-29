@@ -1,26 +1,43 @@
 {
   "schema": "point_b_target_v1",
-  "updated_at": "2026-06-21",
-  "operator_lock": "Adam 2026-06-21 — Point B is LifeRE Alpha. PASS only when founder success test satisfied.",
+  "updated_at": "2026-06-29",
+  "operator_lock": "Adam 2026-06-29 — LifeRE Alpha complete (machine alpha 12/12 PASS). New Point B: LifeOS Consumer Alpha — user auth + Lumin account identity + SocialMediaOS alpha. Machine builds, tests, and advances without waiting for Adam.",
+  "completed_milestones": [
+    {
+      "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+      "label": "LifeRE Alpha",
+      "completed_at": "2026-06-29",
+      "machine_alpha_receipt": "products/receipts/MACHINE_ALPHA_WALKTHROUGH.json",
+      "note": "12/12 machine alpha PASS. Founder reviews async."
+    }
+  ],
   "target": {
-    "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-    "label": "LifeRE Alpha",
-    "point_a": "LifeRE stub on production spine — service + routes exist; alpha surface not yet founder-usable",
-    "point_b": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
-    "founder_success_test": "Open /overlay/lifeos-app.html LifeRE path; complete one daily command center cycle; confirm top-3 and debrief visible",
-    "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
-    "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001"
+    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+    "label": "LifeOS Consumer Alpha",
+    "point_a": "LifeOS has no user auth system — all users are anonymous guests; Lumin cannot identify the account",
+    "point_b": "LifeOS user can sign up, log in, access their tier, and Lumin identifies them by account — full consumer stack live on production",
+    "founder_success_test": "Register account, log in via LifeOS app, Lumin greets by name with correct tier, daily command center runs as authenticated user",
+    "acceptance_command": "npm run lifeos:user-auth:v1-acceptance",
+    "machine_alpha_command": "npm run lifeos:machine-alpha-walkthrough",
+    "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001"
+  },
+  "pipeline_after_lifeos": {
+    "next": "PRODUCT-SOCIALMEDIAOS-ALPHA-V1-0001",
+    "label": "SocialMediaOS Alpha",
+    "note": "SocialMediaOS intake blueprint is already running via never-stop expansion factory"
   },
   "doctrine": {
     "stopping_is_failure": true,
     "obstacle_is_lesson": true,
     "must_adjust_system": true,
     "never_stop_until": "point_b_reached_or_founder_stop",
+    "machine_alpha_protocol": "Machine runs its own alpha walkthrough after each blueprint completes. PASS = advance, no founder wait.",
+    "adam_is_never_bottleneck": true,
     "point_b_defined_by": "founder_communications_intent",
-    "tools_not_destination": "Governance, SSOT, receipts, and pipelines are tools accountable to A→B results — not the destination.",
+    "tools_not_destination": "Governance, SSOT, receipts, and blueprints are tools accountable to A→B results — not the destination.",
     "point_b_dna_version": "point_b_dna_v1",
     "point_b_dna": "builderos-reboot/governance/POINT_B_DNA.json",
-    "synergy": "Human + AI > sum of parts — Chair fleshes broad vision with honest scoreboard",
+    "synergy": "Human + AI > sum of parts — Lumin fleshes broad vision with honest scoreboard",
     "chair_job": "Ask until founder intent understood; then execute through real paths until Point B is reached or blocked honestly.",
     "chair_intent_protocol": "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json"
   }

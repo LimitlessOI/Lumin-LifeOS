@@ -1,0 +1,16 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-06-29T08:39:21.911Z",
+  "objective_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "objective_name": "LifeOS Consumer Auth v1",
+  "verdict": "NOT_COMPLETE",
+  "receipt": "products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
+  "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2",
+  "tests_passed": [],
+  "tests_failed": [
+    "UAT-STUB_pending_build"
+  ],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run lifeos:user-auth:v1-acceptance",
+  "machine_alpha_command": "npm run lifeos:machine-alpha-walkthrough"
+}

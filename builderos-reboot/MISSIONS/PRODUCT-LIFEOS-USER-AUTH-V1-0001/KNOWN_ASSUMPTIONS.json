@@ -1,0 +1,43 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "assumptions": [
+    {
+      "id": "A1",
+      "assumption": "Adam is primary user at Alpha",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "A2",
+      "assumption": "Railway production spine is live",
+      "confidence": "THINK"
+    },
+    {
+      "id": "A3",
+      "assumption": "Founder reaches Point B: acceptance command PASS and founder success test satisfied on production.",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "OBS-333",
+      "assumption": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "repair_in_place"
+    },
+    {
+      "id": "OBS-334",
+      "assumption": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-335",
+      "assumption": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    }
+  ],
+  "updated_at": "2026-06-29T08:40:08.374Z"
+}

@@ -1,0 +1,2316 @@
+{
+  "schema": "system_adjustment_log_v1",
+  "adjustments": [
+    {
+      "at": "2026-06-29T08:36:06.027Z",
+      "obstacle_id": "obs_1782722166024_1",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.034Z",
+      "obstacle_id": "obs_1782722166032_2",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.040Z",
+      "obstacle_id": "obs_1782722166038_3",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.046Z",
+      "obstacle_id": "obs_1782722166045_4",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.052Z",
+      "obstacle_id": "obs_1782722166050_5",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.058Z",
+      "obstacle_id": "obs_1782722166056_6",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.064Z",
+      "obstacle_id": "obs_1782722166062_7",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.069Z",
+      "obstacle_id": "obs_1782722166068_8",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.075Z",
+      "obstacle_id": "obs_1782722166073_9",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.080Z",
+      "obstacle_id": "obs_1782722166078_10",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.085Z",
+      "obstacle_id": "obs_1782722166084_11",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.090Z",
+      "obstacle_id": "obs_1782722166089_12",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.096Z",
+      "obstacle_id": "obs_1782722166094_13",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.101Z",
+      "obstacle_id": "obs_1782722166100_14",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.107Z",
+      "obstacle_id": "obs_1782722166105_15",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.112Z",
+      "obstacle_id": "obs_1782722166110_16",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.117Z",
+      "obstacle_id": "obs_1782722166116_17",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.123Z",
+      "obstacle_id": "obs_1782722166121_18",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.128Z",
+      "obstacle_id": "obs_1782722166126_19",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.133Z",
+      "obstacle_id": "obs_1782722166131_20",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.138Z",
+      "obstacle_id": "obs_1782722166136_21",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.143Z",
+      "obstacle_id": "obs_1782722166141_22",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.148Z",
+      "obstacle_id": "obs_1782722166146_23",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.153Z",
+      "obstacle_id": "obs_1782722166151_24",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.158Z",
+      "obstacle_id": "obs_1782722166156_25",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.163Z",
+      "obstacle_id": "obs_1782722166161_26",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.168Z",
+      "obstacle_id": "obs_1782722166167_27",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.174Z",
+      "obstacle_id": "obs_1782722166172_28",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.179Z",
+      "obstacle_id": "obs_1782722166178_29",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.185Z",
+      "obstacle_id": "obs_1782722166183_30",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.190Z",
+      "obstacle_id": "obs_1782722166188_31",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.196Z",
+      "obstacle_id": "obs_1782722166194_32",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.196Z",
+      "obstacle_id": "obs_1782722166196_32",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.201Z",
+      "obstacle_id": "obs_1782722166200_33",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.207Z",
+      "obstacle_id": "obs_1782722166205_34",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.213Z",
+      "obstacle_id": "obs_1782722166211_35",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.218Z",
+      "obstacle_id": "obs_1782722166216_36",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.224Z",
+      "obstacle_id": "obs_1782722166222_37",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.229Z",
+      "obstacle_id": "obs_1782722166227_38",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.234Z",
+      "obstacle_id": "obs_1782722166233_39",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.239Z",
+      "obstacle_id": "obs_1782722166238_40",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.245Z",
+      "obstacle_id": "obs_1782722166243_41",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.250Z",
+      "obstacle_id": "obs_1782722166248_42",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.255Z",
+      "obstacle_id": "obs_1782722166253_43",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.260Z",
+      "obstacle_id": "obs_1782722166259_44",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.265Z",
+      "obstacle_id": "obs_1782722166264_45",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.271Z",
+      "obstacle_id": "obs_1782722166270_46",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.277Z",
+      "obstacle_id": "obs_1782722166275_47",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.283Z",
+      "obstacle_id": "obs_1782722166281_48",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.289Z",
+      "obstacle_id": "obs_1782722166287_49",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.294Z",
+      "obstacle_id": "obs_1782722166292_50",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.299Z",
+      "obstacle_id": "obs_1782722166297_51",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.304Z",
+      "obstacle_id": "obs_1782722166303_52",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.310Z",
+      "obstacle_id": "obs_1782722166308_53",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.315Z",
+      "obstacle_id": "obs_1782722166314_54",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.321Z",
+      "obstacle_id": "obs_1782722166319_55",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.326Z",
+      "obstacle_id": "obs_1782722166324_56",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.332Z",
+      "obstacle_id": "obs_1782722166330_57",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.337Z",
+      "obstacle_id": "obs_1782722166335_58",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.342Z",
+      "obstacle_id": "obs_1782722166341_59",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.348Z",
+      "obstacle_id": "obs_1782722166346_60",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.353Z",
+      "obstacle_id": "obs_1782722166351_61",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.358Z",
+      "obstacle_id": "obs_1782722166357_62",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.364Z",
+      "obstacle_id": "obs_1782722166362_63",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.369Z",
+      "obstacle_id": "obs_1782722166367_64",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:36:06.370Z",
+      "obstacle_id": "obs_1782722166369_64",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.398Z",
+      "obstacle_id": "obs_1782722226394_1",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.405Z",
+      "obstacle_id": "obs_1782722226403_2",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.412Z",
+      "obstacle_id": "obs_1782722226410_3",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.419Z",
+      "obstacle_id": "obs_1782722226417_4",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.426Z",
+      "obstacle_id": "obs_1782722226423_5",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.433Z",
+      "obstacle_id": "obs_1782722226431_6",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.439Z",
+      "obstacle_id": "obs_1782722226437_7",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.446Z",
+      "obstacle_id": "obs_1782722226444_8",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.452Z",
+      "obstacle_id": "obs_1782722226450_9",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.459Z",
+      "obstacle_id": "obs_1782722226456_10",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.465Z",
+      "obstacle_id": "obs_1782722226463_11",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.471Z",
+      "obstacle_id": "obs_1782722226469_12",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.478Z",
+      "obstacle_id": "obs_1782722226475_13",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.483Z",
+      "obstacle_id": "obs_1782722226481_14",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.489Z",
+      "obstacle_id": "obs_1782722226487_15",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.495Z",
+      "obstacle_id": "obs_1782722226493_16",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.500Z",
+      "obstacle_id": "obs_1782722226499_17",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.506Z",
+      "obstacle_id": "obs_1782722226504_18",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.511Z",
+      "obstacle_id": "obs_1782722226509_19",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.517Z",
+      "obstacle_id": "obs_1782722226515_20",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.522Z",
+      "obstacle_id": "obs_1782722226521_21",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.528Z",
+      "obstacle_id": "obs_1782722226526_22",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.534Z",
+      "obstacle_id": "obs_1782722226532_23",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.539Z",
+      "obstacle_id": "obs_1782722226538_24",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.545Z",
+      "obstacle_id": "obs_1782722226543_25",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.551Z",
+      "obstacle_id": "obs_1782722226549_26",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.557Z",
+      "obstacle_id": "obs_1782722226555_27",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.562Z",
+      "obstacle_id": "obs_1782722226560_28",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.568Z",
+      "obstacle_id": "obs_1782722226566_29",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.573Z",
+      "obstacle_id": "obs_1782722226571_30",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.579Z",
+      "obstacle_id": "obs_1782722226577_31",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.584Z",
+      "obstacle_id": "obs_1782722226582_32",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.585Z",
+      "obstacle_id": "obs_1782722226585_32",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.591Z",
+      "obstacle_id": "obs_1782722226589_33",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.597Z",
+      "obstacle_id": "obs_1782722226595_34",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.602Z",
+      "obstacle_id": "obs_1782722226600_35",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.608Z",
+      "obstacle_id": "obs_1782722226606_36",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.614Z",
+      "obstacle_id": "obs_1782722226611_37",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.619Z",
+      "obstacle_id": "obs_1782722226618_38",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.625Z",
+      "obstacle_id": "obs_1782722226623_39",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.631Z",
+      "obstacle_id": "obs_1782722226629_40",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.637Z",
+      "obstacle_id": "obs_1782722226635_41",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.643Z",
+      "obstacle_id": "obs_1782722226641_42",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.648Z",
+      "obstacle_id": "obs_1782722226646_43",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.653Z",
+      "obstacle_id": "obs_1782722226652_44",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.659Z",
+      "obstacle_id": "obs_1782722226657_45",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.665Z",
+      "obstacle_id": "obs_1782722226663_46",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.671Z",
+      "obstacle_id": "obs_1782722226669_47",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.677Z",
+      "obstacle_id": "obs_1782722226675_48",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.683Z",
+      "obstacle_id": "obs_1782722226681_49",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.689Z",
+      "obstacle_id": "obs_1782722226687_50",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.695Z",
+      "obstacle_id": "obs_1782722226693_51",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.702Z",
+      "obstacle_id": "obs_1782722226699_52",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.708Z",
+      "obstacle_id": "obs_1782722226706_53",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.713Z",
+      "obstacle_id": "obs_1782722226711_54",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.719Z",
+      "obstacle_id": "obs_1782722226717_55",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.724Z",
+      "obstacle_id": "obs_1782722226722_56",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.730Z",
+      "obstacle_id": "obs_1782722226729_57",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.736Z",
+      "obstacle_id": "obs_1782722226734_58",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.742Z",
+      "obstacle_id": "obs_1782722226740_59",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.748Z",
+      "obstacle_id": "obs_1782722226746_60",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.754Z",
+      "obstacle_id": "obs_1782722226752_61",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.759Z",
+      "obstacle_id": "obs_1782722226758_62",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.766Z",
+      "obstacle_id": "obs_1782722226763_63",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.772Z",
+      "obstacle_id": "obs_1782722226770_64",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:37:06.773Z",
+      "obstacle_id": "obs_1782722226772_64",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.797Z",
+      "obstacle_id": "obs_1782722286793_1",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.807Z",
+      "obstacle_id": "obs_1782722286804_2",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.817Z",
+      "obstacle_id": "obs_1782722286813_3",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.826Z",
+      "obstacle_id": "obs_1782722286823_4",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.836Z",
+      "obstacle_id": "obs_1782722286833_5",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.844Z",
+      "obstacle_id": "obs_1782722286841_6",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.852Z",
+      "obstacle_id": "obs_1782722286849_7",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.860Z",
+      "obstacle_id": "obs_1782722286857_8",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.868Z",
+      "obstacle_id": "obs_1782722286865_9",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.876Z",
+      "obstacle_id": "obs_1782722286873_10",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.883Z",
+      "obstacle_id": "obs_1782722286881_11",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.890Z",
+      "obstacle_id": "obs_1782722286887_12",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.897Z",
+      "obstacle_id": "obs_1782722286895_13",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.904Z",
+      "obstacle_id": "obs_1782722286902_14",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.912Z",
+      "obstacle_id": "obs_1782722286909_15",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.918Z",
+      "obstacle_id": "obs_1782722286916_16",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.925Z",
+      "obstacle_id": "obs_1782722286923_17",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.932Z",
+      "obstacle_id": "obs_1782722286929_18",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.939Z",
+      "obstacle_id": "obs_1782722286937_19",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.947Z",
+      "obstacle_id": "obs_1782722286944_20",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.954Z",
+      "obstacle_id": "obs_1782722286952_21",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.962Z",
+      "obstacle_id": "obs_1782722286959_22",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.969Z",
+      "obstacle_id": "obs_1782722286966_23",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.977Z",
+      "obstacle_id": "obs_1782722286974_24",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.984Z",
+      "obstacle_id": "obs_1782722286982_25",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.991Z",
+      "obstacle_id": "obs_1782722286988_26",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:06.998Z",
+      "obstacle_id": "obs_1782722286996_27",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.005Z",
+      "obstacle_id": "obs_1782722287003_28",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.011Z",
+      "obstacle_id": "obs_1782722287009_29",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.018Z",
+      "obstacle_id": "obs_1782722287016_30",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.025Z",
+      "obstacle_id": "obs_1782722287023_31",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.032Z",
+      "obstacle_id": "obs_1782722287030_32",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.033Z",
+      "obstacle_id": "obs_1782722287033_32",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.041Z",
+      "obstacle_id": "obs_1782722287038_33",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.048Z",
+      "obstacle_id": "obs_1782722287045_34",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.056Z",
+      "obstacle_id": "obs_1782722287052_35",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.063Z",
+      "obstacle_id": "obs_1782722287061_36",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.070Z",
+      "obstacle_id": "obs_1782722287068_37",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.077Z",
+      "obstacle_id": "obs_1782722287075_38",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.085Z",
+      "obstacle_id": "obs_1782722287082_39",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.092Z",
+      "obstacle_id": "obs_1782722287089_40",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.099Z",
+      "obstacle_id": "obs_1782722287096_41",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.106Z",
+      "obstacle_id": "obs_1782722287104_42",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.114Z",
+      "obstacle_id": "obs_1782722287111_43",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.121Z",
+      "obstacle_id": "obs_1782722287118_44",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.128Z",
+      "obstacle_id": "obs_1782722287126_45",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.135Z",
+      "obstacle_id": "obs_1782722287133_46",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.142Z",
+      "obstacle_id": "obs_1782722287139_47",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.149Z",
+      "obstacle_id": "obs_1782722287146_48",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.156Z",
+      "obstacle_id": "obs_1782722287153_49",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.163Z",
+      "obstacle_id": "obs_1782722287160_50",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.171Z",
+      "obstacle_id": "obs_1782722287168_51",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.177Z",
+      "obstacle_id": "obs_1782722287175_52",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.184Z",
+      "obstacle_id": "obs_1782722287182_53",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.191Z",
+      "obstacle_id": "obs_1782722287189_54",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.198Z",
+      "obstacle_id": "obs_1782722287196_55",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.205Z",
+      "obstacle_id": "obs_1782722287203_56",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.212Z",
+      "obstacle_id": "obs_1782722287210_57",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.219Z",
+      "obstacle_id": "obs_1782722287217_58",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.226Z",
+      "obstacle_id": "obs_1782722287223_59",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.233Z",
+      "obstacle_id": "obs_1782722287230_60",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.240Z",
+      "obstacle_id": "obs_1782722287237_61",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.247Z",
+      "obstacle_id": "obs_1782722287244_62",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.254Z",
+      "obstacle_id": "obs_1782722287251_63",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.260Z",
+      "obstacle_id": "obs_1782722287258_64",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:38:07.262Z",
+      "obstacle_id": "obs_1782722287261_64",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.281Z",
+      "obstacle_id": "obs_1782722347278_1",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.293Z",
+      "obstacle_id": "obs_1782722347289_2",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.303Z",
+      "obstacle_id": "obs_1782722347299_3",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.313Z",
+      "obstacle_id": "obs_1782722347309_4",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.322Z",
+      "obstacle_id": "obs_1782722347319_5",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.331Z",
+      "obstacle_id": "obs_1782722347328_6",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.340Z",
+      "obstacle_id": "obs_1782722347337_7",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.347Z",
+      "obstacle_id": "obs_1782722347344_8",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.356Z",
+      "obstacle_id": "obs_1782722347352_9",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.363Z",
+      "obstacle_id": "obs_1782722347361_10",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.372Z",
+      "obstacle_id": "obs_1782722347369_11",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.379Z",
+      "obstacle_id": "obs_1782722347377_12",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.387Z",
+      "obstacle_id": "obs_1782722347384_13",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.395Z",
+      "obstacle_id": "obs_1782722347392_14",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.402Z",
+      "obstacle_id": "obs_1782722347399_15",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.410Z",
+      "obstacle_id": "obs_1782722347407_16",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.418Z",
+      "obstacle_id": "obs_1782722347415_17",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.426Z",
+      "obstacle_id": "obs_1782722347423_18",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.433Z",
+      "obstacle_id": "obs_1782722347431_19",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.441Z",
+      "obstacle_id": "obs_1782722347438_20",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.448Z",
+      "obstacle_id": "obs_1782722347445_21",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.456Z",
+      "obstacle_id": "obs_1782722347453_22",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.465Z",
+      "obstacle_id": "obs_1782722347461_23",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.472Z",
+      "obstacle_id": "obs_1782722347469_24",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.480Z",
+      "obstacle_id": "obs_1782722347477_25",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.487Z",
+      "obstacle_id": "obs_1782722347485_26",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.495Z",
+      "obstacle_id": "obs_1782722347492_27",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.502Z",
+      "obstacle_id": "obs_1782722347499_28",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.509Z",
+      "obstacle_id": "obs_1782722347507_29",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.517Z",
+      "obstacle_id": "obs_1782722347514_30",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.525Z",
+      "obstacle_id": "obs_1782722347522_31",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.533Z",
+      "obstacle_id": "obs_1782722347529_32",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.534Z",
+      "obstacle_id": "obs_1782722347533_32",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.542Z",
+      "obstacle_id": "obs_1782722347540_33",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.550Z",
+      "obstacle_id": "obs_1782722347547_34",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.557Z",
+      "obstacle_id": "obs_1782722347555_35",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.565Z",
+      "obstacle_id": "obs_1782722347562_36",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.573Z",
+      "obstacle_id": "obs_1782722347570_37",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.581Z",
+      "obstacle_id": "obs_1782722347578_38",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.588Z",
+      "obstacle_id": "obs_1782722347586_39",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.596Z",
+      "obstacle_id": "obs_1782722347593_40",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.604Z",
+      "obstacle_id": "obs_1782722347601_41",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.611Z",
+      "obstacle_id": "obs_1782722347608_42",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.619Z",
+      "obstacle_id": "obs_1782722347616_43",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.627Z",
+      "obstacle_id": "obs_1782722347624_44",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.635Z",
+      "obstacle_id": "obs_1782722347632_45",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.642Z",
+      "obstacle_id": "obs_1782722347639_46",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.650Z",
+      "obstacle_id": "obs_1782722347647_47",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.657Z",
+      "obstacle_id": "obs_1782722347654_48",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.665Z",
+      "obstacle_id": "obs_1782722347662_49",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.672Z",
+      "obstacle_id": "obs_1782722347670_50",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.680Z",
+      "obstacle_id": "obs_1782722347677_51",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.688Z",
+      "obstacle_id": "obs_1782722347685_52",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.696Z",
+      "obstacle_id": "obs_1782722347693_53",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.704Z",
+      "obstacle_id": "obs_1782722347701_54",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.711Z",
+      "obstacle_id": "obs_1782722347708_55",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.719Z",
+      "obstacle_id": "obs_1782722347716_56",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.727Z",
+      "obstacle_id": "obs_1782722347724_57",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.735Z",
+      "obstacle_id": "obs_1782722347732_58",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.743Z",
+      "obstacle_id": "obs_1782722347740_59",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.751Z",
+      "obstacle_id": "obs_1782722347748_60",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.759Z",
+      "obstacle_id": "obs_1782722347755_61",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.766Z",
+      "obstacle_id": "obs_1782722347764_62",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.774Z",
+      "obstacle_id": "obs_1782722347771_63",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.782Z",
+      "obstacle_id": "obs_1782722347779_64",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:39:07.784Z",
+      "obstacle_id": "obs_1782722347783_64",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.825Z",
+      "obstacle_id": "obs_1782722407817_1",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.839Z",
+      "obstacle_id": "obs_1782722407834_2",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.851Z",
+      "obstacle_id": "obs_1782722407847_3",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.862Z",
+      "obstacle_id": "obs_1782722407858_4",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.872Z",
+      "obstacle_id": "obs_1782722407868_5",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.881Z",
+      "obstacle_id": "obs_1782722407877_6",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.889Z",
+      "obstacle_id": "obs_1782722407886_7",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.898Z",
+      "obstacle_id": "obs_1782722407895_8",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.907Z",
+      "obstacle_id": "obs_1782722407904_9",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.916Z",
+      "obstacle_id": "obs_1782722407913_10",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.925Z",
+      "obstacle_id": "obs_1782722407922_11",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.933Z",
+      "obstacle_id": "obs_1782722407930_12",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.942Z",
+      "obstacle_id": "obs_1782722407938_13",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.952Z",
+      "obstacle_id": "obs_1782722407947_14",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.960Z",
+      "obstacle_id": "obs_1782722407957_15",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.967Z",
+      "obstacle_id": "obs_1782722407964_16",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.975Z",
+      "obstacle_id": "obs_1782722407973_17",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.984Z",
+      "obstacle_id": "obs_1782722407981_18",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:07.992Z",
+      "obstacle_id": "obs_1782722407989_19",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.001Z",
+      "obstacle_id": "obs_1782722407997_20",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.009Z",
+      "obstacle_id": "obs_1782722408005_21",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.017Z",
+      "obstacle_id": "obs_1782722408014_22",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.025Z",
+      "obstacle_id": "obs_1782722408022_23",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.032Z",
+      "obstacle_id": "obs_1782722408030_24",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.040Z",
+      "obstacle_id": "obs_1782722408037_25",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.050Z",
+      "obstacle_id": "obs_1782722408046_26",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.058Z",
+      "obstacle_id": "obs_1782722408055_27",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.067Z",
+      "obstacle_id": "obs_1782722408063_28",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.074Z",
+      "obstacle_id": "obs_1782722408072_29",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.082Z",
+      "obstacle_id": "obs_1782722408079_30",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.091Z",
+      "obstacle_id": "obs_1782722408088_31",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.099Z",
+      "obstacle_id": "obs_1782722408095_32",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.101Z",
+      "obstacle_id": "obs_1782722408100_32",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.109Z",
+      "obstacle_id": "obs_1782722408106_33",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.117Z",
+      "obstacle_id": "obs_1782722408115_34",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.126Z",
+      "obstacle_id": "obs_1782722408123_35",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.136Z",
+      "obstacle_id": "obs_1782722408132_36",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.143Z",
+      "obstacle_id": "obs_1782722408140_37",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.152Z",
+      "obstacle_id": "obs_1782722408149_38",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.160Z",
+      "obstacle_id": "obs_1782722408157_39",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.169Z",
+      "obstacle_id": "obs_1782722408166_40",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.177Z",
+      "obstacle_id": "obs_1782722408174_41",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.185Z",
+      "obstacle_id": "obs_1782722408182_42",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.193Z",
+      "obstacle_id": "obs_1782722408190_43",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.201Z",
+      "obstacle_id": "obs_1782722408198_44",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.210Z",
+      "obstacle_id": "obs_1782722408207_45",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.218Z",
+      "obstacle_id": "obs_1782722408215_46",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.227Z",
+      "obstacle_id": "obs_1782722408223_47",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.236Z",
+      "obstacle_id": "obs_1782722408233_48",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.245Z",
+      "obstacle_id": "obs_1782722408242_49",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.253Z",
+      "obstacle_id": "obs_1782722408250_50",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.262Z",
+      "obstacle_id": "obs_1782722408258_51",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.271Z",
+      "obstacle_id": "obs_1782722408267_52",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.280Z",
+      "obstacle_id": "obs_1782722408276_53",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.288Z",
+      "obstacle_id": "obs_1782722408285_54",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.296Z",
+      "obstacle_id": "obs_1782722408293_55",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.304Z",
+      "obstacle_id": "obs_1782722408301_56",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.313Z",
+      "obstacle_id": "obs_1782722408310_57",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.321Z",
+      "obstacle_id": "obs_1782722408318_58",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.329Z",
+      "obstacle_id": "obs_1782722408326_59",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.338Z",
+      "obstacle_id": "obs_1782722408334_60",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.346Z",
+      "obstacle_id": "obs_1782722408343_61",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.354Z",
+      "obstacle_id": "obs_1782722408351_62",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.362Z",
+      "obstacle_id": "obs_1782722408359_63",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.371Z",
+      "obstacle_id": "obs_1782722408367_64",
+      "action": "bootstrap_development_intake",
+      "route": "repair_in_place",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-29T08:40:08.373Z",
+      "obstacle_id": "obs_1782722408372_64",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    }
+  ],
+  "last_adjustment": "bootstrap_development_intake"
+}

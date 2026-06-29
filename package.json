@@ -114,6 +114,7 @@
     "lifeos:direct-action:v1-acceptance": "node scripts/run-lifeos-direct-action-v1-acceptance.mjs",
     "lifeos:action-inbox:v1-acceptance": "node scripts/run-action-inbox-v1-acceptance.mjs",
     "lifeos:machine-alpha-walkthrough": "node scripts/run-machine-alpha-walkthrough.mjs",
+    "lifeos:user-auth:v1-acceptance": "node scripts/run-lifeos-user-auth-v1-acceptance.mjs",
     "lifeos:lifere-os:v1-acceptance": "node scripts/run-lifere-os-v1-acceptance.mjs",
     "lifeos:lifere-w1-acceptance": "node scripts/run-lifere-w1-acceptance.mjs",
     "lifeos:lifere-w2-acceptance": "node scripts/run-lifere-w2-acceptance.mjs",

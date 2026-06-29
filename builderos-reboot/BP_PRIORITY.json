@@ -3,35 +3,35 @@
     "domain": "Machine",
     "status": "CANONICAL",
     "not_hist_domain": true,
-    "role": "Ordered blueprint priority list — active product work queue (NOT Historian domain)",
+    "role": "Ordered blueprint priority list \u2014 active product work queue (NOT Historian domain)",
     "replaces_for_orchestration": "Hist-owned MISSION_QUEUE.json and overnight artifacts",
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
   "updated_at": "2026-06-29",
-  "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BPs in priority order ARE the queue.",
+  "operator_lock": "Adam 2026-06-22 \u2014 Voice Rail SCRAPPED (salvage only). BPs in priority order ARE the queue.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
     {
       "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
       "status": "SCRAPPED_SALVAGE",
-      "operator_lock": "Adam 2026-06-22 — program scrapped; salvage reusable pieces only",
+      "operator_lock": "Adam 2026-06-22 \u2014 program scrapped; salvage reusable pieces only",
       "salvage_manifest": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/SALVAGE_MANIFEST.json",
       "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
       "hist_doc": "docs/VOICE_RAIL_HISTORY_ONLY.md",
-      "note": "NOT active queue. STT/TTS/wake-word salvage → Lumin Chair. Overlay redirects to /lifeos."
+      "note": "NOT active queue. STT/TTS/wake-word salvage \u2192 Lumin Chair. Overlay redirects to /lifeos."
     },
     {
       "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
       "status": "INTERNAL_PROOF_ONLY",
-      "operator_lock": "Internal factory proof receipt — not an active product queue item.",
+      "operator_lock": "Internal factory proof receipt \u2014 not an active product queue item.",
       "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "note": "Canonical closure acceptance receipt for the BuilderOS autonomy-closure mission."
     },
     {
       "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
       "status": "INTERNAL_PROOF_ONLY",
-      "operator_lock": "Internal transport/deploy proof receipt — not an active product queue item.",
+      "operator_lock": "Internal transport/deploy proof receipt \u2014 not an active product queue item.",
       "receipt_path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "note": "Canonical build/deploy/runtime proof receipt for the BuilderOS autonomy-closure mission."
     }
@@ -101,7 +101,7 @@
       "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance",
       "receipt_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
-      "note": "Capture pipeline v2 — intake staging (Voice Rail scrapped; salvage STT/TTS via Chair path).",
+      "note": "Capture pipeline v2 \u2014 intake staging (Voice Rail scrapped; salvage STT/TTS via Chair path).",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/OBJECTIVE_VERDICT.json",
@@ -128,7 +128,7 @@
       "acceptance_command": "npm run lifeos:commitment-route:v2-acceptance",
       "receipt_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
-      "note": "LifeOS v2.1 — inbox commitment → commitment tracker",
+      "note": "LifeOS v2.1 \u2014 inbox commitment \u2192 commitment tracker",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/OBJECTIVE_VERDICT.json",
@@ -160,17 +160,19 @@
       "note": "Point B = LifeRE Alpha. Founder success test = lifeos-app LifeRE path + daily cycle.",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-29T02:06:45.821Z",
-      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618",
-      "production_base": "https://robust-magic-production.up.railway.app",
+      "technical_pass_at": "2026-06-29T08:35:05.946Z",
+      "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2",
+      "production_base": "",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "artifact_sync": {
-        "at": "2026-06-29T02:06:45.821Z",
+        "at": "2026-06-29T08:35:05.946Z",
         "mode": "technical_acceptance",
         "status": "CURRENT"
-      }
+      },
+      "machine_alpha_at": "2026-06-29T09:00:00.000Z",
+      "machine_alpha_receipt": "products/receipts/MACHINE_ALPHA_WALKTHROUGH.json"
     },
     {
       "rank": 6,
@@ -273,7 +275,7 @@
       "acceptance_command": "npm run lifeos:founder-chat:alpha:battery",
       "receipt_path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
       "verdict": "TECHNICAL_PASS",
-      "note": "Gap-fill from Lumin alpha findings — identity routing, UI undefined prefix, env null repair. SNT handoff complete.",
+      "note": "Gap-fill from Lumin alpha findings \u2014 identity routing, UI undefined prefix, env null repair. SNT handoff complete.",
       "build_method": "GAP-FILL",
       "founder_usability_pass": false,
       "production_base": "https://robust-magic-production.up.railway.app",
@@ -286,6 +288,24 @@
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }
+    },
+    {
+      "rank": 11,
+      "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+      "product_id": "lifeos",
+      "product_home": "docs/products/lifeos/",
+      "product_ssot": "docs/products/lifeos/PRODUCT_SSOT.md",
+      "objective_home": "docs/products/lifeos/OBJECTIVES/",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/BLUEPRINT.json",
+      "blueprint_status": "active",
+      "acceptance_command": "npm run lifeos:user-auth:v1-acceptance",
+      "machine_alpha_command": "npm run lifeos:machine-alpha-walkthrough",
+      "receipt_path": "products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
+      "verdict": "PENDING",
+      "build_method": "system-build",
+      "founder_usability_pass": false,
+      "note": "LifeOS consumer auth system \u2014 #1 LifeOS gap. Machine builds per blueprint steps. Machine alpha walkthrough required before moving on.",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/FOUNDER_PACKET.md"
     }
   ]
 }

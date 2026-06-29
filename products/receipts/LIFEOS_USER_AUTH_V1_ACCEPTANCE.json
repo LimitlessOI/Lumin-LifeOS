@@ -1,0 +1,17 @@
+{
+  "schema": "lifeos_user_auth_v1_acceptance",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "at": "2026-06-29T08:39:21.898Z",
+  "passed": [],
+  "failed": [
+    "UAT-STUB_pending_build"
+  ],
+  "tests_passed": [],
+  "tests_failed": [
+    "UAT-STUB_pending_build"
+  ],
+  "fail_UAT-STUB_pending_build": "Blueprint not yet built — BuilderOS implements per BLUEPRINT.json steps UAT-001 through UAT-007",
+  "completed_at": "2026-06-29T08:39:21.911Z",
+  "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2",
+  "verdict": "FAIL"
+}

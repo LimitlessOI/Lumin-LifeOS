@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-29T02:06:45.821Z",
+  "generated_at": "2026-06-29T08:35:05.946Z",
   "objective_id": "PRODUCT-LIFERE-OS-V1-0001",
   "objective_name": "LifeRE OS v1 (LifeRE Alpha)",
   "verdict": "TECHNICAL_PASS",
   "receipt": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
-  "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618",
+  "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2",
   "tests_passed": [
     "LRE-T01_service_file",
     "LRE-T01b_top3_export",

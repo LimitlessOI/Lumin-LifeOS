@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-29 — Machine Alpha Walkthrough script (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence; intake_blueprint fix.
+**Last Updated:** 2026-06-29 — LifeOS User Auth blueprint stub wired (run-lifeos-user-auth-v1-acceptance.mjs + finishBpAcceptance); Machine Alpha Walkthrough (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence.
 
 ---
 
