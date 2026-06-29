@@ -147,3 +147,7 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - `scripts/run-founder-chat-alpha-battery.mjs`: B1 delegates terminal proof to fresh `REAL_APP_E2E.drawer_direct_build` when invoked from founder-ui-proof; per-probe poll caps for B2/B3.
 - `scripts/run-builderos-founder-ui-proof.mjs`: reuses fresh E2E receipt, retries once on drawer-only failure, passes `FOUNDER_BATTERY_E2E_BUILD_SATISFIED` to alpha battery.
 - `services/builderos-command-control-service.js`: DB-backed founder jobs expose `created_at` for stale-running detection.
+
+## 2026-06-29 personal Lumin routing receipt
+
+- `tests/lumin-conversation-routing.test.js`: personal-life conversation regression now expects the `lumin` channel, matching the current LifeOS routing receipt and preserving the non-display guarantee for personal questions.
