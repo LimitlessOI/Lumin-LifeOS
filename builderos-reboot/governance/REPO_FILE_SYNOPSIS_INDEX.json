@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T17:23:52.611Z",
+  "generated_at": "2026-06-29T17:24:54.047Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11357,
   "files": [
@@ -26814,9 +26814,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-007/run-lifeos-user-auth-v1-acceptance.mjs",
       "synopsis": "LifeOS User Auth V1 acceptance test — register, login, refresh, me, logout, tier gate.",
-      "bytes": 6169,
-      "mtime": "2026-06-29T17:20:46.038Z",
-      "indexed_at": "2026-06-29T17:23:52.611Z"
+      "bytes": 6151,
+      "mtime": "2026-06-29T17:24:54.071Z",
+      "indexed_at": "2026-06-29T17:24:54.047Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/DO_NOT_INVENT.json",
@@ -68803,9 +68803,9 @@
     {
       "path": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
       "synopsis": "LifeOS User Auth V1 acceptance test — register, login, refresh, me, logout, tier gate.",
-      "bytes": 6169,
-      "mtime": "2026-06-29T17:20:52.672Z",
-      "indexed_at": "2026-06-29T17:23:52.611Z"
+      "bytes": 6151,
+      "mtime": "2026-06-29T17:24:31.688Z",
+      "indexed_at": "2026-06-29T17:24:54.047Z"
     },
     {
       "path": "scripts/run-lifere-agent-alpha.mjs",

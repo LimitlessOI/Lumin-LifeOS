@@ -100,10 +100,10 @@ function step(id, cond, detail = '') {
     process.exit(1);
   }
 
-  const regR = await req('POST', '/register', { handle, email, password: pass, invite_code: invCode });
+  const regR = await req('POST', '/register', { handle, email, password: pass, inviteCode: invCode });
   step('UAT-register', [200, 201].includes(regR.status) && regR.json?.ok === true, JSON.stringify(regR.json).slice(0, 200));
 
-  const loginR = await req('POST', '/login', { handle_or_email: email, password: pass });
+  const loginR = await req('POST', '/login', { email, password: pass });
   step('UAT-login-ok', loginR.ok && loginR.json?.ok, JSON.stringify(loginR.json).slice(0, 200));
   const { access_token, refresh_token } = loginR.json || {};
   step('UAT-login-access-token', Boolean(access_token));
