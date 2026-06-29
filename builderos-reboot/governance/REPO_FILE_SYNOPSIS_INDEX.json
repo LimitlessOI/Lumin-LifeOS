@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T16:15:31.326Z",
+  "generated_at": "2026-06-29T16:52:31.607Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11372,
   "files": [
@@ -35504,9 +35504,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 51688,
-      "mtime": "2026-06-29T16:15:00.867Z",
-      "indexed_at": "2026-06-29T16:15:31.326Z"
+      "bytes": 52479,
+      "mtime": "2026-06-29T16:46:38.933Z",
+      "indexed_at": "2026-06-29T16:52:31.607Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -84573,9 +84573,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 9633,
-      "mtime": "2026-06-29T07:53:32.665Z",
-      "indexed_at": "2026-06-29T16:09:38.764Z",
+      "bytes": 9717,
+      "mtime": "2026-06-29T16:46:13.118Z",
+      "indexed_at": "2026-06-29T16:52:31.607Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

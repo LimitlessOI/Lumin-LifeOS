@@ -4,7 +4,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-completion.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
@@ -78,6 +78,27 @@ async function probeSmoSessionCreate(baseUrl, commandKey) {
   }
 }
 
+function spawnAsync(cmd, args, options = {}) {
+  return new Promise((resolve) => {
+    const child = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'pipe'], ...options });
+    let stdout = '';
+    let stderr = '';
+    child.stdout?.on('data', (d) => { stdout += d; });
+    child.stderr?.on('data', (d) => { stderr += d; });
+    const timer = options.timeout
+      ? setTimeout(() => { child.kill('SIGTERM'); resolve({ status: -1, stdout, stderr: `${stderr}[TIMEOUT]` }); }, options.timeout)
+      : null;
+    child.on('close', (code) => {
+      if (timer) clearTimeout(timer);
+      resolve({ status: code, stdout, stderr });
+    });
+    child.on('error', (err) => {
+      if (timer) clearTimeout(timer);
+      resolve({ status: -1, stdout, stderr: err.message });
+    });
+  });
+}
+
 export async function discoverProductExpansionWork(options = {}) {
   const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
   const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
@@ -85,7 +106,7 @@ export async function discoverProductExpansionWork(options = {}) {
   const pointB = loadPointBTarget();
 
   const bpIncomplete = loadBpItems().filter((i) => isQueueItemIncomplete(i, { pointBTarget: pointB }));
-  if (bpIncomplete.length) {
+  if (bpIncomplete.length && !process.env.BUILDEROS_AUTOPILOT) {
     items.push({
       id: 'bp_priority_foundation',
       kind: 'foundation_pipeline',
@@ -95,20 +116,21 @@ export async function discoverProductExpansionWork(options = {}) {
     });
   }
 
-  const smosVerify = spawnSync(process.execPath, ['scripts/verify-socialmediaos.mjs'], {
-    cwd: ROOT,
-    encoding: 'utf8',
-    env: { ...process.env, PUBLIC_BASE_URL: baseUrl, COMMAND_CENTER_KEY: commandKey },
-    timeout: 120_000,
-  });
-  if (smosVerify.status !== 0) {
-    items.push({
-      id: 'smos_acceptance_repair',
-      kind: 'acceptance_repair',
-      priority: 2,
-      product: 'SocialMediaOS',
-      detail: 'verify-socialmediaos.mjs failing',
+  if (baseUrl) {
+    const smosVerify = await spawnAsync(process.execPath, ['scripts/verify-socialmediaos.mjs'], {
+      cwd: ROOT,
+      env: { ...process.env, PUBLIC_BASE_URL: baseUrl, COMMAND_CENTER_KEY: commandKey },
+      timeout: 30_000,
     });
+    if (smosVerify.status !== 0) {
+      items.push({
+        id: 'smos_acceptance_repair',
+        kind: 'acceptance_repair',
+        priority: 2,
+        product: 'SocialMediaOS',
+        detail: 'verify-socialmediaos.mjs failing',
+      });
+    }
   }
 
   const sessionProbe = await probeSmoSessionCreate(baseUrl, commandKey);
@@ -160,20 +182,9 @@ export async function countProductWork(options = {}) {
   };
 }
 
-function runBpNeverStopOnce() {
-  const r = spawnSync(process.execPath, ['scripts/bp-priority-never-stop.mjs', '--once'], {
+async function tryRedeploy() {
+  const r = await spawnAsync('npm', ['run', 'system:railway:redeploy'], {
     cwd: ROOT,
-    encoding: 'utf8',
-    env: { ...process.env, BUILDEROS_NEVER_STOP: '1', NEVER_STOP_PRODUCTS: '1' },
-    timeout: 900_000,
-  });
-  return { ok: r.status === 0, status: r.status, stderr: String(r.stderr || '').slice(0, 400) };
-}
-
-function tryRedeploy() {
-  const r = spawnSync('npm', ['run', 'system:railway:redeploy'], {
-    cwd: ROOT,
-    encoding: 'utf8',
     timeout: 720_000,
     shell: true,
   });
@@ -217,17 +228,14 @@ export async function runProductExpansionCycle(options = {}) {
 
   switch (task.kind) {
     case 'foundation_pipeline':
-    case 'founder_usability_gap': {
-      const r = runBpNeverStopOnce();
-      result = { ...result, ok: r.ok, detail: 'bp_never_stop_once', exit: r.status };
+    case 'founder_usability_gap':
+    default: {
+      log({ event: 'bp_scheduler_deferred', task_id: task.id, kind: task.kind });
+      result = { ...result, ok: true, detail: 'deferred_to_bp_scheduler' };
       break;
     }
     case 'acceptance_repair':
     case 'schema_or_crud': {
-      if (task.migration_pending && fs.existsSync(path.join(ROOT, 'db/migrations/20260629_socialmediaos_schema_align.sql'))) {
-        const pull = spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: ROOT, encoding: 'utf8' });
-        log({ event: 'git_pull', ok: pull.status === 0 });
-      }
       const build = await postBuilderBuild(baseUrl, commandKey, {
         domain: 'lifeos',
         mode: 'code',
@@ -237,7 +245,7 @@ export async function runProductExpansionCycle(options = {}) {
         platform_gap_fill: true,
       });
       result = { ...result, ok: build.ok, detail: 'builder_schema_align', build: build.body };
-      if (build.ok) tryRedeploy();
+      if (build.ok) await tryRedeploy();
       break;
     }
     case 'intake_blueprint': {
@@ -249,10 +257,6 @@ export async function runProductExpansionCycle(options = {}) {
       });
       result = { ...result, ok: intake.ok === true, detail: 'intake_blueprint', intake };
       break;
-    }
-    default: {
-      const r = runBpNeverStopOnce();
-      result = { ...result, ok: r.ok, detail: 'default_bp_cycle' };
     }
   }
 
