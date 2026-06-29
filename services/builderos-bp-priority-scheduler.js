@@ -11,6 +11,12 @@ import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { isQueueItemIncomplete } from './bp-priority-completion.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';
+import {
+  countProductWork,
+  neverStopProductsEnabled,
+  hasTokenCapacity,
+  runProductExpansionCycle,
+} from './never-stop-product-factory.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(REPO_ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -22,7 +28,9 @@ const state = {
   lastRunAt: null,
   lastExitCode: null,
   lastError: null,
+  lastSkipReason: null,
   totalRuns: 0,
+  bootAt: new Date().toISOString(),
 };
 
 function queueHasIncompleteWork() {
@@ -64,11 +72,16 @@ export function getBpPrioritySchedulerStatus() {
   const receipt = safeReadJson(RECEIPT_PATH);
   const pointB = loadPointBTarget();
   const incomplete = queueHasIncompleteWork();
+  const neverStop = neverStopProductsEnabled();
+  const token = hasTokenCapacity();
   const enabled = process.env.BUILDEROS_AUTOPILOT === '1';
   const lastRunAt = state.lastRunAt || receipt?.ran_at || null;
   const lastRunAgeMs = lastRunAt ? Math.max(0, Date.now() - new Date(lastRunAt).getTime()) : null;
   const recentWindowMs = Number(process.env.BUILDEROS_AUTOPILOT_RECENT_WINDOW_MS || 2 * 60 * 60 * 1000);
   const recent = lastRunAgeMs != null && lastRunAgeMs <= recentWindowMs;
+  const bootDelayMs = Number(process.env.BUILDEROS_AUTOPILOT_BOOT_DELAY_MS || 2 * 60 * 1000);
+  const msSinceBoot = Date.now() - new Date(state.bootAt).getTime();
+  const inBootWindow = msSinceBoot < bootDelayMs + 30_000;
   const healthy =
     enabled &&
     !state.running &&
@@ -82,15 +95,20 @@ export function getBpPrioritySchedulerStatus() {
       running: state.running,
       recent,
       healthy,
+      in_boot_window: inBootWindow,
+      boot_at: state.bootAt,
       recent_window_ms: recentWindowMs,
       interval_ms: Number(process.env.BUILDEROS_AUTOPILOT_INTERVAL_MS || 30 * 60 * 1000),
-      boot_delay_ms: Number(process.env.BUILDEROS_AUTOPILOT_BOOT_DELAY_MS || 2 * 60 * 1000),
+      boot_delay_ms: bootDelayMs,
       state: getBpPrioritySchedulerState(),
       receipt,
       queue_has_incomplete_work: incomplete,
+      never_stop_products: neverStop,
+      token_capacity: token,
       point_b_target: pointB || null,
       last_run_at: lastRunAt,
       last_run_age_ms: lastRunAgeMs,
+      last_skip_reason: state.lastSkipReason,
       canonical_runner: path.relative(REPO_ROOT, RUNNER_SCRIPT),
       canonical_receipt: path.relative(REPO_ROOT, RECEIPT_PATH),
     },
@@ -165,6 +183,7 @@ function recordGuardedOutcome(outcome, { logger } = {}) {
     });
     logger?.info?.({ reason: outcome.reason }, '[BP-PRIORITY-SCHEDULER] healthy idle — queue complete');
   } else if (outcome?.skipped) {
+    state.lastSkipReason = outcome.reason || 'skipped';
     writeReceipt({
       ok: false,
       skipped: true,
@@ -185,10 +204,14 @@ const guardedBpPriorityTick = createUsefulWorkGuard({
     if (process.env.BUILDEROS_AUTOPILOT !== '1') {
       return { ok: false, reason: 'BUILDEROS_AUTOPILOT not enabled' };
     }
+    const token = hasTokenCapacity();
+    if (!token.ok && neverStopProductsEnabled()) {
+      return { ok: false, reason: `token_capacity: ${token.reason}` };
+    }
     try {
       const { founderStopActive } = await loadFactoryArcModules();
       const stop = founderStopActive();
-      if (stop.active) {
+      if (stop.active && !neverStopProductsEnabled()) {
         return { ok: false, reason: 'founder_stop_active' };
       }
     } catch {
@@ -200,16 +223,36 @@ const guardedBpPriorityTick = createUsefulWorkGuard({
     return { ok: true, reason: null };
   },
   workCheck: async () => {
-    const count = queueHasIncompleteWork() ? 1 : 0;
-    const target = loadPointBTarget();
-    return {
-      count,
-      description: count
-        ? `Incomplete BP_PRIORITY work toward ${target?.label || 'Point B'}`
-        : 'BP_PRIORITY queue complete',
-    };
+    const token = hasTokenCapacity();
+    if (!token.ok) {
+      return { count: 0, description: `token_capacity: ${token.reason}` };
+    }
+    if (queueHasIncompleteWork()) {
+      const target = loadPointBTarget();
+      return {
+        count: 1,
+        description: `Incomplete BP_PRIORITY work toward ${target?.label || 'Point B'}`,
+      };
+    }
+    if (neverStopProductsEnabled()) {
+      return countProductWork();
+    }
+    return { count: 0, description: 'BP_PRIORITY queue complete' };
   },
-  execute: async ({ logger } = {}) => runBpPriorityOnce({ logger }),
+  execute: async ({ logger } = {}) => {
+    if (!queueHasIncompleteWork() && neverStopProductsEnabled()) {
+      const result = await runProductExpansionCycle({ logger });
+      writeReceipt({
+        ok: result.ok !== false,
+        expansion: true,
+        task_id: result.task_id,
+        detail: result.detail,
+        ran_at: new Date().toISOString(),
+      });
+      return result;
+    }
+    return runBpPriorityOnce({ logger });
+  },
 });
 
 /**

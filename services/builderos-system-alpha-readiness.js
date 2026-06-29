@@ -432,9 +432,11 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       code: 'BP_PRIORITY_SCHEDULER_DISABLED',
       detail: 'BUILDEROS_AUTOPILOT is not enabled — canonical autonomous build queue is not running.',
     }]),
-    ...(schedulerStatus.scheduler.enabled && schedulerStatus.scheduler.recent ? [] : [{
+    ...(schedulerStatus.scheduler.enabled && (schedulerStatus.scheduler.recent || schedulerStatus.scheduler.in_boot_window) ? [] : [{
       code: 'BP_PRIORITY_SCHEDULER_NOT_RECENT',
-      detail: 'Canonical BP scheduler has no recent successful receipt inside the configured liveness window.',
+      detail: schedulerStatus.scheduler.last_skip_reason
+        ? `Canonical BP scheduler last skipped: ${schedulerStatus.scheduler.last_skip_reason}`
+        : 'Canonical BP scheduler has no recent successful receipt inside the configured liveness window.',
     }]),
   ];
 

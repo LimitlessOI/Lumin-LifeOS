@@ -5,7 +5,7 @@
 **Status:** `DRAFT`  
 **Owner:** Adam  
 **Verifier:** BuilderOS / OIL / PBB  
-**Last Updated:** 2026-06-28 (V1 memory proof-source + alpha-readiness)
+**Last Updated:** 2026-06-29 (scheduler boot-window detection: boot_at + in_boot_window + last_skip_reason in scheduler state; alpha-readiness suppresses false NOT_RECENT during boot window)
 
 ## Purpose
 

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T08:41:22.085Z",
+  "generated_at": "2026-06-29T08:54:41.028Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11363,
   "files": [
@@ -21329,9 +21329,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 17251,
-      "mtime": "2026-06-29T08:38:09.226Z",
-      "indexed_at": "2026-06-29T08:41:22.085Z",
+      "bytes": 17299,
+      "mtime": "2026-06-29T08:54:08.717Z",
+      "indexed_at": "2026-06-29T08:54:41.028Z",
       "synopsis_index_only": true
     },
     {
@@ -33238,9 +33238,9 @@
     {
       "path": "docs/architecture/BUILDEROS_STRUCTURAL_CONSOLIDATION_BLUEPRINT.md",
       "synopsis": "BUILDEROS STRUCTURAL CONSOLIDATION BLUEPRINT",
-      "bytes": 8906,
-      "mtime": "2026-06-28T18:19:01.834Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z"
+      "bytes": 9025,
+      "mtime": "2026-06-29T08:54:24.790Z",
+      "indexed_at": "2026-06-29T08:54:41.028Z"
     },
     {
       "path": "docs/architecture/BUILDEROS_SYSTEM_INVENTORY.md",
@@ -35456,9 +35456,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 50805,
-      "mtime": "2026-06-29T08:37:22.300Z",
-      "indexed_at": "2026-06-29T08:41:22.085Z"
+      "bytes": 50975,
+      "mtime": "2026-06-29T08:53:43.606Z",
+      "indexed_at": "2026-06-29T08:54:41.028Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -80930,9 +80930,9 @@
     {
       "path": "services/builderos-bp-priority-scheduler.js",
       "synopsis": "BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.",
-      "bytes": 9315,
-      "mtime": "2026-06-29T07:53:32.703Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z",
+      "bytes": 9705,
+      "mtime": "2026-06-29T08:53:21.896Z",
+      "indexed_at": "2026-06-29T08:54:41.028Z",
       "ssot": [
         "builderos-reboot/BP_PRIORITY.json",
         "docs/products/AUTHORITY_BOUNDARIES.md"
@@ -81205,9 +81205,9 @@
     {
       "path": "services/builderos-system-alpha-readiness.js",
       "synopsis": "BuilderOS structural consolidation + Alpha readiness.",
-      "bytes": 25701,
-      "mtime": "2026-06-28T18:19:01.836Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z",
+      "bytes": 25895,
+      "mtime": "2026-06-29T08:53:32.251Z",
+      "indexed_at": "2026-06-29T08:54:41.028Z",
       "ssot": [
         "docs/architecture/BUILDEROS_STRUCTURAL_CONSOLIDATION_BLUEPRINT.md",
         "docs/products/builderos/PRODUCT_SSOT.md"
