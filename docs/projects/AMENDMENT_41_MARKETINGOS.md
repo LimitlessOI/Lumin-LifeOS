@@ -1202,7 +1202,7 @@ Create Stripe payment link for $997 "Build My Thing — 30-Day Content System" (
 ## Pre-Build Readiness
 
 **Status:** NOT_READY (Phase 0 starts today; Phase 1 code starts after decisions)
-**Last Updated:** 2026-05-30
+**Last Updated:** 2026-06-29
 
 ### Gate 1 — Implementation Detail
 - [x] Complete A-to-Z feature inventory
@@ -1301,6 +1301,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-06-29 | **Intake idempotent re-run** — same as AMENDMENT_04/21; chat A2Z PASS when SMOS already built. | Founder chat re-run should not fail on completed BP. | ✅ | `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |
 | 2026-06-29 | **intake_blueprint routing hardening** — `resolveChairContext` checks intake before forced `explicitAction: build`; `isBuildRequest` excludes SMOS intake phrases; orchestrator skips build hijack when `isIntakeBlueprintIntent`. **founder-chat-health 502 fix** — cred helpers hoisted to route scope. | Chat A→Z SMOS hit `build_terminal` + FP v2 INTENT_AMBIGUITY because `do:` forced build channel; health endpoint ReferenceError'd on undefined helpers. | ✅ | ⬜ | deploy + `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |
 | 2026-06-01 | Overnight runner priority fix — PRIORITY_RULES reorder: socialmediaos→rank 1 (was rank 2), c2_command_control→rank 2 (was rank 1). Commit `5fde694263`. Gen 2 queue confirmed: first 3 tasks = MarketingOS DB migration + marketing-transcriber.js + marketing-coach.js. Railway redeploy triggered to fix HTTP_502 blocking. 0 commits from runner yet (Railway stale deploy). | C2 was starving MarketingOS — every gen filled with C2 tasks first due to rank 1. | ✅ | ⬜ | pending |
 | 2026-06-28 | **SocialMediaOS founder-chat A→Z path:** `services/lifeos-mission-pipeline-executor.js` — `isIntakeBlueprintIntent` + golden session `3e6105c4-…`; `services/chair-context-classifier.js` + `services/lumin-chair-orchestrator.js` — `intake_blueprint` channel runs `executeIntakeBlueprint`; `scripts/run-founder-socialmediaos-chat-a2z.mjs` — JWT/command-key chat driver + receipt. | Adam: build SMOS BP A–Z from founder login via Lumin chat, not CLI backdoor. | ⚠️ IN PROGRESS: pending deploy + JWT login sync | `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |

@@ -102,7 +102,9 @@ async function main() {
     summary: String(chat.data.human_summary || chat.data.human_summary_technical || '').slice(0, 500),
   };
 
-  report.ok = chat.data.pass_fail === 'PASS' || (chat.data.command_truth === 'COMMAND_RAN' && chat.data.ok !== false);
+  report.ok = chat.data.pass_fail === 'PASS'
+    || (chat.data.command_truth === 'COMMAND_RAN' && chat.data.ok !== false)
+    || chat.data.already_complete === true;
   report.duration_ms = Date.now() - started;
   report.blocker = report.ok ? null : (chat.data.first_blocker || chat.data.reason || 'INTAKE_CHAT_FAILED');
 

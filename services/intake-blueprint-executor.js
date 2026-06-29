@@ -398,6 +398,28 @@ export async function executeIntakeBlueprint({
   }
 
   const steps = sortIntakeSteps(resolvedBlueprint.steps);
+  const acceptanceCmd = resolvedBlueprint._meta?.acceptance_cmd;
+
+  if (acceptanceCmd && !dryRun && !fromStepId) {
+    const allTargetsPresent = steps.every((step) => {
+      const target = stepTargetFile(step);
+      return target && existsSync(join(REPO_ROOT, target));
+    });
+    if (allTargetsPresent) {
+      const probe = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
+      if (probe.ok) {
+        return {
+          ok: true,
+          steps_run: 0,
+          already_complete: true,
+          results: [],
+          blueprint: resolvedBlueprint,
+          acceptance: probe,
+        };
+      }
+    }
+  }
+
   let started = !fromStepId;
   const results = [];
 
@@ -468,7 +490,6 @@ export async function executeIntakeBlueprint({
     }
   }
 
-  const acceptanceCmd = resolvedBlueprint._meta?.acceptance_cmd;
   let acceptance = null;
   let postDeploy = null;
   const hadCommits = results.some((r) => r.committed === true);

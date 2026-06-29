@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-27 — restored parse-safe BuilderOS alpha readiness service for live deploys.
+**Last Updated:** 2026-06-29 — intake blueprint idempotent re-run when acceptance already PASS.
 
 ---
 

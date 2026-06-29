@@ -605,10 +605,13 @@ export async function runLuminChairTurn(ctx, deps) {
         steps_run: intakeResult.steps_run || 0,
         failed_step: intakeResult.failed_step || null,
         acceptance: intakeResult.acceptance || null,
+        already_complete: intakeResult.already_complete === true,
         first_blocker: intakeResult.ok ? null : (intakeResult.error || intakeResult.failed_step || 'intake_failed'),
         duration_ms: Date.now() - started,
         human_summary: intakeResult.ok
-          ? `SocialMediaOS intake blueprint complete (${intakeResult.steps_run || 0} steps). Acceptance: ${intakeResult.acceptance?.ok ? 'PASS' : 'check logs'}.`
+          ? (intakeResult.already_complete
+            ? `SocialMediaOS intake blueprint already complete — acceptance PASS (idempotent re-run).`
+            : `SocialMediaOS intake blueprint complete (${intakeResult.steps_run || 0} steps). Acceptance: ${intakeResult.acceptance?.ok ? 'PASS' : 'check logs'}.`)
           : `SocialMediaOS intake failed at ${intakeResult.failed_step || 'unknown'}: ${intakeResult.error || 'see builder receipt'}.`,
         human_summary_technical: deps.formatExecutionTruthReply({
           ok: intakeResult.ok,
