@@ -8,7 +8,7 @@
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
 **Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
 **Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`  
-**Last Updated:** 2026-06-28 — alpha-auditor provision validates vault email; rejects literal null GMAIL_SIGNUP values.
+**Last Updated:** 2026-06-28 — Lumin personal identity routing + undefined prompt guard in founder chat UI.
 
 ## Mission
 

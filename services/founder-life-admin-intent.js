@@ -29,6 +29,9 @@ export function isFounderPersonalLifeIntent(text = '') {
   if (/\b(target_file|\.html|\.js|lifere|blueprint|mission|ssot|amendment|deploy|railway|builder)\b/i.test(t)) {
     return false;
   }
+  if (/\b(who am i|know me|about me|my priorities|my goals|what do you know about me|answer as my chair)\b/i.test(t)) {
+    return true;
+  }
   return PERSONAL_LIFE_MARKERS.some((re) => re.test(t));
 }
 

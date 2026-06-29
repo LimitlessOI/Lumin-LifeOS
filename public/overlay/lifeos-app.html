@@ -3264,15 +3264,22 @@ function openLuminFromQuickBar() {
   openLuminDrawer();
 }
 
+function safePromptText(value) {
+  const s = String(value ?? '').trim();
+  if (!s || s === 'undefined' || s === 'null') return '';
+  return s;
+}
+
 function seedLuminPrompt(prompt, { send = false } = {}) {
   openLuminDrawer();
   const input = document.getElementById('lumin-input');
   if (!input) return;
-  input.value = String(prompt || '');
+  const text = safePromptText(prompt);
+  input.value = text;
   luminAutoResize(input);
   setTimeout(() => input.focus(), 60);
-  if (send && prompt) {
-    setTimeout(() => luminSend({ text: prompt }), 100);
+  if (send && text) {
+    setTimeout(() => luminSend({ text }), 100);
   }
 }
 
@@ -3468,7 +3475,7 @@ function applyLuminShellAction(data) {
 
 async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');
-  const msg   = (opts.text || input.value || '').trim();
+  let msg = safePromptText(opts.text || input?.value || '');
   if (!msg || luminState.sending) return;
   const voiceTurn = opts.voice === true || luminState.voiceTurn;
   luminState.voiceTurn = false;
@@ -3949,8 +3956,9 @@ async function maybeRouteFromContextIntent() {
       }
       if (data.focus_prompt) {
         const input = document.getElementById('lumin-input');
-        if (input && !input.value.trim()) {
-          input.value = data.focus_prompt;
+        const focus = safePromptText(data.focus_prompt);
+        if (input && !input.value.trim() && focus) {
+          input.value = focus;
           luminAutoResize(input);
         }
       }
