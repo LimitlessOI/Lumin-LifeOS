@@ -1,7 +1,7 @@
 {
   "schema": "point_b_gate_v2",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "evaluated_at": "2026-06-22T22:05:00.746Z",
+  "evaluated_at": "2026-06-29T08:34:52.237Z",
   "proof_lap_only": false,
   "handoff": {
     "schema": "corridor_entered_gate_v1",

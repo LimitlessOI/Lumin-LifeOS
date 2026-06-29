@@ -1,13 +1,11 @@
 {
   "schema": "idc_exit_gate_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "pass": false,
-  "status": "BLOCKED_CONTINUE_IDC",
-  "route_to": "CHAIR",
-  "defect_owner_seat": "Chair",
-  "violations": [
-    "idc:missing ASSET_REUSE_DECISION"
-  ],
+  "pass": true,
+  "status": "IDC_EXIT_PASS",
+  "route_to": "ARC",
+  "defect_owner_seat": null,
+  "violations": [],
   "checks": {
     "intent_baseline": {
       "pass": true,
@@ -69,7 +67,7 @@
       "pass": true
     },
     "asset_reuse": {
-      "pass": false
+      "pass": true
     },
     "prediction_receipt": {
       "pass": true

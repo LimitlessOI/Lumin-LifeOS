@@ -2,7 +2,7 @@
   "schema": "studio_experience_simulation_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "seat": "Studio",
-  "simulated_at": "2026-06-22T17:34:07.468Z",
+  "simulated_at": "2026-06-29T08:34:51.747Z",
   "simulated_by": "factory-core/arc/foundation/studio-simulation.js",
   "in_scope": true,
   "checks": [
@@ -14,5 +14,25 @@
   ],
   "friction_points": [],
   "verdict": "experience_acceptable",
-  "pass": true
+  "pass": true,
+  "role_contract": {
+    "seat": "Studio",
+    "contract_version": "2.0A",
+    "title": "Design / UX",
+    "role": "Design engine + experience simulation when UI/product feel in scope — emits a governed design packet and blocks generic template-grade design before build"
+  },
+  "measurements": [
+    {
+      "metric_id": "design_distinctiveness",
+      "seat": "Studio",
+      "predicted": "design gate likely strong enough for founder-facing alpha",
+      "confidence": "GUESS",
+      "how_we_know_if_wrong": "Founder alpha or SENTRY UI testing flags the result as generic, flat, or trust-damaging despite the simulation pass.",
+      "evidence_path": "receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
+      "predicted_at": "2026-06-29T08:34:51.747Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ]
 }

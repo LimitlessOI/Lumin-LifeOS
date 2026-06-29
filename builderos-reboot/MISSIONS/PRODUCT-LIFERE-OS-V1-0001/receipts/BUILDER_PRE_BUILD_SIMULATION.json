@@ -2,7 +2,7 @@
   "schema": "builder_pre_build_simulation_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "blueprint_id": "LIFERE-OS-V1-2026-06-21",
-  "simulated_at": "2026-06-22T17:34:07.652Z",
+  "simulated_at": "2026-06-29T08:34:51.953Z",
   "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
   "procedure": [
     "simulate_blueprint_steps",

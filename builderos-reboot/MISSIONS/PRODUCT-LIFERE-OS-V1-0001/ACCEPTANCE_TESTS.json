@@ -4,13 +4,13 @@
     "step_id": "LRE-S01",
     "type": "file_sha256_matches",
     "target": "public/overlay/lifeos-lifere.html",
-    "expected_sha256": "6e9d735acd42424229bf8fb68ec334e4ba95216a201c9944b9223730cbd60a69"
+    "expected_sha256": "7756b074c6dd73b7795ae8e90c06ef49674434688c5333ca67a0eb36a8f5ad61"
   },
   {
     "test_id": "AT-LRE-S02-1",
     "step_id": "LRE-S02",
     "type": "file_sha256_matches",
     "target": "public/overlay/lifeos-app.html",
-    "expected_sha256": "3e9d70ba2bc90b8d9bd3813059be8c15edb4b93dacbbd1ec2f7ed541d48e5fbc"
+    "expected_sha256": "045e5f00268af03b21db0c27fd93b45896863946b31ff6dac48717aae2ae47e1"
   }
 ]

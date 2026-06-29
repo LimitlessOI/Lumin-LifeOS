@@ -4,7 +4,7 @@
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "tier": 1,
   "status": "HANDOFF_READY",
-  "created_at": "2026-06-22",
+  "created_at": "2026-06-29",
   "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
   "proof_lap_only": false,
   "outcome_statement": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
@@ -25,7 +25,7 @@
   "scope_boundary": "LifeRE light operational copilot: daily command center, top-3 priorities, nightly debrief, compliance guardrails. Extend production spine — no parallel stack.",
   "unacceptable_result": "Partial blueprint labeled Alpha; bypass of staging/approval gates",
   "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
-  "priority_fit": "BP_PRIORITY rank 6",
+  "priority_fit": "BP_PRIORITY rank 5",
   "point_model": {
     "A": "Vision — Adam provides FP in development stage",
     "B": "Chair locks handoff — corridor protected; Adam done until Alpha",

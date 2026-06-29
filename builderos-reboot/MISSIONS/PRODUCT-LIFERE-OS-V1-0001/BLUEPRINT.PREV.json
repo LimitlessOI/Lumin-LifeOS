@@ -2,7 +2,7 @@
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "blueprint_id": "LIFERE-OS-V1-2026-06-21",
   "blueprint_status": "complete",
-  "scope": "lifere_alpha_point_b",
+  "scope": "lifere_alpha_point_b_plus_runtime",
   "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "builderos-reboot/POINT_B_TARGET.json",
   "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
@@ -33,7 +33,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "6e9d735acd42424229bf8fb68ec334e4ba95216a201c9944b9223730cbd60a69"
+        "sha256": "7756b074c6dd73b7795ae8e90c06ef49674434688c5333ca67a0eb36a8f5ad61"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S01/lifeos-lifere.html"
@@ -53,8 +53,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-22T17:33:31.379Z",
-      "git_sha": "ea76e488f0d176ecb3bc24e5d4ab7bab93a7ba1e"
+      "completed_at": "2026-06-29T08:33:51.666Z",
+      "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2"
     },
     {
       "step_id": "LRE-S02",
@@ -67,7 +67,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "3e9d70ba2bc90b8d9bd3813059be8c15edb4b93dacbbd1ec2f7ed541d48e5fbc"
+        "sha256": "045e5f00268af03b21db0c27fd93b45896863946b31ff6dac48717aae2ae47e1"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S02/lifeos-app.html"
@@ -89,14 +89,14 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-22T17:33:31.379Z",
-      "git_sha": "ea76e488f0d176ecb3bc24e5d4ab7bab93a7ba1e"
+      "completed_at": "2026-06-29T08:33:51.666Z",
+      "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
   "authored_by": "ARC",
-  "completed_at": "2026-06-22T17:33:31.379Z",
-  "git_sha": "ea76e488f0d176ecb3bc24e5d4ab7bab93a7ba1e",
+  "completed_at": "2026-06-29T08:33:51.666Z",
+  "git_sha": "5cc2bb65fb1c0cfdc808f0da6e73fc74c9c827c2",
   "receipt_path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build"

@@ -2,7 +2,7 @@
   "schema": "asset_reuse_decision_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "arc_decision_status": "CONFIRMED",
-  "surveyed_at": "2026-06-22",
+  "surveyed_at": "2026-06-29",
   "wisdom_lessons": [
     "Reuse production spine files already built — ARC hosts byte contracts"
   ],

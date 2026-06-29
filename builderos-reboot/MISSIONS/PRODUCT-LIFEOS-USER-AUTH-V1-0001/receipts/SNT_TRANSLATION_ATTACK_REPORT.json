@@ -1,36 +1,36 @@
 {
   "schema": "snt_translation_attack_v2",
-  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "seat": "SNT",
   "review": "translation_attack",
-  "simulated_at": "2026-06-29T08:34:51.746Z",
+  "simulated_at": "2026-06-29T16:08:00.239Z",
   "simulated_by": "factory-core/arc/foundation/snt-translation-attack.js",
   "core_question": "If this claim is wrong, how would we know?",
-  "attacks_run": 5,
+  "attacks_run": 6,
   "attacks": [
     {
       "claim": "ARC preserved intent sources",
-      "pass": true,
+      "pass": false,
       "failure_scenario": "ARC invented scope",
       "severity": "blocking",
-      "evidence_if_wrong": "intent_sources=5 in BLUEPRINT.json",
-      "recommended_action": "none"
+      "evidence_if_wrong": "missing intent_sources in BLUEPRINT.json",
+      "recommended_action": "ARC revises blueprint"
     },
     {
       "claim": "Blueprint has acceptance command",
       "pass": true,
       "failure_scenario": "No measurable Alpha bar",
       "severity": "blocking",
-      "evidence_if_wrong": "npm run lifeos:lifere-os:v1-acceptance",
+      "evidence_if_wrong": "npm run lifeos:user-auth:v1-acceptance",
       "recommended_action": "none"
     },
     {
       "claim": "All steps are write_file_exact",
-      "pass": true,
+      "pass": false,
       "failure_scenario": "Builder forced to decide",
       "severity": "blocking",
-      "evidence_if_wrong": "steps=2 write_file_exact=2",
-      "recommended_action": "none"
+      "evidence_if_wrong": "steps=7 write_file_exact=0",
+      "recommended_action": "ARC revises blueprint"
     },
     {
       "claim": "Auto-execution rule preserved",
@@ -45,11 +45,19 @@
       "pass": false,
       "failure_scenario": "Blocking decision gaps remain or empty builder sim",
       "severity": "blocking",
-      "evidence_if_wrong": "sim steps=0 blocking_gaps=0",
+      "evidence_if_wrong": "sim steps=8 blocking_gaps=68",
       "recommended_action": "ARC revises blueprint"
+    },
+    {
+      "claim": "Production route probe",
+      "pass": true,
+      "failure_scenario": "Routes not live on production base URL",
+      "severity": "blocking",
+      "evidence_if_wrong": "Run npm run lifeos:user-auth:v1-acceptance against https://robust-magic-production.up.railway.app",
+      "recommended_action": "none"
     }
   ],
-  "blocking_count": 1,
+  "blocking_count": 3,
   "verdict": "builder_clearance_no",
   "pass": false
 }

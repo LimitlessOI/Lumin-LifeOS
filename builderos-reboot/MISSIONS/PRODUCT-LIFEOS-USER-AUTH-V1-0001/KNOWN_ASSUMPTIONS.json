@@ -18,26 +18,852 @@
       "confidence": "KNOW"
     },
     {
-      "id": "OBS-333",
-      "assumption": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
-      "confidence": "KNOW",
-      "source": "obstacle-lesson-loop",
-      "route": "repair_in_place"
-    },
-    {
-      "id": "OBS-334",
-      "assumption": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "id": "OBS-188",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
       "confidence": "KNOW",
       "source": "obstacle-lesson-loop",
       "route": "bootstrap_full"
     },
     {
-      "id": "OBS-335",
-      "assumption": "Obstacle in development — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "id": "OBS-188",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-189",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-189",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-190",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-191",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-192",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-193",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-194",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-195",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-196",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-197",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-198",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-199",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-200",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-200",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-201",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-201",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-202",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-202",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-203",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-203",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-204",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-204",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-205",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-206",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-207",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-208",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-209",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-210",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-211",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-212",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-213",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-214",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-214",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-215",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-215",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-216",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-216",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-217",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-218",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-218",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-219",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-219",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-220",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-220",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-221",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-1",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-2",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-4",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-5",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-6",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-7",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-8",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-9",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-10",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-11",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-12",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-13",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-14",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-15",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-16",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-17",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-18",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-19",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-20",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-21",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-22",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-23",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-24",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-25",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-26",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-27",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-28",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-29",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-30",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-31",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-32",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-33",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-34",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-35",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-36",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-37",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-38",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-39",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-40",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-41",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-42",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-43",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-44",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-45",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-46",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-47",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-48",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-49",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-50",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-51",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-52",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-53",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-54",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-55",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-56",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-57",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-58",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-59",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-60",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-61",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-61",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-62",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-63",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-64",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-65",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-66",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-67",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-68",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-69",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-70",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-71",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-72",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-73",
+      "assumption": "Obstacle in corridor — not a stop condition. Point B remains LifeOS Consumer Alpha.",
       "confidence": "KNOW",
       "source": "obstacle-lesson-loop",
       "route": "bootstrap_full"
     }
   ],
-  "updated_at": "2026-06-29T08:40:08.374Z"
+  "updated_at": "2026-06-29T16:08:00.240Z"
 }

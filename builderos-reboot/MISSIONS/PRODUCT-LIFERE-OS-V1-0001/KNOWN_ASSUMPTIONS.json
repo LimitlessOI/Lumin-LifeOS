@@ -16,6 +16,441 @@
       "id": "A3",
       "assumption": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
       "confidence": "KNOW"
+    },
+    {
+      "id": "OBS-3517",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3518",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3519",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3520",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3521",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3522",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3523",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3524",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3525",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3526",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3527",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3528",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3529",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3530",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3531",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3532",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3533",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3534",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3535",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3536",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3537",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3538",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3539",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3540",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3541",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3542",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3543",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3544",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3545",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3546",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3547",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3548",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3549",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3550",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3551",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3552",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3553",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3554",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3555",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3556",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3557",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3558",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3559",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3560",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3561",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3562",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3563",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3564",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3565",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3566",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3567",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3568",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3569",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3570",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3571",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3572",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3573",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3574",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3575",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3576",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3577",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
+    },
+    {
+      "id": "OBS-3578",
+      "assumption": "Obstacle in final_gate — not a stop condition. Point B remains LifeRE Alpha.",
+      "confidence": "KNOW",
+      "source": "obstacle-lesson-loop",
+      "route": "bootstrap_full"
     }
-  ]
+  ],
+  "updated_at": "2026-06-29T08:35:05.993Z"
 }

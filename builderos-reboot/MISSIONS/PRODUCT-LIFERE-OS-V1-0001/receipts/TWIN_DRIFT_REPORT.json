@@ -1,7 +1,7 @@
 {
   "schema": "twin_drift_report_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "scored_at": "2026-06-22T17:34:07.892Z",
+  "scored_at": "2026-06-29T08:34:52.238Z",
   "scored_by": "Hist",
   "simulation_vs_reality": [
     {
@@ -12,7 +12,7 @@
       "how_we_know_if_wrong": "BUILDER_RUN_RECEIPT.acceptance_exit_code and acceptance receipt verdict",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.237Z",
       "scored_by": "Hist"
     },
     {
@@ -23,7 +23,7 @@
       "how_we_know_if_wrong": "OBJECTIVE_VERDICT.verdict after acceptance",
       "match": false,
       "variance": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"",
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.237Z",
       "scored_by": "Hist"
     },
     {
@@ -34,7 +34,7 @@
       "how_we_know_if_wrong": "Production acceptance implies deploy occurred or was unnecessary",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.238Z",
       "scored_by": "Hist"
     },
     {
@@ -45,7 +45,7 @@
       "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.238Z",
       "scored_by": "Hist"
     },
     {
@@ -56,7 +56,7 @@
       "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.238Z",
       "scored_by": "Hist"
     }
   ],

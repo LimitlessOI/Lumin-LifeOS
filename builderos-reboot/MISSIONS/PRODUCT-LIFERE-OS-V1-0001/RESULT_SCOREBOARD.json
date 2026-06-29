@@ -1,7 +1,7 @@
 {
   "schema": "result_scoreboard_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-22T17:34:07.898Z",
+  "at": "2026-06-29T08:34:52.245Z",
   "intended": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
   "built": "TECHNICAL_PASS",
   "happened": "TECHNICAL_PASS",
@@ -23,6 +23,10 @@
       "LRE-T05c_point_b_strip",
       "LRE-T06_blueprint",
       "LRE-T07_navigator",
+      "LRE-T08_boldtrail_bridge",
+      "LRE-T08b_boldtrail_status_route",
+      "LRE-T08c_lifere_boldtrail_marker",
+      "LRE-T08d_followup_approve_route",
       "bp_sync_mandatory",
       "LRE-T03_bp_sync"
     ]
@@ -40,7 +44,7 @@
       "how_we_know_if_wrong": "BUILDER_RUN_RECEIPT.acceptance_exit_code and acceptance receipt verdict",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.237Z",
       "scored_by": "Hist"
     },
     {
@@ -51,7 +55,7 @@
       "how_we_know_if_wrong": "OBJECTIVE_VERDICT.verdict after acceptance",
       "match": false,
       "variance": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"",
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.237Z",
       "scored_by": "Hist"
     },
     {
@@ -62,7 +66,7 @@
       "how_we_know_if_wrong": "Production acceptance implies deploy occurred or was unnecessary",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.238Z",
       "scored_by": "Hist"
     },
     {
@@ -73,7 +77,7 @@
       "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.238Z",
       "scored_by": "Hist"
     },
     {
@@ -84,7 +88,7 @@
       "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_at": "2026-06-29T08:34:52.238Z",
       "scored_by": "Hist"
     }
   ],

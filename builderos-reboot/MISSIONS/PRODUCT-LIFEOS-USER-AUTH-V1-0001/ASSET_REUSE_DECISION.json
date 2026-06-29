@@ -7,7 +7,51 @@
     "Reuse production spine files already built — ARC hosts byte contracts"
   ],
   "cfo_recommendation": "EXTEND existing repo assets; no greenfield parallel stack",
-  "assets_reviewed": [],
-  "decisions": [],
+  "assets_reviewed": [
+    "routes/lifeos-auth-routes.js",
+    "services/lifeos-user-service.js",
+    "db/migrations/20260629_lifeos_user_auth.sql",
+    "middleware/lifeos-tier-guard.js",
+    "public/overlay/lifeos-app.html",
+    "routes/lifeos-builderos-command-control-routes.js",
+    "scripts/run-lifeos-user-auth-v1-acceptance.mjs"
+  ],
+  "decisions": [
+    {
+      "asset": "routes/lifeos-auth-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/lifeos-user-service.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "db/migrations/20260629_lifeos_user_auth.sql",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "middleware/lifeos-tier-guard.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "public/overlay/lifeos-app.html",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "routes/lifeos-builderos-command-control-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    }
+  ],
   "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
 }

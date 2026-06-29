@@ -1,0 +1,7 @@
+{
+  "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+  "simulated_at": "2026-06-29T16:08:00.239Z",
+  "simulated_by": "foundation/phase-repair.js",
+  "blocking_gaps": 68,
+  "verdict": "FAIL"
+}

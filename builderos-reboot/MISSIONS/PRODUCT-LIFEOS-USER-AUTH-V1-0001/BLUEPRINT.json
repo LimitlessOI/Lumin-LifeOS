@@ -13,6 +13,7 @@
       "step_id": "UAT-001",
       "label": "User registration endpoint",
       "description": "POST /api/v1/lifeos/auth/register — email+password, creates lifeos_users row, returns JWT. Validate with Zod. Hash password with bcrypt.",
+      "target_file": "routes/lifeos-auth-routes.js",
       "target_files": ["routes/lifeos-auth-routes.js", "services/lifeos-user-service.js"],
       "status": "pending"
     },
@@ -20,6 +21,7 @@
       "step_id": "UAT-002",
       "label": "Login + JWT issue",
       "description": "POST /api/v1/lifeos/auth/login — verify password, issue access + refresh JWT pair (15m / 7d). Store refresh token hash in DB.",
+      "target_file": "services/lifeos-user-service.js",
       "target_files": ["routes/lifeos-auth-routes.js", "services/lifeos-user-service.js"],
       "status": "pending"
     },
@@ -27,6 +29,7 @@
       "step_id": "UAT-003",
       "label": "DB migration — lifeos_users table",
       "description": "CREATE TABLE lifeos_users: id, email (unique), password_hash, handle, tier (free/core/pro/elite), role, created_at, updated_at. Also lifeos_refresh_tokens table.",
+      "target_file": "db/migrations/20260629_lifeos_user_auth.sql",
       "target_files": ["db/migrations/20260629_lifeos_user_auth.sql"],
       "status": "pending"
     },
@@ -34,6 +37,7 @@
       "step_id": "UAT-004",
       "label": "Tier enforcement middleware",
       "description": "requireLifeosTier(minTier) — reads JWT.tier, rejects if below minimum. Wire to premium endpoints.",
+      "target_file": "middleware/lifeos-tier-guard.js",
       "target_files": ["middleware/lifeos-tier-guard.js"],
       "status": "pending"
     },
@@ -41,6 +45,7 @@
       "step_id": "UAT-005",
       "label": "Login UI in lifeos-app.html",
       "description": "Login/register drawer in the LifeOS app overlay. On success: store JWT in memory, update UI to show handle + tier badge. No localStorage for JWT.",
+      "target_file": "public/overlay/lifeos-app.html",
       "target_files": ["public/overlay/lifeos-app.html"],
       "status": "pending"
     },
@@ -48,6 +53,7 @@
       "step_id": "UAT-006",
       "label": "Lumin chat identifies account",
       "description": "When user is logged in, Lumin knows their name, tier, and context. Chair route includes account JWT sub as user_id.",
+      "target_file": "routes/lifeos-builderos-command-control-routes.js",
       "target_files": ["routes/lifeos-builderos-command-control-routes.js"],
       "status": "pending"
     },
@@ -55,6 +61,7 @@
       "step_id": "UAT-007",
       "label": "Acceptance test + machine alpha",
       "description": "npm run lifeos:user-auth:v1-acceptance — register, login, JWT verify, tier gate test, Lumin chat with account identity. Then run machine alpha walkthrough. All PASS → mark blueprint complete.",
+      "target_file": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
       "target_files": ["scripts/run-lifeos-user-auth-v1-acceptance.mjs"],
       "status": "pending"
     }

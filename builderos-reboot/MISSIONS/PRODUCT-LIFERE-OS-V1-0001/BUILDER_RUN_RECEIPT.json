@@ -2,7 +2,7 @@
   "schema": "builder_run_receipt_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "blueprint_id": "LIFERE-OS-V1-2026-06-21",
-  "run_at": "2026-06-22T17:34:07.880Z",
+  "run_at": "2026-06-29T08:34:52.234Z",
   "runner": "builderos-reboot/scripts/execute-mission.mjs",
   "procedure": [
     "builder_pre_build_simulate",
@@ -23,13 +23,13 @@
       "step_id": "LRE-S01",
       "status": "DONE",
       "target_file": "public/overlay/lifeos-lifere.html",
-      "sha256": "6e9d735acd42424229bf8fb68ec334e4ba95216a201c9944b9223730cbd60a69"
+      "sha256": "7756b074c6dd73b7795ae8e90c06ef49674434688c5333ca67a0eb36a8f5ad61"
     },
     {
       "step_id": "LRE-S02",
       "status": "DONE",
       "target_file": "public/overlay/lifeos-app.html",
-      "sha256": "3e9d70ba2bc90b8d9bd3813059be8c15edb4b93dacbbd1ec2f7ed541d48e5fbc"
+      "sha256": "045e5f00268af03b21db0c27fd93b45896863946b31ff6dac48717aae2ae47e1"
     }
   ],
   "acceptance_exit_code": 0,

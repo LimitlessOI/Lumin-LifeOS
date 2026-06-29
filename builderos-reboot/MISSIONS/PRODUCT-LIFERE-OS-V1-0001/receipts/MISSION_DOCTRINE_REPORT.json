@@ -1,7 +1,7 @@
 {
   "schema": "mission_doctrine_report_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "evaluated_at": "2026-06-22T17:34:07.899Z",
+  "evaluated_at": "2026-06-29T08:35:05.765Z",
   "pass": true,
   "enforcement": "HARD",
   "violations": [],

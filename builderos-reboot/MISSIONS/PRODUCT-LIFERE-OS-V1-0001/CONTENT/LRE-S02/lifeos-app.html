@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <script src="/overlay/lifeos-bootstrap.js?v=20260620c"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260519d"></script>
+  <script src="/shared/lifeos-native-shell.js?v=20260519e"></script>
+  <script src="/overlay/lifeos-studio-shell.js?v=20260627a"></script>
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
@@ -53,9 +55,19 @@
       --c-victory:    #fbbf24;
 
       /* Layout */
-      --sidebar-w:      240px;
-      --sidebar-w-mini: 60px;
-      --topbar-h:       52px;
+      --studio-shell-gap: 14px;
+      --studio-content-pad: 14px;
+      --studio-panel-radius: 22px;
+      --studio-stage-radius: 28px;
+      --studio-drawer-width: 440px;
+      --studio-composer-radius: 22px;
+      --studio-sidebar-width: 248px;
+      --studio-sidebar-mini-width: 72px;
+      --studio-topbar-height: 64px;
+
+      --sidebar-w:      var(--studio-sidebar-width);
+      --sidebar-w-mini: var(--studio-sidebar-mini-width);
+      --topbar-h:       var(--studio-topbar-height);
       --bottomnav-h:    56px;
 
       /* Safe areas */
@@ -71,6 +83,24 @@
       --radius-md:  10px;
       --radius-lg:  14px;
       --transition: 0.2s ease;
+      --studio-bg: var(--bg-base);
+      --studio-bg-raised: var(--bg-raised);
+      --studio-bg-surface: var(--bg-surface);
+      --studio-bg-surface2: var(--bg-surface2);
+      --studio-bg-overlay: var(--bg-overlay);
+      --studio-text: var(--text-primary);
+      --studio-text-secondary: var(--text-secondary);
+      --studio-text-muted: var(--text-muted);
+      --studio-border: var(--border);
+      --studio-border-focus: var(--border-focus);
+      --studio-accent: var(--c-today);
+      --studio-accent-two: var(--c-engine);
+      --studio-accent-soft: rgba(91,106,245,0.12);
+      --studio-hero-gradient: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      --studio-font-display: "Space Grotesk", "Trebuchet MS", sans-serif;
+      --studio-font-body: "Manrope", "Avenir Next", sans-serif;
+      --studio-font-code: "IBM Plex Mono", monospace;
+      --studio-shadow: 0 24px 80px rgba(38,45,61,0.16);
     }
 
     html[data-theme="light"] {
@@ -96,9 +126,12 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg-base);
-      color: var(--text-primary);
+      font-family: var(--studio-font-body);
+      background:
+        radial-gradient(circle at top right, rgba(28,124,84,0.10), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(217,108,6,0.10), transparent 28%),
+        var(--studio-bg);
+      color: var(--studio-text);
       height: 100%;
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
@@ -124,7 +157,7 @@
       overflow: hidden;
       transition: width var(--transition);
       position: relative;
-      z-index: 50;
+      z-index: 100;
     }
     .sidebar.mini { width: var(--sidebar-w-mini); }
 
@@ -142,7 +175,8 @@
     .logo {
       font-size: 15px;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--studio-text);
+      font-family: var(--studio-font-display);
       letter-spacing: -0.4px;
       white-space: nowrap;
       display: flex;
@@ -153,15 +187,15 @@
       width: 26px;
       height: 26px;
       border-radius: 7px;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      background: var(--studio-hero-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 13px;
       flex-shrink: 0;
     }
-    .logo-text { color: var(--text-primary); }
-    .logo-text em { color: var(--c-today); font-style: normal; }
+    .logo-text { color: var(--studio-text); }
+    .logo-text em { color: var(--studio-accent); font-style: normal; }
     .sidebar.mini .logo-text { display: none; }
 
     .collapse-btn {
@@ -394,39 +428,69 @@
       flex-direction: column;
       overflow: hidden;
       min-width: 0;
+      position: relative;
+      padding: var(--studio-content-pad);
+      gap: var(--studio-shell-gap);
     }
 
     /* Desktop topbar */
     .topbar {
       height: var(--topbar-h);
-      border-bottom: 1px solid var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--studio-panel-radius);
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 18px;
       gap: 12px;
       flex-shrink: 0;
-      background: var(--bg-raised);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.62)),
+        linear-gradient(180deg, rgba(28,124,84,0.08), rgba(217,108,6,0.04));
+      box-shadow: var(--studio-shadow);
       position: relative;
+      overflow: hidden;
     }
     /* Section color accent line at bottom of topbar */
     .topbar::after {
       content: '';
       position: absolute;
       bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--section-color);
-      opacity: 0.6;
-      transition: background 0.3s ease;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--section-color), transparent);
+      opacity: 0.72;
+      transition: background 0.3s ease, opacity 0.3s ease;
     }
     .topbar-icon { font-size: 16px; line-height: 1; }
-    .topbar-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .topbar-copy {
+      display: flex;
       flex: 1;
-      letter-spacing: -0.01em;
+      min-width: 0;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .topbar-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--studio-text-secondary);
+    }
+    .topbar-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .topbar-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      font-family: var(--studio-font-display);
+      min-width: 0;
     }
     .topbar-actions { display: flex; gap: 4px; }
     .topbar-btn {
@@ -454,52 +518,68 @@
     .content-frame {
       flex: 1;
       width: 100%;
+      height: 100%;
       border: none;
-      background: var(--bg-base);
+      background: var(--studio-bg-surface);
       display: block;
+      border-radius: calc(var(--studio-stage-radius) - 6px);
+    }
+
+    .studio-command-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
     }
 
     /* One-tap Lumin entry — visible companion strip (not only ◎ / FAB) */
     .lumin-quick-bar {
       flex-shrink: 0;
       display: flex;
-      align-items: center;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 12px;
       width: 100%;
       margin: 0;
-      padding: 10px 14px 11px;
-      border: none;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(91, 106, 245, 0.08), var(--bg-surface2));
+      padding: 16px 18px;
+      border: 1px solid var(--studio-border);
+      border-radius: var(--studio-panel-radius);
+      background:
+        radial-gradient(circle at top right, rgba(28,124,84,0.14), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.74));
+      box-shadow: var(--studio-shadow);
       cursor: pointer;
       text-align: left;
       font: inherit;
       color: inherit;
-      transition: background 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
     .lumin-quick-bar:hover,
     .lumin-quick-bar:focus-visible {
-      background: var(--bg-surface);
+      background:
+        radial-gradient(circle at top right, rgba(28,124,84,0.18), transparent 28%),
+        linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,255,255,0.82));
+      transform: translateY(-1px);
       outline: none;
     }
     .lumin-quick-bar:focus-visible {
-      box-shadow: inset 0 0 0 2px rgba(91, 106, 245, 0.35);
+      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(28,124,84,0.26);
     }
     .lumin-quick-bar.active {
-      box-shadow: inset 0 2px 0 0 rgba(91, 106, 245, 0.55);
+      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(28,124,84,0.32);
     }
     .lumin-quick-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--studio-hero-gradient);
       color: #fff;
-      font-size: 16px;
+      font-size: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 12px 30px rgba(28,124,84,0.18);
     }
     .lumin-quick-copy {
       flex: 1;
@@ -509,23 +589,58 @@
       gap: 2px;
     }
     .lumin-quick-title {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 700;
       color: var(--text-primary);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      font-family: var(--studio-font-display);
     }
     .lumin-quick-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.35;
+      font-size: 12px;
+      color: var(--studio-text-secondary);
+      line-height: 1.5;
+      max-width: 72ch;
     }
     .lumin-quick-chev {
-      color: var(--text-muted);
+      color: var(--studio-text-muted);
       font-size: 18px;
       flex-shrink: 0;
+      padding-top: 10px;
     }
     @media (max-width: 420px) {
       .lumin-quick-sub { display: none; }
+    }
+
+    .studio-command-chips,
+    .lumin-suggestion-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .studio-command-chips {
+      padding: 0 6px;
+    }
+    .studio-chip {
+      border: 1px solid rgba(23,32,51,0.10);
+      background: rgba(255,255,255,0.72);
+      color: var(--studio-text);
+      border-radius: 999px;
+      min-height: 34px;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      box-shadow: 0 10px 24px rgba(20,28,40,0.05);
+    }
+    .studio-chip:hover,
+    .studio-chip:focus-visible {
+      background: rgba(255,255,255,0.94);
+      border-color: rgba(28,124,84,0.26);
+      transform: translateY(-1px);
+      outline: none;
     }
 
     .point-b-strip {
@@ -534,15 +649,17 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      padding: 7px 14px 8px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(14, 165, 233, 0.06);
+      padding: 12px 14px;
+      border: 1px solid rgba(14, 165, 233, 0.14);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(14,165,233,0.08), rgba(255,255,255,0.84));
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--studio-text-secondary);
     }
     .point-b-strip strong {
-      color: var(--text-primary);
+      color: var(--studio-text);
       font-weight: 600;
+      font-size: 12px;
     }
     .point-b-strip .point-b-pct {
       color: #0ea5e9;
@@ -553,6 +670,145 @@
       flex: 1;
       min-width: 120px;
     }
+
+    .studio-status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .ambient-pill {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 14px;
+      border: 1px solid var(--studio-border);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.66);
+      font-size: 11px;
+      box-shadow: 0 10px 26px rgba(20,28,40,0.04);
+    }
+    .ambient-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .ambient-pill-btn:hover { background: rgba(255,255,255,0.08); }
+    .ambient-pill-btn[data-mode="sleeping"] {
+      border-color: rgba(99, 102, 241, 0.45);
+      color: #a5b4fc;
+    }
+    .ambient-pill-btn[data-mode="listening"] {
+      border-color: rgba(34, 197, 94, 0.55);
+      color: #86efac;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.15);
+    }
+    .ambient-pill-btn[data-mode="processing"] {
+      border-color: rgba(245, 158, 11, 0.55);
+      color: #fcd34d;
+    }
+    .ambient-pill-btn[data-mode="off"] { opacity: 0.85; }
+    .ambient-pill-hint {
+      color: var(--studio-text-secondary);
+      line-height: 1.45;
+    }
+
+    .workspace-stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      padding: 10px;
+      border-radius: var(--studio-stage-radius);
+      border: 1px solid rgba(23,32,51,0.08);
+      background:
+        radial-gradient(circle at top left, rgba(217,108,6,0.08), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(28,124,84,0.08), transparent 22%),
+        rgba(255,255,255,0.62);
+      box-shadow: var(--studio-shadow);
+    }
+    .family-guard-pill .ambient-pill-btn[data-mode="watching"] {
+      border-color: rgba(244, 114, 182, 0.45);
+      background: rgba(244, 114, 182, 0.08);
+    }
+    .family-guard-pill .ambient-pill-btn[data-mode="yelling"] {
+      border-color: rgba(239, 68, 68, 0.65);
+      background: rgba(239, 68, 68, 0.14);
+      color: #fecaca;
+    }
+    .family-guard-pill .ambient-pill-btn[data-mode="yelling"] .ambient-dot {
+      background: #ef4444;
+      opacity: 1;
+      animation: ambient-pulse 0.55s ease-in-out infinite;
+    }
+    .listening-pill .ambient-pill-btn[data-mode="on"] {
+      border-color: rgba(108, 99, 255, 0.55);
+      background: rgba(108, 99, 255, 0.12);
+    }
+    .listening-pill .ambient-pill-btn[data-mode="on"] .ambient-dot {
+      background: #6c63ff;
+      opacity: 1;
+      animation: ambient-pulse 2s ease-in-out infinite;
+    }
+    .ambient-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+    }
+    .ambient-pill-btn[data-mode="sleeping"] .ambient-dot {
+      animation: ambient-pulse 2.4s ease-in-out infinite;
+    }
+    .ambient-pill-btn[data-mode="listening"] .ambient-dot {
+      opacity: 1;
+      animation: ambient-pulse 1s ease-in-out infinite;
+    }
+    @keyframes ambient-pulse {
+      0%, 100% { opacity: 0.35; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+    .ambient-pill-hint {
+      color: var(--text-muted);
+      flex: 1;
+      min-width: 100px;
+    }
+    .ambient-toast {
+      position: fixed;
+      bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      max-width: min(92vw, 420px);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-primary);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
+    .ambient-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .ambient-toast[data-kind="commitment"] { border-color: rgba(34, 197, 94, 0.5); }
+    .ambient-toast[data-kind="renegotiate"] { border-color: rgba(245, 158, 11, 0.5); }
+    .ambient-toast[data-kind="note"] { border-color: rgba(99, 102, 241, 0.5); }
+    .ambient-toast[data-kind="error"] { border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
 
     /* ═══════════════════════════════════════════════════════
        MOBILE CHROME
@@ -1059,6 +1315,13 @@
       transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
     html[data-shell-layout="desktop"] .lumin-drawer.open { right: 0; bottom: 0; }
+    html[data-shell-layout="desktop"] .lumin-backdrop {
+      display: none !important;
+      pointer-events: none !important;
+      background: transparent !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
     html[data-shell-layout="desktop"] .lumin-fab { bottom: 24px; }
     html[data-shell-layout="desktop"] .toast { bottom: 24px; }
 
@@ -1081,20 +1344,20 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      background: var(--studio-hero-gradient);
       border: none;
       color: #fff;
       font-size: 22px;
       cursor: pointer;
       z-index: 960;
-      box-shadow: 0 4px 20px rgba(91,106,245,0.4);
+      box-shadow: var(--studio-shadow);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.2s, box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-    .lumin-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(91,106,245,0.55); }
+    .lumin-fab:hover { transform: scale(1.08); box-shadow: 0 18px 45px rgba(28,124,84,0.25); }
     .lumin-fab.drawer-open { transform: scale(0.92); }
     .lumin-fab-badge {
       position: absolute;
@@ -1123,9 +1386,9 @@
       50%       { opacity: 0.5; }
     }
 
-    /* Drawer backdrop */
+    /* Drawer backdrop — scoped to .main so sidebar stays clickable */
     .lumin-backdrop {
-      position: fixed;
+      position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.35);
       z-index: 970;
@@ -1139,17 +1402,21 @@
     .lumin-drawer {
       position: fixed;
       top: 0;
-      right: -420px;
+      right: calc(-1 * var(--studio-drawer-width) - 24px);
       bottom: 0;
-      width: 400px;
+      width: var(--studio-drawer-width);
       max-width: 100vw;
-      background: var(--bg-raised);
-      border-left: 1px solid var(--border-focus);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.92)),
+        var(--studio-bg-raised);
+      border-left: 1px solid var(--studio-border-focus);
       z-index: 980;
       display: flex;
       flex-direction: column;
       transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
       padding-top: var(--safe-top);
+      box-shadow: var(--studio-shadow);
+      color: var(--studio-text);
     }
     .lumin-drawer.open { right: 0; }
 
@@ -1173,18 +1440,21 @@
 
     /* Drawer header */
     .lumin-drawer-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--studio-border);
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
+      background:
+        linear-gradient(135deg, rgba(28,124,84,0.12), rgba(217,108,6,0.08)),
+        transparent;
     }
     .lumin-drawer-avatar {
       width: 32px;
       height: 32px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      background: var(--studio-hero-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1192,12 +1462,12 @@
       flex-shrink: 0;
     }
     .lumin-drawer-title { flex: 1; }
-    .lumin-drawer-title strong { font-size: 14px; font-weight: 700; display: block; }
-    .lumin-drawer-title span { font-size: 11px; color: var(--text-muted); }
+    .lumin-drawer-title strong { font-size: 16px; font-weight: 700; display: block; font-family: var(--studio-font-display); color: var(--studio-text); }
+    .lumin-drawer-title span { font-size: 11px; color: var(--studio-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; }
     .lumin-drawer-close {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: var(--studio-text-muted);
       font-size: 18px;
       cursor: pointer;
       width: 36px;
@@ -1208,7 +1478,7 @@
       justify-content: center;
       transition: color var(--transition), background var(--transition);
     }
-    .lumin-drawer-close:hover { color: var(--text-primary); background: var(--bg-surface); }
+    .lumin-drawer-close:hover { color: var(--studio-text); background: var(--studio-bg-surface2); }
 
     .lumin-dock-controls {
       display: none;
@@ -1218,9 +1488,9 @@
     }
     html[data-shell-layout="desktop"] .lumin-dock-controls { display: flex; }
     .lumin-dock-btn {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--studio-border);
+      color: var(--studio-text-secondary);
       font-size: 10px;
       font-weight: 600;
       padding: 4px 7px;
@@ -1229,16 +1499,16 @@
       line-height: 1.2;
       transition: color var(--transition), border-color var(--transition), background var(--transition);
     }
-    .lumin-dock-btn:hover { color: var(--text-primary); border-color: var(--border-focus); }
+    .lumin-dock-btn:hover { color: var(--studio-text); border-color: var(--studio-border-focus); }
     .lumin-dock-btn.active {
-      color: var(--c-today);
-      border-color: var(--c-today);
-      background: rgba(99, 102, 241, 0.12);
+      color: var(--studio-accent);
+      border-color: var(--studio-accent);
+      background: var(--studio-accent-soft);
     }
 
     html[data-shell-layout="desktop"] .lumin-drawer.dock-right {
-      top: 0; right: -420px; bottom: 0; left: auto;
-      width: 400px; height: auto; max-height: 100vh;
+      top: 0; right: calc(-1 * var(--studio-drawer-width) - 24px); bottom: 0; left: auto;
+      width: var(--studio-drawer-width); height: auto; max-height: 100vh;
       border-left: 1px solid var(--border-focus);
       border-top: none; border-radius: 0;
       transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1277,7 +1547,7 @@
 
     .lumin-history-link {
       font-size: 11px;
-      color: var(--c-today);
+      color: var(--studio-accent);
       text-decoration: none;
       cursor: pointer;
       padding: 2px 6px;
@@ -1285,13 +1555,13 @@
       transition: background var(--transition);
       flex-shrink: 0;
     }
-    .lumin-history-link:hover { background: var(--bg-surface); }
+    .lumin-history-link:hover { background: rgba(255,255,255,0.65); }
 
     /* Voice interim preview */
     .lumin-interim {
       padding: 6px 16px;
       font-size: 12px;
-      color: var(--text-muted);
+      color: var(--studio-text-secondary);
       font-style: italic;
       min-height: 24px;
       flex-shrink: 0;
@@ -1301,32 +1571,116 @@
     .lumin-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 16px;
+      padding: 16px 18px 10px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       scrollbar-width: thin;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0)),
+        transparent;
     }
     .lumin-msg {
-      max-width: 85%;
-      padding: 10px 14px;
-      border-radius: 14px;
+      max-width: 87%;
+      padding: 12px 14px;
+      border-radius: 18px;
       font-size: 13.5px;
-      line-height: 1.55;
+      line-height: 1.6;
+      box-shadow: 0 10px 30px rgba(20,28,40,0.08);
     }
     .lumin-msg.user {
       align-self: flex-end;
-      background: var(--c-today);
+      background: var(--studio-hero-gradient);
       color: #fff;
       border-bottom-right-radius: 4px;
     }
     .lumin-msg.assistant {
       align-self: flex-start;
-      background: #1e2030;
-      border: 1px solid #3d4266;
-      color: #e8e8f0;
+      background: #ffeb3b;
+      border: 1px solid #f9d800;
+      color: #000000;
       border-bottom-left-radius: 4px;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     .lumin-msg.thinking {
       align-self: flex-start;
       background: var(--bg-surface);
@@ -1346,46 +1700,77 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       gap: 8px;
-      color: var(--text-muted);
+      color: var(--studio-text);
       font-size: 13px;
-      padding: 20px;
-      text-align: center;
+      padding: 24px 20px;
+      text-align: left;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.66));
+      border: 1px solid rgba(23,32,51,0.08);
+      box-shadow: 0 16px 40px rgba(20,28,40,0.08);
     }
-    .lumin-empty-icon { font-size: 36px; opacity: 0.5; }
+    .lumin-empty-icon { font-size: 36px; opacity: 0.7; }
+    .lumin-empty-title {
+      font-family: var(--studio-font-display);
+      font-size: 20px;
+      line-height: 1.1;
+    }
+    .lumin-empty-subtitle {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--studio-text-secondary);
+    }
+    .lumin-suggestions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .lumin-suggestions-heading {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--studio-text-muted);
+    }
 
     /* Input bar */
     .lumin-input-bar {
-      padding: 12px 14px;
-      border-top: 1px solid var(--border);
+      padding: 14px 18px;
+      border-top: 1px solid var(--studio-border);
       display: flex;
       align-items: flex-end;
       gap: 8px;
       flex-shrink: 0;
       padding-bottom: calc(12px + var(--safe-bottom));
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.82)),
+        transparent;
     }
     .lumin-input-wrap {
       flex: 1;
-      background: var(--bg-surface);
-      border: 1px solid color-mix(in srgb, var(--text-muted) 22%, transparent);
-      border-radius: 14px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--studio-border);
+      border-radius: var(--studio-composer-radius);
       display: flex;
       align-items: flex-end;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 8px 28px rgba(20,28,40,0.07);
       transition: border-color var(--transition), box-shadow var(--transition);
     }
     .lumin-input-wrap:focus-within {
-      border-color: color-mix(in srgb, var(--c-today) 50%, var(--border));
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-today) 16%, transparent);
+      border-color: var(--studio-border-focus);
+      box-shadow: 0 0 0 3px rgba(28,124,84,0.10);
     }
     .lumin-input {
       flex: 1;
       background: none;
       border: none;
-      color: var(--text-primary);
-      font-family: inherit;
+      color: var(--studio-text);
+      font-family: var(--studio-font-body);
       font-size: 14px;
       padding: 10px 12px;
       resize: vertical;
@@ -1396,11 +1781,11 @@
       outline: none;
       line-height: 1.5;
     }
-    .lumin-input::placeholder { color: var(--text-muted); }
+    .lumin-input::placeholder { color: var(--studio-text-muted); }
     .lumin-input-mic {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: var(--studio-text-secondary);
       font-size: 16px;
       cursor: pointer;
       padding: 8px 10px 8px 4px;
@@ -1408,13 +1793,13 @@
       line-height: 1;
       transition: color var(--transition);
     }
-    .lumin-input-mic:hover { color: var(--text-primary); }
+    .lumin-input-mic:hover { color: var(--studio-text); }
     .lumin-input-mic.voice-active { color: #ef4444; animation: voice-topbar-pulse 0.8s infinite; }
     .lumin-send-btn {
       width: 38px;
       height: 38px;
       border-radius: 10px;
-      background: var(--c-today);
+      background: var(--studio-hero-gradient);
       border: none;
       color: #fff;
       font-size: 16px;
@@ -1423,13 +1808,51 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      transition: opacity var(--transition);
+      transition: opacity var(--transition), transform var(--transition);
     }
-    .lumin-send-btn:hover { opacity: 0.85; }
+    .lumin-send-btn:hover { opacity: 0.88; transform: translateY(-1px); }
     .lumin-send-btn:disabled { opacity: 0.4; cursor: default; }
+
+    @media (max-width: 999px) {
+      .main {
+        padding: 10px;
+      }
+      .studio-status-grid {
+        grid-template-columns: 1fr;
+      }
+      .workspace-stage {
+        padding: 6px;
+        border-radius: 22px;
+      }
+    }
+
+    @media (max-width: 599px) {
+      .main {
+        gap: 8px;
+        padding: 8px;
+      }
+      .topbar {
+        border-radius: 18px;
+      }
+      .studio-command-stack {
+        gap: 8px;
+      }
+      .lumin-quick-bar {
+        padding: 14px;
+      }
+      .studio-command-chips {
+        padding: 0;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+      }
+      .studio-chip {
+        white-space: nowrap;
+      }
+    }
   </style>
-  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
-  <script src="/overlay/lifeos-voice.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=f1782693875654">
+  <script src="/overlay/lifeos-voice.js?v=20260622"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260626"></script>
   <script src="/overlay/lifeos-ambient-sense.js"></script>
   <script src="/shared/lifeos-system-reply.js?v=20260620e"></script>
   <script src="/shared/lifeos-founder-bubble-proof.js?v=20260621a"></script>
@@ -1468,118 +1891,118 @@
     <!-- Nav -->
     <div class="nav-scroll">
 
-      <div class="nav-group-label">Daily</div>
-      <a class="nav-item active" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" onclick="navigate(this)" href="#">
+      <div class="nav-group-label" data-studio-nav-group="daily">Daily</div>
+      <a class="nav-item active" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" href="#" role="button">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Dashboard</span>
       </a>
-      <a class="nav-item" id="nav-today"     data-page="lifeos-today.html"     data-label="Today"      onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-today"     data-page="lifeos-today.html"     data-label="Today"      href="#" role="button">
         <span class="nav-icon">☀️</span>
         <span class="nav-label">Today</span>
       </a>
-      <a class="nav-item" id="nav-lifere" data-page="lifeos-lifere.html" data-label="LifeRE" data-lifere-nav="true" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-lifere" data-page="lifeos-lifere.html" data-label="LifeRE" data-lifere-nav="true" href="#" role="button">
         <span class="nav-icon">🏠</span>
         <span class="nav-label">LifeRE</span>
       </a>
-      <a class="nav-item" id="nav-chat" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-chat" data-label="Lumin" onclick="openLuminFromQuickBar(); return false;" href="#">
         <span class="nav-icon">💬</span>
         <span class="nav-label">Chat</span>
       </a>
-      <a class="nav-item"        id="nav-mirror"    data-page="lifeos-mirror.html"    data-label="Mirror"     onclick="navigate(this)" href="#">
+      <a class="nav-item"        id="nav-mirror"    data-page="lifeos-mirror.html"    data-label="Mirror"     href="#" role="button">
         <span class="nav-icon">🔮</span>
         <span class="nav-label">Mirror</span>
       </a>
-      <a class="nav-item"        id="nav-engine"    data-page="lifeos-engine.html"    data-label="Engine"     onclick="navigate(this)" href="#">
+      <a class="nav-item"        id="nav-engine"    data-page="lifeos-engine.html"    data-label="Engine"     href="#" role="button">
         <span class="nav-icon">⚡</span>
         <span class="nav-label">Engine</span>
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Life &amp; Relationships</div>
-      <a class="nav-item" id="nav-health"   data-page="lifeos-health.html"    data-label="Health"     onclick="navigate(this)" href="#">
+      <div class="nav-group-label" data-studio-nav-group="life">Life &amp; Relationships</div>
+      <a class="nav-item" id="nav-health"   data-page="lifeos-health.html"    data-label="Health"     href="#" role="button">
         <span class="nav-icon">🌿</span>
         <span class="nav-label">Health</span>
       </a>
-      <a class="nav-item" id="nav-inner"    data-page="lifeos-inner.html"     data-label="Inner Work" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-inner"    data-page="lifeos-inner.html"     data-label="Inner Work" href="#" role="button">
         <span class="nav-icon">🌊</span>
         <span class="nav-label">Inner Work</span>
       </a>
-      <a class="nav-item" id="nav-family"   data-page="lifeos-family.html"    data-label="Family"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-family"   data-page="lifeos-family.html"    data-label="Family"     href="#" role="button">
         <span class="nav-icon">🏡</span>
         <span class="nav-label">Family</span>
       </a>
-      <a class="nav-item" id="nav-purpose"  data-page="lifeos-purpose.html"   data-label="Purpose"    onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-purpose"  data-page="lifeos-purpose.html"   data-label="Purpose"    href="#" role="button">
         <span class="nav-icon">🎯</span>
         <span class="nav-label">Purpose</span>
       </a>
-      <a class="nav-item" id="nav-children" data-page="lifeos-child.html"     data-label="Children"   onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-children" data-page="lifeos-child.html"     data-label="Children"   href="#" role="button">
         <span class="nav-icon">⭐</span>
         <span class="nav-label">Children</span>
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Support</div>
-      <a class="nav-item" id="nav-conflict"  data-page="lifeos-conflict.html"  data-label="Conflict"   onclick="navigate(this)" href="#">
+      <div class="nav-group-label" data-studio-nav-group="support">Support</div>
+      <a class="nav-item" id="nav-conflict"  data-page="lifeos-conflict.html"  data-label="Conflict"   href="#" role="button">
         <span class="nav-icon">🔥</span><span class="nav-label">Conflict</span>
       </a>
-      <a class="nav-item" id="nav-mediation" data-page="lifeos-mediation.html" data-label="Mediation"  onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-mediation" data-page="lifeos-mediation.html" data-label="Mediation"  href="#" role="button">
         <span class="nav-icon">⚖️</span>
         <span class="nav-label">Mediation</span>
       </a>
-      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach"      onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach"      href="#" role="button">
         <span class="nav-icon">💬</span>
         <span class="nav-label">Coach</span>
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Self</div>
-      <a class="nav-item" id="nav-identity"  data-page="lifeos-identity.html"  data-label="Identity"   onclick="navigate(this)" href="#">
+      <div class="nav-group-label" data-studio-nav-group="self">Self</div>
+      <a class="nav-item" id="nav-identity"  data-page="lifeos-identity.html"  data-label="Identity"   href="#" role="button">
         <span class="nav-icon">🔑</span>
         <span class="nav-label">Identity</span>
       </a>
-      <a class="nav-item" id="nav-decisions" data-page="lifeos-decisions.html" data-label="Decisions"  onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-decisions" data-page="lifeos-decisions.html" data-label="Decisions"  href="#" role="button">
         <span class="nav-icon">🧭</span>
         <span class="nav-label">Decisions</span>
       </a>
-      <a class="nav-item" id="nav-balance"   data-page="lifeos-balance-wheel.html" data-label="Balance Wheel" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-balance"   data-page="lifeos-balance-wheel.html" data-label="Balance Wheel" href="#" role="button">
         <span class="nav-icon">⚖</span><span class="nav-label">Balance</span>
       </a>
-      <a class="nav-item" id="nav-growth"    data-page="lifeos-growth.html"    data-label="Growth"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-growth"    data-page="lifeos-growth.html"    data-label="Growth"     href="#" role="button">
         <span class="nav-icon">🌱</span>
         <span class="nav-label">Growth</span>
       </a>
-      <a class="nav-item" id="nav-habits"    data-page="lifeos-habits.html"    data-label="Habits"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-habits"    data-page="lifeos-habits.html"    data-label="Habits"     href="#" role="button">
         <span class="nav-icon">🔥</span>
         <span class="nav-label">Habits</span>
       </a>
-      <a class="nav-item" id="nav-cycle"     data-page="lifeos-cycle.html"     data-label="Cycle"      onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-cycle"     data-page="lifeos-cycle.html"     data-label="Cycle"      href="#" role="button">
         <span class="nav-icon">🌑</span>
         <span class="nav-label">Cycle</span>
       </a>
-      <a class="nav-item" id="nav-weekly" data-page="lifeos-weekly-review.html" data-label="Weekly Review" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-weekly" data-page="lifeos-weekly-review.html" data-label="Weekly Review" href="#" role="button">
         <span class="nav-icon">📋</span>
         <span class="nav-label">Weekly</span>
       </a>
-      <a class="nav-item" id="nav-victory" data-page="lifeos-victory-vault.html" data-label="Victory Vault" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-victory" data-page="lifeos-victory-vault.html" data-label="Victory Vault" href="#" role="button">
         <span class="nav-icon">🏆</span>
         <span class="nav-label">Wins</span>
       </a>
-      <a class="nav-item" id="nav-finance"   data-page="lifeos-finance.html"   data-label="Finance"    onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-finance"   data-page="lifeos-finance.html"   data-label="Finance"    href="#" role="button">
         <span class="nav-icon">💰</span>
         <span class="nav-label">Finance</span>
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Legacy</div>
-      <a class="nav-item" id="nav-vision"    data-page="lifeos-vision.html"    data-label="Vision"     onclick="navigate(this)" href="#">
+      <div class="nav-group-label" data-studio-nav-group="legacy">Legacy</div>
+      <a class="nav-item" id="nav-vision"    data-page="lifeos-vision.html"    data-label="Vision"     href="#" role="button">
         <span class="nav-icon">🔭</span>
         <span class="nav-label">Vision</span>
       </a>
-      <a class="nav-item" id="nav-legacy"    data-page="lifeos-legacy.html"    data-label="Legacy"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-legacy"    data-page="lifeos-legacy.html"    data-label="Legacy"     href="#" role="button">
         <span class="nav-icon">🏛️</span>
         <span class="nav-label">Legacy</span>
       </a>
-      <a class="nav-item" id="nav-healing"   data-page="lifeos-healing.html"   data-label="Healing"    onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-healing"   data-page="lifeos-healing.html"   data-label="Healing"    href="#" role="button">
         <span class="nav-icon">🌸</span>
         <span class="nav-label">Healing</span>
       </a>
@@ -1592,14 +2015,20 @@
 
   <!-- Main -->
   <div class="main">
+    <div class="lumin-backdrop" id="lumin-backdrop" onclick="closeLuminDrawer()"></div>
 
     <!-- Desktop topbar -->
     <div class="topbar" id="topbar">
       <button class="topbar-btn sidebar-toggle-btn" id="sidebar-toggle-topbar" onclick="toggleSidebar()" title="Toggle sidebar" aria-label="Toggle sidebar">☰</button>
-      <span class="topbar-icon" id="topbar-icon">📊</span>
-      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-copy">
+        <span class="topbar-eyebrow" id="topbar-eyebrow">Founder command rail</span>
+        <div class="topbar-title-row">
+          <span class="topbar-icon" id="topbar-icon">📊</span>
+          <span class="topbar-title" id="topbar-title">Dashboard</span>
+        </div>
+      </div>
       <div class="topbar-actions">
-        <button class="topbar-btn" id="voice-btn" onclick="toggleAlwaysListen()" title="Toggle always-on voice">🎙</button>
+        <button class="topbar-btn" id="voice-btn" onclick="toggleLuminWakeListen()" title="Say &quot;Lumin&quot; to talk to the Chair">🎙</button>
         <button class="topbar-btn" onclick="toggleLuminDrawer()" title="Talk to Lumin" style="font-size:18px;">◎</button>
         <button class="topbar-btn" onclick="openQuickCapture()" title="Quick capture">✦</button>
         <button class="topbar-btn" id="theme-toggle-topbar" onclick="cycleTheme()" title="Toggle theme">☀︎</button>
@@ -1614,35 +2043,71 @@
         <div class="mobile-logo-icon">◎</div>
         <span class="mobile-section-name" id="mobile-section-name">Dashboard</span>
       </div>
-      <button class="topbar-btn" id="voice-btn-mob" onclick="toggleAlwaysListen()" title="Voice" style="min-width:44px;min-height:44px;">🎙</button>
+      <button class="topbar-btn" id="voice-btn-mob" onclick="toggleLuminWakeListen()" title="Say Lumin" style="min-width:44px;min-height:44px;">🎙</button>
       <button class="topbar-btn" onclick="toggleLuminDrawer()" title="Lumin" style="min-width:44px;min-height:44px;font-size:18px;">◎</button>
       <button class="topbar-btn" id="theme-toggle-mobile" onclick="cycleTheme()" title="Toggle theme" style="min-width:44px;min-height:44px;">☀︎</button>
       <button class="topbar-btn" onclick="openSettings()" title="Settings" style="min-width:44px;min-height:44px;">⚙</button>
     </div>
 
-    <button type="button" class="lumin-quick-bar" id="lumin-quick-bar" onclick="openLuminFromQuickBar()"
-      aria-label="Open Lumin — ask anything or use voice">
-      <span class="lumin-quick-icon" aria-hidden="true">◎</span>
-      <span class="lumin-quick-copy">
-        <span class="lumin-quick-title">Talk to your system directly…</span>
-        <span class="lumin-quick-sub">Voice or type. Messages route through the terminal bridge and return human-readable execution truth.</span>
-      </span>
-      <span class="lumin-quick-chev" aria-hidden="true">›</span>
-    </button>
+    <div class="studio-command-stack" id="studio-command-stack">
+      <button type="button" class="lumin-quick-bar" id="lumin-quick-bar" onclick="openLuminFromQuickBar()"
+        aria-label="Open Lumin — speak or type">
+        <span class="lumin-quick-icon" aria-hidden="true">◎</span>
+        <span class="lumin-quick-copy">
+          <span class="lumin-quick-title" id="lumin-quick-title">Lumin — speak or type</span>
+          <span class="lumin-quick-sub" id="lumin-quick-sub">Real execution — say "open LifeRE", "run alpha cycle", or "do: fix X". Receipts only, no theater.</span>
+        </span>
+        <span class="lumin-quick-chev" aria-hidden="true">›</span>
+      </button>
 
-    <div id="point-b-strip" class="point-b-strip" data-point-b-strip="true" data-lifere="point-b-status" aria-live="polite">
-      <strong id="point-b-label">Point B · LifeRE Alpha</strong>
-      <span class="point-b-pct" id="point-b-pct">—</span>
-      <span id="point-b-phase"></span>
-      <span class="point-b-blocker" id="point-b-blocker"></span>
+      <div class="studio-command-chips" id="studio-command-chips" aria-label="Suggested founder actions"></div>
+
+      <div id="point-b-strip" class="point-b-strip" data-point-b-strip="true" data-lifere="point-b-status" aria-live="polite">
+        <strong id="point-b-label">Point B · LifeRE Alpha</strong>
+        <span class="point-b-pct" id="point-b-pct">—</span>
+        <span id="point-b-phase"></span>
+        <span class="point-b-blocker" id="point-b-blocker"></span>
+      </div>
+
+      <div class="studio-status-grid">
+        <div id="ambient-pill" class="ambient-pill" aria-live="polite">
+          <button type="button" class="ambient-pill-btn" id="ambient-toggle" data-mode="off" aria-pressed="false"
+            title="Ambient listen — sleeps when silent, captures commitments and notes">
+            <span class="ambient-dot" aria-hidden="true"></span>
+            <span id="ambient-label">Ambient off</span>
+          </button>
+          <span class="ambient-pill-hint" id="ambient-hint">Uses your LifeOS account · stays signed in · mic sleeps when quiet</span>
+        </div>
+
+        <div id="listening-pill" class="ambient-pill listening-pill" aria-live="polite">
+          <button type="button" class="ambient-pill-btn" id="listening-master-toggle" data-mode="off" aria-pressed="false"
+            title="Listening master — schedules, wake word, family guard per your Lumen profile">
+            <span class="ambient-dot" aria-hidden="true"></span>
+            <span id="listening-label">Listening off</span>
+          </button>
+          <span class="ambient-pill-hint" id="listening-hint"><a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Listening prefs</a> · system talk → Lumin drawer</span>
+        </div>
+
+        <div id="family-guard-pill" class="ambient-pill family-guard-pill" aria-live="polite">
+          <button type="button" class="ambient-pill-btn" id="family-guard-toggle" data-mode="off" aria-pressed="false"
+            title="Family tone guard — vibrates when you yell or get snippy (mic stays on device, not recorded)">
+            <span class="ambient-dot" aria-hidden="true"></span>
+            <span id="family-guard-label">Family guard off</span>
+          </button>
+          <span class="ambient-pill-hint" id="family-guard-hint">Tap to watch tone — yell = vibrate until calm · snippy/mean = one pulse</span>
+        </div>
+      </div>
     </div>
+    <div id="ambient-toast" class="ambient-toast" role="status" aria-live="polite"></div>
 
     <!-- Content iframe -->
-    <iframe class="content-frame" id="content-frame"
-      src="/overlay/lifeos-dashboard.html"
-      title="LifeOS content"
-      allow="clipboard-write">
-    </iframe>
+    <div class="workspace-stage" id="workspace-stage">
+      <iframe class="content-frame" id="content-frame"
+        src="/overlay/lifeos-dashboard.html"
+        title="LifeOS content"
+        allow="clipboard-write">
+      </iframe>
+    </div>
 
     <!-- Mobile bottom nav -->
     <div class="mobile-bottomnav" id="mobile-bottomnav">
@@ -1695,7 +2160,11 @@
       <span class="more-item-icon">☀️</span>
       <span class="more-item-label">Today</span>
     </div>
-    <div class="more-item" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="mobileNavFromMore('lifeos-chat.html','Lumin Chat','--c-coach')">
+    <div class="more-item" data-page="lifeos-lifere.html" data-label="LifeRE" onclick="mobileNavFromMore('lifeos-lifere.html','LifeRE','--c-today')">
+      <span class="more-item-icon">🏠</span>
+      <span class="more-item-label">LifeRE</span>
+    </div>
+    <div class="more-item" data-label="Lumin" onclick="openLuminFromQuickBar(); closeMobileMore();">
       <span class="more-item-icon">💬</span>
       <span class="more-item-label">Chat</span>
     </div>
@@ -1800,11 +2269,12 @@
         <input class="settings-input" id="st-name" placeholder="Adam" autocomplete="off" />
       </div>
     </div>
-    <div class="settings-section">
-      <div class="settings-section-title">API Access</div>
+    <div class="settings-section" id="settings-operator-section" style="display:none;">
+      <div class="settings-section-title">Operator fallback (optional)</div>
+      <p class="settings-hint">Lumin uses your signed-in account. Default turns are counsel only — nothing runs until you ask to build or execute (<code>do:</code>).</p>
       <div class="settings-row">
         <div class="settings-label">Command Key</div>
-        <input class="settings-input" id="st-key" type="password" placeholder="Enter command key…" autocomplete="off" />
+        <input class="settings-input" id="st-key" type="password" placeholder="Optional — not needed for Lumin" autocomplete="off" />
       </div>
     </div>
     <div class="settings-section" id="settings-invites-section" style="display:none;">
@@ -1818,6 +2288,36 @@
       <p class="settings-hint">Named bodies for <code>POST /api/v1/lifeos/gate-change/run-preset</code> (multi-model debate runs on the server). Copy a CLI line — you still need <code>COMMAND_CENTER_KEY</code> and <code>PUBLIC_BASE_URL</code> in your shell to execute it.</p>
       <button type="button" class="settings-invite-btn" onclick="loadGateChangePresets()">Refresh list</button>
       <div class="admin-invites-list" id="gate-presets-list"></div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-section-title">Listening &amp; Lumen</div>
+      <p class="settings-hint">100% opt-in. Use Listening setup for mic schedules and privacy. System talk stays in the Lumin drawer.</p>
+      <label class="settings-row" style="cursor:pointer;user-select:none;">
+        <input type="checkbox" id="st-listening-master" style="margin-right:10px;" />
+        <span class="settings-label" style="flex:1;">Master listening switch</span>
+      </label>
+      <div class="settings-row">
+        <div class="settings-label">Setup with Lumen</div>
+        <span class="settings-link" onclick="window.location.href='/overlay/lifeos-listening-setup.html'">Open conversation →</span>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Clip vault (device)</div>
+        <span class="settings-link" onclick="loadPage('lifeos-clip-vault.html','Clip Vault','--c-mirror'); closeSettings()">Open →</span>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Native app (Universal Overlay)</div>
+        <span class="settings-link" onclick="alert('LifeOS native app = this same shell with a home-screen icon.\\n\\nOn Mac: npm run mobile:add:ios then npm run mobile:ios\\n\\nOr Safari → Share → Add to Home Screen for PWA.')">Build / install →</span>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-section-title">Family tone guard</div>
+      <p class="settings-hint">Phone mic listens locally — nothing is uploaded or recorded. Sustained yelling vibrates until you calm down. Snippy or mean words give one vibration nudge. Works best with LifeOS open on your phone (PWA/home screen).</p>
+      <label class="settings-row" style="cursor:pointer;user-select:none;">
+        <input type="checkbox" id="st-family-guard" style="margin-right:10px;" />
+        <span class="settings-label" style="flex:1;">Enable family tone guard</span>
+      </label>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
@@ -1869,13 +2369,33 @@
 </button>
 
 <!-- Lumin Drawer -->
-<div class="lumin-backdrop" id="lumin-backdrop" onclick="closeLuminDrawer()"></div>
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe-2 -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe-3 -->
+<!-- founder-chat-alpha-probe-4 -->
+<!-- founder-chat-alpha-probe-5 -->
+<!-- founder-chat-alpha-probe-6 -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- founder-chat-alpha-probe -->
+<!-- lumin parity probe -->
+<!-- point-b-direct-exec-probe -->
+<!-- lumin parity probe -->
+<!-- lumin parity probe -->
+<!-- point-b-direct-exec-probe -->
 <div class="lumin-drawer dock-right" id="lumin-drawer">
   <div class="lumin-drawer-header">
     <div class="lumin-drawer-avatar">◎</div>
     <div class="lumin-drawer-title">
       <strong>Lumin</strong>
-      <span id="lumin-status-text">Ready</span>
+      <span id="lumin-status-text">Counsel · Lumin</span>
     </div>
     <div class="lumin-dock-controls" id="lumin-dock-controls">
       <button type="button" class="lumin-dock-btn active" data-dock="right" onclick="setLuminDock('right')">Side</button>
@@ -1893,8 +2413,12 @@
   <div class="lumin-messages" id="lumin-messages">
     <div class="lumin-empty" id="lumin-empty">
       <div class="lumin-empty-icon">◎</div>
-      <div>What's on your mind?</div>
-      <div style="font-size:11px;opacity:0.6;margin-top:4px;">Or tap 🎙 to speak</div>
+      <div class="lumin-empty-title" data-studio-copy="emptyHeading">Talk to Lumin</div>
+      <div class="lumin-empty-subtitle" data-studio-copy="emptySubhead">Counsel by default. Say do: or ask to build to execute.</div>
+      <div class="lumin-suggestions">
+        <div class="lumin-suggestions-heading" id="lumin-suggestions-heading">Start with one of these</div>
+        <div class="lumin-suggestion-chips" id="lumin-suggestion-chips"></div>
+      </div>
     </div>
   </div>
 
@@ -1903,13 +2427,14 @@
       <textarea
         class="lumin-input"
         id="lumin-input"
-        placeholder="Message Lumin…"
-        rows="4"
+        placeholder="Lumin — ask anything, or `do: open LifeRE` / `do: fix …` to execute"
+        rows="3"
         onkeydown="luminHandleKey(event)"
         oninput="luminAutoResize(this)"></textarea>
       <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input">🎙</button>
     </div>
     <button class="lumin-send-btn" id="lumin-send-btn" onclick="luminSend()" title="Send">↑</button>
+    <button type="button" class="lumin-dock-btn" id="lumin-save-moment-btn" onclick="luminSaveLastMoment()" title="Save last reply as lesson/moment">★</button>
   </div>
 </div>
 
@@ -1917,11 +2442,36 @@
 
 <script>
 /* ── State ──────────────────────────────────────────────────── */
-const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false });
 CTX.startSessionKeepAlive();
-CTX.refreshIfNeeded().catch(() => {});
+(async function bootAccountSession() {
+  await CTX.refreshIfNeeded();
+  const token = localStorage.getItem('lifeos_access_token');
+  const refresh = localStorage.getItem('lifeos_refresh_token');
+  if (!token && !refresh) {
+    await CTX.requireAuth('/overlay/lifeos-login.html');
+    return;
+  }
+  if (!CTX.authenticated && refresh) {
+    await CTX.refreshIfNeeded();
+  }
+  syncAccountUiFromContext();
+})().catch(() => {});
+
+function syncAccountUiFromContext() {
+  const ctx = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false });
+  USER = ctx.USER || USER;
+  NAME = localStorage.getItem('lifeos_name') || (USER ? USER.charAt(0).toUpperCase() + USER.slice(1) : 'You');
+  const av = document.getElementById('user-avatar');
+  const sn = document.getElementById('sidebar-user-name');
+  const sh = document.getElementById('sidebar-user-handle');
+  const sth = document.getElementById('st-handle');
+  if (av) av.textContent = NAME.charAt(0).toUpperCase();
+  if (sn) sn.textContent = NAME;
+  if (sh) sh.textContent = '@' + USER;
+  if (sth) sth.textContent = '@' + USER;
+}
 luminBootThread().catch(() => {});
-initLuminDock();
 let KEY   = CTX.KEY;
 let USER  = CTX.USER;
 let NAME  = localStorage.getItem('lifeos_name') || (USER.charAt(0).toUpperCase() + USER.slice(1));
@@ -1934,6 +2484,7 @@ function overlayUrl(page) { return `/overlay/${page}`; }
 /* Page metadata */
 const PAGE_META = {
   'lifeos-today.html':     { title: 'Today',      icon: '☀️',  color: '--c-today'     },
+  'lifeos-lifere.html':    { title: 'LifeRE',     icon: '🏠',  color: '--c-today'     },
   'lifeos-dashboard.html': { title: 'Dashboard', icon: '📊',  color: '--c-dashboard' },
   'lifeos-mirror.html':    { title: 'Mirror',     icon: '🔮',  color: '--c-mirror'    },
   'lifeos-engine.html':    { title: 'Engine',     icon: '⚡',  color: '--c-engine'    },
@@ -1960,6 +2511,7 @@ const PAGE_META = {
   'lifeos-quick-entry.html': { title: 'Quick Entry', icon: '✍️', color: '--c-engine' },
   'lifeos-notifications.html': { title: 'Notifications', icon: '🔔', color: '--c-mirror' },
   'lifeos-parent-view.html': { title: 'Parent View', icon: '👨‍👩‍👧', color: '--c-children' },
+  'lifeos-clip-vault.html': { title: 'Clip Vault', icon: '🎞️', color: '--c-mirror' },
   'lifeos-feature.html': { title: 'Feature Guide', icon: 'ℹ️', color: '--c-purpose' },
   'lifeos-chat.html':    { title: 'Lumin Chat',    icon: '💬', color: '--c-coach'   },
   'lifeos-victory-vault.html': { title: 'Victory Vault', icon: '🏆', color: '--c-victory' },
@@ -1968,6 +2520,11 @@ const PAGE_META = {
 };
 const FEATURE_GUIDES = window.LIFEOS_FEATURE_GUIDES || {};
 let helpHideTimer = null;
+const STUDIO_BASE_COPY = {
+  eyebrow: 'Founder command rail',
+  quickTitle: 'Ask Lumin or execute directly',
+  quickSub: 'Open a surface, continue a build, or press on a blocker. The shell stays honest about what actually ran.',
+};
 
 /** layout query: auto (default CSS breakpoints) | mobile | desktop — matches LIFEOS_PROGRAM_MAP_SSOT + Builder Brief shells */
 function applyShellLayoutFromQuery() {
@@ -1983,14 +2540,17 @@ function applyShellLayoutFromQuery() {
 /* ── Boot ────────────────────────────────────────────────────── */
 (function init() {
   applyShellLayoutFromQuery();
+  try { window.LifeOSStudioShell?.apply?.(); } catch {}
 
   const initials = NAME.charAt(0).toUpperCase();
   document.getElementById('user-avatar').textContent        = initials;
   document.getElementById('sidebar-user-name').textContent  = NAME;
   document.getElementById('sidebar-user-handle').textContent = '@' + USER;
   document.getElementById('st-handle').textContent          = '@' + USER;
-  document.getElementById('st-key').value                   = KEY;
-  document.getElementById('st-name').value                  = NAME;
+  const stKeyEl = document.getElementById('st-key');
+  if (stKeyEl) stKeyEl.value = KEY;
+  const stNameEl = document.getElementById('st-name');
+  if (stNameEl) stNameEl.value = NAME;
   applyThemeUi(THEME);
 
   // Restore last page (unless URL overrides below)
@@ -2013,9 +2573,13 @@ function applyShellLayoutFromQuery() {
     syncSidebarToggleButtons();
   }
 
-  // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto
-  const launchPage = new URLSearchParams(location.search).get('page');
+  // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto&stack=lifere
+  let launchPage = new URLSearchParams(location.search).get('page');
+  const stackParam = new URLSearchParams(location.search).get('stack');
+  if (!launchPage && stackParam === 'lifere') launchPage = 'lifeos-lifere.html';
+  if (!launchPage && stackParam === 'socialmediaos') launchPage = 'lifeos-lifere.html';
   const directSystemLaunch = new URLSearchParams(location.search).get('direct_system');
+  const luminVoiceLaunch = new URLSearchParams(location.search).get('lumin_voice');
   if (launchPage && PAGE_META[launchPage]) {
     loadPage(launchPage);
     const nav = document.querySelector(`[data-page="${launchPage}"]`);
@@ -2034,17 +2598,14 @@ function applyShellLayoutFromQuery() {
   if (directSystemLaunch === '1') {
     setTimeout(() => openLuminDrawer(), 150);
   }
+  if (luminVoiceLaunch !== '0' && (directSystemLaunch === '1' || luminVoiceLaunch === '1')) {
+    setTimeout(() => initLuminWakeWordListen(), 800);
+  }
   initFeatureHelp();
+  bindShellNavigation();
 
   if (window.LifeOSAmbientSense && localStorage.getItem('lifeos_ambient_sense') === '1') {
     LifeOSAmbientSense.start({ getCtx: () => CTX, userHandle: USER });
-  }
-
-  // PWA: service worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    });
   }
 
   const frame = document.getElementById('content-frame');
@@ -2065,6 +2626,22 @@ function applyShellLayoutFromQuery() {
       setTimeout(() => showInstallBanner(deferredInstall), 2000);
     }
   });
+
+  // iPhone Safari: Add to Home Screen (no beforeinstallprompt on iOS)
+  (function maybeShowIosInstallHint() {
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isSafari = isIOS && /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua);
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    if (!isSafari || standalone) return;
+    const dismissed = localStorage.getItem('lifeos_ios_install_dismissed');
+    const visits = parseInt(localStorage.getItem('lifeos_visits') || '0', 10) + 1;
+    localStorage.setItem('lifeos_visits', String(visits));
+    if (dismissed === '1' && visits < 5) return;
+    if (visits >= 1) {
+      setTimeout(showIosInstallBanner, 1500);
+    }
+  })();
 })();
 
 function showInstallBanner(promptEvent) {
@@ -2081,12 +2658,34 @@ function showInstallBanner(promptEvent) {
   setTimeout(() => { b.classList.remove('show'); setTimeout(() => b.remove(), 400); }, 9000);
 }
 
+function showIosInstallBanner() {
+  if (document.getElementById('ios-install-banner')) return;
+  const b = document.createElement('div');
+  b.id = 'ios-install-banner';
+  b.innerHTML = `<span class="banner-icon">📲</span> Tap Share → Add to Home Screen <span class="banner-close">✕</span>`;
+  b.style.cursor = 'pointer';
+  b.querySelector('.banner-close').onclick = (e) => {
+    e.stopPropagation();
+    localStorage.setItem('lifeos_ios_install_dismissed', '1');
+    b.remove();
+  };
+  b.onclick = () => { location.href = '/install'; };
+  document.body.appendChild(b);
+  requestAnimationFrame(() => b.classList.add('show'));
+}
+
 /* ── Navigation ──────────────────────────────────────────────── */
 function loadPage(page) {
   const meta = PAGE_META[page];
-  if (!meta) return;
+  if (!meta) {
+    console.warn('[LifeOS] Unknown page:', page);
+    toast('That page is not available yet.');
+    return;
+  }
 
-  document.getElementById('content-frame').src = overlayUrl(page);
+  const frame = document.getElementById('content-frame');
+  const nextUrl = `${overlayUrl(page)}?shell=1&_=${Date.now()}`;
+  if (frame) frame.src = nextUrl;
   currentPage  = page;
   currentTitle = meta.title;
 
@@ -2155,12 +2754,48 @@ window.addEventListener('storage', (event) => {
   if (event.key === 'lifeos_theme') applyThemeUi(event.newValue || 'dark');
 });
 
-function navigate(el) {
-  if (!el.dataset.page) return;
+function navigate(el, evt) {
+  if (evt) evt.preventDefault();
+  if (!el || !el.dataset.page) return false;
+  hideFeatureHelp();
+  if (!luminState.pinned) closeLuminDrawer();
   loadPage(el.dataset.page);
   closeMobileSidebar();
   return false;
 }
+
+function bindShellNavigation() {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar) {
+    sidebar.addEventListener('click', (e) => {
+      const item = e.target.closest('a.nav-item[data-page]');
+      if (!item) return;
+      navigate(item, e);
+    });
+  }
+  const bottomNav = document.getElementById('mobile-bottomnav');
+  if (bottomNav) {
+    bottomNav.addEventListener('click', (e) => {
+      const tab = e.target.closest('.mob-tab[data-page]');
+      if (!tab) return;
+      e.preventDefault();
+      mobileNav(tab);
+    });
+  }
+  const moreSheet = document.getElementById('more-sheet');
+  if (moreSheet) {
+    moreSheet.addEventListener('click', (e) => {
+      const item = e.target.closest('.more-item[data-page]');
+      if (!item) return;
+      e.preventDefault();
+      mobileNavFromMore(item.dataset.page, item.dataset.label || '', item.dataset.color || '--c-dashboard');
+    });
+  }
+}
+
+window.navigate = navigate;
+window.loadPage = loadPage;
+window.mobileNav = mobileNav;
 
 function mobileNav(el) {
   const page = el.dataset.page;
@@ -2348,6 +2983,12 @@ function openSettings(e) {
   document.getElementById('settings-backdrop').classList.add('open');
   const amb = document.getElementById('st-ambient');
   if (amb && window.LifeOSAmbientSense) amb.checked = LifeOSAmbientSense.enabled();
+  const fg = document.getElementById('st-family-guard');
+  if (fg && window.LifeOSFamilyToneGuard) fg.checked = LifeOSFamilyToneGuard.isEnabled();
+  const lm = document.getElementById('st-listening-master');
+  if (lm && window.LifeOSListeningOrchestrator) {
+    lm.checked = LifeOSListeningOrchestrator.getStatus().master;
+  }
   const invSec = document.getElementById('settings-invites-section');
   if (invSec) {
     if (CTX.role === 'admin') {
@@ -2366,6 +3007,8 @@ function openSettings(e) {
       gateSec.style.display = 'none';
     }
   }
+  const opSec = document.getElementById('settings-operator-section');
+  if (opSec) opSec.style.display = CTX.role === 'admin' ? '' : 'none';
 }
 function closeSettings() {
   document.getElementById('settings-panel').classList.remove('open');
@@ -2476,6 +3119,18 @@ function saveSettings() {
       LifeOSAmbientSense.start({ getCtx: () => CTX, userHandle: USER });
     }
   }
+  const fg = document.getElementById('st-family-guard');
+  if (fg && window.LifeOSFamilyToneGuard) {
+    if (fg.checked && !LifeOSFamilyToneGuard.isEnabled()) {
+      LifeOSFamilyToneGuard.toggle();
+    } else if (!fg.checked && LifeOSFamilyToneGuard.isEnabled()) {
+      LifeOSFamilyToneGuard.setEnabled(false);
+    }
+  }
+  const lm = document.getElementById('st-listening-master');
+  if (lm && window.LifeOSListeningOrchestrator) {
+    LifeOSListeningOrchestrator.setMaster(!!lm.checked);
+  }
   document.getElementById('sidebar-user-name').textContent = name || NAME;
   document.getElementById('user-avatar').textContent       = (name || NAME).charAt(0).toUpperCase();
   toast('Settings saved ✓');
@@ -2498,8 +3153,10 @@ function openQuickCapture() {
 function signOut(e) {
   e && e.stopPropagation();
   if (confirm('Sign out? You will need to sign in again.')) {
-    if (window.LifeOSBootstrap && typeof window.LifeOSBootstrap.clearTokens === 'function') {
-      window.LifeOSBootstrap.clearTokens();
+    const ctx = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false });
+    if (ctx?.logout) {
+      ctx.logout();
+      return;
     }
     localStorage.removeItem('commandKey');
     localStorage.removeItem('command_key');
@@ -2537,11 +3194,16 @@ const luminState = {
   dock: 'right',
   pinned: false,
   minimized: false,
+  voiceTurn: false,
+  wakeListenActive: false,
+  lastReply: '',
+  chatHistory: [],
 };
 
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
 const LUMIN_PIN_KEY = 'lifeos_lumin_dock_pinned';
 const LUMIN_MIN_KEY = 'lifeos_lumin_dock_minimized';
+initLuminDock();
 
 function initLuminDock() {
   const drawer = document.getElementById('lumin-drawer');
@@ -2604,6 +3266,29 @@ function openLuminFromQuickBar() {
   openLuminDrawer();
 }
 
+function safePromptText(value) {
+  const s = String(value ?? '').trim();
+  if (!s || s === 'undefined' || s === 'null') return '';
+  return s;
+}
+
+function seedLuminPrompt(prompt, { send = false } = {}) {
+  openLuminDrawer();
+  const input = document.getElementById('lumin-input');
+  if (!input) return;
+  const text = safePromptText(prompt);
+  input.value = text;
+  luminAutoResize(input);
+  setTimeout(() => input.focus(), 60);
+  if (send && text) {
+    setTimeout(() => luminSend({ text }), 100);
+  }
+}
+
+window.lifeosStudioRunAction = function lifeosStudioRunAction(prompt, opts = {}) {
+  seedLuminPrompt(prompt, opts);
+};
+
 function openLuminDrawer() {
   luminState.open = true;
   document.getElementById('lumin-drawer').classList.add('open');
@@ -2626,14 +3311,54 @@ function closeLuminDrawer() {
 }
 
 function openFullChat() {
-  closeLuminDrawer();
-  loadPage('lifeos-chat.html');
-  // Active nav item
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  openLuminDrawer();
+  document.getElementById('lumin-input')?.focus();
 }
 
-/* Boot: load default thread (same as dashboard chat) */
+/* Boot: direct Chair path uses founder-interface; legacy thread GET is history-only */
+const LUMIN_LEGACY_COUNSEL_RE = /Counsel only ·|nothing executed — counsel only|To execute: say `do:/i;
+
+function luminFilterDirectHistory(messages) {
+  if (!Array.isArray(messages)) return [];
+  return messages.filter((m) => {
+    const body = String(m.content || '');
+    if (m.role === 'assistant' && LUMIN_LEGACY_COUNSEL_RE.test(body)) return false;
+    return true;
+  });
+}
+
+function updateLuminConnectionStatus(data) {
+  const el = document.getElementById('lumin-status-text');
+  if (!el) return;
+  if (data?.pass_fail === 'RUNNING' || data?.async) {
+    el.textContent = 'Running · polling job';
+    return;
+  }
+  const ct = data?.command_truth;
+  if (ct === 'COMMITTED' || ct === 'COMMAND_RAN' || ct === 'BUILD_ATTEMPTED') {
+    el.textContent = 'Executed · Lumin';
+    return;
+  }
+  if (ct === 'NO_COMMAND_RAN' || data?.conversational_mode) {
+    el.textContent = 'Counsel · Lumin';
+    return;
+  }
+  el.textContent = 'Lumin';
+}
+
 async function luminBootThread() {
+  if (USE_DIRECT_SYSTEM_CHAT) {
+    updateLuminConnectionStatus({ command_truth: 'NO_COMMAND_RAN', conversational_mode: true });
+    try {
+      const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/default`);
+      const data = await res.json();
+      if (data.ok && data.thread?.id) {
+        luminState.threadId = data.thread.id;
+        await luminLoadMessages();
+      }
+    } catch { /* fresh session */ }
+    return;
+  }
   try {
     const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/default`);
     const data = await res.json();
@@ -2663,7 +3388,8 @@ async function luminLoadMessages() {
     const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/${luminState.threadId}/messages?limit=80`);
     const data = await res.json();
     if (data.ok && data.messages?.length) {
-      luminRenderHistory(data.messages);
+      const rows = USE_DIRECT_SYSTEM_CHAT ? luminFilterDirectHistory(data.messages) : data.messages;
+      if (rows.length) luminRenderHistory(rows);
     }
   } catch {}
 }
@@ -2674,7 +3400,7 @@ function luminRenderHistory(messages) {
   container.innerHTML = '';
   const subset = messages.slice(-80);
   subset.forEach(m => {
-    const role = m.role === 'user' ? 'user' : (m.role === 'assistant' ? 'assistant' : 'thinking');
+    const role = m.role === 'user' ? 'user' : 'assistant';
     _appendLuminMsg(role, m.content, m.created_at, false);
   });
   container.scrollTop = container.scrollHeight;
@@ -2688,8 +3414,38 @@ function appendClientBubbleProof(reply, data) {
   return `${reply}\n${tag}`;
 }
 
+const LUMIN_SEND_TIMEOUT_MS = 45000;
+
+async function luminReadJsonSafe(res) {
+  const raw = await res.text();
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      ok: false,
+      error: raw.slice(0, 500) || `Unexpected response (${res.status})`,
+    };
+  }
+}
+
+async function luminFetchJsonWithTimeout(url, init = {}, timeoutMs = LUMIN_SEND_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      ...init,
+      signal: controller.signal,
+    });
+    const data = await luminReadJsonSafe(res);
+    return { res, data };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 async function pollFounderBuildJob(jobId, pollUrl) {
-  const deadline = Date.now() + 300000;
+  const deadline = Date.now() + 660000;
   while (Date.now() < deadline) {
     const res = await fetch(pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`, {
       credentials: 'same-origin',
@@ -2702,30 +3458,46 @@ async function pollFounderBuildJob(jobId, pollUrl) {
     }
     return { res, data };
   }
-  return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 5 minutes.' } };
+  return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 11 minutes.' } };
 }
 
-async function luminSend() {
+function applyLuminShellAction(data) {
+  const sa = data?.shell_action;
+  if (!sa) return;
+  if (sa.type === 'navigate' && sa.page) {
+    loadPage(sa.page);
+    document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
+    const nav = document.querySelector(`[data-page="${sa.page}"]`);
+    if (nav) nav.classList.add('active');
+    if (sa.stack === 'lifere') {
+      try { sessionStorage.setItem('lifeos_stack', 'lifere'); } catch {}
+    }
+  }
+}
+
+async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');
-  const msg   = (input.value || '').trim();
+  let msg = safePromptText(opts.text || input?.value || '');
   if (!msg || luminState.sending) return;
+  const voiceTurn = opts.voice === true || luminState.voiceTurn;
+  luminState.voiceTurn = false;
   if (!USE_DIRECT_SYSTEM_CHAT && !luminState.threadId) { await luminCreateThread(); }
 
   // Remove empty state
   document.getElementById('lumin-empty')?.remove();
 
-  // Optimistic user bubble
   _appendLuminMsg('user', msg, new Date().toISOString(), true);
   input.value = '';
   luminAutoResize(input);
 
-  // Thinking indicator
+  document.querySelectorAll('.lumin-msg.thinking').forEach((el) => el.remove());
+
   const thinkId = 'lumin-think-' + Date.now();
-  _appendLuminMsgRaw(thinkId, 'thinking', 'Lumin is thinking…');
+  _appendLuminMsgRaw(thinkId, 'thinking', voiceTurn ? 'Lumin is listening…' : 'Lumin is working…');
 
   luminState.sending = true;
   document.getElementById('lumin-send-btn').disabled = true;
-  document.getElementById('lumin-status-text').textContent = 'Thinking…';
+  document.getElementById('lumin-status-text').textContent = 'Working…';
 
   const H = await directSystemHeaders();
   try {
@@ -2734,22 +3506,28 @@ async function luminSend() {
           text: msg,
           action: 'auto',
           stage: 'system',
-          source_mode: 'text',
+          source_mode: voiceTurn ? 'voice' : 'text',
           conversational_mode: true,
-          dictate_then_send: false,
+          dictate_then_send: voiceTurn,
           async: true,
+          conversation_history: buildLuminConversationHistoryPayload(),
+          ui_context: {
+            surface: 'lifeos-app',
+            focused_element: '#lumin-input',
+            page: location.pathname + location.search,
+          },
+          client_version: '20260626f',
         }
       : { user: USER || 'adam', message: msg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
       ? DIRECT_SYSTEM_ENDPOINT
       : `${CHAT_BASE}/threads/${luminState.threadId}/messages`;
-    let res  = await fetch(endpoint, {
+    let { res, data } = await luminFetchJsonWithTimeout(endpoint, {
       method: 'POST',
       credentials: 'same-origin',
       headers: H,
       body: JSON.stringify(reqBody),
     });
-    let data = await res.json();
     if (USE_DIRECT_SYSTEM_CHAT && res.status === 202 && data.job_id) {
       const polled = await pollFounderBuildJob(data.job_id, data.poll_url);
       res = polled.res;
@@ -2762,18 +3540,20 @@ async function luminSend() {
     if (res.status === 401 || res.status === 403) {
       const renewed = await CTX.refreshIfNeeded();
       if (renewed) {
-        const retry = await fetch(endpoint, {
+        const retryResult = await luminFetchJsonWithTimeout(endpoint, {
           method: 'POST',
           credentials: 'same-origin',
           headers: await directSystemHeaders(),
           body: JSON.stringify(reqBody),
         });
-        const retryData = await retry.json();
+        const retry = retryResult.res;
+        const retryData = retryResult.data;
         if (retry.ok) {
           document.getElementById(thinkId)?.remove();
           let reply = formatDirectSystemReply(retryData);
           reply = appendClientBubbleProof(reply, retryData);
           _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
+          applyLuminShellAction(retryData);
           return;
         }
       }
@@ -2782,14 +3562,19 @@ async function luminSend() {
     }
 
     if (USE_DIRECT_SYSTEM_CHAT && data) {
+      updateLuminConnectionStatus(data);
       let reply = formatDirectSystemReply(data);
       reply = appendClientBubbleProof(reply, data);
+      luminState.lastReply = reply;
       _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
+      applyLuminShellAction(data);
+      if (voiceTurn) speakLuminReply(reply);
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
       }
     } else if (data.ok && data.assistant_message) {
       _appendLuminMsg('assistant', data.assistant_message.content, data.assistant_message.created_at, true);
+      if (voiceTurn) speakLuminReply(data.assistant_message.content);
       // Badge on FAB if drawer is closed
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
@@ -2799,11 +3584,25 @@ async function luminSend() {
     }
   } catch (err) {
     document.getElementById(thinkId)?.remove();
-    _appendLuminMsgRaw(null, 'assistant', `Connection error: ${err.message}`);
+    const message = err?.name === 'AbortError'
+      ? 'Lumin timed out waiting for the system. Nothing completed on this turn. Try again.'
+      : `Connection error: ${err.message}`;
+    _appendLuminMsgRaw(null, 'assistant', message);
   } finally {
     luminState.sending = false;
     document.getElementById('lumin-send-btn').disabled = false;
-    document.getElementById('lumin-status-text').textContent = 'Ready';
+    const statusEl = document.getElementById('lumin-status-text');
+    if (statusEl) {
+      if (luminState.wakeListenActive) {
+        statusEl.textContent = LuminVoice?.isConversationActive?.()
+          ? 'Lumin is with you'
+          : 'Say "Lumin" when ready';
+      } else if (USE_DIRECT_SYSTEM_CHAT) {
+        statusEl.textContent = 'Counsel · Lumin';
+      } else {
+        statusEl.textContent = 'Ready';
+      }
+    }
   }
 }
 
@@ -2815,6 +3614,10 @@ function _appendLuminMsg(role, content, createdAt, scroll) {
   div.innerHTML = `<div style="white-space:pre-wrap;word-break:break-word;">${_escHtml(content)}</div>${time ? `<div class="lumin-msg-time">${time}</div>` : ''}`;
   container.appendChild(div);
   if (scroll) container.scrollTop = container.scrollHeight;
+  if (role === 'user' || role === 'assistant') {
+    luminState.chatHistory.push({ role, content: String(content || '') });
+    if (luminState.chatHistory.length > 40) luminState.chatHistory.shift();
+  }
 }
 
 function _appendLuminMsgRaw(id, role, content) {
@@ -2831,6 +3634,13 @@ function _escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
+function buildLuminConversationHistoryPayload() {
+  return luminState.chatHistory
+    .slice(0, -1)
+    .slice(-12)
+    .map((m) => ({ role: m.role, content: m.content }));
+}
+
 async function directSystemHeaders() {
   try {
     await CTX.refreshIfNeeded();
@@ -2845,6 +3655,28 @@ function formatDirectSystemReply(data) {
     return window.LifeOSSystemReply.format(data);
   }
   return data.human_summary || data.reason || data.error || 'No response from system.';
+}
+
+async function luminSaveLastMoment() {
+  const body = String(luminState.lastReply || '').trim();
+  if (!body) {
+    toast('Nothing to save yet — talk to Lumin first');
+    return;
+  }
+  const title = body.split('\n')[0].slice(0, 120);
+  try {
+    const H = await directSystemHeaders();
+    const res = await fetch('/api/v1/lifeos/lumin/moments', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: H,
+      body: JSON.stringify({ user: 'adam', clip_type: 'lesson', title, body, tags: ['saved', 'manual'] }),
+    });
+    const data = await res.json();
+    toast(data.ok ? 'Saved to your twin' : (data.error || 'Save failed'));
+  } catch {
+    toast('Save failed');
+  }
 }
 
 function luminHandleKey(e) {
@@ -2879,33 +3711,171 @@ function luminAutoResize(el) {
   el.style.height = Math.max(minHeightPx, Math.min(el.scrollHeight, 120)) + 'px';
 }
 
+/* founder-lumin-voice-send:start — mechanical voice "send it" wire */
+let luminDrawerVoiceCtrl = null;
+let luminSpaceMicHeld = false;
+
+function initLuminDrawerVoiceSend() {
+  if (!window.LifeOSVoiceChat || luminDrawerVoiceCtrl) return;
+  const input = document.getElementById('lumin-input');
+  const micBtn = document.getElementById('lumin-mic-btn');
+  if (!input || !micBtn) return;
+  micBtn.onclick = null;
+  luminDrawerVoiceCtrl = LifeOSVoiceChat.attach({
+    inputId: 'lumin-input',
+    buttonId: 'lumin-mic-btn',
+    statusId: 'lumin-status-text',
+    iconOnly: true,
+    idleText: 'Tap mic or hold Space — say "send it" to post',
+    voiceSendEnabled: true,
+    voiceSendPhrases: ['send it', 'send message', 'send that', 'send now'],
+    voiceSendRequireFinal: true,
+    manualSendOnly: true,
+    keepListeningOnVoiceSend: true,
+    persistentListen: false,
+    onVoiceSend: (text) => {
+      const msg = String(text || '').trim();
+      if (!msg || luminState.sending) return;
+      luminSend({ text: msg, voice: true });
+    },
+    silenceAutoSendMs: 0,
+    sendOnMicStop: false,
+  });
+  if (!window.__luminDrawerSpacePtt) {
+    window.__luminDrawerSpacePtt = true;
+    document.addEventListener('keydown', (e) => {
+      if (e.code !== 'Space' || e.repeat) return;
+      const tag = e.target?.tagName?.toLowerCase();
+      if (tag === 'textarea' || tag === 'input' || e.target?.isContentEditable) return;
+      if (!luminState.open) return;
+      e.preventDefault();
+      if (!luminSpaceMicHeld && luminDrawerVoiceCtrl) {
+        luminSpaceMicHeld = true;
+        luminDrawerVoiceCtrl.startMic();
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      if (e.code !== 'Space' || !luminSpaceMicHeld) return;
+      luminSpaceMicHeld = false;
+      if (luminDrawerVoiceCtrl) luminDrawerVoiceCtrl.stopMic();
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => { initLuminDrawerVoiceSend(); });
+/* founder-lumin-voice-send:end */
+
+
 /* Voice input for Lumin drawer */
 function luminVoiceInput() {
-  if (!window.LuminVoice) return;
+  if (window.LifeOSVoiceChat) {
+    initLuminDrawerVoiceSend();
+    if (luminDrawerVoiceCtrl?.startMic) {
+      luminDrawerVoiceCtrl.startMic();
+      return;
+    }
+  }
+  if (!window.LuminVoice) {
+    toast('Voice input is unavailable right now.');
+    return;
+  }
   const input  = document.getElementById('lumin-input');
   const micBtn = document.getElementById('lumin-mic-btn');
   LuminVoice.startForInput(input, micBtn);
 }
 
-/* ── Global always-on voice toggle ─────────────────────────── */
-function toggleAlwaysListen() {
-  if (!window.LuminVoice) { toast('Voice input not available in this browser.'); return; }
-  const active = LuminVoice.toggleAlwaysListen((transcript) => {
-    // Route transcript to Lumin drawer
-    if (!luminState.open) openLuminDrawer();
-    const input = document.getElementById('lumin-input');
+/* Voice — wake word "Lumin" → Lumin only (Voice Rail product surface retired) */
+function routeVoiceToLuminChair(transcript, meta = {}) {
+  if (!transcript || luminState.sending) return;
+  if (!luminState.open) openLuminDrawer();
+  const input = document.getElementById('lumin-input');
+  if (input) {
     input.value = transcript;
     luminAutoResize(input);
-    // Auto-send after a short pause
-    clearTimeout(toggleAlwaysListen._sendTimer);
-    toggleAlwaysListen._sendTimer = setTimeout(() => {
-      if (input.value.trim()) luminSend();
-    }, 800);
-  });
-  toast(active ? '🎙 Listening while LifeOS is open — pauses in background to save battery' : 'Voice off');
+  }
+  document.getElementById('lumin-status-text').textContent = meta.wake
+    ? 'Lumin is with you — speak'
+    : 'Sending to Lumin…';
+  luminState.voiceTurn = true;
+  luminSend({ text: transcript, voice: true });
 }
 
-/* Listen for interim voice (live typing preview) */
+function speakLuminReply(text) {
+  if (!window.speechSynthesis || !text) return;
+  const plain = String(text)
+    .replace(/\b(PASS|FAIL|COMMAND_RAN|NO_COMMAND_RAN)\b/g, '')
+    .replace(/— Lumin ·[^\n]*/g, '')
+    .trim()
+    .slice(0, 600);
+  if (!plain) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(plain);
+    u.rate = 1;
+    u.lang = 'en-US';
+    window.speechSynthesis.speak(u);
+  } catch { /* non-fatal */ }
+}
+
+function toggleLuminWakeListen() {
+  if (!window.LuminVoice) { toast('Voice requires Chrome or Safari.'); return; }
+  const active = LuminVoice.toggleWakeWordListen({
+    onTranscript: (text) => routeVoiceToLuminChair(text, { voice: true }),
+    onWake: () => {
+      if (!luminState.open) openLuminDrawer();
+      document.getElementById('lumin-status-text').textContent = 'Say your question…';
+      toast('Lumin is listening');
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.value = 880;
+        g.gain.value = 0.04;
+        o.start(); o.stop(ctx.currentTime + 0.12);
+      } catch { /* optional chime */ }
+    },
+    onSleep: () => {
+      document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
+      toast('Lumin paused — say "Lumin" again');
+    },
+  });
+  luminState.wakeListenActive = active;
+  toast(active ? '🎙 Say "Lumin" or "Hey Lumin" — Chair only, no theater' : 'Wake word off');
+}
+
+function initLuminWakeWordListen() {
+  if (!window.LuminVoice || luminState.wakeListenActive) return;
+  if (localStorage.getItem('lifeos_lumin_wake') === '0') return;
+  const started = LuminVoice.toggleWakeWordListen({
+    onTranscript: (text) => routeVoiceToLuminChair(text, { voice: true }),
+    onWake: () => {
+      if (!luminState.open) openLuminDrawer();
+      document.getElementById('lumin-status-text').textContent = 'Say your question…';
+    },
+    onSleep: () => {
+      document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
+    },
+  });
+  luminState.wakeListenActive = !!started;
+  if (started) {
+    document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
+    toast('Say "Lumin" to talk to the Chair');
+  }
+}
+
+function toggleAlwaysListen() { toggleLuminWakeListen(); }
+
+document.addEventListener('lumin-wake', () => {
+  if (!luminState.open) openLuminDrawer();
+});
+document.addEventListener('lumin-sleep', () => {
+  const el = document.getElementById('lumin-interim');
+  if (el) el.textContent = '';
+});
+document.addEventListener('lumin-voice-error', () => {
+  toast('Microphone permission needed — tap 🎙 to enable');
+});
 document.addEventListener('lumin-voice-interim', (e) => {
   const el = document.getElementById('lumin-interim');
   if (el) {
@@ -2920,23 +3890,37 @@ async function refreshPointBStrip() {
   const strip = document.getElementById('point-b-strip');
   if (!strip) return;
   try {
-    const ctx = window.LifeOSAuth?.();
-    const headers = { Accept: 'application/json' };
-    let res;
-    if (ctx?.fetchWithAuth) {
-      res = await ctx.fetchWithAuth('/api/v1/lifeos/builderos/command-control/point-b/status');
-    } else {
-      const key = ctx?.KEY || localStorage.getItem('commandKey');
-      if (key) headers['x-command-key'] = key;
-      res = await fetch('/api/v1/lifeos/builderos/command-control/point-b/status', { headers });
-    }
+    const res = await CTX.fetchWithAuth('/api/v1/lifeos/builderos/command-control/point-b/status');
     if (!res.ok) return;
     const data = await res.json();
     const s = data.point_b || data;
-    document.getElementById('point-b-label').textContent = `Point B · ${s.label || 'LifeRE Alpha'}`;
+    const labelEl = document.getElementById('point-b-label');
+    const prefix = labelEl?.dataset.prefix || 'Point B';
+    if (labelEl) labelEl.textContent = `${prefix} · ${s.label || 'LifeRE Alpha'}`;
     document.getElementById('point-b-pct').textContent = `${s.progress_pct ?? 0}%`;
     document.getElementById('point-b-phase').textContent = s.phase ? `· ${s.phase}` : '';
-    document.getElementById('point-b-blocker').textContent = s.blocker ? s.blocker : '';
+    const blockerEl = document.getElementById('point-b-blocker');
+    if (blockerEl) {
+      if (s.next_action === 'founder_usability_check') {
+        blockerEl.textContent = `${s.blocker || ''} → Open LifeRE, run Alpha Daily Cycle, Confirm Alpha PASS (12+ chars)`;
+      } else {
+        blockerEl.textContent = s.blocker ? s.blocker : '';
+      }
+    }
+    if (s.next_action === 'founder_usability_check') {
+      strip.style.cursor = 'pointer';
+      strip.title = 'Open LifeRE alpha confirm';
+      strip.onclick = () => {
+        loadPage('lifeos-lifere.html');
+        setTimeout(() => {
+          document.getElementById('content-frame')?.contentWindow?.postMessage?.({ type: 'lifere-focus-alpha-confirm' }, '*');
+        }, 800);
+      };
+    } else {
+      strip.style.cursor = '';
+      strip.title = '';
+      strip.onclick = null;
+    }
   } catch {
     // non-fatal — strip stays at defaults
   }
@@ -2944,7 +3928,232 @@ async function refreshPointBStrip() {
 document.addEventListener('DOMContentLoaded', () => {
   refreshPointBStrip();
   setInterval(refreshPointBStrip, 120000);
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === 'lifeos-point-b-refresh') refreshPointBStrip();
+  });
+  maybeRouteFromContextIntent();
 });
+
+async function maybeRouteFromContextIntent() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('page') || params.get('stack')) return;
+  const intent = sessionStorage.getItem('lifeos_context_intent');
+  if (!intent) return;
+  try {
+    const res = await CTX.fetchWithAuth(`/api/v1/lifeos/context/suggest?q=${encodeURIComponent(intent)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    applyFluidWorkspaceSuggestion(data, intent);
+    const nextPage = data.page || (data.stack_id === 'lifere' ? 'lifeos-lifere.html' : null);
+    if (nextPage) {
+      sessionStorage.removeItem('lifeos_context_intent');
+      loadPage(nextPage);
+      const nav = document.querySelector(`[data-page="${nextPage}"]`);
+      if (nav) {
+        document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
+        nav.classList.add('active');
+      }
+      if (data.open_drawer) {
+        openLuminDrawer();
+      }
+      if (data.focus_prompt) {
+        const input = document.getElementById('lumin-input');
+        const focus = safePromptText(data.focus_prompt);
+        if (input && !input.value.trim() && focus) {
+          input.value = focus;
+          luminAutoResize(input);
+        }
+      }
+    }
+  } catch {
+    /* non-fatal */
+  }
+}
+
+function applyFluidWorkspaceSuggestion(suggestion, sourceIntent) {
+  const mode = suggestion?.stack_id || 'lifeos';
+  document.documentElement.dataset.workspaceMode = mode;
+  document.documentElement.dataset.workspaceView = suggestion?.view_id || 'default_dashboard';
+  const eyebrow = document.getElementById('topbar-eyebrow');
+  const quickTitle = document.getElementById('lumin-quick-title');
+  const quickSub = document.getElementById('lumin-quick-sub');
+  if (eyebrow) eyebrow.textContent = suggestion?.title || STUDIO_BASE_COPY.eyebrow;
+  if (quickTitle) quickTitle.textContent = suggestion?.title || STUDIO_BASE_COPY.quickTitle;
+  if (quickSub) {
+    quickSub.textContent = sourceIntent
+      ? `Workspace shifted for: "${sourceIntent}". ${suggestion?.focus_prompt || STUDIO_BASE_COPY.quickSub}`
+      : STUDIO_BASE_COPY.quickSub;
+  }
+}
+
+window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
+  if (!text?.trim()) return;
+  sessionStorage.setItem('lifeos_context_intent', text.trim());
+  maybeRouteFromContextIntent();
+};
+</script>
+
+<script src="/shared/lifeos-local-vault.js?v=20260519c"></script>
+<script src="/shared/lifeos-listening-orchestrator.js?v=20260519c"></script>
+<script src="/shared/lifeos-family-tone-guard.js?v=20260519d"></script>
+<script src="/shared/lifeos-ambient-listener.js?v=20260519b"></script>
+<script>
+(function initListeningOrchestrator() {
+  const btn = document.getElementById('listening-master-toggle');
+  const label = document.getElementById('listening-label');
+  const hint = document.getElementById('listening-hint');
+  const toast = document.getElementById('ambient-toast');
+  let toastTimer = null;
+
+  function showToast(message, kind) {
+    if (!toast || !message) return;
+    toast.textContent = message;
+    toast.dataset.kind = kind || 'note';
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
+  }
+
+  function renderStatus(st) {
+    const on = st?.master && st?.profile?.mode !== 'off';
+    if (btn) {
+      btn.dataset.mode = on ? 'on' : 'off';
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    if (label) label.textContent = on ? 'Listening on' : 'Listening off';
+    if (hint && st?.profile?.mode) {
+      hint.innerHTML = `Mode: <strong>${st.profile.mode.replace(/_/g, ' ')}</strong> · <a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Listening prefs</a>`;
+    }
+    const lm = document.getElementById('st-listening-master');
+    if (lm) lm.checked = !!st?.master;
+  }
+
+  if (!window.LifeOSListeningOrchestrator) return;
+
+  window.LifeOSListeningOrchestrator.init({
+    getCtx: () => CTX,
+    onProfileChange: renderStatus,
+    onToast: showToast,
+  }).then(() => renderStatus(LifeOSListeningOrchestrator.getStatus()));
+
+  btn?.addEventListener('click', async () => {
+    const st = LifeOSListeningOrchestrator.getStatus();
+    await LifeOSListeningOrchestrator.setMaster(!st.master);
+    renderStatus(LifeOSListeningOrchestrator.getStatus());
+  });
+
+  document.addEventListener('lifeos-mediation-offer', () => {
+    if (confirm('Open mediation with Lumen?')) {
+      loadPage('lifeos-mediation.html', 'Mediation', '--c-relationship');
+    }
+  });
+
+  document.addEventListener('lifeos-lumen-wake', (e) => {
+    const text = String(e.detail?.text || '').trim();
+    if (text) {
+      routeVoiceToLuminChair(text, { wake: true });
+      return;
+    }
+    openLuminDrawer?.();
+  });
+})();
+</script>
+<script>
+(function initFamilyToneGuard() {
+  const btn = document.getElementById('family-guard-toggle');
+  const label = document.getElementById('family-guard-label');
+  const hint = document.getElementById('family-guard-hint');
+  const toast = document.getElementById('ambient-toast');
+  let toastTimer = null;
+
+  const MODE_COPY = {
+    off: { label: 'Family guard off', hint: 'Tap to watch tone — yell = vibrate until calm · snippy/mean = one pulse' },
+    watching: { label: 'Family guard on', hint: 'Listening locally — not recorded · yell or snippy tone triggers vibration' },
+    yelling: { label: 'Yelling — calm down', hint: 'Phone vibrating until volume drops — breathe' },
+  };
+
+  function showGuardToast(message, kind) {
+    if (!toast || !message) return;
+    toast.textContent = message;
+    toast.dataset.kind = kind || 'note';
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
+  }
+
+  function renderMode(mode) {
+    const copy = MODE_COPY[mode] || MODE_COPY.off;
+    if (btn) {
+      btn.dataset.mode = mode;
+      btn.setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
+    }
+    if (label) label.textContent = copy.label;
+    if (hint) hint.textContent = copy.hint;
+  }
+
+  if (!window.LifeOSFamilyToneGuard) return;
+
+  window.LifeOSFamilyToneGuard.init({
+    onStateChange: renderMode,
+    onToast: showGuardToast,
+  });
+  renderMode(window.LifeOSFamilyToneGuard.getMode());
+
+  btn?.addEventListener('click', async () => {
+    await window.LifeOSFamilyToneGuard.toggle();
+    renderMode(window.LifeOSFamilyToneGuard.getMode());
+    const fg = document.getElementById('st-family-guard');
+    if (fg) fg.checked = window.LifeOSFamilyToneGuard.isEnabled();
+  });
+})();
+</script>
+<script>
+(function initAmbientListen() {
+  const btn = document.getElementById('ambient-toggle');
+  const label = document.getElementById('ambient-label');
+  const hint = document.getElementById('ambient-hint');
+  const toast = document.getElementById('ambient-toast');
+  let toastTimer = null;
+
+  const MODE_COPY = {
+    off: { label: 'Ambient off', hint: 'Click to listen — sleeps when quiet, logs commitments & notes' },
+    sleeping: { label: 'Sleeping · ears open', hint: 'Silent — will wake when you speak' },
+    listening: { label: 'Listening', hint: 'Speech detected — deciding what to save' },
+    processing: { label: 'Noting…', hint: 'Adding to commitments or your twin' },
+  };
+
+  function renderMode(mode) {
+    const copy = MODE_COPY[mode] || MODE_COPY.off;
+    if (btn) {
+      btn.dataset.mode = mode;
+      btn.setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
+    }
+    if (label) label.textContent = copy.label;
+    if (hint) hint.textContent = copy.hint;
+  }
+
+  function showAmbientToast(message, kind) {
+    if (!toast || !message) return;
+    toast.textContent = message;
+    toast.dataset.kind = kind || 'note';
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
+  }
+
+  if (!window.LifeOSAmbientListener) return;
+
+  window.LifeOSAmbientListener.init({
+    onStateChange: renderMode,
+    onToast: showAmbientToast,
+  });
+  renderMode(window.LifeOSAmbientListener.getMode());
+
+  btn?.addEventListener('click', async () => {
+    await window.LifeOSAmbientListener.toggle();
+    renderMode(window.LifeOSAmbientListener.getMode());
+  });
+})();
 </script>
 
 <script>

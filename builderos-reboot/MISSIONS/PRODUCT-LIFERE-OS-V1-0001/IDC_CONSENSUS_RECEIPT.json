@@ -1,7 +1,7 @@
 {
   "schema": "idc_consensus_receipt_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-22T17:34:07.459Z",
+  "at": "2026-06-29T08:34:51.738Z",
   "chair_led": true,
   "load_bearing_decision": "handoff_to_arc_corridor",
   "dissent": [],

@@ -1,6 +1,6 @@
 {
   "schema": "builderos_intake_regression_report_v1",
-  "generated_at": "2026-06-26T01:40:11.395Z",
+  "generated_at": "2026-06-29T15:59:45.938Z",
   "harness_path": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
   "harness_updated_at": "2026-06-26",
   "session_count": 1,
@@ -18,7 +18,7 @@
         "ok": true,
         "status": 0,
         "script": "scripts/verify-socialmediaos.mjs",
-        "stdout_tail": "{\n  \"schema\": \"mos_p1_005_acceptance_report_v1\",\n  \"generated_at\": \"2026-06-26T01:40:11.390Z\",\n  \"checks\": [\n    {\n      \"id\": \"DB-M01\",\n      \"ok\": true,\n      \"detail\": \"migration includes socialmediaos_sessions table\"\n    },\n    {\n      \"id\": \"DB-M02\",\n      \"ok\": true,\n      \"detail\": \"migration includes socialmediaos_content_packs table\"\n    },\n    {\n      \"id\": \"SVC-E01\",\n      \"ok\": true,\n      \"detail\": \"service exports createMarketingOSFactory\"\n    },\n    {\n      \"id\": \"RTE-S01\",\n      \"ok\": true,\n      \"detail\": \"routes file includes correct factory signature\"\n    },\n    {\n      \"id\": \"HTTP-P01\",\n      \"ok\": true,\n      \"detail\": \"GET /sessions: Status 200, ok: true\"\n    },\n    {\n      \"id\": \"HTTP-P02\",\n      \"ok\": true,\n      \"detail\": \"POST /validate-payment-link: Status 200, ok: true, valid: true\"\n    }\n  ],\n  \"overall_score\": 10,\n  \"all_passed\": true\n}\n\nAll acceptance checks passed.\n",
+        "stdout_tail": "--- SocialMediaOS Phase 1 Acceptance Audit ---\nPASS [DB-01] Migration file db/migrations/20260626_socialmediaos.sql exists.\nPASS [DB-02] Migration includes literal `CREATE TABLE IF NOT EXISTS socialmediaos_sessions`.\nPASS [DB-03] Migration includes literal `CREATE TABLE IF NOT EXISTS socialmediaos_content_packs`.\nPASS [SVC-01] Service file services/socialmediaos-service.js exists.\nPASS [SVC-02] `services/socialmediaos-service.js` exports literal `export function createMarketingOSFactory`.\nPASS [RTE-01] Routes file routes/socialmediaos-routes.js exists.\nPASS [RTE-02] Routes file includes exact factory signature: `export function createSocialmediaosRoutes({ pool, requireKey, logger })`.\nPASS [HTTP-01] GET /api/v1/socialmediaos/sessions: HTTP 200, ok: true\nPASS [HTTP-02] POST /api/v1/socialmediaos/validate-payment-link: HTTP 200, ok: true, valid: true\n\nAll SocialMediaOS Phase 1 acceptance checks passed.\n",
         "stderr_tail": ""
       }
     }

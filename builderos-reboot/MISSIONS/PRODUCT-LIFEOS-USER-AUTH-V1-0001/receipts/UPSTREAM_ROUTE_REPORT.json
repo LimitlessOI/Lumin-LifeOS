@@ -7,10 +7,7 @@
   "escalate_to_founder": true,
   "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
   "violations": [
-    "development:FOUNDER_PACKET missing Problem",
-    "development:FOUNDER_PACKET missing Desired Outcome",
-    "development:FOUNDER_PACKET missing FOUNDER SUCCESS TEST",
-    "development:intent_not_clear pain:MISSING,value:MISSING"
+    "development:intent_not_clear failure_metric:MISSING,scope_boundary:MISSING,constraints:MISSING,unacceptable_result:MISSING,ownership:MISSING"
   ],
   "flow": [
     "ARC → Chair (handoff incomplete)",
