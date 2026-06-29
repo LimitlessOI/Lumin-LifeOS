@@ -9,7 +9,7 @@
     "obstacle_is_lesson": true,
     "must_adjust_system": true
   },
-  "started_at": "2026-06-29T16:07:59.958Z",
+  "started_at": "2026-06-29T17:12:27.252Z",
   "cooking_slice_size": 32,
   "attempts": [
     {
@@ -17,7 +17,7 @@
       "attempt": 1,
       "slice": 1,
       "cooking_spent": 1,
-      "at": "2026-06-29T16:07:59.964Z",
+      "at": "2026-06-29T17:12:27.256Z",
       "ok": true
     },
     {
@@ -25,11 +25,11 @@
       "attempt": 1,
       "slice": 1,
       "cooking_spent": 2,
-      "at": "2026-06-29T16:07:59.965Z",
+      "at": "2026-06-29T17:12:27.257Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749279965_1",
-        "at": "2026-06-29T16:07:59.965Z",
+        "obstacle_id": "obs_1782753147261_1",
+        "at": "2026-06-29T17:12:27.261Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 1,
@@ -61,7 +61,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:07:59.969Z"
+        "at": "2026-06-29T17:12:27.270Z"
       },
       "violations": []
     },
@@ -70,11 +70,11 @@
       "attempt": 2,
       "slice": 1,
       "cooking_spent": 3,
-      "at": "2026-06-29T16:07:59.970Z",
+      "at": "2026-06-29T17:12:27.272Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749279970_2",
-        "at": "2026-06-29T16:07:59.970Z",
+        "obstacle_id": "obs_1782753147277_2",
+        "at": "2026-06-29T17:12:27.277Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 2,
@@ -106,7 +106,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:07:59.977Z"
+        "at": "2026-06-29T17:12:27.285Z"
       },
       "violations": []
     },
@@ -115,11 +115,11 @@
       "attempt": 3,
       "slice": 1,
       "cooking_spent": 4,
-      "at": "2026-06-29T16:07:59.977Z",
+      "at": "2026-06-29T17:12:27.287Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749279978_3",
-        "at": "2026-06-29T16:07:59.978Z",
+        "obstacle_id": "obs_1782753147292_3",
+        "at": "2026-06-29T17:12:27.292Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 3,
@@ -151,7 +151,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:07:59.981Z"
+        "at": "2026-06-29T17:12:27.300Z"
       },
       "violations": []
     },
@@ -160,11 +160,11 @@
       "attempt": 4,
       "slice": 1,
       "cooking_spent": 5,
-      "at": "2026-06-29T16:07:59.982Z",
+      "at": "2026-06-29T17:12:27.302Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749279982_4",
-        "at": "2026-06-29T16:07:59.982Z",
+        "obstacle_id": "obs_1782753147306_4",
+        "at": "2026-06-29T17:12:27.306Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 4,
@@ -196,7 +196,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:07:59.986Z"
+        "at": "2026-06-29T17:12:27.315Z"
       },
       "violations": []
     },
@@ -205,11 +205,11 @@
       "attempt": 5,
       "slice": 1,
       "cooking_spent": 6,
-      "at": "2026-06-29T16:07:59.986Z",
+      "at": "2026-06-29T17:12:27.317Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749279987_5",
-        "at": "2026-06-29T16:07:59.987Z",
+        "obstacle_id": "obs_1782753147322_5",
+        "at": "2026-06-29T17:12:27.322Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 5,
@@ -241,7 +241,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:07:59.990Z"
+        "at": "2026-06-29T17:12:27.330Z"
       },
       "violations": []
     },
@@ -250,11 +250,11 @@
       "attempt": 6,
       "slice": 1,
       "cooking_spent": 7,
-      "at": "2026-06-29T16:07:59.990Z",
+      "at": "2026-06-29T17:12:27.332Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749279991_6",
-        "at": "2026-06-29T16:07:59.991Z",
+        "obstacle_id": "obs_1782753147336_6",
+        "at": "2026-06-29T17:12:27.336Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 6,
@@ -286,7 +286,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:07:59.994Z"
+        "at": "2026-06-29T17:12:27.344Z"
       },
       "violations": []
     },
@@ -295,11 +295,11 @@
       "attempt": 7,
       "slice": 1,
       "cooking_spent": 8,
-      "at": "2026-06-29T16:07:59.995Z",
+      "at": "2026-06-29T17:12:27.346Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749279996_7",
-        "at": "2026-06-29T16:07:59.996Z",
+        "obstacle_id": "obs_1782753147350_7",
+        "at": "2026-06-29T17:12:27.350Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 7,
@@ -331,7 +331,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:07:59.999Z"
+        "at": "2026-06-29T17:12:27.358Z"
       },
       "violations": []
     },
@@ -340,11 +340,11 @@
       "attempt": 8,
       "slice": 1,
       "cooking_spent": 9,
-      "at": "2026-06-29T16:07:59.999Z",
+      "at": "2026-06-29T17:12:27.360Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280000_8",
-        "at": "2026-06-29T16:08:00.000Z",
+        "obstacle_id": "obs_1782753147364_8",
+        "at": "2026-06-29T17:12:27.364Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 8,
@@ -376,7 +376,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.003Z"
+        "at": "2026-06-29T17:12:27.373Z"
       },
       "violations": []
     },
@@ -385,11 +385,11 @@
       "attempt": 9,
       "slice": 1,
       "cooking_spent": 10,
-      "at": "2026-06-29T16:08:00.003Z",
+      "at": "2026-06-29T17:12:27.375Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280004_9",
-        "at": "2026-06-29T16:08:00.004Z",
+        "obstacle_id": "obs_1782753147380_9",
+        "at": "2026-06-29T17:12:27.380Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 9,
@@ -421,7 +421,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.007Z"
+        "at": "2026-06-29T17:12:27.388Z"
       },
       "violations": []
     },
@@ -430,11 +430,11 @@
       "attempt": 10,
       "slice": 1,
       "cooking_spent": 11,
-      "at": "2026-06-29T16:08:00.008Z",
+      "at": "2026-06-29T17:12:27.390Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280008_10",
-        "at": "2026-06-29T16:08:00.008Z",
+        "obstacle_id": "obs_1782753147394_10",
+        "at": "2026-06-29T17:12:27.394Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 10,
@@ -466,7 +466,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.013Z"
+        "at": "2026-06-29T17:12:27.403Z"
       },
       "violations": []
     },
@@ -475,11 +475,11 @@
       "attempt": 11,
       "slice": 1,
       "cooking_spent": 12,
-      "at": "2026-06-29T16:08:00.013Z",
+      "at": "2026-06-29T17:12:27.404Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280014_11",
-        "at": "2026-06-29T16:08:00.014Z",
+        "obstacle_id": "obs_1782753147409_11",
+        "at": "2026-06-29T17:12:27.409Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 11,
@@ -511,7 +511,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.017Z"
+        "at": "2026-06-29T17:12:27.418Z"
       },
       "violations": []
     },
@@ -520,11 +520,11 @@
       "attempt": 12,
       "slice": 1,
       "cooking_spent": 13,
-      "at": "2026-06-29T16:08:00.017Z",
+      "at": "2026-06-29T17:12:27.420Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280018_12",
-        "at": "2026-06-29T16:08:00.018Z",
+        "obstacle_id": "obs_1782753147424_12",
+        "at": "2026-06-29T17:12:27.424Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 12,
@@ -556,7 +556,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.021Z"
+        "at": "2026-06-29T17:12:27.433Z"
       },
       "violations": []
     },
@@ -565,11 +565,11 @@
       "attempt": 13,
       "slice": 1,
       "cooking_spent": 14,
-      "at": "2026-06-29T16:08:00.022Z",
+      "at": "2026-06-29T17:12:27.434Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280022_13",
-        "at": "2026-06-29T16:08:00.022Z",
+        "obstacle_id": "obs_1782753147439_13",
+        "at": "2026-06-29T17:12:27.439Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 13,
@@ -601,7 +601,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.025Z"
+        "at": "2026-06-29T17:12:27.447Z"
       },
       "violations": []
     },
@@ -610,11 +610,11 @@
       "attempt": 14,
       "slice": 1,
       "cooking_spent": 15,
-      "at": "2026-06-29T16:08:00.026Z",
+      "at": "2026-06-29T17:12:27.449Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280026_14",
-        "at": "2026-06-29T16:08:00.026Z",
+        "obstacle_id": "obs_1782753147454_14",
+        "at": "2026-06-29T17:12:27.454Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 14,
@@ -646,7 +646,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.030Z"
+        "at": "2026-06-29T17:12:27.462Z"
       },
       "violations": []
     },
@@ -655,11 +655,11 @@
       "attempt": 15,
       "slice": 1,
       "cooking_spent": 16,
-      "at": "2026-06-29T16:08:00.030Z",
+      "at": "2026-06-29T17:12:27.469Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280031_15",
-        "at": "2026-06-29T16:08:00.031Z",
+        "obstacle_id": "obs_1782753147473_15",
+        "at": "2026-06-29T17:12:27.473Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 15,
@@ -691,7 +691,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.034Z"
+        "at": "2026-06-29T17:12:27.484Z"
       },
       "violations": []
     },
@@ -700,11 +700,11 @@
       "attempt": 16,
       "slice": 1,
       "cooking_spent": 17,
-      "at": "2026-06-29T16:08:00.034Z",
+      "at": "2026-06-29T17:12:27.485Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280035_16",
-        "at": "2026-06-29T16:08:00.035Z",
+        "obstacle_id": "obs_1782753147490_16",
+        "at": "2026-06-29T17:12:27.490Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 16,
@@ -736,7 +736,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.038Z"
+        "at": "2026-06-29T17:12:27.499Z"
       },
       "violations": []
     },
@@ -745,11 +745,11 @@
       "attempt": 17,
       "slice": 1,
       "cooking_spent": 18,
-      "at": "2026-06-29T16:08:00.039Z",
+      "at": "2026-06-29T17:12:27.501Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280039_17",
-        "at": "2026-06-29T16:08:00.039Z",
+        "obstacle_id": "obs_1782753147506_17",
+        "at": "2026-06-29T17:12:27.506Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 17,
@@ -781,7 +781,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.043Z"
+        "at": "2026-06-29T17:12:27.514Z"
       },
       "violations": []
     },
@@ -790,11 +790,11 @@
       "attempt": 18,
       "slice": 1,
       "cooking_spent": 19,
-      "at": "2026-06-29T16:08:00.043Z",
+      "at": "2026-06-29T17:12:27.515Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280044_18",
-        "at": "2026-06-29T16:08:00.044Z",
+        "obstacle_id": "obs_1782753147519_18",
+        "at": "2026-06-29T17:12:27.519Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 18,
@@ -826,7 +826,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.048Z"
+        "at": "2026-06-29T17:12:27.528Z"
       },
       "violations": []
     },
@@ -835,11 +835,11 @@
       "attempt": 19,
       "slice": 1,
       "cooking_spent": 20,
-      "at": "2026-06-29T16:08:00.048Z",
+      "at": "2026-06-29T17:12:27.529Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280049_19",
-        "at": "2026-06-29T16:08:00.049Z",
+        "obstacle_id": "obs_1782753147534_19",
+        "at": "2026-06-29T17:12:27.534Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 19,
@@ -871,7 +871,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.052Z"
+        "at": "2026-06-29T17:12:27.543Z"
       },
       "violations": []
     },
@@ -880,11 +880,11 @@
       "attempt": 20,
       "slice": 1,
       "cooking_spent": 21,
-      "at": "2026-06-29T16:08:00.053Z",
+      "at": "2026-06-29T17:12:27.546Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280053_20",
-        "at": "2026-06-29T16:08:00.053Z",
+        "obstacle_id": "obs_1782753147550_20",
+        "at": "2026-06-29T17:12:27.550Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 20,
@@ -916,7 +916,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.057Z"
+        "at": "2026-06-29T17:12:27.560Z"
       },
       "violations": []
     },
@@ -925,11 +925,11 @@
       "attempt": 21,
       "slice": 1,
       "cooking_spent": 22,
-      "at": "2026-06-29T16:08:00.058Z",
+      "at": "2026-06-29T17:12:27.562Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280058_21",
-        "at": "2026-06-29T16:08:00.058Z",
+        "obstacle_id": "obs_1782753147566_21",
+        "at": "2026-06-29T17:12:27.566Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 21,
@@ -961,7 +961,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.062Z"
+        "at": "2026-06-29T17:12:27.575Z"
       },
       "violations": []
     },
@@ -970,11 +970,11 @@
       "attempt": 22,
       "slice": 1,
       "cooking_spent": 23,
-      "at": "2026-06-29T16:08:00.063Z",
+      "at": "2026-06-29T17:12:27.577Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280063_22",
-        "at": "2026-06-29T16:08:00.063Z",
+        "obstacle_id": "obs_1782753147582_22",
+        "at": "2026-06-29T17:12:27.582Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 22,
@@ -1006,7 +1006,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.067Z"
+        "at": "2026-06-29T17:12:27.590Z"
       },
       "violations": []
     },
@@ -1015,11 +1015,11 @@
       "attempt": 23,
       "slice": 1,
       "cooking_spent": 24,
-      "at": "2026-06-29T16:08:00.068Z",
+      "at": "2026-06-29T17:12:27.593Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280068_23",
-        "at": "2026-06-29T16:08:00.068Z",
+        "obstacle_id": "obs_1782753147597_23",
+        "at": "2026-06-29T17:12:27.597Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 23,
@@ -1051,7 +1051,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.072Z"
+        "at": "2026-06-29T17:12:27.606Z"
       },
       "violations": []
     },
@@ -1060,11 +1060,11 @@
       "attempt": 24,
       "slice": 1,
       "cooking_spent": 25,
-      "at": "2026-06-29T16:08:00.073Z",
+      "at": "2026-06-29T17:12:27.608Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280073_24",
-        "at": "2026-06-29T16:08:00.073Z",
+        "obstacle_id": "obs_1782753147612_24",
+        "at": "2026-06-29T17:12:27.612Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 24,
@@ -1096,7 +1096,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.077Z"
+        "at": "2026-06-29T17:12:27.621Z"
       },
       "violations": []
     },
@@ -1105,11 +1105,11 @@
       "attempt": 25,
       "slice": 1,
       "cooking_spent": 26,
-      "at": "2026-06-29T16:08:00.078Z",
+      "at": "2026-06-29T17:12:27.623Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280078_25",
-        "at": "2026-06-29T16:08:00.078Z",
+        "obstacle_id": "obs_1782753147627_25",
+        "at": "2026-06-29T17:12:27.627Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 25,
@@ -1141,7 +1141,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.082Z"
+        "at": "2026-06-29T17:12:27.635Z"
       },
       "violations": []
     },
@@ -1150,11 +1150,11 @@
       "attempt": 26,
       "slice": 1,
       "cooking_spent": 27,
-      "at": "2026-06-29T16:08:00.082Z",
+      "at": "2026-06-29T17:12:27.638Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280082_26",
-        "at": "2026-06-29T16:08:00.082Z",
+        "obstacle_id": "obs_1782753147642_26",
+        "at": "2026-06-29T17:12:27.642Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 26,
@@ -1186,7 +1186,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.085Z"
+        "at": "2026-06-29T17:12:27.650Z"
       },
       "violations": []
     },
@@ -1195,11 +1195,11 @@
       "attempt": 27,
       "slice": 1,
       "cooking_spent": 28,
-      "at": "2026-06-29T16:08:00.086Z",
+      "at": "2026-06-29T17:12:27.652Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280086_27",
-        "at": "2026-06-29T16:08:00.086Z",
+        "obstacle_id": "obs_1782753147657_27",
+        "at": "2026-06-29T17:12:27.657Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 27,
@@ -1231,7 +1231,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.089Z"
+        "at": "2026-06-29T17:12:27.665Z"
       },
       "violations": []
     },
@@ -1240,11 +1240,11 @@
       "attempt": 28,
       "slice": 1,
       "cooking_spent": 29,
-      "at": "2026-06-29T16:08:00.090Z",
+      "at": "2026-06-29T17:12:27.666Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280090_28",
-        "at": "2026-06-29T16:08:00.090Z",
+        "obstacle_id": "obs_1782753147671_28",
+        "at": "2026-06-29T17:12:27.671Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 28,
@@ -1276,7 +1276,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.093Z"
+        "at": "2026-06-29T17:12:27.680Z"
       },
       "violations": []
     },
@@ -1285,11 +1285,11 @@
       "attempt": 29,
       "slice": 1,
       "cooking_spent": 30,
-      "at": "2026-06-29T16:08:00.094Z",
+      "at": "2026-06-29T17:12:27.682Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280094_29",
-        "at": "2026-06-29T16:08:00.094Z",
+        "obstacle_id": "obs_1782753147686_29",
+        "at": "2026-06-29T17:12:27.686Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 29,
@@ -1321,7 +1321,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.097Z"
+        "at": "2026-06-29T17:12:27.694Z"
       },
       "violations": []
     },
@@ -1330,11 +1330,11 @@
       "attempt": 30,
       "slice": 1,
       "cooking_spent": 31,
-      "at": "2026-06-29T16:08:00.097Z",
+      "at": "2026-06-29T17:12:27.696Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280098_30",
-        "at": "2026-06-29T16:08:00.098Z",
+        "obstacle_id": "obs_1782753147700_30",
+        "at": "2026-06-29T17:12:27.700Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 30,
@@ -1366,7 +1366,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.101Z"
+        "at": "2026-06-29T17:12:27.710Z"
       },
       "violations": []
     },
@@ -1375,11 +1375,11 @@
       "attempt": 31,
       "slice": 1,
       "cooking_spent": 32,
-      "at": "2026-06-29T16:08:00.101Z",
+      "at": "2026-06-29T17:12:27.712Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280101_31",
-        "at": "2026-06-29T16:08:00.101Z",
+        "obstacle_id": "obs_1782753147717_31",
+        "at": "2026-06-29T17:12:27.717Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 31,
@@ -1411,7 +1411,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.104Z"
+        "at": "2026-06-29T17:12:27.726Z"
       },
       "violations": []
     },
@@ -1420,11 +1420,11 @@
       "attempt": 32,
       "slice": 1,
       "cooking_spent": 33,
-      "at": "2026-06-29T16:08:00.105Z",
+      "at": "2026-06-29T17:12:27.728Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280105_32",
-        "at": "2026-06-29T16:08:00.105Z",
+        "obstacle_id": "obs_1782753147732_32",
+        "at": "2026-06-29T17:12:27.732Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 32,
@@ -1456,7 +1456,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.108Z"
+        "at": "2026-06-29T17:12:27.743Z"
       },
       "violations": []
     },
@@ -1465,11 +1465,11 @@
       "attempt": 33,
       "slice": 2,
       "cooking_spent": 34,
-      "at": "2026-06-29T16:08:00.110Z",
+      "at": "2026-06-29T17:12:27.772Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280110_33",
-        "at": "2026-06-29T16:08:00.110Z",
+        "obstacle_id": "obs_1782753147779_33",
+        "at": "2026-06-29T17:12:27.779Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 33,
@@ -1501,7 +1501,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.113Z"
+        "at": "2026-06-29T17:12:27.790Z"
       },
       "violations": []
     },
@@ -1510,11 +1510,11 @@
       "attempt": 34,
       "slice": 2,
       "cooking_spent": 35,
-      "at": "2026-06-29T16:08:00.114Z",
+      "at": "2026-06-29T17:12:27.793Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280114_34",
-        "at": "2026-06-29T16:08:00.114Z",
+        "obstacle_id": "obs_1782753147800_34",
+        "at": "2026-06-29T17:12:27.800Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 34,
@@ -1546,7 +1546,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.117Z"
+        "at": "2026-06-29T17:12:27.816Z"
       },
       "violations": []
     },
@@ -1555,11 +1555,11 @@
       "attempt": 35,
       "slice": 2,
       "cooking_spent": 36,
-      "at": "2026-06-29T16:08:00.118Z",
+      "at": "2026-06-29T17:12:27.818Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280118_35",
-        "at": "2026-06-29T16:08:00.118Z",
+        "obstacle_id": "obs_1782753147824_35",
+        "at": "2026-06-29T17:12:27.824Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 35,
@@ -1591,7 +1591,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.121Z"
+        "at": "2026-06-29T17:12:27.839Z"
       },
       "violations": []
     },
@@ -1600,11 +1600,11 @@
       "attempt": 36,
       "slice": 2,
       "cooking_spent": 37,
-      "at": "2026-06-29T16:08:00.121Z",
+      "at": "2026-06-29T17:12:27.841Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280122_36",
-        "at": "2026-06-29T16:08:00.122Z",
+        "obstacle_id": "obs_1782753147846_36",
+        "at": "2026-06-29T17:12:27.846Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 36,
@@ -1636,7 +1636,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.125Z"
+        "at": "2026-06-29T17:12:27.856Z"
       },
       "violations": []
     },
@@ -1645,11 +1645,11 @@
       "attempt": 37,
       "slice": 2,
       "cooking_spent": 38,
-      "at": "2026-06-29T16:08:00.125Z",
+      "at": "2026-06-29T17:12:27.858Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280126_37",
-        "at": "2026-06-29T16:08:00.126Z",
+        "obstacle_id": "obs_1782753147865_37",
+        "at": "2026-06-29T17:12:27.865Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 37,
@@ -1681,7 +1681,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.129Z"
+        "at": "2026-06-29T17:12:27.877Z"
       },
       "violations": []
     },
@@ -1690,11 +1690,11 @@
       "attempt": 38,
       "slice": 2,
       "cooking_spent": 39,
-      "at": "2026-06-29T16:08:00.129Z",
+      "at": "2026-06-29T17:12:27.879Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280130_38",
-        "at": "2026-06-29T16:08:00.130Z",
+        "obstacle_id": "obs_1782753147885_38",
+        "at": "2026-06-29T17:12:27.885Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 38,
@@ -1726,7 +1726,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.133Z"
+        "at": "2026-06-29T17:12:27.902Z"
       },
       "violations": []
     },
@@ -1735,11 +1735,11 @@
       "attempt": 39,
       "slice": 2,
       "cooking_spent": 40,
-      "at": "2026-06-29T16:08:00.134Z",
+      "at": "2026-06-29T17:12:27.904Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280134_39",
-        "at": "2026-06-29T16:08:00.134Z",
+        "obstacle_id": "obs_1782753147911_39",
+        "at": "2026-06-29T17:12:27.911Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 39,
@@ -1771,7 +1771,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.137Z"
+        "at": "2026-06-29T17:12:27.931Z"
       },
       "violations": []
     },
@@ -1780,11 +1780,11 @@
       "attempt": 40,
       "slice": 2,
       "cooking_spent": 41,
-      "at": "2026-06-29T16:08:00.137Z",
+      "at": "2026-06-29T17:12:27.934Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280137_40",
-        "at": "2026-06-29T16:08:00.137Z",
+        "obstacle_id": "obs_1782753147940_40",
+        "at": "2026-06-29T17:12:27.940Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 40,
@@ -1816,7 +1816,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.141Z"
+        "at": "2026-06-29T17:12:27.953Z"
       },
       "violations": []
     },
@@ -1825,11 +1825,11 @@
       "attempt": 41,
       "slice": 2,
       "cooking_spent": 42,
-      "at": "2026-06-29T16:08:00.142Z",
+      "at": "2026-06-29T17:12:27.955Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280142_41",
-        "at": "2026-06-29T16:08:00.142Z",
+        "obstacle_id": "obs_1782753147960_41",
+        "at": "2026-06-29T17:12:27.960Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 41,
@@ -1861,7 +1861,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.145Z"
+        "at": "2026-06-29T17:12:27.980Z"
       },
       "violations": []
     },
@@ -1870,11 +1870,11 @@
       "attempt": 42,
       "slice": 2,
       "cooking_spent": 43,
-      "at": "2026-06-29T16:08:00.145Z",
+      "at": "2026-06-29T17:12:27.982Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280146_42",
-        "at": "2026-06-29T16:08:00.146Z",
+        "obstacle_id": "obs_1782753147986_42",
+        "at": "2026-06-29T17:12:27.986Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 42,
@@ -1906,7 +1906,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.149Z"
+        "at": "2026-06-29T17:12:27.996Z"
       },
       "violations": []
     },
@@ -1915,11 +1915,11 @@
       "attempt": 43,
       "slice": 2,
       "cooking_spent": 44,
-      "at": "2026-06-29T16:08:00.150Z",
+      "at": "2026-06-29T17:12:27.998Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280150_43",
-        "at": "2026-06-29T16:08:00.150Z",
+        "obstacle_id": "obs_1782753148002_43",
+        "at": "2026-06-29T17:12:28.002Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 43,
@@ -1951,7 +1951,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.153Z"
+        "at": "2026-06-29T17:12:28.011Z"
       },
       "violations": []
     },
@@ -1960,11 +1960,11 @@
       "attempt": 44,
       "slice": 2,
       "cooking_spent": 45,
-      "at": "2026-06-29T16:08:00.154Z",
+      "at": "2026-06-29T17:12:28.013Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280154_44",
-        "at": "2026-06-29T16:08:00.154Z",
+        "obstacle_id": "obs_1782753148017_44",
+        "at": "2026-06-29T17:12:28.017Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 44,
@@ -1996,7 +1996,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.157Z"
+        "at": "2026-06-29T17:12:28.027Z"
       },
       "violations": []
     },
@@ -2005,11 +2005,11 @@
       "attempt": 45,
       "slice": 2,
       "cooking_spent": 46,
-      "at": "2026-06-29T16:08:00.158Z",
+      "at": "2026-06-29T17:12:28.029Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280158_45",
-        "at": "2026-06-29T16:08:00.158Z",
+        "obstacle_id": "obs_1782753148033_45",
+        "at": "2026-06-29T17:12:28.033Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 45,
@@ -2041,7 +2041,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.161Z"
+        "at": "2026-06-29T17:12:28.043Z"
       },
       "violations": []
     },
@@ -2050,11 +2050,11 @@
       "attempt": 46,
       "slice": 2,
       "cooking_spent": 47,
-      "at": "2026-06-29T16:08:00.161Z",
+      "at": "2026-06-29T17:12:28.044Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280162_46",
-        "at": "2026-06-29T16:08:00.162Z",
+        "obstacle_id": "obs_1782753148049_46",
+        "at": "2026-06-29T17:12:28.049Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 46,
@@ -2086,7 +2086,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.164Z"
+        "at": "2026-06-29T17:12:28.058Z"
       },
       "violations": []
     },
@@ -2095,11 +2095,11 @@
       "attempt": 47,
       "slice": 2,
       "cooking_spent": 48,
-      "at": "2026-06-29T16:08:00.165Z",
+      "at": "2026-06-29T17:12:28.061Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280165_47",
-        "at": "2026-06-29T16:08:00.165Z",
+        "obstacle_id": "obs_1782753148067_47",
+        "at": "2026-06-29T17:12:28.067Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 47,
@@ -2131,7 +2131,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.168Z"
+        "at": "2026-06-29T17:12:28.078Z"
       },
       "violations": []
     },
@@ -2140,11 +2140,11 @@
       "attempt": 48,
       "slice": 2,
       "cooking_spent": 49,
-      "at": "2026-06-29T16:08:00.168Z",
+      "at": "2026-06-29T17:12:28.079Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280169_48",
-        "at": "2026-06-29T16:08:00.169Z",
+        "obstacle_id": "obs_1782753148084_48",
+        "at": "2026-06-29T17:12:28.084Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 48,
@@ -2176,7 +2176,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.172Z"
+        "at": "2026-06-29T17:12:28.093Z"
       },
       "violations": []
     },
@@ -2185,11 +2185,11 @@
       "attempt": 49,
       "slice": 2,
       "cooking_spent": 50,
-      "at": "2026-06-29T16:08:00.172Z",
+      "at": "2026-06-29T17:12:28.094Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280173_49",
-        "at": "2026-06-29T16:08:00.173Z",
+        "obstacle_id": "obs_1782753148099_49",
+        "at": "2026-06-29T17:12:28.099Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 49,
@@ -2221,7 +2221,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.176Z"
+        "at": "2026-06-29T17:12:28.107Z"
       },
       "violations": []
     },
@@ -2230,11 +2230,11 @@
       "attempt": 50,
       "slice": 2,
       "cooking_spent": 51,
-      "at": "2026-06-29T16:08:00.177Z",
+      "at": "2026-06-29T17:12:28.109Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280177_50",
-        "at": "2026-06-29T16:08:00.177Z",
+        "obstacle_id": "obs_1782753148113_50",
+        "at": "2026-06-29T17:12:28.113Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 50,
@@ -2266,7 +2266,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.180Z"
+        "at": "2026-06-29T17:12:28.121Z"
       },
       "violations": []
     },
@@ -2275,11 +2275,11 @@
       "attempt": 51,
       "slice": 2,
       "cooking_spent": 52,
-      "at": "2026-06-29T16:08:00.181Z",
+      "at": "2026-06-29T17:12:28.123Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280181_51",
-        "at": "2026-06-29T16:08:00.181Z",
+        "obstacle_id": "obs_1782753148127_51",
+        "at": "2026-06-29T17:12:28.127Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 51,
@@ -2311,7 +2311,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.184Z"
+        "at": "2026-06-29T17:12:28.135Z"
       },
       "violations": []
     },
@@ -2320,11 +2320,11 @@
       "attempt": 52,
       "slice": 2,
       "cooking_spent": 53,
-      "at": "2026-06-29T16:08:00.185Z",
+      "at": "2026-06-29T17:12:28.137Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280185_52",
-        "at": "2026-06-29T16:08:00.185Z",
+        "obstacle_id": "obs_1782753148141_52",
+        "at": "2026-06-29T17:12:28.141Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 52,
@@ -2356,7 +2356,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.189Z"
+        "at": "2026-06-29T17:12:28.150Z"
       },
       "violations": []
     },
@@ -2365,11 +2365,11 @@
       "attempt": 53,
       "slice": 2,
       "cooking_spent": 54,
-      "at": "2026-06-29T16:08:00.189Z",
+      "at": "2026-06-29T17:12:28.151Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280190_53",
-        "at": "2026-06-29T16:08:00.190Z",
+        "obstacle_id": "obs_1782753148156_53",
+        "at": "2026-06-29T17:12:28.156Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 53,
@@ -2401,7 +2401,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.193Z"
+        "at": "2026-06-29T17:12:28.164Z"
       },
       "violations": []
     },
@@ -2410,11 +2410,11 @@
       "attempt": 54,
       "slice": 2,
       "cooking_spent": 55,
-      "at": "2026-06-29T16:08:00.194Z",
+      "at": "2026-06-29T17:12:28.165Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280194_54",
-        "at": "2026-06-29T16:08:00.194Z",
+        "obstacle_id": "obs_1782753148170_54",
+        "at": "2026-06-29T17:12:28.170Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 54,
@@ -2446,7 +2446,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.197Z"
+        "at": "2026-06-29T17:12:28.178Z"
       },
       "violations": []
     },
@@ -2455,11 +2455,11 @@
       "attempt": 55,
       "slice": 2,
       "cooking_spent": 56,
-      "at": "2026-06-29T16:08:00.198Z",
+      "at": "2026-06-29T17:12:28.180Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280198_55",
-        "at": "2026-06-29T16:08:00.198Z",
+        "obstacle_id": "obs_1782753148184_55",
+        "at": "2026-06-29T17:12:28.184Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 55,
@@ -2491,7 +2491,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.202Z"
+        "at": "2026-06-29T17:12:28.193Z"
       },
       "violations": []
     },
@@ -2500,11 +2500,11 @@
       "attempt": 56,
       "slice": 2,
       "cooking_spent": 57,
-      "at": "2026-06-29T16:08:00.207Z",
+      "at": "2026-06-29T17:12:28.195Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280208_56",
-        "at": "2026-06-29T16:08:00.208Z",
+        "obstacle_id": "obs_1782753148199_56",
+        "at": "2026-06-29T17:12:28.199Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 56,
@@ -2536,7 +2536,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.211Z"
+        "at": "2026-06-29T17:12:28.207Z"
       },
       "violations": []
     },
@@ -2545,11 +2545,11 @@
       "attempt": 57,
       "slice": 2,
       "cooking_spent": 58,
-      "at": "2026-06-29T16:08:00.212Z",
+      "at": "2026-06-29T17:12:28.209Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280212_57",
-        "at": "2026-06-29T16:08:00.212Z",
+        "obstacle_id": "obs_1782753148213_57",
+        "at": "2026-06-29T17:12:28.213Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 57,
@@ -2581,7 +2581,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.214Z"
+        "at": "2026-06-29T17:12:28.221Z"
       },
       "violations": []
     },
@@ -2590,11 +2590,11 @@
       "attempt": 58,
       "slice": 2,
       "cooking_spent": 59,
-      "at": "2026-06-29T16:08:00.215Z",
+      "at": "2026-06-29T17:12:28.223Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280215_58",
-        "at": "2026-06-29T16:08:00.215Z",
+        "obstacle_id": "obs_1782753148227_58",
+        "at": "2026-06-29T17:12:28.227Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 58,
@@ -2626,7 +2626,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.218Z"
+        "at": "2026-06-29T17:12:28.235Z"
       },
       "violations": []
     },
@@ -2635,11 +2635,11 @@
       "attempt": 59,
       "slice": 2,
       "cooking_spent": 60,
-      "at": "2026-06-29T16:08:00.219Z",
+      "at": "2026-06-29T17:12:28.237Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280219_59",
-        "at": "2026-06-29T16:08:00.219Z",
+        "obstacle_id": "obs_1782753148241_59",
+        "at": "2026-06-29T17:12:28.241Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 59,
@@ -2671,7 +2671,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.222Z"
+        "at": "2026-06-29T17:12:28.249Z"
       },
       "violations": []
     },
@@ -2680,11 +2680,11 @@
       "attempt": 60,
       "slice": 2,
       "cooking_spent": 61,
-      "at": "2026-06-29T16:08:00.222Z",
+      "at": "2026-06-29T17:12:28.251Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280222_60",
-        "at": "2026-06-29T16:08:00.222Z",
+        "obstacle_id": "obs_1782753148256_60",
+        "at": "2026-06-29T17:12:28.256Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 60,
@@ -2716,7 +2716,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.225Z"
+        "at": "2026-06-29T17:12:28.265Z"
       },
       "violations": []
     },
@@ -2725,11 +2725,11 @@
       "attempt": 61,
       "slice": 2,
       "cooking_spent": 62,
-      "at": "2026-06-29T16:08:00.226Z",
+      "at": "2026-06-29T17:12:28.267Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280226_61",
-        "at": "2026-06-29T16:08:00.226Z",
+        "obstacle_id": "obs_1782753148271_61",
+        "at": "2026-06-29T17:12:28.271Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 61,
@@ -2761,7 +2761,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.231Z"
+        "at": "2026-06-29T17:12:28.280Z"
       },
       "violations": []
     },
@@ -2770,11 +2770,11 @@
       "attempt": 62,
       "slice": 2,
       "cooking_spent": 63,
-      "at": "2026-06-29T16:08:00.231Z",
+      "at": "2026-06-29T17:12:28.282Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280231_62",
-        "at": "2026-06-29T16:08:00.231Z",
+        "obstacle_id": "obs_1782753148287_62",
+        "at": "2026-06-29T17:12:28.287Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 62,
@@ -2806,7 +2806,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.235Z"
+        "at": "2026-06-29T17:12:28.295Z"
       },
       "violations": []
     },
@@ -2815,11 +2815,11 @@
       "attempt": 63,
       "slice": 2,
       "cooking_spent": 64,
-      "at": "2026-06-29T16:08:00.235Z",
+      "at": "2026-06-29T17:12:28.297Z",
       "ok": false,
       "obstacle": {
-        "obstacle_id": "obs_1782749280235_63",
-        "at": "2026-06-29T16:08:00.235Z",
+        "obstacle_id": "obs_1782753148302_63",
+        "at": "2026-06-29T17:12:28.302Z",
         "kind": "phase_fail",
         "phase": "corridor",
         "attempt": 63,
@@ -2851,7 +2851,7 @@
           "post_arc_receipts_refreshed"
         ],
         "canRetry": true,
-        "at": "2026-06-29T16:08:00.239Z"
+        "at": "2026-06-29T17:12:28.311Z"
       },
       "violations": []
     }
@@ -2875,7 +2875,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:07:59.969Z"
+      "at": "2026-06-29T17:12:27.270Z"
     },
     {
       "stage": "corridor",
@@ -2888,7 +2888,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:07:59.977Z"
+      "at": "2026-06-29T17:12:27.285Z"
     },
     {
       "stage": "corridor",
@@ -2901,7 +2901,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:07:59.981Z"
+      "at": "2026-06-29T17:12:27.300Z"
     },
     {
       "stage": "corridor",
@@ -2914,7 +2914,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:07:59.986Z"
+      "at": "2026-06-29T17:12:27.315Z"
     },
     {
       "stage": "corridor",
@@ -2927,7 +2927,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:07:59.990Z"
+      "at": "2026-06-29T17:12:27.330Z"
     },
     {
       "stage": "corridor",
@@ -2940,7 +2940,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:07:59.994Z"
+      "at": "2026-06-29T17:12:27.344Z"
     },
     {
       "stage": "corridor",
@@ -2953,7 +2953,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:07:59.999Z"
+      "at": "2026-06-29T17:12:27.358Z"
     },
     {
       "stage": "corridor",
@@ -2966,7 +2966,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.003Z"
+      "at": "2026-06-29T17:12:27.373Z"
     },
     {
       "stage": "corridor",
@@ -2979,7 +2979,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.007Z"
+      "at": "2026-06-29T17:12:27.388Z"
     },
     {
       "stage": "corridor",
@@ -2992,7 +2992,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.013Z"
+      "at": "2026-06-29T17:12:27.403Z"
     },
     {
       "stage": "corridor",
@@ -3005,7 +3005,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.017Z"
+      "at": "2026-06-29T17:12:27.418Z"
     },
     {
       "stage": "corridor",
@@ -3018,7 +3018,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.021Z"
+      "at": "2026-06-29T17:12:27.433Z"
     },
     {
       "stage": "corridor",
@@ -3031,7 +3031,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.025Z"
+      "at": "2026-06-29T17:12:27.447Z"
     },
     {
       "stage": "corridor",
@@ -3044,7 +3044,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.030Z"
+      "at": "2026-06-29T17:12:27.462Z"
     },
     {
       "stage": "corridor",
@@ -3057,7 +3057,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.034Z"
+      "at": "2026-06-29T17:12:27.484Z"
     },
     {
       "stage": "corridor",
@@ -3070,7 +3070,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.038Z"
+      "at": "2026-06-29T17:12:27.499Z"
     },
     {
       "stage": "corridor",
@@ -3083,7 +3083,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.043Z"
+      "at": "2026-06-29T17:12:27.514Z"
     },
     {
       "stage": "corridor",
@@ -3096,7 +3096,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.048Z"
+      "at": "2026-06-29T17:12:27.528Z"
     },
     {
       "stage": "corridor",
@@ -3109,7 +3109,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.052Z"
+      "at": "2026-06-29T17:12:27.543Z"
     },
     {
       "stage": "corridor",
@@ -3122,7 +3122,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.057Z"
+      "at": "2026-06-29T17:12:27.560Z"
     },
     {
       "stage": "corridor",
@@ -3135,7 +3135,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.062Z"
+      "at": "2026-06-29T17:12:27.575Z"
     },
     {
       "stage": "corridor",
@@ -3148,7 +3148,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.067Z"
+      "at": "2026-06-29T17:12:27.590Z"
     },
     {
       "stage": "corridor",
@@ -3161,7 +3161,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.072Z"
+      "at": "2026-06-29T17:12:27.606Z"
     },
     {
       "stage": "corridor",
@@ -3174,7 +3174,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.077Z"
+      "at": "2026-06-29T17:12:27.621Z"
     },
     {
       "stage": "corridor",
@@ -3187,7 +3187,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.082Z"
+      "at": "2026-06-29T17:12:27.635Z"
     },
     {
       "stage": "corridor",
@@ -3200,7 +3200,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.085Z"
+      "at": "2026-06-29T17:12:27.650Z"
     },
     {
       "stage": "corridor",
@@ -3213,7 +3213,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.089Z"
+      "at": "2026-06-29T17:12:27.665Z"
     },
     {
       "stage": "corridor",
@@ -3226,7 +3226,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.093Z"
+      "at": "2026-06-29T17:12:27.680Z"
     },
     {
       "stage": "corridor",
@@ -3239,7 +3239,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.097Z"
+      "at": "2026-06-29T17:12:27.694Z"
     },
     {
       "stage": "corridor",
@@ -3252,7 +3252,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.101Z"
+      "at": "2026-06-29T17:12:27.710Z"
     },
     {
       "stage": "corridor",
@@ -3265,7 +3265,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.104Z"
+      "at": "2026-06-29T17:12:27.726Z"
     },
     {
       "stage": "corridor",
@@ -3278,7 +3278,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.108Z"
+      "at": "2026-06-29T17:12:27.743Z"
     },
     {
       "stage": "corridor",
@@ -3291,7 +3291,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.113Z"
+      "at": "2026-06-29T17:12:27.790Z"
     },
     {
       "stage": "corridor",
@@ -3304,7 +3304,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.117Z"
+      "at": "2026-06-29T17:12:27.816Z"
     },
     {
       "stage": "corridor",
@@ -3317,7 +3317,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.121Z"
+      "at": "2026-06-29T17:12:27.839Z"
     },
     {
       "stage": "corridor",
@@ -3330,7 +3330,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.125Z"
+      "at": "2026-06-29T17:12:27.856Z"
     },
     {
       "stage": "corridor",
@@ -3343,7 +3343,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.129Z"
+      "at": "2026-06-29T17:12:27.877Z"
     },
     {
       "stage": "corridor",
@@ -3356,7 +3356,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.133Z"
+      "at": "2026-06-29T17:12:27.902Z"
     },
     {
       "stage": "corridor",
@@ -3369,7 +3369,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.137Z"
+      "at": "2026-06-29T17:12:27.931Z"
     },
     {
       "stage": "corridor",
@@ -3382,7 +3382,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.141Z"
+      "at": "2026-06-29T17:12:27.953Z"
     },
     {
       "stage": "corridor",
@@ -3395,7 +3395,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.145Z"
+      "at": "2026-06-29T17:12:27.980Z"
     },
     {
       "stage": "corridor",
@@ -3408,7 +3408,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.149Z"
+      "at": "2026-06-29T17:12:27.996Z"
     },
     {
       "stage": "corridor",
@@ -3421,7 +3421,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.153Z"
+      "at": "2026-06-29T17:12:28.011Z"
     },
     {
       "stage": "corridor",
@@ -3434,7 +3434,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.157Z"
+      "at": "2026-06-29T17:12:28.027Z"
     },
     {
       "stage": "corridor",
@@ -3447,7 +3447,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.161Z"
+      "at": "2026-06-29T17:12:28.043Z"
     },
     {
       "stage": "corridor",
@@ -3460,7 +3460,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.164Z"
+      "at": "2026-06-29T17:12:28.058Z"
     },
     {
       "stage": "corridor",
@@ -3473,7 +3473,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.168Z"
+      "at": "2026-06-29T17:12:28.078Z"
     },
     {
       "stage": "corridor",
@@ -3486,7 +3486,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.172Z"
+      "at": "2026-06-29T17:12:28.093Z"
     },
     {
       "stage": "corridor",
@@ -3499,7 +3499,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.176Z"
+      "at": "2026-06-29T17:12:28.107Z"
     },
     {
       "stage": "corridor",
@@ -3512,7 +3512,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.180Z"
+      "at": "2026-06-29T17:12:28.121Z"
     },
     {
       "stage": "corridor",
@@ -3525,7 +3525,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.184Z"
+      "at": "2026-06-29T17:12:28.135Z"
     },
     {
       "stage": "corridor",
@@ -3538,7 +3538,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.189Z"
+      "at": "2026-06-29T17:12:28.150Z"
     },
     {
       "stage": "corridor",
@@ -3551,7 +3551,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.193Z"
+      "at": "2026-06-29T17:12:28.164Z"
     },
     {
       "stage": "corridor",
@@ -3564,7 +3564,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.197Z"
+      "at": "2026-06-29T17:12:28.178Z"
     },
     {
       "stage": "corridor",
@@ -3577,7 +3577,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.202Z"
+      "at": "2026-06-29T17:12:28.193Z"
     },
     {
       "stage": "corridor",
@@ -3590,7 +3590,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.211Z"
+      "at": "2026-06-29T17:12:28.207Z"
     },
     {
       "stage": "corridor",
@@ -3603,7 +3603,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.214Z"
+      "at": "2026-06-29T17:12:28.221Z"
     },
     {
       "stage": "corridor",
@@ -3616,7 +3616,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.218Z"
+      "at": "2026-06-29T17:12:28.235Z"
     },
     {
       "stage": "corridor",
@@ -3629,7 +3629,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.222Z"
+      "at": "2026-06-29T17:12:28.249Z"
     },
     {
       "stage": "corridor",
@@ -3642,7 +3642,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.225Z"
+      "at": "2026-06-29T17:12:28.265Z"
     },
     {
       "stage": "corridor",
@@ -3655,7 +3655,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.231Z"
+      "at": "2026-06-29T17:12:28.280Z"
     },
     {
       "stage": "corridor",
@@ -3668,7 +3668,7 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.235Z"
+      "at": "2026-06-29T17:12:28.295Z"
     },
     {
       "stage": "corridor",
@@ -3681,13 +3681,13 @@
         "post_arc_receipts_refreshed"
       ],
       "canRetry": true,
-      "at": "2026-06-29T16:08:00.239Z"
+      "at": "2026-06-29T17:12:28.311Z"
     }
   ],
   "obstacles": [
     {
-      "obstacle_id": "obs_1782749279965_1",
-      "at": "2026-06-29T16:07:59.965Z",
+      "obstacle_id": "obs_1782753147261_1",
+      "at": "2026-06-29T17:12:27.261Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 1,
@@ -3709,8 +3709,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749279970_2",
-      "at": "2026-06-29T16:07:59.970Z",
+      "obstacle_id": "obs_1782753147277_2",
+      "at": "2026-06-29T17:12:27.277Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 2,
@@ -3732,8 +3732,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749279978_3",
-      "at": "2026-06-29T16:07:59.978Z",
+      "obstacle_id": "obs_1782753147292_3",
+      "at": "2026-06-29T17:12:27.292Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 3,
@@ -3755,8 +3755,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749279982_4",
-      "at": "2026-06-29T16:07:59.982Z",
+      "obstacle_id": "obs_1782753147306_4",
+      "at": "2026-06-29T17:12:27.306Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 4,
@@ -3778,8 +3778,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749279987_5",
-      "at": "2026-06-29T16:07:59.987Z",
+      "obstacle_id": "obs_1782753147322_5",
+      "at": "2026-06-29T17:12:27.322Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 5,
@@ -3801,8 +3801,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749279991_6",
-      "at": "2026-06-29T16:07:59.991Z",
+      "obstacle_id": "obs_1782753147336_6",
+      "at": "2026-06-29T17:12:27.336Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 6,
@@ -3824,8 +3824,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749279996_7",
-      "at": "2026-06-29T16:07:59.996Z",
+      "obstacle_id": "obs_1782753147350_7",
+      "at": "2026-06-29T17:12:27.350Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 7,
@@ -3847,8 +3847,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280000_8",
-      "at": "2026-06-29T16:08:00.000Z",
+      "obstacle_id": "obs_1782753147364_8",
+      "at": "2026-06-29T17:12:27.364Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 8,
@@ -3870,8 +3870,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280004_9",
-      "at": "2026-06-29T16:08:00.004Z",
+      "obstacle_id": "obs_1782753147380_9",
+      "at": "2026-06-29T17:12:27.380Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 9,
@@ -3893,8 +3893,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280008_10",
-      "at": "2026-06-29T16:08:00.008Z",
+      "obstacle_id": "obs_1782753147394_10",
+      "at": "2026-06-29T17:12:27.394Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 10,
@@ -3916,8 +3916,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280014_11",
-      "at": "2026-06-29T16:08:00.014Z",
+      "obstacle_id": "obs_1782753147409_11",
+      "at": "2026-06-29T17:12:27.409Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 11,
@@ -3939,8 +3939,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280018_12",
-      "at": "2026-06-29T16:08:00.018Z",
+      "obstacle_id": "obs_1782753147424_12",
+      "at": "2026-06-29T17:12:27.424Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 12,
@@ -3962,8 +3962,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280022_13",
-      "at": "2026-06-29T16:08:00.022Z",
+      "obstacle_id": "obs_1782753147439_13",
+      "at": "2026-06-29T17:12:27.439Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 13,
@@ -3985,8 +3985,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280026_14",
-      "at": "2026-06-29T16:08:00.026Z",
+      "obstacle_id": "obs_1782753147454_14",
+      "at": "2026-06-29T17:12:27.454Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 14,
@@ -4008,8 +4008,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280031_15",
-      "at": "2026-06-29T16:08:00.031Z",
+      "obstacle_id": "obs_1782753147473_15",
+      "at": "2026-06-29T17:12:27.473Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 15,
@@ -4031,8 +4031,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280035_16",
-      "at": "2026-06-29T16:08:00.035Z",
+      "obstacle_id": "obs_1782753147490_16",
+      "at": "2026-06-29T17:12:27.490Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 16,
@@ -4054,8 +4054,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280039_17",
-      "at": "2026-06-29T16:08:00.039Z",
+      "obstacle_id": "obs_1782753147506_17",
+      "at": "2026-06-29T17:12:27.506Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 17,
@@ -4077,8 +4077,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280044_18",
-      "at": "2026-06-29T16:08:00.044Z",
+      "obstacle_id": "obs_1782753147519_18",
+      "at": "2026-06-29T17:12:27.519Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 18,
@@ -4100,8 +4100,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280049_19",
-      "at": "2026-06-29T16:08:00.049Z",
+      "obstacle_id": "obs_1782753147534_19",
+      "at": "2026-06-29T17:12:27.534Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 19,
@@ -4123,8 +4123,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280053_20",
-      "at": "2026-06-29T16:08:00.053Z",
+      "obstacle_id": "obs_1782753147550_20",
+      "at": "2026-06-29T17:12:27.550Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 20,
@@ -4146,8 +4146,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280058_21",
-      "at": "2026-06-29T16:08:00.058Z",
+      "obstacle_id": "obs_1782753147566_21",
+      "at": "2026-06-29T17:12:27.566Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 21,
@@ -4169,8 +4169,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280063_22",
-      "at": "2026-06-29T16:08:00.063Z",
+      "obstacle_id": "obs_1782753147582_22",
+      "at": "2026-06-29T17:12:27.582Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 22,
@@ -4192,8 +4192,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280068_23",
-      "at": "2026-06-29T16:08:00.068Z",
+      "obstacle_id": "obs_1782753147597_23",
+      "at": "2026-06-29T17:12:27.597Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 23,
@@ -4215,8 +4215,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280073_24",
-      "at": "2026-06-29T16:08:00.073Z",
+      "obstacle_id": "obs_1782753147612_24",
+      "at": "2026-06-29T17:12:27.612Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 24,
@@ -4238,8 +4238,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280078_25",
-      "at": "2026-06-29T16:08:00.078Z",
+      "obstacle_id": "obs_1782753147627_25",
+      "at": "2026-06-29T17:12:27.627Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 25,
@@ -4261,8 +4261,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280082_26",
-      "at": "2026-06-29T16:08:00.082Z",
+      "obstacle_id": "obs_1782753147642_26",
+      "at": "2026-06-29T17:12:27.642Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 26,
@@ -4284,8 +4284,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280086_27",
-      "at": "2026-06-29T16:08:00.086Z",
+      "obstacle_id": "obs_1782753147657_27",
+      "at": "2026-06-29T17:12:27.657Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 27,
@@ -4307,8 +4307,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280090_28",
-      "at": "2026-06-29T16:08:00.090Z",
+      "obstacle_id": "obs_1782753147671_28",
+      "at": "2026-06-29T17:12:27.671Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 28,
@@ -4330,8 +4330,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280094_29",
-      "at": "2026-06-29T16:08:00.094Z",
+      "obstacle_id": "obs_1782753147686_29",
+      "at": "2026-06-29T17:12:27.686Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 29,
@@ -4353,8 +4353,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280098_30",
-      "at": "2026-06-29T16:08:00.098Z",
+      "obstacle_id": "obs_1782753147700_30",
+      "at": "2026-06-29T17:12:27.700Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 30,
@@ -4376,8 +4376,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280101_31",
-      "at": "2026-06-29T16:08:00.101Z",
+      "obstacle_id": "obs_1782753147717_31",
+      "at": "2026-06-29T17:12:27.717Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 31,
@@ -4399,8 +4399,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280105_32",
-      "at": "2026-06-29T16:08:00.105Z",
+      "obstacle_id": "obs_1782753147732_32",
+      "at": "2026-06-29T17:12:27.732Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 32,
@@ -4422,8 +4422,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280109_33",
-      "at": "2026-06-29T16:08:00.109Z",
+      "obstacle_id": "obs_1782753147753_33",
+      "at": "2026-06-29T17:12:27.753Z",
       "kind": "cooking_slice_exhausted",
       "phase": "corridor",
       "attempt": 33,
@@ -4445,8 +4445,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280110_33",
-      "at": "2026-06-29T16:08:00.110Z",
+      "obstacle_id": "obs_1782753147779_33",
+      "at": "2026-06-29T17:12:27.779Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 33,
@@ -4468,8 +4468,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280114_34",
-      "at": "2026-06-29T16:08:00.114Z",
+      "obstacle_id": "obs_1782753147800_34",
+      "at": "2026-06-29T17:12:27.800Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 34,
@@ -4491,8 +4491,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280118_35",
-      "at": "2026-06-29T16:08:00.118Z",
+      "obstacle_id": "obs_1782753147824_35",
+      "at": "2026-06-29T17:12:27.824Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 35,
@@ -4514,8 +4514,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280122_36",
-      "at": "2026-06-29T16:08:00.122Z",
+      "obstacle_id": "obs_1782753147846_36",
+      "at": "2026-06-29T17:12:27.846Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 36,
@@ -4537,8 +4537,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280126_37",
-      "at": "2026-06-29T16:08:00.126Z",
+      "obstacle_id": "obs_1782753147865_37",
+      "at": "2026-06-29T17:12:27.865Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 37,
@@ -4560,8 +4560,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280130_38",
-      "at": "2026-06-29T16:08:00.130Z",
+      "obstacle_id": "obs_1782753147885_38",
+      "at": "2026-06-29T17:12:27.885Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 38,
@@ -4583,8 +4583,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280134_39",
-      "at": "2026-06-29T16:08:00.134Z",
+      "obstacle_id": "obs_1782753147911_39",
+      "at": "2026-06-29T17:12:27.911Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 39,
@@ -4606,8 +4606,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280137_40",
-      "at": "2026-06-29T16:08:00.137Z",
+      "obstacle_id": "obs_1782753147940_40",
+      "at": "2026-06-29T17:12:27.940Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 40,
@@ -4629,8 +4629,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280142_41",
-      "at": "2026-06-29T16:08:00.142Z",
+      "obstacle_id": "obs_1782753147960_41",
+      "at": "2026-06-29T17:12:27.960Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 41,
@@ -4652,8 +4652,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280146_42",
-      "at": "2026-06-29T16:08:00.146Z",
+      "obstacle_id": "obs_1782753147986_42",
+      "at": "2026-06-29T17:12:27.986Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 42,
@@ -4675,8 +4675,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280150_43",
-      "at": "2026-06-29T16:08:00.150Z",
+      "obstacle_id": "obs_1782753148002_43",
+      "at": "2026-06-29T17:12:28.002Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 43,
@@ -4698,8 +4698,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280154_44",
-      "at": "2026-06-29T16:08:00.154Z",
+      "obstacle_id": "obs_1782753148017_44",
+      "at": "2026-06-29T17:12:28.017Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 44,
@@ -4721,8 +4721,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280158_45",
-      "at": "2026-06-29T16:08:00.158Z",
+      "obstacle_id": "obs_1782753148033_45",
+      "at": "2026-06-29T17:12:28.033Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 45,
@@ -4744,8 +4744,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280162_46",
-      "at": "2026-06-29T16:08:00.162Z",
+      "obstacle_id": "obs_1782753148049_46",
+      "at": "2026-06-29T17:12:28.049Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 46,
@@ -4767,8 +4767,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280165_47",
-      "at": "2026-06-29T16:08:00.165Z",
+      "obstacle_id": "obs_1782753148067_47",
+      "at": "2026-06-29T17:12:28.067Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 47,
@@ -4790,8 +4790,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280169_48",
-      "at": "2026-06-29T16:08:00.169Z",
+      "obstacle_id": "obs_1782753148084_48",
+      "at": "2026-06-29T17:12:28.084Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 48,
@@ -4813,8 +4813,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280173_49",
-      "at": "2026-06-29T16:08:00.173Z",
+      "obstacle_id": "obs_1782753148099_49",
+      "at": "2026-06-29T17:12:28.099Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 49,
@@ -4836,8 +4836,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280177_50",
-      "at": "2026-06-29T16:08:00.177Z",
+      "obstacle_id": "obs_1782753148113_50",
+      "at": "2026-06-29T17:12:28.113Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 50,
@@ -4859,8 +4859,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280181_51",
-      "at": "2026-06-29T16:08:00.181Z",
+      "obstacle_id": "obs_1782753148127_51",
+      "at": "2026-06-29T17:12:28.127Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 51,
@@ -4882,8 +4882,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280185_52",
-      "at": "2026-06-29T16:08:00.185Z",
+      "obstacle_id": "obs_1782753148141_52",
+      "at": "2026-06-29T17:12:28.141Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 52,
@@ -4905,8 +4905,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280190_53",
-      "at": "2026-06-29T16:08:00.190Z",
+      "obstacle_id": "obs_1782753148156_53",
+      "at": "2026-06-29T17:12:28.156Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 53,
@@ -4928,8 +4928,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280194_54",
-      "at": "2026-06-29T16:08:00.194Z",
+      "obstacle_id": "obs_1782753148170_54",
+      "at": "2026-06-29T17:12:28.170Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 54,
@@ -4951,8 +4951,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280198_55",
-      "at": "2026-06-29T16:08:00.198Z",
+      "obstacle_id": "obs_1782753148184_55",
+      "at": "2026-06-29T17:12:28.184Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 55,
@@ -4974,8 +4974,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280208_56",
-      "at": "2026-06-29T16:08:00.208Z",
+      "obstacle_id": "obs_1782753148199_56",
+      "at": "2026-06-29T17:12:28.199Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 56,
@@ -4997,8 +4997,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280212_57",
-      "at": "2026-06-29T16:08:00.212Z",
+      "obstacle_id": "obs_1782753148213_57",
+      "at": "2026-06-29T17:12:28.213Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 57,
@@ -5020,8 +5020,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280215_58",
-      "at": "2026-06-29T16:08:00.215Z",
+      "obstacle_id": "obs_1782753148227_58",
+      "at": "2026-06-29T17:12:28.227Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 58,
@@ -5043,8 +5043,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280219_59",
-      "at": "2026-06-29T16:08:00.219Z",
+      "obstacle_id": "obs_1782753148241_59",
+      "at": "2026-06-29T17:12:28.241Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 59,
@@ -5066,8 +5066,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280222_60",
-      "at": "2026-06-29T16:08:00.222Z",
+      "obstacle_id": "obs_1782753148256_60",
+      "at": "2026-06-29T17:12:28.256Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 60,
@@ -5089,8 +5089,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280226_61",
-      "at": "2026-06-29T16:08:00.226Z",
+      "obstacle_id": "obs_1782753148271_61",
+      "at": "2026-06-29T17:12:28.271Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 61,
@@ -5112,8 +5112,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280231_62",
-      "at": "2026-06-29T16:08:00.231Z",
+      "obstacle_id": "obs_1782753148287_62",
+      "at": "2026-06-29T17:12:28.287Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 62,
@@ -5135,8 +5135,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280235_63",
-      "at": "2026-06-29T16:08:00.235Z",
+      "obstacle_id": "obs_1782753148302_63",
+      "at": "2026-06-29T17:12:28.302Z",
       "kind": "phase_fail",
       "phase": "corridor",
       "attempt": 63,
@@ -5158,8 +5158,8 @@
       "stopping_is_failure": true
     },
     {
-      "obstacle_id": "obs_1782749280240_63",
-      "at": "2026-06-29T16:08:00.240Z",
+      "obstacle_id": "obs_1782753148316_63",
+      "at": "2026-06-29T17:12:28.316Z",
       "kind": "attempt_budget_per_run",
       "phase": "corridor",
       "attempt": 63,
@@ -5189,10 +5189,10 @@
     "stopping_is_failure": true,
     "lesson": "Per-run attempt cap hit — outer loop must continue toward Point B"
   },
-  "finished_at": "2026-06-29T16:08:00.240Z",
+  "finished_at": "2026-06-29T17:12:28.322Z",
   "ok": false,
   "point_b_reached": false,
   "total_attempts": 64,
-  "latency_ms": 282,
+  "latency_ms": 1070,
   "point_b": null
 }

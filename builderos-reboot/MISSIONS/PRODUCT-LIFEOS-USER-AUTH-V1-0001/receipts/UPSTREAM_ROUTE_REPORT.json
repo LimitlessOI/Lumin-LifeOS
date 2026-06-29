@@ -7,7 +7,7 @@
   "escalate_to_founder": true,
   "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
   "violations": [
-    "development:intent_not_clear failure_metric:MISSING,scope_boundary:MISSING,constraints:MISSING,unacceptable_result:MISSING,ownership:MISSING"
+    "department:CFO invalid JSON"
   ],
   "flow": [
     "ARC → Chair (handoff incomplete)",

@@ -3,7 +3,7 @@
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "seat": "SNT",
   "review": "translation_attack",
-  "simulated_at": "2026-06-29T16:08:00.239Z",
+  "simulated_at": "2026-06-29T17:12:28.618Z",
   "simulated_by": "factory-core/arc/foundation/snt-translation-attack.js",
   "core_question": "If this claim is wrong, how would we know?",
   "attacks_run": 6,
@@ -26,11 +26,11 @@
     },
     {
       "claim": "All steps are write_file_exact",
-      "pass": false,
+      "pass": true,
       "failure_scenario": "Builder forced to decide",
       "severity": "blocking",
-      "evidence_if_wrong": "steps=7 write_file_exact=0",
-      "recommended_action": "ARC revises blueprint"
+      "evidence_if_wrong": "steps=7 write_file_exact=7",
+      "recommended_action": "none"
     },
     {
       "claim": "Auto-execution rule preserved",
@@ -45,16 +45,16 @@
       "pass": false,
       "failure_scenario": "Blocking decision gaps remain or empty builder sim",
       "severity": "blocking",
-      "evidence_if_wrong": "sim steps=8 blocking_gaps=68",
+      "evidence_if_wrong": "sim steps=0 blocking_gaps=0",
       "recommended_action": "ARC revises blueprint"
     },
     {
       "claim": "Production route probe",
-      "pass": true,
+      "pass": false,
       "failure_scenario": "Routes not live on production base URL",
       "severity": "blocking",
-      "evidence_if_wrong": "Run npm run lifeos:user-auth:v1-acceptance against https://robust-magic-production.up.railway.app",
-      "recommended_action": "none"
+      "evidence_if_wrong": "Set PUBLIC_BASE_URL + COMMAND_CENTER_KEY to probe production routes",
+      "recommended_action": "ARC revises blueprint"
     }
   ],
   "blocking_count": 3,

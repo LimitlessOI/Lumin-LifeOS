@@ -1,7 +1,7 @@
 {
   "schema": "pre_arc_input_packet_v2",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "assembled_at": "2026-06-29T16:07:59.964Z",
+  "assembled_at": "2026-06-29T17:12:28.330Z",
   "assembled_by": "foundation/pre-arc-enrichment.js",
   "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
   "manifest": [

@@ -12,33 +12,69 @@
     {
       "step_id": "UAT-001",
       "label": "User registration endpoint",
-      "description": "POST /api/v1/lifeos/auth/register — email+password, creates lifeos_users row, returns JWT. Validate with Zod. Hash password with bcrypt.",
+      "description": "POST /api/v1/lifeos/auth/register — email+password, creates lifeos_users row, returns JWT. Hash password with scrypt. Invite-code gated.",
       "target_file": "routes/lifeos-auth-routes.js",
-      "target_files": ["routes/lifeos-auth-routes.js", "services/lifeos-user-service.js"],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-001/lifeos-auth-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "757d5875a9b9402ed911ed083c77f5e0a759707f4d5741e5d909a011a1db3823"
+      },
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "pending"
     },
     {
       "step_id": "UAT-002",
-      "label": "Login + JWT issue",
-      "description": "POST /api/v1/lifeos/auth/login — verify password, issue access + refresh JWT pair (15m / 7d). Store refresh token hash in DB.",
+      "label": "User service — CRUD + login + session management",
+      "description": "services/lifeos-user-service.js — createUser, loginUser, refreshSession, revokeSession, createInvite, listInvites. Uses lifeos-auth.js for hashing/JWT.",
       "target_file": "services/lifeos-user-service.js",
-      "target_files": ["routes/lifeos-auth-routes.js", "services/lifeos-user-service.js"],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-002/lifeos-user-service.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "15f32f0e6d0c16bfa867d011febbe06699c5e77c0f813afa4da308422bd7474e"
+      },
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "pending"
     },
     {
       "step_id": "UAT-003",
-      "label": "DB migration — lifeos_users table",
-      "description": "CREATE TABLE lifeos_users: id, email (unique), password_hash, handle, tier (free/core/pro/elite), role, created_at, updated_at. Also lifeos_refresh_tokens table.",
+      "label": "DB migration — lifeos_users auth columns, sessions, invites",
+      "description": "Idempotent SQL: ADD COLUMN IF NOT EXISTS email, password_hash, role, tier on lifeos_users. CREATE TABLE IF NOT EXISTS lifeos_sessions, lifeos_invites.",
       "target_file": "db/migrations/20260629_lifeos_user_auth.sql",
-      "target_files": ["db/migrations/20260629_lifeos_user_auth.sql"],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-003/20260629_lifeos_user_auth.sql"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "b714fbe925818b1c57694cac750062037b018c72291d2243c36b511e50ec5b3d"
+      },
+      "sandbox_boundary": "db/migrations/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "pending"
     },
     {
       "step_id": "UAT-004",
       "label": "Tier enforcement middleware",
-      "description": "requireLifeosTier(minTier) — reads JWT.tier, rejects if below minimum. Wire to premium endpoints.",
+      "description": "requireTier(minTier) — reads JWT.tier, rejects if below minimum. injectTierContext for personalized responses.",
       "target_file": "middleware/lifeos-tier-guard.js",
-      "target_files": ["middleware/lifeos-tier-guard.js"],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-004/lifeos-tier-guard.js"
+      },
+      "sandbox_boundary": "middleware/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "pending"
     },
     {
@@ -46,7 +82,17 @@
       "label": "Login UI in lifeos-app.html",
       "description": "Login/register drawer in the LifeOS app overlay. On success: store JWT in memory, update UI to show handle + tier badge. No localStorage for JWT.",
       "target_file": "public/overlay/lifeos-app.html",
-      "target_files": ["public/overlay/lifeos-app.html"],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-005/lifeos-app.html"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "045e5f00268af03b21db0c27fd93b45896863946b31ff6dac48717aae2ae47e1"
+      },
+      "sandbox_boundary": "public/overlay/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "pending"
     },
     {
@@ -54,15 +100,31 @@
       "label": "Lumin chat identifies account",
       "description": "When user is logged in, Lumin knows their name, tier, and context. Chair route includes account JWT sub as user_id.",
       "target_file": "routes/lifeos-builderos-command-control-routes.js",
-      "target_files": ["routes/lifeos-builderos-command-control-routes.js"],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-006/lifeos-builderos-command-control-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "698f6c5e6e2dd8dadf7fcb8c51d847b7a48a773844a64042497b63a1131aa1a1"
+      },
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "pending"
     },
     {
       "step_id": "UAT-007",
       "label": "Acceptance test + machine alpha",
-      "description": "npm run lifeos:user-auth:v1-acceptance — register, login, JWT verify, tier gate test, Lumin chat with account identity. Then run machine alpha walkthrough. All PASS → mark blueprint complete.",
+      "description": "scripts/run-lifeos-user-auth-v1-acceptance.mjs — register, login, JWT verify, tier gate test. All PASS → mark blueprint complete.",
       "target_file": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
-      "target_files": ["scripts/run-lifeos-user-auth-v1-acceptance.mjs"],
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-007/run-lifeos-user-auth-v1-acceptance.mjs"
+      },
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "pending"
     }
   ],

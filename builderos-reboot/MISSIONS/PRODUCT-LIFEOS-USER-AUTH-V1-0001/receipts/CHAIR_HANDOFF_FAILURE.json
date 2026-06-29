@@ -1,12 +1,12 @@
 {
   "schema": "chair_handoff_failure_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "recorded_at": "2026-06-29T16:05:59.531Z",
+  "recorded_at": "2026-06-29T17:04:58.755Z",
   "chair_failed": true,
   "pushed_by": "ARC",
   "defect_owner_seat": "Chair",
   "violations": [
-    "development:intent_not_clear failure_metric:MISSING,scope_boundary:MISSING,constraints:MISSING,unacceptable_result:MISSING,ownership:MISSING"
+    "department:CFO invalid JSON"
   ],
   "escalate_to_founder": true,
   "founder_message": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
