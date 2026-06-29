@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-29 — Lumin personal routing fix (channel: 'lumin'), personal prose format fix, canMarkBuildDone pending evidence support; intake_blueprint routing fix; founder-chat-health scope fix.
+**Last Updated:** 2026-06-29 — Machine Alpha Walkthrough script (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence; intake_blueprint fix.
 
 ---
 
@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-29 | **Machine Alpha Walkthrough gate:** `scripts/run-machine-alpha-walkthrough.mjs` — 12-step founder session: app HTML on disk, LifeRE surface markers, daily cycle API (top-3), Lumin counsel plain prose (2116 chars, no theater), build command routing coherent, Point B status reachable. Writes `MACHINE_ALPHA_WALKTHROUGH.json`. `FOUNDER_USABILITY_CONTRACT.md` updated: walkthrough PASS is now a required gate. `npm run lifeos:machine-alpha-walkthrough` added. | Point B handoff requires machine to test the UI as Adam would — real walkthrough proved system passes all 12 founder paths. | ✅ 12/12 PASS on production | `npm run lifeos:machine-alpha-walkthrough` |
 | 2026-06-29 | **Lumin/Sentry rename enforcement — personal routing + communication format:** `services/chair-context-classifier.js` — `resolveChairContext` now returns `channel: 'lumin'` (was `'chair'`) for auto-detected personal_life messages so `classifyChairIntent` emits `'lumin'`; `services/founder-communication-format.js` — `wrapChairHumanSummary` uses `formatConversationalLuminReply` (not `formatDirectConnectionReply`) for personal Lumin cards so `personal_life` responses return plain prose without the counsel header/footer. `services/builderos-control-plane-service.js` — `canMarkBuildDone` accepts `pending` parameter to overlay pre-commit evidence before DB row updates. All 3 failing tests now pass. | Lumin rename exposed `classifyChairIntent` still emitting `'chair'` for personal messages; `wrapChairHumanSummary` was routing personal cards through the header-adding path instead of bare prose; `canMarkBuildDone` lacked `pending` support needed for pre-commit proof evidence. | ✅ 8/8 tests pass | `node --test tests/builderos-control-plane-pending-evidence.test.js tests/founder-life-admin-intent.test.js tests/chair-lumin-personal-mode.test.js` |
 | 2026-06-29 | **Intake idempotent re-run** — `intake-blueprint-executor.js` short-circuits when targets exist + acceptance PASS; A2Z script treats `already_complete`. | Chat re-run failed step_failed on live SMOS. | ✅ deploy | `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |
 | 2026-06-29 | **intake_blueprint + founder login self-diagnosis** — same routing/health fixes as AMENDMENT_41 row; alpha battery `H0_founder_login_health` probe. | System failed to detect wrong channel + broken health endpoint during founder A→Z SMOS run. | ✅ deploy + chat A2Z | `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |

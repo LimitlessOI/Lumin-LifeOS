@@ -36,6 +36,7 @@ Minimum proof for founder usability PASS:
 - `products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json` is PASS.
 - `products/receipts/UI_ALPHA_GATE.json` is PASS or `CLEARED_FOR_FOUNDER_ALPHA`.
 - `products/receipts/LIFERE_ALPHA_READINESS.json` shows `ready_for_alpha_testing=true`.
+- `products/receipts/MACHINE_ALPHA_WALKTHROUGH.json` is PASS — machine ran `npm run lifeos:machine-alpha-walkthrough` and all 12 founder-path steps passed (app loads, LifeRE daily cycle, Lumin counsel returns plain prose, build command routes coherently, Point B status reachable).
 - Founder confirms PASS with a 12+ character quote through the governed confirm path.
 
 Explicit failure examples:

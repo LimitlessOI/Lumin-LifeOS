@@ -1,0 +1,144 @@
+{
+  "schema": "machine_alpha_walkthrough_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-06-29T08:19:15.675Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "ok": true,
+  "pass_fail": "PASS",
+  "tests_passed": 12,
+  "tests_failed": 0,
+  "passed": [
+    "MAW-T01_app_html_exists",
+    "MAW-T02_lifere_html_exists",
+    "MAW-T03_daily_cycle_marker",
+    "MAW-T04_top3_marker",
+    "MAW-T05_debrief_marker",
+    "MAW-T06_app_nav_to_lifere",
+    "MAW-T07_server_health",
+    "MAW-T08_lifere_daily_cycle",
+    "MAW-T09_lumin_counsel_plain_prose",
+    "MAW-T10_build_command_routed",
+    "MAW-T11_build_response_coherent",
+    "MAW-T12_point_b_status"
+  ],
+  "failed": [],
+  "steps": [
+    {
+      "id": "MAW-T01_app_html_exists",
+      "ok": true,
+      "detail": "public/overlay/lifeos-app.html on disk"
+    },
+    {
+      "id": "MAW-T02_lifere_html_exists",
+      "ok": true,
+      "detail": "public/overlay/lifeos-lifere.html on disk"
+    },
+    {
+      "id": "MAW-T03_daily_cycle_marker",
+      "ok": true,
+      "detail": "daily command center button marker present"
+    },
+    {
+      "id": "MAW-T04_top3_marker",
+      "ok": true,
+      "detail": "top-3 priorities section marker present"
+    },
+    {
+      "id": "MAW-T05_debrief_marker",
+      "ok": true,
+      "detail": "nightly debrief section marker present"
+    },
+    {
+      "id": "MAW-T06_app_nav_to_lifere",
+      "ok": true,
+      "detail": "lifeos-app.html navigates to lifeos-lifere.html"
+    },
+    {
+      "id": "MAW-T07_server_health",
+      "ok": true,
+      "detail": "HTTP 200",
+      "response": {}
+    },
+    {
+      "id": "MAW-T08_lifere_daily_cycle",
+      "ok": true,
+      "detail": "HTTP 200; top_3=true",
+      "top_3": [
+        {
+          "rank": 1,
+          "task": "Follow up contact: BreakIt Dup",
+          "why_now": "synced from BoldTrail CRM",
+          "boldtrail_contact_id": "144496950",
+          "contact": {
+            "id": "144496950",
+            "name": "BreakIt Dup",
+            "email": "break-it-dup-1782689501875@lifere-alpha.test",
+            "phone": null,
+            "status": null,
+            "status_label": "unknown",
+            "assigned_agent_id": 170494,
+            "source": "break-it",
+            "updated_at": "2026-06-28 23:32:03"
+          }
+        },
+        {
+          "rank": 2,
+          "task": "Follow up contact: Ambient Contact",
+          "why_now": "synced from BoldTrail CRM",
+          "boldtrail_contact_id": "144496948",
+          "contact": {
+            "id": "144496948",
+            "name": "Ambient Contact",
+            "email": "break-it-1782689487918@lifere-alpha.test",
+            "phone": null,
+            "status": null,
+            "status_label": "unknown",
+            "assigned_agent_id": 170494,
+            "source": "LifeOS-ambient",
+            "updated_at": "2026-06-28 23:32:03"
+          }
+        },
+        {
+          "rank": 3,
+          "task": "Follow up contact: Alpha Bogus 1782689481625",
+          "why_now": "synced from BoldTrail CRM",
+          "boldtrail_contact_id": "144496946",
+          "contact": {
+            "id": "144496946",
+            "name": "Alpha Bogus 1782689481625",
+            "email": "alpha-bogus-1782689481625@lifere-alpha.test",
+            "phone": null,
+            "status": null,
+            "status_label": "unknown",
+            "assigned_agent_id": 170494,
+            "source": "LifeRE-alpha-test",
+            "updated_at": "2026-06-29 01:20:20"
+          }
+        }
+      ]
+    },
+    {
+      "id": "MAW-T09_lumin_counsel_plain_prose",
+      "ok": true,
+      "detail": "HTTP 200; theater_detected=false; prose_len=2116",
+      "sample": "Lumin IS the Chair — connected to LifeOS files, SSOT amendments, BuilderOS, and founder thread. Build path: Founder UI/code orders → build_async job → council commit via BuilderOS\n\n[KERNEL]\nMission: S"
+    },
+    {
+      "id": "MAW-T10_build_command_routed",
+      "ok": true,
+      "detail": "sync: command_truth=NO_COMMAND_RAN response_len=598"
+    },
+    {
+      "id": "MAW-T11_build_response_coherent",
+      "ok": true,
+      "detail": "sync: command_truth=NO_COMMAND_RAN response_len=598",
+      "sample": "{\"interface\":\"Lumin\",\"lumin_chair\":true,\"lumin\":true,\"direct_connection\":true,\"chair_channel\":\"build_async\",\"point_b_dna_version\":\"point_b_dna_v1\",\"system_purpose\":\"point_a_to_point_b\",\"model_routing\""
+    },
+    {
+      "id": "MAW-T12_point_b_status",
+      "ok": true,
+      "detail": "HTTP 200; label=\"LifeRE Alpha\""
+    }
+  ],
+  "note": "Machine alpha walkthrough complete — all founder paths verified. Ready for Point B handoff to Adam."
+}

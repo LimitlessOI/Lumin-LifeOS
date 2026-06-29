@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T08:14:54.724Z",
+  "generated_at": "2026-06-29T08:20:39.814Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11331,
+  "file_count": 11333,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -35131,9 +35131,9 @@
     {
       "path": "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md",
       "synopsis": "Founder Usability Contract",
-      "bytes": 2382,
-      "mtime": "2026-06-28T01:39:37.796Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z"
+      "bytes": 2666,
+      "mtime": "2026-06-29T08:19:45.854Z",
+      "indexed_at": "2026-06-29T08:20:39.814Z"
     },
     {
       "path": "docs/products/site-builder/AGENTS.md",
@@ -35433,9 +35433,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 523812,
-      "mtime": "2026-06-29T08:13:24.735Z",
-      "indexed_at": "2026-06-29T08:14:54.724Z"
+      "bytes": 524473,
+      "mtime": "2026-06-29T08:20:22.140Z",
+      "indexed_at": "2026-06-29T08:20:39.814Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -63242,9 +63242,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 28354,
-      "mtime": "2026-06-28T01:26:05.999Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "bytes": 28763,
+      "mtime": "2026-06-29T08:19:34.261Z",
+      "indexed_at": "2026-06-29T08:20:39.814Z",
       "synopsis_index_only": true
     },
     {
@@ -64010,6 +64010,14 @@
       "bytes": 1156,
       "mtime": "2026-06-25T22:28:06.230Z",
       "indexed_at": "2026-06-29T04:00:11.890Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/MACHINE_ALPHA_WALKTHROUGH.json",
+      "synopsis": "Product receipt — MACHINE ALPHA WALKTHROUGH.",
+      "bytes": 4680,
+      "mtime": "2026-06-29T08:19:15.678Z",
+      "indexed_at": "2026-06-29T08:20:39.814Z",
       "synopsis_index_only": true
     },
     {
@@ -68779,6 +68787,16 @@
       "bytes": 7730,
       "mtime": "2026-06-28T18:17:45.439Z",
       "indexed_at": "2026-06-29T04:00:11.890Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-machine-alpha-walkthrough.mjs",
+      "synopsis": "Machine Alpha Walkthrough — simulates founder UI session before Point B handoff.",
+      "bytes": 8768,
+      "mtime": "2026-06-29T08:19:06.624Z",
+      "indexed_at": "2026-06-29T08:20:39.814Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
