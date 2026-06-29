@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T16:09:54.451Z",
+  "generated_at": "2026-06-29T16:15:31.326Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11372,
   "files": [
@@ -21329,9 +21329,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 17314,
-      "mtime": "2026-06-29T15:52:35.506Z",
-      "indexed_at": "2026-06-29T16:09:38.764Z",
+      "bytes": 17327,
+      "mtime": "2026-06-29T16:15:19.689Z",
+      "indexed_at": "2026-06-29T16:15:31.326Z",
       "synopsis_index_only": true
     },
     {
@@ -35504,9 +35504,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 50891,
-      "mtime": "2026-06-29T15:52:44.074Z",
-      "indexed_at": "2026-06-29T16:09:38.764Z"
+      "bytes": 51688,
+      "mtime": "2026-06-29T16:15:00.867Z",
+      "indexed_at": "2026-06-29T16:15:31.326Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -67304,9 +67304,9 @@
     {
       "path": "scripts/bp-priority-never-stop.mjs",
       "synopsis": "Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.",
-      "bytes": 5607,
-      "mtime": "2026-06-29T15:51:58.343Z",
-      "indexed_at": "2026-06-29T16:09:38.764Z",
+      "bytes": 8964,
+      "mtime": "2026-06-29T16:14:21.996Z",
+      "indexed_at": "2026-06-29T16:15:31.326Z",
       "ssot": [
         "builderos-reboot/BP_PRIORITY.json",
         "docs/products/AUTHORITY_BOUNDARIES.md"

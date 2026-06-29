@@ -57,7 +57,91 @@ function runPreBuildGate() {
   return { ok: r.status === 0, status: r.status, stdout: String(r.stdout || '').slice(0, 500) };
 }
 
-function runCycle() {
+/**
+ * Commit repair artifacts from a foundation loop run to GitHub.
+ * The repair loop writes JSON files to the filesystem but they're wiped on Railway restart.
+ * This function detects files that differ from git HEAD and commits them via the GitHub API,
+ * giving repairs persistence across restarts.
+ */
+async function commitRepairArtifacts(missionFolder) {
+  const token = process.env.GITHUB_TOKEN?.trim();
+  const repo = process.env.GITHUB_REPO;
+  if (!token || !repo) return { skipped: true, reason: 'no_github_credentials' };
+
+  const [owner, repoName] = repo.split('/');
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+
+  const CRITICAL_REPAIR_FILES = [
+    'ASSET_REUSE_DECISION.json',
+    'INTENT_BASELINE.json',
+    'BLUEPRINT_ROADMAP.json',
+    'INTENT_COVERAGE_MAP.json',
+    'MODE_A_TO_B_TRANSITION_RECEIPT.json',
+    'PREDICTION_RECEIPT.json',
+    'PRE_ARC_INPUT_PACKET.json',
+  ];
+
+  const committed = [];
+  const skipped = [];
+
+  for (const fileName of CRITICAL_REPAIR_FILES) {
+    const fullPath = path.join(missionFolder, fileName);
+    if (!fs.existsSync(fullPath)) continue;
+
+    const diskContent = fs.readFileSync(fullPath, 'utf8');
+    const gitCheck = spawnSync('git', ['show', `HEAD:${path.relative(ROOT, fullPath).replace(/\\/g, '/')}`], {
+      cwd: ROOT, encoding: 'utf8',
+    });
+
+    if (gitCheck.status === 0 && gitCheck.stdout === diskContent) {
+      skipped.push(fileName);
+      continue;
+    }
+
+    const relPath = path.relative(ROOT, fullPath).replace(/\\/g, '/');
+    try {
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}?ref=${branch}`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+      });
+
+      let sha;
+      if (getRes.status === 200) {
+        const existing = await getRes.json();
+        sha = existing.sha;
+      }
+
+      const body = {
+        message: `[system-build] repair-artifact: ${path.basename(missionFolder)}/${fileName}\n\nINTENT DRIFT: none\n\nAuto-committed by repair loop — file was repaired during foundation pipeline\nbut not in git. Persisting to survive Railway restart.`,
+        content: Buffer.from(diskContent, 'utf8').toString('base64'),
+        branch,
+      };
+      if (sha) body.sha = sha;
+
+      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (putRes.ok) {
+        committed.push(relPath);
+      } else {
+        const err = await putRes.text();
+        log({ event: 'repair_commit_error', file: relPath, status: putRes.status, error: err.slice(0, 200) });
+      }
+    } catch (err) {
+      log({ event: 'repair_commit_exception', file: relPath, error: String(err.message || err).slice(0, 200) });
+    }
+  }
+
+  return { committed, skipped };
+}
+
+async function runCycle() {
   const stop = founderStopActive();
   if (stop.active && !neverStop) {
     log({ event: 'founder_stop', path: stop.path });
@@ -85,13 +169,14 @@ function runCycle() {
 
   log({ event: 'cycle_start', mission_id: mission.mission_id, rank: mission.rank, verdict: mission.verdict, point_b: loadPointBTarget()?.label });
 
+  const missionFolder = path.join(ROOT, 'builderos-reboot/MISSIONS', mission.mission_id);
+
   while (true) {
     if (founderStopActive().active && !neverStop) {
       log({ event: 'founder_stop' });
       return { halt: true, reason: 'founder_stop' };
     }
 
-    const started = Date.now();
     const last = runFoundationPipelineLoop(mission.mission_id, { force: true, maxAttempts: 64, cookingSliceSize: 32 });
     log({
       event: 'foundation_run',
@@ -101,6 +186,11 @@ function runCycle() {
       total_attempts: last.loopReceipt?.total_attempts,
       obstacles: last.loopReceipt?.obstacles?.length,
     });
+
+    if (!last.ok && last.loopReceipt?.repairs?.length) {
+      const commitResult = await commitRepairArtifacts(missionFolder);
+      log({ event: 'repair_artifact_commit', mission_id: mission.mission_id, ...commitResult });
+    }
 
     if (last.ok && last.point_b_reached) {
       return { halt: false, defect: false, mission_id: mission.mission_id, last, point_b: true };
@@ -116,7 +206,7 @@ function runCycle() {
 
 if (once) {
   (async () => {
-    const result = runCycle();
+    const result = await runCycle();
     if (result.reason === 'queue_complete_expansion' && neverStop) {
       const { runProductExpansionCycle } = await import('../services/never-stop-product-factory.js');
       const exp = await runProductExpansionCycle({ logger: console });
@@ -128,7 +218,7 @@ if (once) {
   console.log('BP priority never-stop runner — continuous until token exhaustion when NEVER_STOP enabled');
   (async () => {
     while (true) {
-      const result = runCycle();
+      const result = await runCycle();
       if (result.halt && !neverStop) {
         console.log(JSON.stringify(result, null, 2));
         process.exit(result.defect ? 1 : 0);
