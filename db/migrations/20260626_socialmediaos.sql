@@ -1,46 +1,36 @@
 -- SYNOPSIS: Database migration — 20260626_socialmediaos.sql.
+-- MOS-P1-001: Create socialmediaos_sessions and socialmediaos_content_packs tables
+
 -- Create socialmediaos_sessions table
 CREATE TABLE IF NOT EXISTS socialmediaos_sessions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     owner_id UUID NOT NULL,
-    status TEXT NOT NULL DEFAULT 'draft',
-    scheduled_for TIMESTAMPTZ,
-    delivered_at TIMESTAMPTZ,
-    delivery_attempts INTEGER DEFAULT 0,
-    last_delivery_error TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    status TEXT NOT NULL DEFAULT 'draft', -- e.g., 'draft', 'scheduled', 'active', 'archived'
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    delivered_at TIMESTAMPTZ, -- Timestamp when the session content was delivered/published
+    delivery_status TEXT NOT NULL DEFAULT 'pending', -- e.g., 'pending', 'in_progress', 'completed', 'failed'
+    delivery_message TEXT -- Optional message for delivery details or errors
 );
 
--- Create index on owner_id for socialmediaos_sessions
+-- Create indexes for socialmediaos_sessions
 CREATE INDEX IF NOT EXISTS idx_socialmediaos_sessions_owner_id ON socialmediaos_sessions (owner_id);
-
--- Create index on status for socialmediaos_sessions
 CREATE INDEX IF NOT EXISTS idx_socialmediaos_sessions_status ON socialmediaos_sessions (status);
+CREATE INDEX IF NOT EXISTS idx_socialmediaos_sessions_delivery_status ON socialmediaos_sessions (delivery_status);
 
 -- Create socialmediaos_content_packs table
 CREATE TABLE IF NOT EXISTS socialmediaos_content_packs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     owner_id UUID NOT NULL,
-    session_id UUID, -- Link to socialmediaos_sessions
-    status TEXT NOT NULL DEFAULT 'draft',
-    scheduled_for TIMESTAMPTZ,
-    delivered_at TIMESTAMPTZ,
-    delivery_attempts INTEGER DEFAULT 0,
-    last_delivery_error TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT fk_session
-        FOREIGN KEY(session_id)
-        REFERENCES socialmediaos_sessions(id)
-        ON DELETE SET NULL
+    status TEXT NOT NULL DEFAULT 'draft', -- e.g., 'draft', 'ready', 'published', 'archived'
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    delivered_at TIMESTAMPTZ, -- Timestamp when the content pack was delivered/published
+    delivery_status TEXT NOT NULL DEFAULT 'pending', -- e.g., 'pending', 'in_progress', 'completed', 'failed'
+    delivery_message TEXT -- Optional message for delivery details or errors
 );
 
--- Create index on owner_id for socialmediaos_content_packs
+-- Create indexes for socialmediaos_content_packs
 CREATE INDEX IF NOT EXISTS idx_socialmediaos_content_packs_owner_id ON socialmediaos_content_packs (owner_id);
-
--- Create index on session_id for socialmediaos_content_packs
-CREATE INDEX IF NOT EXISTS idx_socialmediaos_content_packs_session_id ON socialmediaos_content_packs (session_id);
-
--- Create index on status for socialmediaos_content_packs
 CREATE INDEX IF NOT EXISTS idx_socialmediaos_content_packs_status ON socialmediaos_content_packs (status);
+CREATE INDEX IF NOT EXISTS idx_socialmediaos_content_packs_delivery_status ON socialmediaos_content_packs (delivery_status);
