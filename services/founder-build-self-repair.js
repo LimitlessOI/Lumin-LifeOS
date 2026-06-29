@@ -60,6 +60,8 @@ import {
 } from './founder-build-quorum-escalation.js';
 import { enforceBeforeBuilderDispatch, formatUnifiedGateBlockSummary } from './founder-packet-v2-unified-gate.js';
 import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
+import { researchObstacleBlocker } from './obstacle-web-research.js';
+import { shouldRunWebSearchBeforeAttempt } from './self-repair-escalation-policy.js';
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
@@ -961,8 +963,24 @@ export async function runFounderBuildWithSelfRepair(options) {
 
   const attempts = [];
   const loadedLessons = await loadFounderBuildLessons(pool);
+  let soloWebResearchHints = [];
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    if (shouldRunWebSearchBeforeAttempt(attempt) && attempts.length > 0) {
+      const lastBlocker = attempts.at(-1)?.blocker;
+      if (lastBlocker) {
+        const research = await researchObstacleBlocker({
+          phase: 'builder_task_solo',
+          violations: [lastBlocker, currentTask.slice(0, 200)].filter(Boolean),
+          mission_id: 'founder_build_self_repair',
+          kind: 'solo_blocker',
+        }, { callAI: callCouncilMember }).catch(() => ({ ok: false, fix_hints: [] }));
+        if (research.ok && research.fix_hints?.length) {
+          soloWebResearchHints = research.fix_hints;
+        }
+      }
+    }
+
     const carryForward = prepareRetryContext({
       attempt,
       attempts,
@@ -989,6 +1007,7 @@ export async function runFounderBuildWithSelfRepair(options) {
       useCache: false,
       ...(platformGapFill || {}),
       ...(targetFile ? { target_file: targetFile, files: [targetFile] } : {}),
+      ...(soloWebResearchHints.length ? { web_research_hints: soloWebResearchHints } : {}),
     };
 
     let taskJson = {};

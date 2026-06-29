@@ -1,12 +1,14 @@
 /**
- * SYNOPSIS: Founder build quorum escalation — solo cap → 2-AI → 3-AI → Chair (no endless loops).
- * WIRED: partial — founder-build-self-repair.js after 3 solo failures
- * INTEGRATE: web-search-service.js on unknown blockers; token-accounting on CFO gate
+ * SYNOPSIS: Founder build quorum escalation — solo cap → 2-AI → 3-AI → Chair → Adam.
+ * Each tier gets 3 rounds; web search fires before the final round of each tier.
+ * All prior context (attempts, lessons, web research, deliberations) is shared with every new tier.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import { createMemoryIntelligenceService } from './memory-intelligence-service.js';
 import { isCssOnlyUiFeedback } from './builder-instruction-target.js';
 import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
+import { researchObstacleBlocker } from './obstacle-web-research.js';
+import { QUORUM_ROUNDS_PER_STAGE } from './self-repair-escalation-policy.js';
 
 export const FOUNDER_SOLO_ATTEMPT_MAX = Number(process.env.FOUNDER_SOLO_ATTEMPT_MAX || '3');
 
@@ -39,10 +41,14 @@ function buildFailureContext({ task, attempts, blocker, verification, targetFile
   };
 }
 
-function buildQuorumPrompt({ stage, members, context, lessons, priorDeliberations = [] }) {
+function buildQuorumPrompt({ stage, members, context, lessons, priorDeliberations = [], webResearchHints = [] }) {
   const cssHint = isCssOnlyUiFeedback(context.task)
     ? 'This is CSS-only UI feedback — prefer css_patch / redeploy_wait / cache_bust over HTML rewrites.'
     : 'Prefer scoped patches; never rewrite entire overlay shells.';
+
+  const webSection = webResearchHints.length
+    ? `\nWEB RESEARCH (community-sourced solutions for this class of blocker):\n${webResearchHints.map((h, i) => `${i + 1}. ${h}`).join('\n')}\n`
+    : '';
 
   return `You are part of a ${stage} deliberation to unblock a founder build that failed after ${context.solo_attempts.length} solo repair attempt(s).
 
@@ -54,7 +60,7 @@ ${cssHint}
 
 INSTITUTIONAL LESSONS (CFO + Hist):
 ${lessons.map((l, i) => `${i + 1}. ${l}`).join('\n')}
-
+${webSection}
 SOLO ATTEMPT LOG:
 ${JSON.stringify(context.solo_attempts, null, 2)}
 
@@ -153,7 +159,7 @@ async function callMember(callCouncilMember, member, prompt, maxTokens) {
   }
 }
 
-async function runQuorumDeliberation({ stage, members, callCouncilMember, context, lessons, priorDeliberations, maxTokens }) {
+async function runQuorumDeliberation({ stage, members, callCouncilMember, context, lessons, priorDeliberations, maxTokens, webResearchHints = [] }) {
   const carryForward = buildAttemptCarryForwardContext({
     attemptNumber: context?.solo_attempts?.length + 1,
     priorAttempts: context?.solo_attempts || [],
@@ -170,7 +176,7 @@ async function runQuorumDeliberation({ stage, members, callCouncilMember, contex
       blocked_return: carryForward.blocked_return,
     };
   }
-  const prompt = buildQuorumPrompt({ stage, members, context, lessons, priorDeliberations });
+  const prompt = buildQuorumPrompt({ stage, members, context, lessons, priorDeliberations, webResearchHints });
   const responses = await Promise.all(
     members.map((m) => callMember(callCouncilMember, m, prompt, maxTokens)),
   );
@@ -205,11 +211,76 @@ async function runQuorumDeliberation({ stage, members, callCouncilMember, contex
   };
 }
 
-async function runChairSynthesis({ callCouncilMember, context, lessons, deliberations, maxTokens }) {
+async function runQuorumStageWithRetry({
+  stage,
+  members,
+  callCouncilMember,
+  context,
+  lessons,
+  priorDeliberations = [],
+  cumulativeWebResearch = [],
+  maxTokens,
+}) {
+  const rounds = QUORUM_ROUNDS_PER_STAGE;
+  let roundWebHints = [...cumulativeWebResearch];
+  let lastResult = null;
+
+  for (let round = 1; round <= rounds; round++) {
+    if (round === rounds && context.blocker) {
+      const research = await researchObstacleBlocker({
+        phase: stage,
+        violations: [context.blocker, String(context.task || '').slice(0, 200)].filter(Boolean),
+        mission_id: 'quorum_escalation',
+        kind: 'quorum_blocker',
+      }).catch(() => ({ ok: false, fix_hints: [] }));
+      if (research.ok && research.fix_hints?.length) {
+        roundWebHints = [...roundWebHints, ...research.fix_hints];
+      }
+    }
+
+    const result = await runQuorumDeliberation({
+      stage: `${stage}_r${round}`,
+      members,
+      callCouncilMember,
+      context,
+      lessons,
+      priorDeliberations: [
+        ...priorDeliberations,
+        ...(lastResult?.plan ? [JSON.stringify(lastResult.plan)] : []),
+      ],
+      maxTokens,
+      webResearchHints: roundWebHints,
+    });
+
+    lastResult = result;
+    if (result.ok) {
+      return {
+        ...result,
+        stage,
+        rounds_used: round,
+        web_research_hints: roundWebHints,
+      };
+    }
+  }
+
+  return {
+    ...lastResult,
+    stage,
+    ok: false,
+    rounds_used: rounds,
+    web_research_hints: roundWebHints,
+  };
+}
+
+async function runChairSynthesis({ callCouncilMember, context, lessons, deliberations, cumulativeWebResearch = [], maxTokens }) {
   const digest = deliberations
     .filter((d) => d.ok)
     .map((d) => `[${d.stage}] confidence=${d.plan?.confidence} approach=${d.plan?.fix_approach}\n${d.plan?.augmented_task}`)
     .join('\n\n');
+
+  const webSection = cumulativeWebResearch.length
+    ? `\nWEB RESEARCH (accumulated across all tiers):\n${cumulativeWebResearch.map((h, i) => `${i + 1}. ${h}`).join('\n')}\n`
+    : '';
 
   const prompt = `You are the CHAIR — final resolver for a founder build blocked after solo repair + quorum.
 
@@ -220,7 +291,7 @@ BLOCKER: ${context.blocker}
 
 LESSONS:
 ${lessons.join('\n')}
-
+${webSection}
 QUORUM DELIBERATIONS:
 ${digest || '(none succeeded)'}
 
@@ -277,7 +348,9 @@ export async function recordFounderEscalationLesson(pool, { task, blocker, stage
 }
 
 /**
- * Sequential escalation: 2-AI → apply → 3-AI → apply → Chair → apply → hard stop.
+ * Sequential escalation: 2-AI (3 rounds) → 3-AI (3 rounds) → Chair (3 rounds) → Adam.
+ * Web search fires before the final round of each tier and is passed forward to every subsequent tier.
+ * All prior context (solo attempts, lessons, web research, deliberations) is shared at each tier entry.
  */
 export async function runFounderBuildQuorumEscalation({
   task,
@@ -295,6 +368,7 @@ export async function runFounderBuildQuorumEscalation({
 
   const receipt = {
     solo_max: FOUNDER_SOLO_ATTEMPT_MAX,
+    rounds_per_stage: QUORUM_ROUNDS_PER_STAGE,
     cfo,
     stages: [],
     final_plan: null,
@@ -314,16 +388,21 @@ export async function runFounderBuildQuorumEscalation({
   }
 
   const deliberations = [];
+  let cumulativeWebResearch = [];
 
-  const q2 = await runQuorumDeliberation({
+  const q2 = await runQuorumStageWithRetry({
     stage: 'quorum_2',
     members: QUORUM_2_MEMBERS,
     callCouncilMember,
     context,
     lessons,
+    cumulativeWebResearch,
     maxTokens: cfo.token_budget?.quorum_2 || 8000,
   });
   receipt.stages.push(q2);
+  if (q2.web_research_hints?.length) {
+    cumulativeWebResearch = [...cumulativeWebResearch, ...q2.web_research_hints];
+  }
   if (q2.ok) {
     deliberations.push(q2);
     receipt.final_plan = q2.plan;
@@ -333,16 +412,20 @@ export async function runFounderBuildQuorumEscalation({
     }
   }
 
-  const q3 = await runQuorumDeliberation({
+  const q3 = await runQuorumStageWithRetry({
     stage: 'quorum_3',
     members: QUORUM_3_MEMBERS,
     callCouncilMember,
     context,
     lessons,
     priorDeliberations: deliberations.map((d) => JSON.stringify(d.plan)),
+    cumulativeWebResearch,
     maxTokens: cfo.token_budget?.quorum_3 || 12000,
   });
   receipt.stages.push(q3);
+  if (q3.web_research_hints?.length) {
+    cumulativeWebResearch = [...new Set([...cumulativeWebResearch, ...q3.web_research_hints])];
+  }
   if (q3.ok) {
     deliberations.push(q3);
     receipt.final_plan = q3.plan;
@@ -357,6 +440,7 @@ export async function runFounderBuildQuorumEscalation({
     context,
     lessons,
     deliberations,
+    cumulativeWebResearch,
     maxTokens: cfo.token_budget?.chair || 6000,
   });
   receipt.stages.push(chair);
@@ -370,6 +454,16 @@ export async function runFounderBuildQuorumEscalation({
 
   receipt.exhausted = true;
   receipt.stop_reason = 'QUORUM_AND_CHAIR_EXHAUSTED';
+  receipt.escalate_to_adam = true;
+  receipt.adam_escalation = {
+    reason: 'All tiers exhausted — solo (3 attempts + web search) → 2-AI (3 rounds) → 3-AI (3 rounds) → Chair (1 synthesis). No mechanical fix found.',
+    task,
+    blocker,
+    web_research_hints: cumulativeWebResearch,
+    final_plan: receipt.final_plan,
+    solo_attempts: context.solo_attempts?.length || 0,
+    quorum_stages: receipt.stages.length,
+  };
   await recordFounderEscalationLesson(pool, {
     task,
     blocker,

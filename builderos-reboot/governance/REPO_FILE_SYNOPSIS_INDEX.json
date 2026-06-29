@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T04:00:24.692Z",
+  "generated_at": "2026-06-29T07:52:31.280Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11331,
   "files": [
@@ -21969,9 +21969,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 31302,
-      "mtime": "2026-06-29T02:04:33.016Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "bytes": 31377,
+      "mtime": "2026-06-29T07:52:14.056Z",
+      "indexed_at": "2026-06-29T07:52:31.280Z",
       "synopsis_index_only": true
     },
     {
@@ -35939,9 +35939,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 146914,
-      "mtime": "2026-06-28T23:37:30.205Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z"
+      "bytes": 147295,
+      "mtime": "2026-06-29T07:50:48.061Z",
+      "indexed_at": "2026-06-29T07:52:31.280Z"
     },
     {
       "path": "docs/projects/BUILDEROS_BP_V1.md",
@@ -82027,10 +82027,10 @@
     },
     {
       "path": "services/founder-build-quorum-escalation.js",
-      "synopsis": "Founder build quorum escalation — solo cap → 2-AI → 3-AI → Chair (no endless loops).",
-      "bytes": 13842,
-      "mtime": "2026-06-28T00:55:55.939Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "synopsis": "Founder build quorum escalation — solo cap → 2-AI → 3-AI → Chair → Adam.",
+      "bytes": 17086,
+      "mtime": "2026-06-29T07:49:47.925Z",
+      "indexed_at": "2026-06-29T07:52:31.280Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -82048,9 +82048,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 39185,
-      "mtime": "2026-06-28T18:19:01.766Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "bytes": 40098,
+      "mtime": "2026-06-29T07:50:16.845Z",
+      "indexed_at": "2026-06-29T07:52:31.280Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -84747,9 +84747,9 @@
     {
       "path": "services/self-repair-escalation-policy.js",
       "synopsis": "Canonical self-repair escalation policy for BuilderOS repair loops.",
-      "bytes": 778,
-      "mtime": "2026-06-28T00:38:03.843Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "bytes": 938,
+      "mtime": "2026-06-29T07:48:21.019Z",
+      "indexed_at": "2026-06-29T07:52:31.280Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]

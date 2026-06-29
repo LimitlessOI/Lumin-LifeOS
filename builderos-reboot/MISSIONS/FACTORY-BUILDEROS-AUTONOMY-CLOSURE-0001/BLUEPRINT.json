@@ -742,6 +742,6 @@
   ],
   "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
   "build_method": "system-build",
-  "ssot_last_updated": "2026-06-28",
-  "ssot_change_receipt": "V1 L0 truth boundary: build-proof-contract COMMIT_ONLY_NOT_LIVE fails closed; build-deploy-truth mirrors Reality Records; same-tier tier-lock config."
+  "ssot_last_updated": "2026-06-29",
+  "ssot_change_receipt": "Escalation policy hardened: shouldRunWebSearchBeforeAttempt added; web search wired before 3rd solo attempt (founder-build-self-repair.js); prior: V1 L0 truth boundary: build-proof-contract COMMIT_ONLY_NOT_LIVE fails closed."
 }
