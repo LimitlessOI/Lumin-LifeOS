@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-28T23:37:38.776Z",
+  "generated_at": "2026-06-29T00:19:03.690Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11296,
+  "file_count": 11297,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21608,9 +21608,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3418720,
-      "mtime": "2026-06-28T23:37:38.081Z",
-      "indexed_at": "2026-06-28T23:37:38.776Z"
+      "bytes": 3419073,
+      "mtime": "2026-06-29T00:18:54.101Z",
+      "indexed_at": "2026-06-29T00:19:03.690Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -34852,9 +34852,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 8437,
-      "mtime": "2026-06-28T23:37:30.202Z",
-      "indexed_at": "2026-06-28T23:37:36.693Z"
+      "bytes": 8441,
+      "mtime": "2026-06-29T00:17:55.510Z",
+      "indexed_at": "2026-06-29T00:19:03.690Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -35197,17 +35197,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 27094,
-      "mtime": "2026-06-28T23:37:30.202Z",
-      "indexed_at": "2026-06-28T23:37:36.693Z",
+      "bytes": 26875,
+      "mtime": "2026-06-29T00:18:48.162Z",
+      "indexed_at": "2026-06-29T00:19:03.690Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 518759,
-      "mtime": "2026-06-28T23:37:30.204Z",
-      "indexed_at": "2026-06-28T23:37:36.693Z"
+      "bytes": 519193,
+      "mtime": "2026-06-29T00:18:06.004Z",
+      "indexed_at": "2026-06-29T00:19:03.690Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -65757,9 +65757,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 13290,
-      "mtime": "2026-06-27T23:29:27.351Z",
-      "indexed_at": "2026-06-28T23:37:36.693Z",
+      "bytes": 16974,
+      "mtime": "2026-06-29T00:17:29.122Z",
+      "indexed_at": "2026-06-29T00:19:03.690Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68108,6 +68108,16 @@
       "bytes": 710,
       "mtime": "2026-06-21T21:39:08.143Z",
       "indexed_at": "2026-06-28T23:37:36.693Z"
+    },
+    {
+      "path": "scripts/provision-alpha-auditor.mjs",
+      "synopsis": "Provision founder-level alpha auditor test account for UI/build chat testing.",
+      "bytes": 7391,
+      "mtime": "2026-06-29T00:17:43.392Z",
+      "indexed_at": "2026-06-29T00:19:03.690Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "scripts/query-build-artifacts.js",

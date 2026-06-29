@@ -105,6 +105,7 @@
     "startup/boot-domains.js",
     "services/lifeos-scoreboard.js",
     "scripts/lifeos-smoke.mjs",
+    "scripts/provision-alpha-auditor.mjs",
     "public/overlay/lifeos-app.html",
     "public/overlay/lifeos-dashboard.html",
     "routes/lifeos-builderos-command-control-routes.js",
@@ -884,7 +885,7 @@
     ]
   },
   "last_updated": "2026-06-28",
-  "last_receipt": "2026-06-28 autonomy-closure founder proof stabilization",
-  "last_change_summary": "Founder build truth no longer collapses committed-but-unverified founder UI work into immediate FAIL. Pending founder proof now stays pollable through transport truth, and the founder build job store treats origin/deploy drift as waiting-for-proof instead of terminal failure.",
-  "ssot_receipt_tail": "Live founder probe proved the worker stopped false-greening, but the truth gate still downgraded pending founder proof to FAIL. The amendment now records the fix: keep pending founder proof as PASS + transport-pending so founder poll/readback can finish the loop honestly."
+  "last_receipt": "2026-06-28 alpha-auditor founder test account provision",
+  "last_change_summary": "Operator route + script provision handle alpha-auditor with founder_admin from Railway vault creds (GMAIL_SIGNUP_* guess) for build chat UI testing.",
+  "ssot_receipt_tail": "Adam needs throwaway login with same build authority as adam; non-engineer should not pick env var names — system provisions from vault."
 }

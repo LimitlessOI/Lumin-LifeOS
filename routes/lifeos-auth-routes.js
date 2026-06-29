@@ -22,12 +22,13 @@
  * Operator endpoints (requireKey — Adam's admin key, NOT member login):
  *   POST /api/v1/lifeos/auth/operator/invite           — create invite for Sherry / new members
  *   POST /api/v1/lifeos/auth/operator/provision-member — create member account + optional household link
+ *   POST /api/v1/lifeos/auth/operator/provision-alpha-auditor — founder-level test account from Railway vault creds
  *
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';
-import { createLifeOSAuth } from '../services/lifeos-auth.js';
+import { createLifeOSAuth, hashPassword } from '../services/lifeos-auth.js';
 import { requireLifeOSUser, requireLifeOSAdmin, createRequireLifeOSUserOrKey } from '../middleware/lifeos-auth-middleware.js';
 import { createHouseholdSync } from '../services/household-sync.js';
 
@@ -258,6 +259,94 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
           ok: true,
           invite: { ...invite, signup_url },
           note: 'Member uses signup URL with their own email + password — not COMMAND_CENTER_KEY.',
+        });
+      } catch (e) {
+        res.status(e.status || 500).json({ ok: false, error: e.message });
+      }
+    });
+
+    function resolveAlphaAuditorCreds() {
+      const pairs = [
+        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
+        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+      ];
+      for (const [emailKey, passKey] of pairs) {
+        const email = String(process.env[emailKey] || '').trim();
+        const password = String(process.env[passKey] || '');
+        if (email && password.length >= 8) {
+          return { email, password, source: `${emailKey}+${passKey}` };
+        }
+      }
+      return null;
+    }
+
+    router.post('/operator/provision-alpha-auditor', requireKey, async (req, res) => {
+      try {
+        const creds = resolveAlphaAuditorCreds();
+        if (!creds) {
+          return res.status(503).json({
+            ok: false,
+            error: 'No alpha auditor creds in server env (expected GMAIL_SIGNUP_* or ALPHA_TEST_*)',
+          });
+        }
+        const handle = String(process.env.ALPHA_TEST_HANDLE || 'alpha-auditor').trim().toLowerCase();
+        const displayName = String(process.env.ALPHA_TEST_DISPLAY_NAME || 'Alpha Auditor').trim();
+        const role = 'founder_admin';
+        const tier = 'premium';
+
+        const { rows: existing } = await pool.query(
+          `SELECT id, user_handle, email, role, tier FROM lifeos_users
+           WHERE LOWER(user_handle) = LOWER($1) OR email = LOWER($2)`,
+          [handle, creds.email]
+        );
+
+        if (existing.length) {
+          const phash = hashPassword(creds.password);
+          const { rows: [user] } = await pool.query(
+            `UPDATE lifeos_users
+             SET password_hash = $1, role = $2, tier = $3, active = TRUE, display_name = $4
+             WHERE id = $5
+             RETURNING id, user_handle, display_name, email, role, tier`,
+            [phash, role, tier, displayName, existing[0].id]
+          );
+          log.info({ handle: user.user_handle, role }, '[LIFEOS-AUTH] alpha auditor upgraded');
+          return res.json({
+            ok: true,
+            mode: 'updated',
+            user,
+            cred_source: creds.source,
+            login_url: `${publicWebOrigin(req) || ''}/overlay/lifeos-login.html?next=${encodeURIComponent('/lifeos?direct_system=1')}`,
+            note: 'Founder-level test account — same build authority as adam. Disable after alpha.',
+          });
+        }
+
+        const adamId = await resolveAdamId();
+        if (!adamId) return res.status(503).json({ ok: false, error: 'adam user row missing' });
+
+        const result = await auth.register({
+          email: creds.email,
+          password: creds.password,
+          handle,
+          displayName,
+          inviteCode: (await auth.createInvite({
+            role,
+            tier,
+            email: creds.email,
+            days: 1,
+            createdBy: adamId,
+          })).code,
+          userAgent: req.headers['user-agent'],
+          ip: req.ip,
+        });
+        log.info({ handle: result.user.user_handle, role }, '[LIFEOS-AUTH] alpha auditor provisioned');
+        res.json({
+          ok: true,
+          mode: 'created',
+          user: result.user,
+          cred_source: creds.source,
+          login_url: `${publicWebOrigin(req) || ''}/overlay/lifeos-login.html?next=${encodeURIComponent('/lifeos?direct_system=1')}`,
+          note: 'Founder-level test account — sign in with vault email + password, not COMMAND_CENTER_KEY.',
         });
       } catch (e) {
         res.status(e.status || 500).json({ ok: false, error: e.message });
