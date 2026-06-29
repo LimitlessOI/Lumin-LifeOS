@@ -51,6 +51,8 @@ function skipMtimeCheck(rel) {
   return (
     /^data\/.*-last-run\.json$/.test(rel)
     || rel === 'docs/AGENT_RULES.compact.md'
+    || /^builderos-reboot\/MISSIONS\/[^/]+\/(?:receipts\/|CONTENT\/)/.test(rel)
+    || /^builderos-reboot\/MISSIONS\/[^/]+\/[A-Z_]+\.json$/.test(rel)
   );
 }
 

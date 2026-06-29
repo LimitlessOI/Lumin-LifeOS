@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T17:15:08.924Z",
+  "generated_at": "2026-06-29T17:18:57.694Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11377,
   "files": [
@@ -35995,9 +35995,9 @@
     {
       "path": "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
       "synopsis": "AMENDMENT 36 — Zero-Drift Handoff & Cold-Start Protocol",
-      "bytes": 98938,
-      "mtime": "2026-06-21T22:25:01.388Z",
-      "indexed_at": "2026-06-29T17:15:06.427Z"
+      "bytes": 99529,
+      "mtime": "2026-06-29T17:18:49.345Z",
+      "indexed_at": "2026-06-29T17:18:57.694Z"
     },
     {
       "path": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
@@ -69902,9 +69902,9 @@
     {
       "path": "scripts/verify-file-synopsis.mjs",
       "synopsis": "HARD verify — every tracked file has synopsis + index row; blocks commit/push/CI on drift.",
-      "bytes": 6535,
-      "mtime": "2026-06-21T22:31:32.400Z",
-      "indexed_at": "2026-06-29T17:15:06.427Z",
+      "bytes": 6685,
+      "mtime": "2026-06-29T17:18:24.173Z",
+      "indexed_at": "2026-06-29T17:18:57.694Z",
       "ssot": [
         "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md"
       ]
