@@ -69,9 +69,9 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     });
   }
 
-  const strategicSection = systemFacts.strategic_brief
-    ? formatStrategicBriefSection(systemFacts.strategic_brief)
-    : '';
+  const strategicSection = systemFacts.personal_turn
+    ? ''
+    : (systemFacts.strategic_brief ? formatStrategicBriefSection(systemFacts.strategic_brief) : '');
   if (strategicSection && !voice.includes('strategic')) {
     voice = `${voice}\n\n${strategicSection}`;
   }

@@ -1,0 +1,31 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "arc_decision_status": "CONFIRMED",
+  "surveyed_at": "2026-06-28",
+  "wisdom_lessons": [
+    "GAP-FILL existing chair routing and founder UI — no parallel Lumin stack"
+  ],
+  "cfo_recommendation": "EXTEND chair-context-classifier, chair-lumin-unified, lifeos-app.html",
+  "assets_reviewed": [
+    "services/chair-context-classifier.js",
+    "services/chair-lumin-unified.js",
+    "services/chair-native-facts.js",
+    "services/founder-life-admin-intent.js",
+    "public/overlay/lifeos-app.html",
+    "scripts/run-founder-chat-alpha-battery.mjs"
+  ],
+  "decisions": [
+    {
+      "asset": "services/chair-context-classifier.js",
+      "decision": "EXTEND",
+      "reason": "Remove false-positive Lumin product marker; identity intent guard"
+    },
+    {
+      "asset": "public/overlay/lifeos-app.html",
+      "decision": "EXTEND",
+      "reason": "safePromptText guard already landed — verify in alpha battery"
+    }
+  ],
+  "arc_decision": "REUSE production Lumin spine; GAP-FILL routing only"
+}

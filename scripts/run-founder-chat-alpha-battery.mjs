@@ -8,8 +8,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { detectCounselTheater } from '../services/chair-direct-connection-truth.js';
+import { finishBpAcceptance } from './lib/bp-acceptance-finish.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const MISSION = 'FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001';
 const BASE = (process.env.PUBLIC_BASE_URL || process.env.LIFERE_ALPHA_BASE_URL || '').replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
 const ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
@@ -79,6 +81,16 @@ async function send(id, text, opts = {}) {
 }
 
 const PROBES = [
+  {
+    id: 'Q_identity_twin',
+    text: 'Lumin — who am I to you? What are my top priorities right now?',
+    expectChannel: 'chair',
+    expectTruth: 'NO_COMMAND_RAN',
+    forbidClarify: true,
+    forbidTheater: true,
+    summaryMustNotInclude: ['Point B gap', 'AGENT CONTINUITY', 'Reality is the scoreboard', 'BP PRIORITY'],
+    summaryMustInclude: [/priorit|Adam|family|freedom|impact|motivat|know you/i],
+  },
   {
     id: 'Q1_counsel_no_clarify',
     text: 'should I prioritize follow-ups or prospecting today?',
@@ -290,14 +302,33 @@ for (const probe of PROBES) {
 }
 
 report.ok = report.failed.length === 0;
+report.tests_passed = [...report.passed];
+report.tests_failed = [...report.failed];
+report.mission_id = MISSION;
+report.started_at = report.at;
+report.founder_usability_pass = false;
+
 const out = path.join(ROOT, 'products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json');
-fs.mkdirSync(path.dirname(out), { recursive: true });
-fs.writeFileSync(out, `${JSON.stringify(report, null, 2)}\n`);
+const verdictPath = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE_VERDICT.json');
+
+const { pass } = finishBpAcceptance({
+  root: ROOT,
+  missionId: MISSION,
+  report,
+  receiptAbsPath: out,
+  receiptRelPath: 'products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json',
+  verdictAbsPath: verdictPath,
+  objectiveName: 'Lumin Founder Alpha Gap-Fill',
+  objectiveVerdictOnPass: 'TECHNICAL_PASS',
+  base: BASE,
+  buildRecord: { build_method: 'GAP-FILL' },
+  passPredicate: (r) => r.failed.length === 0,
+});
 
 console.log(JSON.stringify({
-  ok: report.ok,
+  ok: pass,
   passed: report.passed.length,
   failed: report.failed.length,
   failures: report.failed,
 }, null, 2));
-process.exit(report.ok ? 0 : 1);
+process.exit(pass ? 0 : 1);

@@ -287,6 +287,25 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
       return null;
     }
 
+    function diagnoseAlphaAuditorCreds() {
+      const pairs = [
+        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
+        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+      ];
+      return pairs.map(([emailKey, passKey]) => {
+        const email = String(process.env[emailKey] || '').trim();
+        const password = String(process.env[passKey] || '');
+        return {
+          pair: `${emailKey}+${passKey}`,
+          email_set: Boolean(email),
+          email_valid: isValidTestEmail(email),
+          password_set: Boolean(password),
+          password_len_ok: password.length >= 8,
+        };
+      });
+    }
+
     router.post('/operator/provision-alpha-auditor', requireKey, async (req, res) => {
       try {
         const creds = resolveAlphaAuditorCreds();
@@ -294,6 +313,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
           return res.status(503).json({
             ok: false,
             error: 'No alpha auditor creds in server env (expected GMAIL_SIGNUP_* or ALPHA_TEST_*)',
+            cred_diagnosis: diagnoseAlphaAuditorCreds(),
           });
         }
         const handle = String(process.env.ALPHA_TEST_HANDLE || 'alpha-auditor').trim().toLowerCase();

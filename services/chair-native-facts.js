@@ -10,6 +10,7 @@ import {
   buildLifeAdminSearchQuery,
   formatLifeAdminCounselPreamble,
   formatErrandCouponFallback,
+  isFounderIdentityIntent,
   isFounderPersonalLifeIntent,
 } from './founder-life-admin-intent.js';
 import { hasProductBuildContext } from './chair-context-classifier.js';
@@ -109,7 +110,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
       facts.program_context = sysKnow.programs;
       facts.chair_note = `${facts.chair_note} Answer using program_context and system_knowledge — do not claim the system lacks this; do not answer a different topic.`;
     }
-    if (sysKnow.programs?.length || systemQuestion) {
+    if ((sysKnow.programs?.length || systemQuestion) && !explicitPersonalLifeIntent) {
       facts.personal_turn = false;
     }
   } catch {
@@ -159,7 +160,8 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     }
   }
 
-  if ((!personalTurn || hasProductBuildContext(text)) && /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next)\b/i.test(text)) {
+  if ((!personalTurn || hasProductBuildContext(text)) && !isFounderIdentityIntent(text)
+    && /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next)\b/i.test(text)) {
     try {
       facts.point_b_status = await evaluatePointBNavigator({
         callAI: deps.callAI,

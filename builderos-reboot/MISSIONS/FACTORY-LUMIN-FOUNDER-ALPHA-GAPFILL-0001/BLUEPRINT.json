@@ -1,0 +1,61 @@
+{
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "blueprint_id": "LUMIN-FOUNDER-ALPHA-GAPFILL-2026-06-28",
+  "blueprint_status": "complete",
+  "scope": "lumin_founder_alpha_gapfill",
+  "summary": "Gap-fill from alpha findings — personal routing, UI prompt guard, env null repair, identity battery probe",
+  "authority": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:founder-chat:alpha:battery",
+  "allowed_action_types": ["GAP-FILL"],
+  "steps": [
+    {
+      "step_id": "LFA-S01",
+      "phase_id": "P1",
+      "title": "Remove Lumin name from product-build markers; guard identity intent",
+      "target_file": "services/chair-context-classifier.js",
+      "status": "complete"
+    },
+    {
+      "step_id": "LFA-S02",
+      "phase_id": "P1",
+      "title": "Skip strategic brief on personal_turn",
+      "target_file": "services/chair-lumin-unified.js",
+      "status": "complete"
+    },
+    {
+      "step_id": "LFA-S03",
+      "phase_id": "P1",
+      "title": "Preserve personal_turn on identity asks; skip Point B attach",
+      "target_file": "services/chair-native-facts.js",
+      "status": "complete"
+    },
+    {
+      "step_id": "LFA-S04",
+      "phase_id": "P1",
+      "title": "Export isFounderIdentityIntent helper",
+      "target_file": "services/founder-life-admin-intent.js",
+      "status": "complete"
+    },
+    {
+      "step_id": "LFA-S05",
+      "phase_id": "P2",
+      "title": "Alpha battery identity twin probe",
+      "target_file": "scripts/run-founder-chat-alpha-battery.mjs",
+      "status": "complete"
+    },
+    {
+      "step_id": "LFA-S06",
+      "phase_id": "P2",
+      "title": "Boot seeder overwrites literal null emails",
+      "target_file": "server.js",
+      "status": "complete"
+    },
+    {
+      "step_id": "LFA-S07",
+      "phase_id": "P2",
+      "title": "Alpha auditor provision cred diagnosis",
+      "target_file": "routes/lifeos-auth-routes.js",
+      "status": "complete"
+    }
+  ]
+}

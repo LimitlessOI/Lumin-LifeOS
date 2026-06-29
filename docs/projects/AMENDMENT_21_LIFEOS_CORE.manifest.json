@@ -884,7 +884,7 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-28",
+  "last_updated": "2026-06-29",
   "last_receipt": "2026-06-28 alpha-auditor founder test account provision",
   "last_change_summary": "Operator route + script provision handle alpha-auditor with founder_admin from Railway vault creds (GMAIL_SIGNUP_* guess) for build chat UI testing.",
   "ssot_receipt_tail": "Adam needs throwaway login with same build authority as adam; non-engineer should not pick env var names — system provisions from vault."

@@ -1,0 +1,38 @@
+{
+  "schema": "cfo_resource_simulation_v1",
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "seat": "CFO",
+  "simulated_at": "2026-06-29T00:41:35.974Z",
+  "simulated_by": "factory-core/arc/department-simulations.js",
+  "roi_note": "EXTEND existing spine — sunk cost leveraged",
+  "build_vs_buy": "REUSE repo assets",
+  "opportunity_cost": "Gap-fill from Lumin alpha findings — identity routing, UI undefined prefix, env null repair. SNT handoff queued.",
+  "priority_rank": 0,
+  "resource_burden": "low",
+  "constitutional_exemption_applied": false,
+  "fastest_responsible_path": "EXTEND existing spine",
+  "verdict": "within_budget",
+  "pass": true,
+  "route_on_fail": "CHAIR",
+  "role_contract": {
+    "seat": "CFO",
+    "contract_version": "2.0A",
+    "title": "CFO",
+    "role": "Resource burden, ROI note, priority fit — never demote constitutional floor on ROI alone"
+  },
+  "measurements": [
+    {
+      "metric_id": "within_budget",
+      "seat": "CFO",
+      "predicted": "yes",
+      "confidence": "THINK",
+      "how_we_know_if_wrong": "Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT",
+      "evidence_path": null,
+      "predicted_at": "2026-06-29T00:41:35.974Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ],
+  "simulation_tier": "COUNCIL_SIM"
+}

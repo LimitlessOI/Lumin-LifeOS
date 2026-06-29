@@ -1,0 +1,258 @@
+{
+  "schema": "intent_coverage_map_v2",
+  "intent_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "tier": 1,
+  "updated_at": "2026-06-29",
+  "snt_regrade_required": false,
+  "dimensions": [
+    {
+      "name": "outcome",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "user",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "pain",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "value",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "success_metric",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "failure_metric",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "done_definition",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "scope_boundary",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "constraints",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "unacceptable_result",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "ownership",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "priority_fit",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": true,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "behavior_change",
+      "coverage_level": "PARTIAL",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "tradeoffs",
+      "coverage_level": "PARTIAL",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "alternatives",
+      "coverage_level": "PARTIAL",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "assumptions",
+      "coverage_level": "PARTIAL",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "evidence_needed",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "risk",
+      "coverage_level": "PARTIAL",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "dependencies",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "stage_target",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "rollback_condition",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "competing_intents",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "market_reality",
+      "coverage_level": "PARKED",
+      "load_bearing": false,
+      "evidence_refs": [
+        "deferred_v1"
+      ],
+      "parked_reason": "Not required for v1 internal product lap",
+      "parked_owner": "Chair",
+      "parked_due_at": "RELEASE_PASS"
+    },
+    {
+      "name": "future_implications",
+      "coverage_level": "PARKED",
+      "load_bearing": false,
+      "evidence_refs": [
+        "deferred_v1"
+      ],
+      "parked_reason": "Not required for v1 internal product lap",
+      "parked_owner": "Chair",
+      "parked_due_at": "RELEASE_PASS"
+    },
+    {
+      "name": "alpha_learning_target",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "release_boundary",
+      "coverage_level": "SUFFICIENT",
+      "load_bearing": false,
+      "evidence_refs": [
+        "FOUNDER_PACKET.md",
+        "INTENT_BASELINE.json"
+      ]
+    },
+    {
+      "name": "sherry_household",
+      "coverage_level": "PARKED",
+      "load_bearing": false,
+      "parked_reason": "SHERRY_FILTER_PARK_RECEIPT",
+      "parked_owner": "Studio"
+    }
+  ],
+  "summary": {
+    "tier1_load_bearing_ready": true,
+    "blocking_gaps": []
+  }
+}

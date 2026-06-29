@@ -1,0 +1,38 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-06-28",
+  "amendment_pack": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+  "proof_lap_only": false,
+  "outcome_statement": "Lumin knows Adam personally, executes builds, answers real questions — no pattern theater",
+  "user": "Adam (founder)",
+  "pain": "Alpha testing found identity questions dumping Point B content, undefined UI prefixes, and null email env blocking test accounts.",
+  "value": "Founder talks to Lumin and gets personal twin context + working build path",
+  "success_metrics": [
+    "Q_identity_twin PASS in founder chat alpha battery",
+    "No undefined prefix in Lumin user bubbles",
+    "Alpha auditor provisions from Railway creds",
+    "Build probes B1-B3 PASS or BUILD_STARTED with receipt"
+  ],
+  "failure_metrics": [
+    "Point B / AGENT CONTINUITY language on identity asks",
+    "GMAIL_SIGNUP_EMAIL literal null blocks provision",
+    "Identity ask routes to build_async"
+  ],
+  "constraints": [
+    "GAP-FILL only — no new architecture",
+    "Founder chat alpha battery is acceptance gate"
+  ],
+  "scope_boundary": "Founder Lumin drawer + chair routing only — not LifeRE page or cold login UX",
+  "unacceptable_result": "Identity question returns strategic meta-docs; build commands no-op",
+  "ownership": "CUR gap-fill; SNT adversarial review; Adam founder usability verdict",
+  "priority_fit": "BP_PRIORITY gap-fill rank 0 — Lumin alpha blocker",
+  "point_model": {
+    "A": "Alpha findings from live probes",
+    "B": "Gap-fill code + battery probe",
+    "C": "Founder usability pass on Lumin drawer"
+  }
+}

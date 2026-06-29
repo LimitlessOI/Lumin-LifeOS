@@ -1,0 +1,10 @@
+{
+  "schema": "blocked_return_to_idc_v1",
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "at": "2026-06-29T00:41:35.979Z",
+  "status": "BLOCKED_CORRIDOR",
+  "violations": [
+    "roadmap:no BUILDER_READY phases"
+  ],
+  "idc_questions": []
+}

@@ -1178,8 +1178,13 @@ registerTwilioWebhook().then(result => {
       WORK_EMAIL:         { value: 'LifeOS@hopkinsgroup.org', description: 'Work email (private domain, for Postmark etc.) — set by boot seeder' },
     };
 
+    function envIsBlankOrNull(key) {
+      const v = String(process.env[key] || '').trim();
+      return !v || v === 'null' || v === 'undefined';
+    }
+
     const toSet = Object.fromEntries(
-      Object.entries(knownVars).filter(([key]) => !process.env[key])
+      Object.entries(knownVars).filter(([key]) => envIsBlankOrNull(key))
     );
 
     if (Object.keys(toSet).length > 0) {

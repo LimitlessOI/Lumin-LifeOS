@@ -9,6 +9,7 @@ import { isMissionPipelineIntent } from './lifeos-mission-pipeline-executor.js';
 import { isPointBExecuteIntent, isPointBStatusIntent } from './point-b-navigator.js';
 import { isFounderShipOrUsabilityIntent } from './founder-chair-intent.js';
 import {
+  isFounderIdentityIntent,
   isFounderPersonalLifeIntent,
   isProductBuildChangeVerb,
 } from './founder-life-admin-intent.js';
@@ -21,7 +22,7 @@ import {
   isFounderUiBehaviorChangeRequest,
 } from './chair-intent-signals.js';
 
-const PRODUCT_MARKERS = /\b(html|css|\.js|\.mjs|route|routes\/|services\/|overlay|lifere|lifeos-app|deploy|railway|builder|commit|target_file|ui|nav|bubble|button|drawer|lumin|panel|send|server|migration|blueprint|mission|ssot|amendment|api\/|public\/|npm run|gap-fill)\b/i;
+const PRODUCT_MARKERS = /\b(html|css|\.js|\.mjs|route|routes\/|services\/|overlay|lifere|lifeos-app|deploy|railway|builder|commit|target_file|ui|nav|bubble|button|drawer|panel|server|migration|blueprint|mission|ssot|amendment|api\/|public\/|npm run|gap-fill)\b/i;
 
 const SYSTEM_STATUS_MARKERS = /\b(point b|alpha|progress|keep going|continue building|machine path|receipt scan|queue status|what(?:'s| is) next)\b/i;
 const CONTINUE_TO_PASS_MARKERS = /\b(keep going|continue|advance|do the next|next machine step)\b.*\b(pass|exact blocker)\b/i;
@@ -30,6 +31,10 @@ const CONVERSATION_MARKERS = /\b( worried|feel|think about|should i|can you find
 
 export function hasProductBuildContext(text = '') {
   const t = String(text || '');
+  if (isFounderIdentityIntent(t)) return false;
+  if (isFounderPersonalLifeIntent(t) && !/^\s*(do|execute|run)\s*:/i.test(t) && !isProductBuildChangeVerb(t)) {
+    return false;
+  }
   return PRODUCT_MARKERS.test(t)
     || isCssOnlyUiFeedback(t)
     || isFounderShipOrUsabilityIntent(t)
@@ -63,6 +68,11 @@ export function computeContextScores(text = '') {
   };
 
   if (isFounderPersonalLifeIntent(t)) scores.personal += 10;
+  if (isFounderIdentityIntent(t)) {
+    scores.personal += 12;
+    scores.build = 0;
+    scores.system = Math.max(0, scores.system - 8);
+  }
   if (CONVERSATION_MARKERS.test(t)) scores.personal += 3;
   if (/\b(coupon|oil change|on the way|errand|appointment)\b/i.test(t)) scores.personal += 4;
 

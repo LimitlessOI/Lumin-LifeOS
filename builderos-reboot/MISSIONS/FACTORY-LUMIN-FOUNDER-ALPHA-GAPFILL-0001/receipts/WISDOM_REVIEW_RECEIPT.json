@@ -1,0 +1,38 @@
+{
+  "schema": "wisdom_review_v1",
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "seat": "Wisdom",
+  "simulated_at": "2026-06-29T00:41:35.974Z",
+  "simulated_by": "factory-core/arc/department-simulations.js",
+  "lessons_surfaced": [],
+  "patterns_from_history": [
+    "Partial blueprint labeled success = historical drift — fail closed"
+  ],
+  "drift_warnings": [
+    "Agent hand-build bypassing system path = agent drift failure"
+  ],
+  "verdict": "proceed",
+  "pass": true,
+  "route_on_fail": "CHAIR",
+  "role_contract": {
+    "seat": "WISDOM",
+    "contract_version": "2.0A",
+    "title": "Wisdom / Hist lane",
+    "role": "Historical patterns, drift warnings, lesson surfacing — scores predictions post-hoc"
+  },
+  "measurements": [
+    {
+      "metric_id": "drift_pattern_acknowledged",
+      "seat": "WISDOM",
+      "predicted": true,
+      "confidence": "KNOW",
+      "how_we_know_if_wrong": "TWIN_DRIFT_REPORT drift_count > 0 post-acceptance",
+      "evidence_path": null,
+      "predicted_at": "2026-06-29T00:41:35.974Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ],
+  "simulation_tier": "COUNCIL_SIM"
+}

@@ -1,11 +1,11 @@
 {
   "schema": "bp_priority_guardrails_v1",
-  "checked_at": "2026-06-28T23:36:45.298Z",
-  "verdict": "PASS",
+  "checked_at": "2026-06-29T00:41:55.410Z",
+  "verdict": "FAIL",
   "owner_department": "Historian",
   "registry": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
   "pass_count": 26,
-  "fail_count": 0,
+  "fail_count": 2,
   "passes": [
     {
       "id": "HIST_LAW",
@@ -13,7 +13,7 @@
     },
     {
       "id": "BP_PRIORITY_SHAPE",
-      "detail": "items=9"
+      "detail": "items=10"
     },
     {
       "id": "HIST_QUEUE_NO_ACTIVE_PRODUCT",
@@ -28,15 +28,15 @@
       "detail": ""
     },
     {
-      "id": "BP_ACCEPTANCE_SYNC_WIRED",
-      "detail": ""
-    },
-    {
       "id": "BP_PASS_RECEIPT_SYNC_PROOF",
       "detail": ""
     },
     {
       "id": "BP_NO_ORPHAN_PASS_RECEIPTS",
+      "detail": ""
+    },
+    {
+      "id": "BP_STAGED_CO_COMMIT",
       "detail": ""
     },
     {
@@ -112,6 +112,15 @@
       "detail": ""
     }
   ],
-  "failures": [],
+  "failures": [
+    {
+      "id": "BP_PRIORITY_RANKS",
+      "detail": "ranks must be 1..n sequential; got 0,1,2,3,4,5,6,7,8,9"
+    },
+    {
+      "id": "BP_ACCEPTANCE_NO_SYNC",
+      "detail": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001: scripts/run-founder-chat-alpha-battery.mjs must call finishBpAcceptance or syncMissionFromTechnicalReceipt"
+    }
+  ],
   "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
 }
