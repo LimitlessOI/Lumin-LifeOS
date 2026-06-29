@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: Voice Rail — fetch latest council token/cost receipt after a founder reply.
  * Voice Rail — fetch latest council token/cost receipt after a founder reply.
- * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 export async function fetchVoiceRailUsageReceipt(pool, { since, taskType = 'voice_rail_department' } = {}) {

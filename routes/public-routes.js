@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Public HTML entry routes for operator-facing overlays and portals.
- * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  * Public HTML entry routes for operator-facing overlays and portals.
  */
 import { verifyToken, signToken } from '../services/lifeos-auth.js';

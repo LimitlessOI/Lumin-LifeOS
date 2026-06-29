@@ -11,7 +11,7 @@
  * Do NOT put domain boot logic in server.js — add it here instead.
  *
  * @authority Legacy production spine — see services/AGENTS.md. Not canonical factory runtime.
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { execSync } from 'child_process';
