@@ -400,9 +400,10 @@ export async function runLuminChairTurn(ctx, deps) {
       forceExecute = true;
     }
   }
-  const likelyBuild = isBuildRequest(effectiveInput)
+  const likelyBuild = (isBuildRequest(effectiveInput)
     || isRepairContinuationIntent(effectiveInput)
-    || hasHighConfidenceBuildTarget(effectiveInput);
+    || hasHighConfidenceBuildTarget(effectiveInput))
+    && !isIntakeBlueprintIntent(effectiveInput);
 
   const skipIntentGate = force || forceExecute;
   const displayOnlyTurn = shouldDisplayOnly || explicitAction === 'display';
@@ -482,7 +483,9 @@ export async function runLuminChairTurn(ctx, deps) {
     shouldDisplayOnly,
     explicitExecute: explicitExecute || forceExecute,
     useTerminalForBuild,
-    explicitAction: forceExecute && isBuildRequest(effectiveInput) ? 'build' : explicitAction,
+    explicitAction: forceExecute && isBuildRequest(effectiveInput) && !isIntakeBlueprintIntent(effectiveInput)
+      ? 'build'
+      : explicitAction,
     confirmIntent: forceExecute,
     forceExecute,
   };

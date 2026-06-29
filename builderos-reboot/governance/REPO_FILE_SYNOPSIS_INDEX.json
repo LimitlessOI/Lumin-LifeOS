@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T03:48:45.770Z",
+  "generated_at": "2026-06-29T03:53:11.326Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11331,
   "files": [
@@ -35080,9 +35080,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 8463,
-      "mtime": "2026-06-29T03:40:24.132Z",
-      "indexed_at": "2026-06-29T03:48:45.770Z"
+      "bytes": 8445,
+      "mtime": "2026-06-29T03:53:03.138Z",
+      "indexed_at": "2026-06-29T03:53:11.326Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -35433,9 +35433,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 521945,
-      "mtime": "2026-06-29T03:40:24.906Z",
-      "indexed_at": "2026-06-29T03:48:45.770Z"
+      "bytes": 522266,
+      "mtime": "2026-06-29T03:52:45.594Z",
+      "indexed_at": "2026-06-29T03:53:11.326Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -35725,9 +35725,9 @@
     {
       "path": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
       "synopsis": "AMENDMENT 41 — MarketingOS / SocialMediaOS",
-      "bytes": 76194,
-      "mtime": "2026-06-29T03:40:26.140Z",
-      "indexed_at": "2026-06-29T03:48:45.770Z"
+      "bytes": 76745,
+      "mtime": "2026-06-29T03:53:04.006Z",
+      "indexed_at": "2026-06-29T03:53:11.326Z"
     },
     {
       "path": "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.manifest.json",
@@ -65985,9 +65985,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 25007,
-      "mtime": "2026-06-29T03:39:58.220Z",
-      "indexed_at": "2026-06-29T03:48:45.770Z",
+      "bytes": 24975,
+      "mtime": "2026-06-29T03:52:25.448Z",
+      "indexed_at": "2026-06-29T03:53:11.326Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81008,9 +81008,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 11106,
-      "mtime": "2026-06-29T03:39:34.507Z",
-      "indexed_at": "2026-06-29T03:48:45.770Z",
+      "bytes": 11365,
+      "mtime": "2026-06-29T03:51:20.317Z",
+      "indexed_at": "2026-06-29T03:53:11.326Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -81048,9 +81048,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 5150,
-      "mtime": "2026-06-28T18:17:45.443Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 5357,
+      "mtime": "2026-06-29T03:51:20.260Z",
+      "indexed_at": "2026-06-29T03:53:11.326Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -83667,9 +83667,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 36406,
-      "mtime": "2026-06-29T03:39:11.144Z",
-      "indexed_at": "2026-06-29T03:48:45.770Z",
+      "bytes": 36512,
+      "mtime": "2026-06-29T03:51:35.626Z",
+      "indexed_at": "2026-06-29T03:53:11.326Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

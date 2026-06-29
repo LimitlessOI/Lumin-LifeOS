@@ -85,6 +85,8 @@ export function isBuildRequest(text) {
   if (isBlueprintExecuteIntent(text)) return false;
   if (isCounselOnlyBypass(text)) return false;
   const t = String(text || '');
+  if (/\b(intake blueprint|intake_blueprint|mos-p1)\b/i.test(t)) return false;
+  if (/\b(social\s*media\s*os|socialmediaos|smos)\b/i.test(t) && /\b(intake|blueprint|a to z|a-to-z)\b/i.test(t)) return false;
   if (/\b(counsel only|do not run|don't run|without building|without running|explain how you|walk me through)\b/i.test(t)) {
     return false;
   }

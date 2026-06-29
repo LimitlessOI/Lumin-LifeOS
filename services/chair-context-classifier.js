@@ -159,6 +159,17 @@ export function resolveChairContext(text = '', ctx = {}) {
     }
   }
 
+  if (isIntakeBlueprintIntent(t)) {
+    return {
+      channel: 'intake_blueprint',
+      domain: 'product_build',
+      confidence: 0.95,
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores: computeContextScores(t),
+    };
+  }
+
   if (explicitAction && explicitAction !== 'auto') {
     const forced = String(explicitAction).toLowerCase();
     const map = {

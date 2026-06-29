@@ -195,47 +195,130 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     }
   });
 
-  router.get('/operator/founder-chat-health', requireKey, async (req, res) => {
-    const started = Date.now();
-    const creds = resolveFounderLoginCreds();
-    const cred_diagnosis = diagnoseFounderLoginCreds();
-    let login_probe = null;
-    if (creds) {
-      try {
-        const loginResult = await auth.login({
-          email: creds.email,
-          password: creds.password,
-          userAgent: 'operator-founder-chat-health',
-          ip: req.ip,
-        });
-        login_probe = {
-          ok: true,
-          handle: loginResult.user.user_handle,
-          email: loginResult.user.email,
-          role: loginResult.user.role,
-        };
-      } catch (e) {
-        login_probe = { ok: false, error: e.message };
+  async function resolveAdamId() {
+    const { rows } = await pool.query(
+      `SELECT id FROM lifeos_users WHERE LOWER(user_handle) = 'adam' LIMIT 1`
+    );
+    return rows[0]?.id || null;
+  }
+
+  function isValidTestEmail(email) {
+    const e = String(email || '').trim();
+    if (!e || e === 'null' || e === 'undefined') return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  }
+
+  function resolveFounderLoginCreds() {
+    const pairs = [
+      ['LIFEOS_FOUNDER_LOGIN_EMAIL', 'LIFEOS_FOUNDER_LOGIN_PASSWORD'],
+      ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+    ];
+    for (const [emailKey, passKey] of pairs) {
+      const email = String(process.env[emailKey] || '').trim();
+      const password = String(process.env[passKey] || '');
+      if (isValidTestEmail(email) && password.length >= 8) {
+        return { email, password, source: `${emailKey}+${passKey}` };
       }
     }
-    const { rows: adamRow } = await pool.query(
-      `SELECT user_handle, email, role, active FROM lifeos_users WHERE LOWER(user_handle) = 'adam' LIMIT 1`
-    ).catch(() => ({ rows: [] }));
-    res.json({
-      ok: login_probe?.ok === true,
-      duration_ms: Date.now() - started,
-      cred_source: creds?.source || null,
-      cred_diagnosis,
-      login_probe,
-      db_adam: adamRow[0] || null,
-      blockers: [
-        ...(login_probe?.ok ? [] : ['founder_login_sync_required']),
-        ...(creds ? [] : ['LIFEOS_FOUNDER_LOGIN_* missing in Railway env']),
-        ...(login_probe?.ok && login_probe.role && !['founder_admin', 'admin'].includes(String(login_probe.role).toLowerCase()) ? ['role_cannot_execute'] : []),
-      ],
-      fix: 'Set LIFEOS_FOUNDER_LOGIN_EMAIL=adam@hopkinsgroup.org + LIFEOS_FOUNDER_LOGIN_PASSWORD in Railway, redeploy, POST /operator/sync-founder-login',
+    return null;
+  }
+
+  function diagnoseFounderLoginCreds() {
+    const pairs = [
+      ['LIFEOS_FOUNDER_LOGIN_EMAIL', 'LIFEOS_FOUNDER_LOGIN_PASSWORD'],
+      ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+    ];
+    return pairs.map(([emailKey, passKey]) => {
+      const email = String(process.env[emailKey] || '').trim();
+      const password = String(process.env[passKey] || '');
+      return {
+        pair: `${emailKey}+${passKey}`,
+        email_set: Boolean(email),
+        email_valid: isValidTestEmail(email),
+        password_set: Boolean(password),
+        password_len_ok: password.length >= 8,
+      };
     });
-  });
+  }
+
+  function resolveAlphaAuditorCreds() {
+    const pairs = [
+      ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+      ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
+      ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+    ];
+    for (const [emailKey, passKey] of pairs) {
+      const email = String(process.env[emailKey] || '').trim();
+      const password = String(process.env[passKey] || '');
+      if (isValidTestEmail(email) && password.length >= 8) {
+        return { email, password, source: `${emailKey}+${passKey}` };
+      }
+    }
+    return null;
+  }
+
+  function diagnoseAlphaAuditorCreds() {
+    const pairs = [
+      ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+      ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
+      ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+    ];
+    return pairs.map(([emailKey, passKey]) => {
+      const email = String(process.env[emailKey] || '').trim();
+      const password = String(process.env[passKey] || '');
+      return {
+        pair: `${emailKey}+${passKey}`,
+        email_set: Boolean(email),
+        email_valid: isValidTestEmail(email),
+        password_set: Boolean(password),
+        password_len_ok: password.length >= 8,
+      };
+    });
+  }
+
+  if (requireKey) {
+    router.get('/operator/founder-chat-health', requireKey, async (req, res) => {
+      const started = Date.now();
+      const creds = resolveFounderLoginCreds();
+      const cred_diagnosis = diagnoseFounderLoginCreds();
+      let login_probe = null;
+      if (creds) {
+        try {
+          const loginResult = await auth.login({
+            email: creds.email,
+            password: creds.password,
+            userAgent: 'operator-founder-chat-health',
+            ip: req.ip,
+          });
+          login_probe = {
+            ok: true,
+            handle: loginResult.user.user_handle,
+            email: loginResult.user.email,
+            role: loginResult.user.role,
+          };
+        } catch (e) {
+          login_probe = { ok: false, error: e.message };
+        }
+      }
+      const { rows: adamRow } = await pool.query(
+        `SELECT user_handle, email, role, active FROM lifeos_users WHERE LOWER(user_handle) = 'adam' LIMIT 1`
+      ).catch(() => ({ rows: [] }));
+      res.json({
+        ok: login_probe?.ok === true,
+        duration_ms: Date.now() - started,
+        cred_source: creds?.source || null,
+        cred_diagnosis,
+        login_probe,
+        db_adam: adamRow[0] || null,
+        blockers: [
+          ...(login_probe?.ok ? [] : ['founder_login_sync_required']),
+          ...(creds ? [] : ['LIFEOS_FOUNDER_LOGIN_* missing in Railway env']),
+          ...(login_probe?.ok && login_probe.role && !['founder_admin', 'admin'].includes(String(login_probe.role).toLowerCase()) ? ['role_cannot_execute'] : []),
+        ],
+        fix: 'Set LIFEOS_FOUNDER_LOGIN_EMAIL=adam@hopkinsgroup.org + LIFEOS_FOUNDER_LOGIN_PASSWORD in Railway, redeploy, POST /operator/sync-founder-login',
+      });
+    });
+  }
 
   // ── Create invite (admin) ───────────────────────────────────────────────────
   router.post('/invite', requireLifeOSUser, requireLifeOSAdmin, async (req, res) => {
@@ -275,13 +358,6 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     }
   });
 
-  async function resolveAdamId() {
-    const { rows } = await pool.query(
-      `SELECT id FROM lifeos_users WHERE LOWER(user_handle) = 'adam' LIMIT 1`
-    );
-    return rows[0]?.id || null;
-  }
-
   // ── Operator: create invite (command key — for provisioning family members) ─
   if (requireKey) {
     router.post('/operator/invite', requireKey, async (req, res) => {
@@ -307,80 +383,6 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         res.status(e.status || 500).json({ ok: false, error: e.message });
       }
     });
-
-    function isValidTestEmail(email) {
-      const e = String(email || '').trim();
-      if (!e || e === 'null' || e === 'undefined') return false;
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-    }
-
-    function resolveFounderLoginCreds() {
-      const pairs = [
-        ['LIFEOS_FOUNDER_LOGIN_EMAIL', 'LIFEOS_FOUNDER_LOGIN_PASSWORD'],
-        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
-      ];
-      for (const [emailKey, passKey] of pairs) {
-        const email = String(process.env[emailKey] || '').trim();
-        const password = String(process.env[passKey] || '');
-        if (isValidTestEmail(email) && password.length >= 8) {
-          return { email, password, source: `${emailKey}+${passKey}` };
-        }
-      }
-      return null;
-    }
-
-    function diagnoseFounderLoginCreds() {
-      const pairs = [
-        ['LIFEOS_FOUNDER_LOGIN_EMAIL', 'LIFEOS_FOUNDER_LOGIN_PASSWORD'],
-        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
-      ];
-      return pairs.map(([emailKey, passKey]) => {
-        const email = String(process.env[emailKey] || '').trim();
-        const password = String(process.env[passKey] || '');
-        return {
-          pair: `${emailKey}+${passKey}`,
-          email_set: Boolean(email),
-          email_valid: isValidTestEmail(email),
-          password_set: Boolean(password),
-          password_len_ok: password.length >= 8,
-        };
-      });
-    }
-
-    function resolveAlphaAuditorCreds() {
-      const pairs = [
-        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
-        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
-        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
-      ];
-      for (const [emailKey, passKey] of pairs) {
-        const email = String(process.env[emailKey] || '').trim();
-        const password = String(process.env[passKey] || '');
-        if (isValidTestEmail(email) && password.length >= 8) {
-          return { email, password, source: `${emailKey}+${passKey}` };
-        }
-      }
-      return null;
-    }
-
-    function diagnoseAlphaAuditorCreds() {
-      const pairs = [
-        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
-        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
-        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
-      ];
-      return pairs.map(([emailKey, passKey]) => {
-        const email = String(process.env[emailKey] || '').trim();
-        const password = String(process.env[passKey] || '');
-        return {
-          pair: `${emailKey}+${passKey}`,
-          email_set: Boolean(email),
-          email_valid: isValidTestEmail(email),
-          password_set: Boolean(password),
-          password_len_ok: password.length >= 8,
-        };
-      });
-    }
 
     router.post('/operator/sync-founder-login', requireKey, async (req, res) => {
       const opStarted = Date.now();
