@@ -30,6 +30,12 @@ const DISPLAY = process.env.ALPHA_TEST_DISPLAY_NAME || 'Alpha Auditor';
 const ROLE = 'founder_admin';
 const TIER = 'premium';
 
+function isValidTestEmail(email) {
+  const e = String(email || '').trim();
+  if (!e || e === 'null' || e === 'undefined') return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+}
+
 function resolveAlphaCreds() {
   const pairs = [
     ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
@@ -39,7 +45,7 @@ function resolveAlphaCreds() {
   for (const [emailKey, passKey] of pairs) {
     const email = String(process.env[emailKey] || '').trim();
     const password = String(process.env[passKey] || '');
-    if (email && password.length >= 8) {
+    if (isValidTestEmail(email) && password.length >= 8) {
       return { email, password, source: `${emailKey}+${passKey}` };
     }
   }
@@ -79,9 +85,9 @@ async function provisionViaDb(pool, creds) {
       const phash = hashPassword(creds.password);
       await client.query(
         `UPDATE lifeos_users
-         SET password_hash = $1, role = $2, tier = $3, active = TRUE, display_name = $4
-         WHERE id = $5`,
-        [phash, ROLE, TIER, DISPLAY, row.id]
+         SET password_hash = $1, role = $2, tier = $3, active = TRUE, display_name = $4, email = LOWER($5)
+         WHERE id = $6`,
+        [phash, ROLE, TIER, DISPLAY, creds.email.trim(), row.id]
       );
       return {
         ok: true,

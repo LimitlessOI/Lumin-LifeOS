@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T00:19:03.690Z",
+  "generated_at": "2026-06-29T00:21:04.150Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11297,
   "files": [
@@ -34852,9 +34852,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 8441,
-      "mtime": "2026-06-29T00:17:55.510Z",
-      "indexed_at": "2026-06-29T00:19:03.690Z"
+      "bytes": 8443,
+      "mtime": "2026-06-29T00:20:58.116Z",
+      "indexed_at": "2026-06-29T00:21:04.150Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -35205,9 +35205,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 519193,
-      "mtime": "2026-06-29T00:18:06.004Z",
-      "indexed_at": "2026-06-29T00:19:03.690Z"
+      "bytes": 519600,
+      "mtime": "2026-06-29T00:20:52.436Z",
+      "indexed_at": "2026-06-29T00:21:04.150Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -65757,9 +65757,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 16974,
-      "mtime": "2026-06-29T00:17:29.122Z",
-      "indexed_at": "2026-06-29T00:19:03.690Z",
+      "bytes": 17237,
+      "mtime": "2026-06-29T00:20:43.376Z",
+      "indexed_at": "2026-06-29T00:21:04.150Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68112,9 +68112,9 @@
     {
       "path": "scripts/provision-alpha-auditor.mjs",
       "synopsis": "Provision founder-level alpha auditor test account for UI/build chat testing.",
-      "bytes": 7391,
-      "mtime": "2026-06-29T00:17:43.392Z",
-      "indexed_at": "2026-06-29T00:19:03.690Z",
+      "bytes": 7634,
+      "mtime": "2026-06-29T00:20:40.740Z",
+      "indexed_at": "2026-06-29T00:21:04.150Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

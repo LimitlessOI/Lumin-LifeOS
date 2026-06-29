@@ -265,6 +265,12 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
       }
     });
 
+    function isValidTestEmail(email) {
+      const e = String(email || '').trim();
+      if (!e || e === 'null' || e === 'undefined') return false;
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    }
+
     function resolveAlphaAuditorCreds() {
       const pairs = [
         ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
@@ -274,7 +280,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
       for (const [emailKey, passKey] of pairs) {
         const email = String(process.env[emailKey] || '').trim();
         const password = String(process.env[passKey] || '');
-        if (email && password.length >= 8) {
+        if (isValidTestEmail(email) && password.length >= 8) {
           return { email, password, source: `${emailKey}+${passKey}` };
         }
       }
@@ -305,10 +311,10 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
           const phash = hashPassword(creds.password);
           const { rows: [user] } = await pool.query(
             `UPDATE lifeos_users
-             SET password_hash = $1, role = $2, tier = $3, active = TRUE, display_name = $4
-             WHERE id = $5
+             SET password_hash = $1, role = $2, tier = $3, active = TRUE, display_name = $4, email = LOWER($5)
+             WHERE id = $6
              RETURNING id, user_handle, display_name, email, role, tier`,
-            [phash, role, tier, displayName, existing[0].id]
+            [phash, role, tier, displayName, creds.email.trim(), existing[0].id]
           );
           log.info({ handle: user.user_handle, role }, '[LIFEOS-AUTH] alpha auditor upgraded');
           return res.json({
