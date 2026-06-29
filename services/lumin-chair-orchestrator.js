@@ -11,7 +11,11 @@ import {
   isMissionPipelineIntent,
   extractMissionIdFromText,
   runFoundationPipelineForFounder,
+  extractIntakeSessionId,
+  isIntakeBlueprintIntent,
+  SOCIALMEDIAOS_INTAKE_SESSION,
 } from './lifeos-mission-pipeline-executor.js';
+import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { isVisualUiPatchRequest } from './founder-visual-ui-patch.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
@@ -522,7 +526,7 @@ export async function runLuminChairTurn(ctx, deps) {
   const channel = chairContext.channel;
 
   let fpV2Enforcement = null;
-  const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
+  const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute', 'intake_blueprint'];
   const counselChannels = new Set(['display', 'lumin', 'counsel', 'life_admin', 'chair']);
   if (!shouldDisplayOnly && !counselChannels.has(channel)) {
     const understandingForChannel = assessChairIntentUnderstanding(effectiveInput, {
@@ -542,7 +546,7 @@ export async function runLuminChairTurn(ctx, deps) {
       confirmIntent: skipIntentGate,
       channel,
     });
-    const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
+    const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute', 'intake_blueprint'];
     if (executeChannels.includes(channel) && !fpV2Enforcement.execute_cleared) {
       return chairFpV2BlockResponse(
         { intakeNormalized, sourceMode, auth_mode, user_role },
@@ -573,6 +577,47 @@ export async function runLuminChairTurn(ctx, deps) {
         display: displayBundle,
       }, channel);
       return { statusCode: 200, body: chairEnvelope(channel, truth) };
+    }
+
+    case 'intake_blueprint': {
+      const sessionId = extractIntakeSessionId(cleanedInput) || SOCIALMEDIAOS_INTAKE_SESSION;
+      const operatorKey = deps.operatorKey || process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
+      const baseUrl = deps.founderBuildBaseUrl || process.env.PUBLIC_BASE_URL || '';
+      const started = Date.now();
+      const intakeResult = await executeIntakeBlueprint({
+        sessionId,
+        baseUrl,
+        commandKey: operatorKey,
+        dryRun: false,
+        onStep: () => {},
+      });
+      const truth = finalizeTruth({
+        ok: intakeResult.ok === true,
+        pass_fail: intakeResult.ok ? 'PASS' : 'FAIL',
+        command_truth: intakeResult.ok ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+        action: 'intake_blueprint',
+        execution_path: 'intake_blueprint_executor',
+        session_id: sessionId,
+        product: 'SocialMediaOS',
+        steps_run: intakeResult.steps_run || 0,
+        failed_step: intakeResult.failed_step || null,
+        acceptance: intakeResult.acceptance || null,
+        first_blocker: intakeResult.ok ? null : (intakeResult.error || intakeResult.failed_step || 'intake_failed'),
+        duration_ms: Date.now() - started,
+        human_summary: intakeResult.ok
+          ? `SocialMediaOS intake blueprint complete (${intakeResult.steps_run || 0} steps). Acceptance: ${intakeResult.acceptance?.ok ? 'PASS' : 'check logs'}.`
+          : `SocialMediaOS intake failed at ${intakeResult.failed_step || 'unknown'}: ${intakeResult.error || 'see builder receipt'}.`,
+        human_summary_technical: deps.formatExecutionTruthReply({
+          ok: intakeResult.ok,
+          pass_fail: intakeResult.ok ? 'PASS' : 'FAIL',
+          action: 'intake_blueprint',
+          session_id: sessionId,
+        }),
+      }, channel);
+      return {
+        statusCode: intakeResult.ok ? 200 : 200,
+        body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }),
+      };
     }
 
     case 'mission_pipeline': {

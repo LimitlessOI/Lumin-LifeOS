@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T00:47:35.687Z",
+  "generated_at": "2026-06-29T03:48:45.770Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11325,
+  "file_count": 11331,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21329,9 +21329,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 15926,
-      "mtime": "2026-06-29T00:47:27.508Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 16119,
+      "mtime": "2026-06-29T03:47:33.883Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -21608,9 +21608,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3428472,
-      "mtime": "2026-06-29T00:47:35.046Z",
-      "indexed_at": "2026-06-29T00:47:35.687Z"
+      "bytes": 3430519,
+      "mtime": "2026-06-29T03:48:35.953Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21970,8 +21970,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 31302,
-      "mtime": "2026-06-29T00:29:42.445Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "mtime": "2026-06-29T02:04:33.016Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -26094,8 +26094,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 7769,
-      "mtime": "2026-06-18T03:39:45.255Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "mtime": "2026-06-29T01:17:26.473Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -26240,8 +26240,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 848,
-      "mtime": "2026-06-18T03:39:45.256Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "mtime": "2026-06-29T01:17:26.476Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -26833,8 +26833,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3994,
-      "mtime": "2026-06-28T23:37:30.188Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "mtime": "2026-06-29T02:06:45.822Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -26957,9 +26957,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1293,
-      "mtime": "2026-06-28T23:37:30.188Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 1147,
+      "mtime": "2026-06-29T02:06:45.824Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -32510,6 +32510,13 @@
       "indexed_at": "2026-06-29T00:47:33.729Z"
     },
     {
+      "path": "db/migrations/20260628_system_operation_timeline.sql",
+      "synopsis": "System operation timeline — duration + token correlation.",
+      "bytes": 3918,
+      "mtime": "2026-06-29T03:34:03.052Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
+    },
+    {
       "path": "db/migrations/builderos_command_control.sql",
       "synopsis": "Database migration — builderos_command_control.sql.",
       "bytes": 1596,
@@ -35073,9 +35080,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 8441,
-      "mtime": "2026-06-29T00:43:01.108Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 8463,
+      "mtime": "2026-06-29T03:40:24.132Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -35190,9 +35197,9 @@
     {
       "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
       "synopsis": "AMENDMENT 01 — AI Council System",
-      "bytes": 49506,
-      "mtime": "2026-06-24T23:52:10.747Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 49780,
+      "mtime": "2026-06-29T03:40:52.015Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.manifest.json",
@@ -35227,9 +35234,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 48496,
-      "mtime": "2026-06-27T23:29:27.345Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 48733,
+      "mtime": "2026-06-29T03:40:52.029Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -35323,9 +35330,9 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 103155,
-      "mtime": "2026-06-28T01:50:04.486Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 103419,
+      "mtime": "2026-06-29T03:40:52.034Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -35426,9 +35433,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 521150,
-      "mtime": "2026-06-29T00:43:01.110Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 521945,
+      "mtime": "2026-06-29T03:40:24.906Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -35718,9 +35725,9 @@
     {
       "path": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
       "synopsis": "AMENDMENT 41 — MarketingOS / SocialMediaOS",
-      "bytes": 75599,
-      "mtime": "2026-06-25T21:45:57.300Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 76194,
+      "mtime": "2026-06-29T03:40:26.140Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.manifest.json",
@@ -35733,9 +35740,9 @@
     {
       "path": "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md",
       "synopsis": "AMENDMENT 44 — Token Accounting OS (Universal AI Token Ledger)",
-      "bytes": 5064,
-      "mtime": "2026-06-21T21:37:59.262Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 5385,
+      "mtime": "2026-06-29T03:40:52.038Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.manifest.json",
@@ -35748,9 +35755,9 @@
     {
       "path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
       "synopsis": "BuilderOS Control Plane",
-      "bytes": 16231,
-      "mtime": "2026-06-28T01:40:15.483Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z"
+      "bytes": 16458,
+      "mtime": "2026-06-29T03:40:52.176Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z"
     },
     {
       "path": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
@@ -63409,8 +63416,8 @@
       "path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — BUILDEROS AUTONOMY CLOSURE V1 ACCEPTANCE.",
       "bytes": 7957,
-      "mtime": "2026-06-29T00:29:42.446Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "mtime": "2026-06-29T02:04:33.016Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -63456,9 +63463,9 @@
     {
       "path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
       "synopsis": "Product receipt — CAPTURE PIPELINE V2 ACCEPTANCE.",
-      "bytes": 894,
-      "mtime": "2026-06-18T03:39:45.274Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 1064,
+      "mtime": "2026-06-29T01:17:26.476Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -63953,8 +63960,8 @@
       "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
       "bytes": 1325,
-      "mtime": "2026-06-28T23:37:30.210Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "mtime": "2026-06-29T02:06:45.824Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "synopsis_index_only": true
     },
     {
@@ -65782,9 +65789,9 @@
     {
       "path": "routes/canonical-execution-routes.js",
       "synopsis": "routes/canonical-execution-routes.js",
-      "bytes": 3481,
-      "mtime": "2026-06-21T21:39:03.354Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 4811,
+      "mtime": "2026-06-29T03:35:10.244Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
@@ -65978,9 +65985,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 17974,
-      "mtime": "2026-06-29T00:43:01.110Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 25007,
+      "mtime": "2026-06-29T03:39:58.220Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68538,9 +68545,9 @@
     {
       "path": "scripts/run-founder-chat-alpha-battery.mjs",
       "synopsis": "Founder chat alpha — build must build, questions must answer, search when unknown.",
-      "bytes": 12349,
-      "mtime": "2026-06-29T00:43:01.111Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 13208,
+      "mtime": "2026-06-29T03:46:27.197Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -68564,6 +68571,26 @@
       "indexed_at": "2026-06-29T00:47:33.729Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "scripts/run-founder-jwt-chat-proof.mjs",
+      "synopsis": "Prove founder chat path uses JWT only (no command key) — login → Lumin message.",
+      "bytes": 3804,
+      "mtime": "2026-06-29T03:39:47.173Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-founder-socialmediaos-chat-a2z.mjs",
+      "synopsis": "Drive SocialMediaOS intake blueprint A→Z through founder chat (JWT path).",
+      "bytes": 4606,
+      "mtime": "2026-06-29T03:39:51.100Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_41_MARKETINGOS.md"
       ]
     },
     {
@@ -69095,6 +69122,26 @@
       "bytes": 5100,
       "mtime": "2026-06-28T18:17:45.440Z",
       "indexed_at": "2026-06-29T00:47:33.729Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/sync-founder-login-local.mjs",
+      "synopsis": "Sync founder login locally via DATABASE_URL (no deploy required).",
+      "bytes": 2712,
+      "mtime": "2026-06-29T03:36:07.034Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/sync-founder-login.mjs",
+      "synopsis": "Sync founder LifeOS login email+password from Railway vault to adam user row.",
+      "bytes": 1218,
+      "mtime": "2026-06-29T03:25:09.016Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -80961,9 +81008,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 10803,
-      "mtime": "2026-06-29T00:43:01.112Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 11106,
+      "mtime": "2026-06-29T03:39:34.507Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -81487,9 +81534,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 77415,
-      "mtime": "2026-06-27T17:13:00.448Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 78038,
+      "mtime": "2026-06-29T03:34:53.344Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_01_AI_COUNCIL.md"
       ]
@@ -81899,9 +81946,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 25510,
-      "mtime": "2026-06-21T21:39:13.676Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 25888,
+      "mtime": "2026-06-29T03:24:57.985Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
@@ -83023,9 +83070,9 @@
     {
       "path": "services/lifeos-mission-pipeline-executor.js",
       "synopsis": "Founder chat → foundation pipeline (Point B / mission execute).",
-      "bytes": 5712,
-      "mtime": "2026-06-28T18:17:45.462Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 6501,
+      "mtime": "2026-06-29T03:38:42.838Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -83620,9 +83667,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 34187,
-      "mtime": "2026-06-28T18:17:45.472Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 36406,
+      "mtime": "2026-06-29T03:39:11.144Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -84509,9 +84556,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 21085,
-      "mtime": "2026-06-27T17:13:25.506Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 21185,
+      "mtime": "2026-06-29T03:24:57.971Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -84648,9 +84695,9 @@
     {
       "path": "services/savings-ledger.js",
       "synopsis": "services/savings-ledger.js — TCO-E01",
-      "bytes": 19884,
-      "mtime": "2026-06-21T21:39:17.480Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 20061,
+      "mtime": "2026-06-29T03:34:28.175Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_01_AI_COUNCIL.md"
       ]
@@ -84983,6 +85030,16 @@
       "mtime": "2025-12-10T04:15:39.893Z",
       "indexed_at": "2026-06-29T00:47:33.729Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/system-operation-ledger.js",
+      "synopsis": "Timestamped operation ledger — duration + token correlation by task_id.",
+      "bytes": 5165,
+      "mtime": "2026-06-29T03:34:06.964Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md"
+      ]
     },
     {
       "path": "services/tc-access-service.js",
@@ -85588,9 +85645,9 @@
     {
       "path": "services/tsos-platform-kernel.js",
       "synopsis": "TSOS Platform Kernel — Phase 0 execution syscall layer.",
-      "bytes": 14849,
-      "mtime": "2026-06-27T23:29:26.614Z",
-      "indexed_at": "2026-06-29T00:47:33.729Z",
+      "bytes": 15105,
+      "mtime": "2026-06-29T03:35:41.007Z",
+      "indexed_at": "2026-06-29T03:48:45.770Z",
       "ssot": [
         "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md"
       ]

@@ -117,6 +117,11 @@ export function createTSOSPlatformKernel({
     const task_id = spec.task_id || newTaskId(kind);
     const strict = spec.strict ?? defaultStrict;
     const startedAt = Date.now();
+    const kernelTiming = () => ({
+      started_at: new Date(startedAt).toISOString(),
+      ended_at: new Date().toISOString(),
+      duration_ms: Date.now() - startedAt,
+    });
     const receipts = {
       task_id,
       kind,
@@ -182,7 +187,7 @@ export function createTSOSPlatformKernel({
         }
       }
 
-      return { ok: true, result, receipts, kernel: true };
+      return { ok: true, result, receipts, kernel: true, ...kernelTiming() };
     }
 
     if (kind === 'build') {
@@ -273,17 +278,17 @@ export function createTSOSPlatformKernel({
         }
       }
 
-      return { ok: true, result, receipts, kernel: true };
+      return { ok: true, result, receipts, kernel: true, ...kernelTiming() };
     }
 
     if (kind === 'operator') {
       const result = await spec.fn();
       receipts.token = await verifyTokenReceipt({ task_id, sinceMs: startedAt - 5000 });
-      return { ok: true, result, receipts, kernel: true };
+      return { ok: true, result, receipts, kernel: true, ...kernelTiming() };
     }
 
     const result = await spec.fn();
-    return { ok: true, result, receipts, kernel: true, note: 'unknown_kind_passthrough' };
+    return { ok: true, result, receipts, kernel: true, note: 'unknown_kind_passthrough', ...kernelTiming() };
   }
 
   function wrapCouncilMember(rawCallCouncilMember) {

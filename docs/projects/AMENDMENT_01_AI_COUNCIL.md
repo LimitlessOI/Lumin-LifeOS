@@ -458,6 +458,7 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-06-28 | **`services/savings-ledger.js` + `services/council-service.js`** — token rows record `started_at` + `duration_ms` on every metered council call via `meterTiming()`. | Adam: every token spend must align to timestamps for operation timeline. | ✅ | deploy |
 | 2026-06-13 | **AI prose envelope — direct Lumin path** — voice-lie/theater scrub removes bad sentences only; no full-reply replacement with "Counsel only / sync chat" boilerplate on founder conversational turns. | Adam: fake connection — counsel headers made every reply feel disconnected. | ✅ unit | deploy |
 | 2026-06-24 | **Universal AI prose envelope** — `ai-prose-truth-envelope.js`; `callCouncilMember` wraps every return + cache hit via `deliverCouncilText`; blocks counsel theater + voice-rail execution lies + false verification claims; codegen tasks opt-out | Adam: one degree off compounds — nothing may deceive us or itself | ✅ verify-truth-lockdown | deploy |
 | 2026-05-24 | **`services/council-service.js`:** Voice Rail **`founderComms`** bypasses rules-engine **member override** (words like “route”/“build” in long founder messages had rerouted GPT → Claude while keeping `gpt-4o` → Anthropic 404). Override path uses `applyModelOverride()`. | Adam screenshot: GPT selected, Council API Anthropic 404 model gpt-4o | AM01 | pending deploy |

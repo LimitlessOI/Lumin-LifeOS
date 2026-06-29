@@ -61,6 +61,8 @@ export function createSavingsLedger(pool) {
     fallbackTriggered = false,
     driftDetected = false,
     costUSD = null,
+    startedAt = null,
+    durationMs = null,
     product_lane = null,
     blueprint_id = null,
     oil_result = null,
@@ -114,11 +116,13 @@ export function createSavingsLedger(pool) {
           product_lane, blueprint_id, oil_result,
           ccl_used, ccl_packet_id, ccl_authority_level,
           ccl_round_trip_status, ccl_estimated_savings_tokens, ccl_quality_result,
+          started_at, duration_ms,
           logged_at
         ) VALUES (
           $1,$2,$3, $4,$5,$6, $7,$8,$9, $10,$11,$12,
           $13,$14, $15,$16, $17,$18, $19, $20,$21,
-          $22,$23,$24, $25,$26,$27, $28,$29,$30, NOW()
+          $22,$23,$24, $25,$26,$27, $28,$29,$30,
+          COALESCE($31::timestamptz, NOW()), $32, NOW()
         ) RETURNING id
       `, [
         sessionId || null, requestId || null, clientId || null,
@@ -133,6 +137,7 @@ export function createSavingsLedger(pool) {
         product_lane || taskType || null, blueprint_id || null, oil_result || null,
         Boolean(ccl_used), ccl_packet_id || null, ccl_authority_level || null,
         ccl_round_trip_status || null, ccl_estimated_savings_tokens || 0, ccl_quality_result || null,
+        startedAt || null, durationMs ?? null,
       ]);
       return result.rows[0]?.id;
     } catch (err) {

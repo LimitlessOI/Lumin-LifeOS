@@ -15,9 +15,11 @@
  */
 
 import express from 'express';
+import { createSystemOperationLedger } from '../services/system-operation-ledger.js';
 
 export function createCanonicalExecutionRoutes({ requireKey, pool }) {
   const router = express.Router();
+  const opLedger = createSystemOperationLedger({ pool });
 
   // Execution queue — canonical read from execution_tasks DB table
   router.get('/api/v1/lifeos/tasks/queue', requireKey, async (req, res, next) => {
@@ -91,6 +93,40 @@ export function createCanonicalExecutionRoutes({ requireKey, pool }) {
       note: 'canonical kill-switch is env-based: set LIFEOS_AI_DISABLED=true in Railway env to disable',
       canonical_path: 'Railway env: LIFEOS_AI_DISABLED',
     });
+  });
+
+  router.get('/api/v1/lifeos/admin/operations/timeline', requireKey, async (req, res, next) => {
+    try {
+      const sinceHours = Number(req.query.since_hours || 24);
+      const limit = Number(req.query.limit || 200);
+      const task_id = req.query.task_id ? String(req.query.task_id) : null;
+      const rows = await opLedger.getTimeline({ sinceHours, limit, task_id });
+      res.json({
+        ok: true,
+        since_hours: sinceHours,
+        count: rows.length,
+        timeline: rows,
+        read_path: 'GET /api/v1/lifeos/admin/operations/timeline',
+        note: 'Each row has started_at, ended_at, duration_ms, total_tokens, cost_usd — tokens aligned by task_id.',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/api/v1/lifeos/admin/operations/summary', requireKey, async (req, res, next) => {
+    try {
+      const sinceHours = Number(req.query.since_hours || 24);
+      const summary = await opLedger.getSummary({ sinceHours });
+      res.json({
+        ok: true,
+        since_hours: sinceHours,
+        summary,
+        read_path: 'GET /api/v1/lifeos/admin/operations/summary',
+      });
+    } catch (err) {
+      next(err);
+    }
   });
 
   return router;

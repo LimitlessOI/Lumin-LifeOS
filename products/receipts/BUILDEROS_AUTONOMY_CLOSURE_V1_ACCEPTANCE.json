@@ -1,7 +1,7 @@
 {
   "schema": "builderos_autonomy_closure_v1_acceptance",
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
-  "at": "2026-06-28T23:35:48.337Z",
+  "at": "2026-06-29T02:04:33.010Z",
   "mode": "full_suite",
   "requested_check": null,
   "ok": true,
@@ -209,8 +209,8 @@
     }
   },
   "verdict": "PASS",
-  "completed_at": "2026-06-28T23:35:48.337Z",
-  "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
+  "completed_at": "2026-06-29T02:04:33.010Z",
+  "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
   "production_base": "https://robust-magic-production.up.railway.app",
   "bp_sync": {
     "updated": [

@@ -9,7 +9,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-05-30 |
+| **Last Updated** | 2026-06-28 |
 | **Owner** | adam |
 | **Parent System** | LimitlessOS |
 | **First Module** | SocialMediaOS |
@@ -1302,5 +1302,6 @@ config/council-members.js           — shared AI config
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
 | 2026-06-01 | Overnight runner priority fix — PRIORITY_RULES reorder: socialmediaos→rank 1 (was rank 2), c2_command_control→rank 2 (was rank 1). Commit `5fde694263`. Gen 2 queue confirmed: first 3 tasks = MarketingOS DB migration + marketing-transcriber.js + marketing-coach.js. Railway redeploy triggered to fix HTTP_502 blocking. 0 commits from runner yet (Railway stale deploy). | C2 was starving MarketingOS — every gen filled with C2 tasks first due to rank 1. | ✅ | ⬜ | pending |
+| 2026-06-28 | **SocialMediaOS founder-chat A→Z path:** `services/lifeos-mission-pipeline-executor.js` — `isIntakeBlueprintIntent` + golden session `3e6105c4-…`; `services/chair-context-classifier.js` + `services/lumin-chair-orchestrator.js` — `intake_blueprint` channel runs `executeIntakeBlueprint`; `scripts/run-founder-socialmediaos-chat-a2z.mjs` — JWT/command-key chat driver + receipt. | Adam: build SMOS BP A–Z from founder login via Lumin chat, not CLI backdoor. | ⚠️ IN PROGRESS: pending deploy + JWT login sync | `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |
 | 2026-05-30 | Created AMENDMENT_41_MARKETINGOS.md — full A-to-Z blueprint, Phase 0-10, MVP technical spec, consent contract, BuilderOS execution contract, revenue plan, build order checklist | SSOT foundation for MarketingOS / SocialMediaOS before any code is written | ✅ | ✅ | pending |
 | 2026-05-30 | Closed 6 BuilderOS decision gaps: storage→R2, autosave rule (Rule 12), user identity rule (Rule 13), English-only rule (Rule 14), export→download-first, team accounts→Phase 2. Updated §5 Phase 1, §6 export/error handling/acceptance tests, §9 execution contract (+3 rules), §11 build order task 15, §12 resolved/open split, §13 final summary | Decision gaps audit required before coding begins | ✅ | ✅ | pending |

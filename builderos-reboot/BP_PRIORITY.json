@@ -106,9 +106,14 @@
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/OBJECTIVE_VERDICT.json",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-18T02:51:17.479Z",
-      "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969",
-      "production_base": "https://robust-magic-production.up.railway.app"
+      "technical_pass_at": "2026-06-29T01:17:26.470Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618",
+      "production_base": "https://robust-magic-production.up.railway.app",
+      "artifact_sync": {
+        "at": "2026-06-29T01:17:26.470Z",
+        "mode": "technical_acceptance",
+        "status": "CURRENT"
+      }
     },
     {
       "rank": 4,
@@ -155,15 +160,15 @@
       "note": "Point B = LifeRE Alpha. Founder success test = lifeos-app LifeRE path + daily cycle.",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-28T23:31:20.247Z",
-      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
-      "production_base": "",
+      "technical_pass_at": "2026-06-29T02:06:45.821Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618",
+      "production_base": "https://robust-magic-production.up.railway.app",
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "artifact_sync": {
-        "at": "2026-06-28T23:35:42.855Z",
-        "mode": "founder_usability",
+        "at": "2026-06-29T02:06:45.821Z",
+        "mode": "technical_acceptance",
         "status": "CURRENT"
       }
     },
@@ -181,8 +186,8 @@
       "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-28T23:35:48.337Z",
-      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
+      "technical_pass_at": "2026-06-29T02:04:33.010Z",
+      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
       "production_base": "https://robust-magic-production.up.railway.app",
       "build_method": "system-build",
       "note": "Internal BuilderOS closure acceptance proof.",

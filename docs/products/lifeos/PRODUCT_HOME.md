@@ -8,7 +8,7 @@
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
 **Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
 **Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`  
-**Last Updated:** 2026-06-28 — Lumin identity routing gap-fill; SNT mission FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001.
+**Last Updated:** 2026-06-28 — Founder JWT login sync (`LIFEOS_FOUNDER_LOGIN_*`); SocialMediaOS intake via chat `intake_blueprint` channel.
 
 ## Mission
 

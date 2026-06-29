@@ -23,6 +23,7 @@
  *   POST /api/v1/lifeos/auth/operator/invite           — create invite for Sherry / new members
  *   POST /api/v1/lifeos/auth/operator/provision-member — create member account + optional household link
  *   POST /api/v1/lifeos/auth/operator/provision-alpha-auditor — founder-level test account from Railway vault creds
+ *   POST /api/v1/lifeos/auth/operator/sync-founder-login — sync adam founder email+password from LIFEOS_FOUNDER_LOGIN_* vault
  *
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
@@ -194,6 +195,48 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     }
   });
 
+  router.get('/operator/founder-chat-health', requireKey, async (req, res) => {
+    const started = Date.now();
+    const creds = resolveFounderLoginCreds();
+    const cred_diagnosis = diagnoseFounderLoginCreds();
+    let login_probe = null;
+    if (creds) {
+      try {
+        const loginResult = await auth.login({
+          email: creds.email,
+          password: creds.password,
+          userAgent: 'operator-founder-chat-health',
+          ip: req.ip,
+        });
+        login_probe = {
+          ok: true,
+          handle: loginResult.user.user_handle,
+          email: loginResult.user.email,
+          role: loginResult.user.role,
+        };
+      } catch (e) {
+        login_probe = { ok: false, error: e.message };
+      }
+    }
+    const { rows: adamRow } = await pool.query(
+      `SELECT user_handle, email, role, active FROM lifeos_users WHERE LOWER(user_handle) = 'adam' LIMIT 1`
+    ).catch(() => ({ rows: [] }));
+    res.json({
+      ok: login_probe?.ok === true,
+      duration_ms: Date.now() - started,
+      cred_source: creds?.source || null,
+      cred_diagnosis,
+      login_probe,
+      db_adam: adamRow[0] || null,
+      blockers: [
+        ...(login_probe?.ok ? [] : ['founder_login_sync_required']),
+        ...(creds ? [] : ['LIFEOS_FOUNDER_LOGIN_* missing in Railway env']),
+        ...(login_probe?.ok && login_probe.role && !['founder_admin', 'admin'].includes(String(login_probe.role).toLowerCase()) ? ['role_cannot_execute'] : []),
+      ],
+      fix: 'Set LIFEOS_FOUNDER_LOGIN_EMAIL=adam@hopkinsgroup.org + LIFEOS_FOUNDER_LOGIN_PASSWORD in Railway, redeploy, POST /operator/sync-founder-login',
+    });
+  });
+
   // ── Create invite (admin) ───────────────────────────────────────────────────
   router.post('/invite', requireLifeOSUser, requireLifeOSAdmin, async (req, res) => {
     try {
@@ -271,10 +314,9 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
     }
 
-    function resolveAlphaAuditorCreds() {
+    function resolveFounderLoginCreds() {
       const pairs = [
-        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
-        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+        ['LIFEOS_FOUNDER_LOGIN_EMAIL', 'LIFEOS_FOUNDER_LOGIN_PASSWORD'],
         ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
       ];
       for (const [emailKey, passKey] of pairs) {
@@ -287,10 +329,9 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
       return null;
     }
 
-    function diagnoseAlphaAuditorCreds() {
+    function diagnoseFounderLoginCreds() {
       const pairs = [
-        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
-        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+        ['LIFEOS_FOUNDER_LOGIN_EMAIL', 'LIFEOS_FOUNDER_LOGIN_PASSWORD'],
         ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
       ];
       return pairs.map(([emailKey, passKey]) => {
@@ -305,6 +346,131 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         };
       });
     }
+
+    function resolveAlphaAuditorCreds() {
+      const pairs = [
+        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
+        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+      ];
+      for (const [emailKey, passKey] of pairs) {
+        const email = String(process.env[emailKey] || '').trim();
+        const password = String(process.env[passKey] || '');
+        if (isValidTestEmail(email) && password.length >= 8) {
+          return { email, password, source: `${emailKey}+${passKey}` };
+        }
+      }
+      return null;
+    }
+
+    function diagnoseAlphaAuditorCreds() {
+      const pairs = [
+        ['ALPHA_TEST_EMAIL', 'ALPHA_TEST_PASSWORD'],
+        ['GMAIL_SIGNUP_EMAIL', 'GMAIL_SIGNUP_APP_PASSWORD'],
+        ['WORK_EMAIL', 'WORK_EMAIL_APP_PASSWORD'],
+      ];
+      return pairs.map(([emailKey, passKey]) => {
+        const email = String(process.env[emailKey] || '').trim();
+        const password = String(process.env[passKey] || '');
+        return {
+          pair: `${emailKey}+${passKey}`,
+          email_set: Boolean(email),
+          email_valid: isValidTestEmail(email),
+          password_set: Boolean(password),
+          password_len_ok: password.length >= 8,
+        };
+      });
+    }
+
+    router.post('/operator/sync-founder-login', requireKey, async (req, res) => {
+      const opStarted = Date.now();
+      const task_id = `founder-login-sync-${opStarted}`;
+      try {
+        await pool.query(
+          `INSERT INTO system_operation_log (task_id, operation, source, status, started_at, metadata)
+           VALUES ($1, 'sync_founder_login', 'lifeos-auth', 'running', NOW(), $2)`,
+          [task_id, JSON.stringify({ route: '/operator/sync-founder-login' })]
+        ).catch(() => {});
+        const creds = resolveFounderLoginCreds();
+        if (!creds) {
+          await pool.query(
+            `UPDATE system_operation_log SET status = 'failed', ended_at = NOW(),
+             metadata = metadata || $2::jsonb
+             WHERE task_id = $1 AND status = 'running'`,
+            [task_id, JSON.stringify({ error: 'founder_login_creds_missing' })]
+          ).catch(() => {});
+          return res.status(503).json({
+            ok: false,
+            error: 'No founder login creds in server env (expected LIFEOS_FOUNDER_LOGIN_EMAIL + LIFEOS_FOUNDER_LOGIN_PASSWORD)',
+            cred_diagnosis: diagnoseFounderLoginCreds(),
+            note: 'GMAIL_SIGNUP_* is the system lumea mailbox — do not use it for your LifeOS sign-in.',
+            task_id,
+            duration_ms: Date.now() - opStarted,
+          });
+        }
+        const handle = String(process.env.LIFEOS_FOUNDER_LOGIN_HANDLE || 'adam').trim().toLowerCase();
+        const { rows: existing } = await pool.query(
+          `SELECT id, user_handle, email, role, tier, display_name FROM lifeos_users
+           WHERE LOWER(user_handle) = LOWER($1)
+           LIMIT 1`,
+          [handle]
+        );
+        if (!existing.length) {
+          return res.status(404).json({ ok: false, error: `founder handle not found: ${handle}` });
+        }
+        const phash = hashPassword(creds.password);
+        const { rows: [user] } = await pool.query(
+          `UPDATE lifeos_users
+           SET password_hash = $1, email = LOWER($2), active = TRUE
+           WHERE id = $3
+           RETURNING id, user_handle, display_name, email, role, tier`,
+          [phash, creds.email.trim(), existing[0].id]
+        );
+        log.info({ handle: user.user_handle, email: user.email }, '[LIFEOS-AUTH] founder login synced from vault');
+
+        let login_probe = null;
+        try {
+          const loginResult = await auth.login({
+            email: creds.email,
+            password: creds.password,
+            userAgent: 'operator-sync-founder-login',
+            ip: req.ip,
+          });
+          login_probe = { ok: true, handle: loginResult.user.user_handle };
+        } catch (e) {
+          login_probe = { ok: false, error: e.message };
+        }
+
+        res.json({
+          ok: login_probe?.ok === true,
+          user,
+          cred_source: creds.source,
+          login_probe,
+          task_id,
+          duration_ms: Date.now() - opStarted,
+          login_url: `${publicWebOrigin(req) || ''}/overlay/lifeos-login.html?next=${encodeURIComponent('/overlay/lifeos-app.html?direct_system=1')}`,
+          note: 'Founder account email+password synced from LIFEOS_FOUNDER_LOGIN_* — sign in on Login tab, not COMMAND_CENTER_KEY.',
+        });
+        await pool.query(
+          `UPDATE system_operation_log SET status = $2, ended_at = NOW(),
+           metadata = metadata || $3::jsonb
+           WHERE task_id = $1 AND status = 'running'`,
+          [
+            task_id,
+            login_probe?.ok ? 'ok' : 'failed',
+            JSON.stringify({ email: user.email, login_probe }),
+          ]
+        ).catch(() => {});
+      } catch (e) {
+        await pool.query(
+          `UPDATE system_operation_log SET status = 'failed', ended_at = NOW(),
+           metadata = metadata || $2::jsonb
+           WHERE task_id = $1 AND status = 'running'`,
+          [task_id, JSON.stringify({ error: e.message })]
+        ).catch(() => {});
+        res.status(e.status || 500).json({ ok: false, error: e.message, task_id, duration_ms: Date.now() - opStarted });
+      }
+    });
 
     router.post('/operator/provision-alpha-auditor', requireKey, async (req, res) => {
       try {

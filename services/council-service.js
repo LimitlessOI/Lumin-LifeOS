@@ -129,6 +129,9 @@ export function createCouncilService({
       ccl_round_trip_status: payload.ccl_round_trip_status,
       ccl_estimated_savings_tokens: payload.ccl_estimated_savings_tokens,
       ccl_quality_result: payload.ccl_quality_result,
+      startedAt: payload.startedAt,
+      durationMs: payload.durationMs,
+      requestId: payload.requestId || payload.task_id || payload.sessionId,
     };
     if (tokenAccounting?.recordMeteredCall) {
       return tokenAccounting.recordMeteredCall({ source: "council", ...base });
@@ -858,6 +861,12 @@ export function createCouncilService({
   }
 
   async function callCouncilMember(member, prompt, options = {}) {
+    const callStartedAt = Date.now();
+    const meterTiming = () => ({
+      startedAt: new Date(callStartedAt).toISOString(),
+      durationMs: Date.now() - callStartedAt,
+      requestId: options.requestId || options.task_id || options.sessionId || null,
+    });
     const requestedMember = member;
     const resolvedMember = resolveCouncilMember(member);
     if (resolvedMember !== requestedMember) {
@@ -1054,6 +1063,7 @@ export function createCouncilService({
       }).catch(() => {});
 
       recordMetered({
+          ...meterTiming(),
           provider: "logic",
           model: "rules-engine-v1",
           taskType,
@@ -1110,6 +1120,7 @@ export function createCouncilService({
           savedCostUSD: estimatedTokens * 0.000003,
         }).catch(() => {});
         recordMetered({
+            ...meterTiming(),
             provider: COUNCIL_MEMBERS[member]?.provider || member,
             model: COUNCIL_MEMBERS[member]?.model || member,
             taskType,
@@ -1410,6 +1421,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         // TCO-E01: Token Accounting OS — metered ledger receipt
         recordMetered({
+            ...meterTiming(),
             provider,
             model: config.model || member,
             taskType,
@@ -1518,6 +1530,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }).catch(() => {});
 
         recordMetered({
+            ...meterTiming(),
             provider: "gemini",
             model: config.model || member,
             taskType,
@@ -1587,6 +1600,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           const ollamaIn = estimateTokens(finalPrompt);
           const ollamaOut = estimateTokens(text);
           recordMetered({
+            ...meterTiming(),
             provider: 'ollama',
             model: currentConfig.model || member,
             taskType,
@@ -1656,6 +1670,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
           const dsOut = json.usage?.completion_tokens || estimateTokens(text);
           recordMetered({
+            ...meterTiming(),
             provider: 'deepseek',
             model: config.model || member,
             taskType,
@@ -1728,6 +1743,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }).catch(() => {});
 
         recordMetered({
+            ...meterTiming(),
             provider: "anthropic",
             model: config.model || member,
             taskType,

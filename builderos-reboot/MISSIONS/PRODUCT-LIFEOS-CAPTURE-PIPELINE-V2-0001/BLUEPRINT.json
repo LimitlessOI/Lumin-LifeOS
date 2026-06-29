@@ -33,7 +33,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "c19653fdb2d78370f43c5cadd7bd63c8c20e9e6fc635effe3acf1e44d987eef1"
+        "sha256": "7c51875b37b7bbba1528cefe8634951db2dff38230c8b692e17f34d1bacadbd4"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S01/lifeos-capture-pipeline.js"
@@ -53,8 +53,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-18T02:51:17.479Z",
-      "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969"
+      "completed_at": "2026-06-29T01:17:26.470Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618"
     },
     {
       "step_id": "LCP2-S02",
@@ -67,7 +67,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "679c4dff83491dc1a0dda0d0ae66fa4540c0edfb637f3f4b7ae3f7a712b8f55d"
+        "sha256": "80e82afb21ddabad5a536e39252dbfd670dccb9280611625f6342c6ff123f8ec"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S02/capture-pipeline-routes.js"
@@ -89,8 +89,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-18T02:51:17.479Z",
-      "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969"
+      "completed_at": "2026-06-29T01:17:26.470Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618"
     },
     {
       "step_id": "LCP2-S03",
@@ -103,7 +103,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "9e2baf945a0199cf12e54944bb5045d93d144e55aaa38a7e93baf2c16a0c53d7"
+        "sha256": "2c505fa86c2a38e97ceafdb2aa448f8d941f4407350ecf4efd5db1708c8c92ca"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S03/lifeos-voice-rail-routes.js"
@@ -125,8 +125,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-18T02:51:17.479Z",
-      "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969"
+      "completed_at": "2026-06-29T01:17:26.470Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618"
     },
     {
       "step_id": "LCP2-S04",
@@ -139,7 +139,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+        "sha256": "be67e4ccf3778432bacebbdee4a87a917ee35d151bea1ef01d2530af3cdd8b00"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S04/register-runtime-routes.js"
@@ -161,8 +161,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-18T02:51:17.479Z",
-      "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969"
+      "completed_at": "2026-06-29T01:17:26.470Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618"
     },
     {
       "step_id": "LCP2-S05",
@@ -175,7 +175,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "bc6e67da2b7257e632854f9db02b9c67eca774037320df617c702c191978e500"
+        "sha256": "9c4f7f89a3ce73d090795a183d54eb1bcedb047b71339baffac9a52a55347d02"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S05/run-capture-pipeline-v2-acceptance.mjs"
@@ -197,14 +197,14 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-18T02:51:17.479Z",
-      "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969"
+      "completed_at": "2026-06-29T01:17:26.470Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
   "authored_by": "ARC",
-  "completed_at": "2026-06-18T02:51:17.479Z",
-  "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969",
+  "completed_at": "2026-06-29T01:17:26.470Z",
+  "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618",
   "receipt_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build"

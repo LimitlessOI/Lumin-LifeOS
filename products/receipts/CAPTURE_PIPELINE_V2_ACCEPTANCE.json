@@ -1,7 +1,7 @@
 {
   "schema": "capture_pipeline_v2_acceptance_v1",
   "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
-  "started_at": "2026-06-18T02:51:16.439Z",
+  "started_at": "2026-06-29T01:17:25.301Z",
   "production_base": "https://robust-magic-production.up.railway.app",
   "tests_passed": [
     "LCP2-T01_blueprint",
@@ -18,8 +18,8 @@
   ],
   "tests_failed": [],
   "founder_usability_pass": false,
-  "completed_at": "2026-06-18T02:51:17.479Z",
-  "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969",
+  "completed_at": "2026-06-29T01:17:26.470Z",
+  "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [
@@ -27,5 +27,10 @@
       "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/BLUEPRINT.json"
     ],
     "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
   }
 }

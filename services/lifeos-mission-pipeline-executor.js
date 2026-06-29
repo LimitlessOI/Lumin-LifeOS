@@ -40,6 +40,23 @@ export function isMissionPipelineIntent(text = '') {
   return false;
 }
 
+export const SOCIALMEDIAOS_INTAKE_SESSION = '3e6105c4-f5e9-4037-bb57-5451acc2ea59';
+
+export function extractIntakeSessionId(text = '') {
+  const t = String(text || '');
+  const uuid = t.match(/\b([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b/i);
+  if (uuid) return uuid[1];
+  if (/\b(social\s*media\s*os|socialmediaos|smos|marketingos)\b/i.test(t)) return SOCIALMEDIAOS_INTAKE_SESSION;
+  return null;
+}
+
+export function isIntakeBlueprintIntent(text = '') {
+  const t = String(text || '');
+  if (extractIntakeSessionId(t) && /\b(intake|blueprint|a to z|a-to-z|mos-p1|execute|run|build)\b/i.test(t)) return true;
+  if (/\b(social\s*media\s*os|socialmediaos|smos)\b/i.test(t) && /\b(blueprint|intake|a to z|a-to-z|build|execute)\b/i.test(t)) return true;
+  return false;
+}
+
 export async function runFoundationPipelineForFounder(missionId, { maxAttempts = 32, force = true, dryRun = false } = {}) {
   const started = Date.now();
   let runFoundationPipelineLoop;

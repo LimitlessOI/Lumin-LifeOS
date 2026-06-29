@@ -57,8 +57,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T23:31:20.247Z",
-      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
+      "completed_at": "2026-06-29T02:06:45.821Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618"
     },
     {
       "step_id": "LRE-S02",
@@ -93,14 +93,14 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-28T23:31:20.247Z",
-      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474"
+      "completed_at": "2026-06-29T02:06:45.821Z",
+      "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
   "authored_by": "ARC",
-  "completed_at": "2026-06-28T23:31:20.247Z",
-  "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
+  "completed_at": "2026-06-29T02:06:45.821Z",
+  "git_sha": "09eb59f4a721226ffb990a089e7ca21fd0d6b618",
   "receipt_path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build"

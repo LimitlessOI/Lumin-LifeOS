@@ -177,6 +177,28 @@ if (!BASE || !KEY) {
   process.exit(1);
 }
 
+{
+  const healthRes = await fetch(`${BASE}/api/v1/lifeos/auth/operator/founder-chat-health`, {
+    headers: { 'x-command-key': KEY },
+    cache: 'no-store',
+  }).catch(() => null);
+  const healthJson = healthRes ? await healthRes.json().catch(() => ({})) : {};
+  report.results.H0_founder_login_health = {
+    http: healthRes?.status || 0,
+    ok: healthJson.ok,
+    blockers: healthJson.blockers || [],
+    cred_source: healthJson.cred_source || null,
+    login_probe_ok: healthJson.login_probe?.ok ?? null,
+  };
+  if (!healthRes || healthRes.status === 404) {
+    fail('H0_founder_login_health', 'founder-chat-health endpoint missing — deploy auth routes');
+  } else if (!healthJson.ok) {
+    fail('H0_founder_login_health', (healthJson.blockers || ['login_probe_failed']).join(', '));
+  } else {
+    report.passed.push('H0_founder_login_health');
+  }
+}
+
 for (const probe of PROBES) {
   try {
     const { res, json, summary } = await send(probe.id, probe.text, probe);

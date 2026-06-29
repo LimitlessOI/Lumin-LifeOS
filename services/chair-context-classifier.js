@@ -5,7 +5,7 @@
 import { isRepairContinuationIntent, extractTargetFileFromInstruction, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { isFounderConfirmIntent } from './founder-intent-clarify.js';
 import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
-import { isMissionPipelineIntent } from './lifeos-mission-pipeline-executor.js';
+import { isMissionPipelineIntent, isIntakeBlueprintIntent } from './lifeos-mission-pipeline-executor.js';
 import { isPointBExecuteIntent, isPointBStatusIntent } from './point-b-navigator.js';
 import { isFounderShipOrUsabilityIntent } from './founder-chair-intent.js';
 import {
@@ -170,6 +170,7 @@ export function resolveChairContext(text = '', ctx = {}) {
       lumin: 'chair',
       chair: 'chair',
       mission_pipeline: 'mission_pipeline',
+      intake_blueprint: 'intake_blueprint',
       blueprint_execute: 'blueprint_execute',
       point_b: 'point_b',
     };
@@ -194,6 +195,17 @@ export function resolveChairContext(text = '', ctx = {}) {
       channel: 'chair',
       domain: 'counsel',
       confidence: 1,
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores,
+    };
+  }
+
+  if (isIntakeBlueprintIntent(t)) {
+    return {
+      channel: 'intake_blueprint',
+      domain: 'product_build',
+      confidence: 0.95,
       requires_execute_clarify: false,
       personal_search: false,
       scores,
