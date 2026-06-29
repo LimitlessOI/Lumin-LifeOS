@@ -16,7 +16,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-28 — self-repair escalation attempts, execution-log step detail, and deploy-repair runtime truth carried into the command cockpit |
+| **Last Updated** | 2026-06-29 — never-stop product factory status route wired into command center |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -298,6 +298,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-06-29 | **`routes/lifeos-command-center-routes.js`** — `GET /api/v1/lifeos/command-center/never-stop-product-factory` surfaces live factory lane status (expansion mission, last heartbeat, enabled state). | Never-stop factory scheduler needed a command-center read path to confirm it's running. | AM12 | pending deploy |
 | 2026-06-28 | **`routes/canonical-execution-routes.js` + `services/env-registry-map.js`** — `GET /api/v1/lifeos/admin/operations/timeline|summary` for duration+token aligned ops view. | Adam: see how long everything takes with tokens lined up. | ✅ | deploy |
 | 2026-06-28 | **Self-repair runtime carry-forward surfaced in Command Center** — `services/self-repair-deploy-scheduler.js` raises live deploy-repair retries to 3 attempts, `services/self-repair-execution-log.js` now persists `step_details[]` with attempt/required-context metadata, and `services/self-repair-executor.js` now stamps every executed step with attempt stage plus required carry-forward context before writing the runtime log. | The runtime cockpit was showing repair outcomes without enough truth to explain whether the system actually carried lessons/research forward across retries. These fields make the command layer report the real repair loop instead of a flattened “it tried” summary. | ✅ local syntax + executor/log tests; ⚠️ pending deploy parity | Command Center runtime truth |
 | 2026-06-27 | **Canonical scheduler + improvement-loop runtime surfaces** — `routes/lifeos-command-center-routes.js` now exposes `GET /api/v1/lifeos/command-center/bp-priority-scheduler` for the real BP queue liveness and `GET /api/v1/lifeos/command-center/improvement-loop/status` for deterministic runtime improvement proposals. The command center can now read whether the canonical queue is actually enabled/recent instead of inferring continuity from older overnight sidecars. | Runtime audit found a truth leak: the cockpit could report system maturity while the canonical autonomous queue was disabled. These endpoints make the cockpit read the real queue and the real improvement backlog, not theater. | ✅ local syntax + route import checks; ✅ readiness/improvement status builders exercised locally | BuilderOS runtime truth surfaces |

@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-26 — socialmediaos deps-object mount after MOS-P1-003 regen; autoWire remount on signature change.
+**Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
 
 | Field | Value |
 |---|---|
@@ -204,6 +204,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-29 | **`startup/boot-domains.js`** — `startNeverStopProductFactoryScheduler` called in `bootBuilderOSPriorityQueue`. Expansion lane now boots automatically alongside the canonical BP scheduler. | Never-stop factory needed boot-time start; was only wired in the scheduler service itself. | AM19 | pending deploy |
 | 2026-06-26 | **`startup/register-runtime-routes.js`** — deps-object mount `createSocialmediaosRoutes({ pool, requireKey, logger })` after MOS-P1-003 regen. | Prior (app,ctx) mount wrong after route factory regen. | ⚠️ redeploy + acceptance | intake execute |
 | 2026-06-26 | **`startup/register-runtime-routes.js`** — socialmediaos mount: `createSocialmediaosRoutes(app, { pool, requireKey, rk, logger })` — autoWire had used deps-object call on (app,ctx) factory. | Deploy FAILED TypeError ctx undefined line 530. | ✅ superseded by deps-object regen | intake execute |
 | 2026-06-13 | **`startup/register-runtime-routes.js`** — restore missing `import { createLifeOSChatRoutes }` (ReferenceError crashed Railway boot on deploy 2728eed). | GAP-FILL: deploy FAILED `createLifeOSChatRoutes is not defined` at register-runtime-routes.js:294 — import dropped while chat mount remained. | ✅ node --check | redeploy |

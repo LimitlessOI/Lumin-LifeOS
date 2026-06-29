@@ -65,6 +65,7 @@ import {
 import { buildSupervisedAutonomyReadiness } from '../services/supervised-autonomy-readiness.js';
 import { buildBuilderOSSystemAlphaReadiness } from '../services/builderos-system-alpha-readiness.js';
 import { getBpPrioritySchedulerStatus } from '../services/builderos-bp-priority-scheduler.js';
+import { getNeverStopProductFactoryStatus } from '../services/never-stop-product-factory-scheduler.js';
 import { buildBuilderOSImprovementLoopStatus } from '../services/builderos-improvement-loop.js';
 import {
   buildCommunicationEvidence,
@@ -417,6 +418,21 @@ export function createCommandCenterAggregateRoutes({ requireKey, pool }) {
       res.json({
         read_path: 'GET /api/v1/lifeos/command-center/bp-priority-scheduler',
         ...getBpPrioritySchedulerStatus(),
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/never-stop-product-factory
+   * Continuous product expansion lane — only halts on token exhaustion.
+   */
+  router.get('/api/v1/lifeos/command-center/never-stop-product-factory', requireKey, async (req, res, next) => {
+    try {
+      res.json({
+        read_path: 'GET /api/v1/lifeos/command-center/never-stop-product-factory',
+        ...getNeverStopProductFactoryStatus(),
       });
     } catch (err) {
       next(err);

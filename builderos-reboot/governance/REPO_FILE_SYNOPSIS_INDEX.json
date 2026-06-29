@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T16:08:16.465Z",
+  "generated_at": "2026-06-29T16:09:25.997Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11372,
   "files": [
@@ -35600,9 +35600,9 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 103419,
-      "mtime": "2026-06-29T03:40:52.034Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z"
+      "bytes": 103689,
+      "mtime": "2026-06-29T16:08:41.555Z",
+      "indexed_at": "2026-06-29T16:09:25.997Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -35681,9 +35681,9 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 47349,
-      "mtime": "2026-06-26T01:22:50.073Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z"
+      "bytes": 47644,
+      "mtime": "2026-06-29T16:09:08.663Z",
+      "indexed_at": "2026-06-29T16:09:25.997Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -66333,7 +66333,7 @@
       "synopsis": "routes/lifeos-command-center-routes.js",
       "bytes": 61641,
       "mtime": "2026-06-29T07:53:32.635Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z",
+      "indexed_at": "2026-06-29T16:09:25.997Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
@@ -67940,7 +67940,7 @@
       "synopsis": "Push FP V2 production env defaults to Railway managed env (lane intel + prediction score).",
       "bytes": 1527,
       "mtime": "2026-06-29T07:53:32.714Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z"
+      "indexed_at": "2026-06-29T16:09:25.997Z"
     },
     {
       "path": "scripts/enforce-mutation-ban.mjs",
@@ -86597,7 +86597,7 @@
       "synopsis": "boot-domains.js",
       "bytes": 19264,
       "mtime": "2026-06-29T07:53:32.624Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z",
+      "indexed_at": "2026-06-29T16:09:25.997Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]

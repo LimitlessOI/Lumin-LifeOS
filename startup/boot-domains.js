@@ -18,6 +18,7 @@ import { execSync } from 'child_process';
 import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work-guard.js';
 import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
 import { startBpPriorityScheduler } from '../services/builderos-bp-priority-scheduler.js';
+import { startNeverStopProductFactoryScheduler } from '../services/never-stop-product-factory-scheduler.js';
 
 function scheduleAsyncInterval(task, intervalMs, logger, label) {
   return setInterval(() => {
@@ -431,6 +432,11 @@ async function bootBuilderOSPriorityQueue(deps) {
     startBpPriorityScheduler({ logger });
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[BOOT] BuilderOS BP_PRIORITY scheduler failed to start (non-fatal)');
+  }
+  try {
+    startNeverStopProductFactoryScheduler({ logger });
+  } catch (err) {
+    logger?.warn?.({ err: err.message }, '[BOOT] Never-stop product factory failed to start (non-fatal)');
   }
 }
 
