@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T09:05:32.130Z",
+  "generated_at": "2026-06-29T15:52:59.873Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11366,
   "files": [
@@ -21329,9 +21329,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 17299,
-      "mtime": "2026-06-29T08:54:08.717Z",
-      "indexed_at": "2026-06-29T08:54:41.028Z",
+      "bytes": 17314,
+      "mtime": "2026-06-29T15:52:35.506Z",
+      "indexed_at": "2026-06-29T15:52:59.873Z",
       "synopsis_index_only": true
     },
     {
@@ -21488,9 +21488,9 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS HARNESS TOOLS.",
-      "bytes": 10953,
-      "mtime": "2026-06-26T06:27:19.408Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z",
+      "bytes": 11034,
+      "mtime": "2026-06-29T15:52:35.508Z",
+      "indexed_at": "2026-06-29T15:52:59.873Z",
       "synopsis_index_only": true
     },
     {
@@ -35456,9 +35456,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 50978,
-      "mtime": "2026-06-29T09:05:18.375Z",
-      "indexed_at": "2026-06-29T09:05:32.130Z"
+      "bytes": 50891,
+      "mtime": "2026-06-29T15:52:44.074Z",
+      "indexed_at": "2026-06-29T15:52:59.873Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -67256,9 +67256,9 @@
     {
       "path": "scripts/bp-priority-never-stop.mjs",
       "synopsis": "Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.",
-      "bytes": 5732,
-      "mtime": "2026-06-29T07:53:32.691Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z",
+      "bytes": 5607,
+      "mtime": "2026-06-29T15:51:58.343Z",
+      "indexed_at": "2026-06-29T15:52:59.873Z",
       "ssot": [
         "builderos-reboot/BP_PRIORITY.json",
         "docs/products/AUTHORITY_BOUNDARIES.md"
@@ -67556,9 +67556,9 @@
     {
       "path": "scripts/builderos-pre-build-gate.mjs",
       "synopsis": "Pre-build gate for canonical harness — ready, deploy, doctrine, env.",
-      "bytes": 4885,
-      "mtime": "2026-06-27T17:13:00.437Z",
-      "indexed_at": "2026-06-29T08:39:43.206Z",
+      "bytes": 4928,
+      "mtime": "2026-06-29T15:52:22.101Z",
+      "indexed_at": "2026-06-29T15:52:59.873Z",
       "ssot": [
         "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json"
       ]

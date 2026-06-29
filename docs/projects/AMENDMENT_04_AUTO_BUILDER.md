@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-29 — LifeRE blueprint complete (machine alpha 12/12 PASS); Point B advanced to LifeOS Consumer Auth; BUILDEROS_NEVER_STOP added to managed env allowlist; LifeOS user auth blueprint added (rank 11); scheduler boot-window detection gap fixed; never-stop-product-factory.js + never-stop-product-factory-scheduler.js committed (were missing from git, causing Railway crash).
+**Last Updated:** 2026-06-29 — crash-loop fix: pre-build gate fail no longer triggers tryRedeploy (was killing the server); PBG-06 --allow-stale now actually bypasses the deploy SHA check (was identical condition both ways — Railway git fetch fails without credentials, causing infinite self-destruct loop).
 
 ---
 

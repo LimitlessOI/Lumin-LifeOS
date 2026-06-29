@@ -100,8 +100,8 @@ const deploy = spawnSync('npm', deployArgs, { cwd: ROOT, encoding: 'utf8' });
 checks.push(
   check(
     'PBG-06',
-    allowStale ? deploy.status === 0 : deploy.status === 0,
-    deploy.status === 0 ? 'deploy SHA fresh' : 'deploy stale or diverged (use --allow-stale to bypass)',
+    allowStale ? true : deploy.status === 0,
+    deploy.status === 0 ? 'deploy SHA fresh' : allowStale ? 'deploy stale (bypassed by --allow-stale)' : 'deploy stale or diverged (use --allow-stale to bypass)',
   ),
 );
 

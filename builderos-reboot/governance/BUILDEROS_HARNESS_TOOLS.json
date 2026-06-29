@@ -1,12 +1,12 @@
 {
   "schema": "builderos_harness_tools_v1",
   "updated_at": "2026-06-26",
-  "purpose": "BuilderOS machine harness — tools required for 4 pillars (not LifeRE product). Honest wiring truth for agents.",
+  "purpose": "BuilderOS machine harness \u2014 tools required for 4 pillars (not LifeRE product). Honest wiring truth for agents.",
   "authority": "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json",
   "audit_command": "npm run builderos:harness:audit",
   "pillars": {
     "envisioned_workflow": {
-      "label": "Mission → blueprint → build → receipt",
+      "label": "Mission \u2192 blueprint \u2192 build \u2192 receipt",
       "tools": [
         {
           "id": "working_definition",
@@ -110,7 +110,7 @@
           "npm": "builderos:intake:regression:acceptance",
           "tier": "required",
           "status": "wired",
-          "note": "Golden intake sessions — acceptance-only catches builder drift without full rebuild"
+          "note": "Golden intake sessions \u2014 acceptance-only catches builder drift without full rebuild"
         },
         {
           "id": "intake_ready_gate",
@@ -140,7 +140,7 @@
           "npm": null,
           "tier": "platform_gap",
           "status": "partial",
-          "note": "CLI/factory only — production spine uses canonical /build until cutover receipt"
+          "note": "CLI/factory only \u2014 production spine uses canonical /build until cutover receipt"
         }
       ]
     },
@@ -175,7 +175,7 @@
           "npm": null,
           "tier": "recommended",
           "status": "wired",
-          "note": "Founder path — not canonical harness primary"
+          "note": "Founder path \u2014 not canonical harness primary"
         },
         {
           "id": "builder_retry_plan",
@@ -256,7 +256,7 @@
         "npm": "builderos:dispatch:gate",
         "tier": "required",
         "status": "wired",
-        "note": "Claude Code PreToolUse pattern — fail-closed before every autonomous dispatch"
+        "note": "Claude Code PreToolUse pattern \u2014 fail-closed before every autonomous dispatch"
       },
       {
         "id": "worktree_supervisor",
@@ -264,7 +264,7 @@
         "npm": null,
         "tier": "parallel",
         "status": "wired",
-        "note": "Parallel workers — not primary canonical path"
+        "note": "Parallel workers \u2014 not primary canonical path"
       }
     ]
   },
@@ -298,14 +298,14 @@
     {
       "rank": 1,
       "id": "deploy_stale_local",
-      "summary": "Harness fixes local — production /build may lag until commit+push+redeploy",
+      "summary": "Harness fixes local \u2014 production /build may lag until commit+push+redeploy",
       "tool": "builderos:deploy:verify",
       "fix": "npm run builderos:deploy:verify && commit push redeploy"
     },
     {
       "rank": 2,
       "id": "factory_cutover",
-      "summary": "execute-mission.mjs uses factory execute-step; canonical harness uses /build — two hot paths",
+      "summary": "execute-mission.mjs uses factory execute-step; canonical harness uses /build \u2014 two hot paths",
       "tool": "builderos:mission-run --canonical",
       "fix": "Use mission-run for MECHANICAL; factory path for full ARC stack"
     },
@@ -330,5 +330,6 @@
       "tool": "builderos:deploy:verify",
       "fix": "Deploy routes patch from harness audit session"
     }
-  ]
+  ],
+  "_last_updated": "2026-06-29-crash-loop-fix"
 }

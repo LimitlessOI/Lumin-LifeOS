@@ -308,6 +308,6 @@
       "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/FOUNDER_PACKET.md"
     }
   ],
-  "_last_updated": "2026-06-29",
+  "_last_updated": "2026-06-29-crash-loop-fix",
   "_note": ""
 }
