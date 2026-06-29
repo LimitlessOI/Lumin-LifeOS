@@ -56,7 +56,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "b714fbe925818b1c57694cac750062037b018c72291d2243c36b511e50ec5b3d"
+        "sha256": "85c611cd8466cb99cdc0da625842384fbc2b437f7c0285c860686406d8dce73d"
       },
       "sandbox_boundary": "db/migrations/**",
       "authority_owner": "ARC",
