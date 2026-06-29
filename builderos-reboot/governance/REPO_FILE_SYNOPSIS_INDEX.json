@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T08:54:41.028Z",
+  "generated_at": "2026-06-29T09:05:32.130Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11363,
+  "file_count": 11366,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -35456,9 +35456,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 50975,
-      "mtime": "2026-06-29T08:53:43.606Z",
-      "indexed_at": "2026-06-29T08:54:41.028Z"
+      "bytes": 50978,
+      "mtime": "2026-06-29T09:05:18.375Z",
+      "indexed_at": "2026-06-29T09:05:32.130Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -69056,6 +69056,16 @@
       "indexed_at": "2026-06-29T08:39:43.206Z"
     },
     {
+      "path": "scripts/run-never-stop-product-factory.mjs",
+      "synopsis": "Local never-stop product factory daemon — runs forever; only pauses on token exhaustion.",
+      "bytes": 2461,
+      "mtime": "2026-06-29T07:53:32.682Z",
+      "indexed_at": "2026-06-29T09:05:32.130Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
       "path": "scripts/run-objective-1-until-pass.mjs",
       "synopsis": "Non-stop Objective 1 runner — blueprint exists → build → acceptance until PASS or UNSOLVED.",
       "bytes": 5526,
@@ -84501,6 +84511,26 @@
       "bytes": 654,
       "mtime": "2026-06-21T21:39:16.738Z",
       "indexed_at": "2026-06-29T08:39:43.206Z"
+    },
+    {
+      "path": "services/never-stop-product-factory-scheduler.js",
+      "synopsis": "Railway + local scheduler — never-stop product factory (only halts on token exhaustion).",
+      "bytes": 4775,
+      "mtime": "2026-06-29T07:53:32.674Z",
+      "indexed_at": "2026-06-29T09:05:32.130Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "services/never-stop-product-factory.js",
+      "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
+      "bytes": 9633,
+      "mtime": "2026-06-29T07:53:32.665Z",
+      "indexed_at": "2026-06-29T09:05:32.130Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
     },
     {
       "path": "services/nutrition-service/index.js",

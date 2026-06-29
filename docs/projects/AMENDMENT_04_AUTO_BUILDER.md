@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-29 — LifeRE blueprint complete (machine alpha 12/12 PASS); Point B advanced to LifeOS Consumer Auth; BUILDEROS_NEVER_STOP added to managed env allowlist; LifeOS user auth blueprint added (rank 11); scheduler boot-window detection gap fixed (boot_at + in_boot_window + last_skip_reason added to state so the system can distinguish "warming up" from "genuinely stuck").
+**Last Updated:** 2026-06-29 — LifeRE blueprint complete (machine alpha 12/12 PASS); Point B advanced to LifeOS Consumer Auth; BUILDEROS_NEVER_STOP added to managed env allowlist; LifeOS user auth blueprint added (rank 11); scheduler boot-window detection gap fixed; never-stop-product-factory.js + never-stop-product-factory-scheduler.js committed (were missing from git, causing Railway crash).
 
 ---
 
