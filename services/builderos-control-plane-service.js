@@ -248,7 +248,7 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
     return rows;
   }
 
-  async function canMarkBuildDone({ task_id, allow_exception = false } = {}) {
+  async function canMarkBuildDone({ task_id, allow_exception = false, pending = {} } = {}) {
     const health = await getMeasurementHealth();
     if (health.status === 'RED' && !allow_exception) {
       return { allowed: false, reason: 'measurement_coverage_red', proof_status: 'pending', health };
@@ -259,8 +259,15 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
       return { allowed: false, reason: 'no_build_ledger_row', proof_status: 'pending' };
     }
 
-    let hasToken = Boolean(build.token_receipt_id || build.unmetered_exception_id);
-    let hasOil = Boolean(build.oil_receipt_id);
+    const merged = {
+      ...build,
+      ...(pending.end_time && { end_time: pending.end_time }),
+      ...(pending.token_receipt_id && { token_receipt_id: pending.token_receipt_id }),
+      ...(pending.oil_receipt_id && { oil_receipt_id: pending.oil_receipt_id }),
+    };
+
+    let hasToken = Boolean(merged.token_receipt_id || merged.unmetered_exception_id);
+    let hasOil = Boolean(merged.oil_receipt_id);
 
     if (!hasToken && pool) {
       const tok = await pool.query(
@@ -288,19 +295,19 @@ export function createBuilderOSControlPlaneService({ pool, tokenAccounting, logg
       hasOil = oil.rows.length > 0;
     }
 
-    const complete = hasToken && build.end_time && hasOil;
-    const partial = hasToken || build.end_time || hasOil;
+    const complete = hasToken && merged.end_time && hasOil;
+    const partial = hasToken || merged.end_time || hasOil;
     const proof_status = complete ? 'complete' : allow_exception ? 'exception' : partial ? 'partial' : 'pending';
 
     if (!complete && !allow_exception) {
       const missing = [];
       if (!hasToken) missing.push('token_receipt');
-      if (!build.end_time) missing.push('build_end_time');
+      if (!merged.end_time) missing.push('build_end_time');
       if (!hasOil) missing.push('oil_receipt');
-      return { allowed: false, reason: `missing_proof:${missing.join(',')}`, proof_status, hasToken, hasOil, build };
+      return { allowed: false, reason: `missing_proof:${missing.join(',')}`, proof_status, hasToken, hasOil, build: merged };
     }
 
-    return { allowed: true, proof_status, hasToken, hasOil, build };
+    return { allowed: true, proof_status, hasToken, hasOil, build: merged };
   }
 
   async function getMeasurementHealth() {

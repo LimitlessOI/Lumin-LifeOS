@@ -99,9 +99,7 @@ export function wrapChairHumanSummary(truth, technicalReply) {
   if (shouldUsePersonalLuminCard(truth)) {
     const scrubbed = scrubCounselTheater(technicalReply || truth.human_summary || '', commandTruth);
     if (isCounsel) {
-      return isDirectLuminConnection(truth)
-        ? formatConversationalLuminReply(truth, scrubbed)
-        : formatDirectConnectionReply(truth, scrubbed);
+      return formatConversationalLuminReply(truth, scrubbed);
     }
     return scrubbed;
   }

@@ -8,7 +8,7 @@
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
 **Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
 **Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`  
-**Last Updated:** 2026-06-29 — founder-chat-health scope fix; intake_blueprint no longer hijacked by `do:` build routing.
+**Last Updated:** 2026-06-29 — Lumin personal routing emits 'lumin' channel; personal Lumin card returns plain prose; founder-communication-format personal_life skips counsel header; founder-chat-health scope fix; intake_blueprint no longer hijacked by `do:` build routing.
 
 ## Mission
 

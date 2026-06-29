@@ -4,7 +4,7 @@
 _(formerly AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md)_
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-28 — BP readiness/product-readiness sync now carries artifact freshness and founder-usability truth into control-plane reporting for Point B products.
+**Last Updated:** 2026-06-29 — canMarkBuildDone accepts `pending` overlay so callers can supply pre-commit evidence before DB row updates; BP readiness sync carries artifact freshness and founder-usability truth.
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.
@@ -254,6 +254,7 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-06-29 | **`canMarkBuildDone` pending evidence support** — `services/builderos-control-plane-service.js` — function now accepts `pending = { end_time, token_receipt_id, oil_receipt_id }` parameter; creates `merged` overlay from DB row + pending values so proof checks use pre-commit evidence before row is updated. | Callers completing a build needed to supply end-time + receipts before the DB UPDATE, so `canMarkBuildDone` had to validate the merged state, not just the stale row. | ✅ test pass | `node --test tests/builderos-control-plane-pending-evidence.test.js` |
 | 2026-06-28 | **`services/tsos-platform-kernel.js`** — kernel returns `started_at`, `ended_at`, `duration_ms` on every `kernelExecute` result. | Operation timing must be in the ballpark on all kernel paths. | ✅ | deploy |
 | 2026-06-22 | **`services/bp-priority-sync.js`** — `checkOrphanProductPassReceipts` includes `scrapped_items[].receipt_path` (Voice Rail SCRAPPED_SALVAGE). | Adam scrapped Voice Rail; PASS receipt stays registered under scrapped not active queue. | BP guardrails PASS |
 | 2026-06-13 | **`services/tsos-platform-kernel.js`** — `wrapBuild()` now sets request marker `req.__kernel_managed_build = true` for wrapped `/builder/build` calls and clears it in `finally`, allowing route-layer guards to distinguish kernel-managed sequencing. **`routes/lifeos-council-builder-routes.js`** — `evaluateBuildDoneGateForBuildResponse()` and `evaluateBuildCompletionForBuildResponse()` now support `kernelManaged` deferral mode; `/build` passes this marker and, when set, defers terminal DONE/completion checks to kernel authority (`done_gate_deferred_to_kernel`, `completion_deferred_to_kernel`) instead of early route blocking. **`tests/builderos-build-done-gate-route-wiring.test.js`** and **`tests/builderos-completion-authority.test.js`** add regression coverage for kernel-managed deferral and non-kernel missing-proof blocking. | Fix circular proof ordering found in live job `881754fc-5674-4e49-8f63-4cfe137be606`: route-level DONE gate ran before kernel/control-plane could write `build_end_time`/token/OIL proof, causing false early `missing_proof` blocks. |

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T07:52:31.280Z",
+  "generated_at": "2026-06-29T08:14:54.724Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11331,
   "files": [
@@ -21608,9 +21608,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3430519,
-      "mtime": "2026-06-29T04:00:13.355Z",
-      "indexed_at": "2026-06-29T04:00:24.692Z"
+      "bytes": 3430509,
+      "mtime": "2026-06-29T08:14:12.659Z",
+      "indexed_at": "2026-06-29T08:14:54.724Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -35080,9 +35080,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 8445,
-      "mtime": "2026-06-29T03:53:03.138Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z"
+      "bytes": 8597,
+      "mtime": "2026-06-29T08:13:38.159Z",
+      "indexed_at": "2026-06-29T08:14:54.724Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -35433,9 +35433,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 522554,
-      "mtime": "2026-06-29T04:00:03.149Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z"
+      "bytes": 523812,
+      "mtime": "2026-06-29T08:13:24.735Z",
+      "indexed_at": "2026-06-29T08:14:54.724Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -35755,9 +35755,9 @@
     {
       "path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
       "synopsis": "BuilderOS Control Plane",
-      "bytes": 16458,
-      "mtime": "2026-06-29T03:40:52.176Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z"
+      "bytes": 17076,
+      "mtime": "2026-06-29T08:14:40.023Z",
+      "indexed_at": "2026-06-29T08:14:54.724Z"
     },
     {
       "path": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
@@ -80765,9 +80765,9 @@
     {
       "path": "services/builderos-control-plane-service.js",
       "synopsis": "BuilderOS Control Plane — measurement aggregation + DONE gate + build ledger.",
-      "bytes": 15523,
-      "mtime": "2026-06-27T23:29:26.570Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "bytes": 15835,
+      "mtime": "2026-06-29T08:08:05.647Z",
+      "indexed_at": "2026-06-29T08:14:54.724Z",
       "ssot": [
         "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md"
       ]
@@ -81009,8 +81009,8 @@
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
       "bytes": 11365,
-      "mtime": "2026-06-29T03:51:20.317Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "mtime": "2026-06-29T08:09:23.005Z",
+      "indexed_at": "2026-06-29T08:14:54.724Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -82078,9 +82078,9 @@
     {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
-      "bytes": 6100,
-      "mtime": "2026-06-27T23:29:27.361Z",
-      "indexed_at": "2026-06-29T04:00:11.890Z",
+      "bytes": 6004,
+      "mtime": "2026-06-29T08:10:36.063Z",
+      "indexed_at": "2026-06-29T08:14:54.724Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
