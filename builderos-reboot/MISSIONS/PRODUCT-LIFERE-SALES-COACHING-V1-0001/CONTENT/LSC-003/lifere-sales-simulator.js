@@ -3,7 +3,6 @@
  * @ssot docs/products/lifere/PRODUCT_HOME.md
  */
 import { randomUUID } from 'node:crypto';
-import { createReadStream } from 'node:fs';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';

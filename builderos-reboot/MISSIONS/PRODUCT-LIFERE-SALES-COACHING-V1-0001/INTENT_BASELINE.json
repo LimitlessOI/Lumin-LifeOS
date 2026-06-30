@@ -1,0 +1,41 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-06-29",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "An agent picks a real estate scenario, practices against an AI client that adapts to their personality quadrant, receives real-time coaching per turn, and gets a scored debrief at the end.",
+  "user": "LifeRE agent in training mode",
+  "pain": "Agents learn objection handling by losing real deals. There is no safe environment to practice the same scenario 20 times with personalized coaching.",
+  "value": "Unlimited reps against calibrated AI clients, with a coach whispering in their ear every turn and a post-session debrief that identifies exactly what to change.",
+  "success_metrics": [
+    "npm run lifere:sales-coaching:v1-acceptance exits 0",
+    "Scenario list returns 5 scenarios including expired_listing",
+    "Agent turns return clientResponse + coachingNote",
+    "End session returns debrief with scores.overall as a number"
+  ],
+  "failure_metrics": [
+    "agentTurn UPDATE fails because updated_at column missing",
+    "Session start fails with DB error",
+    "Debrief AI response is unparseable",
+    "GET score endpoint returns 404 after completed session"
+  ],
+  "constraints": [
+    "Text simulator only — no live call listening in this BP",
+    "No voice/audio in this BP",
+    "No UI in this BP — API-only Phase 1",
+    "Must execute after PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001 (SSM-007 wires register-runtime-routes.js which LSC-006 builds on)"
+  ],
+  "scope_boundary": "Per FOUNDER_PACKET.md — API-only, 5 scenarios, 10 objections, personality quadrant detection, post-session debrief.",
+  "unacceptable_result": "Acceptance script exits 1; agentTurn fails due to missing updated_at column; debrief scores are absent",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 12",
+  "point_model": {
+    "A": "Vision — Adam provides FP in development stage",
+    "B": "Chair locks handoff — corridor protected; Adam done until Alpha",
+    "C": "Alpha — Adam evaluates outcome only"
+  }
+}

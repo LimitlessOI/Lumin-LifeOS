@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-30T03:26:40.535Z",
+  "generated_at": "2026-06-30T03:44:52.320Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11605,
+  "file_count": 11611,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28214,19 +28214,27 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/ACCEPTANCE_TESTS.json",
+      "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
+      "bytes": 1495,
+      "mtime": "2026-06-30T03:42:50.378Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 8160,
-      "mtime": "2026-06-30T03:24:42.079Z",
-      "indexed_at": "2026-06-30T03:26:40.535Z",
+      "mtime": "2026-06-30T03:41:22.503Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-001/20260629_lifere_sales_coaching.sql",
       "synopsis": "Database migration — 20260629_lifere_sales_coaching.sql",
-      "bytes": 1695,
-      "mtime": "2026-06-30T03:15:14.182Z",
-      "indexed_at": "2026-06-30T03:26:40.535Z"
+      "bytes": 1723,
+      "mtime": "2026-06-30T03:40:09.824Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-002/lifere-objection-library.json",
@@ -28239,9 +28247,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-003/lifere-sales-simulator.js",
       "synopsis": "LifeRE sales coaching simulator — AI plays the client, real-time coaching, objection mastery.",
-      "bytes": 8548,
-      "mtime": "2026-06-30T03:17:06.960Z",
-      "indexed_at": "2026-06-30T03:26:40.535Z",
+      "bytes": 8504,
+      "mtime": "2026-06-30T03:40:41.965Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -28279,6 +28287,22 @@
       "bytes": 3379,
       "mtime": "2026-06-30T03:19:40.079Z",
       "indexed_at": "2026-06-30T03:26:40.535Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2341,
+      "mtime": "2026-06-30T03:41:57.443Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/PRE_ARC_INPUT_PACKET.json",
+      "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
+      "bytes": 2156,
+      "mtime": "2026-06-30T03:42:15.419Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-MARKETINGOS-SALVAGE-0001/ACCEPTANCE_TESTS.json",
@@ -28344,11 +28368,19 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/ACCEPTANCE_TESTS.json",
+      "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
+      "bytes": 1762,
+      "mtime": "2026-06-30T03:42:36.950Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 9078,
-      "mtime": "2026-06-30T03:24:38.517Z",
-      "indexed_at": "2026-06-30T03:26:40.535Z",
+      "mtime": "2026-06-30T03:41:08.032Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
       "synopsis_index_only": true
     },
     {
@@ -28384,9 +28416,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql",
       "synopsis": "Database migration — 20260629_socialmediaos_coaching.sql",
-      "bytes": 707,
-      "mtime": "2026-06-30T03:13:27.925Z",
-      "indexed_at": "2026-06-30T03:26:40.535Z"
+      "bytes": 1003,
+      "mtime": "2026-06-30T03:40:02.562Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html",
@@ -28398,9 +28430,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs",
       "synopsis": "SocialMediaOS session MVP acceptance test — coaching Q&A, content generation, export.",
-      "bytes": 8356,
-      "mtime": "2026-06-30T03:15:00.872Z",
-      "indexed_at": "2026-06-30T03:26:40.535Z"
+      "bytes": 8446,
+      "mtime": "2026-06-30T03:40:35.209Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js",
@@ -28418,6 +28450,22 @@
       "bytes": 2615,
       "mtime": "2026-06-30T03:19:19.202Z",
       "indexed_at": "2026-06-30T03:26:40.535Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/INTENT_BASELINE.json",
+      "synopsis": "BuilderOS artifact — INTENT BASELINE.",
+      "bytes": 2114,
+      "mtime": "2026-06-30T03:41:46.534Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/PRE_ARC_INPUT_PACKET.json",
+      "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
+      "bytes": 2378,
+      "mtime": "2026-06-30T03:42:09.322Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/ACCEPTANCE_SPEC.md",
@@ -70915,9 +70963,9 @@
     {
       "path": "scripts/run-socialmediaos-session-acceptance.mjs",
       "synopsis": "SocialMediaOS session MVP acceptance test — coaching Q&A, content generation, export.",
-      "bytes": 8356,
-      "mtime": "2026-06-30T03:22:47.004Z",
-      "indexed_at": "2026-06-30T03:26:40.535Z"
+      "bytes": 8446,
+      "mtime": "2026-06-30T03:43:01.796Z",
+      "indexed_at": "2026-06-30T03:44:52.320Z"
     },
     {
       "path": "scripts/run-system-path.mjs",

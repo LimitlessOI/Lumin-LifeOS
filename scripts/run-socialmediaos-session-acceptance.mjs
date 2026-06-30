@@ -121,7 +121,7 @@ async function run() {
 
   // AT-SSM-003: Verify session state is coaching_complete
   console.log('\nAT-SSM-003: Verify session state');
-  const stateRes = await req('GET', `${COACHING_PREFIX}/${sessionId}/state`);
+  const stateRes = await req('GET', `${COACHING_PREFIX}/${sessionId}/state?owner_id=acceptance-test-user`);
   check('AT-SSM-003-ok', stateRes.ok, `status=${stateRes.status}`);
   check('AT-SSM-003-status', stateRes.body.status === 'coaching_complete', `status=${stateRes.body.status}`);
   check('AT-SSM-003-answers', stateRes.body.answers_given === 5, `answers_given=${stateRes.body.answers_given}`);
@@ -139,14 +139,14 @@ async function run() {
 
   // AT-SSM-005: Retrieve content pack
   console.log('\nAT-SSM-005: Retrieve content pack');
-  const packRes = await req('GET', `${COACHING_PREFIX}/${sessionId}/content-pack`);
+  const packRes = await req('GET', `${COACHING_PREFIX}/${sessionId}/content-pack?owner_id=acceptance-test-user`);
   check('AT-SSM-005-ok', packRes.ok, `status=${packRes.status}`);
   check('AT-SSM-005-content', !!packRes.body.content, 'content field missing');
 
   // AT-SSM-006: Export as text
   console.log('\nAT-SSM-006: Export as text');
   try {
-    const exportRes = await fetch(`${ACTIVE_BASE}${COACHING_PREFIX}/${sessionId}/export`, {
+    const exportRes = await fetch(`${ACTIVE_BASE}${COACHING_PREFIX}/${sessionId}/export?owner_id=acceptance-test-user`, {
       headers: { 'x-command-key': KEY },
       signal: AbortSignal.timeout(10000),
     });

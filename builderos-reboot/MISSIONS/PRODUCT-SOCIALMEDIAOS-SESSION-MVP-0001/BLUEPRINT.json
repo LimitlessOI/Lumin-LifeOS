@@ -109,7 +109,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "aaf37f08bd8c61134b2917dd263d440b21d96dcc38973cdd5e0213f29cf865ae"
+        "sha256": "cfa26257e586cc6d25366433c5d6c18dffa0a088b460eece11aad8a1d6fd123b"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql"
@@ -161,7 +161,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "237475cfa964fc93001c75e9d9dd2e8dbf122baadfe7b901408ef46817780a7b"
+        "sha256": "21af6f4a6307a661916650402487ef4811fb056ce9123a79b89f2e4012450120"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs"

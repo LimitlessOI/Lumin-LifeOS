@@ -1,0 +1,59 @@
+{
+  "schema": "pre_arc_input_packet_v2",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "assembled_at": "2026-06-29T00:00:00.000Z",
+  "assembled_by": "Claude Sonnet 4.6 (ARC review pass)",
+  "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
+  "manifest": [
+    {
+      "artifact": "FOUNDER_PACKET",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/FOUNDER_PACKET.md",
+      "exists": true
+    },
+    {
+      "artifact": "INTENT_BASELINE",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/INTENT_BASELINE.json",
+      "exists": true
+    },
+    {
+      "artifact": "BLUEPRINT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/BLUEPRINT.json",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_LSC-001",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-001/20260629_lifere_sales_coaching.sql",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_LSC-002",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-002/lifere-objection-library.json",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_LSC-003",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-003/lifere-sales-simulator.js",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_LSC-004",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-004/lifere-sales-coaching-routes.js",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_LSC-005",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-005/run-lifere-sales-coaching-acceptance.mjs",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_LSC-006",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-006/register-runtime-routes.js",
+      "exists": true
+    },
+    {
+      "artifact": "ACCEPTANCE_TESTS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/ACCEPTANCE_TESTS.json",
+      "exists": true
+    }
+  ]
+}

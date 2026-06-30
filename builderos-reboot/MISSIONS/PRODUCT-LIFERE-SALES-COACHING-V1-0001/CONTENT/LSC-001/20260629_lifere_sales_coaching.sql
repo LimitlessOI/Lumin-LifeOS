@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS lifere_coaching_sessions (
   scores       JSONB,                       -- {talk_ratio, question_count, close_attempts, objections_handled, objections_failed, overall}
   debrief      JSONB,                       -- AI post-session analysis
   created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ,
   completed_at TIMESTAMPTZ
 );
 

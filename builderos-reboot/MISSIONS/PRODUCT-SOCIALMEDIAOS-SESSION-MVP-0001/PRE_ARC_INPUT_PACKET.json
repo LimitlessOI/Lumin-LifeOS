@@ -1,0 +1,64 @@
+{
+  "schema": "pre_arc_input_packet_v2",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "assembled_at": "2026-06-29T00:00:00.000Z",
+  "assembled_by": "Claude Sonnet 4.6 (ARC review pass)",
+  "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
+  "manifest": [
+    {
+      "artifact": "FOUNDER_PACKET",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/FOUNDER_PACKET.md",
+      "exists": true
+    },
+    {
+      "artifact": "INTENT_BASELINE",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/INTENT_BASELINE.json",
+      "exists": true
+    },
+    {
+      "artifact": "BLUEPRINT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BLUEPRINT.json",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_SSM-001",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-001/socialmediaos-coaching-service.js",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_SSM-002",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-002/socialmediaos-content-generator.js",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_SSM-003",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-003/socialmediaos-coaching-routes.js",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_SSM-004",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_SSM-005",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_SSM-006",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs",
+      "exists": true
+    },
+    {
+      "artifact": "CONTENT_SSM-007",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js",
+      "exists": true
+    },
+    {
+      "artifact": "ACCEPTANCE_TESTS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/ACCEPTANCE_TESTS.json",
+      "exists": true
+    }
+  ]
+}

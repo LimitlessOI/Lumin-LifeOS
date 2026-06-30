@@ -32,7 +32,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "3d92e0462cabe3c7679ee0035bdd01b6b38524cce423d5b0da0eb191e84efca9"
+        "sha256": "f14da65e1a671b6d364f8e05e2c39fcd48b92d332f4ad005655b1ad4c0ab9b34"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-001/20260629_lifere_sales_coaching.sql"
@@ -84,7 +84,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d09c98692102ea0e6b208ffe86a1c9d09c37f689e4bc8254d541ab2b0c9b10ba"
+        "sha256": "a43853c369a84dd30be3e80a9d85a93225f98c5cfba636f4ee7843bf73b15e11"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-003/lifere-sales-simulator.js"

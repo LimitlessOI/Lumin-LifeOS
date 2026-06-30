@@ -1,0 +1,51 @@
+[
+  {
+    "test_id": "AT-SSM-001-1",
+    "step_id": "SSM-001",
+    "type": "file_sha256_matches",
+    "target": "services/socialmediaos-coaching-service.js",
+    "expected_sha256": "b252f2e957053add61b55a32e7c22df66b1f3e65245d40ee82261ac298aa84ee"
+  },
+  {
+    "test_id": "AT-SSM-002-1",
+    "step_id": "SSM-002",
+    "type": "file_sha256_matches",
+    "target": "services/socialmediaos-content-generator.js",
+    "expected_sha256": "c41e45955975d498b6b9cc49e6e84ca0e523209d6da28af413d54df94759746b"
+  },
+  {
+    "test_id": "AT-SSM-003-1",
+    "step_id": "SSM-003",
+    "type": "file_sha256_matches",
+    "target": "routes/socialmediaos-coaching-routes.js",
+    "expected_sha256": "3e22e63e017543cf29f03583072b8343d51cb93d86e6904aabbc03de5a1e68bf"
+  },
+  {
+    "test_id": "AT-SSM-004-1",
+    "step_id": "SSM-004",
+    "type": "file_sha256_matches",
+    "target": "db/migrations/20260629_socialmediaos_coaching.sql",
+    "expected_sha256": "cfa26257e586cc6d25366433c5d6c18dffa0a088b460eece11aad8a1d6fd123b"
+  },
+  {
+    "test_id": "AT-SSM-005-1",
+    "step_id": "SSM-005",
+    "type": "file_sha256_matches",
+    "target": "public/overlay/socialmediaos-session.html",
+    "expected_sha256": "4549891f69c0ceb440064eb6df25e724868294c86438eda880cbd4204d88fcc9"
+  },
+  {
+    "test_id": "AT-SSM-006-1",
+    "step_id": "SSM-006",
+    "type": "file_sha256_matches",
+    "target": "scripts/run-socialmediaos-session-acceptance.mjs",
+    "expected_sha256": "21af6f4a6307a661916650402487ef4811fb056ce9123a79b89f2e4012450120"
+  },
+  {
+    "test_id": "AT-SSM-007-1",
+    "step_id": "SSM-007",
+    "type": "file_sha256_matches",
+    "target": "startup/register-runtime-routes.js",
+    "expected_sha256": "15d973c95aff3e6ec1f4d303bbd2d576da9c94c24cf3ee0df2e61246108e33c8"
+  }
+]
