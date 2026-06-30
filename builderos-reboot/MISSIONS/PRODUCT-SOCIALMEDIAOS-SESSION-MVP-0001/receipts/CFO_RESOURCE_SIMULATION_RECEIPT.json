@@ -1,0 +1,38 @@
+{
+  "schema": "cfo_resource_simulation_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "seat": "CFO",
+  "simulated_at": "2026-06-30T03:51:03.207Z",
+  "simulated_by": "factory-core/arc/department-simulations.js",
+  "roi_note": "Greenfield — higher token/time cost",
+  "build_vs_buy": "BUILD",
+  "opportunity_cost": "First working client session: Q&A coaching + AI content pack generation + session UI",
+  "priority_rank": 11,
+  "resource_burden": "low",
+  "constitutional_exemption_applied": false,
+  "fastest_responsible_path": "greenfield build",
+  "verdict": "within_budget",
+  "pass": true,
+  "route_on_fail": "CHAIR",
+  "role_contract": {
+    "seat": "CFO",
+    "contract_version": "2.0A",
+    "title": "CFO",
+    "role": "Resource burden, ROI note, priority fit — never demote constitutional floor on ROI alone"
+  },
+  "measurements": [
+    {
+      "metric_id": "within_budget",
+      "seat": "CFO",
+      "predicted": "yes",
+      "confidence": "THINK",
+      "how_we_know_if_wrong": "Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT",
+      "evidence_path": null,
+      "predicted_at": "2026-06-30T03:51:03.207Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ],
+  "simulation_tier": "COUNCIL_SIM"
+}

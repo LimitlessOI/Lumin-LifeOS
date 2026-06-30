@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-30T03:44:52.320Z",
+  "generated_at": "2026-06-30T03:51:35.275Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11611,
+  "file_count": 11625,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28305,6 +28305,38 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
+      "bytes": 1326,
+      "mtime": "2026-06-30T03:51:03.210Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
+      "bytes": 3405,
+      "mtime": "2026-06-30T03:51:03.210Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
+      "bytes": 2642,
+      "mtime": "2026-06-30T03:51:03.210Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
+      "bytes": 1250,
+      "mtime": "2026-06-30T03:51:03.210Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-MARKETINGOS-SALVAGE-0001/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 238,
@@ -28462,9 +28494,89 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/PRE_ARC_INPUT_PACKET.json",
       "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
-      "bytes": 2378,
-      "mtime": "2026-06-30T03:42:09.322Z",
-      "indexed_at": "2026-06-30T03:44:52.320Z",
+      "bytes": 2909,
+      "mtime": "2026-06-30T03:50:57.288Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
+      "bytes": 1276,
+      "mtime": "2026-06-30T03:51:03.209Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
+      "bytes": 3401,
+      "mtime": "2026-06-30T03:51:03.208Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/CHAIR_HANDOFF_FAILURE.json",
+      "synopsis": "BuilderOS artifact — CHAIR HANDOFF FAILURE.",
+      "bytes": 654,
+      "mtime": "2026-06-30T03:48:01.789Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/CORRIDOR_ENTERED_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — CORRIDOR ENTERED GATE REPORT.",
+      "bytes": 1739,
+      "mtime": "2026-06-30T03:50:57.282Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/FOUNDATION_PIPELINE_REPORT.json",
+      "synopsis": "BuilderOS artifact — FOUNDATION PIPELINE REPORT.",
+      "bytes": 17418,
+      "mtime": "2026-06-30T03:50:57.293Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/IDC_EXIT_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — IDC EXIT GATE REPORT.",
+      "bytes": 1718,
+      "mtime": "2026-06-30T03:50:57.290Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — PRE HANDOFF INTENT GATE REPORT.",
+      "bytes": 2063,
+      "mtime": "2026-06-30T03:50:57.287Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
+      "bytes": 2634,
+      "mtime": "2026-06-30T03:51:03.208Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/UPSTREAM_ROUTE_REPORT.json",
+      "synopsis": "BuilderOS artifact — UPSTREAM ROUTE REPORT.",
+      "bytes": 685,
+      "mtime": "2026-06-30T03:48:01.789Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
+      "bytes": 1242,
+      "mtime": "2026-06-30T03:51:03.209Z",
+      "indexed_at": "2026-06-30T03:51:35.275Z",
       "synopsis_index_only": true
     },
     {

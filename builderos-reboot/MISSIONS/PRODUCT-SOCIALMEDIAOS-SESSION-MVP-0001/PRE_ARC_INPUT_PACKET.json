@@ -1,8 +1,8 @@
 {
   "schema": "pre_arc_input_packet_v2",
   "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
-  "assembled_at": "2026-06-29T00:00:00.000Z",
-  "assembled_by": "Claude Sonnet 4.6 (ARC review pass)",
+  "assembled_at": "2026-06-30T03:50:57.287Z",
+  "assembled_by": "foundation/pre-arc-enrichment.js",
   "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
   "manifest": [
     {
@@ -16,49 +16,65 @@
       "exists": true
     },
     {
-      "artifact": "BLUEPRINT",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BLUEPRINT.json",
+      "artifact": "INTENT_COVERAGE_MAP",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/INTENT_COVERAGE_MAP.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_SSM-001",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-001/socialmediaos-coaching-service.js",
+      "artifact": "ASSET_REUSE_DECISION",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/ASSET_REUSE_DECISION.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_SSM-002",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-002/socialmediaos-content-generator.js",
+      "artifact": "IDC_CONSENSUS_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/IDC_CONSENSUS_RECEIPT.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_SSM-003",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-003/socialmediaos-coaching-routes.js",
+      "artifact": "KNOWN_RISKS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/KNOWN_RISKS.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_SSM-004",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql",
+      "artifact": "KNOWN_ASSUMPTIONS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/KNOWN_ASSUMPTIONS.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_SSM-005",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html",
+      "artifact": "KNOWN_CONTRADICTIONS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/KNOWN_CONTRADICTIONS.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_SSM-006",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs",
+      "artifact": "DO_NOT_INVENT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/DO_NOT_INVENT.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_SSM-007",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js",
+      "artifact": "CHAIR_HANDOFF_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CHAIR_HANDOFF_RECEIPT.json",
       "exists": true
     },
     {
-      "artifact": "ACCEPTANCE_TESTS",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/ACCEPTANCE_TESTS.json",
+      "artifact": "SNT_INTENT_ATTACK_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
+      "exists": true
+    },
+    {
+      "artifact": "CHAIR_FORECAST_SIMULATION_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+      "exists": true
+    },
+    {
+      "artifact": "CFO_RESOURCE_SIMULATION_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
+      "exists": true
+    },
+    {
+      "artifact": "WISDOM_REVIEW_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
       "exists": true
     }
-  ]
+  ],
+  "complete": true
 }

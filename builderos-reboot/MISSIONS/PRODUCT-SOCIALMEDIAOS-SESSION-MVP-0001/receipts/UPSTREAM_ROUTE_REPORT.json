@@ -1,0 +1,19 @@
+{
+  "schema": "upstream_route_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "route_to": "CHAIR",
+  "escalate_to_founder": true,
+  "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "violations": [
+    "development:FOUNDER_PACKET missing Problem",
+    "development:intent_not_clear pain:MISSING"
+  ],
+  "flow": [
+    "ARC → Chair (handoff incomplete)",
+    "Chair → Adam (Chair acknowledges synthesis failure)",
+    "resolve → back down chain"
+  ],
+  "lesson": "Incomplete handoff clarity = Chair failure. Architect pushes upstream."
+}

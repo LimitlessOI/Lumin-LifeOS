@@ -1,0 +1,457 @@
+{
+  "schema": "foundation_pipeline_report_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "at": "2026-06-30T03:50:57.273Z",
+  "doctrine": "FOUNDER_PACKET_V2 full machine path",
+  "stages": {
+    "development": {
+      "ok": true,
+      "stage": "development",
+      "deptSims": {
+        "schema": "department_simulations_v1",
+        "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+        "simulated_at": "2026-06-30T03:50:57.285Z",
+        "departments": {
+          "SNT": {
+            "schema": "snt_intent_attack_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "seat": "SNT",
+            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "attacks_run": 4,
+            "attacks": [
+              {
+                "claim": "Desired outcome is stated",
+                "pass": true,
+                "failure_scenario": "Builder/ARC invents product scope",
+                "severity": "blocking",
+                "evidence": "found in FOUNDER_PACKET or INTENT_BASELINE",
+                "evidence_if_wrong": "Acceptance FAIL or Builder/ARC invents product scope",
+                "recommended_action": "none"
+              },
+              {
+                "claim": "Success is measurable",
+                "pass": true,
+                "failure_scenario": "Alpha claimed without behavioral test",
+                "severity": "blocking",
+                "evidence": "found in FOUNDER_PACKET or INTENT_BASELINE",
+                "evidence_if_wrong": "Acceptance FAIL or Alpha claimed without behavioral test",
+                "recommended_action": "none"
+              },
+              {
+                "claim": "Failure mode defined",
+                "pass": true,
+                "failure_scenario": "Silent failure at Alpha",
+                "severity": "blocking",
+                "evidence": "found in FOUNDER_PACKET or INTENT_BASELINE",
+                "evidence_if_wrong": "Acceptance FAIL or Silent failure at Alpha",
+                "recommended_action": "none"
+              },
+              {
+                "claim": "Scope boundary present",
+                "pass": true,
+                "failure_scenario": "Scope creep during build",
+                "severity": "advisory",
+                "evidence": "found in FOUNDER_PACKET or INTENT_BASELINE",
+                "recommended_action": "none"
+              }
+            ],
+            "blocking_count": 0,
+            "verdict": "intent_clearance_yes",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "SNT",
+              "contract_version": "2.0A",
+              "title": "Sentinel",
+              "role": "Adversarial review — intent fidelity, drift, translation attack, reality invalidation"
+            },
+            "measurements": [
+              {
+                "metric_id": "intent_measurable",
+                "seat": "SNT",
+                "predicted": "clear",
+                "confidence": "THINK",
+                "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
+                "evidence_path": null,
+                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              },
+              {
+                "metric_id": "blocking_attack_count",
+                "seat": "SNT",
+                "predicted": 0,
+                "confidence": "KNOW",
+                "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
+                "evidence_path": null,
+                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          },
+          "CHAIR": {
+            "schema": "chair_forecast_simulation_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "seat": "CHAIR",
+            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "scenarios_run": 4,
+            "predictions": [
+              {
+                "horizon": "6_months",
+                "confidence": "THINK",
+                "note": "Near-term staging product — evidence from FP scope",
+                "prediction": "Intent remains valid at 6_months for PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [],
+                "expected_timeline": "6_months",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              },
+              {
+                "horizon": "1_year",
+                "confidence": "THINK",
+                "note": "Middle layer between comms and execution remains load-bearing",
+                "prediction": "Intent remains valid at 1_year for PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [],
+                "expected_timeline": "1_year",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              },
+              {
+                "horizon": "2_years",
+                "confidence": "GUESS",
+                "note": "Platform evolution — scenario only",
+                "prediction": "Intent remains valid at 2_years for PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [
+                  "long_horizon_market_data"
+                ],
+                "expected_timeline": "2_years",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              },
+              {
+                "horizon": "5_years",
+                "confidence": "GUESS",
+                "note": "Long-range — not blocking handoff",
+                "prediction": "Intent remains valid at 5_years for PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [
+                  "long_horizon_market_data"
+                ],
+                "expected_timeline": "5_years",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              }
+            ],
+            "priority_fit": "BP_PRIORITY rank 11",
+            "blocking_risks": [],
+            "verdict": "forecast_acceptable",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "CHAIR",
+              "contract_version": "2.0A",
+              "title": "Council Chair",
+              "role": "Strategic forecast, handoff lock, Mode A→B transition, upstream routing on failure"
+            },
+            "measurements": [
+              {
+                "metric_id": "handoff_forecast",
+                "seat": "CHAIR",
+                "predicted": "proceed",
+                "confidence": "THINK",
+                "how_we_know_if_wrong": "CHAIR_HANDOFF_RECEIPT missing or corridor gate FAIL",
+                "evidence_path": null,
+                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          },
+          "CFO": {
+            "schema": "cfo_resource_simulation_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "seat": "CFO",
+            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "roi_note": "Greenfield — higher token/time cost",
+            "build_vs_buy": "BUILD",
+            "opportunity_cost": "First working client session: Q&A coaching + AI content pack generation + session UI",
+            "priority_rank": 11,
+            "resource_burden": "low",
+            "constitutional_exemption_applied": false,
+            "fastest_responsible_path": "greenfield build",
+            "verdict": "within_budget",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "CFO",
+              "contract_version": "2.0A",
+              "title": "CFO",
+              "role": "Resource burden, ROI note, priority fit — never demote constitutional floor on ROI alone"
+            },
+            "measurements": [
+              {
+                "metric_id": "within_budget",
+                "seat": "CFO",
+                "predicted": "yes",
+                "confidence": "THINK",
+                "how_we_know_if_wrong": "Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT",
+                "evidence_path": null,
+                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          },
+          "WISDOM": {
+            "schema": "wisdom_review_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "seat": "Wisdom",
+            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "lessons_surfaced": [],
+            "patterns_from_history": [
+              "Prior missions split technical vs founder usability — do not conflate",
+              "Partial blueprint labeled success = historical drift — fail closed"
+            ],
+            "drift_warnings": [
+              "Agent hand-build bypassing system path = agent drift failure"
+            ],
+            "verdict": "proceed",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "WISDOM",
+              "contract_version": "2.0A",
+              "title": "Wisdom / Hist lane",
+              "role": "Historical patterns, drift warnings, lesson surfacing — scores predictions post-hoc"
+            },
+            "measurements": [
+              {
+                "metric_id": "drift_pattern_acknowledged",
+                "seat": "WISDOM",
+                "predicted": true,
+                "confidence": "KNOW",
+                "how_we_know_if_wrong": "TWIN_DRIFT_REPORT drift_count > 0 post-acceptance",
+                "evidence_path": null,
+                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          }
+        },
+        "all_pass": true,
+        "failed_seats": [],
+        "defect_owner_seat": null,
+        "route_to": "ARC",
+        "simulation_tier": "COUNCIL_SIM",
+        "lesson": "All departments touched. Chair may lock handoff."
+      },
+      "idcExit": {
+        "schema": "idc_exit_gate_v1",
+        "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+        "pass": true,
+        "status": "IDC_EXIT_PASS",
+        "route_to": "ARC",
+        "defect_owner_seat": null,
+        "violations": [],
+        "checks": {
+          "intent_baseline": {
+            "pass": true,
+            "status": "HANDOFF_READY"
+          },
+          "coverage": {
+            "pass": true,
+            "gaps": []
+          },
+          "departments": {
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "SNT": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "intent_clearance_yes"
+              },
+              "CHAIR": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "forecast_acceptable"
+              },
+              "CFO": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "within_budget"
+              },
+              "WISDOM": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "proceed"
+              }
+            },
+            "defect_owner_seat": null,
+            "route_to": "ARC"
+          },
+          "IDC_CONSENSUS_RECEIPT.json": {
+            "pass": true
+          },
+          "KNOWN_RISKS.json": {
+            "pass": true
+          },
+          "KNOWN_ASSUMPTIONS.json": {
+            "pass": true
+          },
+          "CHAIR_HANDOFF_RECEIPT.json": {
+            "pass": true
+          },
+          "PRE_ARC_INPUT_PACKET.json": {
+            "pass": true
+          },
+          "asset_reuse": {
+            "pass": true
+          },
+          "prediction_receipt": {
+            "pass": true
+          },
+          "mode_a_to_b": {
+            "pass": true
+          }
+        }
+      }
+    },
+    "corridor": {
+      "ok": false,
+      "translate": {
+        "ok": false,
+        "status": "BLOCKED_RETURN_TO_ARC",
+        "intake": {
+          "ok": true,
+          "status": "ARC_INTAKE_PASS",
+          "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "checks": {
+            "founder_packet": {
+              "pass": true,
+              "path": "FOUNDER_PACKET.md"
+            },
+            "intent_baseline": {
+              "pass": true,
+              "status": "HANDOFF_READY",
+              "corridor": true
+            },
+            "intent_coverage": {
+              "pass": true,
+              "note": "corridor — intent not re-litigated post-handoff"
+            },
+            "tier1_validator": {
+              "pass": true,
+              "note": "corridor — tier1 checked at development stage only"
+            },
+            "pre_arc_packet": {
+              "pass": true,
+              "manifest_count": 14
+            },
+            "blueprint_provenance": {
+              "has_blueprint": true,
+              "authored_by": "Adam Hopkins + Claude",
+              "arc_run_receipt": false
+            },
+            "asset_reuse": {
+              "pass": true,
+              "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
+            },
+            "roadmap": {
+              "pass": true,
+              "builder_ready_phases": [
+                "P1"
+              ]
+            },
+            "snt_regrade": {
+              "pass": true,
+              "note": "corridor — no regrade at machine path"
+            },
+            "chair_handoff": {
+              "pass": true
+            }
+          },
+          "violations": [],
+          "route_to": "SYSTEM",
+          "idc_questions": []
+        },
+        "compile": {
+          "ok": false,
+          "status": "BLOCKED_RETURN_TO_ARC",
+          "error": "implementation_files_missing",
+          "missing": [
+            {
+              "step_id": "SSM-001",
+              "target": "services/socialmediaos-coaching-service.js",
+              "error": "missing source services/socialmediaos-coaching-service.js"
+            },
+            {
+              "step_id": "SSM-002",
+              "target": "services/socialmediaos-content-generator.js",
+              "error": "missing source services/socialmediaos-content-generator.js"
+            },
+            {
+              "step_id": "SSM-003",
+              "target": "routes/socialmediaos-coaching-routes.js",
+              "error": "missing source routes/socialmediaos-coaching-routes.js"
+            },
+            {
+              "step_id": "SSM-004",
+              "target": "db/migrations/20260629_socialmediaos_coaching.sql",
+              "error": "missing source db/migrations/20260629_socialmediaos_coaching.sql"
+            },
+            {
+              "step_id": "SSM-005",
+              "target": "public/overlay/socialmediaos-session.html",
+              "error": "missing source public/overlay/socialmediaos-session.html"
+            }
+          ],
+          "hint": "All blueprint target_file paths must exist in repo before ARC host compile"
+        }
+      }
+    }
+  }
+}
