@@ -1,0 +1,51 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "arc_decision_status": "CONFIRMED",
+  "surveyed_at": "2026-06-30",
+  "wisdom_lessons": [
+    "Reuse production spine files already built — ARC hosts byte contracts"
+  ],
+  "cfo_recommendation": "EXTEND existing repo assets; no greenfield parallel stack",
+  "assets_reviewed": [
+    "db/migrations/20260629_lifere_sales_coaching.sql",
+    "config/lifere-objection-library.json",
+    "services/lifere-sales-simulator.js",
+    "routes/lifere-sales-coaching-routes.js",
+    "scripts/run-lifere-sales-coaching-acceptance.mjs",
+    "startup/register-runtime-routes.js"
+  ],
+  "decisions": [
+    {
+      "asset": "db/migrations/20260629_lifere_sales_coaching.sql",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "config/lifere-objection-library.json",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/lifere-sales-simulator.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "routes/lifere-sales-coaching-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "scripts/run-lifere-sales-coaching-acceptance.mjs",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "startup/register-runtime-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    }
+  ],
+  "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
+}

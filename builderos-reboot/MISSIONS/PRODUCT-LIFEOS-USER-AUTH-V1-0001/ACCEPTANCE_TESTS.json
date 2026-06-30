@@ -46,6 +46,6 @@
     "step_id": "UAT-007",
     "type": "file_sha256_matches",
     "target": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
-    "expected_sha256": "349dfb67f1fa94b3c70b2e90007966f94e910a0970638d054a98c6e0d46a498c"
+    "expected_sha256": "74bdebe023c28c73ea85b769597d6de2e2bd080c50fef9ec7eff3717e6f8b60b"
   }
 ]

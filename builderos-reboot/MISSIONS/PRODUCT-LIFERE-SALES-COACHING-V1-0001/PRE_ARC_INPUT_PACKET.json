@@ -1,8 +1,8 @@
 {
   "schema": "pre_arc_input_packet_v2",
   "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
-  "assembled_at": "2026-06-29T00:00:00.000Z",
-  "assembled_by": "Claude Sonnet 4.6 (ARC review pass)",
+  "assembled_at": "2026-06-30T04:24:21.540Z",
+  "assembled_by": "foundation/pre-arc-enrichment.js",
   "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
   "manifest": [
     {
@@ -16,44 +16,65 @@
       "exists": true
     },
     {
-      "artifact": "BLUEPRINT",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/BLUEPRINT.json",
+      "artifact": "INTENT_COVERAGE_MAP",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/INTENT_COVERAGE_MAP.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_LSC-001",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-001/20260629_lifere_sales_coaching.sql",
+      "artifact": "ASSET_REUSE_DECISION",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/ASSET_REUSE_DECISION.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_LSC-002",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-002/lifere-objection-library.json",
+      "artifact": "IDC_CONSENSUS_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/IDC_CONSENSUS_RECEIPT.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_LSC-003",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-003/lifere-sales-simulator.js",
+      "artifact": "KNOWN_RISKS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/KNOWN_RISKS.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_LSC-004",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-004/lifere-sales-coaching-routes.js",
+      "artifact": "KNOWN_ASSUMPTIONS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/KNOWN_ASSUMPTIONS.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_LSC-005",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-005/run-lifere-sales-coaching-acceptance.mjs",
+      "artifact": "KNOWN_CONTRADICTIONS",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/KNOWN_CONTRADICTIONS.json",
       "exists": true
     },
     {
-      "artifact": "CONTENT_LSC-006",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-006/register-runtime-routes.js",
+      "artifact": "DO_NOT_INVENT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/DO_NOT_INVENT.json",
       "exists": true
     },
     {
-      "artifact": "ACCEPTANCE_TESTS",
-      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/ACCEPTANCE_TESTS.json",
+      "artifact": "CHAIR_HANDOFF_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CHAIR_HANDOFF_RECEIPT.json",
+      "exists": true
+    },
+    {
+      "artifact": "SNT_INTENT_ATTACK_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
+      "exists": true
+    },
+    {
+      "artifact": "CHAIR_FORECAST_SIMULATION_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+      "exists": true
+    },
+    {
+      "artifact": "CFO_RESOURCE_SIMULATION_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
+      "exists": true
+    },
+    {
+      "artifact": "WISDOM_REVIEW_RECEIPT",
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
       "exists": true
     }
-  ]
+  ],
+  "complete": true
 }

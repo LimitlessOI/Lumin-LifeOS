@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-06-30 |
 
 ---
 
@@ -161,6 +161,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 
 **Last Updated:** 2026-06-29 — LifeOS User Auth blueprint stub wired (run-lifeos-user-auth-v1-acceptance.mjs + finishBpAcceptance); Machine Alpha Walkthrough (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence.
+**Last Updated:** 2026-06-30 — runtime composition now mounts SocialMediaOS coaching and LifeRE sales coaching slices; Builder acceptance now boots a fresh runtime from newly written files before grading route/service missions.
 
 ---
 

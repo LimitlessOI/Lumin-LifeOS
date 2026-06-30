@@ -2,10 +2,8 @@
   "schema": "corridor_entered_gate_v1",
   "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
   "point": "B",
-  "pass": false,
-  "violations": [
-    "corridor:missing CHAIR_HANDOFF_RECEIPT"
-  ],
+  "pass": true,
+  "violations": [],
   "checks": {
     "founder_packet": {
       "pass": true
@@ -15,7 +13,7 @@
       "status": "HANDOFF_READY"
     },
     "chair_handoff": {
-      "pass": false
+      "pass": true
     },
     "pre_arc_packet": {
       "pass": true
@@ -67,5 +65,5 @@
       }
     }
   },
-  "lesson": "Corridor not properly entered — Chair must complete development handoff first."
+  "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
 }

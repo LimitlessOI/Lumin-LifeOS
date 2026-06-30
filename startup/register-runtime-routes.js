@@ -99,6 +99,8 @@ import createMemoryStatusRoutes from "../routes/memory-status-routes.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 
 import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
+import { createSocialmediaosCoachingRoutes } from "../routes/socialmediaos-coaching-routes.js";
+import { createLifeRESalesCoachingRoutes } from "../routes/lifere-sales-coaching-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const {
     pool,
@@ -350,6 +352,9 @@ export async function registerRuntimeRoutes(app, deps) {
   }));
   logger.info("✅ [LIFERE-OS] Routes mounted at /api/v1/lifere (W1–W6)");
 
+  app.use("/api/v1/lifere/sales-coach", createLifeRESalesCoachingRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
+  logger.info("✅ [LIFERE-SALES-COACH] Routes mounted at /api/v1/lifere/sales-coach");
+
   app.use("/api/v1/lifeos/ambient", createLifeOSAmbientRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info("✅ [LIFEOS-AMBIENT] Routes mounted at /api/v1/lifeos/ambient");
 
@@ -529,6 +534,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/socialmediaos", createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [SOCIALMEDIAOS] Routes mounted at /api/v1/socialmediaos');
+
+  app.use('/api/v1/socialmediaos/coaching', createSocialmediaosCoachingRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
+  logger.info('✅ [SOCIALMEDIAOS-COACHING] Routes mounted at /api/v1/socialmediaos/coaching');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));

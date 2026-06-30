@@ -60,7 +60,7 @@ function printBlock(title, body) {
 }
 
 async function fetchJson(url) {
-  const r = await fetch(url, { headers });
+  const r = await fetch(url, { headers, signal: AbortSignal.timeout(10000) });
   const text = await r.text();
   let json;
   try {

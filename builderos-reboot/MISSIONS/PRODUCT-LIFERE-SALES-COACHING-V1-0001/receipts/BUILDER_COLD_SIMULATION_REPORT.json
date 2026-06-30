@@ -1,0 +1,46 @@
+{
+  "schema": "builder_cold_simulation_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "blueprint_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001-v1",
+  "simulated_by": "factory-core/arc/builder-cold-walk.js",
+  "simulated_at": "2026-06-30T04:24:21.547Z",
+  "builder_runtime": "builderos-reboot/scripts/execute-mission.mjs",
+  "steps": [
+    {
+      "step_id": "LSC-001",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LSC-002",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LSC-003",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LSC-004",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LSC-005",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LSC-006",
+      "decision_gap": null,
+      "blocked": false
+    }
+  ],
+  "summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  }
+}

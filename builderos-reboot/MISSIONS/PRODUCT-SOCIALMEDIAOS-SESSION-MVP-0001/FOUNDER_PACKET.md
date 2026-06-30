@@ -6,9 +6,20 @@
 **Product:** SocialMediaOS (module under MarketingOS)
 **SSOT:** docs/products/marketingos/socialmediaos/PRODUCT_HOME.md
 
-## WHAT
+## Problem
 
-Build the first working client-facing SocialMediaOS session. Right now routes and schema exist but a client has no way to use the product — the coaching loop is missing. After this blueprint:
+SocialMediaOS has partial schema and route groundwork, but no founder-usable client session flow. A client cannot actually go through a coached session, extract their story, generate a usable content pack, or export it. That means the product exists as scattered pieces instead of a working end-to-end outcome.
+
+Pain now:
+
+- no usable client session experience
+- no guided 5-question coaching loop
+- no reliable content-pack generation path for a real user
+- no founder-usable proof that SocialMediaOS can take a client from blank page to usable content
+
+## Desired Outcome
+
+Build the first working client-facing SocialMediaOS session. After this blueprint:
 
 - Client opens `/overlay/socialmediaos-session.html`
 - Types their niche and goal
@@ -21,6 +32,17 @@ Build the first working client-facing SocialMediaOS session. Right now routes an
 
 Machine runs `node scripts/run-socialmediaos-session-acceptance.mjs` — all 18 tests pass.
 `OBJECTIVE_VERDICT.json` is written with `"verdict": "TECHNICAL_PASS"`.
+
+## Scope Boundary
+
+This packet is only for the first working text-only SocialMediaOS session MVP. It does not include recording, voice, payment gating, b-roll systems, or competitor intelligence.
+
+## Constraints
+
+- Builder executes exact BP only — no strategy invention.
+- Build through BuilderOS system path only.
+- Acceptance must run against a healthy runtime and write receipts honestly.
+- Session must remain text-first and exportable.
 
 ## SEQUENCE
 

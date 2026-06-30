@@ -1,7 +1,7 @@
 {
   "schema": "foundation_pipeline_report_v1",
   "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
-  "at": "2026-06-30T03:50:57.273Z",
+  "at": "2026-06-30T04:09:50.834Z",
   "doctrine": "FOUNDER_PACKET_V2 full machine path",
   "stages": {
     "development": {
@@ -10,13 +10,13 @@
       "deptSims": {
         "schema": "department_simulations_v1",
         "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
-        "simulated_at": "2026-06-30T03:50:57.285Z",
+        "simulated_at": "2026-06-30T04:09:50.845Z",
         "departments": {
           "SNT": {
             "schema": "snt_intent_attack_v1",
             "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
             "seat": "SNT",
-            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_at": "2026-06-30T04:09:50.845Z",
             "simulated_by": "factory-core/arc/department-simulations.js",
             "attacks_run": 4,
             "attacks": [
@@ -74,7 +74,7 @@
                 "confidence": "THINK",
                 "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
                 "evidence_path": null,
-                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "predicted_at": "2026-06-30T04:09:50.845Z",
                 "actual": null,
                 "scored_at": null,
                 "match": null
@@ -86,7 +86,7 @@
                 "confidence": "KNOW",
                 "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
                 "evidence_path": null,
-                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "predicted_at": "2026-06-30T04:09:50.845Z",
                 "actual": null,
                 "scored_at": null,
                 "match": null
@@ -98,7 +98,7 @@
             "schema": "chair_forecast_simulation_v1",
             "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
             "seat": "CHAIR",
-            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_at": "2026-06-30T04:09:50.845Z",
             "simulated_by": "factory-core/arc/department-simulations.js",
             "scenarios_run": 4,
             "predictions": [
@@ -186,7 +186,7 @@
                 "confidence": "THINK",
                 "how_we_know_if_wrong": "CHAIR_HANDOFF_RECEIPT missing or corridor gate FAIL",
                 "evidence_path": null,
-                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "predicted_at": "2026-06-30T04:09:50.845Z",
                 "actual": null,
                 "scored_at": null,
                 "match": null
@@ -198,7 +198,7 @@
             "schema": "cfo_resource_simulation_v1",
             "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
             "seat": "CFO",
-            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_at": "2026-06-30T04:09:50.845Z",
             "simulated_by": "factory-core/arc/department-simulations.js",
             "roi_note": "Greenfield — higher token/time cost",
             "build_vs_buy": "BUILD",
@@ -224,7 +224,7 @@
                 "confidence": "THINK",
                 "how_we_know_if_wrong": "Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT",
                 "evidence_path": null,
-                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "predicted_at": "2026-06-30T04:09:50.845Z",
                 "actual": null,
                 "scored_at": null,
                 "match": null
@@ -236,7 +236,7 @@
             "schema": "wisdom_review_v1",
             "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
             "seat": "Wisdom",
-            "simulated_at": "2026-06-30T03:50:57.285Z",
+            "simulated_at": "2026-06-30T04:09:50.845Z",
             "simulated_by": "factory-core/arc/department-simulations.js",
             "lessons_surfaced": [],
             "patterns_from_history": [
@@ -263,7 +263,7 @@
                 "confidence": "KNOW",
                 "how_we_know_if_wrong": "TWIN_DRIFT_REPORT drift_count > 0 post-acceptance",
                 "evidence_path": null,
-                "predicted_at": "2026-06-30T03:50:57.285Z",
+                "predicted_at": "2026-06-30T04:09:50.845Z",
                 "actual": null,
                 "scored_at": null,
                 "match": null
@@ -360,10 +360,11 @@
       }
     },
     "corridor": {
-      "ok": false,
+      "ok": true,
       "translate": {
-        "ok": false,
-        "status": "BLOCKED_RETURN_TO_ARC",
+        "ok": true,
+        "status": "ARC_TRANSLATE_PASS",
+        "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
         "intake": {
           "ok": true,
           "status": "ARC_INTAKE_PASS",
@@ -393,8 +394,8 @@
             },
             "blueprint_provenance": {
               "has_blueprint": true,
-              "authored_by": "Adam Hopkins + Claude",
-              "arc_run_receipt": false
+              "authored_by": "ARC",
+              "arc_run_receipt": true
             },
             "asset_reuse": {
               "pass": true,
@@ -419,39 +420,1024 @@
           "idc_questions": []
         },
         "compile": {
-          "ok": false,
-          "status": "BLOCKED_RETURN_TO_ARC",
-          "error": "implementation_files_missing",
-          "missing": [
-            {
-              "step_id": "SSM-001",
-              "target": "services/socialmediaos-coaching-service.js",
-              "error": "missing source services/socialmediaos-coaching-service.js"
+          "steps_count": 7,
+          "content_root": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT"
+        },
+        "simulation": {
+          "evaluated_steps": 7,
+          "total_gaps": 0,
+          "blocking_gaps": 0,
+          "clear_to_build": true
+        },
+        "cold_walk": {
+          "decision_gaps": 0,
+          "total_gaps": 0,
+          "handoff_to_builder": true,
+          "architect_pass": true
+        },
+        "handoff": {
+          "schema": "corridor_entered_gate_v1",
+          "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "point": "B",
+          "pass": true,
+          "violations": [],
+          "checks": {
+            "founder_packet": {
+              "pass": true
             },
-            {
-              "step_id": "SSM-002",
-              "target": "services/socialmediaos-content-generator.js",
-              "error": "missing source services/socialmediaos-content-generator.js"
+            "intent_baseline": {
+              "pass": true,
+              "status": "HANDOFF_READY"
             },
-            {
-              "step_id": "SSM-003",
-              "target": "routes/socialmediaos-coaching-routes.js",
-              "error": "missing source routes/socialmediaos-coaching-routes.js"
+            "chair_handoff": {
+              "pass": true
             },
-            {
-              "step_id": "SSM-004",
-              "target": "db/migrations/20260629_socialmediaos_coaching.sql",
-              "error": "missing source db/migrations/20260629_socialmediaos_coaching.sql"
+            "pre_arc_packet": {
+              "pass": true
             },
-            {
-              "step_id": "SSM-005",
-              "target": "public/overlay/socialmediaos-session.html",
-              "error": "missing source public/overlay/socialmediaos-session.html"
+            "pre_arc_SNT_INTENT_ATTACK": {
+              "pass": true,
+              "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+            },
+            "pre_arc_CHAIR_FORECAST": {
+              "pass": true,
+              "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_CFO_RESOURCE": {
+              "pass": true,
+              "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_WISDOM_REVIEW": {
+              "pass": true,
+              "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+            },
+            "departments": {
+              "SNT": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "intent_clearance_yes"
+              },
+              "CHAIR": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "forecast_acceptable"
+              },
+              "CFO": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "within_budget"
+              },
+              "WISDOM": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "proceed"
+              }
             }
+          },
+          "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+        },
+        "corridor": {
+          "schema": "corridor_entered_gate_v1",
+          "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "point": "B",
+          "pass": true,
+          "violations": [],
+          "checks": {
+            "founder_packet": {
+              "pass": true
+            },
+            "intent_baseline": {
+              "pass": true,
+              "status": "HANDOFF_READY"
+            },
+            "chair_handoff": {
+              "pass": true
+            },
+            "pre_arc_packet": {
+              "pass": true
+            },
+            "pre_arc_SNT_INTENT_ATTACK": {
+              "pass": true,
+              "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+            },
+            "pre_arc_CHAIR_FORECAST": {
+              "pass": true,
+              "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_CFO_RESOURCE": {
+              "pass": true,
+              "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_WISDOM_REVIEW": {
+              "pass": true,
+              "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+            },
+            "departments": {
+              "SNT": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "intent_clearance_yes"
+              },
+              "CHAIR": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "forecast_acceptable"
+              },
+              "CFO": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "within_budget"
+              },
+              "WISDOM": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "proceed"
+              }
+            }
+          },
+          "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+        },
+        "point_b": {
+          "schema": "point_b_gate_v2",
+          "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "evaluated_at": "2026-06-30T04:09:50.856Z",
+          "proof_lap_only": false,
+          "handoff": {
+            "schema": "corridor_entered_gate_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "point": "B",
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "founder_packet": {
+                "pass": true
+              },
+              "intent_baseline": {
+                "pass": true,
+                "status": "HANDOFF_READY"
+              },
+              "chair_handoff": {
+                "pass": true
+              },
+              "pre_arc_packet": {
+                "pass": true
+              },
+              "pre_arc_SNT_INTENT_ATTACK": {
+                "pass": true,
+                "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+              },
+              "pre_arc_CHAIR_FORECAST": {
+                "pass": true,
+                "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_CFO_RESOURCE": {
+                "pass": true,
+                "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_WISDOM_REVIEW": {
+                "pass": true,
+                "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+              },
+              "departments": {
+                "SNT": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "intent_clearance_yes"
+                },
+                "CHAIR": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "forecast_acceptable"
+                },
+                "CFO": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "within_budget"
+                },
+                "WISDOM": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "proceed"
+                }
+              }
+            },
+            "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+          },
+          "corridor": {
+            "schema": "corridor_entered_gate_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "point": "B",
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "founder_packet": {
+                "pass": true
+              },
+              "intent_baseline": {
+                "pass": true,
+                "status": "HANDOFF_READY"
+              },
+              "chair_handoff": {
+                "pass": true
+              },
+              "pre_arc_packet": {
+                "pass": true
+              },
+              "pre_arc_SNT_INTENT_ATTACK": {
+                "pass": true,
+                "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+              },
+              "pre_arc_CHAIR_FORECAST": {
+                "pass": true,
+                "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_CFO_RESOURCE": {
+                "pass": true,
+                "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_WISDOM_REVIEW": {
+                "pass": true,
+                "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+              },
+              "departments": {
+                "SNT": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "intent_clearance_yes"
+                },
+                "CHAIR": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "forecast_acceptable"
+                },
+                "CFO": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "within_budget"
+                },
+                "WISDOM": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "proceed"
+                }
+              }
+            },
+            "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+          },
+          "machine_path": {
+            "schema": "machine_path_gate_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "point": "B_to_C",
+            "proof_lap_only": false,
+            "pass": false,
+            "violations": [
+              "machine:roadmap FUTURE P4",
+              "machine:acceptance FAIL — result truth wins over corridor pass",
+              "machine:Builder not TECHNICAL_PASS"
+            ],
+            "checks": {
+              "corridor": {
+                "pass": true,
+                "violations": []
+              },
+              "post_arc_ARC_TWIN_SIM": {
+                "pass": true,
+                "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+              },
+              "post_arc_BUILDER_SIM": {
+                "pass": true,
+                "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+              },
+              "post_arc_SNT_TRANSLATION": {
+                "pass": true,
+                "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+              },
+              "post_arc_PRE_BUILD": {
+                "pass": true,
+                "path": "PRE_BUILD_VALIDATION_PACKET.json"
+              },
+              "arc_run": {
+                "pass": true,
+                "status": "MECHANICAL_PASS"
+              },
+              "builder_executed": {
+                "pass": false,
+                "value": "FAIL"
+              }
+            },
+            "awaiting_founder_at_alpha": true,
+            "lesson": "System failed B→C — ARC or Builder did not complete. If intent gap: system failure, not founder."
+          },
+          "alpha": {
+            "schema": "alpha_gate_v1",
+            "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+            "point": "C",
+            "machine_path_pass": false,
+            "pass": false,
+            "founder_usability_pass": false,
+            "violations": [
+              "machine:roadmap FUTURE P4",
+              "machine:acceptance FAIL — result truth wins over corridor pass",
+              "machine:Builder not TECHNICAL_PASS",
+              "alpha:founder has not confirmed Alpha yet"
+            ],
+            "checks": {
+              "corridor": {
+                "pass": true,
+                "violations": []
+              },
+              "post_arc_ARC_TWIN_SIM": {
+                "pass": true,
+                "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+              },
+              "post_arc_BUILDER_SIM": {
+                "pass": true,
+                "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+              },
+              "post_arc_SNT_TRANSLATION": {
+                "pass": true,
+                "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+              },
+              "post_arc_PRE_BUILD": {
+                "pass": true,
+                "path": "PRE_BUILD_VALIDATION_PACKET.json"
+              },
+              "arc_run": {
+                "pass": true,
+                "status": "MECHANICAL_PASS"
+              },
+              "builder_executed": {
+                "pass": false,
+                "value": "FAIL"
+              },
+              "founder_usability": {
+                "pass": false,
+                "value": false
+              }
+            },
+            "lesson": "Cannot reach Alpha — machine path incomplete."
+          },
+          "point_b_reached": true,
+          "machine_path_complete": false,
+          "alpha_reached": false,
+          "pass": false,
+          "status": "BLOCKED_MACHINE_PATH",
+          "violations": [
+            "machine:roadmap FUTURE P4",
+            "machine:acceptance FAIL — result truth wins over corridor pass",
+            "machine:Builder not TECHNICAL_PASS"
           ],
-          "hint": "All blueprint target_file paths must exist in repo before ARC host compile"
+          "infrastructure_only": false,
+          "lesson": "Corridor entered. System must complete ARC → Builder → acceptance."
+        },
+        "acceptance": {
+          "ok": true,
+          "detail": "Wrote 7 acceptance tests to /Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/ACCEPTANCE_TESTS.json"
+        },
+        "receipt": {
+          "schema": "arc_run_receipt_v1",
+          "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "run_at": "2026-06-30T04:09:50.857Z",
+          "runner": "factory-core/arc/translate-mission.js",
+          "arc_job": "factory-staging/factory-core/arc/ARC_JOB.json",
+          "entry_gate": "PASS",
+          "intake_status": "ARC_INTAKE_PASS",
+          "compile_mode": "product_host",
+          "compile_status": "ARC_COMPILE_PASS",
+          "translate": {
+            "status": "MECHANICAL_PASS",
+            "compiler": "factory-core/arc/compilers/product-blueprint-host.js"
+          },
+          "simulation_summary": {
+            "evaluated_steps": 7,
+            "total_gaps": 0,
+            "blocking_gaps": 0,
+            "clear_to_build": true
+          },
+          "cold_builder_walk": {
+            "decision_gaps": 0,
+            "total_gaps": 0,
+            "handoff_to_builder": true,
+            "architect_pass": true
+          },
+          "mechanical_handoff_pass": true,
+          "handoff_pass": true,
+          "corridor_entered": true,
+          "proof_lap_only": false,
+          "system_produced": true,
+          "blueprint_written": true,
+          "acceptance_sync": "PASS"
         }
       }
+    },
+    "builder_entry": {
+      "schema": "builder_entry_gate_v1",
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+      "pass": true,
+      "status": "BUILDER_ENTRY_PASS",
+      "violations": [],
+      "checks": {
+        "post_arc": {
+          "schema": "post_arc_bundle_gate_v1",
+          "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "pass": true,
+          "violations": [],
+          "checks": {
+            "ARC_TWIN_SIM": {
+              "pass": true,
+              "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+            },
+            "BUILDER_SIM": {
+              "pass": true,
+              "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+            },
+            "SNT_TRANSLATION": {
+              "pass": true,
+              "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+            },
+            "PRE_BUILD": {
+              "pass": true,
+              "path": "PRE_BUILD_VALIDATION_PACKET.json"
+            },
+            "builder_clearance": {
+              "pass": true
+            },
+            "builder_sim_blocking": {
+              "pass": true,
+              "blocking_gaps": 0
+            }
+          },
+          "enforcement": "HARD"
+        },
+        "studio": {
+          "schema": "studio_blocking_gate_v1",
+          "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+          "pass": true,
+          "in_scope": true,
+          "verdict": "experience_acceptable",
+          "violations": [],
+          "enforcement": "HARD"
+        }
+      },
+      "enforcement": "HARD"
+    },
+    "builder": {
+      "ok": true,
+      "exit": 0,
+      "stdout": "\n=== Builder pre-build simulation (PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001) ===\n\nSSM-001 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-001/socialmediaos-coaching-service.js → services/socialmediaos-coaching-service.js\nSSM-002 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-002/socialmediaos-content-generator.js → services/socialmediaos-content-generator.js\nSSM-003 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-003/socialmediaos-coaching-routes.js → routes/socialmediaos-coaching-routes.js\nSSM-004 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql → db/migrations/20260629_socialmediaos_coaching.sql\nSSM-005 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html → public/overlay/socialmediaos-session.html\nSSM-006 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs → scripts/run-socialmediaos-session-acceptance.mjs\nSSM-007 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js → startup/register-runtime-routes.js\n\nPre-build: PRE_BUILD_PASS — blocking_gaps=0, clear=7/7\n\nMission PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001: 7 step(s) to execute\n\n--- SSM-001: Coaching service\n  DONE services/socialmediaos-coaching-service.js (3786 bytes, sha256=b252f2e95705…)\n\n--- SSM-002: Content generator service\n  DONE services/socialmediaos-content-generator.js (9647 bytes, sha256=f97b2292479c…)\n\n--- SSM-003: Coaching routes\n  DONE routes/socialmediaos-coaching-routes.js (5394 bytes, sha256=b6631116e41e…)\n\n--- SSM-004: DB migration — coaching columns\n  DONE db/migrations/20260629_socialmediaos_coaching.sql (1003 bytes, sha256=cfa26257e586…)\n\n--- SSM-005: Session UI\n  DONE public/overlay/socialmediaos-session.html (15481 bytes, sha256=4549891f69c0…)\n\n--- SSM-006: Acceptance test\n  DONE scripts/run-socialmediaos-session-acceptance.mjs (9426 bytes, sha256=895617e3549e…)\n\n--- SSM-007: Route wiring — register-runtime-routes.js\n  DONE startup/register-runtime-routes.js (31820 bytes, sha256=3fd81ff0e62b…)\n\nRunning acceptance tests…\nBooting fresh acceptance runtime from newly written files…\nAcceptance runtime ready at http://127.0.0.1:3441\n\n> ai-counsel-os@1.0.0 smos:session:acceptance\n> node scripts/run-socialmediaos-session-acceptance.mjs\n\n\n=== SocialMediaOS Session MVP Acceptance ===\nMission: PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001\n\nBase: http://127.0.0.1:3441\n\nAT-SSM-001: Start coaching session\n  ✅ AT-SSM-001-ok\n  ✅ AT-SSM-001-sessionId\n  ✅ AT-SSM-001-question\n  ✅ AT-SSM-001-q1of5\n\nAT-SSM-002: Submit 5 answers\n  ✅ AT-SSM-002-answer-1\n  ✅ AT-SSM-002-answer-2\n  ✅ AT-SSM-002-answer-3\n  ✅ AT-SSM-002-answer-4\n  ✅ AT-SSM-002-answer-5\n  ✅ AT-SSM-002-complete-flag\n\nAT-SSM-003: Verify session state\n  ✅ AT-SSM-003-ok\n  ✅ AT-SSM-003-status\n  ✅ AT-SSM-003-answers\n\nAT-SSM-004: Generate content pack (AI call)\n  ✅ AT-SSM-004-ok\n  ✅ AT-SSM-004-packId\n  ✅ AT-SSM-004-linkedin\n  ✅ AT-SSM-004-hooks\n  ✅ AT-SSM-004-email\n  ✅ AT-SSM-004-story\n\nAT-SSM-005: Retrieve content pack\n  ✅ AT-SSM-005-ok\n  ✅ AT-SSM-005-content\n\nAT-SSM-006: Export as text\n  ✅ AT-SSM-006-ok\n  ✅ AT-SSM-006-content-type\n  ✅ AT-SSM-006-has-linkedin\n  ✅ AT-SSM-006-has-hooks\n\n--- Results ---\nPASS: 25\nFAIL: 0\n\nWrote builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BUILDER_RUN_RECEIPT.json — verdict TECHNICAL_PASS\nPoint B handoff: true | Machine path: true | Alpha: false\n",
+      "stderr": ""
+    },
+    "final_gate": {
+      "schema": "point_b_gate_v2",
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+      "evaluated_at": "2026-06-30T04:09:57.385Z",
+      "proof_lap_only": false,
+      "handoff": {
+        "schema": "corridor_entered_gate_v1",
+        "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+        "point": "B",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "founder_packet": {
+            "pass": true
+          },
+          "intent_baseline": {
+            "pass": true,
+            "status": "HANDOFF_READY"
+          },
+          "chair_handoff": {
+            "pass": true
+          },
+          "pre_arc_packet": {
+            "pass": true
+          },
+          "pre_arc_SNT_INTENT_ATTACK": {
+            "pass": true,
+            "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+          },
+          "pre_arc_CHAIR_FORECAST": {
+            "pass": true,
+            "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+          },
+          "pre_arc_CFO_RESOURCE": {
+            "pass": true,
+            "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+          },
+          "pre_arc_WISDOM_REVIEW": {
+            "pass": true,
+            "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+          },
+          "departments": {
+            "SNT": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "intent_clearance_yes"
+            },
+            "CHAIR": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "forecast_acceptable"
+            },
+            "CFO": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "within_budget"
+            },
+            "WISDOM": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "proceed"
+            }
+          }
+        },
+        "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+      },
+      "corridor": {
+        "schema": "corridor_entered_gate_v1",
+        "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+        "point": "B",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "founder_packet": {
+            "pass": true
+          },
+          "intent_baseline": {
+            "pass": true,
+            "status": "HANDOFF_READY"
+          },
+          "chair_handoff": {
+            "pass": true
+          },
+          "pre_arc_packet": {
+            "pass": true
+          },
+          "pre_arc_SNT_INTENT_ATTACK": {
+            "pass": true,
+            "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+          },
+          "pre_arc_CHAIR_FORECAST": {
+            "pass": true,
+            "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+          },
+          "pre_arc_CFO_RESOURCE": {
+            "pass": true,
+            "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+          },
+          "pre_arc_WISDOM_REVIEW": {
+            "pass": true,
+            "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+          },
+          "departments": {
+            "SNT": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "intent_clearance_yes"
+            },
+            "CHAIR": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "forecast_acceptable"
+            },
+            "CFO": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "within_budget"
+            },
+            "WISDOM": {
+              "pass": true,
+              "stub": false,
+              "tier": "COUNCIL_SIM",
+              "bootstrapBlocked": false,
+              "verdict": "proceed"
+            }
+          }
+        },
+        "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+      },
+      "machine_path": {
+        "schema": "machine_path_gate_v1",
+        "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+        "point": "B_to_C",
+        "proof_lap_only": false,
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "corridor": {
+            "pass": true,
+            "violations": []
+          },
+          "post_arc_ARC_TWIN_SIM": {
+            "pass": true,
+            "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+          },
+          "post_arc_BUILDER_SIM": {
+            "pass": true,
+            "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+          },
+          "post_arc_SNT_TRANSLATION": {
+            "pass": true,
+            "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+          },
+          "post_arc_PRE_BUILD": {
+            "pass": true,
+            "path": "PRE_BUILD_VALIDATION_PACKET.json"
+          },
+          "arc_run": {
+            "pass": true,
+            "status": "MECHANICAL_PASS"
+          },
+          "builder_executed": {
+            "pass": true,
+            "value": "TECHNICAL_PASS"
+          }
+        },
+        "awaiting_founder_at_alpha": true,
+        "lesson": "Machine path complete. Ready for Adam Alpha evaluation."
+      },
+      "alpha": {
+        "schema": "alpha_gate_v1",
+        "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+        "point": "C",
+        "machine_path_pass": true,
+        "pass": false,
+        "founder_usability_pass": false,
+        "violations": [
+          "alpha:founder has not confirmed Alpha yet"
+        ],
+        "checks": {
+          "corridor": {
+            "pass": true,
+            "violations": []
+          },
+          "post_arc_ARC_TWIN_SIM": {
+            "pass": true,
+            "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+          },
+          "post_arc_BUILDER_SIM": {
+            "pass": true,
+            "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+          },
+          "post_arc_SNT_TRANSLATION": {
+            "pass": true,
+            "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+          },
+          "post_arc_PRE_BUILD": {
+            "pass": true,
+            "path": "PRE_BUILD_VALIDATION_PACKET.json"
+          },
+          "arc_run": {
+            "pass": true,
+            "status": "MECHANICAL_PASS"
+          },
+          "builder_executed": {
+            "pass": true,
+            "value": "TECHNICAL_PASS"
+          },
+          "founder_usability": {
+            "pass": false,
+            "value": false
+          }
+        },
+        "lesson": "Machine delivered. Adam evaluates at Alpha."
+      },
+      "point_b_reached": true,
+      "machine_path_complete": true,
+      "alpha_reached": false,
+      "pass": true,
+      "status": "MACHINE_PATH_PASS_AWAITING_ALPHA",
+      "violations": [],
+      "infrastructure_only": false,
+      "lesson": "Corridor protected. Machine delivered. Alpha = founder evaluation only."
+    },
+    "scoreboard": {
+      "schema": "result_scoreboard_v1",
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+      "at": "2026-06-30T04:09:57.395Z",
+      "intended": "Build the first working client-facing SocialMediaOS session. After this blueprint:\n\n- Client opens `/overlay/socialmediaos-session.html`\n- Types their niche and goal\n- AI asks 5 coached questions, one at a time (story extraction)\n- After all 5 answers: AI generates a full content pack — 5 LinkedIn posts, 3 YouTube hooks, 3 Instagram captions, 3 email subjects\n- Client copies any piece or downloads everything as a text file\n- Routes wired; schema columns added; acceptance test passes end-to-end",
+      "built": "TECHNICAL_PASS",
+      "happened": "TECHNICAL_PASS",
+      "matched_intent": false,
+      "evidence": {
+        "acceptance_receipt": "products/receipts/SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json",
+        "builder_receipt": "BUILDER_RUN_RECEIPT.json",
+        "tests_passed": [
+          "AT-SSM-001-ok",
+          "AT-SSM-001-sessionId",
+          "AT-SSM-001-question",
+          "AT-SSM-001-q1of5",
+          "AT-SSM-002-answer-1",
+          "AT-SSM-002-answer-2",
+          "AT-SSM-002-answer-3",
+          "AT-SSM-002-answer-4",
+          "AT-SSM-002-answer-5",
+          "AT-SSM-002-complete-flag",
+          "AT-SSM-003-ok",
+          "AT-SSM-003-status",
+          "AT-SSM-003-answers",
+          "AT-SSM-004-ok",
+          "AT-SSM-004-packId",
+          "AT-SSM-004-linkedin",
+          "AT-SSM-004-hooks",
+          "AT-SSM-004-email",
+          "AT-SSM-004-story",
+          "AT-SSM-005-ok",
+          "AT-SSM-005-content",
+          "AT-SSM-006-ok",
+          "AT-SSM-006-content-type",
+          "AT-SSM-006-has-linkedin",
+          "AT-SSM-006-has-hooks",
+          "bp_sync_mandatory",
+          "SSM-006_bp_sync"
+        ]
+      },
+      "failed": [],
+      "changed": [],
+      "learned": [],
+      "no_narrative": true,
+      "simulation_vs_reality": [
+        {
+          "metric_id": "acceptance_pass",
+          "seat": "Builder",
+          "predicted": "PASS",
+          "actual": "PASS",
+          "how_we_know_if_wrong": "BUILDER_RUN_RECEIPT.acceptance_exit_code and acceptance receipt verdict",
+          "match": true,
+          "variance": null,
+          "scored_at": "2026-06-30T04:09:57.385Z",
+          "scored_by": "Hist"
+        },
+        {
+          "metric_id": "technical_pass",
+          "seat": "CFO",
+          "predicted": "LIKELY",
+          "actual": "TECHNICAL_PASS",
+          "how_we_know_if_wrong": "OBJECTIVE_VERDICT.verdict after acceptance",
+          "match": false,
+          "variance": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"",
+          "scored_at": "2026-06-30T04:09:57.385Z",
+          "scored_by": "Hist"
+        },
+        {
+          "metric_id": "deploy_required",
+          "seat": "CFO",
+          "predicted": true,
+          "actual": true,
+          "how_we_know_if_wrong": "Production acceptance implies deploy occurred or was unnecessary",
+          "match": true,
+          "variance": null,
+          "scored_at": "2026-06-30T04:09:57.385Z",
+          "scored_by": "Hist"
+        },
+        {
+          "metric_id": "production_route_probe",
+          "seat": "SNT",
+          "predicted": "routes_missing",
+          "actual": "routes_live",
+          "how_we_know_if_wrong": "Set PUBLIC_BASE_URL + COMMAND_CENTER_KEY to probe production routes",
+          "match": false,
+          "variance": "predicted \"routes_missing\" got \"routes_live\"",
+          "scored_at": "2026-06-30T04:09:57.385Z",
+          "scored_by": "Hist"
+        },
+        {
+          "metric_id": "intent_measurable",
+          "seat": "SNT",
+          "predicted": "clear",
+          "actual": "clear",
+          "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
+          "match": true,
+          "variance": null,
+          "scored_at": "2026-06-30T04:09:57.385Z",
+          "scored_by": "Hist"
+        },
+        {
+          "metric_id": "blocking_attack_count",
+          "seat": "SNT",
+          "predicted": 0,
+          "actual": 0,
+          "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
+          "match": true,
+          "variance": null,
+          "scored_at": "2026-06-30T04:09:57.385Z",
+          "scored_by": "Hist"
+        }
+      ],
+      "twin_drift_pass": false,
+      "twin_drift_count": 2,
+      "scored_by": "Hist"
+    },
+    "release_gate": {
+      "schema": "release_pass_gate_v1",
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+      "pass": false,
+      "status": "BLOCKED_RELEASE",
+      "violations": [
+        "release:founder_usability_pass not true"
+      ]
+    },
+    "doctrine": {
+      "schema": "mission_doctrine_report_v1",
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+      "evaluated_at": "2026-06-30T04:09:57.397Z",
+      "pass": true,
+      "enforcement": "HARD",
+      "violations": [],
+      "checks": {
+        "phases": {
+          "corridor": {
+            "phase": "corridor",
+            "gate": "ARC_ENTRY",
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "BLUEPRINT_TWIN": {
+                "pass": true,
+                "path": "BLUEPRINT.json"
+              },
+              "ARC_RUN_RECEIPT": {
+                "pass": true,
+                "path": "ARC_RUN_RECEIPT.json"
+              },
+              "ARC_TWIN_SIMULATION_RECEIPT": {
+                "pass": true,
+                "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+              },
+              "BUILDER_SIMULATION_REPORT": {
+                "pass": true,
+                "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+              },
+              "SNT_TRANSLATION_ATTACK_REPORT": {
+                "pass": true,
+                "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+              },
+              "PRE_BUILD_VALIDATION_PACKET": {
+                "pass": true,
+                "path": "PRE_BUILD_VALIDATION_PACKET.json"
+              }
+            },
+            "discard_policy": "none — PARKED requires explicit receipt"
+          },
+          "builder": {
+            "phase": "builder",
+            "gate": "BUILDER_ENTRY",
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "BUILDER_RUN_RECEIPT": {
+                "pass": true,
+                "path": "BUILDER_RUN_RECEIPT.json"
+              }
+            },
+            "discard_policy": "none — PARKED requires explicit receipt"
+          },
+          "technical_pass": {
+            "phase": "technical_pass",
+            "gate": "BUILD_PASS_CLAIM",
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "OBJECTIVE_VERDICT": {
+                "pass": true,
+                "path": "OBJECTIVE_VERDICT.json"
+              },
+              "RESULT_SCOREBOARD": {
+                "pass": true,
+                "path": "RESULT_SCOREBOARD.json"
+              }
+            },
+            "discard_policy": "none — PARKED requires explicit receipt"
+          }
+        },
+        "blueprint_no_discard": {
+          "pass": true,
+          "violations": [],
+          "steps_required": 7,
+          "steps_done": 7
+        },
+        "result_truth": {
+          "pass": true,
+          "violations": [],
+          "acceptance_verdict": "PASS",
+          "exit_code": 0
+        },
+        "simulation_fidelity": {
+          "pass": true,
+          "violations": []
+        },
+        "department_roles": {
+          "pass": true,
+          "violations": [],
+          "checks": {
+            "SNT": {
+              "pass": true,
+              "violations": [],
+              "seat": "SNT"
+            },
+            "CHAIR": {
+              "pass": true,
+              "violations": [],
+              "seat": "CHAIR"
+            },
+            "CFO": {
+              "pass": true,
+              "violations": [],
+              "seat": "CFO"
+            },
+            "WISDOM": {
+              "pass": true,
+              "violations": [],
+              "seat": "WISDOM"
+            }
+          },
+          "departments": {
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "SNT": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "intent_clearance_yes"
+              },
+              "CHAIR": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "forecast_acceptable"
+              },
+              "CFO": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "within_budget"
+              },
+              "WISDOM": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "proceed"
+              }
+            },
+            "defect_owner_seat": null,
+            "route_to": "ARC"
+          }
+        }
+      },
+      "lesson": "Doctrine satisfied — simulation measurements filed for Hist to score against reality."
     }
-  }
+  },
+  "ok": true,
+  "awaiting_alpha": true
 }

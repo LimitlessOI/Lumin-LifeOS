@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-06-30 |
 
 ---
 
@@ -36,8 +36,12 @@ Primary owned files are defined in:
 High-signal owned surfaces:
 - `services/lifere-os-v1.js`
 - `services/lifere-boldtrail-bridge.js`
+- `services/lifere-sales-simulator.js`
 - `routes/lifere-os-routes.js`
+- `routes/lifere-sales-coaching-routes.js`
 - `public/overlay/lifeos-lifere.html`
+- `config/lifere-objection-library.json`
+- `db/migrations/20260629_lifere_sales_coaching.sql`
 
 ## Shared dependencies
 
@@ -56,7 +60,7 @@ Use pointers, not duplication.
 | **Status** | **FOUNDING** — doctrine + twin blueprint shipped 2026-06-13 |
 | **Authority** | Subordinate to SSOT North Star Constitution |
 | **Lifecycle** | `active` (program) / Alpha slice `technical_pass` |
-| **Last Updated** | 2026-06-29 — sales coaching & training system vision added (brainstorm capture) |
+| **Last Updated** | 2026-06-30 — sales coaching simulator machine path reached TECHNICAL_PASS; deterministic fallback + provider fallback added for coaching turns |
 | **Verification (Alpha)** | `npm run lifeos:lifere-os:v1-acceptance` |
 | **Verification (Alpha readiness)** | `npm run lifeos:lifere-alpha-readiness` |
 | **Audit agent prompt** | `docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md` |
@@ -218,6 +222,24 @@ By making "no" a respected option, false yeses disappear. By making "maybe" a no
 When both decision makers are present and "I need to think about it" comes up: "Absolutely — I'll step outside, sit in my car. Take as long as you need. When you're done talking and have questions, come get me and we'll just get this done." Removes the audience. The real conversation happens. Agent returns to questions, not a second presentation. The car is where the deal actually gets made.
 
 **False Yes Detection**
+
+### Change receipt — 2026-06-30
+
+- Added the Phase 1 sales coaching runtime slice to owned LifeRE surfaces:
+  - `routes/lifere-sales-coaching-routes.js`
+  - `services/lifere-sales-simulator.js`
+  - `config/lifere-objection-library.json`
+  - `db/migrations/20260629_lifere_sales_coaching.sql`
+- Machine path now proves:
+  - scenario list
+  - session start
+  - three coached turns
+  - end-session debrief
+  - score readback
+- Hardening added so the slice does not die on missing provider availability:
+  - corrected `callCouncilMember(member, prompt, options)` usage
+  - provider fallback path in route layer
+  - deterministic client/coaching/debrief fallback in simulator layer
 Real yes vs. false yes sound different: energy drops, response time lags, the word is followed by a qualifying "but." System flags: "This was not a committed yes. Probe here before moving forward." By quadrant: amiable gives false yeses to avoid conflict; analytical gives tentative yeses mid-process; driver gives sharp real yeses; expressive gives enthusiastic yeses that can fade without follow-through.
 
 ### Personality Quadrant Detection

@@ -1,7 +1,7 @@
 {
   "schema": "arc_run_receipt_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "run_at": "2026-06-30T00:05:32.545Z",
+  "run_at": "2026-06-30T04:34:37.933Z",
   "runner": "factory-core/arc/translate-mission.js",
   "arc_job": "factory-staging/factory-core/arc/ARC_JOB.json",
   "entry_gate": "PASS",
@@ -9,7 +9,7 @@
   "compile_mode": "product_host",
   "compile_status": "ARC_COMPILE_PASS",
   "translate": {
-    "status": "BLOCKED_STUDIO",
+    "status": "MECHANICAL_PASS",
     "compiler": "factory-core/arc/compilers/product-blueprint-host.js"
   },
   "simulation_summary": {
@@ -29,21 +29,6 @@
   "corridor_entered": true,
   "proof_lap_only": false,
   "system_produced": true,
-  "blueprint_written": false,
-  "studio_gate": {
-    "schema": "studio_blocking_gate_v1",
-    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-    "pass": false,
-    "in_scope": true,
-    "verdict": "STUDIO_CONCERNS",
-    "violations": [
-      "studio:STUDIO_CONCERNS",
-      "studio:friction:UI can collapse into generic SaaS typography",
-      "studio:friction:UI can become flat or visually forgettable",
-      "studio:friction:Experience can pass desktop and fail real mobile use",
-      "studio:friction:Builder can ship technically correct but market-weak design",
-      "studio:friction:UI still reads like default SaaS typography"
-    ],
-    "enforcement": "HARD"
-  }
+  "blueprint_written": true,
+  "acceptance_sync": "PASS"
 }

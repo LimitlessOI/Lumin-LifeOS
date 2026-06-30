@@ -98,8 +98,8 @@ import { createMemorySelfRepairRoutes } from "../routes/memory-self-repair-route
 import createMemoryStatusRoutes from "../routes/memory-status-routes.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 
-import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
 import { createSocialmediaosCoachingRoutes } from "../routes/socialmediaos-coaching-routes.js";
+import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const {
     pool,
@@ -528,11 +528,11 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use('/api/v1/memory/capsules', createMemoryCapsuleRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-CAPSULE] Routes mounted at /api/v1/memory/capsules/{signal,retrieve,health,capsule/:id,correct}');
 
+  app.use("/api/v1/socialmediaos/coaching", createSocialmediaosCoachingRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
+  logger.info('✅ [SOCIALMEDIAOS-COACHING] Routes mounted at /api/v1/socialmediaos/coaching');
+
   app.use("/api/v1/socialmediaos", createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [SOCIALMEDIAOS] Routes mounted at /api/v1/socialmediaos');
-
-  app.use('/api/v1/socialmediaos/coaching', createSocialmediaosCoachingRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
-  logger.info('✅ [SOCIALMEDIAOS-COACHING] Routes mounted at /api/v1/socialmediaos/coaching');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));

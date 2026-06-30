@@ -1,0 +1,31 @@
+{
+  "schema": "prediction_receipt_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "created_at": "2026-06-30T04:09:50.844Z",
+  "owner": "CFO",
+  "pre_build": {
+    "estimated_duration_minutes": 21,
+    "estimated_token_cost": {
+      "value": null,
+      "confidence": "GUESS",
+      "note": "IDE/builder tokens tracked post-hoc in mission ledger"
+    },
+    "estimated_deploy_required": true,
+    "priority_rank": 11,
+    "success_probability": {
+      "value": 0.7,
+      "confidence": "THINK"
+    }
+  },
+  "post_build": {
+    "actual_duration_minutes": null,
+    "actual_token_cost": null,
+    "variance_note": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"; predicted \"routes_missing\" got \"routes_live\"",
+    "actual_acceptance_pass": true,
+    "actual_verdict": "TECHNICAL_PASS",
+    "actual_git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+    "scored_at": "2026-06-30T04:09:57.395Z"
+  },
+  "outcome_statement": "Build the first working client-facing SocialMediaOS session. After this blueprint:\n\n- Client opens `/overlay/socialmediaos-session.html`\n- Types their niche and goal\n- AI asks 5 coached questions, one at a time (story extraction)\n- After all 5 answers: AI generates a full content pack — 5 LinkedIn posts, 3 YouTube hooks, 3 Instagram captions, 3 email subjects\n- Client copies any piece or downloads everything as a text file\n- Routes wired; schema columns added; acceptance test passes end-to-end",
+  "scored_by": "Hist"
+}

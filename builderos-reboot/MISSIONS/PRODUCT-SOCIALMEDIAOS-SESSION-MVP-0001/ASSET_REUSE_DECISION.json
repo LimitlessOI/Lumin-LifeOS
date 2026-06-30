@@ -1,0 +1,57 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "arc_decision_status": "CONFIRMED",
+  "surveyed_at": "2026-06-30",
+  "wisdom_lessons": [
+    "Reuse production spine files already built — ARC hosts byte contracts"
+  ],
+  "cfo_recommendation": "EXTEND existing repo assets; no greenfield parallel stack",
+  "assets_reviewed": [
+    "services/socialmediaos-coaching-service.js",
+    "services/socialmediaos-content-generator.js",
+    "routes/socialmediaos-coaching-routes.js",
+    "db/migrations/20260629_socialmediaos_coaching.sql",
+    "public/overlay/socialmediaos-session.html",
+    "scripts/run-socialmediaos-session-acceptance.mjs",
+    "startup/register-runtime-routes.js"
+  ],
+  "decisions": [
+    {
+      "asset": "services/socialmediaos-coaching-service.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "services/socialmediaos-content-generator.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "routes/socialmediaos-coaching-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "db/migrations/20260629_socialmediaos_coaching.sql",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "public/overlay/socialmediaos-session.html",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "scripts/run-socialmediaos-session-acceptance.mjs",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "startup/register-runtime-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    }
+  ],
+  "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
+}

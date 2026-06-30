@@ -1,0 +1,263 @@
+{
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "blueprint_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1",
+  "blueprint_status": "ready_for_builder",
+  "scope": "socialmediaos_session_mvp",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "authority": "ARC",
+  "acceptance_command": "npm run smos:session:acceptance",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "non_goals": [
+    "No shell_command steps in Builder — acceptance at blueprint root only"
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
+  ],
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BLUEPRINT.json",
+  "steps": [
+    {
+      "step_id": "SSM-001",
+      "phase_id": "P1",
+      "title": "Coaching service",
+      "target_file": "services/socialmediaos-coaching-service.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-001/socialmediaos-coaching-service.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "b252f2e957053add61b55a32e7c22df66b1f3e65245d40ee82261ac298aa84ee"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-001/socialmediaos-coaching-service.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-001-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SSM-002",
+      "phase_id": "P1",
+      "title": "Content generator service",
+      "target_file": "services/socialmediaos-content-generator.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-002/socialmediaos-content-generator.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "c41e45955975d498b6b9cc49e6e84ca0e523209d6da28af413d54df94759746b"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-002/socialmediaos-content-generator.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-002-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SSM-003",
+      "phase_id": "P1",
+      "title": "Coaching routes",
+      "target_file": "routes/socialmediaos-coaching-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-003/socialmediaos-coaching-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "b6631116e41e038b6b601f46ad86ed86dfb03c55f90053f0569cf2485dd15dbe"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-003/socialmediaos-coaching-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001",
+        "SSM-002"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-003-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SSM-004",
+      "phase_id": "P1",
+      "title": "DB migration — coaching columns",
+      "target_file": "db/migrations/20260629_socialmediaos_coaching.sql",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "cfa26257e586cc6d25366433c5d6c18dffa0a088b460eece11aad8a1d6fd123b"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-004-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "db/migrations/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SSM-005",
+      "phase_id": "P1",
+      "title": "Session UI",
+      "target_file": "public/overlay/socialmediaos-session.html",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "4549891f69c0ceb440064eb6df25e724868294c86438eda880cbd4204d88fcc9"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-005-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "public/overlay/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SSM-006",
+      "phase_id": "P1",
+      "title": "Acceptance test",
+      "target_file": "scripts/run-socialmediaos-session-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "895617e3549ed07506e73bfa5f3bad99af3d87c3b7219c7af8f93e3478e55ced"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001",
+        "SSM-002",
+        "SSM-003",
+        "SSM-004",
+        "SSM-005"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-006-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "SSM-007",
+      "phase_id": "P1",
+      "title": "Route wiring — register-runtime-routes.js",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "3fd81ff0e62ba88742b9069d8a764466486ee79c8dcfced9586613d5ac569374"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001",
+        "SSM-002",
+        "SSM-003",
+        "SSM-004",
+        "SSM-005",
+        "SSM-006"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-007-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "startup/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    }
+  ],
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC"
+}

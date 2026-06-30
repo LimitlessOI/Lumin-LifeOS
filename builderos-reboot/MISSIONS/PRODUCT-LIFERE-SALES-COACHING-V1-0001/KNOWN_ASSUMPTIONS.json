@@ -1,0 +1,21 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "assumptions": [
+    {
+      "id": "A1",
+      "assumption": "Adam is primary user at Alpha",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "A2",
+      "assumption": "Railway production spine is live",
+      "confidence": "THINK"
+    },
+    {
+      "id": "A3",
+      "assumption": "Build the Phase 1 sales coaching system for LifeRE agents. After this blueprint:\n\n- Agent selects a scenario such as expired listing, listing appointment, buyer call, cold call, or objection drill\n- AI plays the client and stays in role for the scenario\n- After every agent turn, the system returns a concise coaching note\n- System detects the likely personality quadrant early and adapts persona + coaching\n- Session ends with a structured scored debrief\n- Objection library and scenarios are wired ",
+      "confidence": "KNOW"
+    }
+  ]
+}

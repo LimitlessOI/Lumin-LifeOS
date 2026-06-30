@@ -1,0 +1,31 @@
+{
+  "schema": "prediction_receipt_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "created_at": "2026-06-30T04:24:21.535Z",
+  "owner": "CFO",
+  "pre_build": {
+    "estimated_duration_minutes": 18,
+    "estimated_token_cost": {
+      "value": null,
+      "confidence": "GUESS",
+      "note": "IDE/builder tokens tracked post-hoc in mission ledger"
+    },
+    "estimated_deploy_required": true,
+    "priority_rank": 12,
+    "success_probability": {
+      "value": 0.7,
+      "confidence": "THINK"
+    }
+  },
+  "post_build": {
+    "actual_duration_minutes": null,
+    "actual_token_cost": null,
+    "variance_note": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"; predicted \"routes_missing\" got \"routes_live\"",
+    "actual_acceptance_pass": true,
+    "actual_verdict": "TECHNICAL_PASS",
+    "actual_git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+    "scored_at": "2026-06-30T04:24:44.069Z"
+  },
+  "outcome_statement": "Build the Phase 1 sales coaching system for LifeRE agents. After this blueprint:\n\n- Agent selects a scenario such as expired listing, listing appointment, buyer call, cold call, or objection drill\n- AI plays the client and stays in role for the scenario\n- After every agent turn, the system returns a concise coaching note\n- System detects the likely personality quadrant early and adapts persona + coaching\n- Session ends with a structured scored debrief\n- Objection library and scenarios are wired ",
+  "scored_by": "Hist"
+}

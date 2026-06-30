@@ -1,0 +1,33 @@
+{
+  "schema": "idc_consensus_receipt_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "at": "2026-06-30T04:09:50.845Z",
+  "chair_led": true,
+  "load_bearing_decision": "handoff_to_arc_corridor",
+  "dissent": [],
+  "synthesis": [
+    {
+      "seat": "SNT",
+      "verdict": "intent_clearance_yes",
+      "aligned": true
+    },
+    {
+      "seat": "CHAIR",
+      "verdict": "forecast_acceptable",
+      "aligned": true
+    },
+    {
+      "seat": "CFO",
+      "verdict": "within_budget",
+      "aligned": true
+    },
+    {
+      "seat": "WISDOM",
+      "verdict": "proceed",
+      "aligned": true
+    }
+  ],
+  "consensus_reached": true,
+  "founder_escalation_required": false,
+  "verdict": "CONSENSUS_YES"
+}

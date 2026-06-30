@@ -4,31 +4,26 @@
   "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
   "tier": 1,
   "status": "HANDOFF_READY",
-  "created_at": "2026-06-29",
+  "created_at": "2026-06-30",
   "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
   "proof_lap_only": false,
-  "outcome_statement": "A client completes a 5-question coaching session and receives an AI-generated content pack (LinkedIn posts, YouTube hooks, Instagram captions, email subjects) they can copy and download immediately.",
-  "user": "SocialMediaOS client (entrepreneur / service professional)",
-  "pain": "Clients have authority and story but can't translate it into platform-native content without a full production team.",
-  "value": "One 15-minute session produces a week of authentic content in the client's own voice.",
+  "outcome_statement": "Build the first working client-facing SocialMediaOS session. After this blueprint:\n\n- Client opens `/overlay/socialmediaos-session.html`\n- Types their niche and goal\n- AI asks 5 coached questions, one at a time (story extraction)\n- After all 5 answers: AI generates a full content pack — 5 LinkedIn posts, 3 YouTube hooks, 3 Instagram captions, 3 email subjects\n- Client copies any piece or downloads everything as a text file\n- Routes wired; schema columns added; acceptance test passes end-to-end",
+  "user": "Adam (founder)",
+  "pain": "SocialMediaOS has partial schema and route groundwork, but no founder-usable client session flow. A client cannot actually go through a coached session, extract their story, generate a usable content pack, or export it. That means the product exists as scattered pieces instead of a working end-to-end outcome.\n\nPain now:\n\n- no usable client session experience\n- no guided 5-question coaching loop\n- ",
+  "value": "Build the first working client-facing SocialMediaOS session. After this blueprint:\n\n- Client opens `/overlay/socialmediaos-session.html`\n- Types their niche and goal\n- AI asks 5 coached questions, one at a time (story extraction)\n- After all 5 answers: AI generates a full content pack — 5 LinkedIn posts, 3 YouTube hooks, 3 Instagram captions, 3 email subjects\n- Client copies any piece or downloads",
   "success_metrics": [
-    "npm run smos:session:acceptance exits 0",
-    "Client can complete all 5 questions through the UI",
-    "Content pack is generated and downloadable as plain text"
+    "Open `/overlay/socialmediaos-session.html` → complete all 5 questions → content pack displays → download works. Run acceptance test: PASS."
   ],
   "failure_metrics": [
-    "Session start fails with DB error",
-    "GET routes return 401 because owner_id is missing",
-    "Content pack generation returns a 502 or unparseable AI response",
-    "Export endpoint returns wrong content-type"
+    "TECHNICAL_PASS without founder_usability_pass",
+    "Auto-execution without Adam approval"
   ],
   "constraints": [
-    "Text-only coaching session — no recording or video in this BP",
-    "No payment gating in this BP",
-    "BP_PRIORITY queue authority — execute after no blocking dependencies"
+    "BP_PRIORITY queue authority",
+    "BuilderOS system path only — no agent hand-build"
   ],
-  "scope_boundary": "Per FOUNDER_PACKET.md — 5 Q&A → AI generation → download. No voice, no b-roll, no competitor intelligence.",
-  "unacceptable_result": "Acceptance script exits 1; owner_id type error crashes session start; GET state/export routes 401 in tests",
+  "scope_boundary": "This packet is only for the first working text-only SocialMediaOS session MVP. It does not include recording, voice, payment gating, b-roll systems, or competitor intelligence.",
+  "unacceptable_result": "Partial blueprint labeled Alpha; bypass of staging/approval gates",
   "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
   "priority_fit": "BP_PRIORITY rank 11",
   "point_model": {

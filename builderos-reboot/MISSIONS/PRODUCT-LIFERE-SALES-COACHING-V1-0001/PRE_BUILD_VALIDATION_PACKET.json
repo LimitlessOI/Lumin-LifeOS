@@ -1,0 +1,11 @@
+{
+  "schema": "pre_build_validation_packet_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "assembled_at": "2026-06-30T04:24:21.802Z",
+  "assembled_by": "assemble-pre-build-packet.mjs",
+  "builder_simulation_ref": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/BUILDER_PRE_BUILD_SIMULATION.json",
+  "arc_twin_ref": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
+  "snt_translation_ref": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
+  "blocking_gaps": 0,
+  "builder_clearance": "yes"
+}

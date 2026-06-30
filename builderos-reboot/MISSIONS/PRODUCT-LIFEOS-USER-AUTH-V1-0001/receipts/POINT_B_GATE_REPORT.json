@@ -1,7 +1,7 @@
 {
   "schema": "point_b_gate_v2",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "evaluated_at": "2026-06-30T00:05:32.578Z",
+  "evaluated_at": "2026-06-30T04:34:44.632Z",
   "proof_lap_only": false,
   "handoff": {
     "schema": "corridor_entered_gate_v1",
@@ -148,8 +148,7 @@
     "proof_lap_only": false,
     "pass": false,
     "violations": [
-      "machine:roadmap FUTURE P4",
-      "machine:Builder not TECHNICAL_PASS"
+      "machine:blueprint missing phases P4"
     ],
     "checks": {
       "corridor": {
@@ -174,11 +173,11 @@
       },
       "arc_run": {
         "pass": true,
-        "status": "BLOCKED_STUDIO"
+        "status": "MECHANICAL_PASS"
       },
       "builder_executed": {
-        "pass": false,
-        "value": "FAIL"
+        "pass": true,
+        "value": "TECHNICAL_PASS"
       }
     },
     "awaiting_founder_at_alpha": true,
@@ -192,8 +191,7 @@
     "pass": false,
     "founder_usability_pass": false,
     "violations": [
-      "machine:roadmap FUTURE P4",
-      "machine:Builder not TECHNICAL_PASS",
+      "machine:blueprint missing phases P4",
       "alpha:founder has not confirmed Alpha yet"
     ],
     "checks": {
@@ -219,11 +217,11 @@
       },
       "arc_run": {
         "pass": true,
-        "status": "BLOCKED_STUDIO"
+        "status": "MECHANICAL_PASS"
       },
       "builder_executed": {
-        "pass": false,
-        "value": "FAIL"
+        "pass": true,
+        "value": "TECHNICAL_PASS"
       },
       "founder_usability": {
         "pass": false,
@@ -238,8 +236,7 @@
   "pass": false,
   "status": "BLOCKED_MACHINE_PATH",
   "violations": [
-    "machine:roadmap FUTURE P4",
-    "machine:Builder not TECHNICAL_PASS"
+    "machine:blueprint missing phases P4"
   ],
   "infrastructure_only": false,
   "lesson": "Corridor entered. System must complete ARC → Builder → acceptance."

@@ -7,7 +7,8 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import fs from 'node:fs';
-import { spawnSync } from 'node:child_process';
+import net from 'node:net';
+import { spawn, spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runBuilderPreBuildSimulate } from './builder-pre-build-simulate.mjs';
@@ -48,6 +49,131 @@ if (!missionId) {
 
 const blueprint = loadBlueprint(missionId);
 const missionFolder = missionDir(missionId);
+
+function needsFreshAcceptanceRuntime(stepsToRun = []) {
+  return stepsToRun.some((step) => /^(routes|services|public\/overlay|startup|db\/migrations)\//.test(String(step.target_file || '')));
+}
+
+async function allocateAcceptancePort() {
+  for (let attempt = 0; attempt < 25; attempt += 1) {
+    const candidate = 3300 + Math.floor(Math.random() * 500);
+    const available = await new Promise((resolve) => {
+      const server = net.createServer();
+      server.unref();
+      server.once('error', () => resolve(false));
+      server.listen(candidate, '127.0.0.1', () => {
+        server.close(() => resolve(true));
+      });
+    });
+    if (available) return candidate;
+  }
+  throw new Error('No free local port available for acceptance runtime');
+}
+
+function createLineBuffer(maxLines = 120) {
+  const lines = [];
+  return {
+    push(chunk) {
+      const text = chunk.toString('utf8');
+      for (const line of text.split(/\r?\n/)) {
+        if (!line) continue;
+        lines.push(line);
+        if (lines.length > maxLines) lines.shift();
+      }
+    },
+    dump() {
+      return [...lines];
+    },
+  };
+}
+
+function parseEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return {};
+  const parsed = {};
+  const raw = fs.readFileSync(filePath, 'utf8');
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq <= 0) continue;
+    const key = trimmed.slice(0, eq).trim();
+    let value = trimmed.slice(eq + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    parsed[key] = value;
+  }
+  return parsed;
+}
+
+async function startAcceptanceRuntime() {
+  const port = await allocateAcceptancePort();
+  const base = `http://127.0.0.1:${port}`;
+  const stdout = createLineBuffer();
+  const stderr = createLineBuffer();
+  const builderEnv = parseEnvFile(path.join(REPO, '.env.builderos'));
+  const mergedEnv = {
+    ...process.env,
+    ...builderEnv,
+    PORT: String(port),
+    BASE_URL: base,
+    BUILDER_BASE_URL: base,
+    LUMIN_SMOKE_BASE_URL: base,
+    PUBLIC_BASE_URL: base,
+  };
+  if (mergedEnv.OPENAI_API_KEY && (!mergedEnv.MAX_DAILY_SPEND || Number(mergedEnv.MAX_DAILY_SPEND) === 0)) {
+    mergedEnv.MAX_DAILY_SPEND = mergedEnv.BUILDER_ACCEPTANCE_MAX_DAILY_SPEND || '1';
+    if (!mergedEnv.COST_SHUTDOWN_THRESHOLD || Number(mergedEnv.COST_SHUTDOWN_THRESHOLD) === 0) {
+      mergedEnv.COST_SHUTDOWN_THRESHOLD = mergedEnv.BUILDER_ACCEPTANCE_COST_THRESHOLD || '0.9';
+    }
+  }
+  const child = spawn(process.execPath, ['server.js'], {
+    cwd: REPO,
+    env: mergedEnv,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+
+  child.stdout.on('data', (chunk) => stdout.push(chunk));
+  child.stderr.on('data', (chunk) => stderr.push(chunk));
+
+  const deadline = Date.now() + 60000;
+  while (Date.now() < deadline) {
+    if (child.exitCode !== null) {
+      throw new Error(
+        `Acceptance runtime exited early (${child.exitCode}). stderr: ${stderr.dump().slice(-20).join('\n')}`,
+      );
+    }
+    try {
+      const res = await fetch(`${base}/healthz`, { signal: AbortSignal.timeout(3000) });
+      if (res.ok) {
+        return {
+          base,
+          env: {
+            ...mergedEnv,
+            BASE_URL: base,
+            BUILDER_BASE_URL: base,
+            LUMIN_SMOKE_BASE_URL: base,
+            PUBLIC_BASE_URL: base,
+          },
+          async stop() {
+            if (child.exitCode !== null) return;
+            child.kill('SIGTERM');
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            if (child.exitCode === null) child.kill('SIGKILL');
+          },
+        };
+      }
+    } catch {
+      // retry until deadline
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+
+  child.kill('SIGKILL');
+  throw new Error(
+    `Timed out waiting for acceptance runtime healthz. stdout: ${stdout.dump().slice(-20).join('\n')} stderr: ${stderr.dump().slice(-20).join('\n')}`,
+  );
+}
 
 const intakeGate = runBpbIntakeGate(missionId, { skip_if_missing: true });
 if (intakeGate && !intakeGate.ok && intakeGate.status !== 'SKIP') {
@@ -170,19 +296,38 @@ if (dryRun) {
   process.exit(0);
 }
 
-console.log('\nRunning acceptance tests…');
 const acceptanceCommand = String(blueprint.acceptance_command || '').trim();
+console.log('\nRunning acceptance tests…');
+let acceptanceRuntime = null;
+let acceptanceEnv = { ...process.env };
+try {
+  if (needsFreshAcceptanceRuntime(steps)) {
+    console.log('Booting fresh acceptance runtime from newly written files…');
+    acceptanceRuntime = await startAcceptanceRuntime();
+    acceptanceEnv = { ...acceptanceEnv, ...acceptanceRuntime.env };
+    console.log(`Acceptance runtime ready at ${acceptanceRuntime.base}`);
+  }
+} catch (error) {
+  console.error(`ACCEPTANCE_RUNTIME_FAIL — ${error.message}`);
+  process.exit(1);
+}
+
 const acceptance = acceptanceCommand
   ? spawnSync(acceptanceCommand, {
       shell: true,
       stdio: 'inherit',
       cwd: REPO,
+      env: acceptanceEnv,
     })
   : spawnSync(
       process.execPath,
       [path.join(__dirname, 'run-mission-acceptance.mjs'), missionId],
-      { stdio: 'inherit', cwd: REPO },
+      { stdio: 'inherit', cwd: REPO, env: acceptanceEnv },
     );
+
+if (acceptanceRuntime) {
+  await acceptanceRuntime.stop();
+}
 
 const runReceipt = {
   schema: 'builder_run_receipt_v1',

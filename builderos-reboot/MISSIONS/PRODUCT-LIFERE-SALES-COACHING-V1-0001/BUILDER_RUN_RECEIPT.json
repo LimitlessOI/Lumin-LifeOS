@@ -1,0 +1,77 @@
+{
+  "schema": "builder_run_receipt_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "blueprint_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001-v1",
+  "run_at": "2026-06-30T04:24:44.013Z",
+  "runner": "builderos-reboot/scripts/execute-mission.mjs",
+  "procedure": [
+    "builder_pre_build_simulate",
+    "decision_gap_map",
+    "pre_build_validation_packet",
+    "write_file_exact_steps",
+    "acceptance_tests",
+    "point_b_gate"
+  ],
+  "pre_build": {
+    "status": "PRE_BUILD_PASS",
+    "blocking_gaps": 0,
+    "receipt": "receipts/BUILDER_PRE_BUILD_SIMULATION.json"
+  },
+  "steps_executed": 6,
+  "step_results": [
+    {
+      "step_id": "LSC-001",
+      "status": "DONE",
+      "target_file": "db/migrations/20260629_lifere_sales_coaching.sql",
+      "sha256": "f14da65e1a671b6d364f8e05e2c39fcd48b92d332f4ad005655b1ad4c0ab9b34"
+    },
+    {
+      "step_id": "LSC-002",
+      "status": "DONE",
+      "target_file": "config/lifere-objection-library.json",
+      "sha256": "ad0e94ac4e20a7f8190336c8fb140be8b24b0dbaa2ce9848efcceac6b0c9501b"
+    },
+    {
+      "step_id": "LSC-003",
+      "status": "DONE",
+      "target_file": "services/lifere-sales-simulator.js",
+      "sha256": "1013d43a2d71d287064bd54209d27841bfeaf088416e2124691d7026a099ea20"
+    },
+    {
+      "step_id": "LSC-004",
+      "status": "DONE",
+      "target_file": "routes/lifere-sales-coaching-routes.js",
+      "sha256": "fb0f7245d244bf3f3c2c73ddc192921fe4060551aca945a00841803fe0dec216"
+    },
+    {
+      "step_id": "LSC-005",
+      "status": "DONE",
+      "target_file": "scripts/run-lifere-sales-coaching-acceptance.mjs",
+      "sha256": "c1b1297178a4da1593198cdda584cc6d450d005d6589f7da0c63ce9c670be735"
+    },
+    {
+      "step_id": "LSC-006",
+      "status": "DONE",
+      "target_file": "startup/register-runtime-routes.js",
+      "sha256": "a94150ce018ce66ceb580c3b3391b2db267824c689ae417aa7df6c4883409b4e"
+    }
+  ],
+  "acceptance_exit_code": 0,
+  "verdict": "TECHNICAL_PASS",
+  "point_b": {
+    "handoff_pass": true,
+    "machine_path_complete": true,
+    "alpha_reached": false,
+    "status": "MACHINE_PATH_PASS_AWAITING_ALPHA",
+    "proof_lap_only": false,
+    "awaiting_founder_alpha": true,
+    "violations": []
+  },
+  "machine_path_complete": true,
+  "alpha_reached": false,
+  "awaiting_founder_alpha": true,
+  "doctrine": {
+    "pass": true,
+    "violations": []
+  }
+}

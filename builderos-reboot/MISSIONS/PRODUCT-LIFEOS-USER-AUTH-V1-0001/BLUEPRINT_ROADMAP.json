@@ -13,19 +13,19 @@
       "name": "Phase P1",
       "status": "BUILDER_READY",
       "intent": "Blueprint steps tagged P1",
-      "builder_outcome": "Builder executes frozen byte contracts",
+      "builder_outcome": "Steps marked complete in legacy blueprint — ARC re-hosts as write_file_exact",
       "alpha_signal": "Phase P1 artifacts exist"
     },
     {
       "phase_id": "P4",
       "name": "Builder Execution",
-      "status": "FUTURE",
+      "status": "BUILDER_READY",
       "intent": "System Builder executes ARC-emitted write_file_exact steps"
     },
     {
       "phase_id": "P5",
       "name": "Alpha Acceptance",
-      "status": "FUTURE",
+      "status": "BUILDER_READY",
       "intent": "Acceptance command + founder usability verdict"
     }
   ],

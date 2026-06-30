@@ -1,8 +1,8 @@
 {
   "schema": "builder_run_receipt_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "blueprint_id": null,
-  "run_at": "2026-06-29T17:19:18.955Z",
+  "blueprint_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST",
+  "run_at": "2026-06-30T04:34:44.619Z",
   "runner": "builderos-reboot/scripts/execute-mission.mjs",
   "procedure": [
     "builder_pre_build_simulate",
@@ -29,7 +29,7 @@
       "step_id": "UAT-002",
       "status": "DONE",
       "target_file": "services/lifeos-user-service.js",
-      "sha256": "15f32f0e6d0c16bfa867d011febbe06699c5e77c0f813afa4da308422bd7474e"
+      "sha256": "cbffe9a279b9a1d2166632de7398cde52a37cefff3d0243b7d9acb54a9721ab6"
     },
     {
       "step_id": "UAT-003",
@@ -41,7 +41,7 @@
       "step_id": "UAT-004",
       "status": "DONE",
       "target_file": "middleware/lifeos-tier-guard.js",
-      "sha256": "adac76f70794ad0eedfa127800d9d0b263d2294cd57a150f45ee05cc08482782"
+      "sha256": "51626dc83944cba2f5f6396f7ea4d3770ec327a28293610acd71508ce2bb51cb"
     },
     {
       "step_id": "UAT-005",
@@ -59,7 +59,7 @@
       "step_id": "UAT-007",
       "status": "DONE",
       "target_file": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
-      "sha256": "0340fd1fe7d2ec0e839c72c9f249608b9e14a9b32a60674386253d9eb01de739"
+      "sha256": "74bdebe023c28c73ea85b769597d6de2e2bd080c50fef9ec7eff3717e6f8b60b"
     }
   ],
   "acceptance_exit_code": 0,
@@ -72,21 +72,14 @@
     "proof_lap_only": false,
     "awaiting_founder_alpha": false,
     "violations": [
-      "machine:roadmap FUTURE P4",
-      "machine:acceptance FAIL — result truth wins over corridor pass",
-      "machine:ARC mechanical handoff not pass"
+      "machine:blueprint missing phases P4"
     ]
   },
   "machine_path_complete": false,
   "alpha_reached": false,
   "awaiting_founder_alpha": false,
   "doctrine": {
-    "pass": false,
-    "violations": [
-      "doctrine:corridor:missing ARC_RUN_RECEIPT (ARC_RUN_RECEIPT.json)",
-      "doctrine:acceptance FAIL tests=UAT-STUB_pending_build",
-      "doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission",
-      "doctrine:verdict/objective mismatch (NOT_COMPLETE)"
-    ]
+    "pass": true,
+    "violations": []
   }
 }

@@ -21,6 +21,8 @@ const VERDICT = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE
 const KEY = process.env.COMMAND_CENTER_KEY || '';
 const PREFIX = '/api/v1/lifere/sales-coach';
 const BASE_CANDIDATES = [
+  process.env.BUILDER_BASE_URL,
+  process.env.LUMIN_SMOKE_BASE_URL,
   process.env.PUBLIC_BASE_URL,
   process.env.BASE_URL,
   'http://127.0.0.1:3000',
@@ -85,7 +87,21 @@ async function run() {
   if (!resolved.base) {
     console.error('SKIP — no reachable base URL');
     report.skipped = true;
-    await finishBpAcceptance({ report, receiptPath: RECEIPT, verdictPath: VERDICT });
+    finishBpAcceptance({
+      root: ROOT,
+      missionId: MISSION,
+      report,
+      receiptAbsPath: RECEIPT,
+      receiptRelPath: RECEIPT_REL,
+      verdictAbsPath: VERDICT,
+      objectiveName: 'LifeRE Sales Coaching V1',
+      objectiveVerdictOnPass: 'TECHNICAL_PASS',
+      base: '',
+      syncTestId: 'LSC-005_bp_sync',
+      buildRecord: { build_method: 'system-build', note: 'LifeRE sales coaching simulator flow.' },
+      verdictExtra: { acceptance_command: 'npm run lifere:sales-coaching:v1-acceptance' },
+      passPredicate: (r) => r.tests_failed.length === 0 && r.skipped !== true,
+    });
     process.exit(0);
   }
   ACTIVE_BASE = resolved.base;
@@ -152,10 +168,23 @@ async function run() {
   console.log(`FAIL: ${report.tests_failed.length}`);
   if (report.tests_failed.length) console.log('Failed:', report.tests_failed);
 
-  const verdict = report.tests_failed.length === 0 ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL';
-  await finishBpAcceptance({ report, receiptPath: RECEIPT, verdictPath: VERDICT });
+  const { pass: acceptancePass } = finishBpAcceptance({
+    root: ROOT,
+    missionId: MISSION,
+    report,
+    receiptAbsPath: RECEIPT,
+    receiptRelPath: RECEIPT_REL,
+    verdictAbsPath: VERDICT,
+    objectiveName: 'LifeRE Sales Coaching V1',
+    objectiveVerdictOnPass: 'TECHNICAL_PASS',
+    base: ACTIVE_BASE,
+    syncTestId: 'LSC-005_bp_sync',
+    buildRecord: { build_method: 'system-build', note: 'LifeRE sales coaching simulator flow.' },
+    verdictExtra: { acceptance_command: 'npm run lifere:sales-coaching:v1-acceptance' },
+    passPredicate: (r) => r.tests_failed.length === 0,
+  });
 
-  process.exit(verdict === 'TECHNICAL_PASS' ? 0 : 1);
+  process.exit(acceptancePass ? 0 : 1);
 }
 
 run().catch((err) => { console.error('Fatal:', err); process.exit(1); });

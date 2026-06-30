@@ -1,24 +1,26 @@
 {
   "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
   "blueprint_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1",
-  "blueprint_status": "READY",
+  "blueprint_status": "complete",
   "scope": "socialmediaos_session_mvp",
-  "summary": "Build first working client-facing SocialMediaOS session: AI Q&A coaching loop, content pack generation, export, session UI, route wiring.",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "ARC",
   "acceptance_command": "npm run smos:session:acceptance",
-  "allowed_action_types": ["write_file_exact"],
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
   "non_goals": [
-    "No recording/video features — text-only coaching session only",
-    "No payment gating in this BP",
-    "No b-roll catalog or voice mirror",
-    "No competitor intelligence features"
+    "No shell_command steps in Builder — acceptance at blueprint root only"
   ],
   "intent_sources": [
-    "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
-    "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/FOUNDER_PACKET.md"
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
   ],
-  "compile_mode": "content_file",
-  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT",
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BLUEPRINT.json",
   "steps": [
     {
       "step_id": "SSM-001",
@@ -36,15 +38,23 @@
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-001/socialmediaos-coaching-service.js"
       ],
-      "forbidden_context_files": ["**"],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-SSM-001-1"],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-001-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:09:55.823Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "SSM-002",
@@ -57,20 +67,30 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "c41e45955975d498b6b9cc49e6e84ca0e523209d6da28af413d54df94759746b"
+        "sha256": "f97b2292479c36cc63cfc5fb74bb077b923e3efe029b5fe26fe8467ec9918cc6"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-002/socialmediaos-content-generator.js"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["SSM-001"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-SSM-002-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-002-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:09:55.823Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "SSM-003",
@@ -83,20 +103,31 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "3e22e63e017543cf29f03583072b8343d51cb93d86e6904aabbc03de5a1e68bf"
+        "sha256": "b6631116e41e038b6b601f46ad86ed86dfb03c55f90053f0569cf2485dd15dbe"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-003/socialmediaos-coaching-routes.js"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["SSM-001", "SSM-002"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-SSM-003-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001",
+        "SSM-002"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-003-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "routes/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:09:55.823Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "SSM-004",
@@ -114,15 +145,23 @@
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql"
       ],
-      "forbidden_context_files": ["**"],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-SSM-004-1"],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-004-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "db/migrations/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:09:55.823Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "SSM-005",
@@ -140,15 +179,23 @@
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html"
       ],
-      "forbidden_context_files": ["**"],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-SSM-005-1"],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-005-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
-      "sandbox_boundary": "public/**",
+      "sandbox_boundary": "public/overlay/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:09:55.823Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "SSM-006",
@@ -161,20 +208,34 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "21af6f4a6307a661916650402487ef4811fb056ce9123a79b89f2e4012450120"
+        "sha256": "895617e3549ed07506e73bfa5f3bad99af3d87c3b7219c7af8f93e3478e55ced"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["SSM-001", "SSM-002", "SSM-003", "SSM-004", "SSM-005"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-SSM-006-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001",
+        "SSM-002",
+        "SSM-003",
+        "SSM-004",
+        "SSM-005"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-006-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:09:55.823Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "SSM-007",
@@ -187,23 +248,42 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "15d973c95aff3e6ec1f4d303bbd2d576da9c94c24cf3ee0df2e61246108e33c8"
+        "sha256": "3fd81ff0e62ba88742b9069d8a764466486ee79c8dcfced9586613d5ac569374"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["SSM-001", "SSM-002", "SSM-003", "SSM-004", "SSM-005", "SSM-006"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-SSM-007-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "SSM-001",
+        "SSM-002",
+        "SSM-003",
+        "SSM-004",
+        "SSM-005",
+        "SSM-006"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-SSM-007-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "startup/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:09:55.823Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     }
   ],
-  "compiled_by": "Claude Sonnet 4.6",
-  "authored_by": "Adam Hopkins + Claude",
-  "build_method": "content_file_write"
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC",
+  "completed_at": "2026-06-30T04:09:55.823Z",
+  "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+  "receipt_path": "products/receipts/SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

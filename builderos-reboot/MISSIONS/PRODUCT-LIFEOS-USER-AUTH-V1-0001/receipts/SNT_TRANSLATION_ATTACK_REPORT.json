@@ -3,7 +3,7 @@
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "seat": "SNT",
   "review": "translation_attack",
-  "simulated_at": "2026-06-30T00:05:32.578Z",
+  "simulated_at": "2026-06-30T04:38:33.464Z",
   "simulated_by": "factory-core/arc/foundation/snt-translation-attack.js",
   "core_question": "If this claim is wrong, how would we know?",
   "attacks_run": 6,
@@ -50,14 +50,14 @@
     },
     {
       "claim": "Production route probe",
-      "pass": false,
+      "pass": true,
       "failure_scenario": "Routes not live on production base URL",
       "severity": "blocking",
-      "evidence_if_wrong": "Set PUBLIC_BASE_URL + COMMAND_CENTER_KEY to probe production routes",
-      "recommended_action": "ARC revises blueprint"
+      "evidence_if_wrong": "Run npm run lifeos:user-auth:v1-acceptance against https://robust-magic-production.up.railway.app",
+      "recommended_action": "none"
     }
   ],
-  "blocking_count": 2,
+  "blocking_count": 1,
   "verdict": "builder_clearance_no",
   "pass": false
 }

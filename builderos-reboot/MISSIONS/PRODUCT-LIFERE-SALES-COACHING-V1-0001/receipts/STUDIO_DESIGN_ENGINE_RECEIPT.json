@@ -1,0 +1,9 @@
+{
+  "schema": "studio_design_engine_receipt_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "generated_at": "2026-06-30T04:24:21.552Z",
+  "packet_path": "STUDIO_DESIGN_PACKET.json",
+  "surface": "voice_command_surface",
+  "mood": "mission_control",
+  "pass": true
+}

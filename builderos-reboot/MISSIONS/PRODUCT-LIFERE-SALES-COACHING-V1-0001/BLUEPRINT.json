@@ -1,25 +1,26 @@
 {
   "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
   "blueprint_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001-v1",
-  "blueprint_status": "READY",
+  "blueprint_status": "complete",
   "scope": "lifere_sales_coaching_phase1",
-  "summary": "Build LifeRE Sales Coaching Phase 1: AI simulator plays the client, real-time coaching per turn, personality quadrant detection, post-session debrief with scores. 5 scenarios, 10 core objections.",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "ARC",
   "acceptance_command": "npm run lifere:sales-coaching:v1-acceptance",
-  "allowed_action_types": ["write_file_exact"],
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
   "non_goals": [
-    "No live call listening in this BP — simulator only",
-    "No voice/audio integration",
-    "No UI in this BP — API-only Phase 1",
-    "No behavioral analytics or call history dashboard"
+    "No shell_command steps in Builder — acceptance at blueprint root only"
   ],
   "intent_sources": [
-    "docs/products/lifere/PRODUCT_HOME.md",
-    "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/FOUNDER_PACKET.md"
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
   ],
-  "compile_mode": "content_file",
-  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT",
-  "dependencies_on_missions": ["PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001"],
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/BLUEPRINT.json",
   "steps": [
     {
       "step_id": "LSC-001",
@@ -37,15 +38,23 @@
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-001/20260629_lifere_sales_coaching.sql"
       ],
-      "forbidden_context_files": ["**"],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-LSC-001-1"],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LSC-001-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "db/migrations/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:24:42.494Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "LSC-002",
@@ -63,15 +72,23 @@
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-002/lifere-objection-library.json"
       ],
-      "forbidden_context_files": ["**"],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-LSC-002-1"],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LSC-002-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "config/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:24:42.494Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "LSC-003",
@@ -84,20 +101,31 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "a43853c369a84dd30be3e80a9d85a93225f98c5cfba636f4ee7843bf73b15e11"
+        "sha256": "1013d43a2d71d287064bd54209d27841bfeaf088416e2124691d7026a099ea20"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-003/lifere-sales-simulator.js"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["LSC-001", "LSC-002"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-LSC-003-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LSC-001",
+        "LSC-002"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LSC-003-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:24:42.494Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "LSC-004",
@@ -110,20 +138,30 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d18b9ab4ceee4884eb11ed571b4ec2241a0eb129d6e7e495a76236641a6597be"
+        "sha256": "fb0f7245d244bf3f3c2c73ddc192921fe4060551aca945a00841803fe0dec216"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-004/lifere-sales-coaching-routes.js"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["LSC-003"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-LSC-004-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LSC-003"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LSC-004-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "routes/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:24:42.494Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "LSC-005",
@@ -136,20 +174,33 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "07416234be7eda42f054a96bebbdd395af9f5a99909d4af062ff724186b71111"
+        "sha256": "c1b1297178a4da1593198cdda584cc6d450d005d6589f7da0c63ce9c670be735"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-005/run-lifere-sales-coaching-acceptance.mjs"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["LSC-001", "LSC-002", "LSC-003", "LSC-004"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-LSC-005-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LSC-001",
+        "LSC-002",
+        "LSC-003",
+        "LSC-004"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LSC-005-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:24:42.494Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "LSC-006",
@@ -167,18 +218,36 @@
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-006/register-runtime-routes.js"
       ],
-      "forbidden_context_files": ["**"],
-      "dependencies": ["LSC-001", "LSC-002", "LSC-003", "LSC-004", "LSC-005"],
-      "non_goals": ["No agent improvisation — byte contract only"],
-      "acceptance_test_ids": ["AT-LSC-006-1"],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LSC-001",
+        "LSC-002",
+        "LSC-003",
+        "LSC-004",
+        "LSC-005"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LSC-006-1"
+      ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "startup/**",
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
-      "status": "pending"
+      "status": "complete",
+      "completed_at": "2026-06-30T04:24:42.494Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     }
   ],
-  "compiled_by": "Claude Sonnet 4.6",
-  "authored_by": "Adam Hopkins + Claude",
-  "build_method": "content_file_write"
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC",
+  "completed_at": "2026-06-30T04:24:42.494Z",
+  "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+  "receipt_path": "products/receipts/LIFERE_SALES_COACHING_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

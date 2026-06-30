@@ -20,8 +20,10 @@ const VERDICT = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE
 
 const KEY = process.env.COMMAND_CENTER_KEY || '';
 const BASE_CANDIDATES = [
-  process.env.PUBLIC_BASE_URL,
+  process.env.BUILDER_BASE_URL,
+  process.env.LUMIN_SMOKE_BASE_URL,
   process.env.BASE_URL,
+  process.env.PUBLIC_BASE_URL,
   'http://127.0.0.1:3000',
 ].filter(Boolean).map((v) => String(v).replace(/\/$/, ''));
 
@@ -87,7 +89,21 @@ async function run() {
   if (!resolved.base) {
     console.error('SKIP — no reachable base URL');
     report.skipped = true;
-    await finishBpAcceptance({ report, receiptPath: RECEIPT, verdictPath: VERDICT });
+    finishBpAcceptance({
+      root: ROOT,
+      missionId: MISSION,
+      report,
+      receiptAbsPath: RECEIPT,
+      receiptRelPath: RECEIPT_REL,
+      verdictAbsPath: VERDICT,
+      objectiveName: 'SocialMediaOS Session MVP',
+      objectiveVerdictOnPass: 'TECHNICAL_PASS',
+      base: '',
+      syncTestId: 'SSM-006_bp_sync',
+      buildRecord: { build_method: 'system-build', note: 'SocialMediaOS coaching + content pack session flow.' },
+      verdictExtra: { acceptance_command: 'npm run smos:session:acceptance' },
+      passPredicate: (r) => r.tests_failed.length === 0 && r.skipped !== true,
+    });
     process.exit(0);
   }
   ACTIVE_BASE = resolved.base;
@@ -163,10 +179,23 @@ async function run() {
   console.log(`FAIL: ${report.tests_failed.length}`);
   if (report.tests_failed.length) console.log('Failed:', report.tests_failed);
 
-  const verdict = report.tests_failed.length === 0 ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL';
-  await finishBpAcceptance({ report, receiptPath: RECEIPT, verdictPath: VERDICT });
+  const { pass } = finishBpAcceptance({
+    root: ROOT,
+    missionId: MISSION,
+    report,
+    receiptAbsPath: RECEIPT,
+    receiptRelPath: RECEIPT_REL,
+    verdictAbsPath: VERDICT,
+    objectiveName: 'SocialMediaOS Session MVP',
+    objectiveVerdictOnPass: 'TECHNICAL_PASS',
+    base: ACTIVE_BASE,
+    syncTestId: 'SSM-006_bp_sync',
+    buildRecord: { build_method: 'system-build', note: 'SocialMediaOS coaching + content pack session flow.' },
+    verdictExtra: { acceptance_command: 'npm run smos:session:acceptance' },
+    passPredicate: (r) => r.tests_failed.length === 0,
+  });
 
-  process.exit(verdict === 'TECHNICAL_PASS' ? 0 : 1);
+  process.exit(pass ? 0 : 1);
 }
 
 run().catch((err) => { console.error('Fatal:', err); process.exit(1); });

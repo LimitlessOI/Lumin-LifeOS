@@ -1,0 +1,195 @@
+{
+  "version": "1.0",
+  "vertical": "real_estate",
+  "updated": "2026-06-29",
+  "objections": [
+    {
+      "id": "commission_too_high",
+      "surface": ["your commission is too high", "I can't afford that", "other agents charge less"],
+      "real_driver": "value gap — they don't yet see what justifies the fee",
+      "principle": "never defend the number — reveal the cost of the cheaper alternative",
+      "responses": {
+        "universal": "What would it cost you if the house sat on the market an extra 60 days? My fee pays for itself in speed, price, and stress you don't carry.",
+        "analytical": "Let me show you the data: homes I list sell in X days vs. Y days average. The delta on your price more than covers the difference in commission.",
+        "driver": "You want it sold fast, at the right price, with no surprises. That's what you're paying for. The cheaper option is more expensive when the deal falls apart.",
+        "expressive": "I completely understand — and I want you to feel great about this. Let me tell you what happened to my last client who almost went with a discounted agent…",
+        "amiable": "I hear you, and I want this to feel fair. Can we walk through exactly what's included? I think once you see it, it'll make more sense."
+      },
+      "objection_mastery_drill": "expired_listing"
+    },
+    {
+      "id": "need_to_think_about_it",
+      "surface": ["I need to think about it", "let me sleep on it", "I want to talk it over"],
+      "real_driver": "trust deficit OR price concern OR invisible influencer not in the room",
+      "principle": "maybe is a no — make three options explicit; offer the car move if spouse is present",
+      "responses": {
+        "universal": "I completely respect that. Here's where I land: you can choose to work with me, choose not to — both are good choices I respect. A maybe for me is a no, so I'd rather know where we stand. What's the one thing that's holding you back right now?",
+        "analytical": "What specific information would help you feel confident making this decision today? I'd rather answer those questions now than have you research alone.",
+        "driver": "What's the one thing that's not resolved yet? Let's handle it now.",
+        "expressive": "I want you to feel great about this — not just make a decision. What would need to be true for this to feel like an obvious yes?",
+        "amiable": "I understand. Is there someone else who's part of this decision? If so, I'd love to include them in the conversation."
+      },
+      "car_move_trigger": true,
+      "objection_mastery_drill": "listing_appointment"
+    },
+    {
+      "id": "already_have_an_agent",
+      "surface": ["I already have an agent", "my friend is an agent", "my family member sells real estate"],
+      "real_driver": "loyalty obligation OR fear of conflict — rarely an actual preference issue",
+      "principle": "validate the loyalty; surface the real question they haven't asked themselves",
+      "responses": {
+        "universal": "I respect that completely. When that listing expires, reach out — I'd love to show you a different approach. One question before I go: is that agent giving you the results you expected?",
+        "analytical": "I'm not here to replace a relationship. But what metrics are you using to measure if it's working?",
+        "driver": "Fair enough. When the contract's up, what would you need to see from an agent to make the switch?",
+        "expressive": "That's really nice — loyalty matters. If you ever want a second opinion on strategy, I'm here. No pressure.",
+        "amiable": "I wouldn't want to cause any awkwardness. If things ever change, I hope you'll think of me."
+      },
+      "objection_mastery_drill": "cold_call"
+    },
+    {
+      "id": "price_too_high",
+      "surface": ["you priced it too high", "I want to list higher", "the other agent said we could get more"],
+      "real_driver": "emotional attachment to a number, anchoring to a higher comp, fear of undervaluing",
+      "principle": "never argue with the number — let the market be the authority; protect their equity, not their hope",
+      "responses": {
+        "universal": "I understand — and I want you to get every dollar this home is worth. But here's what I've seen happen when a home is overpriced: it sits, gets stigmatized, and ultimately sells for less than if it was priced right from day one. I'm trying to protect your equity, not limit it.",
+        "analytical": "Here's the data on comparable sales. Homes that are overpriced by 5% take 3x longer to sell and end up reducing below where we should have started. Want to walk through the numbers?",
+        "driver": "I hear you. I want to get you the most money. The fastest path to maximum price is the right starting price. Overpricing loses money.",
+        "expressive": "I know how much this home means to you and your family. That's exactly why I want to get the strategy right — so it sells to someone who will love it the way you did.",
+        "amiable": "I want you to feel comfortable with where we land. Can we look at this together and make the decision based on what the market is actually showing us?"
+      },
+      "objection_mastery_drill": "listing_appointment"
+    },
+    {
+      "id": "just_browsing",
+      "surface": ["we're just looking", "not ready yet", "just starting the process"],
+      "real_driver": "guard is up — they've been burned before OR genuinely early; goal is to qualify",
+      "principle": "don't sell; qualify and earn the next conversation",
+      "responses": {
+        "universal": "Totally makes sense — there's no urgency here. Can I ask, what would make this the right time? Is it finding the right neighborhood, a specific price point, or waiting for something else to happen first?",
+        "analytical": "When you say 'just browsing,' does that mean 6 months away, 12 months away, or you're not sure yet? I just want to know how to be useful to you.",
+        "driver": "What would 'ready' look like? Is there a milestone you're waiting to hit?",
+        "expressive": "What's got you excited about the idea of moving? Even if it's early, I love hearing people's vision for their next chapter.",
+        "amiable": "No pressure at all. It helps me to know what you're hoping for — even the dream version. What does the perfect home look like?"
+      },
+      "objection_mastery_drill": "buyer_qualification"
+    },
+    {
+      "id": "market_is_bad",
+      "surface": ["the market is bad", "now's not a good time to sell", "interest rates are too high"],
+      "real_driver": "fear of getting stuck without options OR anchoring to a specific number they've heard",
+      "principle": "shift from market-timing to personal-economics; every market has the right move",
+      "responses": {
+        "universal": "The market is always good for someone. Sellers facing buyers facing high rates — they're not gone, they're motivated. The serious buyers are the ones making offers right now.",
+        "analytical": "Let me show you what's actually moved in the last 90 days. The data might be different from what you're seeing in the headlines.",
+        "driver": "Here's what I know: people who waited for the 'right market' in 2018 were still waiting in 2020. What's the cost to you of waiting another year?",
+        "expressive": "I understand the concern. Can I share what I'm seeing with clients who are in similar situations? Some are doing really well right now.",
+        "amiable": "There's no rush. Can we just look at what your options would look like if you did decide to sell? That way you have the information and can choose."
+      },
+      "objection_mastery_drill": "expired_listing"
+    },
+    {
+      "id": "sell_it_myself",
+      "surface": ["I'm going to try to sell it myself", "FSBO", "I have a buyer"],
+      "real_driver": "wants to avoid commission OR overestimates how easy it is OR has a genuine buyer",
+      "principle": "validate the goal; reveal the real cost of the attempt; offer to be the backstop",
+      "responses": {
+        "universal": "I completely respect that. If you have a buyer, let me help you get the paperwork right and make sure you're protected — that part alone could save you tens of thousands. And if it doesn't work out, you know where to find me.",
+        "analytical": "FSBO homes sell for an average of 5.5% less than agent-listed homes. That's usually more than the commission. Want to see the data?",
+        "driver": "Fair enough. What's your backup plan if the buyer walks or the deal falls apart in escrow?",
+        "expressive": "I love the confidence — you clearly know what you want. Can I share one thing I've seen go sideways on private sales so you can avoid it?",
+        "amiable": "I want whatever's easiest for you. If you want a safety net while you try, I can be on standby — no obligation."
+      },
+      "objection_mastery_drill": "expired_listing"
+    },
+    {
+      "id": "bad_experience_last_agent",
+      "surface": ["my last agent was terrible", "I had a bad experience", "I don't trust agents"],
+      "real_driver": "real emotional wound — lack of communication, broken promises, or feeling like a number",
+      "principle": "validate first; don't defend the industry; let them vent completely before you say anything",
+      "responses": {
+        "universal": "I'm really sorry that happened. Can you tell me what went wrong? I want to understand, not just convince you I'm different.",
+        "analytical": "What would you need to see — in concrete terms — for this to feel different? I want to know your benchmark.",
+        "driver": "Fair — you should judge by results. Here's what I'd propose: let's set clear expectations up front and you hold me to them. No vague promises.",
+        "expressive": "That sounds like it was genuinely painful. You trusted someone and they let you down. I take that seriously.",
+        "amiable": "I hear you, and I think your caution makes complete sense. What would it take for you to feel comfortable trying again?"
+      },
+      "objection_mastery_drill": "listing_appointment"
+    },
+    {
+      "id": "need_to_fix_first",
+      "surface": ["I need to fix it up first", "it needs work before we sell", "I want to renovate"],
+      "real_driver": "fear of showing a 'lesser' home OR sunk-cost thinking on improvements",
+      "principle": "separate perception from reality — buyers pay for potential, not perfection",
+      "responses": {
+        "universal": "Let's talk about which improvements actually add value and which ones don't. In this market, buyers often prefer to personalize themselves. You might be putting money into something that doesn't change the offer price.",
+        "analytical": "I can give you a cost-vs-return analysis on any improvement you're considering. Some add dollar-for-dollar value; many don't. Let's be strategic.",
+        "driver": "What's the all-in cost and timeline on the renovation? And what's the cost of delaying your sale by 3-6 months while you do it?",
+        "expressive": "I love that you care about how the home presents. Let's do a walk-through together and I'll tell you exactly what buyers in your price range are actually looking for.",
+        "amiable": "I want you to feel proud of how it shows. Let me walk through it with you — I can tell you what's worth doing and what you can skip."
+      },
+      "objection_mastery_drill": "listing_appointment"
+    },
+    {
+      "id": "interviewing_multiple_agents",
+      "surface": ["I'm interviewing several agents", "I'm talking to a few people", "I want to compare"],
+      "real_driver": "due diligence (healthy) OR trying to avoid commitment OR price shopping",
+      "principle": "welcome the comparison; shift the evaluation criteria to your strengths; ask what matters most to them",
+      "responses": {
+        "universal": "That's exactly what you should do. What's the most important thing you'll be evaluating? I want to make sure I'm answering the right question, not just giving a generic pitch.",
+        "analytical": "Great. What metrics matter most to you — days on market, list-to-sale ratio, communication frequency, marketing reach? Tell me your scorecard and I'll tell you where I stand.",
+        "driver": "Good. At the end of this, what will make someone a clear choice? I'd rather know now so I can address it directly.",
+        "expressive": "I love that — you're being really thoughtful about this. What's your gut telling you to watch out for?",
+        "amiable": "I think it's smart to meet a few people. What would make you feel really confident in whoever you choose?"
+      },
+      "objection_mastery_drill": "listing_appointment"
+    }
+  ],
+  "scenarios": {
+    "expired_listing": {
+      "id": "expired_listing",
+      "label": "Expired Listing Cold Call",
+      "difficulty": "hard",
+      "setup": "The listing expired 3 days ago. Owner is frustrated — their home sat for 90 days with no offers. They're skeptical of agents.",
+      "client_persona": "defensive, financially stressed, had a bad experience with last agent",
+      "target_objections": ["commission_too_high", "bad_experience_last_agent", "market_is_bad"],
+      "win_condition": "secure listing appointment within 5 turns"
+    },
+    "listing_appointment": {
+      "id": "listing_appointment",
+      "label": "Listing Appointment",
+      "difficulty": "medium",
+      "setup": "You're sitting in the seller's living room. They've already met 2 other agents. They want to sell but are nervous about price.",
+      "client_persona": "cautious, price-anchored high, interviewing multiple agents",
+      "target_objections": ["price_too_high", "need_to_think_about_it", "interviewing_multiple_agents"],
+      "win_condition": "get listing signed before leaving"
+    },
+    "buyer_qualification": {
+      "id": "buyer_qualification",
+      "label": "Buyer Qualification Call",
+      "difficulty": "easy",
+      "setup": "First call with an online lead. They registered on your website but haven't committed to anything.",
+      "client_persona": "curious but non-committal, just browsing, has questions about market",
+      "target_objections": ["just_browsing", "market_is_bad"],
+      "win_condition": "book showing or consultation within 4 turns"
+    },
+    "objection_drill": {
+      "id": "objection_drill",
+      "label": "Objection Mastery Drill",
+      "difficulty": "variable",
+      "setup": "AI throws random objections in sequence. Agent must handle each one before moving on.",
+      "client_persona": "varies by objection",
+      "target_objections": "all",
+      "win_condition": "score 7/10 or higher on handling quality"
+    },
+    "cold_call": {
+      "id": "cold_call",
+      "label": "Cold Call to Farming Area",
+      "difficulty": "hard",
+      "setup": "Calling a homeowner in your farm area who did not request contact. They have no reason to talk to you.",
+      "client_persona": "surprised, slightly annoyed, no initial interest",
+      "target_objections": ["already_have_an_agent", "just_browsing", "need_to_think_about_it"],
+      "win_condition": "earn a follow-up conversation within 4 turns"
+    }
+  }
+}

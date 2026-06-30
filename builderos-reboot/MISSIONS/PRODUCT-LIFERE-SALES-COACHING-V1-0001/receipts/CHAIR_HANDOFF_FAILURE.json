@@ -1,0 +1,19 @@
+{
+  "schema": "chair_handoff_failure_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "recorded_at": "2026-06-30T04:12:17.237Z",
+  "chair_failed": true,
+  "pushed_by": "ARC",
+  "defect_owner_seat": "Chair",
+  "violations": [
+    "development:FOUNDER_PACKET missing Problem",
+    "development:intent_not_clear pain:MISSING"
+  ],
+  "escalate_to_founder": true,
+  "founder_message": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+  "next": [
+    "ARC → Chair (handoff incomplete)",
+    "Chair → Adam (Chair acknowledges synthesis failure)",
+    "resolve → back down chain"
+  ]
+}

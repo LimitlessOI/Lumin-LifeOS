@@ -14,25 +14,31 @@
     "expected_sha256": "ad0e94ac4e20a7f8190336c8fb140be8b24b0dbaa2ce9848efcceac6b0c9501b"
   },
   {
+    "test_id": "AT-LSC-002-2",
+    "step_id": "LSC-002",
+    "type": "json_parseable",
+    "target": "config/lifere-objection-library.json"
+  },
+  {
     "test_id": "AT-LSC-003-1",
     "step_id": "LSC-003",
     "type": "file_sha256_matches",
     "target": "services/lifere-sales-simulator.js",
-    "expected_sha256": "a43853c369a84dd30be3e80a9d85a93225f98c5cfba636f4ee7843bf73b15e11"
+    "expected_sha256": "1013d43a2d71d287064bd54209d27841bfeaf088416e2124691d7026a099ea20"
   },
   {
     "test_id": "AT-LSC-004-1",
     "step_id": "LSC-004",
     "type": "file_sha256_matches",
     "target": "routes/lifere-sales-coaching-routes.js",
-    "expected_sha256": "d18b9ab4ceee4884eb11ed571b4ec2241a0eb129d6e7e495a76236641a6597be"
+    "expected_sha256": "fb0f7245d244bf3f3c2c73ddc192921fe4060551aca945a00841803fe0dec216"
   },
   {
     "test_id": "AT-LSC-005-1",
     "step_id": "LSC-005",
     "type": "file_sha256_matches",
     "target": "scripts/run-lifere-sales-coaching-acceptance.mjs",
-    "expected_sha256": "07416234be7eda42f054a96bebbdd395af9f5a99909d4af062ff724186b71111"
+    "expected_sha256": "c1b1297178a4da1593198cdda584cc6d450d005d6589f7da0c63ce9c670be735"
   },
   {
     "test_id": "AT-LSC-006-1",

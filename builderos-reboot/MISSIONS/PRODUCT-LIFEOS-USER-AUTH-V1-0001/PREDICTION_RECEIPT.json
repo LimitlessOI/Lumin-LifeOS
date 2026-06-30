@@ -1,7 +1,7 @@
 {
   "schema": "prediction_receipt_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "created_at": "2026-06-30T00:05:30.558Z",
+  "created_at": "2026-06-30T04:34:37.917Z",
   "owner": "CFO",
   "pre_build": {
     "estimated_duration_minutes": 21,
@@ -11,7 +11,7 @@
       "note": "IDE/builder tokens tracked post-hoc in mission ledger"
     },
     "estimated_deploy_required": true,
-    "priority_rank": 11,
+    "priority_rank": 13,
     "success_probability": {
       "value": 0.7,
       "confidence": "THINK"
@@ -20,7 +20,11 @@
   "post_build": {
     "actual_duration_minutes": null,
     "actual_token_cost": null,
-    "variance_note": null
+    "variance_note": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"",
+    "actual_acceptance_pass": true,
+    "actual_verdict": "TECHNICAL_PASS",
+    "actual_git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+    "scored_at": "2026-06-30T04:34:44.650Z"
   },
   "outcome_statement": "Founder reaches Point B: acceptance command PASS and founder success test satisfied on production.",
   "scored_by": "Hist"

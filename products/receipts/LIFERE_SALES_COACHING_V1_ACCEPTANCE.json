@@ -1,0 +1,55 @@
+{
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "run_at": "2026-06-30T04:24:37.318Z",
+  "tests_passed": [
+    "AT-LSC-001-ok",
+    "AT-LSC-001-has-scenarios",
+    "AT-LSC-001-has-expired",
+    "AT-LSC-002-ok",
+    "AT-LSC-002-sessionId",
+    "AT-LSC-002-opening",
+    "AT-LSC-003-turn-1-ok",
+    "AT-LSC-003-turn-1-client",
+    "AT-LSC-003-turn-1-coach",
+    "AT-LSC-003-turn-2-ok",
+    "AT-LSC-003-turn-2-client",
+    "AT-LSC-003-turn-2-coach",
+    "AT-LSC-003-turn-3-ok",
+    "AT-LSC-003-turn-3-client",
+    "AT-LSC-003-turn-3-coach",
+    "AT-LSC-003-quadrant",
+    "AT-LSC-004-ok",
+    "AT-LSC-004-debrief",
+    "AT-LSC-004-scores",
+    "AT-LSC-004-overall-score",
+    "AT-LSC-004-did-well",
+    "AT-LSC-004-must-change",
+    "AT-LSC-005-ok",
+    "AT-LSC-005-completed",
+    "bp_sync_mandatory",
+    "LSC-005_bp_sync"
+  ],
+  "tests_failed": [],
+  "skipped": false,
+  "runtime_target": "http://127.0.0.1:3362",
+  "base_resolution": {
+    "base": "http://127.0.0.1:3362",
+    "mode": "configured"
+  },
+  "completed_at": "2026-06-30T04:24:42.494Z",
+  "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+  "production_base": "http://127.0.0.1:3362",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}

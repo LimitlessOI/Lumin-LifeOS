@@ -1,0 +1,91 @@
+{
+  "schema": "studio_design_packet_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "generated_at": "2026-06-30T04:24:21.552Z",
+  "generated_by": "factory-core/arc/foundation/studio-design-engine.js",
+  "in_scope": true,
+  "surface": "voice_command_surface",
+  "mood": "mission_control",
+  "visual_direction": {
+    "title": "voice_command_surface:mission_control",
+    "summary": [
+      "Build this as voice command surface with a mission control visual language.",
+      "The founder should understand hierarchy, trust level, and primary action at a glance."
+    ]
+  },
+  "typography": {
+    "display": "\"Space Grotesk\", \"Trebuchet MS\", sans-serif",
+    "body": "\"Manrope\", \"Avenir Next\", sans-serif",
+    "code": "\"IBM Plex Mono\", monospace"
+  },
+  "palette": {
+    "background": "#f6f7f2",
+    "surface": "#ffffff",
+    "text": "#172033",
+    "accent": "#1c7c54",
+    "accent_two": "#d96c06",
+    "border": "#d5dbe4"
+  },
+  "layout_rules": [
+    "Conversation/result surface above, composer immediately below, support tools subordinate.",
+    "One primary column on mobile; optional secondary utility rail only when space allows.",
+    "Critical actions remain within the first viewport on laptop and phone."
+  ],
+  "component_rules": [
+    "Input composer sits directly below conversation transcript with no dead zone.",
+    "Primary action controls stay visually anchored near the composer.",
+    "System status text must be compressed into badges or cards, never tiny paragraph clutter.",
+    "Founder-critical actions must have strong contrast and single-click legibility.",
+    "Mic state must be obvious from one glance: idle, listening, transcribing, blocked, failed.",
+    "Transcript panel should privilege the active exchange over secondary proof widgets.",
+    "Voice controls must not compete with the message composer for visual dominance."
+  ],
+  "motion_rules": [
+    "Use short staged reveals for major sections; avoid constant ambient motion.",
+    "Animation must clarify hierarchy or state change, never exist as decoration alone.",
+    "Mic state changes should animate within 120-220ms and never feel laggy or theatrical."
+  ],
+  "implementation_contract": {
+    "required_css_variables": {
+      "--studio-bg": "#f6f7f2",
+      "--studio-surface": "#ffffff",
+      "--studio-text": "#172033",
+      "--studio-accent": "#1c7c54",
+      "--studio-accent-2": "#d96c06",
+      "--studio-border": "#d5dbe4",
+      "--studio-font-display": "\"Space Grotesk\", \"Trebuchet MS\", sans-serif",
+      "--studio-font-body": "\"Manrope\", \"Avenir Next\", sans-serif",
+      "--studio-font-code": "\"IBM Plex Mono\", monospace",
+      "--studio-radius-lg": "24px",
+      "--studio-shadow-soft": "0 18px 50px rgba(20,28,40,0.12)"
+    },
+    "required_markup_signals": [
+      "A dedicated conversation transcript region.",
+      "A dedicated composer region directly below the transcript.",
+      "A founder-visible primary action button."
+    ],
+    "required_responsive_signals": [
+      "At least one @media breakpoint or clamp()-based scaling rule.",
+      "Mobile-safe spacing and touch-target sizing."
+    ],
+    "required_visual_signals": [
+      "At least one layered background, gradient, texture, or elevated surface treatment.",
+      "At least one emphasized display typography treatment."
+    ],
+    "forbidden_patterns": [
+      "Default system font stack as the only typography direction.",
+      "Flat white or flat near-black background with no atmosphere.",
+      "Tiny explanatory helper text beneath every control.",
+      "Department toggles or debug controls in the founder’s primary command path unless explicitly requested.",
+      "Proof-event tables above the active conversation surface.",
+      "Mic/device troubleshooting exposed as the primary UI instead of a contained fallback panel."
+    ]
+  },
+  "builder_instructions": [
+    "Implement the CSS variables exactly or provide a stronger governed equivalent with a receipt.",
+    "Do not reintroduce generic helper-text clutter after Studio packet generation.",
+    "Any deviation from the forbidden patterns requires SENTRY/Studio justification."
+  ],
+  "source_artifact_count": 6,
+  "pass": true
+}

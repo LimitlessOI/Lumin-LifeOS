@@ -1,7 +1,7 @@
 {
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "blueprint_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST",
-  "blueprint_status": "ready_for_builder",
+  "blueprint_status": "complete",
   "scope": "product_host",
   "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "FOUNDER_PACKET.md",
@@ -51,7 +51,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "routes/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-30T04:22:43.427Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "UAT-002",
@@ -82,7 +85,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-30T04:22:43.427Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "UAT-003",
@@ -113,7 +119,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "db/migrations/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-30T04:22:43.427Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "UAT-004",
@@ -144,7 +153,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "middleware/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-30T04:22:43.427Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "UAT-005",
@@ -175,7 +187,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "public/overlay/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-30T04:22:43.427Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "UAT-006",
@@ -206,7 +221,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "routes/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-30T04:22:43.427Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
       "step_id": "UAT-007",
@@ -219,7 +237,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "349dfb67f1fa94b3c70b2e90007966f94e910a0970638d054a98c6e0d46a498c"
+        "sha256": "74bdebe023c28c73ea85b769597d6de2e2bd080c50fef9ec7eff3717e6f8b60b"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-007/run-lifeos-user-auth-v1-acceptance.mjs"
@@ -237,9 +255,17 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-30T04:22:43.427Z",
+      "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
-  "authored_by": "ARC"
+  "authored_by": "ARC",
+  "completed_at": "2026-06-30T04:22:43.427Z",
+  "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+  "receipt_path": "products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

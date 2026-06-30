@@ -7,7 +7,7 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-06-29 — product vision brainstorm added (45 features, earned attention framework, referral partner engine, EXP recruiting strategy)
+**Last Updated:** 2026-06-30 — session MVP machine path reached TECHNICAL_PASS; coaching/content generation hardened for low-cost execution
 
 ---
 
@@ -25,9 +25,11 @@ See `FILE_MANIFEST.json` in this folder.
 
 High-signal surfaces:
 - `/api/v1/socialmediaos/*` — intake scaffold (sessions, content packs)
+- `/api/v1/socialmediaos/coaching/*` — guided coaching session + content-pack generation loop
 - `/api/v1/lifere/marketing/socialmediaos/*` — LifeRE adapter bridge
 - `public/overlay/lifeos-lifere.html` — founder panel
 - `lifeos-app.html?stack=socialmediaos` — stack launcher
+- `public/overlay/socialmediaos-session.html` — session MVP overlay
 
 ## Verification
 
@@ -146,3 +148,5 @@ Adjacent professionals (title, escrow, lenders, inspectors, interior designers) 
 | Date | Change | Why | State |
 |------|--------|-----|-------|
 | 2026-06-29 | **Product vision brainstorm** — 45 platform feature ideas, earned attention framework, recording architecture, referral partner engine, EXP recruiting strategy, client terminology established | Session capture for BP writing | ✅ doc-only |
+| 2026-06-30 | **Session MVP machine path PASS** — coaching session start/answer/generate/export loop now reaches `TECHNICAL_PASS`; route mounted in runtime and acceptance artifacts synced | Proves the lower-cost BuilderOS lane can build this slice end-to-end | ✅ runtime |
+| 2026-06-30 | **Low-cost hardening** — provider fallback in route layer, deterministic content-pack fallback in generator layer, acceptance finalizer updated to current artifact contract | Prevents mission failure when live AI provider or spend gate is unavailable | ✅ runtime |

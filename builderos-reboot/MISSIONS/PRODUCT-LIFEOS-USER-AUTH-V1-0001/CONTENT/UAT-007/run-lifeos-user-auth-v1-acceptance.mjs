@@ -9,6 +9,7 @@
  * Env: PUBLIC_BASE_URL, COMMAND_CENTER_KEY
  * Exit 0 = PASS, Exit 1 = FAIL
  */
+import 'dotenv/config';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,9 +21,16 @@ const RECEIPT_REL = `products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json`;
 const RECEIPT     = path.join(ROOT, RECEIPT_REL);
 const VERDICT     = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE_VERDICT.json');
 
-const BASE  = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
 const KEY   = process.env.COMMAND_CENTER_KEY || '';
 const PREFIX = '/api/v1/lifeos/auth';
+const REQUEST_TIMEOUT_MS = 10000;
+const BASE_CANDIDATES = [
+  process.env.PUBLIC_BASE_URL,
+  process.env.BASE_URL,
+  'http://127.0.0.1:3000',
+].filter(Boolean).map((value) => String(value).replace(/\/$/, ''));
+
+let ACTIVE_BASE = '';
 
 const report = {
   mission_id: MISSION,
@@ -30,40 +38,57 @@ const report = {
   tests_passed: [],
   tests_failed: [],
   skipped: false,
+  runtime_target: null,
+  base_resolution: null,
 };
 
-if (!BASE || !KEY) {
-  report.skipped = true;
-  report.skip_reason = 'PUBLIC_BASE_URL or COMMAND_CENTER_KEY not set';
-  console.error('SKIP: PUBLIC_BASE_URL or COMMAND_CENTER_KEY not set');
-  const { pass } = finishBpAcceptance({
-    root: ROOT,
-    missionId: MISSION,
-    report,
-    receiptAbsPath: RECEIPT,
-    receiptRelPath: RECEIPT_REL,
-    verdictAbsPath: VERDICT,
-    objectiveName: 'LifeOS User Auth V1',
-    objectiveVerdictOnPass: 'TECHNICAL_PASS',
-    base: BASE,
-    syncTestId: 'UAT-007_bp_sync',
-    buildRecord: { build_method: 'system-build', note: 'Auth system — register, login, JWT, tier guard.' },
-    verdictExtra: { acceptance_command: 'npm run lifeos:user-auth:v1-acceptance' },
-    passPredicate: (r) => r.tests_failed.length === 0 && r.skipped !== true,
-  });
-  process.exit(0);
+async function probeBase(base) {
+  try {
+    const res = await fetch(`${base}/healthz`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(3000),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function resolveBase() {
+  const attempts = [];
+  for (const base of [...new Set(BASE_CANDIDATES)]) {
+    const reachable = await probeBase(base);
+    attempts.push({ base, reachable });
+    if (reachable) {
+      return {
+        base,
+        mode: base === BASE_CANDIDATES[0] ? 'configured' : 'fallback',
+        attempts,
+      };
+    }
+  }
+  return { base: '', mode: 'unreachable', attempts };
 }
 
 async function req(method, reqPath, body, headers = {}) {
-  const res = await fetch(`${BASE}${PREFIX}${reqPath}`, {
-    method,
-    headers: { 'Content-Type': 'application/json', 'x-command-key': KEY, ...headers },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const text = await res.text();
-  let json = {};
-  try { json = JSON.parse(text); } catch { json = { raw: text.slice(0, 300) }; }
-  return { status: res.status, ok: res.ok, json };
+  try {
+    const res = await fetch(`${ACTIVE_BASE}${PREFIX}${reqPath}`, {
+      method,
+      headers: { 'Content-Type': 'application/json', 'x-command-key': KEY, ...headers },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+    const text = await res.text();
+    let json = {};
+    try { json = JSON.parse(text); } catch { json = { raw: text.slice(0, 300) }; }
+    return { status: res.status, ok: res.ok, json };
+  } catch (error) {
+    return {
+      status: 0,
+      ok: false,
+      json: { error: error.name === 'TimeoutError' ? `request timeout after ${REQUEST_TIMEOUT_MS}ms` : error.message },
+    };
+  }
 }
 
 function step(id, cond, detail = '') {
@@ -77,6 +102,33 @@ function step(id, cond, detail = '') {
 }
 
 (async () => {
+  const baseResolution = await resolveBase();
+  ACTIVE_BASE = baseResolution.base;
+  report.runtime_target = ACTIVE_BASE || null;
+  report.base_resolution = baseResolution;
+
+  if (!ACTIVE_BASE || !KEY) {
+    report.skipped = true;
+    report.skip_reason = 'reachable base or COMMAND_CENTER_KEY not set';
+    console.error('SKIP: reachable base or COMMAND_CENTER_KEY not set');
+    finishBpAcceptance({
+      root: ROOT,
+      missionId: MISSION,
+      report,
+      receiptAbsPath: RECEIPT,
+      receiptRelPath: RECEIPT_REL,
+      verdictAbsPath: VERDICT,
+      objectiveName: 'LifeOS User Auth V1',
+      objectiveVerdictOnPass: 'TECHNICAL_PASS',
+      base: ACTIVE_BASE,
+      syncTestId: 'UAT-007_bp_sync',
+      buildRecord: { build_method: 'system-build', note: 'Auth system — register, login, JWT, tier guard.' },
+      verdictExtra: { acceptance_command: 'npm run lifeos:user-auth:v1-acceptance' },
+      passPredicate: (r) => r.tests_failed.length === 0 && r.skipped !== true,
+    });
+    process.exit(0);
+  }
+
   const tag    = crypto.randomBytes(4).toString('hex');
   const handle = `testuser_${tag}`;
   const email  = `test_${tag}@lifeos.local`;
@@ -92,7 +144,7 @@ function step(id, cond, detail = '') {
     finishBpAcceptance({
       root: ROOT, missionId: MISSION, report, receiptAbsPath: RECEIPT, receiptRelPath: RECEIPT_REL,
       verdictAbsPath: VERDICT, objectiveName: 'LifeOS User Auth V1', objectiveVerdictOnPass: 'TECHNICAL_PASS',
-      base: BASE, syncTestId: 'UAT-007_bp_sync',
+      base: ACTIVE_BASE, syncTestId: 'UAT-007_bp_sync',
       buildRecord: { build_method: 'system-build', note: 'Auth acceptance failed at invite step.' },
       verdictExtra: { acceptance_command: 'npm run lifeos:user-auth:v1-acceptance' },
       passPredicate: (r) => r.tests_failed.length === 0,
@@ -136,7 +188,7 @@ function step(id, cond, detail = '') {
     verdictAbsPath: VERDICT,
     objectiveName: 'LifeOS User Auth V1',
     objectiveVerdictOnPass: 'TECHNICAL_PASS',
-    base: BASE,
+    base: ACTIVE_BASE,
     syncTestId: 'UAT-007_bp_sync',
     buildRecord: { build_method: 'system-build', note: 'Register, login, JWT, tier guard.' },
     verdictExtra: { acceptance_command: 'npm run lifeos:user-auth:v1-acceptance' },

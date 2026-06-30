@@ -1,0 +1,118 @@
+{
+  "schema": "builder_pre_build_simulation_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "blueprint_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1",
+  "simulated_at": "2026-06-30T04:09:51.053Z",
+  "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
+  "procedure": [
+    "simulate_blueprint_steps",
+    "cold_builder_walk",
+    "sha256_content_contracts",
+    "blueprint_freeze_check",
+    "assemble_pre_build_packet"
+  ],
+  "decision_table": [
+    {
+      "step_id": "SSM-001",
+      "title": "Coaching service",
+      "target_file": "services/socialmediaos-coaching-service.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-001/socialmediaos-coaching-service.js → services/socialmediaos-coaching-service.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "SSM-002",
+      "title": "Content generator service",
+      "target_file": "services/socialmediaos-content-generator.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-002/socialmediaos-content-generator.js → services/socialmediaos-content-generator.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "SSM-003",
+      "title": "Coaching routes",
+      "target_file": "routes/socialmediaos-coaching-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-003/socialmediaos-coaching-routes.js → routes/socialmediaos-coaching-routes.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "SSM-004",
+      "title": "DB migration — coaching columns",
+      "target_file": "db/migrations/20260629_socialmediaos_coaching.sql",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-004/20260629_socialmediaos_coaching.sql → db/migrations/20260629_socialmediaos_coaching.sql",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "SSM-005",
+      "title": "Session UI",
+      "target_file": "public/overlay/socialmediaos-session.html",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-005/socialmediaos-session.html → public/overlay/socialmediaos-session.html",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "SSM-006",
+      "title": "Acceptance test",
+      "target_file": "scripts/run-socialmediaos-session-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-006/run-socialmediaos-session-acceptance.mjs → scripts/run-socialmediaos-session-acceptance.mjs",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "SSM-007",
+      "title": "Route wiring — register-runtime-routes.js",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/CONTENT/SSM-007/register-runtime-routes.js → startup/register-runtime-routes.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    }
+  ],
+  "summary": {
+    "steps_total": 7,
+    "steps_blocked": 0,
+    "steps_clear": 7,
+    "blocking_gaps": 0,
+    "clear_to_build": true,
+    "freeze_pass": true
+  },
+  "simulation_summary": {
+    "evaluated_steps": 7,
+    "total_gaps": 0,
+    "blocking_gaps": 0,
+    "clear_to_build": true
+  },
+  "cold_walk_summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  },
+  "freeze": {
+    "blueprint_status": "FROZEN",
+    "pass": true,
+    "blocking": [],
+    "checks": [
+      "deterministic_step_set",
+      "authority_lock",
+      "exact_output_contract_present",
+      "non_goals_present"
+    ],
+    "blueprintId": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1"
+  }
+}

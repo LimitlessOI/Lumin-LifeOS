@@ -1,0 +1,21 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "assumptions": [
+    {
+      "id": "A1",
+      "assumption": "Adam is primary user at Alpha",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "A2",
+      "assumption": "Railway production spine is live",
+      "confidence": "THINK"
+    },
+    {
+      "id": "A3",
+      "assumption": "Build the first working client-facing SocialMediaOS session. After this blueprint:\n\n- Client opens `/overlay/socialmediaos-session.html`\n- Types their niche and goal\n- AI asks 5 coached questions, one at a time (story extraction)\n- After all 5 answers: AI generates a full content pack — 5 LinkedIn posts, 3 YouTube hooks, 3 Instagram captions, 3 email subjects\n- Client copies any piece or downloads everything as a text file\n- Routes wired; schema columns added; acceptance test passes end-to-end",
+      "confidence": "KNOW"
+    }
+  ]
+}

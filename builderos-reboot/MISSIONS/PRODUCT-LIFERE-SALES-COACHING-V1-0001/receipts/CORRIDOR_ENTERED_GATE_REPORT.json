@@ -1,0 +1,69 @@
+{
+  "schema": "corridor_entered_gate_v1",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "point": "B",
+  "pass": true,
+  "violations": [],
+  "checks": {
+    "founder_packet": {
+      "pass": true
+    },
+    "intent_baseline": {
+      "pass": true,
+      "status": "HANDOFF_READY"
+    },
+    "chair_handoff": {
+      "pass": true
+    },
+    "pre_arc_packet": {
+      "pass": true
+    },
+    "pre_arc_SNT_INTENT_ATTACK": {
+      "pass": true,
+      "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+    },
+    "pre_arc_CHAIR_FORECAST": {
+      "pass": true,
+      "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+    },
+    "pre_arc_CFO_RESOURCE": {
+      "pass": true,
+      "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+    },
+    "pre_arc_WISDOM_REVIEW": {
+      "pass": true,
+      "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+    },
+    "departments": {
+      "SNT": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "intent_clearance_yes"
+      },
+      "CHAIR": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "forecast_acceptable"
+      },
+      "CFO": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "within_budget"
+      },
+      "WISDOM": {
+        "pass": true,
+        "stub": false,
+        "tier": "COUNCIL_SIM",
+        "bootstrapBlocked": false,
+        "verdict": "proceed"
+      }
+    }
+  },
+  "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+}

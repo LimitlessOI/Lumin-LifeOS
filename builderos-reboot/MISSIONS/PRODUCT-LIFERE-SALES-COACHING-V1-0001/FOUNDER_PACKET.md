@@ -18,10 +18,44 @@ Build the Phase 1 sales coaching system for LifeRE agents. The core capability: 
 - 10 core real estate objections pre-loaded with response frameworks by personality quadrant
 - Acceptance test passes end-to-end
 
+## Problem
+
+LifeRE has live product momentum, but there is no working founder-usable sales coaching simulator inside the system. Agents cannot practice objections, receive real-time coaching, or finish with a scored debrief. That leaves a major training loop as concept only instead of a working tool.
+
+Pain now:
+
+- no working sales practice simulator for LifeRE agents
+- no in-session coaching loop after each agent turn
+- no scored debrief showing what improved or failed
+- no founder-usable proof that LifeRE can coach a rep from first line to post-call review
+
+## Desired Outcome
+
+Build the Phase 1 sales coaching system for LifeRE agents. After this blueprint:
+
+- Agent selects a scenario such as expired listing, listing appointment, buyer call, cold call, or objection drill
+- AI plays the client and stays in role for the scenario
+- After every agent turn, the system returns a concise coaching note
+- System detects the likely personality quadrant early and adapts persona + coaching
+- Session ends with a structured scored debrief
+- Objection library and scenarios are wired into the simulator path
+- Acceptance test passes end-to-end
+
 ## PASS
 
 Machine runs `node scripts/run-lifere-sales-coaching-acceptance.mjs` — all tests pass.
 `OBJECTIVE_VERDICT.json` written with `"verdict": "TECHNICAL_PASS"`.
+
+## Scope Boundary
+
+This packet is only for the text-based simulator coaching loop. It does not include live call listening, voice capture, ambient coaching, or production founder Alpha signoff.
+
+## Constraints
+
+- Builder executes exact BP only — no strategic invention.
+- Build through BuilderOS system path only.
+- Runtime acceptance must run against a fresh healthy runtime and write receipts honestly.
+- Phase 2 live-call coaching remains out of scope.
 
 ## SEQUENCE
 

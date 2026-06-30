@@ -2,7 +2,7 @@
   "schema": "snt_intent_attack_v1",
   "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
   "seat": "SNT",
-  "simulated_at": "2026-06-30T03:51:03.209Z",
+  "simulated_at": "2026-06-30T04:24:21.535Z",
   "simulated_by": "factory-core/arc/department-simulations.js",
   "attacks_run": 4,
   "attacks": [
@@ -60,7 +60,7 @@
       "confidence": "THINK",
       "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
       "evidence_path": null,
-      "predicted_at": "2026-06-30T03:51:03.209Z",
+      "predicted_at": "2026-06-30T04:24:21.535Z",
       "actual": null,
       "scored_at": null,
       "match": null
@@ -72,11 +72,11 @@
       "confidence": "KNOW",
       "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
       "evidence_path": null,
-      "predicted_at": "2026-06-30T03:51:03.209Z",
+      "predicted_at": "2026-06-30T04:24:21.535Z",
       "actual": null,
       "scored_at": null,
       "match": null
     }
   ],
-  "simulation_tier": "BOOTSTRAP_MECHANICAL"
+  "simulation_tier": "COUNCIL_SIM"
 }

@@ -11,14 +11,14 @@
     "step_id": "SSM-002",
     "type": "file_sha256_matches",
     "target": "services/socialmediaos-content-generator.js",
-    "expected_sha256": "c41e45955975d498b6b9cc49e6e84ca0e523209d6da28af413d54df94759746b"
+    "expected_sha256": "f97b2292479c36cc63cfc5fb74bb077b923e3efe029b5fe26fe8467ec9918cc6"
   },
   {
     "test_id": "AT-SSM-003-1",
     "step_id": "SSM-003",
     "type": "file_sha256_matches",
     "target": "routes/socialmediaos-coaching-routes.js",
-    "expected_sha256": "3e22e63e017543cf29f03583072b8343d51cb93d86e6904aabbc03de5a1e68bf"
+    "expected_sha256": "b6631116e41e038b6b601f46ad86ed86dfb03c55f90053f0569cf2485dd15dbe"
   },
   {
     "test_id": "AT-SSM-004-1",
@@ -39,13 +39,13 @@
     "step_id": "SSM-006",
     "type": "file_sha256_matches",
     "target": "scripts/run-socialmediaos-session-acceptance.mjs",
-    "expected_sha256": "21af6f4a6307a661916650402487ef4811fb056ce9123a79b89f2e4012450120"
+    "expected_sha256": "895617e3549ed07506e73bfa5f3bad99af3d87c3b7219c7af8f93e3478e55ced"
   },
   {
     "test_id": "AT-SSM-007-1",
     "step_id": "SSM-007",
     "type": "file_sha256_matches",
     "target": "startup/register-runtime-routes.js",
-    "expected_sha256": "15d973c95aff3e6ec1f4d303bbd2d576da9c94c24cf3ee0df2e61246108e33c8"
+    "expected_sha256": "3fd81ff0e62ba88742b9069d8a764466486ee79c8dcfced9586613d5ac569374"
   }
 ]

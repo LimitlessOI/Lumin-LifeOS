@@ -1,0 +1,238 @@
+{
+  "schema": "point_b_gate_v2",
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "evaluated_at": "2026-06-30T04:24:44.030Z",
+  "proof_lap_only": false,
+  "handoff": {
+    "schema": "corridor_entered_gate_v1",
+    "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+    "point": "B",
+    "pass": true,
+    "violations": [],
+    "checks": {
+      "founder_packet": {
+        "pass": true
+      },
+      "intent_baseline": {
+        "pass": true,
+        "status": "HANDOFF_READY"
+      },
+      "chair_handoff": {
+        "pass": true
+      },
+      "pre_arc_packet": {
+        "pass": true
+      },
+      "pre_arc_SNT_INTENT_ATTACK": {
+        "pass": true,
+        "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+      },
+      "pre_arc_CHAIR_FORECAST": {
+        "pass": true,
+        "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+      },
+      "pre_arc_CFO_RESOURCE": {
+        "pass": true,
+        "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+      },
+      "pre_arc_WISDOM_REVIEW": {
+        "pass": true,
+        "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+      },
+      "departments": {
+        "SNT": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "intent_clearance_yes"
+        },
+        "CHAIR": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "forecast_acceptable"
+        },
+        "CFO": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "within_budget"
+        },
+        "WISDOM": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "proceed"
+        }
+      }
+    },
+    "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+  },
+  "corridor": {
+    "schema": "corridor_entered_gate_v1",
+    "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+    "point": "B",
+    "pass": true,
+    "violations": [],
+    "checks": {
+      "founder_packet": {
+        "pass": true
+      },
+      "intent_baseline": {
+        "pass": true,
+        "status": "HANDOFF_READY"
+      },
+      "chair_handoff": {
+        "pass": true
+      },
+      "pre_arc_packet": {
+        "pass": true
+      },
+      "pre_arc_SNT_INTENT_ATTACK": {
+        "pass": true,
+        "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+      },
+      "pre_arc_CHAIR_FORECAST": {
+        "pass": true,
+        "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+      },
+      "pre_arc_CFO_RESOURCE": {
+        "pass": true,
+        "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+      },
+      "pre_arc_WISDOM_REVIEW": {
+        "pass": true,
+        "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+      },
+      "departments": {
+        "SNT": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "intent_clearance_yes"
+        },
+        "CHAIR": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "forecast_acceptable"
+        },
+        "CFO": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "within_budget"
+        },
+        "WISDOM": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "proceed"
+        }
+      }
+    },
+    "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+  },
+  "machine_path": {
+    "schema": "machine_path_gate_v1",
+    "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+    "point": "B_to_C",
+    "proof_lap_only": false,
+    "pass": true,
+    "violations": [],
+    "checks": {
+      "corridor": {
+        "pass": true,
+        "violations": []
+      },
+      "post_arc_ARC_TWIN_SIM": {
+        "pass": true,
+        "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+      },
+      "post_arc_BUILDER_SIM": {
+        "pass": true,
+        "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+      },
+      "post_arc_SNT_TRANSLATION": {
+        "pass": true,
+        "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+      },
+      "post_arc_PRE_BUILD": {
+        "pass": true,
+        "path": "PRE_BUILD_VALIDATION_PACKET.json"
+      },
+      "arc_run": {
+        "pass": true,
+        "status": "MECHANICAL_PASS"
+      },
+      "builder_executed": {
+        "pass": true,
+        "value": "TECHNICAL_PASS"
+      }
+    },
+    "awaiting_founder_at_alpha": true,
+    "lesson": "Machine path complete. Ready for Adam Alpha evaluation."
+  },
+  "alpha": {
+    "schema": "alpha_gate_v1",
+    "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+    "point": "C",
+    "machine_path_pass": true,
+    "pass": false,
+    "founder_usability_pass": false,
+    "violations": [
+      "alpha:founder has not confirmed Alpha yet"
+    ],
+    "checks": {
+      "corridor": {
+        "pass": true,
+        "violations": []
+      },
+      "post_arc_ARC_TWIN_SIM": {
+        "pass": true,
+        "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+      },
+      "post_arc_BUILDER_SIM": {
+        "pass": true,
+        "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+      },
+      "post_arc_SNT_TRANSLATION": {
+        "pass": true,
+        "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+      },
+      "post_arc_PRE_BUILD": {
+        "pass": true,
+        "path": "PRE_BUILD_VALIDATION_PACKET.json"
+      },
+      "arc_run": {
+        "pass": true,
+        "status": "MECHANICAL_PASS"
+      },
+      "builder_executed": {
+        "pass": true,
+        "value": "TECHNICAL_PASS"
+      },
+      "founder_usability": {
+        "pass": false,
+        "value": false
+      }
+    },
+    "lesson": "Machine delivered. Adam evaluates at Alpha."
+  },
+  "point_b_reached": true,
+  "machine_path_complete": true,
+  "alpha_reached": false,
+  "pass": true,
+  "status": "MACHINE_PATH_PASS_AWAITING_ALPHA",
+  "violations": [],
+  "infrastructure_only": false,
+  "lesson": "Corridor protected. Machine delivered. Alpha = founder evaluation only."
+}

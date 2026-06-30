@@ -1,7 +1,7 @@
 {
   "schema": "pre_arc_input_packet_v2",
   "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
-  "assembled_at": "2026-06-30T03:50:57.287Z",
+  "assembled_at": "2026-06-30T04:09:50.847Z",
   "assembled_by": "foundation/pre-arc-enrichment.js",
   "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
   "manifest": [

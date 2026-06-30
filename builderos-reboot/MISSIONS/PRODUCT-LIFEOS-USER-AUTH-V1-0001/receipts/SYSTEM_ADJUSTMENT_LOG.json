@@ -4221,7 +4221,1932 @@
       "action": "bootstrap_development_intake",
       "route": "bootstrap_full",
       "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:11.110Z",
+      "obstacle_id": "obs_1782791171086_1",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:12.857Z",
+      "obstacle_id": "obs_1782791172836_2",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:14.923Z",
+      "obstacle_id": "obs_1782791174903_3",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:18.721Z",
+      "obstacle_id": "obs_1782791178700_4",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:21.602Z",
+      "obstacle_id": "obs_1782791181583_5",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:23.258Z",
+      "obstacle_id": "obs_1782791183239_6",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:24.905Z",
+      "obstacle_id": "obs_1782791184887_7",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:26.481Z",
+      "obstacle_id": "obs_1782791186460_8",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:28.277Z",
+      "obstacle_id": "obs_1782791188257_9",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:29.884Z",
+      "obstacle_id": "obs_1782791189862_10",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:31.449Z",
+      "obstacle_id": "obs_1782791191430_11",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:33.203Z",
+      "obstacle_id": "obs_1782791193186_12",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:34.973Z",
+      "obstacle_id": "obs_1782791194953_13",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:36.799Z",
+      "obstacle_id": "obs_1782791196780_14",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:38.569Z",
+      "obstacle_id": "obs_1782791198550_15",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:40.316Z",
+      "obstacle_id": "obs_1782791200293_16",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:42.142Z",
+      "obstacle_id": "obs_1782791202122_17",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:43.806Z",
+      "obstacle_id": "obs_1782791203785_18",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:45.430Z",
+      "obstacle_id": "obs_1782791205413_19",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:50.701Z",
+      "obstacle_id": "obs_1782791210684_20",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:52.335Z",
+      "obstacle_id": "obs_1782791212315_21",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:46:54.168Z",
+      "obstacle_id": "obs_1782791214149_22",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:47:35.365Z",
+      "obstacle_id": "obs_1782791255344_23",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:47:40.417Z",
+      "obstacle_id": "obs_1782791260394_24",
+      "action": "re_arc_translate",
+      "route": "re_arc",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:47:45.888Z",
+      "obstacle_id": "obs_1782791265872_25",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:47:50.464Z",
+      "obstacle_id": "obs_1782791270445_26",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:47:55.283Z",
+      "obstacle_id": "obs_1782791275262_27",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:00.201Z",
+      "obstacle_id": "obs_1782791280182_28",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:12.227Z",
+      "obstacle_id": "obs_1782791292206_29",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:17.018Z",
+      "obstacle_id": "obs_1782791297002_30",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:21.540Z",
+      "obstacle_id": "obs_1782791301519_31",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:26.052Z",
+      "obstacle_id": "obs_1782791306037_32",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:26.072Z",
+      "obstacle_id": "obs_1782791306061_36",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:31.095Z",
+      "obstacle_id": "obs_1782791311075_33",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:35.988Z",
+      "obstacle_id": "obs_1782791315967_34",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:40.715Z",
+      "obstacle_id": "obs_1782791320698_35",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:45.347Z",
+      "obstacle_id": "obs_1782791325329_36",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:50.076Z",
+      "obstacle_id": "obs_1782791330056_37",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:48:54.717Z",
+      "obstacle_id": "obs_1782791334701_38",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:49:07.988Z",
+      "obstacle_id": "obs_1782791347965_39",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:49:44.007Z",
+      "obstacle_id": "obs_1782791383987_40",
+      "action": "re_arc_translate",
+      "route": "re_arc",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:49:53.207Z",
+      "obstacle_id": "obs_1782791393189_41",
+      "action": "re_arc_translate",
+      "route": "re_arc",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:49:59.447Z",
+      "obstacle_id": "obs_1782791399425_42",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:04.187Z",
+      "obstacle_id": "obs_1782791404169_43",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:09.543Z",
+      "obstacle_id": "obs_1782791409522_44",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:29.162Z",
+      "obstacle_id": "obs_1782791429141_45",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:35.030Z",
+      "obstacle_id": "obs_1782791435012_46",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:39.594Z",
+      "obstacle_id": "obs_1782791439574_47",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:45.569Z",
+      "obstacle_id": "obs_1782791445545_48",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:50.692Z",
+      "obstacle_id": "obs_1782791450676_49",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:50:55.619Z",
+      "obstacle_id": "obs_1782791455603_50",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:07.647Z",
+      "obstacle_id": "obs_1782791467625_51",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:12.635Z",
+      "obstacle_id": "obs_1782791472617_52",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:17.519Z",
+      "obstacle_id": "obs_1782791477500_53",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:22.361Z",
+      "obstacle_id": "obs_1782791482343_54",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:28.117Z",
+      "obstacle_id": "obs_1782791488097_55",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:32.773Z",
+      "obstacle_id": "obs_1782791492755_56",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:37.455Z",
+      "obstacle_id": "obs_1782791497428_57",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:42.737Z",
+      "obstacle_id": "obs_1782791502720_58",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:47.874Z",
+      "obstacle_id": "obs_1782791507858_59",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:51:53.536Z",
+      "obstacle_id": "obs_1782791513518_60",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:08.829Z",
+      "obstacle_id": "obs_1782791588810_1",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:10.359Z",
+      "obstacle_id": "obs_1782791590338_2",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:11.859Z",
+      "obstacle_id": "obs_1782791591837_3",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:13.532Z",
+      "obstacle_id": "obs_1782791593512_4",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:15.456Z",
+      "obstacle_id": "obs_1782791595436_5",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:17.213Z",
+      "obstacle_id": "obs_1782791597192_6",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:18.998Z",
+      "obstacle_id": "obs_1782791598981_7",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:21.243Z",
+      "obstacle_id": "obs_1782791601223_8",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:26.548Z",
+      "obstacle_id": "obs_1782791606528_9",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:32.237Z",
+      "obstacle_id": "obs_1782791612218_10",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:36.783Z",
+      "obstacle_id": "obs_1782791616768_11",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:42.133Z",
+      "obstacle_id": "obs_1782791622111_12",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:48.177Z",
+      "obstacle_id": "obs_1782791628157_13",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:53.357Z",
+      "obstacle_id": "obs_1782791633336_14",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:53:58.609Z",
+      "obstacle_id": "obs_1782791638590_15",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:03.792Z",
+      "obstacle_id": "obs_1782791643770_16",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:08.980Z",
+      "obstacle_id": "obs_1782791648959_17",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:14.248Z",
+      "obstacle_id": "obs_1782791654229_18",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:19.601Z",
+      "obstacle_id": "obs_1782791659578_19",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:25.003Z",
+      "obstacle_id": "obs_1782791664983_20",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:30.245Z",
+      "obstacle_id": "obs_1782791670222_21",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:35.310Z",
+      "obstacle_id": "obs_1782791675288_22",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:40.313Z",
+      "obstacle_id": "obs_1782791680296_23",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:45.454Z",
+      "obstacle_id": "obs_1782791685423_24",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:51.615Z",
+      "obstacle_id": "obs_1782791691595_25",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:54:57.542Z",
+      "obstacle_id": "obs_1782791697520_26",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:02.259Z",
+      "obstacle_id": "obs_1782791702242_27",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:07.153Z",
+      "obstacle_id": "obs_1782791707138_28",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:12.365Z",
+      "obstacle_id": "obs_1782791712341_29",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:17.498Z",
+      "obstacle_id": "obs_1782791717477_30",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:22.318Z",
+      "obstacle_id": "obs_1782791722299_31",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:27.072Z",
+      "obstacle_id": "obs_1782791727051_32",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:27.095Z",
+      "obstacle_id": "obs_1782791727082_36",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:31.759Z",
+      "obstacle_id": "obs_1782791731738_33",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:37.681Z",
+      "obstacle_id": "obs_1782791737661_34",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:42.641Z",
+      "obstacle_id": "obs_1782791742620_35",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:47.159Z",
+      "obstacle_id": "obs_1782791747141_36",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:51.645Z",
+      "obstacle_id": "obs_1782791751630_37",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:55:56.249Z",
+      "obstacle_id": "obs_1782791756233_38",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:04.918Z",
+      "obstacle_id": "obs_1782791764897_39",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:09.582Z",
+      "obstacle_id": "obs_1782791769556_40",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:14.272Z",
+      "obstacle_id": "obs_1782791774247_41",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:19.272Z",
+      "obstacle_id": "obs_1782791779255_42",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:24.297Z",
+      "obstacle_id": "obs_1782791784278_43",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:28.909Z",
+      "obstacle_id": "obs_1782791788888_44",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:33.564Z",
+      "obstacle_id": "obs_1782791793543_45",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:38.149Z",
+      "obstacle_id": "obs_1782791798133_46",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:43.588Z",
+      "obstacle_id": "obs_1782791803572_47",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:49.468Z",
+      "obstacle_id": "obs_1782791809449_48",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:54.305Z",
+      "obstacle_id": "obs_1782791814285_49",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:56:59.382Z",
+      "obstacle_id": "obs_1782791819364_50",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:04.570Z",
+      "obstacle_id": "obs_1782791824551_51",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:09.444Z",
+      "obstacle_id": "obs_1782791829423_52",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:14.420Z",
+      "obstacle_id": "obs_1782791834400_53",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:19.585Z",
+      "obstacle_id": "obs_1782791839563_54",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:24.448Z",
+      "obstacle_id": "obs_1782791844427_55",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:29.310Z",
+      "obstacle_id": "obs_1782791849290_56",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:34.148Z",
+      "obstacle_id": "obs_1782791854129_57",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:39.117Z",
+      "obstacle_id": "obs_1782791859099_58",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:43.889Z",
+      "obstacle_id": "obs_1782791863870_59",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:57:48.753Z",
+      "obstacle_id": "obs_1782791868737_60",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:58:59.253Z",
+      "obstacle_id": "obs_1782791939233_1",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:04.140Z",
+      "obstacle_id": "obs_1782791944119_2",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:08.992Z",
+      "obstacle_id": "obs_1782791948974_3",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:13.655Z",
+      "obstacle_id": "obs_1782791953637_4",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:18.296Z",
+      "obstacle_id": "obs_1782791958280_5",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:23.300Z",
+      "obstacle_id": "obs_1782791963283_6",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:28.354Z",
+      "obstacle_id": "obs_1782791968331_7",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:33.455Z",
+      "obstacle_id": "obs_1782791973435_8",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:38.686Z",
+      "obstacle_id": "obs_1782791978665_9",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:43.411Z",
+      "obstacle_id": "obs_1782791983393_10",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:48.084Z",
+      "obstacle_id": "obs_1782791988062_11",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:52.658Z",
+      "obstacle_id": "obs_1782791992641_12",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T03:59:57.246Z",
+      "obstacle_id": "obs_1782791997222_13",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:01.722Z",
+      "obstacle_id": "obs_1782792001706_14",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:06.285Z",
+      "obstacle_id": "obs_1782792006267_15",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:10.766Z",
+      "obstacle_id": "obs_1782792010748_16",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:15.730Z",
+      "obstacle_id": "obs_1782792015707_17",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:20.525Z",
+      "obstacle_id": "obs_1782792020508_18",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:25.370Z",
+      "obstacle_id": "obs_1782792025353_19",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:30.161Z",
+      "obstacle_id": "obs_1782792030140_20",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:34.988Z",
+      "obstacle_id": "obs_1782792034971_21",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:39.900Z",
+      "obstacle_id": "obs_1782792039885_22",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:45.091Z",
+      "obstacle_id": "obs_1782792045073_23",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:50.546Z",
+      "obstacle_id": "obs_1782792050527_24",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:00:55.761Z",
+      "obstacle_id": "obs_1782792055743_25",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:01:00.682Z",
+      "obstacle_id": "obs_1782792060664_26",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:05.237Z",
+      "obstacle_id": "obs_1782792785217_1",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:09.789Z",
+      "obstacle_id": "obs_1782792789766_2",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:14.532Z",
+      "obstacle_id": "obs_1782792794512_3",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:19.525Z",
+      "obstacle_id": "obs_1782792799503_4",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:24.583Z",
+      "obstacle_id": "obs_1782792804563_5",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:29.387Z",
+      "obstacle_id": "obs_1782792809372_6",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:34.029Z",
+      "obstacle_id": "obs_1782792814012_7",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:38.733Z",
+      "obstacle_id": "obs_1782792818712_8",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:43.782Z",
+      "obstacle_id": "obs_1782792823763_9",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:48.760Z",
+      "obstacle_id": "obs_1782792828738_10",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:53.857Z",
+      "obstacle_id": "obs_1782792833836_11",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:13:58.693Z",
+      "obstacle_id": "obs_1782792838676_12",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:03.508Z",
+      "obstacle_id": "obs_1782792843486_13",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:08.356Z",
+      "obstacle_id": "obs_1782792848331_14",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:12.939Z",
+      "obstacle_id": "obs_1782792852918_15",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:17.535Z",
+      "obstacle_id": "obs_1782792857517_16",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:22.210Z",
+      "obstacle_id": "obs_1782792862191_17",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:26.961Z",
+      "obstacle_id": "obs_1782792866937_18",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:31.749Z",
+      "obstacle_id": "obs_1782792871733_19",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:36.709Z",
+      "obstacle_id": "obs_1782792876693_20",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:41.885Z",
+      "obstacle_id": "obs_1782792881866_21",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:48.992Z",
+      "obstacle_id": "obs_1782792888972_22",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:54.345Z",
+      "obstacle_id": "obs_1782792894324_23",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:14:59.192Z",
+      "obstacle_id": "obs_1782792899174_24",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:03.741Z",
+      "obstacle_id": "obs_1782792903720_25",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:08.333Z",
+      "obstacle_id": "obs_1782792908315_26",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:13.179Z",
+      "obstacle_id": "obs_1782792913157_27",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:18.076Z",
+      "obstacle_id": "obs_1782792918055_28",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:23.013Z",
+      "obstacle_id": "obs_1782792922998_29",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:27.701Z",
+      "obstacle_id": "obs_1782792927683_30",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:32.125Z",
+      "obstacle_id": "obs_1782792932108_31",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:36.527Z",
+      "obstacle_id": "obs_1782792936505_32",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:36.549Z",
+      "obstacle_id": "obs_1782792936536_36",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:41.060Z",
+      "obstacle_id": "obs_1782792941041_33",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:45.656Z",
+      "obstacle_id": "obs_1782792945632_34",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:50.368Z",
+      "obstacle_id": "obs_1782792950349_35",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:15:55.208Z",
+      "obstacle_id": "obs_1782792955184_36",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:00.013Z",
+      "obstacle_id": "obs_1782792959996_37",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:04.556Z",
+      "obstacle_id": "obs_1782792964538_38",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:09.049Z",
+      "obstacle_id": "obs_1782792969028_39",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:13.850Z",
+      "obstacle_id": "obs_1782792973830_40",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:18.626Z",
+      "obstacle_id": "obs_1782792978606_41",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:23.415Z",
+      "obstacle_id": "obs_1782792983397_42",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:28.640Z",
+      "obstacle_id": "obs_1782792988621_43",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:33.753Z",
+      "obstacle_id": "obs_1782792993731_44",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:38.633Z",
+      "obstacle_id": "obs_1782792998616_45",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:43.682Z",
+      "obstacle_id": "obs_1782793003662_46",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:48.476Z",
+      "obstacle_id": "obs_1782793008454_47",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:53.174Z",
+      "obstacle_id": "obs_1782793013154_48",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:16:58.097Z",
+      "obstacle_id": "obs_1782793018075_49",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:17:04.786Z",
+      "obstacle_id": "obs_1782793024762_50",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:17:18.076Z",
+      "obstacle_id": "obs_1782793038051_51",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:17:31.360Z",
+      "obstacle_id": "obs_1782793051337_52",
+      "action": "re_arc_translate",
+      "route": "re_arc",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:00.317Z",
+      "obstacle_id": "obs_1782793080290_53",
+      "action": "re_arc_translate",
+      "route": "re_arc",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:06.595Z",
+      "obstacle_id": "obs_1782793086574_54",
+      "action": "re_arc_translate",
+      "route": "re_arc",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:12.175Z",
+      "obstacle_id": "obs_1782793092154_55",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:21.799Z",
+      "obstacle_id": "obs_1782793101778_56",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:26.822Z",
+      "obstacle_id": "obs_1782793106799_57",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:31.938Z",
+      "obstacle_id": "obs_1782793111920_58",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:36.786Z",
+      "obstacle_id": "obs_1782793116762_59",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:18:42.919Z",
+      "obstacle_id": "obs_1782793122898_60",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:19:54.712Z",
+      "obstacle_id": "obs_1782793194693_1",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:01.109Z",
+      "obstacle_id": "obs_1782793201086_2",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:06.011Z",
+      "obstacle_id": "obs_1782793205986_3",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:11.414Z",
+      "obstacle_id": "obs_1782793211396_4",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:16.290Z",
+      "obstacle_id": "obs_1782793216271_5",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:21.126Z",
+      "obstacle_id": "obs_1782793221107_6",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:25.969Z",
+      "obstacle_id": "obs_1782793225952_7",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:30.600Z",
+      "obstacle_id": "obs_1782793230583_8",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:35.269Z",
+      "obstacle_id": "obs_1782793235251_9",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:40.069Z",
+      "obstacle_id": "obs_1782793240051_10",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:45.246Z",
+      "obstacle_id": "obs_1782793245225_11",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:50.239Z",
+      "obstacle_id": "obs_1782793250223_12",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:20:55.861Z",
+      "obstacle_id": "obs_1782793255842_13",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:07.062Z",
+      "obstacle_id": "obs_1782793267041_14",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:11.763Z",
+      "obstacle_id": "obs_1782793271741_15",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:16.467Z",
+      "obstacle_id": "obs_1782793276449_16",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:23.042Z",
+      "obstacle_id": "obs_1782793283019_17",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:27.898Z",
+      "obstacle_id": "obs_1782793287880_18",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:33.064Z",
+      "obstacle_id": "obs_1782793293035_19",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:37.939Z",
+      "obstacle_id": "obs_1782793297921_20",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:42.739Z",
+      "obstacle_id": "obs_1782793302717_21",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:53.602Z",
+      "obstacle_id": "obs_1782793313578_22",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:21:58.360Z",
+      "obstacle_id": "obs_1782793318335_23",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:22:02.995Z",
+      "obstacle_id": "obs_1782793322978_24",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:22:18.315Z",
+      "obstacle_id": "obs_1782793338295_25",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:22:23.301Z",
+      "obstacle_id": "obs_1782793343281_26",
+      "action": "re_arc_translate",
+      "route": "re_arc",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:22:28.377Z",
+      "obstacle_id": "obs_1782793348349_27",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:22:33.413Z",
+      "obstacle_id": "obs_1782793353394_28",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:22:38.568Z",
+      "obstacle_id": "obs_1782793358546_29",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:22:43.471Z",
+      "obstacle_id": "obs_1782793363450_30",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:34:49.877Z",
+      "obstacle_id": "obs_1782794089852_1",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:05.117Z",
+      "obstacle_id": "obs_1782794105094_2",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:09.700Z",
+      "obstacle_id": "obs_1782794109682_3",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:14.258Z",
+      "obstacle_id": "obs_1782794114239_4",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:18.780Z",
+      "obstacle_id": "obs_1782794118765_5",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:33.635Z",
+      "obstacle_id": "obs_1782794133615_6",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:38.290Z",
+      "obstacle_id": "obs_1782794138272_7",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:43.115Z",
+      "obstacle_id": "obs_1782794143094_8",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:35:55.102Z",
+      "obstacle_id": "obs_1782794155084_9",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:00.025Z",
+      "obstacle_id": "obs_1782794160008_10",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:04.745Z",
+      "obstacle_id": "obs_1782794164728_11",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:18.990Z",
+      "obstacle_id": "obs_1782794178970_12",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:23.965Z",
+      "obstacle_id": "obs_1782794183946_13",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:28.869Z",
+      "obstacle_id": "obs_1782794188851_14",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:33.719Z",
+      "obstacle_id": "obs_1782794193704_15",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:38.580Z",
+      "obstacle_id": "obs_1782794198562_16",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:43.379Z",
+      "obstacle_id": "obs_1782794203356_17",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:48.293Z",
+      "obstacle_id": "obs_1782794208271_18",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:36:55.994Z",
+      "obstacle_id": "obs_1782794215972_19",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:01.395Z",
+      "obstacle_id": "obs_1782794221373_20",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:06.561Z",
+      "obstacle_id": "obs_1782794226544_21",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:11.569Z",
+      "obstacle_id": "obs_1782794231553_22",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:16.052Z",
+      "obstacle_id": "obs_1782794236033_23",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:25.312Z",
+      "obstacle_id": "obs_1782794245295_24",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:30.303Z",
+      "obstacle_id": "obs_1782794250283_25",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:42.811Z",
+      "obstacle_id": "obs_1782794262790_26",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:47.587Z",
+      "obstacle_id": "obs_1782794267566_27",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:52.327Z",
+      "obstacle_id": "obs_1782794272304_28",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:37:57.185Z",
+      "obstacle_id": "obs_1782794277165_29",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:38:01.850Z",
+      "obstacle_id": "obs_1782794281832_30",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:38:06.641Z",
+      "obstacle_id": "obs_1782794286626_31",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:38:19.403Z",
+      "obstacle_id": "obs_1782794299383_32",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:38:19.428Z",
+      "obstacle_id": "obs_1782794299414_36",
+      "action": "bootstrap_development_intake",
+      "route": "bootstrap_full",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:38:23.973Z",
+      "obstacle_id": "obs_1782794303957_33",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:38:28.757Z",
+      "obstacle_id": "obs_1782794308740_34",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
+    },
+    {
+      "at": "2026-06-30T04:38:33.465Z",
+      "obstacle_id": "obs_1782794313448_35",
+      "action": "rerun_builder_execute",
+      "route": "rerun_builder",
+      "efficiency": "Prefer shortest mechanical repair before re-running expensive builder"
     }
   ],
-  "last_adjustment": "bootstrap_development_intake"
+  "last_adjustment": "rerun_builder_execute"
 }

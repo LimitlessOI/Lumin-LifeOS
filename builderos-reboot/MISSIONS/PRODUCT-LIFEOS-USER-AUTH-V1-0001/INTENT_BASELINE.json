@@ -25,7 +25,7 @@
   "scope_boundary": "Per FOUNDER_PACKET.md",
   "unacceptable_result": "Partial blueprint labeled Alpha; bypass of staging/approval gates",
   "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
-  "priority_fit": "BP_PRIORITY rank 11",
+  "priority_fit": "BP_PRIORITY rank 13",
   "point_model": {
     "A": "Vision — Adam provides FP in development stage",
     "B": "Chair locks handoff — corridor protected; Adam done until Alpha",

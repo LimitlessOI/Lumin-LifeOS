@@ -1,0 +1,83 @@
+{
+  "schema": "builder_run_receipt_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "blueprint_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1",
+  "run_at": "2026-06-30T04:09:57.346Z",
+  "runner": "builderos-reboot/scripts/execute-mission.mjs",
+  "procedure": [
+    "builder_pre_build_simulate",
+    "decision_gap_map",
+    "pre_build_validation_packet",
+    "write_file_exact_steps",
+    "acceptance_tests",
+    "point_b_gate"
+  ],
+  "pre_build": {
+    "status": "PRE_BUILD_PASS",
+    "blocking_gaps": 0,
+    "receipt": "receipts/BUILDER_PRE_BUILD_SIMULATION.json"
+  },
+  "steps_executed": 7,
+  "step_results": [
+    {
+      "step_id": "SSM-001",
+      "status": "DONE",
+      "target_file": "services/socialmediaos-coaching-service.js",
+      "sha256": "b252f2e957053add61b55a32e7c22df66b1f3e65245d40ee82261ac298aa84ee"
+    },
+    {
+      "step_id": "SSM-002",
+      "status": "DONE",
+      "target_file": "services/socialmediaos-content-generator.js",
+      "sha256": "f97b2292479c36cc63cfc5fb74bb077b923e3efe029b5fe26fe8467ec9918cc6"
+    },
+    {
+      "step_id": "SSM-003",
+      "status": "DONE",
+      "target_file": "routes/socialmediaos-coaching-routes.js",
+      "sha256": "b6631116e41e038b6b601f46ad86ed86dfb03c55f90053f0569cf2485dd15dbe"
+    },
+    {
+      "step_id": "SSM-004",
+      "status": "DONE",
+      "target_file": "db/migrations/20260629_socialmediaos_coaching.sql",
+      "sha256": "cfa26257e586cc6d25366433c5d6c18dffa0a088b460eece11aad8a1d6fd123b"
+    },
+    {
+      "step_id": "SSM-005",
+      "status": "DONE",
+      "target_file": "public/overlay/socialmediaos-session.html",
+      "sha256": "4549891f69c0ceb440064eb6df25e724868294c86438eda880cbd4204d88fcc9"
+    },
+    {
+      "step_id": "SSM-006",
+      "status": "DONE",
+      "target_file": "scripts/run-socialmediaos-session-acceptance.mjs",
+      "sha256": "895617e3549ed07506e73bfa5f3bad99af3d87c3b7219c7af8f93e3478e55ced"
+    },
+    {
+      "step_id": "SSM-007",
+      "status": "DONE",
+      "target_file": "startup/register-runtime-routes.js",
+      "sha256": "3fd81ff0e62ba88742b9069d8a764466486ee79c8dcfced9586613d5ac569374"
+    }
+  ],
+  "acceptance_exit_code": 0,
+  "verdict": "TECHNICAL_PASS",
+  "point_b": {
+    "handoff_pass": true,
+    "machine_path_complete": true,
+    "alpha_reached": false,
+    "status": "MACHINE_PATH_PASS_AWAITING_ALPHA",
+    "proof_lap_only": false,
+    "awaiting_founder_alpha": true,
+    "violations": []
+  },
+  "machine_path_complete": true,
+  "alpha_reached": false,
+  "awaiting_founder_alpha": true,
+  "doctrine": {
+    "pass": true,
+    "violations": []
+  }
+}

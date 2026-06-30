@@ -1,7 +1,7 @@
 {
   "schema": "twin_drift_report_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "scored_at": "2026-06-29T17:19:18.959Z",
+  "scored_at": "2026-06-30T04:34:44.633Z",
   "scored_by": "Hist",
   "simulation_vs_reality": [
     {
@@ -12,18 +12,18 @@
       "how_we_know_if_wrong": "BUILDER_RUN_RECEIPT.acceptance_exit_code and acceptance receipt verdict",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_at": "2026-06-30T04:34:44.633Z",
       "scored_by": "Hist"
     },
     {
       "metric_id": "technical_pass",
       "seat": "CFO",
       "predicted": "LIKELY",
-      "actual": "NOT_COMPLETE",
+      "actual": "TECHNICAL_PASS",
       "how_we_know_if_wrong": "OBJECTIVE_VERDICT.verdict after acceptance",
       "match": false,
-      "variance": "predicted \"LIKELY\" got \"NOT_COMPLETE\"",
-      "scored_at": "2026-06-29T17:19:18.959Z",
+      "variance": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"",
+      "scored_at": "2026-06-30T04:34:44.633Z",
       "scored_by": "Hist"
     },
     {
@@ -34,44 +34,44 @@
       "how_we_know_if_wrong": "Production acceptance implies deploy occurred or was unnecessary",
       "match": true,
       "variance": null,
-      "scored_at": "2026-06-29T17:19:18.959Z",
+      "scored_at": "2026-06-30T04:34:44.633Z",
       "scored_by": "Hist"
     },
     {
       "metric_id": "production_route_probe",
       "seat": "SNT",
-      "predicted": "routes_missing",
+      "predicted": "routes_live",
       "actual": "routes_live",
-      "how_we_know_if_wrong": "Set PUBLIC_BASE_URL + COMMAND_CENTER_KEY to probe production routes",
-      "match": false,
-      "variance": "predicted \"routes_missing\" got \"routes_live\"",
-      "scored_at": "2026-06-29T17:19:18.959Z",
+      "how_we_know_if_wrong": "Run npm run lifeos:user-auth:v1-acceptance against https://robust-magic-production.up.railway.app",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-30T04:34:44.633Z",
       "scored_by": "Hist"
     },
     {
       "metric_id": "intent_measurable",
       "seat": "SNT",
       "predicted": "clear",
-      "actual": "FAIL",
+      "actual": "clear",
       "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
-      "match": false,
-      "variance": "predicted \"clear\" got \"FAIL\"",
-      "scored_at": "2026-06-29T17:19:18.959Z",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-30T04:34:44.633Z",
       "scored_by": "Hist"
     },
     {
       "metric_id": "blocking_attack_count",
       "seat": "SNT",
       "predicted": 0,
-      "actual": "FAIL",
+      "actual": 0,
       "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
-      "match": false,
-      "variance": "predicted 0 got \"FAIL\"",
-      "scored_at": "2026-06-29T17:19:18.959Z",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-30T04:34:44.633Z",
       "scored_by": "Hist"
     }
   ],
-  "drift_count": 4,
+  "drift_count": 1,
   "pass": false,
   "lesson": "Simulation diverged from reality — update department models and gates."
 }

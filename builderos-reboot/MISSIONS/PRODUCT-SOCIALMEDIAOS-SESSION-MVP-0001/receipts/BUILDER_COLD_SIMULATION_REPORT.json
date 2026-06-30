@@ -1,0 +1,51 @@
+{
+  "schema": "builder_cold_simulation_v1",
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "blueprint_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1",
+  "simulated_by": "factory-core/arc/builder-cold-walk.js",
+  "simulated_at": "2026-06-30T04:09:50.853Z",
+  "builder_runtime": "builderos-reboot/scripts/execute-mission.mjs",
+  "steps": [
+    {
+      "step_id": "SSM-001",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "SSM-002",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "SSM-003",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "SSM-004",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "SSM-005",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "SSM-006",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "SSM-007",
+      "decision_gap": null,
+      "blocked": false
+    }
+  ],
+  "summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  }
+}

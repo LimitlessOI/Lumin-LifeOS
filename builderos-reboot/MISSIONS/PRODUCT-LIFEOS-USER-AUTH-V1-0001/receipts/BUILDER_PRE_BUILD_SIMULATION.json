@@ -1,8 +1,8 @@
 {
   "schema": "builder_pre_build_simulation_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "blueprint_id": null,
-  "simulated_at": "2026-06-29T17:19:18.645Z",
+  "blueprint_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST",
+  "simulated_at": "2026-06-30T04:34:38.127Z",
   "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
   "procedure": [
     "simulate_blueprint_steps",
@@ -14,6 +14,7 @@
   "decision_table": [
     {
       "step_id": "UAT-001",
+      "title": "UAT-001",
       "target_file": "routes/lifeos-auth-routes.js",
       "action_type": "write_file_exact",
       "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-001/lifeos-auth-routes.js → routes/lifeos-auth-routes.js",
@@ -23,6 +24,7 @@
     },
     {
       "step_id": "UAT-002",
+      "title": "UAT-002",
       "target_file": "services/lifeos-user-service.js",
       "action_type": "write_file_exact",
       "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-002/lifeos-user-service.js → services/lifeos-user-service.js",
@@ -32,6 +34,7 @@
     },
     {
       "step_id": "UAT-003",
+      "title": "UAT-003",
       "target_file": "db/migrations/20260629_lifeos_user_auth.sql",
       "action_type": "write_file_exact",
       "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-003/20260629_lifeos_user_auth.sql → db/migrations/20260629_lifeos_user_auth.sql",
@@ -41,6 +44,7 @@
     },
     {
       "step_id": "UAT-004",
+      "title": "UAT-004",
       "target_file": "middleware/lifeos-tier-guard.js",
       "action_type": "write_file_exact",
       "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-004/lifeos-tier-guard.js → middleware/lifeos-tier-guard.js",
@@ -50,6 +54,7 @@
     },
     {
       "step_id": "UAT-005",
+      "title": "UAT-005",
       "target_file": "public/overlay/lifeos-app.html",
       "action_type": "write_file_exact",
       "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-005/lifeos-app.html → public/overlay/lifeos-app.html",
@@ -59,6 +64,7 @@
     },
     {
       "step_id": "UAT-006",
+      "title": "UAT-006",
       "target_file": "routes/lifeos-builderos-command-control-routes.js",
       "action_type": "write_file_exact",
       "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-006/lifeos-builderos-command-control-routes.js → routes/lifeos-builderos-command-control-routes.js",
@@ -68,6 +74,7 @@
     },
     {
       "step_id": "UAT-007",
+      "title": "UAT-007",
       "target_file": "scripts/run-lifeos-user-auth-v1-acceptance.mjs",
       "action_type": "write_file_exact",
       "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CONTENT/UAT-007/run-lifeos-user-auth-v1-acceptance.mjs → scripts/run-lifeos-user-auth-v1-acceptance.mjs",
@@ -106,6 +113,6 @@
       "exact_output_contract_present",
       "non_goals_present"
     ],
-    "blueprintId": "PRODUCT-LIFEOS-USER-AUTH-V1-0001"
+    "blueprintId": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST"
   }
 }

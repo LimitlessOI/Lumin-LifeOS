@@ -1,0 +1,56 @@
+{
+  "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+  "run_at": "2026-06-30T04:09:53.920Z",
+  "tests_passed": [
+    "AT-SSM-001-ok",
+    "AT-SSM-001-sessionId",
+    "AT-SSM-001-question",
+    "AT-SSM-001-q1of5",
+    "AT-SSM-002-answer-1",
+    "AT-SSM-002-answer-2",
+    "AT-SSM-002-answer-3",
+    "AT-SSM-002-answer-4",
+    "AT-SSM-002-answer-5",
+    "AT-SSM-002-complete-flag",
+    "AT-SSM-003-ok",
+    "AT-SSM-003-status",
+    "AT-SSM-003-answers",
+    "AT-SSM-004-ok",
+    "AT-SSM-004-packId",
+    "AT-SSM-004-linkedin",
+    "AT-SSM-004-hooks",
+    "AT-SSM-004-email",
+    "AT-SSM-004-story",
+    "AT-SSM-005-ok",
+    "AT-SSM-005-content",
+    "AT-SSM-006-ok",
+    "AT-SSM-006-content-type",
+    "AT-SSM-006-has-linkedin",
+    "AT-SSM-006-has-hooks",
+    "bp_sync_mandatory",
+    "SSM-006_bp_sync"
+  ],
+  "tests_failed": [],
+  "skipped": false,
+  "runtime_target": "http://127.0.0.1:3441",
+  "base_resolution": {
+    "base": "http://127.0.0.1:3441",
+    "mode": "configured"
+  },
+  "completed_at": "2026-06-30T04:09:55.823Z",
+  "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
+  "production_base": "http://127.0.0.1:3441",
+  "verdict": "PASS",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  },
+  "artifact_sync": {
+    "mode": "technical_acceptance",
+    "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+    "freshness_status": "CURRENT"
+  }
+}
