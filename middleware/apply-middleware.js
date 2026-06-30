@@ -63,7 +63,12 @@ export function applyMiddleware(app, {
   );
 
   // Serve static files (after specific routes)
-  app.use(express.static(publicDir));
+  app.use((req, res, next) => {
+    if (req.path === "/health" || req.path === "/health/") {
+      return next();
+    }
+    return express.static(publicDir)(req, res, next);
+  });
 
   // SECURE CORS Middleware with NO-CACHE headers
   app.use((req, res, next) => {

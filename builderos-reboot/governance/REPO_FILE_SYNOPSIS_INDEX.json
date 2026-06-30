@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-30T17:26:05.955Z",
+  "generated_at": "2026-06-30T17:47:10.572Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11754,
   "files": [
@@ -37888,9 +37888,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 104064,
-      "mtime": "2026-06-29T17:35:43.021Z",
-      "indexed_at": "2026-06-30T17:26:05.955Z"
+      "bytes": 104499,
+      "mtime": "2026-06-30T17:46:28.647Z",
+      "indexed_at": "2026-06-30T17:47:10.572Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -38551,9 +38551,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 48449,
-      "mtime": "2026-06-30T17:17:10.925Z",
-      "indexed_at": "2026-06-30T17:26:05.955Z"
+      "bytes": 49063,
+      "mtime": "2026-06-30T17:46:49.256Z",
+      "indexed_at": "2026-06-30T17:47:10.572Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -64906,9 +64906,9 @@
     {
       "path": "middleware/apply-middleware.js",
       "synopsis": "Apply Middleware — registers all Express middleware for the app: body parsers,",
-      "bytes": 3417,
-      "mtime": "2026-06-29T17:21:08.349Z",
-      "indexed_at": "2026-06-30T17:26:05.955Z",
+      "bytes": 3559,
+      "mtime": "2026-06-30T17:44:19.928Z",
+      "indexed_at": "2026-06-30T17:47:10.572Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -83244,9 +83244,9 @@
     {
       "path": "server.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 71592,
-      "mtime": "2026-06-29T00:43:01.111Z",
-      "indexed_at": "2026-06-30T17:26:05.955Z"
+      "bytes": 72321,
+      "mtime": "2026-06-30T17:40:45.267Z",
+      "indexed_at": "2026-06-30T17:47:10.572Z"
     },
     {
       "path": "server/config/fileStorage.js",
@@ -89575,9 +89575,9 @@
     {
       "path": "startup/routes/server-routes.js",
       "synopsis": "Registers ServerRoutes routes/handlers (startup/routes/server-routes.js).",
-      "bytes": 7371,
-      "mtime": "2026-06-29T17:21:09.072Z",
-      "indexed_at": "2026-06-30T17:26:05.955Z",
+      "bytes": 7794,
+      "mtime": "2026-06-30T17:40:24.002Z",
+      "indexed_at": "2026-06-30T17:47:10.572Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]

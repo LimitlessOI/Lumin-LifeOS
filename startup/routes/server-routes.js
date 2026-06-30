@@ -63,7 +63,7 @@ export function registerServerRoutes(app, deps) {
     res.json({ ok: true, telemetry: telemetry?.snapshot?.() || {} });
   });
 
-  app.get("/api/health", async (req, res) => {
+  async function computeServerHealth() {
     const health = {
       server: "ok",
       timestamp: new Date().toISOString(),
@@ -99,17 +99,24 @@ export function registerServerRoutes(app, deps) {
       health.build = { status: "error", message: e.message };
     }
 
-    const allOk =
-      health.ollama?.status === "ok" &&
-      health.database?.status === "ok" &&
-      !(health.build && health.build.status === "error");
+    const dbOk = health.database?.status === "ok";
+    const buildOk = !(health.build && health.build.status === "error");
+    const livenessOk = dbOk && buildOk;
 
-    telemetry?.recordMetric?.("endpoint.healthz", allOk ? 1 : 0);
-    res.status(allOk ? 200 : 503).json({
-      ok: allOk,
-      status: allOk ? "healthy" : "degraded",
+    return {
+      ok: livenessOk,
+      status: livenessOk ? "healthy" : "degraded",
       canonical_health_path: "/api/v1/lifeos/system/health",
-      ...health,
+      health,
+    };
+  }
+
+  app.get("/api/health", async (req, res) => {
+    const result = await computeServerHealth();
+    telemetry?.recordMetric?.("endpoint.healthz", result.ok ? 1 : 0);
+    res.status(result.ok ? 200 : 503).json({
+      ...result,
+      ...result.health,
     });
   });
 
@@ -221,12 +228,22 @@ export function registerServerRoutes(app, deps) {
       checks.db = "error: " + e.message;
     }
 
-    const allOk = checks.db === "ok" && checks.ai === "configured";
+    const allOk = checks.db === "ok";
     res.status(allOk ? 200 : 503).json({
+      ok: allOk,
       status: allOk ? "healthy" : "degraded",
       checks,
       uptime: Math.floor(process.uptime()),
       timestamp: new Date().toISOString(),
+    });
+  });
+
+  app.get("/health", async (req, res) => {
+    const result = await computeServerHealth();
+    telemetry?.recordMetric?.("endpoint.health", result.ok ? 1 : 0);
+    res.status(result.ok ? 200 : 503).json({
+      ...result,
+      ...result.health,
     });
   });
 

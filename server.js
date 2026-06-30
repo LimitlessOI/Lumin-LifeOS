@@ -1329,6 +1329,13 @@ async function start() {
   const DEFAULT_PORT = 64266;
   const MAX_PORT_ATTEMPTS = 20;
   const basePort = Number.isFinite(Number(PORT)) ? Number(PORT) : DEFAULT_PORT;
+  const isRailwayRuntime = Boolean(
+    process.env.RAILWAY_ENVIRONMENT ||
+    process.env.RAILWAY_PROJECT_ID ||
+    process.env.RAILWAY_SERVICE_ID ||
+    process.env.RAILWAY_ENVIRONMENT_ID ||
+    process.env.RAILWAY_PUBLIC_DOMAIN
+  );
   let selectedPort = null;
   const autonomyPortFile = process.env.AUTONOMY_PORT_FILE
     || path.join(process.cwd(), "scripts", "autonomy", "last-port.txt");
@@ -1385,12 +1392,28 @@ async function start() {
       }
     }
 
-    selectedPort = await listenWithRetry(
-      server,
-      HOST,
-      basePort,
-      MAX_PORT_ATTEMPTS
-    );
+    if (isRailwayRuntime) {
+      selectedPort = await new Promise((resolve, reject) => {
+        const onError = (error) => {
+          server.off("listening", onListening);
+          reject(error);
+        };
+        const onListening = () => {
+          server.off("error", onError);
+          resolve(basePort);
+        };
+        server.once("error", onError);
+        server.once("listening", onListening);
+        server.listen(basePort, HOST);
+      });
+    } else {
+      selectedPort = await listenWithRetry(
+        server,
+        HOST,
+        basePort,
+        MAX_PORT_ATTEMPTS
+      );
+    }
     await writeAutonomyPortFile(selectedPort);
     const railwayUrl = RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app";
     console.log(`\n🌐  ONLINE: http://${HOST}:${selectedPort}`);
