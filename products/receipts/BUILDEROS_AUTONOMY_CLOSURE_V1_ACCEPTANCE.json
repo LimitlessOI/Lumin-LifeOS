@@ -1,18 +1,22 @@
 {
   "schema": "builderos_autonomy_closure_v1_acceptance",
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
-  "at": "2026-06-29T02:04:33.010Z",
+  "at": "2026-06-30T01:42:17.319Z",
   "mode": "full_suite",
   "requested_check": null,
   "ok": true,
   "passed": [
     "architect-snt-promotion",
+    "build-proof-verdicts",
     "queue-truth",
     "repair-carry-forward",
     "improvement-contract",
+    "artifact-sync-module",
     "receipt-sync",
     "ui-truth",
-    "soft-acceptance-language"
+    "stale-authority-cleanup",
+    "soft-acceptance-language",
+    "certification-gate-truth"
   ],
   "failed": [],
   "checks": {
@@ -62,11 +66,56 @@
         ]
       }
     },
+    "build-proof-verdicts": {
+      "ok": true,
+      "detail": "build-proof contract freezes PASS, WAITING_FOR_PROOF, and FAIL mapping",
+      "evidence": {
+        "pass": {
+          "job_id": "bp-pass",
+          "code_changing": true,
+          "already_present": false,
+          "commit_sha": "abc123",
+          "origin_contains_commit": true,
+          "deploy_required": true,
+          "deploy_identifier": "railway",
+          "deploy_sha_seen": "abc123",
+          "expected_deploy_sha": "abc123",
+          "deploy_matches_origin_main": true,
+          "runtime_behavior_verified": null
+        },
+        "waiting": {
+          "job_id": "bp-wait",
+          "code_changing": true,
+          "already_present": false,
+          "commit_sha": "abc123",
+          "origin_contains_commit": true,
+          "deploy_required": true,
+          "deploy_identifier": "railway",
+          "deploy_sha_seen": "def456",
+          "expected_deploy_sha": "abc123",
+          "deploy_matches_origin_main": false,
+          "runtime_behavior_verified": null
+        },
+        "fail": {
+          "job_id": "bp-fail",
+          "code_changing": true,
+          "already_present": false,
+          "commit_sha": null,
+          "origin_contains_commit": false,
+          "deploy_required": false,
+          "deploy_identifier": null,
+          "deploy_sha_seen": null,
+          "expected_deploy_sha": null,
+          "deploy_matches_origin_main": false,
+          "runtime_behavior_verified": null
+        }
+      }
+    },
     "queue-truth": {
       "ok": true,
       "detail": "Point B target remains incomplete while founder usability is false",
       "evidence": {
-        "target_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+        "target_mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
         "state": {
           "verdict": "TECHNICAL_PASS",
           "objective_verdict": "TECHNICAL_PASS",
@@ -149,13 +198,23 @@
         }
       }
     },
+    "artifact-sync-module": {
+      "ok": true,
+      "detail": "one canonical artifact-sync module is present and wired",
+      "evidence": {
+        "canonical_module": "services/builderos-artifact-sync.js",
+        "service_files": [
+          "builderos-artifact-sync.js"
+        ]
+      }
+    },
     "receipt-sync": {
       "ok": true,
       "detail": "artifact sync keeps BP item, readiness report, and founder false aligned",
       "evidence": {
         "bp_item": {
-          "at": "2026-06-28T23:35:42.855Z",
-          "mode": "founder_usability",
+          "at": "2026-06-29T08:35:05.946Z",
+          "mode": "technical_acceptance",
           "status": "CURRENT"
         },
         "readiness_objective": {
@@ -166,8 +225,8 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-06-28T23:35:42.855Z",
-            "mode": "founder_usability",
+            "at": "2026-06-29T08:35:05.946Z",
+            "mode": "technical_acceptance",
             "status": "CURRENT"
           }
         },
@@ -182,13 +241,75 @@
           "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
           "founder_usability_pass": false,
           "technical_pass_only": true,
-          "founder_usability_contract": "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md"
+          "founder_usability_contract": "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md",
+          "required_receipts": "script_enforced_next_run",
+          "canonical_surface": "script_enforced_next_run",
+          "checked_routes": "script_enforced_next_run"
         },
         "founder_alpha_audit": {
           "founder_usability_pass": false,
           "ready_for_adam_alpha": true,
-          "technical_pass_only": "script_enforced_next_run"
-        }
+          "technical_pass_only": "script_enforced_next_run",
+          "founder_surface": "script_enforced_next_run"
+        },
+        "machine_alpha_walkthrough": {
+          "verdict": "FAIL",
+          "canonical_surface": "/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html",
+          "checked_routes": [
+            "COUNSEL",
+            "BUILD",
+            "STATUS"
+          ],
+          "required_controls": [
+            "text_input",
+            "send_button",
+            "mic_button_when_enabled",
+            "visible_result_panel"
+          ]
+        },
+        "canonical_contract": "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md"
+      }
+    },
+    "stale-authority-cleanup": {
+      "ok": true,
+      "detail": "stale authority references are removed while canonical product-home authority remains allowed",
+      "evidence": {
+        "forbidden": [
+          "builderos-reboot/MISSION_QUEUE.json",
+          "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md"
+        ],
+        "scanned": [
+          {
+            "path": "services/builderos-bp-priority-scheduler.js",
+            "has_mission_queue": false,
+            "has_legacy_founder_contract": false,
+            "has_builderos_product_home": false
+          },
+          {
+            "path": "scripts/bp-priority-never-stop.mjs",
+            "has_mission_queue": false,
+            "has_legacy_founder_contract": false,
+            "has_builderos_product_home": false
+          },
+          {
+            "path": "services/builderos-improvement-loop.js",
+            "has_mission_queue": false,
+            "has_legacy_founder_contract": false,
+            "has_builderos_product_home": false
+          },
+          {
+            "path": "scripts/lifeos-builder-continuous-queue.mjs",
+            "has_mission_queue": false,
+            "has_legacy_founder_contract": false,
+            "has_builderos_product_home": false
+          },
+          {
+            "path": "builderos-reboot/AGENTS.md",
+            "has_mission_queue": false,
+            "has_legacy_founder_contract": false,
+            "has_builderos_product_home": false
+          }
+        ]
       }
     },
     "soft-acceptance-language": {
@@ -206,11 +327,22 @@
           "readback_verified": true
         }
       }
+    },
+    "certification-gate-truth": {
+      "ok": true,
+      "detail": "FULLY_MACHINE_READY stays false until founder confirmation and live proof gates are truly closed",
+      "evidence": {
+        "founder_passed": false,
+        "live_proofs_pass": true,
+        "same_tier_pass": true,
+        "fully_machine_ready_expected": false,
+        "fully_machine_ready_actual": false
+      }
     }
   },
   "verdict": "PASS",
-  "completed_at": "2026-06-29T02:04:33.010Z",
-  "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
+  "completed_at": "2026-06-30T01:42:17.319Z",
+  "git_sha": "776a674410c435698219da923ed5d06db2bed458",
   "production_base": "https://robust-magic-production.up.railway.app",
   "bp_sync": {
     "updated": [

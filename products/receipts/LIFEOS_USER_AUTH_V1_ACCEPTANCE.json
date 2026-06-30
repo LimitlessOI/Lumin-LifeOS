@@ -1,6 +1,6 @@
 {
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "run_at": "2026-06-29T17:24:43.526Z",
+  "run_at": "2026-06-30T03:03:34.882Z",
   "tests_passed": [
     "UAT-invite",
     "UAT-register",
@@ -18,9 +18,24 @@
   ],
   "tests_failed": [],
   "skipped": false,
-  "completed_at": "2026-06-29T17:24:44.666Z",
-  "git_sha": "e32f88287fe04a70f31d1af514ffe21a68ad5b31",
-  "production_base": "https://robust-magic-production.up.railway.app",
+  "runtime_target": "http://127.0.0.1:3000",
+  "base_resolution": {
+    "base": "http://127.0.0.1:3000",
+    "mode": "fallback",
+    "attempts": [
+      {
+        "base": "https://robust-magic-production.up.railway.app",
+        "reachable": false
+      },
+      {
+        "base": "http://127.0.0.1:3000",
+        "reachable": true
+      }
+    ]
+  },
+  "completed_at": "2026-06-30T03:03:45.503Z",
+  "git_sha": "776a674410c435698219da923ed5d06db2bed458",
+  "production_base": "http://127.0.0.1:3000",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

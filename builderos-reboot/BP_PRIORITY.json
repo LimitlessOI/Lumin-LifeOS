@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-06-30",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BP_PRIORITY is the scheduler queue; each mission's founder packet and blueprint remain the execution authority.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
@@ -188,8 +188,8 @@
       "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-29T02:04:33.010Z",
-      "git_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
+      "technical_pass_at": "2026-06-30T01:42:17.319Z",
+      "git_sha": "776a674410c435698219da923ed5d06db2bed458",
       "production_base": "https://robust-magic-production.up.railway.app",
       "build_method": "system-build",
       "note": "Internal BuilderOS closure acceptance proof.",
@@ -291,6 +291,39 @@
     },
     {
       "rank": 11,
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+      "product_id": "socialmediaos",
+      "product_home": "docs/products/marketingos/socialmediaos/",
+      "product_ssot": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001/BLUEPRINT.json",
+      "blueprint_status": "READY",
+      "acceptance_command": "npm run smos:session:acceptance",
+      "receipt_path": "products/receipts/SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json",
+      "verdict": "PENDING",
+      "build_method": "content_file",
+      "founder_usability_pass": false,
+      "note": "First working client session: Q&A coaching + AI content pack generation + session UI"
+    },
+    {
+      "rank": 12,
+      "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+      "product_id": "lifere",
+      "product_home": "docs/products/lifere/",
+      "product_ssot": "docs/products/lifere/PRODUCT_HOME.md",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/BLUEPRINT.json",
+      "blueprint_status": "READY",
+      "acceptance_command": "npm run lifere:sales-coaching:v1-acceptance",
+      "receipt_path": "products/receipts/LIFERE_SALES_COACHING_V1_ACCEPTANCE.json",
+      "verdict": "PENDING",
+      "build_method": "content_file",
+      "founder_usability_pass": false,
+      "note": "Sales coaching Phase 1: AI plays client (5 scenarios), real-time coaching, quadrant detection, debrief. Execute AFTER rank 11.",
+      "depends_on": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001"
+    },
+    {
+      "rank": 13,
       "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
       "product_id": "lifeos",
       "product_home": "docs/products/lifeos/",
@@ -307,17 +340,17 @@
       "note": "Register, login, JWT, tier guard.",
       "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/FOUNDER_PACKET.md",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-29T17:24:44.666Z",
-      "git_sha": "e32f88287fe04a70f31d1af514ffe21a68ad5b31",
-      "production_base": "https://robust-magic-production.up.railway.app",
+      "technical_pass_at": "2026-06-30T03:03:45.503Z",
+      "git_sha": "776a674410c435698219da923ed5d06db2bed458",
+      "production_base": "http://127.0.0.1:3000",
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/OBJECTIVE_VERDICT.json",
       "artifact_sync": {
-        "at": "2026-06-29T17:24:44.666Z",
+        "at": "2026-06-30T03:03:45.503Z",
         "mode": "technical_acceptance",
         "status": "CURRENT"
       }
     }
   ],
-  "_last_updated": "2026-06-29-repair-artifact-persistence",
-  "_note": ""
+  "_last_updated": "2026-06-29-smos-lsc-bps-added",
+  "_note": "SSM and LSC added 2026-06-29 — execute SSM first (LSC-006 depends on SSM-007 output)"
 }

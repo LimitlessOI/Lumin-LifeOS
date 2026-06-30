@@ -56,7 +56,7 @@ Use pointers, not duplication.
 | **Status** | **FOUNDING** — doctrine + twin blueprint shipped 2026-06-13 |
 | **Authority** | Subordinate to SSOT North Star Constitution |
 | **Lifecycle** | `active` (program) / Alpha slice `technical_pass` |
-| **Last Updated** | 2026-06-28 — founder usability contract, alpha readiness/UI gate truth split, and product-readiness sync for LifeRE Point B |
+| **Last Updated** | 2026-06-29 — sales coaching & training system vision added (brainstorm capture) |
 | **Verification (Alpha)** | `npm run lifeos:lifere-os:v1-acceptance` |
 | **Verification (Alpha readiness)** | `npm run lifeos:lifere-alpha-readiness` |
 | **Audit agent prompt** | `docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md` |
@@ -165,6 +165,124 @@ services/lifere-performance-twin.js … lifere-council-router.js (26 services)
 
 ### Integration (read-only ownership — sibling amendments)
 See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
+
+---
+
+## Sales Coaching & Training System — Vision (2026-06-29)
+
+> Brainstorm capture: Adam + Claude. Not a build spec — raw product intelligence for BP writing. This module is industry-agnostic at the engine level; real estate is the first vertical.
+
+### The Full Stack (EXP Recruiting Value Proposition)
+Agents who come to EXP under Adam get the complete LifeRE stack:
+- **SocialMediaOS** — content machine that builds their brand
+- **TC** — transaction coordination, compliance, deadline management
+- **AI Receptionist** — never misses an inbound inquiry
+- **Contract writing** — from a voice note or a few words
+- **Search setup automation** — texts clients, asks criteria questions, sets up MLS searches automatically
+- **Just-in-time coaching** — knowledge delivered at the moment of need, not front-loaded
+- **Real-time on-screen script coaching** — what to say, as they need to say it
+- **Team building and management** — tools to build and train their own team
+- **LifeOS personal shell** — organizes their life, eliminates chaos
+
+### Three-Phase Coaching Architecture
+
+**Phase 1 — Simulator**
+AI plays the client. Agent plays themselves. Runs any scenario: cold call to expired listing, listing appointment with unrealistic price expectations, buyer burned out after 18 months, any named objection. Agent runs the same scenario until they nail it. System scores: talk/listen ratio, question frequency, close timing, silence tolerance. Real clients never experience a bad moment.
+
+**Phase 2 — Live Call Coaching (heavy)**
+Agent on real calls. System listens. On screen in real time: "You've been talking 90 seconds — ask a question." "They said 'I need to think about it' — that's not a no. Here are 3 responses." "This is a close moment — options: [assumptive] [puppy dog] [summary]." New agents get constant guidance.
+
+**Phase 3 — Live Call Coaching (light)**
+Experienced agent. Screen is mostly quiet. Only speaks at critical moments: "You're talking too much." "Close. They're ready." "Urgency — use it." The system earns its silence. Only interrupts when the data says they're drifting.
+
+### Core Sales Principles (Hard-Wired Into System)
+
+**The Listening Close**
+Ask: "What are your expectations of your next agent?" Then: "What else? What else?" until they run dry. Confirm: "Do you feel I can handle all of those?" Trial close: "Do I seem like the right agent for you?" Recap every item in their words. Then: "Sign right here." The close is always inside what the client already said. Agent's job: ask the question, listen all the way through.
+
+**Never Argue — The Bunkering Law**
+When clients don't feel heard, they bunker. They stop evaluating the deal and start defending their position. Every coaching prompt, every simulation, every script begins with validation before redirection. Validate → acknowledge → redirect. Non-negotiable. System enforces this at every level.
+
+**Close in the Room**
+Every hour without a commitment, probability drains from the deal. System never lets the agent leave without attempting the close. If conversation wraps without commitment: on-screen flag. The close sequence: recap their list → confirm you can deliver → trial close → signature.
+
+**The Three Options Framework**
+At the end of every listing appointment:
+1. "You choose to work with me — great, let's go."
+2. "You choose not to work with me — totally fine, I respect that."
+3. "You need to think about it — for me, a maybe is a no."
+
+By making "no" a respected option, false yeses disappear. By making "maybe" a no for you, the client is forced to actually decide. Most powerful thing about it: it communicates that your time has value.
+
+**The Car Move**
+When both decision makers are present and "I need to think about it" comes up: "Absolutely — I'll step outside, sit in my car. Take as long as you need. When you're done talking and have questions, come get me and we'll just get this done." Removes the audience. The real conversation happens. Agent returns to questions, not a second presentation. The car is where the deal actually gets made.
+
+**False Yes Detection**
+Real yes vs. false yes sound different: energy drops, response time lags, the word is followed by a qualifying "but." System flags: "This was not a committed yes. Probe here before moving forward." By quadrant: amiable gives false yeses to avoid conflict; analytical gives tentative yeses mid-process; driver gives sharp real yeses; expressive gives enthusiastic yeses that can fade without follow-through.
+
+### Personality Quadrant Detection
+System infers quadrant from first 3-5 minutes: speaking pace, linguistic markers, response to rapport, whether they reference facts or feelings, push-back style.
+
+| Quadrant | Profile | Coaching Adjustment |
+|----------|---------|---------------------|
+| **Analytical** | Data-driven, methodical, fears wrong decisions | Never rush. Give comparables. Expect questions — they're warming up, not stalling. Close too early = lost trust permanently. |
+| **Driver** | Direct, results-oriented, impatient | Get to the point. Skip small talk. Offer choices, not recommendations. Give them control. |
+| **Expressive** | Buys the agent first, then the house | Build rapport first. Use vision and emotion. Testimonials beat statistics. |
+| **Amiable** | Needs safety, defers to others | Never rush. Find the invisible influencer (spouse, parent, friend). Get them in the conversation. |
+
+All real-time coaching prompts, objection responses, close suggestions, and silence coaching adapt to detected quadrant.
+
+### The 10 Core Objections (mastered, not memorized)
+Any industry has ~10 real objections underneath all the surface variations. System identifies the 10 for each vertical, builds mastery through:
+1. Simulation: agent faces it 20+ times until the response is automatic
+2. Failure loop: when they fail it in real life → write 5 different responses → system helps perfect each → practice until mastered
+3. Live coaching: objection detected in real call → ideal response on screen within 2 seconds, adapted to this client's quadrant
+
+### Auto CRM Intelligence Capture
+System listens to every call and auto-logs:
+- Names, relationships, personal details mentioned in passing
+- Timeline signals ("lease ends in October")
+- Budget signals (even unstated anchors)
+- Decision-making style and influencers
+- Kids' names, job, interests, fears, what motivates them
+- Every expectation they stated about their ideal outcome
+
+Pre-call brief (60 seconds before every scheduled call): full history, emotional style, previous objections, what close almost worked, current market stats for their situation. Agent walks in fully briefed every time.
+
+### Objection Origin Detector
+Surface objection → real driver:
+- "I need to think about it" → trust deficit, price concern, need spouse input, or genuinely analytical
+- "I want to wait" → status quo bias, fear of commitment, or legitimate timing
+- "Your commission is too high" → doesn't yet see the value, price-sensitive, or using it as a deflection
+
+System classifies the real driver and changes the entire response strategy accordingly. Same surface words, completely different approach underneath.
+
+### Additional Intelligence Features (Priority Ideas)
+1. Voice biomarker stress detection — client's stress level from pitch, micro-pauses, intensity; adjust pressure in real time
+2. Mirroring coach — detect client's speaking pace and energy, coach agent to match for rapport
+3. Pause coach — count seconds after key questions; don't fill silence; first to speak loses
+4. Agent energy tracker — analyze agent's own voice throughout; flag when energy drops or tone gets too aggressive
+5. Emotional arc mapping — chart full emotional journey of every call; identify exact moments that created or killed warmth
+6. Loss aversion framing — reframe pitches as loss prevention when gain framing isn't landing; twice as motivating
+7. Anchoring coach — set your number before they set theirs; whoever anchors first wins
+8. Status quo bias breaker — make the cost of inaction concrete and specific: "what does waiting cost you each month?"
+9. Commitment ladder — track micro-yeses, build toward the macro-yes; flag when ladder is complete and agent should close
+10. "What would need to be true" probe — unlocks stalled deals: "what would need to be true for you to move forward today?"
+11. Win/loss pattern library — extract patterns from every closed and lost deal; searchable by situation type
+12. Behavioral style profiler — detect DISC quadrant from first 5 minutes, adjust all prompts accordingly
+13. Reluctance profiler — predict how many touches this client needs; don't push too early or give up too soon
+14. Call scoring dashboard — 10 dimensions scored every call; growth map not grades
+15. Streak and momentum management — book hardest calls during winning streaks; rest before calls when energy is flagged low
+16. Post-call debrief AI — 2-minute structured reflection immediately after call; system pre-populates from analysis
+17. Referral harvest prompt — detect emotional peaks (offer accepted, deal closed) and prompt referral ask in real time
+18. Competitive battle cards — competitor mentioned → instant card with differentiators and what to say
+19. Legacy close — when stuck in transaction-mode, prompt agent to ask one vision question that reframes the decision as a life move
+20. Pre-call intelligence brief — 60-second briefing before every scheduled call, every relevant detail surfaced
+21. Live cultural/language adaptation — coaching adjusts for cultural communication style; collectivist vs. individualist dynamics
+22. Referral partner intelligence loop — track adjacent professionals per transaction; map relationships; prompt reconnection at 90-day intervals
+
+### Industry-Agnostic Architecture
+Same engine adapts to any sales vertical. Only the objection library, close scripts, and compliance rules change. Real estate is vertical one. Insurance, financial advisory, SaaS sales follow the same architecture. Every vertical contributes back to cross-industry pattern learning.
 
 ---
 

@@ -1,0 +1,184 @@
+{
+  "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+  "blueprint_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001-v1",
+  "blueprint_status": "READY",
+  "scope": "lifere_sales_coaching_phase1",
+  "summary": "Build LifeRE Sales Coaching Phase 1: AI simulator plays the client, real-time coaching per turn, personality quadrant detection, post-session debrief with scores. 5 scenarios, 10 core objections.",
+  "authority": "ARC",
+  "acceptance_command": "npm run lifere:sales-coaching:v1-acceptance",
+  "allowed_action_types": ["write_file_exact"],
+  "non_goals": [
+    "No live call listening in this BP — simulator only",
+    "No voice/audio integration",
+    "No UI in this BP — API-only Phase 1",
+    "No behavioral analytics or call history dashboard"
+  ],
+  "intent_sources": [
+    "docs/products/lifere/PRODUCT_HOME.md",
+    "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/FOUNDER_PACKET.md"
+  ],
+  "compile_mode": "content_file",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT",
+  "dependencies_on_missions": ["PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001"],
+  "steps": [
+    {
+      "step_id": "LSC-001",
+      "phase_id": "P1",
+      "title": "DB migration — coaching sessions and objection attempts",
+      "target_file": "db/migrations/20260629_lifere_sales_coaching.sql",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-001/20260629_lifere_sales_coaching.sql"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "3d92e0462cabe3c7679ee0035bdd01b6b38524cce423d5b0da0eb191e84efca9"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-001/20260629_lifere_sales_coaching.sql"
+      ],
+      "forbidden_context_files": ["**"],
+      "dependencies": [],
+      "non_goals": ["No agent improvisation — byte contract only"],
+      "acceptance_test_ids": ["AT-LSC-001-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "db/migrations/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "pending"
+    },
+    {
+      "step_id": "LSC-002",
+      "phase_id": "P1",
+      "title": "Objection library — 10 core RE objections with quadrant-specific responses",
+      "target_file": "config/lifere-objection-library.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-002/lifere-objection-library.json"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "ad0e94ac4e20a7f8190336c8fb140be8b24b0dbaa2ce9848efcceac6b0c9501b"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-002/lifere-objection-library.json"
+      ],
+      "forbidden_context_files": ["**"],
+      "dependencies": [],
+      "non_goals": ["No agent improvisation — byte contract only"],
+      "acceptance_test_ids": ["AT-LSC-002-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "config/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "pending"
+    },
+    {
+      "step_id": "LSC-003",
+      "phase_id": "P1",
+      "title": "Sales simulator service",
+      "target_file": "services/lifere-sales-simulator.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-003/lifere-sales-simulator.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "d09c98692102ea0e6b208ffe86a1c9d09c37f689e4bc8254d541ab2b0c9b10ba"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-003/lifere-sales-simulator.js"
+      ],
+      "forbidden_context_files": ["**"],
+      "dependencies": ["LSC-001", "LSC-002"],
+      "non_goals": ["No agent improvisation — byte contract only"],
+      "acceptance_test_ids": ["AT-LSC-003-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "pending"
+    },
+    {
+      "step_id": "LSC-004",
+      "phase_id": "P1",
+      "title": "Sales coaching routes",
+      "target_file": "routes/lifere-sales-coaching-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-004/lifere-sales-coaching-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "d18b9ab4ceee4884eb11ed571b4ec2241a0eb129d6e7e495a76236641a6597be"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-004/lifere-sales-coaching-routes.js"
+      ],
+      "forbidden_context_files": ["**"],
+      "dependencies": ["LSC-003"],
+      "non_goals": ["No agent improvisation — byte contract only"],
+      "acceptance_test_ids": ["AT-LSC-004-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "pending"
+    },
+    {
+      "step_id": "LSC-005",
+      "phase_id": "P1",
+      "title": "Acceptance test",
+      "target_file": "scripts/run-lifere-sales-coaching-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-005/run-lifere-sales-coaching-acceptance.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "07416234be7eda42f054a96bebbdd395af9f5a99909d4af062ff724186b71111"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-005/run-lifere-sales-coaching-acceptance.mjs"
+      ],
+      "forbidden_context_files": ["**"],
+      "dependencies": ["LSC-001", "LSC-002", "LSC-003", "LSC-004"],
+      "non_goals": ["No agent improvisation — byte contract only"],
+      "acceptance_test_ids": ["AT-LSC-005-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "pending"
+    },
+    {
+      "step_id": "LSC-006",
+      "phase_id": "P1",
+      "title": "Route wiring — register-runtime-routes.js (adds SMOS coaching + LSC routes)",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-006/register-runtime-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "a94150ce018ce66ceb580c3b3391b2db267824c689ae417aa7df6c4883409b4e"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-SALES-COACHING-V1-0001/CONTENT/LSC-006/register-runtime-routes.js"
+      ],
+      "forbidden_context_files": ["**"],
+      "dependencies": ["LSC-001", "LSC-002", "LSC-003", "LSC-004", "LSC-005"],
+      "non_goals": ["No agent improvisation — byte contract only"],
+      "acceptance_test_ids": ["AT-LSC-006-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "startup/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "pending"
+    }
+  ],
+  "compiled_by": "Claude Sonnet 4.6",
+  "authored_by": "Adam Hopkins + Claude",
+  "build_method": "content_file_write"
+}
