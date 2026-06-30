@@ -62,6 +62,7 @@ export const REASONING_FAILURE_PATTERNS = Object.freeze([
 ]);
 
 const CHEAP_MODELS = new Set([
+  'openai_builder_mini',
   'groq_llama',
   'gemini_flash',
   'deepseek',

@@ -16,8 +16,10 @@ const HIGH_RISK_PREFIXES = [
   'core/',
 ];
 
-const CHEAP_MODELS = ['groq_llama', 'gemini_flash', 'deepseek', 'cerebras_llama'];
+const CHEAP_MODELS = ['openai_builder_mini', 'groq_llama', 'gemini_flash', 'deepseek', 'cerebras_llama'];
 const STRONGER_MODELS = [
+  'openai_builder_standard',
+  'openai_builder_escalation',
   'claude_sonnet',
   'gpt-5.1-codex',
   'gpt-5.2-codex',
@@ -113,7 +115,7 @@ export function getBuilderRoutingPolicy(input) {
       costSensitivity: 'high',
     },
     bounded_patching: {
-      allowedModels: ['gemini_flash', 'deepseek', ...STRONGER_MODELS],
+      allowedModels: ['openai_builder_mini', 'deepseek', 'gemini_flash', ...STRONGER_MODELS],
       blockedModels: ['groq_llama', 'mistral_free'],
       escalationTriggers: ['import_merge_bug', 'stub_output', 'commonjs_bleed', 'verifier_failure'],
       retryCeiling: 1,
@@ -122,7 +124,7 @@ export function getBuilderRoutingPolicy(input) {
       costSensitivity: 'medium',
     },
     architecture_planning: {
-      allowedModels: ['gemini_flash', 'deepseek', ...STRONGER_MODELS],
+      allowedModels: ['openai_builder_standard', 'openai_builder_mini', 'deepseek', 'gemini_flash', ...STRONGER_MODELS],
       blockedModels: ['groq_llama'],
       escalationTriggers: ['multi_file_plan', 'governance_boundary', 'db_plus_route_plus_service'],
       retryCeiling: 1,
@@ -131,7 +133,7 @@ export function getBuilderRoutingPolicy(input) {
       costSensitivity: 'medium',
     },
     governance_review: {
-      allowedModels: ['gemini_flash', ...STRONGER_MODELS],
+      allowedModels: ['openai_builder_standard', 'openai_builder_mini', 'gemini_flash', ...STRONGER_MODELS],
       blockedModels: ['groq_llama'],
       escalationTriggers: ['policy_conflict', 'runtime_truth_conflict', 'receipt_gap'],
       retryCeiling: 0,
@@ -140,7 +142,7 @@ export function getBuilderRoutingPolicy(input) {
       costSensitivity: 'medium',
     },
     verifier_conflict_resolution: {
-      allowedModels: ['gemini_flash', 'deepseek', ...STRONGER_MODELS],
+      allowedModels: ['openai_builder_standard', 'openai_builder_mini', 'deepseek', 'gemini_flash', ...STRONGER_MODELS],
       blockedModels: ['groq_llama'],
       escalationTriggers: ['repeat_verifier_failure', 'syntax_failure', 'scope_drift'],
       retryCeiling: 1,
@@ -149,7 +151,7 @@ export function getBuilderRoutingPolicy(input) {
       costSensitivity: 'medium',
     },
     autonomous_retry: {
-      allowedModels: ['gemini_flash', 'deepseek', ...STRONGER_MODELS],
+      allowedModels: ['openai_builder_mini', 'deepseek', 'gemini_flash', ...STRONGER_MODELS],
       blockedModels: ['groq_llama'],
       escalationTriggers: ['first_retry_failed', 'failure_family_repeat'],
       retryCeiling: 1,
@@ -158,7 +160,7 @@ export function getBuilderRoutingPolicy(input) {
       costSensitivity: 'medium',
     },
     high_risk_repo_edit: {
-      allowedModels: ['gemini_flash', 'deepseek', ...STRONGER_MODELS],
+      allowedModels: ['openai_builder_standard', 'openai_builder_escalation', 'openai_builder_mini', 'deepseek', 'gemini_flash', ...STRONGER_MODELS],
       blockedModels: ['groq_llama', 'mistral_free', 'cerebras_llama'],
       escalationTriggers: ['zone3_target', 'auth_or_runtime_boundary', 'migration_or_governance_change', 'failure_family_repeat'],
       retryCeiling: 1,

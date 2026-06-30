@@ -6,7 +6,7 @@
 **Authority:** Subordinate to `docs/constitution/NORTH_STAR_SSOT.md`, `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md`, `prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`  
 **Enforced in:** `services/builderos-model-escalation-gate.js`, `services/builderos-routing-policy.js`, `routes/lifeos-council-builder-routes.js`  
 **Receipts:** `founder_decision_ledger` rows with `decision_type = 'model_escalation'`  
-**Last Updated:** 2026-06-02
+**Last Updated:** 2026-06-30 — dedicated OpenAI Builder lanes added; `openai_builder_mini` now counts as the cheap-first builder attempt before escalation
 
 ---
 
@@ -23,7 +23,7 @@ Do **not** escalate to a stronger or more expensive model unless **all** are tru
 
 ### 2. Cheaper model already attempted once
 
-At least one full attempt with a cheaper tier model (`groq_llama`, `gemini_flash`, etc.) must have completed and failed.
+At least one full attempt with a cheaper tier model (`openai_builder_mini`, `groq_llama`, `gemini_flash`, etc.) must have completed and failed.
 
 ### 3. Failure was NOT caused by infrastructure/platform blockers
 

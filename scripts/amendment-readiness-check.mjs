@@ -2,7 +2,7 @@
 /**
  * SYNOPSIS: Flags manifests with build_ready: true whose linked amendment lacks
  * Flags manifests with build_ready: true whose linked amendment lacks
- * Pre-Build Readiness / Gate markers (from AMENDMENT_READINESS_CHECKLIST.md).
+ * Pre-Build Readiness / Gate markers (from the canonical readiness checklist).
  *
  * @ssot docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md
  */
@@ -46,7 +46,7 @@ async function main() {
       (text.includes('### Gate 1') && text.includes('### Gate 5'));
     if (!hasGates) {
       console.warn(
-        `[READINESS] ${m} has build_ready:true but ${amdRel} lacks Pre-Build Readiness / Gate 1–5 markers — see docs/projects/AMENDMENT_READINESS_CHECKLIST.md`
+        `[READINESS] ${m} has build_ready:true but ${amdRel} lacks Pre-Build Readiness / Gate 1–5 markers — see docs/products/project-governance/READINESS_CHECKLIST.md`
       );
       violations++;
     }

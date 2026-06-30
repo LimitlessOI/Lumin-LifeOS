@@ -2,7 +2,7 @@
  * SYNOPSIS: routes/mission-routes.js
  * routes/mission-routes.js
  * Mission Runtime Express router — missions, participants, household board.
- * Authority: docs/projects/BPB-0001-MISSION-RUNTIME-V1.md §§3.1–3.3, 3.5, 13.3.
+ * Authority: docs/history/legacy-history-salvage/docs-projects-root/BPB-0001-MISSION-RUNTIME-V1.md §§3.1–3.3, 3.5, 13.3.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
  * NOTE (§13.3): Commitment CRUD (POST/GET /commitments, PUT /commitments/:id) is NOT

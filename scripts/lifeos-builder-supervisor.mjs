@@ -409,7 +409,7 @@ async function main() {
     console.log('Running doc smoke objective...');
     await runBuild({
       model,
-      targetFile: 'docs/projects/BUILDER_DASHBOARD_SMOKE_RECEIPT.md',
+      targetFile: 'products/receipts/BUILDER_DASHBOARD_SMOKE_RECEIPT.md',
       files: [BRIEF, QUEUE, AMENDMENT, CATALOG],
       task:
         'Create a concise builder smoke receipt that proves you understood the LifeOS dashboard brief. ' +
@@ -421,7 +421,7 @@ async function main() {
         'End with ---METADATA--- JSON.',
       commitMessage: '[system-build] Builder smoke receipt for LifeOS dashboard supervision',
     });
-    await verifyDocSmoke('docs/projects/BUILDER_DASHBOARD_SMOKE_RECEIPT.md');
+    await verifyDocSmoke('products/receipts/BUILDER_DASHBOARD_SMOKE_RECEIPT.md');
     // KNOW: committed:true + content contains required doc markers — scoped to this run
     console.log('KNOW: Doc smoke passed — brief markers confirmed in committed output.');
   }

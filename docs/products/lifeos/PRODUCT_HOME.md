@@ -162,6 +162,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 
 **Last Updated:** 2026-06-29 — LifeOS User Auth blueprint stub wired (run-lifeos-user-auth-v1-acceptance.mjs + finishBpAcceptance); Machine Alpha Walkthrough (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence.
 **Last Updated:** 2026-06-30 — runtime composition now mounts SocialMediaOS coaching and LifeRE sales coaching slices; Builder acceptance now boots a fresh runtime from newly written files before grading route/service missions.
+**Last Updated:** 2026-06-30 — Builder/chat execution now defaults to dedicated OpenAI Builder lanes; voice rail product grounding reads the canonical LifeOS product home; builder smoke receipts now write under `products/receipts/`.
 
 ---
 

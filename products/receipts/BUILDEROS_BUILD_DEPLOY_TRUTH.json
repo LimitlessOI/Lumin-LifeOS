@@ -1,29 +1,38 @@
 {
   "schema": "builderos_build_deploy_truth_v1",
-  "at": "2026-06-28T01:33:55.583Z",
-  "ok": true,
-  "verdict": "PASS",
-  "blocker": null,
+  "at": "2026-06-30T12:02:16.651Z",
+  "ok": false,
+  "verdict": "WAITING_FOR_PROOF",
+  "blocker": "READY_ENDPOINT_TIMEOUT",
   "proof": {
-    "commit_sha": "546a3aaa31b82ff08e59da941b4ec2dc70dc961d",
-    "origin_main_sha": "ffa4d8656876b1d48d60b95db26530faf4b1959e",
+    "commit_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
+    "origin_main_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
     "origin_contains_commit": true,
     "deploy_required": true,
-    "deploy_sha": "ffa4d8656876b1d48d60b95db26530faf4b1959e",
-    "deploy_matches_origin_main": true,
+    "deploy_sha": null,
+    "deploy_matches_origin_main": false,
     "runtime_probe_url": "https://robust-magic-production.up.railway.app/api/v1/lifeos/builder/ready",
-    "runtime_probe_ok": true,
-    "runtime_behavior_verified": true,
-    "transport_status": "LIVE_BEHAVIOR_PASS"
+    "runtime_probe_ok": false,
+    "runtime_behavior_verified": false,
+    "transport_status": "COMMIT_ONLY_NOT_LIVE",
+    "runtime_probe_timeout": true,
+    "runtime_probe_error": "The operation was aborted due to timeout",
+    "record": {
+      "job_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-DEPLOY-TRUTH",
+      "code_changing": true,
+      "already_present": false,
+      "commit_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
+      "origin_contains_commit": true,
+      "deploy_required": true,
+      "deploy_identifier": "railway",
+      "deploy_sha_seen": null,
+      "expected_deploy_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
+      "deploy_matches_origin_main": false,
+      "runtime_behavior_verified": false
+    }
   },
-  "ready_snapshot": {
-    "route": "/api/v1/lifeos/builder/ready",
-    "status": 200,
-    "deploy_commit_sha": "ffa4d8656876b1d48d60b95db26530faf4b1959e"
-  },
-  "bp_sync": {
-    "updated": [
-      "builderos-reboot/BP_PRIORITY.json"
-    ]
-  }
+  "ready_snapshot": null,
+  "completed_at": "2026-06-30T12:02:16.651Z",
+  "git_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
+  "production_base": "https://robust-magic-production.up.railway.app"
 }

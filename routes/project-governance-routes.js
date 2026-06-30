@@ -85,7 +85,7 @@ export function createProjectGovernanceRoutes({ requireKey, pool }) {
       const ready    = rows.filter(r => r.build_ready);
       const notReady = rows.filter(r => !r.build_ready);
 
-      res.json({ ok: true, ready, notReady, checklist_doc: 'docs/projects/AMENDMENT_READINESS_CHECKLIST.md' });
+      res.json({ ok: true, ready, notReady, checklist_doc: 'docs/products/project-governance/READINESS_CHECKLIST.md' });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -413,7 +413,7 @@ export function createProjectGovernanceRoutes({ requireKey, pool }) {
 
   // ── POST /api/v1/projects/:id/readiness/mark-ready ───────────────────────
   // Mark a project as build_ready = TRUE after completing the 5-gate checklist.
-  // See docs/projects/AMENDMENT_READINESS_CHECKLIST.md
+  // See docs/products/project-governance/READINESS_CHECKLIST.md
   router.post('/projects/:id/readiness/mark-ready', requireKey, async (req, res) => {
     try {
       const { rows: [project] } = await pool.query(

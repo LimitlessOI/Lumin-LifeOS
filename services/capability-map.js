@@ -9,8 +9,8 @@
  *   - extension_point  → maps to a specific hook/factory in existing code
  *   - new_segment      → generates a ready-to-insert project_segments spec
  *
- * Uses Gemini 2.5 Pro (1M context) to read the full amendment index in one
- * call, so it cross-references all 19+ amendments simultaneously.
+ * Uses Gemini 2.5 Pro to read the canonical product registry + product homes
+ * so it grounds ideas in live authority instead of amendment-era docs.
  *
  * @ssot docs/products/capability-map/PRODUCT_HOME.md
  */
@@ -19,8 +19,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(process.cwd());
-const AMENDMENTS_DIR = path.join(ROOT, 'docs', 'projects');
-const INDEX_PATH = path.join(AMENDMENTS_DIR, 'INDEX.md');
+const PRODUCTS_DIR = path.join(ROOT, 'docs', 'products');
+const REGISTRY_PATH = path.join(PRODUCTS_DIR, 'PRODUCT_REGISTRY.json');
 
 // ── Gemini 2.5 Pro call (re-uses same pattern as builder-council-review) ──────
 
@@ -49,30 +49,32 @@ async function callGeminiPro(prompt, systemInstruction = '') {
   return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
 }
 
-// ── Build amendment context ────────────────────────────────────────────────────
+// ── Build product-home context ────────────────────────────────────────────────
 
-function buildAmendmentContext() {
-  const files = fs.readdirSync(AMENDMENTS_DIR)
-    .filter(f => f.startsWith('AMENDMENT_') && f.endsWith('.md'))
-    .sort();
-
+function buildProductContext() {
   const chunks = [];
   let totalChars = 0;
-  const MAX_CHARS = 600_000; // leave room for prompt + response
+  const MAX_CHARS = 600_000;
 
-  // Always include the index first
-  if (fs.existsSync(INDEX_PATH)) {
-    const idx = fs.readFileSync(INDEX_PATH, 'utf8');
-    chunks.push(`=== INDEX.md ===\n${idx}`);
-    totalChars += idx.length;
+  if (fs.existsSync(REGISTRY_PATH)) {
+    const registry = fs.readFileSync(REGISTRY_PATH, 'utf8');
+    chunks.push(`=== PRODUCT_REGISTRY.json ===\n${registry}`);
+    totalChars += registry.length;
   }
 
-  for (const f of files) {
+  const productDirs = fs.readdirSync(PRODUCTS_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+
+  for (const dir of productDirs) {
     if (totalChars >= MAX_CHARS) break;
     try {
-      const content = fs.readFileSync(path.join(AMENDMENTS_DIR, f), 'utf8');
-      const excerpt = content.slice(0, 8000); // first 8k chars per amendment
-      chunks.push(`=== ${f} ===\n${excerpt}`);
+      const home = path.join(PRODUCTS_DIR, dir, 'PRODUCT_HOME.md');
+      if (!fs.existsSync(home)) continue;
+      const content = fs.readFileSync(home, 'utf8');
+      const excerpt = content.slice(0, 6000);
+      chunks.push(`=== docs/products/${dir}/PRODUCT_HOME.md ===\n${excerpt}`);
       totalChars += excerpt.length;
     } catch { /* skip unreadable */ }
   }
@@ -113,15 +115,15 @@ function buildSuggestedSegment(analysis, idea) {
  * @returns {Promise<{mapping_type, target, rationale, suggested_segment, raw}>}
  */
 export async function analyzeCapability(idea, source = 'user', { pool } = {}) {
-  const { context, fileCount, charCount } = buildAmendmentContext();
+  const { context, fileCount, charCount } = buildProductContext();
 
   const systemInstruction = `You are a software architect for the LimitlessOS / LifeOS platform.
 Your job is to map an inbound feature idea to the existing architecture.
-You have access to all SSOT amendments (the source of truth for every module).
+You have access to the canonical product registry and product homes.
 Return ONLY valid JSON. No markdown. No explanation outside the JSON object.`;
 
   const prompt = `
-## Architecture Context (${fileCount} amendments, ${charCount.toLocaleString()} chars)
+## Architecture Context (${fileCount} product artifacts, ${charCount.toLocaleString()} chars)
 
 ${context}
 
@@ -138,7 +140,7 @@ Map this idea to the architecture above. Return a JSON object with these exact f
 
 {
   "mapping_type": "existing_module" | "extension_point" | "new_segment",
-  "target": "<amendment filename OR file path OR segment name this maps to>",
+  "target": "<product home path OR file path OR segment name this maps to>",
   "rationale": "<2-3 sentences: why this mapping, what the idea adds or overlaps>",
   "confidence": 0.0-1.0,
   "title": "<short title for this capability if new_segment>",

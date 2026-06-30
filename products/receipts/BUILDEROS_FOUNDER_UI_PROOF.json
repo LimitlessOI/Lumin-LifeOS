@@ -1,15 +1,15 @@
 {
   "schema": "builderos_founder_ui_proof_v1",
-  "at": "2026-06-28T23:18:48.489Z",
+  "at": "2026-06-30T14:18:51.137Z",
   "base": "https://robust-magic-production.up.railway.app",
-  "ok": true,
-  "verdict": "PASS",
-  "blocker": null,
+  "ok": false,
+  "verdict": "FAIL",
+  "blocker": "REAL_APP_E2E_FAILED",
   "suites": {
     "real_app_e2e": {
       "label": "real_app_e2e",
-      "exit": 0,
-      "stdout": "      Close Alpha gate (founder only)\n        Agent alpha must PASS first (every button + API tested). Then confirm u\"\n\n[12] Dashboard page loads\n  ✅ dashboard_loads — 2518 chars visible\n\n[13] Page navigation: today / finance / health load\n  ✅ page_nav — 3 pages loaded cleanly\n\n[14] Login page reachable (not 404)\n  ✅ login_page — HTTP 200\n\n[15] Logged-out LifeOS redirect preserves a single clean next target\n  ✅ logged_out_redirect_shape — /lifeos?layout=desktop&direct_system=1\n\n[16] Logged-out overlay shell redirect does not double-append next\n  ✅ logged_out_overlay_redirect_shape — /overlay/lifeos-app.html?direct_system=1\n\n────────────────────────────────────────────────────────\n✅ PASSED  16\nScreenshots → products/receipts/e2e-screenshots/\nReceipt    → products/receipts/REAL_APP_E2E.json\n",
+      "exit": 1,
+      "stdout": "e to LifeRE page\n  ❌ navigate_lifere — page.goto: net::ERR_CONNECTION_RESET at https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html\nCall log:\n\u001b[2m  - navigating to \"https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html\", waiting until \"load\"\u001b[22m\n\n\n[10] LifeRE alpha readiness surface renders\n  ❌ alpha_readiness — locator.textContent: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#content-frame').contentFrame().locator('#lifere-alpha-cycle-btn')\u001b[22m\n\n\n[11] Alpha daily cycle runs from UI\n  ❌ alpha_daily_cycle — locator.click: Timeout 660000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#content-frame').contentFrame().locator('#lifere-alpha-cycle-btn')\u001b[22m\n\n",
       "stderr": "",
       "receipt": {
         "schema": "real_app_e2e_v1",
@@ -105,27 +105,60 @@
     },
     "founder_chat_alpha": {
       "label": "founder_chat_alpha",
-      "exit": 0,
-      "stdout": "\n> ai-counsel-os@1.0.0 lifeos:founder-chat:alpha:battery\n> node scripts/run-founder-chat-alpha-battery.mjs\n\n{\n  \"ok\": true,\n  \"passed\": 9,\n  \"failed\": 0,\n  \"failures\": []\n}\n",
+      "exit": 1,
+      "stdout": "\n> ai-counsel-os@1.0.0 lifeos:founder-chat:alpha:battery\n> node scripts/run-founder-chat-alpha-battery.mjs\n\n{\n  \"ok\": false,\n  \"passed\": 8,\n  \"failed\": 3,\n  \"failures\": [\n    \"B1_do_build\",\n    \"B2_nl_ui_rounded\",\n    \"B3_nl_css_yellow\"\n  ]\n}\n",
       "stderr": "",
       "receipt": {
         "schema": "founder_chat_alpha_battery_v1",
-        "at": "2026-06-28T23:19:13.080Z",
+        "at": "2026-06-30T14:45:25.723Z",
         "base": "https://robust-magic-production.up.railway.app",
-        "ok": true,
+        "ok": false,
         "passed": [
+          "H0_founder_login_health",
+          "Q_identity_twin",
           "Q1_counsel_no_clarify",
           "Q2_smos_workflow_question",
           "Q2b_smos_steps",
           "Q_chair_builder",
           "Q3_factual_search",
-          "Q4_connection_truth",
+          "Q4_connection_truth"
+        ],
+        "failed": [
           "B1_do_build",
           "B2_nl_ui_rounded",
           "B3_nl_css_yellow"
         ],
-        "failed": [],
         "results": {
+          "H0_founder_login_health": {
+            "http": 200,
+            "ok": true,
+            "blockers": [],
+            "cred_source": "WORK_EMAIL+WORK_EMAIL_APP_PASSWORD",
+            "login_probe_ok": true
+          },
+          "Q_identity_twin": {
+            "http": 200,
+            "channel": "chair",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "NO_COMMAND_RAN",
+            "transport_status": null,
+            "action": "chair",
+            "summary_head": "Lumin IS the Chair — connected to LifeOS files, SSOT amendments, BuilderOS, and founder thread. Build path: Founder UI/code orders → build_async job → council commit via BuilderOS\n\n[KERNEL]\nMission: Speed to validated re",
+            "has_verified_search": false,
+            "has_system_knowledge": true,
+            "program_context": [
+              {
+                "id": "lumin_chair",
+                "amendment": "docs/products/lifeos/PRODUCT_HOME.md",
+                "services": [
+                  "services/lumin-chair-orchestrator.js",
+                  "services/chair-lumin-unified.js",
+                  "routes/lifeos-builderos-command-control-routes.js"
+                ],
+                "canonical": null
+              }
+            ]
+          },
           "Q1_counsel_no_clarify": {
             "http": 200,
             "channel": "chair",
@@ -133,7 +166,7 @@
             "pass_fail": "NO_COMMAND_RAN",
             "transport_status": null,
             "action": "chair",
-            "summary_head": "Based on your personal twin's motivations, which include family, freedom, and impact, I'd like to know: what's the most important outcome to achieve today that aligns with these motivations?",
+            "summary_head": "Based on your personal twin's motivations, which include family, freedom, and impact, I'd say it's essential to prioritize follow-ups today. This will allow you to nurture existing relationships and potentially drive mor",
             "has_verified_search": false,
             "has_system_knowledge": true,
             "program_context": null
@@ -151,7 +184,7 @@
             "program_context": [
               {
                 "id": "smos",
-                "amendment": "docs/products/marketingos/PRODUCT_HOME.md",
+                "amendment": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
                 "services": [
                   "services/lifere-socialmediaos-bridge.js",
                   "services/lifere-content-brief-engine.js",
@@ -159,7 +192,7 @@
                 ],
                 "canonical": {
                   "program": "Social Media OS (LifeRE)",
-                  "authority": "docs/products/marketingos/PRODUCT_HOME.md",
+                  "authority": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
                   "workflow_order": [
                     "content_brief",
                     "coach",
@@ -188,7 +221,7 @@
             "program_context": [
               {
                 "id": "smos",
-                "amendment": "docs/products/marketingos/PRODUCT_HOME.md",
+                "amendment": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
                 "services": [
                   "services/lifere-socialmediaos-bridge.js",
                   "services/lifere-content-brief-engine.js",
@@ -196,7 +229,7 @@
                 ],
                 "canonical": {
                   "program": "Social Media OS (LifeRE)",
-                  "authority": "docs/products/marketingos/PRODUCT_HOME.md",
+                  "authority": "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md",
                   "workflow_order": [
                     "content_brief",
                     "coach",
@@ -225,7 +258,7 @@
             "program_context": [
               {
                 "id": "builderos",
-                "amendment": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+                "amendment": "docs/products/builderos/PRODUCT_HOME.md",
                 "services": [
                   "routes/lifeos-council-builder-routes.js",
                   "services/builderos-command-control-service.js"
@@ -269,62 +302,71 @@
             "program_context": null
           },
           "B1_do_build": {
-            "http": 202,
+            "http": 200,
             "channel": "build_async",
-            "truth": "BUILD_ATTEMPTED",
-            "pass_fail": "RUNNING",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "FAIL",
             "transport_status": null,
-            "action": "build",
-            "job_id": "ff4bbf09-da26-4cd0-b705-10c6ba9d832f",
-            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ff4bbf09… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ff4bbf09-da26-4cd0-b705-10c6ba9d832f",
+            "action": "build_async",
+            "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: BUILDER_ENTRY:studio:STUDIO_CONCERNS\n\nN",
             "has_verified_search": false,
             "has_system_knowledge": false,
-            "program_context": null,
-            "final_pass_fail": "PASS",
-            "terminal_proof_delegated": "real_app_e2e.drawer_direct_build"
+            "program_context": null
           },
           "B2_nl_ui_rounded": {
-            "http": 202,
+            "http": 200,
             "channel": "build_async",
-            "truth": "BUILD_ATTEMPTED",
-            "pass_fail": "RUNNING",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "FAIL",
             "transport_status": null,
-            "action": "build",
-            "job_id": "ec67c064-e7a6-4e4f-893f-63e92d186535",
-            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ec67c064… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ec67c064-e7a6-4e4f-893f-63e92d186535",
+            "action": "build_async",
+            "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: BUILDER_ENTRY:studio:STUDIO_CONCERNS\n\nN",
             "has_verified_search": false,
             "has_system_knowledge": false,
-            "program_context": null,
-            "final_pass_fail": "PASS",
-            "final_transport_status": "COMMIT_ONLY_NOT_LIVE"
+            "program_context": null
           },
           "B3_nl_css_yellow": {
-            "http": 202,
+            "http": 200,
             "channel": "build_async",
-            "truth": "BUILD_ATTEMPTED",
-            "pass_fail": "RUNNING",
+            "truth": "NO_COMMAND_RAN",
+            "pass_fail": "FAIL",
             "transport_status": null,
-            "action": "build",
-            "job_id": "3441ba2b-4d7a-4f52-bffe-0463320f772c",
-            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 3441ba2b… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 3441ba2b-4d7a-4f52-bffe-0463320f772c",
+            "action": "build_async",
+            "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: BUILDER_ENTRY:studio:STUDIO_CONCERNS\n\nN",
             "has_verified_search": false,
             "has_system_knowledge": false,
-            "program_context": null,
-            "final_pass_fail": "TIMEOUT",
-            "final_transport_status": null
+            "program_context": null
           }
-        }
+        },
+        "fail_B1_do_build": "truth NO_COMMAND_RAN !== BUILD_ATTEMPTED",
+        "fail_B2_nl_ui_rounded": "truth NO_COMMAND_RAN !== BUILD_ATTEMPTED",
+        "fail_B3_nl_css_yellow": "truth NO_COMMAND_RAN !== BUILD_ATTEMPTED",
+        "tests_passed": [
+          "H0_founder_login_health",
+          "Q_identity_twin",
+          "Q1_counsel_no_clarify",
+          "Q2_smos_workflow_question",
+          "Q2b_smos_steps",
+          "Q_chair_builder",
+          "Q3_factual_search",
+          "Q4_connection_truth"
+        ],
+        "tests_failed": [
+          "B1_do_build",
+          "B2_nl_ui_rounded",
+          "B3_nl_css_yellow"
+        ],
+        "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+        "started_at": "2026-06-30T14:45:25.723Z",
+        "founder_usability_pass": false,
+        "completed_at": "2026-06-30T14:45:30.898Z",
+        "git_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
+        "production_base": "https://robust-magic-production.up.railway.app",
+        "verdict": "FAIL"
       }
     }
   },
-  "completed_at": "2026-06-28T23:18:48.489Z",
-  "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
-  "production_base": "https://robust-magic-production.up.railway.app",
-  "bp_sync": {
-    "updated": [
-      "builderos-reboot/BP_PRIORITY.json",
-      "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
-    ],
-    "skipped": []
-  }
+  "completed_at": "2026-06-30T14:18:51.137Z",
+  "git_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
+  "production_base": "https://robust-magic-production.up.railway.app"
 }

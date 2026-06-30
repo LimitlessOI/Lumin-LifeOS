@@ -177,7 +177,7 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
 
     try {
       const domainContext = await loadDomain(domain);
-      const preferredModel = getModelForTask('lifeos.lumin.program_plan') || 'gemini_flash';
+      const preferredModel = getModelForTask('lifeos.lumin.program_plan') || 'openai_builder_standard';
       let routingRecommendation = { selectedModel: preferredModel };
       if (memorySvc) {
         try {
@@ -288,7 +288,7 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
 
     try {
       const domainContext = await loadDomain(domain);
-      const preferredModel = getModelForTask('council.builder.task') || 'gemini_flash';
+      const preferredModel = getModelForTask('council.builder.task') || 'openai_builder_mini';
       let routingRecommendation = { selectedModel: preferredModel };
       if (memorySvc) {
         try {

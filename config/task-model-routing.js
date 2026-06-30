@@ -7,8 +7,8 @@
  * the memory-intelligence layer may reorder or block these choices.
  *
  * Rule: use the CHEAPEST model that can do the job CORRECTLY.
- * Free models (Gemini Flash, Groq) for routing/classification/planning.
- * claude_sonnet for any code generation — free models truncate and emit wrong syntax.
+ * Use the dedicated BuilderOS OpenAI mini lane for frozen/bounded build work first.
+ * Escalate only when the cheaper lane fails for reasoning-quality reasons.
  *
  * Usage:
  *   import { getModelForTask } from './config/task-model-routing.js';
@@ -27,10 +27,12 @@
  * Keys must match entries in config/council-members.js COUNCIL_MEMBERS object.
  *
  * Tier guide:
- *   groq_llama    — fast, cheap, great for classification + structured extraction + **literal codegen** when spec is frozen (`council.builder.code_execute`)
- *   gemini_flash  — better reasoning, still free, use for narratives + conversation + open-ended codegen
- *   ollama_deepseek_v3 — local, best reasoning, use only for complex on-demand tasks
- *   gemini_flash  — default fallback
+ *   groq_llama    — fast, cheap, great for classification + structured extraction
+ *   gemini_flash  — good for conversational and narrative work
+ *   openai_builder_mini — cheapest-capable bounded BuilderOS execution lane
+ *   openai_builder_standard — standard BuilderOS reasoning/review lane
+ *   openai_builder_escalation — stronger BuilderOS escalation lane
+ *   gemini_flash  — default fallback for non-builder general tasks
  */
 export const TASK_MODEL_MAP = {
   // ── LifeOS: Lumin AI ──────────────────────────────────────────────────────
@@ -74,14 +76,13 @@ export const TASK_MODEL_MAP = {
   'lifeos.health.pattern_analysis':    'gemini_flash',
 
   // ── Council / Builder ────────────────────────────────────────────────────
-  // OpenRouter retired (Adam 2026-05-24). Use gemini_flash until ANTHROPIC_API_KEY on Railway → claude_sonnet.
-  'council.builder.task':             'gemini_flash',
-  'council.builder.code':             'gemini_flash',
-  'council.builder.code_execute':     'groq_llama',      // frozen spec → groq is fast enough
-  'council.builder.plan':             'gemini_flash',    // planning is free-tier safe
-  'council.builder.review':           'gemini_flash',
-  'council.builder.code_review':      'gemini_flash',
-  'council.gate_change.debate':       'gemini_flash',
+  'council.builder.task':             'openai_builder_mini',
+  'council.builder.code':             'openai_builder_mini',
+  'council.builder.code_execute':     'openai_builder_mini',
+  'council.builder.plan':             'openai_builder_standard',
+  'council.builder.review':           'openai_builder_standard',
+  'council.builder.code_review':      'openai_builder_standard',
+  'council.gate_change.debate':       'openai_builder_standard',
 
   // ── Site Builder ─────────────────────────────────────────────────────────
   // gemini_flash: free, 8192+ output tokens — necessary for full 15-section HTML
@@ -104,6 +105,9 @@ export const TASK_MODEL_MAP = {
 /** Default model when task type is unknown */
 export const DEFAULT_MODEL = 'gemini_flash';
 export const TRUSTED_FALLBACK_MODELS = [
+  'openai_builder_mini',
+  'openai_builder_standard',
+  'openai_builder_escalation',
   'gemini_flash',
   'groq_llama',
   'deepseek',

@@ -292,7 +292,7 @@ async function readContinuityTail() {
 
 async function readLifeOSProductBrief() {
   try {
-    const text = await fs.readFile(path.join(process.cwd(), 'docs', 'projects', 'AMENDMENT_21_LIFEOS_CORE.md'), 'utf8');
+    const text = await fs.readFile(path.join(process.cwd(), 'docs', 'products', 'lifeos', 'PRODUCT_HOME.md'), 'utf8');
     return text.slice(0, 4500);
   } catch {
     return null;

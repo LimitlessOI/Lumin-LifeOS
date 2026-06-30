@@ -1,13 +1,29 @@
-<!-- SYNOPSIS: Project specs folder — not SSOT -->
+<!-- SYNOPSIS: Active docs/projects surface only -->
 
-# docs/projects — Specs & Research
+# docs/projects
 
-**Not product law.** Product truth lives in `docs/products/<id>/PRODUCT_HOME.md`.
+This directory is no longer the general dumping ground for product truth.
 
-This folder holds:
-- Build specs, dashboard specs, audits, brainstorms
-- BuilderOS live docs moved to `docs/products/builderos/` (redirect stubs remain here)
+## What stays here
 
-**When a spec becomes law:** merge into the owning product's `PRODUCT_HOME.md`, then move the old file to `docs/history/projects/`.
+Only active machine-fed shims that are still consumed by queue runners or build verification:
 
-**Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md` only.
+- `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
+- `LIFEOS_DASHBOARD_BUILDER_QUEUE.json`
+- `LIFEOS_DASHBOARD_BUILDER_QUEUE.md`
+- `LIFEOS_MVP_THROUGHPUT_SCOPE.json`
+- `LIFEOS_UX_ARCHITECTURE.md`
+- `SITE_BUILDER_AUTONOMOUS_QUEUE.json`
+- `TC_SERVICE_BUILDER_QUEUE.json`
+
+## What moved
+
+Legacy root-level specs moved to:
+
+- `docs/history/legacy-history-salvage/docs-projects-root/`
+
+Canonical product authority lives under:
+
+- `docs/products/<product-id>/PRODUCT_HOME.md`
+
+Do not add new product SSOT files here unless the file is an active runtime shim that cannot yet be promoted elsewhere.

@@ -12,10 +12,13 @@ export const TSOS_ROUTING_MODES = ['shadow', 'active'];
 const BASELINE_POLICY_SOURCE = 'builderos_routing_policy + task_model_map + availability';
 
 const MODEL_TIER_ORDER = [
+  'openai_builder_mini',
   'groq_llama',
   'gemini_flash',
   'deepseek',
   'cerebras_llama',
+  'openai_builder_standard',
+  'openai_builder_escalation',
   'claude_sonnet',
   'gpt-5.1-codex',
   'gpt-5.2-codex',
@@ -112,7 +115,7 @@ export function computeBaselineRouting({
   operatorOverride = false,
 }) {
   const taskClass = pickString(taskClassBaseline) || 'classification';
-  const model = pickString(baselineModel) || 'gemini_flash';
+  const model = pickString(baselineModel) || 'openai_builder_mini';
   const allowedModels = uniqueStrings(routingPolicy?.policy?.allowedModels || []);
 
   return {
@@ -142,7 +145,7 @@ export function computeTsosHypotheticalRouting({
   routingKey = null,
 }) {
   const baselineTaskClass = pickString(baselineComparator?.task_class_baseline) || 'classification';
-  const baselineModel = pickString(baselineComparator?.baseline_model) || 'gemini_flash';
+  const baselineModel = pickString(baselineComparator?.baseline_model) || 'openai_builder_mini';
   const allowedBaseline = uniqueStrings(baselineComparator?.baseline_allowed_models || []);
 
   const unchanged = (detail) => ({

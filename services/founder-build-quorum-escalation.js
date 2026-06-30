@@ -12,8 +12,8 @@ import { QUORUM_ROUNDS_PER_STAGE } from './self-repair-escalation-policy.js';
 
 export const FOUNDER_SOLO_ATTEMPT_MAX = Number(process.env.FOUNDER_SOLO_ATTEMPT_MAX || '3');
 
-const QUORUM_2_MEMBERS = ['gemini_flash', 'deepseek'];
-const QUORUM_3_MEMBERS = ['gemini_flash', 'deepseek', 'claude_sonnet'];
+const QUORUM_2_MEMBERS = ['openai_builder_mini', 'deepseek'];
+const QUORUM_3_MEMBERS = ['openai_builder_mini', 'openai_builder_standard', 'claude_sonnet'];
 const CHAIR_MEMBER = process.env.FOUNDER_CHAIR_MEMBER || 'claude_sonnet';
 
 const STATIC_FOUNDER_LESSONS = [

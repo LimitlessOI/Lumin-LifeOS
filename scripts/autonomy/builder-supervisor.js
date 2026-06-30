@@ -775,7 +775,7 @@ async function main() {
     if (segments.length === 0) {
       logger.info('[MAIN] No safe pending segments found — nothing to do');
       logger.info('[MAIN] Hint: projects must have build_ready=TRUE to be picked up.');
-      logger.info('[MAIN] See docs/projects/AMENDMENT_READINESS_CHECKLIST.md to qualify a project,');
+      logger.info('[MAIN] See docs/products/project-governance/READINESS_CHECKLIST.md to qualify a project,');
       logger.info('[MAIN] then call POST /api/v1/projects/:slug/readiness/mark-ready');
       return;
     }

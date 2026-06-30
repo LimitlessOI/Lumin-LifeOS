@@ -20,6 +20,7 @@ This folder is the staging area for authority files that are no longer supposed 
 ## Current artifacts
 
 - [`LEGACY_AUTHORITY_INVENTORY.json`](LEGACY_AUTHORITY_INVENTORY.json) — machine inventory of flat product files, legacy project docs, and broken runtime amendment references
+- `docs-projects-root/` — archived root-level `docs/projects/*` files that no longer belong in the active build surface
 
 ## Archive rule
 

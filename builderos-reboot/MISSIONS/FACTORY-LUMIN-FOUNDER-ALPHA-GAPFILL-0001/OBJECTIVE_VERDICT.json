@@ -1,25 +1,26 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-29T00:46:42.880Z",
+  "generated_at": "2026-06-30T14:45:30.898Z",
   "objective_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
   "objective_name": "Lumin Founder Alpha Gap-Fill",
-  "verdict": "TECHNICAL_PASS",
+  "verdict": "NOT_COMPLETE",
   "receipt": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
   "production_base": "https://robust-magic-production.up.railway.app",
-  "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de",
+  "git_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
   "tests_passed": [
+    "H0_founder_login_health",
     "Q_identity_twin",
     "Q1_counsel_no_clarify",
     "Q2_smos_workflow_question",
     "Q2b_smos_steps",
     "Q_chair_builder",
     "Q3_factual_search",
-    "Q4_connection_truth",
+    "Q4_connection_truth"
+  ],
+  "tests_failed": [
     "B1_do_build",
     "B2_nl_ui_rounded",
-    "B3_nl_css_yellow",
-    "bp_sync_mandatory"
+    "B3_nl_css_yellow"
   ],
-  "tests_failed": [],
   "founder_usability_pass": false
 }

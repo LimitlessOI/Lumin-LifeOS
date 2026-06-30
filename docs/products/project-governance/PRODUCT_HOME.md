@@ -17,6 +17,7 @@
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
 **Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
+**Last Updated:** 2026-06-30 — build-readiness authority moved to canonical governance docs; runtime/readiness routes and builder hints now point to `docs/products/project-governance/READINESS_CHECKLIST.md`, and legacy root `docs/projects/*` specs were archived under `docs/history/legacy-history-salvage/docs-projects-root/`.
 
 | Field | Value |
 |---|---|
@@ -62,7 +63,7 @@ db/migrations/20260327_governance_spec.sql
 docs/projects/manifest.schema.json
 docs/products/project-governance/PRODUCT_HOME.md
 docs/products/project-governance/FILE_MANIFEST.json
-docs/projects/AMENDMENT_READINESS_CHECKLIST.md
+docs/products/project-governance/READINESS_CHECKLIST.md
 routes/builder-supervisor-routes.js
 scripts/verify-project.mjs
 scripts/check-coupling.mjs
@@ -110,7 +111,7 @@ docs/projects/INDEX.md
 - `POST /api/v1/builder/resume`
 
 ### Verification loop
-1. Amendment explains intent
+1. Product home / canonical spec explains intent
 2. Manifest encodes machine-checkable truth
 3. Verifier runs assertions (DB, files, syntax; optional HTTP route probes when `PUBLIC_BASE_URL` / `RAILWAY_PUBLIC_DOMAIN` / `REMOTE_VERIFY_BASE_URL` is set, or when **`--remote-base-url https://…`** is passed — see `docs/ENV_REGISTRY.md` § Public URL & remote verification)
 4. Coupling/staleness scripts enforce discipline in CI

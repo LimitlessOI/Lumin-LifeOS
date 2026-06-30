@@ -79,6 +79,8 @@ const REPO_ROOT = join(__dirname, '..');
 
 /** Bumped when builder codegen/token policy semantics change; operators compare GET /builder/ready to git main. */
 const BUILDER_CODEGEN_POLICY_REVISION = '2026-05-01a';
+const BUILDER_ROUTE_DEFAULT_MODEL = 'openai_builder_mini';
+const BUILDER_ROUTE_STANDARD_MODEL = 'openai_builder_standard';
 
 const METADATA_SEP = '\n---METADATA---\n';
 const REMOTE_SYSTEM_TRUTH = 'System truth is remote: GitHub=source, Railway=runtime, Neon=data. Local shell/repo are workbench mirrors only.';
@@ -1197,7 +1199,7 @@ export function createLifeOSCouncilBuilderRoutes({
       const escalationVerdict = evaluateModelEscalationGate({
         task_id: bodyEsc.task_id || task || routingKey,
         mission_id: bodyEsc.mission_id || bodyEsc.metadata_json?.mission_id || null,
-        cheaper_model_used: bodyEsc.escalate_from_model || bodyEsc.cheaper_model_used || 'gemini_flash',
+        cheaper_model_used: bodyEsc.escalate_from_model || bodyEsc.cheaper_model_used || BUILDER_ROUTE_DEFAULT_MODEL,
         stronger_model_requested: bodyEsc.escalate_to_model || model || null,
         failure_reason: bodyEsc.escalation_failure_reason || bodyEsc.failure_reason || bodyEsc.blocker || 'reasoning_failure',
         value_categories: bodyEsc.value_categories || (bodyEsc.value_category ? [bodyEsc.value_category] : []),
@@ -1220,7 +1222,7 @@ export function createLifeOSCouncilBuilderRoutes({
       }
     }
 
-    const requestedModel = model || getModelForTask(routingKey) || 'gemini_flash';
+    const requestedModel = model || getModelForTask(routingKey) || BUILDER_ROUTE_DEFAULT_MODEL;
     const rawCandidateModels = model ? [model] : getCandidateModelsForTask(routingKey);
     const routingPolicy = applyBuilderRoutingPolicy({
       candidateModels: rawCandidateModels,
@@ -1245,7 +1247,7 @@ export function createLifeOSCouncilBuilderRoutes({
         routingKey,
         targetFile: bodyTargetFile || null,
         taskClassBaseline: routingPolicy.taskClass,
-        baselineModel: preferredModel || requestedModel || 'gemini_flash',
+        baselineModel: preferredModel || requestedModel || BUILDER_ROUTE_DEFAULT_MODEL,
         routingPolicy,
         operatorOverride: Boolean(model),
       }).catch((shadowErr) => {
@@ -1577,7 +1579,7 @@ export function createLifeOSCouncilBuilderRoutes({
       model: member || '(no AI needed)',
       is_free: true,
     }));
-    res.json({ ok: true, routing: annotated, default_model: 'gemini_flash' });
+    res.json({ ok: true, routing: annotated, default_model: BUILDER_ROUTE_DEFAULT_MODEL });
   }
 
   function getLCLStats(req, res) {
@@ -2173,7 +2175,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       domain = captured.data.domain;
 
       if (!String(generatedOutput || '').trim() && taskBody.execution_only === true) {
-        log.warn({ target_file }, '[BUILDER] code_execute returned empty — retry with gemini_flash');
+        log.warn({ target_file }, '[BUILDER] code_execute returned empty — retry with openai_builder_standard');
         captured = null;
         await dispatchTask({
           body: {
@@ -2182,7 +2184,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
             mode: taskBody.mode || 'code',
             useCache: false,
             execution_only: false,
-            model: 'gemini_flash',
+            model: BUILDER_ROUTE_STANDARD_MODEL,
           },
         }, mockRes);
         if (captured?.code === 200 && captured.data?.ok && captured.data.output) {
@@ -2359,7 +2361,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
             mode: taskBody.mode || 'code',
             useCache: false,
             execution_only: false,
-            model: 'gemini_flash',
+            model: BUILDER_ROUTE_STANDARD_MODEL,
             max_output_tokens: 16384,
             spec: [
               taskBody.spec,
@@ -2479,8 +2481,8 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     const isSqlFile = /\.sql$/.test(resolvedTarget);
     if (isSqlFile) {
       let sqlCheck = validateSqlMigrationContent(generatedOutput);
-      if (!sqlCheck.ok && model_used !== 'gemini_flash') {
-        log.warn({ resolvedTarget, reason: sqlCheck.error, model_used }, '[BUILDER] SQL validation failed — retry with gemini_flash');
+      if (!sqlCheck.ok && model_used !== BUILDER_ROUTE_STANDARD_MODEL) {
+        log.warn({ resolvedTarget, reason: sqlCheck.error, model_used }, '[BUILDER] SQL validation failed — retry with openai_builder_standard');
         let retryCapture = null;
         const mockRetryRes = {
           status(code) { return { json(data) { retryCapture = { code, data }; } }; },
@@ -2493,7 +2495,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
             mode: taskBody.mode || 'code',
             useCache: false,
             execution_only: false,
-            model: 'gemini_flash',
+            model: BUILDER_ROUTE_STANDARD_MODEL,
             spec: [
               taskBody.spec,
               'CRITICAL: target is a .sql migration file. Output plain PostgreSQL DDL only.',

@@ -238,7 +238,7 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
     let g2Complete = 0;
     let prefixTokenEstimateCount = 0;
     let prefixCheaperVerifierSuccess = false;
-    const cheaperModels = new Set(['groq_llama', 'deepseek', 'cerebras_llama']);
+    const cheaperModels = new Set(['openai_builder_mini', 'groq_llama', 'deepseek', 'cerebras_llama']);
 
     for (const row of prefixHooks) {
       const meta = row.metadata || {};

@@ -25,6 +25,7 @@
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
 **Last Updated:** 2026-06-29 — CRASH FIX: never-stop-product-factory.js converted all spawnSync to async spawn to stop blocking the Node.js event loop and crashing the Railway container.
+**Last Updated:** 2026-06-30 — BuilderOS routing hardened to dedicated OpenAI builder lanes: `openai_builder_mini` for cheap-first frozen execution, `openai_builder_standard` for planning/review, and `openai_builder_escalation` for harder repair paths; TSOS/evidence/quorum logic now treats the mini lane as the canonical cheaper executor.
 
 ---
 

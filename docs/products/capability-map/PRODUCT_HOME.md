@@ -19,7 +19,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `stable` |
-| **Last Updated** | 2026-03-27 |
+| **Last Updated** | 2026-06-30 — capability grounding switched from amendment-index scanning to canonical product registry + product homes |
 
 ---
 
@@ -35,7 +35,7 @@ Truth over convenience. The architecture shouldn't drift because someone dumped 
 
 **In scope:**
 - Capability analysis endpoint + service
-- Amendment-indexed analysis using Gemini 2.5 Pro (1M context)
+- Canonical product-registry and product-home analysis using Gemini 2.5 Pro
 - capability_map DB table (pending/accepted/rejected/inserted)
 - Auto-insert of approved capabilities into project_segments
 
@@ -60,7 +60,7 @@ docs/products/capability-map/PRODUCT_HOME.md
 
 ### Analysis flow
 1. Caller submits idea + source via `POST /api/v1/capability-map/analyze`
-2. Service reads all 19+ amendments + INDEX.md (Gemini 2.5 Pro, 1M context)
+2. Service reads `docs/products/PRODUCT_REGISTRY.json` plus canonical `docs/products/*/PRODUCT_HOME.md` entries
 3. Returns `mapping_type` + `target` + `rationale` + `suggested_segment` (if new)
 4. Result persisted to `capability_map` table with status=pending
 
@@ -82,7 +82,7 @@ docs/products/capability-map/PRODUCT_HOME.md
 | `idea` | Free-text description |
 | `source` | Origin: 'codex', 'user', 'competitor_scan', etc. |
 | `mapping_type` | existing_module / extension_point / new_segment |
-| `target` | Amendment filename, file path, or segment name |
+| `target` | Product-home path, file path, or segment name |
 | `rationale` | 2-3 sentence explanation |
 | `suggested_segment` | JSONB segment spec if mapping_type=new_segment |
 | `status` | pending / accepted / rejected / inserted |
@@ -99,8 +99,8 @@ docs/products/capability-map/PRODUCT_HOME.md
 ---
 
 ## CURRENT STATE
-- **KNOW:** Service reads full amendment index via Gemini 2.5 Pro (1M context) in single call
-- **KNOW:** `buildAmendmentContext()` reads all AMENDMENT_*.md files up to 600k chars
+- **KNOW:** Service reads the canonical product registry and product homes via Gemini 2.5 Pro
+- **KNOW:** `buildProductContext()` reads `docs/products/PRODUCT_REGISTRY.json` plus `docs/products/*/PRODUCT_HOME.md` entries up to 600k chars
 - **KNOW:** Returns structured JSON: `mapping_type`, `target`, `rationale`, `confidence`, `overlap_warning`, `suggested_segment`
 - **KNOW:** `actOnCapability` with `insert` action auto-inserts into `project_segments` with full spec fields
 - **KNOW:** Routes mounted at `/api/v1/capability-map` with requireKey auth
@@ -135,3 +135,4 @@ Competitors absorb ideas ad-hoc. We map every idea to a specific amendment + fil
 | Date | What Changed | Why | Amendment | Verified |
 |---|---|---|---|---|
 | 2026-03-27 | Created Capability Map service, routes, DB migration, mounted in runtime | Govern inbound capability absorption against architecture | ✅ | pending |
+| 2026-06-30 | Grounding source updated from amendment-era files to canonical product registry + product homes | Capability mapping must follow the active authority surface, not legacy amendment-first docs | ✅ | pending |
