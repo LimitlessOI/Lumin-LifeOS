@@ -301,7 +301,7 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-FINANCE] Routes mounted at /api/v1/lifeos/finance");
 
   app.use("/api/v1/lifeos/backtest", createLifeOSBacktestRoutes({ requireKey: requireUserOrKey }));
-  logger.info("✅ [LIFEOS-BACKTEST] Education-only routes mounted at /api/v1/lifeos/backtest");
+  logger.info("✅ [LIFEOS-BACKTEST] Routes mounted at /api/v1/lifeos/backtest");
 
   app.use(
     "/api/v1/lifeos/weekly-review",

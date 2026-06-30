@@ -216,7 +216,7 @@ export function createConsensusService(deps) {
 }
 
 // ==================== COUNCIL CONSENSUS (getCouncilConsensus) ====================
-// Extracted from server.js. Requires { callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT } at call time.
+// Extracted from server.js. Requires { callCouncilMember, COUNCIL_MEMBERS } at call time.
 
 /**
  * Compare two responses for similarity (word overlap)
@@ -260,21 +260,21 @@ export function selectBestResponse(responses) {
 
 /**
  * Factory — returns getCouncilConsensus bound to the provided deps.
- * @param {{ callCouncilMember: function, COUNCIL_MEMBERS: object, OLLAMA_ENDPOINT: string }} deps
+ * @param {{ callCouncilMember: function, COUNCIL_MEMBERS: object }} deps
  */
-export function createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT }) {
+export function createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS }) {
   return async function getCouncilConsensus(prompt, taskType = 'code') {
     console.log('🤝 [COUNCIL CONSENSUS] Getting multiple opinions for code decision...');
 
-    const models = ['ollama_deepseek_coder', 'ollama_qwen_coder_32b', 'ollama_llama', 'ollama_deepseek'];
-    const availableModels = models.filter(m => COUNCIL_MEMBERS[m] && (OLLAMA_ENDPOINT || COUNCIL_MEMBERS[m].provider === 'groq'));
+    const models = ['deepseek', 'gemini_flash', 'groq_llama', 'cerebras_llama', 'claude_sonnet'];
+    const availableModels = models.filter((m) => COUNCIL_MEMBERS[m]);
 
     if (availableModels.length < 2) {
       console.warn('⚠️ [CONSENSUS] Not enough models available, using single model');
       if (availableModels.length > 0) {
         return await callCouncilMember(availableModels[0], prompt);
       }
-      return await callCouncilMember('ollama_deepseek', prompt);
+      return await callCouncilMember('deepseek', prompt);
     }
 
     const responses = [];

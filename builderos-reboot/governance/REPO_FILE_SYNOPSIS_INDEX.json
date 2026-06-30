@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-30T22:51:10.437Z",
+  "generated_at": "2026-06-30T23:35:56.467Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11754,
+  "file_count": 11755,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -30513,9 +30513,9 @@
     {
       "path": "config/council-members.js",
       "synopsis": "Exports createCouncilMembers — config/council-members.js.",
-      "bytes": 11784,
-      "mtime": "2026-06-30T15:20:18.169Z",
-      "indexed_at": "2026-06-30T18:59:24.013Z"
+      "bytes": 6924,
+      "mtime": "2026-06-30T23:14:07.193Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z"
     },
     {
       "path": "config/cultural-databases.json",
@@ -31659,10 +31659,10 @@
     },
     {
       "path": "core/two-tier-system-init.js",
-      "synopsis": "Two-Tier AI Council System Initialization",
-      "bytes": 39750,
-      "mtime": "2026-06-29T17:21:07.695Z",
-      "indexed_at": "2026-06-30T18:59:24.013Z",
+      "synopsis": "Worker-council subsystem initialization",
+      "bytes": 38038,
+      "mtime": "2026-06-30T23:26:25.109Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -37286,6 +37286,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/history/legacy-history-salvage/ollama-retired/README.md",
+      "synopsis": "Documentation — README.",
+      "bytes": 731,
+      "mtime": "2026-06-30T23:35:45.342Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z"
+    },
+    {
       "path": "docs/history/legacy-history-salvage/README.md",
       "synopsis": "Legacy authority salvage staging area",
       "bytes": 1042,
@@ -37649,9 +37656,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 50844,
-      "mtime": "2026-06-30T22:49:53.655Z",
-      "indexed_at": "2026-06-30T22:51:10.437Z"
+      "bytes": 51134,
+      "mtime": "2026-06-30T23:34:13.075Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -38222,9 +38229,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 532056,
-      "mtime": "2026-06-30T22:49:53.654Z",
-      "indexed_at": "2026-06-30T22:51:10.437Z"
+      "bytes": 532545,
+      "mtime": "2026-06-30T23:32:26.594Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -83244,9 +83251,9 @@
     {
       "path": "server.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 73144,
-      "mtime": "2026-06-30T22:42:37.281Z",
-      "indexed_at": "2026-06-30T22:51:10.437Z"
+      "bytes": 70618,
+      "mtime": "2026-06-30T23:24:38.920Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z"
     },
     {
       "path": "server/config/fileStorage.js",
@@ -84609,9 +84616,9 @@
     {
       "path": "services/consensus-service.js",
       "synopsis": "consensus-service.js — extracted from server.js",
-      "bytes": 11417,
-      "mtime": "2026-06-21T21:39:12.555Z",
-      "indexed_at": "2026-06-30T18:59:24.013Z"
+      "bytes": 11282,
+      "mtime": "2026-06-30T23:17:06.979Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z"
     },
     {
       "path": "services/consent-registry.js",
@@ -84715,9 +84722,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 74757,
-      "mtime": "2026-06-30T22:36:18.954Z",
-      "indexed_at": "2026-06-30T22:51:10.437Z",
+      "bytes": 74571,
+      "mtime": "2026-06-30T23:26:03.905Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -88762,9 +88769,9 @@
     {
       "path": "services/tools-status.js",
       "synopsis": "Tools Status — probes the runtime environment for available CLI commands,",
-      "bytes": 3073,
-      "mtime": "2026-06-21T21:39:18.981Z",
-      "indexed_at": "2026-06-30T18:59:24.013Z"
+      "bytes": 2194,
+      "mtime": "2026-06-30T23:26:48.605Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z"
     },
     {
       "path": "services/toon-formatter.js",
@@ -89558,9 +89565,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 34414,
-      "mtime": "2026-06-30T21:59:45.372Z",
-      "indexed_at": "2026-06-30T22:51:10.437Z",
+      "bytes": 34399,
+      "mtime": "2026-06-30T23:25:10.905Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89575,9 +89582,9 @@
     {
       "path": "startup/routes/server-routes.js",
       "synopsis": "Registers ServerRoutes routes/handlers (startup/routes/server-routes.js).",
-      "bytes": 7794,
-      "mtime": "2026-06-30T17:40:24.002Z",
-      "indexed_at": "2026-06-30T18:59:24.013Z",
+      "bytes": 7204,
+      "mtime": "2026-06-30T23:25:38.690Z",
+      "indexed_at": "2026-06-30T23:35:56.467Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]

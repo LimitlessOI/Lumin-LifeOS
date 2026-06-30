@@ -60,8 +60,6 @@ export function createCouncilService({
   pool,
   COUNCIL_MEMBERS,
   COUNCIL_ALIAS_MAP,
-  OLLAMA_ENDPOINT,
-  COUNCIL_OLLAMA_MODE = "last_resort",
   MAX_DAILY_SPEND,
   COST_SHUTDOWN_THRESHOLD,
   NODE_ENV,
@@ -151,7 +149,6 @@ export function createCouncilService({
 
   const _exhaustedProviders = new Set();
   _exhaustedProviders.add("ollama");
-  console.log("🔌 [COUNCIL] Local Ollama retired by founder directive — free cloud lanes only");
 
   // ==================== LCTP v3 COMPRESSION HELPERS ====================
 
@@ -523,8 +520,7 @@ export function createCouncilService({
     }
 
     if (memberConfig.provider === "ollama") {
-      const endpoint =
-        memberConfig.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+      const endpoint = memberConfig.endpoint || "http://localhost:11434";
       const controller = new AbortController();
       const timeoutId = setTimeout(
         () => controller.abort(),

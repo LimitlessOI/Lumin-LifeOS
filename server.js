@@ -184,8 +184,6 @@ import { bootAllDomains } from "./startup/boot-domains.js";
 
 const coachingStackRuntimeEnabled =
   process.env.LIFEOS_ENABLE_COACHING_STACK_RUNTIME === "true";
-const educationRuntimeEnabled =
-  process.env.LIFEOS_ENABLE_EDUCATION_RUNTIME === "true";
 const externalProductRoutesEnabled =
   process.env.LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES === "true";
 
@@ -316,8 +314,6 @@ const {
   DEEPSEEK_API_KEY,
   GITHUB_TOKEN,
   GITHUB_REPO,
-  OLLAMA_ENDPOINT,
-  COUNCIL_OLLAMA_MODE,
   DEEPSEEK_LOCAL_ENDPOINT,
   DEEPSEEK_BRIDGE_ENABLED,
   ALLOWED_ORIGINS,
@@ -504,7 +500,7 @@ trackLossFunction = trackLoss;
 // ==================== ENHANCED AI COUNCIL MEMBERS (NO CLAUDE) ====================
 // TIER 0: Open Source / Cheap Models (PRIMARY - Do all the work)
 // TIER 1: Expensive Models (OVERSIGHT ONLY - Validation when needed)
-const COUNCIL_MEMBERS = createCouncilMembers({ OLLAMA_ENDPOINT, DEEPSEEK_BRIDGE_ENABLED });
+const COUNCIL_MEMBERS = createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED });
 
 // LCTP v3 helpers are now provided by services/council-service.js via compressPrompt/decompressResponse
 
@@ -550,8 +546,6 @@ const councilService = createCouncilService({
   pool,
   COUNCIL_MEMBERS,
   COUNCIL_ALIAS_MAP,
-  OLLAMA_ENDPOINT,
-  COUNCIL_OLLAMA_MODE,
   MAX_DAILY_SPEND,
   COST_SHUTDOWN_THRESHOLD,
   NODE_ENV,
@@ -814,8 +808,6 @@ async function runInitializeTwoTierSystem() {
     getCouncilConsensus,
     getTwilioClient,
     providerCooldowns,
-    OLLAMA_ENDPOINT,
-    COUNCIL_OLLAMA_MODE,
     PORT,
     RAILWAY_PUBLIC_DOMAIN,
     requireKey,
@@ -998,7 +990,6 @@ registerServerRoutes(app, {
   stripeRoutes,
   requireKey,
   getAllFlags,
-  OLLAMA_ENDPOINT,
   pool,
   autoBuilder,
   syncStripeRevenue,
@@ -1050,7 +1041,7 @@ async function mountRuntimeRoutes() {
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================
 // Functions extracted to services/consensus-service.js (createGetCouncilConsensus, compareResponses, selectBestResponse)
-const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT });
+const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS });
 
 // ==================== AUTO-BUILDER: CLOUD AI + PERSISTENCE ====================
 // Founder directive: no Ollama fallback. Builder uses active cloud council lanes only.
@@ -1413,7 +1404,6 @@ async function start() {
     console.log(`🎯 Command Center: https://${railwayUrl}/command-center`);
     console.log(`🏠 BoldTrail CRM: https://${railwayUrl}/boldtrail`);
     console.log(`📞 Recruitment System: POST /api/v1/recruitment/* (outbound calls, webinars, enrollment)`);
-    console.log(`🎓 Virtual Class: POST /api/v1/class/enroll (free real estate education)`);
     console.log(`📹 YouTube Automation: POST /api/v1/youtube/* (progressive unlock system)`);
     console.log(`🔨 Auto-Builder: GET /api/v1/auto-builder/status (builds opportunities automatically)`);
     console.log(`🤖 Extract Conversations: https://${railwayUrl}/extract-conversations`);
@@ -1787,8 +1777,6 @@ async function start() {
       );
     }
 
-      logger.info("🛑 [OLLAMA] Retired by founder directive — no startup probe, installer, or fallback routing");
-
       // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)
       try {
         const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
@@ -1808,61 +1796,6 @@ async function start() {
 
     if (STRIPE_SECRET_KEY) {
       await syncStripeRevenue();
-    }
-
-    // Initialize virtual class modules if they don't exist
-    async function initializeVirtualClassModules() {
-      try {
-        const moduleCheck = await pool.query("SELECT COUNT(*) FROM virtual_class_modules");
-        if (parseInt(moduleCheck.rows[0].count) === 0) {
-          const modules = [
-            {
-              name: "Introduction to Real Estate",
-              order: 1,
-              content: { description: "Basics of real estate, licensing, and getting started" },
-            },
-            {
-              name: "Client Communication",
-              order: 2,
-              content: { description: "How to communicate effectively with clients" },
-            },
-            {
-              name: "Property Showings",
-              order: 3,
-              content: { description: "Planning and executing successful property showings" },
-            },
-            {
-              name: "Email & Follow-up",
-              order: 4,
-              content: { description: "Professional email drafting and follow-up strategies" },
-            },
-            {
-              name: "Building Your Business",
-              order: 5,
-              content: { description: "Growing your real estate business and client base" },
-            },
-          ];
-
-          for (const module of modules) {
-            await pool.query(
-              `INSERT INTO virtual_class_modules (module_name, module_order, content)
-               VALUES ($1, $2, $3)`,
-              [module.name, module.order, JSON.stringify(module.content)]
-            );
-          }
-
-          logger.info("✅ Virtual class modules initialized");
-        }
-      } catch (error) {
-        logger.error("Virtual class initialization error:", { error: error.message });
-      }
-    }
-
-    // Initialize modules on startup
-    if (educationRuntimeEnabled) {
-      await initializeVirtualClassModules();
-    } else {
-      logger.info("🛑 [EDUCATION] Virtual class bootstrap not initialized (set LIFEOS_ENABLE_EDUCATION_RUNTIME=true to restore)");
     }
 
     autonomyDepsRef.current = {

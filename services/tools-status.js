@@ -47,42 +47,21 @@ export async function checkNodeModule(moduleName) {
   }
 }
 
-// Suppress repeated Ollama failure logs — log once, then silence for 30 min
-let _ollamaLastWarnAt = 0;
-const _OLLAMA_WARN_COOLDOWN = 30 * 60 * 1000;
+export async function fetchLocalRuntimeStatus(endpoint) {
+  const ep = endpoint || process.env.OLLAMA_ENDPOINT || process.env.OLLAMA_BASE_URL || null;
+  return {
+    provider: 'local_runtime_disabled',
+    endpoint: ep,
+    available: false,
+    models: [],
+    status: 'disabled',
+    message: 'Founder directive (2026-06-30): local model runtime disabled in the active system.',
+  };
+}
 
+// Backward-compat export for older callers still importing the old symbol.
 export async function fetchOllamaModels(endpoint) {
-  // Skip entirely if not configured or explicitly disabled
-  const ep = endpoint || process.env.OLLAMA_ENDPOINT;
-  const disabled = !ep || ep === 'disabled' || ep === 'none' ||
-    (process.env.RAILWAY_ENVIRONMENT && /localhost|127\.0\.0\.1|PASTE_YOUR/i.test(String(ep)));
-  if (disabled) {
-    return { endpoint: null, available: false, models: [] };
-  }
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 1500);
-  try {
-    const response = await fetch(`${ep}/api/tags`, {
-      signal: controller.signal,
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    const models = Array.isArray(data.models)
-      ? data.models.map((m) => m.name || m.model || "")
-      : [];
-    _ollamaLastWarnAt = 0; // reset on success
-    return { endpoint: ep, available: true, models };
-  } catch (error) {
-    const now = Date.now();
-    if (now - _ollamaLastWarnAt > _OLLAMA_WARN_COOLDOWN) {
-      console.warn("[TOOLS STATUS] Ollama unavailable (silencing for 30 min):", error.message);
-      _ollamaLastWarnAt = now;
-    }
-    return { endpoint: ep, available: false, models: [] };
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  return fetchLocalRuntimeStatus(endpoint);
 }
 
 export async function getPythonVersion() {

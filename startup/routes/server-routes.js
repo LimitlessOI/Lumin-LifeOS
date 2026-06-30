@@ -14,7 +14,6 @@ export function registerServerRoutes(app, deps) {
     stripeRoutes,
     requireKey,
     getAllFlags,
-    OLLAMA_ENDPOINT,
     pool,
     autoBuilder,
     syncStripeRevenue,
@@ -68,23 +67,6 @@ export function registerServerRoutes(app, deps) {
       server: "ok",
       timestamp: new Date().toISOString(),
     };
-
-    try {
-      const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
-      const ollamaRes = await fetch(`${ollamaEndpoint}/api/tags`);
-      if (ollamaRes.ok) {
-        const data = await ollamaRes.json();
-        health.ollama = {
-          status: "ok",
-          endpoint: ollamaEndpoint,
-          models: data.models?.map((m) => m.name) || [],
-        };
-      } else {
-        health.ollama = { status: "error", message: `HTTP ${ollamaRes.status}` };
-      }
-    } catch (e) {
-      health.ollama = { status: "error", message: e.message };
-    }
 
     try {
       await pool.query("SELECT 1");
