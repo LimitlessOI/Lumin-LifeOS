@@ -162,6 +162,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 
 **Last Updated:** 2026-06-29 — LifeOS User Auth blueprint stub wired (run-lifeos-user-auth-v1-acceptance.mjs + finishBpAcceptance); Machine Alpha Walkthrough (12/12 PASS); Lumin personal routing fix; personal prose format fix; canMarkBuildDone pending evidence.
 **Last Updated:** 2026-06-30 — runtime composition now mounts SocialMediaOS coaching and LifeRE sales coaching slices; Builder acceptance now boots a fresh runtime from newly written files before grading route/service missions.
+**Last Updated:** 2026-06-30 — LifeOS auth password bootstrap hardened: `/auth/set-password` now requires same-handle JWT or operator key, and passwordless bootstrap is operator-only.
 
 ---
 
@@ -1298,7 +1299,7 @@ These were approved but not yet built. Each needs its own migration + service + 
 - `lifeos-today.html` — updated with MIT widget + day score bar (appended JS at bottom)
 
 **Auth state:**
-- JWT auth is live in code. New routes should use `requireLifeOSUser` (from `middleware/lifeos-auth-middleware.js`) for per-user routes. Legacy routes still use `requireKey` for backward compat.
+- JWT auth is live in code. New routes should use `requireLifeOSUser` (from `middleware/lifeos-auth-middleware.js`) for per-user routes. Legacy routes still use `requireKey` for backward compat. `/auth/set-password` is no longer public: account JWTs may change only their own handle with current password, and passwordless bootstrap requires the operator key.
 - Sherry invite code `SHERRY-LIFEOS-2026` is in the auth migration — seeds on first boot
 
 **Lumin AI:**
@@ -1701,6 +1702,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-30 | **LifeOS auth password-bootstrap hardening:** `routes/lifeos-auth-routes.js` now protects `POST /auth/set-password` with account-JWT-or-operator middleware, blocks JWT callers from changing another handle, and passes an explicit operator-only bootstrap flag. `services/lifeos-auth.js` now refuses passwordless password creation unless that flag is set. Added `tests/lifeos-auth-password-security.test.js` to prove unauthenticated requests never touch DB, cross-handle JWTs are blocked, passwordless same-user requests require operator bootstrap, normal current-password self-service still works, and operator-key bootstrap remains available. | Bug sweep found a concrete account-takeover path: any unauthenticated caller could set a password for a passwordless LifeOS handle and then log in as that account. | ✅ targeted regression PASS; ⚠️ full `builder:preflight` blocked by existing `tests/lumin-conversation-routing.test.js` oil-change assertion (`actual=lumin`, expected `chair`) | `node --test tests/lifeos-auth-password-security.test.js` |
 | 2026-06-29 | **Founder session ingest** — Human Synergy / Limitless Principle / employee digital twin extract in `conversations/2026-06-29-human-synergy-limitless-principle.md`; pointer to `limitlessos/PRODUCT_HOME.md`. | Adam: preserve ChatGPT ecosystem brainstorm in product folders. | doc-only |
 | 2026-06-29 | **Auth acceptance + bp_sync:** `scripts/run-lifeos-user-auth-v1-acceptance.mjs` updated to call `finishBpAcceptance` from `scripts/lib/bp-acceptance-finish.mjs` — writes receipt to `products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json` and updates `OBJECTIVE_VERDICT.json` on PASS. `services/lifeos-user-service.js` and `middleware/lifeos-tier-guard.js` are new files committed from execute-mission output. | ssot-check requires PRODUCT_HOME co-commit when new lifeos service/middleware files are staged. |
 | 2026-06-29 | **AUTH SYSTEM EXECUTE: mission PRODUCT-LIFEOS-USER-AUTH-V1-0001 written to target files** — `execute-mission.mjs` ran all 7 blueprint steps: `services/lifeos-user-service.js` (NEW — createUser/loginUser/refreshSession/revokeSession/createInvite/listInvites with scrypt hashing), `middleware/lifeos-tier-guard.js` (NEW — requireTier/injectTierContext), `db/migrations/20260629_lifeos_user_auth.sql` (NEW — idempotent auth schema), `scripts/run-lifeos-user-auth-v1-acceptance.mjs` (NEW — register/login/refresh/me/logout acceptance), plus routes/lifeos-auth-routes.js, public/overlay/lifeos-app.html, routes/lifeos-builderos-command-control-routes.js (refreshed). All 4 new files pass `node --check`. Migration auto-applies on next Railway boot. | Mission content pack cleared builder simulation; execute-mission wrote files to final target paths. | ✅ 7/7 files written | `node builderos-reboot/scripts/execute-mission.mjs PRODUCT-LIFEOS-USER-AUTH-V1-0001` |

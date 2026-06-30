@@ -10,10 +10,10 @@
  *   POST /api/v1/lifeos/auth/login          — email + password → access + refresh tokens
  *   POST /api/v1/lifeos/auth/refresh        — refresh token → new access token
  *   POST /api/v1/lifeos/auth/logout         — revoke refresh token
- *   POST /api/v1/lifeos/auth/set-password   — set/change password for a handle
  *
  * Authenticated endpoints (requireLifeOSUser):
  *   GET  /api/v1/lifeos/auth/me             — current user info
+ *   POST /api/v1/lifeos/auth/set-password   — change own password; command key may bootstrap passwordless users
  *
  * Admin-only endpoints (requireLifeOSUser + role=admin):
  *   POST /api/v1/lifeos/auth/invite         — generate new invite code; response `invite.signup_url` when `PUBLIC_BASE_URL` or proxy Host is known
@@ -151,13 +151,24 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
   });
 
   // ── Set / change password (admin bootstrap + user self-service) ──────────────
-  router.post('/set-password', async (req, res) => {
+  router.post('/set-password', requireUserOrKey, async (req, res) => {
     try {
       const { handle, newPassword, currentPassword } = req.body;
       if (!handle || !newPassword) {
         return res.status(400).json({ ok: false, error: 'handle and newPassword required' });
       }
-      const result = await auth.setAdminPassword({ handle, newPassword, currentPassword: currentPassword || null });
+      const isOperatorBootstrap = req.auth_mode === 'command_key_fallback';
+      const requestedHandle = String(handle || '').trim().toLowerCase();
+      const authenticatedHandle = String(req.lifeosUser?.handle || '').trim().toLowerCase();
+      if (!isOperatorBootstrap && requestedHandle !== authenticatedHandle) {
+        return res.status(403).json({ ok: false, error: 'Cannot change another user password' });
+      }
+      const result = await auth.setAdminPassword({
+        handle,
+        newPassword,
+        currentPassword: currentPassword || null,
+        allowBootstrap: isOperatorBootstrap,
+      });
       res.json(result);
     } catch (e) {
       res.status(e.status || 500).json({ ok: false, error: e.message });

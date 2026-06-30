@@ -257,13 +257,16 @@ export function createLifeOSAuth(pool) {
    * Set or update Adam's password without an invite (admin bootstrap).
    * Only works if the row has no password yet OR caller passes current password.
    */
-  async function setAdminPassword({ handle, newPassword, currentPassword = null }) {
+  async function setAdminPassword({ handle, newPassword, currentPassword = null, allowBootstrap = false }) {
     const { rows } = await pool.query(
       `SELECT id, password_hash, role FROM lifeos_users WHERE LOWER(user_handle) = LOWER($1)`,
       [handle]
     );
     if (!rows.length) throw Object.assign(new Error('User not found'), { status: 404 });
     const user = rows[0];
+    if (!user.password_hash && !allowBootstrap) {
+      throw Object.assign(new Error('Operator bootstrap key required'), { status: 403 });
+    }
     if (user.password_hash && currentPassword !== null) {
       if (!verifyPassword(currentPassword, user.password_hash)) {
         throw Object.assign(new Error('Current password incorrect'), { status: 401 });
