@@ -5,7 +5,7 @@
   "name": "AI Council System",
   "canonical_home": "docs/products/ai-council/PRODUCT_HOME.md",
   "amendment_path": "docs/products/ai-council/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-06-30",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "services/council-service.js",
@@ -116,7 +116,7 @@
     }
   ],
   "completion_checks": [
-    "All AI calls routed to free providers first (Groq → Gemini → Cerebras → Ollama)",
+    "All AI calls routed to free providers first across active cloud lanes; Ollama is retired and must not be selected",
     "council.builder.code routes to claude_sonnet (not gemini_flash)",
     "Anthropic Messages API handler wired in council-service.js (x-api-key header, content[0].text)",
     "TOON compression enabled for all task types including codegen",

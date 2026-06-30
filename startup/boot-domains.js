@@ -20,6 +20,11 @@ import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
 import { startBpPriorityScheduler } from '../services/builderos-bp-priority-scheduler.js';
 import { startNeverStopProductFactoryScheduler } from '../services/never-stop-product-factory-scheduler.js';
 
+const tcOperationsBootEnabled =
+  process.env.LIFEOS_ENABLE_TC_OPERATIONS_BOOT === 'true';
+const twinAutoIngestBootEnabled =
+  process.env.LIFEOS_ENABLE_TWIN_AUTO_INGEST_BOOT === 'true';
+
 function scheduleAsyncInterval(task, intervalMs, logger, label) {
   return setInterval(() => {
     Promise.resolve()
@@ -458,16 +463,28 @@ export async function bootAllDomains(deps) {
   await autoSeedEpistemicFacts(pool, logger);
   await bootDeliberationRepCatalog(deps);
   await bootLifeREDomain(deps);
+
+  if (!tcOperationsBootEnabled) {
+    logger?.info?.('[BOOT] TC operations boot disabled (set LIFEOS_ENABLE_TC_OPERATIONS_BOOT=true to restore GLVAR, email triage, and TC deadline startup)');
+  }
+  if (!twinAutoIngestBootEnabled) {
+    logger?.info?.('[BOOT] Twin auto-ingest boot disabled (set LIFEOS_ENABLE_TWIN_AUTO_INGEST_BOOT=true to restore startup ingest)');
+  }
+
   await Promise.allSettled([
-    bootGLVARMonitor(deps),
-    bootEmailTriage(deps),
-    bootTCDeadlineCron(deps),
+    ...(tcOperationsBootEnabled
+      ? [
+          bootGLVARMonitor(deps),
+          bootEmailTriage(deps),
+          bootTCDeadlineCron(deps),
+        ]
+      : []),
     bootLifeOSScheduled(deps),
     bootLaneIntel(deps),
     bootTruthScoreboard(deps),
     bootWisdomTruthAuditor(deps),
     bootChairPredictionScore(deps),
-    bootTwinAutoIngest(deps),
+    ...(twinAutoIngestBootEnabled ? [bootTwinAutoIngest(deps)] : []),
     bootOILDailySummary(deps),
     bootSelfRepairDeployCheck(deps),
     bootFactoryAutopilotRecoveryOwner(deps),

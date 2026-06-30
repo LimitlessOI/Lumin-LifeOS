@@ -132,10 +132,7 @@ import {
   selectOptimalModel,
   getModelSize,
   isCloudflareTunnel,
-  callOllamaWithStreaming,
   getModelSizeCategory,
-  getSmallerOllamaModel,
-  getOllamaFallbackModel,
 } from './services/ai-model-selector.js';
 import { createCodeEscalation } from './core/code-escalation.js';
 import { createConsensusService, createGetCouncilConsensus } from './services/consensus-service.js';
@@ -184,6 +181,13 @@ import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
 import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
 import { bootAllDomains } from "./startup/boot-domains.js";
+
+const coachingStackRuntimeEnabled =
+  process.env.LIFEOS_ENABLE_COACHING_STACK_RUNTIME === "true";
+const educationRuntimeEnabled =
+  process.env.LIFEOS_ENABLE_EDUCATION_RUNTIME === "true";
+const externalProductRoutesEnabled =
+  process.env.LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES === "true";
 
 // Enhanced Council Features
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
@@ -1008,24 +1012,28 @@ registerServerRoutes(app, {
   podManager,
 });
 
-const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
-  pool,
-  requireKey,
-  logger,
-  callCouncilMember,
-  callCouncilWithFailover,
-  lclMonitor,
-  apiCostSavingsRevenue,
-  getStripeClient,
-  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
-  autonomyOrchestrator,
-  railwayManagedEnvService,
-  accountManager,
-  notificationService,
-  sendSMS,
-  sendAlertSms,
-  sendAlertCall,
-  makePhoneCall,
+let tcCoordinator = null;
+let wkIntegrityEngine = null;
+
+async function mountRuntimeRoutes() {
+  const mounted = await registerRuntimeRoutes(app, {
+    pool,
+    requireKey,
+    logger,
+    callCouncilMember,
+    callCouncilWithFailover,
+    lclMonitor,
+    apiCostSavingsRevenue,
+    getStripeClient,
+    publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
+    autonomyOrchestrator,
+    railwayManagedEnvService,
+    accountManager,
+    notificationService,
+    sendSMS,
+    sendAlertSms,
+    sendAlertCall,
+    makePhoneCall,
     commitToGitHub,
     commitManyToGitHub,
     savingsLedger,
@@ -1035,47 +1043,20 @@ const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
     COUNCIL_MEMBERS,
     COUNCIL_ALIAS_MAP,
   });
+  tcCoordinator = mounted?.tcCoordinator || null;
+  wkIntegrityEngine = mounted?.wkIntegrityEngine || null;
+  return mounted;
+}
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================
 // Functions extracted to services/consensus-service.js (createGetCouncilConsensus, compareResponses, selectBestResponse)
 const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT });
 
 // ==================== AUTO-BUILDER: CLOUD AI + PERSISTENCE ====================
-// Override routeTask so the builder uses Ollama when available, falls back to the
-// council (OpenAI / DeepSeek / Groq) when Ollama is unreachable (e.g. Railway prod).
+// Founder directive: no Ollama fallback. Builder uses active cloud council lanes only.
 autoBuilder.overrideBuildHelpers({
   routeTask: async (task, prompt) => {
-    const ollamaEndpoint = String(OLLAMA_ENDPOINT || '').trim();
-    const tryOllama =
-      Boolean(ollamaEndpoint) && COUNCIL_OLLAMA_MODE !== 'off';
-    const modelName = task === 'code_generation' ? 'deepseek-coder-v2:latest' : 'qwen2.5:32b';
-
-    if (tryOllama) {
-      try {
-        const res = await fetch(`${ollamaEndpoint}/api/generate`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: modelName,
-            prompt,
-            stream: false,
-            options: { temperature: 0.2, num_predict: 8192 },
-          }),
-          signal: AbortSignal.timeout(60000),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.response && data.response.length > 50) {
-            logger.info(`[AUTO-BUILDER] Ollama OK: ${data.response.length} chars (${modelName})`);
-            return data.response;
-          }
-        }
-      } catch (ollamaErr) {
-        logger.warn(`[AUTO-BUILDER] Ollama unavailable (${ollamaErr.message}) — falling back to council`);
-      }
-    }
-
-    // Cloud fallback: pick first free-tier model with an API key
+    // Cloud routing: pick first reachable low-cost model with a live API key
     const fallbackOrder = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'mistral_free', 'deepseek', 'claude'];
     const councilMember = fallbackOrder.find((m) => {
       const cfg = COUNCIL_MEMBERS[m];
@@ -1093,42 +1074,51 @@ autoBuilder.overrideBuildHelpers({
   },
 });
 
-// ── Word Keeper reminder cron — check every 60s, send SMS, weekly coaching ──
-startReminderCron(pool, async (to, msg) => {
-  try {
-    const { createTwilioService } = await import('./services/twilio-service.js');
-    const twilio = createTwilioService({
-      callCouncilMember,
-      RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
-      ALERT_PHONE: to,
-      alertState: { inProgress: false },
-    });
-    return twilio.sendSMS(to, msg);
-  } catch {
-    return { success: false };
-  }
-}, {
-  userPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
-  integrityEngine: wkIntegrityEngine,
-});
-logger.info('✅ [WORD-KEEPER] Reminder cron started');
+if (externalProductRoutesEnabled) {
+  logger.info('⏳ [WORD-KEEPER] Reminder cron deferred until runtime routes finish mounting');
+} else {
+  logger.info('🛑 [WORD-KEEPER] Reminder cron not started (set LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES=true to restore)');
+}
 
-bootAllDomains({
-  pool,
-  logger,
-  notificationService,
-  callCouncilMember,
-  accountManager,
-  tcCoordinator,
-  // callAI: routes LifeOS scheduled jobs to Gemini Flash (free, better than Groq
-  // for nuanced tasks like emotional pattern analysis, weekly review letters, etc.)
-  // Without this, LifeOS scheduled AI features silently skip on every interval.
-  callAI: async (prompt) => {
-    try {
-      return await spineCallAI('scheduled', prompt, { member: 'gemini' });
-    } catch { return ''; }
-  },
-});
+async function startDeferredRuntimeServices() {
+  if (externalProductRoutesEnabled) {
+    startReminderCron(pool, async (to, msg) => {
+      try {
+        const { createTwilioService } = await import('./services/twilio-service.js');
+        const twilio = createTwilioService({
+          callCouncilMember,
+          RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
+          ALERT_PHONE: to,
+          alertState: { inProgress: false },
+        });
+        return twilio.sendSMS(to, msg);
+      } catch {
+        return { success: false };
+      }
+    }, {
+      userPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
+      integrityEngine: wkIntegrityEngine,
+    });
+    logger.info('✅ [WORD-KEEPER] Reminder cron started');
+  }
+
+  bootAllDomains({
+    pool,
+    logger,
+    notificationService,
+    callCouncilMember,
+    accountManager,
+    tcCoordinator,
+    // callAI: routes LifeOS scheduled jobs to Gemini Flash (free, better than Groq
+    // for nuanced tasks like emotional pattern analysis, weekly review letters, etc.)
+    // Without this, LifeOS scheduled AI features silently skip on every interval.
+    callAI: async (prompt) => {
+      try {
+        return await spineCallAI('scheduled', prompt, { member: 'gemini' });
+      } catch { return ''; }
+    },
+  });
+}
 
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
 // Warm response cache L1 from DB — picks up where last deploy left off
@@ -1455,6 +1445,15 @@ async function start() {
 
     await startListening();
 
+    try {
+      await mountRuntimeRoutes();
+      await startDeferredRuntimeServices();
+      logger.info("✅ Runtime routes and deferred services initialized");
+    } catch (runtimeErr) {
+      logger.error("❌ Runtime routes/deferred services failed after listen:", { error: runtimeErr.message });
+      logger.warn("⚠️ Continuing with minimal liveness spine; runtime route tree is degraded until this is fixed");
+    }
+
     // ── Auto-builder persistence + startup recovery ────────────────────────
     // Wire the DB pool so addProductToQueue() persists products across restarts
     autoBuilder.initPersistence(pool);
@@ -1539,13 +1538,17 @@ async function start() {
       await runInitializeTwoTierSystem();
 
       // Mount TCO routes after initialization
-      if (tcoRoutes) {
+      if (tcoRoutes && process.env.LIFEOS_ENABLE_TCO_RUNTIME === 'true') {
         app.use('/api/tco', tcoRoutes);
         logger.info('✅ [TCO] Routes mounted at /api/tco');
+      } else if (tcoRoutes) {
+        logger.info('🛑 [TCO] Routes not mounted (set LIFEOS_ENABLE_TCO_RUNTIME=true to restore)');
       }
-      if (tcoAgentRoutes) {
+      if (tcoAgentRoutes && process.env.LIFEOS_ENABLE_TCO_RUNTIME === 'true') {
         app.use('/api/tco-agent', tcoAgentRoutes);
         logger.info('✅ [TCO AGENT] Routes mounted at /api/tco-agent');
+      } else if (tcoAgentRoutes) {
+        logger.info('🛑 [TCO AGENT] Routes not mounted (set LIFEOS_ENABLE_TCO_RUNTIME=true to restore)');
       }
     }
 
@@ -1610,63 +1613,74 @@ async function start() {
     }
 
     if (!SMOKE_MODE) {
-      // Initialize Sales Coaching Services
-      try {
-        const SalesAnalyzerModule = await import("./src/services/sales-technique-analyzer.js");
-        const CallRecorderModule = await import("./src/services/call-recorder.js");
-        
-        salesTechniqueAnalyzer = new SalesAnalyzerModule.SalesTechniqueAnalyzer(pool, callCouncilWithFailover);
-        callRecorder = new CallRecorderModule.CallRecorder(pool, salesTechniqueAnalyzer);
-        
-        logger.info("✅ Sales Coaching Services initialized");
-      } catch (error) {
-        logger.warn("⚠️ Sales Coaching Services not available:", { error: error.message });
+      if (coachingStackRuntimeEnabled) {
+        // Initialize Sales Coaching Services
+        try {
+          const SalesAnalyzerModule = await import("./src/services/sales-technique-analyzer.js");
+          const CallRecorderModule = await import("./src/services/call-recorder.js");
+          
+          salesTechniqueAnalyzer = new SalesAnalyzerModule.SalesTechniqueAnalyzer(pool, callCouncilWithFailover);
+          callRecorder = new CallRecorderModule.CallRecorder(pool, salesTechniqueAnalyzer);
+          
+          logger.info("✅ Sales Coaching Services initialized");
+        } catch (error) {
+          logger.warn("⚠️ Sales Coaching Services not available:", { error: error.message });
+          salesTechniqueAnalyzer = null;
+          callRecorder = null;
+        }
+
+        // Initialize Goal Tracking & Coaching Services
+        try {
+          const GoalTrackerModule = await import("./src/services/goal-tracker.js");
+          const ActivityTrackerModule = await import("./src/services/activity-tracker.js");
+          const CoachingProgressionModule = await import("./src/services/coaching-progression.js");
+          const CalendarServiceModule = await import("./src/services/calendar-service.js");
+          
+          goalTracker = new GoalTrackerModule.GoalTracker(pool, callCouncilWithFailover);
+          activityTracker = new ActivityTrackerModule.ActivityTracker(pool, callRecorder);
+          coachingProgression = new CoachingProgressionModule.CoachingProgression(pool, callCouncilWithFailover);
+          calendarService = new CalendarServiceModule.CalendarService(pool, callRecorder, activityTracker);
+          
+          logger.info("✅ Goal Tracking & Coaching Services initialized");
+        } catch (error) {
+          logger.warn("⚠️ Goal Tracking & Coaching Services not available:", { error: error.message });
+          goalTracker = null;
+          activityTracker = null;
+          coachingProgression = null;
+          calendarService = null;
+        }
+
+        // Initialize Motivation & Perfect Day Services
+        try {
+          const PerfectDayModule = await import("./src/services/perfect-day-system.js");
+          const GoalCommitmentModule = await import("./src/services/goal-commitment-system.js");
+          const CallSimulationModule = await import("./src/services/call-simulation-system.js");
+          const RelationshipMediationModule = await import("./src/services/relationship-mediation.js");
+          const MeaningfulMomentsModule = await import("./src/services/meaningful-moments.js");
+          
+          perfectDaySystem = new PerfectDayModule.PerfectDaySystem(pool, callCouncilWithFailover);
+          goalCommitmentSystem = new GoalCommitmentModule.GoalCommitmentSystem(pool, callCouncilWithFailover);
+          callSimulationSystem = new CallSimulationModule.CallSimulationSystem(pool, callRecorder, callCouncilWithFailover);
+          relationshipMediation = new RelationshipMediationModule.RelationshipMediation(pool, callCouncilWithFailover);
+          meaningfulMoments = new MeaningfulMomentsModule.MeaningfulMoments(pool, callRecorder);
+          
+          logger.info("✅ Motivation & Perfect Day Services initialized");
+        } catch (error) {
+          logger.warn("⚠️ Motivation & Perfect Day Services not available:", { error: error.message });
+          perfectDaySystem = null;
+          goalCommitmentSystem = null;
+          callSimulationSystem = null;
+          relationshipMediation = null;
+          meaningfulMoments = null;
+        }
+      } else {
+        logger.info("🛑 [COACHING-STACK] Coaching, goal, and motivation services not initialized (set LIFEOS_ENABLE_COACHING_STACK_RUNTIME=true to restore)");
         salesTechniqueAnalyzer = null;
         callRecorder = null;
-      }
-    }
-
-    if (!SMOKE_MODE) {
-      // Initialize Goal Tracking & Coaching Services
-      try {
-        const GoalTrackerModule = await import("./src/services/goal-tracker.js");
-        const ActivityTrackerModule = await import("./src/services/activity-tracker.js");
-        const CoachingProgressionModule = await import("./src/services/coaching-progression.js");
-        const CalendarServiceModule = await import("./src/services/calendar-service.js");
-        
-        goalTracker = new GoalTrackerModule.GoalTracker(pool, callCouncilWithFailover);
-        activityTracker = new ActivityTrackerModule.ActivityTracker(pool, callRecorder);
-        coachingProgression = new CoachingProgressionModule.CoachingProgression(pool, callCouncilWithFailover);
-        calendarService = new CalendarServiceModule.CalendarService(pool, callRecorder, activityTracker);
-        
-        logger.info("✅ Goal Tracking & Coaching Services initialized");
-      } catch (error) {
-        logger.warn("⚠️ Goal Tracking & Coaching Services not available:", { error: error.message });
         goalTracker = null;
         activityTracker = null;
         coachingProgression = null;
         calendarService = null;
-      }
-    }
-
-    if (!SMOKE_MODE) {
-      // Initialize Motivation & Perfect Day Services
-      try {
-        const PerfectDayModule = await import("./src/services/perfect-day-system.js");
-        const GoalCommitmentModule = await import("./src/services/goal-commitment-system.js");
-        const CallSimulationModule = await import("./src/services/call-simulation-system.js");
-        const RelationshipMediationModule = await import("./src/services/relationship-mediation.js");
-        const MeaningfulMomentsModule = await import("./src/services/meaningful-moments.js");
-        
-        perfectDaySystem = new PerfectDayModule.PerfectDaySystem(pool, callCouncilWithFailover);
-        goalCommitmentSystem = new GoalCommitmentModule.GoalCommitmentSystem(pool, callCouncilWithFailover);
-        callSimulationSystem = new CallSimulationModule.CallSimulationSystem(pool, callRecorder, callCouncilWithFailover);
-        relationshipMediation = new RelationshipMediationModule.RelationshipMediation(pool, callCouncilWithFailover);
-        meaningfulMoments = new MeaningfulMomentsModule.MeaningfulMoments(pool, callRecorder);
-        
-        logger.info("✅ Motivation & Perfect Day Services initialized");
-      } catch (error) {
-        logger.warn("⚠️ Motivation & Perfect Day Services not available:", { error: error.message });
         perfectDaySystem = null;
         goalCommitmentSystem = null;
         callSimulationSystem = null;
@@ -1682,7 +1696,6 @@ async function start() {
 
     console.log("\n✅ SYSTEMS:");
     console.log("  ✅ Self-Programming");
-    console.log("  ✅ Ollama Bridge for DeepSeek");
     console.log("  ✅ File Operations");
     console.log("  ✅ Overlay Connection (Railway URL)");
     console.log("  ✅ Consensus Protocol");
@@ -1731,7 +1744,7 @@ async function start() {
         incomeDroneSystem,
         executionQueue,
         autoBuilder,
-        ollamaEndpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+        ollamaEndpoint: null,
         callCouncilMember,
         callCouncilWithFailover,
         pingCouncilMember,
@@ -1774,27 +1787,7 @@ async function start() {
       );
     }
 
-      const railwayOllamaDisabled = Boolean(
-        COUNCIL_OLLAMA_MODE === 'off' ||
-        (process.env.RAILWAY_ENVIRONMENT &&
-          (!OLLAMA_ENDPOINT || /localhost|127\.0\.0\.1|PASTE_YOUR|disabled|none/i.test(String(OLLAMA_ENDPOINT))))
-      );
-      // Initialize Ollama Installer (auto-install Ollama if needed)
-      if (railwayOllamaDisabled) {
-        logger.info("🛑 [OLLAMA] Disabled in Railway until an external Ollama service is configured");
-      } else {
-        try {
-          const ollamaInstallerModule = await import("./core/ollama-installer.js");
-          const ollamaInstaller = new ollamaInstallerModule.OllamaInstaller(pool, callCouncilMember);
-          // Auto-configure in background (don't block startup)
-          ollamaInstaller.autoConfigure().catch(err => {
-            logger.warn('⚠️ Ollama auto-configuration failed:', { error: err.message });
-          });
-          logger.info("✅ Ollama Installer initialized - will auto-configure Ollama if possible");
-        } catch (error) {
-          logger.warn("⚠️ Ollama Installer not available:", { error: error.message });
-        }
-      }
+      logger.info("🛑 [OLLAMA] Retired by founder directive — no startup probe, installer, or fallback routing");
 
       // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)
       try {
@@ -1866,7 +1859,11 @@ async function start() {
     }
 
     // Initialize modules on startup
-    await initializeVirtualClassModules();
+    if (educationRuntimeEnabled) {
+      await initializeVirtualClassModules();
+    } else {
+      logger.info("🛑 [EDUCATION] Virtual class bootstrap not initialized (set LIFEOS_ENABLE_EDUCATION_RUNTIME=true to restore)");
+    }
 
     autonomyDepsRef.current = {
       pool,
@@ -1925,16 +1922,47 @@ async function start() {
   }
 }
 
-// Graceful shutdown
-process.on("SIGINT", async () => {
-  logger.info("Shutting down gracefully...");
-  await createSystemSnapshot("System shutdown");
+let shutdownInProgress = false;
+
+async function gracefulShutdown(signal = "SIGINT") {
+  if (shutdownInProgress) {
+    logger.warn({ signal }, "Graceful shutdown already in progress");
+    return;
+  }
+  shutdownInProgress = true;
+
+  logger.info({ signal }, "Shutting down gracefully...");
+  try {
+    await createSystemSnapshot("System shutdown");
+  } catch (error) {
+    logger.warn({ signal, err: error.message }, "Shutdown snapshot failed");
+  }
+
   for (const ws of activeConnections.values()) ws.close();
-  await shutdownQueues();
-  await pool.end();
+
+  try {
+    await shutdownQueues();
+  } catch (error) {
+    logger.warn({ signal, err: error.message }, "Queue shutdown failed");
+  }
+
+  try {
+    await pool.end();
+  } catch (error) {
+    logger.warn({ signal, err: error.message }, "Pool shutdown failed");
+  }
+
   lifecycleSubscriptions.forEach((unsubscribe) => unsubscribe?.());
   lifecycleSubscriptions.length = 0;
   process.exit(0);
+}
+
+process.on("SIGINT", () => {
+  gracefulShutdown("SIGINT");
+});
+
+process.on("SIGTERM", () => {
+  gracefulShutdown("SIGTERM");
 });
 
 // Queue status endpoint

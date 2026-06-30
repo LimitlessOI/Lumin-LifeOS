@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-06-30 |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-02 — **Gemini 413 non-retryable fast-fail** in `services/council-service.js`. When Gemini returns HTTP 413, throws `err.code='PROMPT_TOO_LARGE'` + `err.nonRetryable=true` instead of a generic Error — prevents failover retry chains that accumulate past Railway's 60s proxy timeout. Prior: 2026-06-01 — constitutional refactor alignment: AIC clarified as mission-attached deliberation layer with outcome accountability, not automatic truth. Prior: 2026-05-11 — **`services/lifeos-gate-change-council-run.js`** **`@ssot`** corrected **LifeOS → Amendment 01** (gate-change debate is council SSOT; fixes **`npm run ssot:validate`** when only council service changes). Prior: 2026-04-28 — **Railway-aware builder routing hardening:** `services/council-model-availability.js` now marks Ollama unavailable on Railway unless a real non-local endpoint is explicitly configured; this prevents council/builder memory routing from selecting local-only Ollama models in production. Prior: 2026-04-27 — **`services/council-model-availability.js`** committed (was untracked, crashing Railway boot). Prior: 2026-04-26 — **future-back consensus artifact** required for gate-change debate; runtime authority from Memory Intelligence may override static model routing. Prior: 2026-04-25 — **`council.builder.code_execute`** → **`groq_llama`** (builder **`execution_only: true`** + `mode: code`, no `model` override). Prior: 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view. Prior: **`maxOutputTokens`** in **`council-service.js`**. Prior: explicit **`council.builder.code` / `plan` / `review`**. Prior: **`@ssot`** council-service. Prior: **`POST /gate-change/run-preset`:** server-side debate. |
+| **Last Updated** | 2026-06-30 — **Builder lane routing truth + Ollama retirement pass:** `services/council-model-availability.js` now reports `openai`, `github_models`, and `fireworks` key presence correctly and hard-blocks `ollama` as `ollama_retired_by_founder_directive`; `services/council-service.js` no longer counts Ollama as a free provider, no longer silently cascades BuilderOS requests into generic free-tier models under spend shutdown, and allows a dedicated `BUILDEROS_MAX_DAILY_SPEND` cap for builder lanes. Prior: 2026-06-02 — **Gemini 413 non-retryable fast-fail** in `services/council-service.js`. When Gemini returns HTTP 413, throws `err.code='PROMPT_TOO_LARGE'` + `err.nonRetryable=true` instead of a generic Error — prevents failover retry chains that accumulate past Railway's 60s proxy timeout. Prior: 2026-06-01 — constitutional refactor alignment: AIC clarified as mission-attached deliberation layer with outcome accountability, not automatic truth. Prior: 2026-05-11 — **`services/lifeos-gate-change-council-run.js`** **`@ssot`** corrected **LifeOS → Amendment 01** (gate-change debate is council SSOT; fixes **`npm run ssot:validate`** when only council service changes). Prior: 2026-04-28 — **Railway-aware builder routing hardening:** `services/council-model-availability.js` now marks Ollama unavailable on Railway unless a real non-local endpoint is explicitly configured; this prevents council/builder memory routing from selecting local-only Ollama models in production. Prior: 2026-04-27 — **`services/council-model-availability.js`** committed (was untracked, crashing Railway boot). Prior: 2026-04-26 — **future-back consensus artifact** required for gate-change debate; runtime authority from Memory Intelligence may override static model routing. Prior: 2026-04-25 — **`council.builder.code_execute`** → **`groq_llama`** (builder **`execution_only: true`** + `mode: code`, no `model` override). Prior: 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view. Prior: **`maxOutputTokens`** in **`council-service.js`**. Prior: explicit **`council.builder.code` / `plan` / `review`**. Prior: **`@ssot`** council-service. Prior: **`POST /gate-change/run-preset`:** server-side debate. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 
@@ -107,9 +107,9 @@ server.js           — composition root only
 4. **OpenRouter** — 195 req/day (free models only)
 5. **Mistral** — 485 req/day
 6. **Together** — 970 req/day
-7. **Ollama** — unlimited (local, always last fallback)
+7. **Ollama** — retired by founder directive; not available for routing
 
-**Paid providers:** Anthropic, OpenAI — only fire if `MAX_DAILY_SPEND > 0` AND free providers all exhausted.
+**Paid providers:** Anthropic, OpenAI — only fire if spend policy allows them. Builder lanes may use `BUILDEROS_MAX_DAILY_SPEND` independently from `MAX_DAILY_SPEND`.
 
 ### Token Compression Stack (applied in order)
 1. Exact cache hit → 100% savings
@@ -133,8 +133,9 @@ server.js           — composition root only
 | `LIFEOS_DIRECTED_MODE` | `true` | Disables all autonomous AI schedulers |
 | `PAUSE_AUTONOMY` | `1` | Secondary kill switch |
 | `LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER` | `false` | Auto-builder off |
-| `OLLAMA_ENDPOINT` | empty on Railway unless set | Explicit URL only — no default `ollama.railway.internal` (avoids boot pings) |
-| `COUNCIL_OLLAMA_MODE` | `off` on Railway, else `last_resort` | `off` = never use local Ollama; `last_resort` / `on` = after free cloud caps |
+| `OLLAMA_ENDPOINT` | retired | Kept only for legacy compatibility; runtime routing must not depend on it |
+| `COUNCIL_OLLAMA_MODE` | retired / ignored | Founder directive retired Ollama from active routing |
+| `BUILDEROS_MAX_DAILY_SPEND` | unset | Optional BuilderOS-only spend cap; when unset, builder lane is governed by availability and explicit routing policy rather than generic `$0` shutdown drift |
 
 ### DB Tables
 | Table | Purpose |

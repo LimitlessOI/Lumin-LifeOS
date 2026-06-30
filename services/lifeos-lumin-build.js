@@ -13,11 +13,31 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
 import { createMemoryIntelligenceService } from './memory-intelligence-service.js';
+import { filterAvailableCouncilMembers } from './council-model-availability.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
 
 const METADATA_SEP = '\n---METADATA---\n';
+
+function clampRoutingRecommendationToAvailable(routingRecommendation, candidateModels, preferredModel, availability) {
+  if (!routingRecommendation?.selectedModel || candidateModels.includes(routingRecommendation.selectedModel)) {
+    return routingRecommendation;
+  }
+  const rejectedModel = routingRecommendation.selectedModel;
+  const rejectedReason = availability?.availabilityByModel?.[rejectedModel]?.reason || 'not_runtime_available';
+  return {
+    ...routingRecommendation,
+    selectedModel: preferredModel,
+    blockedCandidates: [
+      ...(routingRecommendation.blockedCandidates || []),
+      rejectedModel,
+    ],
+    reason: preferredModel
+      ? `Memory routing selected unavailable model ${rejectedModel} (${rejectedReason}); clamped to runtime-available ${preferredModel}`
+      : `Memory routing selected unavailable model ${rejectedModel} (${rejectedReason}); no runtime-available authorized model remains`,
+  };
+}
 
 function splitBuilderOutput(raw) {
   const text = String(raw || '');
@@ -177,20 +197,28 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
 
     try {
       const domainContext = await loadDomain(domain);
-      const preferredModel = getModelForTask('lifeos.lumin.program_plan') || 'openai_builder_standard';
+      const routeCandidates = getCandidateModelsForTask('lifeos.lumin.program_plan');
+      const availability = filterAvailableCouncilMembers(routeCandidates);
+      const preferredModel = availability.available[0] || null;
       let routingRecommendation = { selectedModel: preferredModel };
       if (memorySvc) {
         try {
           routingRecommendation = await memorySvc.getRoutingRecommendation({
             taskType: 'lifeos.lumin.program_plan',
             proposedModel: preferredModel,
-            candidateModels: getCandidateModelsForTask('lifeos.lumin.program_plan'),
+            candidateModels: availability.available,
           });
         } catch (memoryErr) {
           log.warn({ err: memoryErr.message }, '[LUMIN-BUILD] Memory routing unavailable — using static plan model');
           routingRecommendation = { selectedModel: preferredModel, reason: 'Memory routing unavailable; using static map' };
         }
       }
+      routingRecommendation = clampRoutingRecommendationToAvailable(
+        routingRecommendation,
+        availability.available,
+        preferredModel,
+        availability,
+      );
       const memberKey = routingRecommendation.selectedModel;
       if (!memberKey) {
         throw Object.assign(new Error('No authorized model is currently allowed for lifeos.lumin.program_plan'), { status: 409 });
@@ -288,20 +316,28 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
 
     try {
       const domainContext = await loadDomain(domain);
-      const preferredModel = getModelForTask('council.builder.task') || 'openai_builder_mini';
+      const routeCandidates = getCandidateModelsForTask('council.builder.task');
+      const availability = filterAvailableCouncilMembers(routeCandidates);
+      const preferredModel = availability.available[0] || null;
       let routingRecommendation = { selectedModel: preferredModel };
       if (memorySvc) {
         try {
           routingRecommendation = await memorySvc.getRoutingRecommendation({
             taskType: 'council.builder.task',
             proposedModel: preferredModel,
-            candidateModels: getCandidateModelsForTask('council.builder.task'),
+            candidateModels: availability.available,
           });
         } catch (memoryErr) {
           log.warn({ err: memoryErr.message }, '[LUMIN-BUILD] Memory routing unavailable — using static draft model');
           routingRecommendation = { selectedModel: preferredModel, reason: 'Memory routing unavailable; using static map' };
         }
       }
+      routingRecommendation = clampRoutingRecommendationToAvailable(
+        routingRecommendation,
+        availability.available,
+        preferredModel,
+        availability,
+      );
       const memberKey = routingRecommendation.selectedModel;
       if (!memberKey) {
         throw Object.assign(new Error('No authorized model is currently allowed for council.builder.task'), { status: 409 });

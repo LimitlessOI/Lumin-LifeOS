@@ -102,6 +102,14 @@ import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
 import { createSocialmediaosCoachingRoutes } from "../routes/socialmediaos-coaching-routes.js";
 import { createLifeRESalesCoachingRoutes } from "../routes/lifere-sales-coaching-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
+  const optionalProductRoutesEnabled =
+    process.env.LIFEOS_ENABLE_OPTIONAL_PRODUCT_ROUTES === "true";
+  const externalProductRoutesEnabled =
+    process.env.LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES === "true";
+  const fieldOpsRoutesEnabled =
+    process.env.LIFEOS_ENABLE_FIELD_OPS_ROUTES === "true";
+  const extensionRoutesEnabled =
+    process.env.LIFEOS_ENABLE_EXTENSION_ROUTE === "true";
   const {
     pool,
     requireKey,
@@ -163,16 +171,24 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/history", createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [HISTORY] Routes mounted at /api/v1/history");
 
-  app.use("/api/v1/clientcare-billing", createClientCareBillingRoutes({ pool, requireKey, logger, callCouncilMember, callCouncilWithFailover, notificationService, sendSMS }));
-  logger.info("✅ [CLIENTCARE-BILLING] Routes mounted at /api/v1/clientcare-billing");
+  if (externalProductRoutesEnabled) {
+    app.use("/api/v1/clientcare-billing", createClientCareBillingRoutes({ pool, requireKey, logger, callCouncilMember, callCouncilWithFailover, notificationService, sendSMS }));
+    logger.info("✅ [CLIENTCARE-BILLING] Routes mounted at /api/v1/clientcare-billing");
+  } else {
+    logger.info("🛑 [CLIENTCARE-BILLING] External product route not mounted (set LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES=true to restore)");
+  }
 
   const wordKeeperCouncil = {
     ask: (prompt, opts = {}) => callCouncilMember(opts.model || "claude", prompt, opts.systemPrompt || "", opts),
   };
   const wkIntegrityEngine = createWKIntegrityEngine(pool, wordKeeperCouncil);
 
-  app.use("/api/v1/word-keeper", createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
-  logger.info("✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper");
+  if (externalProductRoutesEnabled) {
+    app.use("/api/v1/word-keeper", createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
+    logger.info("✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper");
+  } else {
+    logger.info("🛑 [WORD-KEEPER] External product route not mounted (set LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES=true to restore)");
+  }
 
   if (process.env.LIFEOS_DIRECTED_MODE === "false") {
     autonomyOrchestrator.start();
@@ -265,8 +281,12 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/lifeos/healing", createLifeOSHealingRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-HEALING] Routes mounted at /api/v1/lifeos/healing");
 
-  app.use("/api/v1/lifeos/legacy", createLifeOSLegacyRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
-  logger.info("✅ [LIFEOS-LEGACY] Routes mounted at /api/v1/lifeos/legacy");
+  if (process.env.LIFEOS_ENABLE_LEGACY_ROUTES === "true") {
+    app.use("/api/v1/lifeos/legacy", createLifeOSLegacyRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
+    logger.info("✅ [LIFEOS-LEGACY] Routes mounted at /api/v1/lifeos/legacy");
+  } else {
+    logger.info("🛑 [LIFEOS-LEGACY] Legacy route tree not mounted (set LIFEOS_ENABLE_LEGACY_ROUTES=true to restore)");
+  }
 
   app.use("/api/v1/lifeos/emotional", createLifeOSEmotionalRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember }));
   logger.info("✅ [LIFEOS-EMOTIONAL] Routes mounted at /api/v1/lifeos/emotional");
@@ -416,14 +436,23 @@ export async function registerRuntimeRoutes(app, deps) {
   );
   logger.info("✅ [LIFEOS-INTEL] Horizon + red-team routes mounted at /api/v1/lifeos/intel");
 
-  app.use(
-    "/api/v1/extension",
-    createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger })
-  );
-  logger.info("✅ [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}");
+  if (extensionRoutesEnabled) {
+    app.use(
+      "/api/v1/extension",
+      createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger })
+    );
+    logger.info("✅ [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}");
+  } else {
+    logger.info("🛑 [EXTENSION] Universal Overlay route not mounted (set LIFEOS_ENABLE_EXTENSION_ROUTE=true to restore)");
+  }
 
   // TokenOS — B2B API token savings product
-  createTokenOSRoutes({ pool, requireKey, callCouncilMember, logger })(app);
+  if (externalProductRoutesEnabled) {
+    createTokenOSRoutes({ pool, requireKey, callCouncilMember, logger })(app);
+    logger.info("✅ [TOKENOS] External product routes mounted");
+  } else {
+    logger.info("🛑 [TOKENOS] External product routes not mounted (set LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES=true to restore)");
+  }
 
   // Token Accounting OS — unified ledger + OCL + health
   if (deps.tokenAccounting) {
@@ -491,52 +520,68 @@ export async function registerRuntimeRoutes(app, deps) {
     }
   }
 
-  const optionalRoutes = [
-    { modulePath: "../routes/lifeos-copilot-routes.js", exportName: "createLifeOSCopilotRoutes", mountPath: "/api/v1/lifeos/copilot", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-COPILOT]" },
-    { modulePath: "../routes/lifeos-simulator-routes.js", exportName: "createLifeOSSimulatorRoutes", mountPath: "/api/v1/lifeos/simulator", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-SIMULATOR]" },
-    { modulePath: "../routes/lifeos-workshop-routes.js", exportName: "createLifeOSWorkshopRoutes", mountPath: "/api/v1/lifeos/workshop", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-WORKSHOP]" },
-    { modulePath: "../routes/kids-os-routes.js", exportName: "createKidsOSRoutes", mountPath: "/api/v1/kids", args: [{ pool, requireKey, callCouncilMember }], label: "[KIDS-OS]" },
-    { modulePath: "../routes/teacher-os-routes.js", exportName: "createTeacherOSRoutes", mountPath: "/api/v1/teacher", args: [{ pool, requireKey, callCouncilMember }], label: "[TEACHER-OS]" },
-  ];
+  if (optionalProductRoutesEnabled) {
+    const optionalRoutes = [
+      { modulePath: "../routes/lifeos-copilot-routes.js", exportName: "createLifeOSCopilotRoutes", mountPath: "/api/v1/lifeos/copilot", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-COPILOT]" },
+      { modulePath: "../routes/lifeos-simulator-routes.js", exportName: "createLifeOSSimulatorRoutes", mountPath: "/api/v1/lifeos/simulator", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-SIMULATOR]" },
+      { modulePath: "../routes/lifeos-workshop-routes.js", exportName: "createLifeOSWorkshopRoutes", mountPath: "/api/v1/lifeos/workshop", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-WORKSHOP]" },
+      { modulePath: "../routes/kids-os-routes.js", exportName: "createKidsOSRoutes", mountPath: "/api/v1/kids", args: [{ pool, requireKey, callCouncilMember }], label: "[KIDS-OS]" },
+      { modulePath: "../routes/teacher-os-routes.js", exportName: "createTeacherOSRoutes", mountPath: "/api/v1/teacher", args: [{ pool, requireKey, callCouncilMember }], label: "[TEACHER-OS]" },
+    ];
 
-  let mountedOptionalCount = 0;
-  for (const routeDef of optionalRoutes) {
-    const factory = await importOptionalRoute(routeDef.modulePath, routeDef.exportName);
-    if (!factory) continue;
-    app.use(routeDef.mountPath, factory(...routeDef.args));
-    mountedOptionalCount += 1;
-    logger.info(`✅ ${routeDef.label} Routes mounted at ${routeDef.mountPath}`);
+    let mountedOptionalCount = 0;
+    for (const routeDef of optionalRoutes) {
+      const factory = await importOptionalRoute(routeDef.modulePath, routeDef.exportName);
+      if (!factory) continue;
+      app.use(routeDef.mountPath, factory(...routeDef.args));
+      mountedOptionalCount += 1;
+      logger.info(`✅ ${routeDef.label} Routes mounted at ${routeDef.mountPath}`);
+    }
+    logger.info(`✅ [LIFEOS-OPTIONAL] Mounted ${mountedOptionalCount}/${optionalRoutes.length} optional routes`);
+  } else {
+    logger.info("🛑 [LIFEOS-OPTIONAL] Optional product routes not mounted (set LIFEOS_ENABLE_OPTIONAL_PRODUCT_ROUTES=true to restore)");
   }
-  logger.info(`✅ [LIFEOS-OPTIONAL] Mounted ${mountedOptionalCount}/${optionalRoutes.length} optional routes`);
 
-  const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
+  let tcCoordinator = null;
+  if (fieldOpsRoutesEnabled) {
+    tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
 
-  createTCRoutes(app, {
-    pool,
-    requireKey,
-    coordinator: tcCoordinator,
-    logger,
-    accountManager,
-    notificationService,
-    callCouncilMember,
-    sendSMS,
-    sendAlertSms,
-    sendAlertCall,
-    startAlertLoop: true,
-    managedEnvService: railwayManagedEnvService,
-  });
+    createTCRoutes(app, {
+      pool,
+      requireKey,
+      coordinator: tcCoordinator,
+      logger,
+      accountManager,
+      notificationService,
+      callCouncilMember,
+      sendSMS,
+      sendAlertSms,
+      sendAlertCall,
+      startAlertLoop: true,
+      managedEnvService: railwayManagedEnvService,
+    });
+    logger.info("✅ [TC] Field-ops routes mounted");
 
-  createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
+    createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
+    logger.info("✅ [MLS] Field-ops routes mounted");
+  } else {
+    logger.info("🛑 [TC] Field-ops routes not mounted (set LIFEOS_ENABLE_FIELD_OPS_ROUTES=true to restore)");
+    logger.info("🛑 [MLS] Field-ops routes not mounted (set LIFEOS_ENABLE_FIELD_OPS_ROUTES=true to restore)");
+  }
 
   // Memory Capsule Alpha — governed product memory (AMENDMENT_02)
   app.use('/api/v1/memory/capsules', createMemoryCapsuleRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-CAPSULE] Routes mounted at /api/v1/memory/capsules/{signal,retrieve,health,capsule/:id,correct}');
 
-  app.use("/api/v1/socialmediaos", createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger }));
-  logger.info('✅ [SOCIALMEDIAOS] Routes mounted at /api/v1/socialmediaos');
+  if (externalProductRoutesEnabled) {
+    app.use("/api/v1/socialmediaos", createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger }));
+    logger.info('✅ [SOCIALMEDIAOS] Routes mounted at /api/v1/socialmediaos');
 
-  app.use('/api/v1/socialmediaos/coaching', createSocialmediaosCoachingRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
-  logger.info('✅ [SOCIALMEDIAOS-COACHING] Routes mounted at /api/v1/socialmediaos/coaching');
+    app.use('/api/v1/socialmediaos/coaching', createSocialmediaosCoachingRoutes({ pool, requireKey: requireUserOrKey, callCouncilMember, logger }));
+    logger.info('✅ [SOCIALMEDIAOS-COACHING] Routes mounted at /api/v1/socialmediaos/coaching');
+  } else {
+    logger.info("🛑 [SOCIALMEDIAOS] External product routes not mounted (set LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES=true to restore)");
+  }
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));

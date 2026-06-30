@@ -34,7 +34,6 @@ const ZERO_COST_PROVIDERS = new Set([
   "openrouter",
   "mistral",
   "together",
-  "ollama",
 ]);
 const OPENAI_COMPATIBLE_PROVIDERS = new Set([
   "openai",
@@ -85,7 +84,6 @@ export function createCouncilService({
   const tokenOptimizer = createTokenOptimizer(pool);
   const freeTierGovernor = createFreeTierGovernor({
     pool,
-    ollamaMode: COUNCIL_OLLAMA_MODE,
   });
   // LCL prompt translator — applies codebook symbol compression before every API call.
   // Works with all free stateless providers (Groq, Gemini) by injecting a tiny inline
@@ -148,43 +146,12 @@ export function createCouncilService({
     return { ok: false, error: "no_ledger" };
   }
 
-  const ollamaCouncilOff = COUNCIL_OLLAMA_MODE === "off";
-  const ollamaDisabled = ollamaCouncilOff ||
-    !OLLAMA_ENDPOINT ||
-    OLLAMA_ENDPOINT === "disabled" ||
-    OLLAMA_ENDPOINT === "none" ||
-    (RAILWAY_ENVIRONMENT && /localhost|127\.0\.0\.1|PASTE_YOUR/i.test(String(OLLAMA_ENDPOINT)));
+  const ollamaCouncilOff = true;
+  const ollamaDisabled = true;
 
   const _exhaustedProviders = new Set();
-  if (ollamaCouncilOff) {
-    _exhaustedProviders.add("ollama");
-  }
-
-  // Startup Ollama ping — skip when council mode is off or endpoint unusable
-  (async () => {
-    const endpoint = OLLAMA_ENDPOINT;
-    if (ollamaDisabled) {
-      if (!ollamaCouncilOff) _exhaustedProviders.add("ollama");
-      return;
-    }
-    try {
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), 3000);
-      const res = await fetch(`${endpoint}/api/tags`, { signal: ctrl.signal });
-      clearTimeout(t);
-      if (!res.ok) throw new Error(`status ${res.status}`);
-      console.log(`✅ [COUNCIL] Ollama reachable at ${endpoint}`);
-    } catch {
-      _exhaustedProviders.add('ollama');
-      console.log(`🔌 [COUNCIL] Ollama not available — excluded from routing`);
-    }
-  })();
-
-  console.log(
-    `🔌 [COUNCIL] Ollama policy: ${COUNCIL_OLLAMA_MODE}${
-      ollamaCouncilOff ? " (local Ollama excluded — free cloud APIs only)" : ""
-    }`
-  );
+  _exhaustedProviders.add("ollama");
+  console.log("🔌 [COUNCIL] Local Ollama retired by founder directive — free cloud lanes only");
 
   // ==================== LCTP v3 COMPRESSION HELPERS ====================
 
@@ -527,6 +494,27 @@ export function createCouncilService({
     }
   }
 
+  function isBuilderLaneRequest(member, options = {}) {
+    const sourceRoute = String(options?.source_route || "");
+    const taskType = String(options?.taskType || "");
+    const productLane = String(options?.product_lane || "");
+    return (
+      options?.builderExecution === true ||
+      sourceRoute.startsWith("/api/v1/lifeos/builder") ||
+      sourceRoute.startsWith("/api/v1/lifeos/direct-action") ||
+      taskType.startsWith("builder") ||
+      productLane === "builderos" ||
+      String(member || "").startsWith("openai_builder_")
+    );
+  }
+
+  function getBuilderLaneSpendCap() {
+    const raw = process.env.BUILDEROS_MAX_DAILY_SPEND;
+    if (raw == null || String(raw).trim() === "") return null;
+    const value = Number.parseFloat(String(raw));
+    return Number.isFinite(value) && value > 0 ? value : null;
+  }
+
   async function pingCouncilMember(memberKey) {
     const targetMember = resolveCouncilMember(memberKey);
     const memberConfig = COUNCIL_MEMBERS[targetMember];
@@ -789,19 +777,11 @@ export function createCouncilService({
       complexity === "complex" ||
       complexity === "critical";
 
-    // Determine if a real Ollama endpoint is reachable on this deployment
-    const hasRealOllama = OLLAMA_ENDPOINT &&
-      !OLLAMA_ENDPOINT.includes('localhost') &&
-      !OLLAMA_ENDPOINT.includes('127.0.0.1') &&
-      !OLLAMA_ENDPOINT.includes('PASTE_YOUR');
-
     // Only consider tier0 models that are actually reachable right now:
-    //  - exclude local-only (Ollama) models when no real tunnel is configured
     //  - exclude providers already rate-limited this session (_exhaustedProviders)
     const candidates = Object.entries(COUNCIL_MEMBERS).filter(
       ([, cfg]) => {
         if (!cfg || cfg.tier !== "tier0") return false;
-        if (cfg.isLocal && !hasRealOllama) return false;
         if (_exhaustedProviders.has(cfg.provider)) return false;
         return true;
       }
@@ -874,6 +854,8 @@ export function createCouncilService({
     }
     member = resolvedMember;
     const founderComms = options.founderComms === true || options.taskType === 'voice_rail_department';
+    const builderLane = isBuilderLaneRequest(member, options);
+    const builderLaneSpendCap = builderLane ? getBuilderLaneSpendCap() : null;
 
     function deliverCouncilText(rawText, taskTypeForEnvelope = options.taskType || 'general') {
       const { text, envelope } = envelopeCouncilMemberOutput(rawText, options, taskTypeForEnvelope, member);
@@ -894,13 +876,13 @@ export function createCouncilService({
       !COUNCIL_MEMBERS[member]?.isFree &&
       (COUNCIL_MEMBERS[member]?.costPer1M > 0 || COUNCIL_MEMBERS[member]?.tier === "tier1");
 
-    // ── Free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Ollama) ──
+    // ── Free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Fireworks) ──
     // Founder Voice Rail comms always use configured paid council member (no silent downgrade).
-    if (!founderComms && MAX_DAILY_SPEND === 0 && isPaid) {
+    if (!founderComms && !builderLane && MAX_DAILY_SPEND === 0 && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
       if (!nextProvider) {
         throw new Error(
-          `💰 [COST SHUTDOWN] Blocked ${member} — no free providers available (Ollama off: set COUNCIL_OLLAMA_MODE=last_resort for local fallback after caps).`
+          `💰 [COST SHUTDOWN] Blocked ${member} — no free providers available.`
         );
       }
       const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
@@ -913,11 +895,11 @@ export function createCouncilService({
       throw new Error(`💰 [COST SHUTDOWN] Blocked ${member} — no free providers available right now.`);
     }
 
-    if (!founderComms && spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
+    if (!founderComms && !builderLane && spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
       if (!nextProvider) {
         throw new Error(
-          `💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} — no free providers (Ollama off: set COUNCIL_OLLAMA_MODE=last_resort for local fallback).`
+          `💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} — no free providers available.`
         );
       }
       const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
@@ -930,26 +912,26 @@ export function createCouncilService({
       throw new Error(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} — no free providers available.`);
     }
 
-    if (spend > MAX_DAILY_SPEND * 0.1) {
+    const effectiveSpendCap = builderLane ? builderLaneSpendCap : MAX_DAILY_SPEND;
+    if (Number.isFinite(effectiveSpendCap) && effectiveSpendCap > 0 && spend > effectiveSpendCap * 0.1) {
       console.log(
         `💰 [SPEND CHECK] Today (${today}): $${spend.toFixed(
           4
-        )} / $${MAX_DAILY_SPEND}`
+        )} / $${effectiveSpendCap}${builderLane ? ' [builder lane]' : ''}`
       );
     }
 
-    const isOllama =
-      COUNCIL_MEMBERS[member]?.provider === "ollama" ||
-      member?.startsWith("ollama_") ||
-      COUNCIL_MEMBERS[member]?.isLocal === true;
-    const isFreeModel =
-      COUNCIL_MEMBERS[member]?.isFree === true || isOllama;
+    const isFreeModel = COUNCIL_MEMBERS[member]?.isFree === true;
 
-    if (!isFreeModel && spend >= MAX_DAILY_SPEND) {
+    if (!isFreeModel && Number.isFinite(effectiveSpendCap) && effectiveSpendCap > 0 && spend >= effectiveSpendCap) {
       throw new Error(
-        `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(
-          4
-        )} for ${today}. Resets at midnight UTC.`
+        builderLane
+          ? `BuilderOS spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
+              4
+            )} for ${today}. Raise BUILDEROS_MAX_DAILY_SPEND or lower builder activity.`
+          : `Daily spend limit ($${effectiveSpendCap}) reached at $${spend.toFixed(
+              4
+            )} for ${today}. Resets at midnight UTC.`
       );
     }
 
@@ -974,20 +956,7 @@ export function createCouncilService({
         const optimalConfig = COUNCIL_MEMBERS[optimalModel.member];
         if (optimalConfig) {
           const optimalKey = getApiKeyForProvider(optimalConfig.provider);
-          if (optimalConfig.provider === "ollama") {
-            // Only override to Ollama if a real external endpoint is configured
-            // (localhost fallback is not valid on Railway — Ollama doesn't run there)
-            const hasRealEndpoint = OLLAMA_ENDPOINT &&
-              !OLLAMA_ENDPOINT.includes('localhost') &&
-              !OLLAMA_ENDPOINT.includes('127.0.0.1') &&
-              !OLLAMA_ENDPOINT.includes('PASTE_YOUR');
-            if (hasRealEndpoint) {
-              member = optimalModel.member;
-              console.log(
-                `💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`
-              );
-            }
-          } else if (optimalKey) {
+          if (optimalKey) {
             member = optimalModel.member;
             console.log(
               `💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`
@@ -1138,7 +1107,7 @@ export function createCouncilService({
     const apiKey = getApiKey(config.provider);
 
     if (config.provider === "ollama") {
-      // endpoint will be checked on request
+      throw new Error("ollama retired by founder directive");
     } else if (!apiKey) {
       if (config.provider === "openai") {
         throw new Error(`${member.toUpperCase()}_API_KEY not set`);
@@ -1558,68 +1527,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       }
 
       if (config.provider === "ollama" || member.startsWith("ollama_")) {
-        const currentConfig = COUNCIL_MEMBERS[member] || config;
-        const ollamaEndpoint =
-          currentConfig.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
-
-        response = await fetch(`${ollamaEndpoint}/api/chat`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: currentConfig.model,
-            messages: deltaMessages
-              ? [{ role: "system", content: systemPrompt }, ...deltaMessages]
-              : [
-                  { role: "system", content: systemPrompt },
-                  { role: "user", content: finalPrompt },
-                ],
-            stream: false,
-          }),
-          signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(
-            `Ollama HTTP ${response.status}: ${errorText.slice(0, 200)}`
-          );
-        }
-
-        const json = await response.json();
-        let text = json.message?.content || json.response || "";
-        if (!text) throw new Error("Empty response from Ollama");
-
-        text = decompressResponse(text, useCompression);
-
-        if (options.useCache !== false) {
-          await cacheResponse(prompt, member, cleanForCache(text), taskType);
-        }
-
-        // TCO-E01: ledger for Ollama (free/local — cost $0)
-        {
-          const ollamaIn = estimateTokens(finalPrompt);
-          const ollamaOut = estimateTokens(text);
-          recordMetered({
-            ...meterTiming(),
-            provider: 'ollama',
-            model: currentConfig.model || member,
-            taskType,
-            originalTokens: ollamaIn + totalSavedInputTokens,
-            compressedTokens: ollamaIn,
-            outputTokens: ollamaOut,
-            savedTokens: totalSavedInputTokens,
-            savedOutputPct: codSavedOutputPct,
-            costUSD: 0,
-            cacheHit: false,
-            compressionLayers: buildRecordedCompressionLayers(compressionLayers, ollamaOut, codSavedOutputPct),
-          }).catch(() => {});
-        }
-
-        recordSessionTurns(effectiveSessionId, finalPrompt, text);
-
-        lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
-
-        return deliverCouncilText(text, taskType);
+        throw new Error("ollama retired by founder directive");
       }
 
       if (config.provider === "deepseek") {
@@ -1780,7 +1688,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       const is429 = error.message?.includes('429') ||
                     error.message?.toLowerCase().includes('rate limit') ||
                     error.message?.toLowerCase().includes('quota');
-      if (is429 && !founderComms) {
+      if (is429 && !founderComms && !builderLane) {
         await freeTierGovernor.on429(member);
         const exhaustedProvider = freeTierGovernor.resolveProvider(member);
         _markProviderExhausted(exhaustedProvider); // keep selectOptimalModel from re-picking it
@@ -1795,14 +1703,14 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
       }
 
-      // ── fetch failed = provider unreachable → mark Ollama out for this session ──
+      // ── fetch failed on a legacy-local alias → keep retired provider exhausted ──
       const isConnRefused = error.message?.toLowerCase().includes('fetch failed') ||
                             error.message?.toLowerCase().includes('econnrefused') ||
                             error.message?.toLowerCase().includes('enotfound') ||
                             error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND';
       if (isConnRefused && COUNCIL_MEMBERS[member]?.isLocal) {
         _markProviderExhausted('ollama');
-        console.log(`🔌 [COUNCIL] Ollama unreachable — removed from routing for this session`);
+        console.log(`🔌 [COUNCIL] Retired local-model alias hit a dead endpoint — keeping it out of routing`);
       }
 
       throw error;
@@ -1837,7 +1745,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
     if (isProduction && openSourceCouncil) {
       console.log(
-        `⚠️  [OSC] Skipping Open Source Council in production (Ollama not available on Railway)`
+        `⚠️  [OSC] Skipping worker council in production (local-model runtime retired)`
       );
     } else if (inCostShutdown) {
       console.warn(
@@ -1859,7 +1767,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         "\n╔══════════════════════════════════════════════════════════════════════════════════╗"
       );
       console.log(
-        "║ 🆓 [OPEN SOURCE COUNCIL] ACTIVATED - Using local Ollama models (FREE)            ║"
+        "║ 🆓 [WORKER COUNCIL] ACTIVATED - Using free/cheap cloud lanes                     ║"
       );
       console.log(
         `║    Reason: ${reasonText.padEnd(63)}║`
@@ -1926,7 +1834,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             `║    Response Time: ${`${routeDuration}ms`.padEnd(79)}║`
           );
           console.log(
-            "║    Cost: $0.00 (FREE - local Ollama)".padEnd(79) + "║"
+            "║    Cost: low/free cloud lane".padEnd(79) + "║"
           );
           console.log(
             "╚══════════════════════════════════════════════════════════════════════════════════╝\n"
@@ -1989,7 +1897,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         console.error(
           "❌ [COST SHUTDOWN] No free models available. System cannot proceed without spending."
         );
-        return "System is in cost shutdown mode and no free models are available. Please enable Ollama or set MAX_DAILY_SPEND > 0.";
+        return "System is in cost shutdown mode and no free cloud models are available. Add a free provider key or raise MAX_DAILY_SPEND.";
       }
     } else if (!requireOversight) {
       const tier0Members = availableMembers.filter(

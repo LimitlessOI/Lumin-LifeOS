@@ -34,6 +34,7 @@ import { readdir, readFile, writeFile, unlink, mkdtemp, mkdir } from 'fs/promise
 import { readFileSync, existsSync } from 'fs';
 import { join, dirname, resolve, relative, extname } from 'path';
 import { fileURLToPath } from 'url';
+import { createHash } from 'crypto';
 import { execSync } from 'child_process';
 import { tmpdir } from 'os';
 import { getModelForTask, getCandidateModelsForTask, TASK_MODEL_MAP } from '../config/task-model-routing.js';
@@ -81,6 +82,12 @@ const REPO_ROOT = join(__dirname, '..');
 const BUILDER_CODEGEN_POLICY_REVISION = '2026-05-01a';
 const BUILDER_ROUTE_DEFAULT_MODEL = 'openai_builder_mini';
 const BUILDER_ROUTE_STANDARD_MODEL = 'openai_builder_standard';
+const IS_RAILWAY_RUNTIME = Boolean(
+  process.env.RAILWAY_ENVIRONMENT
+  || process.env.RAILWAY_SERVICE_ID
+  || process.env.RAILWAY_PROJECT_ID
+  || process.env.RAILWAY_ENVIRONMENT_ID
+);
 
 const METADATA_SEP = '\n---METADATA---\n';
 const REMOTE_SYSTEM_TRUTH = 'System truth is remote: GitHub=source, Railway=runtime, Neon=data. Local shell/repo are workbench mirrors only.';
@@ -1020,6 +1027,64 @@ export function createLifeOSCouncilBuilderRoutes({
     }
   }
 
+  function isMissingGitHubCommitCapability(error) {
+    const message = String(error?.message || error || '');
+    return /GITHUB_TOKEN not configured|commitManyToGitHub not available/i.test(message);
+  }
+
+  async function mirrorEntriesLocally(fileEntries, commitMessage) {
+    const committed_files = [];
+    for (const entry of fileEntries) {
+      const mirrorExec = await mirrorCommittedContentToRepoRoot(entry.path, entry.content);
+      if (!mirrorExec.ok) {
+        throw new Error(`local mirror failed for ${entry.path}: ${mirrorExec.reason}`);
+      }
+      committed_files.push(entry.path);
+    }
+    const sha = createHash('sha1')
+      .update(JSON.stringify({
+        commit_message: commitMessage || '[system-build] local mirror',
+        files: fileEntries.map((entry) => ({
+          path: entry.path,
+          content: entry.content,
+        })),
+      }))
+      .digest('hex');
+    return {
+      ok: true,
+      sha,
+      commit_sha: sha,
+      committed_files,
+      commit_mode: 'local_mirror',
+      local_only: true,
+      warning: 'GitHub remote commit unavailable; mirrored locally for founder alpha runtime.',
+    };
+  }
+
+  async function commitOrMirrorFiles(fileEntries, commitMessage, branch) {
+    if (typeof commitManyToGitHub === 'function') {
+      try {
+        const commitResult = await commitManyToGitHub(fileEntries, commitMessage, branch || undefined);
+        return {
+          ok: true,
+          sha: commitResult?.sha || null,
+          commit_sha: commitResult?.sha || null,
+          committed_files: fileEntries.map((entry) => entry.path),
+          commit_mode: 'github',
+          local_only: false,
+        };
+      } catch (err) {
+        if (IS_RAILWAY_RUNTIME || !isMissingGitHubCommitCapability(err)) {
+          throw err;
+        }
+      }
+    } else if (IS_RAILWAY_RUNTIME) {
+      throw new Error('commitManyToGitHub not available — GITHUB_TOKEN may be missing');
+    }
+
+    return mirrorEntriesLocally(fileEntries, commitMessage);
+  }
+
   async function recordBuilderGap({
     domain,
     task,
@@ -1308,6 +1373,24 @@ export function createLifeOSCouncilBuilderRoutes({
           ? 'Memory routing unavailable; using runtime-available static routing map'
           : 'Memory routing unavailable and no runtime-available static model exists';
       }
+    }
+    if (
+      routingRecommendation.selectedModel &&
+      !candidateModels.includes(routingRecommendation.selectedModel)
+    ) {
+      const rejectedModel = routingRecommendation.selectedModel;
+      const rejectedReason = availability.availabilityByModel[rejectedModel]?.reason || 'not_runtime_available';
+      routingRecommendation = {
+        ...routingRecommendation,
+        selectedModel: preferredModel,
+        blockedCandidates: [
+          ...(routingRecommendation.blockedCandidates || []),
+          rejectedModel,
+        ],
+        reason: preferredModel
+          ? `Memory routing selected unavailable model ${rejectedModel} (${rejectedReason}); clamped to runtime-available ${preferredModel}`
+          : `Memory routing selected unavailable model ${rejectedModel} (${rejectedReason}); no runtime-available authorized model remains`,
+      };
     }
     const memberKey = routingRecommendation.selectedModel;
     if (!memberKey) {
@@ -1710,13 +1793,16 @@ export function createLifeOSCouncilBuilderRoutes({
 
     const msg = commit_message || `[system-build] ${target_file}`;
     try {
-      const commitResult = await commitToGitHub(target_file, cleanedOutput, msg, branch || undefined);
+      const commitResult = await commitOrMirrorFiles(
+        [{ path: target_file, content: cleanedOutput }],
+        msg,
+        branch,
+      );
       const commitSha = commitResult?.sha || null;
-      log.info({ target_file, msg, sha: commitSha }, '[BUILDER] /execute committed file to GitHub');
-      const mirrorExec = await mirrorCommittedContentToRepoRoot(target_file, cleanedOutput);
-      if (!mirrorExec.ok) {
-        log.warn({ target_file, reason: mirrorExec.reason }, '[BUILDER] Runtime repo mirror failed after /execute — chained files[] may be stale until redeploy');
-      }
+      log.info(
+        { target_file, msg, sha: commitSha, commit_mode: commitResult?.commit_mode || 'github' },
+        '[BUILDER] /execute committed file',
+      );
       await insertBuilderAudit({
         domain: null,
         task: `execute: ${target_file}`,
@@ -1736,6 +1822,9 @@ export function createLifeOSCouncilBuilderRoutes({
         commit_message: msg,
         sha: commitSha,
         commit_sha: commitSha,
+        commit_mode: commitResult?.commit_mode || 'github',
+        local_only: commitResult?.local_only === true,
+        warning: commitResult?.warning || null,
       });
     } catch (err) {
       log.error({ err: err.message, target_file }, '[BUILDER] /execute commit failed');
@@ -1760,14 +1849,6 @@ export function createLifeOSCouncilBuilderRoutes({
     if (!Array.isArray(files) || !files.length) {
       return res.status(400).json({ ok: false, error: 'files[] is required' });
     }
-    if (typeof commitManyToGitHub !== 'function') {
-      return res.status(503).json({
-        ok: false,
-        error: 'commitManyToGitHub not available — GITHUB_TOKEN may be missing',
-        committed: false,
-      });
-    }
-
     const cleaned = [];
     for (const file of files) {
       const target_file = String(file?.target_file || file?.path || '').trim();
@@ -1800,18 +1881,14 @@ export function createLifeOSCouncilBuilderRoutes({
 
     const msg = commit_message || `[system-build] batch ${cleaned.length} files`;
     try {
-      const commitResult = await commitManyToGitHub(
+      const commitResult = await commitOrMirrorFiles(
         cleaned.map((f) => ({ path: f.target_file, content: f.output })),
         msg,
-        branch || undefined,
+        branch,
       );
       const commitSha = commitResult?.sha || null;
       const committed_files = cleaned.map((f) => f.target_file);
       for (const file of cleaned) {
-        const mirrorExec = await mirrorCommittedContentToRepoRoot(file.target_file, file.output);
-        if (!mirrorExec.ok) {
-          log.warn({ target_file: file.target_file, reason: mirrorExec.reason }, '[BUILDER] mirror failed after execute-batch');
-        }
         await insertBuilderAudit({
           domain: null,
           task: `execute-batch: ${file.target_file}`,
@@ -1834,6 +1911,9 @@ export function createLifeOSCouncilBuilderRoutes({
         commit_message: msg,
         sha: commitSha,
         commit_sha: commitSha,
+        commit_mode: commitResult?.commit_mode || 'github',
+        local_only: commitResult?.local_only === true,
+        warning: commitResult?.warning || null,
       });
     } catch (err) {
       log.error({ err: err.message }, '[BUILDER] /execute-batch commit failed');

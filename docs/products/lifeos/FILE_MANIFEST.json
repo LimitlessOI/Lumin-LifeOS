@@ -5,7 +5,7 @@
   "name": "LifeOS Core",
   "canonical_home": "docs/products/lifeos/PRODUCT_HOME.md",
   "amendment_path": "docs/products/lifeos/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-06-30",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "config/gate-change-presets.js",

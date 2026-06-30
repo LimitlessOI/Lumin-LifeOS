@@ -58,6 +58,11 @@ export function getCouncilMemberAvailability(memberKey, env = process.env) {
         ? { available: true, reason: 'anthropic_key_present' }
         : { available: false, reason: 'anthropic_api_key_missing' };
 
+    case 'openai':
+      return hasAny(['OPENAI_API_KEY'], env)
+        ? { available: true, reason: 'openai_key_present' }
+        : { available: false, reason: 'openai_api_key_missing' };
+
     case 'openrouter':
       return hasAny(['OPENROUTER_API_KEY'], env)
         ? { available: true, reason: 'openrouter_key_present' }
@@ -89,6 +94,16 @@ export function getCouncilMemberAvailability(memberKey, env = process.env) {
         ? { available: true, reason: 'together_key_present' }
         : { available: false, reason: 'together_api_key_missing' };
 
+    case 'github_models':
+      return hasAny(['GITHUB_TOKEN'], env)
+        ? { available: true, reason: 'github_token_present' }
+        : { available: false, reason: 'github_token_missing' };
+
+    case 'fireworks':
+      return hasAny(['FIREWORKS_API_KEY'], env)
+        ? { available: true, reason: 'fireworks_key_present' }
+        : { available: false, reason: 'fireworks_api_key_missing' };
+
     case 'deepseek':
       if (config.useLocal) {
         return { available: true, reason: 'deepseek_bridge_enabled' };
@@ -98,16 +113,7 @@ export function getCouncilMemberAvailability(memberKey, env = process.env) {
         : { available: false, reason: 'deepseek_api_key_missing' };
 
     case 'ollama': {
-      const ollamaMode = envValue('COUNCIL_OLLAMA_MODE', env) || 'last_resort';
-      const endpoint = resolveOllamaEndpoint(env);
-      const railway = isRailwayRuntime(env);
-      return ollamaMode === 'off'
-        ? { available: false, reason: 'ollama_disabled' }
-        : railway && !endpoint
-          ? { available: false, reason: 'ollama_endpoint_missing_on_railway' }
-          : railway && /localhost|127\.0\.0\.1/i.test(endpoint)
-            ? { available: false, reason: 'ollama_endpoint_localhost_invalid_on_railway' }
-            : { available: true, reason: `ollama_mode_${ollamaMode}` };
+      return { available: false, reason: 'ollama_retired_by_founder_directive' };
     }
 
     default:
