@@ -4,10 +4,10 @@
 
 ## Status
 
-- `EXECUTION_IN_PROGRESS`
+- `PRE_EXECUTION_PACKET_REPAIR_REQUIRED`
 - `ARCHITECT_COMPARISON_COMPLETE`
 - `SNT_TO_CHAIR_CONSENSUS_COMPLETE`
-- `PROMOTED_AND_FROZEN_FOR_EXECUTION`
+- `PROMOTED_FOR_REPAIR_NOT_EXECUTION`
 - `NOT_YET_CERTIFIED_FULLY_MACHINE_READY`
 
 ## Purpose
@@ -20,6 +20,7 @@ This mission pack freezes the current BuilderOS closure problem in a machine-rea
 
 This pack is not a product mission queue item.
 It is the active canonical closure mission for BuilderOS autonomy hardening.
+Execution remains blocked until packet repair closes the load-bearing ambiguities called out by the architect/SNT stack.
 
 ## Mission
 
@@ -49,6 +50,7 @@ Take BuilderOS from the current bootstrap state to a truthful autonomous build s
 11. [`ARC_SIGNOFF_RECEIPT.json`](./ARC_SIGNOFF_RECEIPT.json)
 12. [`EXECUTION_TRACKER.json`](./EXECUTION_TRACKER.json)
 13. [`EXECUTION_ISSUES.md`](./EXECUTION_ISSUES.md)
+14. [`PACKET_REPAIR_BLUEPRINT.json`](./PACKET_REPAIR_BLUEPRINT.json)
 
 ## Architect Boundary
 
@@ -64,10 +66,19 @@ The architect receives only the founder packet, current-state audit, pre-ARC inp
 
 ## Hard Boundary
 
-Pre-execution comparison is complete. Remaining boundary:
+Pre-execution comparison is complete. Current execution state:
 
-1. Do not certify `FULLY_MACHINE_READY` until closure acceptance, same-tier determinism, and founder-surface proof all pass.
+1. `comparison complete`
+2. `packet repair still required`
+3. `coding not allowed yet`
+4. `simulation/audit allowed`
+
+Remaining boundary:
+
+1. Do not certify `FULLY_MACHINE_READY` until closure acceptance, same-tier determinism, founder-surface proof, and founder confirmation all pass.
 2. Do not claim live founder success from code-only or technical-only artifacts.
+3. `BLUEPRINT.json` and `EXECUTION_CONTRACTS.json` execution-gate fields are canonical if any other file drifts.
+4. `EXECUTION_CONTRACTS.json.execution_gate.blueprint_may_execute_now` is the single executable gate. `BLUEPRINT.json.execution_gate.status` is mirror-only human-readable state.
 
 ## Current Canonical Anchors
 

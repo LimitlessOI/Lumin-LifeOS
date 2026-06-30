@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-29T20:12:21.376Z",
+  "generated_at": "2026-06-30T00:06:45.900Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11571,
+  "file_count": 11586,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -22064,9 +22064,9 @@
     {
       "path": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
       "synopsis": "BuilderOS artifact — HIST DOMAIN REGISTRY.",
-      "bytes": 2996,
-      "mtime": "2026-06-27T17:13:00.387Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 3060,
+      "mtime": "2026-06-30T00:06:34.998Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -22208,9 +22208,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
-      "bytes": 4824,
-      "mtime": "2026-06-29T17:21:07.236Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 8954,
+      "mtime": "2026-06-29T22:49:37.462Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -22323,9 +22323,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/AUTHORITY_CHECK.json",
       "synopsis": "BuilderOS artifact — AUTHORITY CHECK.",
-      "bytes": 1694,
-      "mtime": "2026-06-27T23:46:44.462Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 3190,
+      "mtime": "2026-06-29T23:56:25.303Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -22401,9 +22401,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/FOUNDER_PACKET.md",
       "synopsis": "Founder packet for BuilderOS autonomy closure",
-      "bytes": 9125,
-      "mtime": "2026-06-27T23:45:04.083Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z"
+      "bytes": 10065,
+      "mtime": "2026-06-29T22:20:19.129Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/IDC_CONSENSUS_RECEIPT.json",
@@ -22472,9 +22472,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/PRE_BUILD_VALIDATION_PACKET.json",
       "synopsis": "BuilderOS artifact — PRE BUILD VALIDATION PACKET.",
-      "bytes": 864,
-      "mtime": "2026-06-27T22:44:52.896Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 962,
+      "mtime": "2026-06-29T22:35:04.957Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -22488,9 +22488,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/README.md",
       "synopsis": "Architect-comparison pack for BuilderOS autonomy closure",
-      "bytes": 3654,
-      "mtime": "2026-06-29T17:35:42.541Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z"
+      "bytes": 4316,
+      "mtime": "2026-06-29T23:57:32.864Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
@@ -27321,24 +27321,24 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/ARC_RUN_RECEIPT.json",
       "synopsis": "BuilderOS artifact — ARC RUN RECEIPT.",
       "bytes": 1587,
-      "mtime": "2026-06-29T20:12:14.905Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.917Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/ASSET_REUSE_DECISION.json",
       "synopsis": "BuilderOS artifact — ASSET REUSE DECISION.",
       "bytes": 2124,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.931Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/BLUEPRINT_ROADMAP.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT ROADMAP.",
       "bytes": 1164,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.931Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27369,8 +27369,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/CHAIR_HANDOFF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR HANDOFF RECEIPT.",
       "bytes": 568,
-      "mtime": "2026-06-29T20:12:13.397Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.730Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27453,32 +27453,32 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/IDC_CONSENSUS_RECEIPT.json",
       "synopsis": "BuilderOS artifact — IDC CONSENSUS RECEIPT.",
       "bytes": 715,
-      "mtime": "2026-06-29T20:12:13.396Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.729Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/INTENT_BASELINE.json",
       "synopsis": "BuilderOS artifact — INTENT BASELINE.",
       "bytes": 1608,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.930Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/INTENT_COVERAGE_MAP.json",
       "synopsis": "BuilderOS artifact — INTENT COVERAGE MAP.",
       "bytes": 5915,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.931Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/KNOWN_ASSUMPTIONS.json",
       "synopsis": "BuilderOS artifact — KNOWN ASSUMPTIONS.",
-      "bytes": 15324,
-      "mtime": "2026-06-29T20:12:14.895Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 2778,
+      "mtime": "2026-06-30T00:06:45.929Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27493,16 +27493,16 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/KNOWN_RISKS.json",
       "synopsis": "BuilderOS artifact — KNOWN RISKS.",
       "bytes": 144,
-      "mtime": "2026-06-29T20:12:13.396Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.729Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/MODE_A_TO_B_TRANSITION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — MODE A TO B TRANSITION RECEIPT.",
       "bytes": 339,
-      "mtime": "2026-06-29T20:12:13.395Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.728Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27517,48 +27517,48 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/PRE_ARC_INPUT_PACKET.json",
       "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
       "bytes": 2819,
-      "mtime": "2026-06-29T20:12:13.397Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.730Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/PRE_BUILD_VALIDATION_PACKET.json",
       "synopsis": "BuilderOS artifact — PRE BUILD VALIDATION PACKET.",
       "bytes": 377,
-      "mtime": "2026-06-29T20:12:14.898Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.932Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/PREDICTION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — PREDICTION RECEIPT.",
       "bytes": 783,
-      "mtime": "2026-06-29T20:12:13.395Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.728Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — ARC TWIN SIMULATION RECEIPT.",
-      "bytes": 421,
-      "mtime": "2026-06-29T20:12:14.904Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 192,
+      "mtime": "2026-06-30T00:06:45.932Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/BLOCKED_RETURN_TO_IDC.json",
       "synopsis": "BuilderOS artifact — BLOCKED RETURN TO IDC.",
-      "bytes": 253,
-      "mtime": "2026-06-29T20:10:41.820Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 291,
+      "mtime": "2026-06-30T00:04:12.753Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/BUILDER_COLD_SIMULATION_REPORT.json",
       "synopsis": "BuilderOS artifact — BUILDER COLD SIMULATION REPORT.",
       "bytes": 1119,
-      "mtime": "2026-06-29T20:12:14.903Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.914Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27573,32 +27573,32 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/BUILDER_SIMULATION_REPORT.json",
       "synopsis": "BuilderOS artifact — BUILDER SIMULATION REPORT.",
       "bytes": 425,
-      "mtime": "2026-06-29T20:12:14.904Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.932Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
       "bytes": 1244,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.931Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
       "bytes": 3371,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.931Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/CHAIR_HANDOFF_FAILURE.json",
       "synopsis": "BuilderOS artifact — CHAIR HANDOFF FAILURE.",
-      "bytes": 571,
-      "mtime": "2026-06-29T20:00:27.109Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 622,
+      "mtime": "2026-06-29T23:21:25.278Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27613,8 +27613,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/FOUNDATION_LOOP_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FOUNDATION LOOP RECEIPT.",
       "bytes": 175520,
-      "mtime": "2026-06-29T20:12:13.387Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.722Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27636,16 +27636,16 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/OBSTACLE_LESSON_LEDGER.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 1808465,
-      "mtime": "2026-06-29T20:12:14.895Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z"
+      "bytes": 1700879,
+      "mtime": "2026-06-30T00:06:45.929Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/POINT_B_GATE_REPORT.json",
       "synopsis": "BuilderOS artifact — POINT B GATE REPORT.",
       "bytes": 6677,
-      "mtime": "2026-06-29T20:12:14.903Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.915Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27660,16 +27660,16 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
       "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
       "bytes": 2628,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.931Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
       "synopsis": "BuilderOS artifact — SNT TRANSLATION ATTACK REPORT.",
       "bytes": 2132,
-      "mtime": "2026-06-29T20:12:14.904Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.932Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27684,32 +27684,32 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/STUDIO_DESIGN_ENGINE_RECEIPT.json",
       "synopsis": "BuilderOS artifact — STUDIO DESIGN ENGINE RECEIPT.",
       "bytes": 283,
-      "mtime": "2026-06-29T20:12:14.904Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.915Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — STUDIO EXPERIENCE SIMULATION RECEIPT.",
       "bytes": 3907,
-      "mtime": "2026-06-29T20:12:14.905Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.916Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/SYSTEM_ADJUSTMENT_LOG.json",
       "synopsis": "BuilderOS artifact — SYSTEM ADJUSTMENT LOG.",
-      "bytes": 523430,
-      "mtime": "2026-06-29T20:12:14.900Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 486040,
+      "mtime": "2026-06-30T00:06:45.934Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/SYSTEM_FAILURE_DEFECT.json",
       "synopsis": "BuilderOS artifact — SYSTEM FAILURE DEFECT.",
       "bytes": 3130,
-      "mtime": "2026-06-29T20:06:35.379Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:05:15.026Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27732,8 +27732,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
       "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
       "bytes": 1157,
-      "mtime": "2026-06-29T20:12:14.897Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.931Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -27748,8 +27748,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/STUDIO_DESIGN_PACKET.json",
       "synopsis": "BuilderOS artifact — STUDIO DESIGN PACKET.",
       "bytes": 3687,
-      "mtime": "2026-06-29T20:12:14.904Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "mtime": "2026-06-30T00:06:45.915Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -35238,6 +35238,20 @@
       "indexed_at": "2026-06-29T20:12:14.424Z"
     },
     {
+      "path": "docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-founder-vision.md",
+      "synopsis": "Verbatim founder session — LimitlessOS ecosystem vision (ChatGPT)",
+      "bytes": 16273,
+      "mtime": "2026-06-30T00:03:13.507Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
+      "path": "docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-ROUTING.md",
+      "synopsis": "Route map — 2026-06-29 founder ecosystem session",
+      "bytes": 2666,
+      "mtime": "2026-06-30T00:01:59.346Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
       "path": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
       "synopsis": "BuilderOS / TSOS / autonomous / alpha",
       "bytes": 85566,
@@ -36072,6 +36086,37 @@
       "indexed_at": "2026-06-29T20:12:14.424Z"
     },
     {
+      "path": "docs/history/legacy-history-salvage/LEGACY_AUTHORITY_INVENTORY.json",
+      "synopsis": "Documentation — LEGACY AUTHORITY INVENTORY.",
+      "bytes": 78087,
+      "mtime": "2026-06-29T21:14:01.905Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/legacy-history-salvage/README.md",
+      "synopsis": "Legacy authority salvage staging area",
+      "bytes": 920,
+      "mtime": "2026-06-29T21:08:58.596Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
+      "path": "docs/history/legacy-history-salvage/receipts/2026-06-29T21-50-43.431Z__live-legacy__raw.json",
+      "synopsis": "Documentation — 2026 06 29T21 50 43.431Z Live Legacy Raw.",
+      "bytes": 11559,
+      "mtime": "2026-06-29T21:50:43.432Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/legacy-history-salvage/receipts/2026-06-29T21-50-43.431Z__live-legacy__triage.json",
+      "synopsis": "Documentation — 2026 06 29T21 50 43.431Z Live Legacy Triage.",
+      "bytes": 11960,
+      "mtime": "2026-06-29T21:50:43.433Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/history/products/BUILD_PLAN.md",
       "synopsis": "Redirect — legacy build plan archived",
       "bytes": 206,
@@ -36095,9 +36140,9 @@
     {
       "path": "docs/history/README.md",
       "synopsis": "History archive — parts car for wisdom and salvage",
-      "bytes": 1598,
-      "mtime": "2026-06-29T17:44:54.082Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z"
+      "bytes": 1703,
+      "mtime": "2026-06-29T21:08:58.596Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md",
@@ -36823,6 +36868,13 @@
       "indexed_at": "2026-06-29T20:12:14.424Z"
     },
     {
+      "path": "docs/products/ideavault/conversations/2026-06-29-ecosystem-routing-catalog.md",
+      "synopsis": "IdeaVault catalog row — 2026-06-29 ecosystem session",
+      "bytes": 1780,
+      "mtime": "2026-06-30T00:02:47.771Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 1893,
@@ -36840,9 +36892,9 @@
     {
       "path": "docs/products/INDEX.md",
       "synopsis": "Product index — start here",
-      "bytes": 2131,
-      "mtime": "2026-06-29T17:42:37.592Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z"
+      "bytes": 2463,
+      "mtime": "2026-06-30T00:03:42.088Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "docs/products/kids-os/FILE_MANIFEST.json",
@@ -36911,6 +36963,13 @@
       "indexed_at": "2026-06-29T20:12:14.424Z"
     },
     {
+      "path": "docs/products/LEGACY_AUTHORITY_MIGRATION_AUDIT.md",
+      "synopsis": "Legacy authority migration audit — what still has value before archive",
+      "bytes": 6443,
+      "mtime": "2026-06-29T21:08:58.595Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
       "path": "docs/products/life-coaching/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 560,
@@ -36954,6 +37013,13 @@
       "indexed_at": "2026-06-29T20:12:14.424Z"
     },
     {
+      "path": "docs/products/lifeos/conversations/2026-06-29-human-synergy-limitless-principle.md",
+      "synopsis": "LifeOS extract — human synergy and employee digital twin",
+      "bytes": 2964,
+      "mtime": "2026-06-30T00:02:45.261Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
       "path": "docs/products/lifeos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 29959,
@@ -36964,9 +37030,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 530214,
-      "mtime": "2026-06-29T17:35:43.030Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z"
+      "bytes": 530987,
+      "mtime": "2026-06-30T00:04:17.020Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -36991,11 +37057,40 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md",
+      "synopsis": "Founder Usability Contract",
+      "bytes": 3371,
+      "mtime": "2026-06-29T23:13:17.614Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
       "bytes": 16365,
       "mtime": "2026-06-29T17:35:43.031Z",
       "indexed_at": "2026-06-29T20:12:14.424Z"
+    },
+    {
+      "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
+      "synopsis": "LimitlessOS extract — 2026-06-29 founder session",
+      "bytes": 2301,
+      "mtime": "2026-06-30T00:02:38.148Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
+      "path": "docs/products/limitlessos/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 766,
+      "mtime": "2026-06-30T00:02:20.954Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/limitlessos/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — LimitlessOS business stack",
+      "bytes": 7008,
+      "mtime": "2026-06-30T00:02:20.885Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "docs/products/LLM_FEEDBACK_REQUEST.md",
@@ -37034,6 +37129,13 @@
       "indexed_at": "2026-06-29T20:12:14.424Z"
     },
     {
+      "path": "docs/products/marketingos/conversations/2026-06-29-directed-production-sticker-pricing.md",
+      "synopsis": "MarketingOS — sticker mockup and print pricing research",
+      "bytes": 2468,
+      "mtime": "2026-06-30T00:02:40.792Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
       "path": "docs/products/marketingos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 8605,
@@ -37044,9 +37146,16 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 77811,
-      "mtime": "2026-06-29T17:35:43.033Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z"
+      "bytes": 78896,
+      "mtime": "2026-06-30T00:04:16.478Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
+    },
+    {
+      "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
+      "synopsis": "SocialMediaOS extract — producer/director scaling model",
+      "bytes": 2224,
+      "mtime": "2026-06-30T00:02:40.615Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/FILE_MANIFEST.json",
@@ -37198,9 +37307,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 28439,
-      "mtime": "2026-06-29T18:32:30.851Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 29027,
+      "mtime": "2026-06-30T00:03:42.090Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "synopsis_index_only": true
     },
     {
@@ -70224,9 +70333,9 @@
     {
       "path": "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
       "synopsis": "BuilderOS autonomy closure v1 acceptance.",
-      "bytes": 12234,
-      "mtime": "2026-06-28T01:54:30.155Z",
-      "indexed_at": "2026-06-29T20:12:14.424Z",
+      "bytes": 18625,
+      "mtime": "2026-06-29T23:40:55.527Z",
+      "indexed_at": "2026-06-30T00:06:45.900Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]

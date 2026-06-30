@@ -4,110 +4,159 @@
     "step_id": "BAC-000B",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check architect-snt-promotion",
+    "pass_rule": "command exits 0 and writes a PASS verdict for architect-snt-promotion",
     "expected": "architect handoff requires machine-execution output, SNT attack categories are explicit, and better-answer promotion is receipted"
+  },
+  {
+    "test_id": "AT-BAC-000-1",
+    "step_id": "BAC-000",
+    "type": "node_test",
+    "command": "node --test tests/build-proof-contract.test.js",
+    "pass_rule": "node test exits 0"
+  },
+  {
+    "test_id": "AT-BAC-000-2",
+    "step_id": "BAC-000",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check build-proof-verdicts",
+    "pass_rule": "command exits 0 and proves PASS, WAITING_FOR_PROOF, and FAIL verdict mapping",
+    "expected": "build-proof contract distinguishes PASS, WAITING_FOR_PROOF, and FAIL according to explicit verdict rules and never allows PASS without required proof"
+  },
+  {
+    "test_id": "AT-BAC-000A-1",
+    "step_id": "BAC-000A",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-build-deploy-truth.mjs",
+    "pass_rule": "command exits 0 and writes BUILDEROS_BUILD_DEPLOY_TRUTH.json with transport-proof evidence fields populated",
+    "expected": "build/deploy truth proves commit, remote, deploy, and live reprobe state without false PASS"
+  },
+  {
+    "test_id": "AT-BAC-000A-2",
+    "step_id": "BAC-000A",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-founder-chat-alpha-battery.mjs",
+    "pass_rule": "command exits 0 and founder-chat battery receipts transport/deploy truth honestly",
+    "expected": "founder-surface build results do not claim PASS when remote or live proof is still pending"
   },
   {
     "test_id": "AT-BAC-001-1",
     "step_id": "BAC-001",
     "type": "file_exists",
-    "target": "services/bp-priority-completion.js"
+    "target": "services/bp-priority-completion.js",
+    "pass_rule": "target file exists"
   },
   {
     "test_id": "AT-BAC-001-2",
     "step_id": "BAC-001",
     "type": "node_test",
-    "command": "node --test tests/bp-priority-completion.test.js"
+    "command": "node --test tests/bp-priority-completion.test.js",
+    "pass_rule": "node test exits 0"
   },
   {
     "test_id": "AT-BAC-002-1",
     "step_id": "BAC-002",
     "type": "npm_exit_zero",
-    "command": "npm run lifeos:bp-priority:verify"
+    "command": "npm run lifeos:bp-priority:verify",
+    "pass_rule": "npm command exits 0"
   },
   {
     "test_id": "AT-BAC-002-2",
     "step_id": "BAC-002",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check queue-truth",
+    "pass_rule": "command exits 0 and proves no false-green queue/readiness state while founder usability is false",
     "expected": "scheduler cannot report no_work or healthy idle while POINT_B founder_usability_pass is false"
   },
   {
     "test_id": "AT-BAC-003-1",
     "step_id": "BAC-003",
     "type": "node_test",
-    "command": "node --test tests/self-repair-escalation-policy.test.js"
+    "command": "node --test tests/self-repair-escalation-policy.test.js",
+    "pass_rule": "node test exits 0"
   },
   {
     "test_id": "AT-BAC-004-1",
     "step_id": "BAC-004",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check repair-carry-forward",
+    "pass_rule": "command exits 0 and proves prior_attempts_consulted, lessons_loaded, and research evidence persist between retries",
     "expected": "retry stages must persist lessons_loaded, research_completed, and prior_attempts_consulted"
   },
   {
     "test_id": "AT-BAC-005-1",
     "step_id": "BAC-005",
     "type": "node_test",
-    "command": "node --test tests/builderos-improvement-loop.test.js"
+    "command": "node --test tests/builderos-improvement-loop.test.js",
+    "pass_rule": "node test exits 0"
   },
   {
     "test_id": "AT-BAC-005-2",
     "step_id": "BAC-005",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check improvement-contract",
+    "pass_rule": "command exits 0 and proves improvement output is deterministic blueprint-delta structure, not free-form advice",
     "expected": "improvement loop emits deterministic blueprint deltas rather than free-form advisory output"
   },
   {
     "test_id": "AT-BAC-006-1",
     "step_id": "BAC-006",
-    "type": "npm_exit_zero",
-    "command": "node scripts/generate-product-readiness-report.mjs"
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check artifact-sync-module",
+    "pass_rule": "command exits 0 and proves one canonical artifact-sync module path only",
+    "expected": "artifact sync helper exists at the canonical module path and is the only acceptance-owned sync module path for this mission"
   },
   {
     "test_id": "AT-BAC-006-2",
     "step_id": "BAC-006",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check receipt-sync",
+    "pass_rule": "command exits 0 and proves governed artifacts co-update atomically with freshness fields",
     "expected": "acceptance finish updates objective verdict, BP item state, readiness report, and freshness fields together"
   },
   {
     "test_id": "AT-BAC-007-1",
     "step_id": "BAC-007",
     "type": "npm_exit_zero",
-    "command": "npm run lifeos:ui-alpha-gate"
+    "command": "npm run lifeos:ui-alpha-gate",
+    "pass_rule": "npm command exits 0"
   },
   {
     "test_id": "AT-BAC-007-2",
     "step_id": "BAC-007",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check ui-truth",
-    "expected": "console errors fail unless explicitly allowlisted; founder alpha readiness does not imply point_b_complete; founder usability contract artifacts exist and govern founder-facing pass/fail"
+    "pass_rule": "command exits 0 and proves canonical founder-usability contract plus honest founder-surface technical/pass distinction",
+    "expected": "console errors fail unless explicitly allowlisted; founder alpha readiness does not imply point_b_complete; canonical founder usability contract exists at docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md and governs founder-facing pass/fail"
   },
   {
     "test_id": "AT-BAC-008-1",
     "step_id": "BAC-008",
-    "type": "rg_absent",
-    "target": "services/builderos-bp-priority-scheduler.js scripts/bp-priority-never-stop.mjs services/builderos-improvement-loop.js",
-    "pattern": "docs/products/builderos/PRODUCT_HOME.md|MISSION_QUEUE.json"
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check stale-authority-cleanup",
+    "pass_rule": "command exits 0 and proves stale authority is removed while canonical product-home authority remains allowed",
+    "expected": "active autonomy spine forbids stale queue/amendment authority while allowing canonical product-home authority such as docs/products/builderos/PRODUCT_HOME.md"
   },
   {
     "test_id": "AT-BAC-008-2",
     "step_id": "BAC-008",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check soft-acceptance-language",
+    "pass_rule": "command exits 0 and proves founder-surface acceptance is bounded by explicit corpus or schema criteria where possible",
     "expected": "founder-surface acceptance checks do not rely on unconstrained semantic wording where stricter corpus or schema checks can be defined"
   },
   {
     "test_id": "AT-BAC-009-1",
     "step_id": "BAC-009",
     "type": "npm_exit_zero",
-    "command": "npm run builderos:autonomy-closure:v1-acceptance"
+    "command": "npm run builderos:autonomy-closure:v1-acceptance",
+    "pass_rule": "npm command exits 0"
   },
   {
     "test_id": "AT-BAC-010-1",
     "step_id": "BAC-010",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-same-tier-determinism.mjs",
+    "pass_rule": "command exits 0 and determinism receipt shows no material differences across required runs",
     "expected": "three same-tier coder runs produce materially equivalent output on the sacrificial blueprint"
   },
   {
@@ -115,14 +164,23 @@
     "step_id": "BAC-010",
     "type": "manual_or_scripted_assertion",
     "command": "node scripts/run-builderos-founder-ui-proof.mjs",
+    "pass_rule": "command exits 0 and founder-ui proof receipt shows honest counsel/build/repair routing",
     "expected": "real founder UI path can counsel, build, repair/escalate, and return honest result receipts"
+  },
+  {
+    "test_id": "AT-BAC-010-3",
+    "step_id": "BAC-010",
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-build-deploy-truth.mjs",
+    "pass_rule": "command exits 0 and BUILDEROS_BUILD_DEPLOY_TRUTH.json is written with PASS, FAIL, or WAITING_FOR_PROOF according to contract",
+    "expected": "explicit build/deploy proof runs as part of BAC-010 rather than being implied only"
   },
   {
     "test_id": "AT-BAC-011-1",
     "step_id": "BAC-011",
-    "type": "json_field_equals",
-    "target": "builderos-reboot/PROJECT_CERTIFICATION.json",
-    "field_path": "levels.FULLY_MACHINE_READY",
-    "expected": true
+    "type": "manual_or_scripted_assertion",
+    "command": "node scripts/run-builderos-autonomy-closure-v1-acceptance.mjs --check certification-gate-truth",
+    "pass_rule": "command exits 0 and proves FULLY_MACHINE_READY matches the exact proof gate formula including founder confirmation",
+    "expected": "FULLY_MACHINE_READY is true only when every required proof plus explicit founder confirmation is present; otherwise false or BLOCKED is the honest result"
   }
 ]

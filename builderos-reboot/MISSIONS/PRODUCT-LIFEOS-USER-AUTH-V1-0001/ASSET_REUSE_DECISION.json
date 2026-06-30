@@ -2,7 +2,7 @@
   "schema": "asset_reuse_decision_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "arc_decision_status": "CONFIRMED",
-  "surveyed_at": "2026-06-29",
+  "surveyed_at": "2026-06-30",
   "wisdom_lessons": [
     "Reuse production spine files already built — ARC hosts byte contracts"
   ],

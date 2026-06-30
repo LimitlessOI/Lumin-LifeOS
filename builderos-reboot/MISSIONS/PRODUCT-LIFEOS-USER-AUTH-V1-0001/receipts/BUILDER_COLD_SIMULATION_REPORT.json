@@ -3,7 +3,7 @@
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "blueprint_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST",
   "simulated_by": "factory-core/arc/builder-cold-walk.js",
-  "simulated_at": "2026-06-29T20:06:14.817Z",
+  "simulated_at": "2026-06-30T00:05:32.543Z",
   "builder_runtime": "builderos-reboot/scripts/execute-mission.mjs",
   "steps": [
     {

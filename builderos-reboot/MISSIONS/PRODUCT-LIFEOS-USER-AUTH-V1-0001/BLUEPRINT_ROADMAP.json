@@ -3,7 +3,7 @@
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "roadmap_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ROADMAP",
   "status": "ARC_HANDOFF",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-06-30",
   "intent_source": "FOUNDER_PACKET.md + existing BLUEPRINT.json",
   "boundary_note": "Product mission on BP_PRIORITY queue — not meta proof lap",
   "full_map_note": "A→Z for this product scope; P4/P5 BUILDER_READY when blueprint complete",
@@ -13,19 +13,19 @@
       "name": "Phase P1",
       "status": "BUILDER_READY",
       "intent": "Blueprint steps tagged P1",
-      "builder_outcome": "Steps marked complete in legacy blueprint — ARC re-hosts as write_file_exact",
+      "builder_outcome": "Builder executes frozen byte contracts",
       "alpha_signal": "Phase P1 artifacts exist"
     },
     {
       "phase_id": "P4",
       "name": "Builder Execution",
-      "status": "BUILDER_READY",
+      "status": "FUTURE",
       "intent": "System Builder executes ARC-emitted write_file_exact steps"
     },
     {
       "phase_id": "P5",
       "name": "Alpha Acceptance",
-      "status": "BUILDER_READY",
+      "status": "FUTURE",
       "intent": "Acceptance command + founder usability verdict"
     }
   ],

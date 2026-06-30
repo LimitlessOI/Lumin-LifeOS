@@ -390,6 +390,21 @@
       ]
     },
     {
+      "product_id": "limitlessos",
+      "name": "LimitlessOS",
+      "canonical_home": "docs/products/limitlessos/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/limitlessos/FILE_MANIFEST.json",
+      "law_path": "docs/products/limitlessos/PRODUCT_HOME.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Business operating umbrella — founder vision 2026-06-29; modules in child product homes."
+      ]
+    },
+    {
       "product_id": "lumin-university",
       "name": "Lumin University",
       "canonical_home": "docs/products/lumin-university/PRODUCT_HOME.md",

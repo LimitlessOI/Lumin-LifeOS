@@ -1,0 +1,21 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "limitlessos",
+  "name": "LimitlessOS",
+  "canonical_home": "docs/products/limitlessos/PRODUCT_HOME.md",
+  "amendment_path": "docs/products/limitlessos/PRODUCT_HOME.md",
+  "updated_at": "2026-06-29",
+  "owned_paths": [
+    "docs/products/limitlessos/PRODUCT_HOME.md",
+    "docs/products/limitlessos/FILE_MANIFEST.json",
+    "docs/products/limitlessos/conversations/"
+  ],
+  "shared_dependencies": [
+    "docs/products/lifeos/PRODUCT_HOME.md",
+    "docs/products/marketingos/PRODUCT_HOME.md",
+    "docs/products/builderos/PRODUCT_HOME.md",
+    "docs/products/PRODUCT_REGISTRY.json"
+  ],
+  "runtime_surfaces": [],
+  "notes": "Founder-vision umbrella for business stack; modules live in child product homes."
+}

@@ -1,17 +1,19 @@
 {
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
   "checks": [
-    { "step_id": "BAC-000B", "allowed_roles": ["ChC", "SNT", "BPB"], "forbidden_roles": ["CDR"], "requires_founder_input": false },
-    { "step_id": "BAC-001", "allowed_roles": ["BPB", "CDR", "SNT"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
-    { "step_id": "BAC-002", "allowed_roles": ["BPB", "CDR", "SNT"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
-    { "step_id": "BAC-003", "allowed_roles": ["BPB", "CDR", "SNT", "ChC"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
-    { "step_id": "BAC-004", "allowed_roles": ["BPB", "CDR", "SNT", "Hist"], "forbidden_roles": [], "requires_founder_input": false },
-    { "step_id": "BAC-005", "allowed_roles": ["BPB", "CDR", "SNT", "CFO", "ChC"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
-    { "step_id": "BAC-006", "allowed_roles": ["BPB", "CDR", "SNT", "Hist"], "forbidden_roles": [], "requires_founder_input": false },
-    { "step_id": "BAC-007", "allowed_roles": ["BPB", "CDR", "SNT", "SDO"], "forbidden_roles": [], "requires_founder_input": false },
-    { "step_id": "BAC-008", "allowed_roles": ["BPB", "CDR", "SNT", "Hist", "SDO"], "forbidden_roles": [], "requires_founder_input": false },
-    { "step_id": "BAC-009", "allowed_roles": ["BPB", "CDR", "SNT"], "forbidden_roles": [], "requires_founder_input": false },
-    { "step_id": "BAC-010", "allowed_roles": ["CDR", "SNT", "ChC", "CFO"], "forbidden_roles": [], "requires_founder_input": false },
-    { "step_id": "BAC-011", "allowed_roles": ["SNT", "Hist", "ChC"], "forbidden_roles": ["CDR"], "requires_founder_input": false }
+    { "step_id": "BAC-000B", "decision_owner": "ChC", "implementation_actor": "BPB", "review_roles": ["SNT"], "allowed_roles": ["ChC", "SNT", "BPB"], "forbidden_roles": ["CDR"], "requires_founder_input": false },
+    { "step_id": "BAC-000", "decision_owner": "BPB", "implementation_actor": "CDR", "review_roles": ["CFO", "SNT"], "allowed_roles": ["BPB", "CDR", "SNT", "CFO"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-000A", "decision_owner": "CFO", "implementation_actor": "CDR", "review_roles": ["SNT", "ChC"], "allowed_roles": ["CFO", "CDR", "SNT", "ChC"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-001", "decision_owner": "BPB", "implementation_actor": "CDR", "review_roles": ["SNT"], "allowed_roles": ["BPB", "CDR", "SNT"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
+    { "step_id": "BAC-002", "decision_owner": "BPB", "implementation_actor": "CDR", "review_roles": ["SNT"], "allowed_roles": ["BPB", "CDR", "SNT"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
+    { "step_id": "BAC-003", "decision_owner": "ChC", "implementation_actor": "CDR", "review_roles": ["BPB", "SNT"], "allowed_roles": ["BPB", "CDR", "SNT", "ChC"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
+    { "step_id": "BAC-004", "decision_owner": "Hist", "implementation_actor": "CDR", "review_roles": ["BPB", "SNT"], "allowed_roles": ["BPB", "CDR", "SNT", "Hist"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-005", "decision_owner": "CFO", "implementation_actor": "CDR", "review_roles": ["BPB", "SNT", "ChC"], "allowed_roles": ["BPB", "CDR", "SNT", "CFO", "ChC"], "forbidden_roles": ["Hist"], "requires_founder_input": false },
+    { "step_id": "BAC-006", "decision_owner": "Hist", "implementation_actor": "CDR", "review_roles": ["BPB", "SNT"], "allowed_roles": ["BPB", "CDR", "SNT", "Hist"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-007", "decision_owner": "SDO", "implementation_actor": "CDR", "review_roles": ["BPB", "SNT"], "allowed_roles": ["BPB", "CDR", "SNT", "SDO"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-008", "decision_owner": "SNT", "implementation_actor": "CDR", "review_roles": ["BPB", "Hist", "SDO"], "allowed_roles": ["BPB", "CDR", "SNT", "Hist", "SDO"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-009", "decision_owner": "CDR", "implementation_actor": "CDR", "review_roles": ["BPB", "SNT"], "allowed_roles": ["BPB", "CDR", "SNT"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-010", "decision_owner": "SNT", "implementation_actor": "CDR", "review_roles": ["ChC", "CFO"], "allowed_roles": ["CDR", "SNT", "ChC", "CFO"], "forbidden_roles": [], "requires_founder_input": false },
+    { "step_id": "BAC-011", "decision_owner": "Hist", "implementation_actor": "Hist", "review_roles": ["SNT", "ChC"], "allowed_roles": ["SNT", "Hist", "ChC"], "forbidden_roles": ["CDR"], "requires_founder_input": true }
   ]
 }

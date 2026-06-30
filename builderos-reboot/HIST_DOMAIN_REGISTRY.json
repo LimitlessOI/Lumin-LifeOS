@@ -44,6 +44,7 @@
     "services/factory-autopilot-scheduler.js",
     "services/factory-recovery-proof-service.js",
     "scripts/verify-bp-priority-guardrails.mjs",
+    "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
     "services/bp-priority-queue.js",
     "lumin-factory/",
     "docs/",

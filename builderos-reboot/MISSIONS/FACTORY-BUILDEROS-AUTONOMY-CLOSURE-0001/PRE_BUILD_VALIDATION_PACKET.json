@@ -5,9 +5,8 @@
   "snt_translation_ref": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
   "arc_simulation_ref": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
   "studio_simulation_ref": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
-  "blocking_gaps": 0,
-  "builder_clearance": "hold_for_architect_comparison",
+  "blocking_gaps": 13,
+  "builder_clearance": "hold_for_packet_repair",
   "execution_hold": true,
-  "execution_hold_reason": "Founder explicitly requested architect comparison before code execution."
+  "execution_hold_reason": "Architect comparison is complete, but packet-repair blockers remain. Coding is still forbidden until execution-gate repair and consensus receipts close the remaining P0/P1 gaps."
 }
-

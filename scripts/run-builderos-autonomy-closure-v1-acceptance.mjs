@@ -12,9 +12,13 @@ import { buildAttemptCarryForwardContext } from '../services/self-repair-attempt
 import { buildSelfRepairAttemptRequirements } from '../services/self-repair-escalation-policy.js';
 import { buildImprovementDeltaContract } from '../services/builderos-improvement-contract.js';
 import { syncMissionFromTechnicalReceipt } from '../services/bp-priority-sync.js';
+import { createBuildProofRecord, deriveBuildProofVerdict } from '../services/build-proof-contract.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT = path.join(ROOT, 'products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json');
+const MISSION_ROOT = 'builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001';
+const CANONICAL_FOUNDER_USABILITY_CONTRACT = 'docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md';
+const LEGACY_FOUNDER_USABILITY_CONTRACT = 'docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md';
 
 function readJson(relPath) {
   try {
@@ -34,6 +38,11 @@ function readText(relPath) {
 
 function exists(relPath) {
   return fs.existsSync(path.join(ROOT, relPath));
+}
+
+function grepMissing(pattern, relPath) {
+  const text = readText(relPath);
+  return !pattern.test(text);
 }
 
 function makeCheck(ok, detail, evidence = {}) {
@@ -144,15 +153,68 @@ function checkImprovementContract() {
   });
 }
 
+function checkBuildProofVerdicts() {
+  const pass = createBuildProofRecord({
+    jobId: 'bp-pass',
+    commitSha: 'abc123',
+    originContainsCommit: true,
+    deployIdentifier: 'railway',
+    deployShaSeen: 'abc123',
+    expectedDeploySha: 'abc123',
+    deployMatchesOriginMain: true,
+  });
+  const waiting = createBuildProofRecord({
+    jobId: 'bp-wait',
+    commitSha: 'abc123',
+    originContainsCommit: true,
+    deployIdentifier: 'railway',
+    deployShaSeen: 'def456',
+    expectedDeploySha: 'abc123',
+    deployMatchesOriginMain: false,
+  });
+  const fail = createBuildProofRecord({
+    jobId: 'bp-fail',
+    commitSha: null,
+    originContainsCommit: false,
+  });
+  const ok = deriveBuildProofVerdict(pass) === 'PASS'
+    && deriveBuildProofVerdict(waiting) === 'WAITING_FOR_PROOF'
+    && deriveBuildProofVerdict(fail) === 'FAIL';
+  return makeCheck(ok, ok ? 'build-proof contract freezes PASS, WAITING_FOR_PROOF, and FAIL mapping' : 'build-proof verdict mapping is missing or inconsistent', {
+    pass,
+    waiting,
+    fail,
+  });
+}
+
+function checkArtifactSyncModule() {
+  const modulePath = 'services/builderos-artifact-sync.js';
+  const text = readText(modulePath);
+  const serviceFiles = fs.readdirSync(path.join(ROOT, 'services'))
+    .filter((name) => /artifact-sync/i.test(name));
+  const ok = exists(modulePath)
+    && serviceFiles.length === 1
+    && /syncTechnicalAcceptanceArtifacts/.test(text)
+    && /syncFounderUsabilityArtifacts/.test(text)
+    && /syncMissionFromTechnicalReceipt/.test(text)
+    && /buildProductReadinessReport/.test(text);
+  return makeCheck(ok, ok ? 'one canonical artifact-sync module is present and wired' : 'artifact-sync module path is duplicated or incomplete', {
+    canonical_module: modulePath,
+    service_files: serviceFiles,
+  });
+}
+
 function checkReceiptSync() {
   const bp = readJson('builderos-reboot/BP_PRIORITY.json');
   const readiness = readJson('builderos-reboot/PRODUCT_READINESS_REPORT.json');
   const item = bp?.items?.find((entry) => entry.mission_id === 'PRODUCT-LIFERE-OS-V1-0001');
   const row = readiness?.products?.find((entry) => entry.product_id === 'lifere');
   const rowItem = row?.bp_priority?.find((entry) => entry.mission_id === 'PRODUCT-LIFERE-OS-V1-0001');
+  const allowedModes = new Set(['technical_acceptance', 'founder_usability']);
   const ok = item?.artifact_sync?.status === 'CURRENT'
-    && item?.artifact_sync?.mode === 'founder_usability'
+    && allowedModes.has(String(item?.artifact_sync?.mode || ''))
     && rowItem?.artifact_sync?.status === 'CURRENT'
+    && allowedModes.has(String(rowItem?.artifact_sync?.mode || ''))
     && rowItem?.founder_usability_pass === false
     && row?.readiness_state === 'TECHNICAL_PASS_ONLY';
   return makeCheck(ok, ok ? 'artifact sync keeps BP item, readiness report, and founder false aligned' : 'artifact sync is stale or incomplete', {
@@ -167,7 +229,8 @@ function checkUiTruth() {
   const founderAudit = readJson('products/receipts/FOUNDER_ALPHA_READINESS_AUDIT.json');
   const uiGateScript = readText('scripts/run-ui-alpha-gate.mjs');
   const founderAuditScript = readText('scripts/audit-founder-alpha-ready.mjs');
-  const ok = exists('docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md')
+  const lifereReadinessScript = readText('scripts/run-lifere-alpha-readiness.mjs');
+  const ok = exists(CANONICAL_FOUNDER_USABILITY_CONTRACT)
     && uiGate?.ok === true
     && uiGate?.founder_usability_pass === false
     && uiGate?.verdict !== 'ALPHA_GATE_CLOSED'
@@ -175,7 +238,13 @@ function checkUiTruth() {
     && founderAudit?.ready_for_adam_alpha === true
     && /technical_pass_only/.test(uiGateScript)
     && /founder_usability_contract/.test(uiGateScript)
-    && /technical_pass_only/.test(founderAuditScript);
+    && /technical_pass_only/.test(founderAuditScript)
+    && !grepMissing(new RegExp(CANONICAL_FOUNDER_USABILITY_CONTRACT.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), 'scripts/run-ui-alpha-gate.mjs')
+    && !grepMissing(new RegExp(CANONICAL_FOUNDER_USABILITY_CONTRACT.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), 'scripts/audit-founder-alpha-ready.mjs')
+    && !grepMissing(new RegExp(CANONICAL_FOUNDER_USABILITY_CONTRACT.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), 'scripts/run-lifere-alpha-readiness.mjs')
+    && !/PRODUCT-LIFERE-OS-V1-0001\/FOUNDER_USABILITY_CONTRACT\.md/.test(uiGateScript)
+    && !/PRODUCT-LIFERE-OS-V1-0001\/FOUNDER_USABILITY_CONTRACT\.md/.test(founderAuditScript)
+    && !/PRODUCT-LIFERE-OS-V1-0001\/FOUNDER_USABILITY_CONTRACT\.md/.test(lifereReadinessScript);
   return makeCheck(ok, ok ? 'UI alpha truth distinguishes technical pass from founder completion' : 'UI alpha gate is overclaiming or missing founder-usability authority', {
     ui_gate: uiGate ? {
       verdict: uiGate.verdict,
@@ -189,6 +258,7 @@ function checkUiTruth() {
       ready_for_adam_alpha: founderAudit.ready_for_adam_alpha,
       technical_pass_only: founderAudit.technical_pass_only ?? 'script_enforced_next_run',
     } : null,
+    canonical_contract: CANONICAL_FOUNDER_USABILITY_CONTRACT,
   });
 }
 
@@ -215,14 +285,71 @@ function checkSoftAcceptanceLanguage() {
   });
 }
 
+function checkStaleAuthorityCleanup() {
+  const targetFiles = [
+    'services/builderos-bp-priority-scheduler.js',
+    'scripts/bp-priority-never-stop.mjs',
+    'services/builderos-improvement-loop.js',
+    'scripts/lifeos-builder-continuous-queue.mjs',
+    'builderos-reboot/AGENTS.md',
+  ];
+  const forbidden = [
+    'builderos-reboot/MISSION_QUEUE.json',
+    LEGACY_FOUNDER_USABILITY_CONTRACT,
+  ];
+  const evidence = targetFiles.map((relPath) => {
+    const text = readText(relPath);
+    return {
+      path: relPath,
+      has_mission_queue: text.includes(forbidden[0]),
+      has_legacy_founder_contract: text.includes(forbidden[1]),
+      has_builderos_product_home: text.includes('docs/products/builderos/PRODUCT_HOME.md'),
+    };
+  });
+  const ok = evidence.every((row) => row.has_mission_queue === false && row.has_legacy_founder_contract === false);
+  return makeCheck(ok, ok ? 'stale authority references are removed while canonical product-home authority remains allowed' : 'stale authority still leaks into active autonomy files', {
+    forbidden,
+    scanned: evidence,
+  });
+}
+
+function checkCertificationGateTruth() {
+  const certification = readJson('builderos-reboot/PROJECT_CERTIFICATION.json');
+  const pointBItem = readJson('builderos-reboot/BP_PRIORITY.json')?.items?.find((entry) => entry.mission_id === 'PRODUCT-LIFERE-OS-V1-0001') || null;
+  const founderReceipt = readJson('builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONFIRM.json');
+  const buildDeploy = readJson('products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json');
+  const founderUi = readJson('products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json');
+  const sameTier = readJson('products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json');
+  const founderPassed = pointBItem?.founder_usability_pass === true || founderReceipt?.pass === true;
+  const liveProofsPass = buildDeploy?.verdict === 'PASS' && founderUi?.verdict === 'PASS';
+  const sameTierPass = sameTier?.verdict === 'PASS';
+  const fullyMachineReadyExpected = founderPassed && liveProofsPass && sameTierPass;
+  const fullyMachineReadyActual = certification?.levels?.FULLY_MACHINE_READY === true;
+  const ok = fullyMachineReadyExpected === fullyMachineReadyActual
+    && certification?.levels?.FULLY_MACHINE_READY === false
+    && Array.isArray(certification?.autonomy_closure_v1?.blockers)
+    && certification.autonomy_closure_v1.blockers.includes('point_b_founder_confirmation_required');
+  return makeCheck(ok, ok ? 'FULLY_MACHINE_READY stays false until founder confirmation and live proof gates are truly closed' : 'certification truth does not match the proof gate formula', {
+    founder_passed: founderPassed,
+    live_proofs_pass: liveProofsPass,
+    same_tier_pass: sameTierPass,
+    fully_machine_ready_expected: fullyMachineReadyExpected,
+    fully_machine_ready_actual: fullyMachineReadyActual,
+  });
+}
+
 const CHECKS = {
   'architect-snt-promotion': checkArchitectSntPromotion,
+  'build-proof-verdicts': checkBuildProofVerdicts,
   'queue-truth': checkQueueTruth,
   'repair-carry-forward': checkRepairCarryForward,
   'improvement-contract': checkImprovementContract,
+  'artifact-sync-module': checkArtifactSyncModule,
   'receipt-sync': checkReceiptSync,
   'ui-truth': checkUiTruth,
+  'stale-authority-cleanup': checkStaleAuthorityCleanup,
   'soft-acceptance-language': checkSoftAcceptanceLanguage,
+  'certification-gate-truth': checkCertificationGateTruth,
 };
 
 const requestedCheck = (() => {

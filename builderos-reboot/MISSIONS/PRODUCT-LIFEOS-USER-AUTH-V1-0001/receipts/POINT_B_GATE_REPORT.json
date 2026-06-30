@@ -1,7 +1,7 @@
 {
   "schema": "point_b_gate_v2",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "evaluated_at": "2026-06-29T20:06:14.844Z",
+  "evaluated_at": "2026-06-30T00:05:32.578Z",
   "proof_lap_only": false,
   "handoff": {
     "schema": "corridor_entered_gate_v1",
@@ -148,7 +148,7 @@
     "proof_lap_only": false,
     "pass": false,
     "violations": [
-      "machine:blueprint missing phases P4",
+      "machine:roadmap FUTURE P4",
       "machine:Builder not TECHNICAL_PASS"
     ],
     "checks": {
@@ -192,7 +192,7 @@
     "pass": false,
     "founder_usability_pass": false,
     "violations": [
-      "machine:blueprint missing phases P4",
+      "machine:roadmap FUTURE P4",
       "machine:Builder not TECHNICAL_PASS",
       "alpha:founder has not confirmed Alpha yet"
     ],
@@ -238,7 +238,7 @@
   "pass": false,
   "status": "BLOCKED_MACHINE_PATH",
   "violations": [
-    "machine:blueprint missing phases P4",
+    "machine:roadmap FUTURE P4",
     "machine:Builder not TECHNICAL_PASS"
   ],
   "infrastructure_only": false,

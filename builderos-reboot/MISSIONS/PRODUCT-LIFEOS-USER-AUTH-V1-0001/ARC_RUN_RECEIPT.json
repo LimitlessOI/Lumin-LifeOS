@@ -1,7 +1,7 @@
 {
   "schema": "arc_run_receipt_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "run_at": "2026-06-29T20:06:14.794Z",
+  "run_at": "2026-06-30T00:05:32.545Z",
   "runner": "factory-core/arc/translate-mission.js",
   "arc_job": "factory-staging/factory-core/arc/ARC_JOB.json",
   "entry_gate": "PASS",

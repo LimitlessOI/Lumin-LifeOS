@@ -1,0 +1,1794 @@
+{
+  "schema": "legacy_authority_inventory_v1",
+  "generated_at": "2026-06-29T21:14:01.903Z",
+  "purpose": "Pre-archive authority inventory for flat product files, legacy project docs, and amendment-era runtime dependencies.",
+  "rules": {
+    "do_not_move_before_value_review": true,
+    "do_not_delete_live_dependency_before_retarget": true,
+    "canonical_product_truth": "docs/products/<product-id>/PRODUCT_HOME.md",
+    "canonical_product_registry": "docs/products/PRODUCT_REGISTRY.json"
+  },
+  "summary": {
+    "top_level_product_files": 52,
+    "top_level_project_files": 59,
+    "product_file_breakdown": {
+      "redirect_stub": 44,
+      "active_rule_or_index": 7,
+      "active_canonical_registry": 1
+    },
+    "project_file_breakdown": {
+      "salvage_doctrine": 1,
+      "salvage_template": 1,
+      "live_legacy_dependency": 23,
+      "salvage_candidate": 29,
+      "legacy_registry": 1,
+      "legacy_queue": 3,
+      "machine_schema": 1
+    },
+    "broken_amendment_runtime_refs": 65,
+    "highest_risk_broken_refs": [
+      {
+        "path": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+        "reference_count": 42
+      },
+      {
+        "path": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "reference_count": 11
+      },
+      {
+        "path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
+        "reference_count": 11
+      },
+      {
+        "path": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
+        "reference_count": 10
+      },
+      {
+        "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+        "reference_count": 9
+      },
+      {
+        "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
+        "reference_count": 8
+      },
+      {
+        "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "reference_count": 7
+      },
+      {
+        "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+        "reference_count": 7
+      },
+      {
+        "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+        "reference_count": 7
+      },
+      {
+        "path": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+        "reference_count": 6
+      }
+    ]
+  },
+  "top_level_product_files": [
+    {
+      "path": "docs/products/AICOUNCIL.md",
+      "synopsis": "AI Council — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/AIRECEPTIONIST.md",
+      "synopsis": "AI Receptionist — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/APICOSTSAVINGS.md",
+      "synopsis": "API Cost Savings — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/AUTHORITY_BOUNDARIES.md",
+      "synopsis": "Canonical vs historical authority — cold-agent law",
+      "runtime_reference_count": 14,
+      "repo_reference_count": 68,
+      "classification": "active_rule_or_index",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Active rule, index, or roadmap document."
+    },
+    {
+      "path": "docs/products/BLUEPRINT_READINESS_RANKING.md",
+      "synopsis": "Blueprint readiness ranking — all tracked products, scored as of 2026-06-27",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "active_rule_or_index",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Active rule, index, or roadmap document."
+    },
+    {
+      "path": "docs/products/BOLDTRAIL.md",
+      "synopsis": "BoldTrail — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/BUILDEROS.md",
+      "synopsis": "BuilderOS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 11,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/BUSINESSTOOLS.md",
+      "synopsis": "Business Tools — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/CANONICAL_PRODUCT_HOME_RULES.md",
+      "synopsis": "Canonical product-home law",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "active_rule_or_index",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Active rule, index, or roadmap document."
+    },
+    {
+      "path": "docs/products/CAPABILITYMAP.md",
+      "synopsis": "Capability Map — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
+      "synopsis": "ClientCare Billing Recovery — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/COMMANDCENTER.md",
+      "synopsis": "Command Center — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/COMPLETE_PRODUCT_SPEC.md",
+      "synopsis": "Redirect — legacy product spec archived",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 6,
+      "classification": "active_rule_or_index",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Active rule, index, or roadmap document."
+    },
+    {
+      "path": "docs/products/CONFLICTARBITRATOR.md",
+      "synopsis": "Conflict Arbitrator — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/CREATORMEDIAOS.md",
+      "synopsis": "Creator Media OS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/ENTERPRISEAIGOVERNANCE.md",
+      "synopsis": "Enterprise AI Governance — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/FAITHSTUDIO.md",
+      "synopsis": "Faith Studio — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/FINANCIALREVENUE.md",
+      "synopsis": "Financial Revenue — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/GAMEPUBLISHER.md",
+      "synopsis": "Game Publisher — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/IDEAVAULT.md",
+      "synopsis": "IdeaVault — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/INDEX.md",
+      "synopsis": "Product index — start here",
+      "runtime_reference_count": 2,
+      "repo_reference_count": 48,
+      "classification": "active_rule_or_index",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Active rule, index, or roadmap document."
+    },
+    {
+      "path": "docs/products/KIDSOS.md",
+      "synopsis": "Kids OS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/KINGSMANPROTOCOL.md",
+      "synopsis": "Kingsman Protocol — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/KNOWLEDGEBASE.md",
+      "synopsis": "Knowledge Base — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/LEGACY_AUTHORITY_MIGRATION_AUDIT.md",
+      "synopsis": "Legacy authority migration audit — what still has value before archive",
+      "runtime_reference_count": 0,
+      "repo_reference_count": 1,
+      "classification": "active_rule_or_index",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Active rule, index, or roadmap document."
+    },
+    {
+      "path": "docs/products/LIFECOACHING.md",
+      "synopsis": "Life Coaching — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/LIFEOS.md",
+      "synopsis": "LifeOS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 8,
+      "repo_reference_count": 143,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/LIFEOS_VERSION_ROADMAP.md",
+      "synopsis": "LifeOS Version Roadmap — Machine Path",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 27,
+      "classification": "active_rule_or_index",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Active rule, index, or roadmap document."
+    },
+    {
+      "path": "docs/products/LIFERE.md",
+      "synopsis": "LifeRE — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 84,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/LUMINUNIVERSITY.md",
+      "synopsis": "Lumin University — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/MARKETINGOS.md",
+      "synopsis": "MarketingOS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 3,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/MEMORYINTELLIGENCE.md",
+      "synopsis": "Memory Intelligence — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/MEMORYSYSTEM.md",
+      "synopsis": "Memory System — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/MUSICTALENTSTUDIO.md",
+      "synopsis": "Music Talent Studio — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/OILSECURITYDIVISIONS.md",
+      "synopsis": "OIL Security Divisions — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/OUTREACHCRM.md",
+      "synopsis": "Outreach CRM — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/PERSONALFINANCEOS.md",
+      "synopsis": "Personal Finance OS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/PRODUCTIZEDSPRINT.md",
+      "synopsis": "Productized Sprint — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/PRODUCT_REGISTRY.json",
+      "synopsis": null,
+      "runtime_reference_count": 24,
+      "repo_reference_count": 29,
+      "classification": "active_canonical_registry",
+      "recommendation": "KEEP_ACTIVE",
+      "value_note": "Canonical machine index of products and readiness gates."
+    },
+    {
+      "path": "docs/products/PROJECTGOVERNANCE.md",
+      "synopsis": "Project Governance — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/SITEBUILDER.md",
+      "synopsis": "Site Builder — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/SOCIALMEDIAOS.md",
+      "synopsis": "SocialMediaOS module — redirect stub",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/STORYSTUDIO.md",
+      "synopsis": "Story Studio — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/TCSERVICE.md",
+      "synopsis": "TC Service — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/TEACHEROS.md",
+      "synopsis": "Teacher OS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/TOKENACCOUNTINGOS.md",
+      "synopsis": "Token Accounting OS — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/UNIVERSALOVERLAY.md",
+      "synopsis": "Universal Overlay — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/VIDEOPIPELINE.md",
+      "synopsis": "Video Pipeline — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/WELLNESSSTUDIO.md",
+      "synopsis": "Wellness Studio — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/WHITELABEL.md",
+      "synopsis": "White Label — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/WORDKEEPER.md",
+      "synopsis": "Word Keeper — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    },
+    {
+      "path": "docs/products/ZERODRIFTHANDOFFPROTOCOL.md",
+      "synopsis": "ZERO DRIFT HANDOFF PROTOCOL — redirect stub — see PRODUCT_HOME.md",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "redirect_stub",
+      "recommendation": "KEEP_TEMPORARILY_FOR_OLD_LINKS",
+      "value_note": "Low unique value; points to canonical product home."
+    }
+  ],
+  "top_level_project_files": [
+    {
+      "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
+      "synopsis": "Pre-Build Readiness Checklist",
+      "runtime_reference_count": 4,
+      "repo_reference_count": 23,
+      "classification": "salvage_doctrine",
+      "recommendation": "RETARGET_RUNTIME_FIRST__PROMOTE_TO_PRODUCT_DEVELOPMENT_GATE",
+      "value_note": "Pre-Build Readiness Checklist"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_TEMPLATE.md",
+      "synopsis": "AMENDMENT_XX — [Project Name]",
+      "runtime_reference_count": 2,
+      "repo_reference_count": 14,
+      "classification": "salvage_template",
+      "recommendation": "RETARGET_RUNTIME_FIRST__PROMOTE_BEST_PARTS_THEN_ARCHIVE",
+      "value_note": "AMENDMENT_XX — [Project Name]"
+    },
+    {
+      "path": "docs/projects/BPB-0001-MISSION-RUNTIME-V1.md",
+      "synopsis": "BPB-0001 — Mission Runtime v1 + Shared Adam/Sherry Mission Board",
+      "runtime_reference_count": 6,
+      "repo_reference_count": 16,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "BPB-0001 — Mission Runtime v1 + Shared Adam/Sherry Mission Board"
+    },
+    {
+      "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+      "synopsis": "Redirect — alpha blueprint archived",
+      "runtime_reference_count": 6,
+      "repo_reference_count": 432,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Redirect — alpha blueprint archived"
+    },
+    {
+      "path": "docs/projects/BUILDEROS_BP_V1.md",
+      "synopsis": "Redirect — BP V1 moved to product specs",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Redirect — BP V1 moved to product specs"
+    },
+    {
+      "path": "docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md",
+      "synopsis": "Builder autonomy — brainstorm vault",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 50,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Builder autonomy — brainstorm vault"
+    },
+    {
+      "path": "docs/projects/BUILDER_DASHBOARD_SMOKE_RECEIPT.md",
+      "synopsis": "Documentation — BUILDER DASHBOARD SMOKE RECEIPT.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 5,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Documentation — BUILDER DASHBOARD SMOKE RECEIPT."
+    },
+    {
+      "path": "docs/projects/BUILDER_QUEUE_SLICE_POLICY.md",
+      "synopsis": "Builder queue — comparable slices (telemetry discipline)",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 12,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Builder queue — comparable slices (telemetry discipline)"
+    },
+    {
+      "path": "docs/projects/BUILDER_TAILWIND_EXIT_SPIKE.md",
+      "synopsis": "Tailwind CDN exit — spike charter (**BUILD_NOW** triage **M02**)",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 22,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Tailwind CDN exit — spike charter (**BUILD_NOW** triage **M02**)"
+    },
+    {
+      "path": "docs/projects/COMMAND_CENTER_LEGACY_AUDIT.md",
+      "synopsis": "Command Center Legacy Audit",
+      "runtime_reference_count": 2,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Command Center Legacy Audit"
+    },
+    {
+      "path": "docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md",
+      "synopsis": "Lumin Command & Control Center v2 — Builder Blueprint",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 127,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Lumin Command & Control Center v2 — Builder Blueprint"
+    },
+    {
+      "path": "docs/projects/DASHBOARD_A11Y_SPEC.md",
+      "synopsis": "LifeOS Dashboard Shell Accessibility Specification",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 15,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "LifeOS Dashboard Shell Accessibility Specification"
+    },
+    {
+      "path": "docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md",
+      "synopsis": "Technical Contract: Persistent AI Rail",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 38,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Technical Contract: Persistent AI Rail"
+    },
+    {
+      "path": "docs/projects/DASHBOARD_AI_RAIL_QA_CHECKLIST.md",
+      "synopsis": "Documentation — DASHBOARD AI RAIL QA CHECKLIST.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Documentation — DASHBOARD AI RAIL QA CHECKLIST."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_CALENDAR_ASSUMPTIONS_SPEC.md",
+      "synopsis": "LifeOS Dashboard Calendar Tile Brief",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "LifeOS Dashboard Calendar Tile Brief"
+    },
+    {
+      "path": "docs/projects/DASHBOARD_CATEGORY_STUBS_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD CATEGORY STUBS SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 15,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD CATEGORY STUBS SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_CUSTOMIZATION_STATE.md",
+      "synopsis": "LifeOS Dashboard Local State Contract",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 24,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "LifeOS Dashboard Local State Contract"
+    },
+    {
+      "path": "docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md",
+      "synopsis": "Documentation — DASHBOARD DENSITY INTEGRATION NOTES.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 37,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Documentation — DASHBOARD DENSITY INTEGRATION NOTES."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_HOUSEHOLD_CONTEXT_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD HOUSEHOLD CONTEXT SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD HOUSEHOLD CONTEXT SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_KEYBOARD_SHORTCUTS_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD KEYBOARD SHORTCUTS SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 9,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD KEYBOARD SHORTCUTS SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_LOADING_EMPTY_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD LOADING EMPTY SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 9,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD LOADING EMPTY SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_MIT_WIDGET_CONTRACT_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD MIT WIDGET CONTRACT SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD MIT WIDGET CONTRACT SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_NOTIFICATIONS_SHELL_SPEC.md",
+      "synopsis": "Dashboard Notification Patterns Specification",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 9,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Dashboard Notification Patterns Specification"
+    },
+    {
+      "path": "docs/projects/DASHBOARD_OFFLINE_QUEUE_SPEC.md",
+      "synopsis": "Project Brief: LifeOS Dashboard Offline Queued Actions",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 9,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Project Brief: LifeOS Dashboard Offline Queued Actions"
+    },
+    {
+      "path": "docs/projects/DASHBOARD_PERFORMANCE_BUDGET_NOTES.md",
+      "synopsis": "Documentation — DASHBOARD PERFORMANCE BUDGET NOTES.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Documentation — DASHBOARD PERFORMANCE BUDGET NOTES."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_SEARCH_DISCOVERY_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD SEARCH DISCOVERY SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD SEARCH DISCOVERY SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md",
+      "synopsis": "Documentation — DASHBOARD SHELL GAP AUDIT.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 38,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD SHELL GAP AUDIT."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_TELEMETRY_ERRORS_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD TELEMETRY ERRORS SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 5,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD TELEMETRY ERRORS SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_TODAY_CATEGORY_SPEC.md",
+      "synopsis": "Documentation — DASHBOARD TODAY CATEGORY SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 12,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — DASHBOARD TODAY CATEGORY SPEC."
+    },
+    {
+      "path": "docs/projects/DASHBOARD_WIDGET_DENSITY_SPEC.md",
+      "synopsis": "Dashboard Card Density Specification",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 22,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Dashboard Card Density Specification"
+    },
+    {
+      "path": "docs/projects/INDEX.md",
+      "synopsis": "PROJECT AMENDMENTS INDEX",
+      "runtime_reference_count": 19,
+      "repo_reference_count": 439,
+      "classification": "legacy_registry",
+      "recommendation": "RETARGET_RUNTIME_FIRST__SALVAGE_HIGH_VALUE_HISTORY_THEN_ARCHIVE",
+      "value_note": "PROJECT AMENDMENTS INDEX"
+    },
+    {
+      "path": "docs/projects/LIFEOS_ALPHA_CONSENSUS_PACK.md",
+      "synopsis": "Documentation — LIFEOS ALPHA CONSENSUS PACK.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 16,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Documentation — LIFEOS ALPHA CONSENSUS PACK."
+    },
+    {
+      "path": "docs/projects/LIFEOS_ALPHA_NEEDS_AND_QUEUE.md",
+      "synopsis": "LifeOS alpha — needs assessment & queue rationale",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 46,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "LifeOS alpha — needs assessment & queue rationale"
+    },
+    {
+      "path": "docs/projects/LIFEOS_ALPHA_OPERATOR_ONE_PAGER.md",
+      "synopsis": "Documentation — LIFEOS ALPHA OPERATOR ONE PAGER.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 14,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — LIFEOS ALPHA OPERATOR ONE PAGER."
+    },
+    {
+      "path": "docs/projects/LIFEOS_BROWSER_AND_PLATFORM_GRADE_2026-05-08.md",
+      "synopsis": "LifeOS shell + platform — graded pass (live browser + probes)",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 18,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "LifeOS shell + platform — graded pass (live browser + probes)"
+    },
+    {
+      "path": "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+      "synopsis": "LifeOS Dashboard Builder Brief",
+      "runtime_reference_count": 3,
+      "repo_reference_count": 254,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "LifeOS Dashboard Builder Brief"
+    },
+    {
+      "path": "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json",
+      "synopsis": null,
+      "runtime_reference_count": 5,
+      "repo_reference_count": 204,
+      "classification": "legacy_queue",
+      "recommendation": "RETARGET_RUNTIME_FIRST__SALVAGE_IF_STILL_UNIQUE_THEN_ARCHIVE",
+      "value_note": null
+    },
+    {
+      "path": "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md",
+      "synopsis": "LifeOS Dashboard — 24/7 supervised builder queue",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 51,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "LifeOS Dashboard — 24/7 supervised builder queue"
+    },
+    {
+      "path": "docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
+      "synopsis": "Moved — Dashboard builder queue SSOT",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 51,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Moved — Dashboard builder queue SSOT"
+    },
+    {
+      "path": "docs/projects/LIFEOS_MVP_THROUGHPUT_SCOPE.json",
+      "synopsis": null,
+      "runtime_reference_count": 1,
+      "repo_reference_count": 26,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": null
+    },
+    {
+      "path": "docs/projects/LIFEOS_SHELL_URL_PARAMETERS_SPEC.md",
+      "synopsis": "Documentation — LIFEOS SHELL URL PARAMETERS SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — LIFEOS SHELL URL PARAMETERS SPEC."
+    },
+    {
+      "path": "docs/projects/LIFEOS_SYSTEM_MAP_AND_BUILD_ORDER.md",
+      "synopsis": "LifeOS System Map and Build Order",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "LifeOS System Map and Build Order"
+    },
+    {
+      "path": "docs/projects/LIFEOS_UX_ARCHITECTURE.md",
+      "synopsis": "LifeOS UX architecture — Lumin-first adaptive environment",
+      "runtime_reference_count": 2,
+      "repo_reference_count": 93,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "LifeOS UX architecture — Lumin-first adaptive environment"
+    },
+    {
+      "path": "docs/projects/MEMORY_SYSTEM_CLEANUP_BP.md",
+      "synopsis": "Memory System Cleanup BP",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 7,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Memory System Cleanup BP"
+    },
+    {
+      "path": "docs/projects/OPERATOR_BRAINSTORM_SESSION_ENTRY.md",
+      "synopsis": "Operator brainstorm & “idea session” — **read this first**",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 38,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Operator brainstorm & “idea session” — **read this first**"
+    },
+    {
+      "path": "docs/projects/PRIME_TIME_AUTONOMOUS_BUILDER_ROADMAP_v3_SSOT_CANDIDATE.md",
+      "synopsis": "Prime-Time Autonomous Builder Roadmap — **v3 SSOT Candidate**",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 17,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Prime-Time Autonomous Builder Roadmap — **v3 SSOT Candidate**"
+    },
+    {
+      "path": "docs/projects/README.md",
+      "synopsis": "Project specs folder — not SSOT",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Project specs folder — not SSOT"
+    },
+    {
+      "path": "docs/projects/SITE_BUILDER_AUTONOMOUS_QUEUE.json",
+      "synopsis": null,
+      "runtime_reference_count": 1,
+      "repo_reference_count": 18,
+      "classification": "legacy_queue",
+      "recommendation": "RETARGET_RUNTIME_FIRST__SALVAGE_IF_STILL_UNIQUE_THEN_ARCHIVE",
+      "value_note": null
+    },
+    {
+      "path": "docs/projects/SITE_BUILDER_COMMAND_CENTER_AUDIT.md",
+      "synopsis": "Documentation — SITE BUILDER COMMAND CENTER AUDIT.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — SITE BUILDER COMMAND CENTER AUDIT."
+    },
+    {
+      "path": "docs/projects/SITE_BUILDER_LIVE_OPS_RUNBOOK.md",
+      "synopsis": "Site Builder Lane Operator Runbook",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Site Builder Lane Operator Runbook"
+    },
+    {
+      "path": "docs/projects/SITE_BUILDER_PREVIEW_QUALITY_PLAYBOOK.md",
+      "synopsis": "Site Builder Preview Quality Playbook",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 4,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "Site Builder Preview Quality Playbook"
+    },
+    {
+      "path": "docs/projects/TCO_TSOS_75_PERCENT_SAVINGS_BRAINSTORM.md",
+      "synopsis": "TCO + TSOS — brainstorm toward ≥75% average token savings",
+      "runtime_reference_count": 4,
+      "repo_reference_count": 43,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "TCO + TSOS — brainstorm toward ≥75% average token savings"
+    },
+    {
+      "path": "docs/projects/TC_INTAKE_WORKSPACE_AUDIT.md",
+      "synopsis": "Documentation — TC INTAKE WORKSPACE AUDIT.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 2,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — TC INTAKE WORKSPACE AUDIT."
+    },
+    {
+      "path": "docs/projects/TC_MOBILE_APPROVAL_FLOW_SPEC.md",
+      "synopsis": "Documentation — TC MOBILE APPROVAL FLOW SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 11,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — TC MOBILE APPROVAL FLOW SPEC."
+    },
+    {
+      "path": "docs/projects/TC_PORTAL_MAP_SPEC.md",
+      "synopsis": "Documentation — TC PORTAL MAP SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 11,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — TC PORTAL MAP SPEC."
+    },
+    {
+      "path": "docs/projects/TC_SERVICE_BUILDER_QUEUE.json",
+      "synopsis": null,
+      "runtime_reference_count": 2,
+      "repo_reference_count": 19,
+      "classification": "legacy_queue",
+      "recommendation": "RETARGET_RUNTIME_FIRST__SALVAGE_IF_STILL_UNIQUE_THEN_ARCHIVE",
+      "value_note": null
+    },
+    {
+      "path": "docs/projects/TSOS_PROVEN_ADVANCEMENT_PLAN.md",
+      "synopsis": "TSOS LIVE → PROVEN Advancement Plan",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 82,
+      "classification": "live_legacy_dependency",
+      "recommendation": "RETARGET_RUNTIME_FIRST",
+      "value_note": "TSOS LIVE → PROVEN Advancement Plan"
+    },
+    {
+      "path": "docs/projects/VICTORY_VAULT_DASHBOARD_PLACEMENT_SPEC.md",
+      "synopsis": "Documentation — VICTORY VAULT DASHBOARD PLACEMENT SPEC.",
+      "runtime_reference_count": 1,
+      "repo_reference_count": 13,
+      "classification": "salvage_candidate",
+      "recommendation": "RETARGET_RUNTIME_FIRST__REVIEW_FOR_UNIQUE_IDEAS_OR_MECHANICS",
+      "value_note": "Documentation — VICTORY VAULT DASHBOARD PLACEMENT SPEC."
+    },
+    {
+      "path": "docs/projects/manifest.schema.json",
+      "synopsis": null,
+      "runtime_reference_count": 1,
+      "repo_reference_count": 12,
+      "classification": "machine_schema",
+      "recommendation": "RETARGET_RUNTIME_FIRST__RETARGET_FIELDS_THEN_KEEP_OR_RENAME",
+      "value_note": null
+    }
+  ],
+  "broken_runtime_amendment_references": [
+    {
+      "path": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/data/builder-failure-lessons.jsonl",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/data/governed-autonomy-backlog-state.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_41_MARKETINGOS.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 42,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 11,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/data/builder-failure-lessons.jsonl",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/data/governed-autonomy-backlog-state.json"
+      ],
+      "reference_count": 11,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 10,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/CLAUDE.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/products/LIFEOS.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/prompts/00-LIFEOS-AGENT-CONTRACT.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/scripts/council-builder-preflight.mjs",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 9,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/services/factory-autopilot-scheduler.js",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 8,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 7,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/scripts/governed-overnight-autonomy.mjs",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 7,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 7,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_41_MARKETINGOS.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 6,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/prompts/00-LIFEOS-AGENT-CONTRACT.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 5,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_41_MARKETINGOS.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 5,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 5,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 5,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 5,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 4,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 4,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_38_IDEA_VAULT.md"
+      ],
+      "reference_count": 4,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 4,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_41_MARKETINGOS.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_41_MARKETINGOS.md"
+      ],
+      "reference_count": 4,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_22_STORY_STUDIO.md"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_24_FAITH_STUDIO.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_24_FAITH_STUDIO.md"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_41_MARKETINGOS.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_31_TEACHER_OS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_34_KIDS_OS.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_34_KIDS_OS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_34_KIDS_OS.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/architecture/BUILDEROS_A_TO_Z_BLUEPRINT.md",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_XX.md",
+      "referenced_by": [
+        "services/blueprint-intake.js"
+      ],
+      "reference_count": 3,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_01_AI_COUNCIL.md"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_05_SITE_BUILDER.md"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_06_GAME_PUBLISHER.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_08_OUTREACH_CRM.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_09_LIFE_COACHING.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_14_WHITE_LABEL.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_16_WORD_KEEPER.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_32_MUSIC_TALENT_STUDIO.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/MANIFEST.json",
+        "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json"
+      ],
+      "reference_count": 2,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_17_TC_SERVICE.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.manifest.json",
+      "referenced_by": [
+        "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/files/docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md"
+      ],
+      "reference_count": 1,
+      "recommendation": "RETARGET_OR_REMOVE_BROKEN_REFERENCE"
+    }
+  ],
+  "critical_runtime_dependencies": [
+    {
+      "path": "routes/blueprint-intake-routes.js",
+      "synopsis": null,
+      "product_home_reference_count": 1,
+      "amendment_path_reference_count": 0,
+      "direct_missing_amendment_refs": []
+    },
+    {
+      "path": "services/blueprint-intake.js",
+      "synopsis": null,
+      "product_home_reference_count": 1,
+      "amendment_path_reference_count": 3,
+      "direct_missing_amendment_refs": [
+        "docs/projects/AMENDMENT_XX.md"
+      ]
+    },
+    {
+      "path": "services/voice-rail-v1.js",
+      "synopsis": null,
+      "product_home_reference_count": 1,
+      "amendment_path_reference_count": 1,
+      "direct_missing_amendment_refs": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/capability-map.js",
+      "synopsis": null,
+      "product_home_reference_count": 1,
+      "amendment_path_reference_count": 1,
+      "direct_missing_amendment_refs": []
+    },
+    {
+      "path": "routes/project-governance-routes.js",
+      "synopsis": null,
+      "product_home_reference_count": 1,
+      "amendment_path_reference_count": 2,
+      "direct_missing_amendment_refs": []
+    },
+    {
+      "path": "docs/projects/manifest.schema.json",
+      "synopsis": null,
+      "product_home_reference_count": 0,
+      "amendment_path_reference_count": 2,
+      "direct_missing_amendment_refs": [
+        "docs/projects/AMENDMENT_XX_NAME.md"
+      ]
+    },
+    {
+      "path": "docs/projects/INDEX.md",
+      "synopsis": "PROJECT AMENDMENTS INDEX",
+      "product_home_reference_count": 0,
+      "amendment_path_reference_count": 53,
+      "direct_missing_amendment_refs": [
+        "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+        "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+        "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
+        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/projects/AMENDMENT_06_GAME_PUBLISHER.md",
+        "docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md",
+        "docs/projects/AMENDMENT_08_OUTREACH_CRM.md",
+        "docs/projects/AMENDMENT_09_LIFE_COACHING.md",
+        "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+        "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
+        "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+        "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
+        "docs/projects/AMENDMENT_14_WHITE_LABEL.md",
+        "docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md",
+        "docs/projects/AMENDMENT_16_WORD_KEEPER.md",
+        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+        "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
+        "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+        "docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+        "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+        "docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+        "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md",
+        "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md",
+        "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md",
+        "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md",
+        "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
+        "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md",
+        "docs/projects/AMENDMENT_31_TEACHER_OS.md",
+        "docs/projects/AMENDMENT_32_MUSIC_TALENT_STUDIO.md",
+        "docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md",
+        "docs/projects/AMENDMENT_34_KIDS_OS.md",
+        "docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md",
+        "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+        "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
+        "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+        "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
+        "docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md",
+        "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+        "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md",
+        "docs/projects/AMENDMENT_45_CCL_MEANING_PRESERVATION_PROTOCOL.md",
+        "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
+        "docs/projects/AMENDMENT_BUILD_READINESS_AUDIT.md"
+      ]
+    }
+  ]
+}

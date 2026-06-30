@@ -24,6 +24,7 @@ When truth consolidates into one canonical home, the old file is not deleted bli
 - `constitution/` — retired constitutional duplicates (pre–NORTH_STAR_SSOT consolidation)
 - `products/` — retired cross-product specs (COMPLETE_PRODUCT_SPEC, etc.)
 - `builderos/` — superseded BuilderOS alpha blueprint + change receipts
+- `legacy-history-salvage/` — pre-archive inventory and migration receipts for retired authority files
 
 ## What is still live (not here)
 

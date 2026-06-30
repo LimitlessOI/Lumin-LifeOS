@@ -2,7 +2,7 @@
   "schema": "intent_coverage_map_v2",
   "intent_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
   "tier": 1,
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-06-30",
   "snt_regrade_required": false,
   "dimensions": [
     {

@@ -1,7 +1,7 @@
 {
   "schema": "pre_build_validation_packet_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "assembled_at": "2026-06-29T20:06:14.814Z",
+  "assembled_at": "2026-06-30T00:05:32.574Z",
   "assembled_by": "foundation/phase-repair.js",
   "builder_simulation_ref": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/receipts/BUILDER_SIMULATION_REPORT.json",
   "blocking_gaps": 0,

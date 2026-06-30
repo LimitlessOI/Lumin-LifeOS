@@ -1,7 +1,7 @@
 {
   "schema": "system_failure_defect_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "recorded_at": "2026-06-29T20:03:31.299Z",
+  "recorded_at": "2026-06-30T00:05:15.025Z",
   "classification": "intent_not_cleared_before_handoff",
   "route": "system_fix_not_founder",
   "reason": "Intent gap after handoff — should have been caught in development (Chair failure)",

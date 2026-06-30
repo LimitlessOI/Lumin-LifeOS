@@ -1,7 +1,7 @@
 {
   "schema": "idc_consensus_receipt_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "at": "2026-06-29T20:06:13.230Z",
+  "at": "2026-06-30T00:05:30.559Z",
   "chair_led": true,
   "load_bearing_decision": "handoff_to_arc_corridor",
   "dissent": [],

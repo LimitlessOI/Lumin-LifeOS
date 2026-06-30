@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-06-29T21:50:43.432Z",
+  "model": "gpt-5.4-mini",
+  "group": "live-legacy",
+  "limit": 12,
+  "source_inventory": "docs/history/legacy-history-salvage/LEGACY_AUTHORITY_INVENTORY.json",
+  "result": {
+    "id": "resp_027588a71926b2b0006a42e8a95fa48199b9e012b5da8c1c70",
+    "object": "response",
+    "created_at": 1782769833,
+    "status": "completed",
+    "background": false,
+    "billing": {
+      "payer": "developer"
+    },
+    "completed_at": 1782769843,
+    "error": null,
+    "frequency_penalty": 0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 2500,
+    "max_tool_calls": null,
+    "model": "gpt-5.4-mini-2026-03-17",
+    "moderation": null,
+    "output": [
+      {
+        "id": "msg_027588a71926b2b0006a42e8aa7cc081999400b85645000974",
+        "type": "message",
+        "status": "completed",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [],
+            "logprobs": [],
+            "text": "{\n  \"verdict\": \"RETARGET_FIRST\",\n  \"summary\": \"Several items still contain useful doctrine, templates, or historical routing value, but none are archive-safe while live references remain. The highest-risk paths are legacy registries, queues, and briefs that are still used by runtime or repo tooling, so the smallest safe move is to retarget those dependencies first and only then promote salvageable doctrine into canonical product-home or product-development gate materials.\",\n  \"items\": [\n    {\n      \"path\": \"docs/projects/INDEX.md\",\n      \"classification\": \"legacy_registry\",\n      \"value_now\": [\n        \"Historical registry of former amendment lineage\",\n        \"Repo archaeology and older priority context\",\n        \"Lost idea breadcrumbs\"\n      ],\n      \"promote_to\": [\n        \"history_only\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Retarget any live readers to canonical product homes first, then preserve unique lineage notes in history and archive the index as a non-authoritative archive index.\"\n    },\n    {\n      \"path\": \"docs/projects/BPB-0001-MISSION-RUNTIME-V1.md\",\n      \"classification\": \"live_legacy_dependency\",\n      \"value_now\": [\n        \"Mission runtime coordination model\",\n        \"Shared Adam/Sherry mission board structure\",\n        \"Potential operational sequencing and state-tracking mechanics\"\n      ],\n      \"promote_to\": [\n        \"machine_schema\",\n        \"history_only\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Identify every runtime consumer, retarget it to canonical mission/product sources, then extract any still-unique board mechanics into the active machine schema before archiving.\"\n    },\n    {\n      \"path\": \"docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md\",\n      \"classification\": \"salvage_candidate\",\n      \"value_now\": [\n        \"Alpha blueprint structure\",\n        \"Potential design patterns for builder workflow\",\n        \"Archived reasoning about builder evolution\"\n      ],\n      \"promote_to\": [\n        \"product_home\",\n        \"product_development_gate\",\n        \"history_only\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Review for unique builder doctrine, promote any reusable gate or workflow ideas into canonical builder docs, and keep only lineage residue in history once live references are removed.\"\n    },\n    {\n      \"path\": \"docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json\",\n      \"classification\": \"legacy_queue\",\n      \"value_now\": [\n        \"Queue ordering and task sequencing\",\n        \"Potential builder prioritization mechanics\",\n        \"Historical execution state\"\n      ],\n      \"promote_to\": [\n        \"machine_schema\",\n        \"history_only\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Retarget queue consumers to the active builder priority system, then migrate any still-useful queue semantics into the canonical machine queue schema before archiving.\"\n    },\n    {\n      \"path\": \"docs/projects/AMENDMENT_READINESS_CHECKLIST.md\",\n      \"classification\": \"salvage_doctrine\",\n      \"value_now\": [\n        \"Competitor analysis forcing function\",\n        \"Future-risk and adaptability checks\",\n        \"Pre-build readiness gate mechanics\"\n      ],\n      \"promote_to\": [\n        \"product_development_gate\",\n        \"constitution\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Promote the best readiness checks into the canonical product-development gate, then retire the amendment-framed file after all live references are redirected.\"\n    },\n    {\n      \"path\": \"docs/projects/TCO_TSOS_75_PERCENT_SAVINGS_BRAINSTORM.md\",\n      \"classification\": \"live_legacy_dependency\",\n      \"value_now\": [\n        \"Token-savings optimization ideas\",\n        \"Cost/efficiency tradeoff exploration\",\n        \"Potential reusable heuristics for system efficiency\"\n      ],\n      \"promote_to\": [\n        \"product_development_gate\",\n        \"machine_schema\",\n        \"history_only\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Check whether any active prompts or tools still rely on this brainstorm, then salvage only the durable optimization heuristics into canonical efficiency doctrine.\"\n    },\n    {\n      \"path\": \"docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md\",\n      \"classification\": \"live_legacy_dependency\",\n      \"value_now\": [\n        \"Product brief content for LifeOS dashboard builder\",\n        \"Possible mission intent and scope framing\",\n        \"Reference material for runtime or prompt loading\"\n      ],\n      \"promote_to\": [\n        \"canonical_product_home\",\n        \"product_development_gate\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Move the surviving brief content into the canonical LifeOS product home or a dedicated owned brief, then update live loaders before archiving the legacy brief.\"\n    },\n    {\n      \"path\": \"docs/projects/AMENDMENT_TEMPLATE.md\",\n      \"classification\": \"salvage_template\",\n      \"value_now\": [\n        \"Scope and non-scope definition\",\n        \"Owned vs protected file distinctions\",\n        \"Anti-drift assertions and handoff structure\",\n        \"Runbook and decision-debt sections\"\n      ],\n      \"promote_to\": [\n        \"product_home\",\n        \"product_development_gate\",\n        \"constitution\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Extract the reusable template sections into canonical product-home or founder-packet templates, then archive the amendment-specific shell once references are gone.\"\n    },\n    {\n      \"path\": \"docs/projects/COMMAND_CENTER_LEGACY_AUDIT.md\",\n      \"classification\": \"salvage_candidate\",\n      \"value_now\": [\n        \"Audit findings about command center history\",\n        \"Possible operational lessons\",\n        \"Archived control-plane observations\"\n      ],\n      \"promote_to\": [\n        \"history_only\",\n        \"machine_schema\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Verify whether any live audit tooling still reads it, then preserve only unique control-plane lessons and move the rest to history.\"\n    },\n    {\n      \"path\": \"docs/projects/LIFEOS_UX_ARCHITECTURE.md\",\n      \"classification\": \"salvage_candidate\",\n      \"value_now\": [\n        \"Lumin-first adaptive environment concept\",\n        \"UX architecture patterns\",\n        \"Potential product experience doctrine\"\n      ],\n      \"promote_to\": [\n        \"canonical_product_home\",\n        \"product_development_gate\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Promote any still-relevant UX doctrine into the canonical LifeOS product home or product-development gate, then archive the legacy architecture note after dependency cleanup.\"\n    },\n    {\n      \"path\": \"docs/projects/TC_SERVICE_BUILDER_QUEUE.json\",\n      \"classification\": \"legacy_queue\",\n      \"value_now\": [\n        \"Service builder queue state\",\n        \"Execution ordering mechanics\",\n        \"Legacy operational workflow\"\n      ],\n      \"promote_to\": [\n        \"machine_schema\",\n        \"history_only\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Retarget any queue consumers to the active service/build queue source, then salvage only the durable sequencing mechanics into the canonical schema.\"\n    },\n    {\n      \"path\": \"docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md\",\n      \"classification\": \"live_legacy_dependency\",\n      \"value_now\": [\n        \"Autonomy brainstorming ideas\",\n        \"Possible builder decision rules\",\n        \"Historical rationale for automation\"\n      ],\n      \"promote_to\": [\n        \"product_development_gate\",\n        \"machine_schema\",\n        \"history_only\"\n      ],\n      \"blocked_by_live_dependency\": true,\n      \"next_action\": \"Retarget any live readers away from the vault, then extract only durable autonomy rules into the canonical development gate or machine schema.\"\n    }\n  ],\n  \"highest_risk_first\": [\n    {\n      \"path\": \"docs/projects/INDEX.md\",\n      \"why\": \"It is a high-fanout legacy registry with many references, so keeping it authoritative risks widespread drift.\"\n    },\n    {\n      \"path\": \"docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md\",\n      \"why\": \"It still looks like a loadable product brief, so live consumers may be depending on outdated authority.\"\n    },\n    {\n      \"path\": \"docs/projects/AMENDMENT_READINESS_CHECKLIST.md\",\n      \"why\": \"It contains valuable doctrine but is still framed in legacy authority language and is likely used as a gate.\"\n    },\n    {\n      \"path\": \"docs/projects/LIFEOS_UX_ARCHITECTURE.md\",\n      \"why\": \"It likely feeds current product experience decisions, so archiving before retargeting could lose active design truth.\"\n    },\n    {\n      \"path\": \"docs/projects/BPB-0001-MISSION-RUNTIME-V1.md\",\n      \"why\": \"Mission runtime mechanics are the kind of legacy dependency that can silently break live orchestration if removed too early.\"\n    }\n  ]\n}"
+          }
+        ],
+        "phase": "final_answer",
+        "role": "assistant"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "current_turn",
+      "effort": "none",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": true,
+    "temperature": 1,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 5667,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 1895,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 7562
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

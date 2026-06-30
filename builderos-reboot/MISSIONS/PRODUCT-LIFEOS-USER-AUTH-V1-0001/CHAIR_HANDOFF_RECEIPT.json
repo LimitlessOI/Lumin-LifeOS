@@ -1,7 +1,7 @@
 {
   "schema": "chair_handoff_receipt_v1",
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "handoff_at": "2026-06-29T20:06:13.231Z",
+  "handoff_at": "2026-06-30T00:05:30.560Z",
   "from_stage": "development",
   "to_stage": "protected_corridor",
   "locked_by": "Chair",

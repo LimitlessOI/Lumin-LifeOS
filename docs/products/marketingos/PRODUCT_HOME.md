@@ -17,6 +17,20 @@
 
 ---
 
+## Founder conversations (2026-06-29)
+
+Multi-product ecosystem session routed per [`CANONICAL_PRODUCT_HOME_RULES.md`](../CANONICAL_PRODUCT_HOME_RULES.md):
+
+| Topic | File |
+|-------|------|
+| Producer/director scaling model | [`socialmediaos/conversations/2026-06-29-producer-director-model.md`](socialmediaos/conversations/2026-06-29-producer-director-model.md) |
+| Sticker mockup + print pricing | [`conversations/2026-06-29-directed-production-sticker-pricing.md`](conversations/2026-06-29-directed-production-sticker-pricing.md) |
+| LimitlessOS business model (umbrella) | [`../limitlessos/PRODUCT_HOME.md`](../limitlessos/PRODUCT_HOME.md) |
+
+Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-founder-vision.md`
+
+---
+
 > **Y-STATEMENT:** In the context of founders and business owners who need consistent, authentic marketing content but hate feeling fake on camera and can't afford an agency, facing fragmented AI tools that produce generic output disconnected from their real voice and story, we decided to build MarketingOS as an AI-powered marketing intelligence and execution system to achieve authentic, founder-led content at scale, accepting that video generation and full publishing automation must wait until text/audio output has proven demand and revenue.
 
 | Field | Value |
@@ -26,7 +40,7 @@
 | **Stability** | `draft` |
 | **Last Updated** | 2026-06-28 |
 | **Owner** | adam |
-| **Parent System** | LimitlessOS |
+| **Parent System** | [LimitlessOS](../limitlessos/PRODUCT_HOME.md) |
 | **First Module** | SocialMediaOS |
 | **Verification Command** | `node scripts/verify-project.mjs --project marketingos` |
 | **Manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
@@ -1316,6 +1330,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-06-29 | **Founder session ingest** — routed ChatGPT ecosystem brainstorm to `conversations/`, `limitlessos/PRODUCT_HOME.md`, SMOS producer/director extract, sticker mockup asset. | Adam: preserve multi-product vision in correct folders per CANONICAL_PRODUCT_HOME_RULES. | ✅ | — | doc-only |
 | 2026-06-29 | **Product home migration** — consolidated former Amendment 41 into `docs/products/marketingos/`; deleted duplicate amendment files. | One canonical product folder per product; constitutional rails via North Star. | ✅ | ✅ | pending |
 | 2026-06-29 | **Intake idempotent re-run** — same as BuilderOS/LifeOS intake pattern; chat A2Z PASS when SMOS already built. | Founder chat re-run should not fail on completed BP. | ✅ | `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |
 | 2026-06-29 | **intake_blueprint routing hardening** — `resolveChairContext` checks intake before forced `explicitAction: build`; `isBuildRequest` excludes SMOS intake phrases; orchestrator skips build hijack when `isIntakeBlueprintIntent`. **founder-chat-health 502 fix** — cred helpers hoisted to route scope. | Chat A→Z SMOS hit `build_terminal` + FP v2 INTENT_AMBIGUITY because `do:` forced build channel; health endpoint ReferenceError'd on undefined helpers. | ✅ | ⬜ | deploy + `node scripts/run-founder-socialmediaos-chat-a2z.mjs` |

@@ -1,15 +1,7 @@
 {
   "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-  "simulated_at": "2026-06-29T20:06:14.820Z",
-  "simulated_by": "factory-core/arc/translate-mission.js",
-  "compile_mode": "product_host",
-  "intent_sources_cited": [
-    "FOUNDER_PACKET.md",
-    "INTENT_BASELINE.json",
-    "ASSET_REUSE_DECISION.json",
-    "BLUEPRINT_ROADMAP.json",
-    "BLUEPRINT.json (legacy host)"
-  ],
+  "simulated_at": "2026-06-30T00:05:32.573Z",
+  "simulated_by": "foundation/phase-repair.js",
   "blocking_gaps": 0,
   "verdict": "PASS"
 }

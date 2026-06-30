@@ -205,6 +205,36 @@ If ARC or SNT discovers a materially better answer than the current canonical pa
 
 No lesson may remain only in chat or side notes.
 
+### 18. Existing-System Reality Must Be Reviewed Before Rewrite
+
+Before any step writes code, the system must review what already exists in the repo for that exact surface.
+
+That review must classify:
+
+- what is already working,
+- what is partially working,
+- what is reusable as-is,
+- what is reusable with repair,
+- what is broken,
+- and what is history-only and forbidden as active authority.
+
+The system may not overwrite working mechanisms or duplicate them just because the blueprint forgot they existed.
+
+### 19. Time And Cost Must Be Receipted
+
+The system must track what it costs and how long it takes to do anything meaningful.
+
+For every governed step, record:
+
+- estimated time,
+- actual time,
+- estimated token/API cost,
+- actual token/API cost,
+- variance,
+- and whether the path is repeatable or wasteful.
+
+No major step is complete if it cannot later teach the system how expensive it was and whether a better path exists.
+
 ## Non-Goals
 
 - No new product lane expansion
