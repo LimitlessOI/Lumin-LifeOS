@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T21:19:37.497Z",
+  "generated_at": "2026-07-01T22:32:49.283Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11787,
+  "file_count": 11800,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21699,9 +21699,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 21271,
-      "mtime": "2026-07-01T04:36:18.015Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 20808,
+      "mtime": "2026-07-01T22:32:31.980Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
@@ -23287,9 +23287,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 8982,
-      "mtime": "2026-06-30T19:24:49.015Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 11822,
+      "mtime": "2026-07-01T22:24:40.320Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
@@ -23299,6 +23299,73 @@
       "mtime": "2026-06-29T00:43:01.099Z",
       "indexed_at": "2026-07-01T04:36:20.955Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S01/chair-context-classifier.js",
+      "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
+      "bytes": 11385,
+      "mtime": "2026-07-01T22:24:09.700Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S02/chair-lumin-unified.js",
+      "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
+      "bytes": 4015,
+      "mtime": "2026-07-01T22:24:09.704Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S03/chair-native-facts.js",
+      "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
+      "bytes": 8875,
+      "mtime": "2026-07-01T22:24:09.708Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S04/founder-life-admin-intent.js",
+      "synopsis": "Founder personal-life asks — errands, coupons, appointments (not builder/code).",
+      "bytes": 3654,
+      "mtime": "2026-07-01T22:24:09.712Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S05/run-founder-chat-alpha-battery.mjs",
+      "synopsis": "Founder chat alpha — build must build, questions must answer, search when unknown.",
+      "bytes": 16333,
+      "mtime": "2026-07-01T22:24:09.716Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S06/server-full-runtime.js",
+      "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
+      "bytes": 74920,
+      "mtime": "2026-07-01T22:24:09.720Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S07/lifeos-auth-routes.js",
+      "synopsis": "routes/lifeos-auth-routes.js",
+      "bytes": 25737,
+      "mtime": "2026-07-01T22:24:09.724Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/DO_NOT_INVENT.json",
@@ -23390,9 +23457,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/PRE_BUILD_VALIDATION_PACKET.json",
       "synopsis": "BuilderOS artifact — PRE BUILD VALIDATION PACKET.",
-      "bytes": 665,
-      "mtime": "2026-06-30T19:24:49.136Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 393,
+      "mtime": "2026-07-01T22:24:52.728Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
@@ -23401,6 +23468,14 @@
       "bytes": 783,
       "mtime": "2026-06-29T00:43:01.100Z",
       "indexed_at": "2026-07-01T04:36:20.955Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — ARC TWIN SIMULATION RECEIPT.",
+      "bytes": 200,
+      "mtime": "2026-07-01T22:24:52.724Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
@@ -23420,19 +23495,27 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/BUILDER_SIMULATION_REPORT.json",
+      "synopsis": "BuilderOS artifact — BUILDER SIMULATION REPORT.",
+      "bytes": 430,
+      "mtime": "2026-07-01T22:24:52.724Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
-      "bytes": 1332,
-      "mtime": "2026-06-29T00:43:01.101Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 1411,
+      "mtime": "2026-07-01T22:18:55.564Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
-      "bytes": 3410,
-      "mtime": "2026-06-29T00:43:01.101Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 3411,
+      "mtime": "2026-07-01T22:18:55.564Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
@@ -23471,8 +23554,32 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
       "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
       "bytes": 2636,
-      "mtime": "2026-06-29T00:43:01.102Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "mtime": "2026-07-01T22:18:55.564Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
+      "synopsis": "BuilderOS artifact — SNT TRANSLATION ATTACK REPORT.",
+      "bytes": 2143,
+      "mtime": "2026-07-01T22:24:52.724Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/STUDIO_DESIGN_ENGINE_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — STUDIO DESIGN ENGINE RECEIPT.",
+      "bytes": 285,
+      "mtime": "2026-07-01T22:24:52.788Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — STUDIO EXPERIENCE SIMULATION RECEIPT.",
+      "bytes": 1199,
+      "mtime": "2026-07-01T22:24:52.788Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
@@ -23487,8 +23594,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
       "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
       "bytes": 1165,
-      "mtime": "2026-06-29T00:43:01.102Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "mtime": "2026-07-01T22:18:55.564Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {
@@ -23511,6 +23618,14 @@
       "bytes": 1190,
       "mtime": "2026-06-29T00:43:01.101Z",
       "indexed_at": "2026-07-01T04:36:20.955Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/STUDIO_DESIGN_PACKET.json",
+      "synopsis": "BuilderOS artifact — STUDIO DESIGN PACKET.",
+      "bytes": 4226,
+      "mtime": "2026-07-01T22:24:52.788Z",
+      "indexed_at": "2026-07-01T22:32:49.283Z",
       "synopsis_index_only": true
     },
     {

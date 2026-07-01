@@ -7,15 +7,42 @@
   "authority": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/FOUNDER_PACKET.md",
   "acceptance_command": "npm run lifeos:founder-chat:alpha:battery",
   "allowed_action_types": [
-    "GAP-FILL"
+    "write_file_exact"
+  ],
+  "intent_sources": [
+    "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/FOUNDER_PACKET.md",
+    "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/INTENT_BASELINE.json",
+    "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json"
+  ],
+  "non_goals": [
+    "cold-login wall UX",
+    "LifeRE page routing",
+    "voice rail salvage"
   ],
   "steps": [
     {
       "step_id": "LFA-S01",
       "phase_id": "P1",
       "title": "Remove Lumin name from product-build markers; guard identity intent",
+      "action_type": "write_file_exact",
       "target_file": "services/chair-context-classifier.js",
-      "status": "complete",
+      "sandbox_boundary": "services/chair-context-classifier.js",
+      "authority_owner": "ARC",
+      "on_block": "HALT: return to ARC with the blocking gap; builder must not invent classifier markers.",
+      "intent_sources": [
+        "FOUNDER_PACKET.md#problem (P1 #2: word Lumin triggered product-build markers)",
+        "FOUNDER_PACKET.md#desired-outcome"
+      ],
+      "required_outcome": "Identity questions must not route to product-build markers because the word Lumin appears; identity intent is guarded.",
+      "interface_contract": "Preserves exported classifier surface consumed by services/chair-lumin-unified.js and services/chair-native-facts.js.",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S01/chair-context-classifier.js",
+        "sha256": "87947a51b6ca82dc9f6a4485709546b8eabc64647ea7efcf252287d3a0586548"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "87947a51b6ca82dc9f6a4485709546b8eabc64647ea7efcf252287d3a0586548"
+      },
       "completed_at": "2026-06-29T00:46:42.880Z",
       "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de"
     },
@@ -23,8 +50,25 @@
       "step_id": "LFA-S02",
       "phase_id": "P1",
       "title": "Skip strategic brief on personal_turn",
+      "action_type": "write_file_exact",
       "target_file": "services/chair-lumin-unified.js",
-      "status": "complete",
+      "sandbox_boundary": "services/chair-lumin-unified.js",
+      "authority_owner": "ARC",
+      "on_block": "HALT: return to ARC with the blocking gap; builder must not invent brief-skip logic.",
+      "intent_sources": [
+        "FOUNDER_PACKET.md#problem (P2 #4: strategic brief appended on personal turns)",
+        "FOUNDER_PACKET.md#failure-mode"
+      ],
+      "required_outcome": "On a personal_turn the strategic brief section is not appended.",
+      "interface_contract": "Consumes personal_turn signal from services/chair-context-classifier.js; unified chair response contract unchanged.",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S02/chair-lumin-unified.js",
+        "sha256": "dcbaf0bc2c1212c856b2e506d320bf7b4c99bc89468ad4116c3613a92d567b70"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "dcbaf0bc2c1212c856b2e506d320bf7b4c99bc89468ad4116c3613a92d567b70"
+      },
       "completed_at": "2026-06-29T00:46:42.880Z",
       "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de"
     },
@@ -32,8 +76,25 @@
       "step_id": "LFA-S03",
       "phase_id": "P1",
       "title": "Preserve personal_turn on identity asks; skip Point B attach",
+      "action_type": "write_file_exact",
       "target_file": "services/chair-native-facts.js",
-      "status": "complete",
+      "sandbox_boundary": "services/chair-native-facts.js",
+      "authority_owner": "ARC",
+      "on_block": "HALT: return to ARC with the blocking gap; builder must not invent Point B attach rules.",
+      "intent_sources": [
+        "FOUNDER_PACKET.md#problem (P1: identity asks routed Point B content)",
+        "FOUNDER_PACKET.md#desired-outcome"
+      ],
+      "required_outcome": "Identity asks keep personal_turn and do not attach Point B content.",
+      "interface_contract": "Uses isFounderIdentityIntent from services/founder-life-admin-intent.js; native-facts response contract unchanged.",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S03/chair-native-facts.js",
+        "sha256": "4284b354abd48dc79ee7d76295cd06bc0939f722d8bb1e1e8cacba48cc12edfe"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "4284b354abd48dc79ee7d76295cd06bc0939f722d8bb1e1e8cacba48cc12edfe"
+      },
       "completed_at": "2026-06-29T00:46:42.880Z",
       "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de"
     },
@@ -41,8 +102,25 @@
       "step_id": "LFA-S04",
       "phase_id": "P1",
       "title": "Export isFounderIdentityIntent helper",
+      "action_type": "write_file_exact",
       "target_file": "services/founder-life-admin-intent.js",
-      "status": "complete",
+      "sandbox_boundary": "services/founder-life-admin-intent.js",
+      "authority_owner": "ARC",
+      "on_block": "HALT: return to ARC with the blocking gap; builder must not invent the helper signature.",
+      "intent_sources": [
+        "FOUNDER_PACKET.md#desired-outcome (identity twin answers)",
+        "FOUNDER_PACKET.md#founder-success-test"
+      ],
+      "required_outcome": "Module exports isFounderIdentityIntent for identity-ask detection.",
+      "interface_contract": "Adds named export isFounderIdentityIntent consumed by services/chair-native-facts.js.",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S04/founder-life-admin-intent.js",
+        "sha256": "545433314e26d994ffc4e638d70e7cc277eb4475c8d94d7c53c46aa5b5adc650"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "545433314e26d994ffc4e638d70e7cc277eb4475c8d94d7c53c46aa5b5adc650"
+      },
       "completed_at": "2026-06-29T00:46:42.880Z",
       "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de"
     },
@@ -50,8 +128,25 @@
       "step_id": "LFA-S05",
       "phase_id": "P2",
       "title": "Alpha battery identity twin probe",
+      "action_type": "write_file_exact",
       "target_file": "scripts/run-founder-chat-alpha-battery.mjs",
-      "status": "complete",
+      "sandbox_boundary": "scripts/run-founder-chat-alpha-battery.mjs",
+      "authority_owner": "ARC",
+      "on_block": "HALT: return to ARC with the blocking gap; builder must not invent probe assertions.",
+      "intent_sources": [
+        "FOUNDER_PACKET.md#acceptance-command (probe Q_identity_twin PASS)",
+        "FOUNDER_PACKET.md#founder-success-test"
+      ],
+      "required_outcome": "Alpha battery includes probe Q_identity_twin that fails on strategic dump language.",
+      "interface_contract": "Acceptance runner invoked by npm run lifeos:founder-chat:alpha:battery; probe id Q_identity_twin.",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S05/run-founder-chat-alpha-battery.mjs",
+        "sha256": "0830c296cf1c19515c81f2a852ff04c4bfd8fc97295b3d5f50bcd956f2aaeff5"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "0830c296cf1c19515c81f2a852ff04c4bfd8fc97295b3d5f50bcd956f2aaeff5"
+      },
       "completed_at": "2026-06-29T00:46:42.880Z",
       "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de"
     },
@@ -59,8 +154,26 @@
       "step_id": "LFA-S06",
       "phase_id": "P2",
       "title": "Boot seeder overwrites literal null emails",
-      "target_file": "server.js",
-      "status": "complete",
+      "action_type": "write_file_exact",
+      "target_file": "server-full-runtime.js",
+      "sandbox_boundary": "server-full-runtime.js",
+      "authority_owner": "ARC",
+      "on_block": "HALT: return to ARC with the blocking gap; builder must not write server.js (protected composition root).",
+      "protected_file_note": "Original blueprint targeted server.js. server.js is now a 48-line composition root (runtime-lane selector) and MUST NOT be written by a lower-tier builder. The boot-seeder null-email repair lives in server-full-runtime.js (GMAIL_SIGNUP_EMAIL seeded default). Step re-pointed to server-full-runtime.js to match current reality; server.js stays protected and out of the write sandbox.",
+      "intent_sources": [
+        "FOUNDER_PACKET.md#problem (P1 #3: GMAIL_SIGNUP_EMAIL literal null blocked provisioning)",
+        "FOUNDER_PACKET.md#failure-mode"
+      ],
+      "required_outcome": "Boot seeder overwrites a literal null GMAIL_SIGNUP_EMAIL with a valid system signup email so alpha-auditor provisioning is not blocked.",
+      "interface_contract": "Boot seeder runs inside server-full-runtime.js startup; server.js composition root is unchanged and remains protected.",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S06/server-full-runtime.js",
+        "sha256": "8d94b5092103d7c71ed9d0790c49c9f90813319f0218cbcc70dba759161f2b92"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "8d94b5092103d7c71ed9d0790c49c9f90813319f0218cbcc70dba759161f2b92"
+      },
       "completed_at": "2026-06-29T00:46:42.880Z",
       "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de"
     },
@@ -68,8 +181,25 @@
       "step_id": "LFA-S07",
       "phase_id": "P2",
       "title": "Alpha auditor provision cred diagnosis",
+      "action_type": "write_file_exact",
       "target_file": "routes/lifeos-auth-routes.js",
-      "status": "complete",
+      "sandbox_boundary": "routes/lifeos-auth-routes.js",
+      "authority_owner": "ARC",
+      "on_block": "HALT: return to ARC with the blocking gap; builder must not invent provisioning diagnosis logic.",
+      "intent_sources": [
+        "FOUNDER_PACKET.md#problem (P1 #3: alpha-auditor test account provision)",
+        "FOUNDER_PACKET.md#failure-mode"
+      ],
+      "required_outcome": "Alpha-auditor provisioning surfaces a credential diagnosis instead of failing silently on missing/null email env.",
+      "interface_contract": "Auth route module registered by the runtime route registrar; provisioning diagnosis exposed on the alpha-auditor path.",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/CONTENT/LFA-S07/lifeos-auth-routes.js",
+        "sha256": "bd6511665a972ba20670b794397f925a033050908fbd68cab8a903335980e227"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "bd6511665a972ba20670b794397f925a033050908fbd68cab8a903335980e227"
+      },
       "completed_at": "2026-06-29T00:46:42.880Z",
       "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de"
     }
@@ -78,5 +208,6 @@
   "git_sha": "69dbd1137ccbfb01d0c1b81ba595b64e90b250de",
   "receipt_path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
   "receipt_verdict": "PASS",
-  "build_method": "GAP-FILL"
+  "build_method": "write_file_exact",
+  "arc_repair_note": "ARC repair 2026-07-01: added executable step contracts (action_type, sandbox_boundary, authority_owner, on_block, intent_sources) and byte_exact_copy CONTENT snapshots so a lower-tier builder can reproduce each target file deterministically without inventing product intent. Snapshots are the current committed (git_sha 69dbd11) known-good files. LFA-S06 re-pointed from protected server.js to server-full-runtime.js where the boot seeder actually lives."
 }
