@@ -10,7 +10,22 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = (process.env.LIFEOS_BASE_URL || process.env.BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+function loadEnv() {
+  const fp = path.join(ROOT, '.env');
+  if (!fs.existsSync(fp)) return;
+  for (const line of fs.readFileSync(fp, 'utf8').split('\n')) {
+    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!m || process.env[m[1]]) continue;
+    process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  }
+}
+loadEnv();
+const BASE = (
+  process.env.PUBLIC_BASE_URL
+  || process.env.LIFEOS_BASE_URL
+  || process.env.BASE_URL
+  || 'https://robust-magic-production.up.railway.app'
+).replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
 const RECEIPT_PATH = path.join(ROOT, 'products/receipts/MACHINE_ALPHA_WALKTHROUGH.json');
 
@@ -136,8 +151,8 @@ async function main() {
     { sample: counselBody.slice(0, 200) }
   );
 
-  // ── Step 6: Build command via chat — expect routing + non-empty response ──
-  const buildMsg = 'do: run pre-build gate and report status';
+  // ── Step 6: Build command via chat — must route into a real deterministic canary build ──
+  const buildMsg = `do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// machine-alpha-probe: ${new Date().toISOString()}" near the top. Do not change runtime behavior and do not modify any other file.`;
   const build = await req('POST', '/api/v1/lifeos/builderos/command-control/founder-interface/message', {
     text: buildMsg,
     action: 'build',
@@ -153,16 +168,22 @@ async function main() {
     buildRoutedOk = true;
     const job = await pollJob(build.json.job_id, 90000);
     const jobStatus = job?.status || 'unknown';
-    buildResponseOk = ['done', 'committed', 'complete'].includes(jobStatus) || Boolean(job?.ok);
-    buildDetail = `async job: status=${jobStatus} ok=${job?.ok}`;
+    const jobTruth = job?.command_truth || '';
+    const jobPassFail = job?.pass_fail || '';
+    const finalPass = Boolean(job?.ok)
+      && jobPassFail === 'PASS'
+      && ['COMMITTED', 'COMMAND_RAN', 'BUILD_ATTEMPTED'].includes(jobTruth);
+    buildResponseOk = finalPass;
+    buildDetail = `async job: status=${jobStatus} pass_fail=${jobPassFail} command_truth=${jobTruth} ok=${job?.ok} blocker=${job?.first_blocker || ''}`.trim();
   } else if (build.status === 200) {
-    buildRoutedOk = true;
     const ct = build.json?.command_truth || build.json?.body?.command_truth || '';
+    buildRoutedOk = ['COMMITTED', 'COMMAND_RAN', 'BUILD_ATTEMPTED'].includes(ct);
+    const pf = build.json?.pass_fail || build.json?.body?.pass_fail || '';
     const hs = build.json?.human_summary || build.json?.body?.human_summary || '';
-    // Accept committed/ran, AND accept clarify/counsel with content (correct system behavior)
-    buildResponseOk = ['COMMITTED', 'COMMAND_RAN', 'BUILD_ATTEMPTED'].includes(ct)
-      || (hs.length > 30 && !['', 'error'].includes(ct.toLowerCase()));
-    buildDetail = `sync: command_truth=${ct} response_len=${hs.length}`;
+    buildResponseOk = Boolean(build.json?.ok)
+      && pf === 'PASS'
+      && ['COMMITTED', 'COMMAND_RAN', 'BUILD_ATTEMPTED'].includes(ct);
+    buildDetail = `sync: pass_fail=${pf} command_truth=${ct} ok=${build.json?.ok} response_len=${hs.length} blocker=${build.json?.first_blocker || build.json?.body?.first_blocker || ''}`.trim();
   }
   step('MAW-T10_build_command_routed', buildRoutedOk, buildDetail);
   step('MAW-T11_build_response_coherent', buildResponseOk, buildDetail, { sample: String(JSON.stringify(build.json)).slice(0, 200) });
@@ -187,7 +208,11 @@ async function main() {
     at: new Date().toISOString(),
     base: BASE,
     ok: allPass,
+    verdict: allPass ? 'PASS' : 'FAIL',
     pass_fail: allPass ? 'PASS' : 'FAIL',
+    canonical_surface: '/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html',
+    checked_routes: ['COUNSEL', 'BUILD', 'STATUS'],
+    required_controls: ['text_input', 'send_button', 'mic_button_when_enabled', 'visible_result_panel'],
     tests_passed: passed.length,
     tests_failed: failed.length,
     passed,

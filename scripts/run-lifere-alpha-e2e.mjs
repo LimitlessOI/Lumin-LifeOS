@@ -11,7 +11,12 @@ import express from 'express';
 import { createLifeRERoutes } from '../routes/lifere-os-routes.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = (process.env.LIFERE_ALPHA_BASE_URL || process.env.BASE_URL || '').replace(/\/$/, '');
+const BASE = (
+  process.env.LIFERE_ALPHA_BASE_URL
+  || process.env.PUBLIC_BASE_URL
+  || process.env.BASE_URL
+  || ''
+).replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || 'alpha-e2e-local';
 const USE_LIVE = Boolean(BASE);
 

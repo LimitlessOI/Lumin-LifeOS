@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T13:21:13.184Z",
+  "generated_at": "2026-07-01T14:22:38.303Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11778,
+  "file_count": 11779,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -38320,9 +38320,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 539507,
-      "mtime": "2026-07-01T11:35:42.550Z",
-      "indexed_at": "2026-07-01T13:21:13.184Z"
+      "bytes": 541591,
+      "mtime": "2026-07-01T14:20:21.339Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -38356,9 +38356,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 27424,
-      "mtime": "2026-06-30T04:28:49.294Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 28197,
+      "mtime": "2026-07-01T14:19:44.932Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -38649,9 +38649,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 54102,
-      "mtime": "2026-07-01T10:21:50.984Z",
-      "indexed_at": "2026-07-01T10:22:26.495Z"
+      "bytes": 54988,
+      "mtime": "2026-07-01T14:19:18.469Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -71908,9 +71908,9 @@
     {
       "path": "scripts/run-lifere-alpha-e2e.mjs",
       "synopsis": "LifeRE Alpha E2E — founder success test at API layer (daily + top-3 + debrief).",
-      "bytes": 5857,
-      "mtime": "2026-06-29T17:21:08.650Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 5898,
+      "mtime": "2026-07-01T13:48:29.487Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -71938,9 +71938,9 @@
     {
       "path": "scripts/run-lifere-full-audit.mjs",
       "synopsis": "LifeRE full audit — machine + live + wiring report.",
-      "bytes": 3983,
-      "mtime": "2026-06-29T17:21:08.651Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 4022,
+      "mtime": "2026-07-01T13:48:29.488Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -72065,9 +72065,9 @@
     {
       "path": "scripts/run-machine-alpha-walkthrough.mjs",
       "synopsis": "Machine Alpha Walkthrough — simulates founder UI session before Point B handoff.",
-      "bytes": 9385,
-      "mtime": "2026-06-30T01:30:37.345Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 10036,
+      "mtime": "2026-07-01T14:05:21.754Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84337,9 +84337,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 11360,
-      "mtime": "2026-06-29T17:21:08.815Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 11385,
+      "mtime": "2026-07-01T13:52:45.328Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88047,9 +88047,9 @@
     {
       "path": "services/runtime-modes.js",
       "synopsis": "Central runtime safety defaults for autonomy-related env flags.",
-      "bytes": 2849,
-      "mtime": "2026-07-01T10:19:52.089Z",
-      "indexed_at": "2026-07-01T10:22:26.495Z",
+      "bytes": 3084,
+      "mtime": "2026-07-01T14:09:58.028Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -89706,9 +89706,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 3266,
-      "mtime": "2026-07-01T03:36:02.754Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 3575,
+      "mtime": "2026-07-01T13:52:45.327Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90249,9 +90249,9 @@
     {
       "path": "tests/chair-context-classifier.test.js",
       "synopsis": "js — tests/chair-context-classifier.test.js.",
-      "bytes": 3445,
-      "mtime": "2026-06-27T03:17:39.467Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 3836,
+      "mtime": "2026-07-01T14:14:50.924Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z"
     },
     {
       "path": "tests/chair-direct-connection-truth.test.js",
@@ -90847,6 +90847,13 @@
       "bytes": 2622,
       "mtime": "2026-07-01T11:33:10.876Z",
       "indexed_at": "2026-07-01T13:21:13.184Z"
+    },
+    {
+      "path": "tests/runtime-modes.test.js",
+      "synopsis": "js — tests/runtime-modes.test.js.",
+      "bytes": 1095,
+      "mtime": "2026-07-01T14:16:05.285Z",
+      "indexed_at": "2026-07-01T14:22:38.303Z"
     },
     {
       "path": "tests/self-repair-attempt-context.test.js",

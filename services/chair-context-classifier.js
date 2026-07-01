@@ -40,7 +40,8 @@ export function hasProductBuildContext(text = '') {
     || isFounderShipOrUsabilityIntent(t)
     || isRepairContinuationIntent(t)
     || isFounderRepairOrderIntent(t)
-    || isProductBuildChangeVerb(t);
+    || isProductBuildChangeVerb(t)
+    || isBuildRequest(t);
 }
 
 export function hasHighConfidenceBuildTarget(text = '') {

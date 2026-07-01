@@ -9,6 +9,7 @@ import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
 import { createLifeOSCouncilBuilderRoutes } from "../routes/lifeos-council-builder-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createLifeOSBuilderOSCommandControlRoutes } from "../routes/lifeos-builderos-command-control-routes.js";
+import { createLifeRERoutes } from "../routes/lifere-os-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 
@@ -90,6 +91,17 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember })
   );
   logger.info("✅ [BUILDEROS-C2] Founder-builder routes mounted");
+
+  app.use(
+    "/api/v1/lifere",
+    createLifeRERoutes({
+      pool,
+      requireKey: requireUserOrKey,
+      logger,
+      callCouncilMember,
+    })
+  );
+  logger.info("✅ [LIFERE-OS] Founder-builder routes mounted at /api/v1/lifere");
 
   return {
     tcCoordinator: null,

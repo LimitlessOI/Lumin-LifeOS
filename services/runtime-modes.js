@@ -22,11 +22,18 @@ function isRailwayRuntime(env = process.env) {
 export function getRuntimeProfile(env = process.env) {
   const raw = normalize(env.LIFEOS_RUNTIME_PROFILE, 'founder_builder');
   const explicitFullRuntime = normalize(env.LIFEOS_ENABLE_FULL_RUNTIME, 'false') === 'true';
-  const allowFullRuntimeOnRailway =
-    normalize(env.LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY, 'false') === 'true';
-  const fullRuntimeAllowed = !isRailwayRuntime(env) || allowFullRuntimeOnRailway;
+  const railwayRuntime = isRailwayRuntime(env);
+  /**
+   * Founder directive:
+   * - Railway is the governed founder-builder lane until BuilderOS is proven.
+   * - The legacy/full runtime may still run locally for forensic or salvage work,
+   *   but production must fail closed to founder_builder even if stale env flags remain.
+   */
+  if (railwayRuntime) {
+    return 'founder_builder';
+  }
   if (raw === 'full' || raw === 'legacy_full') {
-    return explicitFullRuntime && fullRuntimeAllowed ? 'full' : 'founder_builder';
+    return explicitFullRuntime ? 'full' : 'founder_builder';
   }
   if (raw === 'founder_builder' || raw === 'builder' || raw === 'founder') {
     return 'founder_builder';
@@ -71,6 +78,7 @@ export function getRuntimeModeSnapshot(env = process.env) {
     explicitFullRuntime,
     allowFullRuntimeOnRailway,
     railwayRuntime,
+    railwayRuntimeLockedToFounderBuilder: railwayRuntime,
     directedMode: isDirectedMode(env),
     autonomyPaused: isAutonomyPaused(env),
     autoBuilderSchedulerEnabled: isAutoBuilderSchedulerEnabled(env),

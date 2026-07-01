@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-30 |
+| **Last Updated** | 2026-07-01 |
 
 ---
 
@@ -335,6 +335,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 | 2026-06-25 | **`services/founder-overlay-surgical-patch.js`** + **`founder-build-self-repair.js`** + **`founder-intent-clarify.js`** — mechanical HTML comment inserts without whole-file regen | Lumin build sliver failed overlay-shrink guard | ✅ local patch test | deploy; live build verify |
 | 2026-06-25 | **`scripts/run-overlay-alpha-battery.mjs`** + **`npm run lifeos:overlay:alpha:battery`** — conductor alpha battery | Adam: don't stop until founder-alpha ready | ✅ local battery PASS | `lifeos:overlay:alpha:battery:live` after deploy |
 | 2026-06-25 | **`products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json`** — founder alpha entry steps | Single readiness receipt for Adam | ✅ | Adam opens `/lifeos?layout=desktop` after deploy |
+| 2026-07-01 | **Founder-builder LifeRE alpha path hardening** — `startup/register-founder-runtime-routes.js` now mounts `createLifeRERoutes()` inside the founder-builder minimal runtime, and both `scripts/run-lifere-alpha-e2e.mjs` and `scripts/run-lifere-full-audit.mjs` now honor `PUBLIC_BASE_URL` first when targeting live or local founder-builder surfaces. | The machine alpha/founder-builder lane was being graded against LifeRE routes that were not mounted in the minimal runtime, and the audit scripts could silently drift to the wrong base URL. Founder alpha must test the same narrow lane the founder actually uses. | ✅ local founder-builder mount + script base resolution PASS | `PUBLIC_BASE_URL=http://127.0.0.1:4331 node scripts/run-lifere-alpha-e2e.mjs` |
 | 2026-06-24 | **Full audit fix batch** — SMOS council signature, alpha PG checklist, outreach user_id fail-closed + adam boot seed, Vapi webhook guard, context router in lifeos-app, dead route imports removed, PG verify 12 tables, `run-lifere-full-audit.mjs` | Adam: audit broken/gaps/disconnected/enforcement | ✅ full-audit 12/12 PASS | deploy; Adam founder confirm |
 | 2026-06-24 | **Alpha live verification + founder confirm persist** — live E2E T11–T13, readiness checks live banner/API, `lifere-founder-usability-persist.js` commits verdict to GitHub | Live was 1 deploy behind alpha banner; confirm was ephemeral on Railway | ✅ | redeploy + Adam confirm |
 | 2026-06-24 | **SMOS Content Brief v1** — `lifere-content-brief-engine.js`, migration, brief-before-coach gate, UI panel, routes | Adam: brief-first workflow is hard law | ✅ tests + self-audit | deploy; Record Mode v1 |

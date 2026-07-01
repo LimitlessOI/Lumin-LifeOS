@@ -12,13 +12,13 @@ import { classifyChairIntent } from '../services/lumin-chair-orchestrator.js';
 
 const OIL_MSG = 'pretty worried I got to get an oil change should I get to do that on the way out can you find a coupon for me';
 
-test('oil change routes to chair not build clarify', () => {
+test('oil change routes to lumin personal-life counsel not build clarify', () => {
   const ctx = resolveChairContext(OIL_MSG, {});
-  assert.equal(ctx.channel, 'chair');
+  assert.equal(ctx.channel, 'lumin');
   assert.equal(ctx.domain, 'personal_life');
   assert.equal(ctx.requires_execute_clarify, false);
   assert.equal(requiresPreExecuteClarify(OIL_MSG, {}), false);
-  assert.equal(classifyChairIntent({ cleanedInput: OIL_MSG }), 'chair');
+  assert.equal(classifyChairIntent({ cleanedInput: OIL_MSG }), 'lumin');
 });
 
 test('vague hello routes to chair not point_b', () => {
@@ -79,6 +79,18 @@ test('explicit execute mission for known mission routes to point_b', () => {
   const msg = 'run execute mission for PRODUCT-LIFERE-OS-V1-0001';
   const ctx = resolveChairContext(msg, {});
   assert.equal(ctx.channel, 'point_b');
+});
+
+test('do: run pre-build gate routes to build_async', () => {
+  const result = resolveChairContext('do: run pre-build gate and report status', {
+    explicitAction: 'auto',
+    explicitExecute: false,
+    shouldDisplayOnly: false,
+    useTerminalForBuild: false,
+  });
+
+  assert.equal(result.channel, 'build_async');
+  assert.equal(result.domain, 'product_build');
 });
 
 console.log('✅ chair-context-classifier.test.js passed');
