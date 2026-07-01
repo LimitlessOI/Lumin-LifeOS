@@ -12,6 +12,7 @@ import {
   setExpectedRealityHash,
   getExpectedRealityState,
 } from "../../services/ai-guard.js";
+import { getRuntimeProfile, isFullRuntimeProfile } from "../../services/runtime-modes.js";
 
 export class AdminModule {
   constructor({
@@ -135,34 +136,39 @@ export class AdminModule {
   }
 
   handleHealthz(req, res) {
-    console.log("✅ Health check hit");
-    res.status(200).send("OK");
+    const runtimeProfile = getRuntimeProfile();
+    res.status(200).json({
+      ok: true,
+      live: true,
+      ready: true,
+      status: "healthy",
+      runtime_profile: runtimeProfile,
+      full_runtime: isFullRuntimeProfile(),
+      local_runtime: {
+        status: "retired",
+        provider: "retired_local_runtime",
+        message: "Founder directive (2026-06-30): local Ollama runtime permanently removed from active system.",
+      },
+      timestamp: new Date().toISOString(),
+      uptime: Math.floor(process.uptime()),
+    });
   }
 
   async handleApiHealth(req, res) {
+    const runtimeProfile = getRuntimeProfile();
     const health = {
       status: "OK",
       timestamp: new Date().toISOString(),
-      ollama: this.ollamaEndpoint ? "Connected" : "Not configured",
+      runtime_profile: runtimeProfile,
+      full_runtime: isFullRuntimeProfile(),
+      local_runtime: {
+        status: "retired",
+        provider: "retired_local_runtime",
+        message: "Founder directive (2026-06-30): local Ollama runtime permanently removed from active system.",
+      },
       version: "26.1",
       uptime: process.uptime(),
     };
-
-    if (this.ollamaEndpoint) {
-      try {
-        const ollamaRes = await fetch(`${this.ollamaEndpoint}/api/tags`);
-        if (ollamaRes.ok) {
-          const data = await ollamaRes.json();
-          health.ollama = {
-            status: "ok",
-            endpoint: this.ollamaEndpoint,
-            models: data.models?.map((m) => m.name) || [],
-          };
-        }
-      } catch (error) {
-        health.ollama = { status: "error", message: error.message };
-      }
-    }
 
     if (this.autoBuilder) {
       try {

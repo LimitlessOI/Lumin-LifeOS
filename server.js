@@ -1126,77 +1126,81 @@ async function startDeferredRuntimeServices() {
 
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
 // Warm response cache L1 from DB — picks up where last deploy left off
-initCache(pool).catch(() => {});
-railwayManagedEnvService.ensureSchema()
-  .then(() => {
-    railwayManagedEnvService.startScheduler();
-    return railwayManagedEnvService.syncDesiredVars({ actor: 'boot', syncOnBootOnly: true });
-  })
-  .then((result) => {
-    logger.info({ changed: result.changed, failed: result.failed }, '✅ [RAILWAY-MANAGED-ENV] Boot sync complete');
-  })
-  .catch((error) => {
-    logger.warn({ error: error.message }, '⚠️ [RAILWAY-MANAGED-ENV] Boot sync failed');
+if (fullRuntimeProfile) {
+  initCache(pool).catch(() => {});
+  railwayManagedEnvService.ensureSchema()
+    .then(() => {
+      railwayManagedEnvService.startScheduler();
+      return railwayManagedEnvService.syncDesiredVars({ actor: 'boot', syncOnBootOnly: true });
+    })
+    .then((result) => {
+      logger.info({ changed: result.changed, failed: result.failed }, '✅ [RAILWAY-MANAGED-ENV] Boot sync complete');
+    })
+    .catch((error) => {
+      logger.warn({ error: error.message }, '⚠️ [RAILWAY-MANAGED-ENV] Boot sync failed');
+    });
+
+  accountManager.ensureSchema().catch((err) => {
+    logger.warn({ error: err.message }, '⚠️ [ACCOUNT-MANAGER] Schema init failed');
   });
 
-accountManager.ensureSchema().catch((err) => {
-  logger.warn({ error: err.message }, '⚠️ [ACCOUNT-MANAGER] Schema init failed');
-});
-
-registerTwilioWebhook().then(result => {
-  if (result.registered) {
-    logger.info({ url: result.url, changed: result.changed }, '✅ [TWILIO] SMS webhook confirmed');
-  } else {
-    logger.warn({ error: result.error }, '⚠️ [TWILIO] SMS webhook registration failed (non-fatal)');
-  }
-}).catch(() => {});
-
-// Boot seeder — sets every env var the system knows the value for.
-// Uses managed-env service so all changes are encrypted, audited, and persist in Neon.
-// Only writes a var if it isn't already set in process.env (never overwrites live values).
-(async () => {
-  try {
-    const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN || '';
-    const siteBaseUrl = publicDomain
-      ? (publicDomain.startsWith('http') ? publicDomain : `https://${publicDomain}`)
-      : '';
-
-    const knownVars = {
-      // Email — Postmark is the provider, lifeos@ is the FROM address
-      EMAIL_PROVIDER: { value: 'postmark',                   description: 'Email provider — set by boot seeder' },
-      EMAIL_FROM:     { value: 'lifeOS@hopkinsgroup.org',    description: 'Outreach FROM address — set by boot seeder' },
-      // Site builder — derive from Railway public domain
-      ...(siteBaseUrl && { SITE_BASE_URL: { value: siteBaseUrl, description: 'Preview site base URL — derived from RAILWAY_PUBLIC_DOMAIN' } }),
-      // Signup agent — system emails for autonomous account creation
-      GMAIL_SIGNUP_EMAIL: { value: 'lumea.lifeos@gmail.com', description: 'System signup email (public domain services) — set by boot seeder' },
-      WORK_EMAIL:         { value: 'LifeOS@hopkinsgroup.org', description: 'Work email (private domain, for Postmark etc.) — set by boot seeder' },
-    };
-
-    function envIsBlankOrNull(key) {
-      const v = String(process.env[key] || '').trim();
-      return !v || v === 'null' || v === 'undefined';
-    }
-
-    const toSet = Object.fromEntries(
-      Object.entries(knownVars).filter(([key]) => envIsBlankOrNull(key))
-    );
-
-    if (Object.keys(toSet).length > 0) {
-      const results = await railwayManagedEnvService.upsertDesiredVars(toSet, 'boot-seeder');
-      const ok = results.filter((r) => r.ok).map((r) => r.envName);
-      const failed = results.filter((r) => !r.ok).map((r) => `${r.envName}: ${r.error}`);
-      if (ok.length)     logger.info({ vars: ok },     '✅ [BOOT-SEEDER] Vars stored in managed-env');
-      if (failed.length) logger.warn({ failed },       '⚠️ [BOOT-SEEDER] Some vars failed');
-      // Push to Railway immediately so this deploy picks them up
-      await railwayManagedEnvService.syncDesiredVars({ actor: 'boot-seeder', names: ok });
-      logger.info({ count: ok.length }, '✅ [BOOT-SEEDER] Known vars pushed to Railway');
+  registerTwilioWebhook().then(result => {
+    if (result.registered) {
+      logger.info({ url: result.url, changed: result.changed }, '✅ [TWILIO] SMS webhook confirmed');
     } else {
-      logger.info('[BOOT-SEEDER] All known vars already set — no action needed');
+      logger.warn({ error: result.error }, '⚠️ [TWILIO] SMS webhook registration failed (non-fatal)');
     }
-  } catch (err) {
-    logger.warn({ error: err.message }, '⚠️ [BOOT-SEEDER] Non-fatal error');
-  }
-})();
+  }).catch(() => {});
+
+  // Boot seeder — sets every env var the system knows the value for.
+  // Uses managed-env service so all changes are encrypted, audited, and persist in Neon.
+  // Only writes a var if it isn't already set in process.env (never overwrites live values).
+  (async () => {
+    try {
+      const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN || '';
+      const siteBaseUrl = publicDomain
+        ? (publicDomain.startsWith('http') ? publicDomain : `https://${publicDomain}`)
+        : '';
+
+      const knownVars = {
+        // Email — Postmark is the provider, lifeos@ is the FROM address
+        EMAIL_PROVIDER: { value: 'postmark',                   description: 'Email provider — set by boot seeder' },
+        EMAIL_FROM:     { value: 'lifeOS@hopkinsgroup.org',    description: 'Outreach FROM address — set by boot seeder' },
+        // Site builder — derive from Railway public domain
+        ...(siteBaseUrl && { SITE_BASE_URL: { value: siteBaseUrl, description: 'Preview site base URL — derived from RAILWAY_PUBLIC_DOMAIN' } }),
+        // Signup agent — system emails for autonomous account creation
+        GMAIL_SIGNUP_EMAIL: { value: 'lumea.lifeos@gmail.com', description: 'System signup email (public domain services) — set by boot seeder' },
+        WORK_EMAIL:         { value: 'LifeOS@hopkinsgroup.org', description: 'Work email (private domain, for Postmark etc.) — set by boot seeder' },
+      };
+
+      function envIsBlankOrNull(key) {
+        const v = String(process.env[key] || '').trim();
+        return !v || v === 'null' || v === 'undefined';
+      }
+
+      const toSet = Object.fromEntries(
+        Object.entries(knownVars).filter(([key]) => envIsBlankOrNull(key))
+      );
+
+      if (Object.keys(toSet).length > 0) {
+        const results = await railwayManagedEnvService.upsertDesiredVars(toSet, 'boot-seeder');
+        const ok = results.filter((r) => r.ok).map((r) => r.envName);
+        const failed = results.filter((r) => !r.ok).map((r) => `${r.envName}: ${r.error}`);
+        if (ok.length)     logger.info({ vars: ok },     '✅ [BOOT-SEEDER] Vars stored in managed-env');
+        if (failed.length) logger.warn({ failed },       '⚠️ [BOOT-SEEDER] Some vars failed');
+        // Push to Railway immediately so this deploy picks them up
+        await railwayManagedEnvService.syncDesiredVars({ actor: 'boot-seeder', names: ok });
+        logger.info({ count: ok.length }, '✅ [BOOT-SEEDER] Known vars pushed to Railway');
+      } else {
+        logger.info('[BOOT-SEEDER] All known vars already set — no action needed');
+      }
+    } catch (err) {
+      logger.warn({ error: err.message }, '⚠️ [BOOT-SEEDER] Non-fatal error');
+    }
+  })();
+} else {
+  logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — managed-env sync, Twilio webhook bootstrap, account bootstrap, and boot seeder deferred`);
+}
 
 // Auto-log all council API calls as conversations
 const convStore = createConversationStore(pool);
@@ -1733,15 +1737,19 @@ async function start() {
     console.log("  ✅ Overlay Connection (Railway URL)");
     console.log("  ✅ Consensus Protocol");
     console.log("  ✅ Blind Spot Detection");
-    console.log("  ✅ Daily Idea Generation (25 ideas)");
-    console.log("  ✅ AI Performance Rotation");
-    console.log("  ✅ Sandbox Testing");
-    console.log("  ✅ Snapshot & Rollback");
-    console.log("  ✅ User Preference Learning");
-    console.log("  ✅ No-Cache API Calls");
-    console.log("  ✅ Self-Healing System");
-    console.log("  ✅ Continuous Memory");
-    console.log("  ✅ Stripe Revenue Sync (read + ROI logging only)");
+    if (fullRuntimeProfile) {
+      console.log("  ✅ Daily Idea Generation (25 ideas)");
+      console.log("  ✅ AI Performance Rotation");
+      console.log("  ✅ Sandbox Testing");
+      console.log("  ✅ Snapshot & Rollback");
+      console.log("  ✅ User Preference Learning");
+      console.log("  ✅ No-Cache API Calls");
+      console.log("  ✅ Self-Healing System");
+      console.log("  ✅ Continuous Memory");
+      console.log("  ✅ Stripe Revenue Sync (read + ROI logging only)");
+    } else {
+      console.log(`  🛑 Founder-builder runtime (${runtimeProfile}) — legacy automation, product schedulers, and full-runtime boot services deferred`);
+    }
 
     const selfProgrammingHttpService = createSelfProgrammingService(
       () => selfProgrammingDepsRef.current
@@ -1820,22 +1828,25 @@ async function start() {
       );
     }
 
-      // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)
-      try {
-        const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
-        const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
-        const taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
-        ideaToImplementationPipeline = new pipelineModule.IdeaToImplementationPipeline(
-          pool,
-          callCouncilMember,
-          selfBuilder,
-          taskTracker
-        );
-        logger.info("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
-
-    } catch (error) {
-      logger.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", { error: error.message });
-    }
+      // Initialize Idea-to-Implementation Pipeline only in explicit full runtime.
+      if (fullRuntimeProfile) {
+        try {
+          const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
+          const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+          const taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
+          ideaToImplementationPipeline = new pipelineModule.IdeaToImplementationPipeline(
+            pool,
+            callCouncilMember,
+            selfBuilder,
+            taskTracker
+          );
+          logger.info("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
+        } catch (error) {
+          logger.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", { error: error.message });
+        }
+      } else {
+        logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — idea-to-implementation pipeline deferred`);
+      }
 
     if (STRIPE_SECRET_KEY && fullRuntimeProfile) {
       await syncStripeRevenue();

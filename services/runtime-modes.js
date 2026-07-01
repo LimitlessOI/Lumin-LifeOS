@@ -12,7 +12,10 @@ function normalize(value, fallback = '') {
 
 export function getRuntimeProfile(env = process.env) {
   const raw = normalize(env.LIFEOS_RUNTIME_PROFILE, 'founder_builder');
-  if (raw === 'full' || raw === 'legacy_full') return 'full';
+  const explicitFullRuntime = normalize(env.LIFEOS_ENABLE_FULL_RUNTIME, 'false') === 'true';
+  if (raw === 'full' || raw === 'legacy_full') {
+    return explicitFullRuntime ? 'full' : 'founder_builder';
+  }
   if (raw === 'founder_builder' || raw === 'builder' || raw === 'founder') {
     return 'founder_builder';
   }
@@ -45,10 +48,12 @@ export function getHabDailyLimit(env = process.env) {
 }
 
 export function getRuntimeModeSnapshot(env = process.env) {
+  const explicitFullRuntime = normalize(env.LIFEOS_ENABLE_FULL_RUNTIME, 'false') === 'true';
   return {
     runtimeProfile: getRuntimeProfile(env),
     fullRuntimeProfile: isFullRuntimeProfile(env),
     founderBuilderRuntimeProfile: isFounderBuilderRuntimeProfile(env),
+    explicitFullRuntime,
     directedMode: isDirectedMode(env),
     autonomyPaused: isAutonomyPaused(env),
     autoBuilderSchedulerEnabled: isAutoBuilderSchedulerEnabled(env),
