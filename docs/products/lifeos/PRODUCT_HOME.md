@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-30 |
+| **Last Updated** | 2026-07-01 |
 
 ---
 
@@ -50,6 +50,9 @@ Primary owned files are defined in:
 - `docs/products/lifeos/FILE_MANIFEST.json`
 
 High-signal owned surfaces:
+- `server.js`
+- `server-founder-runtime.js`
+- `server-full-runtime.js`
 - `services/lumin-chair-orchestrator.js`
 - `services/chair-lumin-unified.js`
 - `services/chair-system-knowledge.js`
