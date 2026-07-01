@@ -1085,6 +1085,10 @@ if (externalProductRoutesEnabled) {
 }
 
 async function startDeferredRuntimeServices() {
+  if (!fullRuntimeProfile) {
+    logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — deferred domain boot skipped`);
+    return;
+  }
   if (externalProductRoutesEnabled) {
     startReminderCron(pool, async (to, msg) => {
       try {
@@ -1222,26 +1226,30 @@ const ciMonitor = createContinuousImprovement({
   adamLogger: adamLoggerGlobal,
 });
 
-// Run first check after 5 minutes, then every 6 hours
-setTimeout(() => {
-  ciMonitor.runMonitorCycle().catch(err =>
-    logger.warn('[CI] Monitor cycle failed', { error: err.message })
-  );
-  setInterval(() => {
+if (fullRuntimeProfile) {
+  // Run first check after 5 minutes, then every 6 hours
+  setTimeout(() => {
     ciMonitor.runMonitorCycle().catch(err =>
       logger.warn('[CI] Monitor cycle failed', { error: err.message })
     );
-  }, 6 * 60 * 60 * 1000); // every 6 hours
-}, 5 * 60 * 1000); // 5 min after startup
+    setInterval(() => {
+      ciMonitor.runMonitorCycle().catch(err =>
+        logger.warn('[CI] Monitor cycle failed', { error: err.message })
+      );
+    }, 6 * 60 * 60 * 1000); // every 6 hours
+  }, 5 * 60 * 1000); // 5 min after startup
 
-// Rebuild Adam's profile every 12 hours
-setInterval(() => {
-  adamLoggerGlobal.buildProfile(async (prompt) => {
-    try {
-      return await spineCallAI('adam_profile', prompt, { member: 'anthropic' });
-    } catch { return ''; }
-  }).catch(err => logger.warn('[ADAM-TWIN] Profile rebuild failed', { error: err.message }));
-}, 12 * 60 * 60 * 1000); // every 12 hours
+  // Rebuild Adam's profile every 12 hours
+  setInterval(() => {
+    adamLoggerGlobal.buildProfile(async (prompt) => {
+      try {
+        return await spineCallAI('adam_profile', prompt, { member: 'anthropic' });
+      } catch { return ''; }
+    }).catch(err => logger.warn('[ADAM-TWIN] Profile rebuild failed', { error: err.message }));
+  }, 12 * 60 * 60 * 1000); // every 12 hours
+} else {
+  logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — continuous-improvement and Adam-profile background loops deferred`);
+}
 
 // ==================== RAILWAY CONTROL ====================
 // Legacy direct-mutation endpoints are intentionally disabled.
@@ -1567,7 +1575,7 @@ async function start() {
     // Database validation runs at module load time (before this point)
     // If we reach here, database config is valid
     
-    if (!SMOKE_MODE) {
+    if (!SMOKE_MODE && fullRuntimeProfile) {
       await runInitializeTwoTierSystem();
 
       // Mount TCO routes after initialization
@@ -1583,6 +1591,8 @@ async function start() {
       } else if (tcoAgentRoutes) {
         logger.info('🛑 [TCO AGENT] Routes not mounted (set LIFEOS_ENABLE_TCO_RUNTIME=true to restore)');
       }
+    } else if (!SMOKE_MODE) {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — two-tier startup spine deferred`);
     }
 
     if (!SMOKE_MODE && fullRuntimeProfile) {
@@ -1801,57 +1811,50 @@ async function start() {
       }
     );
 
-    if (!SMOKE_MODE) {
+    if (!SMOKE_MODE && fullRuntimeProfile) {
       // Kick off the execution queue
       executionQueue.executeNext();
 
-    // Deploy income drones (if not disabled)
-    if (!DISABLE_INCOME_DRONES && process.env.LIFEOS_DIRECTED_MODE === 'false') {
-      // Note: If EnhancedIncomeDrone is used, drones are already deployed during initialization
-      // Only deploy here if using basic IncomeDroneSystem
-      if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
-        logger.info('🚀 [STARTUP] Deploying income drones (basic system)...');
-        const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
-        const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
-        const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
-        const productDrone = await incomeDroneSystem.deployDrone("product", 200);
-        const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
-        logger.info(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
-      } else {
-        logger.info('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
-      }
-    } else {
-      logger.info(
-        process.env.LIFEOS_DIRECTED_MODE !== 'false'
-          ? '🛑 [STARTUP] Directed mode active — income drones disabled until explicitly enabled'
-          : 'ℹ️ [STARTUP] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)'
-      );
-    }
-
-      // Initialize Idea-to-Implementation Pipeline only in explicit full runtime.
-      if (fullRuntimeProfile) {
-        try {
-          const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
-          const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
-          const taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
-          ideaToImplementationPipeline = new pipelineModule.IdeaToImplementationPipeline(
-            pool,
-            callCouncilMember,
-            selfBuilder,
-            taskTracker
-          );
-          logger.info("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
-        } catch (error) {
-          logger.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", { error: error.message });
+      if (!DISABLE_INCOME_DRONES && process.env.LIFEOS_DIRECTED_MODE === 'false') {
+        if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
+          logger.info('🚀 [STARTUP] Deploying income drones (basic system)...');
+          const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
+          const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
+          const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
+          const productDrone = await incomeDroneSystem.deployDrone("product", 200);
+          const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
+          logger.info(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
+        } else {
+          logger.info('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
         }
       } else {
-        logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — idea-to-implementation pipeline deferred`);
+        logger.info(
+          process.env.LIFEOS_DIRECTED_MODE !== 'false'
+            ? '🛑 [STARTUP] Directed mode active — income drones disabled until explicitly enabled'
+            : 'ℹ️ [STARTUP] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)'
+        );
       }
 
-    if (STRIPE_SECRET_KEY && fullRuntimeProfile) {
-      await syncStripeRevenue();
-    } else if (STRIPE_SECRET_KEY) {
-      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — Stripe revenue sync deferred`);
+      try {
+        const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
+        const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+        const taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
+        ideaToImplementationPipeline = new pipelineModule.IdeaToImplementationPipeline(
+          pool,
+          callCouncilMember,
+          selfBuilder,
+          taskTracker
+        );
+        logger.info("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
+      } catch (error) {
+        logger.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", { error: error.message });
+      }
+
+      if (STRIPE_SECRET_KEY) {
+        await syncStripeRevenue();
+      }
+    } else if (!SMOKE_MODE) {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — execution queue, income drones, pipeline bootstrap, and Stripe revenue sync deferred`);
     }
 
     autonomyDepsRef.current = {
@@ -1904,7 +1907,6 @@ async function start() {
     startupHealthState.phase = "ready";
     startupHealthState.ready = true;
     finalizeStartup("ok");
-    }
   } catch (error) {
     startupHealthState.phase = "error";
     startupHealthState.db = startupHealthState.db === "pending" ? "error" : startupHealthState.db;

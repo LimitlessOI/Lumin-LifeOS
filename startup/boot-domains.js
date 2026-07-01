@@ -463,6 +463,12 @@ async function bootLifeREDomain(deps) {
 
 export async function bootAllDomains(deps) {
   const { pool, logger } = deps;
+  if (!fullRuntimeProfile && process.env.LIFEOS_ENABLE_FOUNDER_BUILDER_BOOT_DOMAINS !== 'true') {
+    logger?.info?.(
+      `[BOOT] Founder-builder runtime profile active (${runtimeProfile}) — startup domain boot skipped`
+    );
+    return;
+  }
   await autoSeedEpistemicFacts(pool, logger);
   await bootDeliberationRepCatalog(deps);
   await bootLifeREDomain(deps);

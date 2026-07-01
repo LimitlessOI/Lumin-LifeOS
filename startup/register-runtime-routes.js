@@ -26,6 +26,7 @@ import { createAccountManagerRoutes } from "../routes/account-manager-routes.js"
 import { createTCRoutes } from "../routes/tc-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
 import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
+import { createLifeOSFounderRuntimeRoutes } from "../routes/lifeos-founder-runtime-routes.js";
 import { createLifeOSSystemProofRoutes } from "../routes/lifeos-system-proof-routes.js";
 import { createLifeOSDirectActionRoutes } from "../routes/lifeos-direct-action-routes.js";
 import { createLifeOSGatewayRoutes, createLifeOSEngineRoutes } from "../routes/lifeos-engine-routes.js";
@@ -145,6 +146,70 @@ export async function registerRuntimeRoutes(app, deps) {
       })
     : null;
 
+  const requireUserOrKey = createRequireLifeOSUserOrKey(requireKey);
+
+  if (!fullRuntimeProfile) {
+    app.use("/api/v1/lifeos/auth", createLifeOSAuthRoutes({ pool, logger, requireKey }));
+    logger.info("✅ [LIFEOS-AUTH] Founder-builder routes mounted at /api/v1/lifeos/auth");
+
+    app.use(
+      "/api/v1/lifeos",
+      createLifeOSFounderRuntimeRoutes({
+        pool,
+        requireKey: requireUserOrKey,
+        callCouncilMember,
+        logger,
+      })
+    );
+    logger.info("✅ [LIFEOS-FOUNDER-RUNTIME] Founder-builder shell routes mounted");
+
+    app.use("/api/v1/lifeos", createLifeOSDirectActionRoutes({ pool, requireKey: requireUserOrKey }));
+    logger.info("✅ [LIFEOS-DIRECT-ACTION] Founder-builder route mounted at /api/v1/lifeos/direct-action");
+
+    app.use(
+      "/api/v1/lifeos/chat",
+      createLifeOSChatRoutes({
+        pool,
+        requireKey,
+        callAI: councilChatAI,
+        callCouncilMember,
+        logger,
+      })
+    );
+    logger.info("✅ [LIFEOS-CHAT] Founder-builder routes mounted at /api/v1/lifeos/chat");
+
+    createLifeOSCouncilBuilderRoutes({
+      pool,
+      requireKey,
+      callCouncilMember,
+      lclMonitor,
+      logger,
+      getCachedResponse,
+      cacheResponse,
+      commitToGitHub,
+      commitManyToGitHub,
+      platformKernel: deps.platformKernel,
+    })(app);
+    logger.info("✅ [LIFEOS-BUILDER] Founder-builder ready routes mounted");
+
+    app.use(
+      "/api/v1/lifeos/gate-change",
+      createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMember, logger })
+    );
+    logger.info("✅ [LIFEOS-GATE-CHANGE] Founder-builder routes mounted");
+
+    app.use(
+      "/api/v1/lifeos/builderos/command-control",
+      createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember })
+    );
+    logger.info("✅ [BUILDEROS-C2] Founder-builder routes mounted");
+
+    return {
+      tcCoordinator: null,
+      wkIntegrityEngine: null,
+    };
+  }
+
   registerWebsiteAuditRoutes(app, {
     requireKey,
     callCouncilWithFailover,
@@ -228,8 +293,6 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-AUTH] Routes mounted at /api/v1/lifeos/auth");
 
   /** Account JWT (lifeos-login) OR legacy command key — what the app shell uses after sign-in. */
-  const requireUserOrKey = createRequireLifeOSUserOrKey(requireKey);
-
   // Core LifeOS routes are required for the product to function.
   const lifeosOpts = { pool, requireKey: requireUserOrKey, callCouncilMember, logger, notificationService, sendSMS, sendAlertCall, makePhoneCall };
 
