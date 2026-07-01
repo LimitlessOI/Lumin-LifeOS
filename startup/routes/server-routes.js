@@ -25,6 +25,7 @@ export function registerServerRoutes(app, deps) {
     rootDir,
     telemetry,
     podManager,
+    getStartupHealthState,
   } = deps;
 
   app.use("/api", memoryRoutes({ requireKey }));
@@ -196,25 +197,34 @@ export function registerServerRoutes(app, deps) {
   });
 
   app.get("/healthz", async (req, res) => {
-    const checks = {
-      server: "ok",
-      db: "unknown",
-      ai: process.env.ANTHROPIC_API_KEY ? "configured" : "missing_key",
-      email: process.env.POSTMARK_SERVER_TOKEN ? "configured" : "not_configured",
-    };
+    const startup = typeof getStartupHealthState === "function"
+      ? getStartupHealthState()
+      : {
+          phase: "unknown",
+          ready: false,
+          db: "unknown",
+          runtime_routes: "unknown",
+          deferred_services: "unknown",
+          runtime_profile: process.env.LIFEOS_RUNTIME_PROFILE || "unknown",
+          last_error: null,
+        };
 
-    try {
-      await pool.query("SELECT 1");
-      checks.db = "ok";
-    } catch (e) {
-      checks.db = "error: " + e.message;
-    }
-
-    const allOk = checks.db === "ok";
-    res.status(allOk ? 200 : 503).json({
-      ok: allOk,
-      status: allOk ? "healthy" : "degraded",
-      checks,
+    res.status(200).json({
+      ok: true,
+      live: true,
+      ready: startup.ready === true,
+      status: startup.ready === true ? "healthy" : "starting",
+      checks: {
+        server: "ok",
+        db: startup.db,
+        runtime_routes: startup.runtime_routes,
+        deferred_services: startup.deferred_services,
+        runtime_profile: startup.runtime_profile,
+        last_error: startup.last_error || null,
+        ai: process.env.ANTHROPIC_API_KEY ? "configured" : "missing_key",
+        email: process.env.POSTMARK_SERVER_TOKEN ? "configured" : "not_configured",
+      },
+      startup,
       uptime: Math.floor(process.uptime()),
       timestamp: new Date().toISOString(),
     });

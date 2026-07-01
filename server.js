@@ -189,6 +189,15 @@ const externalProductRoutesEnabled =
   isFullRuntimeProfile() && process.env.LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES === "true";
 const runtimeProfile = getRuntimeProfile();
 const fullRuntimeProfile = isFullRuntimeProfile();
+const startupHealthState = {
+  phase: "booting",
+  ready: false,
+  db: "pending",
+  runtime_routes: "pending",
+  deferred_services: "pending",
+  runtime_profile: runtimeProfile,
+  last_error: null,
+};
 
 // Enhanced Council Features
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
@@ -1004,6 +1013,7 @@ registerServerRoutes(app, {
   rootDir: __dirname,
   telemetry,
   podManager,
+  getStartupHealthState: () => ({ ...startupHealthState }),
 });
 
 let tcCoordinator = null;
@@ -1433,19 +1443,29 @@ async function start() {
 
     validateEnv(logger);
 
-    await initDatabase(pool, logger);
-    logger.info("✅ Database initialized");
-
     await startListening();
     if (!fullRuntimeProfile) {
-      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — non-core warmups will be skipped or deferred`);
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — early bind enabled before database readiness`);
     }
 
+    startupHealthState.phase = "db_init";
+    await initDatabase(pool, logger);
+    startupHealthState.db = "ok";
+    logger.info("✅ Database initialized");
+
     try {
+      startupHealthState.phase = "runtime_routes";
       await mountRuntimeRoutes();
+      startupHealthState.runtime_routes = "ok";
+      startupHealthState.phase = "deferred_services";
       await startDeferredRuntimeServices();
+      startupHealthState.deferred_services = "ok";
+      startupHealthState.phase = "warm";
       logger.info("✅ Runtime routes and deferred services initialized");
     } catch (runtimeErr) {
+      startupHealthState.runtime_routes = startupHealthState.runtime_routes === "pending" ? "error" : startupHealthState.runtime_routes;
+      startupHealthState.deferred_services = startupHealthState.deferred_services === "pending" ? "error" : startupHealthState.deferred_services;
+      startupHealthState.last_error = runtimeErr.message;
       logger.error("❌ Runtime routes/deferred services failed after listen:", { error: runtimeErr.message });
       logger.warn("⚠️ Continuing with minimal liveness spine; runtime route tree is degraded until this is fixed");
     }
@@ -1870,9 +1890,14 @@ async function start() {
     }
 
     await startListening();
+    startupHealthState.phase = "ready";
+    startupHealthState.ready = true;
     finalizeStartup("ok");
     }
   } catch (error) {
+    startupHealthState.phase = "error";
+    startupHealthState.db = startupHealthState.db === "pending" ? "error" : startupHealthState.db;
+    startupHealthState.last_error = error.message;
     finalizeStartup("error", { error: error.message });
     logger.error("❌ Startup error:", { error: error.message, stack: error.stack });
     if (selectedPort !== null || server.listening) {
