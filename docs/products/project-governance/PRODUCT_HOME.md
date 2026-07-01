@@ -17,6 +17,7 @@
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
 **Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
+**Last Updated:** 2026-07-01 — founder-builder runtime availability took precedence over global response wrapping: `server-founder-runtime.js` no longer mounts `createTruthResponseEnforcer` after live Railway proved a route split where `/ready` worked but all protected founder routes hung behind proxy timeout. This is a runtime-scope availability cut, not a repeal of truth law.
 **Last Updated:** 2026-07-01 — BuilderOS proof governance tightened: readiness/deploy verifiers now truly fall back to `/ready` when `/api/v1/lifeos/builder/ready` times out, and the pre-build gate now treats `founder_builder` as a valid minimal runtime by skipping intake-regression checks that require product surfaces outside that lane.
 **Last Updated:** 2026-06-30 — build-readiness authority moved to canonical governance docs; runtime/readiness routes and builder hints now point to `docs/products/project-governance/READINESS_CHECKLIST.md`, and legacy root `docs/projects/*` specs were archived under `docs/history/legacy-history-salvage/docs-projects-root/`.
 **Last Updated:** 2026-06-30 — runtime mode governance formalized in `services/runtime-modes.js`: founder-builder is now the default profile; only explicit `LIFEOS_RUNTIME_PROFILE=full` may boot the wider product/scheduler surface.

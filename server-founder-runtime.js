@@ -24,7 +24,6 @@ import { createDbPool } from "./services/db.js";
 import { initDb } from "./db/index.js";
 import { startDbHealthMonitor } from "./services/db-health-monitor.js";
 import { requestTracer } from "./middleware/request-tracer.js";
-import { createTruthResponseEnforcer } from "./middleware/truth-response-enforcer.js";
 import { createSavingsLedger } from "./services/savings-ledger.js";
 import { createTokenAccountingService } from "./services/token-accounting-service.js";
 import { createBuilderOSControlPlaneService } from "./services/builderos-control-plane-service.js";
@@ -170,7 +169,6 @@ applyMiddleware(app, {
 });
 
 app.use(requestTracer(logger));
-app.use(createTruthResponseEnforcer({ logger }));
 
 export const pool = createDbPool({
   validatedDatabaseUrl,

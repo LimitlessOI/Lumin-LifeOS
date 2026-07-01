@@ -24,6 +24,7 @@
 ---
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
+**Last Updated:** 2026-07-01 — founder-builder runtime no longer wraps protected builder responses with the global truth-response enforcer while the live Railway hang is under repair; this is an availability cut for BuilderOS entry surfaces, not a rollback of builder proof law or receipt requirements.
 **Last Updated:** 2026-07-01 — BuilderOS CLI truth now loads `.env.builderos` through `scripts/lib/load-builderos-env.mjs`; `builderos:openai:smoke` was added as the cheapest-capable worker lane probe; readiness/deploy proof scripts now truly fall back from `/api/v1/lifeos/builder/ready` to `/ready` instead of falsely stopping on the first timeout; the pre-build gate now skips product-only intake regression on the minimal `founder_builder` runtime instead of blocking BuilderOS for surfaces that lane does not mount.
 **Last Updated:** 2026-07-01 — Canonical executor `dryRun` now returns blueprint plan truth without requiring live dispatch-gate success first; dispatch gate now recognizes local founder-builder mirror commits as a valid commit-ready path; `/build` now uses the same commit-or-local-mirror path as `/execute`, so local founder runtime can record real committed builder history instead of false-ready GitHub-only state.
 **Last Updated:** 2026-06-29 — CRASH FIX: never-stop-product-factory.js converted all spawnSync to async spawn to stop blocking the Node.js event loop and crashing the Railway container.
