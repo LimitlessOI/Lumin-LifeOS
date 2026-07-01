@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T04:36:25.841Z",
+  "generated_at": "2026-07-01T08:27:44.559Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11773,
   "files": [
@@ -21979,8 +21979,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3563247,
-      "mtime": "2026-07-01T04:36:22.316Z",
-      "indexed_at": "2026-07-01T04:36:25.841Z"
+      "mtime": "2026-07-01T08:26:58.672Z",
+      "indexed_at": "2026-07-01T08:27:44.559Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -37877,9 +37877,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 100482,
-      "mtime": "2026-06-30T17:17:10.924Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 100903,
+      "mtime": "2026-07-01T08:26:04.019Z",
+      "indexed_at": "2026-07-01T08:27:44.559Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38320,9 +38320,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 537632,
-      "mtime": "2026-07-01T04:35:57.982Z",
-      "indexed_at": "2026-07-01T04:36:25.841Z"
+      "bytes": 537786,
+      "mtime": "2026-07-01T08:26:22.217Z",
+      "indexed_at": "2026-07-01T08:27:44.559Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69313,9 +69313,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 127857,
-      "mtime": "2026-07-01T04:32:13.876Z",
-      "indexed_at": "2026-07-01T04:36:25.841Z",
+      "bytes": 129750,
+      "mtime": "2026-07-01T08:18:43.321Z",
+      "indexed_at": "2026-07-01T08:27:44.559Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84013,9 +84013,9 @@
     {
       "path": "services/builderos-canonical-executor.js",
       "synopsis": "BuilderOS canonical execution — single autonomous programming entry point.",
-      "bytes": 10155,
-      "mtime": "2026-06-29T17:44:54.492Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 10190,
+      "mtime": "2026-07-01T08:19:08.770Z",
+      "indexed_at": "2026-07-01T08:27:44.559Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84084,9 +84084,9 @@
     {
       "path": "services/builderos-dispatch-gate.js",
       "synopsis": "Fail-closed pre-dispatch gate for all autonomous BuilderOS paths (Claude Code PreToolUse pattern).",
-      "bytes": 5360,
-      "mtime": "2026-06-29T17:44:54.494Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 5648,
+      "mtime": "2026-07-01T08:19:32.860Z",
+      "indexed_at": "2026-07-01T08:27:44.559Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

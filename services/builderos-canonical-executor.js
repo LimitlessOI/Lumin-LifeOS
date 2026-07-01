@@ -126,6 +126,16 @@ export async function executeCanonicalBlueprintStep({
   const resolvedBase = resolveBaseUrl(baseUrl);
   const resolvedKey = resolveCommandKey(commandKey);
 
+  if (dryRun) {
+    return {
+      ok: true,
+      dry_run: true,
+      plan,
+      step,
+      canonical_path: CANONICAL_PATH_ID,
+    };
+  }
+
   if (!resolvedKey) {
     return { ok: false, error: 'command_key_missing', stage: 'preflight', canonical_path: CANONICAL_PATH_ID };
   }
@@ -143,10 +153,6 @@ export async function executeCanonicalBlueprintStep({
       gate,
       canonical_path: CANONICAL_PATH_ID,
     };
-  }
-
-  if (dryRun) {
-    return { ok: true, dry_run: true, plan, step, canonical_path: CANONICAL_PATH_ID };
   }
 
   let lastResult = null;

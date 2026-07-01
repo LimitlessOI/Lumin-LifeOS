@@ -799,6 +799,8 @@ export function createLifeOSCouncilBuilderRoutes({
     const builderEnvPresent = existsSync(builderEnvPath);
     const builderEnvBytes = builderEnvPresent ? readFileSync(builderEnvPath, 'utf8').length : 0;
     const builderEnvNonEmpty = builderEnvBytes > 0;
+    const localMirrorCommitReady = !IS_RAILWAY_RUNTIME;
+    const commitPathReady = typeof commitToGitHub === 'function' && (Boolean(process.env.GITHUB_TOKEN) || localMirrorCommitReady);
     const deployCommitShaRaw =
       process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || '';
     const deployCommitSha =
@@ -816,6 +818,8 @@ export function createLifeOSCouncilBuilderRoutes({
       codegen,
       builder: {
         commitToGitHub: typeof commitToGitHub === 'function',
+        commit_path_ready: commitPathReady,
+        local_mirror_commit: localMirrorCommitReady,
         /** Token present on the server; without it, commitToGitHub usually throws on use. */
         github_token: Boolean(process.env.GITHUB_TOKEN),
         callCouncilMember: typeof callCouncilMember === 'function',
@@ -839,8 +843,10 @@ export function createLifeOSCouncilBuilderRoutes({
       next_steps: (() => {
         const s = [];
         if (typeof commitToGitHub !== 'function') s.push('Wire deployment-service commitToGitHub into createLifeOSCouncilBuilderRoutes (startup).');
-        if (typeof commitToGitHub === 'function' && !process.env.GITHUB_TOKEN)
-          s.push('Set GITHUB_TOKEN on the server — commits will fail at runtime without a GitHub PAT.');
+        if (typeof commitToGitHub === 'function' && !process.env.GITHUB_TOKEN && IS_RAILWAY_RUNTIME)
+          s.push('Set GITHUB_TOKEN on the server — Railway runtime cannot commit builder output without a GitHub PAT.');
+        if (typeof commitToGitHub === 'function' && !process.env.GITHUB_TOKEN && !IS_RAILWAY_RUNTIME)
+          s.push('Local founder-builder runtime will mirror commits to disk without GitHub. Add GITHUB_TOKEN if you want local /build to push remote commits too.');
         if (typeof callCouncilMember !== 'function') s.push('Wiring: callCouncilMember missing from createLifeOSCouncilBuilderRoutes (startup).');
         if (!pool?.query) s.push('Set DATABASE_URL — builder audit + some paths need pool.');
         if (anyAuthKey)
@@ -1302,6 +1308,10 @@ export function createLifeOSCouncilBuilderRoutes({
     }
 
     const requestedModel = model || getModelForTask(routingKey) || BUILDER_ROUTE_DEFAULT_MODEL;
+    const strictModelSelection =
+      req.body?.strict_model === true ||
+      req.body?.strictModel === true ||
+      req.body?.allow_model_fallback === false;
     const rawCandidateModels = model ? [model] : getCandidateModelsForTask(routingKey);
     const routingPolicy = applyBuilderRoutingPolicy({
       candidateModels: rawCandidateModels,
@@ -1343,11 +1353,17 @@ export function createLifeOSCouncilBuilderRoutes({
     };
     if (model) {
       if (routingPolicy.requestedModelBlocked) {
-        routingRecommendation = {
-          selectedModel: null,
-          blockedCandidates: unavailableCandidates.map((row) => row.model),
-          reason: routingPolicy.reason,
-        };
+        routingRecommendation = strictModelSelection || !preferredModel
+          ? {
+              selectedModel: null,
+              blockedCandidates: unavailableCandidates.map((row) => row.model),
+              reason: routingPolicy.reason,
+            }
+          : {
+              selectedModel: preferredModel,
+              blockedCandidates: unavailableCandidates.map((row) => row.model),
+              reason: `${routingPolicy.reason}; fell back to runtime-available ${preferredModel}`,
+            };
       } else if (availability.availabilityByModel[model]?.available) {
         routingRecommendation = {
           selectedModel: model,
@@ -1355,11 +1371,18 @@ export function createLifeOSCouncilBuilderRoutes({
           reason: `Using explicit model override: ${model}`,
         };
       } else {
-        routingRecommendation = {
-          selectedModel: null,
-          blockedCandidates: unavailableCandidates.map((row) => row.model),
-          reason: `Explicit model override ${model} unavailable (${availability.availabilityByModel[model]?.reason || 'unknown_reason'})`,
-        };
+        const unavailableReason = availability.availabilityByModel[model]?.reason || 'unknown_reason';
+        routingRecommendation = strictModelSelection || !preferredModel
+          ? {
+              selectedModel: null,
+              blockedCandidates: unavailableCandidates.map((row) => row.model),
+              reason: `Explicit model override ${model} unavailable (${unavailableReason})`,
+            }
+          : {
+              selectedModel: preferredModel,
+              blockedCandidates: unavailableCandidates.map((row) => row.model),
+              reason: `Explicit model override ${model} unavailable (${unavailableReason}); fell back to runtime-available ${preferredModel}`,
+            };
       }
     } else if (memorySvc) {
       try {
@@ -2670,9 +2693,23 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
 
     const msg = commit_message || `[system-build] ${resolvedTarget}`;
     try {
-      const commitResult = await commitToGitHub(resolvedTarget, generatedOutput, msg, branch || undefined);
+      const commitResult = await commitOrMirrorFiles(
+        [{ path: resolvedTarget, content: generatedOutput }],
+        msg,
+        branch || undefined,
+      );
       const goldenSha = commitResult?.sha || null;
-      log.info({ resolvedTarget, msg, model_used, goldenSha }, '[BUILDER] /build committed generated file to GitHub');
+      log.info(
+        {
+          resolvedTarget,
+          msg,
+          model_used,
+          goldenSha,
+          commit_mode: commitResult?.commit_mode || 'github',
+          local_only: commitResult?.local_only === true,
+        },
+        '[BUILDER] /build committed generated file',
+      );
       if (goldenSha) {
         createAutonomyGoldenTag(goldenSha).catch(e => log.warn({ err: e.message }, '[BUILDER] golden tag failed (non-fatal)'));
       }
@@ -2818,6 +2855,9 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         committed: true,
         commit_message: msg,
         commit_sha: goldenSha,
+        commit_mode: commitResult?.commit_mode || 'github',
+        local_only: commitResult?.local_only === true,
+        warning: commitResult?.warning || null,
         done_gate_required: true,
         ...(doneGateDeferred
           ? {

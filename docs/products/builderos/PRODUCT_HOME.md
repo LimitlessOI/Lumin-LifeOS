@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-01 |
 
 ### Related docs (this product)
 
@@ -24,6 +24,7 @@
 ---
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
+**Last Updated:** 2026-07-01 — Canonical executor `dryRun` now returns blueprint plan truth without requiring live dispatch-gate success first; dispatch gate now recognizes local founder-builder mirror commits as a valid commit-ready path; `/build` now uses the same commit-or-local-mirror path as `/execute`, so local founder runtime can record real committed builder history instead of false-ready GitHub-only state.
 **Last Updated:** 2026-06-29 — CRASH FIX: never-stop-product-factory.js converted all spawnSync to async spawn to stop blocking the Node.js event loop and crashing the Railway container.
 **Last Updated:** 2026-06-30 — BuilderOS routing hardened to dedicated OpenAI builder lanes: `openai_builder_mini` for cheap-first frozen execution, `openai_builder_standard` for planning/review, and `openai_builder_escalation` for harder repair paths; TSOS/evidence/quorum logic now treats the mini lane as the canonical cheaper executor.
 

@@ -101,11 +101,22 @@ export async function runDispatchGate({
   if (resolvedBase && resolvedKey) {
     const live = await fetchDeploySha(resolvedBase, resolvedKey);
     const builder = live.ready?.builder || {};
+    const commitPathReady =
+      builder.commit_path_ready === true ||
+      builder.commitToGitHub === true;
     checks.push(
       check('DG-04', live.status === 200 && live.ready?.ok !== false, live.path ? `GET ${live.path} OK` : 'ready unreachable'),
     );
     checks.push(
-      check('DG-05', builder.commitToGitHub === true, builder.commitToGitHub ? 'commitToGitHub ready' : 'commit path not ready'),
+      check(
+        'DG-05',
+        commitPathReady,
+        commitPathReady
+          ? (builder.local_mirror_commit === true && builder.github_token !== true
+              ? 'commit path ready via local mirror fallback'
+              : 'commit path ready')
+          : 'commit path not ready',
+      ),
     );
 
     const origin = localOriginMainSha(root);
