@@ -10,11 +10,23 @@ function normalize(value, fallback = '') {
   return String(value ?? fallback).trim().toLowerCase();
 }
 
+function isRailwayRuntime(env = process.env) {
+  return Boolean(
+    env.RAILWAY_ENVIRONMENT
+    || env.RAILWAY_PROJECT_ID
+    || env.RAILWAY_SERVICE_ID
+    || env.RAILWAY_ENVIRONMENT_ID
+  );
+}
+
 export function getRuntimeProfile(env = process.env) {
   const raw = normalize(env.LIFEOS_RUNTIME_PROFILE, 'founder_builder');
   const explicitFullRuntime = normalize(env.LIFEOS_ENABLE_FULL_RUNTIME, 'false') === 'true';
+  const allowFullRuntimeOnRailway =
+    normalize(env.LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY, 'false') === 'true';
+  const fullRuntimeAllowed = !isRailwayRuntime(env) || allowFullRuntimeOnRailway;
   if (raw === 'full' || raw === 'legacy_full') {
-    return explicitFullRuntime ? 'full' : 'founder_builder';
+    return explicitFullRuntime && fullRuntimeAllowed ? 'full' : 'founder_builder';
   }
   if (raw === 'founder_builder' || raw === 'builder' || raw === 'founder') {
     return 'founder_builder';
@@ -49,11 +61,16 @@ export function getHabDailyLimit(env = process.env) {
 
 export function getRuntimeModeSnapshot(env = process.env) {
   const explicitFullRuntime = normalize(env.LIFEOS_ENABLE_FULL_RUNTIME, 'false') === 'true';
+  const allowFullRuntimeOnRailway =
+    normalize(env.LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY, 'false') === 'true';
+  const railwayRuntime = isRailwayRuntime(env);
   return {
     runtimeProfile: getRuntimeProfile(env),
     fullRuntimeProfile: isFullRuntimeProfile(env),
     founderBuilderRuntimeProfile: isFounderBuilderRuntimeProfile(env),
     explicitFullRuntime,
+    allowFullRuntimeOnRailway,
+    railwayRuntime,
     directedMode: isDirectedMode(env),
     autonomyPaused: isAutonomyPaused(env),
     autoBuilderSchedulerEnabled: isAutoBuilderSchedulerEnabled(env),

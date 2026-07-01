@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T10:01:08.610Z",
+  "generated_at": "2026-07-01T10:22:26.495Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11775,
   "files": [
@@ -38649,9 +38649,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 53281,
-      "mtime": "2026-07-01T10:00:39.966Z",
-      "indexed_at": "2026-07-01T10:01:08.610Z"
+      "bytes": 54102,
+      "mtime": "2026-07-01T10:21:50.984Z",
+      "indexed_at": "2026-07-01T10:22:26.495Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -88047,9 +88047,9 @@
     {
       "path": "services/runtime-modes.js",
       "synopsis": "Central runtime safety defaults for autonomy-related env flags.",
-      "bytes": 2225,
-      "mtime": "2026-07-01T00:59:07.577Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 2849,
+      "mtime": "2026-07-01T10:19:52.089Z",
+      "indexed_at": "2026-07-01T10:22:26.495Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
