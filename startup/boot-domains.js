@@ -19,11 +19,14 @@ import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work
 import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
 import { startBpPriorityScheduler } from '../services/builderos-bp-priority-scheduler.js';
 import { startNeverStopProductFactoryScheduler } from '../services/never-stop-product-factory-scheduler.js';
+import { getRuntimeProfile, isFullRuntimeProfile } from '../services/runtime-modes.js';
 
 const tcOperationsBootEnabled =
   process.env.LIFEOS_ENABLE_TC_OPERATIONS_BOOT === 'true';
 const twinAutoIngestBootEnabled =
   process.env.LIFEOS_ENABLE_TWIN_AUTO_INGEST_BOOT === 'true';
+const runtimeProfile = getRuntimeProfile();
+const fullRuntimeProfile = isFullRuntimeProfile();
 
 function scheduleAsyncInterval(task, intervalMs, logger, label) {
   return setInterval(() => {
@@ -464,6 +467,10 @@ export async function bootAllDomains(deps) {
   await bootDeliberationRepCatalog(deps);
   await bootLifeREDomain(deps);
 
+  if (!fullRuntimeProfile) {
+    logger?.info?.(`[BOOT] Founder-builder runtime profile active (${runtimeProfile}) — non-core startup domains suppressed unless explicitly re-enabled`);
+  }
+
   if (!tcOperationsBootEnabled) {
     logger?.info?.('[BOOT] TC operations boot disabled (set LIFEOS_ENABLE_TC_OPERATIONS_BOOT=true to restore GLVAR, email triage, and TC deadline startup)');
   }
@@ -479,15 +486,15 @@ export async function bootAllDomains(deps) {
           bootTCDeadlineCron(deps),
         ]
       : []),
-    bootLifeOSScheduled(deps),
-    bootLaneIntel(deps),
+    ...(fullRuntimeProfile ? [bootLifeOSScheduled(deps)] : []),
+    ...(fullRuntimeProfile ? [bootLaneIntel(deps)] : []),
     bootTruthScoreboard(deps),
-    bootWisdomTruthAuditor(deps),
-    bootChairPredictionScore(deps),
+    ...(fullRuntimeProfile ? [bootWisdomTruthAuditor(deps)] : []),
+    ...(fullRuntimeProfile ? [bootChairPredictionScore(deps)] : []),
     ...(twinAutoIngestBootEnabled ? [bootTwinAutoIngest(deps)] : []),
-    bootOILDailySummary(deps),
+    ...(fullRuntimeProfile ? [bootOILDailySummary(deps)] : []),
     bootSelfRepairDeployCheck(deps),
-    bootFactoryAutopilotRecoveryOwner(deps),
+    ...(fullRuntimeProfile ? [bootFactoryAutopilotRecoveryOwner(deps)] : []),
     bootBuilderOSPriorityQueue(deps),
   ]);
 }

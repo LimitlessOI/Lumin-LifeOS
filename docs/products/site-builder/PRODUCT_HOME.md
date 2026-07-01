@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-06-30 |
 
 ---
 
@@ -81,6 +81,7 @@ All Site Builder conversations, brainstorms, and session dumps live at:
 **Status:** QUALITY-GATED LAUNCH READY — awaiting Railway env vars + live preview verification
 **Authority:** Subordinate to SSOT North Star Constitution
 **Last Updated:** 2026-06-25 — `core/two-tier-system-init.js` — added `createBlueprintIntakeRoutes` import and registration call. Prior: 2026-05-12 — **RL1 repair loop** — `services/site-builder-postmark-helper.js` + **`npm run operator:repair-loop`** (`scripts/operator-repair-loop-once.mjs`) + `tests/site-builder-postmark-helper.test.js` ( **`node:path`** import — verify gate); quarantine clear for **`site-builder-postmark-send`**. Prior: 2026-05-11 — Emergency restore: createSiteBuilderRoutes factory removed by autonomous builder; server crash fix: `patchSiteHtml()` deterministic injection, maxOutputTokens 800→14k, gemini_flash for generation (replaces chatgpt→groq_llama alias that was capping output at 800 tokens), repair passes 1→2, focus-styles regex fixed. Site quality benchmark: 35.6%/F → 88.5%/B after patch. Full automation loop now wired: prospect discovery → batch ranking by opportunity score → mock site build → email outreach → view tracking (auto, via pixel) → reply detection (auto, via Postmark webhook) → follow-up cron → pipeline report. New in this session: command center overlay (operator UI), batch ranker script, pipeline analytics report, preview view tracking pixel, Postmark reply webhook, opportunity scorer accuracy upgrade (30+ booking platforms, chain/franchise cap). All 31/33 verifier checks pass; only 2 remaining failures are `SITE_BASE_URL` + `EMAIL_FROM` env vars (Adam sets in Railway to activate email sending).
+**Last Updated:** 2026-06-30 — `core/two-tier-system-init.js` now honors the founder-builder runtime profile and suppresses auxiliary expansion services outside explicit `full` runtime mode, which keeps the site-builder lane from piggybacking on founder/builder alpha boot unless intentionally re-enabled.
 
 ---
 
@@ -287,6 +288,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-06-30 | `core/two-tier-system-init.js` now suppresses auxiliary expansion boot services when LifeOS is running in the default `founder_builder` runtime profile. | Site Builder should not auto-inflate the founder/builder alpha runtime; it remains available in full runtime, but no longer piggybacks on the narrower BuilderOS proof surface. | `node --check core/two-tier-system-init.js` |
 | 2026-06-25 | **`core/two-tier-system-init.js`** — added `createBlueprintIntakeRoutes` import + registration after `createCommandCenterRoutes`. No change to site builder logic. | Blueprint Intake Service needs to be registered at boot alongside all other route factories. | `node --check core/two-tier-system-init.js` ✅ |
 | 2026-05-13 | **Recovery commit — `services/site-builder-postmark-helper.js` first-time committed to git.** File existed as working-tree untracked since RL1 (2026-05-12) but was never pushed to `origin/main`. Also committed: `tests/site-builder-postmark-helper.test.js` (same situation — RL1 regression test, never pushed). Root cause: local rebased onto 32 Railway autonomous commits (`origin/main`); untracked files exposed as missing; stash recovered them; committed here for first time. `npm test` 8/8 pass; compliance 12/12 pass. | Working-tree files must live in git so Railway CI and cold agents can use them. No logic changes — file content unchanged from stash. | `npm test` 8/8; `node --check services/site-builder-postmark-helper.js` |
 | 2026-05-12 | **`tests/site-builder-postmark-helper.test.js`** — add missing **`import path from "node:path"`** ( **`ReferenceError: path is not defined`** broke **`npm test`** / RL1 verify step); **`@ssot`** header → **Amendment 05**. | Regression guard must load for CI and **`operator:repair-loop`**. | `npm test` |

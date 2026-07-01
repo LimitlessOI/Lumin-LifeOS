@@ -34,7 +34,20 @@ export function registerPublicRoutes(app, {
       Expires: "0",
       "Surrogate-Control": "no-store",
     });
-    return res.sendFile(filePath);
+    const ext = path.extname(filePath).toLowerCase();
+    const type =
+      ext === '.html' ? 'text/html; charset=UTF-8'
+      : ext === '.css' ? 'text/css; charset=UTF-8'
+      : ext === '.js' ? 'application/javascript; charset=UTF-8'
+      : ext === '.webmanifest' ? 'application/manifest+json; charset=UTF-8'
+      : ext === '.svg' ? 'image/svg+xml'
+      : ext === '.png' ? 'image/png'
+      : undefined;
+    if (type) {
+      res.set("Content-Type", type);
+    }
+    const body = fs.readFileSync(filePath);
+    return res.send(body);
   }
 
   function readCookie(req, name) {

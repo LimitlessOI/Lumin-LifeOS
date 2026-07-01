@@ -10,6 +10,23 @@ function normalize(value, fallback = '') {
   return String(value ?? fallback).trim().toLowerCase();
 }
 
+export function getRuntimeProfile(env = process.env) {
+  const raw = normalize(env.LIFEOS_RUNTIME_PROFILE, 'founder_builder');
+  if (raw === 'full' || raw === 'legacy_full') return 'full';
+  if (raw === 'founder_builder' || raw === 'builder' || raw === 'founder') {
+    return 'founder_builder';
+  }
+  return 'founder_builder';
+}
+
+export function isFullRuntimeProfile(env = process.env) {
+  return getRuntimeProfile(env) === 'full';
+}
+
+export function isFounderBuilderRuntimeProfile(env = process.env) {
+  return getRuntimeProfile(env) === 'founder_builder';
+}
+
 export function isDirectedMode(env = process.env) {
   return normalize(env.LIFEOS_DIRECTED_MODE, 'true') !== 'false';
 }
@@ -29,10 +46,12 @@ export function getHabDailyLimit(env = process.env) {
 
 export function getRuntimeModeSnapshot(env = process.env) {
   return {
+    runtimeProfile: getRuntimeProfile(env),
+    fullRuntimeProfile: isFullRuntimeProfile(env),
+    founderBuilderRuntimeProfile: isFounderBuilderRuntimeProfile(env),
     directedMode: isDirectedMode(env),
     autonomyPaused: isAutonomyPaused(env),
     autoBuilderSchedulerEnabled: isAutoBuilderSchedulerEnabled(env),
     habDailyLimit: getHabDailyLimit(env),
   };
 }
-

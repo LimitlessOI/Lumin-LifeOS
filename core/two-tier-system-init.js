@@ -35,14 +35,17 @@ import { createKnowledgeRoutes } from '../routes/knowledge-routes.js';
 import { createConversationRoutes } from '../routes/conversation-routes.js';
 import { createCommandCenterRoutes } from '../routes/command-center-routes.js';
 import { createBlueprintIntakeRoutes } from '../routes/blueprint-intake-routes.js';
+import { getRuntimeProfile, isFullRuntimeProfile } from '../services/runtime-modes.js';
 
 export async function initializeTwoTierSystem(deps) {
+  const runtimeProfile = getRuntimeProfile();
+  const fullRuntimeProfile = isFullRuntimeProfile();
   const directedMode = process.env.LIFEOS_DIRECTED_MODE !== 'false';
   const tcoRuntimeEnabled = process.env.LIFEOS_ENABLE_TCO_RUNTIME === 'true';
   const legacyTwoTierRouteSpineEnabled =
     process.env.LIFEOS_ENABLE_TWO_TIER_ROUTE_SPINE === 'true';
   const auxiliaryBootServicesEnabled =
-    process.env.LIFEOS_ENABLE_AUXILIARY_BOOT_SERVICES === 'true';
+    fullRuntimeProfile && process.env.LIFEOS_ENABLE_AUXILIARY_BOOT_SERVICES === 'true';
   const {
     pool,
     app,
@@ -293,6 +296,9 @@ export async function initializeTwoTierSystem(deps) {
     console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
     console.log("║    Models: Groq, Gemini, Cerebras, Mistral, DeepSeek, Builder mini/standard    ║");
     console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
+    if (!fullRuntimeProfile) {
+      logger.info(`[WORKER-COUNCIL] Founder-builder runtime profile active (${runtimeProfile}) — auxiliary expansion services held out of boot`);
+    }
 
     // Initialize NotificationService (Email/SMS abstractions)
     const NotificationService = notificationModule.NotificationService || notificationModule.default;
@@ -519,7 +525,11 @@ export async function initializeTwoTierSystem(deps) {
             logger.warn("⚠️ API Cost Savings Revenue System not available:", { error: error.message });
           }
         } else {
-          logger.info("🛑 [AUXILIARY-BOOT] Expansion services not initialized (set LIFEOS_ENABLE_AUXILIARY_BOOT_SERVICES=true to restore)");
+          logger.info(
+            fullRuntimeProfile
+              ? "🛑 [AUXILIARY-BOOT] Expansion services not initialized (set LIFEOS_ENABLE_AUXILIARY_BOOT_SERVICES=true to restore)"
+              : `[AUXILIARY-BOOT] Founder-builder runtime profile active (${runtimeProfile}) — expansion services suppressed by default`
+          );
         }
 
         // Initialize System Health Checker

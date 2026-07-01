@@ -11,13 +11,14 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/project-governance/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-06-30 |
 
 ---
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
 **Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
 **Last Updated:** 2026-06-30 — build-readiness authority moved to canonical governance docs; runtime/readiness routes and builder hints now point to `docs/products/project-governance/READINESS_CHECKLIST.md`, and legacy root `docs/projects/*` specs were archived under `docs/history/legacy-history-salvage/docs-projects-root/`.
+**Last Updated:** 2026-06-30 — runtime mode governance formalized in `services/runtime-modes.js`: founder-builder is now the default profile; only explicit `LIFEOS_RUNTIME_PROFILE=full` may boot the wider product/scheduler surface.
 
 | Field | Value |
 |---|---|
@@ -218,6 +219,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-30 | `services/runtime-modes.js` — added explicit runtime profile helpers (`getRuntimeProfile`, `isFullRuntimeProfile`, `isFounderBuilderRuntimeProfile`) and made `founder_builder` the default profile. | The system needed a machine-enforced distinction between founder/builder alpha runtime and the wider legacy/full product runtime so BuilderOS and founder proofing stop booting the whole historical surface by default. | AM19 | local syntax PASS |
 | 2026-06-29 | **`startup/boot-domains.js`** — `startNeverStopProductFactoryScheduler` called in `bootBuilderOSPriorityQueue`. Expansion lane now boots automatically alongside the canonical BP scheduler. | Never-stop factory needed boot-time start; was only wired in the scheduler service itself. | AM19 | pending deploy |
 | 2026-06-26 | **`startup/register-runtime-routes.js`** — deps-object mount `createSocialmediaosRoutes({ pool, requireKey, logger })` after MOS-P1-003 regen. | Prior (app,ctx) mount wrong after route factory regen. | ⚠️ redeploy + acceptance | intake execute |
 | 2026-06-26 | **`startup/register-runtime-routes.js`** — socialmediaos mount: `createSocialmediaosRoutes(app, { pool, requireKey, rk, logger })` — autoWire had used deps-object call on (app,ctx) factory. | Deploy FAILED TypeError ctx undefined line 530. | ✅ superseded by deps-object regen | intake execute |

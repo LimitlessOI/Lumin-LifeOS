@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-30T23:37:42.674Z",
+  "generated_at": "2026-07-01T00:12:34.766Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11768,
   "files": [
@@ -31653,9 +31653,9 @@
     {
       "path": "core/two-tier-system-init.js",
       "synopsis": "Worker-council subsystem initialization",
-      "bytes": 38038,
-      "mtime": "2026-06-30T23:26:25.109Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z",
+      "bytes": 38630,
+      "mtime": "2026-06-30T23:52:31.728Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -38320,9 +38320,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 532545,
-      "mtime": "2026-06-30T23:32:26.594Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z"
+      "bytes": 534048,
+      "mtime": "2026-07-01T00:05:07.223Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -38649,9 +38649,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 49063,
-      "mtime": "2026-06-30T17:46:49.256Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z"
+      "bytes": 49759,
+      "mtime": "2026-07-01T00:05:42.155Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -38685,9 +38685,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 51987,
-      "mtime": "2026-06-29T17:35:43.040Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z"
+      "bytes": 52689,
+      "mtime": "2026-07-01T00:06:13.465Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -69753,9 +69753,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 13782,
-      "mtime": "2026-06-29T17:23:38.355Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z",
+      "bytes": 14287,
+      "mtime": "2026-06-30T23:58:13.902Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87997,9 +87997,9 @@
     {
       "path": "services/runtime-modes.js",
       "synopsis": "Central runtime safety defaults for autonomy-related env flags.",
-      "bytes": 1235,
-      "mtime": "2026-06-29T17:21:08.968Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z",
+      "bytes": 1962,
+      "mtime": "2026-06-30T23:47:42.748Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -89598,9 +89598,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 19935,
-      "mtime": "2026-06-30T22:00:11.817Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z",
+      "bytes": 20508,
+      "mtime": "2026-06-30T23:52:02.973Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89656,9 +89656,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 34399,
-      "mtime": "2026-06-30T23:25:10.905Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z",
+      "bytes": 35922,
+      "mtime": "2026-06-30T23:51:12.292Z",
+      "indexed_at": "2026-07-01T00:12:34.766Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
