@@ -1340,6 +1340,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
                   { role: "user", content: finalPrompt },
                 ],
           }),
+          signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
         });
 
         if (!response.ok) {
@@ -1547,6 +1548,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
                   { role: "user", content: finalPrompt },
                 ],
           }),
+          signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
         });
 
         if (!response.ok) {
@@ -1675,6 +1677,9 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         `Provider ${config.provider} not yet wired in council-service`
       );
     } catch (error) {
+      if (error?.name === 'TimeoutError' || error?.code === 'ABORT_ERR') {
+        error = new Error(`Council provider timed out after ${COUNCIL_TIMEOUT_MS}ms for ${member}`);
+      }
       const duration = Date.now() - startTime;
       if (trackAIPerformance) {
         await trackAIPerformance(member, "chat", duration, 0, 0, false);
