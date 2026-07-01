@@ -19,11 +19,17 @@
 |-----|------|
 | Digital twin (code reality map) | [`TWIN.md`](TWIN.md) |
 | BP V1 — close the loop | [`specs/BP_V1.md`](specs/BP_V1.md) |
+| OpenAI execution ladder | [`OB_EXECUTION_LADDER.md`](OB_EXECUTION_LADDER.md) |
+| Devin execution handoff | [`DEVIN_HANDOFF.md`](DEVIN_HANDOFF.md) |
 | Alpha blueprint (archived receipts) | [`docs/history/builderos/`](../../history/builderos/) |
 
 ---
-**Status:** LIVE (autonomous — builder supervisor operational)
+**Status:** ACTIVE (execution ladder locked; full end-to-end autonomy still requires runtime proof)
 **Authority:** Subordinate to SSOT North Star Constitution
+**Last Updated:** 2026-07-01 — Devin external-host handoff added. The repo now carries a single human-readable handoff and a machine packet for Devin setup/execution so external host use does not depend on reconstructing context from chat. Manual boundary remains only account sign-in, GitHub connection, repo grant, and secret entry.
+**Last Updated:** 2026-07-01 — BuilderOS V1 authority clarified: `Chair/Lumin` is the first real surface; `ARC` authors deterministic blueprints; `CFO` first appears as scoreboard ownership (tokens, time, cost, model grading, efficiency); `Historian` owns blueprint/runtime sync after accepted change; wording is now “truth protocol” / truth ladder, not vague “truth locked” shorthand.
+**Last Updated:** 2026-07-01 — BuilderOS continuity law locked: the OB ladder does not stop on a single blocker. It continues until approved spend is exhausted, founder explicitly stops it, alpha is ready for founder use, or the queue has no ready work left after scan. Isolated blockers are recorded and the system moves to the next ready slice.
+**Last Updated:** 2026-07-01 — canonical OpenAI Builder ladder locked into repo-native authority: `OB1=gpt-5.4-mini`, `OB2=gpt-5.4`, `OB3=gpt-5.5`. Founder is now upstream for product development and downstream for alpha, not the normal coding supervisor. The machine-readable contract lives at `builderos-reboot/governance/OB_EXECUTION_LADDER.json`; cold agents must follow it instead of reconstructing the execution path from chat.
 **Last Updated:** 2026-07-01 — founder-builder runtime no longer wraps protected builder responses with the global truth-response enforcer while the live Railway hang is under repair; this is an availability cut for BuilderOS entry surfaces, not a rollback of builder proof law or receipt requirements.
 **Last Updated:** 2026-07-01 — BuilderOS CLI truth now loads `.env.builderos` through `scripts/lib/load-builderos-env.mjs`; `builderos:openai:smoke` was added as the cheapest-capable worker lane probe; readiness/deploy proof scripts now truly fall back from `/api/v1/lifeos/builder/ready` to `/ready` instead of falsely stopping on the first timeout; the pre-build gate now skips product-only intake regression on the minimal `founder_builder` runtime instead of blocking BuilderOS for surfaces that lane does not mount.
 **Last Updated:** 2026-07-01 — Canonical executor `dryRun` now returns blueprint plan truth without requiring live dispatch-gate success first; dispatch gate now recognizes local founder-builder mirror commits as a valid commit-ready path; `/build` now uses the same commit-or-local-mirror path as `/execute`, so local founder runtime can record real committed builder history instead of false-ready GitHub-only state.
@@ -48,6 +54,15 @@ The system that writes, tests, and deploys its own code. Takes an idea → gener
 - The system must never treat a blueprint itself as the queue, and it must never let the queue reinterpret blueprint authority.
 - Queue advancement must co-update blueprint-adjacent state, receipts, and product-local history so scheduling truth, build truth, and forensic history do not diverge.
 
+### OpenAI ladder doctrine
+
+- The canonical BuilderOS execution ladder is `OB1` → `OB2` → `OB3`.
+- `OB1` is the default cheap executor.
+- `OB2` is the bounded repair lane.
+- `OB3` is the unblock/supervisor lane.
+- BuilderOS execution starts from the frozen blueprint, not from the most recent founder chat.
+- If `OB1` or `OB2` must guess product intent, execution stops and the upstream artifact is repaired.
+
 ### Founder pushback doctrine
 
 - Founder direction is mission-critical, but founder wording is not automatically engineering truth.
@@ -64,6 +79,43 @@ The system that writes, tests, and deploys its own code. Takes an idea → gener
   2. propose the safer structure
   3. block advancement if the ambiguity is load-bearing
   4. record the pushback in the founder-packet or product-development trail
+
+### Truth protocol doctrine
+
+- BuilderOS follows the constitutional truth protocol and truth ladder.
+- Required claim labels: `KNOW`, `THINK`, `GUESS`, `DON'T KNOW`.
+- Status, receipts, predictions, scoreboards, and founder-facing replies must use those epistemic rules when evidence is incomplete.
+- “Truth locked” is not the governing phrase. The governing mechanism is the truth protocol: evidence, scrutiny, promotion, demotion, and reality scoring.
+
+### Blueprint sync doctrine
+
+- Blueprint authority must track reality.
+- If an accepted canonical change modifies the real system, the following must co-update in the same closure loop:
+  1. code/runtime
+  2. receipt trail
+  3. blueprint / twin
+  4. product-home history note when material
+- If code and blueprint disagree after acceptance, the state is `DRIFT_OPEN`, not complete.
+- Ownership split:
+  - Chair approves the intended change
+  - ARC authors the blueprint structure
+  - Builder changes code
+  - SNT detects drift and false green
+  - Historian updates the blueprint/twin/receipt record so canonical authority matches reality
+
+### Minimal real-seat order
+
+BuilderOS V1 does not require the entire department stack to be fully real before useful execution begins.
+
+The required order is:
+
+1. `Chair/Lumin` — one real founder surface: `answer | execute | block`
+2. `CFO` — scoreboard ownership: tokens, cost, time, quality, model-by-role grading
+3. `Historian` — receipts + blueprint sync
+4. `SNT` — attack and false-green detection
+5. `ARC` — deterministic blueprint authoring and freeze
+
+Everything else must earn its runtime cost by results.
 
 ---
 

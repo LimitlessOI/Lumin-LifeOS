@@ -15,6 +15,7 @@ When Cursor hits a usage limit and a new agent starts cold, it reads the relevan
 0a. **`prompts/00-SYSTEM-AUTHORITY-LAYERS.md`** — which repo layer is canonical (factory runtime vs legacy production spine); then path `AGENTS.md` for the tree you edit.
 0b. **`prompts/00-SSOT-READ-SEQUENCE.md`** — fixed read order (Channel A conductor vs Channel B system) to reduce hallucination/drift.
 0c. **`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`** — when to use think-tier vs execute-tier models (maps to `config/task-model-routing.js`).
+0d. **`prompts/00-BUILDEROS-OB-LADDER.md`** — canonical OpenAI Builder execution ladder for repo-native build work.
 1. Identify which domain you're working on
 2. Read `prompts/<domain>.md` — this is your full context in one file
 3. Then read the SSOT amendment it points to for deeper detail (for LifeOS: `docs/products/lifeos/PRODUCT_HOME.md` + `docs/products/lifeos/FILE_MANIFEST.json` for product work; read **entire** `docs/products/lifeos/PRODUCT_HOME.md` only before editing that amendment)
@@ -34,6 +35,7 @@ When Cursor hits a usage limit and a new agent starts cold, it reads the relevan
 | `00-PROVIDER-STRATEGY-LOCK.md` | **Locked** — Decision A provider tiers + department ownership (no monthly re-debate) | COUNCIL_ROUTING_AUDIT + mission 0031 |
 | `00-SSOT-READ-SEQUENCE.md` | **Read early** — SSOT read order (agents vs system); anti-drift rules | Dual-channel + amendments |
 | `00-MODEL-TIERS-THINK-VS-EXECUTE.md` | **Read early** — Think vs execute model policy; builder `execution_only` | AMENDMENT_01 |
+| `00-BUILDEROS-OB-LADDER.md` | **Read early for BuilderOS work** — OB1/OB2/OB3 execution ladder and founder boundary | BuilderOS product home |
 | `lifeos-lumin.md` | Lumin AI conversational interface | AMENDMENT_21 |
 | `lifeos-weekly-review.md` | Weekly letter + interactive conversation | AMENDMENT_21 |
 | `lifeos-scorecard.md` | MITs + daily scorecard + deferral tracking | AMENDMENT_21 |

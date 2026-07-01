@@ -5,9 +5,73 @@
 **Status:** `EXECUTABLE BLUEPRINT — V1 (ARC-revised, code-grounded, execution-deterministic)`
 **Owner:** Adam · **Governs under:** `docs/constitution/FOUNDER_PACKET_V3_BUILDEROS_MASTER_ARCHITECTURE.md`
 **Reality reference:** `docs/products/builderos/TWIN.md` (digital twin of actual code)
-**Last Updated:** 2026-06-28 (ARC translation pass over SNT attack report)
+**Last Updated:** 2026-07-01 (Chair-first operating lock + truth-protocol / scoreboard ownership update)
 
 > **ARC note:** This revision incorporates the SNT attack report. Accepted findings became blueprint changes (below). Two findings were **intent gaps ARC may not invent** and are returned to the founder (see "Returned to founder"). The contract-honesty fix (SNT-1) and gate-hardening (SNT-2) are promoted to the FRONT of the sequence — no other step can be trusted until the proof contract fails closed.
+
+## V1 operating lock (2026-07-01)
+
+These are now part of the V1 blueprint, not chat-only guidance:
+
+- **Chair-first reality:** V1 does **not** require the full department stack to be live first. `Chair/Lumin` is the first real surface. The rest are added only when they earn cost and complexity.
+- **Minimal real Chair:** Chair must truthfully do only three things: `answer`, `execute`, `block`. No theater, no fake execution, no fake “department activity.”
+- **Truth protocol, not vague truth-lock language:** all claims, receipts, predictions, and status updates must use the constitutional truth protocol and truth ladder (`KNOW / THINK / GUESS / DON'T KNOW`, plus promotion/demotion by evidence and outcomes). V1 must use that wording consistently.
+- **CFO first appears as scoreboard ownership, not org ceremony:** CFO owns measurement, spend, latency, efficiency, and model-by-role grading before it grows into a broader strategic seat.
+- **Historian owns blueprint-reality sync:** if code changes are accepted and become canonical, Historian must co-update the blueprint/twin/receipt trail so blueprint authority stays aligned with runtime reality.
+- **ARC builds blueprints; Historian reconciles them:** ARC creates the blueprint from approved intent. Historian does not invent blueprint strategy, but it does maintain blueprint truth after accepted runtime change.
+
+## V1 seat ownership (minimal real stack)
+
+| Function | V1 owner | Required outcome |
+|---|---|---|
+| Founder surface | Chair | one real founder surface, no theater |
+| Blueprint authoring | Chair + ARC | deterministic build packet |
+| Runtime execution | Builder | code only, no strategic invention |
+| Truth attack | SNT | false-green, UI, runtime, acceptance attack |
+| Scoreboard / efficiency | CFO | cost, time, tokens, quality, retry, drift |
+| Canonical record + blueprint sync | Historian | receipts, outcome trail, blueprint/twin co-update |
+
+## V1 scoreboard contract
+
+Every meaningful run must produce a machine-readable record of:
+
+- mission / slice id
+- blueprint version
+- model(s) used
+- tokens used or token estimate
+- cost estimate
+- wall-clock duration
+- result (`PASS`, `FAIL`, `BLOCKED`, `CLARIFY`)
+- receipt path
+- acceptance verdict
+- blueprint delta required (`yes/no`)
+
+No model earns a role by reputation.
+
+Each role is graded by results:
+
+- Chair: routing truth, useful execution, block honesty
+- ARC: blueprint determinism, ambiguity escape rate
+- Builder: build success, retry waste, unauthorized-decision rate
+- SNT: defect catch rate, false-green catch rate
+- CFO: cost/quality routing improvement
+- Historian: receipt completeness and blueprint/runtime sync fidelity
+
+## Blueprint sync law (V1)
+
+If runtime reality changes and that change is accepted as canonical:
+
+1. code changes
+2. receipt is written
+3. blueprint/twin changes
+4. product-home history note changes when material
+
+If those do not co-update, the state is `DRIFT_OPEN`, not complete.
+
+Builder does not decide blueprint truth.
+SNT flags mismatch.
+Historian performs sync.
+Chair/ARC approve the new canonical direction.
 
 ### Returned to founder (`BLOCKED_RETURN_TO_IDC` — ARC may not invent intent)
 - **Lexical priority (SNT-7):** FP V3 names both "Mission is the only sacred cow" and "trust is the highest priority." When closing-fast conflicts with proving-trust, which wins? ARC needs an explicit ordering (proposed default: *fidelity > trust > speed > cost*) before it can resolve trade-offs deterministically.

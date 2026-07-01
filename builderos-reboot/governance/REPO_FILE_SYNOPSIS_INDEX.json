@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T14:22:38.303Z",
+  "generated_at": "2026-07-01T21:19:37.497Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11779,
+  "file_count": 11787,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21904,6 +21904,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/governance/DEVIN_EXECUTION_PACKET.json",
+      "synopsis": "BuilderOS artifact — DEVIN EXECUTION PACKET.",
+      "bytes": 2337,
+      "mtime": "2026-07-01T20:47:49.582Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/governance/FILE_SYNOPSIS_LAW.json",
       "synopsis": "<one line>\\\\n",
       "bytes": 2491,
@@ -21965,6 +21973,14 @@
       "bytes": 3265,
       "mtime": "2026-06-27T17:13:25.155Z",
       "indexed_at": "2026-07-01T04:36:20.955Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/governance/OB_EXECUTION_LADDER.json",
+      "synopsis": "BuilderOS artifact — OB EXECUTION LADDER.",
+      "bytes": 3320,
+      "mtime": "2026-07-01T16:44:40.899Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z",
       "synopsis_index_only": true
     },
     {
@@ -37867,26 +37883,40 @@
       "indexed_at": "2026-07-01T04:36:20.955Z"
     },
     {
+      "path": "docs/products/builderos/DEVIN_HANDOFF.md",
+      "synopsis": "Devin execution host handoff for BuilderOS",
+      "bytes": 4947,
+      "mtime": "2026-07-01T20:47:49.582Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
+    },
+    {
       "path": "docs/products/builderos/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 2139,
-      "mtime": "2026-06-29T17:21:02.600Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 3119,
+      "mtime": "2026-07-01T21:18:13.311Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/builderos/OB_EXECUTION_LADDER.md",
+      "synopsis": "Canonical OpenAI Builder execution ladder",
+      "bytes": 7058,
+      "mtime": "2026-07-01T16:44:40.899Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
     },
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 102512,
-      "mtime": "2026-07-01T10:00:39.966Z",
-      "indexed_at": "2026-07-01T10:01:08.610Z"
+      "bytes": 106254,
+      "mtime": "2026-07-01T21:17:46.133Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
       "synopsis": "BUILDEROS_BP_V1 — executable Version-1 blueprint: close the build loop (L0) + turn on the five recorders",
-      "bytes": 18346,
-      "mtime": "2026-06-29T18:25:12.026Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 21471,
+      "mtime": "2026-07-01T21:16:56.760Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
     },
     {
       "path": "docs/products/builderos/TWIN.md",
@@ -67362,6 +67392,13 @@
       "indexed_at": "2026-07-01T04:36:20.955Z"
     },
     {
+      "path": "prompts/00-BUILDEROS-OB-LADDER.md",
+      "synopsis": "BuilderOS OpenAI execution ladder",
+      "bytes": 1659,
+      "mtime": "2026-07-01T16:44:40.900Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
+    },
+    {
       "path": "prompts/00-HIST-LEGACY-BOUNDARY.md",
       "synopsis": "STOP — Hist / legacy boundary (mandatory before any edit)",
       "bytes": 1883,
@@ -67392,16 +67429,16 @@
     {
       "path": "prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md",
       "synopsis": "Model tiers — think vs execute",
-      "bytes": 2553,
-      "mtime": "2026-06-29T17:21:08.409Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 2725,
+      "mtime": "2026-07-01T16:40:09.269Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
     },
     {
       "path": "prompts/00-PROVIDER-STRATEGY-LOCK.md",
       "synopsis": "Provider Strategy Lock (Decision A)",
-      "bytes": 3977,
-      "mtime": "2026-06-21T21:38:59.952Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 4666,
+      "mtime": "2026-07-01T16:40:09.270Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
     },
     {
       "path": "prompts/00-RESIDENT-ARCHITECT.md",
@@ -67430,6 +67467,27 @@
       "bytes": 10903,
       "mtime": "2026-06-29T17:35:43.582Z",
       "indexed_at": "2026-07-01T04:36:20.955Z"
+    },
+    {
+      "path": "prompts/builderos-ob1-executor.md",
+      "synopsis": "OB1 executor brief",
+      "bytes": 815,
+      "mtime": "2026-07-01T16:39:08.972Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
+    },
+    {
+      "path": "prompts/builderos-ob2-repair.md",
+      "synopsis": "OB2 repair brief",
+      "bytes": 687,
+      "mtime": "2026-07-01T16:39:08.972Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
+    },
+    {
+      "path": "prompts/builderos-ob3-supervisor.md",
+      "synopsis": "OB3 supervisor brief",
+      "bytes": 1075,
+      "mtime": "2026-07-01T16:44:40.900Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
     },
     {
       "path": "prompts/CODEX_SYSTEM_WRAPPER.md",
@@ -67553,9 +67611,9 @@
     {
       "path": "prompts/README.md",
       "synopsis": "LifeOS Domain Prompt Files",
-      "bytes": 3954,
-      "mtime": "2026-06-29T17:21:08.411Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 4219,
+      "mtime": "2026-07-01T16:40:09.270Z",
+      "indexed_at": "2026-07-01T21:19:37.497Z"
     },
     {
       "path": "prompts/tc-service.md",

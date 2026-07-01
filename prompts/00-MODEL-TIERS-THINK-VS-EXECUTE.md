@@ -8,45 +8,49 @@
 
 ---
 
-## Principle (Adam’s policy)
+## Principle (BuilderOS lock)
 
 | Phase | Goal | Tier | Typical member (free tier) |
 |-------|------|------|----------------------------|
-| **Think** | Architecture, tradeoffs, plans, gate-change rubrics, ambiguous specs, **review** | **Higher reasoning** | `gemini_flash` (default for builder plan/review/code when scope is open) |
-| **Execute** | Emit code **from a fixed spec** + injected files; minimal redesign | **Fast / cheaper** | `groq_llama` when `execution_only: true` on builder `mode: code` |
+| **Think** | Architecture, tradeoffs, blueprint hardening, blocker classification, **review** | **Higher reasoning** | `OB3` = `gpt-5.5` |
+| **Repair** | Clear bounded implementation blockers without changing product intent | **Mid reasoning** | `OB2` = `gpt-5.4` |
+| **Execute** | Emit code **from a fixed spec** + injected files; minimal redesign | **Fast / cheaper** | `OB1` = `gpt-5.4-mini` |
 
-**Rule:** Don’t use the execute tier if the spec is incomplete — you’ll get fast wrong code.
+**Rule:** Don’t use the execute tier if the spec is incomplete. If `OB1` must guess, the blueprint failed.
 
 ---
 
-## How routes map (today)
+## BuilderOS route lock (current canonical path)
 
 | Task type key | Model | When |
 |---------------|-------|------|
-| `council.builder.plan` | `gemini_flash` | Step-by-step plan, no code. |
-| `council.builder.review` | `gemini_flash` | Judgment, drift, bugs. |
-| `council.builder.code` | `gemini_flash` | Default codegen (reasoning + large output budget). |
-| `council.builder.code_execute` | `groq_llama` | **Only** with builder body **`execution_only: true`** + `mode: code` — literal implementation of supplied spec/files. |
-| `council.gate_change.debate` | `gemini_flash` | Load-bearing decisions. |
-| Classification / short JSON extract | `groq_llama` | Structured, low ambiguity. |
+| `council.builder.code_execute` | `openai_builder_mini` | Default BuilderOS bounded execution from frozen spec. |
+| `council.builder.review` | `openai_builder_standard` | Bounded repair, code review, verifier-followup. |
+| `council.builder.plan` | `openai_builder_escalation` | Blueprint hardening, blocker classification, execution redesign. |
+| `council.gate_change.debate` | `openai_builder_escalation` | Load-bearing decisions. |
+| Classification / short JSON extract | `openai_builder_mini` | Structured, low ambiguity. |
 
-Override anytime with body **`model`**:`"<council_member_key>"` (Conductor choice).
+Override only when an authority file explicitly allows it. BuilderOS should not free-form hop providers during the canonical OpenAI ladder path.
 
 ---
 
 ## Operational pattern (two-call)
 
-1. **`POST .../task`** with `mode: plan` (and `domain` + amendment excerpt in `spec`) → **think** tier produces steps + file touch list.
-2. Conductor tightens spec; then **`POST .../task`** or **`/build`** with `mode: code`, **`execution_only: true`**, **`files[]`** + full `spec` → **execute** tier emits code.
+1. Freeze the blueprint with no strategic ambiguity.
+2. Dispatch bounded work to `OB1`.
+3. If `OB1` fails twice on the same bounded task, dispatch the blocker to `OB2`.
+4. If `OB2` fails twice, dispatch the full failure chain to `OB3`.
+5. `OB3` repairs the execution contract or emits a true hard blocker.
 
-For **large / fragile** files (e.g. full HTML overlays), stay on **`council.builder.code`** (Gemini) until you’ve proven Groq output passes validators.
+For fragile files, keep the same ladder. Do not substitute a different provider just because the file is large; classify the blocker and escalate inside the ladder.
 
 ---
 
 ## Laws
 
-- **§2.12** forks stay on **think** tier + real council / gate-change — never “cheap model decides architecture.”
-- **§2.6** — if the execute model skips constraints, **do not commit**; fix spec or switch back to think tier.
+- **§2.12** — cheap execution never decides architecture.
+- **§2.6** — if the execute model skips constraints, do not commit; repair the contract or escalate.
+- BuilderOS execution starts from the blueprint, not from founder chat.
 
 ---
 
@@ -54,3 +58,4 @@ For **large / fragile** files (e.g. full HTML overlays), stay on **`council.buil
 
 - `prompts/lifeos-council-builder.md` — API details.
 - `config/council-members.js` — member keys and providers.
+- `docs/products/builderos/OB_EXECUTION_LADDER.md` — canonical OB1/OB2/OB3 execution law.

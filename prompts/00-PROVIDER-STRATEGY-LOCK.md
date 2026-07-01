@@ -36,6 +36,24 @@
 
 ---
 
+## BuilderOS execution exception (current operating lock)
+
+For the canonical BuilderOS repo-level execution path, the current locked ladder is:
+
+- `OB1` = OpenAI `gpt-5.4-mini`
+- `OB2` = OpenAI `gpt-5.4`
+- `OB3` = OpenAI `gpt-5.5`
+
+This is an operating lock, not a philosophical claim that OpenAI must own every department forever.
+
+Why this exception exists:
+
+- the cheapest-capable literal executor is already wired in code
+- the founder needs one coherent low-drift build path now
+- alternate coder lanes may return later only after equal-or-better proof
+
+---
+
 ## Department → provider ownership (target)
 
 Departments **own routing intent**. Providers are replaceable under the role.
@@ -44,10 +62,10 @@ Departments **own routing intent**. Providers are replaceable under the role.
 |------------|-------------------|-----------|---------------|
 | **AIC** (AI Council) | OpenAI, Anthropic | Gemini (cheap seat in debate) | DeepSeek, Groq |
 | **BPB** (Blueprinting) | Gemini, Anthropic | OpenAI | DeepSeek, Groq |
-| **Coder** | DeepSeek | Gemini Flash (bounded patch fallback) | Groq for repo edits |
+| **Coder** | OpenAI Builder ladder (`OB1`/`OB2`/`OB3`) | DeepSeek or Gemini only after equal-or-better proof | Groq for repo edits |
 | **SENTRY** | OpenAI, Anthropic | Gemini (mechanical-adjacent review) | Unreviewed free-tier alone |
 
-**Coder role lock:** Coder = lowest-cost **literal** executor on **frozen** steps (Zero-Decision spec). Exact model ID may change; **role does not**.
+**Coder role lock:** Coder = lowest-cost **literal** executor on **frozen** steps (Zero-Decision spec). For the current canonical BuilderOS path, that means the OpenAI Builder ladder until a cheaper lane proves equal or better.
 
 ---
 

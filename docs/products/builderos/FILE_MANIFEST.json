@@ -2,14 +2,17 @@
   "schema": "product_file_manifest_v1",
   "product_id": "builderos",
   "project_id": "builderos_vocabulary",
-  "name": "BuilderOS Vocabulary & Deliberation Governance v2.7",
+  "name": "BuilderOS Canonical Runtime, Deliberation, and OpenAI Execution Ladder",
   "canonical_home": "docs/products/builderos/PRODUCT_HOME.md",
   "amendment_path": "docs/products/builderos/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-01",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "docs/products/builderos/PRODUCT_HOME.md",
     "docs/products/builderos/FILE_MANIFEST.json",
+    "docs/products/builderos/specs/BP_V1.md",
+    "docs/products/builderos/OB_EXECUTION_LADDER.md",
+    "docs/products/builderos/DEVIN_HANDOFF.md",
     "services/builderos-control-plane-service.js",
     "routes/builderos-control-plane-routes.js",
     "db/migrations/20260601_build_task_ledger.sql",
@@ -31,8 +34,14 @@
     "scripts/deliberation-governance-behavior.mjs",
     "scripts/deliberation-snt-live-verify.mjs",
     "scripts/verify-deliberation-governance.mjs",
+    "builderos-reboot/governance/OB_EXECUTION_LADDER.json",
+    "builderos-reboot/governance/DEVIN_EXECUTION_PACKET.json",
     "factory-staging/factory-core/deliberation/seed-mission-deliberation.js",
-    "factory-staging/factory-core/deliberation/validate-deliberation-gate.js"
+    "factory-staging/factory-core/deliberation/validate-deliberation-gate.js",
+    "prompts/00-BUILDEROS-OB-LADDER.md",
+    "prompts/builderos-ob1-executor.md",
+    "prompts/builderos-ob2-repair.md",
+    "prompts/builderos-ob3-supervisor.md"
   ],
   "shared_dependencies": [],
   "history_anchors": [],
@@ -52,6 +61,26 @@
     {
       "type": "node_check",
       "check": "scripts/deliberation-governance-behavior.mjs"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/builderos/OB_EXECUTION_LADDER.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/builderos/specs/BP_V1.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "builderos-reboot/governance/OB_EXECUTION_LADDER.json"
+    },
+    {
+      "type": "file_exists",
+      "path": "docs/products/builderos/DEVIN_HANDOFF.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "builderos-reboot/governance/DEVIN_EXECUTION_PACKET.json"
     }
   ]
 }

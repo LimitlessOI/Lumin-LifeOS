@@ -1,0 +1,76 @@
+{
+  "schema": "devin_execution_packet_v1",
+  "updated_at": "2026-07-01",
+  "canonical_doc": "docs/products/builderos/DEVIN_HANDOFF.md",
+  "role": "external_execution_host",
+  "source_of_truth": "repo_authority_only",
+  "manual_boundary_only": [
+    "devin_sign_in",
+    "github_connection",
+    "repo_access_grant",
+    "secret_entry",
+    "first_session_start"
+  ],
+  "required_secrets": [
+    "OPENAI_API_KEY",
+    "GITHUB_TOKEN",
+    "GITHUB_REPO",
+    "DATABASE_URL",
+    "COMMAND_CENTER_KEY"
+  ],
+  "authority_order": [
+    "docs/products/builderos/PRODUCT_HOME.md",
+    "docs/products/builderos/OB_EXECUTION_LADDER.md",
+    "builderos-reboot/governance/OB_EXECUTION_LADDER.json",
+    "builderos-reboot/AGENTS.md",
+    "builderos-reboot/BP_PRIORITY.json",
+    "builderos-reboot/HANDOFF.md",
+    "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/FOUNDER_PACKET.md",
+    "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json",
+    "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/OBJECTIVE_VERDICT.json"
+  ],
+  "current_known_blockers": [
+    "empty_env_builderos",
+    "openai_lane_not_operational",
+    "missing_github_token",
+    "missing_github_repo",
+    "canonical_runner_repeat_fail_loop",
+    "repair_persistence_skipped"
+  ],
+  "required_setup_proofs": [
+    "npm run builderos:openai:smoke",
+    "npm run builder:preflight:fast",
+    "npm run builderos:bp-priority:once"
+  ],
+  "execution_objective_order": [
+    "prove_openai_lane",
+    "restore_repair_persistence",
+    "clear_repeat_fail_loop",
+    "resume_canonical_bp_execution",
+    "emit_truthful_receipts"
+  ],
+  "kill_test": {
+    "window_hours": 2,
+    "pass_if_any_3": [
+      "builderos_openai_smoke_pass",
+      "repair_persistence_restored",
+      "repeat_fail_loop_broken",
+      "new_truthful_receipt_written",
+      "bp_priority_advanced_or_blockers_materially_dropped"
+    ],
+    "fail_if_still": [
+      "same_mission_loop",
+      "repair_commit_skipped",
+      "env_missing",
+      "no_new_truthful_receipt",
+      "queue_state_unchanged"
+    ]
+  },
+  "non_negotiables": [
+    "blueprint_authority_outranks_chat",
+    "builder_must_not_make_strategic_decisions",
+    "no_false_green",
+    "infra_blockers_must_be_named_as_infra",
+    "blueprint_blockers_must_be_named_as_blueprint"
+  ]
+}

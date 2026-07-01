@@ -1,0 +1,109 @@
+{
+  "schema": "builderos_ob_execution_ladder_v1",
+  "updated_at": "2026-07-01",
+  "canonical_doc": "docs/products/builderos/OB_EXECUTION_LADDER.md",
+  "purpose": "Cheap-first BuilderOS execution ladder after blueprint freeze.",
+  "active_when": [
+    ".env.builderos is present and non-empty or equivalent runtime secrets are loaded",
+    "builderos:openai:smoke passes",
+    "builder runtime can write receipts on the canonical path"
+  ],
+  "continuity_law": {
+    "default_mode": "continue",
+    "system_must_not_stop_because_one_slice_blocked": true,
+    "system_must_continue_to_next_ready_slice_when_current_slice_is_isolated_blocked": true,
+    "allowed_global_stop_conditions": [
+      "approved_spend_cap_reached",
+      "explicit_founder_stop",
+      "alpha_ready_waiting_for_founder",
+      "no_ready_work_remaining_after_queue_scan"
+    ],
+    "disallowed_global_stop_conditions": [
+      "single_model_failure",
+      "single_slice_blocker",
+      "ordinary_runtime_confusion",
+      "soft_ambiguity_without_supervisor_review"
+    ]
+  },
+  "founder_involvement": {
+    "allowed_phases": [
+      "product_development",
+      "founder_packet",
+      "blueprint_freeze",
+      "alpha_review"
+    ],
+    "must_not_interrupt_for": [
+      "bounded_coding_decision",
+      "repair_attempt",
+      "minor_test_failure",
+      "normal_execution_status"
+    ],
+    "hard_blocker_classes": [
+      "missing_founder_authority",
+      "missing_product_intent",
+      "external_access_blocked",
+      "alpha_ready_for_founder"
+    ]
+  },
+  "models": {
+    "OB1": {
+      "model": "gpt-5.4-mini",
+      "role": "primary_executor",
+      "max_attempts_per_bounded_task": 2,
+      "may_make_strategic_decisions": false,
+      "must_return_control_to": null
+    },
+    "OB2": {
+      "model": "gpt-5.4",
+      "role": "repair_executor",
+      "max_attempts_per_bounded_task": 2,
+      "may_make_strategic_decisions": false,
+      "must_return_control_to": "OB1"
+    },
+    "OB3": {
+      "model": "gpt-5.5",
+      "role": "supervisor_unblocker",
+      "max_attempts_per_bounded_task": 2,
+      "may_make_strategic_decisions": false,
+      "may_repair_execution_contract": true,
+      "may_reopen_blueprint_on_ambiguity": true,
+      "must_return_control_to": "OB1"
+    }
+  },
+  "escalation_order": [
+    "OB1",
+    "OB2",
+    "OB3"
+  ],
+  "escalation_rules": {
+    "retry_before_escalation": true,
+    "must_carry_forward_all_prior_receipts": true,
+    "must_carry_forward_all_prior_research": true,
+    "must_carry_forward_all_prior_failures": true,
+    "infra_failure_is_not_reason_for_model_escalation": true,
+    "blueprint_ambiguity_forces_supervisor_review": true
+  },
+  "blocker_classes": [
+    "blueprint_ambiguity",
+    "missing_authority",
+    "infra_env_failure",
+    "missing_tooling",
+    "acceptance_contract_gap",
+    "code_generation_failure"
+  ],
+  "required_inputs": [
+    "founder_packet",
+    "blueprint",
+    "acceptance_contract",
+    "authority_contract",
+    "queue_position",
+    "prior_receipts"
+  ],
+  "required_truths": [
+    "execution_starts_from_blueprint_not_chat",
+    "builder_must_not_make_strategic_decisions",
+    "success_requires_runtime_truth_not_code_only",
+    "founder_ui_must_be_tested_when_founder_surface_changes",
+    "system_continues_until_spend_cap_or_true_wait_state"
+  ]
+}
