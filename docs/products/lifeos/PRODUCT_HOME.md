@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-01 — founder runtime split shipped (`server.js` bootstrap + `server-founder-runtime.js` + `server-full-runtime.js`); builder readiness now reports local `.env.builderos` truth instead of generic model-unavailable drift |
 
 ---
 

@@ -795,6 +795,10 @@ export function createLifeOSCouncilBuilderRoutes({
     const anyAuthKey = Boolean(
       process.env.API_KEY || process.env.LIFEOS_KEY || process.env.COMMAND_CENTER_KEY
     );
+    const builderEnvPath = join(REPO_ROOT, '.env.builderos');
+    const builderEnvPresent = existsSync(builderEnvPath);
+    const builderEnvBytes = builderEnvPresent ? readFileSync(builderEnvPath, 'utf8').length : 0;
+    const builderEnvNonEmpty = builderEnvBytes > 0;
     const deployCommitShaRaw =
       process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || '';
     const deployCommitSha =
@@ -826,6 +830,11 @@ export function createLifeOSCouncilBuilderRoutes({
         auth_keys: anyAuthKey
           ? { API_KEY: Boolean(process.env.API_KEY), LIFEOS_KEY: Boolean(process.env.LIFEOS_KEY), COMMAND_CENTER_KEY: Boolean(process.env.COMMAND_CENTER_KEY) }
           : null,
+        local_builder_env: {
+          file_present: builderEnvPresent,
+          file_nonempty: builderEnvNonEmpty,
+          openai_key_loaded: Boolean(process.env.OPENAI_API_KEY),
+        },
       },
       next_steps: (() => {
         const s = [];
@@ -836,6 +845,11 @@ export function createLifeOSCouncilBuilderRoutes({
         if (!pool?.query) s.push('Set DATABASE_URL — builder audit + some paths need pool.');
         if (anyAuthKey)
           s.push('Send x-command-key (or x-lifeos-key) equal to the configured COMMAND_CENTER_KEY / LIFEOS_KEY / API_KEY on each builder request from your machine.');
+        if (builderEnvPresent && !builderEnvNonEmpty) {
+          s.push('Local BuilderOS worker file .env.builderos exists but is empty — local builder lanes will stay unavailable until OPENAI_API_KEY (or other provider keys) are actually saved into that file.');
+        } else if (!process.env.OPENAI_API_KEY && !IS_RAILWAY_RUNTIME) {
+          s.push('Local builder runtime has no OPENAI_API_KEY loaded — save the BuilderOS worker key into .env.builderos or export OPENAI_API_KEY before local build tests.');
+        }
         return s;
       })(),
     });
