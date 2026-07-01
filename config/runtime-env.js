@@ -1,6 +1,53 @@
 /**
  * SYNOPSIS: Exports loadRuntimeEnv — config/runtime-env.js. @ssot docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps) */
+import fs from 'node:fs';
+import path from 'node:path';
+import dotenv from 'dotenv';
+
+let builderOsEnvLoaded = false;
+let builderOsEnvFingerprint = null;
+
+function readBuilderOsEnvFile() {
+  const envPath = path.join(process.cwd(), '.env.builderos');
+  if (!fs.existsSync(envPath)) {
+    return { envPath, raw: null };
+  }
+  return { envPath, raw: fs.readFileSync(envPath, 'utf8') };
+}
+
+function applyBuilderOsEnv(raw, { override = false } = {}) {
+  if (typeof raw !== 'string' || !raw.trim()) return false;
+  const parsed = dotenv.parse(raw);
+  let changed = false;
+  for (const [key, value] of Object.entries(parsed)) {
+    if (!override && String(process.env[key] || '').trim()) continue;
+    if (process.env[key] !== value) {
+      process.env[key] = value;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+function loadBuilderOsEnvFallback() {
+  if (builderOsEnvLoaded) return false;
+  builderOsEnvLoaded = true;
+  const { raw } = readBuilderOsEnvFile();
+  if (!raw) return false;
+  builderOsEnvFingerprint = raw;
+  return applyBuilderOsEnv(raw, { override: false });
+}
+
+export function refreshBuilderOsEnvFallback() {
+  const { raw } = readBuilderOsEnvFile();
+  if (typeof raw !== 'string' || !raw.trim()) return false;
+  if (raw === builderOsEnvFingerprint) return false;
+  builderOsEnvFingerprint = raw;
+  return applyBuilderOsEnv(raw, { override: false });
+}
+
 export function loadRuntimeEnv() {
+  loadBuilderOsEnvFallback();
   const {
     DATABASE_URL,
     DATABASE_URL_SANDBOX,
@@ -69,34 +116,12 @@ export function loadRuntimeEnv() {
     RAILWAY_ENVIRONMENT_ID
   );
 
-  const _ollamaExplicit =
-    (
-      process.env.OLLAMA_ENDPOINT ||
-      process.env.OLLAMA_BASE_URL ||
-      process.env.OLLAMA_URL ||
-      process.env.OLLAMA_API_BASE ||
-      (process.env.OLLAMA_HOST ? `http://${process.env.OLLAMA_HOST}` : "") ||
-      ""
-    ).trim();
-
-  /** Explicit only on Railway — avoids boot pings to ollama.railway.internal or a tunnel to your Mac. */
-  const OLLAMA_ENDPOINT =
-    _ollamaExplicit || (!isRailwayDeploy ? "http://localhost:11434" : "");
-
   /**
-   * off — never use Ollama in council routing (free cloud APIs only). Default on Railway.
-   * last_resort — Ollama only after other free providers hit daily limits.
-   * on — same as last_resort for now.
+   * Founder directive (2026-06-30): Ollama is permanently retired from this system.
+   * Keep the exported fields for compatibility, but force runtime routing off.
    */
-  const rawCouncilOllama = String(process.env.COUNCIL_OLLAMA_MODE || "")
-    .toLowerCase()
-    .trim();
-  let COUNCIL_OLLAMA_MODE = "last_resort";
-  if (["off", "last_resort", "on"].includes(rawCouncilOllama)) {
-    COUNCIL_OLLAMA_MODE = rawCouncilOllama;
-  } else if (isRailwayDeploy) {
-    COUNCIL_OLLAMA_MODE = "off";
-  }
+  const OLLAMA_ENDPOINT = "";
+  const COUNCIL_OLLAMA_MODE = "off";
 
   // ==================== DATABASE ENVIRONMENT VALIDATION ====================
   /**

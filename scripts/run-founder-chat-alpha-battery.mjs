@@ -12,11 +12,17 @@ import { finishBpAcceptance } from './lib/bp-acceptance-finish.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MISSION = 'FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001';
-const BASE = (process.env.PUBLIC_BASE_URL || process.env.LIFERE_ALPHA_BASE_URL || '').replace(/\/$/, '');
+const BASE = (
+  process.env.PUBLIC_BASE_URL
+  || process.env.LIFERE_ALPHA_BASE_URL
+  || process.env.BASE_URL
+  || ''
+).replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
 const ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
 const POLL_MS = 5000;
 const POLL_MAX = 180;
+const FETCH_TIMEOUT_MS = Number(process.env.FOUNDER_ALPHA_FETCH_TIMEOUT_MS || 15000);
 
 const report = {
   schema: 'founder_chat_alpha_battery_v1',
@@ -33,24 +39,85 @@ function fail(id, detail) {
   report[`fail_${id}`] = detail;
 }
 
+function authHeaders(extra = {}) {
+  return {
+    ...(KEY ? { 'x-command-key': KEY, 'x-api-key': KEY } : {}),
+    ...extra,
+  };
+}
+
+async function fetchJsonWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS) {
+  const res = await fetch(url, {
+    ...options,
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  const json = await res.json().catch(() => ({}));
+  return { res, json };
+}
+
 async function pollBuildJob(jobId, pollUrl, pollMax = POLL_MAX) {
   const url = pollUrl?.startsWith('http') ? pollUrl : `${BASE}${pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`}`;
   for (let i = 0; i < pollMax; i += 1) {
     await new Promise((r) => setTimeout(r, POLL_MS));
-    const res = await fetch(url, { headers: KEY ? { 'x-command-key': KEY } : {} });
-    const json = await res.json().catch(() => ({}));
+    let res;
+    let json;
+    try {
+      ({ res, json } = await fetchJsonWithTimeout(
+        url,
+        { headers: authHeaders() },
+        FETCH_TIMEOUT_MS,
+      ));
+    } catch (error) {
+      return {
+        json: {
+          pass_fail: 'FAIL',
+          first_blocker: error?.name === 'TimeoutError'
+            ? 'build_job_poll_timeout'
+            : (error?.message || String(error)),
+        },
+        pf: 'FAIL',
+      };
+    }
     const pf = json.pass_fail || json.result?.pass_fail;
     if (pf === 'PASS' || pf === 'FAIL') return { json, pf };
   }
   return { json: { pass_fail: 'TIMEOUT' }, pf: 'TIMEOUT' };
 }
 
+async function fetchFounderHealth() {
+  let last = null;
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    last = await fetchJsonWithTimeout(`${BASE}/api/v1/lifeos/auth/operator/founder-chat-health`, {
+      headers: authHeaders(),
+      cache: 'no-store',
+    }).catch((error) => ({
+      res: { status: 0 },
+      json: { ok: false, error: error?.message || String(error) },
+    }));
+    if (last?.res?.status === 200) return last;
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  return last || {
+    res: { status: 0 },
+    json: { ok: false, error: 'founder_health_probe_failed' },
+  };
+}
+
+async function syncFounderLogin() {
+  return fetchJsonWithTimeout(`${BASE}/api/v1/lifeos/auth/operator/sync-founder-login`, {
+    method: 'POST',
+    headers: authHeaders({ 'Content-Type': 'application/json' }),
+    body: JSON.stringify({ source: 'founder_chat_alpha_battery' }),
+    cache: 'no-store',
+  });
+}
+
 async function send(id, text, opts = {}) {
-  const res = await fetch(`${BASE}${ENDPOINT}`, {
+  const { res, json } = await fetchJsonWithTimeout(`${BASE}${ENDPOINT}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      ...(KEY ? { 'x-command-key': KEY } : {}),
+      ...authHeaders(),
     },
     body: JSON.stringify({
       text,
@@ -62,7 +129,6 @@ async function send(id, text, opts = {}) {
     }),
     cache: 'no-store',
   });
-  const json = await res.json().catch(() => ({}));
   const summary = String(json.human_summary || json.human_summary_technical || json.summary || '');
   report.results[id] = {
     http: res.status,
@@ -178,11 +244,46 @@ if (!BASE || !KEY) {
 }
 
 {
-  const healthRes = await fetch(`${BASE}/api/v1/lifeos/auth/operator/founder-chat-health`, {
-    headers: { 'x-command-key': KEY },
-    cache: 'no-store',
-  }).catch(() => null);
-  const healthJson = healthRes ? await healthRes.json().catch(() => ({})) : {};
+  let healthRes = null;
+  let healthJson = {};
+  let healthError = null;
+  try {
+    const result = await fetchFounderHealth();
+    healthRes = result.res;
+    healthJson = result.json;
+  } catch (error) {
+    healthError = error?.name === 'TimeoutError'
+      ? 'founder-chat-health timeout'
+      : (error?.message || String(error));
+  }
+  if (!healthError && healthRes?.status === 200 && healthJson?.ok !== true) {
+    const blockers = Array.isArray(healthJson.blockers) ? healthJson.blockers : [];
+    if (blockers.includes('founder_login_sync_required')) {
+      try {
+        const syncResult = await syncFounderLogin();
+        report.results.H0_founder_login_health_sync = {
+          http: syncResult.res.status,
+          ok: syncResult.json?.ok === true,
+          cred_source: syncResult.json?.cred_source || null,
+          login_probe_ok: syncResult.json?.login_probe?.ok ?? null,
+          error: syncResult.json?.error || null,
+        };
+        if (syncResult.res.status === 200 && syncResult.json?.ok === true) {
+          const retry = await fetchFounderHealth();
+          healthRes = retry.res;
+          healthJson = retry.json;
+        }
+      } catch (error) {
+        report.results.H0_founder_login_health_sync = {
+          http: 0,
+          ok: false,
+          error: error?.name === 'TimeoutError'
+            ? 'sync-founder-login timeout'
+            : (error?.message || String(error)),
+        };
+      }
+    }
+  }
   report.results.H0_founder_login_health = {
     http: healthRes?.status || 0,
     ok: healthJson.ok,
@@ -190,7 +291,9 @@ if (!BASE || !KEY) {
     cred_source: healthJson.cred_source || null,
     login_probe_ok: healthJson.login_probe?.ok ?? null,
   };
-  if (!healthRes || healthRes.status === 404) {
+  if (healthError) {
+    fail('H0_founder_login_health', healthError);
+  } else if (!healthRes || healthRes.status === 404) {
     fail('H0_founder_login_health', 'founder-chat-health endpoint missing — deploy auth routes');
   } else if (!healthJson.ok) {
     fail('H0_founder_login_health', (healthJson.blockers || ['login_probe_failed']).join(', '));
@@ -199,7 +302,9 @@ if (!BASE || !KEY) {
   }
 }
 
-for (const probe of PROBES) {
+const founderSurfaceUnavailable = report.failed.includes('H0_founder_login_health');
+
+for (const probe of founderSurfaceUnavailable ? [] : PROBES) {
   try {
     const { res, json, summary } = await send(probe.id, probe.text, probe);
     if (res.status !== 200 && res.status !== 202) {
@@ -320,6 +425,7 @@ for (const probe of PROBES) {
     report.passed.push(probe.id);
   } catch (err) {
     fail(probe.id, err.message);
+    if (err?.name === 'TimeoutError') break;
   }
 }
 

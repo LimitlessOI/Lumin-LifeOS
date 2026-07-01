@@ -155,7 +155,11 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       receipt_truth = 'COMMIT_BLOCKED';
     }
     const blockerText = String(first_blocker || raw.exec_meta?.error || '');
-    if (/too short|validation|syntax|refusing to commit|stub|layer violation|pre-commit|governance|prose refusal|not code/i.test(blockerText)) {
+    if (/No (?:authorized model is currently allowed|runtime-available authorized model)|_api_key_missing|github_token_missing|builderos_policy_blocked/i.test(blockerText)) {
+      failure_code = failure_code || 'ROUTING_DISPATCH';
+      lesson = lesson || 'Builder routing could not find any runtime-available authorized model for this task.';
+      fix = fix || 'Load a real provider key for an approved builder lane, or unblock an approved free/provider lane in builder routing policy.';
+    } else if (/too short|validation|syntax|refusing to commit|stub|layer violation|pre-commit|governance|prose refusal|not code/i.test(blockerText)) {
       failure_code = failure_code || 'VALIDATION_REJECTED';
     } else {
       failure_code = failure_code || 'COMMAND_FAILED';
@@ -409,10 +413,15 @@ export function buildExecutionAutopsy({
   const cacheHit = raw.task_meta?.cache_hit === true;
   const outputBytes = raw.task_meta?.output_bytes || 0;
   const execError = raw.exec_meta?.error || raw.task_meta?.error || null;
+  const builderRoute = path === 'builder_task_execute'
+    ? 'POST /api/v1/lifeos/builder/build'
+    : path === 'terminal_bridge'
+      ? 'terminal-bridge execution path'
+      : 'execution path varies by route';
 
   const what_happened = [
     `You asked: ${task.slice(0, 200)}${task.length > 200 ? '…' : ''}`,
-    `Route: founder-interface → ${path} → POST /api/v1/lifeos/builder/task → POST /api/v1/lifeos/builder/execute`,
+    `Route: founder-interface → ${path} → ${builderRoute}`,
   ];
 
   if (cacheHit) what_happened.push('Builder task returned cache_hit:true — stale cached output was reused.');
@@ -457,6 +466,9 @@ export function buildExecutionAutopsy({
     lessons.push('Inline CSS in dashboard + app shell beats theme-overrides alone; service worker cache can hide changes.');
   } else if (cacheHit) {
     lessons.push('Cached builder output is not fresh code for a new task.');
+  } else if (failure_code === 'ROUTING_DISPATCH') {
+    lessons.push('The builder route ran, but every approved model lane was unavailable or policy-blocked.');
+    lessons.push('This is a runtime/provider configuration failure, not a code-generation success.');
   } else {
     lessons.push(lesson || 'Failure without commit means zero user-visible change — never claim shipped.');
   }
@@ -490,9 +502,17 @@ function buildFixSteps({ failure_code, targetFile, task, action }) {
 
   if (failure_code === 'COMMIT_NO_SHA') {
     return [
-      'Inspect POST /api/v1/lifeos/builder/execute response — sha must flow from commitToGitHub.',
+      'Inspect POST /api/v1/lifeos/builder/build response — sha must flow from commitToGitHub.',
       'Do not show PASS in founder chat until SHA is present.',
       'After SHA confirmed: verify Railway deploy SHA matches before founder visual test.',
+    ];
+  }
+
+  if (failure_code === 'ROUTING_DISPATCH') {
+    return [
+      'Inspect the blocker for missing or blocked provider lanes — that list is the actual runtime constraint.',
+      'Load an approved builder key (for example OPENAI_API_KEY, GEMINI_API_KEY / GOOGLE_API_KEY, GITHUB_TOKEN, or DEEPSEEK_API_KEY) into the active runtime.',
+      'If a real key already exists, patch council-model-availability / routing policy so the lane is recognized and allowed for council.builder.code.',
     ];
   }
 

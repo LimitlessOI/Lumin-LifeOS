@@ -11,6 +11,7 @@ import {
   verificationCurlForProofEvent,
   verificationPathForProofEvent,
 } from './lifeos-system-proof-event.js';
+import { refreshBuilderOsEnvFallback } from '../config/runtime-env.js';
 
 const PROVIDERS = {
   gpt: 'openai',
@@ -28,10 +29,14 @@ const PROVIDER_LABELS = {
 };
 
 function apiKeyFor(provider) {
+  refreshBuilderOsEnvFallback();
   if (provider === 'openai') return process.env.OPENAI_API_KEY?.trim() || null;
   if (provider === 'anthropic') return process.env.ANTHROPIC_API_KEY?.trim() || null;
   if (provider === 'google') {
-    return process.env.GEMINI_API_KEY?.trim() || process.env.GOOGLE_API_KEY?.trim() || null;
+    return process.env.GEMINI_API_KEY?.trim()
+      || process.env.GOOGLE_API_KEY?.trim()
+      || process.env.GOOGLE_AI_KEY?.trim()
+      || null;
   }
   return null;
 }

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T10:22:26.495Z",
+  "generated_at": "2026-07-01T13:21:13.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11775,
+  "file_count": 11778,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -30786,9 +30786,9 @@
     {
       "path": "config/runtime-env.js",
       "synopsis": "Exports loadRuntimeEnv — config/runtime-env.js. @ssot docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)",
-      "bytes": 9359,
-      "mtime": "2026-06-30T20:09:11.583Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 10355,
+      "mtime": "2026-07-01T11:28:30.592Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)"
       ]
@@ -37747,9 +37747,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 51524,
-      "mtime": "2026-07-01T08:39:28.170Z",
-      "indexed_at": "2026-07-01T08:40:07.587Z"
+      "bytes": 51835,
+      "mtime": "2026-07-01T11:35:42.548Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -38320,9 +38320,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 538786,
-      "mtime": "2026-07-01T10:00:39.965Z",
-      "indexed_at": "2026-07-01T10:01:08.610Z"
+      "bytes": 539507,
+      "mtime": "2026-07-01T11:35:42.550Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69183,9 +69183,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 24975,
-      "mtime": "2026-07-01T04:35:46.091Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 25737,
+      "mtime": "2026-07-01T13:06:56.019Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -69213,9 +69213,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 53124,
-      "mtime": "2026-07-01T04:35:46.095Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 53795,
+      "mtime": "2026-07-01T13:09:45.037Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71810,9 +71810,9 @@
     {
       "path": "scripts/run-founder-chat-alpha-battery.mjs",
       "synopsis": "Founder chat alpha — build must build, questions must answer, search when unknown.",
-      "bytes": 15878,
-      "mtime": "2026-06-30T19:45:00.330Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 16333,
+      "mtime": "2026-07-01T12:58:06.309Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84843,9 +84843,9 @@
     {
       "path": "services/council-model-availability.js",
       "synopsis": "Provider-aware candidate filtering for council/builder routing.",
-      "bytes": 4927,
-      "mtime": "2026-06-30T22:24:33.433Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 5102,
+      "mtime": "2026-07-01T12:38:28.945Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -84863,9 +84863,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 74873,
-      "mtime": "2026-07-01T08:38:17.410Z",
-      "indexed_at": "2026-07-01T08:40:07.587Z",
+      "bytes": 74968,
+      "mtime": "2026-07-01T12:38:52.149Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -85387,9 +85387,9 @@
     {
       "path": "services/founder-build-success-gate.js",
       "synopsis": "Founder build success gate — PASS requires atomic commit + outcome + live content + client proof spec.",
-      "bytes": 13019,
-      "mtime": "2026-06-29T17:44:54.521Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 13473,
+      "mtime": "2026-07-01T12:29:22.083Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85437,9 +85437,9 @@
     {
       "path": "services/founder-direct-provider.js",
       "synopsis": "Founder direct provider test — live API only, no council, no simulation.",
-      "bytes": 7746,
-      "mtime": "2026-06-29T17:21:08.877Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 7906,
+      "mtime": "2026-07-01T12:39:39.291Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85528,9 +85528,9 @@
     {
       "path": "services/founder-provider-tool-action.js",
       "synopsis": "Direct paid-provider API → tool call → LifeOS system proof event.",
-      "bytes": 18560,
-      "mtime": "2026-06-29T17:21:08.880Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 18720,
+      "mtime": "2026-07-01T12:39:15.731Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86259,9 +86259,9 @@
     {
       "path": "services/lifeos-execution-truth.js",
       "synopsis": "Hard execution-truth gate — never emit PASS / COMMITTED without proof.",
-      "bytes": 31422,
-      "mtime": "2026-06-28T20:00:25.750Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 32835,
+      "mtime": "2026-07-01T12:56:13.238Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90337,6 +90337,13 @@
       "indexed_at": "2026-07-01T04:36:20.955Z"
     },
     {
+      "path": "tests/council-model-availability.test.js",
+      "synopsis": "js — tests/council-model-availability.test.js.",
+      "bytes": 744,
+      "mtime": "2026-07-01T13:20:58.810Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z"
+    },
+    {
       "path": "tests/deployment-service-package-guard.test.js",
       "synopsis": "Regression tests for the package.json protected-scripts guard in",
       "bytes": 5529,
@@ -90390,6 +90397,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/founder-build-base-url.test.js",
+      "synopsis": "js — tests/founder-build-base-url.test.js.",
+      "bytes": 2268,
+      "mtime": "2026-07-01T13:20:58.829Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z"
     },
     {
       "path": "tests/founder-build-job-store.test.js",
@@ -90826,6 +90840,13 @@
       "bytes": 1291,
       "mtime": "2026-06-28T18:19:01.837Z",
       "indexed_at": "2026-07-01T04:36:20.955Z"
+    },
+    {
+      "path": "tests/runtime-env-builderos-refresh.test.js",
+      "synopsis": "js — tests/runtime-env-builderos-refresh.test.js.",
+      "bytes": 2622,
+      "mtime": "2026-07-01T11:33:10.876Z",
+      "indexed_at": "2026-07-01T13:21:13.184Z"
     },
     {
       "path": "tests/self-repair-attempt-context.test.js",

@@ -410,7 +410,9 @@ export function createCouncilService({
       case "google":
         return (
           process.env.LIFEOS_GEMINI_KEY?.trim() ||
-          process.env.GEMINI_API_KEY?.trim()
+          process.env.GEMINI_API_KEY?.trim() ||
+          process.env.GOOGLE_API_KEY?.trim() ||
+          process.env.GOOGLE_AI_KEY?.trim()
         );
       case "groq":
         return process.env.GROQ_API_KEY?.trim();

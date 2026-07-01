@@ -9,6 +9,7 @@
  */
 
 import { createCouncilMembers } from '../config/council-members.js';
+import { refreshBuilderOsEnvFallback } from '../config/runtime-env.js';
 
 function loadCouncilMembers(env = process.env) {
   return createCouncilMembers({
@@ -46,6 +47,9 @@ function resolveOllamaEndpoint(env = process.env) {
 }
 
 export function getCouncilMemberAvailability(memberKey, env = process.env) {
+  if (env === process.env) {
+    refreshBuilderOsEnvFallback();
+  }
   const members = loadCouncilMembers(env);
   const config = members?.[memberKey];
   if (!config) {
@@ -70,7 +74,7 @@ export function getCouncilMemberAvailability(memberKey, env = process.env) {
 
     case 'gemini':
     case 'google':
-      return hasAny(['LIFEOS_GEMINI_KEY', 'GEMINI_API_KEY'], env)
+      return hasAny(['LIFEOS_GEMINI_KEY', 'GEMINI_API_KEY', 'GOOGLE_API_KEY', 'GOOGLE_AI_KEY'], env)
         ? { available: true, reason: 'gemini_key_present' }
         : { available: false, reason: 'gemini_api_key_missing' };
 

@@ -217,7 +217,15 @@ Input: ${rawText}`,
   }
 
   function buildBuildFailureReceipt(task, taskJson, execJson) {
-    const blocker = execJson?.error || taskJson?.error || 'Builder failed with no error detail';
+    const blocker =
+      execJson?.first_blocker ||
+      execJson?.detail ||
+      execJson?.error ||
+      taskJson?.first_blocker ||
+      taskJson?.detail ||
+      taskJson?.error ||
+      taskJson?.reason ||
+      'Builder failed with no error detail';
     let lesson = 'The build path ran but did not produce a committable change.';
     let fix = 'Retry with a smaller scope: name the exact file and the one change you want.';
 
@@ -233,6 +241,9 @@ Input: ${rawText}`,
     } else if (/prose refusal|not code/i.test(blocker)) {
       lesson = 'Builder returned prose instead of code — usually means the target file was not injected into the prompt.';
       fix = 'Retry the same GAP-FILL prompt; founder-interface now auto-injects files[] when target_file is named.';
+    } else if (/No runtime-available authorized model|No authorized model is currently allowed|_api_key_missing|github_token_missing|builderos_policy_blocked/i.test(blocker)) {
+      lesson = 'Founder build reached BuilderOS, but no runtime-authorized coding lane was actually available for execution.';
+      fix = 'Configure at least one allowed builder provider key for the active runtime lane, then retry the exact same request.';
     } else if (taskJson?.cache_hit) {
       lesson = 'Builder returned cached stale output instead of fresh code for this task.';
       fix = 'System now disables cache on build route; retry the same request.';
@@ -461,11 +472,7 @@ HOW TO RESPOND:
         fp_v2_gate: gate,
       }, { action: 'build', task });
     }
-    const baseCheck = assertFounderBuildBaseUrl(
-      process.env.PUBLIC_BASE_URL
-        ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
-        : resolveFounderBuildBaseUrl(),
-    );
+    const baseCheck = assertFounderBuildBaseUrl(resolveFounderBuildBaseUrl());
     if (!baseCheck.ok) {
       return enforceExecutionTruth({
         ok: false,
@@ -1131,7 +1138,11 @@ HOW TO RESPOND:
 
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
     try {
-      const originalText = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
+      const bodyText =
+        typeof req.body?.text === 'string' && req.body.text.trim()
+          ? req.body.text
+          : (typeof req.body?.message === 'string' ? req.body.message : '');
+      const originalText = typeof bodyText === 'string' ? bodyText.trim() : '';
       const stage = String(req.body?.stage || 'system').toLowerCase();
       const missionId = req.body?.mission_id ? String(req.body.mission_id) : null;
       const force = req.body?.force === true;

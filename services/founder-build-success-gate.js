@@ -273,9 +273,25 @@ export function founderVerificationRequired(task, executionPath) {
 }
 
 export function resolveFounderBuildBaseUrl() {
-  const base = process.env.PUBLIC_BASE_URL
-    || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '')
-    || `http://127.0.0.1:${process.env.PORT || 3000}`;
+  const explicit = String(process.env.FOUNDER_BUILD_BASE_URL || '').trim();
+  if (explicit) return explicit.replace(/\/$/, '');
+
+  const localLoopback = `http://127.0.0.1:${process.env.PORT || 3000}`;
+  const onRailway = Boolean(
+    process.env.RAILWAY_PUBLIC_DOMAIN
+    || process.env.RAILWAY_ENVIRONMENT
+    || process.env.RAILWAY_ENVIRONMENT_NAME
+    || process.env.RAILWAY_PROJECT_ID
+    || process.env.RAILWAY_SERVICE_ID
+  );
+
+  const base = onRailway
+    ? (
+      process.env.PUBLIC_BASE_URL
+      || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '')
+      || localLoopback
+    )
+    : localLoopback;
   return String(base).replace(/\/$/, '');
 }
 
