@@ -19,6 +19,7 @@ _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 **Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
 **Last Updated:** 2026-06-30 — build-readiness authority moved to canonical governance docs; runtime/readiness routes and builder hints now point to `docs/products/project-governance/READINESS_CHECKLIST.md`, and legacy root `docs/projects/*` specs were archived under `docs/history/legacy-history-salvage/docs-projects-root/`.
 **Last Updated:** 2026-06-30 — runtime mode governance formalized in `services/runtime-modes.js`: founder-builder is now the default profile; only explicit `LIFEOS_RUNTIME_PROFILE=full` may boot the wider product/scheduler surface.
+**Last Updated:** 2026-06-30 — founder-builder startup governance extended into `server.js`: non-core warmups are no longer mandatory at startup for the default founder-builder profile, which makes bind/liveness first-class and pushes long-horizon warmups into explicit `full` runtime mode.
 
 | Field | Value |
 |---|---|
@@ -220,6 +221,7 @@ Required runtime truths:
 ## Change Receipts
 
 | 2026-06-30 | `services/runtime-modes.js` — added explicit runtime profile helpers (`getRuntimeProfile`, `isFullRuntimeProfile`, `isFounderBuilderRuntimeProfile`) and made `founder_builder` the default profile. | The system needed a machine-enforced distinction between founder/builder alpha runtime and the wider legacy/full product runtime so BuilderOS and founder proofing stop booting the whole historical surface by default. | AM19 | local syntax PASS |
+| 2026-06-30 | `server.js` — founder-builder runtime now treats bind/liveness as primary and skips or defers non-core warmups (auto-builder recovery, ROI/knowledge warm loads, dependency audit, memory bootstrap, Stripe startup sync, autonomy startup snapshot) unless `LIFEOS_RUNTIME_PROFILE=full`. | Runtime profile law was incomplete while `server.js` still eagerly booted historical warmups on the default founder-builder path; Railway truth required the startup contract to enforce fast liveness, not just route/domain narrowing. | AM19 | local founder boot PASS |
 | 2026-06-29 | **`startup/boot-domains.js`** — `startNeverStopProductFactoryScheduler` called in `bootBuilderOSPriorityQueue`. Expansion lane now boots automatically alongside the canonical BP scheduler. | Never-stop factory needed boot-time start; was only wired in the scheduler service itself. | AM19 | pending deploy |
 | 2026-06-26 | **`startup/register-runtime-routes.js`** — deps-object mount `createSocialmediaosRoutes({ pool, requireKey, logger })` after MOS-P1-003 regen. | Prior (app,ctx) mount wrong after route factory regen. | ⚠️ redeploy + acceptance | intake execute |
 | 2026-06-26 | **`startup/register-runtime-routes.js`** — socialmediaos mount: `createSocialmediaosRoutes(app, { pool, requireKey, rk, logger })` — autoWire had used deps-object call on (app,ctx) factory. | Deploy FAILED TypeError ctx undefined line 530. | ✅ superseded by deps-object regen | intake execute |

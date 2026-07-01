@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T00:12:34.766Z",
+  "generated_at": "2026-07-01T00:20:58.553Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11768,
   "files": [
@@ -38320,9 +38320,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 534048,
-      "mtime": "2026-07-01T00:05:07.223Z",
-      "indexed_at": "2026-07-01T00:12:34.766Z"
+      "bytes": 535375,
+      "mtime": "2026-07-01T00:20:31.826Z",
+      "indexed_at": "2026-07-01T00:20:58.553Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -38649,9 +38649,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 49759,
-      "mtime": "2026-07-01T00:05:42.155Z",
-      "indexed_at": "2026-07-01T00:12:34.766Z"
+      "bytes": 50622,
+      "mtime": "2026-07-01T00:20:31.826Z",
+      "indexed_at": "2026-07-01T00:20:58.553Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -83342,9 +83342,9 @@
     {
       "path": "server.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 70618,
-      "mtime": "2026-06-30T23:24:38.920Z",
-      "indexed_at": "2026-06-30T23:36:50.378Z"
+      "bytes": 72372,
+      "mtime": "2026-07-01T00:18:38.642Z",
+      "indexed_at": "2026-07-01T00:20:58.553Z"
     },
     {
       "path": "server/config/fileStorage.js",

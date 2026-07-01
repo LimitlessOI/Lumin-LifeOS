@@ -181,11 +181,14 @@ import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
 import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
 import { bootAllDomains } from "./startup/boot-domains.js";
+import { getRuntimeProfile, isFullRuntimeProfile } from "./services/runtime-modes.js";
 
 const coachingStackRuntimeEnabled =
-  process.env.LIFEOS_ENABLE_COACHING_STACK_RUNTIME === "true";
+  isFullRuntimeProfile() && process.env.LIFEOS_ENABLE_COACHING_STACK_RUNTIME === "true";
 const externalProductRoutesEnabled =
-  process.env.LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES === "true";
+  isFullRuntimeProfile() && process.env.LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES === "true";
+const runtimeProfile = getRuntimeProfile();
+const fullRuntimeProfile = isFullRuntimeProfile();
 
 // Enhanced Council Features
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
@@ -1434,6 +1437,9 @@ async function start() {
     logger.info("✅ Database initialized");
 
     await startListening();
+    if (!fullRuntimeProfile) {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — non-core warmups will be skipped or deferred`);
+    }
 
     try {
       await mountRuntimeRoutes();
@@ -1444,60 +1450,71 @@ async function start() {
       logger.warn("⚠️ Continuing with minimal liveness spine; runtime route tree is degraded until this is fixed");
     }
 
-    // ── Auto-builder persistence + startup recovery ────────────────────────
-    // Wire the DB pool so addProductToQueue() persists products across restarts
-    autoBuilder.initPersistence(pool);
+    if (fullRuntimeProfile) {
+      // ── Auto-builder persistence + startup recovery ────────────────────────
+      // Wire the DB pool so addProductToQueue() persists products across restarts
+      autoBuilder.initPersistence(pool);
 
-    // Recover any products that were in-flight before the last restart
-    try {
-      const recovered = await autoBuilder.loadPersistedQueue(pool);
-      if (recovered > 0) {
-        logger.info(`[AUTO-BUILDER] Startup recovery: ${recovered} product(s) reloaded from DB`);
+      // Recover any products that were in-flight before the last restart
+      try {
+        const recovered = await autoBuilder.loadPersistedQueue(pool);
+        if (recovered > 0) {
+          logger.info(`[AUTO-BUILDER] Startup recovery: ${recovered} product(s) reloaded from DB`);
+        }
+      } catch (recoverErr) {
+        logger.warn('[AUTO-BUILDER] Startup recovery failed (non-critical):', { error: recoverErr.message });
       }
-    } catch (recoverErr) {
-      logger.warn('[AUTO-BUILDER] Startup recovery failed (non-critical):', { error: recoverErr.message });
-    }
 
-    // Reset ideas stuck in 'building' state from a previous crash/restart.
-    // If a build was triggered > 5 min ago and is still 'building', nothing is working on it.
-    try {
-      const stuckReset = await pool.query(
-        `UPDATE ideas
-         SET approval_status = 'approved', build_triggered_at = NULL
-         WHERE approval_status = 'building'
-           AND build_triggered_at < NOW() - INTERVAL '5 minutes'
-         RETURNING id, title`
-      );
-      if (stuckReset.rows.length > 0) {
-        logger.warn(`[STARTUP] Reset ${stuckReset.rows.length} stuck 'building' idea(s) → 'approved'`, {
-          ids: stuckReset.rows.map(r => r.id),
-        });
+      // Reset ideas stuck in 'building' state from a previous crash/restart.
+      // If a build was triggered > 5 min ago and is still 'building', nothing is working on it.
+      try {
+        const stuckReset = await pool.query(
+          `UPDATE ideas
+           SET approval_status = 'approved', build_triggered_at = NULL
+           WHERE approval_status = 'building'
+             AND build_triggered_at < NOW() - INTERVAL '5 minutes'
+           RETURNING id, title`
+        );
+        if (stuckReset.rows.length > 0) {
+          logger.warn(`[STARTUP] Reset ${stuckReset.rows.length} stuck 'building' idea(s) → 'approved'`, {
+            ids: stuckReset.rows.map(r => r.id),
+          });
+        }
+      } catch (stuckErr) {
+        logger.warn('[STARTUP] Could not reset stuck ideas (non-critical):', { error: stuckErr.message });
       }
-    } catch (stuckErr) {
-      logger.warn('[STARTUP] Could not reset stuck ideas (non-critical):', { error: stuckErr.message });
-    }
-    // ──────────────────────────────────────────────────────────────────────
 
-    autoBuilder.startBuildScheduler({
-      initialDelay: 60000,          // 1 min initial delay (was 15s)
-      interval: 6 * 60 * 60 * 1000, // 6 hours (was 60s) — preserve token quota until TC proven
-    });
+      autoBuilder.startBuildScheduler({
+        initialDelay: 60000,          // 1 min initial delay (was 15s)
+        interval: 6 * 60 * 60 * 1000, // 6 hours (was 60s) — preserve token quota until TC proven
+      });
+    } else {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — auto-builder recovery and long-horizon schedulers deferred`);
+    }
 
     // Load ROI (non-critical)
-    try {
-      await loadROIFromDatabase(pool, logger, roiTracker);
-    } catch (roiError) {
-      logger.warn("⚠️ ROI load error (non-critical):", { error: roiError.message });
+    if (fullRuntimeProfile) {
+      try {
+        await loadROIFromDatabase(pool, logger, roiTracker);
+      } catch (roiError) {
+        logger.warn("⚠️ ROI load error (non-critical):", { error: roiError.message });
+      }
+    } else {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — ROI warm load deferred`);
     }
 
     // Load knowledge context from processed dumps
-    try {
-      const knowledgeContext = await loadKnowledgeContext();
-      if (knowledgeContext) {
-        logger.info(`📚 [KNOWLEDGE] Context loaded: ${knowledgeContext.totalEntries} entries`);
+    if (fullRuntimeProfile) {
+      try {
+        const knowledgeContext = await loadKnowledgeContext();
+        if (knowledgeContext) {
+          logger.info(`📚 [KNOWLEDGE] Context loaded: ${knowledgeContext.totalEntries} entries`);
+        }
+      } catch (knowledgeError) {
+        logger.warn("⚠️ Knowledge load error (non-critical):", { error: knowledgeError.message });
       }
-    } catch (knowledgeError) {
-      logger.warn("⚠️ Knowledge load error (non-critical):", { error: knowledgeError.message });
+    } else {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — knowledge warm load deferred`);
     }
 
     if (SMOKE_MODE) {
@@ -1505,7 +1522,7 @@ async function start() {
     }
 
     // Run dependency audit before initializing systems
-    if (!SMOKE_MODE) {
+    if (!SMOKE_MODE && fullRuntimeProfile) {
       try {
         const { dependencyAuditor } = await import("./core/dependency-auditor.js");
         const auditResults = await dependencyAuditor.auditAll();
@@ -1519,6 +1536,8 @@ async function start() {
       } catch (error) {
         logger.warn("⚠️ Dependency auditor not available:", { error: error.message });
       }
+    } else if (!SMOKE_MODE) {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — dependency auditor skipped`);
     }
     
     // Database validation runs at module load time (before this point)
@@ -1542,7 +1561,7 @@ async function start() {
       }
     }
 
-    if (!SMOKE_MODE) {
+    if (!SMOKE_MODE && fullRuntimeProfile) {
       // Initialize Memory System
       try {
         await memorySystem.initMemoryStore();
@@ -1588,9 +1607,11 @@ async function start() {
       } catch (error) {
         logger.warn('⚠️ [MEMORY] Memory System initialization failed:', { error: error.message });
       }
+    } else if (!SMOKE_MODE) {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — memory warm initialization deferred`);
     }
     
-    if (!SMOKE_MODE) {
+    if (!SMOKE_MODE && fullRuntimeProfile) {
       // Initialize Stripe products on startup
       try {
         const stripeAutomation = await import('./core/stripe-automation.js');
@@ -1600,6 +1621,8 @@ async function start() {
         logger.warn('⚠️ [STRIPE] Could not ensure products on startup:', { error: error.message });
         logger.warn('   This is OK if STRIPE_SECRET_KEY is not set');
       }
+    } else if (!SMOKE_MODE) {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — Stripe product bootstrap deferred`);
     }
 
     if (!SMOKE_MODE) {
@@ -1794,8 +1817,10 @@ async function start() {
       logger.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", { error: error.message });
     }
 
-    if (STRIPE_SECRET_KEY) {
+    if (STRIPE_SECRET_KEY && fullRuntimeProfile) {
       await syncStripeRevenue();
+    } else if (STRIPE_SECRET_KEY) {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — Stripe revenue sync deferred`);
     }
 
     autonomyDepsRef.current = {
@@ -1832,13 +1857,17 @@ async function start() {
       comprehensiveIdeaTracker,
       vapiIntegration,
     };
-    startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, () => autonomyDepsRef.current);
+    if (fullRuntimeProfile) {
+      startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, () => autonomyDepsRef.current);
 
-    // Preview site expiry: Amendment 05 — expire previews older than 30 days
-    scheduleAutonomyLoop('preview-expiry', 24 * 60 * 60 * 1000, () => runPreviewExpiry(pool), 5 * 60 * 1000);
+      // Preview site expiry: Amendment 05 — expire previews older than 30 days
+      scheduleAutonomyLoop('preview-expiry', 24 * 60 * 60 * 1000, () => runPreviewExpiry(pool), 5 * 60 * 1000);
 
-    // Initial snapshot
-    await createSystemSnapshot("System startup");
+      // Initial snapshot
+      await createSystemSnapshot("System startup");
+    } else {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — autonomy schedulers and startup snapshot deferred`);
+    }
 
     await startListening();
     finalizeStartup("ok");
