@@ -52,9 +52,7 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import rateLimit from "express-rate-limit";
 import autoBuilder from "./core/auto-builder.js";
-import stripeRoutes from "./routes/stripe-routes.js";
 import memorySystem from "./core/memory-system.js";
-import memoryRoutes from "./routes/memory-routes.js";
 import TCOTracker from "./core/tco-tracker.js";
 import initTCORoutes from "./routes/tco-routes.js";
 import TCOSalesAgent from "./core/tco-sales-agent.js";
@@ -101,7 +99,6 @@ import VideoPipeline from "./services/video-pipeline.js";
 import GamePublisher from "./services/game-publisher.js";
 import { createSiteBuilderRoutes } from "./routes/site-builder-routes.js";
 import { initDb } from "./db/index.js";
-import { getAllFlags } from "./lib/flags.js";
 import { validateEnv } from './services/env-validator.js';
 import { runPreviewExpiry } from './services/preview-expiry-cron.js';
 import { requestTracer } from './middleware/request-tracer.js';
@@ -170,7 +167,6 @@ import {
   getStripeClient,
 } from "./startup/environment.js";
 import { createLatestRunManager } from "./startup/latest-run.js";
-import { registerServerRoutes } from "./startup/routes/server-routes.js";
 import { createAutonomyScheduler } from "./startup/schedulers.js";
 import { initDatabase } from "./startup/database.js";
 import { createUserPreferenceGuesser } from "./startup/user-preferences.js";
@@ -197,6 +193,20 @@ const startupHealthState = {
   runtime_profile: runtimeProfile,
   last_error: null,
 };
+
+const { registerServerRoutes: registerServerSurface } = fullRuntimeProfile
+  ? await import("./startup/routes/server-routes.js")
+  : await import("./startup/routes/founder-server-routes.js");
+const fullRuntimeServerSurfaceDeps = fullRuntimeProfile
+  ? await (async () => {
+      const [{ default: stripeRoutes }, { default: memoryRoutes }, { getAllFlags }] = await Promise.all([
+        import("./routes/stripe-routes.js"),
+        import("./routes/memory-routes.js"),
+        import("./lib/flags.js"),
+      ]);
+      return { stripeRoutes, memoryRoutes, getAllFlags };
+    })()
+  : {};
 
 // Enhanced Council Features
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
@@ -995,12 +1005,10 @@ const checkHumanAttentionBudget = (req, res, next) => next();
 // Extracted to routes/conversation-routes.js
 // Extracted to routes/command-center-routes.js
 // Extracted to routes/auto-builder-routes.js (part 3: AUTO-BUILDER CONTROL)
-registerServerRoutes(app, {
+registerServerSurface(app, {
   express,
-  memoryRoutes,
-  stripeRoutes,
+  ...fullRuntimeServerSurfaceDeps,
   requireKey,
-  getAllFlags,
   pool,
   autoBuilder,
   syncStripeRevenue,
