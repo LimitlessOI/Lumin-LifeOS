@@ -1,16 +1,28 @@
 /**
  * SYNOPSIS: Shared command-key gate for operator routes (builder, Railway env, etc.).
  * Shared command-key gate for operator routes (builder, Railway env, etc.).
- * Accepts LifeOS account JWT (Bearer) when it is not the operator command key.
+ * Accepts LifeOS operator-role account JWT (Bearer) when it is not the operator command key.
  * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import { verifyToken } from '../../../services/lifeos-auth.js';
 
+const DEFAULT_OPERATOR_JWT_ROLES = new Set(['founder_admin', 'operator', 'admin']);
+
 /** Railway / shell / .env often include a trailing newline — without trim, `includes()` fails and clients see 401. */
 function normalizeKey(value) {
   if (value == null) return "";
   return String(value).trim();
+}
+
+function normalizeRoleSet(roles) {
+  if (roles instanceof Set) {
+    return new Set([...roles].map((role) => String(role || "").toLowerCase()).filter(Boolean));
+  }
+  if (Array.isArray(roles)) {
+    return new Set(roles.map((role) => String(role || "").toLowerCase()).filter(Boolean));
+  }
+  return DEFAULT_OPERATOR_JWT_ROLES;
 }
 
 export function createRequireKey(options = {}) {
@@ -30,6 +42,7 @@ export function createRequireKey(options = {}) {
   ];
   const nodeEnv = String(options.nodeEnv || process.env.NODE_ENV || "").toLowerCase();
   const productionLike = ["production", "prod"].includes(nodeEnv);
+  const operatorJwtRoles = normalizeRoleSet(options.operatorJwtRoles);
 
   return function requireKeyMiddleware(req, res, next) {
     try {
@@ -79,10 +92,18 @@ export function createRequireKey(options = {}) {
 
       if (provided && configuredValues.includes(provided)) return next();
 
-      // Founder app shell: account login JWT (not the operator command key).
+      // Operator app shell: account login JWT (not the operator command key).
       if (bearerToken && !configuredValues.includes(bearerToken)) {
         try {
-          req.lifeosUser = verifyToken(bearerToken);
+          const decoded = verifyToken(bearerToken);
+          const role = String(decoded?.role || "").toLowerCase();
+          if (!operatorJwtRoles.has(role)) {
+            return res.status(403).json({
+              ok: false,
+              error: "OPERATOR_ROLE_REQUIRED",
+            });
+          }
+          req.lifeosUser = decoded;
           req.auth_mode = 'account_jwt';
           return next();
         } catch { /* fall through */ }

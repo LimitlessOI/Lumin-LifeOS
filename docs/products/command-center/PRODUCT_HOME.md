@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-01 — health/liveness truth hardened for founder-builder runtime: `/healthz` and `/ready` now bypass public/static interception, which keeps command surfaces and external monitors from grading stale or hung health off the wrong layer. Prior: 2026-06-29 — never-stop product factory status route wired into command center |
+| **Last Updated** | 2026-07-01 — operator auth boundary hardened: `requireKey` still accepts command keys, but account JWT fallback now requires founder/operator/admin role before reaching C2/admin/builder surfaces. Prior: health/liveness truth hardened for founder-builder runtime. |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-07-01 | **`src/server/auth/requireKey.js`** — account JWT fallback is now restricted to `founder_admin`, `operator`, and `admin` roles; member JWTs receive `OPERATOR_ROLE_REQUIRED` before any `requireKey` route handler runs. Added `tests/require-key-operator-jwt.test.js` for command-key/member/operator coverage. | User Auth V1 made member JWTs real, but `requireKey` protected operator/admin/builder routes and was accepting any valid account JWT as equivalent to `COMMAND_CENTER_KEY`. This closed a concrete privilege-escalation path into C2 jobs, builder execution, and operator provisioning routes. | ✅ `node --check src/server/auth/requireKey.js tests/require-key-operator-jwt.test.js`; ✅ `node --test tests/require-key-operator-jwt.test.js`; ✅ `npm run lifeos:product-home:verify`; ⚠️ `npm run builder:preflight` blocked by Railway `/ready` timeout | security |
 | 2026-06-29 | **`routes/lifeos-command-center-routes.js`** — `GET /api/v1/lifeos/command-center/never-stop-product-factory` surfaces live factory lane status (expansion mission, last heartbeat, enabled state). | Never-stop factory scheduler needed a command-center read path to confirm it's running. | AM12 | pending deploy |
 | 2026-06-28 | **`routes/canonical-execution-routes.js` + `services/env-registry-map.js`** — `GET /api/v1/lifeos/admin/operations/timeline|summary` for duration+token aligned ops view. | Adam: see how long everything takes with tokens lined up. | ✅ | deploy |
 | 2026-06-28 | **Self-repair runtime carry-forward surfaced in Command Center** — `services/self-repair-deploy-scheduler.js` raises live deploy-repair retries to 3 attempts, `services/self-repair-execution-log.js` now persists `step_details[]` with attempt/required-context metadata, and `services/self-repair-executor.js` now stamps every executed step with attempt stage plus required carry-forward context before writing the runtime log. | The runtime cockpit was showing repair outcomes without enough truth to explain whether the system actually carried lessons/research forward across retries. These fields make the command layer report the real repair loop instead of a flattened “it tried” summary. | ✅ local syntax + executor/log tests; ⚠️ pending deploy parity | Command Center runtime truth |
