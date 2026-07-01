@@ -171,7 +171,6 @@ import {
 } from "./startup/environment.js";
 import { createLatestRunManager } from "./startup/latest-run.js";
 import { registerServerRoutes } from "./startup/routes/server-routes.js";
-import { registerRuntimeRoutes } from "./startup/register-runtime-routes.js";
 import { createAutonomyScheduler } from "./startup/schedulers.js";
 import { initDatabase } from "./startup/database.js";
 import { createUserPreferenceGuesser } from "./startup/user-preferences.js";
@@ -1020,13 +1019,19 @@ let tcCoordinator = null;
 let wkIntegrityEngine = null;
 
 async function mountRuntimeRoutes() {
-  const mounted = await registerRuntimeRoutes(app, {
+  const routeRegistrar = fullRuntimeProfile
+    ? (await import("./startup/register-runtime-routes.js")).registerRuntimeRoutes
+    : (await import("./startup/register-founder-runtime-routes.js")).registerFounderRuntimeRoutes;
+
+  const mounted = await routeRegistrar(app, {
     pool,
     requireKey,
     logger,
     callCouncilMember,
     callCouncilWithFailover,
     lclMonitor,
+    getCachedResponse,
+    cacheResponse,
     apiCostSavingsRevenue,
     getStripeClient,
     publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
@@ -1761,55 +1766,59 @@ async function start() {
       console.log(`  🛑 Founder-builder runtime (${runtimeProfile}) — legacy automation, product schedulers, and full-runtime boot services deferred`);
     }
 
-    const selfProgrammingHttpService = createSelfProgrammingService(
-      () => selfProgrammingDepsRef.current
-    );
+    if (fullRuntimeProfile) {
+      const selfProgrammingHttpService = createSelfProgrammingService(
+        () => selfProgrammingDepsRef.current
+      );
 
-    registerModules(
-      moduleRouter,
-      [
+      registerModules(
+        moduleRouter,
+        [
+          {
+            name: "admin",
+            factory: (deps) => new AdminModule(deps),
+          },
+          {
+            name: "council",
+            factory: (deps) => new CouncilModule(deps),
+          },
+          {
+            name: "tools",
+            factory: (deps) => new ToolsModule(deps),
+          },
+          {
+            name: "knowledge",
+            factory: (deps) => new KnowledgeModule(deps),
+          },
+          {
+            name: "self-programming",
+            factory: (deps) => new SelfProgrammingModule(deps),
+          },
+        ],
         {
-          name: "admin",
-          factory: (deps) => new AdminModule(deps),
-        },
-        {
-          name: "council",
-          factory: (deps) => new CouncilModule(deps),
-        },
-        {
-          name: "tools",
-          factory: (deps) => new ToolsModule(deps),
-        },
-        {
-          name: "knowledge",
-          factory: (deps) => new KnowledgeModule(deps),
-        },
-        {
-          name: "self-programming",
-          factory: (deps) => new SelfProgrammingModule(deps),
-        },
-      ],
-      {
-        pool,
-        getDailySpend,
-        incomeDroneSystem,
-        executionQueue,
-        autoBuilder,
-        ollamaEndpoint: null,
-        callCouncilMember,
-        callCouncilWithFailover,
-        pingCouncilMember,
-        requireKey,
-        detectBlindSpots,
-        handleSelfProgramming,
-        handleSelfProgramRequest: selfProgrammingHttpService.handleSelfProgramRequest,
-        aiSafetyGate,
-        decodeMicroBody,
-        buildMicroResponse,
-        compressPrompt,
-        knowledgeBase,
-      }
-    );
+          pool,
+          getDailySpend,
+          incomeDroneSystem,
+          executionQueue,
+          autoBuilder,
+          ollamaEndpoint: null,
+          callCouncilMember,
+          callCouncilWithFailover,
+          pingCouncilMember,
+          requireKey,
+          detectBlindSpots,
+          handleSelfProgramming,
+          handleSelfProgramRequest: selfProgrammingHttpService.handleSelfProgramRequest,
+          aiSafetyGate,
+          decodeMicroBody,
+          buildMicroResponse,
+          compressPrompt,
+          knowledgeBase,
+        }
+      );
+    } else {
+      logger.info(`[STARTUP] Founder-builder runtime profile active (${runtimeProfile}) — admin/council/tools/knowledge/self-programming modules deferred`);
+    }
 
     if (!SMOKE_MODE && fullRuntimeProfile) {
       // Kick off the execution queue
