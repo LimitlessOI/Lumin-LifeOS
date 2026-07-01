@@ -1,6 +1,6 @@
 {
   "schema": "builderos_harness_tools_v1",
-  "updated_at": "2026-06-26",
+  "updated_at": "2026-07-01",
   "purpose": "BuilderOS machine harness \u2014 tools required for 4 pillars (not LifeRE product). Honest wiring truth for agents.",
   "authority": "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json",
   "audit_command": "npm run builderos:harness:audit",
@@ -55,7 +55,8 @@
           "path": "scripts/builderos-pre-build-gate.mjs",
           "npm": "builderos:pre-build-gate",
           "tier": "required",
-          "status": "wired"
+          "status": "wired",
+          "note": "Under founder_builder minimal runtime, skips intake regression checks that require wider product surfaces"
         },
         {
           "id": "harness_proof_mission",
@@ -125,7 +126,8 @@
           "path": "scripts/builderos-deploy-verify.mjs",
           "npm": "builderos:deploy:verify",
           "tier": "required",
-          "status": "wired"
+          "status": "wired",
+          "note": "Tries both /api/v1/lifeos/builder/ready and /ready so timeout on one surface does not hide a live fallback route"
         },
         {
           "id": "builder_output_verifier",
@@ -242,6 +244,14 @@
         "npm": "builderos:working-definition:verify:operational",
         "tier": "required",
         "status": "wired"
+      },
+      {
+        "id": "openai_smoke",
+        "path": "scripts/builderos-openai-smoke.mjs",
+        "npm": "builderos:openai:smoke",
+        "tier": "recommended",
+        "status": "wired",
+        "note": "Cheapest-capable worker lane proof; loads .env.builderos before calling the OpenAI Responses API"
       },
       {
         "id": "tool_registry",

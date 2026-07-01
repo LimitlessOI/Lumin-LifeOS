@@ -70,6 +70,37 @@ const startupHealthState = {
   last_error: null,
 };
 
+function serializeStartupHealth() {
+  return {
+    ok: true,
+    live: true,
+    ready: startupHealthState.ready === true,
+    status: startupHealthState.ready === true ? "healthy" : "starting",
+    checks: {
+      server: "ok",
+      db: startupHealthState.db,
+      runtime_routes: startupHealthState.runtime_routes,
+      deferred_services: startupHealthState.deferred_services,
+      runtime_profile: startupHealthState.runtime_profile,
+      last_error: startupHealthState.last_error || null,
+    },
+    startup: { ...startupHealthState },
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+  };
+}
+
+function resolveDeployCommitSha() {
+  const raw =
+    process.env.RAILWAY_GIT_COMMIT_SHA ||
+    process.env.GITHUB_SHA ||
+    process.env.VERCEL_GIT_COMMIT_SHA ||
+    '';
+  return typeof raw === 'string' && /^[a-fA-F0-9]{7,40}$/.test(raw.trim())
+    ? raw.trim().slice(0, 40)
+    : null;
+}
+
 function getRequestHost(req) {
   const forwarded = (req.headers["x-forwarded-host"] || "").toString().toLowerCase();
   const direct = (req.get("host") || "").toString().toLowerCase();
@@ -86,6 +117,42 @@ function isSameOrigin(req) {
     return false;
   }
 }
+
+// Mount a minimal health route before public/static middleware so Railway can
+// get truthful liveness even if a later route surface regresses.
+app.get("/healthz", (_req, res) => {
+  res.status(200).json(serializeStartupHealth());
+});
+
+app.get("/ready", (_req, res) => {
+  const deployCommitSha = resolveDeployCommitSha();
+  const localMirrorCommitReady = !(
+    process.env.RAILWAY_ENVIRONMENT ||
+    process.env.RAILWAY_SERVICE_ID ||
+    process.env.RAILWAY_PROJECT_ID ||
+    process.env.RAILWAY_ENVIRONMENT_ID
+  );
+  const commitPathReady = typeof commitToGitHub === "function" && (Boolean(process.env.GITHUB_TOKEN) || localMirrorCommitReady);
+  res.status(200).json({
+    ok: true,
+    runtime_profile: "founder_builder",
+    deploy_commit_sha: deployCommitSha,
+    codegen: {
+      ...(deployCommitSha ? { deploy_commit_sha: deployCommitSha } : {}),
+    },
+    builder: {
+      commitToGitHub: typeof commitToGitHub === "function",
+      commit_path_ready: commitPathReady,
+      local_mirror_commit: localMirrorCommitReady,
+      github_token: Boolean(process.env.GITHUB_TOKEN),
+      callCouncilMember: typeof callCouncilMember === "function",
+      pool: Boolean(pool?.query),
+    },
+    startup: { ...startupHealthState },
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
+});
 
 registerPublicRoutes(app, {
   fs,

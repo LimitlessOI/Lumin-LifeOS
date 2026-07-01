@@ -1,6 +1,6 @@
 {
   "schema": "builderos_working_definition_v1",
-  "updated_at": "2026-06-24",
+  "updated_at": "2026-07-01",
   "operator_lock": "Adam — BuilderOS only (not LifeRE product). 10/10 = real loop, not theater.",
   "benchmark": "Envision → program → self-repair → compound improve — without fake green.",
   "pillars": {
@@ -53,10 +53,16 @@
     "builderos:gap:families",
     "builderos:compound:summary",
     "builderos:harness:audit",
-    "builderos:operational-proof"
+    "builderos:operational-proof",
+    "builderos:openai:smoke"
   ],
   "min_score_each_pillar": 10,
   "honesty_law": "Structural 10/10 = wiring exists. Operational 10/10 = live ready + gap health + repair proof + compound from production failures. Calling structural operational is fake green.",
+  "runtime_truth_notes": [
+    "Readiness/deploy proofs must try /ready when /api/v1/lifeos/builder/ready is unreachable.",
+    "founder_builder is a minimal valid runtime lane; product-only intake acceptance may be skipped there without claiming broader product readiness.",
+    "Cheapest-capable worker availability is unproven until builderos:openai:smoke passes with a real loaded key."
+  ],
   "industry_patterns_adopted": [
     "cursor_planner_worker_handoffs",
     "codex_isolated_task_dispatch",

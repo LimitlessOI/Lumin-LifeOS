@@ -186,18 +186,23 @@ export async function fetchRailwayDeploySha(baseUrl, commandKey) {
   const base = (baseUrl || '').replace(/\/$/, '');
   if (!base) return { ok: false, deploySha: null, http: 0 };
   const headers = { Accept: 'application/json', ...(commandKey ? { 'x-command-key': commandKey } : {}) };
-  try {
-    const r = await fetch(`${base}/api/v1/lifeos/builder/ready`, { headers, signal: AbortSignal.timeout(15000) });
-    const j = await r.json().catch(() => ({}));
-    return {
-      ok: r.ok,
-      http: r.status,
-      deploySha: normalizeSha(j?.codegen?.deploy_commit_sha || j?.deploy_commit_sha),
-      raw_ok: j?.ok,
-    };
-  } catch (err) {
-    return { ok: false, deploySha: null, http: 0, error: err.message };
+  for (const route of ['/api/v1/lifeos/builder/ready', '/ready']) {
+    try {
+      const r = await fetch(`${base}${route}`, { headers, signal: AbortSignal.timeout(15000) });
+      if (r.status === 404) continue;
+      const j = await r.json().catch(() => ({}));
+      return {
+        ok: r.ok,
+        http: r.status,
+        route,
+        deploySha: normalizeSha(j?.codegen?.deploy_commit_sha || j?.builder?.deploy_commit_sha || j?.deploy_commit_sha),
+        raw_ok: j?.ok,
+      };
+    } catch (err) {
+      continue;
+    }
   }
+  return { ok: false, deploySha: null, http: 0, error: 'ready_routes_unreachable' };
 }
 
 export async function fetchRailwayProofStore(baseUrl, commandKey) {

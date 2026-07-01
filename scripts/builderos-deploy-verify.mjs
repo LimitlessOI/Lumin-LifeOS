@@ -32,20 +32,30 @@ function originMain() {
 
 async function fetchDeploySha(baseUrl, commandKey) {
   const paths = ['/api/v1/lifeos/builder/ready', '/ready'];
+  const errors = [];
   for (const p of paths) {
-    const res = await fetch(`${baseUrl}${p}`, {
-      headers: commandKey ? { 'x-command-key': commandKey } : {},
-    });
-    if (res.status === 404) continue;
-    const json = await res.json().catch(() => ({}));
-    const sha =
-      json?.codegen?.deploy_commit_sha ||
-      json?.builder?.deploy_commit_sha ||
-      json?.deploy_commit_sha ||
-      null;
-    if (sha) return { sha, path: p, ready: json };
+    try {
+      const res = await fetch(`${baseUrl}${p}`, {
+        headers: commandKey ? { 'x-command-key': commandKey } : {},
+      });
+      if (res.status === 404) continue;
+      const json = await res.json().catch(() => ({}));
+      const sha =
+        json?.codegen?.deploy_commit_sha ||
+        json?.builder?.deploy_commit_sha ||
+        json?.deploy_commit_sha ||
+        null;
+      if (sha) return { sha, path: p, ready: json };
+    } catch (error) {
+      errors.push({ path: p, error: error?.message || 'fetch_failed' });
+    }
   }
-  return { sha: null, path: null, ready: null };
+  return {
+    sha: null,
+    path: null,
+    ready: null,
+    error: errors.map((entry) => `${entry.path}:${entry.error}`).join('; ') || null,
+  };
 }
 
 function shaPrefix(a, b) {

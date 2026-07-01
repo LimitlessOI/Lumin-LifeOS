@@ -5,6 +5,7 @@
  * @ssot builderos-reboot/BUILDEROS_WORKING_DEFINITION.json
  */
 import 'dotenv/config';
+import './lib/load-builderos-env.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -152,20 +153,25 @@ function pillarCompoundImprovementStructural() {
 
 async function fetchReady(baseUrl, commandKey) {
   const paths = ['/api/v1/lifeos/builder/ready', '/ready'];
+  const errors = [];
   for (const p of paths) {
-    const res = await fetch(`${baseUrl}${p}`, {
-      headers: commandKey ? { 'x-command-key': commandKey } : {},
-    });
-    if (res.status === 404) continue;
-    let json = null;
     try {
-      json = await res.json();
+      const res = await fetch(`${baseUrl}${p}`, {
+        headers: commandKey ? { 'x-command-key': commandKey } : {},
+      });
+      if (res.status === 404) continue;
+      let json = null;
+      try {
+        json = await res.json();
+      } catch {
+        json = null;
+      }
+      return { ok: res.ok, status: res.status, json, path: p };
     } catch {
-      json = null;
+      errors.push(p);
     }
-    return { ok: res.ok, status: res.status, json, path: p };
   }
-  return { ok: false, status: 404, json: null, path: null };
+  return { ok: false, status: 404, json: null, path: null, error: errors.join(',') || null };
 }
 
 async function fetchBuilderGaps(baseUrl, commandKey) {
@@ -370,21 +376,33 @@ function scorePillar(name, structuralChecks, operationalChecks) {
   };
 }
 
+function skippedOperationalChecks(ids, detail = 'skipped in structural mode') {
+  return ids.map((id) => ({ id, ok: false, detail, skipped: true }));
+}
+
 async function main() {
   const def = JSON.parse(read('builderos-reboot/BUILDEROS_WORKING_DEFINITION.json'));
   const minScore = Number(process.env.BUILDEROS_WORKING_MIN_SCORE || def.min_score_each_pillar || 10);
 
   const baseUrl = resolveBaseUrl();
   let gapStats = { total: 0, otherPct: 100, buckets: {} };
-  if (baseUrl && resolveCommandKey()) {
+  if (operationalMode && baseUrl && resolveCommandKey()) {
     const gaps = await fetchBuilderGaps(baseUrl, resolveCommandKey());
     if (gaps.ok) gapStats = analyzeGapBucket(gaps.json);
   }
 
-  const ewOp = await pillarEnvisionedWorkflowOperational();
-  const rpOp = await pillarRealProgrammingOperational(gapStats);
-  const srOp = await pillarSelfRepairOperational();
-  const ciOp = await pillarCompoundImprovementOperational(gapStats);
+  const ewOp = operationalMode
+    ? await pillarEnvisionedWorkflowOperational()
+    : skippedOperationalChecks(['EW-O01', 'EW-O02', 'EW-O03', 'EW-O04', 'EW-O05']);
+  const rpOp = operationalMode
+    ? await pillarRealProgrammingOperational(gapStats)
+    : skippedOperationalChecks(['RP-O01', 'RP-O02', 'RP-O03', 'RP-O04']);
+  const srOp = operationalMode
+    ? await pillarSelfRepairOperational()
+    : skippedOperationalChecks(['SR-O01', 'SR-O02', 'SR-O03']);
+  const ciOp = operationalMode
+    ? await pillarCompoundImprovementOperational(gapStats)
+    : skippedOperationalChecks(['CI-O01', 'CI-O02', 'CI-O03', 'CI-O04']);
 
   const pillars = {
     envisioned_workflow: scorePillar('envisioned_workflow', pillarEnvisionedWorkflowStructural(), ewOp),

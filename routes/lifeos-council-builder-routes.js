@@ -815,6 +815,7 @@ export function createLifeOSCouncilBuilderRoutes({
     };
     res.json({
       ok: true,
+      runtime_profile: process.env.LIFEOS_RUNTIME_PROFILE || 'founder_builder',
       codegen,
       builder: {
         commitToGitHub: typeof commitToGitHub === 'function',

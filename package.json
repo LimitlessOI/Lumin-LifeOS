@@ -176,6 +176,7 @@
     "builderos:point-b:gate": "node scripts/run-point-b-gate.mjs",
     "builderos:working-definition:verify": "node scripts/verify-builderos-working-definition.mjs && node --test tests/builderos-working-definition.test.js",
     "builderos:working-definition:verify:operational": "BUILDEROS_WORKING_OPERATIONAL=1 node scripts/verify-builderos-working-definition.mjs",
+    "builderos:openai:smoke": "node scripts/builderos-openai-smoke.mjs",
     "builderos:mission-step": "node scripts/builderos-run-mission-step.mjs",
     "builderos:operational-proof": "node scripts/builderos-run-operational-proof.mjs",
     "builderos:canonical:manifest": "node -e \"import('./services/builderos-canonical-executor.js').then(m=>console.log(JSON.stringify(m.getCanonicalExecutorManifest(),null,2)))\"",

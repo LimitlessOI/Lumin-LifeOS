@@ -19,6 +19,7 @@ import 'dotenv/config';
 // .env.local values override .env (it holds Railway-matching vars).
 import dotenv from 'dotenv';
 dotenv.config({ path: new URL('../.env.local', import.meta.url).pathname, override: true });
+import './lib/load-builderos-env.mjs';
 
 import { mkdir, appendFile } from 'fs/promises';
 import path from 'path';

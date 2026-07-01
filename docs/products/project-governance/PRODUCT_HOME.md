@@ -11,12 +11,13 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/project-governance/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-30 |
+| **Last Updated** | 2026-07-01 |
 
 ---
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
 **Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
+**Last Updated:** 2026-07-01 — BuilderOS proof governance tightened: readiness/deploy verifiers now truly fall back to `/ready` when `/api/v1/lifeos/builder/ready` times out, and the pre-build gate now treats `founder_builder` as a valid minimal runtime by skipping intake-regression checks that require product surfaces outside that lane.
 **Last Updated:** 2026-06-30 — build-readiness authority moved to canonical governance docs; runtime/readiness routes and builder hints now point to `docs/products/project-governance/READINESS_CHECKLIST.md`, and legacy root `docs/projects/*` specs were archived under `docs/history/legacy-history-salvage/docs-projects-root/`.
 **Last Updated:** 2026-06-30 — runtime mode governance formalized in `services/runtime-modes.js`: founder-builder is now the default profile; only explicit `LIFEOS_RUNTIME_PROFILE=full` may boot the wider product/scheduler surface.
 **Last Updated:** 2026-06-30 — founder-builder startup governance extended into `server.js`: non-core warmups are no longer mandatory at startup for the default founder-builder profile, which makes bind/liveness first-class and pushes long-horizon warmups into explicit `full` runtime mode.

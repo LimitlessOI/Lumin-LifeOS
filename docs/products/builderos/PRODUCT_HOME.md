@@ -24,6 +24,7 @@
 ---
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
+**Last Updated:** 2026-07-01 — BuilderOS CLI truth now loads `.env.builderos` through `scripts/lib/load-builderos-env.mjs`; `builderos:openai:smoke` was added as the cheapest-capable worker lane probe; readiness/deploy proof scripts now truly fall back from `/api/v1/lifeos/builder/ready` to `/ready` instead of falsely stopping on the first timeout; the pre-build gate now skips product-only intake regression on the minimal `founder_builder` runtime instead of blocking BuilderOS for surfaces that lane does not mount.
 **Last Updated:** 2026-07-01 — Canonical executor `dryRun` now returns blueprint plan truth without requiring live dispatch-gate success first; dispatch gate now recognizes local founder-builder mirror commits as a valid commit-ready path; `/build` now uses the same commit-or-local-mirror path as `/execute`, so local founder runtime can record real committed builder history instead of false-ready GitHub-only state.
 **Last Updated:** 2026-06-29 — CRASH FIX: never-stop-product-factory.js converted all spawnSync to async spawn to stop blocking the Node.js event loop and crashing the Railway container.
 **Last Updated:** 2026-06-30 — BuilderOS routing hardened to dedicated OpenAI builder lanes: `openai_builder_mini` for cheap-first frozen execution, `openai_builder_standard` for planning/review, and `openai_builder_escalation` for harder repair paths; TSOS/evidence/quorum logic now treats the mini lane as the canonical cheaper executor.
@@ -181,6 +182,10 @@ One model may fill more than one role only when no safer alternative exists, and
 - **KNOW:** 5th council lens added: Codebase Coherence — `lensCodebaseCoherence()` feeds entire relevant codebase (amendment + routes + services files) to Gemini 2.5 Pro via `buildCodebaseContext()`; finds conflicts, duplication, pattern violations BEFORE a line is written; skipped gracefully if `rootDir` not provided
 - **KNOW:** `callGeminiPro()` uses `gemini-2.5-pro` (1M token context), `maxOutputTokens: 4000`, returns deep architectural analysis
 - **KNOW:** `builder-supervisor.js` now passes `rootDir: ROOT` to `reviewSegment()` — codebase coherence lens is always active in builds
+- **KNOW:** BuilderOS CLI support now loads `.env.builderos` directly, so low-cost worker scripts do not falsely claim missing OpenAI keys while runtime boot can already see that file.
+- **KNOW:** `npm run builderos:openai:smoke` is the minimal truth probe for the OpenAI mini worker lane; it must pass before claiming the cheapest-capable builder lane is available.
+- **KNOW:** readiness/deploy proof scripts now attempt both `/api/v1/lifeos/builder/ready` and `/ready`, and they report timeout/error truth instead of silently treating the first unreachable route as authoritative.
+- **KNOW:** the pre-build gate now recognizes the minimal `founder_builder` runtime as a real narrow lane and skips intake regression checks that require broader product surfaces not mounted there.
 - **KNOW:** Builder supervisor upgraded to `--output-format stream-json` — structured event parsing replaces raw stdout scraping; `toolsUsed` array logged per segment; clean final answer extracted from `result` event
 - **KNOW:** Supervisor now prefers project-local `node_modules/.bin/claude` (version-pinned via `@anthropic-ai/claude-code` npm package) over global binary
 - **KNOW:** MCP postgres server configured in `.mcp.json` — `neon-postgres` server gives Claude sessions direct Neon DB query access via `@modelcontextprotocol/server-postgres`; `enableAllProjectMcpServers: true` in `.claude/settings.local.json`

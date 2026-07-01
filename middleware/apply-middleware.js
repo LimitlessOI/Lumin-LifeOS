@@ -20,6 +20,13 @@ export function applyMiddleware(app, {
   ALLOWED_ORIGINS_LIST,
   isSameOrigin,
 }) {
+  const skipStaticPaths = new Set([
+    "/health",
+    "/health/",
+    "/healthz",
+    "/api/health",
+  ]);
+
   // ==================== MIDDLEWARE ====================
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -64,7 +71,7 @@ export function applyMiddleware(app, {
 
   // Serve static files (after specific routes)
   app.use((req, res, next) => {
-    if (req.path === "/health" || req.path === "/health/") {
+    if (skipStaticPaths.has(req.path)) {
       return next();
     }
     return express.static(publicDir)(req, res, next);

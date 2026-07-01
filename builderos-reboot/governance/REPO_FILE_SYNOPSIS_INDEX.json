@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T08:40:07.587Z",
+  "generated_at": "2026-07-01T09:42:10.273Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11773,
+  "file_count": 11775,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21707,9 +21707,9 @@
     {
       "path": "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json",
       "synopsis": "BuilderOS artifact — BUILDEROS WORKING DEFINITION.",
-      "bytes": 2852,
-      "mtime": "2026-06-24T20:34:41.955Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 3278,
+      "mtime": "2026-07-01T09:40:12.083Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "synopsis_index_only": true
     },
     {
@@ -21858,9 +21858,9 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS HARNESS TOOLS.",
-      "bytes": 11034,
-      "mtime": "2026-06-29T15:52:35.508Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 11610,
+      "mtime": "2026-07-01T09:40:12.083Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "synopsis_index_only": true
     },
     {
@@ -21978,9 +21978,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3563247,
-      "mtime": "2026-07-01T08:26:58.672Z",
-      "indexed_at": "2026-07-01T08:27:44.559Z"
+      "bytes": 3563902,
+      "mtime": "2026-07-01T09:41:19.837Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22339,9 +22339,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 31714,
-      "mtime": "2026-06-30T04:49:42.875Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 32185,
+      "mtime": "2026-07-01T09:40:12.084Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "synopsis_index_only": true
     },
     {
@@ -37877,9 +37877,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 100903,
-      "mtime": "2026-07-01T08:26:04.019Z",
-      "indexed_at": "2026-07-01T08:27:44.559Z"
+      "bytes": 102207,
+      "mtime": "2026-07-01T09:39:41.243Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -37986,9 +37986,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 104499,
-      "mtime": "2026-06-30T17:46:28.647Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 104750,
+      "mtime": "2026-07-01T09:39:41.245Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -38320,9 +38320,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 537786,
-      "mtime": "2026-07-01T08:26:22.217Z",
-      "indexed_at": "2026-07-01T08:27:44.559Z"
+      "bytes": 538199,
+      "mtime": "2026-07-01T09:39:41.244Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -38649,9 +38649,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 52556,
-      "mtime": "2026-07-01T00:59:07.580Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z"
+      "bytes": 52898,
+      "mtime": "2026-07-01T09:39:41.245Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -65004,9 +65004,9 @@
     {
       "path": "middleware/apply-middleware.js",
       "synopsis": "Apply Middleware — registers all Express middleware for the app: body parsers,",
-      "bytes": 3559,
-      "mtime": "2026-06-30T17:44:19.928Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 3648,
+      "mtime": "2026-07-01T09:17:07.294Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -66393,9 +66393,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29110,
-      "mtime": "2026-06-30T03:24:24.916Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 29183,
+      "mtime": "2026-07-01T09:18:12.823Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "synopsis_index_only": true
     },
     {
@@ -69313,9 +69313,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 129750,
-      "mtime": "2026-07-01T08:18:43.321Z",
-      "indexed_at": "2026-07-01T08:27:44.559Z",
+      "bytes": 129830,
+      "mtime": "2026-07-01T09:31:34.584Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -70436,9 +70436,9 @@
     {
       "path": "scripts/builderos-deploy-verify.mjs",
       "synopsis": "Verify Railway deploy SHA matches local git (fail-closed on stale prod).",
-      "bytes": 3467,
-      "mtime": "2026-06-24T20:34:41.964Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 3721,
+      "mtime": "2026-07-01T09:24:30.054Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json"
       ]
@@ -70534,6 +70534,16 @@
       ]
     },
     {
+      "path": "scripts/builderos-openai-smoke.mjs",
+      "synopsis": "Minimal BuilderOS OpenAI lane smoke.",
+      "bytes": 1443,
+      "mtime": "2026-07-01T09:18:12.822Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/builderos-output.mjs",
       "synopsis": "This module provides read-only audit capabilities for the LifeOS platform.",
       "bytes": 4228,
@@ -70546,9 +70556,9 @@
     {
       "path": "scripts/builderos-pre-build-gate.mjs",
       "synopsis": "Pre-build gate for canonical harness — ready, deploy, doctrine, env.",
-      "bytes": 6327,
-      "mtime": "2026-06-30T03:37:10.764Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 6913,
+      "mtime": "2026-07-01T09:29:53.622Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json"
       ]
@@ -70689,9 +70699,9 @@
     {
       "path": "scripts/council-builder-preflight.mjs",
       "synopsis": "Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build",
-      "bytes": 14739,
-      "mtime": "2026-06-30T04:35:43.473Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 14778,
+      "mtime": "2026-07-01T09:17:07.296Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71185,6 +71195,16 @@
       "indexed_at": "2026-07-01T04:36:20.955Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/lib/load-builderos-env.mjs",
+      "synopsis": "Load BuilderOS worker env for CLI scripts that only import dotenv/config.",
+      "bytes": 819,
+      "mtime": "2026-07-01T09:17:07.295Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -71700,9 +71720,9 @@
     {
       "path": "scripts/run-builderos-build-deploy-truth.mjs",
       "synopsis": "BuilderOS build/deploy truth receipt.",
-      "bytes": 6741,
-      "mtime": "2026-06-30T04:55:34.765Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 6931,
+      "mtime": "2026-07-01T09:24:30.046Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -71710,9 +71730,9 @@
     {
       "path": "scripts/run-builderos-founder-ui-proof.mjs",
       "synopsis": "BuilderOS founder UI proof.",
-      "bytes": 5148,
-      "mtime": "2026-06-28T23:37:30.230Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 5187,
+      "mtime": "2026-07-01T09:17:07.297Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -72750,9 +72770,9 @@
     {
       "path": "scripts/verify-builderos-working-definition.mjs",
       "synopsis": "BuilderOS working definition — STRUCTURAL vs OPERATIONAL (honest 10/10).",
-      "bytes": 17804,
-      "mtime": "2026-06-30T18:58:40.153Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 17971,
+      "mtime": "2026-07-01T09:24:30.050Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json"
       ]
@@ -83352,9 +83372,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 8537,
-      "mtime": "2026-07-01T04:03:18.288Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 10791,
+      "mtime": "2026-07-01T09:24:30.045Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87643,9 +87663,9 @@
     {
       "path": "services/oil-self-repair-detector.js",
       "synopsis": "OIL self-repair detectors — runtime proof parity, proof-store alignment,",
-      "bytes": 34418,
-      "mtime": "2026-06-29T17:21:08.951Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 34608,
+      "mtime": "2026-07-01T09:24:30.056Z",
+      "indexed_at": "2026-07-01T09:42:10.273Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]

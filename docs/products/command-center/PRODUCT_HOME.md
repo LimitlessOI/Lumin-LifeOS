@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-01 |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-29 — never-stop product factory status route wired into command center |
+| **Last Updated** | 2026-07-01 — health/liveness truth hardened for founder-builder runtime: `/healthz` and `/ready` now bypass public/static interception, which keeps command surfaces and external monitors from grading stale or hung health off the wrong layer. Prior: 2026-06-29 — never-stop product factory status route wired into command center |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
