@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T22:00:00.123Z",
+  "generated_at": "2026-07-02T22:35:39.407Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11805,
+  "file_count": 11806,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -36000,9 +36000,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 492571,
-      "mtime": "2026-07-02T12:48:09.174Z",
-      "indexed_at": "2026-07-02T12:48:09.479Z"
+      "bytes": 495085,
+      "mtime": "2026-07-02T22:35:35.264Z",
+      "indexed_at": "2026-07-02T22:35:39.407Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -68925,6 +68925,13 @@
       "bytes": 1350,
       "mtime": "2026-07-01T22:02:39.853Z",
       "indexed_at": "2026-07-02T09:11:09.743Z"
+    },
+    {
+      "path": "render.yaml",
+      "synopsis": "Render deploy spec — host-portable twin of the Railway service (Cloudflare front-door strategy).",
+      "bytes": 815,
+      "mtime": "2026-07-02T22:35:23.404Z",
+      "indexed_at": "2026-07-02T22:35:39.407Z"
     },
     {
       "path": "REVENUE_SYSTEMS_GUIDE.md",
