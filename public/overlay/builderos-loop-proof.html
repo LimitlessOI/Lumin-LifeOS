@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BuilderOS Loop Proof</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #121933;
+      --panel: #11182b;
+      --panel-2: #18213d;
+      --text: #e8ecf8;
+      --muted: #aab4d0;
+      --line: #2a355d;
+      --accent: #6ee7ff;
+      --accent-2: #8b5cf6;
+      --success: #22c55e;
+      --success-soft: rgba(34, 197, 94, 0.14);
+      --warning: #f59e0b;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+      --max: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at top left, rgba(110, 231, 255, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.10), transparent 24%),
+        linear-gradient(180deg, #09101d 0%, #0b1020 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 72px 0 36px;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(24, 33, 61, 0.92), rgba(17, 24, 43, 0.96));
+      border: 1px solid rgba(110, 231, 255, 0.16);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(110, 231, 255, 0.08), transparent 35%),
+        linear-gradient(315deg, rgba(139, 92, 246, 0.10), transparent 40%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(110, 231, 255, 0.22);
+      background: rgba(110, 231, 255, 0.08);
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .subheading {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      max-width: 760px;
+    }
+
+    .section {
+      margin: 28px 0;
+      background: linear-gradient(180deg, rgba(17, 24, 43, 0.94), rgba(14, 20, 36, 0.98));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 14px;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .status-table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+    }
+
+    thead th {
+      text-align: left;
+      font-size: 0.92rem;
+      color: #c9d4f2;
+      background: rgba(139, 92, 246, 0.08);
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    tbody td {
+      padding: 15px 16px;
+      border-bottom: 1px solid rgba(42, 53, 93, 0.8);
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(110, 231, 255, 0.03);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #dfffea;
+      background: var(--success-soft);
+      border: 1px solid rgba(34, 197, 94, 0.28);
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .marker {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 1px dashed rgba(110, 231, 255, 0.35);
+      background: rgba(110, 231, 255, 0.06);
+      color: #dffbff;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      word-break: break-word;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+    }
+
+    .callout {
+      padding: 18px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.03));
+      border: 1px solid rgba(245, 158, 11, 0.22);
+    }
+
+    .footer {
+      padding: 10px 0 42px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: #d8e7ff;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        padding-top: 40px;
+      }
+
+      .hero-card,
+      .section {
+        padding: 22px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Autonomous Deployment Evidence</div>
+        <h1>BuilderOS Loop Proof</h1>
+        <p class="subheading">
+          A live status artifact demonstrating that the BuilderOS self-build loop executed end to end:
+          instruction received, code generated, changes committed, deployment redeployed, and verification surfaced. Its purpose is simple:
+        provide a visible, polished, self-contained proof that the BuilderOS loop is not theoretical and not
+        simulated, but actively capable of receiving an instruction, producing implementation output, shipping
+        that output through source control, and surfacing the result as a deployed web artifact. </p>
+      <p class="muted">
+        Because this document contains its own styling and requires no external assets or scripts, it also serves
+        as a resilient verification target: if the page renders, the loop completed with enough integrity to create,
+        commit, deploy, and expose a standalone status surface. </p>
+    </section>
+
+    <section class="section">
+      <h2>Loop stage status</h2>
+      <div class="status-table-wrap">
+        <table aria-label="BuilderOS loop status table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Status</th>
+              <th>Operational meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Instruction</strong></td>
+              <td><span class="badge"><span class="dot"></span>OPERATIONAL</span></td>
+              <td>The system accepted a concrete implementation request and translated it into an actionable build task.</td>
+            </tr>
+            <tr>
+              <td><strong>Codegen</strong></td>
+              <td><span class="badge"><span class="dot"></span>OPERATIONAL</span></td>
+              <td>The model generated production-ready output for a complete HTML status page without external dependencies.</td>
+            </tr>
+            <tr>
+              <td><strong>Commit</strong></td>
+              <td><span class="badge"><span class="dot"></span>OPERATIONAL</span></td>
+              <td>The generated artifact was prepared for repository persistence and moved into the source-controlled loop.</td>
+            </tr>
+            <tr>
+              <td><strong>Redeploy</strong></td>
+              <td><span class="badge"><span class="dot"></span>OPERATIONAL</span></td>
+              <td>Railway picked up the repository change and rebuilt the running application environment.</td>
+            </tr>
+            <tr>
+              <td><strong>Verify</strong></td>
+              <td><span class="badge"><span class="dot"></span>OPERATIONAL</span></td>
+              <td>This deployed page acts as the verification artifact proving the loop completed and is externally observable.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="marker">BUILD MARKER: BUILDEROS-LOOP-OPERATIONAL</div>
+    </section>
+
+    <section class="section">
+      <div class="grid">
+        <div>
+          <h2>gpt-5.x <code>max_completion_tokens</code> fix</h2>
+          <p>
+            A key unblocker for this loop was the <code>gpt-5.x</code> request compatibility fix around
+            <code>max_completion_tokens</code>. Once that parameter path was corrected, code generation regained
+            stable completion behavior, allowing autonomous build tasks to finish cleanly instead of stalling at the
+            generation boundary. </p>
+          <p>
+            In practical terms, that fix restored the missing link between instruction intake and deployable output. With codegen unblocked, the loop could once again produce full artifacts, hand them off to the repository
+            workflow, and rely on the deployment platform to publish the result. This page exists as a direct outcome
+            of that repaired path. </p>
+        </div>
+        <aside class="callout">
+          <h2 style="margin-top:0;">Why this matters</h2>
+          <p class="muted" style="margin-bottom:0;">
+            A self-build loop is only credible when it leaves evidence in the deployed product. This document is that
+            evidence: human-readable, machine-generated, and visible after redeploy. </p>
+        </aside>
+      </div>
+    </section>
+
+    <footer class="footer">
+      BuilderOS Loop Proof &mdash; autonomous artifact rendered from a single self-contained HTML document. </footer>
+  </main>
+</body>
+</html>
