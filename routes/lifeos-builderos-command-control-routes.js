@@ -1252,7 +1252,7 @@ HOW TO RESPOND:
       const userId = req.lifeosUser?.sub || null;
       const userHandle = resolveFounderCommandControlHandle(req);
 
-      const chairResult = await runLuminChairTurn({
+      const chairTurnPromise = runLuminChairTurn({
         req,
         originalText,
         cleanedInput,
@@ -1310,6 +1310,26 @@ HOW TO RESPOND:
           return resolveLifeOSUserId(pool, handle);
         },
       });
+
+      const CHAIR_TURN_BUDGET_MS = Number(process.env.CHAIR_TURN_BUDGET_MS || '42000');
+      let chairTurnTimer;
+      const chairTurnTimeout = new Promise((resolve) => {
+        chairTurnTimer = setTimeout(() => resolve({
+          statusCode: 200,
+          body: {
+            ok: true,
+            interface: 'Lumin',
+            action: 'chair',
+            chair_channel: 'chair',
+            command_truth: 'NO_COMMAND_RAN',
+            pass_fail: 'NO_COMMAND_RAN',
+            timed_out: true,
+            human_summary: "That turn took longer than expected, so I stopped it to keep the chat responsive — nothing was committed. Please try again; if it keeps timing out, an AI provider is slow right now.",
+          },
+        }), CHAIR_TURN_BUDGET_MS);
+      });
+      const chairResult = await Promise.race([chairTurnPromise, chairTurnTimeout]);
+      clearTimeout(chairTurnTimer);
 
       const persistWarning = req.body?.alpha_probe === true
         ? 'ALPHA_PROBE_SKIP_PERSIST'

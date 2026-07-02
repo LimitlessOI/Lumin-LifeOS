@@ -53,7 +53,17 @@ async function attachVerifiedSearch(facts, text, deps) {
   });
   try {
     const query = buildLifeAdminSearchQuery(text) || String(text).slice(0, 160);
-    const searchResult = await searchSvc.search(query, { count: 5 });
+    const SEARCH_BUDGET_MS = Number(process.env.CHAIR_SEARCH_BUDGET_MS || '14000');
+    let budgetTimer;
+    const searchResult = await Promise.race([
+      searchSvc.search(query, { count: 5 }),
+      new Promise((_, reject) => {
+        budgetTimer = setTimeout(
+          () => reject(new Error('chair_search_budget_exceeded')),
+          SEARCH_BUDGET_MS,
+        );
+      }),
+    ]).finally(() => clearTimeout(budgetTimer));
     if (searchResult?.results?.length) {
       facts.verified_search = formatLifeAdminCounselPreamble(searchResult);
       facts.search_source = searchResult.source || null;

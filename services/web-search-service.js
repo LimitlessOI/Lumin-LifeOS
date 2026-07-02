@@ -8,10 +8,25 @@
  *   3. AI fallback       (uses council AI training knowledge when no search key available)
  *
  * Exports: createWebSearchService(deps) → { search, searchUXPatterns, searchCompetitors, getBestPractices, researchFeature }
+ *
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 const BRAVE_API = 'https://api.search.brave.com/res/v1/web/search';
 const PERPLEXITY_API = 'https://api.perplexity.ai/chat/completions';
+
+// Interactive chat cannot afford an unbounded external call. Cap every network
+// hop so a stalled provider fails fast instead of hanging the founder turn.
+const WEB_SEARCH_FETCH_TIMEOUT_MS = Number(process.env.WEB_SEARCH_TIMEOUT_MS || '8000');
+const WEB_SEARCH_AI_TIMEOUT_MS = Number(process.env.WEB_SEARCH_AI_TIMEOUT_MS || '12000');
+
+function withTimeout(promise, ms, label) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(label || 'web_search_timeout')), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
 
 export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KEY, callAI }) {
   // ── Raw web search ──────────────────────────────────────────────────────────
@@ -26,6 +41,7 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
             'Accept-Encoding': 'gzip',
             'X-Subscription-Token': BRAVE_SEARCH_API_KEY,
           },
+          signal: AbortSignal.timeout(WEB_SEARCH_FETCH_TIMEOUT_MS),
         });
         if (res.ok) {
           const data = await res.json();
@@ -62,6 +78,7 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
             ],
             max_tokens: 800,
           }),
+          signal: AbortSignal.timeout(WEB_SEARCH_FETCH_TIMEOUT_MS),
         });
         if (res.ok) {
           const data = await res.json();
@@ -74,10 +91,15 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
       }
     }
 
-    // AI fallback — use training knowledge
+    // AI fallback — use training knowledge (bounded: council calls can otherwise
+    // inherit the multi-minute COUNCIL_TIMEOUT_MS and hang the interactive turn).
     if (callAI) {
-      const content = await callAI(
-        `You are a UX researcher and product designer. Based on your training knowledge, provide a detailed, structured answer to this query. Include: specific patterns, common mistakes, measurable impact where known, and concrete implementation guidance.\n\nQuery: ${query}\n\nFormat your answer with clear sections and bullet points. Be specific — avoid generic advice.`
+      const content = await withTimeout(
+        callAI(
+          `You are a UX researcher and product designer. Based on your training knowledge, provide a detailed, structured answer to this query. Include: specific patterns, common mistakes, measurable impact where known, and concrete implementation guidance.\n\nQuery: ${query}\n\nFormat your answer with clear sections and bullet points. Be specific — avoid generic advice.`
+        ),
+        WEB_SEARCH_AI_TIMEOUT_MS,
+        'web_search_ai_timeout',
       );
       console.log(`🔍 [WEB-SEARCH] AI fallback: "${query}"`);
       return { source: 'ai_knowledge', results: [{ title: query, description: content, url: null }] };

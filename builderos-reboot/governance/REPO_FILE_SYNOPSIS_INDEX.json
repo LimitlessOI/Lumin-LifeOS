@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T12:48:09.479Z",
+  "generated_at": "2026-07-02T21:43:41.955Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11803,
   "files": [
@@ -38407,9 +38407,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 552126,
-      "mtime": "2026-07-02T12:44:26.602Z",
-      "indexed_at": "2026-07-02T12:45:24.305Z"
+      "bytes": 554139,
+      "mtime": "2026-07-02T21:43:15.812Z",
+      "indexed_at": "2026-07-02T21:43:41.955Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69355,9 +69355,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 53849,
-      "mtime": "2026-07-02T12:05:50.002Z",
-      "indexed_at": "2026-07-02T12:09:10.616Z",
+      "bytes": 54744,
+      "mtime": "2026-07-02T21:43:15.812Z",
+      "indexed_at": "2026-07-02T21:43:41.955Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84559,9 +84559,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 8875,
-      "mtime": "2026-07-01T22:02:40.605Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 9235,
+      "mtime": "2026-07-02T21:43:15.812Z",
+      "indexed_at": "2026-07-02T21:43:41.955Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89469,9 +89469,12 @@
     {
       "path": "services/web-search-service.js",
       "synopsis": "services/web-search-service.js",
-      "bytes": 8752,
-      "mtime": "2026-07-01T22:02:40.633Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z"
+      "bytes": 9770,
+      "mtime": "2026-07-02T21:43:15.808Z",
+      "indexed_at": "2026-07-02T21:43:41.955Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/websocket-handler.js",
