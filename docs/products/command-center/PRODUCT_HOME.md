@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-02 |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-01 — health/liveness truth hardened for founder-builder runtime: `/healthz` and `/ready` now bypass public/static interception, which keeps command surfaces and external monitors from grading stale or hung health off the wrong layer. Prior: 2026-06-29 — never-stop product factory status route wired into command center |
+| **Last Updated** | 2026-07-02 — operator auth boundary hardened: `src/server/auth/requireKey.js` now accepts account-JWT fallback only for `founder_admin`, `operator`, and `admin`, so member JWTs cannot reach raw Command Center / BuilderOS operator routes. Prior: 2026-07-01 — health/liveness truth hardened for founder-builder runtime: `/healthz` and `/ready` now bypass public/static interception, which keeps command surfaces and external monitors from grading stale or hung health off the wrong layer. Prior: 2026-06-29 — never-stop product factory status route wired into command center |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
@@ -270,7 +270,7 @@ node --check public/overlay/command-center.js
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** None
+**Current blocker:** None. 2026-07-02 security sweep note: raw `requireKey` routes now reject non-operator account JWTs; keep command-key header aliases intact.
 
 **Last decision:** Lazy reality hash capture — fixes REALITY_MISMATCH 409 on all chat requests
 
@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-07-02 | **`src/server/auth/requireKey.js`** — account-JWT fallback now requires `founder_admin`, `operator`, or `admin`; ordinary LifeOS member JWTs receive 403 while configured command-key headers still pass. Added `tests/require-key-operator-jwt.test.js`. | Critical bug sweep found a concrete privilege-escalation path: any valid LifeOS account JWT could satisfy raw `requireKey` and reach Command Center / BuilderOS operator routes such as governed job execution. | AM12 + auth security | ✅ focused regression |
 | 2026-06-29 | **`routes/lifeos-command-center-routes.js`** — `GET /api/v1/lifeos/command-center/never-stop-product-factory` surfaces live factory lane status (expansion mission, last heartbeat, enabled state). | Never-stop factory scheduler needed a command-center read path to confirm it's running. | AM12 | pending deploy |
 | 2026-06-28 | **`routes/canonical-execution-routes.js` + `services/env-registry-map.js`** — `GET /api/v1/lifeos/admin/operations/timeline|summary` for duration+token aligned ops view. | Adam: see how long everything takes with tokens lined up. | ✅ | deploy |
 | 2026-06-28 | **Self-repair runtime carry-forward surfaced in Command Center** — `services/self-repair-deploy-scheduler.js` raises live deploy-repair retries to 3 attempts, `services/self-repair-execution-log.js` now persists `step_details[]` with attempt/required-context metadata, and `services/self-repair-executor.js` now stamps every executed step with attempt stage plus required carry-forward context before writing the runtime log. | The runtime cockpit was showing repair outcomes without enough truth to explain whether the system actually carried lessons/research forward across retries. These fields make the command layer report the real repair loop instead of a flattened “it tried” summary. | ✅ local syntax + executor/log tests; ⚠️ pending deploy parity | Command Center runtime truth |

@@ -1,11 +1,13 @@
 /**
  * SYNOPSIS: Shared command-key gate for operator routes (builder, Railway env, etc.).
  * Shared command-key gate for operator routes (builder, Railway env, etc.).
- * Accepts LifeOS account JWT (Bearer) when it is not the operator command key.
+ * Accepts operator-role LifeOS account JWT (Bearer) when it is not the operator command key.
  * @ssot docs/products/command-center/PRODUCT_HOME.md
  */
 
 import { verifyToken } from '../../../services/lifeos-auth.js';
+
+const OPERATOR_JWT_ROLES = new Set(['founder_admin', 'operator', 'admin']);
 
 /** Railway / shell / .env often include a trailing newline — without trim, `includes()` fails and clients see 401. */
 function normalizeKey(value) {
@@ -79,10 +81,15 @@ export function createRequireKey(options = {}) {
 
       if (provided && configuredValues.includes(provided)) return next();
 
-      // Founder app shell: account login JWT (not the operator command key).
+      // Founder app shell: operator account login JWT (not the operator command key).
       if (bearerToken && !configuredValues.includes(bearerToken)) {
         try {
-          req.lifeosUser = verifyToken(bearerToken);
+          const payload = verifyToken(bearerToken);
+          const role = String(payload?.role || '').toLowerCase();
+          if (!OPERATOR_JWT_ROLES.has(role)) {
+            return res.status(403).json({ ok: false, error: "Operator access required" });
+          }
+          req.lifeosUser = payload;
           req.auth_mode = 'account_jwt';
           return next();
         } catch { /* fall through */ }
