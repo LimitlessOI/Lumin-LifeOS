@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-02 |
 
 ### Related docs (this product)
 
@@ -26,6 +26,7 @@
 ---
 **Status:** ACTIVE (execution ladder locked; full end-to-end autonomy still requires runtime proof)
 **Authority:** Subordinate to SSOT North Star Constitution
+**Last Updated:** 2026-07-02 — ARC entry-gate unblocked: reconstructed the missing `scripts/validate-intent-tier1.mjs` (the intake-loop mission IL-S05 was never completed, so `factory-core/arc/entry-gate.js` returned `tier1_validator: validate-intent-tier1.mjs missing` and every mission was BLOCKED_RETURN_TO_IDC). The validator applies the identical load-bearing coverage rule as the entry-gate's own `tier1CoveragePass`, normalizes both legacy v1 (`dimension`/`status`/`mission_id`) and current v2 (`name`/`coverage_level`/`intent_id`) coverage-map shapes, and never rejects a coverage-rule pass. Verified: `runArcEntryGate('FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001')` now returns `ARC_ENTRY_PASS` (0 violations) in both pre-handoff and corridor modes; all 9 real missions pass; regression test `tests/validate-intent-tier1.test.js` (6 cases) wired into `npm test`. Remaining ARC cascade (studio design packet / FP_V2 / downstream gates) still to be cleared.
 **Last Updated:** 2026-07-01 — Devin external-host handoff added. The repo now carries a single human-readable handoff and a machine packet for Devin setup/execution so external host use does not depend on reconstructing context from chat. Manual boundary remains only account sign-in, GitHub connection, repo grant, and secret entry.
 **Last Updated:** 2026-07-01 — BuilderOS V1 authority clarified: `Chair/Lumin` is the first real surface; `ARC` authors deterministic blueprints; `CFO` first appears as scoreboard ownership (tokens, time, cost, model grading, efficiency); `Historian` owns blueprint/runtime sync after accepted change; wording is now “truth protocol” / truth ladder, not vague “truth locked” shorthand.
 **Last Updated:** 2026-07-01 — BuilderOS continuity law locked: the OB ladder does not stop on a single blocker. It continues until approved spend is exhausted, founder explicitly stops it, alpha is ready for founder use, or the queue has no ready work left after scan. Isolated blockers are recorded and the system moves to the next ready slice.

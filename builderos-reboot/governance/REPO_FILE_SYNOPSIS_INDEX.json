@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T21:43:41.955Z",
+  "generated_at": "2026-07-02T22:00:00.123Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11803,
+  "file_count": 11805,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37964,9 +37964,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 107150,
-      "mtime": "2026-07-02T09:19:36.358Z",
-      "indexed_at": "2026-07-02T09:20:12.551Z"
+      "bytes": 108114,
+      "mtime": "2026-07-02T21:59:41.148Z",
+      "indexed_at": "2026-07-02T22:00:00.123Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -66500,9 +66500,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29270,
-      "mtime": "2026-07-02T12:23:14.922Z",
-      "indexed_at": "2026-07-02T12:23:21.814Z",
+      "bytes": 29306,
+      "mtime": "2026-07-02T21:59:29.824Z",
+      "indexed_at": "2026-07-02T22:00:00.123Z",
       "synopsis_index_only": true
     },
     {
@@ -72808,6 +72808,16 @@
       "bytes": 11390,
       "mtime": "2026-07-01T22:02:40.569Z",
       "indexed_at": "2026-07-02T09:11:09.743Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/validate-intent-tier1.mjs",
+      "synopsis": "Tier-1 intent validator CLI — gates ARC entry on load-bearing INTENT_COVERAGE_MAP coverage.",
+      "bytes": 5759,
+      "mtime": "2026-07-02T21:59:05.352Z",
+      "indexed_at": "2026-07-02T22:00:00.123Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -91208,6 +91218,16 @@
       "bytes": 786,
       "mtime": "2026-07-01T22:02:40.657Z",
       "indexed_at": "2026-07-02T09:11:09.743Z"
+    },
+    {
+      "path": "tests/validate-intent-tier1.test.js",
+      "synopsis": "Tier-1 intent validator — unit tests for coverage rule + shape normalization.",
+      "bytes": 3541,
+      "mtime": "2026-07-02T21:59:16.708Z",
+      "indexed_at": "2026-07-02T22:00:00.123Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/validate-task-dna.test.js",
