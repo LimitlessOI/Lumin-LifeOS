@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T12:29:39.292Z",
+  "generated_at": "2026-07-02T12:31:50.460Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11803,
   "files": [
@@ -37433,9 +37433,9 @@
     {
       "path": "docs/history/legacy-mvc/README.md",
       "synopsis": "Archived legacy Express-MVC island (api/controllers/workers/models)",
-      "bytes": 2081,
-      "mtime": "2026-07-02T12:28:11.374Z",
-      "indexed_at": "2026-07-02T12:28:47.813Z"
+      "bytes": 3053,
+      "mtime": "2026-07-02T12:31:44.646Z",
+      "indexed_at": "2026-07-02T12:31:50.460Z"
     },
     {
       "path": "docs/history/legacy-routes/README.md",

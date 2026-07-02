@@ -34,6 +34,23 @@ restore a module.
    `audit/reports/*` (historical evidence) and `docs/REPO_CATALOG.json` (a
    regeneratable catalog) — neither is a CI gate.
 
+## `orphaned-modules/` — dead files from live dirs
+
+9 import-broken modules that lived in the **live** dirs (`services/`,
+`middleware/`, `config/`) but are 0-reachable from the boot graph and import
+uninstalled packages. Flattened to `<dir>__<name>.js.txt` (double-underscore
+encodes the original path). None are in any product `FILE_MANIFEST.json`.
+
+`ConfigService.js`, `adaptiveModel.js` (brain.js), `analysisService.js` (openai),
+`documentProcessor.js` (natural), `transcriptionService.js` (openai),
+`config-security.js` (winston), `simulationMiddleware.js` (models/outreachLog),
+`config/db.js` (sequelize; had 28 importers, all in the dead `src/` MVC subtree),
+`config/env-validator.js` (joi; boot uses the different `services/env-validator.js`).
+
+**Left in place (founder review):** `services/marketing-coach.js` and
+`services/marketing-transcriber.js` — dead, but listed in the `marketingos`
+product `FILE_MANIFEST.json`, so removing them is product-territory.
+
 ## Recovery
 
 `git mv docs/history/legacy-mvc/<dir> ../../<dir>` then rename `*.js.txt` → `*.js`,
