@@ -1,0 +1,19 @@
+# SYNOPSIS: Render deploy spec — host-portable twin of the Railway service (Cloudflare front-door strategy).
+# Lets the same commit deploy on Render as a warm alternate to Railway. Secrets are
+# entered once in the Render dashboard (env group), never committed here. See
+# docs/products/builderos/PRODUCT_HOME.md for the infra-portability decision.
+services:
+  - type: web
+    name: lumin
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: starter
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      # Dual-stack bind so the platform edge (IPv4/IPv6) can reach the container.
+      - key: HOST
+        value: "::"
+      # PORT is injected by Render; server.js reads process.env.PORT.
+      # All other secrets are provided via the Render dashboard, not this file.
