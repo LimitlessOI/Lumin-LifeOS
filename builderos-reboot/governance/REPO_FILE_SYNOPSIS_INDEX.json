@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T12:25:50.351Z",
+  "generated_at": "2026-07-02T12:28:47.813Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11802,
+  "file_count": 11803,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -32135,8 +32135,8 @@
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
       "bytes": 3223,
-      "mtime": "2026-07-02T10:55:00.490Z",
-      "indexed_at": "2026-07-02T10:55:00.516Z",
+      "mtime": "2026-07-02T12:28:47.786Z",
+      "indexed_at": "2026-07-02T12:28:47.813Z",
       "synopsis_index_only": true
     },
     {
@@ -32429,9 +32429,9 @@
     {
       "path": "data/memories.json",
       "synopsis": "JSON data/config — data/memories.json.",
-      "bytes": 75132,
-      "mtime": "2026-07-01T22:02:40.041Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 101662,
+      "mtime": "2026-07-02T12:16:43.130Z",
+      "indexed_at": "2026-07-02T12:28:47.813Z",
       "synopsis_index_only": true
     },
     {
@@ -37429,6 +37429,13 @@
       "mtime": "2026-07-01T22:02:40.245Z",
       "indexed_at": "2026-07-02T09:11:09.743Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/history/legacy-mvc/README.md",
+      "synopsis": "Archived legacy Express-MVC island (api/controllers/workers/models)",
+      "bytes": 2081,
+      "mtime": "2026-07-02T12:28:11.374Z",
+      "indexed_at": "2026-07-02T12:28:47.813Z"
     },
     {
       "path": "docs/history/legacy-routes/README.md",
@@ -67314,9 +67321,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 3300,
-      "mtime": "2026-07-01T22:02:40.513Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 3712,
+      "mtime": "2026-07-02T11:03:21.618Z",
+      "indexed_at": "2026-07-02T12:28:47.813Z",
       "synopsis_index_only": true
     },
     {

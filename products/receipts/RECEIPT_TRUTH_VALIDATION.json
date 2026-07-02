@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-06-28T23:29:59.936Z",
+  "at": "2026-07-02T11:03:21.621Z",
   "ok": true,
-  "checked": 24,
+  "checked": 27,
   "failures": [],
   "results": [
     {
@@ -15,7 +15,7 @@
       "file": "BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
-      "claims_pass": false
+      "claims_pass": true
     },
     {
       "file": "BUILDEROS_INTAKE_LOOP_V1_ACCEPTANCE.json",
@@ -54,6 +54,12 @@
       "claims_pass": false
     },
     {
+      "file": "LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
       "file": "LIFERE_ALPHA_AUDIT_20260623.json",
       "ok": true,
       "violations": [],
@@ -79,6 +85,12 @@
     },
     {
       "file": "LIFERE_OS_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "LIFERE_SALES_COACHING_V1_ACCEPTANCE.json",
       "ok": true,
       "violations": [],
       "claims_pass": true
@@ -124,6 +136,12 @@
       "ok": true,
       "violations": [],
       "claims_pass": false
+    },
+    {
+      "file": "SOCIALMEDIAOS_SESSION_MVP_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
     },
     {
       "file": "TRUTH_ENFORCEMENT_AUDIT.json",
