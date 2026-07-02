@@ -31,13 +31,18 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const routesDir = path.join(here, '..', 'routes');
+const discover = (dir, rel) =>
+  fs
+    .readdirSync(path.join(here, '..', dir))
+    .filter((f) => f.endsWith('.js'))
+    .sort()
+    .map((f) => `${rel}/${f}`);
 
-const ROUTE_MODULES = fs
-  .readdirSync(routesDir)
-  .filter((f) => f.endsWith('.js'))
-  .sort()
-  .map((f) => `../routes/${f}`);
+// Every route + every middleware is discovered dynamically so new modules are
+// guarded automatically. (services/ + config/ still contain dead legacy modules
+// with missing deps — see docs/history/legacy-mvc/ — so those stay explicit.)
+const ROUTE_MODULES = discover('routes', '../routes');
+const MIDDLEWARE_MODULES = discover('middleware', '../middleware');
 
 const SPINE_MODULES = [
   '../services/lumin-chair-orchestrator.js',
@@ -47,10 +52,9 @@ const SPINE_MODULES = [
   '../services/founder-build-self-repair.js',
   '../services/point-b-navigator.js',
   '../services/truth-enforcement-spine.js',
-  '../middleware/truth-response-enforcer.js',
 ];
 
-for (const mod of [...ROUTE_MODULES, ...SPINE_MODULES]) {
+for (const mod of [...ROUTE_MODULES, ...MIDDLEWARE_MODULES, ...SPINE_MODULES]) {
   test(`module resolves all named imports: ${mod}`, async () => {
     await assert.doesNotReject(
       () => import(mod),
