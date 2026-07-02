@@ -8,6 +8,17 @@ import {
   isProductBuildChangeVerb,
 } from './founder-life-admin-intent.js';
 
+const CHAIR_DO_PREFIX = /^\s*(do|execute|run)\s*:\s*/i;
+
+/** Strip a leading "do:/execute:/run:" prefix and flag it as a forced-execute order. */
+export function stripChairDoPrefix(text = '') {
+  const raw = String(text || '').trim();
+  if (!CHAIR_DO_PREFIX.test(raw)) {
+    return { text: raw, forcedExecute: false };
+  }
+  return { text: raw.replace(CHAIR_DO_PREFIX, '').trim(), forcedExecute: true };
+}
+
 export function isExplicitExecuteCommand(text = '') {
   const t = String(text || '').trim();
   if (!t) return false;

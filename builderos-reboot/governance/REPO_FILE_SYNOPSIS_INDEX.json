@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T09:11:57.191Z",
+  "generated_at": "2026-07-02T09:20:12.551Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11794,
+  "file_count": 11798,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21994,9 +21994,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3569242,
-      "mtime": "2026-07-02T09:11:10.050Z",
-      "indexed_at": "2026-07-02T09:11:57.191Z"
+      "bytes": 3570697,
+      "mtime": "2026-07-02T09:19:59.150Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -32135,8 +32135,8 @@
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
       "bytes": 3223,
-      "mtime": "2026-07-02T07:41:02.074Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "mtime": "2026-07-02T09:20:12.522Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "synopsis_index_only": true
     },
     {
@@ -37943,9 +37943,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 106254,
-      "mtime": "2026-07-01T22:02:40.293Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z"
+      "bytes": 107150,
+      "mtime": "2026-07-02T09:19:36.358Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38386,9 +38386,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 543249,
-      "mtime": "2026-07-02T09:11:03.902Z",
-      "indexed_at": "2026-07-02T09:11:57.191Z"
+      "bytes": 544414,
+      "mtime": "2026-07-02T09:19:27.466Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -59157,9 +59157,9 @@
     {
       "path": "factory-staging/factory-core/bpb/intake-gate.js",
       "synopsis": "BPB intake gate — rejects if upstream strategy or blueprint shape is incomplete.",
-      "bytes": 4574,
-      "mtime": "2026-07-01T22:02:40.485Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z"
+      "bytes": 4568,
+      "mtime": "2026-07-02T09:16:28.574Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z"
     },
     {
       "path": "factory-staging/factory-core/builder/action-handlers/write-file-exact.js",
@@ -59192,9 +59192,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 8653,
-      "mtime": "2026-07-01T22:02:40.485Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z"
+      "bytes": 8431,
+      "mtime": "2026-07-02T09:16:23.990Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -59270,11 +59270,21 @@
       ]
     },
     {
+      "path": "factory-staging/factory-core/deliberation/mission-deliberation-file.js",
+      "synopsis": "Mission DELIBERATION_GATE.json read/write leaf — fs+path only, no gate logic.",
+      "bytes": 1062,
+      "mtime": "2026-07-02T09:17:09.158Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "factory-staging/factory-core/deliberation/seed-mission-deliberation.js",
       "synopsis": "Seed minimum deliberation records for a factory mission (jsonl + DELIBERATION_GATE.json).",
-      "bytes": 4021,
-      "mtime": "2026-07-01T22:02:40.485Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 3518,
+      "mtime": "2026-07-02T09:17:21.498Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -59283,8 +59293,8 @@
       "path": "factory-staging/factory-core/deliberation/validate-deliberation-gate.js",
       "synopsis": "Factory deliberation gate v2.7 — Hist case + CFO receipt required; load-bearing adds consensus.",
       "bytes": 3441,
-      "mtime": "2026-07-01T22:02:40.485Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "mtime": "2026-07-02T09:17:29.982Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -59443,6 +59453,16 @@
       "indexed_at": "2026-07-02T09:11:09.743Z"
     },
     {
+      "path": "factory-staging/factory-core/repo-paths.js",
+      "synopsis": "Factory-core path roots leaf — REPO_ROOT/FACTORY_ROOT, dependency-free.",
+      "bytes": 767,
+      "mtime": "2026-07-02T09:19:11.806Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "factory-staging/factory-core/routes/factory-execute-mission-routes.js",
       "synopsis": "Factory staging — Factory Execute Mission Routes.",
       "bytes": 314,
@@ -59459,9 +59479,9 @@
     {
       "path": "factory-staging/factory-core/sentry/anti-pattern-check.js",
       "synopsis": "Exports antiPatternCheck — factory-staging/factory-core/sentry/anti-pattern-check.js.",
-      "bytes": 1467,
-      "mtime": "2026-07-01T22:02:40.485Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z"
+      "bytes": 1461,
+      "mtime": "2026-07-02T09:16:28.734Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/blueprint-freeze-check.js",
@@ -59501,9 +59521,9 @@
     {
       "path": "factory-staging/factory-core/sentry/verify-step-contract.js",
       "synopsis": "Exports loadAcceptanceTestsForMission — factory-staging/factory-core/sentry/verify-step-contract.js.",
-      "bytes": 1664,
-      "mtime": "2026-07-01T22:02:40.485Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z"
+      "bytes": 1658,
+      "mtime": "2026-07-02T09:16:28.706Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/verify-step-result.js",
@@ -84478,9 +84498,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 5352,
-      "mtime": "2026-07-01T22:02:40.605Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 5759,
+      "mtime": "2026-07-02T09:13:33.690Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86390,9 +86410,9 @@
     {
       "path": "services/lifeos-founder-command-class.js",
       "synopsis": "Founder command class routing — repo/build vs BP vs read vs provider vs system action.",
-      "bytes": 6868,
-      "mtime": "2026-07-01T22:02:40.617Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 6867,
+      "mtime": "2026-07-02T09:15:03.030Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86401,8 +86421,8 @@
       "path": "services/lifeos-founder-system-action.js",
       "synopsis": "Founder system actions — harmless receipts + governed BuilderOS founder intake path.",
       "bytes": 10998,
-      "mtime": "2026-07-01T22:02:40.617Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "mtime": "2026-07-02T09:18:23.262Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87117,9 +87137,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 36724,
-      "mtime": "2026-07-01T22:02:40.621Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 36726,
+      "mtime": "2026-07-02T09:13:51.162Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87127,9 +87147,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 8221,
-      "mtime": "2026-07-01T22:02:40.621Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 7972,
+      "mtime": "2026-07-02T09:13:38.650Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87177,9 +87197,9 @@
     {
       "path": "services/lumin-conversation-routing.js",
       "synopsis": "Conversation vs display routing — personal talk never hits queue display theater.",
-      "bytes": 3894,
-      "mtime": "2026-07-01T22:02:40.621Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 3844,
+      "mtime": "2026-07-02T09:13:42.054Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89223,9 +89243,19 @@
     {
       "path": "services/voice-rail-command-executor.js",
       "synopsis": "Voice Rail — founder commands → BuilderOS command-control → builder receipt.",
-      "bytes": 11433,
-      "mtime": "2026-07-01T22:02:40.633Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 11363,
+      "mtime": "2026-07-02T09:15:19.718Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/voice-rail-execute-flag.js",
+      "synopsis": "Voice Rail execute-flag leaf — VOICE_RAIL_EXECUTE_COMMANDS gate, dependency-free.",
+      "bytes": 433,
+      "mtime": "2026-07-02T09:15:12.150Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89233,9 +89263,9 @@
     {
       "path": "services/voice-rail-execution-truth.js",
       "synopsis": "Voice Rail — execution truth enforcement (no background-work theater).",
-      "bytes": 6157,
-      "mtime": "2026-07-01T22:02:40.633Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 6153,
+      "mtime": "2026-07-02T09:15:22.402Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89261,6 +89291,16 @@
       ]
     },
     {
+      "path": "services/voice-rail-status-probes.js",
+      "synopsis": "Voice Rail status probes leaf — /healthz + builder/ready + connection-proof, fetch-only.",
+      "bytes": 1846,
+      "mtime": "2026-07-02T09:18:05.394Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/voice-rail-stt.js",
       "synopsis": "Voice Rail — server-side STT (OpenAI Whisper) with LifeOS vocabulary bias.",
       "bytes": 3486,
@@ -89273,9 +89313,9 @@
     {
       "path": "services/voice-rail-system-direct.js",
       "synopsis": "LifeOS founder System Direct — API-only comms (no council, no department personas).",
-      "bytes": 10330,
-      "mtime": "2026-07-01T22:02:40.633Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 8947,
+      "mtime": "2026-07-02T09:18:19.770Z",
+      "indexed_at": "2026-07-02T09:20:12.551Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

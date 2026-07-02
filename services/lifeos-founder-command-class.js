@@ -9,7 +9,7 @@ import {
   parseProviderToolProofUtterance,
 } from './founder-provider-tool-action.js';
 import { detectSystemAgentQuestion } from './lifeos-system-agent.js';
-import { extractTargetFileFromInstruction } from './voice-rail-command-executor.js';
+import { extractTargetFileFromInstruction } from './builder-instruction-target.js';
 
 /** @typedef {'repo_build'|'bp_level'|'system_read'|'direct_provider'|'provider_tool_action'|'system_action'|'brainstorm'|'lifeos_operator'|'unsupported'} FounderCommandClass */
 

@@ -3,9 +3,6 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
-import { REPO_ROOT } from '../builder/run-step.js';
 import {
   appendDeliberationRecord,
   validateDeliberationGate,
@@ -15,23 +12,12 @@ import {
   recordCfoDeliberationReceipt,
   recordConsensusSession,
 } from '../historian/record-consensus-session.js';
+import {
+  loadMissionDeliberationFile,
+  writeMissionDeliberationFile,
+} from './mission-deliberation-file.js';
 
-function missionGatePath(mission_id) {
-  return path.join(REPO_ROOT, 'builderos-reboot/MISSIONS', mission_id, 'DELIBERATION_GATE.json');
-}
-
-export function loadMissionDeliberationFile(mission_id) {
-  const p = missionGatePath(mission_id);
-  if (!fs.existsSync(p)) return null;
-  return JSON.parse(fs.readFileSync(p, 'utf8'));
-}
-
-export function writeMissionDeliberationFile(mission_id, payload) {
-  const p = missionGatePath(mission_id);
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  fs.writeFileSync(p, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-  return p;
-}
+export { loadMissionDeliberationFile, writeMissionDeliberationFile };
 
 /**
  * Ensure mission has minimum Hist + CFO deliberation records (A→Z factory path).

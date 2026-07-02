@@ -12,14 +12,6 @@ import { isCounselOnlyBypass } from './chair-intent-signals.js';
 
 const DO_PREFIX = /^\s*(do|execute|run)\s*:\s*/i;
 
-export function stripChairDoPrefix(text = '') {
-  const raw = String(text || '').trim();
-  if (!DO_PREFIX.test(raw)) {
-    return { text: raw, forcedExecute: false };
-  }
-  return { text: raw.replace(DO_PREFIX, '').trim(), forcedExecute: true };
-}
-
 export function shouldSkipInputNormalize(text = '', action = 'auto') {
   const t = String(text || '').trim();
   if (!t) return false;

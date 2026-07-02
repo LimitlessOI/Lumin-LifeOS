@@ -4,6 +4,7 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { listCommandControlJobs } from './builderos-command-control-service.js';
+import { runSystemDirectStatusProbes } from './voice-rail-status-probes.js';
 import {
   executeVoiceRailFounderCommand,
   extractTargetFileFromInstruction,
@@ -55,19 +56,6 @@ export function classifySystemDirectAction(utterance) {
   return { type: 'unsupported' };
 }
 
-async function fetchJson(baseUrl, path, commandKey) {
-  const url = `${String(baseUrl || '').replace(/\/$/, '')}${path}`;
-  const headers = { accept: 'application/json' };
-  if (commandKey) headers['x-command-key'] = commandKey;
-  try {
-    const res = await fetch(url, { headers });
-    const body = await res.json().catch(() => ({}));
-    return { ok: res.ok, status: res.status, path, body };
-  } catch (err) {
-    return { ok: false, status: 0, path, error: err.message };
-  }
-}
-
 function formatProbeLines(probes) {
   return probes.map((p) => {
     if (p.error) return `  ${p.path} → ERROR ${p.error}`;
@@ -78,36 +66,6 @@ function formatProbeLines(probes) {
         : p.status;
     return `  ${p.method || 'GET'} ${p.path} → HTTP ${p.status} (${hint})`;
   }).join('\n');
-}
-
-export async function runSystemDirectStatusProbes({ baseUrl, commandKey, connectionProbe }) {
-  const probes = [];
-  if (typeof connectionProbe === 'function') {
-    try {
-      const local = await connectionProbe();
-      probes.push({
-        method: 'INTERNAL',
-        path: 'probeFounderContext',
-        status: local?.sufficient ? 200 : 503,
-        body: {
-          connected: local?.sufficient === true,
-          level: local?.context_health?.level,
-          counts: local?.context_health?.counts,
-        },
-      });
-    } catch (err) {
-      probes.push({
-        method: 'INTERNAL',
-        path: 'probeFounderContext',
-        status: 0,
-        error: err.message,
-      });
-    }
-  }
-  probes.push(await fetchJson(baseUrl, '/healthz', null));
-  probes.push(await fetchJson(baseUrl, '/api/v1/lifeos/builder/ready', commandKey));
-  probes.push(await fetchJson(baseUrl, '/api/v1/lifeos/voice-rail/connection-proof?user=adam', commandKey));
-  return probes;
 }
 
 function formatStatusReply(probes, jobs) {

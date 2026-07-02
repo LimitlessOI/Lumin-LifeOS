@@ -4,7 +4,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { fileURLToPath } from 'node:url';
 import { getSandboxBoundary } from './sandbox.js';
 import { buildBlockedReturn } from './blocked-return.js';
 import { verifyStepContract } from '../sentry/verify-step-contract.js';
@@ -14,17 +13,12 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
+import { REPO_ROOT, FACTORY_ROOT, resolveRepoPath } from '../repo-paths.js';
 
-const BUILDER_DIR = path.dirname(fileURLToPath(import.meta.url));
-export const REPO_ROOT = path.resolve(BUILDER_DIR, '../../..');
-export const FACTORY_ROOT = path.resolve(BUILDER_DIR, '../..');
+export { REPO_ROOT, FACTORY_ROOT, resolveRepoPath };
 
 function sha256Buffer(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex');
-}
-
-export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath.replace(/\\/g, '/'));
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
