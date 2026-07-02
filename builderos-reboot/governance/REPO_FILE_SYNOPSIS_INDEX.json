@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T12:40:03.755Z",
+  "generated_at": "2026-07-02T12:45:24.305Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11803,
   "files": [
@@ -21994,9 +21994,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3570697,
-      "mtime": "2026-07-02T09:19:59.150Z",
-      "indexed_at": "2026-07-02T09:20:12.551Z"
+      "bytes": 3572359,
+      "mtime": "2026-07-02T12:45:07.374Z",
+      "indexed_at": "2026-07-02T12:45:24.305Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38407,9 +38407,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 550904,
-      "mtime": "2026-07-02T12:39:58.738Z",
-      "indexed_at": "2026-07-02T12:40:03.755Z"
+      "bytes": 552126,
+      "mtime": "2026-07-02T12:44:26.602Z",
+      "indexed_at": "2026-07-02T12:45:24.305Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67346,8 +67346,8 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 736,
-      "mtime": "2026-07-01T22:02:40.513Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "mtime": "2026-07-02T12:42:50.526Z",
+      "indexed_at": "2026-07-02T12:45:24.305Z",
       "synopsis_index_only": true
     },
     {
@@ -67386,8 +67386,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-01T22:02:40.513Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "mtime": "2026-07-02T12:42:50.598Z",
+      "indexed_at": "2026-07-02T12:45:24.305Z",
       "synopsis_index_only": true
     },
     {
@@ -70316,9 +70316,9 @@
     {
       "path": "scripts/audit-truth-enforcement.mjs",
       "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
-      "bytes": 4177,
-      "mtime": "2026-07-01T22:02:40.557Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 4667,
+      "mtime": "2026-07-02T12:42:14.054Z",
+      "indexed_at": "2026-07-02T12:45:24.305Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89514,9 +89514,9 @@
     {
       "path": "services/wisdom-truth-auditor.js",
       "synopsis": "Wisdom truth auditor — red-team truth gates, scan enforcement gaps, challenge assumptions.",
-      "bytes": 11818,
-      "mtime": "2026-07-01T22:02:40.633Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 12191,
+      "mtime": "2026-07-02T12:42:44.946Z",
+      "indexed_at": "2026-07-02T12:45:24.305Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
