@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T09:20:12.551Z",
+  "generated_at": "2026-07-02T09:24:20.866Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11798,
+  "file_count": 11799,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37485,6 +37485,13 @@
       "bytes": 1703,
       "mtime": "2026-07-01T22:02:40.241Z",
       "indexed_at": "2026-07-02T09:11:09.743Z"
+    },
+    {
+      "path": "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md",
+      "synopsis": "Repo cleanup inventory (2026-07-02) — indexed sprawl candidates, reference-evidence, ARCHIVE/ESCALATE/REVIEW verdicts.",
+      "bytes": 6174,
+      "mtime": "2026-07-02T09:23:55.698Z",
+      "indexed_at": "2026-07-02T09:24:20.866Z"
     },
     {
       "path": "docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md",
