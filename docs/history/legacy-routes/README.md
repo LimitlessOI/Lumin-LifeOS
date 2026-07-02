@@ -9,7 +9,9 @@ half-built LifeOS *product* features (not part of the BuilderOS system spine).
 
 They are preserved here (not deleted) so the intent is recoverable if any of
 these features is ever escalated for a real build. Git history holds the full
-original path/content.
+original path/content. Files are archived with a `.js.txt` extension so they are
+inert (not importable, not subject to the FILE SYNOPSIS LAW / import guards) —
+strip the trailing `.txt` to restore the original module on revival.
 
 ## Evidence (captured 2026-07-02)
 
