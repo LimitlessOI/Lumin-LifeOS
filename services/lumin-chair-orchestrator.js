@@ -59,8 +59,9 @@ import {
   isPureCounselQuestion,
   isFounderRepairOrderIntent,
   isFounderUiBehaviorChangeRequest,
+  stripChairDoPrefix,
 } from './chair-intent-signals.js';
-import { stripChairDoPrefix, tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
+import { tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
 import {
   assessFounderUtteranceWisdom,
   formatWisdomClarifySummary,

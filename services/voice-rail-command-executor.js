@@ -15,13 +15,11 @@ import {
 } from './lifeos-founder-command-class.js';
 import { detectProviderProofIntent } from './founder-provider-tool-action.js';
 import { detectSystemAgentQuestion } from './lifeos-system-agent.js';
+import { isVoiceRailCommandExecuteEnabled } from './voice-rail-execute-flag.js';
 
 const DEFAULT_SYNC_MS = 90_000;
 
-export function isVoiceRailCommandExecuteEnabled() {
-  const v = String(process.env.VOICE_RAIL_EXECUTE_COMMANDS ?? '1').trim().toLowerCase();
-  return v !== '0' && v !== 'false' && v !== 'off';
-}
+export { isVoiceRailCommandExecuteEnabled };
 
 /** Parse repo-relative path from founder "please build … scripts/foo.mjs …" utterances. */
 export {

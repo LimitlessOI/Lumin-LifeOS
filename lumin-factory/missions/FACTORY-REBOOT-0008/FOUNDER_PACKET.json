@@ -1,9 +1,0 @@
-{
-  "mission_id": "FACTORY-REBOOT-0008",
-  "scope": [
-    "sentry_acceptance_hardening"
-  ],
-  "success_criteria": [
-    "acceptance tests pass"
-  ]
-}

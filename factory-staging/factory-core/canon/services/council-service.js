@@ -1296,14 +1296,21 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         .trim();
 
       if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
+        // OpenAI-native models (gpt-5.x) require `max_completion_tokens` and reject `max_tokens`
+        // and `stop`. Other OpenAI-compatible providers (groq, cerebras, xai, …) still use the
+        // legacy `max_tokens` + `stop` shape.
+        const isOpenAiNative = config.provider === "openai";
+        const tokenLimitParam = isOpenAiNative
+          ? { max_completion_tokens: scopedMaxTokens }
+          : { max_tokens: scopedMaxTokens };
         response = await fetch(getChatCompletionUrl(config.provider), {
           method: "POST",
           headers: buildOpenAICompatibleHeaders(config.provider, apiKey),
           body: JSON.stringify({
             model: config.model,
-            max_tokens: scopedMaxTokens,
+            ...tokenLimitParam,
             temperature,
-            ...(stopSequences && { stop: stopSequences }),
+            ...(stopSequences && !isOpenAiNative && { stop: stopSequences }),
             messages: deltaMessages
               // Always prepend system message — delta window never carries it
               ? [{ role: "system", content: systemPrompt }, ...deltaMessages]

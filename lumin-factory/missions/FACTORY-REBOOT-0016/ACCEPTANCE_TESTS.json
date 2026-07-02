@@ -1,9 +1,0 @@
-[
-  {
-    "test_id": "AT-S1601-1",
-    "step_id": "S1601",
-    "type": "file_sha256_matches",
-    "target": "scripts/run-greenfield-determinism-3x.mjs",
-    "expected_sha256": "cc0083a2e99c1164a6d68d6e88aaac6becd19568400e299037cc4384d403d679"
-  }
-]

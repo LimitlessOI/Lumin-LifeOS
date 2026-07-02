@@ -5,7 +5,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { runSystemDirectStatusProbes } from './voice-rail-system-direct.js';
+import { runSystemDirectStatusProbes } from './voice-rail-status-probes.js';
 import { detectSystemActionIntent } from './lifeos-founder-command-class.js';
 import { REPO_ROOT } from './repo-root.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';

@@ -1,9 +1,0 @@
-[
-  {
-    "test_id": "AT-S2201-1",
-    "step_id": "S2201",
-    "type": "file_sha256_matches",
-    "target": "scripts/generate-mission-pack-index.mjs",
-    "expected_sha256": "e36757c6a939b7c707dba789b3b89e85fa76656e5a6f02b2a7fc32f8229ac2f7"
-  }
-]

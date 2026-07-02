@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateConsensusSession } from '../canon/deliberation-governance.js';
-import { loadMissionDeliberationFile } from './seed-mission-deliberation.js';
+import { loadMissionDeliberationFile } from './mission-deliberation-file.js';
 
 const FACTORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const DELIBERATION_DATA = path.join(FACTORY_ROOT, 'data/deliberation-gate.jsonl');

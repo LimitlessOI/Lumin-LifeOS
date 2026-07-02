@@ -41,7 +41,13 @@ const REQUIRED_SPINE = [
   { file: 'middleware/truth-response-enforcer.js', needles: ['createTruthResponseEnforcer'] },
   { file: 'services/websocket-handler.js', needles: ['truthGateOutbound'] },
   { file: 'services/conversation-store.js', needles: ['scrubProseForStorage'] },
-  { file: 'server.js', needles: ['createTruthResponseEnforcer', 'createSpineCallAI', 'spineCallAI', 'truthGateOutbound'] },
+  // server.js is a bootstrap-only composition root (CLAUDE.md protected boundary):
+  // it only selects a runtime lane. The truth wiring lives in the runtime files it
+  // delegates to, so the audit follows it there.
+  //  - full runtime: HTTP outbound enforcer + spine-wrapped AI calls + websocket gate
+  //  - founder runtime: HTTP outbound enforcer (the minimal lane's boundary truth gate)
+  { file: 'server-full-runtime.js', needles: ['createTruthResponseEnforcer', 'createSpineCallAI', 'spineCallAI', 'truthGateOutbound'] },
+  { file: 'server-founder-runtime.js', needles: ['createTruthResponseEnforcer'] },
   { file: 'services/council-service.js', needles: ['deliverCouncilText'] },
   { file: 'core/memory-system.js', needles: ['gateMemoryWrite'] },
 ];

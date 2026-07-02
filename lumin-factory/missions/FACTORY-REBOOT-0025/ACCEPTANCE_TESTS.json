@@ -1,9 +1,0 @@
-[
-  {
-    "test_id": "AT-S2501-1",
-    "step_id": "S2501",
-    "type": "file_sha256_matches",
-    "target": "OPERATOR_COMPLETE.md",
-    "expected_sha256": "a7b260bf425a5e37e76d7064a077b0bdd3f8e3e1e8f8c9ba5b12bd7a35f71e5a"
-  }
-]

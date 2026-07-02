@@ -1,11 +1,11 @@
 {
   "schema": "bp_priority_guardrails_v1",
-  "checked_at": "2026-06-29T20:05:34.892Z",
-  "verdict": "FAIL",
+  "checked_at": "2026-07-02T12:25:50.328Z",
+  "verdict": "PASS",
   "owner_department": "Historian",
   "registry": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
-  "pass_count": 26,
-  "fail_count": 2,
+  "pass_count": 27,
+  "fail_count": 0,
   "passes": [
     {
       "id": "HIST_LAW",
@@ -13,7 +13,7 @@
     },
     {
       "id": "BP_PRIORITY_SHAPE",
-      "detail": "items=11"
+      "detail": "items=13"
     },
     {
       "id": "HIST_QUEUE_NO_ACTIVE_PRODUCT",
@@ -29,6 +29,10 @@
     },
     {
       "id": "BP_ACCEPTANCE_SYNC_WIRED",
+      "detail": ""
+    },
+    {
+      "id": "BP_PASS_RECEIPT_SYNC_PROOF",
       "detail": ""
     },
     {
@@ -112,15 +116,6 @@
       "detail": ""
     }
   ],
-  "failures": [
-    {
-      "id": "BP_FINGERPRINT_BLUEPRINT",
-      "detail": "PRODUCT-LIFEOS-USER-AUTH-V1-0001: blueprint.receipt_verdict !== PASS"
-    },
-    {
-      "id": "BP_FINGERPRINT_BLUEPRINT",
-      "detail": "PRODUCT-LIFEOS-USER-AUTH-V1-0001: blueprint.receipt_verdict !== PASS"
-    }
-  ],
+  "failures": [],
   "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
 }

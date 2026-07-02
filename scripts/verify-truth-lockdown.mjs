@@ -72,7 +72,14 @@ const REQUIRED = [
     needles: ['createTruthResponseEnforcer', 'enforceTruthOnResponseBody'],
   },
   {
-    file: 'server.js',
+    // Production hard-locks to the founder_builder runtime; it must gate every
+    // res.json/res.send through the response enforcer.
+    file: 'server-founder-runtime.js',
+    needles: ['createTruthResponseEnforcer'],
+  },
+  {
+    // Full runtime additionally spine-wraps its scheduled/background AI calls.
+    file: 'server-full-runtime.js',
     needles: ['createTruthResponseEnforcer', 'createSpineCallAI', 'spineCallAI'],
   },
   {

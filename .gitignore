@@ -106,3 +106,6 @@ data/builder-daemon-state.*.json
 public/downloads/*.apk
 public/downloads/*.ipa
 public/downloads/lifeos-ios.plist
+
+# Generated factory bundle (regenerate: npm run factory:bundle). Untracked 2026-07-02 to cut sprawl.
+lumin-factory/

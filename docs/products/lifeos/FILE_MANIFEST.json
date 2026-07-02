@@ -5,8 +5,33 @@
   "name": "LifeOS Core",
   "canonical_home": "docs/products/lifeos/PRODUCT_HOME.md",
   "amendment_path": "docs/products/lifeos/PRODUCT_HOME.md",
-  "updated_at": "2026-06-30",
+  "updated_at": "2026-07-02",
   "ownership_policy": "pointer_not_duplication",
+  "lane_read_manifest": {
+    "required_reads": [
+      "docs/CONTINUITY_LOG_LIFEOS.md",
+      "docs/products/lifeos/PRODUCT_HOME.md",
+      "docs/products/lifeos/AGENTS.md",
+      "prompts/lifeos-*.md",
+      "services/lifeos-*.js",
+      "routes/lifeos-*.js",
+      "db/migrations/*_lifeos_*.sql"
+    ],
+    "deep_read_when_building": [
+      "prompts/00-LIFEOS-AGENT-CONTRACT.md",
+      "docs/products/lifeos/PRODUCT_HOME.md",
+      "docs/products/AUTHORITY_BOUNDARIES.md"
+    ],
+    "required_writes_on_any_change": [
+      "docs/CONTINUITY_LOG_LIFEOS.md",
+      "docs/products/lifeos/PRODUCT_HOME.md",
+      "docs/products/lifeos/FILE_MANIFEST.json"
+    ],
+    "constitutional_files_always_in_scope": [
+      "docs/constitution/NORTH_STAR_SSOT.md",
+      "CLAUDE.md"
+    ]
+  },
   "owned_files": [
     "config/gate-change-presets.js",
     "config/task-model-routing.js",

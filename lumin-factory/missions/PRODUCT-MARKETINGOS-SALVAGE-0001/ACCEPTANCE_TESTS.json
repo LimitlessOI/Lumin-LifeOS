@@ -1,8 +1,0 @@
-[
-  {
-    "test_id": "AT-MS001-1",
-    "type": "file_sha256_matches",
-    "target": "product-salvage/MARKETINGOS_README.md",
-    "expected_sha256": "52bc574334fc17d7469fab7d81216c08a858ec89b964590562f685d3f8dc8213"
-  }
-]

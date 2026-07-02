@@ -1,9 +1,0 @@
-[
-  {
-    "test_id": "AT-S2001-1",
-    "step_id": "S2001",
-    "type": "file_sha256_matches",
-    "target": "scripts/factory-ci.mjs",
-    "expected_sha256": "7613128bd836b7773a594530b66dbc31089bfca50b9ac54fdc1ef735d10a5fb6"
-  }
-]

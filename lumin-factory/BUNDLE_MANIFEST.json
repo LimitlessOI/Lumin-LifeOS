@@ -1,7 +1,0 @@
-{
-  "bundle_id": "LUMIN-FACTORY-BUNDLE-001",
-  "built_at": "2026-06-11T07:30:31.067Z",
-  "source_repo": "Lumin-LifeOS",
-  "target_repo": "Lumin-Factory",
-  "entrypoint": "factory-staging/server.js"
-}

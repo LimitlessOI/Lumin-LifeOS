@@ -4,7 +4,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { REPO_ROOT } from '../builder/run-step.js';
+import { REPO_ROOT } from '../repo-paths.js';
 import { validateProductDevelopmentGate } from '../product-development/validate-gate.js';
 import { validateFounderPacketCompleteness } from '../founder-packet/validate-completeness.js';
 import { runAdamFilter } from '../founder-intent/adam-filter.js';

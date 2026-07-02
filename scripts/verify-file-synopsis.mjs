@@ -40,14 +40,7 @@ function loadIndexMap() {
   }
 }
 
-function mtimeMatches(entry, stat) {
-  if (!entry?.mtime) return false;
-  const a = new Date(entry.mtime).getTime();
-  const b = stat.mtimeMs;
-  return Math.abs(a - b) <= 2500;
-}
-
-function skipMtimeCheck(rel) {
+function skipStaleCheck(rel) {
   return (
     /^data\/.*-last-run\.json$/.test(rel)
     || rel === 'docs/AGENT_RULES.compact.md'
@@ -86,11 +79,18 @@ function verifyFile(rel, { indexMap, failures, contentOverride }) {
     failures.push({ id: 'INDEX_SYNOPSIS_EMPTY', detail: `${rel} — index row has no synopsis` });
   }
 
-  if (stat.size <= 750_000 && !skipMtimeCheck(rel) && !mtimeMatches(entry, stat)) {
-    failures.push({
-      id: 'INDEX_STALE',
-      detail: `${rel} — index mtime ${entry.mtime} ≠ disk ${stat.mtime.toISOString()}. Run: npm run lifeos:file-synopsis:index`,
-    });
+  if (stat.size <= 750_000 && !skipStaleCheck(rel)) {
+    // Freshness signal = `bytes` (content-derived file size), NOT mtime. Git does not preserve
+    // mtimes: every checkout, rebase, or fresh clone rewrites them to the operation timestamp,
+    // so mtime equality is impossible to satisfy in CI and flaky locally after a rebase. File
+    // size survives all of those and the index co-commit gates force index regeneration whenever
+    // an indexable file changes, so a bytes mismatch reliably means the index is stale.
+    if (typeof entry.bytes === 'number' && entry.bytes !== stat.size) {
+      failures.push({
+        id: 'INDEX_STALE',
+        detail: `${rel} — index bytes ${entry.bytes} ≠ disk ${stat.size}. Run: npm run lifeos:file-synopsis:index`,
+      });
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-# SYNOPSIS: yml — .github/workflows/keep-alive.yml.
+# SYNOPSIS: yml — .github/workflows/keep-alive.yml. Warm-ping only (no work generation), secrets-based.
 name: Keep System Alive
 
 on:
@@ -6,15 +6,26 @@ on:
     - cron: '*/5 * * * *'
   workflow_dispatch:
 
+# Never let warm-pings stack up.
+concurrency:
+  group: keep-alive
+  cancel-in-progress: true
+
 jobs:
   keep-alive:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
-      - name: Health Check
-        run: curl -f https://robust-magic-production.up.railway.app/health
-      
-      - name: Autopilot
-        run: curl -f "https://robust-magic-production.up.railway.app/internal/cron/autopilot?key=MySecretKey2025LifeOS"
-      
-      - name: Generate Work
-        run: curl -X POST -f "https://robust-magic-production.up.railway.app/api/v1/autopilot/generate-work?key=MySecretKey2025LifeOS"
+      # Warm the container only. Work generation + builds are owned by the
+      # guarded hourly `Autopilot Build` workflow — generating work here every
+      # 5 minutes floods the queue and drives the redeploy churn that took the
+      # public URL down. Health ping is non-fatal so a transient blip is a no-op.
+      - name: Health check
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+        run: |
+          if [ -z "$APP_URL" ]; then
+            echo "APP_URL secret not set — skipping (set it to the live Railway URL)."
+            exit 0
+          fi
+          curl -fsS --max-time 15 "$APP_URL/healthz" || echo "health ping failed (non-fatal)"

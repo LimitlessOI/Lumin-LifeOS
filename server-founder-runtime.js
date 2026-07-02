@@ -24,6 +24,7 @@ import { createDbPool } from "./services/db.js";
 import { initDb } from "./db/index.js";
 import { startDbHealthMonitor } from "./services/db-health-monitor.js";
 import { requestTracer } from "./middleware/request-tracer.js";
+import { createTruthResponseEnforcer } from "./middleware/truth-response-enforcer.js";
 import { createSavingsLedger } from "./services/savings-ledger.js";
 import { createTokenAccountingService } from "./services/token-accounting-service.js";
 import { createBuilderOSControlPlaneService } from "./services/builderos-control-plane-service.js";
@@ -169,6 +170,15 @@ applyMiddleware(app, {
 });
 
 app.use(requestTracer(logger));
+
+// Truth-enforcement spine: gate every res.json/res.send on founder + builder
+// routes through the truth spine. Mounted after body/CORS middleware and the
+// request tracer, but after /healthz, /ready, and public/static routes above so
+// liveness and asset serving stay untouched. The gate is fully synchronous
+// (benchmarked <70ms on large bodies), so it cannot stall the request path;
+// the earlier proxy-timeout hang traced to node-as-PID-1 SIGPIPE (fixed in the
+// Dockerfile), not this wrapper.
+app.use(createTruthResponseEnforcer({ logger }));
 
 export const pool = createDbPool({
   validatedDatabaseUrl,
@@ -329,7 +339,7 @@ async function bootFounderRuntime() {
 
 async function start() {
   const selectedPort = Number(PORT) || 8080;
-  const host = HOST || "0.0.0.0";
+  const host = HOST || "::";
 
   await new Promise((resolve, reject) => {
     server.once("error", reject);

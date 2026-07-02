@@ -3,7 +3,7 @@
  * Voice Rail — execution truth enforcement (no background-work theater).
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
-import { isVoiceRailCommandExecuteEnabled } from './voice-rail-command-executor.js';
+import { isVoiceRailCommandExecuteEnabled } from './voice-rail-execute-flag.js';
 
 /** Machine-readable operational reality — every reply must align with this. */
 export function buildVoiceRailExecutionManifest() {

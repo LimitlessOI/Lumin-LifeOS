@@ -24,7 +24,14 @@ import { execFile as execFileCb } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
 import { promises as fsPromises } from 'fs';
-import { ensureSynopsisInContent, isInFileEnforceable } from '../scripts/lib/file-synopsis.mjs';
+import {
+  ensureSynopsisInContent,
+  isInFileEnforceable,
+  isIndexable,
+  computeUpdatedIndex,
+  stripWrappingCodeFence,
+  INDEX_REL,
+} from '../scripts/lib/file-synopsis.mjs';
 import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-safe-scope.js';
 
 const execFile = promisify(execFileCb);
@@ -140,8 +147,26 @@ export function createDeploymentService(deps) {
       allowRouteRegistration: options.allowRouteRegistration === true,
     });
 
+    // ── Markdown fence strip ──────────────────────────────────────────────────
+    // The model sometimes wraps whole-file output in a ```lang … ``` block. Strip
+    // it before any parsing/validation so fenced JSON/JS/HTML cannot reach GitHub.
+    content = stripWrappingCodeFence(content, normalizedPath);
+
     if (isInFileEnforceable(normalizedPath)) {
       content = ensureSynopsisInContent(normalizedPath, content);
+    }
+
+    // ── Generic JSON validity guard ───────────────────────────────────────────
+    // Any *.json must parse (root package.json also gets the script guard below).
+    // Prevents nested configs like services/health-nexus/package.json being
+    // committed with markdown fences or truncation and breaking node's package
+    // resolution / CI syntax gates.
+    if (normalizedPath.endsWith('.json') && normalizedPath !== 'package.json') {
+      try {
+        JSON.parse(content);
+      } catch {
+        throw new Error(`commitToGitHub BLOCKED: "${normalizedPath}" content is not valid JSON. Refusing to commit.`);
+      }
     }
 
     // ── package.json protected-scripts guard ──────────────────────────────────
@@ -281,6 +306,10 @@ export function createDeploymentService(deps) {
         const commitData = await commitRes.json().catch(() => ({}));
         const commitSha = commitData?.commit?.sha || null;
         console.log(`✅ [DEPLOY] Committed ${normalizedPath} → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
+        // Keep the File Synopsis Law index in step with the file we just wrote.
+        // Best-effort: a failed index update must not fail the primary commit.
+        await commitSynopsisIndexUpdate([{ path: normalizedPath, content }], targetBranch)
+          .catch((e) => console.warn(`⚠️ [DEPLOY] synopsis index co-commit skipped for ${normalizedPath}: ${e.message}`));
         return { ok: true, sha: commitSha, already_present: false };
       }
 
@@ -351,10 +380,19 @@ export function createDeploymentService(deps) {
 
     const tree = [];
     const paths = [];
+    const committedForIndex = [];
     for (const entry of fileEntries) {
       const normalizedPath = normalizeRepoRelativePath(entry.path || entry.target_file);
-      const content = String(entry.content ?? entry.output ?? '');
+      let content = String(entry.content ?? entry.output ?? '');
       paths.push(normalizedPath);
+
+      // Same builder-output hygiene as the single-file path: strip a whole-file
+      // markdown fence, inject the SYNOPSIS header, then validate JSON — so batch
+      // (autonomous /execute) output is governance-compliant by construction.
+      content = stripWrappingCodeFence(content, normalizedPath);
+      if (isInFileEnforceable(normalizedPath)) {
+        content = ensureSynopsisInContent(normalizedPath, content);
+      }
 
       if (normalizedPath === 'package.json') {
         let parsed;
@@ -367,6 +405,12 @@ export function createDeploymentService(deps) {
         const missing = requiredScripts.filter((s) => !parsed?.scripts?.[s]);
         if (missing.length) {
           throw new Error(`commitManyToGitHub BLOCKED: package.json missing scripts: ${missing.join(', ')}`);
+        }
+      } else if (normalizedPath.endsWith('.json')) {
+        try {
+          JSON.parse(content);
+        } catch {
+          throw new Error(`commitManyToGitHub BLOCKED: "${normalizedPath}" content is not valid JSON.`);
         }
       }
 
@@ -398,6 +442,35 @@ export function createDeploymentService(deps) {
       }
       const blob = await blobRes.json();
       tree.push({ path: normalizedPath, mode: '100644', type: 'blob', sha: blob.sha });
+      committedForIndex.push({ path: normalizedPath, content });
+    }
+
+    // ── Atomic File Synopsis Law index co-commit ──────────────────────────────
+    // Fold a fresh index row for every indexable file into the SAME commit, so a
+    // builder commit can never land governance-noncompliant (INDEX_MISSING /
+    // INDEX_STALE) and block its own merge. Best-effort: if the index cannot be
+    // read/built, still commit the files rather than fail the whole build.
+    const indexableCommitted = committedForIndex.filter(
+      (f) => isIndexable(f.path) && f.path !== INDEX_REL,
+    );
+    if (indexableCommitted.length && !paths.includes(INDEX_REL)) {
+      try {
+        const idxContent = await buildUpdatedIndexContent(indexableCommitted, targetBranch);
+        const idxBlobRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs`, {
+          method: 'POST',
+          headers: authHeaders,
+          body: JSON.stringify({ content: idxContent, encoding: 'utf-8' }),
+        });
+        if (idxBlobRes.ok) {
+          const idxBlob = await idxBlobRes.json();
+          tree.push({ path: INDEX_REL, mode: '100644', type: 'blob', sha: idxBlob.sha });
+          paths.push(INDEX_REL);
+        } else {
+          console.warn(`⚠️ [DEPLOY] synopsis index blob create failed — committing files without index refresh`);
+        }
+      } catch (e) {
+        console.warn(`⚠️ [DEPLOY] synopsis index co-commit skipped: ${e.message}`);
+      }
     }
 
     const refRes = await fetch(
@@ -463,6 +536,106 @@ export function createDeploymentService(deps) {
 
     console.log(`✅ [DEPLOY] Batch committed ${paths.length} files → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
     return { ok: true, sha: commitSha, paths };
+  }
+
+  // ── Synopsis index helpers (File Synopsis Law, governance-by-construction) ──
+  function repoOwnerAndName() {
+    const [owner, repo] = String(GITHUB_REPO || '').split('/');
+    return { owner, repo };
+  }
+
+  function githubAuthHeaders() {
+    return {
+      Authorization: `token ${GITHUB_TOKEN?.trim()}`,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+    };
+  }
+
+  async function fetchCurrentSynopsisIndex(owner, repo, targetBranch) {
+    const res = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${INDEX_REL}?ref=${targetBranch}`,
+      { headers: githubAuthHeaders() },
+    );
+    if (res.status === 404) return { files: [] };
+    if (!res.ok) throw new Error(`Could not read ${INDEX_REL} (HTTP ${res.status})`);
+    const data = await res.json();
+    const decoded = decodeGitHubContent(data.content);
+    if (!decoded) return { files: [] };
+    try {
+      return JSON.parse(decoded);
+    } catch {
+      return { files: [] };
+    }
+  }
+
+  // Fetch the live index and return the pretty-printed content with fresh rows
+  // for `committedFiles` folded in (matches the on-disk generator's format).
+  async function buildUpdatedIndexContent(committedFiles, targetBranch) {
+    const { owner, repo } = repoOwnerAndName();
+    const current = await fetchCurrentSynopsisIndex(owner, repo, targetBranch);
+    const payload = computeUpdatedIndex(current, committedFiles);
+    return `${JSON.stringify(payload, null, 2)}\n`;
+  }
+
+  // Commit ONLY the index as its own commit — used by the single-file contents
+  // API path, which cannot fold extra files into one commit. Callers treat this
+  // as best-effort so a failed index sync never fails the primary file commit.
+  async function commitSynopsisIndexUpdate(committedFiles, branch) {
+    const token = GITHUB_TOKEN?.trim();
+    if (!token || !GITHUB_REPO) return { ok: false, skipped: 'no-credentials' };
+    const indexable = (committedFiles || []).filter((f) => isIndexable(f.path) && f.path !== INDEX_REL);
+    if (!indexable.length) return { ok: false, skipped: 'nothing-indexable' };
+
+    const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
+    const { owner, repo } = repoOwnerAndName();
+    const headers = githubAuthHeaders();
+
+    const idxContent = await buildUpdatedIndexContent(indexable, targetBranch);
+
+    const blobRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs`, {
+      method: 'POST', headers, body: JSON.stringify({ content: idxContent, encoding: 'utf-8' }),
+    });
+    if (!blobRes.ok) throw new Error(`index blob create failed (HTTP ${blobRes.status})`);
+    const blob = await blobRes.json();
+
+    const refRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`, { headers });
+    if (!refRes.ok) throw new Error(`could not read ref heads/${targetBranch}`);
+    const baseCommitSha = (await refRes.json())?.object?.sha;
+    if (!baseCommitSha) throw new Error('missing base commit sha for index update');
+
+    const baseCommitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`, { headers });
+    if (!baseCommitRes.ok) throw new Error('could not read base commit for index update');
+    const baseTreeSha = (await baseCommitRes.json())?.tree?.sha;
+    if (!baseTreeSha) throw new Error('missing base tree sha for index update');
+
+    const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
+      method: 'POST', headers,
+      body: JSON.stringify({
+        base_tree: baseTreeSha,
+        tree: [{ path: INDEX_REL, mode: '100644', type: 'blob', sha: blob.sha }],
+      }),
+    });
+    if (!treeRes.ok) throw new Error('index tree create failed');
+    const treeSha = (await treeRes.json())?.sha;
+
+    const commitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits`, {
+      method: 'POST', headers,
+      body: JSON.stringify({
+        message: `chore(governance): sync File Synopsis index for ${indexable.map((f) => f.path).join(', ')}`.slice(0, 480),
+        tree: treeSha,
+        parents: [baseCommitSha],
+      }),
+    });
+    if (!commitRes.ok) throw new Error('index commit create failed');
+    const commitSha = (await commitRes.json())?.sha || null;
+
+    const updateRefRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`, {
+      method: 'PATCH', headers, body: JSON.stringify({ sha: commitSha, force: false }),
+    });
+    if (!updateRefRes.ok) throw new Error('index ref update failed');
+    console.log(`✅ [DEPLOY] Synopsis index synced${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
+    return { ok: true, sha: commitSha };
   }
 
   // ── triggerDeployment ──────────────────────────────────────────────────────

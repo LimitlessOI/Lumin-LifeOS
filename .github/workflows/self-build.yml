@@ -1,4 +1,4 @@
-# SYNOPSIS: yml — .github/workflows/self-build.yml.
+# SYNOPSIS: yml — .github/workflows/self-build.yml. Guarded self-build (concurrency + budget), secrets-based.
 name: Self Build Every 15 Minutes
 
 on:
@@ -6,18 +6,52 @@ on:
     - cron: "*/15 * * * *"
   workflow_dispatch: {}
 
+# Serialize self-builds so a slow build can't overlap the next tick and stack
+# commits → back-to-back Railway redeploys (the churn that took the URL down).
+concurrency:
+  group: self-build
+  cancel-in-progress: false
+
 jobs:
   build_now:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Call build-now
+      - name: Check budget status
+        id: budget
         env:
           APP_URL: ${{ secrets.APP_URL }}
           KEY:     ${{ secrets.COMMAND_CENTER_KEY }}
         run: |
-          set -e
+          if [ -z "$APP_URL" ] || [ -z "$KEY" ]; then
+            echo "APP_URL / COMMAND_CENTER_KEY secret not set — skipping."
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          BUDGET_JSON=$(curl --retry 2 --retry-delay 2 --max-time 10 -fsSL \
+            "$APP_URL/api/v1/budget/status?key=$KEY" || echo '{"exceeded":false}')
+          echo "Budget: $BUDGET_JSON"
+          EXCEEDED=$(echo "$BUDGET_JSON" | jq -r '.exceeded // false')
+          if [ "$EXCEEDED" = "true" ]; then
+            echo "⚠ Budget exceeded — skipping build."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Call build-now
+        if: steps.budget.outputs.skip != 'true'
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          KEY:     ${{ secrets.COMMAND_CENTER_KEY }}
+        run: |
           echo "Triggering build-now..."
-          curl -fsS -X POST "$APP_URL/internal/autopilot/build-now?key=$KEY" \
+          RESP=$(curl -fsS --max-time 45 -X POST "$APP_URL/internal/autopilot/build-now?key=$KEY" \
             -H "Content-Type: application/json" \
-            -d '{}' | tee /tmp/resp.json || true
+            -d '{}' || echo '{"ok":false,"error":"request failed"}')
+          echo "$RESP" | jq '.' || echo "$RESP"
+          SKIPPED=$(echo "$RESP" | jq -r '.skipped // false')
+          if [ "$SKIPPED" = "true" ]; then
+            echo "ℹ Build skipped server-side (already running / no pending work)."
+          fi
           echo "Done."

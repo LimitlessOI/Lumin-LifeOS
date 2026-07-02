@@ -177,9 +177,15 @@ export function scanTruthEnforcementGaps() {
     }
   }
 
-  const serverSrc = fs.readFileSync(path.join(ROOT, 'server.js'), 'utf8');
-  if (!serverSrc.includes('createTruthResponseEnforcer')) {
-    gaps.push({ type: 'SERVER_MISSING_TRUTH_MIDDLEWARE', file: 'server.js' });
+  // server.js is a bootstrap-only composition root (CLAUDE.md protected boundary)
+  // that selects a runtime lane. The outbound truth-response enforcer lives in the
+  // runtime files it delegates to, so every runtime that can serve founder responses
+  // must wire it.
+  for (const runtimeFile of ['server-founder-runtime.js', 'server-full-runtime.js']) {
+    const runtimeSrc = fs.readFileSync(path.join(ROOT, runtimeFile), 'utf8');
+    if (!runtimeSrc.includes('createTruthResponseEnforcer')) {
+      gaps.push({ type: 'SERVER_MISSING_TRUTH_MIDDLEWARE', file: runtimeFile });
+    }
   }
 
   return gaps;
