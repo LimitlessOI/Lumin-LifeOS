@@ -1,9 +1,0 @@
-[
-  {
-    "test_id": "AT-S2801-1",
-    "step_id": "S2801",
-    "type": "file_sha256_matches",
-    "target": "scripts/emit-project-certification.mjs",
-    "expected_sha256": "a8ed5b5ba5a7787322d80e25e797a403cb3d73110c0f9086870bf6444a6e9dcd"
-  }
-]

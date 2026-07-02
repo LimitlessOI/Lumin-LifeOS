@@ -1,9 +1,0 @@
-[
-  {
-    "test_id": "AT-S1701-1",
-    "step_id": "S1701",
-    "type": "file_sha256_matches",
-    "target": "scripts/factory-duplication-test.mjs",
-    "expected_sha256": "d1bd8b137a9bb6cebc568da97dd1a8a411db7442daff8d4824b432ae06439802"
-  }
-]

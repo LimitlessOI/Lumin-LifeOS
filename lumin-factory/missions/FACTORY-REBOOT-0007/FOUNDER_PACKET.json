@@ -1,9 +1,0 @@
-{
-  "mission_id": "FACTORY-REBOOT-0007",
-  "scope": [
-    "council_adapter_quarantine"
-  ],
-  "success_criteria": [
-    "acceptance tests pass"
-  ]
-}

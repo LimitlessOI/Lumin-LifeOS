@@ -1,9 +1,0 @@
-{
-  "mission_id": "FACTORY-REBOOT-0009",
-  "scope": [
-    "autopilot_queue_runner"
-  ],
-  "success_criteria": [
-    "acceptance tests pass"
-  ]
-}

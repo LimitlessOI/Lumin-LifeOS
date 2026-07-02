@@ -1,9 +1,0 @@
-[
-  {
-    "test_id": "AT-FL001-1",
-    "step_id": "FL001",
-    "type": "file_sha256_matches",
-    "target": "factory-staging/proof-loop/LOOP_MARKER.txt",
-    "expected_sha256": "9de471083e3c7b1714bbf77720b1bd91a781552451c7fc2a9211660876499a91"
-  }
-]

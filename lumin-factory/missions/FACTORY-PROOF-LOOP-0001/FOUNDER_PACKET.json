@@ -1,7 +1,0 @@
-{
-  "mission_id": "FACTORY-PROOF-LOOP-0001",
-  "founder_touches": 1,
-  "scope": [
-    "Prove builder→sentry→historian→tsos→c2 loop"
-  ]
-}
