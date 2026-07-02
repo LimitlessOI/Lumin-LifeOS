@@ -10,7 +10,7 @@
  *   POST /api/v1/lifeos/auth/login          — email + password → access + refresh tokens
  *   POST /api/v1/lifeos/auth/refresh        — refresh token → new access token
  *   POST /api/v1/lifeos/auth/logout         — revoke refresh token
- *   POST /api/v1/lifeos/auth/set-password   — set/change password for a handle
+ *   POST /api/v1/lifeos/auth/set-password   — authenticated self-service or operator password change
  *
  * Authenticated endpoints (requireLifeOSUser):
  *   GET  /api/v1/lifeos/auth/me             — current user info
@@ -35,6 +35,7 @@ import { createHouseholdSync } from '../services/household-sync.js';
 
 const ACCESS_COOKIE_NAME = 'lifeos_access_token';
 const ACCESS_COOKIE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const PASSWORD_OPERATOR_ROLES = new Set(['founder_admin', 'operator', 'admin']);
 
 /** Absolute web origin for invite links (Railway / prod). */
 function publicWebOrigin(req) {
@@ -71,6 +72,21 @@ function signupUrlForCode(req, code) {
   const path = `/overlay/lifeos-login.html?invite=${encodeURIComponent(code)}`;
   const origin = publicWebOrigin(req);
   return origin ? `${origin}${path}` : path;
+}
+
+function normalizeHandle(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+export function canSetPasswordForHandle({ authMode = '', lifeosUser = null, targetHandle = '' } = {}) {
+  const requestedHandle = normalizeHandle(targetHandle);
+  const userHandle = normalizeHandle(lifeosUser?.handle);
+  const role = String(lifeosUser?.role || '').toLowerCase();
+
+  if (!requestedHandle) return false;
+  if (authMode === 'command_key_fallback' || String(lifeosUser?.sub || '') === 'emergency-key') return true;
+  if (PASSWORD_OPERATOR_ROLES.has(role)) return true;
+  return Boolean(userHandle && userHandle === requestedHandle);
 }
 
 export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
@@ -150,12 +166,19 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     }
   });
 
-  // ── Set / change password (admin bootstrap + user self-service) ──────────────
-  router.post('/set-password', async (req, res) => {
+  // ── Set / change password (operator bootstrap + user self-service) ───────────
+  router.post('/set-password', requireUserOrKey, async (req, res) => {
     try {
       const { handle, newPassword, currentPassword } = req.body;
       if (!handle || !newPassword) {
         return res.status(400).json({ ok: false, error: 'handle and newPassword required' });
+      }
+      if (!canSetPasswordForHandle({
+        authMode: req.auth_mode,
+        lifeosUser: req.lifeosUser,
+        targetHandle: handle,
+      })) {
+        return res.status(403).json({ ok: false, error: 'Cannot set password for another user' });
       }
       const result = await auth.setAdminPassword({ handle, newPassword, currentPassword: currentPassword || null });
       res.json(result);
