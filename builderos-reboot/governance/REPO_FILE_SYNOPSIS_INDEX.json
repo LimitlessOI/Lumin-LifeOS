@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T10:53:07.397Z",
+  "generated_at": "2026-07-02T10:55:00.516Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11799,
   "files": [
@@ -32135,8 +32135,8 @@
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
       "bytes": 3223,
-      "mtime": "2026-07-02T09:20:12.522Z",
-      "indexed_at": "2026-07-02T09:20:12.551Z",
+      "mtime": "2026-07-02T10:55:00.490Z",
+      "indexed_at": "2026-07-02T10:55:00.516Z",
       "synopsis_index_only": true
     },
     {
