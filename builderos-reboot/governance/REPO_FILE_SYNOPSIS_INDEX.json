@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T12:14:55.466Z",
+  "generated_at": "2026-07-02T12:18:13.939Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11802,
   "files": [
@@ -38400,9 +38400,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 548933,
-      "mtime": "2026-07-02T12:13:52.706Z",
-      "indexed_at": "2026-07-02T12:14:08.003Z"
+      "bytes": 550077,
+      "mtime": "2026-07-02T12:18:08.902Z",
+      "indexed_at": "2026-07-02T12:18:13.939Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -91087,10 +91087,10 @@
     },
     {
       "path": "tests/spine-import-resolution.test.js",
-      "synopsis": "Import-resolution guard — every founder/builder spine module must load",
-      "bytes": 1622,
-      "mtime": "2026-07-02T12:07:05.646Z",
-      "indexed_at": "2026-07-02T12:09:10.616Z",
+      "synopsis": "Import-resolution guard — every route + spine module must load",
+      "bytes": 2571,
+      "mtime": "2026-07-02T12:17:50.258Z",
+      "indexed_at": "2026-07-02T12:18:13.939Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
