@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T11:01:28.075Z",
+  "generated_at": "2026-07-02T12:09:10.616Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11800,
+  "file_count": 11801,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -36000,9 +36000,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 485119,
-      "mtime": "2026-07-02T10:58:08.194Z",
-      "indexed_at": "2026-07-02T10:58:12.666Z"
+      "bytes": 486947,
+      "mtime": "2026-07-02T12:08:22.658Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -38393,9 +38393,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 545226,
-      "mtime": "2026-07-02T11:01:22.966Z",
-      "indexed_at": "2026-07-02T11:01:28.075Z"
+      "bytes": 547519,
+      "mtime": "2026-07-02T12:08:10.738Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66486,9 +66486,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29194,
-      "mtime": "2026-07-02T11:00:37.578Z",
-      "indexed_at": "2026-07-02T11:01:28.075Z",
+      "bytes": 29232,
+      "mtime": "2026-07-02T12:07:09.774Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z",
       "synopsis_index_only": true
     },
     {
@@ -67339,9 +67339,9 @@
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1149,
-      "mtime": "2026-07-01T22:02:40.513Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 1195,
+      "mtime": "2026-07-02T12:07:37.290Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z",
       "synopsis_index_only": true
     },
     {
@@ -69341,9 +69341,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 53795,
-      "mtime": "2026-07-01T22:02:40.553Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 53849,
+      "mtime": "2026-07-02T12:05:50.002Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83435,9 +83435,9 @@
     {
       "path": "scripts/verify-truth-lockdown.mjs",
       "synopsis": "Static proof — truth lockdown wired on all founder exit paths.",
-      "bytes": 5783,
-      "mtime": "2026-07-01T22:02:40.597Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 6106,
+      "mtime": "2026-07-02T12:07:33.174Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83500,9 +83500,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 10649,
-      "mtime": "2026-07-02T01:13:50.600Z",
-      "indexed_at": "2026-07-02T09:11:09.743Z",
+      "bytes": 11291,
+      "mtime": "2026-07-02T12:05:02.298Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -91074,6 +91074,16 @@
       "bytes": 4208,
       "mtime": "2026-07-01T22:02:40.657Z",
       "indexed_at": "2026-07-02T09:11:09.743Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/spine-import-resolution.test.js",
+      "synopsis": "Import-resolution guard — every founder/builder spine module must load",
+      "bytes": 1622,
+      "mtime": "2026-07-02T12:07:05.646Z",
+      "indexed_at": "2026-07-02T12:09:10.616Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

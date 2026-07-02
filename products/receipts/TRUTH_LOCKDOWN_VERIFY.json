@@ -1,6 +1,6 @@
 {
   "schema": "truth_lockdown_verify_v1",
-  "at": "2026-06-28T23:31:43.728Z",
+  "at": "2026-07-02T12:07:37.292Z",
   "ok": true,
   "failures": [],
   "checks": [
@@ -19,7 +19,8 @@
     "services/lifeos-execution-truth.js",
     "services/truth-enforcement-spine.js",
     "middleware/truth-response-enforcer.js",
-    "server.js",
+    "server-founder-runtime.js",
+    "server-full-runtime.js",
     "services/lifeos-lumin.js",
     "services/websocket-handler.js",
     "services/conversation-store.js",

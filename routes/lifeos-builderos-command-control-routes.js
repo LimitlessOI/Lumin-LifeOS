@@ -52,7 +52,8 @@ import {
   isBuildRequest,
 } from '../services/lumin-chair-orchestrator.js';
 import { needsSystemKnowledge } from '../services/chair-system-knowledge.js';
-import { parseLuminChairSystemAction, stripChairDoPrefix, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
+import { parseLuminChairSystemAction, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
+import { stripChairDoPrefix } from '../services/chair-intent-signals.js';
 import { isFounderPersonalLifeIntent } from '../services/founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from '../services/lumin-conversation-routing.js';
 import { translateChairPersonality } from '../services/chair-personality-translate.js';
