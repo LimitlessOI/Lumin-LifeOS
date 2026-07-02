@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T10:58:31.131Z",
+  "generated_at": "2026-07-02T11:01:28.075Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11799,
+  "file_count": 11800,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -38393,9 +38393,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 544414,
-      "mtime": "2026-07-02T09:19:27.466Z",
-      "indexed_at": "2026-07-02T09:20:12.551Z"
+      "bytes": 545226,
+      "mtime": "2026-07-02T11:01:22.966Z",
+      "indexed_at": "2026-07-02T11:01:28.075Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66486,9 +66486,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29153,
-      "mtime": "2026-07-02T09:10:20.898Z",
-      "indexed_at": "2026-07-02T09:11:57.191Z",
+      "bytes": 29194,
+      "mtime": "2026-07-02T11:00:37.578Z",
+      "indexed_at": "2026-07-02T11:01:28.075Z",
       "synopsis_index_only": true
     },
     {
@@ -90490,6 +90490,16 @@
       "bytes": 744,
       "mtime": "2026-07-01T22:02:40.653Z",
       "indexed_at": "2026-07-02T09:11:09.743Z"
+    },
+    {
+      "path": "tests/deploy-boot-codegen-guards.test.js",
+      "synopsis": "Static regression guards for the two bugs that caused the 2026-07-02",
+      "bytes": 2647,
+      "mtime": "2026-07-02T11:00:34.522Z",
+      "indexed_at": "2026-07-02T11:01:28.075Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/deployment-service-package-guard.test.js",
