@@ -1446,6 +1446,25 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           deltaMessages
         );
 
+        const generationConfig = {
+          temperature,
+          maxOutputTokens: scopedMaxTokens,
+        };
+        // Gemini 2.5 flash enables "thinking" by default, which adds ~7-40s of
+        // latency (and billed thinking tokens) per call. The free flash lane is
+        // for fast, lightweight reasoning, so disable thinking by default and let
+        // callers opt back in for deeper analysis.
+        const thinkingBudget = Number(
+          options.thinkingBudget ?? process.env.GEMINI_THINKING_BUDGET ?? 0
+        );
+        if (
+          /gemini-2\.5-flash/i.test(config.model || "") &&
+          Number.isFinite(thinkingBudget) &&
+          thinkingBudget >= 0
+        ) {
+          generationConfig.thinkingConfig = { thinkingBudget };
+        }
+
         response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:generateContent?key=${apiKey}`,
           {
@@ -1455,10 +1474,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             },
             body: JSON.stringify({
               ...geminiBody,
-              generationConfig: {
-                temperature,
-                maxOutputTokens: scopedMaxTokens,
-              },
+              generationConfig,
             }),
             signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
           }
