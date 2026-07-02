@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T03:55:26.128Z",
+  "generated_at": "2026-07-02T04:06:13.454Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11787,
   "files": [
@@ -37763,9 +37763,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 52258,
-      "mtime": "2026-07-02T01:14:05.732Z",
-      "indexed_at": "2026-07-02T01:14:39.418Z"
+      "bytes": 53386,
+      "mtime": "2026-07-02T04:05:46.549Z",
+      "indexed_at": "2026-07-02T04:06:13.454Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -59226,9 +59226,9 @@
     {
       "path": "factory-staging/factory-core/canon/services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 74594,
-      "mtime": "2026-06-29T17:21:08.082Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 75055,
+      "mtime": "2026-07-02T04:03:11.349Z",
+      "indexed_at": "2026-07-02T04:06:13.454Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -60580,9 +60580,9 @@
     {
       "path": "lumin-factory/factory-staging/factory-core/canon/services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 74675,
-      "mtime": "2026-06-29T17:21:08.115Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 75136,
+      "mtime": "2026-07-02T04:03:15.217Z",
+      "indexed_at": "2026-07-02T04:06:13.454Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -84921,9 +84921,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 74968,
-      "mtime": "2026-07-01T12:38:52.149Z",
-      "indexed_at": "2026-07-01T13:21:13.184Z",
+      "bytes": 75429,
+      "mtime": "2026-07-02T04:02:58.097Z",
+      "indexed_at": "2026-07-02T04:06:13.454Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
