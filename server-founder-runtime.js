@@ -329,7 +329,7 @@ async function bootFounderRuntime() {
 
 async function start() {
   const selectedPort = Number(PORT) || 8080;
-  const host = HOST || "0.0.0.0";
+  const host = HOST || "::";
 
   await new Promise((resolve, reject) => {
     server.once("error", reject);

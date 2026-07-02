@@ -72,7 +72,7 @@ export function loadRuntimeEnv() {
     DEEPSEEK_LOCAL_ENDPOINT = "",
     DEEPSEEK_BRIDGE_ENABLED = "false",
     ALLOWED_ORIGINS = "",
-    HOST = "0.0.0.0",
+    HOST = "::",
     PORT = 8080,
     // Spend cap (can be overridden in Railway env). Default: $0/day - NO SPENDING
     MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "0",

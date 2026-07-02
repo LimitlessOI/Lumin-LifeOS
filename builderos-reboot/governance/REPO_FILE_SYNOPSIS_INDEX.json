@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-01T21:19:37.497Z",
+  "generated_at": "2026-07-02T01:14:39.418Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11787,
   "files": [
@@ -21699,9 +21699,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 21271,
-      "mtime": "2026-07-01T04:36:18.015Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "bytes": 20808,
+      "mtime": "2026-07-02T01:12:20.740Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z",
       "synopsis_index_only": true
     },
     {
@@ -22356,8 +22356,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 32185,
-      "mtime": "2026-07-01T09:40:12.084Z",
-      "indexed_at": "2026-07-01T09:42:10.273Z",
+      "mtime": "2026-07-02T01:12:20.740Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z",
       "synopsis_index_only": true
     },
     {
@@ -27361,8 +27361,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-USER-AUTH-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 9821,
-      "mtime": "2026-07-01T04:36:18.015Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "mtime": "2026-07-02T01:12:20.744Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z",
       "synopsis_index_only": true
     },
     {
@@ -30802,9 +30802,9 @@
     {
       "path": "config/runtime-env.js",
       "synopsis": "Exports loadRuntimeEnv — config/runtime-env.js. @ssot docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)",
-      "bytes": 10355,
-      "mtime": "2026-07-01T11:28:30.592Z",
-      "indexed_at": "2026-07-01T13:21:13.184Z",
+      "bytes": 10350,
+      "mtime": "2026-07-02T01:13:50.580Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)"
       ]
@@ -32128,8 +32128,8 @@
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
       "bytes": 3223,
-      "mtime": "2026-07-01T04:16:56.493Z",
-      "indexed_at": "2026-07-01T04:36:20.955Z",
+      "mtime": "2026-07-02T01:14:39.388Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z",
       "synopsis_index_only": true
     },
     {
@@ -37763,9 +37763,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 51835,
-      "mtime": "2026-07-01T11:35:42.548Z",
-      "indexed_at": "2026-07-01T13:21:13.184Z"
+      "bytes": 52258,
+      "mtime": "2026-07-02T01:14:05.732Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -38350,9 +38350,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 541591,
-      "mtime": "2026-07-01T14:20:21.339Z",
-      "indexed_at": "2026-07-01T14:22:38.303Z"
+      "bytes": 542220,
+      "mtime": "2026-07-02T01:14:13.252Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -83430,9 +83430,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 10654,
-      "mtime": "2026-07-01T10:00:08.549Z",
-      "indexed_at": "2026-07-01T10:01:08.610Z",
+      "bytes": 10649,
+      "mtime": "2026-07-02T01:13:50.600Z",
+      "indexed_at": "2026-07-02T01:14:39.418Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -53,7 +53,7 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-30T04:38:33.428Z",
+      "completed_at": "2026-06-30T04:39:45.052Z",
       "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
@@ -87,7 +87,7 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-30T04:38:33.428Z",
+      "completed_at": "2026-06-30T04:39:45.052Z",
       "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
@@ -121,7 +121,7 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-30T04:38:33.428Z",
+      "completed_at": "2026-06-30T04:39:45.052Z",
       "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
@@ -155,7 +155,7 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-30T04:38:33.428Z",
+      "completed_at": "2026-06-30T04:39:45.052Z",
       "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
@@ -189,7 +189,7 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-30T04:38:33.428Z",
+      "completed_at": "2026-06-30T04:39:45.052Z",
       "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
@@ -223,7 +223,7 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-30T04:38:33.428Z",
+      "completed_at": "2026-06-30T04:39:45.052Z",
       "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     },
     {
@@ -257,13 +257,13 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-30T04:38:33.428Z",
+      "completed_at": "2026-06-30T04:39:45.052Z",
       "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
   "authored_by": "ARC",
-  "completed_at": "2026-06-30T04:38:33.428Z",
+  "completed_at": "2026-06-30T04:39:45.052Z",
   "git_sha": "58ef833242d8d274e7f9552dd1e3b000b3b0498e",
   "receipt_path": "products/receipts/LIFEOS_USER_AUTH_V1_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
