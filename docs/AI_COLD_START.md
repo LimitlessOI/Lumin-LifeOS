@@ -1,20 +1,19 @@
-<!-- SYNOPSIS: AI Cold Start Packet -->
-
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-05-14T04:11:16.036Z
+> Generated: 2026-07-02T07:19:04.988Z
 
 ## Read order (mandatory)
 
-1. `docs/CONTINUITY_INDEX.md` — pick your lane.
-2. `prompts/00-LIFEOS-AGENT-CONTRACT.md` — epistemic baseline (§2.6, §2.11, §2.15).
-3. `prompts/00-SSOT-READ-SEQUENCE.md` — ordered SSOT reads (anti-drift).
-4. `prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md` — think vs execute model policy.
-5. This file (you are reading it).
-6. The lane log for your task (`CONTINUITY_LOG_LIFEOS.md` / `CONTINUITY_LOG_COUNCIL.md` / main log).
-7. Owning manifest JSON (e.g. `AMENDMENT_21_LIFEOS_CORE.manifest.json`) for structured next steps.
-8. `prompts/<domain>.md` when using the builder.
+1. `docs/AGENT_RULES.compact.md` — enforcement packet.
+2. `prompts/00-HIST-LEGACY-BOUNDARY.md` — **STOP:** Hist vs active systems (do not skip).
+3. `prompts/00-LIFEOS-AGENT-CONTRACT.md` — epistemic baseline (§2.6, §2.11, §2.15).
+4. `prompts/00-SSOT-READ-SEQUENCE.md` — ordered SSOT reads (anti-drift).
+5. `prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md` — think vs execute model policy.
+6. This file (you are reading it).
+7. The lane log for your task (`CONTINUITY_LOG_LIFEOS.md` / `CONTINUITY_LOG_COUNCIL.md` / main log).
+8. Owning manifest JSON (e.g. `AMENDMENT_21_LIFEOS_CORE.manifest.json`) for structured next steps.
+9. `prompts/<domain>.md` when using the builder.
 
 ## Program priority — LifeOS (KNOW)
 
@@ -23,6 +22,8 @@
 **In practice:** execution is `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json`, LifeOS routes/overlays in **Amendment 21** scope, and honest **Change Receipts**. **No** scope outside the approved backlog without Adam or a load-bearing **§2.12** path (`run-council` / gate-change on the running app). Full legal text: `docs/products/lifeos/PRODUCT_HOME.md` → **Approved Product Backlog** → **PRIORITY ALIGNMENT**.
 
 ## CONTINUITY_INDEX.md
+
+<!-- SYNOPSIS: Continuity Index -->
 
 # Continuity Index
 
@@ -52,107 +53,58 @@ Example first line of an update:
 
 ## Snippet — main CONTINUITY_LOG (first update block)
 
-## ⚠️ AGENT CONTINUITY PROTOCOL
+## [SESSION] 2026-06-29 — Repo + Neon organization pass (files + database cleanup)
 
-**Adam hits usage limits frequently. Every session, a new agent starts cold with no memory.**
-
-**Before writing a single line of code:**
-1. Read `docs/CONTINUITY_INDEX.md` — pick the correct **lane log** (`CONTINUITY_LOG_COUNCIL.md`, `CONTINUITY_LOG_LIFEOS.md`, or this file for cross-cutting work).
-2. Read `docs/AI_COLD_START.md` (run `npm run cold-start:gen` locally if missing or stale).
-3. Read the most recent `## Update` in the lane you own (here: general/cross-lane history — **most recent first**).
-4. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Agent Handoff Notes` for LifeOS build state.
-5. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Approved Product Backlog` (including **PRIORITY ALIGNMENT** / operator directive) for LifeOS program order — **not** stale “revenue-only” excerpts elsewhere without re-checking that block.
-
-**After every file you change:**
-- Add a new update entry at the **top** of the appropriate lane file **and** a one-line pointer here if the change is cross-cutting.
-- Prefix every new update title with a session tag: `[PLAN]` `[BUILD]` `[FIX]` `[REVIEW]` `[RESEARCH]` (example: `## [BUILD] Update 2026-04-19 #6`).
-- Update `AMENDMENT_21_LIFEOS_CORE.md → ## Change Receipts` and `## Agent Handoff Notes` when LifeOS files changed.
-- Be painstakingly accurate. Write for someone who has never seen this project.
-
-**Update format:**
-```
-## [TAG] Update YYYY-MM-DD #N
-### Files changed
-- file.js — what changed, why, any known issues or incomplete stubs
-### State after this session
-- What works, what is broken, what is wired but untested
-### Next agent: start here
-- The very next task, specific enough to begin without asking
-```
+Adam: *go deeper — fix our files, organize them, organize Neon (useless crap).* **Files:** BuilderOS docs consolidated under `docs/products/builderos/` — `TWIN.md`, `specs/BP_V1.md`; alpha blueprint archived to `docs/history/builderos/`; redirect stubs left at old paths; **1,108** `@ssot`/path references updated to canonical product home. **Neon:** Created `archive` schema; moved **49** tables out of `public` (29 empty prototypes + 20 legacy orphan-data tables including `task_outputs` 68k rows, `compression_stats` 54k rows). **Result:** `public` **509 → 460** tables; **88** with live data; **372** empty schema-ready (code-referenced, kept); **0** orphan/review left. Audit script: `scripts/neon-schema-audit.mjs`; guide: `docs/database/README.md`. **Not done:** LifeOS 2k-line PRODUCT_HOME trim; `docs/projects/` dashboard spec sprawl; 372 empty schema-ready tables (wait until products ship or Adam approves deeper cut). **Next:** commit when Adam asks; optional LifeOS spec folder migration.
 
 ---
 
-## [BUILD] Update 2026-05-13 #19 — S6/Founder Decoder v0
+## [SESSION] 2026-06-27 — Founder overlay auth redirect v1 was still split-brain; callers still built nested `next=`
 
-### Files changed
-- `scripts/founder-decoder.mjs` (NEW) — reads existing runtime data, renders plain-English in 4 modes. No new schema, no daemon, no governance logic. Handles list/object quarantine format difference. Coalesces daemons sharing same root cause in --calm mode.
-- `tests/founder-decoder.test.js` (NEW) — 5 tests, all modes + no-args usage.
-- `package.json` — 4 `founder:*` shortcuts + test wired.
-- `docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md` — S6 receipt + handoff (Phase 2 sequence complete).
+Adam: *run a live ui run and repair and observe; do not stop.* After the first redirect hardening pass was committed and pushed, Railway was verified on the new SHA and the anonymous `/overlay/lifeos-app.html?direct_system=1` probe was rerun. That probe still failed live even though the bootstrap helper code was updated: the login URL was now a single `next` param, but its value still contained a nested `?next=`. That proved the remaining problem was architectural, not deployment lag. The helper had been fixed, but the overlay shell and ambient listener were still hand-building `/overlay/lifeos-login.html?next=...` and then delegating to a helper that also owns redirect construction. **Fixed locally:** `public/overlay/lifeos-app.html` and `public/shared/lifeos-ambient-listener.js` now call `requireAuth('/overlay/lifeos-login.html')` only, leaving `lifeos-bootstrap.js` as the single source of truth for `next` generation. **Next:** commit this second redirect slice, redeploy Railway, rerun the anonymous overlay probe until the login URL is clean, then continue founder-path break testing.
 
-### State after this session
-- `npm test`: **49 pass, 0 fail, 4 skipped**. `node --check`: PASS.
-- Live output confirmed: 3 daemons all failing on same CSS comment syntax in lifeos-dashboard.html, 95% prediction match, 13 active quarantine (7 cleared).
-- Phase 2 brainstorm sequence: C21 ✅ → S2/C02 ✅ → S3/C09 ✅ → S4/DNA ✅ → S5/Prediction ✅ → S6/Decoder ✅ — **COMPLETE.**
+## [SESSION] 2026-06-27 — Founder overlay shell auth redirect was false-green; live probe caught nested `next=`
 
-### Next agent: start here
-- **S7 — Adam to confirm scope.** The Phase 2 agreed sequence is done. Adam decides what comes next.
-- The CSS comment issue in `lifeos-dashboard.html` (streak 38) is a live blocker for daemon health — worth fixing before S7.
-
----
-
-## [BUILD] Update 2026-05-13 #18 — S5/Prediction Loop v0
-
-### Files changed
-- `scripts/lib/prediction-loop.mjs` (NEW) — pure library. `makePrediction({ taskId, lane, sis1WillSkip })` builds prediction_recorded record. `evaluatePrediction(prediction, { actual_ok, actual_duration_ms, actual_closure_type })` compares prediction to actual, sets `prediction_match` + `miss_reason`. No I/O.
-- `scripts/validate-predictions.mjs` (NEW) — warn-only scanner for `data/prediction-loop.jsonl`. Reports predictions, evaluations, matches, misses, miss_reason breakdown. Never exits non-zero.
-- `scrip
+Adam: *run a live ui run and repair and observe; keep it going and have it fix its issues you find.* The live founder loop was re-run against Railway, not just local code. First fix shipped: founder `/api/v1/lifeos/auth/me` now supports direct founder command-key mode and the real-app E2E token minting now matches runtime millisecond auth. That cleaned the noisy console/auth path and restored the live real-app E2E to green. Then the probe was tightened: a second anonymous check now opens `/overlay/lifeos-app.html?direct_system=1` directly and verifies the login redirect shape. That immediately exposed a real client-side auth bug the old tests missed: the overlay shell was building `/overlay/lifeos-login.html?next=... ?next=...` by appending `next` twice. **Fixed locally:** `public/overlay/lifeos-bootstrap.js` now preserves a caller-supplied `next` instead of blindly appending another, and the live E2E now carries both server-gate and overlay-shell redirect probes so this cannot go false-green again. **Next:** commit only this redirect fix + new probe, push 
 
 ## Snippet — LifeOS lane
 
-## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 4
+## [BUILD] Update 2026-06-27 — Founder continue-to-Point-B routing hardening
 
 ### What happened
-- **SIS1 mechanism confirmed.** `task_skip_already_shipped` events found in the queue log (not daemon log). Cycle 180 fired at 03:07:20 UTC on `site-builder-pipeline-report-route`; cycle 181 fired at 03:52:22 UTC on `site-builder-discovery-run-action`. Forge cursor now at pos 0 = `site-builder-postmark-send`. SIS1 is operating correctly — one more cycle (~04:37 UTC) will confirm the original RL1 target task specifically.
-- **`tc-webhook-validator.js` audited: complete, not a stub.** 34 lines, both `validatePostmark` (HMAC-SHA256) and `validateTwilio` (HMAC-SHA1) fully implemented with timing-safe compare, graceful unconfigured-key skip. Clean `node --check`. No rebuild.
-- **package.json guard regression test shipped.** `tests/deployment-service-package-guard.test.js` — 6 tests, all pass. Guard now self-protecting: file added to `REQUIRED_TEST_FILES` in `deployment-service.js` and to `package.json` test script.
+- **The next founder-path bug appeared right after status authority was fixed live.** `continue building toward point b until pass or exact blocker` still routed to `mission_pipeline` and returned receipt-scan/foundation-pipeline failure instead of staying in the Point B execution lane.
+- **Root cause was classifier priority.** `chair-context-classifier.js` was still returning `mission_pipeline` before giving high-confidence Point B system asks a chance to stay in the Point B navigator lane.
+- **Fix shipped locally.** High-confidence Point B system routing now wins before the generic `mission_pipeline` branch, and the exact founder phrasing is locked by regression.
 
 ### Verification
-- `npm test`: **14 pass, 0 fail, 4 skipped** (4 smoke tests require live server)
-- All 6 guard contract tests pass
-- `node --check services/tc-webhook-validator.js`: PASS
-- `node --check services/deployment-service.js`: PASS
+- `node --test tests/chair-context-classifier.test.js tests/point-b-navigator.test.js tests/lumin-conversation-routing.test.js tests/lumin-chair-orchestrator.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/chair-program-direct-answer.test.js`
 
-### Next step
-Watch for `task_skip_already_shipped site-builder-postmark-send` in `data/builder-continuous-queue-log.site-builder-autonomous-queue.jsonl`. When it appears, mark SIS1 fully confirmed and clear the PENDING_CONFIRMATION row in AM36 receipts. Then roadmap slice.
+### Next
+Deploy this classifier fix, rerun the live founder continue-to-Point-B probe, then continue walking the founder UI path until the next autonomy blocker is concrete.
 
----
-
-## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 3
+## [BUILD] Update 2026-06-27 — Founder continuation-language hardening + LifeRE truth-split audit
 
 ### What happened
-- **Test script stripped again** after pulling 3 new Railway commits. Fixed in `0071d8cd`. This has now happened 3+ times — root cause is Railway builder templates generating a 2-file test script.
-- **package.json protected-scripts guard shipped** (`d1c72926`). Added content-aware check to `commitToGitHub` in `services/deployment-service.js`. Any commit to `package.json` that removes `repo:sync-check`, `lifeos:verify:ui-map`, or the 3 regression test files is rejected with a descriptive error. PROVISIONAL — monitored.
-- **TC Stripe service rebuilt** via `POST /api/v1/lifeos/builder/build`. Was 24-line truncated stub (ended mid-sentence). Now 90 lines with complete Stripe integration. `ok:true committed:true`.
-- **SIS1 still PENDING_CONFIRMATION**. Forge cursor at pos 10, expected to fire at pos 0 (`site-builder-postmark-send`) within the next two Forge cycles (~04:37 UTC).
-- **Nova throughput confirmed healthy**: 2 commits/cycle (CSS/HTML), cycles 194–196 all clean.
+- **Two founder-language defects remained after Point B routing was repaired.** Natural continuation shorthand like `keep going until pass or exact blocker` still fell into display/counsel, and explicit `run execute mission for PRODUCT-LIFERE-OS-V1-0001` was being classified as generic blueprint execution and blocked by Founder Packet ambiguity instead of entering the governed Point B mission loop.
+- **Routing is now tightened around actual founder phrasing.** `services/lumin-conversation-routing.js` keeps continue-to-pass language out of display-only routing, and `services/chair-context-classifier.js` now routes those shorthand continuation asks plus explicit product mission execution into the Point B lane.
+- **A real truth split was also surfaced, not fixed over.** Local mission artifacts for `PRODUCT-LIFERE-OS-V1-0001` currently show acceptance `PASS` and `BUILDER_RUN_RECEIPT.verdict = TECHNICAL_PASS`, while the live founder endpoint still reports `machine:acceptance FAIL — result truth wins over corridor pass`. That contradiction is now explicitly recorded as unresolved.
 
 ### Verification
-- `npm test`: 8/8 pass
-- Compliance: 12/12 pass
-- `node --check services/tc-stripe-service.js`: PASS (90 lines)
-- `node --check services/deployment-service.js`: PASS
+- `node --test tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/point-b-navigator.test.js tests/lumin-chair-orchestrator.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/chair-program-direct-answer.test.js`
+- Live founder probe (current deploy `66ad2bd0939d2931570de2aa91ef9f0f63758a8d`):
+  - `continue building toward point b until pass or exact blocker` → `point_b`, `RUNNING`, `execute_mission`
+  - `keep going until pass or exact blocker` → wrong on live before this patch (`display` / `NO_COMMAND_RAN`)
+  - `run execute mission for PRODUCT-LIFERE-OS-V1-0001` → wrong on live before this patch (`blueprint_execute` → FPv2 ambiguity block)
 
-### Next step
-Confirm SIS1. Then tc-webhook-validator quality review. Then post-commit smoke router.
+### Next
+Deploy the continuation-language fix, rerun the founder continuation battery on Railway, then trace whether the live Point B gate is reading stale acceptance receipts or stale runtime files.
 
----
-
-## [FIX] Update 2026-05-13 — GOVERNANCE_LOCK_CONTINUOUS_OPERATION cycle 1
+## [BUILD] Update 2026-06-27 — Point B Alpha truth-gate repair
 
 ### What happened
-- **Repo sync gap discovered and closed.** Local was 32 commits behind `origin/main` (Railway autonomous builders had been pushing while we were working on SC1). `git pull --rebase origin main` applied cleanly — zero file conflicts.
-- **13 working-tree files were never pushed to git.** Created during RL1/RL2/OF1/RRS1/OD1 sessions, these scripts, test files, and mockups existed only in the stash: `scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `scripts/generate-runtime-reality-snapsho
+- **The continuation deploy resolved the original r
 
 ## Snippet — Council lane
 
@@ -196,14 +148,28 @@ Confirm SIS1. Then tc-webhook-validator quality review. Then post-commit smoke r
 
 ## Amendment 36 (Zero-Drift) — abstract
 
-# AMENDMENT 36 — Zero-Drift Handoff & Cold-Start Protocol
+<!-- SYNOPSIS: Canonical product home — ZERO DRIFT HANDOFF PROTOCOL -->
 
+# ZERO DRIFT HANDOFF PROTOCOL Product Home
+
+**Formerly called:** Amendment 36 — ZERO DRIFT HANDOFF PROTOCOL
+
+| Field | Value |
+|---|---|
+| **Canonical home** | this file |
+| **Product id** | `zero-drift-handoff-protocol` |
+| **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
+| **Machine manifest** | `docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json` |
+| **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
+| **Last Updated** | 2026-06-29 |
+
+---
 | Field | Value |
 |-------|--------|
 | **Lifecycle** | `infrastructure` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-05-12 — **NSSOT §2.10 ¶8–10** (audit epistemic format, improvement-idea council rule, truth-first order — constitutional clarification, no existing law changed). Prior: **OF1 + QP1 + LA1** — operator freshness fail-closed (`scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `tests/operator-runtime-status-freshness.test.js`, `package.json` test list); LifeOS product queue split (`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` code-only, docs/spec backlog in `LIFEOS_DOCS_QUEUE.json`); lane accountability hardening (`scripts/lifeos-builder-continuous-queue.mjs`, `scripts/tsos-builder-auditor.mjs`, `scripts/operator-stale-failure-detect.mjs`, RL1/RL2 lane scoping) plus quarantine normalization so Nova no longer inherits TC / Site Builder rows. Prior: **SF1** — **`npm run operator:stale-failure-detect`** → **`scripts/operator-stale-failure-detect.mjs`**; **`data/operator-stale-failure-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2f**; **`package.json`**; **`.gitignore`** — Prior: **RL2** — **`npm run operator:repair-loop:r2`** → **`scripts/operator-repair-loop-r2-once.mjs`**; **`tests/tc-morning-digest-service-module.test.js`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2e**; **`docs/products/tc-service/PRODUCT_HOME.md`**; **`package.json`** — Prior: **RL1 + RL1-test-verify** — **`npm run operator:repair-loop`** → **`scripts/operator-repair-loop-once.mjs`**; **`services/site-builder-postmark-helper.js`** + **`tests/site-builder-postmark-helper.test.js`** (**`node:path`** import — **`npm test`** gate); **`data/operator-repair-loop-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2d**; **`docs/products/site-builder/PRODUCT_HOME.md`**; **`docs/CONTINUITY_LOG.md`**; **`package.json`** — Prior: **SW1 + OS1 PATH** — **`npm run tsos:system-watch`** → **`scripts/tsos-system-watch.mjs`**; **`data/system-watch-log.jsonl`**; **`scripts/tsos-overseer-daemon.mjs`** — **`childEnvForChecks()`** (Homebrew **`PATH`** for **`npm`**); **`SYSTEM_CAPABILITIES`** **SW1**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2c**; **`docs/OPERATIONAL_REALITY_SYNC.md`** §5 — Prior: **OH1** — **`npm run operator:status`** / **`tsos:operator-status`** → **`scripts/operator-runtime-status.mjs`**; **`data/operator-s
+| **Last Updated** | 2026-06-30 — readiness and handoff references now point at canonical product-home governance files instead of root-level amendment-era checklist paths; legacy `docs/projects/*` authority docs are archived under `docs/history/legacy-history-salvage/docs-projects-root/`. Prior: **NSSOT §2.10 ¶8–10** (audit epistemic format, improvement-idea council rule, truth-first order — constitutional clarification, no existing law changed). Prior: **OF1 + QP1 + LA1** — operator freshness fail-closed (`scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `tests/operator-runtime-status-freshness.test.js`, `package.json` test list); LifeOS product queue split (`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` code-only, docs/spec backlog in `LIFEOS_DOCS_QUEUE.json`); lane accountability hardening (`scripts/lifeos-builder-continuous-queue.mjs`, `scripts/tsos-builder-auditor.mjs`, `scripts/operator-stale-failure-detect.mjs`, RL1/RL2 lane scoping) plus quarantine normalization so Nova no longer inherits TC / Site Builder rows. Prior: **SF1** — **`npm run operator:stale-failure-detect`** → **`scripts/operator-stale-failure-detect.mjs`**; **`data/operator-stale-failure-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2f**; **`package.json`**; **`.gitignore`** — Prior: **RL2** — **`npm run operator:repair-loop:r2`** → **`scripts/operator-repair-loop-r2-once.mjs`**; **`tests/tc-morning-digest-service-module.test.js`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2e**; **`docs/products/tc-service/PRODUCT_HOME.md`**; **`package.json`** — Prior: **RL1 + RL1-test-verify** — **`npm run operator:repair-loop`** → **`scripts/operator-repair-loop-once.mjs`**; **`services/site-builder-postmark-helper.js`** + **`tests/site-builder-po
 
 ## Amendment 21 — Agent Handoff Notes region
 
@@ -227,9 +193,7 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 
 ## Adam ↔ Agent epistemic contract (NON-NEGOTIABLE)
 
-**Supreme law:** This section **implements** `docs/constitution/NORTH_STAR_SSOT.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, and **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, or **§2.15**.
-
-**§2.6 is mandatory:** law cannot be skipped for speed; **cutting corners** and **laziness** (skipped reads, sk
+**Supreme law:** This section **implements** `docs/constitution/NORTH_STAR_SSOT.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)**, and **Article II §2.17 (operator mandate completion bar — proof receipt or UNSOLVED; no smart substitution)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, **§2.1
 
 ## Institutional Memory — top lessons (RECEIPT-class, not FACT)
 
@@ -311,12 +275,5 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 > Source: `data/prediction-loop.jsonl` — written by queue at each task exit.
 > Mismatches are informational only and do not block queue execution.
 
-[prediction-loop] S5 Prediction Loop v0 — coverage report
-
-  Predictions recorded: 44
-  Evaluations:          43
-  Matches:              41 (95%)
-  Misses:               2
-  Miss reasons:
-    2x ok_mismatch(predicted:true got:false); closure_mismatch(predicted:committed_success got:explicit_noncommit_reason)
-  (warn-only — misses do not block queue execution)
+[prediction-loop] No prediction records yet — data/prediction-loop.jsonl not found.
+  (warn-only)

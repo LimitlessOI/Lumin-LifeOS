@@ -56,7 +56,7 @@ function skipMtimeCheck(rel) {
   );
 }
 
-function verifyFile(rel, { indexMap, failures, contentOverride }) {
+function verifyFile(rel, { indexMap, failures, contentOverride, strict = false }) {
   const abs = path.join(ROOT, rel);
   if (!fs.existsSync(abs)) return;
 
@@ -86,11 +86,25 @@ function verifyFile(rel, { indexMap, failures, contentOverride }) {
     failures.push({ id: 'INDEX_SYNOPSIS_EMPTY', detail: `${rel} — index row has no synopsis` });
   }
 
-  if (stat.size <= 750_000 && !skipMtimeCheck(rel) && !mtimeMatches(entry, stat)) {
-    failures.push({
-      id: 'INDEX_STALE',
-      detail: `${rel} — index mtime ${entry.mtime} ≠ disk ${stat.mtime.toISOString()}. Run: npm run lifeos:file-synopsis:index`,
-    });
+  if (stat.size <= 750_000 && !skipMtimeCheck(rel)) {
+    // Freshness signal. Local (staged/push) checks use mtime — reliable against a working tree
+    // you just edited. Strict/CI integrity uses `bytes` because git checkouts do NOT preserve
+    // mtimes (every file gets the checkout timestamp), making mtime equality impossible in CI.
+    // File size is content-derived and survives checkout, and the index co-commit gates already
+    // force index regeneration whenever an indexable file changes.
+    if (strict) {
+      if (typeof entry.bytes === 'number' && entry.bytes !== stat.size) {
+        failures.push({
+          id: 'INDEX_STALE',
+          detail: `${rel} — index bytes ${entry.bytes} ≠ disk ${stat.size}. Run: npm run lifeos:file-synopsis:index`,
+        });
+      }
+    } else if (!mtimeMatches(entry, stat)) {
+      failures.push({
+        id: 'INDEX_STALE',
+        detail: `${rel} — index mtime ${entry.mtime} ≠ disk ${stat.mtime.toISOString()}. Run: npm run lifeos:file-synopsis:index`,
+      });
+    }
   }
 }
 
@@ -147,7 +161,7 @@ function verifyIndexIntegrity(indexMap, failures) {
 
   const tracked = gitLines('git ls-files').filter((f) => !shouldSkipIndex(f) && isIndexable(f));
   for (const rel of tracked) {
-    verifyFile(rel, { indexMap, failures });
+    verifyFile(rel, { indexMap, failures, strict: true });
   }
 }
 
