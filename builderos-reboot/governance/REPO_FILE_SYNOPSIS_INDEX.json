@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T12:09:10.616Z",
+  "generated_at": "2026-07-02T12:14:08.003Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11801,
+  "file_count": 11802,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37431,6 +37431,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/history/legacy-routes/README.md",
+      "synopsis": "Archive index for dead+broken route modules quarantined out of routes/",
+      "bytes": 2108,
+      "mtime": "2026-07-02T12:12:16.638Z",
+      "indexed_at": "2026-07-02T12:14:08.003Z"
+    },
+    {
       "path": "docs/history/legacy-workflows/ci-cd.yml",
       "synopsis": "yml — .github/workflows/ci-cd.yml.",
       "bytes": 546,
@@ -38393,9 +38400,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 547519,
-      "mtime": "2026-07-02T12:08:10.738Z",
-      "indexed_at": "2026-07-02T12:09:10.616Z"
+      "bytes": 548933,
+      "mtime": "2026-07-02T12:13:52.706Z",
+      "indexed_at": "2026-07-02T12:14:08.003Z"
     },
     {
       "path": "docs/products/LIFERE.md",
