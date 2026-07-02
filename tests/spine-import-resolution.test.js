@@ -38,11 +38,13 @@ const discover = (dir, rel) =>
     .sort()
     .map((f) => `${rel}/${f}`);
 
-// Every route + every middleware is discovered dynamically so new modules are
-// guarded automatically. (services/ + config/ still contain dead legacy modules
-// with missing deps — see docs/history/legacy-mvc/ — so those stay explicit.)
+// Every route + middleware + config module is discovered dynamically so new
+// modules are guarded automatically. (services/ still contains dead legacy
+// modules with missing deps — see docs/history/legacy-mvc/ — so it stays
+// explicit until archived.)
 const ROUTE_MODULES = discover('routes', '../routes');
 const MIDDLEWARE_MODULES = discover('middleware', '../middleware');
+const CONFIG_MODULES = discover('config', '../config');
 
 const SPINE_MODULES = [
   '../services/lumin-chair-orchestrator.js',
@@ -54,7 +56,7 @@ const SPINE_MODULES = [
   '../services/truth-enforcement-spine.js',
 ];
 
-for (const mod of [...ROUTE_MODULES, ...MIDDLEWARE_MODULES, ...SPINE_MODULES]) {
+for (const mod of [...ROUTE_MODULES, ...MIDDLEWARE_MODULES, ...CONFIG_MODULES, ...SPINE_MODULES]) {
   test(`module resolves all named imports: ${mod}`, async () => {
     await assert.doesNotReject(
       () => import(mod),
