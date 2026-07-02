@@ -111,4 +111,62 @@ organized archive," but each is Hist-domain (default-HALT; needs the Hist mandat
 3. **Bullet memory dirs** → founder-confirm, merge unique files, archive.
 4. **History bulk** → Hist mandatory case, consolidate under `_hist/` with INDEX.
 
+---
+
+## 5. Import-resolution audit (2026-07-02 addendum) — broken/dead modules
+
+**Method:** dynamically `import()` every module (routes/services/middleware/config)
+in an isolated process with a dummy `DATABASE_URL`. This catches *missing named
+exports* and *missing packages/modules* that `node --check` and madge cannot see
+(they don't resolve exports). This is the exact class that took the live site
+down (`stripChairDoPrefix`).
+
+### 5a. Routes — DONE (quarantined)
+All 126 `routes/*.js` imported; 123 clean. 3 dead+broken (phantom
+`lifeos-auth-helpers.js` / wrong-file `requireLifeOSUser`, 0 active refs) →
+moved to `docs/history/legacy-routes/*.js.txt`. The route surface is now guarded
+in CI by `tests/spine-import-resolution.test.js` (imports every `routes/*.js`).
+
+### 5b. services / middleware / config — DEAD but NOT boot-orphaned islands — **ESCALATE (do not blind-move)**
+~11 modules fail import, almost all because they import **npm packages that are
+no longer installed** (`sequelize`, `joi`, `openai`, `winston`, `brain.js`,
+`natural`) or missing local modules:
+
+| Module | Failure | Active importers (non-catalog/dump) |
+|---|---|---|
+| `services/ConfigService.js` | `config/env-validator.js` has no `default` | none (only `docs/REPO_CATALOG.json`) |
+| `services/adaptiveModel.js` | pkg `brain.js` missing | `workers/learningQueue.js`, `api/learningRoutes.js` |
+| `services/analysisService.js` | pkg `openai` missing | `controllers/callAnalyzerController.js` |
+| `services/documentProcessor.js` | pkg `natural` missing | none active |
+| `services/marketing-coach.js` | `services/ai-council.js` missing | none active (`marketingos` manifest only) |
+| `services/marketing-transcriber.js` | `transcribeAudioFile` export missing | none active |
+| `services/transcriptionService.js` | pkg `openai` missing | `controllers/callAnalyzerController.js` |
+| `middleware/config-security.js` | pkg `winston` missing | none active |
+| `middleware/simulationMiddleware.js` | `models/outreachLog.js` no `default` | none active |
+| `config/db.js` | pkg `sequelize` missing | **28** (all under `src/`, `api/`, `controllers/`, `workers/`, `scripts/`) |
+| `config/env-validator.js` | pkg `joi` missing | only dead `ConfigService.js` (boot uses the *different* `services/env-validator.js`) |
+
+**Key finding — a legacy Express-MVC island:** these dead modules are wired to a
+separate older app structure — **`src/` (532 files), `api/` (13), `controllers/`
+(4), `workers/` (1), `models/` (25)** — that uses sequelize/joi/openai/winston.
+The current runtime boots via `server-*-runtime.js → startup/ → routes/ +
+services/`, and **none of the live spine imports `api/ controllers/ workers/
+models/`**.
+
+**BUT `src/` is partially load-bearing** — the live spine imports:
+- `src/server/auth/requireKey.js` ← `server-founder-runtime.js`, `server-full-runtime.js` (**boot path**)
+- `src/integrations/boldtrail.js` ← `routes/lifere-os-routes.js`, `services/lumin-ambient-moment-router.js`, `services/lifere-boldtrail-bridge.js`
+
+So **the subtree cannot be moved wholesale** (repeating the backbone break). Safe
+path is per-file: a file is archive-safe only if it (a) fails import or is
+unreferenced AND (b) has zero importers that are themselves in the live graph.
+`api/ controllers/ workers/ models/` look fully boot-orphaned and are the safest
+first candidates; `config/db.js` + the sequelize/joi chain go with them. This is
+a builder/self-repair task (bulk, evidence-checked), not a blind overnight move.
+
+**Not extended to the CI guard:** the whole-`services/` import sweep is
+intentionally *not* wired into CI yet, because these 11 legitimately-dead modules
+would fail it. The guard covers `routes/*.js` + the explicit spine; extend to
+`services/` only after 5b is archived.
+
 After each batch: `npm test` + `npx madge --circular server.js --extensions js` must stay green.
