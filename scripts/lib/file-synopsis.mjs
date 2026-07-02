@@ -241,3 +241,50 @@ export function ensureSynopsisInContent(relPath, content) {
   if (hasSynopsis(content, ext)) return content;
   return injectSynopsis(content, inferSynopsis(relPath, content), ext);
 }
+
+/**
+ * Remove a single markdown code fence that wraps an ENTIRE file's content
+ * (e.g. the model emitted ```json\n{...}\n``` instead of raw JSON). Only strips
+ * when the whole content is one fenced block; a fence appearing mid-file is left
+ * untouched, and `.md` is never stripped (markdown legitimately contains fences).
+ * Root cause of services/health-nexus/package.json being committed unparseable.
+ */
+export function stripWrappingCodeFence(content, relPath = '') {
+  if (typeof content !== 'string') return content;
+  if (path.extname(relPath).toLowerCase() === '.md') return content;
+  const withoutBom = content.replace(/^\uFEFF/, '');
+  const m = withoutBom.match(/^\s*```[A-Za-z0-9._+-]*[ \t]*\r?\n([\s\S]*?)\r?\n```[ \t]*\s*$/);
+  if (!m) return content;
+  const inner = m[1];
+  return inner.endsWith('\n') ? inner : `${inner}\n`;
+}
+
+/**
+ * Produce an updated synopsis-index payload after committing `committedFiles`
+ * (each `{ path, content }`), reusing the on-disk generator's shape so a
+ * builder commit can carry a fresh index row for every file it writes — making
+ * autonomous output pass the File Synopsis Law by construction. Non-indexable
+ * files and the index file itself are ignored. `bytes` is derived from the exact
+ * UTF-8 content committed, matching the checkout-stable freshness signal the
+ * verifier uses.
+ */
+export function computeUpdatedIndex(currentIndex, committedFiles = [], indexedAt = new Date().toISOString()) {
+  const byPath = new Map(((currentIndex && currentIndex.files) || []).map((e) => [e.path, e]));
+  for (const entry of committedFiles) {
+    const rel = entry?.path;
+    const content = entry?.content;
+    if (!rel || typeof content !== 'string') continue;
+    if (rel === INDEX_REL || !isIndexable(rel)) continue;
+    const stat = { size: Buffer.byteLength(content, 'utf8'), mtime: new Date(indexedAt) };
+    byPath.set(rel, buildIndexEntry(rel, content, stat, indexedAt));
+  }
+  const files = [...byPath.values()].sort((a, b) => a.path.localeCompare(b.path));
+  return {
+    schema: 'repo_file_synopsis_index_v1',
+    generated_at: indexedAt,
+    law: (currentIndex && currentIndex.law)
+      || 'Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.',
+    file_count: files.length,
+    files,
+  };
+}
