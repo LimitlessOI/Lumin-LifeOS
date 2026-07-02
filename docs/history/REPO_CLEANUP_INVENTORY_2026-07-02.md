@@ -170,3 +170,45 @@ would fail it. The guard covers `routes/*.js` + the explicit spine; extend to
 `services/` only after 5b is archived.
 
 After each batch: `npm test` + `npx madge --circular server.js --extensions js` must stay green.
+
+---
+
+## 6. Fence-corruption blast radius (pre-fix codegen artifacts)
+
+**Finding (2026-07-02):** **357** tracked `.js` files in the active tree contain
+literal markdown code fences (` ```javascript ` … ` ``` `) written *inside* the
+source — the signature of AI codegen whose output fences were never stripped
+before commit. Example `config/redis.js`:
+
+```
+/** SYNOPSIS ... */
+```javascript          <-- corruption
+const Redis = require('ioredis');
+...
+```                    <-- corruption
+```
+
+These files are syntactically invalid (and many also use CommonJS `require` in an
+ESM repo) so they cannot load.
+
+**Safety proven:** cross-checked all 357 against the live boot-graph import
+closure (madge union of `server.js` / `server-founder-runtime.js` /
+`server-full-runtime.js`, 741 modules) → **0 reachable**. Boot works precisely
+because none are on the live path. The 22 corrupted files under `test/`,`tests/`
+are **not** in the `npm test` explicit file list, so the suite stays green.
+
+**By top dir:** `src/` 176, `services/` 85, `backups/` 20, `tests/` 22,
+`(root)` 10, `config/` 9, `migrations/` 9, `server/` 6, `client/` 5, misc.
+
+**Why it matters (system thesis):** this quantifies the blast radius of the
+builder bug that the **fence-strip** step in the commit path
+(`services/deployment-service.js`) now prevents — new autonomous commits are
+fence-clean by construction, so this set is bounded and will not grow.
+
+**Disposition:** part of the deliberate legacy `src/` MVC-island archival (§5),
+**not** a blind 5am mass-edit. `config/`'s 9 corrupted config files
+(`redis`,`redis_config`,`stripeConfig`,`makeComConfig`,`translationConfig`,
+`gdpr-compliance`,`agriculture-config`,`voting-config`,`wearable-apis`) are
+0-reachable and in no product manifest — safe to archive with the next batch, at
+which point the import-resolution guard can extend to `config/` as it now does
+for `routes/` + `middleware/`.
