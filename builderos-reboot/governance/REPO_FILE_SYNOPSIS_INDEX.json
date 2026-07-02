@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T07:19:58.851Z",
+  "generated_at": "2026-07-02T07:23:14.452Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11788,
+  "file_count": 11789,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21994,9 +21994,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3567593,
-      "mtime": "2026-07-02T07:19:23.238Z",
-      "indexed_at": "2026-07-02T07:19:58.851Z"
+      "bytes": 3567878,
+      "mtime": "2026-07-02T07:21:32.854Z",
+      "indexed_at": "2026-07-02T07:23:14.452Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38957,9 +38957,9 @@
     {
       "path": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ZERO DRIFT HANDOFF PROTOCOL",
-      "bytes": 100273,
-      "mtime": "2026-07-01T22:02:40.309Z",
-      "indexed_at": "2026-07-02T07:19:22.912Z"
+      "bytes": 101312,
+      "mtime": "2026-07-02T07:23:06.422Z",
+      "indexed_at": "2026-07-02T07:23:14.452Z"
     },
     {
       "path": "docs/products/ZERODRIFTHANDOFFPROTOCOL.md",
@@ -67858,6 +67858,13 @@
       "indexed_at": "2026-07-02T07:19:22.912Z"
     },
     {
+      "path": "public/overlay/builderos-loop-proof.html",
+      "synopsis": "HTML page: BuilderOS Loop Proof — autonomous self-build loop evidence artifact",
+      "bytes": 10201,
+      "mtime": "2026-07-02T07:21:28.870Z",
+      "indexed_at": "2026-07-02T07:23:14.452Z"
+    },
+    {
       "path": "public/overlay/c2-mission-dashboard.html",
       "synopsis": "HTML page: C2 Mission Dashboard",
       "bytes": 15913,
@@ -72913,9 +72920,9 @@
     {
       "path": "scripts/verify-file-synopsis.mjs",
       "synopsis": "HARD verify — every tracked file has synopsis + index row; blocks commit/push/CI on drift.",
-      "bytes": 7485,
-      "mtime": "2026-07-02T07:17:58.886Z",
-      "indexed_at": "2026-07-02T07:19:58.851Z",
+      "bytes": 7020,
+      "mtime": "2026-07-02T07:20:53.546Z",
+      "indexed_at": "2026-07-02T07:23:14.452Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]

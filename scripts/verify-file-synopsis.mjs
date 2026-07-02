@@ -40,14 +40,7 @@ function loadIndexMap() {
   }
 }
 
-function mtimeMatches(entry, stat) {
-  if (!entry?.mtime) return false;
-  const a = new Date(entry.mtime).getTime();
-  const b = stat.mtimeMs;
-  return Math.abs(a - b) <= 2500;
-}
-
-function skipMtimeCheck(rel) {
+function skipStaleCheck(rel) {
   return (
     /^data\/.*-last-run\.json$/.test(rel)
     || rel === 'docs/AGENT_RULES.compact.md'
@@ -56,7 +49,7 @@ function skipMtimeCheck(rel) {
   );
 }
 
-function verifyFile(rel, { indexMap, failures, contentOverride, strict = false }) {
+function verifyFile(rel, { indexMap, failures, contentOverride }) {
   const abs = path.join(ROOT, rel);
   if (!fs.existsSync(abs)) return;
 
@@ -86,23 +79,16 @@ function verifyFile(rel, { indexMap, failures, contentOverride, strict = false }
     failures.push({ id: 'INDEX_SYNOPSIS_EMPTY', detail: `${rel} — index row has no synopsis` });
   }
 
-  if (stat.size <= 750_000 && !skipMtimeCheck(rel)) {
-    // Freshness signal. Local (staged/push) checks use mtime — reliable against a working tree
-    // you just edited. Strict/CI integrity uses `bytes` because git checkouts do NOT preserve
-    // mtimes (every file gets the checkout timestamp), making mtime equality impossible in CI.
-    // File size is content-derived and survives checkout, and the index co-commit gates already
-    // force index regeneration whenever an indexable file changes.
-    if (strict) {
-      if (typeof entry.bytes === 'number' && entry.bytes !== stat.size) {
-        failures.push({
-          id: 'INDEX_STALE',
-          detail: `${rel} — index bytes ${entry.bytes} ≠ disk ${stat.size}. Run: npm run lifeos:file-synopsis:index`,
-        });
-      }
-    } else if (!mtimeMatches(entry, stat)) {
+  if (stat.size <= 750_000 && !skipStaleCheck(rel)) {
+    // Freshness signal = `bytes` (content-derived file size), NOT mtime. Git does not preserve
+    // mtimes: every checkout, rebase, or fresh clone rewrites them to the operation timestamp,
+    // so mtime equality is impossible to satisfy in CI and flaky locally after a rebase. File
+    // size survives all of those and the index co-commit gates force index regeneration whenever
+    // an indexable file changes, so a bytes mismatch reliably means the index is stale.
+    if (typeof entry.bytes === 'number' && entry.bytes !== stat.size) {
       failures.push({
         id: 'INDEX_STALE',
-        detail: `${rel} — index mtime ${entry.mtime} ≠ disk ${stat.mtime.toISOString()}. Run: npm run lifeos:file-synopsis:index`,
+        detail: `${rel} — index bytes ${entry.bytes} ≠ disk ${stat.size}. Run: npm run lifeos:file-synopsis:index`,
       });
     }
   }
@@ -161,7 +147,7 @@ function verifyIndexIntegrity(indexMap, failures) {
 
   const tracked = gitLines('git ls-files').filter((f) => !shouldSkipIndex(f) && isIndexable(f));
   for (const rel of tracked) {
-    verifyFile(rel, { indexMap, failures, strict: true });
+    verifyFile(rel, { indexMap, failures });
   }
 }
 
