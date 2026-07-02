@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-02T07:23:14.452Z",
+  "generated_at": "2026-07-02T07:40:19.868Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11789,
+  "file_count": 11790,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37431,6 +37431,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "docs/history/legacy-workflows/README.md",
+      "synopsis": "index of archived (disabled) GitHub Actions workflows and why each was retired",
+      "bytes": 1338,
+      "mtime": "2026-07-02T07:28:00.066Z",
+      "indexed_at": "2026-07-02T07:40:19.868Z"
+    },
+    {
       "path": "docs/history/products/BUILD_PLAN.md",
       "synopsis": "Redirect — legacy build plan archived",
       "bytes": 206,
@@ -66431,9 +66438,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29183,
-      "mtime": "2026-07-01T22:02:40.509Z",
-      "indexed_at": "2026-07-02T07:19:22.912Z",
+      "bytes": 29108,
+      "mtime": "2026-07-02T07:27:49.506Z",
+      "indexed_at": "2026-07-02T07:40:19.868Z",
       "synopsis_index_only": true
     },
     {
@@ -85806,9 +85813,9 @@
     {
       "path": "services/health-nexus/package.json",
       "synopsis": "Service module — Package.",
-      "bytes": 523,
-      "mtime": "2026-07-01T22:02:40.613Z",
-      "indexed_at": "2026-07-02T07:19:22.912Z",
+      "bytes": 511,
+      "mtime": "2026-07-02T07:27:44.178Z",
+      "indexed_at": "2026-07-02T07:40:19.868Z",
       "synopsis_index_only": true
     },
     {
