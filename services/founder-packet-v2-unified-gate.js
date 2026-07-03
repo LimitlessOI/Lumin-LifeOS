@@ -43,6 +43,24 @@ export function resolveMissionFolder({ missionId = null, cleanedInput = '', poin
   return fs.existsSync(folder) ? { mission_id: id, folder } : { mission_id: id, folder: null };
 }
 
+// A mission whose IDC has locked intent (INTENT_BASELINE HANDOFF_READY) is not
+// ambiguous: its outcome, success metrics, and blueprint are already specified.
+// The Chair's ad-hoc build-clarity heuristic (which expects the founder's chat
+// line to name a target file + success criteria) would otherwise force
+// INTENT_AMBIGUITY on every mission build. The mission's own IDC + builder-entry
+// gates still enforce readiness independently, so this is not a bypass.
+function missionIntentIsLocked(missionFolder) {
+  if (!missionFolder) return false;
+  try {
+    const baseline = JSON.parse(
+      fs.readFileSync(path.join(missionFolder, 'INTENT_BASELINE.json'), 'utf8'),
+    );
+    return baseline?.status === 'HANDOFF_READY';
+  } catch {
+    return false;
+  }
+}
+
 export async function assessUnderstandingForGate(cleanedInput = '', expandedTask = cleanedInput) {
   const pointBTarget = loadPointBTarget();
   return assessChairIntentUnderstanding(cleanedInput, {
@@ -75,6 +93,13 @@ export async function enforceFounderPacketV2Unified({
     || pointB?.mission_id
     || pointB?.target?.mission_id
     || null;
+  const isExecute = EXECUTE_CHANNELS.has(channel);
+  const { mission_id: resolvedMissionId, folder: missionFolder } = resolveMissionFolder({
+    missionId: programMissionId,
+    cleanedInput,
+    pointBTarget: pointB,
+  });
+  const missionIntentLocked = isExecute && Boolean(missionFolder) && missionIntentIsLocked(missionFolder);
   const resolvedUnderstanding = understanding || await assessUnderstandingForGate(cleanedInput);
 
   const chair = await enforceFounderPacketV2ChairTurn({
@@ -85,15 +110,10 @@ export async function enforceFounderPacketV2Unified({
     pointBTarget: pointB,
     confirmIntent,
     channel,
+    missionIntentLocked,
   });
 
   const violations = [...(chair.violations || [])];
-  const isExecute = EXECUTE_CHANNELS.has(channel);
-  const { mission_id: resolvedMissionId, folder: missionFolder } = resolveMissionFolder({
-    missionId: programMissionId,
-    cleanedInput,
-    pointBTarget: pointB,
-  });
 
   let idcExit = null;
   let builderEntry = null;

@@ -10,7 +10,7 @@
     "start": "node server.js",
     "worker": "node -e \"setInterval(()=>{},86400000)\"",
     "cli": "node apps/cli/index.js",
-    "test": "node --test tests/smoke.test.js tests/lifeos-execution-truth.test.js tests/insurance-card-parse.test.js tests/site-builder-postmark-helper.test.js tests/tc-morning-digest-service-module.test.js tests/operator-runtime-status-freshness.test.js tests/deployment-service-package-guard.test.js tests/closure-contract.test.js tests/validate-task-dna.test.js tests/prediction-loop.test.js tests/founder-decoder.test.js tests/file-synopsis-commit-hardening.test.js tests/deploy-boot-codegen-guards.test.js tests/spine-import-resolution.test.js tests/validate-intent-tier1.test.js",
+    "test": "node --test tests/smoke.test.js tests/lifeos-execution-truth.test.js tests/insurance-card-parse.test.js tests/site-builder-postmark-helper.test.js tests/tc-morning-digest-service-module.test.js tests/operator-runtime-status-freshness.test.js tests/deployment-service-package-guard.test.js tests/closure-contract.test.js tests/validate-task-dna.test.js tests/prediction-loop.test.js tests/founder-decoder.test.js tests/file-synopsis-commit-hardening.test.js tests/deploy-boot-codegen-guards.test.js tests/spine-import-resolution.test.js tests/validate-intent-tier1.test.js tests/builderos-html-fragment-gate.test.js tests/builderos-edit-patch.test.js tests/token-optimizer-critical.test.js",
     "dna:validate": "node scripts/validate-task-dna.mjs",
     "predictions:validate": "node scripts/validate-predictions.mjs",
     "founder:calm": "node scripts/founder-decoder.mjs --calm",

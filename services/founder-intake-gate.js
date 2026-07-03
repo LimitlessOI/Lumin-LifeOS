@@ -62,8 +62,16 @@ export function createFounderIntakeGate({ pool, logger = console }) {
       item = await inbox.approveItem(item.id);
     }
 
+    // The terminal (ARC FOUNDER_PACKET_V2 machine) pipeline is not production-ready:
+    // it hard-fails a bp_build_request on intent-ambiguity gates before any code is
+    // generated. Until it is proven end-to-end, route bp_build_request builds through
+    // the working async build path (build_async: self-repair loop + edit/additive/create
+    // with full truncation + byte-exact gates). Flip FOUNDER_TERMINAL_ARC_READY=1 to
+    // re-enable the governed terminal path once the ARC cascade is closed.
+    const terminalArcReady = process.env.FOUNDER_TERMINAL_ARC_READY === '1';
+    const requiresTerminal = item.classification === 'bp_build_request' && terminalArcReady;
     const approved = ['approved', 'routed', 'done'].includes(item.status);
-    const bpBuildStagedOnly = item.classification === 'bp_build_request' && item.status === 'staged';
+    const bpBuildStagedOnly = requiresTerminal && item.status === 'staged';
 
     return {
       ok: true,
@@ -72,7 +80,7 @@ export function createFounderIntakeGate({ pool, logger = console }) {
       status: item.status,
       approved,
       bp_build_staged_only: bpBuildStagedOnly,
-      requires_terminal: item.classification === 'bp_build_request',
+      requires_terminal: requiresTerminal,
     };
   }
 

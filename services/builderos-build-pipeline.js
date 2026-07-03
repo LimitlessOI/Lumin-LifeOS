@@ -69,7 +69,12 @@ async function runBuildPipeline(opts) {
     return { ok: false, shouldCommit: false, failureType: 'ZONE4_BLOCKED', zoneResult, retryAttempted: false, gates: null };
   }
   const intakeRewrite = opts.intakeBlueprintStep === true;
-  if (zoneResult.zone === 3 && !intakeRewrite) {
+  // Additive-patch (opts.additivePatch): the caller spliced only-new-code into
+  // the existing file, so `generatedOutput` is the full merged file with all
+  // prior content preserved verbatim. There is no full-file-rewrite stub risk,
+  // so skip the Zone 3 hard-block and let the size/stub/antipattern gates below
+  // validate the merged result (they still catch any collapse or duplication).
+  if (zoneResult.zone === 3 && !intakeRewrite && opts.additivePatch !== true) {
     return { ok: false, shouldCommit: false, failureType: 'ZONE3_PATCH_REQUIRED', zoneResult, retryAttempted: false, gates: null };
   }
   const gateResult = await runInMemoryGates(opts.generatedOutput, opts.resolvedTarget, opts.originalLines);

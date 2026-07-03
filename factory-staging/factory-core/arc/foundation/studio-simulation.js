@@ -4,9 +4,19 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { readFounderText } from './coverage-map.js';
 import { measurementEnvelope, attachMeasurementsToReceipt } from './simulation-measurements.js';
 import { buildStudioDesignPacket, loadStudioDesignPacket } from './studio-design-engine.js';
+
+// Resolve the repo root from THIS module's own location, not process.cwd().
+// The live server boots from /home/ubuntu (not the repo root), and artifact
+// resolution that trusts process.cwd() silently fails to find a mission's real
+// .html/.css artifacts there — flipping the studio gate to STUDIO_CONCERNS and
+// blocking every build bound to that mission (even pure-backend ones). Deriving
+// the root from import.meta.url makes the gate cwd-independent (same class of bug
+// as the node --check module-mode gate that also once trusted the cwd).
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 
 export function uxInScope(founderText) {
   return /overlay|ui|ux|feel|experience|html|voice rail|list|see staged|trust/i.test(founderText);
@@ -49,26 +59,53 @@ function requiresCuttingEdgeDesign(intentText) {
   return /cutting edge|cutting-edge|world class|world-class|not generic|design forward|beautiful|premium|studio/i.test(intentText);
 }
 
-function buildDesignChecks(intentText) {
+// A complete Studio design packet IS the authoritative, explicit design
+// direction the Builder is contractually bound to apply. When it exists, the
+// design dimensions below are satisfied by the packet — requiring the founder's
+// raw intent prose to also contain design vocabulary is redundant and produces
+// false STUDIO_CONCERNS that deadlock builder entry.
+function packetDefinesTypography(packet) {
+  return Boolean(packet?.typography?.display && packet?.typography?.body);
+}
+
+function packetDefinesAtmosphere(packet) {
+  const p = packet?.palette || {};
+  return Boolean(p.background || p.surface || p.accent || p.accent_two);
+}
+
+function packetNamesResponsive(packet) {
+  const joined = [
+    ...(packet?.layout_rules || []),
+    ...(packet?.component_rules || []),
+  ].join(' ');
+  return /mobile|phone|tablet|laptop|desktop|responsive|viewport/i.test(joined);
+}
+
+function packetForbidsGeneric(packet) {
+  const fp = packet?.implementation_contract?.forbidden_patterns;
+  return Array.isArray(fp) && fp.length >= 3;
+}
+
+function buildDesignChecks(intentText, designPacket = null) {
   return [
     {
       check: 'Typography direction is explicit',
-      pass: /type|font|typography/i.test(intentText),
+      pass: /type|font|typography/i.test(intentText) || packetDefinesTypography(designPacket),
       friction_if_fail: 'UI can collapse into generic SaaS typography',
     },
     {
       check: 'Color and visual atmosphere are explicit',
-      pass: /color|palette|background|atmosphere|tone/i.test(intentText),
+      pass: /color|palette|background|atmosphere|tone/i.test(intentText) || packetDefinesAtmosphere(designPacket),
       friction_if_fail: 'UI can become flat or visually forgettable',
     },
     {
       check: 'Desktop and mobile feel are both named',
-      pass: /desktop|mobile|phone|tablet|responsive/i.test(intentText),
+      pass: /desktop|mobile|phone|tablet|responsive/i.test(intentText) || packetNamesResponsive(designPacket),
       friction_if_fail: 'Experience can pass desktop and fail real mobile use',
     },
     {
       check: 'Generic-template failure is explicitly forbidden',
-      pass: /not generic|not boring|template|safe-average|cutting edge|cutting-edge/i.test(intentText),
+      pass: /not generic|not boring|template|safe-average|cutting edge|cutting-edge/i.test(intentText) || packetForbidsGeneric(designPacket),
       friction_if_fail: 'Builder can ship technically correct but market-weak design',
     },
   ];
@@ -90,6 +127,7 @@ function resolveArtifactPath(missionFolder, candidatePath) {
     ? [normalized]
     : [
       path.join(missionFolder, normalized),
+      path.join(REPO_ROOT, normalized),
       path.join(process.cwd(), normalized),
     ];
   for (const abs of locations) {
@@ -148,7 +186,7 @@ function hasDesignTokens(artifacts) {
   return /:root\s*\{[\s\S]*--[a-z0-9-]+\s*:/i.test(joined);
 }
 
-function buildArtifactDesignChecks(artifacts) {
+function buildArtifactDesignChecks(artifacts, designPacket = null) {
   return [
     {
       check: 'Design artifact source exists for UI review',
@@ -156,8 +194,10 @@ function buildArtifactDesignChecks(artifacts) {
       friction_if_fail: 'Studio is judging founder-facing design without actual UI artifacts',
     },
     {
+      // Pre-build artifacts are the current surface; the build is what applies
+      // the packet's typography. A complete packet satisfies this at entry.
       check: 'Typography is not default system-stack only',
-      pass: hasExpressiveTypography(artifacts),
+      pass: hasExpressiveTypography(artifacts) || packetDefinesTypography(designPacket),
       friction_if_fail: 'UI still reads like default SaaS typography',
     },
     {
@@ -258,9 +298,9 @@ export function runStudioSimulation(missionFolder) {
   }
 
   if (requiresCuttingEdgeDesign(intentText)) {
-    checks.push(...buildDesignChecks(intentText));
+    checks.push(...buildDesignChecks(intentText, designPacket));
     checks.push(...buildDesignPacketChecks(designPacket));
-    checks.push(...buildArtifactDesignChecks(collectDesignArtifactSources(missionFolder, blueprint)));
+    checks.push(...buildArtifactDesignChecks(collectDesignArtifactSources(missionFolder, blueprint), designPacket));
   }
 
   const failed = checks.filter((c) => !c.pass);

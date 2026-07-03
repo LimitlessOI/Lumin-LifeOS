@@ -96,6 +96,23 @@ export function classifyBuildTarget(filePath) {
 }
 
 /**
+ * Classify whether a Zone 3 build request wants to MODIFY existing in-file logic
+ * (surgical find-and-replace / edit-patch) vs purely ADD new code (additive
+ * splice). Additive mode is forbidden from touching existing content, so a
+ * "change X to Y" request against a large file can only be satisfied by an edit
+ * patch. Defaults to 'additive' (the safe, existing behavior) unless the task
+ * clearly asks to change/replace/rename/remove something that already exists.
+ * @returns {'edit'|'additive'}
+ */
+export function classifyPatchIntent(task) {
+  const t = String(task || '').toLowerCase();
+  if (!t.trim()) return 'additive';
+  const modifyVerb = /\b(chang|modif|updat|replac|renam|adjust|edit|switch|convert|decreas|increas|disabl|enabl|toggl|rewrit|refactor|fix|remov|delet)\w*\b/i.test(t);
+  const modifyPhrase = /\b(instead of|rather than|set\s+[\w.]+\s+to\b|so (?:it|they|the)\b.*\b(?:lasts?|uses?|returns?|becomes?)\b)/i.test(t);
+  return (modifyVerb || modifyPhrase) ? 'edit' : 'additive';
+}
+
+/**
  * Generate a patch-mode spec for Zone 3 targets using extract-helper strategy.
  * Instead of editing the large file, builder creates a new helper file.
  * @returns {{ patchSpec, strategy, warning }}

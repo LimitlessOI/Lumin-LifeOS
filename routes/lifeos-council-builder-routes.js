@@ -45,7 +45,7 @@ import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
 import { normalizeBuilderCodegenOutput } from '../services/builderos-codegen-normalize.js';
-import { classifyBuildTarget } from '../services/builderos-patch-mode-policy.js';
+import { classifyBuildTarget, classifyPatchIntent } from '../services/builderos-patch-mode-policy.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
 import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-target.js';
 import { checkBuildBlueprintGate } from '../services/builder-blueprint-gate.js';
@@ -77,6 +77,148 @@ import { verifyIntakeSessionBuildClearance } from '../services/intake-blueprint-
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
 const REPO_ROOT = join(__dirname, '..');
+
+/**
+ * Zone 3 additive-patch splice: merge an additive code snippet into an existing
+ * large file without rewriting it. The existing content is preserved verbatim
+ * (byte-for-byte), so there is zero stub/truncation risk to what is already
+ * there. The snippet is inserted just before the file's last top-level
+ * `export default` / `module.exports` (so new route defs still register), else
+ * appended at EOF. New imports the model marked with `//__IMPORT__ ` are hoisted
+ * after the last existing import. Returns a clean merged file or a reason.
+ */
+function spliceAdditiveSnippet(absTargetPath, rawSnippet) {
+  let snippet = String(rawSnippet || '').trim();
+  if (!snippet) return { ok: false, reason: 'empty additive snippet' };
+  const hoistImports = [];
+  snippet = snippet
+    .split('\n')
+    .filter((line) => {
+      if (line.trimStart().startsWith('//__IMPORT__ ')) {
+        hoistImports.push(line.trimStart().replace('//__IMPORT__ ', '').trim());
+        return false;
+      }
+      return true;
+    })
+    .join('\n')
+    .trim();
+  if (!snippet) return { ok: false, reason: 'additive snippet contained only import markers' };
+  let existing;
+  try {
+    existing = readFileSync(absTargetPath, 'utf8');
+  } catch (err) {
+    return { ok: false, reason: `could not read target file: ${err.message}` };
+  }
+  // Fail-closed guards: if the model ignored the additive instruction and
+  // returned (most of) the existing file, splicing would duplicate it. `node
+  // --check` catches most duplicate declarations, but a file of only-redeclarable
+  // `function`s could still parse, so reject here before any splice.
+  const existingImportLines = new Set(
+    existing.split('\n').map((l) => l.trim()).filter((l) => /^import\b/.test(l)),
+  );
+  if (snippet.split('\n').some((l) => existingImportLines.has(l.trim()))) {
+    return { ok: false, reason: 'snippet re-emits an existing import line — model returned the full file instead of an additive-only snippet' };
+  }
+  if (snippet.length >= existing.length * 0.6) {
+    return { ok: false, reason: `additive snippet (${snippet.length}b) is too large vs existing file (${existing.length}b) — looks like a full-file rewrite, not an additive patch` };
+  }
+  const lines = existing.split('\n');
+  let insertIdx = lines.length;
+  for (let i = lines.length - 1; i >= 0; i -= 1) {
+    if (/^\s*(export\s+default\b|module\.exports\b)/.test(lines[i])) {
+      insertIdx = i;
+      break;
+    }
+  }
+  const head = lines.slice(0, insertIdx).join('\n').replace(/\s+$/, '');
+  const tail = lines.slice(insertIdx).join('\n');
+  let merged = tail.trim().length ? `${head}\n\n${snippet}\n\n${tail}` : `${head}\n\n${snippet}\n`;
+  const dedupImports = hoistImports.filter((imp) => imp && !merged.includes(imp));
+  if (dedupImports.length) {
+    const mLines = merged.split('\n');
+    let lastImport = -1;
+    for (let i = 0; i < mLines.length; i += 1) {
+      if (/^\s*import\b/.test(mLines[i])) lastImport = i;
+    }
+    mLines.splice(lastImport >= 0 ? lastImport + 1 : 0, 0, ...dedupImports);
+    merged = mLines.join('\n');
+  }
+  merged = `${merged.replace(/\s+$/, '')}\n`;
+  return { ok: true, content: merged, mergedLines: merged.split('\n').length };
+}
+
+/**
+ * Parse an edit-patch model response into a normalized [{old_string,new_string}]
+ * array. The model is asked to emit ONLY a JSON array; be tolerant of a stray
+ * markdown fence, a leading prose line, or a trailing ---METADATA--- block.
+ */
+export function parseTargetedEditsJson(raw) {
+  let s = String(raw || '').trim();
+  const sepIdx = s.indexOf('---METADATA---');
+  if (sepIdx !== -1) s = s.slice(0, sepIdx).trim();
+  s = s.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
+  const start = s.indexOf('[');
+  const end = s.lastIndexOf(']');
+  if (start === -1 || end === -1 || end < start) {
+    return { ok: false, reason: 'no JSON edit array found in model output' };
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(s.slice(start, end + 1));
+  } catch (err) {
+    return { ok: false, reason: `edit JSON parse failed (likely truncated): ${err.message}` };
+  }
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    return { ok: false, reason: 'edit output is not a non-empty JSON array' };
+  }
+  const edits = [];
+  for (const e of parsed) {
+    if (!e || typeof e !== 'object' || typeof e.old_string !== 'string' || typeof e.new_string !== 'string') {
+      return { ok: false, reason: 'each edit must be an object with string old_string and new_string' };
+    }
+    edits.push({ old_string: e.old_string, new_string: e.new_string });
+  }
+  return { ok: true, edits };
+}
+
+/**
+ * Zone 3 edit-patch: apply surgical find-and-replace edits to an existing large
+ * file so in-file logic can be MODIFIED (not just added to) without a full-file
+ * rewrite. Fail-closed: every old_string must be non-empty and match EXACTLY
+ * ONCE (a missing or ambiguous anchor is rejected rather than guessed), so the
+ * rest of the file is preserved byte-for-byte. Returns the edited content or a
+ * reason. The caller still runs the normal syntax/completeness gate on the
+ * result, so a broken edit can never commit.
+ */
+export function applyTargetedEdits(absTargetPath, rawOutput) {
+  const parsed = parseTargetedEditsJson(rawOutput);
+  if (!parsed.ok) return { ok: false, reason: parsed.reason };
+  let content;
+  try {
+    content = readFileSync(absTargetPath, 'utf8');
+  } catch (err) {
+    return { ok: false, reason: `could not read target file: ${err.message}` };
+  }
+  let applied = 0;
+  for (const { old_string, new_string } of parsed.edits) {
+    if (!old_string) {
+      return { ok: false, reason: 'edit has an empty old_string — cannot anchor (use additive mode to add brand-new code)' };
+    }
+    if (old_string === new_string) continue;
+    const first = content.indexOf(old_string);
+    if (first === -1) {
+      return { ok: false, reason: `edit old_string not found in file — the model must copy it verbatim: ${JSON.stringify(old_string.slice(0, 80))}` };
+    }
+    if (content.indexOf(old_string, first + old_string.length) !== -1) {
+      return { ok: false, reason: `edit old_string is ambiguous (matches more than once) — add surrounding context to make it unique: ${JSON.stringify(old_string.slice(0, 80))}` };
+    }
+    content = content.slice(0, first) + new_string + content.slice(first + old_string.length);
+    applied += 1;
+  }
+  if (applied === 0) return { ok: false, reason: 'no edits applied (all edits were no-ops)' };
+  if (!content.endsWith('\n')) content += '\n';
+  return { ok: true, content, editsApplied: applied };
+}
 
 /** Bumped when builder codegen/token policy semantics change; operators compare GET /builder/ready to git main. */
 const BUILDER_CODEGEN_POLICY_REVISION = '2026-05-01a';
@@ -586,6 +728,74 @@ function fixAsteriskShorthandParams(s) {
   });
 }
 
+// Detect a TRUNCATED SQL migration (model cut off mid-generation). There is no
+// `node --check` for .sql, so this scanner is the truncation gate: it walks the
+// text while skipping delimiters inside string/dollar-quote/comment contexts so
+// real migrations (function bodies with `$$`, strings containing parens) never
+// false-positive, then flags unterminated literals/comments, unbalanced parens,
+// or a body that doesn't end in `;`. Verified zero false-positives across all
+// committed migrations.
+function checkSqlCompleteness(sqlContent) {
+  const s = String(sqlContent || '');
+  const n = s.length;
+  let i = 0;
+  let parenDepth = 0;
+  let lastSignificant = '';
+  let inLineComment = false;
+  let inBlockComment = false;
+  let inSingle = false;
+  let dollarTag = null;
+
+  while (i < n) {
+    const c = s[i];
+    const c2 = s[i + 1];
+
+    if (inLineComment) {
+      if (c === '\n') inLineComment = false;
+      i += 1;
+      continue;
+    }
+    if (inBlockComment) {
+      if (c === '*' && c2 === '/') { inBlockComment = false; i += 2; continue; }
+      i += 1;
+      continue;
+    }
+    if (inSingle) {
+      if (c === "'" && c2 === "'") { i += 2; continue; }
+      if (c === "'") { inSingle = false; i += 1; continue; }
+      i += 1;
+      continue;
+    }
+    if (dollarTag) {
+      if (c === '$' && s.slice(i).startsWith(dollarTag)) { i += dollarTag.length; dollarTag = null; continue; }
+      i += 1;
+      continue;
+    }
+
+    if (c === '-' && c2 === '-') { inLineComment = true; i += 2; continue; }
+    if (c === '/' && c2 === '*') { inBlockComment = true; i += 2; continue; }
+    if (c === "'") { inSingle = true; i += 1; continue; }
+    if (c === '$') {
+      const m = s.slice(i).match(/^\$[A-Za-z0-9_]*\$/);
+      if (m) { dollarTag = m[0]; i += m[0].length; continue; }
+    }
+    if (c === '(') { parenDepth += 1; lastSignificant = c; i += 1; continue; }
+    if (c === ')') { parenDepth -= 1; lastSignificant = c; i += 1; continue; }
+    if (!/\s/.test(c)) lastSignificant = c;
+    i += 1;
+  }
+
+  if (inBlockComment) return { ok: false, error: 'SQL migration appears truncated — unterminated block comment (/* …)' };
+  if (inSingle) return { ok: false, error: 'SQL migration appears truncated — unterminated string literal' };
+  if (dollarTag) return { ok: false, error: `SQL migration appears truncated — unterminated dollar-quoted block (${dollarTag} …)` };
+  if (parenDepth > 0) return { ok: false, error: `SQL migration appears truncated — ${parenDepth} unclosed parenthes${parenDepth === 1 ? 'is' : 'es'}` };
+  if (parenDepth < 0) return { ok: false, error: 'SQL migration malformed — unbalanced parentheses (extra close)' };
+  if (lastSignificant && lastSignificant !== ';') {
+    return { ok: false, error: `SQL migration appears truncated — does not end in ';' (ends in '${lastSignificant}')` };
+  }
+  return { ok: true };
+}
+
 function validateSqlMigrationContent(sqlContent) {
   const s = String(sqlContent || '').trim();
   if (!s) return { ok: false, error: 'SQL migration is empty' };
@@ -610,6 +820,9 @@ function validateSqlMigrationContent(sqlContent) {
     return { ok: false, error: 'No recognizable SQL keywords (CREATE, ALTER, etc.)' };
   }
 
+  const completeness = checkSqlCompleteness(s);
+  if (!completeness.ok) return completeness;
+
   return { ok: true };
 }
 
@@ -619,11 +832,39 @@ function looksLikeJsonManifestInsteadOfJs(content, target) {
   return t.startsWith('{') && /"project_id"|"required_files"|"required_routes"/.test(t);
 }
 
+// Read the repo's module system once — `node --check` resolves ESM-vs-CommonJS
+// from the nearest package.json "type", and a `.js` file parsed in the wrong
+// mode silently tolerates ESM-only syntax errors (e.g. a truncated block comment
+// at EOF). Resolve from REPO_ROOT (derived from this module's own location via
+// import.meta.url), NOT process.cwd() — the server can be launched from a
+// different working directory (e.g. a local boot script), which would otherwise
+// mis-detect the type and defeat this whole gate. Default 'commonjs' matches
+// Node's own default when "type" is absent.
+function repoModuleType() {
+  try {
+    const pkg = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf8'));
+    return pkg.type === 'module' ? 'module' : 'commonjs';
+  } catch {
+    return 'commonjs';
+  }
+}
+
 async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
   let tmpFile = null;
+  let tmpPkg = null;
   try {
     const tmpDir = await mkdtemp(join(tmpdir(), 'builder-check-'));
-    tmpFile = join(tmpDir, extname(resolvedTarget) || '.js');
+    // Give the temp file a real basename (not a bare ".js" dotfile) and, for a
+    // .js target, drop a package.json mirroring the repo's "type" so the check
+    // runs in the SAME module system the committed file will actually run in.
+    // os.tmpdir() has no package.json, so without this a .js file is parsed as
+    // CommonJS and ESM-only syntax errors (including truncated output) pass.
+    const ext = extname(resolvedTarget) || '.js';
+    tmpFile = join(tmpDir, `check${ext}`);
+    if (/^\.(js)$/i.test(ext)) {
+      tmpPkg = join(tmpDir, 'package.json');
+      await writeFile(tmpPkg, JSON.stringify({ type: repoModuleType() }), 'utf8');
+    }
     await writeFile(tmpFile, content, 'utf8');
     execSync(`node --check "${tmpFile}"`, { stdio: 'pipe' });
     return { ok: true };
@@ -634,6 +875,7 @@ async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
     };
   } finally {
     if (tmpFile) await unlink(tmpFile).catch(() => {});
+    if (tmpPkg) await unlink(tmpPkg).catch(() => {});
   }
 }
 
@@ -699,6 +941,65 @@ function validateOverlayNotShrunk(targetFile, output) {
   return null;
 }
 
+// Truncation gate for HTML *fragments/partials* (a <section>/<div> component with
+// no document wrapper). A full-page overlay uses a length floor + document-structure
+// check, but a legitimate partial is often far under that floor and has no
+// <html>/<head>/<body> — so it needs a structure-based completeness check instead
+// (same principle as `node --check` for JS / JSON.parse for JSON): a truncated
+// fragment ends mid-tag, leaves an element unclosed, or has an unterminated comment.
+// This is NOT a weakening of the full-page gate — only explicit fragment targets
+// (partials/components/fragments dirs or *-partial/-fragment/-component.html) that
+// do NOT contain a document wrapper take this path; everything else keeps the floor.
+const HTML_VOID_ELEMENTS = new Set([
+  'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+  'link', 'meta', 'param', 'source', 'track', 'wbr',
+]);
+
+export function validateHtmlFragmentComplete(text) {
+  const s = String(text || '').trim();
+  if (!s) return 'generated HTML fragment is empty';
+  if (!s.endsWith('>')) {
+    return 'generated HTML fragment appears truncated (does not end with a closed tag)';
+  }
+  if ((s.match(/<!--/g) || []).length !== (s.match(/-->/g) || []).length) {
+    return 'generated HTML fragment has an unterminated comment (likely truncated)';
+  }
+  // Strip comments so their contents never register as tags, then walk tags to
+  // confirm every opened non-void element is closed and none dangle.
+  const withoutComments = s.replace(/<!--[\s\S]*?-->/g, '');
+  const tagRe = /<\/?([a-zA-Z][a-zA-Z0-9-]*)\b[^>]*?(\/?)>/g;
+  const stack = [];
+  let m;
+  while ((m = tagRe.exec(withoutComments)) !== null) {
+    const name = m[1].toLowerCase();
+    const isClosing = m[0].startsWith('</');
+    const selfClosed = m[2] === '/';
+    if (HTML_VOID_ELEMENTS.has(name)) continue;
+    if (isClosing) {
+      let idx = -1;
+      for (let i = stack.length - 1; i >= 0; i -= 1) {
+        if (stack[i] === name) { idx = i; break; }
+      }
+      if (idx === -1) {
+        return `generated HTML fragment has an unexpected closing </${name}> (malformed or truncated)`;
+      }
+      stack.length = idx;
+    } else if (!selfClosed) {
+      stack.push(name);
+    }
+  }
+  if (stack.length) {
+    return `generated HTML fragment has an unclosed <${stack[stack.length - 1]}> (likely truncated)`;
+  }
+  return null;
+}
+
+export function isHtmlFragmentTarget(target) {
+  const t = String(target || '').toLowerCase();
+  return /(^|\/)(partials?|components?|fragments?)\//.test(t)
+    || /[-_.](partial|fragment|component)s?\.html$/.test(t);
+}
+
 function validateGeneratedOutputForTarget(targetFile, output) {
   const target = String(targetFile || '').toLowerCase();
   const text = String(output || '').trim();
@@ -708,21 +1009,33 @@ function validateGeneratedOutputForTarget(targetFile, output) {
   const shrinkError = validateOverlayNotShrunk(targetFile, text);
   if (shrinkError) return shrinkError;
   if (target.endsWith('.html')) {
-    if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
     if (!/^[\s]*</.test(text)) return 'generated HTML must start with <!DOCTYPE or <html (no preamble or markdown)';
-    // Accept either: classic <html>...</html> wrapper OR HTML5 <!DOCTYPE html> + <head> + <body>
-    const hasHtmlWrapper = /<html[\s>]/i.test(text) && /<\/html>/i.test(text);
-    const hasHtml5Structure = /<!DOCTYPE\s+html/i.test(text) && /<head[\s>]/i.test(text) && /<body[\s>]/i.test(text);
-    if (!hasHtmlWrapper && !hasHtml5Structure) {
-      const truncatedInHead =
-        /<!DOCTYPE\s+html/i.test(text) &&
-        /<html[\s>]/i.test(text) &&
-        /<head[\s>]/i.test(text) &&
-        !/<body[\s>]/i.test(text);
-      if (truncatedInHead) {
-        return 'generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file.';
+    // Explicit fragment/partial targets are validated for completeness by tag
+    // structure (balanced tags, closed comments, ends on a closed tag) rather
+    // than a length floor — a partial component is legitimately small, and a
+    // truncated one is caught by structure. This holds even when the model wraps
+    // a small partial in a full <!DOCTYPE> document: that is complete, not
+    // truncated, so it should commit. Non-fragment targets keep the strict floor
+    // + document-structure gate so a truncated live overlay can never commit.
+    if (isHtmlFragmentTarget(target)) {
+      const fragmentError = validateHtmlFragmentComplete(text);
+      if (fragmentError) return fragmentError;
+    } else {
+      if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
+      // Accept either: classic <html>...</html> wrapper OR HTML5 <!DOCTYPE html> + <head> + <body>
+      const hasHtmlWrapper = /<html[\s>]/i.test(text) && /<\/html>/i.test(text);
+      const hasHtml5Structure = /<!DOCTYPE\s+html/i.test(text) && /<head[\s>]/i.test(text) && /<body[\s>]/i.test(text);
+      if (!hasHtmlWrapper && !hasHtml5Structure) {
+        const truncatedInHead =
+          /<!DOCTYPE\s+html/i.test(text) &&
+          /<html[\s>]/i.test(text) &&
+          /<head[\s>]/i.test(text) &&
+          !/<body[\s>]/i.test(text);
+        if (truncatedInHead) {
+          return 'generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file.';
+        }
+        return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
       }
-      return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
     }
   }
   // JS absolute floor — catches 1-line truncated stubs; legitimate short files (helpers, re-exports) pass through to node --check
@@ -733,6 +1046,17 @@ function validateGeneratedOutputForTarget(targetFile, output) {
     const lineCount = text.split('\n').length;
     if (lineCount < 3) {
       return `generated JS is too short (${lineCount} lines); likely token-limit truncation — refusing to commit; retry with a smaller spec or explicit target_file`;
+    }
+  }
+  // JSON targets have no `node --check`; a truncated config/manifest would only
+  // fail loudly at boot-parse. JSON.parse IS the completeness gate — it rejects
+  // any truncation (unterminated string/object/array, trailing comma from a cut
+  // mid-write). Covers /build, /execute, and executeBatch (all call this).
+  if (target.endsWith('.json')) {
+    try {
+      JSON.parse(text);
+    } catch (e) {
+      return `generated JSON is invalid (likely truncated): ${e.message}`;
     }
   }
   return null;
@@ -1215,6 +1539,8 @@ export function createLifeOSCouncilBuilderRoutes({
       autonomy_mode = 'max',
       internet_research = true,
       execution_only = false,
+      additive_patch = false,
+      edit_patch = false,
     } = req.body || {};
 
     if (!task) {
@@ -1265,7 +1591,29 @@ export function createLifeOSCouncilBuilderRoutes({
       }
     }
 
-    const { block: filesContentBlock, summaries: filesInjectSummaries } = await loadRepoFilesForBuilder(files, log);
+    // When building against an existing target file, always inject its current
+    // content so the model extends the real file instead of refusing with
+    // "existing exports were not provided" (or blindly rebuilding what exists).
+    // Only auto-added when the file actually exists on disk (new-file builds
+    // have no prior content and must not inject a spurious READ ERROR block).
+    const contextFiles = (() => {
+      const base = Array.isArray(files)
+        ? files.filter((f) => typeof f === 'string' && f.trim())
+        : [];
+      const normalize = (f) => f.trim().replace(/^[/\\]+/, '');
+      const tf = typeof bodyTargetFile === 'string' ? bodyTargetFile.trim() : '';
+      if (
+        mode === 'code'
+        && tf
+        && !base.some((f) => normalize(f) === normalize(tf))
+        && existsSync(resolve(REPO_ROOT, normalize(tf)))
+      ) {
+        return [...base, tf];
+      }
+      return base;
+    })();
+
+    const { block: filesContentBlock, summaries: filesInjectSummaries } = await loadRepoFilesForBuilder(contextFiles, log);
     if (filesInjectSummaries.length) {
       log.info({ count: filesInjectSummaries.length, paths: filesInjectSummaries.map(s => s.path) }, '[BUILDER] Injected repo file bodies for files[]');
     }
@@ -1467,6 +1815,31 @@ export function createLifeOSCouncilBuilderRoutes({
         'End with ---METADATA--- then JSON: {"target_file":null,"insert_after_line":null,"confidence":0.9}',
     }[mode] || 'Generate the complete implementation code.';
 
+    // Zone 3 additive-patch: request ONLY the new code, never a full-file rewrite.
+    const additivePatch = additive_patch === true && mode === 'code';
+    // Zone 3 edit-patch: request surgical find-and-replace edits so EXISTING
+    // in-file logic can be modified without a full-file rewrite. Mutually
+    // exclusive with additive (additive is forbidden from touching existing code).
+    const editPatch = edit_patch === true && !additivePatch && mode === 'code';
+    const effectiveModeInstructions = editPatch
+      ? [
+          'EDIT-PATCH MODE. The target file already exists and is too large to safely rewrite in full.',
+          'Return ONLY a JSON array of surgical find-and-replace edits to the existing file.',
+          'Format: [{"old_string":"<exact snippet copied VERBATIM from the file above, with enough surrounding context that it appears EXACTLY ONCE>","new_string":"<the replacement text>"}]',
+          'Rules: copy old_string character-for-character from the file (same indentation and whitespace); each old_string MUST match exactly once; to delete code set new_string to "".',
+          'Do NOT output the whole file. Do NOT include line numbers. Do NOT use markdown fences.',
+          'Then append a line containing exactly ---METADATA--- followed by a single JSON object: {"target_file":null,"insert_after_line":null,"confidence":0.9}.',
+        ].join('\n')
+      : additivePatch
+        ? [
+          'ADDITIVE-PATCH MODE. The target file already exists and is too large to safely rewrite in full.',
+          'Output ONLY the NEW code to ADD to it — new functions, exported helpers, or route handlers.',
+          'Do NOT reproduce, restate, or modify ANY existing content of the file. Do NOT output the whole file.',
+          'Do NOT repeat imports that already exist. If a NEW import is unavoidable, put it on its own line at the very top of your output prefixed with the exact marker: //__IMPORT__ ',
+          'Then append a line containing exactly ---METADATA--- followed by a single JSON object: {"target_file":null,"insert_after_line":null,"confidence":0.9}. No markdown fences.',
+        ].join('\n')
+      : modeInstructions;
+
     const systemPrompt = [
       'You are a senior engineer working on the LifeOS platform.',
       'You write clean, production-quality Node.js/ESM code that follows existing patterns.',
@@ -1481,9 +1854,9 @@ export function createLifeOSCouncilBuilderRoutes({
     });
 
     const htmlCodegenExtra =
-      mode === 'code' && builderTargetsHtml(files, bodyTargetFile) ? `\n${htmlFullFileCodegenHints()}` : '';
+      mode === 'code' && builderTargetsHtml(contextFiles, bodyTargetFile) ? `\n${htmlFullFileCodegenHints()}` : '';
     const jsCodegenExtra =
-      mode === 'code' && !builderTargetsHtml(files, bodyTargetFile) && builderTargetsJavaScript(files, bodyTargetFile)
+      mode === 'code' && !additivePatch && !editPatch && !builderTargetsHtml(contextFiles, bodyTargetFile) && builderTargetsJavaScript(contextFiles, bodyTargetFile)
         ? `\n${jsFullFileCodegenHints()}`
         : '';
 
@@ -1495,14 +1868,14 @@ export function createLifeOSCouncilBuilderRoutes({
     const userPrompt = [
       `TASK: ${task}`,
       spec ? `\nSPECIFICATION:\n${spec}` : '',
-      files?.length ? `\nRELEVANT FILE PATHS (also embedded below when readable): ${files.join(', ')}` : '',
+      contextFiles?.length ? `\nRELEVANT FILE PATHS (also embedded below when readable): ${contextFiles.join(', ')}` : '',
       filesContentBlock
-        ? `\nREPO FILE CONTENTS — authoritative; produce a single full replacement for target_file when mode is code:\n${filesContentBlock}`
+        ? `\nREPO FILE CONTENTS — authoritative; ${editPatch ? 'this is the EXISTING file you are EDITING — copy old_string excerpts VERBATIM from it and output only the JSON edit array' : additivePatch ? 'this is the EXISTING file you are ADDING to — do NOT reproduce or modify it, output only the new code to append' : 'produce a single full replacement for target_file when mode is code'}:\n${filesContentBlock}`
         : '',
       htmlCodegenExtra,
       jsCodegenExtra,
       executionModeBlock,
-      `\nINSTRUCTION: ${modeInstructions}`,
+      `\nINSTRUCTION: ${effectiveModeInstructions}`,
       autonomyInstructions ? `\nAUTONOMY: ${autonomyInstructions}` : '',
     ].filter(Boolean).join('\n');
 
@@ -1718,7 +2091,7 @@ export function createLifeOSCouncilBuilderRoutes({
   // §2.11: This is the step that makes the SYSTEM the author, not the Conductor.
 
   async function executeOutput(req, res) {
-    const { output, target_file, commit_message, branch, task: bodyTask, mission_id: bodyMissionId } = req.body || {};
+    const { output, target_file, commit_message, branch, task: bodyTask, mission_id: bodyMissionId, additive_patch: additivePatchReq, edit_patch: editPatchReq } = req.body || {};
     if (!output) return res.status(400).json({ ok: false, error: 'output is required' });
     if (!target_file) return res.status(400).json({ ok: false, error: 'target_file is required' });
 
@@ -1759,9 +2132,51 @@ export function createLifeOSCouncilBuilderRoutes({
       });
     }
 
-    // For HTML targets: strip any markdown preamble the model wrote before <!DOCTYPE / <html
+    // Zone 3 edit-patch: the caller asked /task for surgical find-and-replace
+    // edits (JSON array) so EXISTING in-file logic can be modified without a
+    // full-file rewrite. Apply them deterministically here — BEFORE any JS
+    // extraction (which would mangle the JSON) and before validation/commit — so
+    // the rest of the file is preserved byte-for-byte. Mirrors the /build route.
     let cleanedOutput = output;
-    if (/\.html$/i.test(target_file)) {
+    const editPatchActive =
+      editPatchReq === true
+      && additivePatchReq !== true
+      && /\.(js|mjs)$/i.test(target_file)
+      && (() => {
+        const abs = resolve(REPO_ROOT, target_file);
+        return existsSync(abs) && classifyBuildTarget(abs).zone === 3;
+      })();
+    if (editPatchActive) {
+      const absEditTarget = resolve(REPO_ROOT, target_file);
+      const applied = applyTargetedEdits(absEditTarget, output);
+      if (!applied.ok) {
+        const gapRecommendation = await recordBuilderGap({
+          domain: null,
+          task: `execute: ${target_file}`,
+          modelUsed: 'system',
+          rawOutput: output,
+          status: 'failed',
+          stage: 'edit_patch',
+          reason: `edit-patch failed — ${applied.reason}`,
+          targetFile: target_file,
+          routingKey: 'council.builder.execute',
+          mode: 'execute',
+        });
+        return res.status(422).json({
+          ok: false,
+          committed: false,
+          error: `Zone 3 edit-patch failed — ${applied.reason}`,
+          target_file,
+          gap_recommendation: gapRecommendation,
+        });
+      }
+      log.info(
+        { target_file, editsApplied: applied.editsApplied },
+        '[BUILDER] /execute Zone 3 edit-patch: applied surgical edits to existing file',
+      );
+      cleanedOutput = applied.content;
+    } else if (/\.html$/i.test(target_file)) {
+      // For HTML targets: strip any markdown preamble the model wrote before <!DOCTYPE / <html
       const extracted = extractHtmlFromOutput(output);
       if (extracted !== output) {
         log.info({ target_file, stripped: output.length - extracted.length }, '[BUILDER] /execute: Stripped markdown preamble from HTML output');
@@ -1785,6 +2200,44 @@ export function createLifeOSCouncilBuilderRoutes({
         cleanedOutput = stripped;
       }
     }
+    // Zone 3 additive-patch: the caller (e.g. the founder chat build loop) asked
+    // /task for an additive-only snippet; splice it into the existing large file
+    // here — BEFORE validation/syntax/commit — so a >150-line file is never
+    // full-file rewritten through this path. Mirrors the governed /build route.
+    if (additivePatchReq === true && /\.(js|mjs)$/i.test(target_file)) {
+      const absAdditiveTarget = resolve(REPO_ROOT, target_file);
+      const zoneMeta = classifyBuildTarget(absAdditiveTarget);
+      if (zoneMeta.zone === 3 && existsSync(absAdditiveTarget)) {
+        const spliced = spliceAdditiveSnippet(absAdditiveTarget, cleanedOutput);
+        if (!spliced.ok) {
+          const gapRecommendation = await recordBuilderGap({
+            domain: null,
+            task: `execute: ${target_file}`,
+            modelUsed: 'system',
+            rawOutput: output,
+            status: 'failed',
+            stage: 'additive_patch',
+            reason: `additive-patch splice failed — ${spliced.reason}`,
+            targetFile: target_file,
+            routingKey: 'council.builder.execute',
+            mode: 'execute',
+          });
+          return res.status(422).json({
+            ok: false,
+            committed: false,
+            error: `Zone 3 additive-patch failed — ${spliced.reason}`,
+            target_file,
+            gap_recommendation: gapRecommendation,
+          });
+        }
+        log.info(
+          { target_file, originalLines: zoneMeta.lineCount, mergedLines: spliced.mergedLines },
+          '[BUILDER] /execute Zone 3 additive-patch: spliced new code into existing file',
+        );
+        cleanedOutput = spliced.content;
+      }
+    }
+
     const validationError = validateGeneratedOutputForTarget(target_file, cleanedOutput);
     if (validationError) {
       const gapRecommendation = await recordBuilderGap({
@@ -1822,6 +2275,33 @@ export function createLifeOSCouncilBuilderRoutes({
           ok: false,
           error: 'Pre-commit syntax check failed — commit blocked',
           syntax_error: syntaxError,
+          committed: false,
+          target_file,
+          gap_recommendation: gapRecommendation,
+        });
+      }
+    } else if (/\.sql$/i.test(target_file)) {
+      // The founder chat build loop reaches commit through this single /execute
+      // path, so it needs the same .sql truncation gate that /build and
+      // executeBatch run — otherwise a chat-driven truncated migration commits
+      // unchecked (it would only fail loudly at boot-apply).
+      const sqlCheck = validateSqlMigrationContent(cleanedOutput);
+      if (!sqlCheck.ok) {
+        const gapRecommendation = await recordBuilderGap({
+          domain: null,
+          task: `execute: ${target_file}`,
+          modelUsed: 'system',
+          rawOutput: output,
+          status: 'failed',
+          stage: 'sql_validation',
+          reason: sqlCheck.error,
+          targetFile: target_file,
+          routingKey: 'council.builder.execute',
+          mode: 'execute',
+        });
+        return res.status(422).json({
+          ok: false,
+          error: `SQL migration validation failed: ${sqlCheck.error}`,
           committed: false,
           target_file,
           gap_recommendation: gapRecommendation,
@@ -1913,6 +2393,35 @@ export function createLifeOSCouncilBuilderRoutes({
           target_file,
           failed_file: target_file,
         });
+      }
+
+      // Truncation gates — the batch path must be as strict as single-file
+      // /execute: run the real syntax/completeness check per target type so a
+      // truncated JS or SQL file can never slip through a batch commit (in
+      // local-mirror mode nothing downstream re-checks, and commitManyToGitHub
+      // only node --checks JS, never SQL).
+      if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+        const chk = await verifyGeneratedJavaScriptWithNodeCheck(output, target_file);
+        if (!chk.ok) {
+          return res.status(422).json({
+            ok: false,
+            committed: false,
+            error: `Pre-commit syntax check failed: ${chk.error}`,
+            target_file,
+            failed_file: target_file,
+          });
+        }
+      } else if (/\.sql$/i.test(target_file)) {
+        const sqlCheck = validateSqlMigrationContent(output);
+        if (!sqlCheck.ok) {
+          return res.status(422).json({
+            ok: false,
+            committed: false,
+            error: `SQL migration validation failed: ${sqlCheck.error}`,
+            target_file,
+            failed_file: target_file,
+          });
+        }
       }
       cleaned.push({ target_file, output });
     }
@@ -2262,6 +2771,34 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       }
     }
 
+    // ── Zone 3 additive-patch mode ──────────────────────────────────────────
+    // Files above the Zone 3 line threshold cannot be safely full-file rewritten
+    // (a truncated model output silently stubs the file). Rather than hard-block
+    // every large target — which left almost every real production file
+    // un-buildable — request ONLY the new code and deterministically splice it
+    // into the existing file. Existing content is preserved verbatim (no stub
+    // risk) and the SAME in-scope target is committed, so the blueprint scope
+    // gate still applies. Covers "add a new export/function/route"; modifying
+    // existing in-file logic still requires full-file mode.
+    const zoneEarly = classifyBuildTarget(resolve(REPO_ROOT, target_file));
+    const isZone3ExistingJs =
+      (taskBody.mode || 'code') === 'code'
+      && /\.(js|mjs)$/.test(target_file)
+      && zoneEarly.zone === 3
+      && !taskBody.blueprint_intake_session_id
+      && existsSync(resolve(REPO_ROOT, target_file));
+    // A Zone 3 request that wants to MODIFY existing in-file logic (change /
+    // replace / rename / remove) can't be served by additive mode (which is
+    // forbidden from touching existing content) — route it to surgical
+    // edit-patch instead. Pure "add new code" requests stay on additive.
+    const editPatchActive = isZone3ExistingJs && classifyPatchIntent(taskBody.task) === 'edit';
+    const additivePatchActive = isZone3ExistingJs && !editPatchActive;
+    if (editPatchActive) {
+      log.info({ target_file, lineCount: zoneEarly.lineCount }, '[BUILDER] Zone 3 target — using edit-patch mode (surgical find-and-replace, preserve rest of file)');
+    } else if (additivePatchActive) {
+      log.info({ target_file, lineCount: zoneEarly.lineCount }, '[BUILDER] Zone 3 target — using additive-patch mode (splice new code, preserve existing)');
+    }
+
     // Step 1: Generate via council (reuse dispatchTask logic inline)
     let generatedOutput, placement, model_used, domain_context_loaded, domain, routing_key;
     try {
@@ -2272,7 +2809,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         json(data) { captured = { code: 200, data }; },
       };
       // /build must NEVER use cache — every build call needs fresh generation for its spec.
-      await dispatchTask({ body: { ...taskBody, target_file, mode: taskBody.mode || 'code', useCache: false } }, mockRes);
+      await dispatchTask({ body: { ...taskBody, target_file, mode: taskBody.mode || 'code', useCache: false, additive_patch: additivePatchActive, edit_patch: editPatchActive } }, mockRes);
 
       if (!captured || captured.code !== 200 || !captured.data?.ok) {
         const errMsg = captured?.data?.error || 'Council call failed';
@@ -2394,7 +2931,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         generatedOutput = extracted;
       }
     }
-    if (/\.(js|mjs|cjs)$/i.test(resolvedTarget)) {
+    if (!editPatchActive && /\.(js|mjs|cjs)$/i.test(resolvedTarget)) {
       const extractedJs = normalizeBuilderCodegenOutput(extractJavaScriptFromOutput(generatedOutput));
       if (extractedJs !== generatedOutput) {
         log.info(
@@ -2411,6 +2948,47 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         generatedOutput = extractedCss;
       }
     }
+    // Zone 3 edit-patch: apply the model's surgical find-and-replace edits to the
+    // existing file BEFORE any validation/syntax/governance gate, so every gate
+    // runs on the full edited file (the rest preserved byte-for-byte).
+    if (editPatchActive) {
+      const applied = applyTargetedEdits(resolve(REPO_ROOT, resolvedTarget), generatedOutput);
+      if (!applied.ok) {
+        const gapRecommendation = await recordBuilderGap({
+          domain, task: taskBody.task, modelUsed: model_used, rawOutput: generatedOutput,
+          status: 'failed', stage: 'edit_patch', reason: `edit-patch failed — ${applied.reason}`,
+          targetFile: resolvedTarget, routingKey: routing_key, mode: taskBody.mode || 'code',
+          executionOnly: taskBody.execution_only === true, placement,
+        });
+        return res.status(422).json({
+          ok: false, committed: false, error: `Zone 3 edit-patch failed — ${applied.reason}`,
+          target_file: resolvedTarget, output: generatedOutput, gap_recommendation: gapRecommendation,
+        });
+      }
+      log.info({ resolvedTarget, editsApplied: applied.editsApplied }, '[BUILDER] Zone 3 edit-patch: applied surgical edits to existing file');
+      generatedOutput = applied.content;
+    }
+    // Zone 3 additive-patch: splice the generated snippet into the existing file
+    // BEFORE any validation/syntax/governance gate, so every gate runs on the
+    // full merged file (existing content preserved verbatim).
+    if (additivePatchActive) {
+      const spliced = spliceAdditiveSnippet(resolve(REPO_ROOT, resolvedTarget), generatedOutput);
+      if (!spliced.ok) {
+        const gapRecommendation = await recordBuilderGap({
+          domain, task: taskBody.task, modelUsed: model_used, rawOutput: generatedOutput,
+          status: 'failed', stage: 'additive_patch', reason: `additive-patch splice failed — ${spliced.reason}`,
+          targetFile: resolvedTarget, routingKey: routing_key, mode: taskBody.mode || 'code',
+          executionOnly: taskBody.execution_only === true, placement,
+        });
+        return res.status(422).json({
+          ok: false, committed: false, error: `Zone 3 additive-patch failed — ${spliced.reason}`,
+          target_file: resolvedTarget, output: generatedOutput, gap_recommendation: gapRecommendation,
+        });
+      }
+      log.info({ resolvedTarget, originalLines: zoneEarly.lineCount, mergedLines: spliced.mergedLines }, '[BUILDER] Zone 3 additive-patch: spliced new code into existing file');
+      generatedOutput = spliced.content;
+    }
+
     const validationError = validateGeneratedOutputForTarget(resolvedTarget, generatedOutput);
     if (validationError) {
       const gapRecommendation = await recordBuilderGap({
@@ -2550,14 +3128,15 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       log.info({ resolvedTarget }, '[BUILDER] pre-commit syntax check passed');
 
       // ── Pre-commit governance (anti-pattern + stub + unified verifier) ────
-      const zoneMeta = classifyBuildTarget(resolve(process.cwd(), resolvedTarget));
+      const zoneMeta = classifyBuildTarget(resolve(REPO_ROOT, resolvedTarget));
       const govResult = await runPrecommitGovernance({
         generatedOutput,
         resolvedTarget,
         originalLines: zoneMeta.lineCount > 0 ? zoneMeta.lineCount : null,
         intakeBlueprintStep: Boolean(taskBody.blueprint_intake_session_id),
+        additivePatch: additivePatchActive,
         taskBody,
-        retryFn: async (retryBody) => {
+        retryFn: additivePatchActive ? null : async (retryBody) => {
           let retryCapture = null;
           const mockRetryRes = {
             status(c) { return { json(d) { retryCapture = { code: c, data: d }; } }; },
