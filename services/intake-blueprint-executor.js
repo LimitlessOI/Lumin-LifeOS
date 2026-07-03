@@ -22,13 +22,17 @@ export function sortIntakeSteps(steps = []) {
   const byId = new Map(steps.map((s) => [s.id, s]));
   const sorted = [];
   const seen = new Set();
+  const visiting = new Set();
 
   function visit(step) {
     if (!step || seen.has(step.id)) return;
+    if (visiting.has(step.id)) return;
+    visiting.add(step.id);
     for (const dep of step.deps || []) {
       const parent = byId.get(dep);
       if (parent) visit(parent);
     }
+    visiting.delete(step.id);
     seen.add(step.id);
     sorted.push(step);
   }

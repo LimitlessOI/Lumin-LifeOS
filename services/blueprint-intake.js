@@ -826,7 +826,7 @@ Return JSON:
     }
 
     const serviceStepIds = steps
-      .filter(s => s.type === 'esm' && !s.file?.includes('coordinator'))
+      .filter(s => s.type === 'esm' && !s.file?.includes('coordinator') && !s.file?.includes('route'))
       .map(s => s.id);
     const allNonVerifyIds = steps
       .filter(s => s.type !== 'esm_script')
@@ -881,6 +881,21 @@ Return JSON:
       }
     }
 
+    const stepIndex = new Map(steps.map(s => [s.id, s]));
+    for (const s of steps) {
+      if (!s.deps) continue;
+      const clean = s.deps.filter(depId => {
+        const depStep = stepIndex.get(depId);
+        if (!depStep || !depStep.deps) return true;
+        if (depStep.deps.includes(s.id)) {
+          fixCount++;
+          return false;
+        }
+        return true;
+      });
+      s.deps = clean;
+    }
+
     if (fixCount === 0) return null;
 
     fixed._meta = {
@@ -888,7 +903,7 @@ Return JSON:
       blueprint_version: incrementVersion(blueprint._meta?.blueprint_version || '1.0.0'),
       auto_fixed_at: new Date().toISOString(),
       arc_fixes_applied: fixCount,
-      fix_types: ['duplicate_ids', 'missing_deps', 'ssot_tag'].filter(Boolean).join(','),
+      fix_types: 'duplicate_ids,missing_deps,ssot_tag,circular_deps',
     };
     return fixed;
   }
