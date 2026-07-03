@@ -68,14 +68,31 @@ async function attachVerifiedSearch(facts, text, deps) {
       facts.verified_search = formatLifeAdminCounselPreamble(searchResult);
       facts.search_source = searchResult.source || null;
     } else {
-      const fallback = formatErrandCouponFallback(text);
-      facts.verified_search = fallback || `Live search returned no snippets for: ${query.slice(0, 120)}. (source: none)`;
-      facts.search_source = searchResult?.source || null;
+      markSearchUnavailable(facts, text);
     }
   } catch {
-    const fallback = formatErrandCouponFallback(text);
-    facts.verified_search = fallback || `Live search unavailable for: ${String(text).slice(0, 120)}.`;
+    markSearchUnavailable(facts, text);
   }
+}
+
+/**
+ * No live web result. Do NOT echo the user's question back as a fake
+ * "verified" block — a string that repeats the query passes the downstream
+ * relevance check and gets served verbatim as the answer ("Live search
+ * unavailable for: <question>"). Instead surface any genuine offline fallback,
+ * else leave verified_search null so the Chair answers from its own
+ * knowledge/twin/memory and only caveats missing live data when it matters.
+ */
+function markSearchUnavailable(facts, text) {
+  const fallback = formatErrandCouponFallback(text);
+  if (fallback) {
+    facts.verified_search = fallback;
+    return;
+  }
+  facts.verified_search = null;
+  facts.search_source = null;
+  facts.search_unavailable = true;
+  facts.chair_note = `${facts.chair_note} No live web search result was available — answer directly from your own knowledge, the twin, and memory; only note that live/current data was unavailable if the answer genuinely depends on it.`;
 }
 
 export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}) {

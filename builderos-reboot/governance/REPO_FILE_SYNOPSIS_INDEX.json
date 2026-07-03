@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T00:18:55.538Z",
+  "generated_at": "2026-07-03T01:46:22.652Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11819,
+  "file_count": 11820,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21995,8 +21995,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3578588,
-      "mtime": "2026-07-03T00:18:54.410Z",
-      "indexed_at": "2026-07-03T00:18:55.538Z"
+      "mtime": "2026-07-03T01:45:23.644Z",
+      "indexed_at": "2026-07-03T01:46:22.652Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 554139,
-      "mtime": "2026-07-03T00:17:46.203Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 555002,
+      "mtime": "2026-07-03T01:45:18.448Z",
+      "indexed_at": "2026-07-03T01:46:22.652Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66615,9 +66615,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29306,
-      "mtime": "2026-07-03T00:17:46.213Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 29355,
+      "mtime": "2026-07-03T01:45:05.256Z",
+      "indexed_at": "2026-07-03T01:46:22.652Z",
       "synopsis_index_only": true
     },
     {
@@ -84691,9 +84691,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 9235,
-      "mtime": "2026-07-03T00:17:46.218Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 9886,
+      "mtime": "2026-07-03T01:45:05.256Z",
+      "indexed_at": "2026-07-03T01:46:22.652Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90580,6 +90580,16 @@
       "bytes": 1543,
       "mtime": "2026-06-23T01:48:54.588Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
+    },
+    {
+      "path": "tests/chair-native-facts-search-fallback.test.js",
+      "synopsis": "Regression — unavailable web search must not echo the question as a fake verified block.",
+      "bytes": 953,
+      "mtime": "2026-07-03T01:45:05.640Z",
+      "indexed_at": "2026-07-03T01:46:22.652Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/chair-program-direct-answer.test.js",
