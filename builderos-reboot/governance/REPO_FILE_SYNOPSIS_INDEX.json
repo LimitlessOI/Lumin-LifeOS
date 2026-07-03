@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T02:04:22.526Z",
+  "generated_at": "2026-07-03T02:18:01.203Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11819,
   "files": [
@@ -21995,8 +21995,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3578589,
-      "mtime": "2026-07-03T02:03:26.088Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "mtime": "2026-07-03T02:16:56.016Z",
+      "indexed_at": "2026-07-03T02:18:01.203Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 109191,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "bytes": 110959,
+      "mtime": "2026-07-03T02:16:24.656Z",
+      "indexed_at": "2026-07-03T02:18:01.203Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 555459,
-      "mtime": "2026-07-03T02:02:13.896Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "bytes": 556352,
+      "mtime": "2026-07-03T02:16:30.068Z",
+      "indexed_at": "2026-07-03T02:18:01.203Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69577,9 +69577,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 130809,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z",
+      "bytes": 137016,
+      "mtime": "2026-07-03T02:11:44.964Z",
+      "indexed_at": "2026-07-03T02:18:01.203Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84296,9 +84296,9 @@
     {
       "path": "services/builderos-build-pipeline.js",
       "synopsis": "@ssot docs/products/builderos/PRODUCT_HOME.md",
-      "bytes": 6054,
-      "mtime": "2026-06-29T17:44:54.492Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 6484,
+      "mtime": "2026-07-03T02:11:48.460Z",
+      "indexed_at": "2026-07-03T02:18:01.203Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/builderos/PRODUCT_HOME.md"

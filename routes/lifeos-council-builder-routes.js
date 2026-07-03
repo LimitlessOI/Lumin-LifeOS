@@ -78,6 +78,62 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
 const REPO_ROOT = join(__dirname, '..');
 
+/**
+ * Zone 3 additive-patch splice: merge an additive code snippet into an existing
+ * large file without rewriting it. The existing content is preserved verbatim
+ * (byte-for-byte), so there is zero stub/truncation risk to what is already
+ * there. The snippet is inserted just before the file's last top-level
+ * `export default` / `module.exports` (so new route defs still register), else
+ * appended at EOF. New imports the model marked with `//__IMPORT__ ` are hoisted
+ * after the last existing import. Returns a clean merged file or a reason.
+ */
+function spliceAdditiveSnippet(absTargetPath, rawSnippet) {
+  let snippet = String(rawSnippet || '').trim();
+  if (!snippet) return { ok: false, reason: 'empty additive snippet' };
+  const hoistImports = [];
+  snippet = snippet
+    .split('\n')
+    .filter((line) => {
+      if (line.trimStart().startsWith('//__IMPORT__ ')) {
+        hoistImports.push(line.trimStart().replace('//__IMPORT__ ', '').trim());
+        return false;
+      }
+      return true;
+    })
+    .join('\n')
+    .trim();
+  if (!snippet) return { ok: false, reason: 'additive snippet contained only import markers' };
+  let existing;
+  try {
+    existing = readFileSync(absTargetPath, 'utf8');
+  } catch (err) {
+    return { ok: false, reason: `could not read target file: ${err.message}` };
+  }
+  const lines = existing.split('\n');
+  let insertIdx = lines.length;
+  for (let i = lines.length - 1; i >= 0; i -= 1) {
+    if (/^\s*(export\s+default\b|module\.exports\b)/.test(lines[i])) {
+      insertIdx = i;
+      break;
+    }
+  }
+  const head = lines.slice(0, insertIdx).join('\n').replace(/\s+$/, '');
+  const tail = lines.slice(insertIdx).join('\n');
+  let merged = tail.trim().length ? `${head}\n\n${snippet}\n\n${tail}` : `${head}\n\n${snippet}\n`;
+  const dedupImports = hoistImports.filter((imp) => imp && !merged.includes(imp));
+  if (dedupImports.length) {
+    const mLines = merged.split('\n');
+    let lastImport = -1;
+    for (let i = 0; i < mLines.length; i += 1) {
+      if (/^\s*import\b/.test(mLines[i])) lastImport = i;
+    }
+    mLines.splice(lastImport >= 0 ? lastImport + 1 : 0, 0, ...dedupImports);
+    merged = mLines.join('\n');
+  }
+  merged = `${merged.replace(/\s+$/, '')}\n`;
+  return { ok: true, content: merged, mergedLines: merged.split('\n').length };
+}
+
 /** Bumped when builder codegen/token policy semantics change; operators compare GET /builder/ready to git main. */
 const BUILDER_CODEGEN_POLICY_REVISION = '2026-05-01a';
 const BUILDER_ROUTE_DEFAULT_MODEL = 'openai_builder_mini';
@@ -1215,6 +1271,7 @@ export function createLifeOSCouncilBuilderRoutes({
       autonomy_mode = 'max',
       internet_research = true,
       execution_only = false,
+      additive_patch = false,
     } = req.body || {};
 
     if (!task) {
@@ -1489,6 +1546,18 @@ export function createLifeOSCouncilBuilderRoutes({
         'End with ---METADATA--- then JSON: {"target_file":null,"insert_after_line":null,"confidence":0.9}',
     }[mode] || 'Generate the complete implementation code.';
 
+    // Zone 3 additive-patch: request ONLY the new code, never a full-file rewrite.
+    const additivePatch = additive_patch === true && mode === 'code';
+    const effectiveModeInstructions = additivePatch
+      ? [
+          'ADDITIVE-PATCH MODE. The target file already exists and is too large to safely rewrite in full.',
+          'Output ONLY the NEW code to ADD to it — new functions, exported helpers, or route handlers.',
+          'Do NOT reproduce, restate, or modify ANY existing content of the file. Do NOT output the whole file.',
+          'Do NOT repeat imports that already exist. If a NEW import is unavoidable, put it on its own line at the very top of your output prefixed with the exact marker: //__IMPORT__ ',
+          'Then append a line containing exactly ---METADATA--- followed by a single JSON object: {"target_file":null,"insert_after_line":null,"confidence":0.9}. No markdown fences.',
+        ].join('\n')
+      : modeInstructions;
+
     const systemPrompt = [
       'You are a senior engineer working on the LifeOS platform.',
       'You write clean, production-quality Node.js/ESM code that follows existing patterns.',
@@ -1505,7 +1574,7 @@ export function createLifeOSCouncilBuilderRoutes({
     const htmlCodegenExtra =
       mode === 'code' && builderTargetsHtml(contextFiles, bodyTargetFile) ? `\n${htmlFullFileCodegenHints()}` : '';
     const jsCodegenExtra =
-      mode === 'code' && !builderTargetsHtml(contextFiles, bodyTargetFile) && builderTargetsJavaScript(contextFiles, bodyTargetFile)
+      mode === 'code' && !additivePatch && !builderTargetsHtml(contextFiles, bodyTargetFile) && builderTargetsJavaScript(contextFiles, bodyTargetFile)
         ? `\n${jsFullFileCodegenHints()}`
         : '';
 
@@ -1519,12 +1588,12 @@ export function createLifeOSCouncilBuilderRoutes({
       spec ? `\nSPECIFICATION:\n${spec}` : '',
       contextFiles?.length ? `\nRELEVANT FILE PATHS (also embedded below when readable): ${contextFiles.join(', ')}` : '',
       filesContentBlock
-        ? `\nREPO FILE CONTENTS — authoritative; produce a single full replacement for target_file when mode is code:\n${filesContentBlock}`
+        ? `\nREPO FILE CONTENTS — authoritative; ${additivePatch ? 'this is the EXISTING file you are ADDING to — do NOT reproduce or modify it, output only the new code to append' : 'produce a single full replacement for target_file when mode is code'}:\n${filesContentBlock}`
         : '',
       htmlCodegenExtra,
       jsCodegenExtra,
       executionModeBlock,
-      `\nINSTRUCTION: ${modeInstructions}`,
+      `\nINSTRUCTION: ${effectiveModeInstructions}`,
       autonomyInstructions ? `\nAUTONOMY: ${autonomyInstructions}` : '',
     ].filter(Boolean).join('\n');
 
@@ -2284,6 +2353,26 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       }
     }
 
+    // ── Zone 3 additive-patch mode ──────────────────────────────────────────
+    // Files above the Zone 3 line threshold cannot be safely full-file rewritten
+    // (a truncated model output silently stubs the file). Rather than hard-block
+    // every large target — which left almost every real production file
+    // un-buildable — request ONLY the new code and deterministically splice it
+    // into the existing file. Existing content is preserved verbatim (no stub
+    // risk) and the SAME in-scope target is committed, so the blueprint scope
+    // gate still applies. Covers "add a new export/function/route"; modifying
+    // existing in-file logic still requires full-file mode.
+    const zoneEarly = classifyBuildTarget(resolve(process.cwd(), target_file));
+    const additivePatchActive =
+      (taskBody.mode || 'code') === 'code'
+      && /\.(js|mjs)$/.test(target_file)
+      && zoneEarly.zone === 3
+      && !taskBody.blueprint_intake_session_id
+      && existsSync(resolve(process.cwd(), target_file));
+    if (additivePatchActive) {
+      log.info({ target_file, lineCount: zoneEarly.lineCount }, '[BUILDER] Zone 3 target — using additive-patch mode (splice new code, preserve existing)');
+    }
+
     // Step 1: Generate via council (reuse dispatchTask logic inline)
     let generatedOutput, placement, model_used, domain_context_loaded, domain, routing_key;
     try {
@@ -2294,7 +2383,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         json(data) { captured = { code: 200, data }; },
       };
       // /build must NEVER use cache — every build call needs fresh generation for its spec.
-      await dispatchTask({ body: { ...taskBody, target_file, mode: taskBody.mode || 'code', useCache: false } }, mockRes);
+      await dispatchTask({ body: { ...taskBody, target_file, mode: taskBody.mode || 'code', useCache: false, additive_patch: additivePatchActive } }, mockRes);
 
       if (!captured || captured.code !== 200 || !captured.data?.ok) {
         const errMsg = captured?.data?.error || 'Council call failed';
@@ -2433,6 +2522,27 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         generatedOutput = extractedCss;
       }
     }
+    // Zone 3 additive-patch: splice the generated snippet into the existing file
+    // BEFORE any validation/syntax/governance gate, so every gate runs on the
+    // full merged file (existing content preserved verbatim).
+    if (additivePatchActive) {
+      const spliced = spliceAdditiveSnippet(resolve(process.cwd(), resolvedTarget), generatedOutput);
+      if (!spliced.ok) {
+        const gapRecommendation = await recordBuilderGap({
+          domain, task: taskBody.task, modelUsed: model_used, rawOutput: generatedOutput,
+          status: 'failed', stage: 'additive_patch', reason: `additive-patch splice failed — ${spliced.reason}`,
+          targetFile: resolvedTarget, routingKey: routing_key, mode: taskBody.mode || 'code',
+          executionOnly: taskBody.execution_only === true, placement,
+        });
+        return res.status(422).json({
+          ok: false, committed: false, error: `Zone 3 additive-patch failed — ${spliced.reason}`,
+          target_file: resolvedTarget, output: generatedOutput, gap_recommendation: gapRecommendation,
+        });
+      }
+      log.info({ resolvedTarget, originalLines: zoneEarly.lineCount, mergedLines: spliced.mergedLines }, '[BUILDER] Zone 3 additive-patch: spliced new code into existing file');
+      generatedOutput = spliced.content;
+    }
+
     const validationError = validateGeneratedOutputForTarget(resolvedTarget, generatedOutput);
     if (validationError) {
       const gapRecommendation = await recordBuilderGap({
@@ -2578,8 +2688,9 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
         resolvedTarget,
         originalLines: zoneMeta.lineCount > 0 ? zoneMeta.lineCount : null,
         intakeBlueprintStep: Boolean(taskBody.blueprint_intake_session_id),
+        additivePatch: additivePatchActive,
         taskBody,
-        retryFn: async (retryBody) => {
+        retryFn: additivePatchActive ? null : async (retryBody) => {
           let retryCapture = null;
           const mockRetryRes = {
             status(c) { return { json(d) { retryCapture = { code: c, data: d }; } }; },
