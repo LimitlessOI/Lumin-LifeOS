@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T11:14:23.901Z",
+  "generated_at": "2026-07-03T11:27:20.417Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11819,
+  "file_count": 11820,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 562843,
-      "mtime": "2026-07-03T11:02:56.477Z",
-      "indexed_at": "2026-07-03T11:03:04.848Z"
+      "bytes": 564669,
+      "mtime": "2026-07-03T11:27:08.121Z",
+      "indexed_at": "2026-07-03T11:27:20.417Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66615,9 +66615,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29306,
-      "mtime": "2026-07-03T00:17:46.213Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 29349,
+      "mtime": "2026-07-03T11:26:43.853Z",
+      "indexed_at": "2026-07-03T11:27:20.417Z",
       "synopsis_index_only": true
     },
     {
@@ -69577,9 +69577,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 146865,
-      "mtime": "2026-07-03T11:02:13.889Z",
-      "indexed_at": "2026-07-03T11:03:04.848Z",
+      "bytes": 150230,
+      "mtime": "2026-07-03T11:26:16.689Z",
+      "indexed_at": "2026-07-03T11:27:20.417Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90466,6 +90466,16 @@
       "indexed_at": "2026-07-03T00:18:52.998Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/builderos-html-fragment-gate.test.js",
+      "synopsis": "Unit tests for the HTML fragment/partial truncation gate helpers in",
+      "bytes": 3580,
+      "mtime": "2026-07-03T11:26:24.133Z",
+      "indexed_at": "2026-07-03T11:27:20.417Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {

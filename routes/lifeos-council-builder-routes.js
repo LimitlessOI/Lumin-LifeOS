@@ -868,6 +868,65 @@ function validateOverlayNotShrunk(targetFile, output) {
   return null;
 }
 
+// Truncation gate for HTML *fragments/partials* (a <section>/<div> component with
+// no document wrapper). A full-page overlay uses a length floor + document-structure
+// check, but a legitimate partial is often far under that floor and has no
+// <html>/<head>/<body> — so it needs a structure-based completeness check instead
+// (same principle as `node --check` for JS / JSON.parse for JSON): a truncated
+// fragment ends mid-tag, leaves an element unclosed, or has an unterminated comment.
+// This is NOT a weakening of the full-page gate — only explicit fragment targets
+// (partials/components/fragments dirs or *-partial/-fragment/-component.html) that
+// do NOT contain a document wrapper take this path; everything else keeps the floor.
+const HTML_VOID_ELEMENTS = new Set([
+  'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+  'link', 'meta', 'param', 'source', 'track', 'wbr',
+]);
+
+export function validateHtmlFragmentComplete(text) {
+  const s = String(text || '').trim();
+  if (!s) return 'generated HTML fragment is empty';
+  if (!s.endsWith('>')) {
+    return 'generated HTML fragment appears truncated (does not end with a closed tag)';
+  }
+  if ((s.match(/<!--/g) || []).length !== (s.match(/-->/g) || []).length) {
+    return 'generated HTML fragment has an unterminated comment (likely truncated)';
+  }
+  // Strip comments so their contents never register as tags, then walk tags to
+  // confirm every opened non-void element is closed and none dangle.
+  const withoutComments = s.replace(/<!--[\s\S]*?-->/g, '');
+  const tagRe = /<\/?([a-zA-Z][a-zA-Z0-9-]*)\b[^>]*?(\/?)>/g;
+  const stack = [];
+  let m;
+  while ((m = tagRe.exec(withoutComments)) !== null) {
+    const name = m[1].toLowerCase();
+    const isClosing = m[0].startsWith('</');
+    const selfClosed = m[2] === '/';
+    if (HTML_VOID_ELEMENTS.has(name)) continue;
+    if (isClosing) {
+      let idx = -1;
+      for (let i = stack.length - 1; i >= 0; i -= 1) {
+        if (stack[i] === name) { idx = i; break; }
+      }
+      if (idx === -1) {
+        return `generated HTML fragment has an unexpected closing </${name}> (malformed or truncated)`;
+      }
+      stack.length = idx;
+    } else if (!selfClosed) {
+      stack.push(name);
+    }
+  }
+  if (stack.length) {
+    return `generated HTML fragment has an unclosed <${stack[stack.length - 1]}> (likely truncated)`;
+  }
+  return null;
+}
+
+export function isHtmlFragmentTarget(target) {
+  const t = String(target || '').toLowerCase();
+  return /(^|\/)(partials?|components?|fragments?)\//.test(t)
+    || /[-_.](partial|fragment|component)s?\.html$/.test(t);
+}
+
 function validateGeneratedOutputForTarget(targetFile, output) {
   const target = String(targetFile || '').toLowerCase();
   const text = String(output || '').trim();
@@ -877,21 +936,33 @@ function validateGeneratedOutputForTarget(targetFile, output) {
   const shrinkError = validateOverlayNotShrunk(targetFile, text);
   if (shrinkError) return shrinkError;
   if (target.endsWith('.html')) {
-    if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
     if (!/^[\s]*</.test(text)) return 'generated HTML must start with <!DOCTYPE or <html (no preamble or markdown)';
-    // Accept either: classic <html>...</html> wrapper OR HTML5 <!DOCTYPE html> + <head> + <body>
-    const hasHtmlWrapper = /<html[\s>]/i.test(text) && /<\/html>/i.test(text);
-    const hasHtml5Structure = /<!DOCTYPE\s+html/i.test(text) && /<head[\s>]/i.test(text) && /<body[\s>]/i.test(text);
-    if (!hasHtmlWrapper && !hasHtml5Structure) {
-      const truncatedInHead =
-        /<!DOCTYPE\s+html/i.test(text) &&
-        /<html[\s>]/i.test(text) &&
-        /<head[\s>]/i.test(text) &&
-        !/<body[\s>]/i.test(text);
-      if (truncatedInHead) {
-        return 'generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file.';
+    // Explicit fragment/partial targets are validated for completeness by tag
+    // structure (balanced tags, closed comments, ends on a closed tag) rather
+    // than a length floor — a partial component is legitimately small, and a
+    // truncated one is caught by structure. This holds even when the model wraps
+    // a small partial in a full <!DOCTYPE> document: that is complete, not
+    // truncated, so it should commit. Non-fragment targets keep the strict floor
+    // + document-structure gate so a truncated live overlay can never commit.
+    if (isHtmlFragmentTarget(target)) {
+      const fragmentError = validateHtmlFragmentComplete(text);
+      if (fragmentError) return fragmentError;
+    } else {
+      if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
+      // Accept either: classic <html>...</html> wrapper OR HTML5 <!DOCTYPE html> + <head> + <body>
+      const hasHtmlWrapper = /<html[\s>]/i.test(text) && /<\/html>/i.test(text);
+      const hasHtml5Structure = /<!DOCTYPE\s+html/i.test(text) && /<head[\s>]/i.test(text) && /<body[\s>]/i.test(text);
+      if (!hasHtmlWrapper && !hasHtml5Structure) {
+        const truncatedInHead =
+          /<!DOCTYPE\s+html/i.test(text) &&
+          /<html[\s>]/i.test(text) &&
+          /<head[\s>]/i.test(text) &&
+          !/<body[\s>]/i.test(text);
+        if (truncatedInHead) {
+          return 'generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file.';
+        }
+        return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
       }
-      return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
     }
   }
   // JS absolute floor — catches 1-line truncated stubs; legitimate short files (helpers, re-exports) pass through to node --check
