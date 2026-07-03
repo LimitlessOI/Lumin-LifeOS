@@ -738,11 +738,13 @@ Return JSON:
 
     const hasCritical = Number(arcReport.total_critical) > 0 || (arcReport.critical && arcReport.critical.length > 0);
     const hasModerate = Number(arcReport.total_moderate) > 0 || (arcReport.moderate && arcReport.moderate.length > 0);
+    let autoFixError = null;
     if (!arcReport.ready_to_execute && (hasCritical || hasModerate)) {
       let fixedBlueprint = null;
       try {
         fixedBlueprint = await _autoFixFromArcReport(blueprint, arcReport, session.product_name);
       } catch (fixErr) {
+        autoFixError = fixErr.message;
         console.error('[ARC-AUTOFIX] Failed to auto-fix blueprint:', fixErr.message);
       }
       if (fixedBlueprint) {
@@ -774,7 +776,7 @@ Return JSON:
       });
     }
 
-    return { arcReport, status: newStatus, autoFixed: false };
+    return { arcReport, status: newStatus, autoFixed: false, autoFixError };
   }
 
   async function _autoFixFromArcReport(blueprint, arcReport, productName) {
