@@ -1,0 +1,24 @@
+{
+  "index_id": "LEGACY-OVERLAYS-SALVAGE-0001",
+  "created_at": "2026-07-03",
+  "batch": "cleanup batch 6 — forbidden legacy overlay prototypes",
+  "purpose": "Salvage+archive record for the 12 dead founder-interface overlay prototypes named in .cursor/rules/legacy-interfaces-forbidden.mdc. They were still git-tracked under public/overlay/ and served (some directly, some as redirect stubs). Retired via redirect-and-archive: old /overlay/<name>.html paths now 301-redirect to the one canonical interface /lifeos?direct_system=1; files archived here.",
+  "governance": ".cursor/rules/legacy-interfaces-forbidden.mdc (THE ONE INTERFACE = public/overlay/lifeos-app.html)",
+  "evidence": "Each file was a client-side redirect stub (<=528 bytes) pointing at /overlay/lifeos-app.html; no unique UI/logic to salvage. Live runtime reads repointed to canonical interface before archival: services/lumin-connection-guard.js UI-03, core/codebase-reader.js frontend build-context, startup/routes/server-routes.js allowlist. npm test 224/0, builder:preflight verify scripts, file-synopsis + product-home gates all green after change.",
+  "restore": "git mv docs/history/legacy-overlays/<name>.html public/overlay/<name>.html (and remove the redirect route in routes/public-routes.js).",
+  "count": 12,
+  "entries": [
+    { "source_path": "public/overlay/lifeos-communication.html", "archived_to": "docs/history/legacy-overlays/lifeos-communication.html", "verdict": "reject-archive", "reason": "forbidden/dead; redirect stub -> lifeos-app; replaced by canonical /lifeos" },
+    { "source_path": "public/overlay/lifeos-alpha.html", "archived_to": "docs/history/legacy-overlays/lifeos-alpha.html", "verdict": "reject-archive", "reason": "forbidden/dead; failed prototype; redirect stub" },
+    { "source_path": "public/overlay/lifeos-alpha-rail.html", "archived_to": "docs/history/legacy-overlays/lifeos-alpha-rail.html", "verdict": "reject-archive", "reason": "forbidden/dead; failed prototype; redirect stub" },
+    { "source_path": "public/overlay/command-center.html", "archived_to": "docs/history/legacy-overlays/command-center.html", "verdict": "reject-archive", "reason": "forbidden/dead; replaced; redirect stub" },
+    { "source_path": "public/overlay/lifeos-command-center.html", "archived_to": "docs/history/legacy-overlays/lifeos-command-center.html", "verdict": "reject-archive", "reason": "forbidden/dead; replaced; redirect stub" },
+    { "source_path": "public/overlay/control.html", "archived_to": "docs/history/legacy-overlays/control.html", "verdict": "reject-archive", "reason": "forbidden/dead; failed prototype; redirect stub" },
+    { "source_path": "public/overlay/lifeos-founder-interface.html", "archived_to": "docs/history/legacy-overlays/lifeos-founder-interface.html", "verdict": "reject-archive", "reason": "forbidden/dead; replaced by app direct-system chat; redirect stub" },
+    { "source_path": "public/overlay/lifeos-backtest.html", "archived_to": "docs/history/legacy-overlays/lifeos-backtest.html", "verdict": "reject-archive", "reason": "forbidden/dead; experimental, never shipped; redirect stub" },
+    { "source_path": "public/overlay/lifeos-builder-test.html", "archived_to": "docs/history/legacy-overlays/lifeos-builder-test.html", "verdict": "reject-archive", "reason": "forbidden/dead; experimental, never shipped; redirect stub" },
+    { "source_path": "public/overlay/lifeos-voice-rail-v1.html", "archived_to": "docs/history/legacy-overlays/lifeos-voice-rail-v1.html", "verdict": "reject-archive", "reason": "forbidden/dead; v1 replaced; Voice Rail is API-only history; redirect stub" },
+    { "source_path": "public/overlay/lifere-os-v1.html", "archived_to": "docs/history/legacy-overlays/lifere-os-v1.html", "verdict": "reject-archive", "reason": "forbidden/dead; v1 typo, replaced; redirect stub" },
+    { "source_path": "public/overlay/portal.html", "archived_to": "docs/history/legacy-overlays/portal.html", "verdict": "reject-archive", "reason": "forbidden/dead; replaced; redirect stub" }
+  ]
+}

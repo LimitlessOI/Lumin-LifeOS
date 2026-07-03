@@ -103,6 +103,102 @@ organized archive," but each is Hist-domain (default-HALT; needs the Hist mandat
 
 ---
 
+## EXECUTED — Batch 1 (2026-07-02): dead `src/` files (stray ``` codegen markers)
+
+**Moved 168 files** → `docs/history/legacy-src/<path>.txt`, catalogued in
+`docs/history/legacy-src/SALVAGE_INDEX.json` (source_path, archived_to, salvaged synopsis, verdict, reason).
+
+- **Selection (evidence):** madge import closure of `server.js` + `server-founder-runtime.js` +
+  `server-full-runtime.js` (741 modules) → file absent from closure; resolved-import scan across the
+  full active corpus (routes/services/startup/config/core/middleware/scripts/apps/**tests**) → 0 importers.
+  These files also contained stray ``` markdown fence markers (a codegen artifact).
+- **ACCURACY CORRECTION:** an initial pass called these "fence-corrupted / non-loadable." A later
+  `node --check` audit proved that wrong — of a 40-file sample, 25 had ``` but only 2 actually failed to
+  parse (~95% were syntactically valid). The real, verified justification for archiving is **deadness**
+  (unreachable + unreferenced), NOT brokenness. Repo-wide, 0 of 1300 active `.js` files fail `node --check`.
+- **Salvage-first:** each file's `SYNOPSIS`/intent captured into `SALVAGE_INDEX.json` before the move so
+  the *idea* survives even though the dead code is retired. (Most were codegen boilerplate; genuine
+  ideas e.g. LoRaWAN/IoT ingestion, example adapters preserved.)
+- **Post-move verification:** `node --check` on all 3 entrypoints OK · `madge --circular server.js` still
+  741 files (0 boot-path impact) · `tests/spine-import-resolution.test.js` 156/156 · `npm test` 225 pass / 0 fail.
+- **Remaining `src/`:** 13 files load-bearing (KEEP), ~92 dead-but-referenced-by-tests/aliases (per-file work),
+  balance still to salvage+archive in later batches.
+
+## EXECUTED — Batch 2 (2026-07-02): aggressive dead-`src/` + coupled dead tests
+
+**Adam directive:** prefer a *loud* break that names its dependency over silent legacy drift — so
+this batch is aggressive: it moves dead `src/` files even when only **tests/aliases** referenced them,
+letting any true dependency surface in CI/boot rather than lurk.
+
+**Moved 119 files** (103 `src/*.js` → `docs/history/legacy-src/`, 16 dead tests → `docs/history/legacy-tests/`),
+appended to the same `SALVAGE_INDEX.json` (287 entries total).
+
+- **Held back (real deps):** `src/controllers/clientController.js`, `src/services/migrationService.js`
+  (imported by non-test active `index.js`) + the 13 boot-closure KEEP files.
+- **Coupled moves:** the 16 dead tests that imported archived `src/` were moved with them (none are in the
+  CI `npm test` list, so the suite is unaffected).
+- **Safety net (anti-drift):** the import-resolution CI guard now fails loudly if anything reaches for an
+  archived path — silent drift becomes an immediate red X, and the archive is a git-tracked quarantine (restorable).
+- **Verification:** node --check x3 OK · madge --circular still 741 (0 boot impact) · npm test 225 pass / 0 fail.
+
+## EXECUTED — Batch 3 (2026-07-02): last dead `src/` JS + reusable tool
+
+Archived the final 3 dead JS files — root `index.js` (dead app entry; `package.json main`/`start`
+= `server.js`, 0 importers) → `docs/history/legacy-src/_nonsrc/index.js.txt`; plus
+`src/controllers/clientController.js` and `src/services/migrationService.js` (their only importer
+was that dead `index.js`).
+
+**`src/` JS island is now fully resolved:** the only remaining `src/*.js` are the **13 load-bearing**
+files in the live boot closure (KEEP). Everything dead has been salvaged + quarantined.
+
+**System-owned tool:** encoded the whole loop as `scripts/legacy-archive-pass.mjs` — computes the boot
+closure via madge, refuses to move anything boot-reachable or imported by active non-test code
+(`--aggressive` allows test/alias-only refs), salvages SYNOPSIS, then `git mv`s to `.txt`. Re-runnable;
+future passes (and eventually the BuilderOS/OB1 loop) run it as the system's own hands.
+
+- **Verification:** node --check x3 OK · madge --circular still 741 · npm test 225 pass / 0 fail.
+
+## EXECUTED — Batch 4 (2026-07-02): `src/` non-JS prototypes + corrupted-name artifacts — src/ ISLAND CLOSED
+
+Archived the remaining **246** dead `src/` non-JS files (`.jsx` ×111, `.sql` ×59, `.css` ×19, `.py` ×14,
+`.ts` ×12, `.sol` ×10, plus `.vue/.rs/.go/.circom/.tsx/.json`) + **3 corrupted-name codegen artifacts**
+(filenames containing spaces/commas, e.g. one literally named as a comma-separated file list).
+
+- **No build tooling compiles `src/`** (empty `jest.config.js`, no `tsconfig`/bundler, `package.json` has zero
+  `src/` refs; the live app serves static `public/overlay/*.html`). The 39 "mentions" scan hits were all
+  false positives (generic template strings like `package.json`, `App.jsx`).
+- **Idea salvage:** 43 novel-tech prototypes catalogued in `docs/history/IDEA_VAULT_legacy-src.md` grouped by
+  domain (agent P2P runtime `apspan/`, ZK identity+circuits+marketplace, quantum-ML regime, federated learning
+  `fetin/`, energy-grid trading, drone routing, ML threat/anomaly detection, UBI/supply-chain smart contracts).
+  All 246 indexed in `SALVAGE_INDEX.json` (536 entries total).
+- **RESULT:** `src/` now contains **only the 13 load-bearing files** in the live boot closure. Dead island closed.
+- **Verification:** node --check x3 OK · madge --circular still 741 · npm test 225 pass / 0 fail.
+
+## EXECUTED — Batch 5 (2026-07-02): orphaned service/root subsystems → `docs/history/legacy-orphans/`
+
+Archived **116** genuinely-orphaned `.js` files (speculative subsystems never wired into the live boot graph):
+`services/health-nexus/`, `mental-health/`, `microgrid/`, `energy-grid/`, `ecommerce/`, `translation/`,
+`orchestrator/`, `ahni/` (neural-implant), `anomaly-detection/`, `blockchain*/`, `travel/`, `vr-experience/`,
+`wildlife/`, `voting/`, `trust-mesh/`, etc. — plus ~20 loose root scripts (`adam_os_crm_foundation.js`,
+`anti_drift_protocol.js`, `crmUI.js`, `landing_page.js`, `mqtt_handler.js`, …).
+
+- **Multi-vector deadness proof (not just static import):** for each file — (1) NOT in the 741-module madge
+  boot closure, (2) 0 resolved static importers across all tracked `.js/.mjs`, (3) NOT in `package.json`,
+  AND (4) its **basename appears nowhere** in any non-catalog code/config/**HTML**/doc — so it is not
+  dynamically `import()`-ed by constructed path, not in any JSON registry, and not `<script>`-loaded by a page.
+  The catalog/index files (`REPO_FILE_SYNOPSIS_INDEX.json` etc.) were excluded from the mention scan because
+  they list *every* path (false positives).
+- **False positives caught & held back (NOT moved):** files dynamically imported by `services/self-programming.js`
+  (`core/dependency-manager.js`, `core/error-recovery.js`, `core/code-validator.js`, `core/code-linter.js`, …);
+  `public/**` (browser `<script>`-loaded); `db/migrations/*.sql` (dir-scanned by `migration-runner.js`);
+  `drizzle.config.js` (auto-discovered by `drizzle-kit` `db:*` scripts). These are referenced, so they stayed.
+- **Idea salvage:** subsystem ideas appended to `docs/history/IDEA_VAULT_legacy-src.md` (32 subsystems).
+- **Verification:** node --check x3 OK · `npm test` **224 pass / 0 fail / 4 skip** (total dips by 1 only because
+  `tests/spine-import-resolution.test.js` generates one subtest per scanned file — fewer files, one fewer
+  subtest; no test regressed). Archive is git-tracked quarantine (restore = one `git mv`).
+
+---
+
 ## Recommended execution order (all reversible, verify boot after each)
 
 1. **`lumin-factory/`** → Hist archive or `.gitignore` (safe now; 0 boot-path impact). Verify
@@ -212,3 +308,57 @@ fence-clean by construction, so this set is bounded and will not grow.
 0-reachable and in no product manifest — safe to archive with the next batch, at
 which point the import-resolution guard can extend to `config/` as it now does
 for `routes/` + `middleware/`.
+
+---
+
+## Batch 6 — Forbidden legacy overlay prototypes retired (redirect-and-archive)
+
+**Target:** the 12 founder-interface overlay HTML files marked dead by
+`.cursor/rules/legacy-interfaces-forbidden.mdc` but still git-tracked under
+`public/overlay/` and still served:
+`lifeos-communication`, `lifeos-alpha`, `lifeos-alpha-rail`, `command-center`,
+`lifeos-command-center`, `control`, `lifeos-founder-interface`, `lifeos-backtest`,
+`lifeos-builder-test`, `lifeos-voice-rail-v1`, `lifere-os-v1`, `portal` (`.html`).
+
+**Contradiction resolved:** "forbidden and dead" was true as *intent* but false in
+the *code* — `routes/public-routes.js` served them (some as explicit redirects, the
+rest via the generic `/overlay/:file` static resolver), and several live modules
+referenced them. Exactly the silent-legacy drift the founder asked to eliminate.
+
+**Approach — redirect-and-archive (not hard-delete):**
+- Added explicit `301 → /lifeos?direct_system=1` routes for all 12 old
+  `/overlay/<name>.html` paths in `routes/public-routes.js`, registered *before* the
+  generic `/overlay/:file` resolver, so archiving the files produces redirects, not
+  404s. (Consolidates every legacy surface onto the one canonical interface, which is
+  what the rule mandates.)
+- `git mv` the 12 files to `docs/history/legacy-overlays/` (history preserved;
+  reversible). They were all small client-side redirect stubs (≤528 bytes) — nothing
+  unique to salvage; cataloged in `docs/history/legacy-overlays/SALVAGE_INDEX.json`.
+
+**Live references repointed (so nothing reads an archived file at runtime):**
+- `services/lumin-connection-guard.js` — UI-03 previously `readFileSync`'d
+  `lifeos-founder-interface.html`; now asserts the server-side redirect exists in
+  `public-routes.js` (semantically stronger, and file-independent).
+- `core/codebase-reader.js` — frontend build-context file set now includes
+  `lifeos-app.html` instead of the dead `command-center.html`.
+- `startup/routes/server-routes.js` — file-write allowlist dropped
+  `public/overlay/command-center.html` (kept `command-center.js` + `package.json`).
+- `scripts/check-overlay-syntax.js` — dropped retired `control.html` / `portal.html`.
+
+**Verification (all green):**
+- `npm test` — 224 pass / 0 fail.
+- `tests/lumin-connection-guard.test.js` — 3/3 (UI-03 rewire verified).
+- Preflight verify scripts (`verify-voice-rail-history-only`, lumin comm-law,
+  conversation-routing) PASS.
+- `check-overlay-syntax.js` PASS; `readiness:check`, `cold-start:gen`,
+  `handoff:self-test` PASS.
+- File-synopsis law PASS (index updated targeted: +12 −12 ~5, no timestamp churn);
+  SSOT staged-only + staged-product-enforce + product-home:verify PASS.
+- `node --check` clean on all 5 edited `.js` files.
+
+**Note (loud-break honored):** a few *orphaned, non-CI* legacy scripts still read
+these files by name (`scripts/verify-cc-communication.mjs`,
+`scripts/verify-lifeos-communication.mjs`, `scripts/run-voice-rail-*`,
+`scripts/run-lifeos-direct-action-v1-acceptance.mjs`). They are not in CI or
+`builder:preflight`, so they don't affect green; left in place to surface loudly if
+ever invoked, per the founder's "loud break beats silent drift" directive.
