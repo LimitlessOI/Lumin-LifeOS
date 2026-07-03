@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T11:08:00.025Z",
+  "generated_at": "2026-07-03T11:14:23.901Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11819,
   "files": [
@@ -21995,8 +21995,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3578589,
-      "mtime": "2026-07-03T11:07:59.553Z",
-      "indexed_at": "2026-07-03T11:08:00.025Z"
+      "mtime": "2026-07-03T11:14:23.553Z",
+      "indexed_at": "2026-07-03T11:14:23.901Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 114484,
-      "mtime": "2026-07-03T11:07:49.681Z",
-      "indexed_at": "2026-07-03T11:08:00.025Z"
+      "bytes": 117316,
+      "mtime": "2026-07-03T11:14:17.569Z",
+      "indexed_at": "2026-07-03T11:14:23.901Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -59181,9 +59181,9 @@
     {
       "path": "factory-staging/factory-core/arc/foundation/studio-simulation.js",
       "synopsis": "Studio experience simulation when UX/product feel in scope.",
-      "bytes": 12020,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z",
+      "bytes": 12749,
+      "mtime": "2026-07-03T11:12:49.801Z",
+      "indexed_at": "2026-07-03T11:14:23.901Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

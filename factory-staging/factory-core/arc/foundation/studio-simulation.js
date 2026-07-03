@@ -4,9 +4,19 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { readFounderText } from './coverage-map.js';
 import { measurementEnvelope, attachMeasurementsToReceipt } from './simulation-measurements.js';
 import { buildStudioDesignPacket, loadStudioDesignPacket } from './studio-design-engine.js';
+
+// Resolve the repo root from THIS module's own location, not process.cwd().
+// The live server boots from /home/ubuntu (not the repo root), and artifact
+// resolution that trusts process.cwd() silently fails to find a mission's real
+// .html/.css artifacts there — flipping the studio gate to STUDIO_CONCERNS and
+// blocking every build bound to that mission (even pure-backend ones). Deriving
+// the root from import.meta.url makes the gate cwd-independent (same class of bug
+// as the node --check module-mode gate that also once trusted the cwd).
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 
 export function uxInScope(founderText) {
   return /overlay|ui|ux|feel|experience|html|voice rail|list|see staged|trust/i.test(founderText);
@@ -117,6 +127,7 @@ function resolveArtifactPath(missionFolder, candidatePath) {
     ? [normalized]
     : [
       path.join(missionFolder, normalized),
+      path.join(REPO_ROOT, normalized),
       path.join(process.cwd(), normalized),
     ];
   for (const abs of locations) {
