@@ -605,6 +605,20 @@ export async function runLuminChairTurn(ctx, deps) {
         } catch { /* fall through */ }
 
         if (!amendmentText) {
+          try {
+            const ghToken = process.env.GITHUB_TOKEN?.trim();
+            const ghRepo = process.env.GITHUB_REPO || 'LimitlessOI/Lumin-LifeOS';
+            if (ghToken) {
+              const ghRes = await fetch(
+                `https://api.github.com/repos/${ghRepo}/contents/${productHomeFile}?ref=main`,
+                { headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3.raw' } },
+              );
+              if (ghRes.ok) amendmentText = await ghRes.text();
+            }
+          } catch { /* GitHub fallback failed — fall through to error */ }
+        }
+
+        if (!amendmentText) {
           const truth = finalizeTruth({
             ok: false,
             pass_fail: 'FAIL',

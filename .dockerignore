@@ -30,6 +30,8 @@ docs/*
 !docs/SOURCE_OF_TRUTH.md
 !docs/architecture/
 !docs/architecture/**
+!docs/products/
+!docs/products/**
 !docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 !docs/projects/AMENDMENT_12_COMMAND_CENTER.md
 !docs/projects/AMENDMENT_21_LIFEOS_CORE.md
