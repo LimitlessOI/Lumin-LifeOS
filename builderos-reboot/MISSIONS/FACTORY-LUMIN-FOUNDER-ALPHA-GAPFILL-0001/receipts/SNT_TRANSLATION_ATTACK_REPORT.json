@@ -1,0 +1,63 @@
+{
+  "schema": "snt_translation_attack_v2",
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "seat": "SNT",
+  "review": "translation_attack",
+  "simulated_at": "2026-07-01T22:24:52.730Z",
+  "simulated_by": "factory-core/arc/foundation/snt-translation-attack.js",
+  "core_question": "If this claim is wrong, how would we know?",
+  "attacks_run": 6,
+  "attacks": [
+    {
+      "claim": "ARC preserved intent sources",
+      "pass": true,
+      "failure_scenario": "ARC invented scope",
+      "severity": "blocking",
+      "evidence_if_wrong": "intent_sources=3 in BLUEPRINT.json",
+      "recommended_action": "none"
+    },
+    {
+      "claim": "Blueprint has acceptance command",
+      "pass": true,
+      "failure_scenario": "No measurable Alpha bar",
+      "severity": "blocking",
+      "evidence_if_wrong": "npm run lifeos:founder-chat:alpha:battery",
+      "recommended_action": "none"
+    },
+    {
+      "claim": "All steps are write_file_exact",
+      "pass": true,
+      "failure_scenario": "Builder forced to decide",
+      "severity": "blocking",
+      "evidence_if_wrong": "steps=7 write_file_exact=7",
+      "recommended_action": "none"
+    },
+    {
+      "claim": "Auto-execution rule preserved",
+      "pass": true,
+      "failure_scenario": "Intent drift on staging rule",
+      "severity": "blocking",
+      "evidence_if_wrong": "blueprint JSON has no auto-execute drift",
+      "recommended_action": "none"
+    },
+    {
+      "claim": "Simulation clear to build",
+      "pass": false,
+      "failure_scenario": "Blocking decision gaps remain or empty builder sim",
+      "severity": "blocking",
+      "evidence_if_wrong": "sim steps=0 blocking_gaps=0",
+      "recommended_action": "ARC revises blueprint"
+    },
+    {
+      "claim": "Production route probe",
+      "pass": false,
+      "failure_scenario": "Routes not live on production base URL",
+      "severity": "blocking",
+      "evidence_if_wrong": "Set PUBLIC_BASE_URL + COMMAND_CENTER_KEY to probe production routes",
+      "recommended_action": "ARC revises blueprint"
+    }
+  ],
+  "blocking_count": 2,
+  "verdict": "builder_clearance_no",
+  "pass": false
+}

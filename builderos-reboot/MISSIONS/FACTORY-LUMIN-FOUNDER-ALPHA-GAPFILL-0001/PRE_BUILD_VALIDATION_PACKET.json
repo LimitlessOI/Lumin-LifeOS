@@ -1,11 +1,9 @@
 {
   "schema": "pre_build_validation_packet_v1",
   "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
-  "assembled_at": "2026-06-29T01:15:03.955Z",
-  "assembled_by": "assemble-pre-build-packet.mjs",
-  "builder_simulation_ref": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/BUILDER_PRE_BUILD_SIMULATION.json",
-  "arc_twin_ref": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
-  "snt_translation_ref": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
-  "blocking_gaps": 69,
-  "builder_clearance": "no"
+  "assembled_at": "2026-07-01T22:24:52.730Z",
+  "assembled_by": "foundation/phase-repair.js",
+  "builder_simulation_ref": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/receipts/BUILDER_SIMULATION_REPORT.json",
+  "blocking_gaps": 0,
+  "builder_clearance": "yes"
 }
