@@ -24,7 +24,7 @@ const BASE = (
   process.env.PUBLIC_BASE_URL
   || process.env.LIFEOS_BASE_URL
   || process.env.BASE_URL
-  || 'https://robust-magic-production.up.railway.app'
+  || 'https://lumin-web-production-e3a9.up.railway.app'
 ).replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
 const RECEIPT_PATH = path.join(ROOT, 'products/receipts/MACHINE_ALPHA_WALKTHROUGH.json');

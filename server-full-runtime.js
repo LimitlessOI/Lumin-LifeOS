@@ -1426,7 +1426,7 @@ async function start() {
       );
     }
     await writeAutonomyPortFile(selectedPort);
-    const railwayUrl = RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app";
+    const railwayUrl = RAILWAY_PUBLIC_DOMAIN || "lumin-web-production-e3a9.up.railway.app";
     console.log(`\n🌐  ONLINE: http://${HOST}:${selectedPort}`);
     console.log(`📊 Health: http://${HOST}:${selectedPort}/healthz`);
     console.log(`🎮 Overlay: http://${HOST}:${selectedPort}/overlay/index.html`);

@@ -11,7 +11,7 @@
 import 'dotenv/config';
 import { executeIntakeBlueprint } from '../services/intake-blueprint-executor.js';
 
-const BASE_URL = (process.env.API_BASE_URL || process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+const BASE_URL = (process.env.API_BASE_URL || process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY;
 
 async function main() {

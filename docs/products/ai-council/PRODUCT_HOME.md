@@ -525,7 +525,7 @@ When this is done:
 **Status:** BUILD_READY (token optimization + free-tier routing — core is live)
 **Adaptability Score:** 95/100
 **Council Persona:** tesla (think 50 years ahead — what's the theoretical ideal AI routing system?)
-**Last Updated:** 2026-07-02 — OpenAI-native codegen fix: `max_completion_tokens` + drop `stop` for gpt-5.x (unblocks builder `/build` self-build loop). Prior: 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-07-03 — Retired-domain scrub: replaced hardcoded `robust-magic-production.up.railway.app` fallbacks with canonical `lumin-web-production-e3a9.up.railway.app` across `config/runtime-env.js`, `core/*`, `server-full-runtime.js`, and probe/ops scripts (env vars like `PUBLIC_BASE_URL` still take precedence — only the stale default domain changed; no Railway runtime change since `RAILWAY_PUBLIC_DOMAIN` is injected). Prior: 2026-07-02 — OpenAI-native codegen fix: `max_completion_tokens` + drop `stop` for gpt-5.x (unblocks builder `/build` self-build loop). Prior: 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ### Gate 1 — Implementation Detail
 - [x] Token optimizer, free-tier governor, savings ledger all have specific segment descriptions

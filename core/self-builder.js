@@ -350,7 +350,7 @@ export class SelfBuilder {
       
       // Railway auto-deploys on git push, so if we just pushed, deployment is triggered
       // We can also call Railway API if needed
-      const railwayUrl = process.env.RAILWAY_PUBLIC_DOMAIN || 'robust-magic-production.up.railway.app';
+      const railwayUrl = process.env.RAILWAY_PUBLIC_DOMAIN || 'lumin-web-production-e3a9.up.railway.app';
       
       return {
         success: true,

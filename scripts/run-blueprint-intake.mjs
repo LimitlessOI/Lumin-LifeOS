@@ -19,7 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const BASE_URL = (process.env.API_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+const BASE_URL = (process.env.API_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY;
 
 if (!KEY) {

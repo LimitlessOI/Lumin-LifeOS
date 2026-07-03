@@ -135,7 +135,7 @@ async function disableAccount(pool) {
 async function main() {
   const viaApi = process.argv.includes('--via-api');
   const disable = process.argv.includes('--disable');
-  const base = (process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+  const base = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
   const key = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
 
   if (disable) {

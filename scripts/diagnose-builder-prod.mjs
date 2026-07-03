@@ -5,7 +5,7 @@
  * No secrets. Use to prove deploy drift (404 on /domains while /healthz OK).
  *
  * Env (optional):
- *   DIAGNOSE_BASE_URL — default: https://robust-magic-production.up.railway.app
+ *   DIAGNOSE_BASE_URL — default: https://lumin-web-production-e3a9.up.railway.app
  *
  * @ssot docs/ops/BUILDER_PRODUCTION_FIX.md
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
@@ -13,7 +13,7 @@
 
 import 'dotenv/config';
 
-const DEFAULT_BASE = 'https://robust-magic-production.up.railway.app';
+const DEFAULT_BASE = 'https://lumin-web-production-e3a9.up.railway.app';
 
 const base = (
   process.env.DIAGNOSE_BASE_URL ||

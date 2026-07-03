@@ -145,7 +145,7 @@ Return the blog post in markdown format with proper headings.`;
     ];
 
     const message = customMessage || messages[Math.floor(Math.random() * messages.length)];
-    const url = 'https://robust-magic-production.up.railway.app/cost-savings';
+    const url = 'https://lumin-web-production-e3a9.up.railway.app/cost-savings';
     const fullMessage = `${message} ${url}`;
 
     // Store post in database
@@ -254,7 +254,7 @@ Return as HTML email with inline styles.`;
         <p>You're currently spending {{current_spend}}/month on AI APIs. We can reduce that by 90%.</p>
         <p>Our intelligent routing system uses free local models for 90% of requests, and you only pay us 20% of what you save.</p>
         <p>Estimated savings: {{estimated_savings}}/month</p>
-        <a href="https://robust-magic-production.up.railway.app/cost-savings">Learn More →</a>
+        <a href="https://lumin-web-production-e3a9.up.railway.app/cost-savings">Learn More →</a>
       `;
     }
   }
