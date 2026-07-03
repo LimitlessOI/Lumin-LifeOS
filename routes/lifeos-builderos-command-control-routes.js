@@ -180,11 +180,13 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
     }, { action: 'execute', task });
   }
 
+  const NORMALIZE_TIMEOUT_MS = 8000;
+
   async function normalizeInputText(rawText) {
     if (typeof callCouncilMember !== 'function') return rawText;
     if (!rawText || rawText.trim().length < 3) return rawText;
     try {
-      const response = await callCouncilMember(
+      const aiCall = callCouncilMember(
         'gemini',
         `You are an input normalizer for a voice-first personal operating system called LifeOS.
 The founder speaks or types commands — often with misspellings, voice-to-text errors, autocorrect mistakes, dropped words, or garbled phrasing.
@@ -200,6 +202,8 @@ Rules:
 Input: ${rawText}`,
         { maxTokens: 300, taskType: 'chat', useCache: false }
       );
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('normalize_timeout')), NORMALIZE_TIMEOUT_MS));
+      const response = await Promise.race([aiCall, timeout]);
       const cleaned = typeof response === 'string'
         ? response
         : response?.content || response?.text || null;
@@ -1138,6 +1142,20 @@ HOW TO RESPOND:
   });
 
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
+    const HANDLER_DEADLINE_MS = 40000;
+    const handlerDeadline = setTimeout(() => {
+      if (!res.headersSent) {
+        res.status(200).json({
+          ok: false,
+          interface: 'Lumin',
+          action: 'chair',
+          command_truth: 'NO_COMMAND_RAN',
+          pass_fail: 'NO_COMMAND_RAN',
+          timed_out: true,
+          human_summary: 'The system is taking too long to respond — an AI provider may be slow. Nothing was committed. Please try again.',
+        });
+      }
+    }, HANDLER_DEADLINE_MS);
     try {
       const bodyText =
         typeof req.body?.text === 'string' && req.body.text.trim()
@@ -1328,18 +1346,39 @@ HOW TO RESPOND:
           },
         }), CHAIR_TURN_BUDGET_MS);
       });
-      const chairResult = await Promise.race([chairTurnPromise, chairTurnTimeout]);
+      let chairResult;
+      try {
+        chairResult = await Promise.race([chairTurnPromise, chairTurnTimeout]);
+      } catch (chairErr) {
+        clearTimeout(chairTurnTimer);
+        chairResult = {
+          statusCode: 200,
+          body: {
+            ok: false,
+            interface: 'Lumin',
+            action: 'chair',
+            chair_channel: 'chair',
+            command_truth: 'NO_COMMAND_RAN',
+            pass_fail: 'FAIL',
+            timed_out: true,
+            human_summary: `Chair turn failed: ${String(chairErr?.message || chairErr).slice(0, 200)}. Try again.`,
+          },
+        };
+      }
       clearTimeout(chairTurnTimer);
 
       const persistWarning = req.body?.alpha_probe === true
         ? 'ALPHA_PROBE_SKIP_PERSIST'
         : await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);
+      clearTimeout(handlerDeadline);
+      if (res.headersSent) return;
       const locked = lockFounderResponse(chairResult.body, chairResult.body.chair_channel || 'founder_interface');
       return res.status(chairResult.statusCode).json({
         ...locked,
         ...(persistWarning ? { persist_warning: persistWarning } : {}),
       });
     } catch (error) {
+      clearTimeout(handlerDeadline);
       next(error);
     }
   });

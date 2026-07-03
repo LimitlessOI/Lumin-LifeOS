@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T21:03:26.756Z",
+  "generated_at": "2026-07-03T21:48:12.222Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11841,
+  "file_count": 11842,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -112,9 +112,9 @@
     {
       "path": ".github/workflows/railway-deploy.yml",
       "synopsis": "yml — .github/workflows/railway-deploy.yml.",
-      "bytes": 1137,
-      "mtime": "2026-07-03T20:55:52.940Z",
-      "indexed_at": "2026-07-03T21:03:16.097Z"
+      "bytes": 1463,
+      "mtime": "2026-07-03T21:47:14.344Z",
+      "indexed_at": "2026-07-03T21:48:12.222Z"
     },
     {
       "path": ".github/workflows/self-build.yml",
@@ -21994,9 +21994,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3584470,
-      "mtime": "2026-07-03T21:03:16.380Z",
-      "indexed_at": "2026-07-03T21:03:26.756Z"
+      "bytes": 3584749,
+      "mtime": "2026-07-03T21:47:56.064Z",
+      "indexed_at": "2026-07-03T21:48:12.222Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38643,9 +38643,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 570301,
-      "mtime": "2026-07-03T20:59:54.360Z",
-      "indexed_at": "2026-07-03T21:03:16.097Z"
+      "bytes": 571540,
+      "mtime": "2026-07-03T21:47:33.157Z",
+      "indexed_at": "2026-07-03T21:48:12.222Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69598,9 +69598,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 54744,
-      "mtime": "2026-07-03T20:56:58.488Z",
-      "indexed_at": "2026-07-03T21:03:16.097Z",
+      "bytes": 56138,
+      "mtime": "2026-07-03T21:47:14.352Z",
+      "indexed_at": "2026-07-03T21:48:12.222Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72013,6 +72013,13 @@
       "bytes": 858,
       "mtime": "2026-07-03T01:45:05.184Z",
       "indexed_at": "2026-07-03T16:27:19.160Z"
+    },
+    {
+      "path": "scripts/railway-github-deploy.mjs",
+      "synopsis": "Deploy the repo to Railway from GitHub Actions without relying on the Railway CLI.",
+      "bytes": 6137,
+      "mtime": "2026-07-03T21:47:14.353Z",
+      "indexed_at": "2026-07-03T21:48:12.222Z"
     },
     {
       "path": "scripts/record-ci-evidence.mjs",
