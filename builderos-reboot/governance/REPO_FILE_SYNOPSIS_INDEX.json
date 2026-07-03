@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T00:29:47.696Z",
+  "generated_at": "2026-07-03T00:32:28.853Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11821,
+  "file_count": 11822,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37038,6 +37038,13 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
+      "path": "docs/history/IDEA_VAULT_legacy-src.md",
+      "synopsis": "Idea Vault — salvaged from the dead `src/` prototype island",
+      "bytes": 11168,
+      "mtime": "2026-07-03T00:32:28.600Z",
+      "indexed_at": "2026-07-03T00:32:28.853Z"
+    },
+    {
       "path": "docs/history/legacy-history-salvage/DOCS_PROJECTS_ROOT_ARCHIVE_INDEX.md",
       "synopsis": "Inventory of archived docs/projects root files",
       "bytes": 3026,
@@ -37562,9 +37569,9 @@
     {
       "path": "docs/history/legacy-src/SALVAGE_INDEX.json",
       "synopsis": "Documentation — SALVAGE INDEX.",
-      "bytes": 94507,
-      "mtime": "2026-07-03T00:29:13.360Z",
-      "indexed_at": "2026-07-03T00:29:47.696Z",
+      "bytes": 193564,
+      "mtime": "2026-07-03T00:32:12.000Z",
+      "indexed_at": "2026-07-03T00:32:28.853Z",
       "synopsis_index_only": true
     },
     {
@@ -37626,9 +37633,9 @@
     {
       "path": "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md",
       "synopsis": "Repo cleanup inventory (2026-07-02) — indexed sprawl candidates, reference-evidence, ARCHIVE/ESCALATE/REVIEW verdicts.",
-      "bytes": 15513,
-      "mtime": "2026-07-03T00:29:43.368Z",
-      "indexed_at": "2026-07-03T00:29:47.696Z"
+      "bytes": 16843,
+      "mtime": "2026-07-03T00:32:23.184Z",
+      "indexed_at": "2026-07-03T00:32:28.853Z"
     },
     {
       "path": "docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md",

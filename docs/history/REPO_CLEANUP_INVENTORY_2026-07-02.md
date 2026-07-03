@@ -154,6 +154,22 @@ future passes (and eventually the BuilderOS/OB1 loop) run it as the system's own
 
 - **Verification:** node --check x3 OK · madge --circular still 741 · npm test 225 pass / 0 fail.
 
+## EXECUTED — Batch 4 (2026-07-02): `src/` non-JS prototypes + corrupted-name artifacts — src/ ISLAND CLOSED
+
+Archived the remaining **246** dead `src/` non-JS files (`.jsx` ×111, `.sql` ×59, `.css` ×19, `.py` ×14,
+`.ts` ×12, `.sol` ×10, plus `.vue/.rs/.go/.circom/.tsx/.json`) + **3 corrupted-name codegen artifacts**
+(filenames containing spaces/commas, e.g. one literally named as a comma-separated file list).
+
+- **No build tooling compiles `src/`** (empty `jest.config.js`, no `tsconfig`/bundler, `package.json` has zero
+  `src/` refs; the live app serves static `public/overlay/*.html`). The 39 "mentions" scan hits were all
+  false positives (generic template strings like `package.json`, `App.jsx`).
+- **Idea salvage:** 43 novel-tech prototypes catalogued in `docs/history/IDEA_VAULT_legacy-src.md` grouped by
+  domain (agent P2P runtime `apspan/`, ZK identity+circuits+marketplace, quantum-ML regime, federated learning
+  `fetin/`, energy-grid trading, drone routing, ML threat/anomaly detection, UBI/supply-chain smart contracts).
+  All 246 indexed in `SALVAGE_INDEX.json` (536 entries total).
+- **RESULT:** `src/` now contains **only the 13 load-bearing files** in the live boot closure. Dead island closed.
+- **Verification:** node --check x3 OK · madge --circular still 741 · npm test 225 pass / 0 fail.
+
 ---
 
 ## Recommended execution order (all reversible, verify boot after each)
