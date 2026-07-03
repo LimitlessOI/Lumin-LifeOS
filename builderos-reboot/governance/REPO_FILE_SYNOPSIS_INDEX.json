@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T02:04:22.526Z",
+  "generated_at": "2026-07-03T16:22:21.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11819,
+  "file_count": 11822,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21995,8 +21995,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3578589,
-      "mtime": "2026-07-03T02:03:26.088Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "mtime": "2026-07-03T11:14:23.553Z",
+      "indexed_at": "2026-07-03T11:14:23.901Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36115,9 +36115,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 495916,
-      "mtime": "2026-07-03T00:18:12.714Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 501514,
+      "mtime": "2026-07-03T12:08:39.679Z",
+      "indexed_at": "2026-07-03T12:08:44.668Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -37935,9 +37935,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 54052,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "bytes": 56574,
+      "mtime": "2026-07-03T12:07:19.331Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 109191,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "bytes": 120185,
+      "mtime": "2026-07-03T11:58:39.247Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 555459,
-      "mtime": "2026-07-03T02:02:13.896Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "bytes": 566935,
+      "mtime": "2026-07-03T16:22:14.482Z",
+      "indexed_at": "2026-07-03T16:22:21.370Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -59181,9 +59181,9 @@
     {
       "path": "factory-staging/factory-core/arc/foundation/studio-simulation.js",
       "synopsis": "Studio experience simulation when UX/product feel in scope.",
-      "bytes": 12020,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z",
+      "bytes": 12749,
+      "mtime": "2026-07-03T11:12:49.801Z",
+      "indexed_at": "2026-07-03T11:14:23.901Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -66615,9 +66615,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29306,
-      "mtime": "2026-07-03T00:17:46.213Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 29423,
+      "mtime": "2026-07-03T12:07:08.699Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z",
       "synopsis_index_only": true
     },
     {
@@ -69577,9 +69577,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 130809,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z",
+      "bytes": 158765,
+      "mtime": "2026-07-03T11:58:04.075Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84296,9 +84296,9 @@
     {
       "path": "services/builderos-build-pipeline.js",
       "synopsis": "@ssot docs/products/builderos/PRODUCT_HOME.md",
-      "bytes": 6054,
-      "mtime": "2026-06-29T17:44:54.492Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 6484,
+      "mtime": "2026-07-03T02:11:48.460Z",
+      "indexed_at": "2026-07-03T02:18:01.203Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/products/builderos/PRODUCT_HOME.md"
@@ -84487,9 +84487,9 @@
     {
       "path": "services/builderos-patch-mode-policy.js",
       "synopsis": "BuilderOS Zone 3 patch-mode policy — classify build targets, generate",
-      "bytes": 4714,
-      "mtime": "2026-06-29T17:44:54.497Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 5728,
+      "mtime": "2026-07-03T11:30:42.025Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85137,9 +85137,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 75795,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z",
+      "bytes": 76251,
+      "mtime": "2026-07-03T11:54:36.775Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -85239,9 +85239,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 35385,
-      "mtime": "2026-07-03T00:17:46.219Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 36803,
+      "mtime": "2026-07-03T10:55:13.697Z",
+      "indexed_at": "2026-07-03T10:56:06.315Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85651,9 +85651,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 40095,
-      "mtime": "2026-07-03T00:17:45.100Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 44710,
+      "mtime": "2026-07-03T11:58:07.547Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85742,9 +85742,9 @@
     {
       "path": "services/founder-intake-gate.js",
       "synopsis": "Founder execute spine — Action Inbox capture + BPB intake gate before build/terminal.",
-      "bytes": 2920,
-      "mtime": "2026-06-29T17:21:08.878Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 3548,
+      "mtime": "2026-07-03T12:16:45.871Z",
+      "indexed_at": "2026-07-03T16:22:21.370Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -89147,9 +89147,9 @@
     {
       "path": "services/token-optimizer.js",
       "synopsis": "services/token-optimizer.js",
-      "bytes": 20600,
-      "mtime": "2026-06-21T21:39:18.906Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 21046,
+      "mtime": "2026-07-03T12:06:18.459Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z"
     },
     {
       "path": "services/tokenos-quality-check.js",
@@ -90449,6 +90449,16 @@
       ]
     },
     {
+      "path": "tests/builderos-edit-patch.test.js",
+      "synopsis": "Unit tests for the Zone 3 surgical edit-patch primitives that let",
+      "bytes": 5956,
+      "mtime": "2026-07-03T11:48:04.099Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/builderos-governed-loop-platform-gap-fill.test.js",
       "synopsis": "js — tests/builderos-governed-loop-platform-gap-fill.test.js.",
       "bytes": 3147,
@@ -90466,6 +90476,16 @@
       "indexed_at": "2026-07-03T00:18:52.998Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/builderos-html-fragment-gate.test.js",
+      "synopsis": "Unit tests for the HTML fragment/partial truncation gate helpers in",
+      "bytes": 3580,
+      "mtime": "2026-07-03T11:26:24.133Z",
+      "indexed_at": "2026-07-03T11:27:20.417Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -90753,9 +90773,9 @@
     {
       "path": "tests/founder-build-self-repair.test.js",
       "synopsis": "js — tests/founder-build-self-repair.test.js.",
-      "bytes": 5365,
-      "mtime": "2026-06-26T15:56:49.313Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 6889,
+      "mtime": "2026-07-03T11:07:29.257Z",
+      "indexed_at": "2026-07-03T11:08:00.025Z"
     },
     {
       "path": "tests/founder-build-success-gate.test.js",
@@ -91267,6 +91287,16 @@
       "bytes": 968,
       "mtime": "2026-06-21T21:39:28.769Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
+    },
+    {
+      "path": "tests/token-optimizer-critical.test.js",
+      "synopsis": "tests/token-optimizer-critical.test.js",
+      "bytes": 2281,
+      "mtime": "2026-07-03T12:07:06.259Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/truth-gap-closure.test.js",
