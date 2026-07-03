@@ -83,6 +83,34 @@ export function resolveFounderCommandControlHandle(req) {
     : (req?.lifeosUser?.handle || 'adam');
 }
 
+export function shouldUseFounderChairTurnTimeout({
+  action = 'auto',
+  text = '',
+  shouldDisplayOnly = false,
+  explicitExecute = false,
+  executeIntent = false,
+  buildIntentEarly = false,
+  useTerminalForBuild = false,
+  doPrefixForcedExecute = false,
+} = {}) {
+  const normalizedAction = String(action || 'auto').toLowerCase();
+  if (shouldDisplayOnly || normalizedAction === 'display') return true;
+  if (explicitExecute || executeIntent || buildIntentEarly || useTerminalForBuild || doPrefixForcedExecute) return false;
+  if (['build', 'execute', 'intake_blueprint', 'blueprint_execute', 'mission_pipeline', 'point_b'].includes(normalizedAction)) {
+    return false;
+  }
+
+  const t = String(text || '');
+  const looksLikeWorkExecutor = /\b(video|videos|content package|video package|social media os|socialmediaos|smos|content brief|scripts?|hooks?|brief)\b/i.test(t)
+    && /\b(package|make|create|plan|build|need|want|produce|draft|prepare|follow|start|run|do it|just do)\b/i.test(t);
+  if (looksLikeWorkExecutor) return false;
+
+  const looksLikeSystemAction = /\b(open|launch|redeploy|deploy|sync|rotate|provision|provider proof|alpha cycle|run alpha|point b|blueprint|mission)\b/i.test(t);
+  if (looksLikeSystemAction) return false;
+
+  return true;
+}
+
 export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
   const luminPersist = pool
@@ -1311,25 +1339,39 @@ HOW TO RESPOND:
         },
       });
 
-      const CHAIR_TURN_BUDGET_MS = Number(process.env.CHAIR_TURN_BUDGET_MS || '42000');
-      let chairTurnTimer;
-      const chairTurnTimeout = new Promise((resolve) => {
-        chairTurnTimer = setTimeout(() => resolve({
-          statusCode: 200,
-          body: {
-            ok: true,
-            interface: 'Lumin',
-            action: 'chair',
-            chair_channel: 'chair',
-            command_truth: 'NO_COMMAND_RAN',
-            pass_fail: 'NO_COMMAND_RAN',
-            timed_out: true,
-            human_summary: "That turn took longer than expected, so I stopped it to keep the chat responsive — nothing was committed. Please try again; if it keeps timing out, an AI provider is slow right now.",
-          },
-        }), CHAIR_TURN_BUDGET_MS);
-      });
-      const chairResult = await Promise.race([chairTurnPromise, chairTurnTimeout]);
-      clearTimeout(chairTurnTimer);
+      let chairResult;
+      if (shouldUseFounderChairTurnTimeout({
+        action,
+        text: cleanedInput || originalText,
+        shouldDisplayOnly,
+        explicitExecute,
+        executeIntent,
+        buildIntentEarly,
+        useTerminalForBuild,
+        doPrefixForcedExecute: doPrefix.forcedExecute,
+      })) {
+        const CHAIR_TURN_BUDGET_MS = Number(process.env.CHAIR_TURN_BUDGET_MS || '42000');
+        let chairTurnTimer;
+        const chairTurnTimeout = new Promise((resolve) => {
+          chairTurnTimer = setTimeout(() => resolve({
+            statusCode: 200,
+            body: {
+              ok: true,
+              interface: 'Lumin',
+              action: 'chair',
+              chair_channel: 'chair',
+              command_truth: 'NO_COMMAND_RAN',
+              pass_fail: 'NO_COMMAND_RAN',
+              timed_out: true,
+              human_summary: "That turn took longer than expected, so I stopped it to keep the chat responsive — nothing was committed. Please try again; if it keeps timing out, an AI provider is slow right now.",
+            },
+          }), CHAIR_TURN_BUDGET_MS);
+        });
+        chairResult = await Promise.race([chairTurnPromise, chairTurnTimeout]);
+        clearTimeout(chairTurnTimer);
+      } else {
+        chairResult = await chairTurnPromise;
+      }
 
       const persistWarning = req.body?.alpha_probe === true
         ? 'ALPHA_PROBE_SKIP_PERSIST'

@@ -12,7 +12,10 @@ import {
   isPureCounselQuestion,
 } from '../services/lumin-chair-orchestrator.js';
 import { isMissionPipelineIntent } from '../services/lifeos-mission-pipeline-executor.js';
-import { resolveFounderCommandControlHandle } from '../routes/lifeos-builderos-command-control-routes.js';
+import {
+  resolveFounderCommandControlHandle,
+  shouldUseFounderChairTurnTimeout,
+} from '../routes/lifeos-builderos-command-control-routes.js';
 
 test('build the blueprint routes to blueprint_execute not build_async', () => {
   const msg = 'build the blueprint';
@@ -200,4 +203,34 @@ test('chair native turn ignores non-numeric auth sentinel userId and resolves by
 test('command-key founder route defaults handle to adam for continuity', () => {
   assert.equal(resolveFounderCommandControlHandle({ auth_mode: 'command_key_fallback', lifeosUser: {} }), 'adam');
   assert.equal(resolveFounderCommandControlHandle({ auth_mode: 'jwt', lifeosUser: { handle: 'sherry' } }), 'sherry');
+});
+
+test('founder chair timeout only applies to non-mutating conversational turns', () => {
+  assert.equal(
+    shouldUseFounderChairTurnTimeout({ action: 'auto', text: 'who are you?' }),
+    true,
+  );
+  assert.equal(
+    shouldUseFounderChairTurnTimeout({ action: 'display', text: 'display queue status', shouldDisplayOnly: true }),
+    true,
+  );
+});
+
+test('founder chair timeout is disabled for mutating execution-capable turns', () => {
+  assert.equal(
+    shouldUseFounderChairTurnTimeout({ action: 'build', text: 'do: change the drawer color', buildIntentEarly: true }),
+    false,
+  );
+  assert.equal(
+    shouldUseFounderChairTurnTimeout({ action: 'auto', text: 'run execute mission for PRODUCT-LIFERE-OS-V1-0001' }),
+    false,
+  );
+  assert.equal(
+    shouldUseFounderChairTurnTimeout({ action: 'auto', text: 'open LifeRE' }),
+    false,
+  );
+  assert.equal(
+    shouldUseFounderChairTurnTimeout({ action: 'auto', text: 'make me a five video package for SocialMediaOS' }),
+    false,
+  );
 });
