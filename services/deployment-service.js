@@ -23,6 +23,7 @@ import path from 'path';
 import { execFile as execFileCb } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { promises as fsPromises } from 'fs';
 import {
   ensureSynopsisInContent,
@@ -36,6 +37,11 @@ import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-
 
 const execFile = promisify(execFileCb);
 
+// Repo root derived from this module's own location (services/deployment-service.js)
+// via import.meta.url — NOT process.cwd(), which is not guaranteed to be the repo
+// root depending on how the server was launched.
+const REPO_ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+
 // `node --check` resolves ESM-vs-CommonJS from the nearest package.json "type".
 // A syntax-check temp dir in os.tmpdir() has none, so a `.js` file would parse as
 // CommonJS and silently pass ESM-only syntax errors (e.g. a truncated block
@@ -47,7 +53,7 @@ async function writeSyntaxCheckModuleType(tmpDir, filePath) {
   if (!/\.js$/i.test(filePath)) return;
   let type = 'commonjs';
   try {
-    const pkg = JSON.parse(await fsPromises.readFile(path.join(process.cwd(), 'package.json'), 'utf8'));
+    const pkg = JSON.parse(await fsPromises.readFile(path.join(REPO_ROOT, 'package.json'), 'utf8'));
     if (pkg.type === 'module') type = 'module';
   } catch {
     // default commonjs (Node's own default when "type" is absent)

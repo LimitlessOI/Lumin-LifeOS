@@ -762,10 +762,14 @@ function looksLikeJsonManifestInsteadOfJs(content, target) {
 // Read the repo's module system once — `node --check` resolves ESM-vs-CommonJS
 // from the nearest package.json "type", and a `.js` file parsed in the wrong
 // mode silently tolerates ESM-only syntax errors (e.g. a truncated block comment
-// at EOF). Default 'commonjs' matches Node's own default when "type" is absent.
+// at EOF). Resolve from REPO_ROOT (derived from this module's own location via
+// import.meta.url), NOT process.cwd() — the server can be launched from a
+// different working directory (e.g. a local boot script), which would otherwise
+// mis-detect the type and defeat this whole gate. Default 'commonjs' matches
+// Node's own default when "type" is absent.
 function repoModuleType() {
   try {
-    const pkg = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'));
+    const pkg = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf8'));
     return pkg.type === 'module' ? 'module' : 'commonjs';
   } catch {
     return 'commonjs';
@@ -2151,6 +2155,35 @@ export function createLifeOSCouncilBuilderRoutes({
           target_file,
           failed_file: target_file,
         });
+      }
+
+      // Truncation gates — the batch path must be as strict as single-file
+      // /execute: run the real syntax/completeness check per target type so a
+      // truncated JS or SQL file can never slip through a batch commit (in
+      // local-mirror mode nothing downstream re-checks, and commitManyToGitHub
+      // only node --checks JS, never SQL).
+      if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+        const chk = await verifyGeneratedJavaScriptWithNodeCheck(output, target_file);
+        if (!chk.ok) {
+          return res.status(422).json({
+            ok: false,
+            committed: false,
+            error: `Pre-commit syntax check failed: ${chk.error}`,
+            target_file,
+            failed_file: target_file,
+          });
+        }
+      } else if (/\.sql$/i.test(target_file)) {
+        const sqlCheck = validateSqlMigrationContent(output);
+        if (!sqlCheck.ok) {
+          return res.status(422).json({
+            ok: false,
+            committed: false,
+            error: `SQL migration validation failed: ${sqlCheck.error}`,
+            target_file,
+            failed_file: target_file,
+          });
+        }
       }
       cleaned.push({ target_file, output });
     }
