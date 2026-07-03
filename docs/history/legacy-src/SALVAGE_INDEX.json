@@ -2,9 +2,9 @@
   "index_id": "LEGACY-SRC-SALVAGE-0001",
   "created_at": "2026-07-03",
   "purpose": "Salvage+archive record for dead src/ MVC-island files. Code was fence-corrupted (non-loadable); intent/synopsis preserved here for future reuse before archival.",
-  "batch": "fence-corrupted-unreferenced",
+  "batch": "batch1(fence)+batch2(aggressive-dead-src+coupled-tests)",
   "evidence": "madge import closure of server.js+server-founder-runtime.js+server-full-runtime.js (741 modules); resolved-import scan across active corpus incl. tests; each file absent from closure and unreferenced.",
-  "count": 168,
+  "count": 287,
   "entries": [
     {
       "source_path": "src/App.js",
@@ -1181,6 +1181,839 @@
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
       "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+    },
+    {
+      "source_path": "src/api/system-status.js",
+      "archived_to": "docs/history/legacy-src/api/system-status.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/app.js",
+      "archived_to": "docs/history/legacy-src/app.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/components/DailyStats.js",
+      "archived_to": "docs/history/legacy-src/components/DailyStats.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/components/Filters.js",
+      "archived_to": "docs/history/legacy-src/components/Filters.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/components/LeadTable.js",
+      "archived_to": "docs/history/legacy-src/components/LeadTable.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/config/constants.js",
+      "archived_to": "docs/history/legacy-src/config/constants.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/config/dbConfig.js",
+      "archived_to": "docs/history/legacy-src/config/dbConfig.js.txt",
+      "synopsis": "PostgreSQL configuration",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/config/index.js",
+      "archived_to": "docs/history/legacy-src/config/index.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/config/validators.js",
+      "archived_to": "docs/history/legacy-src/config/validators.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/controllers/courseController.js",
+      "archived_to": "docs/history/legacy-src/controllers/courseController.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/cron/daily-digest.js",
+      "archived_to": "docs/history/legacy-src/cron/daily-digest.js.txt",
+      "synopsis": "daily-digest.js",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/cron/health-monitor.js",
+      "archived_to": "docs/history/legacy-src/cron/health-monitor.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/cron/task-timeout-cron.js",
+      "archived_to": "docs/history/legacy-src/cron/task-timeout-cron.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/cybersecurity/ingestion/network-collector.js",
+      "archived_to": "docs/history/legacy-src/cybersecurity/ingestion/network-collector.js.txt",
+      "synopsis": "Middleware to handle JSON data",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/db/index.js",
+      "archived_to": "docs/history/legacy-src/db/index.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/index.js",
+      "archived_to": "docs/history/legacy-src/index.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/integrations/facebook-manager.js",
+      "archived_to": "docs/history/legacy-src/integrations/facebook-manager.js.txt",
+      "synopsis": "Facebook Manager Integration",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/integrations/google-calendar-sync.js",
+      "archived_to": "docs/history/legacy-src/integrations/google-calendar-sync.js.txt",
+      "synopsis": "Google Calendar API setup",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/integrations/youtube-manager.js",
+      "archived_to": "docs/history/legacy-src/integrations/youtube-manager.js.txt",
+      "synopsis": "YouTube Manager Integration",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/middleware/configMiddleware.js",
+      "archived_to": "docs/history/legacy-src/middleware/configMiddleware.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/middleware/logging.js",
+      "archived_to": "docs/history/legacy-src/middleware/logging.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/middleware/rateLimit.js",
+      "archived_to": "docs/history/legacy-src/middleware/rateLimit.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/migrations/20231012000000-create-users-table.js",
+      "archived_to": "docs/history/legacy-src/migrations/20231012000000-create-users-table.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/models/BiocropVariety.js",
+      "archived_to": "docs/history/legacy-src/models/BiocropVariety.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/models/Client.js",
+      "archived_to": "docs/history/legacy-src/models/Client.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/models/Course.js",
+      "archived_to": "docs/history/legacy-src/models/Course.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/models/Customization.js",
+      "archived_to": "docs/history/legacy-src/models/Customization.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/models/FunnelInteraction.js",
+      "archived_to": "docs/history/legacy-src/models/FunnelInteraction.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/models/User.js",
+      "archived_to": "docs/history/legacy-src/models/User.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/biocrop/dataCollector.js",
+      "archived_to": "docs/history/legacy-src/modules/biocrop/dataCollector.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/biocrop/designEngine.js",
+      "archived_to": "docs/history/legacy-src/modules/biocrop/designEngine.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/biocrop/fieldTrialManager.js",
+      "archived_to": "docs/history/legacy-src/modules/biocrop/fieldTrialManager.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/__tests__/funnelService.test.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/__tests__/funnelService.test.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/aiAnalyzer.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/aiAnalyzer.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/funnelController.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/funnelController.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/funnelRepository.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/funnelRepository.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/funnelService.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/funnelService.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/funnelTracker.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/funnelTracker.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/integrations/userIntegration.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/integrations/userIntegration.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/middleware/funnelAuth.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/middleware/funnelAuth.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/funnels/routes.js",
+      "archived_to": "docs/history/legacy-src/modules/funnels/routes.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/microgrid/nodeManager.js",
+      "archived_to": "docs/history/legacy-src/modules/microgrid/nodeManager.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/users/user.controller.js",
+      "archived_to": "docs/history/legacy-src/modules/users/user.controller.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/users/user.model.js",
+      "archived_to": "docs/history/legacy-src/modules/users/user.model.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/users/user.routes.js",
+      "archived_to": "docs/history/legacy-src/modules/users/user.routes.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/modules/users/user.service.js",
+      "archived_to": "docs/history/legacy-src/modules/users/user.service.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/orchestrator/__tests__/queue-status.test.js",
+      "archived_to": "docs/history/legacy-src/orchestrator/__tests__/queue-status.test.js.txt",
+      "synopsis": "src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/orchestrator/api.js",
+      "archived_to": "docs/history/legacy-src/orchestrator/api.js.txt",
+      "synopsis": "src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/orchestrator/queue-status.js",
+      "archived_to": "docs/history/legacy-src/orchestrator/queue-status.js.txt",
+      "synopsis": "src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/orchestrator/worker.js",
+      "archived_to": "docs/history/legacy-src/orchestrator/worker.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/pages/outreach.js",
+      "archived_to": "docs/history/legacy-src/pages/outreach.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/queue/processor.js",
+      "archived_to": "docs/history/legacy-src/queue/processor.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/repositories/userRepository.js",
+      "archived_to": "docs/history/legacy-src/repositories/userRepository.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/admin.js",
+      "archived_to": "docs/history/legacy-src/routes/admin.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/api.js",
+      "archived_to": "docs/history/legacy-src/routes/api.js.txt",
+      "synopsis": "GET",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/billing.js",
+      "archived_to": "docs/history/legacy-src/routes/billing.js.txt",
+      "synopsis": "Exports billingRouter \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/biocrop.routes.js",
+      "archived_to": "docs/history/legacy-src/routes/biocrop.routes.js.txt",
+      "synopsis": "POST",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/capsule.js",
+      "archived_to": "docs/history/legacy-src/routes/capsule.js.txt",
+      "synopsis": "Create a new capsule",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/chat.js",
+      "archived_to": "docs/history/legacy-src/routes/chat.js.txt",
+      "synopsis": "Route to serve chat UI",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/config.js",
+      "archived_to": "docs/history/legacy-src/routes/config.js.txt",
+      "synopsis": "Endpoint to get environment template",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/console.js",
+      "archived_to": "docs/history/legacy-src/routes/console.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/health-api.js",
+      "archived_to": "docs/history/legacy-src/routes/health-api.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/health.js",
+      "archived_to": "docs/history/legacy-src/routes/health.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/notification.js",
+      "archived_to": "docs/history/legacy-src/routes/notification.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/routes/userRoutes.js",
+      "archived_to": "docs/history/legacy-src/routes/userRoutes.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/agent-ai-assistant.js",
+      "archived_to": "docs/history/legacy-src/services/agent-ai-assistant.js.txt",
+      "synopsis": "Agent AI Assistant Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/agent-twin-learning.js",
+      "archived_to": "docs/history/legacy-src/services/agent-twin-learning.js.txt",
+      "synopsis": "Agent Twin Learning System",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/architect-reviewer.js",
+      "archived_to": "docs/history/legacy-src/services/architect-reviewer.js.txt",
+      "synopsis": "src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/auth-service.js",
+      "archived_to": "docs/history/legacy-src/services/auth-service.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/auto-revert.js",
+      "archived_to": "docs/history/legacy-src/services/auto-revert.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/calendar-booking.js",
+      "archived_to": "docs/history/legacy-src/services/calendar-booking.js.txt",
+      "synopsis": "Mock data for agents",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/call-listener.js",
+      "archived_to": "docs/history/legacy-src/services/call-listener.js.txt",
+      "synopsis": "call-listener.js",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/capsule-storage.js",
+      "archived_to": "docs/history/legacy-src/services/capsule-storage.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/chat-overlay-manager.js",
+      "archived_to": "docs/history/legacy-src/services/chat-overlay-manager.js.txt",
+      "synopsis": "Chat Overlay Manager Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/claude-chat.js",
+      "archived_to": "docs/history/legacy-src/services/claude-chat.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/commitment-detector.js",
+      "archived_to": "docs/history/legacy-src/services/commitment-detector.js.txt",
+      "synopsis": "Commitment Detector Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/commitment-tracker.js",
+      "archived_to": "docs/history/legacy-src/services/commitment-tracker.js.txt",
+      "synopsis": "Commitment Tracker Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/conversation-router.js",
+      "archived_to": "docs/history/legacy-src/services/conversation-router.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/council-parallel-review.js",
+      "archived_to": "docs/history/legacy-src/services/council-parallel-review.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/deploymentService.js",
+      "archived_to": "docs/history/legacy-src/services/deploymentService.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/digest-generator.js",
+      "archived_to": "docs/history/legacy-src/services/digest-generator.js.txt",
+      "synopsis": "digest-generator.js",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/digital-twin.js",
+      "archived_to": "docs/history/legacy-src/services/digital-twin.js.txt",
+      "synopsis": "Digital Twin Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/escalation-rules.js",
+      "archived_to": "docs/history/legacy-src/services/escalation-rules.js.txt",
+      "synopsis": "src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/incomeDroneCourseService.js",
+      "archived_to": "docs/history/legacy-src/services/incomeDroneCourseService.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/interactionService.js",
+      "archived_to": "docs/history/legacy-src/services/interactionService.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/notifier.js",
+      "archived_to": "docs/history/legacy-src/services/notifier.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/pattern-learner.js",
+      "archived_to": "docs/history/legacy-src/services/pattern-learner.js.txt",
+      "synopsis": "Pattern Learner Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/paymentService.js",
+      "archived_to": "docs/history/legacy-src/services/paymentService.js.txt",
+      "synopsis": "Example function to create a payment",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/severity.js",
+      "archived_to": "docs/history/legacy-src/services/severity.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/sms-alerts.js",
+      "archived_to": "docs/history/legacy-src/services/sms-alerts.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/stripeCourseService.js",
+      "archived_to": "docs/history/legacy-src/services/stripeCourseService.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/stuck-task-releaser.js",
+      "archived_to": "docs/history/legacy-src/services/stuck-task-releaser.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/subscription-service.js",
+      "archived_to": "docs/history/legacy-src/services/subscription-service.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/td-automation.js",
+      "archived_to": "docs/history/legacy-src/services/td-automation.js.txt",
+      "synopsis": "TD Automation Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/td-scraper.js",
+      "archived_to": "docs/history/legacy-src/services/td-scraper.js.txt",
+      "synopsis": "TD Scraper Service",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/user-service.js",
+      "archived_to": "docs/history/legacy-src/services/user-service.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/userService.js",
+      "archived_to": "docs/history/legacy-src/services/userService.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/voice-input.js",
+      "archived_to": "docs/history/legacy-src/services/voice-input.js.txt",
+      "synopsis": "voice-input.js",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/services/voice-output.js",
+      "archived_to": "docs/history/legacy-src/services/voice-output.js.txt",
+      "synopsis": "voice-output.js",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/social-scheduler.js",
+      "archived_to": "docs/history/legacy-src/social-scheduler.js.txt",
+      "synopsis": "Social Scheduler",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/utils/context.jscontext.js",
+      "archived_to": "docs/history/legacy-src/utils/context.jscontext.js.txt",
+      "synopsis": "Exports buildSmartContext \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/utils/database.js",
+      "archived_to": "docs/history/legacy-src/utils/database.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "src/utils/dockerUtils.js",
+      "archived_to": "docs/history/legacy-src/utils/dockerUtils.js.txt",
+      "synopsis": "js \u2014 src",
+      "verdict": "reject-archive",
+      "reason": "dead src/ (0 boot-reachable; only test/alias refs) \u2014 aggressive archive to surface any hidden dep in CI"
+    },
+    {
+      "source_path": "__tests__/app.test.js",
+      "archived_to": "docs/history/legacy-tests/__tests__/app.test.js.txt",
+      "synopsis": "js \u2014 __tests__",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "test/aiModelFunnel.test.js",
+      "archived_to": "docs/history/legacy-tests/test/aiModelFunnel.test.js.txt",
+      "synopsis": "js \u2014 test",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "test/integration/courses.test.js",
+      "archived_to": "docs/history/legacy-tests/test/integration/courses.test.js.txt",
+      "synopsis": "js \u2014 test",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "test/unit/models/Course.test.js",
+      "archived_to": "docs/history/legacy-tests/test/unit/models/Course.test.js.txt",
+      "synopsis": "js \u2014 test",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/UserProfilingService.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/UserProfilingService.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/auth.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/auth.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/auth/auth.test.ts",
+      "archived_to": "docs/history/legacy-tests/tests/auth/auth.test.ts.txt",
+      "synopsis": "ts \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/configValidators.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/configValidators.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/integration/customizationRoutes.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/integration/customizationRoutes.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/integration/user.api.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/integration/user.api.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/integration/userRoutes.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/integration/userRoutes.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/services/interactionService.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/services/interactionService.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/unit/customization.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/unit/customization.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/unit/user.model.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/unit/user.model.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/unit/userService.test.js",
+      "archived_to": "docs/history/legacy-tests/tests/unit/userService.test.js.txt",
+      "synopsis": "js \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
+    },
+    {
+      "source_path": "tests/users/user.test.ts",
+      "archived_to": "docs/history/legacy-tests/tests/users/user.test.ts.txt",
+      "synopsis": "ts \u2014 tests",
+      "verdict": "reject-archive",
+      "reason": "dead test coupled to archived src/ (not in CI test list)"
     }
   ]
 }

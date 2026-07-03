@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T00:23:34.996Z",
+  "generated_at": "2026-07-03T00:26:03.952Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11820,
   "files": [
@@ -37562,9 +37562,9 @@
     {
       "path": "docs/history/legacy-src/SALVAGE_INDEX.json",
       "synopsis": "Documentation — SALVAGE INDEX.",
-      "bytes": 54292,
-      "mtime": "2026-07-03T00:22:56.012Z",
-      "indexed_at": "2026-07-03T00:23:34.996Z",
+      "bytes": 94696,
+      "mtime": "2026-07-03T00:25:36.780Z",
+      "indexed_at": "2026-07-03T00:26:03.952Z",
       "synopsis_index_only": true
     },
     {
@@ -37626,9 +37626,9 @@
     {
       "path": "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md",
       "synopsis": "Repo cleanup inventory (2026-07-02) — indexed sprawl candidates, reference-evidence, ARCHIVE/ESCALATE/REVIEW verdicts.",
-      "bytes": 13229,
-      "mtime": "2026-07-03T00:23:27.068Z",
-      "indexed_at": "2026-07-03T00:23:34.996Z"
+      "bytes": 14442,
+      "mtime": "2026-07-03T00:25:59.204Z",
+      "indexed_at": "2026-07-03T00:26:03.952Z"
     },
     {
       "path": "docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md",

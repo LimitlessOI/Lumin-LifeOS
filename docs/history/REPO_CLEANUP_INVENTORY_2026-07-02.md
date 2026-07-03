@@ -120,6 +120,23 @@ organized archive," but each is Hist-domain (default-HALT; needs the Hist mandat
 - **Remaining `src/`:** 13 files load-bearing (KEEP), ~92 dead-but-referenced-by-tests/aliases (per-file work),
   balance still to salvage+archive in later batches.
 
+## EXECUTED — Batch 2 (2026-07-02): aggressive dead-`src/` + coupled dead tests
+
+**Adam directive:** prefer a *loud* break that names its dependency over silent legacy drift — so
+this batch is aggressive: it moves dead `src/` files even when only **tests/aliases** referenced them,
+letting any true dependency surface in CI/boot rather than lurk.
+
+**Moved 119 files** (103 `src/*.js` → `docs/history/legacy-src/`, 16 dead tests → `docs/history/legacy-tests/`),
+appended to the same `SALVAGE_INDEX.json` (287 entries total).
+
+- **Held back (real deps):** `src/controllers/clientController.js`, `src/services/migrationService.js`
+  (imported by non-test active `index.js`) + the 13 boot-closure KEEP files.
+- **Coupled moves:** the 16 dead tests that imported archived `src/` were moved with them (none are in the
+  CI `npm test` list, so the suite is unaffected).
+- **Safety net (anti-drift):** the import-resolution CI guard now fails loudly if anything reaches for an
+  archived path — silent drift becomes an immediate red X, and the archive is a git-tracked quarantine (restorable).
+- **Verification:** node --check x3 OK · madge --circular still 741 (0 boot impact) · npm test 225 pass / 0 fail.
+
 ---
 
 ## Recommended execution order (all reversible, verify boot after each)
