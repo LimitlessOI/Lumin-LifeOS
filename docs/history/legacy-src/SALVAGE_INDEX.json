@@ -11,1176 +11,1176 @@
       "archived_to": "docs/history/legacy-src/App.js.txt",
       "synopsis": null,
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/__tests__/funnelController.test.js",
       "archived_to": "docs/history/legacy-src/__tests__/funnelController.test.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/__tests__/taskApi.test.js",
       "archived_to": "docs/history/legacy-src/__tests__/taskApi.test.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/__tests__/zk-proofs.test.js",
       "archived_to": "docs/history/legacy-src/__tests__/zk-proofs.test.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/adapters/universal-adapter.js",
       "archived_to": "docs/history/legacy-src/adapters/universal-adapter.js.txt",
       "synopsis": "Example adapters",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/api/controllers/aiModelFunnelController.js",
       "archived_to": "docs/history/legacy-src/api/controllers/aiModelFunnelController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/api/routes/aiModelFunnelRoutes.js",
       "archived_to": "docs/history/legacy-src/api/routes/aiModelFunnelRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/api/tasks.js",
       "archived_to": "docs/history/legacy-src/api/tasks.js.txt",
       "synopsis": "Get all tasks",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/aunn/data-ingestion/iot-processor.js",
       "archived_to": "docs/history/legacy-src/aunn/data-ingestion/iot-processor.js.txt",
       "synopsis": "Example integration with LoRaWAN",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/components/ProductRecommendationEngine.js",
       "archived_to": "docs/history/legacy-src/components/ProductRecommendationEngine.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/components/TaskEditor/hooks/useTaskEditor.js",
       "archived_to": "docs/history/legacy-src/components/TaskEditor/hooks/useTaskEditor.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/components/TaskEditor/validationSchemas.js",
       "archived_to": "docs/history/legacy-src/components/TaskEditor/validationSchemas.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/config/auth.config.js",
       "archived_to": "docs/history/legacy-src/config/auth.config.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/config/database.js",
       "archived_to": "docs/history/legacy-src/config/database.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/config/kafka-config.js",
       "archived_to": "docs/history/legacy-src/config/kafka-config.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/config/logging.js",
       "archived_to": "docs/history/legacy-src/config/logging.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/config/stripe.js",
       "archived_to": "docs/history/legacy-src/config/stripe.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/AuthController.js",
       "archived_to": "docs/history/legacy-src/controllers/AuthController.js.txt",
       "synopsis": null,
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/UserController.js",
       "archived_to": "docs/history/legacy-src/controllers/UserController.js.txt",
       "synopsis": null,
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/auth.controller.js",
       "archived_to": "docs/history/legacy-src/controllers/auth.controller.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/authController.js",
       "archived_to": "docs/history/legacy-src/controllers/authController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/businessTasksController.js",
       "archived_to": "docs/history/legacy-src/controllers/businessTasksController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/codeReviewController.js",
       "archived_to": "docs/history/legacy-src/controllers/codeReviewController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/commerceController.js",
       "archived_to": "docs/history/legacy-src/controllers/commerceController.js.txt",
       "synopsis": "Define endpoints",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/customizationController.js",
       "archived_to": "docs/history/legacy-src/controllers/customizationController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/funnelController.js",
       "archived_to": "docs/history/legacy-src/controllers/funnelController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/identity-controller.js",
       "archived_to": "docs/history/legacy-src/controllers/identity-controller.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/interactionController.js",
       "archived_to": "docs/history/legacy-src/controllers/interactionController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/processController.js",
       "archived_to": "docs/history/legacy-src/controllers/processController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/recommendationController.js",
       "archived_to": "docs/history/legacy-src/controllers/recommendationController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/scenarioController.js",
       "archived_to": "docs/history/legacy-src/controllers/scenarioController.js.txt",
       "synopsis": "Add update and delete logic as needed",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/supportController.js",
       "archived_to": "docs/history/legacy-src/controllers/supportController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/taskController.js",
       "archived_to": "docs/history/legacy-src/controllers/taskController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/controllers/userController.js",
       "archived_to": "docs/history/legacy-src/controllers/userController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/copilot/api/copilot.routes.js",
       "archived_to": "docs/history/legacy-src/copilot/api/copilot.routes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/copilot/execution/NoCodeBuilder.js",
       "archived_to": "docs/history/legacy-src/copilot/execution/NoCodeBuilder.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/copilot/execution/WorkflowEngine.js",
       "archived_to": "docs/history/legacy-src/copilot/execution/WorkflowEngine.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/database/migrations/20231024001_create_skill_profiles.js",
       "archived_to": "docs/history/legacy-src/database/migrations/20231024001_create_skill_profiles.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/database/migrations/20231024002_create_learning_paths.js",
       "archived_to": "docs/history/legacy-src/database/migrations/20231024002_create_learning_paths.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/database/migrations/20231024003_create_career_simulations.js",
       "archived_to": "docs/history/legacy-src/database/migrations/20231024003_create_career_simulations.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/database/migrations/20231024004_create_skill_mirroring.js",
       "archived_to": "docs/history/legacy-src/database/migrations/20231024004_create_skill_mirroring.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/db/config.js",
       "archived_to": "docs/history/legacy-src/db/config.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/db/models.js",
       "archived_to": "docs/history/legacy-src/db/models.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/device/sync-service.js",
       "archived_to": "docs/history/legacy-src/device/sync-service.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/erp-adapters.js",
       "archived_to": "docs/history/legacy-src/erp-adapters.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/fabric-network.js",
       "archived_to": "docs/history/legacy-src/fabric-network.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/federated-learning.js",
       "archived_to": "docs/history/legacy-src/federated-learning.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/impact-fabric/blockchain-adapter.js",
       "archived_to": "docs/history/legacy-src/impact-fabric/blockchain-adapter.js.txt",
       "synopsis": "Example Web3 setup for Ethereum",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/impact-fabric/verification-engine.js",
       "archived_to": "docs/history/legacy-src/impact-fabric/verification-engine.js.txt",
       "synopsis": "Example schema for data validation",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/integrations/EcommercePlatformAdapter.js",
       "archived_to": "docs/history/legacy-src/integrations/EcommercePlatformAdapter.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/integrations/externalSupport.js",
       "archived_to": "docs/history/legacy-src/integrations/externalSupport.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/integrations/index.js",
       "archived_to": "docs/history/legacy-src/integrations/index.js.txt",
       "synopsis": "Example of how these could be initialized or integrated",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/materialEngine.js",
       "archived_to": "docs/history/legacy-src/materialEngine.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/auth.js",
       "archived_to": "docs/history/legacy-src/middleware/auth.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/auth.middleware.js",
       "archived_to": "docs/history/legacy-src/middleware/auth.middleware.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/identity-auth.js",
       "archived_to": "docs/history/legacy-src/middleware/identity-auth.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/rateLimiter.js",
       "archived_to": "docs/history/legacy-src/middleware/rateLimiter.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/subscription.js",
       "archived_to": "docs/history/legacy-src/middleware/subscription.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/taskValidation.js",
       "archived_to": "docs/history/legacy-src/middleware/taskValidation.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/trackInteraction.js",
       "archived_to": "docs/history/legacy-src/middleware/trackInteraction.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/userValidation.js",
       "archived_to": "docs/history/legacy-src/middleware/userValidation.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/validateCustomization.js",
       "archived_to": "docs/history/legacy-src/middleware/validateCustomization.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middleware/validation.middleware.js",
       "archived_to": "docs/history/legacy-src/middleware/validation.middleware.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/middlewares/taskValidation.js",
       "archived_to": "docs/history/legacy-src/middlewares/taskValidation.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/migrations/202310150001-create-stripe-optimization-clients.js",
       "archived_to": "docs/history/legacy-src/migrations/202310150001-create-stripe-optimization-clients.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/migrations/202310150002-create-optimization-insights.js",
       "archived_to": "docs/history/legacy-src/migrations/202310150002-create-optimization-insights.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/migrations/202310150003-create-analysis-jobs.js",
       "archived_to": "docs/history/legacy-src/migrations/202310150003-create-analysis-jobs.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/ml/local-engine.js",
       "archived_to": "docs/history/legacy-src/ml/local-engine.js.txt",
       "synopsis": "Load or define a simple model",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/AiModelFunnel.js",
       "archived_to": "docs/history/legacy-src/models/AiModelFunnel.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/BioHybridPanel.js",
       "archived_to": "docs/history/legacy-src/models/BioHybridPanel.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/ConstructionProject.js",
       "archived_to": "docs/history/legacy-src/models/ConstructionProject.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/Process.js",
       "archived_to": "docs/history/legacy-src/models/Process.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/Recommendation.js",
       "archived_to": "docs/history/legacy-src/models/Recommendation.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/RecommendationAttachment.js",
       "archived_to": "docs/history/legacy-src/models/RecommendationAttachment.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/Scenario.js",
       "archived_to": "docs/history/legacy-src/models/Scenario.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/Session.js",
       "archived_to": "docs/history/legacy-src/models/Session.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/Task.js",
       "archived_to": "docs/history/legacy-src/models/Task.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/TaskActivity.js",
       "archived_to": "docs/history/legacy-src/models/TaskActivity.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/models/index.js",
       "archived_to": "docs/history/legacy-src/models/index.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/biohybrid/iot-gateway.js",
       "archived_to": "docs/history/legacy-src/modules/biohybrid/iot-gateway.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/clients/client.controller.js",
       "archived_to": "docs/history/legacy-src/modules/clients/client.controller.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/clients/client.routes.js",
       "archived_to": "docs/history/legacy-src/modules/clients/client.routes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/clients/client.service.js",
       "archived_to": "docs/history/legacy-src/modules/clients/client.service.js.txt",
       "synopsis": "Additional functions for client metrics and Stripe integration can be added here",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/clients/client.validators.js",
       "archived_to": "docs/history/legacy-src/modules/clients/client.validators.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/clients/middleware/client.auth.js",
       "archived_to": "docs/history/legacy-src/modules/clients/middleware/client.auth.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/farming/models.js",
       "archived_to": "docs/history/legacy-src/modules/farming/models.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/farming/optimizationEngine.js",
       "archived_to": "docs/history/legacy-src/modules/farming/optimizationEngine.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/funnels/ai-optimizer.service.js",
       "archived_to": "docs/history/legacy-src/modules/funnels/ai-optimizer.service.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/funnels/funnel.middleware.js",
       "archived_to": "docs/history/legacy-src/modules/funnels/funnel.middleware.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/funnels/funnel.repository.js",
       "archived_to": "docs/history/legacy-src/modules/funnels/funnel.repository.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/funnels/funnel.service.js",
       "archived_to": "docs/history/legacy-src/modules/funnels/funnel.service.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/funnels/funnel.validator.js",
       "archived_to": "docs/history/legacy-src/modules/funnels/funnel.validator.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/skill-intelligence/careerAI.js",
       "archived_to": "docs/history/legacy-src/modules/skill-intelligence/careerAI.js.txt",
       "synopsis": "careerAI.js",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/skill-intelligence/diagnosticAI.js",
       "archived_to": "docs/history/legacy-src/modules/skill-intelligence/diagnosticAI.js.txt",
       "synopsis": "diagnosticAI.js",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/skill-intelligence/learningAI.js",
       "archived_to": "docs/history/legacy-src/modules/skill-intelligence/learningAI.js.txt",
       "synopsis": "learningAI.js",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/skill-intelligence/marketIntegrator.js",
       "archived_to": "docs/history/legacy-src/modules/skill-intelligence/marketIntegrator.js.txt",
       "synopsis": "marketIntegrator.js",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/skill-intelligence/skillMirroring.js",
       "archived_to": "docs/history/legacy-src/modules/skill-intelligence/skillMirroring.js.txt",
       "synopsis": "skillMirroring.js",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/skill-intelligence/vectorManager.js",
       "archived_to": "docs/history/legacy-src/modules/skill-intelligence/vectorManager.js.txt",
       "synopsis": "vectorManager.js",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/controllers/analysisController.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/controllers/analysisController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/controllers/clientController.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/controllers/clientController.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/index.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/index.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/middleware/auth.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/middleware/auth.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/models/AnalysisJob.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/models/AnalysisJob.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/models/OptimizationClient.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/models/OptimizationClient.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/models/OptimizationInsight.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/models/OptimizationInsight.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/routes.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/routes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/services/analysisEngine.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/services/analysisEngine.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/services/queueService.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/services/queueService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/modules/stripe-optimization/services/stripeService.js",
       "archived_to": "docs/history/legacy-src/modules/stripe-optimization/services/stripeService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/orchestrator/core.js",
       "archived_to": "docs/history/legacy-src/orchestrator/core.js.txt",
       "synopsis": "Mock success rate data",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/personality/context-adapter.js",
       "archived_to": "docs/history/legacy-src/personality/context-adapter.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/privacy/encryption.js",
       "archived_to": "docs/history/legacy-src/privacy/encryption.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/productionIntegrator.js",
       "archived_to": "docs/history/legacy-src/productionIntegrator.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/queue/processors/aiQueue.js",
       "archived_to": "docs/history/legacy-src/queue/processors/aiQueue.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/queues/codeReviewQueue.js",
       "archived_to": "docs/history/legacy-src/queues/codeReviewQueue.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/queues/recommendationQueue.js",
       "archived_to": "docs/history/legacy-src/queues/recommendationQueue.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/repositories/businessTasksRepository.js",
       "archived_to": "docs/history/legacy-src/repositories/businessTasksRepository.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/repositories/scenarioRepository.js",
       "archived_to": "docs/history/legacy-src/repositories/scenarioRepository.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/repositories/user.repository.js",
       "archived_to": "docs/history/legacy-src/repositories/user.repository.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/auth.js",
       "archived_to": "docs/history/legacy-src/routes/auth.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/auth.routes.js",
       "archived_to": "docs/history/legacy-src/routes/auth.routes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/biodegradableRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/biodegradableRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/businessTasksRouter.js",
       "archived_to": "docs/history/legacy-src/routes/businessTasksRouter.js.txt",
       "synopsis": "Additional routes...",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/codeReviewRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/codeReviewRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/customizationRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/customizationRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/index.js",
       "archived_to": "docs/history/legacy-src/routes/index.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/interactionRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/interactionRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/processRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/processRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/recommendationRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/recommendationRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/scenarioRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/scenarioRoutes.js.txt",
       "synopsis": "Add more routes for update and delete",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/supportRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/supportRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/taskRoutes.js",
       "archived_to": "docs/history/legacy-src/routes/taskRoutes.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/tasks.js",
       "archived_to": "docs/history/legacy-src/routes/tasks.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/routes/users.js",
       "archived_to": "docs/history/legacy-src/routes/users.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/scripts/seedAiModelData.js",
       "archived_to": "docs/history/legacy-src/scripts/seedAiModelData.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/scripts/seedLanguages.js",
       "archived_to": "docs/history/legacy-src/scripts/seedLanguages.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/scripts/seedProcesses.js",
       "archived_to": "docs/history/legacy-src/scripts/seedProcesses.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/AuthService.js",
       "archived_to": "docs/history/legacy-src/services/AuthService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/ProcessManager.js",
       "archived_to": "docs/history/legacy-src/services/ProcessManager.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/SubscriptionService.js",
       "archived_to": "docs/history/legacy-src/services/SubscriptionService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/UserService.js",
       "archived_to": "docs/history/legacy-src/services/UserService.js.txt",
       "synopsis": null,
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/aiEngine.js",
       "archived_to": "docs/history/legacy-src/services/aiEngine.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/aiProcessor.js",
       "archived_to": "docs/history/legacy-src/services/aiProcessor.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/auth.service.js",
       "archived_to": "docs/history/legacy-src/services/auth.service.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/businessTasksService.js",
       "archived_to": "docs/history/legacy-src/services/businessTasksService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/__tests__/validators.test.js",
       "archived_to": "docs/history/legacy-src/services/code-review/__tests__/validators.test.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/controller.js",
       "archived_to": "docs/history/legacy-src/services/code-review/controller.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/middleware/auth.js",
       "archived_to": "docs/history/legacy-src/services/code-review/middleware/auth.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/models/Analytics.js",
       "archived_to": "docs/history/legacy-src/services/code-review/models/Analytics.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/models/Project.js",
       "archived_to": "docs/history/legacy-src/services/code-review/models/Project.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/queue/processor.js",
       "archived_to": "docs/history/legacy-src/services/code-review/queue/processor.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/router.js",
       "archived_to": "docs/history/legacy-src/services/code-review/router.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/submissionService.js",
       "archived_to": "docs/history/legacy-src/services/code-review/submissionService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/code-review/validators/submission.js",
       "archived_to": "docs/history/legacy-src/services/code-review/validators/submission.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/commerce/AISupportAgent.js",
       "archived_to": "docs/history/legacy-src/services/commerce/AISupportAgent.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/conversationService.js",
       "archived_to": "docs/history/legacy-src/services/conversationService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/eventProcessor.js",
       "archived_to": "docs/history/legacy-src/services/eventProcessor.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/platformIntegrator.js",
       "archived_to": "docs/history/legacy-src/services/platformIntegrator.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/services/recommendationService.js",
       "archived_to": "docs/history/legacy-src/services/recommendationService.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/utils/customizationParser.js",
       "archived_to": "docs/history/legacy-src/utils/customizationParser.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/utils/jwt.utils.js",
       "archived_to": "docs/history/legacy-src/utils/jwt.utils.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/utils/logger.js",
       "archived_to": "docs/history/legacy-src/utils/logger.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/utils/security/jwt.js",
       "archived_to": "docs/history/legacy-src/utils/security/jwt.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/utils/security/password.js",
       "archived_to": "docs/history/legacy-src/utils/security/password.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/utils/validators/authValidators.js",
       "archived_to": "docs/history/legacy-src/utils/validators/authValidators.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/validators/scenarioValidator.js",
       "archived_to": "docs/history/legacy-src/validators/scenarioValidator.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/websockets/commerceBehavior.js",
       "archived_to": "docs/history/legacy-src/websockets/commerceBehavior.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/workers/recommendationWorker.js",
       "archived_to": "docs/history/legacy-src/workers/recommendationWorker.js.txt",
       "synopsis": "js \u2014 src",
       "verdict": "reject-archive",
-      "reason": "fence-corrupted (invalid syntax) + 0 boot-reachable + 0 active importers"
+      "reason": "dead (0 boot-reachable, 0 active importers); contained stray ``` codegen fence markers (mostly still syntactically valid)"
     },
     {
       "source_path": "src/api/system-status.js",
@@ -3758,5 +3758,6 @@
       "verdict": "reject-archive",
       "reason": "corrupted codegen filename (spaces/commas); non-loadable dead artifact"
     }
-  ]
+  ],
+  "accuracy_note": "Batch-1 files were selected for ARCHIVAL because they are DEAD (absent from the 741-module boot closure and imported by nothing active, incl. tests). Many contained stray ``` markdown fence markers from codegen; a re-check with `node --check` showed the large majority were still syntactically valid, so 'fence-corrupted/non-loadable' was corrected to the verified reason: deadness."
 }

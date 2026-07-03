@@ -103,17 +103,21 @@ organized archive," but each is Hist-domain (default-HALT; needs the Hist mandat
 
 ---
 
-## EXECUTED — Batch 1 (2026-07-02): fence-corrupted dead `src/` artifacts
+## EXECUTED — Batch 1 (2026-07-02): dead `src/` files (stray ``` codegen markers)
 
 **Moved 168 files** → `docs/history/legacy-src/<path>.txt`, catalogued in
 `docs/history/legacy-src/SALVAGE_INDEX.json` (source_path, archived_to, salvaged synopsis, verdict, reason).
 
 - **Selection (evidence):** madge import closure of `server.js` + `server-founder-runtime.js` +
   `server-full-runtime.js` (741 modules) → file absent from closure; resolved-import scan across the
-  full active corpus (routes/services/startup/config/core/middleware/scripts/apps/**tests**) → 0 importers;
-  AND file contains literal markdown fences (```), i.e. syntactically invalid / non-loadable.
+  full active corpus (routes/services/startup/config/core/middleware/scripts/apps/**tests**) → 0 importers.
+  These files also contained stray ``` markdown fence markers (a codegen artifact).
+- **ACCURACY CORRECTION:** an initial pass called these "fence-corrupted / non-loadable." A later
+  `node --check` audit proved that wrong — of a 40-file sample, 25 had ``` but only 2 actually failed to
+  parse (~95% were syntactically valid). The real, verified justification for archiving is **deadness**
+  (unreachable + unreferenced), NOT brokenness. Repo-wide, 0 of 1300 active `.js` files fail `node --check`.
 - **Salvage-first:** each file's `SYNOPSIS`/intent captured into `SALVAGE_INDEX.json` before the move so
-  the *idea* survives even though the corrupted code is retired. (Most were codegen boilerplate; genuine
+  the *idea* survives even though the dead code is retired. (Most were codegen boilerplate; genuine
   ideas e.g. LoRaWAN/IoT ingestion, example adapters preserved.)
 - **Post-move verification:** `node --check` on all 3 entrypoints OK · `madge --circular server.js` still
   741 files (0 boot-path impact) · `tests/spine-import-resolution.test.js` 156/156 · `npm test` 225 pass / 0 fail.
