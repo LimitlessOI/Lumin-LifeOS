@@ -131,7 +131,7 @@ export class CodebaseReader {
     
     if (instructionLower.includes('frontend') || instructionLower.includes('ui') || instructionLower.includes('component')) {
       filesToRead.add('public/overlay/index.html');
-      filesToRead.add('public/overlay/command-center.html');
+      filesToRead.add('public/overlay/lifeos-app.html');
     }
     
     return Array.from(filesToRead);

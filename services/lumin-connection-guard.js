@@ -71,8 +71,12 @@ export function auditLuminConnectionWiring() {
     'lifeos-app uses canonical founder-interface endpoint',
   );
 
-  const founderHtml = fs.readFileSync(path.join(ROOT, 'public/overlay/lifeos-founder-interface.html'), 'utf8');
-  add('UI-03', founderHtml.includes('lifeos-app.html'), 'founder-interface.html redirects to lifeos-app');
+  const publicRoutesForFounder = fs.readFileSync(path.join(ROOT, 'routes/public-routes.js'), 'utf8');
+  add(
+    'UI-03',
+    publicRoutesForFounder.includes('app.get("/overlay/lifeos-founder-interface.html"'),
+    'legacy founder-interface overlay redirects to canonical /lifeos',
+  );
 
   const chatRoutes = fs.readFileSync(path.join(ROOT, 'routes/lifeos-chat-routes.js'), 'utf8');
   add(

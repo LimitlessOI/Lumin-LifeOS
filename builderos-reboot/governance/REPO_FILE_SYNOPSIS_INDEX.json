@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T00:39:37.480Z",
+  "generated_at": "2026-07-03T01:38:47.925Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11822,
+  "file_count": 11824,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -21994,9 +21994,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3578588,
-      "mtime": "2026-07-03T00:18:54.410Z",
-      "indexed_at": "2026-07-03T00:18:55.538Z"
+      "bytes": 3580222,
+      "mtime": "2026-07-03T01:37:14.412Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -31230,9 +31230,9 @@
     {
       "path": "core/codebase-reader.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 6011,
-      "mtime": "2026-06-21T21:37:46.700Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 6007,
+      "mtime": "2026-07-03T01:32:03.724Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
     },
     {
       "path": "core/competitive-intelligence.js",
@@ -35269,9 +35269,9 @@
     {
       "path": "docs/AI_COLD_START.md",
       "synopsis": "Continuity Index",
-      "bytes": 23453,
-      "mtime": "2026-07-03T00:17:46.177Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 23475,
+      "mtime": "2026-07-03T01:35:09.772Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
     },
     {
       "path": "docs/api/clients.md",
@@ -37560,6 +37560,105 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
+      "path": "docs/history/legacy-overlays/command-center.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/control.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-alpha-rail.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-alpha.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-backtest.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-builder-test.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-command-center.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-communication.html",
+      "synopsis": "HTML page: Redirecting to LifeOS…",
+      "bytes": 528,
+      "mtime": "2026-07-01T22:02:40.541Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-founder-interface.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.545Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifeos-voice-rail-v1.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.545Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/lifere-os-v1.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.545Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/portal.html",
+      "synopsis": "HTML page: Retired",
+      "bytes": 253,
+      "mtime": "2026-07-01T22:02:40.545Z",
+      "indexed_at": "2026-07-03T01:35:03.381Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/README.md",
+      "synopsis": "Archive index — retired legacy founder-interface overlay prototypes",
+      "bytes": 1731,
+      "mtime": "2026-07-03T01:36:42.664Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
+    },
+    {
+      "path": "docs/history/legacy-overlays/SALVAGE_INDEX.json",
+      "synopsis": "Documentation — SALVAGE INDEX.",
+      "bytes": 4039,
+      "mtime": "2026-07-03T01:36:38.180Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/history/legacy-routes/README.md",
       "synopsis": "Archive index for dead+broken route modules quarantined out of routes/",
       "bytes": 2316,
@@ -37633,9 +37732,9 @@
     {
       "path": "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md",
       "synopsis": "Repo cleanup inventory (2026-07-02) — indexed sprawl candidates, reference-evidence, ARCHIVE/ESCALATE/REVIEW verdicts.",
-      "bytes": 19324,
-      "mtime": "2026-07-03T00:39:29.004Z",
-      "indexed_at": "2026-07-03T00:39:37.480Z"
+      "bytes": 22533,
+      "mtime": "2026-07-03T01:36:53.848Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
     },
     {
       "path": "docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md",
@@ -38537,9 +38636,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 554139,
-      "mtime": "2026-07-03T00:17:46.203Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 555184,
+      "mtime": "2026-07-03T01:36:13.332Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -38866,9 +38965,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 54988,
-      "mtime": "2026-07-01T14:19:18.469Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 55507,
+      "mtime": "2026-07-03T01:36:18.536Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -68109,24 +68208,10 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
-      "path": "public/overlay/command-center.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.039Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
       "path": "public/overlay/command-center.js",
       "synopsis": "Command & Control - Enhanced cockpit with Now Bar, Queue, and Chat.",
       "bytes": 38729,
       "mtime": "2026-06-21T21:39:01.055Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
-      "path": "public/overlay/control.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.072Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
@@ -68141,20 +68226,6 @@
       "synopsis": "LifeOS overlay UI — Index.",
       "bytes": 116,
       "mtime": "2026-06-21T21:39:01.103Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
-      "path": "public/overlay/lifeos-alpha-rail.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.120Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
-      "path": "public/overlay/lifeos-alpha.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.135Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
@@ -68175,13 +68246,6 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
-      "path": "public/overlay/lifeos-backtest.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.185Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
       "path": "public/overlay/lifeos-balance-wheel.html",
       "synopsis": "HTML page: Life Balance Wheel — LifeOS",
       "bytes": 15825,
@@ -68197,13 +68261,6 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "public/overlay/lifeos-builder-test.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.233Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
       "path": "public/overlay/lifeos-chat.html",
@@ -68234,13 +68291,6 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
-      "path": "public/overlay/lifeos-command-center.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.303Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
       "path": "public/overlay/lifeos-commitments-v1.html",
       "synopsis": "HTML page: Conversation Commitments v1",
       "bytes": 16058,
@@ -68256,13 +68306,6 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
-    },
-    {
-      "path": "public/overlay/lifeos-communication.html",
-      "synopsis": "HTML page: Redirecting to LifeOS…",
-      "bytes": 528,
-      "mtime": "2026-06-21T21:39:01.354Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
       "path": "public/overlay/lifeos-conflict.html",
@@ -68346,13 +68389,6 @@
       "synopsis": "HTML page: LifeOS · Finance",
       "bytes": 39542,
       "mtime": "2026-06-29T17:21:08.449Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
-      "path": "public/overlay/lifeos-founder-interface.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:01.596Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
@@ -68538,13 +68574,6 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
-      "path": "public/overlay/lifeos-voice-rail-v1.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:02.055Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
       "path": "public/overlay/lifeos-voice.js",
       "synopsis": "lifeos-voice.js — Global voice-to-text utility for LifeOS overlays",
       "bytes": 15489,
@@ -68566,13 +68595,6 @@
       "synopsis": "HTML page: Year in Pixels",
       "bytes": 5839,
       "mtime": "2026-06-21T21:39:02.108Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
-      "path": "public/overlay/lifere-os-v1.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:02.152Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
@@ -68608,13 +68630,6 @@
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
       "bytes": 10731,
       "mtime": "2026-06-21T21:39:02.224Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
-    },
-    {
-      "path": "public/overlay/portal.html",
-      "synopsis": "HTML page: Retired",
-      "bytes": 253,
-      "mtime": "2026-06-21T21:39:02.245Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
@@ -70042,9 +70057,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 14287,
-      "mtime": "2026-06-30T23:58:13.902Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 14827,
+      "mtime": "2026-07-03T01:31:58.424Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -70961,9 +70976,9 @@
     {
       "path": "scripts/check-overlay-syntax.js",
       "synopsis": "Overlay Syntax Checker",
-      "bytes": 4257,
-      "mtime": "2026-06-21T21:39:06.189Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 4192,
+      "mtime": "2026-07-03T01:32:12.716Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z"
     },
     {
       "path": "scripts/classify-mutation-zone.mjs",
@@ -87345,9 +87360,9 @@
     {
       "path": "services/lumin-connection-guard.js",
       "synopsis": "Enforce single canonical Lumin connection — block legacy generative chat paths.",
-      "bytes": 4595,
-      "mtime": "2026-06-29T17:21:08.932Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 4663,
+      "mtime": "2026-07-03T01:33:25.468Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -90065,9 +90080,9 @@
     {
       "path": "startup/routes/server-routes.js",
       "synopsis": "Registers ServerRoutes routes/handlers (startup/routes/server-routes.js).",
-      "bytes": 7696,
-      "mtime": "2026-07-01T00:28:55.127Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 7650,
+      "mtime": "2026-07-03T01:32:31.380Z",
+      "indexed_at": "2026-07-03T01:38:47.925Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]

@@ -308,3 +308,57 @@ fence-clean by construction, so this set is bounded and will not grow.
 0-reachable and in no product manifest — safe to archive with the next batch, at
 which point the import-resolution guard can extend to `config/` as it now does
 for `routes/` + `middleware/`.
+
+---
+
+## Batch 6 — Forbidden legacy overlay prototypes retired (redirect-and-archive)
+
+**Target:** the 12 founder-interface overlay HTML files marked dead by
+`.cursor/rules/legacy-interfaces-forbidden.mdc` but still git-tracked under
+`public/overlay/` and still served:
+`lifeos-communication`, `lifeos-alpha`, `lifeos-alpha-rail`, `command-center`,
+`lifeos-command-center`, `control`, `lifeos-founder-interface`, `lifeos-backtest`,
+`lifeos-builder-test`, `lifeos-voice-rail-v1`, `lifere-os-v1`, `portal` (`.html`).
+
+**Contradiction resolved:** "forbidden and dead" was true as *intent* but false in
+the *code* — `routes/public-routes.js` served them (some as explicit redirects, the
+rest via the generic `/overlay/:file` static resolver), and several live modules
+referenced them. Exactly the silent-legacy drift the founder asked to eliminate.
+
+**Approach — redirect-and-archive (not hard-delete):**
+- Added explicit `301 → /lifeos?direct_system=1` routes for all 12 old
+  `/overlay/<name>.html` paths in `routes/public-routes.js`, registered *before* the
+  generic `/overlay/:file` resolver, so archiving the files produces redirects, not
+  404s. (Consolidates every legacy surface onto the one canonical interface, which is
+  what the rule mandates.)
+- `git mv` the 12 files to `docs/history/legacy-overlays/` (history preserved;
+  reversible). They were all small client-side redirect stubs (≤528 bytes) — nothing
+  unique to salvage; cataloged in `docs/history/legacy-overlays/SALVAGE_INDEX.json`.
+
+**Live references repointed (so nothing reads an archived file at runtime):**
+- `services/lumin-connection-guard.js` — UI-03 previously `readFileSync`'d
+  `lifeos-founder-interface.html`; now asserts the server-side redirect exists in
+  `public-routes.js` (semantically stronger, and file-independent).
+- `core/codebase-reader.js` — frontend build-context file set now includes
+  `lifeos-app.html` instead of the dead `command-center.html`.
+- `startup/routes/server-routes.js` — file-write allowlist dropped
+  `public/overlay/command-center.html` (kept `command-center.js` + `package.json`).
+- `scripts/check-overlay-syntax.js` — dropped retired `control.html` / `portal.html`.
+
+**Verification (all green):**
+- `npm test` — 224 pass / 0 fail.
+- `tests/lumin-connection-guard.test.js` — 3/3 (UI-03 rewire verified).
+- Preflight verify scripts (`verify-voice-rail-history-only`, lumin comm-law,
+  conversation-routing) PASS.
+- `check-overlay-syntax.js` PASS; `readiness:check`, `cold-start:gen`,
+  `handoff:self-test` PASS.
+- File-synopsis law PASS (index updated targeted: +12 −12 ~5, no timestamp churn);
+  SSOT staged-only + staged-product-enforce + product-home:verify PASS.
+- `node --check` clean on all 5 edited `.js` files.
+
+**Note (loud-break honored):** a few *orphaned, non-CI* legacy scripts still read
+these files by name (`scripts/verify-cc-communication.mjs`,
+`scripts/verify-lifeos-communication.mjs`, `scripts/run-voice-rail-*`,
+`scripts/run-lifeos-direct-action-v1-acceptance.mjs`). They are not in CI or
+`builder:preflight`, so they don't affect green; left in place to surface loudly if
+ever invoked, per the founder's "loud break beats silent drift" directive.

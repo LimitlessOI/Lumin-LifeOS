@@ -152,7 +152,6 @@ export function registerServerRoutes(app, deps) {
       const normalizedPath = String(filePath).trim().replace(/^[/\\]+/, "");
       const allowedExactFiles = [
         "public/overlay/command-center.js",
-        "public/overlay/command-center.html",
         "package.json",
       ];
       const resolvedPath = path.resolve(rootDir, normalizedPath);
