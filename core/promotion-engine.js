@@ -6,6 +6,8 @@
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
+
 export class PromotionEngine {
   constructor(pool, callCouncilMember) {
     this.pool = pool;
@@ -61,6 +63,10 @@ export class PromotionEngine {
    */
   async generateBlogPost() {
     console.log('📝 [PROMOTION] Generating blog post...');
+    const baseUrl = resolvePublicBaseUrl();
+    if (!baseUrl) {
+      throw new Error('PUBLIC_BASE_URL or RAILWAY_PUBLIC_DOMAIN required for promotion links');
+    }
 
     const topics = [
       'How to Cut AI API Costs by 90%',
@@ -121,7 +127,7 @@ Return the blog post in markdown format with proper headings.`;
       console.log(`✅ [PROMOTION] Blog post generated: ${filename}`);
 
       // Post to social media about the new blog post
-      await this.postToSocialMedia(`New blog post: ${topic} - Read it here: /blog/${filename.replace('.md', '')}`);
+      await this.postToSocialMedia(`New blog post: ${topic} - Read it here: ${baseUrl}/blog/${filename.replace('.md', '')}`);
 
       return { success: true, filename, topic };
     } catch (error) {
@@ -135,6 +141,10 @@ Return the blog post in markdown format with proper headings.`;
    */
   async postToSocialMedia(customMessage = null) {
     console.log('📱 [PROMOTION] Posting to social media...');
+    const baseUrl = resolvePublicBaseUrl();
+    if (!baseUrl) {
+      throw new Error('PUBLIC_BASE_URL or RAILWAY_PUBLIC_DOMAIN required for promotion links');
+    }
 
     const messages = [
       'Save 90% on AI API costs with intelligent model routing. Pay only 20% of what you save. No upfront cost. →',
@@ -145,7 +155,7 @@ Return the blog post in markdown format with proper headings.`;
     ];
 
     const message = customMessage || messages[Math.floor(Math.random() * messages.length)];
-    const url = 'https://lumin-web-production-e3a9.up.railway.app/cost-savings';
+    const url = `${baseUrl}/cost-savings`;
     const fullMessage = `${message} ${url}`;
 
     // Store post in database
@@ -254,7 +264,7 @@ Return as HTML email with inline styles.`;
         <p>You're currently spending {{current_spend}}/month on AI APIs. We can reduce that by 90%.</p>
         <p>Our intelligent routing system uses free local models for 90% of requests, and you only pay us 20% of what you save.</p>
         <p>Estimated savings: {{estimated_savings}}/month</p>
-        <a href="https://lumin-web-production-e3a9.up.railway.app/cost-savings">Learn More →</a>
+        <a href="${resolvePublicBaseUrl() || '/cost-savings'}">Learn More →</a>
       `;
     }
   }

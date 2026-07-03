@@ -176,6 +176,7 @@ import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
 import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
 import { bootAllDomains } from "./startup/boot-domains.js";
+import { resolvePublicBaseUrlOrLocalhost } from "./config/public-origin.js";
 const coachingStackRuntimeEnabled =
   process.env.LIFEOS_ENABLE_COACHING_STACK_RUNTIME === "true";
 const externalProductRoutesEnabled =
@@ -1426,24 +1427,28 @@ async function start() {
       );
     }
     await writeAutonomyPortFile(selectedPort);
-    const railwayUrl = RAILWAY_PUBLIC_DOMAIN || "lumin-web-production-e3a9.up.railway.app";
+    const railwayUrl = resolvePublicBaseUrlOrLocalhost(
+      8080,
+      RAILWAY_PUBLIC_DOMAIN,
+      process.env.PUBLIC_BASE_URL,
+    );
     console.log(`\n🌐  ONLINE: http://${HOST}:${selectedPort}`);
     console.log(`📊 Health: http://${HOST}:${selectedPort}/healthz`);
     console.log(`🎮 Overlay: http://${HOST}:${selectedPort}/overlay/index.html`);
-    console.log(`🔐 Command Center Activation: https://${railwayUrl}/activate`);
-    console.log(`🎯 Command Center: https://${railwayUrl}/command-center`);
-    console.log(`🏠 BoldTrail CRM: https://${railwayUrl}/boldtrail`);
+    console.log(`🔐 Command Center Activation: ${railwayUrl}/activate`);
+    console.log(`🎯 Command Center: ${railwayUrl}/command-center`);
+    console.log(`🏠 BoldTrail CRM: ${railwayUrl}/boldtrail`);
     console.log(`📞 Recruitment System: POST /api/v1/recruitment/* (outbound calls, webinars, enrollment)`);
     console.log(`📹 YouTube Automation: POST /api/v1/youtube/* (progressive unlock system)`);
     console.log(`🔨 Auto-Builder: GET /api/v1/auto-builder/status (builds opportunities automatically)`);
-    console.log(`🤖 Extract Conversations: https://${railwayUrl}/extract-conversations`);
+    console.log(`🤖 Extract Conversations: ${railwayUrl}/extract-conversations`);
     console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
     console.log(`🔄 Replace File: POST /api/v1/system/replace-file`);
     console.log(
       `💳 Stripe Checkout: POST /api/v1/stripe/checkout-session (key required)`
     );
     console.log(
-      `🌐 Railway URL: https://${railwayUrl}`
+      `🌐 Railway URL: ${railwayUrl}`
     );
     console.log(`🔌 Selected Port: ${selectedPort}`);
     console.log("\n✅ SYSTEM READY");

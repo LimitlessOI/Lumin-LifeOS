@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-03 — Retired-domain scrub: hardcoded `robust-magic-production.up.railway.app` fallbacks replaced with canonical `lumin-web-production-e3a9.up.railway.app` in probe/ops scripts (env vars still take precedence; stale default only). Prior: 2026-07-01 |
+| **Last Updated** | 2026-07-01 |
 
 ---
 
@@ -324,6 +324,7 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-03 | **Founder/base-origin cleanup for LifeRE machine probes** — `scripts/audit-founder-alpha-ready.mjs`, `scripts/crm-alpha-test.mjs`, `scripts/run-lifere-alpha-readiness.mjs`, and `scripts/run-lifere-full-audit.mjs` now resolve `PUBLIC_BASE_URL`/live target through the shared public-origin helper instead of carrying stale `robust-magic` assumptions. | Founder alpha and LifeRE audit receipts are only truthful if they grade the same live origin the founder is actually using; stale host defaults were a hidden false-negative / false-positive path. | ✅ local syntax | deploy + rerun LifeRE founder/audit probes |
 | 2026-06-26 | **Sentry UI routes (GAP-FILL)** — `routes/lifere-os-routes.js`: `GET /buyer/:ref/workspace`, `POST .../objection-coach`, `GET /seller/:ref/workspace`, `POST .../weekly-report`, `GET /client-comms/suggest-vars`; **`services/lifere-deal-side-os.js`** workspace/coach/weekly; **`services/lifere-client-comms.js`** `suggestVarsFromDeal`; **`services/lifere-boot.js`** `ensureDemoDealTwins` (merge demo_buyer_001/demo_listing_001); agent-alpha + break-it probes | Sentry found overlay buttons 404 on production — routes UI called but agent battery missed | ✅ local 124/124 | redeploy + live founder-alpha audit |
 | 2026-06-26 | **`public/overlay/lifeos-lifere.html`** — standalone page redirects to login when no JWT; 401 shows "Sign in" not "Alpha not ready"; shell hint links canonical `/lifeos?...&page=lifeos-lifere.html` | Misleading banner blocked Adam alpha | ✅ UX | deploy |
 | 2026-06-26 | **Alpha banner fix** — `lifere-alpha-readiness-surface.js` uses `OBJECTIVE_VERDICT.agent_alpha_pass` (products/receipts excluded from Docker); adds `ready_for_founder_alpha`; `lifeos-alpha-break-it.mjs` (16 stress checks); overlay battery includes break-it | Adam: alpha test use it break it | ✅ live break-it 16/16 | deploy banner fix |

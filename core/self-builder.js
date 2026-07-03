@@ -11,6 +11,7 @@ import { promisify } from 'util';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolvePublicBaseUrlOrLocalhost } from '../config/public-origin.js';
 
 const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
@@ -350,7 +351,7 @@ export class SelfBuilder {
       
       // Railway auto-deploys on git push, so if we just pushed, deployment is triggered
       // We can also call Railway API if needed
-      const railwayUrl = process.env.RAILWAY_PUBLIC_DOMAIN || 'lumin-web-production-e3a9.up.railway.app';
+      const railwayUrl = resolvePublicBaseUrlOrLocalhost(8080);
       
       return {
         success: true,
@@ -387,9 +388,7 @@ export class SelfBuilder {
 
     try {
       // Check deployment health
-      const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN 
-        ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-        : 'http://localhost:8080';
+      const baseUrl = resolvePublicBaseUrlOrLocalhost(8080);
       
       try {
         const healthResponse = await fetch(`${baseUrl}/healthz`);

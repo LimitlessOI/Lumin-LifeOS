@@ -79,7 +79,7 @@ export function loadRuntimeEnv() {
     // Cost shutdown threshold - if spending exceeds this, only use free models
     COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "0",
     NODE_ENV = "production",
-    RAILWAY_PUBLIC_DOMAIN = "lumin-web-production-e3a9.up.railway.app",
+    RAILWAY_PUBLIC_DOMAIN = "",
     RAILWAY_ENVIRONMENT,
     // Database SSL config (default: false for Neon.tech compatibility)
     DB_SSL_REJECT_UNAUTHORIZED = "false",

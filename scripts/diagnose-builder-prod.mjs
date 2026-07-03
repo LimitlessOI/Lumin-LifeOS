@@ -5,22 +5,20 @@
  * No secrets. Use to prove deploy drift (404 on /domains while /healthz OK).
  *
  * Env (optional):
- *   DIAGNOSE_BASE_URL — default: https://lumin-web-production-e3a9.up.railway.app
+ *   DIAGNOSE_BASE_URL — optional explicit deploy origin
  *
  * @ssot docs/ops/BUILDER_PRODUCTION_FIX.md
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import 'dotenv/config';
-
-const DEFAULT_BASE = 'https://lumin-web-production-e3a9.up.railway.app';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
 const base = (
   process.env.DIAGNOSE_BASE_URL ||
   process.env.PUBLIC_BASE_URL ||
-  process.env.BUILDER_BASE_URL ||
-  DEFAULT_BASE
-).replace(/\/$/, '');
+  process.env.BUILDER_BASE_URL
+);
 
 const key =
   process.env.COMMAND_CENTER_KEY ||

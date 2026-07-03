@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-07-03 | **Command-center/operator live-origin cleanup** — `scripts/governed-autonomy-idle-analysis.mjs`, `scripts/governed-overnight-autonomy.mjs`, and related operator probes now resolve the live base URL through the shared public-origin helper instead of shipping with stale `robust-magic` defaults. | Overnight/operator diagnostics were capable of grading the wrong surface even when the underlying command-center logic was fine. The command layer must look at the active `lumin-web` path, not folklore. | ✅ local syntax | deploy + rerun operator probes |
 | 2026-06-29 | **`routes/lifeos-command-center-routes.js`** — `GET /api/v1/lifeos/command-center/never-stop-product-factory` surfaces live factory lane status (expansion mission, last heartbeat, enabled state). | Never-stop factory scheduler needed a command-center read path to confirm it's running. | AM12 | pending deploy |
 | 2026-06-28 | **`routes/canonical-execution-routes.js` + `services/env-registry-map.js`** — `GET /api/v1/lifeos/admin/operations/timeline|summary` for duration+token aligned ops view. | Adam: see how long everything takes with tokens lined up. | ✅ | deploy |
 | 2026-06-28 | **Self-repair runtime carry-forward surfaced in Command Center** — `services/self-repair-deploy-scheduler.js` raises live deploy-repair retries to 3 attempts, `services/self-repair-execution-log.js` now persists `step_details[]` with attempt/required-context metadata, and `services/self-repair-executor.js` now stamps every executed step with attempt stage plus required carry-forward context before writing the runtime log. | The runtime cockpit was showing repair outcomes without enough truth to explain whether the system actually carried lessons/research forward across retries. These fields make the command layer report the real repair loop instead of a flattened “it tried” summary. | ✅ local syntax + executor/log tests; ⚠️ pending deploy parity | Command Center runtime truth |
@@ -425,7 +426,7 @@ node --check public/overlay/command-center.js
 
 **Status:** BUILD_READY
 **Adaptability Score:** 80/100
-**Last Updated:** 2026-07-03 — Retired-domain scrub: replaced hardcoded `robust-magic-production.up.railway.app` fallbacks with canonical `lumin-web-production-e3a9.up.railway.app` across `config/runtime-env.js`, `core/*`, `server-full-runtime.js`, and probe/ops scripts (env vars like `PUBLIC_BASE_URL` still take precedence — only the stale default domain changed; no Railway runtime change since `RAILWAY_PUBLIC_DOMAIN` is injected). Prior: 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ### Gate 1 — Implementation Detail
 - [x] All panels documented with specific UI descriptions

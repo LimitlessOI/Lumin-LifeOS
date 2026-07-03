@@ -32,6 +32,8 @@ jobs:
           done
 
       - name: Deploy to Railway
-        run: npx --yes @railway/cli@latest up --detach
+        run: npx --yes @railway/cli@latest up --service "${RAILWAY_SERVICE_NAME:-lumin-web}" --environment "${RAILWAY_ENVIRONMENT_NAME:-production}" --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
+          RAILWAY_ENVIRONMENT_NAME: ${{ vars.RAILWAY_ENVIRONMENT_NAME }}

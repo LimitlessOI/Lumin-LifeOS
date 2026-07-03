@@ -71,4 +71,5 @@ node scripts/diagnose-builder-prod.mjs
 
 | Date | Note |
 |------|------|
+| 2026-07-03 | **Repo-side deploy drift reduced:** runtime/script base URLs now resolve through `config/public-origin.js`, the fallback `RAILWAY_PUBLIC_DOMAIN` no longer defaults to robust-magic, and `.github/workflows/railway-deploy.yml` now targets `lumin-web` by default. Current deploy blocker remains external to code: GitHub Actions still reports `Invalid RAILWAY_TOKEN` on `Deploy to Railway`. |
 | 2026-04-25 | **KNOW:** `healthz` 200, `/api/v1/lifeos/builder/domains` 404 on `robust-magic-production` — doc + `diagnose-builder-prod.mjs`. |

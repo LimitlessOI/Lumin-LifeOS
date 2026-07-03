@@ -8,14 +8,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTRACT_PATH = path.join(ROOT, 'docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md');
-const BASE = (
-  process.env.LIFERE_ALPHA_BASE_URL
-  || process.env.PUBLIC_BASE_URL
-  || 'https://lumin-web-production-e3a9.up.railway.app'
-).replace(/\/$/, '');
+const BASE = resolvePublicBaseUrl(process.env.LIFERE_ALPHA_BASE_URL, process.env.PUBLIC_BASE_URL);
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || process.env.LIFEOS_KEY || '';
 
 const report = {

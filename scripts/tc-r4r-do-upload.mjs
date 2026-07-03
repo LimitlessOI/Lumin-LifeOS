@@ -7,7 +7,7 @@
  *
  * Your shell **TC_API_KEY** must match Railway **COMMAND_CENTER_KEY** exactly (local `.env` often drifts).
  *
- *   TC_BASE_URL=https://lumin-web-production-e3a9.up.railway.app \
+ *   TC_BASE_URL=https://your-live-origin \
  *   TC_API_KEY='(paste from Railway Variables)' \
  *   node scripts/tc-r4r-do-upload.mjs --address=Mahogany
  *
@@ -22,6 +22,7 @@
 
 import https from 'node:https';
 import process from 'node:process';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
 const insecureAgent = new https.Agent({ rejectUnauthorized: false });
 
@@ -84,11 +85,11 @@ async function httpJson(base, pathname, { method = 'GET', apiKey, body = null } 
 
 async function main() {
   const args = parseArgs();
-  const base =
-    process.env.TC_BASE_URL ||
-    process.env.PUBLIC_BASE_URL ||
-    process.env.BASE_URL ||
-    'https://lumin-web-production-e3a9.up.railway.app';
+  const base = resolvePublicBaseUrl(
+    process.env.TC_BASE_URL,
+    process.env.PUBLIC_BASE_URL,
+    process.env.BASE_URL,
+  );
   const apiKey =
     process.env.TC_API_KEY ||
     process.env.COMMAND_CENTER_KEY ||

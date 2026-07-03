@@ -470,6 +470,7 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-07-03 | **Public-origin resolver + deploy target cleanup:** `config/public-origin.js` added as the canonical runtime/script origin resolver; `config/runtime-env.js` no longer defaults `RAILWAY_PUBLIC_DOMAIN` to the retired robust-magic host; council-adjacent runtime and audit scripts now resolve `PUBLIC_BASE_URL`/domain through that helper; `.github/workflows/railway-deploy.yml` now targets `lumin-web` by default instead of an implicit/ambiguous service. | Builder/runtime utilities were still teaching and probing stale Railway origins, which makes live diagnosis look like app drift when the real issue may be service targeting or deploy auth. | ✅ local syntax + resolver probe | pending deploy/auth fix |
 | 2026-06-28 | **`services/savings-ledger.js` + `services/council-service.js`** — token rows record `started_at` + `duration_ms` on every metered council call via `meterTiming()`. | Adam: every token spend must align to timestamps for operation timeline. | ✅ | deploy |
 | 2026-06-13 | **AI prose envelope — direct Lumin path** — voice-lie/theater scrub removes bad sentences only; no full-reply replacement with "Counsel only / sync chat" boilerplate on founder conversational turns. | Adam: fake connection — counsel headers made every reply feel disconnected. | ✅ unit | deploy |
 | 2026-06-24 | **Universal AI prose envelope** — `ai-prose-truth-envelope.js`; `callCouncilMember` wraps every return + cache hit via `deliverCouncilText`; blocks counsel theater + voice-rail execution lies + false verification claims; codegen tasks opt-out | Adam: one degree off compounds — nothing may deceive us or itself | ✅ verify-truth-lockdown | deploy |
@@ -525,7 +526,7 @@ When this is done:
 **Status:** BUILD_READY (token optimization + free-tier routing — core is live)
 **Adaptability Score:** 95/100
 **Council Persona:** tesla (think 50 years ahead — what's the theoretical ideal AI routing system?)
-**Last Updated:** 2026-07-03 — Retired-domain scrub: replaced hardcoded `robust-magic-production.up.railway.app` fallbacks with canonical `lumin-web-production-e3a9.up.railway.app` across `config/runtime-env.js`, `core/*`, `server-full-runtime.js`, and probe/ops scripts (env vars like `PUBLIC_BASE_URL` still take precedence — only the stale default domain changed; no Railway runtime change since `RAILWAY_PUBLIC_DOMAIN` is injected). Prior: 2026-07-02 — OpenAI-native codegen fix: `max_completion_tokens` + drop `stop` for gpt-5.x (unblocks builder `/build` self-build loop). Prior: 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-07-03 — public-origin resolver + `lumin-web` deploy-target cleanup for runtime/audit scripts. Prior: 2026-07-02 — OpenAI-native codegen fix: `max_completion_tokens` + drop `stop` for gpt-5.x (unblocks builder `/build` self-build loop).
 
 ### Gate 1 — Implementation Detail
 - [x] Token optimizer, free-tier governor, savings ledger all have specific segment descriptions

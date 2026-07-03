@@ -9,13 +9,14 @@
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
-const base = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
+const base = resolvePublicBaseUrl(process.env.PUBLIC_BASE_URL);
 const key = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
 
 async function main() {
-  if (!key) {
-    console.error(JSON.stringify({ ok: false, error: 'COMMAND_CENTER_KEY required' }));
+  if (!base || !key) {
+    console.error(JSON.stringify({ ok: false, error: 'PUBLIC_BASE_URL and COMMAND_CENTER_KEY required' }));
     process.exit(1);
   }
   const res = await fetch(`${base}/api/v1/lifeos/auth/operator/sync-founder-login`, {

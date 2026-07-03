@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 function loadEnv() {
@@ -21,11 +22,12 @@ function loadEnv() {
 }
 loadEnv();
 const BASE = (
-  process.env.PUBLIC_BASE_URL
-  || process.env.LIFEOS_BASE_URL
-  || process.env.BASE_URL
-  || 'https://lumin-web-production-e3a9.up.railway.app'
-).replace(/\/$/, '');
+  resolvePublicBaseUrl(
+    process.env.PUBLIC_BASE_URL,
+    process.env.LIFEOS_BASE_URL,
+    process.env.BASE_URL,
+  )
+);
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
 const RECEIPT_PATH = path.join(ROOT, 'products/receipts/MACHINE_ALPHA_WALKTHROUGH.json');
 

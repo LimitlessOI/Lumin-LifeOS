@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/universal-overlay/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-03 — Retired-domain scrub: hardcoded `robust-magic-production.up.railway.app` fallbacks replaced with canonical `lumin-web-production-e3a9.up.railway.app` in probe/ops scripts (env vars still take precedence; stale default only). Prior: 2026-06-29 |
+| **Last Updated** | 2026-06-29 |
 
 ---
 ---
@@ -337,6 +337,7 @@ User on insurance portal
 
 | Date | What Changed | Why | Verified | Status |
 |---|---|---|---|---|
+| 2026-07-03 | **Public-origin hardening for native shell + OTA:** `mobile/www/index.html` no longer silently boots the retired robust-magic host when packaged locally; it now requires an explicit `LIFEOS_PUBLIC_BASE_URL` / packaged public origin and fails closed if unset. `mobile/ios/ota/manifest.plist.template` now uses a `PUBLIC_BASE_URL_PLACEHOLDER` token, and `scripts/build-lifeos-ios-adhoc.mjs` injects the real base URL at build time. | Native shell and direct-install artifacts must not ship an invisible stale-host dependency; wrong-origin boot is worse than an explicit configuration blocker. | ✅ local syntax | next mobile package/export |
 | 2026-05-19 | **iPhone install (PWA):** `lifeos.webmanifest` start_url → `/lifeos?direct_system=1&layout=mobile`; `lifeos-native-shell.js` detects iOS standalone; `/install` iPhone-first UX; Safari install banner in `lifeos-app.html`; `build-lifeos-ios.yml` + `ExportOptions-adhoc.plist`; `DIRECT_INSTALL.md` iPhone-first. | Adam: only has iPhone — needs LifeOS on device now without App Store / waiting for Android. | manual Safari | deploy → `/install` on iPhone |
 | 2026-05-19 | **Android CI build + committed `android/`:** `.github/workflows/build-lifeos-android.yml` (ubuntu, SDK 35, `assembleDebug`, artifact + auto-commit APK to `public/downloads/`); `docs/mobile/DIRECT_INSTALL.md` Option A GitHub Actions. | Adam: build real app for direct download outside stores — no App Store / Play Store until tested; no Xcode session now. | ✅ CI | APK live on `/install` |
 | 2026-05-19 | **Direct install (no stores):** `/install`, `/download/lifeos.apk|ipa|ios.plist`, `release.json`, `lifeos-install.html`, `build-lifeos-android-apk.mjs`, `build-lifeos-ios-adhoc.mjs`, `docs/mobile/DIRECT_INSTALL.md`. | Adam: downloadable app without App Store / Play Store. | ✅ node --check | build + deploy binaries |
