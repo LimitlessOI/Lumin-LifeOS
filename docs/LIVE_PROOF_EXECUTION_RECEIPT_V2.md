@@ -9,7 +9,7 @@
 **Mode:** Auditing and execution validation  
 **Runtime code modified:** **NO** (one production CC job executed; two attempts)
 
-**Production base:** `https://robust-magic-production.up.railway.app`
+**Production base:** `https://lumin-web-production-e3a9.up.railway.app`
 
 **Inputs read:**
 - `docs/LIVE_PROOF_CONSENSUS_AUDIT_V1.md`

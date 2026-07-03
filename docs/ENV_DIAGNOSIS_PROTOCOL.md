@@ -3,14 +3,14 @@
 # Environment diagnosis protocol (mandatory before “env is missing”)
 
 **Authority:** Implements `docs/constitution/NORTH_STAR_SSOT.md` **Article II §2.3** (evidence) for variable claims.  
-**Canonical map:** `docs/ENV_REGISTRY.md` (including **Deploy inventory — Lumin / robust-magic**).  
+**Canonical map:** `docs/ENV_REGISTRY.md` (including **Deploy inventory — Lumin / lumin-web**).  
 **Machine mirror:** `services/env-registry-map.js` + `GET /api/v1/railway/managed-env/registry` (when authenticated).
 
 ---
 
 ## Rule (non-negotiable)
 
-No agent may state **KNOW** that a variable is **absent from production** or “not there” **until** steps **1–3** below are satisfied. If the **name** appears in `ENV_REGISTRY.md` (registry table **or** deploy inventory) as present in the **Lumin / robust-magic** vault, the default hypothesis is **THINK: name exists — failure is elsewhere** until disproven.
+No agent may state **KNOW** that a variable is **absent from production** or “not there” **until** steps **1–3** below are satisfied. If the **name** appears in `ENV_REGISTRY.md` (registry table **or** deploy inventory) as present in the **Lumin / lumin-web** vault, the default hypothesis is **THINK: name exists — failure is elsewhere** until disproven.
 
 ### Operator-supplied evidence (hard stop — same conversation)
 
@@ -42,7 +42,7 @@ Work through in order (stop when root cause found):
 | **Wrong runtime** | Local `node` / Cursor shell has **no** Railway inject — only `process.env` you exported. |
 | **Wrong key for header** | Server accepts `COMMAND_CENTER_KEY` / `LIFEOS_KEY` / `API_KEY` — shell must export the **same value** Railway uses; requests use **`x-command-key`**. |
 | **Typo / legacy name** | e.g. `GROK_API_KEY` vs `GROQ_API_KEY`; eXp keys `exp_okta_*` vs uppercase aliases (see registry). |
-| **Wrong base URL** | Preflight hits `PUBLIC_BASE_URL` — must be **this** service’s public origin (e.g. **robust-magic** deploy), not a stale host. |
+| **Wrong base URL** | Preflight hits `PUBLIC_BASE_URL` — must be **this** service’s public origin (e.g. **lumin-web** deploy), not a stale host. |
 | **401 vs 404** | 401 = auth mismatch, not “variable undefined in Railway.” |
 | **Verifier skips secrets** | `verify-project` may skip `CLIENTCARE_*` locally unless `--strict-manifest-env` — read script docs before claiming missing. |
 | **Non-standard UI keys** | Railway may show keys such as `lifeos@hopkinsgroup.org` or `Adam@hopkinsgroup.org` — treat as **legacy labels**; map to documented names in registry when possible. |

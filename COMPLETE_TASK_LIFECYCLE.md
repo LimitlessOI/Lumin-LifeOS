@@ -93,7 +93,7 @@ The system automatically runs these checks after deployment:
 ### View Task Status
 
 ```bash
-GET https://robust-magic-production.up.railway.app/api/v1/tasks/:taskId?key=MySecretKey2025LifeOS
+GET https://lumin-web-production-e3a9.up.railway.app/api/v1/tasks/:taskId?key=MySecretKey2025LifeOS
 ```
 
 **Response:**
@@ -121,13 +121,13 @@ GET https://robust-magic-production.up.railway.app/api/v1/tasks/:taskId?key=MySe
 ### View All Active Tasks
 
 ```bash
-GET https://robust-magic-production.up.railway.app/api/v1/tasks?key=MySecretKey2025LifeOS
+GET https://lumin-web-production-e3a9.up.railway.app/api/v1/tasks?key=MySecretKey2025LifeOS
 ```
 
 ### Manually Verify Task
 
 ```bash
-POST https://robust-magic-production.up.railway.app/api/v1/tasks/:taskId/verify?key=MySecretKey2025LifeOS
+POST https://lumin-web-production-e3a9.up.railway.app/api/v1/tasks/:taskId/verify?key=MySecretKey2025LifeOS
 
 {
   "checks": [

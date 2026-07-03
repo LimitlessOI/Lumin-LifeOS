@@ -9,7 +9,7 @@
 - ✅ Plan Showing interface  
 - ✅ My Showings list
 - ✅ Settings/Registration
-- **Access:** `https://robust-magic-production.up.railway.app/boldtrail?key=MySecretKey2025LifeOS`
+- **Access:** `https://lumin-web-production-e3a9.up.railway.app/boldtrail?key=MySecretKey2025LifeOS`
 
 ### 2. **Backend API Endpoints** (`server.js`)
 - ✅ `POST /api/v1/boldtrail/register` - Register agent
@@ -181,7 +181,7 @@ CREATE TABLE sales_technique_patterns (
 
 ### BoldTrail Interface:
 ```
-https://robust-magic-production.up.railway.app/boldtrail?key=MySecretKey2025LifeOS
+https://lumin-web-production-e3a9.up.railway.app/boldtrail?key=MySecretKey2025LifeOS
 ```
 
 ### Current Features:

@@ -18,7 +18,7 @@ test('resolveFounderBuildBaseUrl prefers local loopback outside Railway even whe
 
   try {
     delete process.env.FOUNDER_BUILD_BASE_URL;
-    process.env.PUBLIC_BASE_URL = 'https://robust-magic-production.up.railway.app';
+    process.env.PUBLIC_BASE_URL = 'https://lumin-web-production-e3a9.up.railway.app';
     delete process.env.RAILWAY_PUBLIC_DOMAIN;
     delete process.env.RAILWAY_ENVIRONMENT;
     delete process.env.RAILWAY_ENVIRONMENT_NAME;
@@ -45,7 +45,7 @@ test('resolveFounderBuildBaseUrl honors explicit override first', async () => {
 
   try {
     process.env.FOUNDER_BUILD_BASE_URL = 'https://example.test';
-    process.env.PUBLIC_BASE_URL = 'https://robust-magic-production.up.railway.app';
+    process.env.PUBLIC_BASE_URL = 'https://lumin-web-production-e3a9.up.railway.app';
     process.env.PORT = '4313';
 
     const mod = await import(`../services/founder-build-success-gate.js?override=${Date.now()}`);

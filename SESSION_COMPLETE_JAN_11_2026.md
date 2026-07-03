@@ -220,10 +220,10 @@ git push origin main
 
 ```bash
 # Health check
-curl https://robust-magic-production.up.railway.app/api/health
+curl https://lumin-web-production-e3a9.up.railway.app/api/health
 
 # Create test customer
-curl -X POST https://robust-magic-production.up.railway.app/api/tco/signup \
+curl -X POST https://lumin-web-production-e3a9.up.railway.app/api/tco/signup \
   -H "Content-Type: application/json" \
   -d '{
     "company_name": "Real Test Co",
@@ -232,7 +232,7 @@ curl -X POST https://robust-magic-production.up.railway.app/api/tco/signup \
   }'
 
 # Make test request
-curl -X POST https://robust-magic-production.up.railway.app/api/tco/proxy \
+curl -X POST https://lumin-web-production-e3a9.up.railway.app/api/tco/proxy \
   -H "Authorization: Bearer tco_xxx" \
   -H "Content-Type: application/json" \
   -d '{

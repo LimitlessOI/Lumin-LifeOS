@@ -15,7 +15,7 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const base = (
   process.env.PUBLIC_BASE_URL ||
   process.env.BUILDER_BASE_URL ||
-  'https://robust-magic-production.up.railway.app'
+  'https://lumin-web-production-e3a9.up.railway.app'
 ).replace(/\/$/, '');
 const key =
   process.env.COMMAND_CENTER_KEY ||

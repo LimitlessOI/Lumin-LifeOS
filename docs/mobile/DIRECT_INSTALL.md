@@ -3,7 +3,7 @@
 # Direct install (no App Store / Play Store)
 
 **Install page (share this link):** `/install`  
-Production: **https://robust-magic-production.up.railway.app/install**
+Production: **https://lumin-web-production-e3a9.up.railway.app/install**
 
 This is a **real app download**, not “open in browser” — once the APK/IPA is built and deployed to `public/downloads/`.
 
@@ -13,7 +13,7 @@ This is a **real app download**, not “open in browser” — once the APK/IPA 
 
 **This works on your iPhone right now** — no App Store, no Xcode, no waiting for Android.
 
-1. Open **Safari** (not Chrome): **https://robust-magic-production.up.railway.app/install**
+1. Open **Safari** (not Chrome): **https://lumin-web-production-e3a9.up.railway.app/install**
 2. Tap **Open LifeOS in Safari** → sign in if asked
 3. Tap **Share** (square with arrow at bottom)
 4. **Add to Home Screen** → **Add**

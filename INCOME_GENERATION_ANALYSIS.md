@@ -47,12 +47,12 @@
 
 ### 1. Check Drone Status:
 ```bash
-GET https://robust-magic-production.up.railway.app/api/v1/drones?key=MySecretKey2025LifeOS
+GET https://lumin-web-production-e3a9.up.railway.app/api/v1/drones?key=MySecretKey2025LifeOS
 ```
 
 ### 2. Check Income Diagnostic:
 ```bash
-GET https://robust-magic-production.up.railway.app/api/v1/income/diagnostic?key=MySecretKey2025LifeOS
+GET https://lumin-web-production-e3a9.up.railway.app/api/v1/income/diagnostic?key=MySecretKey2025LifeOS
 ```
 
 ### 3. Check Opportunities:

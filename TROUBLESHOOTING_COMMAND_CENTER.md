@@ -38,7 +38,7 @@ public/overlay/activate.html
 ### 5. **Test Directly**
 Try accessing:
 ```
-https://robust-magic-production.up.railway.app/health
+https://lumin-web-production-e3a9.up.railway.app/health
 ```
 
 If `/health` works but `/activate` doesn't, it's a routing issue.

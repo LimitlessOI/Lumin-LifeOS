@@ -21,24 +21,24 @@ Railway automatically deploys your app when you push to GitHub. Here's how it wo
 
 ### Your Railway URL:
 ```
-https://robust-magic-production.up.railway.app
+https://lumin-web-production-e3a9.up.railway.app
 ```
 
 ### Available Endpoints:
 
 1. **Health Check** (Working ✅)
    ```
-   https://robust-magic-production.up.railway.app/health
+   https://lumin-web-production-e3a9.up.railway.app/health
    ```
 
 2. **Command Center Activation** (Should work after deployment)
    ```
-   https://robust-magic-production.up.railway.app/activate
+   https://lumin-web-production-e3a9.up.railway.app/activate
    ```
 
 3. **Command Center** (After activation)
    ```
-   https://robust-magic-production.up.railway.app/command-center
+   https://lumin-web-production-e3a9.up.railway.app/command-center
    ```
 
 ---
@@ -87,7 +87,7 @@ git push origin main
    ```
 
 ### Test Deployment:
-1. Visit: `https://robust-magic-production.up.railway.app/health`
+1. Visit: `https://lumin-web-production-e3a9.up.railway.app/health`
 2. Should return: `OK`
 3. If it works, server is running!
 
@@ -102,7 +102,7 @@ git push origin main
 
 ### Step 2: Visit Activation Page
 ```
-https://robust-magic-production.up.railway.app/activate
+https://lumin-web-production-e3a9.up.railway.app/activate
 ```
 
 ### Step 3: Enter Your Key
@@ -112,7 +112,7 @@ https://robust-magic-production.up.railway.app/activate
 
 ### Step 4: Access Command Center
 - You'll be redirected automatically
-- Or visit: `https://robust-magic-production.up.railway.app/command-center?key=YOUR_KEY`
+- Or visit: `https://lumin-web-production-e3a9.up.railway.app/command-center?key=YOUR_KEY`
 
 ---
 

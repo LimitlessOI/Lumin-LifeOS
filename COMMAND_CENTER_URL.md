@@ -8,18 +8,18 @@ Based on your Railway deployment:
 
 **Main URL:**
 ```
-https://robust-magic-production.up.railway.app/activate
+https://lumin-web-production-e3a9.up.railway.app/activate
 ```
 
 **Direct Command Center (after activation):**
 ```
-https://robust-magic-production.up.railway.app/command-center
+https://lumin-web-production-e3a9.up.railway.app/command-center
 ```
 
 ## How to Access
 
 ### Step 1: Go to Activation Page
-Visit: `https://robust-magic-production.up.railway.app/activate`
+Visit: `https://lumin-web-production-e3a9.up.railway.app/activate`
 
 ### Step 2: Enter Your Key
 Enter your `COMMAND_CENTER_KEY` (from Railway environment variables)

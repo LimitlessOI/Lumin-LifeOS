@@ -179,7 +179,7 @@ Ollama unavailable: fetch failed
 
 ### **Check Your Savings:**
 ```
-GET https://robust-magic-production.up.railway.app/api/v1/system/cost-savings?key=MySecretKey2025LifeOS
+GET https://lumin-web-production-e3a9.up.railway.app/api/v1/system/cost-savings?key=MySecretKey2025LifeOS
 ```
 
 This endpoint shows:

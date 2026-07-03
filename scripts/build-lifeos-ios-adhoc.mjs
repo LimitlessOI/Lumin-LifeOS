@@ -59,7 +59,7 @@ Or set LIFEOS_IPA to skip manual copy:
   console.log('✅ Copied IPA to', OUT_IPA);
 
   const plist = fs.readFileSync(path.join(ROOT, 'mobile', 'ios', 'ota', 'manifest.plist.template'), 'utf8')
-    .replace(/https:\/\/robust-magic-production\.up\.railway\.app/g, BASE_URL.replace(/\/$/, ''));
+    .replace(/https:\/\/lumin-web-production-e3a9\.up\.railway\.app/g, BASE_URL.replace(/\/$/, ''));
   fs.writeFileSync(OUT_PLIST, plist);
 
   const version = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version || '1.0.0';
