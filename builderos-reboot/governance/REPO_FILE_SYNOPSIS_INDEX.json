@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T02:26:48.153Z",
+  "generated_at": "2026-07-03T02:32:29.765Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11819,
   "files": [
@@ -21995,8 +21995,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3578589,
-      "mtime": "2026-07-03T02:26:42.312Z",
-      "indexed_at": "2026-07-03T02:26:48.153Z"
+      "mtime": "2026-07-03T02:32:22.784Z",
+      "indexed_at": "2026-07-03T02:32:29.765Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 110959,
-      "mtime": "2026-07-03T02:16:24.656Z",
-      "indexed_at": "2026-07-03T02:18:01.203Z"
+      "bytes": 112511,
+      "mtime": "2026-07-03T02:32:09.908Z",
+      "indexed_at": "2026-07-03T02:32:29.765Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 556709,
-      "mtime": "2026-07-03T02:26:38.588Z",
-      "indexed_at": "2026-07-03T02:26:48.153Z"
+      "bytes": 557104,
+      "mtime": "2026-07-03T02:32:14.412Z",
+      "indexed_at": "2026-07-03T02:32:29.765Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69577,9 +69577,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 137913,
-      "mtime": "2026-07-03T02:25:54.016Z",
-      "indexed_at": "2026-07-03T02:26:48.153Z",
+      "bytes": 139658,
+      "mtime": "2026-07-03T02:31:10.060Z",
+      "indexed_at": "2026-07-03T02:32:29.765Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85651,9 +85651,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 40095,
-      "mtime": "2026-07-03T00:17:45.100Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 41228,
+      "mtime": "2026-07-03T02:31:00.684Z",
+      "indexed_at": "2026-07-03T02:32:29.765Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

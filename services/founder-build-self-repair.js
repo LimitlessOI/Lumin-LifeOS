@@ -62,6 +62,25 @@ import { enforceBeforeBuilderDispatch, formatUnifiedGateBlockSummary } from './f
 import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
 import { researchObstacleBlocker } from './obstacle-web-research.js';
 import { shouldRunWebSearchBeforeAttempt } from './self-repair-escalation-policy.js';
+import { classifyBuildTarget } from './builderos-patch-mode-policy.js';
+import { existsSync } from 'node:fs';
+import { resolve as pathResolve } from 'node:path';
+
+// A large (>150-line "Zone 3") existing .js/.mjs target must NOT be full-file
+// rewritten — that risks a truncated/logic-losing regeneration. When true, the
+// founder build loop asks /task for an additive-only snippet and tells /execute
+// to splice it into the existing file (same protection the governed /build path
+// already uses), instead of committing a whole-file rewrite.
+function isZone3AdditiveTarget(target, repoRoot) {
+  if (!target || !/\.(js|mjs)$/i.test(target)) return false;
+  try {
+    const abs = pathResolve(repoRoot || process.cwd(), target);
+    if (!existsSync(abs)) return false;
+    return classifyBuildTarget(abs).zone === 3;
+  } catch {
+    return false;
+  }
+}
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
@@ -1001,10 +1020,12 @@ export async function runFounderBuildWithSelfRepair(options) {
         self_repair: { attempts, exhausted: true },
       };
     }
+    const additivePatch = isZone3AdditiveTarget(targetFile, repoRoot);
     const taskBody = {
       task: currentTask,
       mode: 'code',
       useCache: false,
+      ...(additivePatch ? { additive_patch: true } : {}),
       ...(platformGapFill || {}),
       ...(targetFile ? { target_file: targetFile, files: [targetFile] } : {}),
       ...(soloWebResearchHints.length ? { web_research_hints: soloWebResearchHints } : {}),
@@ -1065,10 +1086,12 @@ export async function runFounderBuildWithSelfRepair(options) {
       }
 
       const execTarget = taskJson.target_file || taskJson.placement?.target_file || targetFile;
+      const execAdditive = additivePatch || isZone3AdditiveTarget(execTarget, repoRoot);
       const execRes = await postJson(`${base}/api/v1/lifeos/builder/execute`, headers, {
         output: taskJson.output,
         target_file: execTarget,
         commit_message: `[system-build] ${currentTask.slice(0, 80)}`,
+        ...(execAdditive ? { additive_patch: true } : {}),
         ...(platformGapFill || {}),
       });
       execJson = execRes.json || {};

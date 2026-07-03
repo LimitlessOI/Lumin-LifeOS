@@ -1822,7 +1822,7 @@ export function createLifeOSCouncilBuilderRoutes({
   // §2.11: This is the step that makes the SYSTEM the author, not the Conductor.
 
   async function executeOutput(req, res) {
-    const { output, target_file, commit_message, branch, task: bodyTask, mission_id: bodyMissionId } = req.body || {};
+    const { output, target_file, commit_message, branch, task: bodyTask, mission_id: bodyMissionId, additive_patch: additivePatchReq } = req.body || {};
     if (!output) return res.status(400).json({ ok: false, error: 'output is required' });
     if (!target_file) return res.status(400).json({ ok: false, error: 'target_file is required' });
 
@@ -1889,6 +1889,44 @@ export function createLifeOSCouncilBuilderRoutes({
         cleanedOutput = stripped;
       }
     }
+    // Zone 3 additive-patch: the caller (e.g. the founder chat build loop) asked
+    // /task for an additive-only snippet; splice it into the existing large file
+    // here — BEFORE validation/syntax/commit — so a >150-line file is never
+    // full-file rewritten through this path. Mirrors the governed /build route.
+    if (additivePatchReq === true && /\.(js|mjs)$/i.test(target_file)) {
+      const absAdditiveTarget = resolve(process.cwd(), target_file);
+      const zoneMeta = classifyBuildTarget(absAdditiveTarget);
+      if (zoneMeta.zone === 3 && existsSync(absAdditiveTarget)) {
+        const spliced = spliceAdditiveSnippet(absAdditiveTarget, cleanedOutput);
+        if (!spliced.ok) {
+          const gapRecommendation = await recordBuilderGap({
+            domain: null,
+            task: `execute: ${target_file}`,
+            modelUsed: 'system',
+            rawOutput: output,
+            status: 'failed',
+            stage: 'additive_patch',
+            reason: `additive-patch splice failed — ${spliced.reason}`,
+            targetFile: target_file,
+            routingKey: 'council.builder.execute',
+            mode: 'execute',
+          });
+          return res.status(422).json({
+            ok: false,
+            committed: false,
+            error: `Zone 3 additive-patch failed — ${spliced.reason}`,
+            target_file,
+            gap_recommendation: gapRecommendation,
+          });
+        }
+        log.info(
+          { target_file, originalLines: zoneMeta.lineCount, mergedLines: spliced.mergedLines },
+          '[BUILDER] /execute Zone 3 additive-patch: spliced new code into existing file',
+        );
+        cleanedOutput = spliced.content;
+      }
+    }
+
     const validationError = validateGeneratedOutputForTarget(target_file, cleanedOutput);
     if (validationError) {
       const gapRecommendation = await recordBuilderGap({
