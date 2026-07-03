@@ -904,6 +904,17 @@ function validateGeneratedOutputForTarget(targetFile, output) {
       return `generated JS is too short (${lineCount} lines); likely token-limit truncation — refusing to commit; retry with a smaller spec or explicit target_file`;
     }
   }
+  // JSON targets have no `node --check`; a truncated config/manifest would only
+  // fail loudly at boot-parse. JSON.parse IS the completeness gate — it rejects
+  // any truncation (unterminated string/object/array, trailing comma from a cut
+  // mid-write). Covers /build, /execute, and executeBatch (all call this).
+  if (target.endsWith('.json')) {
+    try {
+      JSON.parse(text);
+    } catch (e) {
+      return `generated JSON is invalid (likely truncated): ${e.message}`;
+    }
+  }
   return null;
 }
 
