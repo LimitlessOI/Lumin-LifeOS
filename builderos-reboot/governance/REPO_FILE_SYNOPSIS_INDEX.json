@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T23:59:06.393Z",
+  "generated_at": "2026-07-03T23:59:26.801Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260704_create_transactions_table.sql",
@@ -10,6 +10,13 @@
       "bytes": 804,
       "mtime": "2026-07-03T23:59:06.393Z",
       "indexed_at": "2026-07-03T23:59:06.393Z"
+    },
+    {
+      "path": "services/tc-doc-intake.js",
+      "synopsis": "Exports createTcEmailScanAndUpload — services/tc-doc-intake.js.",
+      "bytes": 13723,
+      "mtime": "2026-07-03T23:59:26.801Z",
+      "indexed_at": "2026-07-03T23:59:26.801Z"
     }
   ]
 }
