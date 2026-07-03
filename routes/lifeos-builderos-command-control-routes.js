@@ -51,6 +51,7 @@ import {
   isExplicitExecuteCommand,
   isBuildRequest,
 } from '../services/lumin-chair-orchestrator.js';
+import { isIntakeBlueprintIntent } from '../services/lifeos-mission-pipeline-executor.js';
 import { needsSystemKnowledge } from '../services/chair-system-knowledge.js';
 import { parseLuminChairSystemAction, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
 import { stripChairDoPrefix } from '../services/chair-intent-signals.js';
@@ -1186,7 +1187,8 @@ HOW TO RESPOND:
         || shouldSkipInputNormalize(originalText, action)
         || isFounderPersonalLifeIntent(originalText)
         || req.body?.alpha_probe === true
-        || needsSystemKnowledge(originalText);
+        || needsSystemKnowledge(originalText)
+        || isIntakeBlueprintIntent(originalText);
       const cleanedInput = skipNormalize
         ? originalText.trim()
         : await normalizeInputText(originalText);
@@ -1329,7 +1331,7 @@ HOW TO RESPOND:
         },
       });
 
-      const CHAIR_TURN_BUDGET_MS = Number(process.env.CHAIR_TURN_BUDGET_MS || '42000');
+      const CHAIR_TURN_BUDGET_MS = Number(process.env.CHAIR_TURN_BUDGET_MS || '90000');
       let chairTurnTimer;
       const chairTurnTimeout = new Promise((resolve) => {
         chairTurnTimer = setTimeout(() => resolve({

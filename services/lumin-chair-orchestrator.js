@@ -409,8 +409,9 @@ export async function runLuminChairTurn(ctx, deps) {
 
   const skipIntentGate = force || forceExecute;
   const displayOnlyTurn = shouldDisplayOnly || explicitAction === 'display';
+  const isIntake = isIntakeBlueprintIntent(effectiveInput) || isIntakeBlueprintIntent(cleanedInput);
 
-  if (!displayOnlyTurn && conversationalMode) {
+  if (!displayOnlyTurn && conversationalMode && !isIntake) {
     const cssTurn = isCssOnlyUiFeedback(cleanedInput) || isCssOnlyUiFeedback(doPrefix.text || cleanedInput);
     if (!cssTurn) {
       const compiled = await compileFounderIntent({
@@ -532,7 +533,7 @@ export async function runLuminChairTurn(ctx, deps) {
 
   let fpV2Enforcement = null;
   const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
-  const counselChannels = new Set(['display', 'lumin', 'counsel', 'life_admin', 'chair']);
+  const counselChannels = new Set(['display', 'lumin', 'counsel', 'life_admin', 'chair', 'intake_blueprint']);
   if (!shouldDisplayOnly && !counselChannels.has(channel)) {
     const understandingForChannel = assessChairIntentUnderstanding(effectiveInput, {
       expandedTask: effectiveInput,

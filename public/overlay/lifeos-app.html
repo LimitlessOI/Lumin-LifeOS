@@ -3414,7 +3414,7 @@ function appendClientBubbleProof(reply, data) {
   return `${reply}\n${tag}`;
 }
 
-const LUMIN_SEND_TIMEOUT_MS = 45000;
+const LUMIN_SEND_TIMEOUT_MS = 95000;
 
 async function luminReadJsonSafe(res) {
   const raw = await res.text();
