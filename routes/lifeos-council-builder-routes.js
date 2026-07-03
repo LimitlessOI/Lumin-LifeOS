@@ -109,6 +109,19 @@ function spliceAdditiveSnippet(absTargetPath, rawSnippet) {
   } catch (err) {
     return { ok: false, reason: `could not read target file: ${err.message}` };
   }
+  // Fail-closed guards: if the model ignored the additive instruction and
+  // returned (most of) the existing file, splicing would duplicate it. `node
+  // --check` catches most duplicate declarations, but a file of only-redeclarable
+  // `function`s could still parse, so reject here before any splice.
+  const existingImportLines = new Set(
+    existing.split('\n').map((l) => l.trim()).filter((l) => /^import\b/.test(l)),
+  );
+  if (snippet.split('\n').some((l) => existingImportLines.has(l.trim()))) {
+    return { ok: false, reason: 'snippet re-emits an existing import line — model returned the full file instead of an additive-only snippet' };
+  }
+  if (snippet.length >= existing.length * 0.6) {
+    return { ok: false, reason: `additive snippet (${snippet.length}b) is too large vs existing file (${existing.length}b) — looks like a full-file rewrite, not an additive patch` };
+  }
   const lines = existing.split('\n');
   let insertIdx = lines.length;
   for (let i = lines.length - 1; i >= 0; i -= 1) {

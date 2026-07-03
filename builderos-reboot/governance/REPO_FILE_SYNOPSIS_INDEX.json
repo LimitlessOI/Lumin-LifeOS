@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T02:18:01.203Z",
+  "generated_at": "2026-07-03T02:26:48.153Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11819,
   "files": [
@@ -21995,8 +21995,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3578589,
-      "mtime": "2026-07-03T02:16:56.016Z",
-      "indexed_at": "2026-07-03T02:18:01.203Z"
+      "mtime": "2026-07-03T02:26:42.312Z",
+      "indexed_at": "2026-07-03T02:26:48.153Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 556352,
-      "mtime": "2026-07-03T02:16:30.068Z",
-      "indexed_at": "2026-07-03T02:18:01.203Z"
+      "bytes": 556709,
+      "mtime": "2026-07-03T02:26:38.588Z",
+      "indexed_at": "2026-07-03T02:26:48.153Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -69577,9 +69577,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 137016,
-      "mtime": "2026-07-03T02:11:44.964Z",
-      "indexed_at": "2026-07-03T02:18:01.203Z",
+      "bytes": 137913,
+      "mtime": "2026-07-03T02:25:54.016Z",
+      "indexed_at": "2026-07-03T02:26:48.153Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
