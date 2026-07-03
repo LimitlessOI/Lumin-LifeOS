@@ -62,7 +62,7 @@ import { enforceBeforeBuilderDispatch, formatUnifiedGateBlockSummary } from './f
 import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
 import { researchObstacleBlocker } from './obstacle-web-research.js';
 import { shouldRunWebSearchBeforeAttempt } from './self-repair-escalation-policy.js';
-import { classifyBuildTarget } from './builderos-patch-mode-policy.js';
+import { classifyBuildTarget, classifyPatchIntent } from './builderos-patch-mode-policy.js';
 import { existsSync } from 'node:fs';
 import { resolve as pathResolve } from 'node:path';
 
@@ -1054,11 +1054,17 @@ export async function runFounderBuildWithSelfRepair(options) {
         self_repair: { attempts, exhausted: true },
       };
     }
-    const additivePatch = isZone3AdditiveTarget(targetFile, repoRoot);
+    // A Zone 3 existing .js target that wants to MODIFY in-file logic routes to
+    // surgical edit-patch (find-and-replace); a pure "add new code" request stays
+    // on additive splice. Both preserve the rest of the file byte-for-byte.
+    const isZone3Existing = isZone3AdditiveTarget(targetFile, repoRoot);
+    const editPatch = isZone3Existing && classifyPatchIntent(currentTask) === 'edit';
+    const additivePatch = isZone3Existing && !editPatch;
     const taskBody = {
       task: currentTask,
       mode: 'code',
       useCache: false,
+      ...(editPatch ? { edit_patch: true } : {}),
       ...(additivePatch ? { additive_patch: true } : {}),
       ...(platformGapFill || {}),
       ...(targetFile ? { target_file: targetFile, files: [targetFile] } : {}),
@@ -1126,11 +1132,13 @@ export async function runFounderBuildWithSelfRepair(options) {
       }
 
       const execTarget = taskJson.target_file || taskJson.placement?.target_file || targetFile;
-      const execAdditive = additivePatch || isZone3AdditiveTarget(execTarget, repoRoot);
+      const execEdit = editPatch && execTarget === targetFile;
+      const execAdditive = !execEdit && (additivePatch || isZone3AdditiveTarget(execTarget, repoRoot));
       const execRes = await postJson(`${base}/api/v1/lifeos/builder/execute`, headers, {
         output: taskJson.output,
         target_file: execTarget,
         commit_message: `[system-build] ${currentTask.slice(0, 80)}`,
+        ...(execEdit ? { edit_patch: true } : {}),
         ...(execAdditive ? { additive_patch: true } : {}),
         ...(platformGapFill || {}),
       });

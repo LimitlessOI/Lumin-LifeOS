@@ -975,7 +975,6 @@ export function createCouncilService({
 
     // ── Auto-detect taskType from prompt content if not provided ─────────────
     // Enables Layers 2-4 for far more calls without callers needing to set options.
-    const isCritical = options.critical === true;
     let taskType = options.taskType || '';
     if (!taskType) {
       const pl = prompt.toLowerCase();
@@ -986,6 +985,12 @@ export function createCouncilService({
       else if (/\bplan\b|\bstrategy\b|\bproposal\b|\bdesign\b/.test(pl)) taskType = 'planning';
       else taskType = 'general';
     }
+    // Code generation must be byte-exact: the lossy compression layers (markdown
+    // strip, phrase-sub, LCL codebook, IR) mangle injected/echoed source — e.g.
+    // `24 * 60 * 60` parsed as markdown emphasis and stripped to `24 60 60`,
+    // which breaks node --check and surgical edit-patch anchors. Treat any code
+    // task as critical so those layers are skipped and source passes through raw.
+    const isCritical = options.critical === true || taskType === 'code' || taskType === 'codegen';
 
     kingsmanAudit({ pool, member, taskType, prompt }).catch(() => {});
 

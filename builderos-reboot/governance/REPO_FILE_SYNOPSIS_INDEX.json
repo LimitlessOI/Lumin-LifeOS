@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T11:27:20.417Z",
+  "generated_at": "2026-07-03T11:59:43.865Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11820,
+  "file_count": 11821,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37935,9 +37935,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 54052,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z"
+      "bytes": 55148,
+      "mtime": "2026-07-03T11:58:44.375Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 117316,
-      "mtime": "2026-07-03T11:14:17.569Z",
-      "indexed_at": "2026-07-03T11:14:23.901Z"
+      "bytes": 120185,
+      "mtime": "2026-07-03T11:58:39.247Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 564669,
-      "mtime": "2026-07-03T11:27:08.121Z",
-      "indexed_at": "2026-07-03T11:27:20.417Z"
+      "bytes": 565633,
+      "mtime": "2026-07-03T11:58:51.487Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -66615,9 +66615,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29349,
-      "mtime": "2026-07-03T11:26:43.853Z",
-      "indexed_at": "2026-07-03T11:27:20.417Z",
+      "bytes": 29384,
+      "mtime": "2026-07-03T11:48:09.847Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "synopsis_index_only": true
     },
     {
@@ -69577,9 +69577,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 150230,
-      "mtime": "2026-07-03T11:26:16.689Z",
-      "indexed_at": "2026-07-03T11:27:20.417Z",
+      "bytes": 158765,
+      "mtime": "2026-07-03T11:58:04.075Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84487,9 +84487,9 @@
     {
       "path": "services/builderos-patch-mode-policy.js",
       "synopsis": "BuilderOS Zone 3 patch-mode policy — classify build targets, generate",
-      "bytes": 4714,
-      "mtime": "2026-06-29T17:44:54.497Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 5728,
+      "mtime": "2026-07-03T11:30:42.025Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85137,9 +85137,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 75795,
-      "mtime": "2026-07-03T02:02:13.864Z",
-      "indexed_at": "2026-07-03T02:04:22.526Z",
+      "bytes": 76251,
+      "mtime": "2026-07-03T11:54:36.775Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -85651,9 +85651,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 44124,
-      "mtime": "2026-07-03T11:07:14.461Z",
-      "indexed_at": "2026-07-03T11:08:00.025Z",
+      "bytes": 44710,
+      "mtime": "2026-07-03T11:58:07.547Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -90444,6 +90444,16 @@
       "bytes": 2341,
       "mtime": "2026-06-29T17:21:09.078Z",
       "indexed_at": "2026-07-03T00:18:52.998Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/builderos-edit-patch.test.js",
+      "synopsis": "Unit tests for the Zone 3 surgical edit-patch primitives that let",
+      "bytes": 5956,
+      "mtime": "2026-07-03T11:48:04.099Z",
+      "indexed_at": "2026-07-03T11:59:43.865Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
