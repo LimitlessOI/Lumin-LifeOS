@@ -736,8 +736,15 @@ Return JSON:
     );
     const arcReport = parseBlueprintFromAiResponse(arcRaw);
 
-    if (!arcReport.ready_to_execute && (arcReport.total_critical > 0 || arcReport.total_moderate > 0)) {
-      const fixedBlueprint = await _autoFixFromArcReport(blueprint, arcReport, session.product_name);
+    const hasCritical = Number(arcReport.total_critical) > 0 || (arcReport.critical && arcReport.critical.length > 0);
+    const hasModerate = Number(arcReport.total_moderate) > 0 || (arcReport.moderate && arcReport.moderate.length > 0);
+    if (!arcReport.ready_to_execute && (hasCritical || hasModerate)) {
+      let fixedBlueprint = null;
+      try {
+        fixedBlueprint = await _autoFixFromArcReport(blueprint, arcReport, session.product_name);
+      } catch (fixErr) {
+        console.error('[ARC-AUTOFIX] Failed to auto-fix blueprint:', fixErr.message);
+      }
       if (fixedBlueprint) {
         await updateSession(pool, sessionId, { arc_report_json: arcReport, blueprint_json: fixedBlueprint, status: 'arc_review' });
         const reReviewRaw = await callCouncilMember('claude',
@@ -767,7 +774,7 @@ Return JSON:
       });
     }
 
-    return { arcReport, status: newStatus };
+    return { arcReport, status: newStatus, autoFixed: false };
   }
 
   async function _autoFixFromArcReport(blueprint, arcReport, productName) {
@@ -794,8 +801,17 @@ Return ONLY the corrected blueprint as a valid JSON object — no markdown, no c
       `CURRENT BLUEPRINT:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
       { systemPromptOverride: fixPrompt, maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
     );
-    const fixed = parseBlueprintFromAiResponse(fixedRaw);
-    if (!fixed || !fixed.steps || fixed.steps.length === 0) return null;
+    let fixed;
+    try {
+      fixed = parseBlueprintFromAiResponse(fixedRaw);
+    } catch (parseErr) {
+      console.error('[ARC-AUTOFIX] Failed to parse AI fix response:', parseErr.message);
+      return null;
+    }
+    if (!fixed || !fixed.steps || fixed.steps.length === 0) {
+      console.error('[ARC-AUTOFIX] Fixed blueprint missing or has no steps');
+      return null;
+    }
 
     fixed._meta = {
       ...blueprint._meta,

@@ -189,6 +189,7 @@ export function createBlueprintIntakeRoutes(app, ctx) {
         status: result.status,
         arc_report: result.arcReport,
         ready_to_execute: result.arcReport.ready_to_execute,
+        auto_fixed: result.autoFixed || false,
         next: result.arcReport.ready_to_execute
           ? `POST /api/v1/blueprint/intake/${req.params.id}/execute`
           : `${result.arcReport.total_critical} critical gaps remain — resolve before executing`,
