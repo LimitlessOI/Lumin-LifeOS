@@ -13,6 +13,7 @@ import {
   runFoundationPipelineForFounder,
   extractIntakeSessionId,
   isIntakeBlueprintIntent,
+  extractIntakeProductName,
   SOCIALMEDIAOS_INTAKE_SESSION,
 } from './lifeos-mission-pipeline-executor.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
@@ -530,7 +531,7 @@ export async function runLuminChairTurn(ctx, deps) {
   const channel = chairContext.channel;
 
   let fpV2Enforcement = null;
-  const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute', 'intake_blueprint'];
+  const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
   const counselChannels = new Set(['display', 'lumin', 'counsel', 'life_admin', 'chair']);
   if (!shouldDisplayOnly && !counselChannels.has(channel)) {
     const understandingForChannel = assessChairIntentUnderstanding(effectiveInput, {
@@ -550,8 +551,8 @@ export async function runLuminChairTurn(ctx, deps) {
       confirmIntent: skipIntentGate,
       channel,
     });
-    const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute', 'intake_blueprint'];
-    if (executeChannels.includes(channel) && !fpV2Enforcement.execute_cleared) {
+    const executeGateChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
+    if (executeGateChannels.includes(channel) && !fpV2Enforcement.execute_cleared) {
       return chairFpV2BlockResponse(
         { intakeNormalized, sourceMode, auth_mode, user_role },
         fpV2Enforcement,
@@ -584,10 +585,68 @@ export async function runLuminChairTurn(ctx, deps) {
     }
 
     case 'intake_blueprint': {
+      const detectedProductId = extractIntakeProductName(cleanedInput);
       const sessionId = extractIntakeSessionId(cleanedInput) || SOCIALMEDIAOS_INTAKE_SESSION;
       const operatorKey = deps.operatorKey || process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
       const baseUrl = deps.founderBuildBaseUrl || process.env.PUBLIC_BASE_URL || '';
       const started = Date.now();
+
+      if (detectedProductId && detectedProductId !== 'marketingos') {
+        const productHomeFile = `docs/products/${detectedProductId}/PRODUCT_HOME.md`;
+        let amendmentText = '';
+        try {
+          const { REPO_ROOT } = await import('./repo-root.js');
+          const { default: fs } = await import('node:fs');
+          const { default: nodePath } = await import('node:path');
+          const fullPath = nodePath.join(REPO_ROOT, productHomeFile);
+          if (fs.existsSync(fullPath)) {
+            amendmentText = fs.readFileSync(fullPath, 'utf8');
+          }
+        } catch { /* fall through */ }
+
+        if (!amendmentText) {
+          const truth = finalizeTruth({
+            ok: false,
+            pass_fail: 'FAIL',
+            command_truth: 'NO_COMMAND_RAN',
+            action: 'intake_blueprint',
+            execution_path: 'intake_blueprint_backfill',
+            product: detectedProductId,
+            first_blocker: `Product home not found: ${productHomeFile}`,
+            human_summary: `Blueprint intake failed — could not read ${productHomeFile}. Ensure the product home exists.`,
+          }, channel);
+          return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+        }
+
+        const intake = (await import('../services/blueprint-intake.js')).createBlueprintIntakeService(deps.pool, deps.callCouncilMember);
+        const backfillResult = await intake.startBackfill({
+          amendmentFile: productHomeFile,
+          amendmentText,
+          productName: detectedProductId,
+          ownerId: null,
+        });
+
+        const truth = finalizeTruth({
+          ok: true,
+          pass_fail: 'RUNNING',
+          command_truth: 'COMMAND_RAN',
+          action: 'intake_blueprint',
+          execution_path: 'intake_blueprint_backfill',
+          session_id: backfillResult.sessionId,
+          product: detectedProductId,
+          product_home: productHomeFile,
+          async: true,
+          first_blocker: null,
+          duration_ms: Date.now() - started,
+          human_summary: `Blueprint intake started for ${detectedProductId}. Session ${backfillResult.sessionId} — status: ${backfillResult.status}. Poll GET /api/v1/blueprint/intake/${backfillResult.sessionId} until status is gap_collection or arc_review.`,
+          human_summary_technical: `Blueprint intake backfill started for ${detectedProductId} from ${productHomeFile}.`,
+        }, channel);
+        return {
+          statusCode: 202,
+          body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }),
+        };
+      }
+
       const intakeResult = await executeIntakeBlueprint({
         sessionId,
         baseUrl,
@@ -595,6 +654,7 @@ export async function runLuminChairTurn(ctx, deps) {
         dryRun: false,
         onStep: () => {},
       });
+      const productLabel = detectedProductId || 'SocialMediaOS';
       const truth = finalizeTruth({
         ok: intakeResult.ok === true,
         pass_fail: intakeResult.ok ? 'PASS' : 'FAIL',
@@ -602,7 +662,7 @@ export async function runLuminChairTurn(ctx, deps) {
         action: 'intake_blueprint',
         execution_path: 'intake_blueprint_executor',
         session_id: sessionId,
-        product: 'SocialMediaOS',
+        product: productLabel,
         steps_run: intakeResult.steps_run || 0,
         failed_step: intakeResult.failed_step || null,
         acceptance: intakeResult.acceptance || null,
@@ -611,9 +671,9 @@ export async function runLuminChairTurn(ctx, deps) {
         duration_ms: Date.now() - started,
         human_summary: intakeResult.ok
           ? (intakeResult.already_complete
-            ? `SocialMediaOS intake blueprint already complete — acceptance PASS (idempotent re-run).`
-            : `SocialMediaOS intake blueprint complete (${intakeResult.steps_run || 0} steps). Acceptance: ${intakeResult.acceptance?.ok ? 'PASS' : 'check logs'}.`)
-          : `SocialMediaOS intake failed at ${intakeResult.failed_step || 'unknown'}: ${intakeResult.error || 'see builder receipt'}.`,
+            ? `${productLabel} intake blueprint already complete — acceptance PASS (idempotent re-run).`
+            : `${productLabel} intake blueprint complete (${intakeResult.steps_run || 0} steps). Acceptance: ${intakeResult.acceptance?.ok ? 'PASS' : 'check logs'}.`)
+          : `${productLabel} intake failed at ${intakeResult.failed_step || 'unknown'}: ${intakeResult.error || 'see builder receipt'}.`,
         human_summary_technical: deps.formatExecutionTruthReply({
           ok: intakeResult.ok,
           pass_fail: intakeResult.ok ? 'PASS' : 'FAIL',

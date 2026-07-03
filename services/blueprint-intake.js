@@ -324,7 +324,8 @@ function tryWriteBlueprintFile(amendmentFile, blueprint) {
 }
 
 function parseBlueprintFromAiResponse(raw) {
-  const stripped = raw.trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+  const text = typeof raw === 'string' ? raw : raw?.content || raw?.text || (typeof raw === 'object' ? JSON.stringify(raw) : String(raw));
+  const stripped = text.trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
   // Try direct parse first
   try { return JSON.parse(stripped); } catch {}
   // Extract first {...} block if AI included preamble text
@@ -443,17 +444,17 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
     await updateSession(pool, sessionId, { codebase_scan_json: codebaseScan });
 
     // Step 1: extract intent
-    const intentRaw = await callCouncilMember('claude',
+    const intentRaw = await callCouncilMember('openai',
       `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
-      { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 1500, taskType: 'codegen', allowModelDowngrade: false }
+      { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
     );
     const intent = parseBlueprintFromAiResponse(intentRaw);
     await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
 
     // Step 2: generate blueprint
-    const blueprintRaw = await callCouncilMember('claude',
+    const blueprintRaw = await callCouncilMember('openai',
       `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
-      { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
+      { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
     );
     let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 

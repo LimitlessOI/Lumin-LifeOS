@@ -50,10 +50,39 @@ export function extractIntakeSessionId(text = '') {
   return null;
 }
 
+const KNOWN_PRODUCTS = new Map([
+  ['tc service', 'tc-service'], ['tc services', 'tc-service'], ['tc-service', 'tc-service'],
+  ['socialmediaos', 'marketingos'], ['social media os', 'marketingos'], ['smos', 'marketingos'], ['marketingos', 'marketingos'],
+  ['lifeos', 'lifeos'], ['life os', 'lifeos'],
+  ['lifere', 'lifere'], ['life re', 'lifere'],
+  ['boldtrail', 'boldtrail'], ['bold trail', 'boldtrail'],
+  ['site builder', 'site-builder'], ['site-builder', 'site-builder'],
+  ['ai council', 'ai-council'], ['ai-council', 'ai-council'],
+  ['memory system', 'memory-system'], ['memory-system', 'memory-system'],
+  ['financial revenue', 'financial-revenue'], ['financial-revenue', 'financial-revenue'],
+  ['command center', 'command-center'], ['command-center', 'command-center'],
+  ['builderos', 'builderos'], ['builder os', 'builderos'],
+  ['limitlessos', 'limitlessos'], ['limitless os', 'limitlessos'],
+  ['video pipeline', 'video-pipeline'], ['video-pipeline', 'video-pipeline'],
+  ['project governance', 'project-governance'], ['project-governance', 'project-governance'],
+  ['universal overlay', 'universal-overlay'], ['universal-overlay', 'universal-overlay'],
+  ['token accounting', 'token-accounting-os'], ['token-accounting-os', 'token-accounting-os'],
+]);
+
+export function extractIntakeProductName(text = '') {
+  const t = String(text || '').toLowerCase();
+  for (const [pattern, productId] of KNOWN_PRODUCTS) {
+    if (t.includes(pattern)) return productId;
+  }
+  return null;
+}
+
 export function isIntakeBlueprintIntent(text = '') {
   const t = String(text || '');
   if (extractIntakeSessionId(t) && /\b(intake|blueprint|a to z|a-to-z|mos-p1|execute|run|build)\b/i.test(t)) return true;
   if (/\b(social\s*media\s*os|socialmediaos|smos)\b/i.test(t) && /\b(blueprint|intake|a to z|a-to-z|build|execute)\b/i.test(t)) return true;
+  if (extractIntakeProductName(t) && /\b(blueprint|founder.?packet|intake|product.?home|mission.?pack)\b/i.test(t)
+    && /\b(create|generate|make|build|produce|write|draft|start|kick.?off)\b/i.test(t)) return true;
   return false;
 }
 
