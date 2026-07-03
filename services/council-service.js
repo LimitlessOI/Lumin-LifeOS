@@ -975,7 +975,6 @@ export function createCouncilService({
 
     // ── Auto-detect taskType from prompt content if not provided ─────────────
     // Enables Layers 2-4 for far more calls without callers needing to set options.
-    const isCritical = options.critical === true;
     let taskType = options.taskType || '';
     if (!taskType) {
       const pl = prompt.toLowerCase();
@@ -986,6 +985,12 @@ export function createCouncilService({
       else if (/\bplan\b|\bstrategy\b|\bproposal\b|\bdesign\b/.test(pl)) taskType = 'planning';
       else taskType = 'general';
     }
+    // Code generation must be byte-exact: the lossy compression layers (markdown
+    // strip, phrase-sub, LCL codebook, IR) mangle injected/echoed source — e.g.
+    // `24 * 60 * 60` parsed as markdown emphasis and stripped to `24 60 60`,
+    // which breaks node --check and surgical edit-patch anchors. Treat any code
+    // task as critical so those layers are skipped and source passes through raw.
+    const isCritical = options.critical === true || taskType === 'code' || taskType === 'codegen';
 
     kingsmanAudit({ pool, member, taskType, prompt }).catch(() => {});
 
@@ -1330,6 +1335,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // and `stop`. Other OpenAI-compatible providers (groq, cerebras, xai, …) still use the
         // legacy `max_tokens` + `stop` shape.
         const isOpenAiNative = config.provider === "openai";
+        // OpenAI reasoning models (o-series, gpt-5.x/6.x) reject any temperature
+        // other than the default (1) with a 400. Omit it for those so
+        // deterministic (temp=0) codegen/json tasks don't hard-fail the build.
+        const reasoningModel = isOpenAiNative && /^(o\d|gpt-[56])/i.test(String(config.model || ''));
         const tokenLimitParam = isOpenAiNative
           ? { max_completion_tokens: scopedMaxTokens }
           : { max_tokens: scopedMaxTokens };
@@ -1339,7 +1348,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           body: JSON.stringify({
             model: config.model,
             ...tokenLimitParam,
-            temperature,
+            ...(reasoningModel ? {} : { temperature }),
             ...(stopSequences && !isOpenAiNative && { stop: stopSequences }),
             messages: deltaMessages
               // Always prepend system message — delta window never carries it
@@ -1446,6 +1455,25 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           deltaMessages
         );
 
+        const generationConfig = {
+          temperature,
+          maxOutputTokens: scopedMaxTokens,
+        };
+        // Gemini 2.5 flash enables "thinking" by default, which adds ~7-40s of
+        // latency (and billed thinking tokens) per call. The free flash lane is
+        // for fast, lightweight reasoning, so disable thinking by default and let
+        // callers opt back in for deeper analysis.
+        const thinkingBudget = Number(
+          options.thinkingBudget ?? process.env.GEMINI_THINKING_BUDGET ?? 0
+        );
+        if (
+          /gemini-2\.5-flash/i.test(config.model || "") &&
+          Number.isFinite(thinkingBudget) &&
+          thinkingBudget >= 0
+        ) {
+          generationConfig.thinkingConfig = { thinkingBudget };
+        }
+
         response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:generateContent?key=${apiKey}`,
           {
@@ -1455,10 +1483,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             },
             body: JSON.stringify({
               ...geminiBody,
-              generationConfig: {
-                temperature,
-                maxOutputTokens: scopedMaxTokens,
-              },
+              generationConfig,
             }),
             signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
           }

@@ -62,6 +62,25 @@ import { enforceBeforeBuilderDispatch, formatUnifiedGateBlockSummary } from './f
 import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
 import { researchObstacleBlocker } from './obstacle-web-research.js';
 import { shouldRunWebSearchBeforeAttempt } from './self-repair-escalation-policy.js';
+import { classifyBuildTarget, classifyPatchIntent } from './builderos-patch-mode-policy.js';
+import { existsSync } from 'node:fs';
+import { resolve as pathResolve } from 'node:path';
+
+// A large (>150-line "Zone 3") existing .js/.mjs target must NOT be full-file
+// rewritten — that risks a truncated/logic-losing regeneration. When true, the
+// founder build loop asks /task for an additive-only snippet and tells /execute
+// to splice it into the existing file (same protection the governed /build path
+// already uses), instead of committing a whole-file rewrite.
+function isZone3AdditiveTarget(target, repoRoot) {
+  if (!target || !/\.(js|mjs)$/i.test(target)) return false;
+  try {
+    const abs = pathResolve(repoRoot || process.cwd(), target);
+    if (!existsSync(abs)) return false;
+    return classifyBuildTarget(abs).zone === 3;
+  } catch {
+    return false;
+  }
+}
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
@@ -76,6 +95,35 @@ function isRetriableBlocker(blocker = '', code = '') {
   if (/FOUNDER_VISUAL_NOT_VERIFIED|DEPLOY_NOT_SYNCED|LIVE_FETCH_FAILED|LOCAL_CSS_MISSING|SCOPE_INCOMPLETE|FAIL_WRONG_OUTCOME/i.test(b)) return true;
   if (/FOUNDER_VISUAL_NOT_VERIFIED|DEPLOY_NOT_SYNCED|LIVE_FETCH_FAILED|LOCAL_CSS_MISSING|SCOPE_INCOMPLETE|FAIL_WRONG_OUTCOME/i.test(c)) return true;
   return false;
+}
+
+// A truncation/completeness blocker is one where the model's output was cut off
+// mid-generation (the pre-commit gates catch it) — as opposed to a logical/scope
+// blocker. These are worth retrying on the SAME target with an explicit
+// "return the complete output" correction, because a fresh generation usually
+// succeeds. Keep this narrow so we don't loop on non-transient failures.
+export function isTruncationBlocker(blocker = '') {
+  const b = String(blocker);
+  return /truncated|Pre-commit syntax check failed|syntax error|Unexpected end|too short|SQL migration appears truncated|likely truncated|does not end in|unclosed paren|unterminated/i.test(b);
+}
+
+// Append an explicit correction so the model knows its previous attempt was cut
+// off and must return complete, valid output. This is the targeted-retry
+// intelligence: feed the exact gate error back rather than silently re-asking.
+export function augmentTaskWithTruncationCorrection(task, blocker) {
+  const reason = String(blocker || 'output was incomplete').slice(0, 300);
+  return [
+    String(task || '').trim(),
+    '',
+    'CORRECTION — YOUR PREVIOUS ATTEMPT WAS REJECTED BY THE PRE-COMMIT COMPLETENESS GATE.',
+    `Gate error: ${reason}`,
+    'Your last output was truncated / incomplete (cut off mid-generation). Return the',
+    'COMPLETE output this time: do not abbreviate, do not omit sections, do not stop',
+    'early. Ensure every bracket, quote, parenthesis, block comment and statement is',
+    'closed and the file/snippet ends cleanly (e.g. a .sql migration ends with ";",',
+    'a .json parses, a .js passes `node --check`). If the full file is too large to',
+    'emit safely, return only the minimal additive snippet for the requested change.',
+  ].join('\n');
 }
 
 function pickRepairTarget(task, currentTarget, blocker) {
@@ -858,6 +906,11 @@ export async function runFounderBuildWithSelfRepair(options) {
   const directOrder = options.confirmIntent === true;
   const effectiveSkipQuorum = skipQuorum || directOrder;
   let targetFile = resolveFounderBuildTarget(currentTask);
+  // Bounded same-target retries when the model truncates its own output. A fresh
+  // generation with the exact gate error fed back usually fixes it; cap it so a
+  // model that keeps truncating escalates instead of looping on budget.
+  let truncationRetries = 0;
+  const MAX_TRUNCATION_RETRIES = 2;
   const platformGapFill = resolvePlatformGapFillForBuildDispatch(
     {
       domain: 'builderos-platform',
@@ -1001,10 +1054,18 @@ export async function runFounderBuildWithSelfRepair(options) {
         self_repair: { attempts, exhausted: true },
       };
     }
+    // A Zone 3 existing .js target that wants to MODIFY in-file logic routes to
+    // surgical edit-patch (find-and-replace); a pure "add new code" request stays
+    // on additive splice. Both preserve the rest of the file byte-for-byte.
+    const isZone3Existing = isZone3AdditiveTarget(targetFile, repoRoot);
+    const editPatch = isZone3Existing && classifyPatchIntent(currentTask) === 'edit';
+    const additivePatch = isZone3Existing && !editPatch;
     const taskBody = {
       task: currentTask,
       mode: 'code',
       useCache: false,
+      ...(editPatch ? { edit_patch: true } : {}),
+      ...(additivePatch ? { additive_patch: true } : {}),
       ...(platformGapFill || {}),
       ...(targetFile ? { target_file: targetFile, files: [targetFile] } : {}),
       ...(soloWebResearchHints.length ? { web_research_hints: soloWebResearchHints } : {}),
@@ -1043,6 +1104,12 @@ export async function runFounderBuildWithSelfRepair(options) {
           attempts[attempts.length - 1].repair_applied = repair.repair;
           continue;
         }
+        if (!repair && attempt < maxAttempts && truncationRetries < MAX_TRUNCATION_RETRIES && isTruncationBlocker(failure.first_blocker)) {
+          truncationRetries += 1;
+          currentTask = augmentTaskWithTruncationCorrection(currentTask, failure.first_blocker);
+          attempts[attempts.length - 1].repair_applied = `truncation_regenerate_${truncationRetries}`;
+          continue;
+        }
         if (!effectiveSkipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
           return escalateAfterSoloExhaustion({
             task: currentTask,
@@ -1065,10 +1132,14 @@ export async function runFounderBuildWithSelfRepair(options) {
       }
 
       const execTarget = taskJson.target_file || taskJson.placement?.target_file || targetFile;
+      const execEdit = editPatch && execTarget === targetFile;
+      const execAdditive = !execEdit && (additivePatch || isZone3AdditiveTarget(execTarget, repoRoot));
       const execRes = await postJson(`${base}/api/v1/lifeos/builder/execute`, headers, {
         output: taskJson.output,
         target_file: execTarget,
         commit_message: `[system-build] ${currentTask.slice(0, 80)}`,
+        ...(execEdit ? { edit_patch: true } : {}),
+        ...(execAdditive ? { additive_patch: true } : {}),
         ...(platformGapFill || {}),
       });
       execJson = execRes.json || {};
@@ -1114,6 +1185,13 @@ export async function runFounderBuildWithSelfRepair(options) {
         targetFile = repair.targetFile;
         currentTask = augmentTaskWithGapFillScope(currentTask, targetFile);
         attempts[attempts.length - 1].repair_applied = repair.repair;
+        continue;
+      }
+      if (!repair && attempt < maxAttempts && truncationRetries < MAX_TRUNCATION_RETRIES && isTruncationBlocker(receipt.blocker)) {
+        truncationRetries += 1;
+        targetFile = resolvedTarget || targetFile;
+        currentTask = augmentTaskWithTruncationCorrection(currentTask, receipt.blocker);
+        attempts[attempts.length - 1].repair_applied = `truncation_regenerate_${truncationRetries}`;
         continue;
       }
 

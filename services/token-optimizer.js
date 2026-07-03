@@ -143,9 +143,14 @@ const REVERSE_TABLE = PHRASE_TABLE.map(([full, short]) => [short, full]);
 
 // ── Compression strategies ────────────────────────────────────────────────────
 
-function stripNoise(text) {
-  return text
-    .replace(/\r\n/g, '\n')           // normalize line endings
+function stripNoise(text, { critical = false } = {}) {
+  // Normalize line endings to LF (always safe; matches on-disk source which uses LF).
+  const normalized = text.replace(/\r\n/g, '\n');
+  // Critical prompts (code generation / edit-patch) must stay byte-exact: blank
+  // lines and indentation are load-bearing for surgical old_string anchors, so
+  // skip every lossy whitespace transform below.
+  if (critical) return normalized;
+  return normalized
     .replace(/\n{2,}/g, '\n')          // collapse all multi-blank lines to single newline
     .replace(/[ \t]+$/gm, '')         // trailing whitespace on each line
     .replace(/^[ \t]+$/gm, '')        // lines that are only whitespace
@@ -209,8 +214,8 @@ export function compress(prompt, opts = {}) {
   const originalTokens = estimateTokens(prompt);
   let text = prompt;
 
-  // Always safe
-  text = stripNoise(text);
+  // Always safe (line-ending normalization); lossy whitespace collapse is skipped for critical.
+  text = stripNoise(text, { critical });
 
   if (!critical) {
     if (stripMd) text = stripMarkdown(text);

@@ -23,6 +23,7 @@ import path from 'path';
 import { execFile as execFileCb } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { promises as fsPromises } from 'fs';
 import {
   ensureSynopsisInContent,
@@ -35,6 +36,30 @@ import {
 import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-safe-scope.js';
 
 const execFile = promisify(execFileCb);
+
+// Repo root derived from this module's own location (services/deployment-service.js)
+// via import.meta.url — NOT process.cwd(), which is not guaranteed to be the repo
+// root depending on how the server was launched.
+const REPO_ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+
+// `node --check` resolves ESM-vs-CommonJS from the nearest package.json "type".
+// A syntax-check temp dir in os.tmpdir() has none, so a `.js` file would parse as
+// CommonJS and silently pass ESM-only syntax errors (e.g. a truncated block
+// comment at EOF) — the exact truncated-output class this guard exists to block
+// before pushing to GitHub. Drop a package.json mirroring this repo's "type" so
+// the check runs in the module system the file will actually run in. (.mjs/.cjs
+// already force their mode via extension, so only `.js` needs this.)
+async function writeSyntaxCheckModuleType(tmpDir, filePath) {
+  if (!/\.js$/i.test(filePath)) return;
+  let type = 'commonjs';
+  try {
+    const pkg = JSON.parse(await fsPromises.readFile(path.join(REPO_ROOT, 'package.json'), 'utf8'));
+    if (pkg.type === 'module') type = 'module';
+  } catch {
+    // default commonjs (Node's own default when "type" is absent)
+  }
+  await fsPromises.writeFile(path.join(tmpDir, 'package.json'), JSON.stringify({ type }), 'utf8');
+}
 
 function assertNotBuilderBlockedPath(normalizedPath, label = 'commitToGitHub', { allowRouteRegistration = false } = {}) {
   if (allowRouteRegistration && normalizedPath === ROUTE_REGISTRATION_FILE) {
@@ -219,20 +244,19 @@ export function createDeploymentService(deps) {
       const tmpDir = await fsPromises.mkdtemp(path.join(tmpdir(), 'deploy-check-'));
       const tmpFile = path.join(tmpDir, 'check.js');
       try {
+        await writeSyntaxCheckModuleType(tmpDir, normalizedPath);
         await fsPromises.writeFile(tmpFile, content, 'utf8');
         await execFile(process.execPath, ['--check', tmpFile]);
       } catch (e) {
         const detail = String(e?.stderr || e?.message || '').split('\n').slice(0, 3).join(' ');
-        await fsPromises.unlink(tmpFile).catch(() => {});
-        await fsPromises.rmdir(tmpDir).catch(() => {});
+        await fsPromises.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
         throw new Error(
           `commitToGitHub BLOCKED: JS syntax check failed for "${normalizedPath}" — not pushing broken code to GitHub.\n` +
           `Detail: ${detail}\n` +
           `Likely cause: builder hit token limit mid-generation. Retry with a smaller spec or explicit target_file.`
         );
       }
-      await fsPromises.unlink(tmpFile).catch(() => {});
-      await fsPromises.rmdir(tmpDir).catch(() => {});
+      await fsPromises.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
     }
 
     const authHeaders = {
@@ -417,6 +441,7 @@ export function createDeploymentService(deps) {
       if (/\.(js|mjs|cjs)$/i.test(normalizedPath)) {
         const tmpDir = await fsPromises.mkdtemp(path.join(tmpdir(), 'lifeos-batch-commit-'));
         const tmpFile = path.join(tmpDir, path.basename(normalizedPath));
+        await writeSyntaxCheckModuleType(tmpDir, normalizedPath);
         await fsPromises.writeFile(tmpFile, content, 'utf8');
         try {
           await execFile('node', ['--check', tmpFile]);
@@ -426,8 +451,7 @@ export function createDeploymentService(deps) {
             `commitManyToGitHub BLOCKED: JS syntax check failed for "${normalizedPath}": ${detail}`,
           );
         } finally {
-          await fsPromises.unlink(tmpFile).catch(() => {});
-          await fsPromises.rmdir(tmpDir).catch(() => {});
+          await fsPromises.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
         }
       }
 
