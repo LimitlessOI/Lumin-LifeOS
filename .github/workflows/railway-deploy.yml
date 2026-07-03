@@ -6,6 +6,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      service_name:
+        description: "Railway service name"
+        required: false
+        default: "lumin-web"
+      environment_name:
+        description: "Railway environment name"
+        required: false
+        default: "production"
 
 jobs:
   deploy:
@@ -33,9 +42,11 @@ jobs:
           done
 
       - name: Deploy to Railway
-        run: npx --yes @railway/cli@latest up --service "${RAILWAY_SERVICE_NAME:-lumin-web}" --environment "${RAILWAY_ENVIRONMENT_NAME:-production}" --detach
+        run: node scripts/railway-github-deploy.mjs
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
-          RAILWAY_ENVIRONMENT_NAME: ${{ vars.RAILWAY_ENVIRONMENT_NAME }}
+          RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+          RAILWAY_SERVICE_NAME: ${{ github.event.inputs.service_name || vars.RAILWAY_SERVICE_NAME }}
+          RAILWAY_ENVIRONMENT_NAME: ${{ github.event.inputs.environment_name || vars.RAILWAY_ENVIRONMENT_NAME }}
+          GITHUB_SHA: ${{ github.sha }}
