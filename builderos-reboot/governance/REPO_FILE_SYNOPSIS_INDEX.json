@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T11:59:43.865Z",
+  "generated_at": "2026-07-03T12:07:26.772Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11821,
+  "file_count": 11822,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37935,9 +37935,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 55148,
-      "mtime": "2026-07-03T11:58:44.375Z",
-      "indexed_at": "2026-07-03T11:59:43.865Z"
+      "bytes": 56574,
+      "mtime": "2026-07-03T12:07:19.331Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -66615,9 +66615,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29384,
-      "mtime": "2026-07-03T11:48:09.847Z",
-      "indexed_at": "2026-07-03T11:59:43.865Z",
+      "bytes": 29423,
+      "mtime": "2026-07-03T12:07:08.699Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z",
       "synopsis_index_only": true
     },
     {
@@ -89147,9 +89147,9 @@
     {
       "path": "services/token-optimizer.js",
       "synopsis": "services/token-optimizer.js",
-      "bytes": 20600,
-      "mtime": "2026-06-21T21:39:18.906Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 21046,
+      "mtime": "2026-07-03T12:06:18.459Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z"
     },
     {
       "path": "services/tokenos-quality-check.js",
@@ -91287,6 +91287,16 @@
       "bytes": 968,
       "mtime": "2026-06-21T21:39:28.769Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
+    },
+    {
+      "path": "tests/token-optimizer-critical.test.js",
+      "synopsis": "tests/token-optimizer-critical.test.js",
+      "bytes": 2281,
+      "mtime": "2026-07-03T12:07:06.259Z",
+      "indexed_at": "2026-07-03T12:07:26.772Z",
+      "ssot": [
+        "docs/products/ai-council/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/truth-gap-closure.test.js",
