@@ -688,11 +688,35 @@ function looksLikeJsonManifestInsteadOfJs(content, target) {
   return t.startsWith('{') && /"project_id"|"required_files"|"required_routes"/.test(t);
 }
 
+// Read the repo's module system once — `node --check` resolves ESM-vs-CommonJS
+// from the nearest package.json "type", and a `.js` file parsed in the wrong
+// mode silently tolerates ESM-only syntax errors (e.g. a truncated block comment
+// at EOF). Default 'commonjs' matches Node's own default when "type" is absent.
+function repoModuleType() {
+  try {
+    const pkg = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'));
+    return pkg.type === 'module' ? 'module' : 'commonjs';
+  } catch {
+    return 'commonjs';
+  }
+}
+
 async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
   let tmpFile = null;
+  let tmpPkg = null;
   try {
     const tmpDir = await mkdtemp(join(tmpdir(), 'builder-check-'));
-    tmpFile = join(tmpDir, extname(resolvedTarget) || '.js');
+    // Give the temp file a real basename (not a bare ".js" dotfile) and, for a
+    // .js target, drop a package.json mirroring the repo's "type" so the check
+    // runs in the SAME module system the committed file will actually run in.
+    // os.tmpdir() has no package.json, so without this a .js file is parsed as
+    // CommonJS and ESM-only syntax errors (including truncated output) pass.
+    const ext = extname(resolvedTarget) || '.js';
+    tmpFile = join(tmpDir, `check${ext}`);
+    if (/^\.(js)$/i.test(ext)) {
+      tmpPkg = join(tmpDir, 'package.json');
+      await writeFile(tmpPkg, JSON.stringify({ type: repoModuleType() }), 'utf8');
+    }
     await writeFile(tmpFile, content, 'utf8');
     execSync(`node --check "${tmpFile}"`, { stdio: 'pipe' });
     return { ok: true };
@@ -703,6 +727,7 @@ async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
     };
   } finally {
     if (tmpFile) await unlink(tmpFile).catch(() => {});
+    if (tmpPkg) await unlink(tmpPkg).catch(() => {});
   }
 }
 
