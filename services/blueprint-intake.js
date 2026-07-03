@@ -807,13 +807,11 @@ Return ONLY the corrected blueprint as a valid JSON object — no markdown, no c
     try {
       fixed = parseBlueprintFromAiResponse(fixedRaw);
     } catch (parseErr) {
-      console.error('[ARC-AUTOFIX] Failed to parse AI fix response:', parseErr.message);
-      return null;
+      throw new Error(`parse_failed: ${parseErr.message} — raw preview: ${String(fixedRaw).slice(0, 200)}`);
     }
-    if (!fixed || !fixed.steps || fixed.steps.length === 0) {
-      console.error('[ARC-AUTOFIX] Fixed blueprint missing or has no steps');
-      return null;
-    }
+    if (!fixed) throw new Error('parse_returned_null: AI returned unparseable response');
+    if (!fixed.steps) throw new Error(`no_steps_key: parsed JSON keys=[${Object.keys(fixed).join(',')}]`);
+    if (fixed.steps.length === 0) throw new Error('empty_steps: AI returned blueprint with 0 steps');
 
     fixed._meta = {
       ...blueprint._meta,
