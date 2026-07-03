@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T17:50:24.967Z",
+  "generated_at": "2026-07-03T19:14:43.799Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11840,
   "files": [
@@ -28,9 +28,9 @@
     {
       "path": ".github/workflows/autopilot-build.yml",
       "synopsis": "yml — .github/workflows/autopilot-build.yml.",
-      "bytes": 3848,
-      "mtime": "2026-07-03T17:45:33.655Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3846,
+      "mtime": "2026-07-01T22:02:39.849Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": ".github/workflows/build-lifeos-android.yml",
@@ -91,9 +91,9 @@
     {
       "path": ".github/workflows/night-run.yml",
       "synopsis": "yml — .github/workflows/night-run.yml.",
-      "bytes": 1206,
-      "mtime": "2026-07-03T17:45:33.671Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 1204,
+      "mtime": "2026-07-01T22:02:39.849Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": ".github/workflows/pr-diff-summary.yml",
@@ -289,9 +289,9 @@
     {
       "path": "android/README.md",
       "synopsis": "LifeOS Android (Capacitor)",
-      "bytes": 412,
-      "mtime": "2026-07-03T17:45:21.871Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 410,
+      "mtime": "2026-07-01T22:02:39.857Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "anti_drift_protocol.js",
@@ -20617,9 +20617,9 @@
     {
       "path": "BOLDTRAIL_INTEGRATION_STATUS.md",
       "synopsis": "🏠 BoldTrail Integration Status & Implementation Plan",
-      "bytes": 7675,
-      "mtime": "2026-07-03T17:48:08.387Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 7671,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
@@ -21699,9 +21699,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 20826,
-      "mtime": "2026-07-03T17:48:51.027Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z",
+      "bytes": 20808,
+      "mtime": "2026-07-02T01:12:20.740Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z",
       "synopsis_index_only": true
     },
     {
@@ -29815,9 +29815,9 @@
     {
       "path": "builderos-reboot/scripts/emit-mission-spend-snapshot.mjs",
       "synopsis": "Mission spend snapshot — Railway production telemetry (honest estimates).",
-      "bytes": 7528,
-      "mtime": "2026-07-03T17:45:33.687Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z",
+      "bytes": 7526,
+      "mtime": "2026-07-01T22:02:40.025Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z",
       "ssot": [
         "builderos-reboot/SNT_TELEMETRY_DOCTRINE.md"
       ]
@@ -30306,9 +30306,9 @@
     {
       "path": "capacitor.config.json",
       "synopsis": "JSON data/config — capacitor.config.json.",
-      "bytes": 710,
-      "mtime": "2026-07-03T17:45:21.883Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z",
+      "bytes": 706,
+      "mtime": "2026-07-01T22:02:40.029Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z",
       "synopsis_index_only": true
     },
     {
@@ -30464,9 +30464,9 @@
     {
       "path": "COMMAND_CENTER_URL.md",
       "synopsis": "🔐 Command Center URL & Activation",
-      "bytes": 2082,
-      "mtime": "2026-07-03T17:47:38.399Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 2076,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "COMPLETE_BUILD_REPORT.md",
@@ -30506,16 +30506,16 @@
     {
       "path": "COMPLETE_SYSTEM_SUMMARY.md",
       "synopsis": "🎯 Complete System Summary - All Features",
-      "bytes": 3586,
-      "mtime": "2026-07-03T17:48:08.387Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3584,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "COMPLETE_TASK_LIFECYCLE.md",
       "synopsis": "🔄 Complete Task Lifecycle - System Now Sees Tasks Through to Completion",
-      "bytes": 6054,
-      "mtime": "2026-07-03T17:47:55.391Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 6048,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "config/agriculture-config.js",
@@ -35080,16 +35080,16 @@
     {
       "path": "DEPLOYMENT_GUIDE.md",
       "synopsis": "🚀 Complete Deployment Guide",
-      "bytes": 4880,
-      "mtime": "2026-07-03T17:47:24.231Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 4866,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "DEPLOYMENT_JAN_11_2026.md",
       "synopsis": "🚀 DEPLOYMENT - JANUARY 11, 2026",
-      "bytes": 8639,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 8627,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "deployment/deploy.sh",
@@ -35674,9 +35674,9 @@
     {
       "path": "docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md",
       "synopsis": "Hist — Legacy System & Repo Registry",
-      "bytes": 14493,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 14491,
+      "mtime": "2026-07-01T22:02:40.069Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md",
@@ -36010,9 +36010,9 @@
     {
       "path": "docs/constitution/NORTH_STAR_SSOT.md",
       "synopsis": "North Star Constitution SSOT — Force of Truth — supreme constitutional law (ONE file)",
-      "bytes": 68050,
-      "mtime": "2026-07-03T17:47:24.211Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 68053,
+      "mtime": "2026-07-01T22:02:40.073Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/constitution/NORTH_STAR.md",
@@ -36865,16 +36865,16 @@
     {
       "path": "docs/ENV_DIAGNOSIS_PROTOCOL.md",
       "synopsis": "Environment diagnosis protocol (mandatory before “env is missing”)",
-      "bytes": 6640,
-      "mtime": "2026-07-03T17:46:11.139Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 6649,
+      "mtime": "2026-07-01T22:02:40.057Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/ENV_REGISTRY.md",
       "synopsis": "ENV_REGISTRY.md — Environment Variable Registry",
-      "bytes": 34403,
-      "mtime": "2026-07-03T17:46:00.583Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 34373,
+      "mtime": "2026-07-01T22:02:40.057Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/ENVIRONMENT_SETUP.md",
@@ -37292,9 +37292,9 @@
     {
       "path": "docs/history/legacy-history-salvage/docs-projects-root/LIFEOS_BROWSER_AND_PLATFORM_GRADE_2026-05-08.md",
       "synopsis": "LifeOS shell + platform — graded pass (live browser + probes)",
-      "bytes": 2990,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 2988,
+      "mtime": "2026-07-01T22:02:40.245Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/history/legacy-history-salvage/docs-projects-root/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
@@ -37830,9 +37830,9 @@
     {
       "path": "docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md",
       "synopsis": "LifeRE Alpha Audit — Agent Prompt",
-      "bytes": 7263,
-      "mtime": "2026-07-03T17:47:12.923Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 7259,
+      "mtime": "2026-07-01T22:02:40.057Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/LIFERE_BLUEPRINT_ROADMAP.json",
@@ -37880,9 +37880,9 @@
     {
       "path": "docs/LIVE_BUILD_EXECUTION_READINESS_RECEIPT_V1.md",
       "synopsis": "Live Build Execution Readiness Receipt V1",
-      "bytes": 14228,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 14226,
+      "mtime": "2026-07-01T22:02:40.061Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/LIVE_PROOF_CONSENSUS_AUDIT_V1.md",
@@ -37894,9 +37894,9 @@
     {
       "path": "docs/LIVE_PROOF_EXECUTION_RECEIPT_V2.md",
       "synopsis": "Live Proof Execution Receipt V2",
-      "bytes": 15885,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 15883,
+      "mtime": "2026-07-01T22:02:40.061Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/LUMIN_DOCTRINE.md",
@@ -37929,9 +37929,9 @@
     {
       "path": "docs/mobile/DIRECT_INSTALL.md",
       "synopsis": "Direct install (no App Store / Play Store)",
-      "bytes": 3125,
-      "mtime": "2026-07-03T17:45:44.991Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3121,
+      "mtime": "2026-07-01T22:02:40.245Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/mockups/DASHBOARD_UI_MAP.md",
@@ -37978,9 +37978,9 @@
     {
       "path": "docs/ops/BUILDER_PRODUCTION_FIX.md",
       "synopsis": "Council builder: production 404 on `/domains` — diagnosis & fix",
-      "bytes": 3908,
-      "mtime": "2026-07-03T17:49:05.659Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3904,
+      "mtime": "2026-07-01T22:02:40.289Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/OSC_LOGS_GUIDE.md",
@@ -38280,9 +38280,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 79787,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 79785,
+      "mtime": "2026-07-01T22:02:40.293Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -38636,9 +38636,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 569262,
-      "mtime": "2026-07-03T17:19:30.575Z",
-      "indexed_at": "2026-07-03T17:19:41.122Z"
+      "bytes": 570501,
+      "mtime": "2026-07-03T19:13:51.203Z",
+      "indexed_at": "2026-07-03T19:14:43.799Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -38672,9 +38672,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 28446,
-      "mtime": "2026-07-03T17:46:50.631Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 28444,
+      "mtime": "2026-07-03T17:19:08.735Z",
+      "indexed_at": "2026-07-03T17:19:41.122Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -58554,16 +58554,16 @@
     {
       "path": "docs/RAILWAY_DEPLOYMENT_CHECK.md",
       "synopsis": "🚨 Railway Auto-Deployment Not Triggering - Quick Fix Guide",
-      "bytes": 3937,
-      "mtime": "2026-07-03T17:46:21.959Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3936,
+      "mtime": "2026-07-01T22:02:40.061Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/RAILWAY_ENV_SETUP.md",
       "synopsis": "🚂 Railway Environment Variable Setup",
-      "bytes": 7373,
-      "mtime": "2026-07-03T17:46:26.687Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 7376,
+      "mtime": "2026-07-01T22:02:40.061Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/REORGANIZATION_SUMMARY.md",
@@ -58582,17 +58582,17 @@
     {
       "path": "docs/REPO_CATALOG.json",
       "synopsis": "Documentation — REPO CATALOG.",
-      "bytes": 716196,
-      "mtime": "2026-07-03T17:48:36.751Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z",
+      "bytes": 661866,
+      "mtime": "2026-07-01T22:02:40.061Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/REPO_CATALOG.md",
       "synopsis": "REPO_CATALOG — machine-generated inventory",
-      "bytes": 512670,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 512668,
+      "mtime": "2026-07-01T22:02:40.065Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/REPO_DEEP_AUDIT.md",
@@ -58618,9 +58618,9 @@
     {
       "path": "docs/reports/landing-page-status.md",
       "synopsis": "Landing Page Verification Report",
-      "bytes": 569,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 567,
+      "mtime": "2026-07-01T22:02:40.377Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md",
@@ -59035,9 +59035,9 @@
     {
       "path": "extensions/chrome/cognitive-profiler/background.js",
       "synopsis": "js — extensions/chrome/cognitive-profiler/background.js.",
-      "bytes": 713,
-      "mtime": "2026-07-03T17:45:12.691Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 714,
+      "mtime": "2026-07-01T22:02:40.481Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "extensions/chrome/cognitive-profiler/content.js",
@@ -60017,16 +60017,16 @@
     {
       "path": "FIXES_SUMMARY.md",
       "synopsis": "🔧 Fixes Applied - Summary",
-      "bytes": 3029,
-      "mtime": "2026-07-03T17:48:08.387Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3027,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "github/workflows/autopilot-cron.yml",
       "synopsis": "yml — github/workflows/autopilot-cron.yml.",
-      "bytes": 590,
-      "mtime": "2026-07-03T17:45:33.639Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 588,
+      "mtime": "2026-07-01T22:02:40.489Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "GOOD_MORNING.md",
@@ -60080,9 +60080,9 @@
     {
       "path": "HOW_TO_EXTRACT_CONVERSATIONS.md",
       "synopsis": "🤖 How to Extract Your AI Conversations",
-      "bytes": 3206,
-      "mtime": "2026-07-03T17:48:08.379Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3198,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "HOW_TO_SCRAPE_CONVERSATIONS.md",
@@ -60101,9 +60101,9 @@
     {
       "path": "HOW_TO_USE_SELF_BUILDER.md",
       "synopsis": "🔨 Self-Builder System - How to Use",
-      "bytes": 4503,
-      "mtime": "2026-07-03T17:47:33.615Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 4497,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "ideas.js",
@@ -60136,16 +60136,16 @@
     {
       "path": "INCOME_GENERATION_ANALYSIS.md",
       "synopsis": "💰 Income Generation Analysis",
-      "bytes": 3978,
-      "mtime": "2026-07-03T17:48:08.383Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 3974,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "INCOME_GENERATION_DIAGNOSTIC.md",
       "synopsis": "💰 Income Generation Diagnostic Report",
-      "bytes": 4724,
-      "mtime": "2026-07-03T17:48:08.383Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 4722,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "index.html",
@@ -66375,16 +66375,16 @@
     {
       "path": "mobile/README.md",
       "synopsis": "Native Universal Overlay shell (Capacitor)",
-      "bytes": 2858,
-      "mtime": "2026-07-03T17:45:21.855Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 2856,
+      "mtime": "2026-07-01T22:02:40.509Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "mobile/www/index.html",
       "synopsis": "Native Universal Overlay bootstrap — loads canonical LifeOS shell from Railway",
-      "bytes": 1753,
-      "mtime": "2026-07-03T17:45:12.707Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 1751,
+      "mtime": "2026-07-01T22:02:40.509Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "MODELROUTER_FIX_REPORT.md",
@@ -69043,9 +69043,9 @@
     {
       "path": "public/welcome.html",
       "synopsis": "HTML page: Welcome - You're All Set!",
-      "bytes": 4411,
-      "mtime": "2026-07-03T17:45:12.667Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 4401,
+      "mtime": "2026-07-01T22:02:40.549Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "quantum_circuits.json",
@@ -69591,9 +69591,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 54744,
-      "mtime": "2026-07-03T02:24:55.672Z",
-      "indexed_at": "2026-07-03T17:19:34.752Z",
+      "bytes": 56138,
+      "mtime": "2026-07-03T19:11:23.215Z",
+      "indexed_at": "2026-07-03T19:14:43.799Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -70367,9 +70367,9 @@
     {
       "path": "SAVINGS_PLAN_AND_OPEN_SOURCE_REPORT.md",
       "synopsis": "💰 Savings Plan & Open-Source AI Systems Report",
-      "bytes": 6732,
-      "mtime": "2026-07-03T17:48:08.387Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 6730,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "scenario_1_new_lead.md",
@@ -70652,9 +70652,9 @@
     {
       "path": "scripts/build-lifeos-ios-adhoc.mjs",
       "synopsis": "iOS ad-hoc IPA + OTA manifest for direct install (no App Store).",
-      "bytes": 3432,
-      "mtime": "2026-07-03T17:45:04.423Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z",
+      "bytes": 3430,
+      "mtime": "2026-07-03T17:19:08.735Z",
+      "indexed_at": "2026-07-03T17:19:41.122Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -89823,16 +89823,16 @@
     {
       "path": "SESSION_BREAKDOWN.md",
       "synopsis": "📋 Complete Session Breakdown - Everything We've Built",
-      "bytes": 12301,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 12299,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "SESSION_COMPLETE_JAN_11_2026.md",
       "synopsis": "✅ SESSION COMPLETE - TCO SYSTEM OPERATIONAL",
-      "bytes": 13710,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 13704,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "setup_database.sql",
@@ -90872,9 +90872,9 @@
     {
       "path": "tests/founder-build-base-url.test.js",
       "synopsis": "js — tests/founder-build-base-url.test.js.",
-      "bytes": 2272,
-      "mtime": "2026-07-03T17:45:12.651Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 2268,
+      "mtime": "2026-07-01T22:02:40.653Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "tests/founder-build-job-store.test.js",
@@ -91552,9 +91552,9 @@
     {
       "path": "TROUBLESHOOTING_COMMAND_CENTER.md",
       "synopsis": "🔧 Troubleshooting Command Center",
-      "bytes": 2129,
-      "mtime": "2026-07-03T17:48:29.719Z",
-      "indexed_at": "2026-07-03T17:50:24.967Z"
+      "bytes": 2127,
+      "mtime": "2026-07-01T22:02:39.853Z",
+      "indexed_at": "2026-07-03T17:19:34.752Z"
     },
     {
       "path": "truffle-config.js",
