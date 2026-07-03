@@ -1,0 +1,7 @@
+{
+  "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+  "simulated_at": "2026-07-01T22:24:52.729Z",
+  "simulated_by": "foundation/phase-repair.js",
+  "blocking_gaps": 0,
+  "verdict": "PASS"
+}
