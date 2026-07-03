@@ -655,6 +655,74 @@ function fixAsteriskShorthandParams(s) {
   });
 }
 
+// Detect a TRUNCATED SQL migration (model cut off mid-generation). There is no
+// `node --check` for .sql, so this scanner is the truncation gate: it walks the
+// text while skipping delimiters inside string/dollar-quote/comment contexts so
+// real migrations (function bodies with `$$`, strings containing parens) never
+// false-positive, then flags unterminated literals/comments, unbalanced parens,
+// or a body that doesn't end in `;`. Verified zero false-positives across all
+// committed migrations.
+function checkSqlCompleteness(sqlContent) {
+  const s = String(sqlContent || '');
+  const n = s.length;
+  let i = 0;
+  let parenDepth = 0;
+  let lastSignificant = '';
+  let inLineComment = false;
+  let inBlockComment = false;
+  let inSingle = false;
+  let dollarTag = null;
+
+  while (i < n) {
+    const c = s[i];
+    const c2 = s[i + 1];
+
+    if (inLineComment) {
+      if (c === '\n') inLineComment = false;
+      i += 1;
+      continue;
+    }
+    if (inBlockComment) {
+      if (c === '*' && c2 === '/') { inBlockComment = false; i += 2; continue; }
+      i += 1;
+      continue;
+    }
+    if (inSingle) {
+      if (c === "'" && c2 === "'") { i += 2; continue; }
+      if (c === "'") { inSingle = false; i += 1; continue; }
+      i += 1;
+      continue;
+    }
+    if (dollarTag) {
+      if (c === '$' && s.slice(i).startsWith(dollarTag)) { i += dollarTag.length; dollarTag = null; continue; }
+      i += 1;
+      continue;
+    }
+
+    if (c === '-' && c2 === '-') { inLineComment = true; i += 2; continue; }
+    if (c === '/' && c2 === '*') { inBlockComment = true; i += 2; continue; }
+    if (c === "'") { inSingle = true; i += 1; continue; }
+    if (c === '$') {
+      const m = s.slice(i).match(/^\$[A-Za-z0-9_]*\$/);
+      if (m) { dollarTag = m[0]; i += m[0].length; continue; }
+    }
+    if (c === '(') { parenDepth += 1; lastSignificant = c; i += 1; continue; }
+    if (c === ')') { parenDepth -= 1; lastSignificant = c; i += 1; continue; }
+    if (!/\s/.test(c)) lastSignificant = c;
+    i += 1;
+  }
+
+  if (inBlockComment) return { ok: false, error: 'SQL migration appears truncated — unterminated block comment (/* …)' };
+  if (inSingle) return { ok: false, error: 'SQL migration appears truncated — unterminated string literal' };
+  if (dollarTag) return { ok: false, error: `SQL migration appears truncated — unterminated dollar-quoted block (${dollarTag} …)` };
+  if (parenDepth > 0) return { ok: false, error: `SQL migration appears truncated — ${parenDepth} unclosed parenthes${parenDepth === 1 ? 'is' : 'es'}` };
+  if (parenDepth < 0) return { ok: false, error: 'SQL migration malformed — unbalanced parentheses (extra close)' };
+  if (lastSignificant && lastSignificant !== ';') {
+    return { ok: false, error: `SQL migration appears truncated — does not end in ';' (ends in '${lastSignificant}')` };
+  }
+  return { ok: true };
+}
+
 function validateSqlMigrationContent(sqlContent) {
   const s = String(sqlContent || '').trim();
   if (!s) return { ok: false, error: 'SQL migration is empty' };
@@ -678,6 +746,9 @@ function validateSqlMigrationContent(sqlContent) {
   if (!sqlKeywords.test(s)) {
     return { ok: false, error: 'No recognizable SQL keywords (CREATE, ALTER, etc.)' };
   }
+
+  const completeness = checkSqlCompleteness(s);
+  if (!completeness.ok) return completeness;
 
   return { ok: true };
 }
