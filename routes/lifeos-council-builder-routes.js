@@ -1265,7 +1265,29 @@ export function createLifeOSCouncilBuilderRoutes({
       }
     }
 
-    const { block: filesContentBlock, summaries: filesInjectSummaries } = await loadRepoFilesForBuilder(files, log);
+    // When building against an existing target file, always inject its current
+    // content so the model extends the real file instead of refusing with
+    // "existing exports were not provided" (or blindly rebuilding what exists).
+    // Only auto-added when the file actually exists on disk (new-file builds
+    // have no prior content and must not inject a spurious READ ERROR block).
+    const contextFiles = (() => {
+      const base = Array.isArray(files)
+        ? files.filter((f) => typeof f === 'string' && f.trim())
+        : [];
+      const normalize = (f) => f.trim().replace(/^[/\\]+/, '');
+      const tf = typeof bodyTargetFile === 'string' ? bodyTargetFile.trim() : '';
+      if (
+        mode === 'code'
+        && tf
+        && !base.some((f) => normalize(f) === normalize(tf))
+        && existsSync(resolve(REPO_ROOT, normalize(tf)))
+      ) {
+        return [...base, tf];
+      }
+      return base;
+    })();
+
+    const { block: filesContentBlock, summaries: filesInjectSummaries } = await loadRepoFilesForBuilder(contextFiles, log);
     if (filesInjectSummaries.length) {
       log.info({ count: filesInjectSummaries.length, paths: filesInjectSummaries.map(s => s.path) }, '[BUILDER] Injected repo file bodies for files[]');
     }
@@ -1481,9 +1503,9 @@ export function createLifeOSCouncilBuilderRoutes({
     });
 
     const htmlCodegenExtra =
-      mode === 'code' && builderTargetsHtml(files, bodyTargetFile) ? `\n${htmlFullFileCodegenHints()}` : '';
+      mode === 'code' && builderTargetsHtml(contextFiles, bodyTargetFile) ? `\n${htmlFullFileCodegenHints()}` : '';
     const jsCodegenExtra =
-      mode === 'code' && !builderTargetsHtml(files, bodyTargetFile) && builderTargetsJavaScript(files, bodyTargetFile)
+      mode === 'code' && !builderTargetsHtml(contextFiles, bodyTargetFile) && builderTargetsJavaScript(contextFiles, bodyTargetFile)
         ? `\n${jsFullFileCodegenHints()}`
         : '';
 
@@ -1495,7 +1517,7 @@ export function createLifeOSCouncilBuilderRoutes({
     const userPrompt = [
       `TASK: ${task}`,
       spec ? `\nSPECIFICATION:\n${spec}` : '',
-      files?.length ? `\nRELEVANT FILE PATHS (also embedded below when readable): ${files.join(', ')}` : '',
+      contextFiles?.length ? `\nRELEVANT FILE PATHS (also embedded below when readable): ${contextFiles.join(', ')}` : '',
       filesContentBlock
         ? `\nREPO FILE CONTENTS — authoritative; produce a single full replacement for target_file when mode is code:\n${filesContentBlock}`
         : '',

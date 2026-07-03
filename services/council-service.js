@@ -1330,6 +1330,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // and `stop`. Other OpenAI-compatible providers (groq, cerebras, xai, …) still use the
         // legacy `max_tokens` + `stop` shape.
         const isOpenAiNative = config.provider === "openai";
+        // OpenAI reasoning models (o-series, gpt-5.x/6.x) reject any temperature
+        // other than the default (1) with a 400. Omit it for those so
+        // deterministic (temp=0) codegen/json tasks don't hard-fail the build.
+        const reasoningModel = isOpenAiNative && /^(o\d|gpt-[56])/i.test(String(config.model || ''));
         const tokenLimitParam = isOpenAiNative
           ? { max_completion_tokens: scopedMaxTokens }
           : { max_tokens: scopedMaxTokens };
@@ -1339,7 +1343,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           body: JSON.stringify({
             model: config.model,
             ...tokenLimitParam,
-            temperature,
+            ...(reasoningModel ? {} : { temperature }),
             ...(stopSequences && !isOpenAiNative && { stop: stopSequences }),
             messages: deltaMessages
               // Always prepend system message — delta window never carries it

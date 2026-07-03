@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T00:18:55.538Z",
+  "generated_at": "2026-07-03T02:04:22.526Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11819,
   "files": [
@@ -21994,9 +21994,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3578588,
-      "mtime": "2026-07-03T00:18:54.410Z",
-      "indexed_at": "2026-07-03T00:18:55.538Z"
+      "bytes": 3578589,
+      "mtime": "2026-07-03T02:03:26.088Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -37935,9 +37935,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 53386,
-      "mtime": "2026-07-03T00:17:46.197Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 54052,
+      "mtime": "2026-07-03T02:02:13.864Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 108114,
-      "mtime": "2026-07-03T00:17:46.197Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 109191,
+      "mtime": "2026-07-03T02:02:13.864Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 554139,
-      "mtime": "2026-07-03T00:17:46.203Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 555459,
+      "mtime": "2026-07-03T02:02:13.896Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -59181,9 +59181,9 @@
     {
       "path": "factory-staging/factory-core/arc/foundation/studio-simulation.js",
       "synopsis": "Studio experience simulation when UX/product feel in scope.",
-      "bytes": 10559,
-      "mtime": "2026-07-03T00:17:45.058Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 12020,
+      "mtime": "2026-07-03T02:02:13.864Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -69577,9 +69577,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 129830,
-      "mtime": "2026-07-01T09:31:34.584Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 130809,
+      "mtime": "2026-07-03T02:02:13.864Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84631,9 +84631,9 @@
     {
       "path": "services/chair-founder-packet-v2-enforcement.js",
       "synopsis": "Founder Packet V2 — hard enforcement on live Lumin Chair turns.",
-      "bytes": 11614,
-      "mtime": "2026-06-29T17:21:08.816Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 11717,
+      "mtime": "2026-07-03T02:02:13.864Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85137,9 +85137,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 75429,
-      "mtime": "2026-07-03T00:17:46.218Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 75795,
+      "mtime": "2026-07-03T02:02:13.864Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -85792,9 +85792,9 @@
     {
       "path": "services/founder-packet-v2-unified-gate.js",
       "synopsis": "Founder Packet V2 unified gate — live Chair + IDC + Builder entry on all execute paths.",
-      "bytes": 9667,
-      "mtime": "2026-06-29T17:21:08.879Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 10566,
+      "mtime": "2026-07-03T02:02:13.864Z",
+      "indexed_at": "2026-07-03T02:04:22.526Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
