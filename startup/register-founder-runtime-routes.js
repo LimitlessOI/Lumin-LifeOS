@@ -10,6 +10,7 @@ import { createLifeOSCouncilBuilderRoutes } from "../routes/lifeos-council-build
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createLifeOSBuilderOSCommandControlRoutes } from "../routes/lifeos-builderos-command-control-routes.js";
 import { createLifeRERoutes } from "../routes/lifere-os-routes.js";
+import { createBlueprintIntakeRoutes } from "../routes/blueprint-intake-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 
@@ -102,6 +103,9 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     })
   );
   logger.info("✅ [LIFERE-OS] Founder-builder routes mounted at /api/v1/lifere");
+
+  createBlueprintIntakeRoutes(app, { pool, requireKey, callCouncilMember });
+  logger.info("✅ [BLUEPRINT-INTAKE] Founder-builder routes mounted at /api/v1/blueprint/intake");
 
   return {
     tcCoordinator: null,
