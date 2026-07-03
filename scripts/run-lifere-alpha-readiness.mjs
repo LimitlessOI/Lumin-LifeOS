@@ -18,7 +18,7 @@ function resolveBaseUrl() {
     const d = process.env.RAILWAY_PUBLIC_DOMAIN.replace(/^https?:\/\//, '').replace(/\/$/, '');
     return `https://${d}`;
   }
-  return 'https://robust-magic-production.up.railway.app';
+  return 'https://lumin-web-production-e3a9.up.railway.app';
 }
 
 const BASE = resolveBaseUrl();

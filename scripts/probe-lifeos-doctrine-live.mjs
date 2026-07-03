@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = (process.env.LIFERE_ALPHA_BASE_URL || process.env.BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+const BASE = (process.env.LIFERE_ALPHA_BASE_URL || process.env.BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
 const EXPECT_SHA_PREFIX = (process.env.EXPECT_SHA || '490d25da1c').slice(0, 12);
 

@@ -7,7 +7,7 @@
  *
  * Your shell **TC_API_KEY** must match Railway **COMMAND_CENTER_KEY** exactly (local `.env` often drifts).
  *
- *   TC_BASE_URL=https://robust-magic-production.up.railway.app \
+ *   TC_BASE_URL=https://lumin-web-production-e3a9.up.railway.app \
  *   TC_API_KEY='(paste from Railway Variables)' \
  *   node scripts/tc-r4r-do-upload.mjs --address=Mahogany
  *
@@ -88,7 +88,7 @@ async function main() {
     process.env.TC_BASE_URL ||
     process.env.PUBLIC_BASE_URL ||
     process.env.BASE_URL ||
-    'https://robust-magic-production.up.railway.app';
+    'https://lumin-web-production-e3a9.up.railway.app';
   const apiKey =
     process.env.TC_API_KEY ||
     process.env.COMMAND_CENTER_KEY ||

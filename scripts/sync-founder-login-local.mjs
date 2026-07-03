@@ -49,7 +49,7 @@ async function main() {
     process.exit(1);
   }
 
-  const base = (process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+  const base = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
   let login_probe = null;
   try {
     const res = await fetch(`${base}/api/v1/lifeos/auth/login`, {

@@ -13,7 +13,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = (
   process.env.LIFERE_ALPHA_BASE_URL
   || process.env.PUBLIC_BASE_URL
-  || 'https://robust-magic-production.up.railway.app'
+  || 'https://lumin-web-production-e3a9.up.railway.app'
 ).replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
 

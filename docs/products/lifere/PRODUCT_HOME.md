@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifere/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-03 — Retired-domain scrub: hardcoded `robust-magic-production.up.railway.app` fallbacks replaced with canonical `lumin-web-production-e3a9.up.railway.app` in probe/ops scripts (env vars still take precedence; stale default only). Prior: 2026-07-01 |
 
 ---
 

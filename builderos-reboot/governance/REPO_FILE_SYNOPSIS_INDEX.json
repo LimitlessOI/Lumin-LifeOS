@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T16:27:19.787Z",
+  "generated_at": "2026-07-03T17:09:53.940Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11822,
   "files": [
@@ -30917,9 +30917,9 @@
     {
       "path": "config/runtime-env.js",
       "synopsis": "Exports loadRuntimeEnv — config/runtime-env.js. @ssot docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)",
-      "bytes": 10350,
-      "mtime": "2026-07-02T01:13:50.580Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 10352,
+      "mtime": "2026-07-03T17:08:03.659Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)"
       ]
@@ -31617,9 +31617,9 @@
     {
       "path": "core/promotion-engine.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 10824,
-      "mtime": "2026-07-01T22:02:40.033Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 10828,
+      "mtime": "2026-07-03T17:08:03.659Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "core/query-optimizer.js",
@@ -31662,9 +31662,9 @@
     {
       "path": "core/self-builder.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 14078,
-      "mtime": "2026-07-01T22:02:40.037Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 14080,
+      "mtime": "2026-07-03T17:08:03.659Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "core/self-funding-system.js",
@@ -37935,9 +37935,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 57404,
-      "mtime": "2026-07-03T16:23:09.246Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 57834,
+      "mtime": "2026-07-03T17:09:10.151Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 120185,
-      "mtime": "2026-07-03T11:58:39.247Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 120615,
+      "mtime": "2026-07-03T17:09:12.679Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38188,9 +38188,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 104750,
-      "mtime": "2026-07-01T22:02:40.293Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 105180,
+      "mtime": "2026-07-03T17:09:16.319Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 566935,
-      "mtime": "2026-07-03T16:22:14.482Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 567365,
+      "mtime": "2026-07-03T17:09:19.723Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -38558,9 +38558,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 28197,
-      "mtime": "2026-07-01T22:02:40.297Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 28444,
+      "mtime": "2026-07-03T17:09:33.915Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -38945,9 +38945,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 91635,
-      "mtime": "2026-07-01T22:02:40.309Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 92065,
+      "mtime": "2026-07-03T17:09:22.567Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -39011,9 +39011,9 @@
     {
       "path": "docs/products/universal-overlay/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Universal Overlay",
-      "bytes": 17513,
-      "mtime": "2026-07-01T22:02:40.309Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 17760,
+      "mtime": "2026-07-03T17:09:36.063Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "docs/products/UNIVERSALOVERLAY.md",
@@ -58886,9 +58886,9 @@
     {
       "path": "extension/content.js",
       "synopsis": "extension/content.js — Lumin Universal Overlay",
-      "bytes": 15204,
-      "mtime": "2026-07-01T22:02:40.481Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 15206,
+      "mtime": "2026-07-03T17:08:03.663Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -70428,9 +70428,9 @@
     {
       "path": "scripts/audit-founder-alpha-ready.mjs",
       "synopsis": "Founder alpha readiness audit — one receipt Adam/conductor trust before founder session.",
-      "bytes": 6915,
-      "mtime": "2026-07-01T22:02:40.557Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 6917,
+      "mtime": "2026-07-03T17:08:03.663Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -70538,9 +70538,9 @@
     {
       "path": "scripts/build-lifeos-ios-adhoc.mjs",
       "synopsis": "iOS ad-hoc IPA + OTA manifest for direct install (no App Store).",
-      "bytes": 3428,
-      "mtime": "2026-07-01T22:02:40.557Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 3430,
+      "mtime": "2026-07-03T17:08:03.663Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/universal-overlay/PRODUCT_HOME.md"
       ]
@@ -71014,9 +71014,9 @@
     {
       "path": "scripts/crm-alpha-test.mjs",
       "synopsis": "Alpha test CRM — BoldTrail connection, create bogus contact, ambient CRM capture, note write-back.",
-      "bytes": 5686,
-      "mtime": "2026-07-01T22:02:40.561Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 5688,
+      "mtime": "2026-07-03T17:08:03.667Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -71136,9 +71136,9 @@
     {
       "path": "scripts/diagnose-builder-prod.mjs",
       "synopsis": "Read-only HTTP probe: health vs council builder /domains.",
-      "bytes": 2611,
-      "mtime": "2026-07-01T22:02:40.561Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 2615,
+      "mtime": "2026-07-03T17:08:03.667Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/ops/BUILDER_PRODUCTION_FIX.md",
         "docs/products/lifeos/PRODUCT_HOME.md"
@@ -71309,9 +71309,9 @@
     {
       "path": "scripts/governed-autonomy-idle-analysis.mjs",
       "synopsis": "Idle-period analysis for governed overnight autonomy — no useless cycles.",
-      "bytes": 7664,
-      "mtime": "2026-07-01T22:02:40.561Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 7666,
+      "mtime": "2026-07-03T17:08:03.667Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -71319,9 +71319,9 @@
     {
       "path": "scripts/governed-overnight-autonomy.mjs",
       "synopsis": "HIST DOMAIN — Historian owns this artifact (read/salvage only).",
-      "bytes": 9551,
-      "mtime": "2026-07-01T22:02:40.561Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 9553,
+      "mtime": "2026-07-03T17:08:03.667Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -71495,9 +71495,9 @@
     {
       "path": "scripts/lifeos-alpha-break-it.mjs",
       "synopsis": "Live break-it alpha — stress edge cases beyond standard batteries.",
-      "bytes": 8983,
-      "mtime": "2026-07-01T22:02:40.561Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 8985,
+      "mtime": "2026-07-03T17:08:03.671Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71586,9 +71586,9 @@
     {
       "path": "scripts/lifeos-provision-member.mjs",
       "synopsis": "Provision a LifeOS member account (invite and/or user row + optional household link to Adam).",
-      "bytes": 6750,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 6754,
+      "mtime": "2026-07-03T17:08:03.671Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71845,9 +71845,9 @@
     {
       "path": "scripts/probe-lifeos-doctrine-live.mjs",
       "synopsis": "Live probe — doctrine artifacts + LifeRE stack endpoints on Railway.",
-      "bytes": 7330,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 7332,
+      "mtime": "2026-07-03T17:08:03.671Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71869,9 +71869,9 @@
     {
       "path": "scripts/provision-alpha-auditor.mjs",
       "synopsis": "Provision founder-level alpha auditor test account for UI/build chat testing.",
-      "bytes": 7629,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 7631,
+      "mtime": "2026-07-03T17:08:03.675Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -71964,9 +71964,9 @@
     {
       "path": "scripts/run-blueprint-intake.mjs",
       "synopsis": "CLI tool for Blueprint Intake — backfill any existing amendment into a blueprint via Railway API.",
-      "bytes": 12286,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 12288,
+      "mtime": "2026-07-03T17:08:03.675Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -71974,9 +71974,9 @@
     {
       "path": "scripts/run-builderos-autonomy-closure-v1-acceptance.mjs",
       "synopsis": "BuilderOS autonomy closure v1 acceptance.",
-      "bytes": 18625,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 18627,
+      "mtime": "2026-07-03T17:08:03.675Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -72004,9 +72004,9 @@
     {
       "path": "scripts/run-builderos-same-tier-determinism.mjs",
       "synopsis": "BuilderOS same-tier determinism proof.",
-      "bytes": 3151,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 3153,
+      "mtime": "2026-07-03T17:08:03.679Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -72105,9 +72105,9 @@
     {
       "path": "scripts/run-founder-jwt-chat-proof.mjs",
       "synopsis": "Prove founder chat path uses JWT only (no command key) — login → Lumin message.",
-      "bytes": 3799,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 3801,
+      "mtime": "2026-07-03T17:08:03.679Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72115,9 +72115,9 @@
     {
       "path": "scripts/run-founder-socialmediaos-chat-a2z.mjs",
       "synopsis": "Drive SocialMediaOS intake blueprint A→Z through founder chat (JWT path).",
-      "bytes": 4667,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 4669,
+      "mtime": "2026-07-03T17:08:03.679Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
       ]
@@ -72135,9 +72135,9 @@
     {
       "path": "scripts/run-intake-blueprint.mjs",
       "synopsis": "Execute an ARC-ready intake blueprint through BuilderOS — observe failures, fix builder not product by hand.",
-      "bytes": 3292,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 3294,
+      "mtime": "2026-07-03T17:08:03.679Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -72182,9 +72182,9 @@
     {
       "path": "scripts/run-lifere-alpha-readiness.mjs",
       "synopsis": "LifeRE alpha readiness — machine gate for founder alpha testing.",
-      "bytes": 5528,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 5530,
+      "mtime": "2026-07-03T17:08:03.683Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -72202,9 +72202,9 @@
     {
       "path": "scripts/run-lifere-full-audit.mjs",
       "synopsis": "LifeRE full audit — machine + live + wiring report.",
-      "bytes": 4022,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 4024,
+      "mtime": "2026-07-03T17:08:03.683Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -72319,9 +72319,9 @@
     {
       "path": "scripts/run-lumin-chair-parity.mjs",
       "synopsis": "Lumin Chair direct-connection parity — live API must match execution truth.",
-      "bytes": 7725,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 7727,
+      "mtime": "2026-07-03T17:08:03.683Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72329,9 +72329,9 @@
     {
       "path": "scripts/run-machine-alpha-walkthrough.mjs",
       "synopsis": "Machine Alpha Walkthrough — simulates founder UI session before Point B handoff.",
-      "bytes": 10036,
-      "mtime": "2026-07-01T22:02:40.565Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 10038,
+      "mtime": "2026-07-03T17:08:03.687Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72699,9 +72699,9 @@
     {
       "path": "scripts/sync-founder-login-local.mjs",
       "synopsis": "Sync founder login locally via DATABASE_URL (no deploy required).",
-      "bytes": 2707,
-      "mtime": "2026-07-01T22:02:40.569Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 2709,
+      "mtime": "2026-07-03T17:08:03.687Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72709,9 +72709,9 @@
     {
       "path": "scripts/sync-founder-login.mjs",
       "synopsis": "Sync founder LifeOS login email+password from Railway vault to adam user row.",
-      "bytes": 1213,
-      "mtime": "2026-07-01T22:02:40.569Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 1215,
+      "mtime": "2026-07-03T17:08:03.687Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -72767,9 +72767,9 @@
     {
       "path": "scripts/tc-r4r-do-upload.mjs",
       "synopsis": "One-shot: resolve a TC transaction → scan mailbox for R4R-style PDFs → upload to TransactionDesk.",
-      "bytes": 5986,
-      "mtime": "2026-07-01T22:02:40.569Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 5990,
+      "mtime": "2026-07-03T17:08:03.691Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -73427,9 +73427,9 @@
     {
       "path": "scripts/verify-lumin-conversation-routing.mjs",
       "synopsis": "Verify conversation never misroutes to display — structural + optional live T4.",
-      "bytes": 2143,
-      "mtime": "2026-07-01T22:02:40.569Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z",
+      "bytes": 2145,
+      "mtime": "2026-07-03T17:08:03.691Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83656,9 +83656,9 @@
     {
       "path": "server-full-runtime.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 74920,
-      "mtime": "2026-07-01T22:02:40.597Z",
-      "indexed_at": "2026-07-03T16:27:19.160Z"
+      "bytes": 74922,
+      "mtime": "2026-07-03T17:08:03.691Z",
+      "indexed_at": "2026-07-03T17:09:53.940Z"
     },
     {
       "path": "server.js",
