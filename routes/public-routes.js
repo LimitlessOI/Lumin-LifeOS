@@ -120,6 +120,23 @@ export function registerPublicRoutes(app, {
   app.get("/overlay/lifeos-founder-interface.html", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
   app.get("/overlay/c2-mission-dashboard.html", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
 
+  // Retired legacy overlay prototypes (archived to docs/history/legacy-overlays/).
+  // Their files no longer exist; redirect any old bookmark to the one canonical interface.
+  for (const legacyOverlay of [
+    "lifeos-alpha.html",
+    "lifeos-alpha-rail.html",
+    "command-center.html",
+    "control.html",
+    "lifeos-backtest.html",
+    "lifeos-builder-test.html",
+    "lifere-os-v1.html",
+    "portal.html",
+  ]) {
+    app.get(`/overlay/${legacyOverlay}`, (_req, res) =>
+      res.redirect(301, "/lifeos?direct_system=1")
+    );
+  }
+
   // Household Mission Board — BPB-0001 §Section 7 (AMENDMENT_47)
   app.get("/lifeos-household", (req, res) => {
     const filePath = path.join(__dirname, "public", "overlay", "lifeos-household.html");

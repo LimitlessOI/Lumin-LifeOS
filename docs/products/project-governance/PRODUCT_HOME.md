@@ -11,12 +11,13 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/project-governance/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-03 |
 
 ---
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
 **Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
+**Last Updated:** 2026-07-03 — Legacy overlay retirement (cleanup batch 6): `startup/routes/server-routes.js` file-write allowlist no longer includes the now-archived `public/overlay/command-center.html` (only `public/overlay/command-center.js` + `package.json` remain servable/writable). The 12 forbidden overlay prototypes were archived to `docs/history/legacy-overlays/` with old `/overlay/*.html` paths 301-redirecting to `/lifeos?direct_system=1`; governed under redirect-and-archive (no live 404s, reversible).
 **Last Updated:** 2026-07-01 — Railway runtime selection is now hard-locked to `founder_builder` regardless of stale full-runtime flags. Local salvage/full-runtime work may still opt into `full`, but Railway production can no longer drift back into the broader legacy/full lane during founder-builder alpha.
 **Last Updated:** 2026-07-01 — Railway runtime selection now fails closed to `founder_builder` unless both `LIFEOS_ENABLE_FULL_RUNTIME=true` and `LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY=true` are present. This prevents production from drifting back into the broader legacy/full runtime while BuilderOS founder alpha is still the primary lane.
 **Last Updated:** 2026-07-01 — founder-builder runtime availability took precedence over global response wrapping: `server-founder-runtime.js` no longer mounts `createTruthResponseEnforcer` after live Railway proved a route split where `/ready` worked but all protected founder routes hung behind proxy timeout. This is a runtime-scope availability cut, not a repeal of truth law.
