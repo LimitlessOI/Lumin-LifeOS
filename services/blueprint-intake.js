@@ -790,18 +790,20 @@ Return JSON:
       `[${f.severity}] Step ${f.step_id}: ${f.issue}\n  Required fix: ${f.fix}`
     ).join('\n\n');
 
-    const fixPrompt = `You are BuilderOS ARC auto-fixer. Given a blueprint JSON and a list of issues found during review, produce a CORRECTED blueprint JSON.
+    const fixPrompt = `You are a blueprint editor. Your ONLY job: take a blueprint JSON that has issues and return the FIXED version.
 
-Apply every fix listed below. Do not add new steps — only modify existing ones (rename IDs, fix deps, update purpose text, fix ssot_tag).
+IMPORTANT: You must return the COMPLETE BLUEPRINT with a "steps" array and a "_meta" object. Do NOT return a review/report. Do NOT return {"critical":...} objects. Return the FIXED BLUEPRINT.
 
-ISSUES TO FIX:
+The blueprint has a "steps" array of objects with {id, file, type, purpose, deps, ssot_tag}. Apply the fixes below by modifying the existing steps (rename IDs, update deps arrays, fix purpose text, fix ssot_tag). Do not add or remove steps.
+
+FIXES TO APPLY:
 ${fixInstructions}
 
-Return ONLY the corrected blueprint as a valid JSON object — no markdown, no code fences.`;
+Return ONLY the corrected blueprint JSON object with "steps" and "_meta" keys. No markdown fences.`;
 
-    const fixedRaw = await callCouncilMember('openai',
-      `CURRENT BLUEPRINT:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
-      { systemPromptOverride: fixPrompt, maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+    const fixedRaw = await callCouncilMember('claude',
+      `Here is the current blueprint. Apply the fixes listed in your instructions and return the corrected version.\n\nBLUEPRINT:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
+      { systemPromptOverride: fixPrompt, maxOutputTokens: 6000, taskType: 'codegen', allowModelDowngrade: false }
     );
     let fixed;
     try {
@@ -810,6 +812,9 @@ Return ONLY the corrected blueprint as a valid JSON object — no markdown, no c
       throw new Error(`parse_failed: ${parseErr.message} — raw preview: ${String(fixedRaw).slice(0, 200)}`);
     }
     if (!fixed) throw new Error('parse_returned_null: AI returned unparseable response');
+    if (fixed.critical && !fixed.steps) {
+      throw new Error('model_returned_review: AI returned a review report instead of a corrected blueprint');
+    }
     if (!fixed.steps) throw new Error(`no_steps_key: parsed JSON keys=[${Object.keys(fixed).join(',')}]`);
     if (fixed.steps.length === 0) throw new Error('empty_steps: AI returned blueprint with 0 steps');
 
