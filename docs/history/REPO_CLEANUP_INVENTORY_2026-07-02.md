@@ -174,6 +174,29 @@ Archived the remaining **246** dead `src/` non-JS files (`.jsx` ×111, `.sql` ×
 - **RESULT:** `src/` now contains **only the 13 load-bearing files** in the live boot closure. Dead island closed.
 - **Verification:** node --check x3 OK · madge --circular still 741 · npm test 225 pass / 0 fail.
 
+## EXECUTED — Batch 5 (2026-07-02): orphaned service/root subsystems → `docs/history/legacy-orphans/`
+
+Archived **116** genuinely-orphaned `.js` files (speculative subsystems never wired into the live boot graph):
+`services/health-nexus/`, `mental-health/`, `microgrid/`, `energy-grid/`, `ecommerce/`, `translation/`,
+`orchestrator/`, `ahni/` (neural-implant), `anomaly-detection/`, `blockchain*/`, `travel/`, `vr-experience/`,
+`wildlife/`, `voting/`, `trust-mesh/`, etc. — plus ~20 loose root scripts (`adam_os_crm_foundation.js`,
+`anti_drift_protocol.js`, `crmUI.js`, `landing_page.js`, `mqtt_handler.js`, …).
+
+- **Multi-vector deadness proof (not just static import):** for each file — (1) NOT in the 741-module madge
+  boot closure, (2) 0 resolved static importers across all tracked `.js/.mjs`, (3) NOT in `package.json`,
+  AND (4) its **basename appears nowhere** in any non-catalog code/config/**HTML**/doc — so it is not
+  dynamically `import()`-ed by constructed path, not in any JSON registry, and not `<script>`-loaded by a page.
+  The catalog/index files (`REPO_FILE_SYNOPSIS_INDEX.json` etc.) were excluded from the mention scan because
+  they list *every* path (false positives).
+- **False positives caught & held back (NOT moved):** files dynamically imported by `services/self-programming.js`
+  (`core/dependency-manager.js`, `core/error-recovery.js`, `core/code-validator.js`, `core/code-linter.js`, …);
+  `public/**` (browser `<script>`-loaded); `db/migrations/*.sql` (dir-scanned by `migration-runner.js`);
+  `drizzle.config.js` (auto-discovered by `drizzle-kit` `db:*` scripts). These are referenced, so they stayed.
+- **Idea salvage:** subsystem ideas appended to `docs/history/IDEA_VAULT_legacy-src.md` (32 subsystems).
+- **Verification:** node --check x3 OK · `npm test` **224 pass / 0 fail / 4 skip** (total dips by 1 only because
+  `tests/spine-import-resolution.test.js` generates one subtest per scanned file — fewer files, one fewer
+  subtest; no test regressed). Archive is git-tracked quarantine (restore = one `git mv`).
+
 ---
 
 ## Recommended execution order (all reversible, verify boot after each)

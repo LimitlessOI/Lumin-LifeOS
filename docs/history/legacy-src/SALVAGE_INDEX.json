@@ -2,9 +2,9 @@
   "index_id": "LEGACY-SRC-SALVAGE-0001",
   "created_at": "2026-07-03",
   "purpose": "Salvage+archive record for dead src/ MVC-island files. Code was fence-corrupted (non-loadable); intent/synopsis preserved here for future reuse before archival.",
-  "batch": "batch1-3(js)+batch4(non-js prototypes)",
+  "batch": "src/ island (1-4) + orphaned service/root subsystems (5)",
   "evidence": "madge import closure of server.js+server-founder-runtime.js+server-full-runtime.js (741 modules); resolved-import scan across active corpus incl. tests; each file absent from closure and unreferenced.",
-  "count": 536,
+  "count": 652,
   "entries": [
     {
       "source_path": "src/App.js",
@@ -3757,6 +3757,818 @@
       "synopsis": null,
       "verdict": "reject-archive",
       "reason": "corrupted codegen filename (spaces/commas); non-loadable dead artifact"
+    },
+    {
+      "source_path": "adam_os_crm_foundation.js",
+      "archived_to": "docs/history/legacy-orphans/adam_os_crm_foundation.js.txt",
+      "synopsis": "Adam-OS CRM Foundation Implementation",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "alignmentChecker.js",
+      "archived_to": "docs/history/legacy-orphans/alignmentChecker.js.txt",
+      "synopsis": "js \u2014 alignmentChecker.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "anti_drift_protocol.js",
+      "archived_to": "docs/history/legacy-orphans/anti_drift_protocol.js.txt",
+      "synopsis": "Anti-Drift Protocol Implementation",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "api_health_check.js",
+      "archived_to": "docs/history/legacy-orphans/api_health_check.js.txt",
+      "synopsis": "api_health_check.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "calendarSync.js",
+      "archived_to": "docs/history/legacy-orphans/calendarSync.js.txt",
+      "synopsis": "calendarSync.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "carbon-calculator.js",
+      "archived_to": "docs/history/legacy-orphans/carbon-calculator.js.txt",
+      "synopsis": "js \u2014 carbon-calculator.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "config/builder-test-flag.js",
+      "archived_to": "docs/history/legacy-orphans/config/builder-test-flag.js.txt",
+      "synopsis": "Configuration \u2014 Builder Test Flag.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "crmUI.js",
+      "archived_to": "docs/history/legacy-orphans/crmUI.js.txt",
+      "synopsis": "crmUI.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "cypress/integration/energy-dashboard.spec.js",
+      "archived_to": "docs/history/legacy-orphans/cypress/integration/energy-dashboard.spec.js.txt",
+      "synopsis": "js \u2014 cypress",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "data-integration.js",
+      "archived_to": "docs/history/legacy-orphans/data-integration.js.txt",
+      "synopsis": "js \u2014 data-integration.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "database/migrations/20231005_create_tables.js",
+      "archived_to": "docs/history/legacy-orphans/database/migrations/20231005_create_tables.js.txt",
+      "synopsis": "js \u2014 database",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "database/migrations/20240101000000_create_courses_table.js",
+      "archived_to": "docs/history/legacy-orphans/database/migrations/20240101000000_create_courses_table.js.txt",
+      "synopsis": "js \u2014 database",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "database/seeds/courses_seed.js",
+      "archived_to": "docs/history/legacy-orphans/database/seeds/courses_seed.js.txt",
+      "synopsis": "js \u2014 database",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "driftUI.js",
+      "archived_to": "docs/history/legacy-orphans/driftUI.js.txt",
+      "synopsis": "js \u2014 driftUI.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "edge-processor.js",
+      "archived_to": "docs/history/legacy-orphans/edge-processor.js.txt",
+      "synopsis": "js \u2014 edge-processor.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "gs1-adapter.js",
+      "archived_to": "docs/history/legacy-orphans/gs1-adapter.js.txt",
+      "synopsis": "js \u2014 gs1-adapter.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "integration/eduToolsIntegrator.js",
+      "archived_to": "docs/history/legacy-orphans/integration/eduToolsIntegrator.js.txt",
+      "synopsis": "js \u2014 integration",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "integrations/IBMQ.js",
+      "archived_to": "docs/history/legacy-orphans/integrations/IBMQ.js.txt",
+      "synopsis": "js \u2014 integrations",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "integrations/ecommerce-adapters.js",
+      "archived_to": "docs/history/legacy-orphans/integrations/ecommerce-adapters.js.txt",
+      "synopsis": "js \u2014 integrations",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "landing_page.js",
+      "archived_to": "docs/history/legacy-orphans/landing_page.js.txt",
+      "synopsis": "Landing Page Implementation",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "mqtt_handler.js",
+      "archived_to": "docs/history/legacy-orphans/mqtt_handler.js.txt",
+      "synopsis": "js \u2014 mqtt_handler.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "plugins/shopify/xr-integration.js",
+      "archived_to": "docs/history/legacy-orphans/plugins/shopify/xr-integration.js.txt",
+      "synopsis": "js \u2014 plugins",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "progress_tracking_ui.js",
+      "archived_to": "docs/history/legacy-orphans/progress_tracking_ui.js.txt",
+      "synopsis": "Progress Tracking UI Implementation",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "queues/code-review-queue.js",
+      "archived_to": "docs/history/legacy-orphans/queues/code-review-queue.js.txt",
+      "synopsis": "Create a new Bull queue",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "queues/travelExecutionQueue.js",
+      "archived_to": "docs/history/legacy-orphans/queues/travelExecutionQueue.js.txt",
+      "synopsis": "js \u2014 queues",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "risk-analytics.js",
+      "archived_to": "docs/history/legacy-orphans/risk-analytics.js.txt",
+      "synopsis": "js \u2014 risk-analytics.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/agriculture-data-pipeline.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/agriculture-data-pipeline.js.txt",
+      "synopsis": "Script \u2014 Agriculture Data Pipeline.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/discovery-run.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/discovery-run.js.txt",
+      "synopsis": "Script \u2014 Discovery Run.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/generate-top-ideas.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/generate-top-ideas.js.txt",
+      "synopsis": "Script \u2014 Generate Top Ideas.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/import-claude-conversations.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/import-claude-conversations.js.txt",
+      "synopsis": "scripts",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/query-build-artifacts.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/query-build-artifacts.js.txt",
+      "synopsis": "Script \u2014 Query Build Artifacts.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/store-source-of-truth.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/store-source-of-truth.js.txt",
+      "synopsis": "Store Source of Truth document in database",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/test-build-artifact-insert.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/test-build-artifact-insert.js.txt",
+      "synopsis": "Script \u2014 Test Build Artifact Insert.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "scripts/test-debugging.js",
+      "archived_to": "docs/history/legacy-orphans/scripts/test-debugging.js.txt",
+      "synopsis": "Test script to verify debugging fixes",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "seeders/mock_businesses.js",
+      "archived_to": "docs/history/legacy-orphans/seeders/mock_businesses.js.txt",
+      "synopsis": "js \u2014 seeders",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "server/config/fileStorage.js",
+      "archived_to": "docs/history/legacy-orphans/server/config/fileStorage.js.txt",
+      "synopsis": "js \u2014 server",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "server/models/Lesson.js",
+      "archived_to": "docs/history/legacy-orphans/server/models/Lesson.js.txt",
+      "synopsis": "js \u2014 server",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "server/models/LessonProgress.js",
+      "archived_to": "docs/history/legacy-orphans/server/models/LessonProgress.js.txt",
+      "synopsis": "js \u2014 server",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "server/routes/lessonRoutes.js",
+      "archived_to": "docs/history/legacy-orphans/server/routes/lessonRoutes.js.txt",
+      "synopsis": "js \u2014 server",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/abi/groceryIntegration.js",
+      "archived_to": "docs/history/legacy-orphans/services/abi/groceryIntegration.js.txt",
+      "synopsis": "Service module \u2014 GroceryIntegration.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/abi/microCoachingService.js",
+      "archived_to": "docs/history/legacy-orphans/services/abi/microCoachingService.js.txt",
+      "synopsis": "Service module \u2014 MicroCoachingService.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/abi/roiCalculator.js",
+      "archived_to": "docs/history/legacy-orphans/services/abi/roiCalculator.js.txt",
+      "synopsis": "Service module \u2014 RoiCalculator.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ahni/ImplantInterfaceService.js",
+      "archived_to": "docs/history/legacy-orphans/services/ahni/ImplantInterfaceService.js.txt",
+      "synopsis": "ImplantInterfaceService.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ahni/NeuralProcessingEngine.js",
+      "archived_to": "docs/history/legacy-orphans/services/ahni/NeuralProcessingEngine.js.txt",
+      "synopsis": "NeuralProcessingEngine.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ahni/SafetyMonitor.js",
+      "archived_to": "docs/history/legacy-orphans/services/ahni/SafetyMonitor.js.txt",
+      "synopsis": "SafetyMonitor.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ahni/WearableInterfaceService.js",
+      "archived_to": "docs/history/legacy-orphans/services/ahni/WearableInterfaceService.js.txt",
+      "synopsis": "WearableInterfaceService.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ai-engine/AdaptationService.js",
+      "archived_to": "docs/history/legacy-orphans/services/ai-engine/AdaptationService.js.txt",
+      "synopsis": "Service module \u2014 AdaptationService.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/anomaly-detection/federated-coordinator.js",
+      "archived_to": "docs/history/legacy-orphans/services/anomaly-detection/federated-coordinator.js.txt",
+      "synopsis": "Service module \u2014 Federated Coordinator.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/anomaly-detection/ipfs-manager.js",
+      "archived_to": "docs/history/legacy-orphans/services/anomaly-detection/ipfs-manager.js.txt",
+      "synopsis": "Service module \u2014 Ipfs Manager.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/anomaly-detection/zk-verifier.js",
+      "archived_to": "docs/history/legacy-orphans/services/anomaly-detection/zk-verifier.js.txt",
+      "synopsis": "Service module \u2014 Zk Verifier.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/biometric-processor/streamHandler.js",
+      "archived_to": "docs/history/legacy-orphans/services/biometric-processor/streamHandler.js.txt",
+      "synopsis": "Initialize WebSocket server",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/blockchain-credentials/issuer.js",
+      "archived_to": "docs/history/legacy-orphans/services/blockchain-credentials/issuer.js.txt",
+      "synopsis": "Service module \u2014 Issuer.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/blockchain/fabric-network.js",
+      "archived_to": "docs/history/legacy-orphans/services/blockchain/fabric-network.js.txt",
+      "synopsis": "Service module \u2014 Fabric Network.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/collaboration-engine/socket-server.js",
+      "archived_to": "docs/history/legacy-orphans/services/collaboration-engine/socket-server.js.txt",
+      "synopsis": "Service module \u2014 Socket Server.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/content-adaptation/adaptationEngine.js",
+      "archived_to": "docs/history/legacy-orphans/services/content-adaptation/adaptationEngine.js.txt",
+      "synopsis": "Service module \u2014 AdaptationEngine.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/data-sync/real-world-api.js",
+      "archived_to": "docs/history/legacy-orphans/services/data-sync/real-world-api.js.txt",
+      "synopsis": "Service module \u2014 Real World Api.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ecommerce-funnel/src/models/FunnelEvent.js",
+      "archived_to": "docs/history/legacy-orphans/services/ecommerce-funnel/src/models/FunnelEvent.js.txt",
+      "synopsis": "Service module \u2014 FunnelEvent.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ecommerce-funnel/src/queues/funnelAnalysisQueue.js",
+      "archived_to": "docs/history/legacy-orphans/services/ecommerce-funnel/src/queues/funnelAnalysisQueue.js.txt",
+      "synopsis": "Service module \u2014 FunnelAnalysisQueue.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ecommerce/integration/platformAdapters.js",
+      "archived_to": "docs/history/legacy-orphans/services/ecommerce/integration/platformAdapters.js.txt",
+      "synopsis": "Service module \u2014 PlatformAdapters.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ecommerce/ml/recommendationEngine.js",
+      "archived_to": "docs/history/legacy-orphans/services/ecommerce/ml/recommendationEngine.js.txt",
+      "synopsis": "Service module \u2014 RecommendationEngine.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/ecommerce/ml/segmentationService.js",
+      "archived_to": "docs/history/legacy-orphans/services/ecommerce/ml/segmentationService.js.txt",
+      "synopsis": "Service module \u2014 SegmentationService.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/energy-grid/src/dashboard/realtime-updater.js",
+      "archived_to": "docs/history/legacy-orphans/services/energy-grid/src/dashboard/realtime-updater.js.txt",
+      "synopsis": "Service module \u2014 Realtime Updater.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/energy-grid/src/security/fraud-detector.js",
+      "archived_to": "docs/history/legacy-orphans/services/energy-grid/src/security/fraud-detector.js.txt",
+      "synopsis": "Service module \u2014 Fraud Detector.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/energy/ab-testing.js",
+      "archived_to": "docs/history/legacy-orphans/services/energy/ab-testing.js.txt",
+      "synopsis": "Service module \u2014 Ab Testing.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/data-ingestion/hipaa-middleware.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/data-ingestion/hipaa-middleware.js.txt",
+      "synopsis": "Service module \u2014 Hipaa Middleware.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/ingestion/ingestion-service.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/ingestion/ingestion-service.js.txt",
+      "synopsis": "Service module \u2014 Ingestion Service.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/integration/fhir-adapter.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/integration/fhir-adapter.js.txt",
+      "synopsis": "Service module \u2014 Fhir Adapter.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/models/genomics-model.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/models/genomics-model.js.txt",
+      "synopsis": "Service module \u2014 Genomics Model.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/models/labs-model.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/models/labs-model.js.txt",
+      "synopsis": "Service module \u2014 Labs Model.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/models/wearables-model.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/models/wearables-model.js.txt",
+      "synopsis": "Service module \u2014 Wearables Model.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/physician/dashboard-websocket.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/physician/dashboard-websocket.js.txt",
+      "synopsis": "Service module \u2014 Dashboard Websocket.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/privacy/zero-knowledge-encryption.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/privacy/zero-knowledge-encryption.js.txt",
+      "synopsis": "Service module \u2014 Zero Knowledge Encryption.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-nexus/twin/twin-aggregator.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-nexus/twin/twin-aggregator.js.txt",
+      "synopsis": "Service module \u2014 Twin Aggregator.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-sentinel/data-normalizer.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-sentinel/data-normalizer.js.txt",
+      "synopsis": "Placeholder for data normalization logic",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-sentinel/federated-aggregator.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-sentinel/federated-aggregator.js.txt",
+      "synopsis": "Placeholder for federated learning aggregation logic",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/health-sync/tests/prediction-validation.js",
+      "archived_to": "docs/history/legacy-orphans/services/health-sync/tests/prediction-validation.js.txt",
+      "synopsis": "Service module \u2014 Prediction Validation.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/mental-health/federated-coordinator.js",
+      "archived_to": "docs/history/legacy-orphans/services/mental-health/federated-coordinator.js.txt",
+      "synopsis": "Service module \u2014 Federated Coordinator.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/mental-health/hipaa-compliant-encryption.js",
+      "archived_to": "docs/history/legacy-orphans/services/mental-health/hipaa-compliant-encryption.js.txt",
+      "synopsis": "Service module \u2014 Hipaa Compliant Encryption.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/messaging/rabbitMQConfig.js",
+      "archived_to": "docs/history/legacy-orphans/services/messaging/rabbitMQConfig.js.txt",
+      "synopsis": "Service module \u2014 RabbitMQConfig.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/microgrid/aiOptimizer.js",
+      "archived_to": "docs/history/legacy-orphans/services/microgrid/aiOptimizer.js.txt",
+      "synopsis": "Service module \u2014 AiOptimizer.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/microgrid/p2pLedger.js",
+      "archived_to": "docs/history/legacy-orphans/services/microgrid/p2pLedger.js.txt",
+      "synopsis": "Service module \u2014 P2pLedger.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/microgrid/resilienceService.js",
+      "archived_to": "docs/history/legacy-orphans/services/microgrid/resilienceService.js.txt",
+      "synopsis": "Service module \u2014 ResilienceService.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/multiplayer/websocket-manager.js",
+      "archived_to": "docs/history/legacy-orphans/services/multiplayer/websocket-manager.js.txt",
+      "synopsis": "Service module \u2014 Websocket Manager.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/orchestrator/adapters/universal-adapter.js",
+      "archived_to": "docs/history/legacy-orphans/services/orchestrator/adapters/universal-adapter.js.txt",
+      "synopsis": "Service module \u2014 Universal Adapter.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/orchestrator/arbitration/decision-engine.js",
+      "archived_to": "docs/history/legacy-orphans/services/orchestrator/arbitration/decision-engine.js.txt",
+      "synopsis": "Service module \u2014 Decision Engine.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/orchestrator/storage/cloud-sync.js",
+      "archived_to": "docs/history/legacy-orphans/services/orchestrator/storage/cloud-sync.js.txt",
+      "synopsis": "Service module \u2014 Cloud Sync.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/orchestrator/storage/local-db.js",
+      "archived_to": "docs/history/legacy-orphans/services/orchestrator/storage/local-db.js.txt",
+      "synopsis": "Service module \u2014 Local Db.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/progress-tracking/metricsCalculator.js",
+      "archived_to": "docs/history/legacy-orphans/services/progress-tracking/metricsCalculator.js.txt",
+      "synopsis": "Service module \u2014 MetricsCalculator.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/sensory/haptic-controller.js",
+      "archived_to": "docs/history/legacy-orphans/services/sensory/haptic-controller.js.txt",
+      "synopsis": "Service module \u2014 Haptic Controller.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/stripe-optimization/routes/clients.js",
+      "archived_to": "docs/history/legacy-orphans/services/stripe-optimization/routes/clients.js.txt",
+      "synopsis": "CRUD routes for clients",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/test-greet.js",
+      "archived_to": "docs/history/legacy-orphans/services/test-greet.js.txt",
+      "synopsis": "Exports greet \u2014 services",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/translation/context/contextProcessor.js",
+      "archived_to": "docs/history/legacy-orphans/services/translation/context/contextProcessor.js.txt",
+      "synopsis": "Service module \u2014 ContextProcessor.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/translation/media/mediaExtractor.js",
+      "archived_to": "docs/history/legacy-orphans/services/translation/media/mediaExtractor.js.txt",
+      "synopsis": "Service module \u2014 MediaExtractor.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/travel/pricingEngine.js",
+      "archived_to": "docs/history/legacy-orphans/services/travel/pricingEngine.js.txt",
+      "synopsis": "Service module \u2014 PricingEngine.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/travel/realTimeDataSync.js",
+      "archived_to": "docs/history/legacy-orphans/services/travel/realTimeDataSync.js.txt",
+      "synopsis": "Service module \u2014 RealTimeDataSync.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/trust-mesh/consensusManager.js",
+      "archived_to": "docs/history/legacy-orphans/services/trust-mesh/consensusManager.js.txt",
+      "synopsis": "Service module \u2014 ConsensusManager.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/trust-mesh/privacyModule.js",
+      "archived_to": "docs/history/legacy-orphans/services/trust-mesh/privacyModule.js.txt",
+      "synopsis": "Service module \u2014 PrivacyModule.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/trust-mesh/trustEngine.js",
+      "archived_to": "docs/history/legacy-orphans/services/trust-mesh/trustEngine.js.txt",
+      "synopsis": "Service module \u2014 TrustEngine.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/voting/biometric-auth.js",
+      "archived_to": "docs/history/legacy-orphans/services/voting/biometric-auth.js.txt",
+      "synopsis": "Placeholder for biometric authentication service",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/voting/paper-trail-generator.js",
+      "archived_to": "docs/history/legacy-orphans/services/voting/paper-trail-generator.js.txt",
+      "synopsis": "Placeholder for paper audit trail generator",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/voting/quantum-crypto.js",
+      "archived_to": "docs/history/legacy-orphans/services/voting/quantum-crypto.js.txt",
+      "synopsis": "Placeholder for quantum-resistant cryptography service",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/voting/sovereign-node-client.js",
+      "archived_to": "docs/history/legacy-orphans/services/voting/sovereign-node-client.js.txt",
+      "synopsis": "Placeholder for sovereign node client service",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/voting/zk-prover.js",
+      "archived_to": "docs/history/legacy-orphans/services/voting/zk-prover.js.txt",
+      "synopsis": "Placeholder for ZK-SNARK proof generation service",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/vr-experience/webgl-fallback.js",
+      "archived_to": "docs/history/legacy-orphans/services/vr-experience/webgl-fallback.js.txt",
+      "synopsis": "Service module \u2014 Webgl Fallback.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/vrTherapy/biometricProcessor.js",
+      "archived_to": "docs/history/legacy-orphans/services/vrTherapy/biometricProcessor.js.txt",
+      "synopsis": "Service module \u2014 BiometricProcessor.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/wildlife/alertEngine.js",
+      "archived_to": "docs/history/legacy-orphans/services/wildlife/alertEngine.js.txt",
+      "synopsis": "Service module \u2014 AlertEngine.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/wildlife/externalIntegration.js",
+      "archived_to": "docs/history/legacy-orphans/services/wildlife/externalIntegration.js.txt",
+      "synopsis": "Service module \u2014 ExternalIntegration.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/wildlife/ingestionGateway.js",
+      "archived_to": "docs/history/legacy-orphans/services/wildlife/ingestionGateway.js.txt",
+      "synopsis": "MQTT Client",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "services/wildlife/streamProcessor.js",
+      "archived_to": "docs/history/legacy-orphans/services/wildlife/streamProcessor.js.txt",
+      "synopsis": "Service module \u2014 StreamProcessor.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "sherry_integration.js",
+      "archived_to": "docs/history/legacy-orphans/sherry_integration.js.txt",
+      "synopsis": "Sherry Integration Implementation",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "truffle-config.js",
+      "archived_to": "docs/history/legacy-orphans/truffle-config.js.txt",
+      "synopsis": "js \u2014 truffle-config.js.",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "utils/crmService.js",
+      "archived_to": "docs/history/legacy-orphans/utils/crmService.js.txt",
+      "synopsis": "js \u2014 utils",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "utils/data-encryption.js",
+      "archived_to": "docs/history/legacy-orphans/utils/data-encryption.js.txt",
+      "synopsis": "js \u2014 utils",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "utils/sentimentAnalyzer.js",
+      "archived_to": "docs/history/legacy-orphans/utils/sentimentAnalyzer.js.txt",
+      "synopsis": "js \u2014 utils",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "websocketServer.js",
+      "archived_to": "docs/history/legacy-orphans/websocketServer.js.txt",
+      "synopsis": "websocket.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
+    },
+    {
+      "source_path": "worker-loop.js",
+      "archived_to": "docs/history/legacy-orphans/worker-loop.js.txt",
+      "synopsis": "worker-loop.js",
+      "verdict": "reject-archive",
+      "reason": "orphan: not in 741-module boot closure, 0 static importers, basename mentioned nowhere in non-catalog code/config/docs (not dynamically imported/registered)"
     }
   ],
   "accuracy_note": "Batch-1 files were selected for ARCHIVAL because they are DEAD (absent from the 741-module boot closure and imported by nothing active, incl. tests). Many contained stray ``` markdown fence markers from codegen; a re-check with `node --check` showed the large majority were still syntactically valid, so 'fence-corrupted/non-loadable' was corrected to the verified reason: deadness."

@@ -133,3 +133,143 @@ Salvaged 43 novel-tech prototypes across 20 domains (plus 202 .jsx/.css/.sql/etc
 ## `src/ubi/`
 - **src/ubi/smart-contracts/UBIDistribution.sol** (`.sol`) — SPDX-License-Identifier: MIT pragma solidity ^0.8.0; import "@openzeppelin/contracts/access/Ownable.sol"; contract UBIDistribution is Ownable { mapping(address   
   ↳ archived: `docs/history/legacy-src/ubi/smart-contracts/UBIDistribution.sol.txt`
+
+---
+
+# Idea Vault addendum — orphaned service/root subsystems (batch 5)
+
+Archived to `docs/history/legacy-orphans/`. Speculative subsystems never wired into the live boot graph;
+ideas kept here for future mining.
+
+## `services/abi/`
+- **services/abi/groceryIntegration.js** — Service module — GroceryIntegration.
+- **services/abi/microCoachingService.js** — Service module — MicroCoachingService.
+- **services/abi/roiCalculator.js** — Service module — RoiCalculator.
+
+## `services/ahni/`
+- **services/ahni/ImplantInterfaceService.js** — ImplantInterfaceService.js
+- **services/ahni/NeuralProcessingEngine.js** — NeuralProcessingEngine.js
+- **services/ahni/SafetyMonitor.js** — SafetyMonitor.js
+- **services/ahni/WearableInterfaceService.js** — WearableInterfaceService.js
+
+## `services/ai-engine/`
+- **services/ai-engine/AdaptationService.js** — Service module — AdaptationService.
+
+## `services/anomaly-detection/`
+- **services/anomaly-detection/federated-coordinator.js** — Service module — Federated Coordinator.
+- **services/anomaly-detection/ipfs-manager.js** — Service module — Ipfs Manager.
+- **services/anomaly-detection/zk-verifier.js** — Service module — Zk Verifier.
+
+## `services/biometric-processor/`
+- **services/biometric-processor/streamHandler.js** — Initialize WebSocket server
+
+## `services/blockchain/`
+- **services/blockchain/fabric-network.js** — Service module — Fabric Network.
+
+## `services/blockchain-credentials/`
+- **services/blockchain-credentials/issuer.js** — Service module — Issuer.
+
+## `services/collaboration-engine/`
+- **services/collaboration-engine/socket-server.js** — Service module — Socket Server.
+
+## `services/content-adaptation/`
+- **services/content-adaptation/adaptationEngine.js** — Service module — AdaptationEngine.
+
+## `services/data-sync/`
+- **services/data-sync/real-world-api.js** — Service module — Real World Api.
+
+## `services/ecommerce/`
+- **services/ecommerce/integration/platformAdapters.js** — Service module — PlatformAdapters.
+- **services/ecommerce/ml/recommendationEngine.js** — Service module — RecommendationEngine.
+- **services/ecommerce/ml/segmentationService.js** — Service module — SegmentationService.
+
+## `services/ecommerce-funnel/`
+- **services/ecommerce-funnel/src/models/FunnelEvent.js** — Service module — FunnelEvent.
+- **services/ecommerce-funnel/src/queues/funnelAnalysisQueue.js** — Service module — FunnelAnalysisQueue.
+
+## `services/energy/`
+- **services/energy/ab-testing.js** — Service module — Ab Testing.
+
+## `services/energy-grid/`
+- **services/energy-grid/src/dashboard/realtime-updater.js** — Service module — Realtime Updater.
+- **services/energy-grid/src/security/fraud-detector.js** — Service module — Fraud Detector.
+
+## `services/health-nexus/`
+- **services/health-nexus/data-ingestion/hipaa-middleware.js** — Service module — Hipaa Middleware.
+- **services/health-nexus/ingestion/ingestion-service.js** — Service module — Ingestion Service.
+- **services/health-nexus/integration/fhir-adapter.js** — Service module — Fhir Adapter.
+- **services/health-nexus/models/genomics-model.js** — Service module — Genomics Model.
+- **services/health-nexus/models/labs-model.js** — Service module — Labs Model.
+- **services/health-nexus/models/wearables-model.js** — Service module — Wearables Model.
+- **services/health-nexus/physician/dashboard-websocket.js** — Service module — Dashboard Websocket.
+- **services/health-nexus/privacy/zero-knowledge-encryption.js** — Service module — Zero Knowledge Encryption.
+- **services/health-nexus/twin/twin-aggregator.js** — Service module — Twin Aggregator.
+
+## `services/health-sentinel/`
+- **services/health-sentinel/data-normalizer.js** — Placeholder for data normalization logic
+- **services/health-sentinel/federated-aggregator.js** — Placeholder for federated learning aggregation logic
+
+## `services/health-sync/`
+- **services/health-sync/tests/prediction-validation.js** — Service module — Prediction Validation.
+
+## `services/mental-health/`
+- **services/mental-health/federated-coordinator.js** — Service module — Federated Coordinator.
+- **services/mental-health/hipaa-compliant-encryption.js** — Service module — Hipaa Compliant Encryption.
+
+## `services/messaging/`
+- **services/messaging/rabbitMQConfig.js** — Service module — RabbitMQConfig.
+
+## `services/microgrid/`
+- **services/microgrid/aiOptimizer.js** — Service module — AiOptimizer.
+- **services/microgrid/p2pLedger.js** — Service module — P2pLedger.
+- **services/microgrid/resilienceService.js** — Service module — ResilienceService.
+
+## `services/multiplayer/`
+- **services/multiplayer/websocket-manager.js** — Service module — Websocket Manager.
+
+## `services/orchestrator/`
+- **services/orchestrator/adapters/universal-adapter.js** — Service module — Universal Adapter.
+- **services/orchestrator/arbitration/decision-engine.js** — Service module — Decision Engine.
+- **services/orchestrator/storage/cloud-sync.js** — Service module — Cloud Sync.
+- **services/orchestrator/storage/local-db.js** — Service module — Local Db.
+
+## `services/progress-tracking/`
+- **services/progress-tracking/metricsCalculator.js** — Service module — MetricsCalculator.
+
+## `services/sensory/`
+- **services/sensory/haptic-controller.js** — Service module — Haptic Controller.
+
+## `services/stripe-optimization/`
+- **services/stripe-optimization/routes/clients.js** — CRUD routes for clients
+
+## `services/translation/`
+- **services/translation/context/contextProcessor.js** — Service module — ContextProcessor.
+- **services/translation/media/mediaExtractor.js** — Service module — MediaExtractor.
+
+## `services/travel/`
+- **services/travel/pricingEngine.js** — Service module — PricingEngine.
+- **services/travel/realTimeDataSync.js** — Service module — RealTimeDataSync.
+
+## `services/trust-mesh/`
+- **services/trust-mesh/consensusManager.js** — Service module — ConsensusManager.
+- **services/trust-mesh/privacyModule.js** — Service module — PrivacyModule.
+- **services/trust-mesh/trustEngine.js** — Service module — TrustEngine.
+
+## `services/voting/`
+- **services/voting/biometric-auth.js** — Placeholder for biometric authentication service
+- **services/voting/paper-trail-generator.js** — Placeholder for paper audit trail generator
+- **services/voting/quantum-crypto.js** — Placeholder for quantum-resistant cryptography service
+- **services/voting/sovereign-node-client.js** — Placeholder for sovereign node client service
+- **services/voting/zk-prover.js** — Placeholder for ZK-SNARK proof generation service
+
+## `services/vr-experience/`
+- **services/vr-experience/webgl-fallback.js** — Service module — Webgl Fallback.
+
+## `services/vrTherapy/`
+- **services/vrTherapy/biometricProcessor.js** — Service module — BiometricProcessor.
+
+## `services/wildlife/`
+- **services/wildlife/alertEngine.js** — Service module — AlertEngine.
+- **services/wildlife/externalIntegration.js** — Service module — ExternalIntegration.
+- **services/wildlife/ingestionGateway.js** — MQTT Client
+- **services/wildlife/streamProcessor.js** — Service module — StreamProcessor.
