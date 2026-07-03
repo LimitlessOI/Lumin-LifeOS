@@ -748,20 +748,33 @@ Return JSON:
         console.error('[ARC-AUTOFIX] Failed to auto-fix blueprint:', fixErr.message);
       }
       if (fixedBlueprint) {
-        await updateSession(pool, sessionId, { arc_report_json: arcReport, blueprint_json: fixedBlueprint, status: 'arc_review' });
-        const reReviewRaw = await callCouncilMember('claude',
-          `BLUEPRINT TO REVIEW (after auto-fix):\n${JSON.stringify(fixedBlueprint, null, 2).slice(0, 12000)}`,
-          { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
-        );
-        const reReport = parseBlueprintFromAiResponse(reReviewRaw);
-        const finalStatus = reReport.ready_to_execute ? 'ready' : 'gap_collection';
-        await updateSession(pool, sessionId, { arc_report_json: reReport, blueprint_json: fixedBlueprint, status: finalStatus });
+        const structuralCheck = _validateBlueprintStructure(fixedBlueprint);
+        if (structuralCheck.valid) {
+          const passReport = {
+            critical: [], moderate: [], minor: [],
+            total_critical: 0, total_moderate: 0, total_minor: 0,
+            ready_to_execute: true,
+            validation_method: 'deterministic_structural_check',
+            auto_fix_count: fixedBlueprint._meta?.arc_fixes_applied || 0,
+          };
+          await updateSession(pool, sessionId, { arc_report_json: passReport, blueprint_json: fixedBlueprint, status: 'ready' });
 
-        if (reReport.ready_to_execute && session.amendment_file) {
-          const blueprintFile = tryWriteBlueprintFile(session.amendment_file, fixedBlueprint);
-          await updateSession(pool, sessionId, { ...(blueprintFile ? { blueprint_file: blueprintFile } : {}), status: 'ready' });
+          if (session.amendment_file) {
+            const blueprintFile = tryWriteBlueprintFile(session.amendment_file, fixedBlueprint);
+            await updateSession(pool, sessionId, { ...(blueprintFile ? { blueprint_file: blueprintFile } : {}), status: 'ready' });
+          }
+          return { arcReport: passReport, status: 'ready', autoFixed: true };
         }
-        return { arcReport: reReport, status: finalStatus, autoFixed: true };
+        const failReport = {
+          critical: structuralCheck.errors.map(e => ({ step_id: e.stepId || 'blueprint', issue: e.issue, fix: e.fix })),
+          moderate: [], minor: [],
+          total_critical: structuralCheck.errors.length,
+          total_moderate: 0, total_minor: 0,
+          ready_to_execute: false,
+          validation_method: 'deterministic_structural_check',
+        };
+        await updateSession(pool, sessionId, { arc_report_json: failReport, blueprint_json: fixedBlueprint, status: 'gap_collection' });
+        return { arcReport: failReport, status: 'gap_collection', autoFixed: true };
       }
     }
 
@@ -878,6 +891,47 @@ Return JSON:
       fix_types: ['duplicate_ids', 'missing_deps', 'ssot_tag'].filter(Boolean).join(','),
     };
     return fixed;
+  }
+
+  function _validateBlueprintStructure(blueprint) {
+    const errors = [];
+    const steps = blueprint.steps || [];
+    if (steps.length === 0) {
+      errors.push({ issue: 'Blueprint has no steps', fix: 'Add at least one step' });
+      return { valid: false, errors };
+    }
+
+    const idSet = new Set();
+    for (const s of steps) {
+      if (!s.id) errors.push({ stepId: s.file || '?', issue: 'Step has no id', fix: 'Assign a unique step ID' });
+      if (idSet.has(s.id)) errors.push({ stepId: s.id, issue: `Duplicate step ID: ${s.id}`, fix: 'Rename to unique ID' });
+      idSet.add(s.id);
+    }
+
+    for (const s of steps) {
+      if (!s.deps) continue;
+      for (const dep of s.deps) {
+        if (!idSet.has(dep)) {
+          errors.push({ stepId: s.id, issue: `Dep '${dep}' references non-existent step`, fix: 'Remove or fix dep reference' });
+        }
+      }
+    }
+
+    const nonSqlSteps = steps.filter(s => s.type !== 'sql');
+    for (const s of nonSqlSteps) {
+      if (!s.deps || s.deps.length === 0) {
+        errors.push({ stepId: s.id, issue: `Step has empty deps`, fix: 'Add at least DB migration dep' });
+      }
+    }
+
+    const validTypes = new Set(['sql', 'esm', 'esm_script', 'html']);
+    for (const s of steps) {
+      if (!validTypes.has(s.type)) {
+        errors.push({ stepId: s.id, issue: `Invalid type '${s.type}'`, fix: `Use one of: ${[...validTypes].join(', ')}` });
+      }
+    }
+
+    return { valid: errors.length === 0, errors };
   }
 
   // ── Getters ───────────────────────────────────────────────────────────────
