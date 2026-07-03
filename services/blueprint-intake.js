@@ -736,6 +736,26 @@ Return JSON:
     );
     const arcReport = parseBlueprintFromAiResponse(arcRaw);
 
+    if (!arcReport.ready_to_execute && (arcReport.total_critical > 0 || arcReport.total_moderate > 0)) {
+      const fixedBlueprint = await _autoFixFromArcReport(blueprint, arcReport, session.product_name);
+      if (fixedBlueprint) {
+        await updateSession(pool, sessionId, { arc_report_json: arcReport, blueprint_json: fixedBlueprint, status: 'arc_review' });
+        const reReviewRaw = await callCouncilMember('claude',
+          `BLUEPRINT TO REVIEW (after auto-fix):\n${JSON.stringify(fixedBlueprint, null, 2).slice(0, 12000)}`,
+          { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
+        );
+        const reReport = parseBlueprintFromAiResponse(reReviewRaw);
+        const finalStatus = reReport.ready_to_execute ? 'ready' : 'gap_collection';
+        await updateSession(pool, sessionId, { arc_report_json: reReport, blueprint_json: fixedBlueprint, status: finalStatus });
+
+        if (reReport.ready_to_execute && session.amendment_file) {
+          const blueprintFile = tryWriteBlueprintFile(session.amendment_file, fixedBlueprint);
+          await updateSession(pool, sessionId, { ...(blueprintFile ? { blueprint_file: blueprintFile } : {}), status: 'ready' });
+        }
+        return { arcReport: reReport, status: finalStatus, autoFixed: true };
+      }
+    }
+
     const newStatus = arcReport.ready_to_execute ? 'ready' : 'gap_collection';
     await updateSession(pool, sessionId, { arc_report_json: arcReport, blueprint_json: blueprint, status: newStatus });
 
@@ -748,6 +768,43 @@ Return JSON:
     }
 
     return { arcReport, status: newStatus };
+  }
+
+  async function _autoFixFromArcReport(blueprint, arcReport, productName) {
+    const allFindings = [
+      ...(arcReport.critical || []).map(f => ({ severity: 'CRITICAL', ...f })),
+      ...(arcReport.moderate || []).map(f => ({ severity: 'MODERATE', ...f })),
+    ];
+    if (allFindings.length === 0) return null;
+
+    const fixInstructions = allFindings.map(f =>
+      `[${f.severity}] Step ${f.step_id}: ${f.issue}\n  Required fix: ${f.fix}`
+    ).join('\n\n');
+
+    const fixPrompt = `You are BuilderOS ARC auto-fixer. Given a blueprint JSON and a list of issues found during review, produce a CORRECTED blueprint JSON.
+
+Apply every fix listed below. Do not add new steps — only modify existing ones (rename IDs, fix deps, update purpose text, fix ssot_tag).
+
+ISSUES TO FIX:
+${fixInstructions}
+
+Return ONLY the corrected blueprint as a valid JSON object — no markdown, no code fences.`;
+
+    const fixedRaw = await callCouncilMember('openai',
+      `CURRENT BLUEPRINT:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
+      { systemPromptOverride: fixPrompt, maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+    );
+    const fixed = parseBlueprintFromAiResponse(fixedRaw);
+    if (!fixed || !fixed.steps || fixed.steps.length === 0) return null;
+
+    fixed._meta = {
+      ...blueprint._meta,
+      ...fixed._meta,
+      blueprint_version: incrementVersion(blueprint._meta?.blueprint_version || '1.0.0'),
+      auto_fixed_at: new Date().toISOString(),
+      arc_fixes_applied: allFindings.length,
+    };
+    return fixed;
   }
 
   // ── Getters ───────────────────────────────────────────────────────────────
