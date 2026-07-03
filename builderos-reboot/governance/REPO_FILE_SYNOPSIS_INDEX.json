@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T12:08:44.668Z",
+  "generated_at": "2026-07-03T16:22:21.370Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11822,
   "files": [
@@ -38522,9 +38522,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 565633,
-      "mtime": "2026-07-03T11:58:51.487Z",
-      "indexed_at": "2026-07-03T11:59:43.865Z"
+      "bytes": 566935,
+      "mtime": "2026-07-03T16:22:14.482Z",
+      "indexed_at": "2026-07-03T16:22:21.370Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -85742,9 +85742,9 @@
     {
       "path": "services/founder-intake-gate.js",
       "synopsis": "Founder execute spine — Action Inbox capture + BPB intake gate before build/terminal.",
-      "bytes": 2920,
-      "mtime": "2026-06-29T17:21:08.878Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z",
+      "bytes": 3548,
+      "mtime": "2026-07-03T12:16:45.871Z",
+      "indexed_at": "2026-07-03T16:22:21.370Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
