@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T11:03:04.848Z",
+  "generated_at": "2026-07-03T11:08:00.025Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11819,
   "files": [
@@ -21995,8 +21995,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3578589,
-      "mtime": "2026-07-03T11:03:01.801Z",
-      "indexed_at": "2026-07-03T11:03:04.848Z"
+      "mtime": "2026-07-03T11:07:59.553Z",
+      "indexed_at": "2026-07-03T11:08:00.025Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38079,9 +38079,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 112511,
-      "mtime": "2026-07-03T02:32:09.908Z",
-      "indexed_at": "2026-07-03T02:32:29.765Z"
+      "bytes": 114484,
+      "mtime": "2026-07-03T11:07:49.681Z",
+      "indexed_at": "2026-07-03T11:08:00.025Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -85651,9 +85651,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 41228,
-      "mtime": "2026-07-03T02:31:00.684Z",
-      "indexed_at": "2026-07-03T02:32:29.765Z",
+      "bytes": 44124,
+      "mtime": "2026-07-03T11:07:14.461Z",
+      "indexed_at": "2026-07-03T11:08:00.025Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -90753,9 +90753,9 @@
     {
       "path": "tests/founder-build-self-repair.test.js",
       "synopsis": "js — tests/founder-build-self-repair.test.js.",
-      "bytes": 5365,
-      "mtime": "2026-06-26T15:56:49.313Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 6889,
+      "mtime": "2026-07-03T11:07:29.257Z",
+      "indexed_at": "2026-07-03T11:08:00.025Z"
     },
     {
       "path": "tests/founder-build-success-gate.test.js",

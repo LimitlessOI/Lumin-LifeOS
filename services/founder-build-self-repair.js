@@ -97,6 +97,35 @@ function isRetriableBlocker(blocker = '', code = '') {
   return false;
 }
 
+// A truncation/completeness blocker is one where the model's output was cut off
+// mid-generation (the pre-commit gates catch it) — as opposed to a logical/scope
+// blocker. These are worth retrying on the SAME target with an explicit
+// "return the complete output" correction, because a fresh generation usually
+// succeeds. Keep this narrow so we don't loop on non-transient failures.
+export function isTruncationBlocker(blocker = '') {
+  const b = String(blocker);
+  return /truncated|Pre-commit syntax check failed|syntax error|Unexpected end|too short|SQL migration appears truncated|likely truncated|does not end in|unclosed paren|unterminated/i.test(b);
+}
+
+// Append an explicit correction so the model knows its previous attempt was cut
+// off and must return complete, valid output. This is the targeted-retry
+// intelligence: feed the exact gate error back rather than silently re-asking.
+export function augmentTaskWithTruncationCorrection(task, blocker) {
+  const reason = String(blocker || 'output was incomplete').slice(0, 300);
+  return [
+    String(task || '').trim(),
+    '',
+    'CORRECTION — YOUR PREVIOUS ATTEMPT WAS REJECTED BY THE PRE-COMMIT COMPLETENESS GATE.',
+    `Gate error: ${reason}`,
+    'Your last output was truncated / incomplete (cut off mid-generation). Return the',
+    'COMPLETE output this time: do not abbreviate, do not omit sections, do not stop',
+    'early. Ensure every bracket, quote, parenthesis, block comment and statement is',
+    'closed and the file/snippet ends cleanly (e.g. a .sql migration ends with ";",',
+    'a .json parses, a .js passes `node --check`). If the full file is too large to',
+    'emit safely, return only the minimal additive snippet for the requested change.',
+  ].join('\n');
+}
+
 function pickRepairTarget(task, currentTarget, blocker) {
   if (/OVERLAY_STUB|overlay shrink|production shell requires|too short.*html/i.test(String(blocker))) {
     if (isSurgicalHtmlCommentPatch(task)) {
@@ -877,6 +906,11 @@ export async function runFounderBuildWithSelfRepair(options) {
   const directOrder = options.confirmIntent === true;
   const effectiveSkipQuorum = skipQuorum || directOrder;
   let targetFile = resolveFounderBuildTarget(currentTask);
+  // Bounded same-target retries when the model truncates its own output. A fresh
+  // generation with the exact gate error fed back usually fixes it; cap it so a
+  // model that keeps truncating escalates instead of looping on budget.
+  let truncationRetries = 0;
+  const MAX_TRUNCATION_RETRIES = 2;
   const platformGapFill = resolvePlatformGapFillForBuildDispatch(
     {
       domain: 'builderos-platform',
@@ -1064,6 +1098,12 @@ export async function runFounderBuildWithSelfRepair(options) {
           attempts[attempts.length - 1].repair_applied = repair.repair;
           continue;
         }
+        if (!repair && attempt < maxAttempts && truncationRetries < MAX_TRUNCATION_RETRIES && isTruncationBlocker(failure.first_blocker)) {
+          truncationRetries += 1;
+          currentTask = augmentTaskWithTruncationCorrection(currentTask, failure.first_blocker);
+          attempts[attempts.length - 1].repair_applied = `truncation_regenerate_${truncationRetries}`;
+          continue;
+        }
         if (!effectiveSkipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
           return escalateAfterSoloExhaustion({
             task: currentTask,
@@ -1137,6 +1177,13 @@ export async function runFounderBuildWithSelfRepair(options) {
         targetFile = repair.targetFile;
         currentTask = augmentTaskWithGapFillScope(currentTask, targetFile);
         attempts[attempts.length - 1].repair_applied = repair.repair;
+        continue;
+      }
+      if (!repair && attempt < maxAttempts && truncationRetries < MAX_TRUNCATION_RETRIES && isTruncationBlocker(receipt.blocker)) {
+        truncationRetries += 1;
+        targetFile = resolvedTarget || targetFile;
+        currentTask = augmentTaskWithTruncationCorrection(currentTask, receipt.blocker);
+        attempts[attempts.length - 1].repair_applied = `truncation_regenerate_${truncationRetries}`;
         continue;
       }
 
