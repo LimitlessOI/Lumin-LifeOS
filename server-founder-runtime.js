@@ -53,6 +53,10 @@ import {
   GITHUB_REPO,
 } from "./startup/environment.js";
 
+process.on('unhandledRejection', (reason) => {
+  logger.error({ err: reason }, 'unhandledRejection — swallowed to keep server alive');
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

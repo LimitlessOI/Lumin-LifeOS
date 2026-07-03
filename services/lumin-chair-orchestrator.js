@@ -611,7 +611,7 @@ export async function runLuminChairTurn(ctx, deps) {
             if (ghToken) {
               const ghRes = await fetch(
                 `https://api.github.com/repos/${ghRepo}/contents/${productHomeFile}?ref=main`,
-                { headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3.raw' } },
+                { headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3.raw' }, signal: AbortSignal.timeout(15000) },
               );
               if (ghRes.ok) amendmentText = await ghRes.text();
             }

@@ -1346,6 +1346,7 @@ HOW TO RESPOND:
           },
         }), CHAIR_TURN_BUDGET_MS);
       });
+      chairTurnPromise.catch(() => {});
       let chairResult;
       try {
         chairResult = await Promise.race([chairTurnPromise, chairTurnTimeout]);
