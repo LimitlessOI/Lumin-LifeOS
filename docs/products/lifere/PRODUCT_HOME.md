@@ -365,5 +365,5 @@ Same engine adapts to any sales vertical. Only the objection library, close scri
 | **@ssot** | New lifere services → `AMENDMENT_LIFERE.md`; `lifere-os-v1.js` still Am 21 until repoint |
 | **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **124/124 PASS** (2026-06-26 sentry routes). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
 | **Founder alpha** | **CLEARED pending deploy** — sentry fixed 5 UI 404s locally; production still 404 until redeploy. Run `npm run lifeos:founder-alpha:audit` after deploy. |
-| **Adam entry** | `https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
+| **Adam entry** | `https://lumin-web-production-e3a9.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
 | **Next** | Adam founder session → confirm PASS quote → optional BoldTrail test contact cleanup |

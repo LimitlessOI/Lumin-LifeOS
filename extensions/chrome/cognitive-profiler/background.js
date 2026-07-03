@@ -13,7 +13,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 });
 
 function sendToServer(data) {
-    fetch('https://robust-magic-lumin-sandbox.up.railway.app/api/v1/track', {
+    fetch('https://lumin-web-production-e3a9.up.railway.app/api/v1/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

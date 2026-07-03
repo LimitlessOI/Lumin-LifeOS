@@ -309,7 +309,7 @@ All new tables created in this session:
 ## 🎮 COMMAND CENTER
 
 ### Access URL:
-**https://robust-magic-production.up.railway.app/command-center?key=MySecretKey2025LifeOS**
+**https://lumin-web-production-e3a9.up.railway.app/command-center?key=MySecretKey2025LifeOS**
 
 **Features:**
 - AI status bar (clickable dots)

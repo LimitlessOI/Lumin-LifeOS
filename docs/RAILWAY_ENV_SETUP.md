@@ -8,7 +8,7 @@
 
 **Before pasting variables, select the correct environment in Railway:**
 1. Open your Railway project
-2. Click on the **service** (e.g., "Lumin-LifeOS" or "robust-magic")
+2. Click on the **service** (e.g., "Lumin-LifeOS" or "lumin-web")
 3. Click **"Variables"** tab
 4. **Look at the sidebar** - you'll see:
    - **Production** (or your main environment name)

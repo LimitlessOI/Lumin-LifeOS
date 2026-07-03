@@ -3,7 +3,7 @@
 # Landing Page Verification Report
 
 ## URL Tested
-- https://robust-magic-production.up.railway.app/sales-coaching.html
+- https://lumin-web-production-e3a9.up.railway.app/sales-coaching.html
 
 ## Test Results
 1. **Landing Page Load Test**: 

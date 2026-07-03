@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       app_url:
-        description: "Public base URL (e.g., https://robust-magic-production.up.railway.app)"
+        description: "Public base URL (e.g., https://lumin-web-production-e3a9.up.railway.app)"
         required: false
       key:
         description: "COMMAND_CENTER_KEY (optional; uses secret if blank)"

@@ -64,7 +64,7 @@ ORDER BY deployed_at DESC;
 ### 3. Check API Endpoint
 
 ```bash
-GET https://robust-magic-production.up.railway.app/api/v1/drones?key=MySecretKey2025LifeOS
+GET https://lumin-web-production-e3a9.up.railway.app/api/v1/drones?key=MySecretKey2025LifeOS
 ```
 
 **Expected Response:**

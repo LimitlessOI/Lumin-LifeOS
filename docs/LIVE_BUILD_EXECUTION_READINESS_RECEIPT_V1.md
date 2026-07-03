@@ -208,7 +208,7 @@ Aligns with `CANONICAL_BUILD_EXECUTION_PATH_V1.md` §5 smallest repair and Counc
 
 **Mission:** `LIVE_BUILD_PROOF_RUN_V1` (execution)
 
-Run the single live test defined in §5 above on production (`https://robust-magic-production.up.railway.app`), produce:
+Run the single live test defined in §5 above on production (`https://lumin-web-production-e3a9.up.railway.app`), produce:
 
 - `products/receipts/LIVE_BUILD_PROOF_RUN_V1.json` — per-gate timestamps, HTTP bodies, job id, SHA, ledger fields
 - Append one paragraph to this doc § "Live run appendix" with PASS/FAIL

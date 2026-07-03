@@ -8,7 +8,7 @@
 
 Visit:
 ```
-https://robust-magic-production.up.railway.app/extract-conversations
+https://lumin-web-production-e3a9.up.railway.app/extract-conversations
 ```
 
 Or from Command Center:
@@ -51,7 +51,7 @@ Or from Command Center:
 
 1. **Open extraction page:**
    ```
-   https://robust-magic-production.up.railway.app/extract-conversations
+   https://lumin-web-production-e3a9.up.railway.app/extract-conversations
    ```
 
 2. **Drag & drop your export file** OR click to select
@@ -74,7 +74,7 @@ Go to Command Center → Knowledge Base → Business Ideas
 
 Or search:
 ```
-https://robust-magic-production.up.railway.app/api/v1/knowledge/business-ideas?key=YOUR_KEY
+https://lumin-web-production-e3a9.up.railway.app/api/v1/knowledge/business-ideas?key=YOUR_KEY
 ```
 
 ---
@@ -94,7 +94,7 @@ https://robust-magic-production.up.railway.app/api/v1/knowledge/business-ideas?k
 If you prefer to use the API directly:
 
 ```bash
-POST https://robust-magic-production.up.railway.app/api/v1/conversations/extract-export
+POST https://lumin-web-production-e3a9.up.railway.app/api/v1/conversations/extract-export
 Headers:
   x-command-key: YOUR_COMMAND_CENTER_KEY
   Content-Type: application/json

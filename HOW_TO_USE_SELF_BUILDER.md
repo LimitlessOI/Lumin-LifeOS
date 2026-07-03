@@ -15,7 +15,7 @@ The system can now **build, test, and deploy itself automatically**. You no long
 **Just ask the system to make changes via self-programming:**
 
 ```bash
-POST https://robust-magic-production.up.railway.app/api/v1/system/self-program?key=MySecretKey2025LifeOS
+POST https://lumin-web-production-e3a9.up.railway.app/api/v1/system/self-program?key=MySecretKey2025LifeOS
 
 {
   "instruction": "Add a new feature to track user engagement",
@@ -42,7 +42,7 @@ POST https://robust-magic-production.up.railway.app/api/v1/system/self-program?k
 ### Trigger Full Build
 
 ```bash
-POST https://robust-magic-production.up.railway.app/api/v1/system/build?key=MySecretKey2025LifeOS
+POST https://lumin-web-production-e3a9.up.railway.app/api/v1/system/build?key=MySecretKey2025LifeOS
 
 {
   "installDependencies": true,
@@ -58,7 +58,7 @@ POST https://robust-magic-production.up.railway.app/api/v1/system/build?key=MySe
 ### View Build History
 
 ```bash
-GET https://robust-magic-production.up.railway.app/api/v1/system/build-history?key=MySecretKey2025LifeOS&limit=10
+GET https://lumin-web-production-e3a9.up.railway.app/api/v1/system/build-history?key=MySecretKey2025LifeOS&limit=10
 ```
 
 ---

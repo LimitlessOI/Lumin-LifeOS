@@ -120,7 +120,7 @@ The system now:
 
 ## 🎮 Command Center Access
 
-**URL**: `https://robust-magic-production.up.railway.app/command-center`
+**URL**: `https://lumin-web-production-e3a9.up.railway.app/command-center`
 
 **Features**:
 - See all active projects

@@ -35,7 +35,7 @@ You are the **LifeRE Alpha Auditor**. Your job is to **find every gap between "m
 | Machine gate | PASS | `npm run lifeos:lifere-alpha-gate` |
 | Self-audit | PASS, `product_z_honest: true` | `npm run lifeos:lifere-self-audit` |
 | Alpha readiness | PASS (may warn on founder only) | `npm run lifeos:lifere-alpha-readiness` |
-| Live API | All E2E tests on Railway | `LIFERE_ALPHA_BASE_URL=https://robust-magic-production.up.railway.app npm run lifeos:lifere-alpha-e2e` (needs `COMMAND_CENTER_KEY` from `.env`) |
+| Live API | All E2E tests on Railway | `LIFERE_ALPHA_BASE_URL=https://lumin-web-production-e3a9.up.railway.app npm run lifeos:lifere-alpha-e2e` (needs `COMMAND_CENTER_KEY` from `.env`) |
 | Deploy | Latest commit live | `/api/v1/lifere/health` returns `waves: W1-W6`, `pool: true` |
 | UI | Founder success test path works | `/overlay/lifeos-lifere.html` — daily command center, top-3, debrief markers render + load data |
 | Honesty | No fake PASS | `founder_usability_pass` stays false until Adam confirms |
@@ -61,7 +61,7 @@ Record outputs to `products/receipts/LIFERE_ALPHA_AUDIT_<timestamp>.json` if any
 
 ```bash
 # From repo root with dotenv loaded:
-node -e "import 'dotenv/config'; import { spawnSync } from 'node:child_process'; const r=spawnSync('npm',['run','lifeos:lifere-alpha-e2e'],{env:{...process.env,LIFERE_ALPHA_BASE_URL:'https://robust-magic-production.up.railway.app'},stdio:'inherit'}); process.exit(r.status??1)"
+node -e "import 'dotenv/config'; import { spawnSync } from 'node:child_process'; const r=spawnSync('npm',['run','lifeos:lifere-alpha-e2e'],{env:{...process.env,LIFERE_ALPHA_BASE_URL:'https://lumin-web-production-e3a9.up.railway.app'},stdio:'inherit'}); process.exit(r.status??1)"
 ```
 
 Also probe:

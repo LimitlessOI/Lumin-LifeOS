@@ -39,7 +39,7 @@ npm run mobile:android
 
 Capacitor loads:
 
-`https://robust-magic-production.up.railway.app/lifeos?native=1&layout=mobile&direct_system=1`
+`https://lumin-web-production-e3a9.up.railway.app/lifeos?native=1&layout=mobile&direct_system=1`
 
 That is **`lifeos-app.html`** — the canonical universal shell. Sign in once; all programs are in the sidebar / bottom nav.
 

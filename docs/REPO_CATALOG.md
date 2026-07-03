@@ -193,7 +193,7 @@
 | `.env.backup` | 285 | 4 | backup | 2026-01-11 | COMMAND_CENTER_KEY=local-dev-key-12345 |
 | `.env.backup.1768410887866` | 234 | 3 | 1768410887866 | 2026-01-14 | COMMAND_CENTER_KEY=local-dev-key-12345 |
 | `.env.example` | 245 | 15 | example | 2025-12-22 | ``` |
-| `.env.local` | 492 | 8 | local | 2026-04-24 | PUBLIC_BASE_URL=https://robust-magic-production.up.railway.app |
+| `.env.local` | 492 | 8 | local | 2026-04-24 | PUBLIC_BASE_URL=https://lumin-web-production-e3a9.up.railway.app |
 | `.env.local.save` | 258 | 16 | save | 2025-12-31 | ollama list |
 | `.env.railway.example` | 6149 | 103 | example | 2026-03-31 | ══════════════════════════════════════════════════════════════════════════════════ |
 | `.env.template` | 377 | 18 | template | 2025-12-22 | Environment configuration template |

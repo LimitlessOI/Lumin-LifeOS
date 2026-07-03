@@ -126,7 +126,7 @@ Legend:
 
 | Variable | Status | Purpose | Used By |
 |---|---|---|---|
-| `PUBLIC_BASE_URL` | ✅ SET | Canonical `https://…` origin — **set on Railway** (`robust-magic` production); operator screenshot **2026-04-22**; also export in local shell for scripts | `scripts/verify-project.mjs`, `scripts/council-builder-preflight.mjs`, curl examples |
+| `PUBLIC_BASE_URL` | ✅ SET | Canonical `https://…` origin — **set on Railway** (`lumin-web` production); operator screenshot **2026-04-22**; also export in local shell for scripts | `scripts/verify-project.mjs`, `scripts/council-builder-preflight.mjs`, curl examples |
 | `REMOTE_VERIFY_BASE_URL` | 🔲 OPTIONAL | Same role as `PUBLIC_BASE_URL` but explicit name for “probe this deploy from my laptop” | `scripts/verify-project.mjs` |
 | `BASE_URL` | ✅ SET | Public app origin; fallback when `RAILWAY_PUBLIC_DOMAIN` / `PUBLIC_BASE_URL` are unset (e.g. TC mobile link helper) | `services/tc-mobile-link-service.js` (with `PUBLIC_BASE_URL`) |
 
@@ -355,7 +355,7 @@ Tuning only; defaults are wired in **`routes/lifeos-council-builder-routes.js`**
 
 ## Railway environments (operator policy)
 
-**Project:** `robust-magic` on Railway.
+**Project:** `lumin-web` on Railway (previously `robust-magic` — retired).
 
 | Environment | Operator status | System use |
 |-------------|-----------------|------------|
@@ -371,13 +371,13 @@ Tuning only; defaults are wired in **`routes/lifeos-council-builder-routes.js`**
 
 ## 🧾 Deploy inventory — Lumin (Railway production, variable **names** only)
 
-**Service:** `robust-magic` · **Environment:** production · **Vault:** Railway → Lumin → Variables.  
+**Service:** `lumin-web` · **Environment:** production · **Vault:** Railway → Lumin → Variables.  
 **Sources:** (1) operator screenshots **2026-04-22** + **2026-04-25** (names only; values masked). (2) Category tables above. (3) Authenticated `GET /api/v1/railway/env` (names + masked values) when available.  
 **Railway UI note:** dashboard reports **~92** service variables; **9** may be “added by Railway” system entries — names can change with platform updates.
 
 **Rule:** **Secret values never appear in this repo.** If a secret was ever exposed in a screenshot, chat, or export → **rotate** in provider + Railway.
 
-**Non-secret values (safe to record here):** Only variables that are already public or non-sensitive (e.g. public URL, `NODE_ENV`, `PORT`). Example confirmed from operator screenshot: **`PUBLIC_BASE_URL`** = `https://robust-magic-production.up.railway.app`.
+**Non-secret values (safe to record here):** Only variables that are already public or non-sensitive (e.g. public URL, `NODE_ENV`, `PORT`). Example confirmed from operator screenshot: **`PUBLIC_BASE_URL`** = `https://lumin-web-production-e3a9.up.railway.app`.
 
 ### Full visible-name list (2026-04-25 screenshot pass — A→Z)
 
@@ -426,7 +426,7 @@ Paste rows whenever a verifier or production flow **succeeds** under an explicit
 | 2026-04-22 | **Pointer to `docs/SYSTEM_CAPABILITIES.md`** — matrix of self-serve routes/scripts + env per capability + gaps; maintain with this registry. |
 | 2026-04-22 | **Env certification playbook + `npm run env:certify`** — `scripts/env-certify.mjs` (healthz + `/railway/env` + `/lifeos/builder/domains`[/ready]); `data/env-certification-log.jsonl` (gitignored); **Env certification log** table columns: scope / success criterion / evidence / result; `ENV_DIAGNOSIS_PROTOCOL` §4 “present **and** working”. |
 | 2026-04-22 | **Operator mirror of Railway** — top-of-file contract: screenshots/lists = **KNOW** for name presence; “no access” = IDE cannot read vault without HTTP/auth, **not** “vars unset”; **same-session update rule** when Railway vars change; `PUBLIC_BASE_URL` → **✅ SET** + non-secret value line under Deploy inventory. |
-| 2026-04-25 | **Deploy inventory expanded** — full A→Z **visible-name** list from operator Railway screenshots (robust-magic); **`docs/ENV_DIAGNOSIS_PROTOCOL.md`** (mandatory before “env missing” claims); **Env certification log** table; top-of-file pointer + **North Star §2.3** cross-link |
+| 2026-04-25 | **Deploy inventory expanded** — full A→Z **visible-name** list from operator Railway screenshots (lumin-web); **`docs/ENV_DIAGNOSIS_PROTOCOL.md`** (mandatory before “env missing” claims); **Env certification log** table; top-of-file pointer + **North Star §2.3** cross-link |
 | 2026-04-22 | **Deploy inventory** (Lumin / robust-magic): names-only table; expanded **Database** (`DATABASE_URL_SANDBOX`, `DB_SSL_*`), **Public URL** (`BASE_URL`), **Runtime** (`COST_SHUTDOWN_THRESHOLD`, reserved keys), **eXp Okta**; **EMAIL_*** and **CEREBRAS** status aligned with live vault where confirmed |
 | 2026-04-22 | Added **Public URL & remote verification** (`PUBLIC_BASE_URL`, `REMOTE_VERIFY_BASE_URL`, verify-project remote mode) and **ClientCare billing** (`CLIENTCARE_*`, MFA optional); synced machine map in `services/env-registry-map.js` |
 | 2026-03-21 | Initial registry created — all vars audited from codebase grep |

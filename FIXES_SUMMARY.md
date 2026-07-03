@@ -63,7 +63,7 @@
 If overlay still not working:
 1. Open browser console (F12)
 2. Check for JavaScript errors
-3. Verify the page loads at: `https://robust-magic-production.up.railway.app/overlay`
+3. Verify the page loads at: `https://lumin-web-production-e3a9.up.railway.app/overlay`
 4. Check network tab for failed API calls
 
 ## 🔍 Testing

@@ -63,7 +63,7 @@ Railway should automatically deploy when you push to `main`, but sometimes it do
 
 ### **Option 1: Manual Redeploy (Fastest - 2 minutes)**
 1. Go to [Railway Dashboard](https://railway.app)
-2. Select your service: **robust-magic** (or your service name)
+2. Select your service: **lumin-web** (or your service name)
 3. Click **"Deployments"** tab
 4. Find the latest deployment
 5. Click **"Redeploy"** button (three dots menu → Redeploy)
@@ -114,7 +114,7 @@ After redeploying, check:
 
 1. **Health Check:**
    ```bash
-   curl https://robust-magic-production.up.railway.app/health
+   curl https://lumin-web-production-e3a9.up.railway.app/health
    ```
    Should return: `OK`
 
@@ -141,7 +141,7 @@ After redeploying, check:
 
 Run this to see if Railway is responding:
 ```bash
-curl -I https://robust-magic-production.up.railway.app/health
+curl -I https://lumin-web-production-e3a9.up.railway.app/health
 ```
 
 If it returns `200 OK`, Railway is running (but might be on old code).

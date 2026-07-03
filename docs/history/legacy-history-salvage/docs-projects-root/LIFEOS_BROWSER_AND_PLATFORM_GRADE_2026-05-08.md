@@ -3,7 +3,7 @@
 # LifeOS shell + platform — graded pass (live browser + probes)
 
 **Date:** 2026-05-08  
-**Evidence:** MCP browser snapshots on **`https://robust-magic-production.up.railway.app`**; `curl` to **`/api/v1/lifeos/builder/ready`**; local **`npm run lifeos:supervise:static`** earlier in pipeline work. **`lifeos:operational-grade`** was **not** re-run here (sandbox missing **`COMMAND_CENTER_KEY`**).
+**Evidence:** MCP browser snapshots on **`https://lumin-web-production-e3a9.up.railway.app`**; `curl` to **`/api/v1/lifeos/builder/ready`**; local **`npm run lifeos:supervise:static`** earlier in pipeline work. **`lifeos:operational-grade`** was **not** re-run here (sandbox missing **`COMMAND_CENTER_KEY`**).
 
 **Scale:** **1 = failing / dishonest**, **10 = exemplary / receipts green across the board.**
 

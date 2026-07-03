@@ -16,7 +16,7 @@
 1. **One GitHub monorepo today:** `Lumin-LifeOS` (see `GITHUB_REPO` on Railway). It contains **both** the old live stack **and** the new factory — they are **not** the same system.
 2. **Legacy = production spine + pre-factory experiments.** From **2026-05-24 forward**, legacy repos/trees are **Hist-owned**: read, salvage, cite — **do not extend** without ADAPT mission or documented GAP-FILL.
 3. **Where to build now:** `factory-staging/` (runtime) + `builderos-reboot/MISSIONS/` (machine). Live Railway product still runs the **production spine** until cutover receipts.
-4. **Deploy host** `robust-magic-production.up.railway.app` = legacy production spine image — not factory authority.
+4. **Deploy host** `lumin-web-production-e3a9.up.railway.app` = legacy production spine image — not factory authority.
 5. **Cutover bundle** `lumin-factory/` = future standalone export — Hist until explicit cutover mission promotes it.
 
 ---

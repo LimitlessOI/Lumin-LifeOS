@@ -146,13 +146,13 @@ COMMAND_CENTER_KEY=local-dev-key-12345
 
 ### Railway 🔄
 - **Status:** AUTO-DEPLOYING (GitHub integration)
-- **URL:** https://robust-magic-production.up.railway.app
+- **URL:** https://lumin-web-production-e3a9.up.railway.app
 - **Expected:** 3-5 minutes for build + deploy
 - **Config:** railway.json (Docker build)
 
 **How to verify:**
 1. Wait 5 minutes for Railway deployment
-2. Visit: https://robust-magic-production.up.railway.app/api/health
+2. Visit: https://lumin-web-production-e3a9.up.railway.app/api/health
 3. Should see: `{"status":"OK","ollama":{"status":"ok"}}`
 
 ---
@@ -161,7 +161,7 @@ COMMAND_CENTER_KEY=local-dev-key-12345
 
 ### Test 1: Server Health
 ```bash
-curl https://robust-magic-production.up.railway.app/api/health
+curl https://lumin-web-production-e3a9.up.railway.app/api/health
 ```
 
 **Expected:**
@@ -175,7 +175,7 @@ curl https://robust-magic-production.up.railway.app/api/health
 
 ### Test 2: TCO System
 ```bash
-curl -X POST https://robust-magic-production.up.railway.app/api/tco/signup \
+curl -X POST https://lumin-web-production-e3a9.up.railway.app/api/tco/signup \
   -H "Content-Type: application/json" \
   -d '{
     "company_name": "Test Co",
@@ -188,7 +188,7 @@ curl -X POST https://robust-magic-production.up.railway.app/api/tco/signup \
 
 ### Test 3: TCO Proxy (after signup)
 ```bash
-curl -X POST https://robust-magic-production.up.railway.app/api/tco/proxy \
+curl -X POST https://lumin-web-production-e3a9.up.railway.app/api/tco/proxy \
   -H "Authorization: Bearer tco_xxx" \
   -H "Content-Type: application/json" \
   -d '{
@@ -310,7 +310,7 @@ railway logs
 ---
 
 **Deployment Status: IN PROGRESS** 🚀
-**Check in 5 minutes:** https://robust-magic-production.up.railway.app/api/health
+**Check in 5 minutes:** https://lumin-web-production-e3a9.up.railway.app/api/health
 
 ---
 

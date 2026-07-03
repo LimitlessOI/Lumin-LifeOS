@@ -9,7 +9,7 @@
 
 ## 1. Problem (KNOW)
 
-| Check | `https://robust-magic-production.up.railway.app` |
+| Check | `https://lumin-web-production-e3a9.up.railway.app` |
 |--------|-----------------------------------------------|
 | `GET /healthz` | **200** — the Node app is up |
 | `GET /api/v1/lifeos/builder/domains` | **404** `Cannot GET /api/.../domains` — **no route registered** on the **running** image |
@@ -48,7 +48,7 @@
 **After deploy:** run locally:
 
 ```bash
-export PUBLIC_BASE_URL="https://robust-magic-production.up.railway.app"
+export PUBLIC_BASE_URL="https://lumin-web-production-e3a9.up.railway.app"
 # plus COMMAND_CENTER_KEY in shell
 npm run builder:preflight
 ```

@@ -3,11 +3,11 @@
   "appName": "LifeOS",
   "webDir": "mobile/www",
   "server": {
-    "url": "https://robust-magic-production.up.railway.app/lifeos?native=1&layout=mobile&direct_system=1",
+    "url": "https://lumin-web-production-e3a9.up.railway.app/lifeos?native=1&layout=mobile&direct_system=1",
     "androidScheme": "https",
     "cleartext": false,
     "allowNavigation": [
-      "robust-magic-production.up.railway.app",
+      "lumin-web-production-e3a9.up.railway.app",
       "*.up.railway.app"
     ]
   },
