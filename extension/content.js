@@ -21,7 +21,7 @@
 
   // ── Config ──────────────────────────────────────────────────────────────────
   const FRAME_ORIGIN  = (typeof chrome !== 'undefined' && chrome.runtime?.getManifest?.()?.host_permissions?.[0])
-    || 'https://robust-magic-production.up.railway.app';
+    || 'https://lumin-web-production-e3a9.up.railway.app';
   const FRAME_PATH    = '/extension/frame.html';
   const VERSION_PATH  = '/extension/version.json';
   const OVERLAY_ID    = '__lumin_overlay_root__';

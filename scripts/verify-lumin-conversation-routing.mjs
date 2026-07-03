@@ -22,7 +22,7 @@ const report = {
 };
 
 if (live) {
-  const BASE = (process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+  const BASE = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
   const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
   const text = 'should I get an oil change this week?';
   if (!KEY) {

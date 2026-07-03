@@ -1036,7 +1036,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 **Status:** BUILD_READY (TC coordination core — gates 1-5 complete)
 **Adaptability Score:** 82/100
 **Council Persona:** edison (iterate fast, test every assumption, protect the core deadline logic)
-**Last Updated:** 2026-05-24 — batch push receipt
+**Last Updated:** 2026-07-03 — Retired-domain scrub: replaced hardcoded `robust-magic-production.up.railway.app` fallbacks with canonical `lumin-web-production-e3a9.up.railway.app` across `config/runtime-env.js`, `core/*`, `server-full-runtime.js`, and probe/ops scripts (env vars like `PUBLIC_BASE_URL` still take precedence — only the stale default domain changed; no Railway runtime change since `RAILWAY_PUBLIC_DOMAIN` is injected). Prior: 2026-05-24 — batch push receipt
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions

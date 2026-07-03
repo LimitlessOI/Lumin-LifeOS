@@ -15,7 +15,7 @@ const IOS = path.join(ROOT, 'ios');
 const OUT_IPA = path.join(ROOT, 'public', 'downloads', 'lifeos.ipa');
 const OUT_PLIST = path.join(ROOT, 'public', 'downloads', 'lifeos-ios.plist');
 const RELEASE_JSON = path.join(ROOT, 'public', 'downloads', 'release.json');
-const BASE_URL = process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app';
+const BASE_URL = process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app';
 
 function run(cmd, opts = {}) {
   console.log('→', cmd);

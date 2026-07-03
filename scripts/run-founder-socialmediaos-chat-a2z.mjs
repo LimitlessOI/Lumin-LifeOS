@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from '../services/lifeos-mission-pipeline-executor.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = (process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+const BASE = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
 const RECEIPT = path.join(ROOT, 'products/receipts/SOCIALMEDIAOS_FOUNDER_CHAT_A2Z.json');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
 

@@ -389,7 +389,7 @@ for (const name of selected) {
 report.verdict = report.ok ? 'PASS' : 'FAIL';
 report.completed_at = report.at;
 report.git_sha = readJson('products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json')?.proof?.commit_sha || null;
-report.production_base = process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app';
+report.production_base = process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app';
 if (report.verdict === 'PASS') {
   report.bp_sync = syncMissionFromTechnicalReceipt({
     missionId: 'FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001',

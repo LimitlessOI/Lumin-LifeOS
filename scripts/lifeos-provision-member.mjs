@@ -108,7 +108,7 @@ async function main() {
           adamId,
         ]
       );
-      const base = (process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+      const base = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
       console.log(JSON.stringify({
         ok: true,
         mode: 'invite',
@@ -157,7 +157,7 @@ async function main() {
 
     await client.query('COMMIT');
 
-    const base = (process.env.PUBLIC_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+    const base = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
     console.log(JSON.stringify({
       ok: true,
       mode: 'account',

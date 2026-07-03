@@ -14,7 +14,7 @@ const CONTRACT_PATH = path.join(ROOT, 'docs/products/PRODUCT-LIFERE-OS-V1-0001/F
 const BASE = (
   process.env.LIFERE_ALPHA_BASE_URL
   || process.env.PUBLIC_BASE_URL
-  || 'https://robust-magic-production.up.railway.app'
+  || 'https://lumin-web-production-e3a9.up.railway.app'
 ).replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || process.env.LIFEOS_KEY || '';
 

@@ -425,7 +425,7 @@ node --check public/overlay/command-center.js
 
 **Status:** BUILD_READY
 **Adaptability Score:** 80/100
-**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-07-03 — Retired-domain scrub: replaced hardcoded `robust-magic-production.up.railway.app` fallbacks with canonical `lumin-web-production-e3a9.up.railway.app` across `config/runtime-env.js`, `core/*`, `server-full-runtime.js`, and probe/ops scripts (env vars like `PUBLIC_BASE_URL` still take precedence — only the stale default domain changed; no Railway runtime change since `RAILWAY_PUBLIC_DOMAIN` is injected). Prior: 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ### Gate 1 — Implementation Detail
 - [x] All panels documented with specific UI descriptions
