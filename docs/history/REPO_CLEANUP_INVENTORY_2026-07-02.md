@@ -137,6 +137,23 @@ appended to the same `SALVAGE_INDEX.json` (287 entries total).
   archived path — silent drift becomes an immediate red X, and the archive is a git-tracked quarantine (restorable).
 - **Verification:** node --check x3 OK · madge --circular still 741 (0 boot impact) · npm test 225 pass / 0 fail.
 
+## EXECUTED — Batch 3 (2026-07-02): last dead `src/` JS + reusable tool
+
+Archived the final 3 dead JS files — root `index.js` (dead app entry; `package.json main`/`start`
+= `server.js`, 0 importers) → `docs/history/legacy-src/_nonsrc/index.js.txt`; plus
+`src/controllers/clientController.js` and `src/services/migrationService.js` (their only importer
+was that dead `index.js`).
+
+**`src/` JS island is now fully resolved:** the only remaining `src/*.js` are the **13 load-bearing**
+files in the live boot closure (KEEP). Everything dead has been salvaged + quarantined.
+
+**System-owned tool:** encoded the whole loop as `scripts/legacy-archive-pass.mjs` — computes the boot
+closure via madge, refuses to move anything boot-reachable or imported by active non-test code
+(`--aggressive` allows test/alias-only refs), salvages SYNOPSIS, then `git mv`s to `.txt`. Re-runnable;
+future passes (and eventually the BuilderOS/OB1 loop) run it as the system's own hands.
+
+- **Verification:** node --check x3 OK · madge --circular still 741 · npm test 225 pass / 0 fail.
+
 ---
 
 ## Recommended execution order (all reversible, verify boot after each)

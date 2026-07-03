@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T00:26:03.952Z",
+  "generated_at": "2026-07-03T00:29:47.696Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11820,
+  "file_count": 11821,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37562,9 +37562,9 @@
     {
       "path": "docs/history/legacy-src/SALVAGE_INDEX.json",
       "synopsis": "Documentation — SALVAGE INDEX.",
-      "bytes": 94696,
-      "mtime": "2026-07-03T00:25:36.780Z",
-      "indexed_at": "2026-07-03T00:26:03.952Z",
+      "bytes": 94507,
+      "mtime": "2026-07-03T00:29:13.360Z",
+      "indexed_at": "2026-07-03T00:29:47.696Z",
       "synopsis_index_only": true
     },
     {
@@ -37626,9 +37626,9 @@
     {
       "path": "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md",
       "synopsis": "Repo cleanup inventory (2026-07-02) — indexed sprawl candidates, reference-evidence, ARCHIVE/ESCALATE/REVIEW verdicts.",
-      "bytes": 14442,
-      "mtime": "2026-07-03T00:25:59.204Z",
-      "indexed_at": "2026-07-03T00:26:03.952Z"
+      "bytes": 15513,
+      "mtime": "2026-07-03T00:29:43.368Z",
+      "indexed_at": "2026-07-03T00:29:47.696Z"
     },
     {
       "path": "docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md",
@@ -71408,6 +71408,16 @@
       "bytes": 1848,
       "mtime": "2026-06-21T21:39:07.028Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
+    },
+    {
+      "path": "scripts/legacy-archive-pass.mjs",
+      "synopsis": "legacy-archive-pass.mjs — system-owned \"salvage → quarantine → verify\" legacy cleanup tool.",
+      "bytes": 7348,
+      "mtime": "2026-07-03T00:28:54.972Z",
+      "indexed_at": "2026-07-03T00:29:47.696Z",
+      "ssot": [
+        "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md"
+      ]
     },
     {
       "path": "scripts/lib/autonomy-write-lock.mjs",
