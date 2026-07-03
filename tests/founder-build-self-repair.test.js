@@ -19,6 +19,10 @@ import {
   isVoiceSendWireOrder,
 } from '../services/founder-voice-send-patch.js';
 import { assessFounderBuildClarity } from '../services/founder-intent-clarify.js';
+import {
+  augmentTaskWithTruncationCorrection,
+  isTruncationBlocker,
+} from '../services/founder-build-self-repair.js';
 
 function testInfersUiTargetFromColorRequest() {
   const hit = inferTargetFileFromFounderFeedback(
@@ -123,6 +127,32 @@ function testBareOverlayFilename() {
   const t5 = 'add HTML comment <!-- x --> before lumin drawer in lifeos-app.html';
   assert.equal(assessFounderBuildClarity('do: ' + t5, t5).needs_clarify, false);
 }
+
+function testTruncationBlockerClassification() {
+  // Truncation/completeness gate errors (from the pre-commit gates) are retriable-on-same-target.
+  assert.equal(isTruncationBlocker('Pre-commit syntax check failed — commit blocked'), true);
+  assert.equal(isTruncationBlocker('SQL migration appears truncated — 1 unclosed parenthesis'), true);
+  assert.equal(isTruncationBlocker('generated JSON is invalid (likely truncated): Unexpected end of JSON input'), true);
+  assert.equal(isTruncationBlocker('generated output too short'), true);
+  // Logical/scope blockers are NOT truncation — must not trigger a blind regenerate loop.
+  assert.equal(isTruncationBlocker('target_file is required'), false);
+  assert.equal(isTruncationBlocker('BLOCKED_FOUNDER_PACKET_V2'), false);
+  assert.equal(isTruncationBlocker('blueprint_gate_required'), false);
+}
+
+function testTruncationCorrectionFeedsExactError() {
+  const out = augmentTaskWithTruncationCorrection(
+    'add a helper to routes/lifeos-auth-routes.js',
+    'SQL migration appears truncated — 1 unclosed parenthesis',
+  );
+  assert.match(out, /add a helper to routes\/lifeos-auth-routes\.js/);
+  assert.match(out, /CORRECTION/);
+  assert.match(out, /1 unclosed parenthesis/); // exact gate error fed back to the model
+  assert.match(out, /COMPLETE output/);
+}
+
+testTruncationBlockerClassification();
+testTruncationCorrectionFeedsExactError();
 
 testBareOverlayFilename();
 

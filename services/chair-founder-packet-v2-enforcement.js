@@ -205,6 +205,7 @@ export async function enforceFounderPacketV2ChairTurn({
   pointBTarget = null,
   confirmIntent = false,
   channel = null,
+  missionIntentLocked = false,
 } = {}) {
   const coverage = assessLiveIntentCoverage(cleanedInput, understanding || {}, pointBTarget);
   writeJson(path.join(LIVE_DIR, 'INTENT_COVERAGE_MAP.json'), coverage);
@@ -237,8 +238,10 @@ export async function enforceFounderPacketV2ChairTurn({
     || isSurgicalHtmlCommentPatch(cleanedInput)
     || isVoiceSendWireOrder(cleanedInput)
   );
-  const intentOk = (understanding ? understanding.intent_understood === true : false) || directExecuteLocked;
-  const coverageOk = coverage.tier1_load_bearing_ready || confirmIntent;
+  const intentOk = (understanding ? understanding.intent_understood === true : false)
+    || directExecuteLocked
+    || missionIntentLocked === true;
+  const coverageOk = coverage.tier1_load_bearing_ready || confirmIntent || missionIntentLocked === true;
   const executeChannels = new Set([
     'build_async',
     'build_terminal',
