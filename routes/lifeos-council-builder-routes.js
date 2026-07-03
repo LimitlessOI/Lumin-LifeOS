@@ -2080,6 +2080,33 @@ export function createLifeOSCouncilBuilderRoutes({
           gap_recommendation: gapRecommendation,
         });
       }
+    } else if (/\.sql$/i.test(target_file)) {
+      // The founder chat build loop reaches commit through this single /execute
+      // path, so it needs the same .sql truncation gate that /build and
+      // executeBatch run — otherwise a chat-driven truncated migration commits
+      // unchecked (it would only fail loudly at boot-apply).
+      const sqlCheck = validateSqlMigrationContent(cleanedOutput);
+      if (!sqlCheck.ok) {
+        const gapRecommendation = await recordBuilderGap({
+          domain: null,
+          task: `execute: ${target_file}`,
+          modelUsed: 'system',
+          rawOutput: output,
+          status: 'failed',
+          stage: 'sql_validation',
+          reason: sqlCheck.error,
+          targetFile: target_file,
+          routingKey: 'council.builder.execute',
+          mode: 'execute',
+        });
+        return res.status(422).json({
+          ok: false,
+          error: `SQL migration validation failed: ${sqlCheck.error}`,
+          committed: false,
+          target_file,
+          gap_recommendation: gapRecommendation,
+        });
+      }
     }
 
     const msg = commit_message || `[system-build] ${target_file}`;
