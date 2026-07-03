@@ -103,6 +103,25 @@ organized archive," but each is Hist-domain (default-HALT; needs the Hist mandat
 
 ---
 
+## EXECUTED — Batch 1 (2026-07-02): fence-corrupted dead `src/` artifacts
+
+**Moved 168 files** → `docs/history/legacy-src/<path>.txt`, catalogued in
+`docs/history/legacy-src/SALVAGE_INDEX.json` (source_path, archived_to, salvaged synopsis, verdict, reason).
+
+- **Selection (evidence):** madge import closure of `server.js` + `server-founder-runtime.js` +
+  `server-full-runtime.js` (741 modules) → file absent from closure; resolved-import scan across the
+  full active corpus (routes/services/startup/config/core/middleware/scripts/apps/**tests**) → 0 importers;
+  AND file contains literal markdown fences (```), i.e. syntactically invalid / non-loadable.
+- **Salvage-first:** each file's `SYNOPSIS`/intent captured into `SALVAGE_INDEX.json` before the move so
+  the *idea* survives even though the corrupted code is retired. (Most were codegen boilerplate; genuine
+  ideas e.g. LoRaWAN/IoT ingestion, example adapters preserved.)
+- **Post-move verification:** `node --check` on all 3 entrypoints OK · `madge --circular server.js` still
+  741 files (0 boot-path impact) · `tests/spine-import-resolution.test.js` 156/156 · `npm test` 225 pass / 0 fail.
+- **Remaining `src/`:** 13 files load-bearing (KEEP), ~92 dead-but-referenced-by-tests/aliases (per-file work),
+  balance still to salvage+archive in later batches.
+
+---
+
 ## Recommended execution order (all reversible, verify boot after each)
 
 1. **`lumin-factory/`** → Hist archive or `.gitignore` (safe now; 0 boot-path impact). Verify
