@@ -742,7 +742,7 @@ Return JSON:
     if (!arcReport.ready_to_execute && (hasCritical || hasModerate)) {
       let fixedBlueprint = null;
       try {
-        fixedBlueprint = await _autoFixFromArcReport(blueprint, arcReport, session.product_name);
+        fixedBlueprint = _autoFixFromArcReport(blueprint, arcReport, session.product_name);
       } catch (fixErr) {
         autoFixError = fixErr.message;
         console.error('[ARC-AUTOFIX] Failed to auto-fix blueprint:', fixErr.message);
@@ -779,51 +779,103 @@ Return JSON:
     return { arcReport, status: newStatus, autoFixed: false, autoFixError };
   }
 
-  async function _autoFixFromArcReport(blueprint, arcReport, productName) {
+  function _autoFixFromArcReport(blueprint, arcReport, productName) {
     const allFindings = [
       ...(arcReport.critical || []).map(f => ({ severity: 'CRITICAL', ...f })),
       ...(arcReport.moderate || []).map(f => ({ severity: 'MODERATE', ...f })),
     ];
     if (allFindings.length === 0) return null;
 
-    const fixInstructions = allFindings.map(f =>
-      `[${f.severity}] Step ${f.step_id}: ${f.issue}\n  Required fix: ${f.fix}`
-    ).join('\n\n');
+    const fixed = JSON.parse(JSON.stringify(blueprint));
+    const steps = fixed.steps || [];
+    if (steps.length === 0) return null;
+    let fixCount = 0;
 
-    const fixPrompt = `You are a blueprint editor. Your ONLY job: take a blueprint JSON that has issues and return the FIXED version.
-
-IMPORTANT: You must return the COMPLETE BLUEPRINT with a "steps" array and a "_meta" object. Do NOT return a review/report. Do NOT return {"critical":...} objects. Return the FIXED BLUEPRINT.
-
-The blueprint has a "steps" array of objects with {id, file, type, purpose, deps, ssot_tag}. Apply the fixes below by modifying the existing steps (rename IDs, update deps arrays, fix purpose text, fix ssot_tag). Do not add or remove steps.
-
-FIXES TO APPLY:
-${fixInstructions}
-
-Return ONLY the corrected blueprint JSON object with "steps" and "_meta" keys. No markdown fences.`;
-
-    const fixedRaw = await callCouncilMember('claude',
-      `Here is the current blueprint. Apply the fixes listed in your instructions and return the corrected version.\n\nBLUEPRINT:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
-      { systemPromptOverride: fixPrompt, maxOutputTokens: 6000, taskType: 'codegen', allowModelDowngrade: false }
-    );
-    let fixed;
-    try {
-      fixed = parseBlueprintFromAiResponse(fixedRaw);
-    } catch (parseErr) {
-      throw new Error(`parse_failed: ${parseErr.message} — raw preview: ${String(fixedRaw).slice(0, 200)}`);
+    const idSet = new Set();
+    const duplicates = new Set();
+    for (const s of steps) {
+      if (idSet.has(s.id)) duplicates.add(s.id);
+      idSet.add(s.id);
     }
-    if (!fixed) throw new Error('parse_returned_null: AI returned unparseable response');
-    if (fixed.critical && !fixed.steps) {
-      throw new Error('model_returned_review: AI returned a review report instead of a corrected blueprint');
+    if (duplicates.size > 0) {
+      const prefix = steps[0]?.id?.replace(/-\d+$/, '') || 'STEP';
+      let nextNum = steps.length + 1;
+      for (let i = steps.length - 1; i >= 0; i--) {
+        if (duplicates.has(steps[i].id)) {
+          const ext = (steps[i].file || '').split('.').pop();
+          if (ext === 'mjs' || steps[i].type === 'esm_script') {
+            steps[i].id = `${prefix}-${String(nextNum).padStart(3, '0')}`;
+            nextNum++;
+            fixCount++;
+          }
+        }
+      }
     }
-    if (!fixed.steps) throw new Error(`no_steps_key: parsed JSON keys=[${Object.keys(fixed).join(',')}]`);
-    if (fixed.steps.length === 0) throw new Error('empty_steps: AI returned blueprint with 0 steps');
+
+    const serviceStepIds = steps
+      .filter(s => s.type === 'esm' && !s.file?.includes('coordinator'))
+      .map(s => s.id);
+    const allNonVerifyIds = steps
+      .filter(s => s.type !== 'esm_script')
+      .map(s => s.id);
+
+    for (const s of steps) {
+      if (s.file?.includes('coordinator') && s.type === 'esm') {
+        const missing = serviceStepIds.filter(id => id !== s.id && !(s.deps || []).includes(id));
+        if (missing.length > 0) {
+          s.deps = [...new Set([...(s.deps || []), ...missing])];
+          fixCount++;
+        }
+      }
+      if (s.type === 'esm_script' || s.file?.includes('verify')) {
+        const missing = allNonVerifyIds.filter(id => !(s.deps || []).includes(id));
+        if (missing.length > 0) {
+          s.deps = [...new Set([...(s.deps || []), ...allNonVerifyIds])];
+          fixCount++;
+        }
+      }
+      if ((s.file?.includes('routes') || s.file?.includes('route')) && s.type === 'esm') {
+        const dbStep = steps.find(st => st.type === 'sql');
+        const coordStep = steps.find(st => st.file?.includes('coordinator'));
+        const needed = [dbStep?.id, coordStep?.id, ...serviceStepIds].filter(Boolean);
+        const missing = needed.filter(id => id !== s.id && !(s.deps || []).includes(id));
+        if (missing.length > 0) {
+          s.deps = [...new Set([...(s.deps || []), ...missing])];
+          fixCount++;
+        }
+      }
+      if ((s.type === 'html') && (!s.deps || s.deps.length === 0)) {
+        const routeStep = steps.find(st => st.file?.includes('route'));
+        if (routeStep) {
+          s.deps = [routeStep.id];
+          fixCount++;
+        }
+      }
+      if (!s.deps || s.deps.length === 0) {
+        const dbStep = steps.find(st => st.type === 'sql');
+        if (dbStep && dbStep.id !== s.id && s.type !== 'sql') {
+          s.deps = [dbStep.id];
+          fixCount++;
+        }
+      }
+    }
+
+    const ssotPath = `docs/products/${(productName || 'unknown').toLowerCase().replace(/\s+/g, '-')}/PRODUCT_HOME.md`;
+    for (const s of steps) {
+      if (!s.ssot_tag || s.ssot_tag.includes('AMENDMENT_XX') || s.ssot_tag.includes('placeholder')) {
+        s.ssot_tag = ssotPath;
+        fixCount++;
+      }
+    }
+
+    if (fixCount === 0) return null;
 
     fixed._meta = {
       ...blueprint._meta,
-      ...fixed._meta,
       blueprint_version: incrementVersion(blueprint._meta?.blueprint_version || '1.0.0'),
       auto_fixed_at: new Date().toISOString(),
-      arc_fixes_applied: allFindings.length,
+      arc_fixes_applied: fixCount,
+      fix_types: ['duplicate_ids', 'missing_deps', 'ssot_tag'].filter(Boolean).join(','),
     };
     return fixed;
   }
