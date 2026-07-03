@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T00:18:55.538Z",
+  "generated_at": "2026-07-03T00:39:37.480Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11819,
+  "file_count": 11822,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -37038,6 +37038,13 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
+      "path": "docs/history/IDEA_VAULT_legacy-src.md",
+      "synopsis": "Idea Vault — salvaged from the dead `src/` prototype island",
+      "bytes": 18463,
+      "mtime": "2026-07-03T00:38:54.472Z",
+      "indexed_at": "2026-07-03T00:39:37.480Z"
+    },
+    {
       "path": "docs/history/legacy-history-salvage/DOCS_PROJECTS_ROOT_ARCHIVE_INDEX.md",
       "synopsis": "Inventory of archived docs/projects root files",
       "bytes": 3026,
@@ -37560,6 +37567,14 @@
       "indexed_at": "2026-07-03T00:18:52.998Z"
     },
     {
+      "path": "docs/history/legacy-src/SALVAGE_INDEX.json",
+      "synopsis": "Documentation — SALVAGE INDEX.",
+      "bytes": 252074,
+      "mtime": "2026-07-03T00:38:54.472Z",
+      "indexed_at": "2026-07-03T00:39:37.480Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/history/legacy-workflows/ci-cd.yml",
       "synopsis": "yml — .github/workflows/ci-cd.yml.",
       "bytes": 546,
@@ -37618,9 +37633,9 @@
     {
       "path": "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md",
       "synopsis": "Repo cleanup inventory (2026-07-02) — indexed sprawl candidates, reference-evidence, ARCHIVE/ESCALATE/REVIEW verdicts.",
-      "bytes": 11893,
-      "mtime": "2026-07-03T00:17:46.178Z",
-      "indexed_at": "2026-07-03T00:18:52.998Z"
+      "bytes": 19324,
+      "mtime": "2026-07-03T00:39:29.004Z",
+      "indexed_at": "2026-07-03T00:39:37.480Z"
     },
     {
       "path": "docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md",
@@ -71400,6 +71415,16 @@
       "bytes": 1848,
       "mtime": "2026-06-21T21:39:07.028Z",
       "indexed_at": "2026-07-03T00:18:52.998Z"
+    },
+    {
+      "path": "scripts/legacy-archive-pass.mjs",
+      "synopsis": "legacy-archive-pass.mjs — system-owned \"salvage → quarantine → verify\" legacy cleanup tool.",
+      "bytes": 7348,
+      "mtime": "2026-07-03T00:28:54.972Z",
+      "indexed_at": "2026-07-03T00:29:47.696Z",
+      "ssot": [
+        "docs/history/REPO_CLEANUP_INVENTORY_2026-07-02.md"
+      ]
     },
     {
       "path": "scripts/lib/autonomy-write-lock.mjs",
