@@ -1,128 +1,102 @@
 /**
- * SYNOPSIS: Conduct AI coaching interviews and extract stories from coaching sessions.
- * WIRED: service factory for MarketingOS coaching interviews
- * @ssot docs/products/MarketingOS/MarketingOS_HOME.md
+ * SYNOPSIS: Exports createAiCoachService — services/ai-coach-service.js.
  */
-
-function normalizeText(value) {
-  return String(value ?? '').trim();
-}
-
-function asJson(value) {
-  return JSON.stringify(value ?? {});
-}
-
-function safeParseJson(value, fallback = null) {
-  if (value == null || value === '') return fallback;
-  if (typeof value === 'object') return value;
-  try {
-    return JSON.parse(value);
-  } catch {
-    return fallback;
-  }
-}
-
-function buildInterviewPrompt({ founderContext, sessionContext, transcriptText }) {
-  return [
-    'You are an AI coaching interviewer for a founder marketing session.',
-    'Your task is to extract story candidates from the coaching conversation.',
-    'Return concise, structured output that identifies concrete founder stories, not generic advice.',
-    '',
-    `Founder context: ${founderContext || 'unknown'}`,
-    `Session context: ${sessionContext || 'unknown'}`,
-    '',
-    'Transcript:',
-    transcriptText,
-  ].join('\n');
-}
-
-function parseAiStoryExtraction(raw) {
-  const text = normalizeText(raw);
-  if (!text) {
-    return { stories: [], summary: '', raw };
-  }
-
-  const parsed = safeParseJson(text, null);
-  if (parsed && typeof parsed === 'object') {
-    const stories = Array.isArray(parsed.stories) ? parsed.stories : [];
-    return {
-      summary: normalizeText(parsed.summary || parsed.overview || ''),
-      stories,
-      raw,
-    };
-  }
-
-  return {
-    summary: '',
-    stories: [
-      {
-        title: 'Extracted from coaching session',
-        narrative: text,
-      },
-    ],
-    raw,
-  };
-}
-
 export function createAiCoachService({ pool, callCouncilMember }) {
-  if (!pool || typeof pool.query !== 'function') {
-    throw new Error('pool_query_required');
-  }
-  if (typeof callCouncilMember !== 'function') {
-    throw new Error('callCouncilMember_required');
-  }
-
-  async function createCoachingSession({ founderId, consentRecord, timestamp } = {}) {
-    const founder = normalizeText(founderId);
-    const consent = normalizeText(consentRecord);
-
-    if (!founder) {
+  async function createInterview({ founderId, consentRecord, transcript, metadata = {} }) {
+    const normalizedTranscript = String(transcript || '').trim();
+    if (!founderId) {
       const err = new Error('founder_id_required');
       err.status = 400;
       throw err;
     }
-    if (!consent) {
+    if (!consentRecord) {
       const err = new Error('consent_record_required');
       err.status = 400;
       throw err;
     }
-
-    const { rows } = await pool.query(
-      `INSERT INTO coaching_sessions (founder_id, consent_record, timestamp)
-       VALUES ($1, $2, COALESCE($3::timestamptz, NOW()))
-       RETURNING *`,
-      [founder, consent, timestamp || null],
-    );
-
-    return rows[0];
-  }
-
-  async function getCoachingSession(sessionId) {
-    const id = normalizeText(sessionId);
-    if (!id) {
-      const err = new Error('session_id_required');
+    if (!normalizedTranscript) {
+      const err = new Error('transcript_required');
       err.status = 400;
       throw err;
     }
 
     const { rows } = await pool.query(
-      `SELECT * FROM coaching_sessions WHERE session_id = $1 LIMIT 1`,
-      [id],
+      `INSERT INTO coaching_sessions (founder_id, consent_record)
+       VALUES ($1, $2)
+       RETURNING *`,
+      [founderId, consentRecord],
     );
 
     const session = rows[0];
-    if (!session) {
-      const err = new Error('session_not_found');
-      err.status = 404;
+    return {
+      ...session,
+      transcript: normalizedTranscript,
+      metadata: metadata || {},
+    };
+  }
+
+  async function extractStoriesFromSession({ sessionId, founderId = null, transcript = null, metadata = {} }) {
+    if (!sessionId && !transcript) {
+      const err = new Error('session_id_or_transcript_required');
+      err.status = 400;
       throw err;
     }
 
-    return session;
+    let session = null;
+    if (sessionId) {
+      const params = founderId
+        ? [sessionId, founderId]
+        : [sessionId];
+      const query = founderId
+        ? `SELECT * FROM coaching_sessions WHERE session_id = $1 AND founder_id = $2 LIMIT 1`
+        : `SELECT * FROM coaching_sessions WHERE session_id = $1 LIMIT 1`;
+      const { rows } = await pool.query(query, params);
+      session = rows[0] || null;
+      if (!session) {
+        const err = new Error('coaching_session_not_found');
+        err.status = 404;
+        throw err;
+      }
+    }
+
+    const coachingText = String(transcript || metadata.transcript || '').trim();
+    if (!coachingText && !session) {
+      const err = new Error('transcript_required');
+      err.status = 400;
+      throw err;
+    }
+
+    const promptPayload = {
+      purpose: 'Extract stories from coaching sessions',
+      session: session
+        ? {
+            session_id: session.session_id,
+            founder_id: session.founder_id,
+            consent_record: session.consent_record,
+            timestamp: session.timestamp,
+          }
+        : null,
+      transcript: coachingText,
+      metadata: metadata || {},
+    };
+
+    const result = await callCouncilMember(
+      'openai',
+      {
+        task: 'Extract stories from coaching sessions',
+        input: promptPayload,
+      },
+      { taskType: 'general' },
+    );
+
+    return {
+      session,
+      result,
+    };
   }
 
-  async function listCoachingSessions({ founderId, limit = 50 } = {}) {
-    const founder = normalizeText(founderId);
-    if (!founder) {
+  async function listSessionsByFounder(founderId, { limit = 50 } = {}) {
+    if (!founderId) {
       const err = new Error('founder_id_required');
       err.status = 400;
       throw err;
@@ -134,92 +108,37 @@ export function createAiCoachService({ pool, callCouncilMember }) {
        WHERE founder_id = $1
        ORDER BY timestamp DESC
        LIMIT $2`,
-      [founder, lim],
+      [founderId, lim],
     );
-
     return rows;
   }
 
-  async function extractStoriesFromSession({
-    sessionId,
-    founderContext,
-    sessionContext,
-    transcriptText,
-  } = {}) {
-    const transcript = normalizeText(transcriptText);
-    if (!transcript) {
-      const err = new Error('transcript_text_required');
+  async function getSession(sessionId, founderId = null) {
+    if (!sessionId) {
+      const err = new Error('session_id_required');
       err.status = 400;
       throw err;
     }
 
-    const session = sessionId ? await getCoachingSession(sessionId) : null;
-    const prompt = buildInterviewPrompt({
-      founderContext: founderContext || session?.founder_id || '',
-      sessionContext: sessionContext || (session ? `session_id=${session.session_id}` : ''),
-      transcriptText: transcript,
-    });
+    const params = founderId ? [sessionId, founderId] : [sessionId];
+    const query = founderId
+      ? `SELECT * FROM coaching_sessions WHERE session_id = $1 AND founder_id = $2 LIMIT 1`
+      : `SELECT * FROM coaching_sessions WHERE session_id = $1 LIMIT 1`;
 
-    const result = await callCouncilMember(
-      'openai',
-      {
-        prompt,
-        transcript,
-        founder_id: session?.founder_id || founderContext || null,
-        coaching_session_id: session?.session_id || sessionId || null,
-      },
-      { taskType: 'general' },
-    );
-
-    const rawOutput =
-      typeof result === 'string'
-        ? result
-        : result?.output ?? result?.text ?? result?.content ?? result?.message ?? '';
-
-    const extracted = parseAiStoryExtraction(rawOutput);
-
-    if (session?.session_id) {
-      await pool.query(
-        `UPDATE coaching_sessions
-         SET timestamp = timestamp
-         WHERE session_id = $1`,
-        [session.session_id],
-      );
+    const { rows } = await pool.query(query, params);
+    const session = rows[0] || null;
+    if (!session) {
+      const err = new Error('coaching_session_not_found');
+      err.status = 404;
+      throw err;
     }
-
-    return {
-      session: session || null,
-      extraction: extracted,
-    };
-  }
-
-  async function conductInterview({
-    founderId,
-    consentRecord,
-    transcriptText,
-    founderContext,
-    sessionContext,
-    timestamp,
-  } = {}) {
-    const session = await createCoachingSession({ founderId, consentRecord, timestamp });
-    const extraction = await extractStoriesFromSession({
-      sessionId: session.session_id,
-      founderContext: founderContext || founderId || '',
-      sessionContext: sessionContext || '',
-      transcriptText,
-    });
-
-    return {
-      session,
-      extraction: extraction.extraction,
-    };
+    return session;
   }
 
   return {
-    createCoachingSession,
-    getCoachingSession,
-    listCoachingSessions,
+    createInterview,
     extractStoriesFromSession,
-    conductInterview,
+    listSessionsByFounder,
+    getSession,
   };
 }

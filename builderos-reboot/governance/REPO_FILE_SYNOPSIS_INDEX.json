@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:31:13.797Z",
+  "generated_at": "2026-07-04T16:31:24.103Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 10,
   "files": [
@@ -48,13 +48,10 @@
     },
     {
       "path": "services/ai-coach-service.js",
-      "synopsis": "Conduct AI coaching interviews and extract stories from coaching sessions.",
-      "bytes": 5828,
-      "mtime": "2026-07-04T16:30:44.484Z",
-      "indexed_at": "2026-07-04T16:30:44.484Z",
-      "ssot": [
-        "docs/products/MarketingOS/MarketingOS_HOME.md"
-      ]
+      "synopsis": "Exports createAiCoachService — services/ai-coach-service.js.",
+      "bytes": 4003,
+      "mtime": "2026-07-04T16:31:24.103Z",
+      "indexed_at": "2026-07-04T16:31:24.103Z"
     },
     {
       "path": "services/content-engine-service.js",
