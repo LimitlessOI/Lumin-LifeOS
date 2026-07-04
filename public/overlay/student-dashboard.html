@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: MTS · Student Progress -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>MTS · Student Progress</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0a0a0f;
+      --panel: #111118;
+      --panel-2: #17171f;
+      --panel-3: #1e1e28;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.14);
+      --text: #ececf4;
+      --muted: #a1a1bf;
+      --muted-2: #6f728a;
+      --good: #34d399;
+      --warn: #f59e0b;
+      --accent: #7c3aed;
+      --accent-2: #5b6af5;
+      --shadow: 0 20px 70px rgba(0,0,0,0.35);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(124,58,237,0.15), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(91,106,245,0.14), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      padding: 16px;
+      padding-top: calc(16px + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .page {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)), var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .hero-header, .side-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      max-width: 72ch;
+    }
+
+    .badge {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(124,58,237,0.28);
+      background: rgba(124,58,237,0.11);
+      color: #d8c7ff;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .hero-body {
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .progress-card {
+      background: linear-gradient(180deg, rgba(91,106,245,0.12), rgba(91,106,245,0.05));
+      border: 1px solid rgba(91,106,245,0.22);
+      border-radius: 22px;
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .progress-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: #cbd5ff;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .progress-pct {
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+    }
+
+    .progress-sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 70ch;
+    }
+
+    .meter {
+      height: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .meter > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      box-shadow: 0 8px 24px rgba(91,106,245,0.3);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .stat .k {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    .stat .v {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .stat .d {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .timeline {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 16px;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-head span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .event-list {
+      display: grid;
+      gap: 10px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .event {
+      display: grid;
+      grid-template-columns: 16px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      margin-top: 4px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 4px rgba(91,106,245,0.12);
+    }
+
+    .event h3 {
+      margin: 0 0 4px;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .event p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .event time {
+      font-size: 11px;
+      color: var(--muted-2);
+      white-space: nowrap;
+      padding-top: 1px;
+    }
+
+    .side {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 0;
+    }
+
+    .side-body {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .feedback-card {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .feedback-card .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-card .meta strong {
+      font-size: 13px;
+      letter-spacing: -0.01em;
+    }
+
+    .feedback-card .meta span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .feedback-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e8e8f0;
+    }
+
+    .bullet-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .bullet {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .bullet::before {
+      content: "•";
+      color: var(--good);
+      font-weight: 900;
+      line-height: 1;
+      margin-top: 1px;
+    }
+
+    .feedback-tone {
+      display: grid;
+      gap: 10px;
+    }
+
+    .tone-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .tone-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .tone-value {
+      font-size: 12px;
+      font-weight: 700;
+      color: #d8c7ff;
+    }
+
+    .tone-track {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .tone-track > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--good), var(--warn));
+      border-radius: 999px;
+    }
+
+    .empty {
+      border: 1px dashed var(--border-strong);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      background: rgba(255,255,255,0.01);
+    }
+
+    @media (max-width: 980px) {
+      body {
+        overflow: auto;
+      }
+      .page {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100%;
+      }
+      .side {
+        min-height: 420px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 10px; }
+      .hero-header, .side-header { padding: 16px; }
+      .hero-body, .side-body { padding: 12px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .title { font-size: 20px; }
+      .progress-pct { font-size: 30px; }
+      .event { grid-template-columns: 16px 1fr; }
+      .event time { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" aria-label="Student progress and AI feedback">
+    <section class="panel hero" aria-labelledby="page-title">
+      <header class="hero-header">
+        <div>
+          <div class="eyebrow">Music Talent Studio · Blueprint MTS-P1-007</div>
+          <h1 class="title" id="page-title">Display student progress and AI feedback</h1>
+          <p class="subtitle">
+            A focused progress view for tracking practice growth, session milestones, and AI coaching notes in one place.
+          </p>
+        </div>
+        <div class="badge" aria-label="Current status">Student dashboard</div>
+      </header>
+
+      <div class="hero-body">
+        <div class="progress-card" aria-label="Overall progress">
+          <div class="progress-top">
+            <div>
+              <div class="progress-label">Overall student progress</div>
+              <div class="progress-pct" id="overall-pct">78%</div>
+            </div>
+            <div class="badge" id="trend-badge">↗ Improving</div>
+          </div>
+          <div class="meter" aria-hidden="true"><span id="overall-meter"></span></div>
+          <div class="progress-sub" id="progress-summary">
+            The student is building consistency across practice, feedback response, and performance readiness.
+          </div>
+        </div>
+
+        <div class="stats-grid" aria-label="Progress metrics">
+          <article class="stat">
+            <span class="k">Practice streak</span>
+            <div class="v" id="practice-streak">12 days</div>
+            <div class="d">Daily work has been steady over the last two weeks.</div>
+          </article>
+          <article class="stat">
+            <span class="k">Completed goals</span>
+            <div class="v" id="completed-goals">8 / 10</div>
+            <div class="d">Core milestone coverage is strong with two targets left.</div>
+          </article>
+          <article class="stat">
+            <span class="k">Readiness</span>
+            <div class="v" id="readiness-score">High</div>
+            <div class="d">AI assessment indicates the student is nearing performance-ready consistency.</div>
+          </article>
+        </div>
+
+        <div class="timeline" aria-label="Recent progress updates">
+          <div class="section-head">
+            <h2>Recent progress</h2>
+            <span id="recent-updated">Updated today</span>
+          </div>
+          <div class="event-list" id="event-list">
+            <article class="event">
+              <span class="dot" aria-hidden="true"></span>
+              <div>
+                <h3>Improved timing accuracy in scales practice</h3>
+                <p>Tempo stability increased and transitions were cleaner across the final two reps.</p>
+              </div>
+              <time datetime="2026-07-04">Today</time>
+            </article>
+            <article class="event">
+              <span class="dot" aria-hidden="true"></span>
+              <div>
+                <h3>Completed repertoire review milestone</h3>
+                <p>All assigned pieces were run once with notes captured for the next session.</p>
+              </div>
+              <time datetime="2026-07-03">Yesterday</time>
+            </article>
+            <article class="event">
+              <span class="dot" aria-hidden="true"></span>
+              <div>
+                <h3>Submitted practice recording for evaluation</h3>
+                <p>Recording quality was strong and the student responded quickly to revision feedback.</p>
+              </div>
+              <time datetime="2026-07-02">2d ago</time>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel side" aria-labelledby="feedback-title">
+      <header class="side-header">
+        <div>
+          <div class="eyebrow">AI coaching</div>
+          <h2 class="title" id="feedback-title">Feedback summary</h2>
+          <p class="subtitle">Clear, direct notes from the AI review layer to help guide the next practice cycle.</p>
+        </div>
+        <div class="badge" id="feedback-grade">A-</div>
+      </header>
+
+      <div class="side-body">
+        <section class="feedback-card" aria-label="AI feedback">
+          <div class="meta">
+            <strong>AI review</strong>
+            <span id="feedback-timestamp">Last reviewed 2 hours ago</span>
+          </div>
+          <div class="feedback-text" id="feedback-text">
+            Strong overall performance. The student shows reliable rhythm control, better phrase shaping, and improved self-correction after prompts.
+          </div>
+          <div class="bullet-list" id="feedback-bullets">
+            <div class="bullet">Keep building consistency at faster tempi without losing articulation.</div>
+            <div class="bullet">Add one targeted warmup focused on note transitions and breathing.</div>
+            <div class="bullet">Use short reflection notes after each session to reinforce what improved.</div>
+          </div>
+        </section>
+
+        <section class="feedback-card feedback-tone" aria-label="AI sentiment">
+          <div class="meta">
+            <strong>Feedback tone</strong>
+            <span id="tone-summary">Constructive and encouraging</span>
+          </div>
+          <div class="tone-row">
+            <div class="tone-label">Supportiveness</div>
+            <div class="tone-value" id="support-score">92%</div>
+          </div>
+          <div class="tone-track" aria-hidden="true"><span id="support-meter"></span></div>
+          <div class="tone-row">
+            <div class="tone-label">Specificity</div>
+            <div class="tone-value" id="specificity-score">86%</div>
+          </div>
+          <div class="tone-track" aria-hidden="true"><span id="specificity-meter"></span></div>
+        </section>
+
+        <section class="empty" aria-label="Next steps">
+          <strong style="color:var(--text);display:block;margin-bottom:8px;">Next steps</strong>
+          Review the AI suggestions, keep the current practice cadence, and confirm the next milestone after the following session.
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    (function init() {
+      const metrics = {
+        overall: 78,
+        support: 92,
+        specificity: 86,
+        streak: 12,
+        goalsDone: 8,
+        goalsTotal: 10,
+      };
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      setText('overall-pct', `${metrics.overall}%`);
+      setText('practice-streak', `${metrics.streak} days`);
+      setText('completed-goals', `${metrics.goalsDone} / ${metrics.goalsTotal}`);
+      setText('support-score', `${metrics.support}%`);
+      setText('specificity-score', `${metrics.specificity}%`);
+      setText('feedback-grade', 'A-');
+
+      const overallMeter = document.getElementById('overall-meter');
+      const supportMeter = document.getElementById('support-meter');
+      const specificityMeter = document.getElementById('specificity-meter');
+      if (overallMeter) overallMeter.style.width = `${metrics.overall}%`;
+      if (supportMeter) supportMeter.style.width = `${metrics.support}%`;
+      if (specificityMeter) specificityMeter.style.width = `${metrics.specificity}%`;
+
+      const trendBadge = document.getElementById('trend-badge');
+      if (trendBadge) {
+        trendBadge.textContent = '↗ Improving';
+      }
+
+      const summary = document.getElementById('progress-summary');
+      if (summary) {
+        summary.textContent = 'The student is building consistency across practice, feedback response, and performance readiness.';
+      }
+
+      const feedbackText = document.getElementById('feedback-text');
+      if (feedbackText) {
+        feedbackText.textContent = 'Strong overall performance. The student shows reliable rhythm control, better phrase shaping, and improved self-correction after prompts.';
+      }
+
+      const bullets = document.getElementById('feedback-bullets');
+      if (bullets) {
+        bullets.innerHTML = [
+          'Keep building consistency at faster tempi without losing articulation.',
+          'Add one targeted warmup focused on note transitions and breathing.',
+          'Use short reflection notes after each session to reinforce what improved.',
+        ].map((item) => `<div class="bullet">${item}</div>`).join('');
+      }
+    })();
+  </script>
+</body>
+</html>
