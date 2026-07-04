@@ -896,14 +896,25 @@ Return JSON:
       s.deps = clean;
     }
 
+    const verifyStep = steps.find(s => s.type === 'esm_script');
+    if (verifyStep && verifyStep.file) {
+      const correctCmd = `node ${verifyStep.file}`;
+      if (!fixed._meta) fixed._meta = {};
+      if (fixed._meta.acceptance_cmd !== correctCmd) {
+        fixed._meta.acceptance_cmd = correctCmd;
+        fixCount++;
+      }
+    }
+
     if (fixCount === 0) return null;
 
     fixed._meta = {
       ...blueprint._meta,
+      ...fixed._meta,
       blueprint_version: incrementVersion(blueprint._meta?.blueprint_version || '1.0.0'),
       auto_fixed_at: new Date().toISOString(),
       arc_fixes_applied: fixCount,
-      fix_types: 'duplicate_ids,missing_deps,ssot_tag,circular_deps',
+      fix_types: 'duplicate_ids,missing_deps,ssot_tag,circular_deps,acceptance_cmd',
     };
     return fixed;
   }
