@@ -1,5 +1,4 @@
 -- SYNOPSIS: Database migration — 20260704_create_crm_sequence_enrollments.sql.
--- OCR-P1-003: CRM sequence enrollments table
 CREATE TABLE IF NOT EXISTS crm_sequence_enrollments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   contact_id UUID NOT NULL,
