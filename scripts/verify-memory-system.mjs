@@ -3,6 +3,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const ROOT = process.cwd();
 const ROUTES_FILE = path.join(ROOT, 'routes/memory-routes.js');
@@ -42,6 +43,23 @@ function extractRoutePaths(source) {
 
 function toPathTemplate(route) {
   return route.replace(/:([A-Za-z0-9_]+)/g, '{$1}');
+}
+
+export function validateMemoryCapsulesMigration(source) {
+  const failures = [];
+  if (/CREATE\s+TABLE\s+IF\s+NOT\s+EXISTS\s+memory_capsules/i.test(source)) {
+    failures.push('must not re-create memory_capsules; canonical schema is owned by 20260521_memory_capsule_core.sql');
+  }
+  if (/ON\s+memory_capsules\s*\(\s*owner_id\s*\)/i.test(source)) {
+    failures.push('must not index owner_id; canonical memory_capsules uses capsule_id and fact_id');
+  }
+  if (!/column_name\s*=\s*'capsule_id'/i.test(source)) {
+    failures.push('must assert canonical capsule_id column before applying');
+  }
+  if (!/idx_memory_capsules_fact_id/i.test(source)) {
+    failures.push('must index canonical fact_id linkage');
+  }
+  return failures;
 }
 
 async function probe(baseUrl, commandKey, method, route, body) {
@@ -89,8 +107,9 @@ export async function runAudit() {
     pass('route signature check passed');
   }
 
-  if (!migrationSource.includes('CREATE TABLE IF NOT EXISTS memory_capsules')) {
-    fail('migration check failed');
+  const migrationFailures = validateMemoryCapsulesMigration(migrationSource);
+  if (migrationFailures.length) {
+    fail(`migration check failed: ${migrationFailures.join('; ')}`);
   } else {
     pass('migration check passed');
   }
@@ -174,4 +193,10 @@ async function main() {
   process.exit(0);
 }
 
-main().catch(() => process.exit(1));
+const isDirectRun = process.argv[1]
+  ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+  : false;
+
+if (isDirectRun) {
+  main().catch(() => process.exit(1));
+}

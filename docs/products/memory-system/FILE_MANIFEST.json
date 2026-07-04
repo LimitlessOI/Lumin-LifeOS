@@ -5,7 +5,7 @@
   "name": "Memory System",
   "canonical_home": "docs/products/memory-system/PRODUCT_HOME.md",
   "amendment_path": "docs/products/memory-system/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-04",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "routes/memory-capsule-routes.js",
@@ -29,6 +29,9 @@
     "config/memory-truth-classes.js",
     "db/migrations/20260521_memory_capsule_core.sql",
     "db/migrations/20260521_memory_capsule_receipts.sql",
+    "db/migrations/20260704_create_memory_capsules.sql",
+    "scripts/verify-memory-system.mjs",
+    "tests/memory-migration-contract.test.js",
     "docs/projects/memory-capsules/BLUEPRINT.md",
     "docs/projects/memory-capsules/MEMORY_NEON_SCHEMA.md",
     "docs/projects/memory-capsules/FEATURE_MAP.md",
