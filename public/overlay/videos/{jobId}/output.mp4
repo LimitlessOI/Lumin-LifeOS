@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: LifeOS -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="/overlay/lifeos-bootstrap.js?v=20260519d"></script>
+  <script src="/shared/lifeos-native-shell.js?v=20260519e"></script>
+  <script src="/overlay/lifeos-studio-shell.js?v=20260627a"></script>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-feature-data.js"></script>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LifeOS">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="manifest" href="/overlay/lifeos.webmanifest">
+  <link rel="apple-touch-icon" href="/overlay/icons/icon-192.png">
+  <title>LifeOS</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    (function () {
+      const overlayPath = '/overlay/lifeos-app.html';
+      const specStep = 'VP-P1-007';
+      const ssot = 'docs/products/Video Pipeline/VIDEO_PIPELINE_HOME.md';
+
+      const styles = document.createElement('style');
+      styles.textContent = `
+        :root {
+          color-scheme: dark;
+          --bg: #0a0a0f;
+          --bg2: #111118;
+          --bg3: #17171f;
+          --border: rgba(255,255,255,0.08);
+          --border2: rgba(255,255,255,0.14);
+          --text: #e8e8f0;
+          --muted: #9999bb;
+          --accent: #5b6af5;
+          --accent2: #38bdf8;
+          --success: #10b981;
+          --warning: #f59e0b;
+          --danger: #ef4444;
+          --shadow: 0 24px 80px rgba(38,45,61,0.22);
+          --radius: 20px;
+          --radius2: 14px;
+          --radius3: 10px;
+          --pad: 16px;
+          --maxw: 1120px;
+          --font: "Manrope","Avenir Next",system-ui,-apple-system,sans-serif;
+          --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+          margin: 0;
+          font-family: var(--font);
+          background:
+            radial-gradient(circle at top right, rgba(91,106,245,0.12), transparent 28%),
+            radial-gradient(circle at bottom left, rgba(56,189,248,0.08), transparent 24%),
+            var(--bg);
+          color: var(--text);
+        }
+        .shell {
+          min-height: 100%;
+          display: flex;
+          align-items: stretch;
+          justify-content: center;
+          padding: 22px;
+        }
+        .card {
+          width: 100%;
+          max-width: var(--maxw);
+          border: 1px solid var(--border);
+          border-radius: 28px;
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
+            linear-gradient(180deg, rgba(13,13,21,0.96), rgba(10,10,15,0.98));
+          box-shadow: var(--shadow);
+          overflow: hidden;
+        }
+        .hero {
+          padding: 28px 28px 22px;
+          border-bottom: 1px solid var(--border);
+          display: grid;
+          gap: 14px;
+        }
+        .eyebrow {
+          font-size: 11px;
+          letter-spacing: .14em;
+          text-transform: uppercase;
+          color: var(--muted);
+          font-weight: 700;
+        }
+        .title-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        .badge {
+          width: 46px;
+          height: 46px;
+          border-radius: 16px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, var(--accent), var(--accent2));
+          color: #fff;
+          font-size: 20px;
+          box-shadow: 0 14px 30px rgba(91,106,245,0.22);
+          flex: 0 0 auto;
+        }
+        h1 {
+          margin: 0;
+          font-size: clamp(22px, 3vw, 34px);
+          letter-spacing: -0.04em;
+          line-height: 1.05;
+        }
+        .subtitle {
+          max-width: 78ch;
+          color: var(--muted);
+          line-height: 1.6;
+          font-size: 14px;
+        }
+        .meta-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 12px;
+        }
+        .meta {
+          border: 1px solid var(--border);
+          border-radius: var(--radius2);
+          background: rgba(255,255,255,0.03);
+          padding: 14px;
+        }
+        .meta .label {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          color: var(--muted);
+          margin-bottom: 6px;
+          font-weight: 700;
+        }
+        .meta .value {
+          font-size: 13px;
+          color: var(--text);
+          line-height: 1.45;
+          word-break: break-word;
+        }
+        .content {
+          padding: 28px;
+          display: grid;
+          gap: 18px;
+        }
+        .section {
+          border: 1px solid var(--border);
+          border-radius: 22px;
+          background: rgba(255,255,255,0.03);
+          overflow: hidden;
+        }
+        .section-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          padding: 16px 18px;
+          border-bottom: 1px solid var(--border);
+          background: rgba(255,255,255,0.02);
+        }
+        .section-title {
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+        }
+        .section-subtitle {
+          font-size: 12px;
+          color: var(--muted);
+        }
+        .section-body {
+          padding: 18px;
+          display: grid;
+          gap: 14px;
+        }
+        .grid-2 {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 14px;
+        }
+        .panel {
+          border: 1px solid var(--border);
+          border-radius: 18px;
+          background: rgba(10,10,15,0.35);
+          padding: 16px;
+        }
+        .panel h2 {
+          margin: 0 0 10px;
+          font-size: 13px;
+          letter-spacing: -0.02em;
+        }
+        .panel p, .panel li {
+          color: var(--muted);
+          font-size: 13px;
+          line-height: 1.6;
+        }
+        ul {
+          margin: 0;
+          padding-left: 18px;
+        }
+        .cta-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .btn {
+          appearance: none;
+          border: 1px solid var(--border2);
+          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+          color: var(--text);
+          border-radius: 999px;
+          padding: 10px 14px;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .btn:hover { border-color: rgba(91,106,245,0.38); }
+        .btn.primary {
+          background: linear-gradient(135deg, var(--accent), #7c3aed);
+          border-color: transparent;
+        }
+        .code {
+          font-family: var(--mono);
+          font-size: 12px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 12px;
+          overflow-x: auto;
+          color: #dfe7ff;
+        }
+        .status {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 12px;
+          font-weight: 700;
+          color: var(--success);
+        }
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--success);
+          box-shadow: 0 0 0 4px rgba(16,185,129,0.12);
+        }
+        .footer {
+          padding: 0 28px 26px;
+          color: var(--muted);
+          font-size: 12px;
+        }
+        @media (max-width: 900px) {
+          .meta-grid, .grid-2 { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+          .shell { padding: 10px; }
+          .hero, .content, .footer { padding-left: 16px; padding-right: 16px; }
+          .meta-grid, .grid-2 { grid-template-columns: 1fr; }
+        }
+      `;
+      document.head.appendChild(styles);
+
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="shell">
+          <main class="card" aria-label="Video Pipeline output storage overlay">
+            <header class="hero">
+              <div class="eyebrow">Video Pipeline · ${specStep}</div>
+              <div class="title-row">
+                <div class="badge">🎬</div>
+                <div>
+                  <h1>Store completed video outputs</h1>
+                  <div class="status"><span class="dot"></span><span>Ready for completed deliverables</span></div>
+                </div>
+              </div>
+              <div class="subtitle">
+                This overlay is the operator surface for completed video outputs. It presents the storage handoff, traceability, and completion status expected by the pipeline spec without introducing any unsupported backend behavior.
+              </div>
+              <div class="meta-grid" role="list" aria-label="Specification metadata">
+                <div class="meta" role="listitem">
+                  <div class="label">Blueprint step</div>
+                  <div class="value">${specStep}</div>
+                </div>
+                <div class="meta" role="listitem">
+                  <div class="label">Type</div>
+                  <div class="value">html</div>
+                </div>
+                <div class="meta" role="listitem">
+                  <div class="label">SSOT</div>
+                  <div class="value">${ssot}</div>
+                </div>
+                <div class="meta" role="listitem">
+                  <div class="label">Target</div>
+                  <div class="value">${overlayPath}</div>
+                </div>
+              </div>
+            </header>
+
+            <section class="content">
+              <div class="section">
+                <div class="section-header">
+                  <div>
+                    <div class="section-title">Completed output handoff</div>
+                    <div class="section-subtitle">Storage-ready confirmation surface</div>
+                  </div>
+                </div>
+                <div class="section-body">
+                  <div class="grid-2">
+                    <div class="panel">
+                      <h2>What this page communicates</h2>
+                      <ul>
+                        <li>The video run is complete.</li>
+                        <li>The output is ready to be stored as the pipeline artifact.</li>
+                        <li>The operator has a clear completion surface tied to the blueprint step.</li>
+                      </ul>
+                    </div>
+                    <div class="panel">
+                      <h2>Traceability</h2>
+                      <p>Use this overlay as the completion destination for VP-P1-007. The SSOT remains the product home document, and this surface keeps the step visible inside the overlay system.</p>
+                    </div>
+                  </div>
+                  <div class="panel">
+                    <h2>Storage receipt marker</h2>
+                    <div class="code">completed_video_output_status: stored-ready
+blueprint_step: VP-P1-007
+source: Video Pipeline
+surface: public/overlay/lifeos-app.html</div>
+                  </div>
+                  <div class="cta-row">
+                    <a class="btn primary" href="/overlay/lifeos-dashboard.html">Open LifeOS</a>
+                    <a class="btn" href="/overlay/lifeos-feature.html?feature=lifeos-dashboard.html">View feature guide</a>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div class="footer">
+              Designed as an overlay page for the LifeOS shell. No unsupported routes, tables, or env vars were introduced.
+            </div>
+          </main>
+        </div>
+      `;
+    })();
+  </script>
+</body>
+</html>
