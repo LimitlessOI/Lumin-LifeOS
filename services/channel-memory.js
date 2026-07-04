@@ -1,69 +1,86 @@
-import crypto from 'node:crypto';
+import crypto from 'crypto';
 
 /**
  * SYNOPSIS: Store and manage creator channel performance and brand memory.
- * WIRED: partial — service factory only; route wiring follows existing factory pattern.
- * INTEGRATE: CMOS-P1-008 channel memory blueprint
+ * WIRED: service-only; intended for route/factory integration via existing patterns.
  * @ssot docs/products/CREATOR_MEDIA_OS/CREATOR_MEDIA_OS_HOME.md
  */
 
 function toJson(value, fallback = {}) {
   if (value == null) return fallback;
   if (typeof value === 'object') return value;
-  if (typeof value === 'string' && value.trim()) {
-    try {
-      return JSON.parse(value);
-    } catch {
-      return fallback;
-    }
+  try {
+    return JSON.parse(String(value));
+  } catch {
+    return fallback;
   }
-  return fallback;
 }
 
-function normalizeLimit(limit, defaultLimit = 50, maxLimit = 200) {
-  const n = parseInt(limit, 10);
-  if (!Number.isFinite(n)) return defaultLimit;
-  return Math.min(Math.max(n, 1), maxLimit);
+function normalizeText(value) {
+  return String(value == null ? '' : value).trim();
 }
 
-function createNotFoundError(message = 'channel_not_found') {
-  const err = new Error(message);
-  err.status = 404;
-  return err;
+function requireOwnerId(ownerId) {
+  const id = normalizeText(ownerId);
+  if (!id) {
+    const err = new Error('owner_id_required');
+    err.status = 401;
+    throw err;
+  }
+  return id;
 }
 
-function createValidationError(message, detail) {
-  const err = new Error(message);
-  err.status = 400;
-  if (detail !== undefined) err.detail = detail;
-  return err;
-}
-
-function buildSearchClause(term, paramIndexStart = 1) {
-  const t = String(term || '').trim();
-  if (!t) return { clause: '', params: [] };
-
-  const like = `%${t}%`;
-  return {
-    clause: ` AND (
-      c.name ILIKE $${paramIndexStart}
-      OR COALESCE(c.niche, '') ILIKE $${paramIndexStart}
-      OR COALESCE(c.brand_profile_json::text, '') ILIKE $${paramIndexStart}
-      OR COALESCE(c.seo_profile_json::text, '') ILIKE $${paramIndexStart}
-    )`,
-    params: [like],
-  };
+function toInt(value, fallback) {
+  const n = parseInt(value, 10);
+  return Number.isFinite(n) ? n : fallback;
 }
 
 export function createChannelMemoryService({ pool }) {
   if (!pool || typeof pool.query !== 'function') {
-    throw new Error('pool_required');
+    throw new Error('pool_query_required');
   }
 
-  async function createChannel({ ownerId, name, niche = null, brandProfile = {}, seoProfile = {} }) {
-    const cleanName = String(name || '').trim();
-    if (!ownerId) throw createValidationError('owner_id_required');
-    if (!cleanName) throw createValidationError('name_required');
+  async function getChannel(channelId, ownerId) {
+    const id = normalizeText(channelId);
+    const owner = requireOwnerId(ownerId);
+    if (!id) {
+      const err = new Error('channel_id_required');
+      err.status = 400;
+      throw err;
+    }
+
+    const { rows } = await pool.query(
+      `SELECT * FROM creator_channels WHERE id = $1 AND owner_id = $2 LIMIT 1`,
+      [id, owner],
+    );
+
+    if (!rows[0]) {
+      const err = new Error('channel_not_found');
+      err.status = 404;
+      throw err;
+    }
+
+    return rows[0];
+  }
+
+  async function listChannels(ownerId, { limit = 50 } = {}) {
+    const owner = requireOwnerId(ownerId);
+    const lim = Math.min(Math.max(toInt(limit, 50), 1), 200);
+    const { rows } = await pool.query(
+      `SELECT * FROM creator_channels WHERE owner_id = $1 ORDER BY name ASC LIMIT $2`,
+      [owner, lim],
+    );
+    return rows;
+  }
+
+  async function createChannel(ownerId, { name, niche = null, brandProfileJson = {}, seoProfileJson = {} } = {}) {
+    const owner = requireOwnerId(ownerId);
+    const channelName = normalizeText(name);
+    if (!channelName) {
+      const err = new Error('name_required');
+      err.status = 400;
+      throw err;
+    }
 
     const { rows } = await pool.query(
       `INSERT INTO creator_channels
@@ -71,58 +88,39 @@ export function createChannelMemoryService({ pool }) {
        VALUES ($1, $2, $3, $4::jsonb, $5::jsonb)
        RETURNING *`,
       [
-        ownerId,
-        cleanName,
-        niche ? String(niche).trim() : null,
-        JSON.stringify(toJson(brandProfile, {})),
-        JSON.stringify(toJson(seoProfile, {})),
+        owner,
+        channelName,
+        niche == null ? null : normalizeText(niche) || null,
+        JSON.stringify(toJson(brandProfileJson, {})),
+        JSON.stringify(toJson(seoProfileJson, {})),
       ],
     );
 
     return rows[0];
   }
 
-  async function getChannel(channelId, ownerId) {
-    const { rows } = await pool.query(
-      `SELECT * FROM creator_channels WHERE id = $1 AND owner_id = $2 LIMIT 1`,
-      [channelId, ownerId],
-    );
-    if (!rows[0]) throw createNotFoundError('channel_not_found');
-    return rows[0];
-  }
+  async function updateChannel(channelId, ownerId, patch = {}) {
+    const owner = requireOwnerId(ownerId);
+    const current = await getChannel(channelId, owner);
 
-  async function listChannels(ownerId, { limit = 50, search = null } = {}) {
-    if (!ownerId) throw createValidationError('owner_id_required');
+    const nextName =
+      Object.prototype.hasOwnProperty.call(patch, 'name') ? normalizeText(patch.name) : current.name;
+    const nextNiche = Object.prototype.hasOwnProperty.call(patch, 'niche')
+      ? (normalizeText(patch.niche) || null)
+      : current.niche;
 
-    const lim = normalizeLimit(limit);
-    const searchClause = buildSearchClause(search, 2);
+    const nextBrandProfile = Object.prototype.hasOwnProperty.call(patch, 'brandProfileJson')
+      ? toJson(patch.brandProfileJson, {})
+      : toJson(current.brand_profile_json, {});
+    const nextSeoProfile = Object.prototype.hasOwnProperty.call(patch, 'seoProfileJson')
+      ? toJson(patch.seoProfileJson, {})
+      : toJson(current.seo_profile_json, {});
 
-    const { rows } = await pool.query(
-      `SELECT *
-         FROM creator_channels c
-        WHERE c.owner_id = $1
-        ${searchClause.clause}
-        ORDER BY c.name ASC, c.id DESC
-        LIMIT $${searchClause.params.length + 2}`,
-      [ownerId, ...searchClause.params, lim],
-    );
-
-    return rows;
-  }
-
-  async function updateChannel(channelId, ownerId, { name, niche, brandProfileJson, seoProfileJson } = {}) {
-    const existing = await getChannel(channelId, ownerId);
-
-    const nextName = name === undefined ? existing.name : String(name || '').trim();
-    if (!nextName) throw createValidationError('name_required');
-
-    const nextNiche = niche === undefined ? existing.niche : (niche ? String(niche).trim() : null);
-    const nextBrandProfile = brandProfileJson === undefined
-      ? toJson(existing.brand_profile_json, {})
-      : toJson(brandProfileJson, {});
-    const nextSeoProfile = seoProfileJson === undefined
-      ? toJson(existing.seo_profile_json, {})
-      : toJson(seoProfileJson, {});
+    if (!nextName) {
+      const err = new Error('name_required');
+      err.status = 400;
+      throw err;
+    }
 
     const { rows } = await pool.query(
       `UPDATE creator_channels
@@ -133,8 +131,8 @@ export function createChannelMemoryService({ pool }) {
         WHERE id = $1 AND owner_id = $2
         RETURNING *`,
       [
-        channelId,
-        ownerId,
+        normalizeText(channelId),
+        owner,
         nextName,
         nextNiche,
         JSON.stringify(nextBrandProfile),
@@ -146,65 +144,131 @@ export function createChannelMemoryService({ pool }) {
   }
 
   async function deleteChannel(channelId, ownerId) {
+    const owner = requireOwnerId(ownerId);
+    const id = normalizeText(channelId);
+    if (!id) {
+      const err = new Error('channel_id_required');
+      err.status = 400;
+      throw err;
+    }
+
     const { rows } = await pool.query(
-      `DELETE FROM creator_channels
-        WHERE id = $1 AND owner_id = $2
-        RETURNING *`,
-      [channelId, ownerId],
+      `DELETE FROM creator_channels WHERE id = $1 AND owner_id = $2 RETURNING *`,
+      [id, owner],
     );
-    if (!rows[0]) throw createNotFoundError('channel_not_found');
+
+    if (!rows[0]) {
+      const err = new Error('channel_not_found');
+      err.status = 404;
+      throw err;
+    }
+
     return rows[0];
   }
 
-  async function upsertBrandMemory(channelId, ownerId, memory = {}) {
-    const channel = await getChannel(channelId, ownerId);
-    const current = toJson(channel.brand_profile_json, {});
-    const next = {
-      ...current,
-      ...toJson(memory, {}),
-      updated_at: new Date().toISOString(),
-      memory_id: current.memory_id || crypto.randomUUID(),
-    };
+  async function setBrandMemory(channelId, ownerId, brandProfileJson) {
+    const owner = requireOwnerId(ownerId);
+    const id = normalizeText(channelId);
+    if (!id) {
+      const err = new Error('channel_id_required');
+      err.status = 400;
+      throw err;
+    }
 
     const { rows } = await pool.query(
       `UPDATE creator_channels
           SET brand_profile_json = $3::jsonb
         WHERE id = $1 AND owner_id = $2
         RETURNING *`,
-      [channelId, ownerId, JSON.stringify(next)],
+      [id, owner, JSON.stringify(toJson(brandProfileJson, {}))],
     );
+
+    if (!rows[0]) {
+      const err = new Error('channel_not_found');
+      err.status = 404;
+      throw err;
+    }
 
     return rows[0];
   }
 
-  async function upsertSeoMemory(channelId, ownerId, memory = {}) {
-    const channel = await getChannel(channelId, ownerId);
-    const current = toJson(channel.seo_profile_json, {});
-    const next = {
-      ...current,
-      ...toJson(memory, {}),
-      updated_at: new Date().toISOString(),
-      memory_id: current.memory_id || crypto.randomUUID(),
-    };
+  async function setSeoProfile(channelId, ownerId, seoProfileJson) {
+    const owner = requireOwnerId(ownerId);
+    const id = normalizeText(channelId);
+    if (!id) {
+      const err = new Error('channel_id_required');
+      err.status = 400;
+      throw err;
+    }
 
     const { rows } = await pool.query(
       `UPDATE creator_channels
           SET seo_profile_json = $3::jsonb
         WHERE id = $1 AND owner_id = $2
         RETURNING *`,
-      [channelId, ownerId, JSON.stringify(next)],
+      [id, owner, JSON.stringify(toJson(seoProfileJson, {}))],
     );
+
+    if (!rows[0]) {
+      const err = new Error('channel_not_found');
+      err.status = 404;
+      throw err;
+    }
 
     return rows[0];
   }
 
+  async function recordPerformance(channelId, ownerId, performance = {}) {
+    const owner = requireOwnerId(ownerId);
+    const id = normalizeText(channelId);
+    if (!id) {
+      const err = new Error('channel_id_required');
+      err.status = 400;
+      throw err;
+    }
+
+    const payload = toJson(performance, {});
+    const summary = {
+      ...payload,
+      recorded_at: payload.recorded_at || new Date().toISOString(),
+      record_id: payload.record_id || crypto.randomUUID(),
+    };
+
+    const { rows } = await pool.query(
+      `UPDATE creator_channels
+          SET brand_profile_json = COALESCE(brand_profile_json, '{}'::jsonb) || $3::jsonb
+        WHERE id = $1 AND owner_id = $2
+        RETURNING *`,
+      [id, owner, JSON.stringify({ performance_memory: summary })],
+    );
+
+    if (!rows[0]) {
+      const err = new Error('channel_not_found');
+      err.status = 404;
+      throw err;
+    }
+
+    return { channel: rows[0], performance: summary };
+  }
+
+  async function getMemory(channelId, ownerId) {
+    const channel = await getChannel(channelId, ownerId);
+    return {
+      channel,
+      brand_memory: toJson(channel.brand_profile_json, {}),
+      seo_profile: toJson(channel.seo_profile_json, {}),
+    };
+  }
+
   return {
-    createChannel,
     getChannel,
     listChannels,
+    createChannel,
     updateChannel,
     deleteChannel,
-    upsertBrandMemory,
-    upsertSeoMemory,
+    setBrandMemory,
+    setSeoProfile,
+    recordPerformance,
+    getMemory,
   };
 }

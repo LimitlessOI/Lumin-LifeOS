@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:56:19.733Z",
+  "generated_at": "2026-07-04T14:56:33.818Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 14,
   "files": [
@@ -84,9 +84,9 @@
     {
       "path": "services/channel-memory.js",
       "synopsis": "Store and manage creator channel performance and brand memory.",
-      "bytes": 6218,
-      "mtime": "2026-07-04T14:50:13.497Z",
-      "indexed_at": "2026-07-04T14:50:13.497Z",
+      "bytes": 7374,
+      "mtime": "2026-07-04T14:56:33.818Z",
+      "indexed_at": "2026-07-04T14:56:33.818Z",
       "ssot": [
         "docs/products/CREATOR_MEDIA_OS/CREATOR_MEDIA_OS_HOME.md"
       ]
