@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:28:47.753Z",
+  "generated_at": "2026-07-04T14:34:22.741Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 4,
   "files": [
@@ -15,8 +15,8 @@
       "path": "db/migrations/20260704_create_children_table.sql",
       "synopsis": "Database migration — 20260704_create_children_table.sql.",
       "bytes": 441,
-      "mtime": "2026-07-04T14:28:02.175Z",
-      "indexed_at": "2026-07-04T14:28:02.175Z"
+      "mtime": "2026-07-04T14:34:22.741Z",
+      "indexed_at": "2026-07-04T14:34:22.741Z"
     },
     {
       "path": "routes/confidence-architecture-routes.js",
