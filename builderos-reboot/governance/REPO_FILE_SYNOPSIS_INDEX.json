@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T18:32:20.585Z",
+  "generated_at": "2026-07-04T18:32:26.861Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 10,
+  "file_count": 11,
   "files": [
     {
       "path": "db/migrations/20260704_adam_decisions.sql",
@@ -10,6 +10,13 @@
       "bytes": 492,
       "mtime": "2026-07-04T18:19:58.983Z",
       "indexed_at": "2026-07-04T18:19:58.983Z"
+    },
+    {
+      "path": "db/migrations/20260704_call_logs.sql",
+      "synopsis": "Database migration — 20260704_call_logs.sql.",
+      "bytes": 487,
+      "mtime": "2026-07-04T18:32:26.861Z",
+      "indexed_at": "2026-07-04T18:32:26.861Z"
     },
     {
       "path": "db/migrations/20260704_receptionist_configs.sql",
