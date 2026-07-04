@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:56:07.954Z",
+  "generated_at": "2026-07-04T21:56:21.476Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 38,
+  "file_count": 39,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -136,6 +136,13 @@
       "bytes": 16159,
       "mtime": "2026-07-04T21:35:01.017Z",
       "indexed_at": "2026-07-04T21:35:01.017Z"
+    },
+    {
+      "path": "public/overlay/cancel.html",
+      "synopsis": "HTML page: API Cost Savings · Cancel",
+      "bytes": 5896,
+      "mtime": "2026-07-04T21:56:21.476Z",
+      "indexed_at": "2026-07-04T21:56:21.476Z"
     },
     {
       "path": "public/overlay/commitment_confirmation.html",
