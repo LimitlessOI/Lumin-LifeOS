@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T11:12:50.150Z",
+  "generated_at": "2026-07-04T11:13:01.862Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 2,
+  "file_count": 3,
   "files": [
     {
       "path": "db/migrations/20260704_create_memory_links.sql",
@@ -17,6 +17,13 @@
       "bytes": 606,
       "mtime": "2026-07-04T11:12:42.024Z",
       "indexed_at": "2026-07-04T11:12:42.024Z"
+    },
+    {
+      "path": "scripts/verify-memory-system.mjs",
+      "synopsis": "MS-P1-005 acceptance audit for memory-system.",
+      "bytes": 5457,
+      "mtime": "2026-07-04T11:13:01.862Z",
+      "indexed_at": "2026-07-04T11:13:01.862Z"
     }
   ]
 }

@@ -1,13 +1,14 @@
 /**
- * SYNOPSIS: Exports runAudit — scripts/verify-memory-system.mjs.
+ * SYNOPSIS: MS-P1-005 acceptance audit for memory-system.
+ * Runs live HTTP probes against the memory capsule surface using x-command-key.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = process.cwd();
 const ROUTES_FILE = path.join(ROOT, 'routes/memory-routes.js');
-const MIGRATION_FILE = path.join(ROOT, 'db/migrations/20260704_create_memory_capsules.sql');
-const SERVICES_FILE = path.join(ROOT, 'services/memory-capsule.js');
+const MIGRATION_USER_PREFERENCE = path.join(ROOT, 'db/migrations/20260704_create_user_preference.sql');
+const MIGRATION_MEMORY_LINKS = path.join(ROOT, 'db/migrations/20260704_create_memory_links.sql');
 
 function readFile(relPath) {
   return fs.readFileSync(relPath, 'utf8');
@@ -40,8 +41,12 @@ function extractRoutePaths(source) {
   return [...paths];
 }
 
-function toPathTemplate(route) {
-  return route.replace(/:([A-Za-z0-9_]+)/g, '{$1}');
+function routeMatchesDeclared(routePaths, probePath) {
+  return routePaths.some((declared) => {
+    const normalizedDeclared = declared.replace(/:([A-Za-z0-9_]+)/g, '{$1}');
+    const normalizedProbe = probePath.replace(/\/[^/]+$/, '/{$id}');
+    return normalizedDeclared === normalizedProbe || declared === probePath;
+  });
 }
 
 async function probe(baseUrl, commandKey, method, route, body) {
@@ -70,29 +75,35 @@ async function probe(baseUrl, commandKey, method, route, body) {
 export async function runAudit() {
   const baseUrl = resolveBaseUrl();
   const commandKey = resolveCommandKey();
-
   const routesSource = readFile(ROUTES_FILE);
-  const migrationSource = readFile(MIGRATION_FILE);
-  const serviceSource = readFile(SERVICES_FILE);
-
   const routePaths = extractRoutePaths(routesSource);
-  const expectedRouteFactory =
-    "import memorySystem from '../core/memory-system.js';";
 
   const checks = [];
   const fail = (msg) => checks.push({ ok: false, msg });
   const pass = (msg) => checks.push({ ok: true, msg });
 
-  if (!routesSource.includes(expectedRouteFactory)) {
+  if (!routesSource.includes("import memorySystem from '../core/memory-system.js';")) {
     fail('route signature check failed');
   } else {
     pass('route signature check passed');
   }
 
-  if (!migrationSource.includes('CREATE TABLE IF NOT EXISTS memory_capsules')) {
-    fail('migration check failed');
+  if (!routesSource.includes("createLegacyMemoryRoutes(options = {})")) {
+    fail('route factory check failed');
   } else {
-    pass('migration check passed');
+    pass('route factory check passed');
+  }
+
+  if (!readFile(MIGRATION_USER_PREFERENCE).includes('CREATE TABLE IF NOT EXISTS user_preference')) {
+    fail('user_preference migration literal missing');
+  } else {
+    pass('user_preference migration literal present');
+  }
+
+  if (!readFile(MIGRATION_MEMORY_LINKS).includes('CREATE TABLE IF NOT EXISTS memory_links')) {
+    fail('memory_links migration literal missing');
+  } else {
+    pass('memory_links migration literal present');
   }
 
   if (!baseUrl) {
@@ -112,13 +123,14 @@ export async function runAudit() {
     pass('GET /api/v1/memory/status passed');
   }
 
-  const capsuleId = String(
-    statusProbe.json?.capsule?.id ||
-      statusProbe.json?.id ||
-      statusProbe.json?.capsule_id ||
-      statusProbe.json?.data?.id ||
-      '1',
-  );
+  const capsuleId =
+    String(
+      statusProbe.json?.capsule?.id ||
+        statusProbe.json?.id ||
+        statusProbe.json?.capsule_id ||
+        statusProbe.json?.data?.id ||
+        '1',
+    );
 
   const requiredRoutes = [
     { method: 'POST', route: '/api/v1/memory/capsules/signal', body: {} },
@@ -129,15 +141,9 @@ export async function runAudit() {
   ];
 
   for (const item of requiredRoutes) {
-    const routeTemplate = item.route.replace(capsuleId, ':id');
-    const declared = routePaths.some((p) => {
-      const normalized = p.replace(':id', '{$id}');
-      const candidate = routeTemplate.replace(capsuleId, '{$id}');
-      return normalized === candidate || p === routeTemplate;
-    });
-
+    const declared = routeMatchesDeclared(routePaths, item.route);
     if (!declared) {
-      fail(`route not declared in routes file: ${routeTemplate}`);
+      fail(`route not declared in routes file: ${item.route}`);
       continue;
     }
 
@@ -164,7 +170,6 @@ export async function runAudit() {
     baseUrl,
     commandKeyPresent: Boolean(commandKey),
     routeCount: routePaths.length,
-    serviceSourceSize: serviceSource.length,
   };
 }
 
