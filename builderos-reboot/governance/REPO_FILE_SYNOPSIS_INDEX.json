@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T12:45:57.887Z",
+  "generated_at": "2026-07-04T12:46:33.079Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 7,
+  "file_count": 8,
   "files": [
     {
       "path": "db/migrations/20260704_create_faith_outputs.sql",
@@ -52,6 +52,13 @@
       "bytes": 3727,
       "mtime": "2026-07-04T12:45:57.887Z",
       "indexed_at": "2026-07-04T12:45:57.887Z"
+    },
+    {
+      "path": "services/tradition-lens-service.js",
+      "synopsis": "Exports createTraditionLensService — services/tradition-lens-service.js.",
+      "bytes": 4671,
+      "mtime": "2026-07-04T12:46:33.079Z",
+      "indexed_at": "2026-07-04T12:46:33.079Z"
     }
   ]
 }
