@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Capability Map · Builder Queue -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Capability Map · Builder Queue</title>
+  <meta name="theme-color" content="#0a0a0f">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0a0a0f;
+      --panel: #111118;
+      --panel2: #17171f;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8f0;
+      --muted: #9a9ab6;
+      --muted2: #66667c;
+      --accent: #5b6af5;
+      --accent2: #7c3aed;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --chip: rgba(255,255,255,0.06);
+      --shadow: 0 24px 80px rgba(0,0,0,0.28);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --maxw: 1200px;
+      --pad: 18px;
+      --gap: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(91,106,245,0.12), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(124,58,237,0.10), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    .shell {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 14px;
+    }
+
+    .topbar {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)), var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 18px;
+      flex: 0 0 auto;
+      box-shadow: 0 12px 30px rgba(91,106,245,0.22);
+    }
+
+    .brand-copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 0 14px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .content {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 14px;
+    }
+
+    .panel {
+      min-height: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02)), var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex: 0 0 auto;
+    }
+
+    .panel-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .panel-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .panel-body {
+      padding: 14px;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .queue-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .queue-card, .cap-card, .mini-card, .stat-card {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-lg);
+    }
+
+    .queue-card {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .queue-card.pending {
+      background:
+        radial-gradient(circle at top right, rgba(245,158,11,0.12), transparent 30%),
+        rgba(255,255,255,0.03);
+    }
+
+    .queue-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .cap-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .cap-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
+    }
+
+    .cap-dot.pending { background: var(--warn); }
+    .cap-dot.builder { background: var(--accent); }
+    .cap-dot.shipped { background: var(--good); }
+
+    .cap-title-wrap {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cap-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .cap-meta {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--chip);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .pill.warn { border-color: rgba(245,158,11,0.35); color: #ffd38a; }
+    .pill.good { border-color: rgba(34,197,94,0.35); color: #94f0b1; }
+    .pill.accent { border-color: rgba(91,106,245,0.35); color: #b6c0ff; }
+
+    .cap-summary {
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .cap-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .stat-card {
+      padding: 14px;
+      display: grid;
+      gap: 6px;
+      min-height: 96px;
+      align-content: start;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .mini-card {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .mini-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mini-title h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .mini-title span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      display: flex;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+    }
+    .list-item:first-child { border-top: none; padding-top: 0; }
+
+    .list-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.05);
+      flex: 0 0 auto;
+      font-size: 14px;
+    }
+
+    .list-copy {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+
+    .list-copy strong {
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .list-copy span {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .builder-queue {
+      display: grid;
+      gap: 10px;
+    }
+
+    .builder-item {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      background:
+        linear-gradient(180deg, rgba(91,106,245,0.08), rgba(255,255,255,0.02)),
+        rgba(255,255,255,0.03);
+      display: grid;
+      gap: 10px;
+    }
+
+    .builder-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .builder-name {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .builder-name strong {
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .builder-name span {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .progress {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .progress > div {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .footer-note {
+      padding: 0 4px;
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .empty-state {
+      padding: 28px 16px;
+      border: 1px dashed rgba(255,255,255,0.10);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.02);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .shell { height: auto; min-height: 100%; overflow: visible; }
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root { --pad: 14px; }
+      .shell { padding: 12px; gap: 12px; }
+      .topbar { padding: 14px; border-radius: 22px; }
+      .panel, .queue-card, .mini-card { border-radius: 18px; }
+      .actions { width: 100%; justify-content: flex-start; }
+      .stats { grid-template-columns: 1fr; }
+      h1 { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">◎</div>
+        <div class="brand-copy">
+          <div class="eyebrow">Capability Map · Blueprint CM-P1-004</div>
+          <h1>Surface pending capabilities alongside builder queue</h1>
+          <p class="subtitle">
+            This overlay keeps the builder queue visible while surfacing nearby pending capabilities so the next build choice is obvious at a glance.
+          </p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="refresh-btn" type="button">Refresh</button>
+        <button class="btn primary" id="focus-pending-btn" type="button">Focus pending</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="panel" aria-label="Pending capabilities and builder queue">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Pending capabilities</h2>
+            <p>Capabilities waiting on implementation or activation, shown alongside the current builder queue.</p>
+          </div>
+          <div class="pill-row" aria-label="Status filters">
+            <span class="pill warn">Pending</span>
+            <span class="pill accent">Queued</span>
+            <span class="pill good">Shipped</span>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">Pending capabilities</div>
+            <div class="stat-value" id="pending-count">—</div>
+            <div class="stat-sub" id="pending-sub">Loading from capability map SSOT</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Builder queue items</div>
+            <div class="stat-value" id="queue-count">—</div>
+            <div class="stat-sub" id="queue-sub">Shown next to capability gaps</div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="queue-grid" id="capability-list">
+            <div class="empty-state">Loading capability map…</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-stack" aria-label="Builder queue side panel">
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <h2>Builder queue</h2>
+              <p>Work currently lined up for implementation and verification.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="builder-queue" id="builder-queue">
+              <div class="empty-state">Loading queue items…</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <h2>Signals</h2>
+              <p>Concise reminders for adjacent pending work.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="mini-card">
+              <div class="mini-title">
+                <h3>What to ship next</h3>
+                <span id="next-signal">—</span>
+              </div>
+              <div class="list" id="signal-list">
+                <div class="list-item">
+                  <div class="list-icon">↗</div>
+                  <div class="list-copy">
+                    <strong>Pending capabilities stay visible</strong>
+                    <span>So the queue does not hide gaps that still need work.</span>
+                  </div>
+                </div>
+                <div class="list-item">
+                  <div class="list-icon">☑</div>
+                  <div class="list-copy">
+                    <strong>Builder queue stays adjacent</strong>
+                    <span>Use the queue to decide which pending capability gets actioned next.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <div class="footer-note">
+      Source of truth is the Capability Map home document; this overlay is a presentation surface only.
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const state = {
+        pending: [],
+        queue: [],
+        sourceTitle: 'Capability Map',
+        loadedAt: null,
+      };
+
+      const fallback = {
+        pending: [
+          {
+            name: 'Surface pending capabilities beside builder queue',
+            summary: 'Show unresolved capabilities next to queued work so the next implementation choice is obvious.',
+            status: 'pending',
+            owner: 'Capability Map',
+            note: 'Blueprint CM-P1-004',
+          },
+          {
+            name: 'Keep queue context visible',
+            summary: 'Preserve queue items in the same view to avoid hiding adjacent work.',
+            status: 'pending',
+            owner: 'Builder Queue',
+            note: 'Overlay presentation',
+          },
+        ],
+        queue: [
+          {
+            name: 'Queue item: overlay implementation',
+            detail: 'Create a presentation surface that prioritizes pending capability visibility.',
+            progress: 68,
+            status: 'builder',
+          },
+          {
+            name: 'Queue item: map reconciliation',
+            detail: 'Reconcile capability map entries with builder-ready work items.',
+            progress: 44,
+            status: 'builder',
+          },
+        ],
+      };
+
+      function safeArray(value) {
+        return Array.isArray(value) ? value : [];
+      }
+
+      function pickText(value, fallbackText = '—') {
+        if (value === null || value === undefined || value === '') return fallbackText;
+        return String(value);
+      }
+
+      function normalizeData(input) {
+        const data = input && typeof input === 'object' ? input : {};
+        const pending = safeArray(data.pendingCapabilities || data.pending || data.capabilities || data.items)
+          .map((item) => ({
+            name: pickText(item.name || item.title || item.label, 'Untitled capability'),
+            summary: pickText(item.summary || item.description || item.detail, 'No summary provided.'),
+            status: pickText(item.status || 'pending'),
+            owner: pickText(item.owner || item.team || data.sourceTitle || 'Capability Map'),
+            note: pickText(item.note || item.blueprint || item.step || ''),
+          }));
+
+        const queue = safeArray(data.builderQueue || data.queue || data.builders || data.items)
+          .map((item) => ({
+            name: pickText(item.name || item.title || item.label, 'Untitled queue item'),
+            detail: pickText(item.detail || item.summary || item.description, 'No detail provided.'),
+            progress: Number.isFinite(Number(item.progress)) ? Math.max(0, Math.min(100, Number(item.progress))) : 0,
+            status: pickText(item.status || 'builder'),
+          }));
+
+        return {
+          pending: pending.length ? pending : fallback.pending,
+          queue: queue.length ? queue : fallback.queue,
+          sourceTitle: pickText(data.sourceTitle || data.title || 'Capability Map'),
+        };
+      }
+
+      async function loadCapabilityMap() {
+        const urls = [
+          '/docs/products/Capability_Map/Capability_Map_HOME.md',
+          '/docs/products/Capability_Map/Capability_Map_HOME.json',
+        ];
+
+        for (const url of urls) {
+          try {
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) continue;
+            const text = await res.text();
+            if (!text.trim()) continue;
+
+            if (url.endsWith('.json')) {
+              return normalizeData(JSON.parse(text));
+            }
+
+            const parsed = parseHomeDoc(text);
+            return normalizeData(parsed);
+          } catch (_) {}
+        }
+
+        return normalizeData(fallback);
+      }
+
+      function parseHomeDoc(markdown) {
+        const lines = String(markdown || '').split(/\r?\n/);
+        const sections = { pending: [], queue: [] };
+        let mode = '';
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (/^#+\s*pending capabilities/i.test(trimmed)) {
+            mode = 'pending';
+            continue;
+          }
+          if (/^#+\s*builder queue/i.test(trimmed)) {
+            mode = 'queue';
+            continue;
+          }
+          if (!trimmed) continue;
+          if (mode === 'pending' && /^[*-]\s+/.test(trimmed)) {
+            const itemText = trimmed.replace(/^[*-]\s+/, '');
+            const [name, ...rest] = itemText.split('—');
+            sections.pending.push({
+              name: (name || itemText).trim(),
+              summary: rest.join('—').trim() || itemText,
+              status: 'pending',
+              owner: 'Capability Map',
+              note: '',
+            });
+          } else if (mode === 'queue' && /^[*-]\s+/.test(trimmed)) {
+            const itemText = trimmed.replace(/^[*-]\s+/, '');
+            const [name, ...rest] = itemText.split('—');
+            sections.queue.push({
+              name: (name || itemText).trim(),
+              detail: rest.join('—').trim() || itemText,
+              progress: 50,
+              status: 'builder',
+            });
+          }
+        }
+        return sections;
+      }
+
+      function el(id) {
+        return document.getElementById(id);
+      }
+
+      function render() {
+        el('pending-count').textContent = String(state.pending.length);
+        el('queue-count').textContent = String(state.queue.length);
+        el('pending-sub').textContent = `Source: ${state.sourceTitle}`;
+        el('queue-sub').textContent = state.loadedAt ? `Updated ${state.loadedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Shown next to capability gaps';
+
+        const pendingList = el('capability-list');
+        pendingList.innerHTML = state.pending.length ? state.pending.map((item) => `
+          <article class="queue-card pending">
+            <div class="queue-head">
+              <div class="cap-name">
+                <span class="cap-dot pending" aria-hidden="true"></span>
+                <div class="cap-title-wrap">
+                  <h3 class="cap-title">${escapeHtml(item.name)}</h3>
+                  <div class="cap-meta">${escapeHtml(item.owner)}${item.note ? ` · ${escapeHtml(item.note)}` : ''}</div>
+                </div>
+              </div>
+              <span class="pill warn">Pending</span>
+            </div>
+            <div class="cap-summary">${escapeHtml(item.summary)}</div>
+          </article>
+        `).join('') : `<div class="empty-state">No pending capabilities found in the capability map source.</div>`;
+
+        const queueEl = el('builder-queue');
+        queueEl.innerHTML = state.queue.length ? state.queue.map((item) => `
+          <article class="builder-item">
+            <div class="builder-top">
+              <div class="cap-name">
+                <span class="cap-dot builder" aria-hidden="true"></span>
+                <div class="builder-name">
+                  <strong>${escapeHtml(item.name)}</strong>
+                  <span>${escapeHtml(item.detail)}</span>
+                </div>
+              </div>
+              <span class="pill accent">Queue</span>
+            </div>
+            <div class="progress" aria-label="Progress ${item.progress}%">
+              <div style="width:${item.progress}%"></div>
+            </div>
+          </article>
+        `).join('') : `<div class="empty-state">No builder queue items found.</div>`;
+
+        const next = state.pending[0] || state.queue[0];
+        el('next-signal').textContent = next ? next.name : '—';
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      async function refresh() {
+        const data = await loadCapabilityMap();
+        state.pending = data.pending;
+        state.queue = data.queue;
+        state.sourceTitle = data.sourceTitle;
+        state.loadedAt = new Date();
+        render();
+      }
+
+      document.getElementById('refresh-btn').addEventListener('click', refresh);
+      document.getElementById('focus-pending-btn').addEventListener('click', () => {
+        document.querySelector('.panel-body')?.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      refresh().catch(() => {
+        state.pending = fallback.pending;
+        state.queue = fallback.queue;
+        state.loadedAt = new Date();
+        render();
+      });
+    })();
+  </script>
+</body>
+</html>

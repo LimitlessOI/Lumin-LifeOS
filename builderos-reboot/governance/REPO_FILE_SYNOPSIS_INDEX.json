@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:31:31.231Z",
+  "generated_at": "2026-07-04T22:40:38.514Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 51,
+  "file_count": 52,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -171,6 +171,13 @@
       "bytes": 5896,
       "mtime": "2026-07-04T21:56:21.476Z",
       "indexed_at": "2026-07-04T21:56:21.476Z"
+    },
+    {
+      "path": "public/overlay/command-center-panel.html",
+      "synopsis": "HTML page: Capability Map · Builder Queue",
+      "bytes": 23875,
+      "mtime": "2026-07-04T22:40:38.514Z",
+      "indexed_at": "2026-07-04T22:40:38.514Z"
     },
     {
       "path": "public/overlay/commitment_confirmation.html",
