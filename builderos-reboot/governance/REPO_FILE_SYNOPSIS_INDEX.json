@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T15:01:55.258Z",
+  "generated_at": "2026-07-04T15:02:01.133Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 14,
   "files": [
@@ -36,8 +36,8 @@
       "path": "db/migrations/20260704_create_creator_likeness_profiles.sql",
       "synopsis": "Database migration — 20260704_create_creator_likeness_profiles.sql.",
       "bytes": 561,
-      "mtime": "2026-07-04T14:55:07.932Z",
-      "indexed_at": "2026-07-04T14:55:07.932Z"
+      "mtime": "2026-07-04T15:02:01.133Z",
+      "indexed_at": "2026-07-04T15:02:01.133Z"
     },
     {
       "path": "db/migrations/20260704_create_creator_performance_memory.sql",
