@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:45:15.206Z",
+  "generated_at": "2026-07-04T20:45:23.737Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260705_create_emergency_fund_table.sql",
@@ -10,6 +10,13 @@
       "bytes": 395,
       "mtime": "2026-07-04T20:45:15.206Z",
       "indexed_at": "2026-07-04T20:45:15.206Z"
+    },
+    {
+      "path": "routes/emergencyFundRoutes.js",
+      "synopsis": "Exports createEmergencyFundRoutes — routes/emergencyFundRoutes.js.",
+      "bytes": 1829,
+      "mtime": "2026-07-04T20:45:23.737Z",
+      "indexed_at": "2026-07-04T20:45:23.737Z"
     }
   ]
 }
