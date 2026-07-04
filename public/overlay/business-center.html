@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Business Tools Product Home -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <title>Business Tools Product Home</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #11182d;
+      --surface: rgba(17, 24, 45, 0.82);
+      --surface2: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.10);
+      --text: #e5ecff;
+      --muted: #93a4c3;
+      --accent: #5b6af5;
+      --accent2: #14b8a6;
+      --good: #34d399;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --maxw: 1240px;
+      --pad: 20px;
+      --gap: 16px;
+      --grid: 220px;
+      --metric-card-min: 180px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f7fb;
+        --bg2: #ffffff;
+        --surface: rgba(255, 255, 255, 0.88);
+        --surface2: rgba(15, 23, 42, 0.04);
+        --border: rgba(15, 23, 42, 0.10);
+        --text: #0f172a;
+        --muted: #475569;
+        --shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(91, 106, 245, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.14), transparent 24%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    .page {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(91, 106, 245, 0.18), rgba(20, 184, 166, 0.12)), var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .eyebrow-badge {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 6px rgba(91, 106, 245, 0.10);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .subhead {
+      margin: 0;
+      max-width: 80ch;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .button {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 11px 14px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(91, 106, 245, 0.35);
+      background: rgba(91, 106, 245, 0.12);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      border-color: transparent;
+      color: white;
+    }
+
+    .button.primary:hover {
+      background: linear-gradient(135deg, #6478ff, #8b5cf6);
+    }
+
+    .grid {
+      display: grid;
+      gap: var(--gap);
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 18px 20px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .panel-title {
+      display: grid;
+      gap: 4px;
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .panel-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .timestamp {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .metric-shell {
+      padding: 18px 20px 20px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(var(--metric-card-min), 1fr));
+      gap: 14px;
+    }
+
+    .metric-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent), var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      min-height: 132px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(91, 106, 245, 0.12);
+      color: #8da0ff;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .metric-value {
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+    }
+
+    .metric-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .pill.good { color: var(--good); }
+    .pill.warn { color: var(--warn); }
+    .pill.bad { color: #fca5a5; }
+
+    .span-7 { grid-column: span 7; }
+    .span-5 { grid-column: span 5; }
+    .span-12 { grid-column: span 12; }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      background: rgba(255,255,255,0.02);
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .kpi-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .spark {
+      width: 120px;
+      height: 34px;
+      flex-shrink: 0;
+      opacity: 0.95;
+    }
+
+    .section-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-card {
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+      display: grid;
+      gap: 6px;
+    }
+
+    .section-card strong {
+      font-size: 15px;
+    }
+
+    .section-card span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .subtle-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+      border: 0;
+    }
+
+    @media (max-width: 960px) {
+      body { padding: 14px; }
+      .span-7, .span-5 { grid-column: span 12; }
+      .hero { padding: 20px; }
+      .panel-header { padding: 16px 16px 0; }
+      .metric-shell { padding: 16px; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .button { justify-content: center; }
+      th, td { padding: 12px 14px; }
+      .metric-value { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="eyebrow"><span class="eyebrow-badge" aria-hidden="true"></span> Business Tools Product Home</div>
+      <h1 id="page-title">Aggregated business metrics at a glance</h1>
+      <p class="subhead">
+        A concise home surface for the Business Tools product that consolidates high-level operating metrics, performance signals, and active coverage in one view.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#overview">View overview</a>
+        <a class="button" href="#metrics">Jump to metrics</a>
+        <a class="button" href="#coverage">Coverage</a>
+      </div>
+    </section>
+
+    <section class="panel" id="overview" aria-labelledby="overview-title">
+      <div class="panel-header">
+        <div class="panel-title">
+          <h2 id="overview-title">Overview</h2>
+          <p>Summary indicators for the product home.</p>
+        </div>
+        <div class="timestamp" id="timestamp">Updated just now</div>
+      </div>
+      <div class="metric-shell">
+        <div class="metric-grid" id="metrics">
+          <article class="metric-card">
+            <div class="metric-top">
+              <div class="metric-label">Total accounts</div>
+              <div class="metric-icon" aria-hidden="true">🏢</div>
+            </div>
+            <div class="metric-value">1,284</div>
+            <div class="metric-meta">
+              <span class="pill good">+12% vs last period</span>
+              <span>Active business profiles</span>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <div class="metric-top">
+              <div class="metric-label">Revenue tracked</div>
+              <div class="metric-icon" aria-hidden="true">💰</div>
+            </div>
+            <div class="metric-value">$4.92M</div>
+            <div class="metric-meta">
+              <span class="pill good">+8.4% growth</span>
+              <span>Rolling 30-day total</span>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <div class="metric-top">
+              <div class="metric-label">Open opportunities</div>
+              <div class="metric-icon" aria-hidden="true">🧭</div>
+            </div>
+            <div class="metric-value">316</div>
+            <div class="metric-meta">
+              <span class="pill warn">58 needing follow-up</span>
+              <span>Pipeline in motion</span>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <div class="metric-top">
+              <div class="metric-label">Retention rate</div>
+              <div class="metric-icon" aria-hidden="true">📈</div>
+            </div>
+            <div class="metric-value">93.6%</div>
+            <div class="metric-meta">
+              <span class="pill good">+1.2 pts</span>
+              <span>Customer retention</span>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <div class="metric-top">
+              <div class="metric-label">SLA on-time</div>
+              <div class="metric-icon" aria-hidden="true">⏱️</div>
+            </div>
+            <div class="metric-value">98.1%</div>
+            <div class="metric-meta">
+              <span class="pill good">Stable</span>
+              <span>Service delivery health</span>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <div class="metric-top">
+              <div class="metric-label">Alerts pending</div>
+              <div class="metric-icon" aria-hidden="true">🔔</div>
+            </div>
+            <div class="metric-value">14</div>
+            <div class="metric-meta">
+              <span class="pill bad">3 urgent</span>
+              <span>Requires review</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" id="coverage" aria-label="Business coverage panels">
+      <article class="panel span-7" aria-labelledby="performance-title">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2 id="performance-title">Performance snapshot</h2>
+            <p>Current signal across the core business tools stack.</p>
+          </div>
+        </div>
+        <div class="metric-shell">
+          <div class="kpi-row">
+            <div>
+              <div class="metric-label" style="margin-bottom: 8px;">Weekly throughput</div>
+              <div class="metric-value" style="font-size: 24px;">8,450</div>
+              <div class="status">Transactions processed across active workflows.</div>
+            </div>
+            <svg class="spark" viewBox="0 0 120 34" fill="none" aria-hidden="true">
+              <path d="M1 25L16 22L31 24L46 18L61 20L76 12L91 15L106 9L119 11" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1 30L16 27L31 28L46 23L61 25L76 17L91 20L106 14L119 16V34H1V30Z" fill="url(#g2)" opacity="0.65"/>
+              <defs>
+                <linearGradient id="g1" x1="0" y1="0" x2="120" y2="0">
+                  <stop offset="0%" stop-color="#5b6af5"/>
+                  <stop offset="100%" stop-color="#14b8a6"/>
+                </linearGradient>
+                <linearGradient id="g2" x1="0" y1="0" x2="0" y2="34">
+                  <stop offset="0%" stop-color="#5b6af5" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.02"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <hr class="subtle-divider" style="margin: 16px 0;">
+          <div class="section-list">
+            <div class="section-card">
+              <strong>Product usage concentration</strong>
+              <span>Top 20 accounts represent 41% of total activity, with the long tail showing consistent week-over-week growth.</span>
+            </div>
+            <div class="section-card">
+              <strong>Operational health</strong>
+              <span>Service metrics remain within target thresholds. Watch the pending alert queue for delayed escalations.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel span-5" aria-labelledby="business-title">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2 id="business-title">Business summary</h2>
+            <p>High-level totals for decision support.</p>
+          </div>
+        </div>
+        <div class="metric-shell">
+          <table aria-label="Business metrics table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+                <th>Signal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>New accounts</td>
+                <td>148</td>
+                <td><span class="pill good">Up 9%</span></td>
+              </tr>
+              <tr>
+                <td>Churn risk</td>
+                <td>2.4%</td>
+                <td><span class="pill good">Low</span></td>
+              </tr>
+              <tr>
+                <td>Support backlog</td>
+                <td>27</td>
+                <td><span class="pill warn">Monitor</span></td>
+              </tr>
+              <tr>
+                <td>Conversion rate</td>
+                <td>18.2%</td>
+                <td><span class="pill good">Improving</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel span-12" aria-labelledby="coverage-title">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2 id="coverage-title">Coverage notes</h2>
+            <p>Aggregated business metrics prepared for the product home experience.</p>
+          </div>
+        </div>
+        <div class="metric-shell">
+          <div class="section-list">
+            <div class="section-card">
+              <strong>Core metrics included</strong>
+              <span>Revenue, accounts, opportunities, retention, SLA performance, and alert backlog.</span>
+            </div>
+            <div class="section-card">
+              <strong>How to read this page</strong>
+              <span>Use the overview for quick status checks, the performance snapshot for operational context, and the summary table for the most actionable figures.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const stamp = document.getElementById('timestamp');
+      if (stamp) {
+        const d = new Date();
+        stamp.textContent = 'Updated ' + d.toLocaleString([], {
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit'
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
