@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T12:46:33.079Z",
+  "generated_at": "2026-07-04T12:46:44.044Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 8,
+  "file_count": 9,
   "files": [
     {
       "path": "db/migrations/20260704_create_faith_outputs.sql",
@@ -45,6 +45,13 @@
       "bytes": 12354,
       "mtime": "2026-07-04T12:45:48.311Z",
       "indexed_at": "2026-07-04T12:45:48.311Z"
+    },
+    {
+      "path": "services/reverence-guard.js",
+      "synopsis": "Exports createReverenceGuard — services/reverence-guard.js.",
+      "bytes": 4064,
+      "mtime": "2026-07-04T12:46:44.044Z",
+      "indexed_at": "2026-07-04T12:46:44.044Z"
     },
     {
       "path": "services/scripture-scene-engine.js",
