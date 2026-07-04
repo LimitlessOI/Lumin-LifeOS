@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T01:02:45.648Z",
+  "generated_at": "2026-07-04T01:02:55.103Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260704_create_transactions_table.sql",
@@ -10,6 +10,13 @@
       "bytes": 804,
       "mtime": "2026-07-04T01:02:45.648Z",
       "indexed_at": "2026-07-04T01:02:45.648Z"
+    },
+    {
+      "path": "routes/tc-r4r-routes.js",
+      "synopsis": "POST /api/v1/tc/attachments/scan",
+      "bytes": 2877,
+      "mtime": "2026-07-04T01:02:55.103Z",
+      "indexed_at": "2026-07-04T01:02:55.103Z"
     }
   ]
 }
