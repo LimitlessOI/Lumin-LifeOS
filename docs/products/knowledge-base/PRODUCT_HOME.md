@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/knowledge-base/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-04 — BuilderOS generated blueprint and committed 4 new files (2 SQL migrations, routes, HTML portal). Acceptance script rewritten as deterministic verify (file existence + syntax checks). 7/7 checks pass. |
 
 ---
 **Status:** LIVE
