@@ -108,7 +108,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
     platform_gap_fill: true,
     platform_gap_fill_reason: `GAP-FILL: mechanical intake blueprint step ${step.id} for ${product} — ARC-ready session ${sessionId}, founder gaps resolved`,
     commit_message: `[system-build] ${product} ${step.id} ${targetFile}`,
-    ...(step.type === 'esm' || step.type === 'esm_script' ? { max_output_tokens: 16384 } : {}),
+    ...(step.type === 'esm' || step.type === 'esm_script' ? { max_output_tokens: isRouteFile ? 8192 : 16384 } : {}),
     ...(isRouteFile ? { mount_path: deriveRouteMountPath(targetFile) } : {}),
     files: depsToContextFiles(step, blueprint),
   };
@@ -230,10 +230,13 @@ function formatScanHints(step, scan, blueprint = null) {
 function depsToContextFiles(step, blueprint) {
   const files = [];
   const byId = new Map((blueprint.steps || []).map((s) => [s.id, s]));
+  const isRouteStep = step.type === 'esm' && /routes\//.test(String(stepTargetFile(step) || ''));
   for (const depId of step.deps || []) {
     const dep = byId.get(depId);
     const f = dep && stepTargetFile(dep);
-    if (f && !files.includes(f)) files.push(f);
+    if (!f || files.includes(f)) continue;
+    if (isRouteStep && dep.type === 'sql') continue;
+    files.push(f);
   }
   for (const ref of REFERENCE_FILES_BY_TYPE[step.type] || []) {
     if (!files.includes(ref)) files.push(ref);
@@ -245,11 +248,11 @@ function depsToContextFiles(step, blueprint) {
       if (f && !files.includes(f)) files.push(f);
     }
   }
-  if (step.type === 'esm' && /routes\//.test(String(stepTargetFile(step) || ''))) {
+  if (isRouteStep) {
     const routeRef = 'routes/action-inbox-routes.js';
     if (!files.includes(routeRef)) files.push(routeRef);
   }
-  return files.slice(0, 6);
+  return files.slice(0, 5);
 }
 
 export async function loadIntakeSession(sessionId, { pool = null, baseUrl = null, commandKey = null } = {}) {
