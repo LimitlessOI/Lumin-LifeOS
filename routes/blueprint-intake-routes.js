@@ -5,7 +5,7 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-import { createBlueprintIntakeService, amendmentReadableOnDisk } from '../services/blueprint-intake.js';
+import { createBlueprintIntakeService, amendmentReadableOnDisk, getAiTrustLedger } from '../services/blueprint-intake.js';
 import { executeIntakeBlueprint } from '../services/intake-blueprint-executor.js';
 
 export function createBlueprintIntakeRoutes(app, ctx) {
@@ -320,5 +320,9 @@ export function createBlueprintIntakeRoutes(app, ctx) {
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
+  });
+
+  app.get('/api/v1/blueprint/intake/ai-trust', requireKey, (_req, res) => {
+    res.json({ ok: true, ledger: getAiTrustLedger() });
   });
 }

@@ -12,6 +12,33 @@ import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+// ── Progressive trust: track AI success/failure per model per task type ──────
+const _aiTrustLedger = new Map();
+
+function recordAiOutcome(model, taskType, success, productName) {
+  const key = `${model}::${taskType}`;
+  if (!_aiTrustLedger.has(key)) {
+    _aiTrustLedger.set(key, { successes: 0, failures: 0, lastFailProduct: null, lastSuccess: null });
+  }
+  const entry = _aiTrustLedger.get(key);
+  if (success) {
+    entry.successes++;
+    entry.lastSuccess = new Date().toISOString();
+  } else {
+    entry.failures++;
+    entry.lastFailProduct = productName;
+  }
+  const total = entry.successes + entry.failures;
+  const rate = total > 0 ? Math.round((entry.successes / total) * 100) : 0;
+  console.log(`[AI-TRUST] ${key} ${success ? 'OK' : 'FAIL'} product=${productName} rate=${rate}% (${entry.successes}/${total})`);
+}
+
+export function getAiTrustLedger() {
+  const result = {};
+  for (const [key, val] of _aiTrustLedger) result[key] = { ...val, rate: val.successes + val.failures > 0 ? Math.round((val.successes / (val.successes + val.failures)) * 100) : 0 };
+  return result;
+}
+
 // ── Prompt templates ─────────────────────────────────────────────────────────
 
 const INTENT_EXTRACT_SYSTEM = `You are BuilderOS ARC. Your job: read a product amendment document and extract structured build intent as JSON.
@@ -590,6 +617,7 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
         if (attempt < 2) continue;
       }
     }
+    recordAiOutcome('openai', 'intent_extraction', aiIntentSucceeded, productName);
     if (!aiIntentSucceeded) {
       _blog('intent_fallback_deterministic');
       intent = extractIntentDeterministic(amendmentText, productName);
@@ -622,6 +650,8 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
         if (attempt === 2) throw parseErr;
       }
     }
+    const bpSuccess = blueprint?.steps?.length > 0;
+    recordAiOutcome('openai', 'blueprint_generation', bpSuccess, productName);
     _blog(`blueprint_generation_done steps=${blueprint.steps?.length}`);
 
     const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
