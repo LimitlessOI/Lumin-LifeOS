@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:46:28.890Z",
+  "generated_at": "2026-07-04T22:50:49.896Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 56,
+  "file_count": 57,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -199,6 +199,13 @@
       "bytes": 27810,
       "mtime": "2026-07-04T21:24:03.734Z",
       "indexed_at": "2026-07-04T21:24:03.734Z"
+    },
+    {
+      "path": "public/overlay/council-dashboard.html",
+      "synopsis": "HTML page: AI Council · Routing & Model Usage",
+      "bytes": 23894,
+      "mtime": "2026-07-04T22:50:49.896Z",
+      "indexed_at": "2026-07-04T22:50:49.896Z"
     },
     {
       "path": "public/overlay/data/operator-runtime-status.html",
