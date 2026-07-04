@@ -278,8 +278,10 @@ function dedupeVerifySteps(blueprint, productName) {
 function normalizeStepPaths(blueprint) {
   for (const step of blueprint?.steps || []) {
     if (!step.file) continue;
-    // This repo has no src/ directory — services/ routes/ scripts/ are at root
     step.file = step.file.replace(/^src\//, '');
+    if (step.type === 'html' && step.file.startsWith('public/') && !step.file.startsWith('public/overlay/')) {
+      step.file = step.file.replace('public/', 'public/overlay/');
+    }
   }
 }
 
