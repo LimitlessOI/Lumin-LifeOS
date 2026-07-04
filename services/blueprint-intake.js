@@ -73,9 +73,9 @@ const BLUEPRINT_GEN_SYSTEM = (patterns) => {
     ai_call_pattern: patterns.ai_call_pattern,
     db_pattern: patterns.db_pattern,
     registration_pattern: patterns.registration_pattern,
-    existing_tables: (patterns.existing_tables || []).slice(0, 30),
-    existing_services: (patterns.existing_services || []).slice(0, 30),
-    existing_routes: (patterns.existing_routes || []).slice(0, 20),
+    existing_tables: (patterns.existing_tables || []).slice(0, 15),
+    existing_services: (patterns.existing_services || []).slice(0, 15),
+    existing_routes: (patterns.existing_routes || []).slice(0, 10),
     scanned_at: patterns.scanned_at,
   };
   return `You are BuilderOS ARC generating an EXECUTABLE blueprint JSON.
@@ -613,8 +613,8 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const intentPrompt = attempt === 0
-          ? `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`
-          : `CRITICAL: You MUST return a JSON object with at least "product_name" and "product_purpose" fields. Do NOT return an empty object.\n\nAmendment to analyze:\n\n${amendmentText.slice(0, 10000)}`;
+          ? `Amendment to analyze:\n\n${amendmentText.slice(0, 8000)}`
+          : `CRITICAL: You MUST return a JSON object with at least "product_name" and "product_purpose" fields. Do NOT return an empty object.\n\nAmendment to analyze:\n\n${amendmentText.slice(0, 6000)}`;
         const intentRaw = await _withTimeout(
           callCouncilMember('openai', intentPrompt,
             { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
