@@ -354,8 +354,19 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
   // amendmentText takes precedence over amendmentFile — CLI reads locally and passes text,
   // so the server doesn't need to find the file (docs/ is excluded from Railway Docker image).
   // Returns immediately with session_id; AI processing runs in background.
+  let _backfillRunning = false;
   async function startBackfill({ amendmentFile, amendmentText: inlineText, productName, ownerId = null }) {
     const amendmentText = inlineText || readAmendment(amendmentFile);
+
+    if (_backfillRunning) {
+      const { rows: existRows } = await pool.query(
+        `SELECT id, status FROM blueprint_intake_sessions WHERE product_name = $1 AND status IN ('extracting','generating','arc_review') ORDER BY created_at DESC LIMIT 1`,
+        [productName]
+      );
+      if (existRows.length) {
+        return { sessionId: existRows[0].id, status: existRows[0].status, reused: true };
+      }
+    }
 
     const { rows } = await pool.query(
       `INSERT INTO blueprint_intake_sessions
@@ -365,11 +376,13 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
     );
     const sessionId = rows[0].id;
 
-    // Process in background — Railway keeps the event loop alive
+    _backfillRunning = true;
     setImmediate(() => {
-      _runBackfill(sessionId, amendmentText).catch(err => {
-        updateSession(pool, sessionId, { status: 'failed', error_message: err.message }).catch(() => {});
-      });
+      _runBackfill(sessionId, amendmentText)
+        .catch(err => {
+          updateSession(pool, sessionId, { status: 'failed', error_message: err.message }).catch(() => {});
+        })
+        .finally(() => { _backfillRunning = false; });
     });
 
     return { sessionId, status: 'extracting' };
@@ -433,6 +446,13 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
     }
   }
 
+  function _withTimeout(promise, ms, label) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)),
+    ]);
+  }
+
   async function _runBackfill(sessionId, amendmentText) {
     const { rows: sessionRows } = await pool.query(
       'SELECT product_name FROM blueprint_intake_sessions WHERE id = $1',
@@ -443,18 +463,20 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
     const codebaseScan = await scanCodebasePatterns();
     await updateSession(pool, sessionId, { codebase_scan_json: codebaseScan });
 
-    // Step 1: extract intent
-    const intentRaw = await callCouncilMember('openai',
-      `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
-      { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+    const intentRaw = await _withTimeout(
+      callCouncilMember('openai',
+        `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
+        { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+      ), 60000, 'intent_extraction'
     );
     const intent = parseBlueprintFromAiResponse(intentRaw);
     await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
 
-    // Step 2: generate blueprint
-    const blueprintRaw = await callCouncilMember('openai',
-      `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
-      { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+    const blueprintRaw = await _withTimeout(
+      callCouncilMember('openai',
+        `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
+        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+      ), 90000, 'blueprint_generation'
     );
     let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
