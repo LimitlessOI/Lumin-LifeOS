@@ -71,6 +71,7 @@ function getAllProductIds() {
 
 export function extractIntakeProductName(text = '') {
   const t = String(text || '').toLowerCase();
+  const tNoSpaces = t.replace(/\s+/g, '');
   for (const [pattern, productId] of MANUAL_ALIASES) {
     if (t.includes(pattern)) return productId;
   }
@@ -80,6 +81,7 @@ export function extractIntakeProductName(text = '') {
     if (spaced !== pid && t.includes(spaced)) return pid;
     const noDash = pid.replace(/-/g, '');
     if (noDash !== pid && t.includes(noDash)) return pid;
+    if (tNoSpaces.includes(pid)) return pid;
   }
   return null;
 }
