@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Kingsman Protocol — Council Mandate -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Kingsman Protocol — Council Mandate</title>
+  <style>
+    :root{
+      --bg0:#07070b;
+      --bg1:#0d0f14;
+      --bg2:#12151d;
+      --card:#161a22;
+      --card2:#10141b;
+      --text:#e9edf7;
+      --muted:#a6afc2;
+      --faint:#6e778a;
+      --line:rgba(255,255,255,.08);
+      --line2:rgba(255,255,255,.14);
+      --accent:#7c5cff;
+      --accent2:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --info:#38bdf8;
+      --shadow:0 24px 80px rgba(0,0,0,.38);
+      --radius:24px;
+      --radius2:18px;
+      --max:1120px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left, rgba(124,92,255,.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(56,189,248,.12), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(34,197,94,.10), transparent 24%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 50%, #090b10);
+      color:var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      line-height:1.5;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      padding:28px 0 40px;
+    }
+    .hero{
+      border:1px solid var(--line);
+      border-radius:calc(var(--radius) + 6px);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        linear-gradient(135deg, rgba(124,92,255,.10), rgba(56,189,248,.06));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:auto 0 0 0;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+    }
+    .hero-inner{
+      padding:28px;
+      display:grid;
+      gap:18px;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .seal{
+      width:34px;height:34px;border-radius:11px;
+      background:linear-gradient(135deg, rgba(124,92,255,.9), rgba(56,189,248,.75));
+      display:inline-flex;align-items:center;justify-content:center;
+      color:#fff;font-size:18px;box-shadow:0 10px 28px rgba(124,92,255,.22);
+      flex:0 0 auto;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(30px, 5vw, 54px);
+      line-height:1.02;
+      letter-spacing:-.05em;
+    }
+    .lead{
+      margin:0;
+      max-width:78ch;
+      color:var(--muted);
+      font-size:clamp(15px, 2vw, 18px);
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.35fr .95fr;
+      gap:18px;
+    }
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow:0 8px 32px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .panel-head{
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background:rgba(255,255,255,.02);
+    }
+    .panel-title{
+      margin:0;
+      font-size:15px;
+      letter-spacing:-.02em;
+    }
+    .panel-body{padding:18px}
+    .tag-row{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line2);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      font-size:12px;
+      font-weight:600;
+      white-space:nowrap;
+    }
+    .tag .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 4px rgba(124,92,255,.12);
+    }
+    .muted{color:var(--muted)}
+    .grid{
+      display:grid;
+      gap:18px;
+      margin-top:18px;
+    }
+    .two-col{
+      grid-template-columns: 1fr 1fr;
+    }
+    .capsules{
+      display:grid;
+      gap:12px;
+    }
+    .cap{
+      padding:14px 15px;
+      border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+    }
+    .cap h3{
+      margin:0 0 4px;
+      font-size:14px;
+    }
+    .cap p{margin:0;color:var(--muted);font-size:13px}
+    .bullet-list{
+      margin:0;
+      padding-left:18px;
+      color:var(--text);
+    }
+    .bullet-list li{margin:10px 0;color:var(--muted)}
+    .bullet-list strong{color:var(--text)}
+    .callout{
+      padding:16px 18px;
+      border-radius:18px;
+      border:1px solid rgba(56,189,248,.22);
+      background:linear-gradient(135deg, rgba(56,189,248,.08), rgba(124,92,255,.05));
+    }
+    .callout strong{color:#dff7ff}
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:16px;
+      border:1px solid var(--line);
+    }
+    .table th,.table td{
+      text-align:left;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+      font-size:13px;
+    }
+    .table th{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+      background:rgba(255,255,255,.02);
+    }
+    .table tr:last-child td{border-bottom:none}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid var(--line2);
+      background:rgba(255,255,255,.03);
+    }
+    .b-ok{color:#a7f3d0}
+    .b-warn{color:#fde68a}
+    .b-info{color:#bae6fd}
+    .b-danger{color:#fecaca}
+    .footer{
+      margin-top:18px;
+      padding:14px 4px 0;
+      color:var(--faint);
+      font-size:12px;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:.95em;
+      color:#d8def0;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      padding:.12em .35em;
+      border-radius:6px;
+    }
+    @media (max-width: 860px){
+      .hero-grid,.two-col{grid-template-columns:1fr}
+      .hero-inner{padding:20px}
+      .wrap{width:min(var(--max), calc(100% - 20px)); padding-top:18px}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="seal">♞</span> Kingsman Protocol · Blueprint KP-P1-004</div>
+        <div>
+          <h1 id="page-title">Council Mandate and Detection Capabilities</h1>
+          <p class="lead">
+            This overlay displays the Kingsman council mandate and the current detection surface for submitted threat patterns.
+            It is aligned to the existing Kingsman detect route and the Kingsman home SSOT.
+          </p>
+        </div>
+
+        <div class="hero-grid">
+          <section class="panel" aria-labelledby="mandate-title">
+            <div class="panel-head">
+              <h2 class="panel-title" id="mandate-title">Council Mandate</h2>
+              <span class="badge b-ok">Authoritative intent</span>
+            </div>
+            <div class="panel-body">
+              <div class="callout">
+                <strong>Mandate:</strong> coordinate council-backed review of threatening patterns and preserve a clear receipt trail for each submitted detection payload.
+              </div>
+              <ul class="bullet-list" style="margin-top:14px">
+                <li><strong>Owner-scoped intake:</strong> every submission is tied to the authenticated user <code>sub</code>.</li>
+                <li><strong>Structured evidence:</strong> both <code>pattern</code> and <code>evidence</code> are required inputs.</li>
+                <li><strong>Receipt-first flow:</strong> successful submissions return the stored record with timestamps.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="capabilities-title">
+            <div class="panel-head">
+              <h2 class="panel-title" id="capabilities-title">Detection Capabilities</h2>
+              <span class="badge b-info">Available now</span>
+            </div>
+            <div class="panel-body">
+              <div class="capsules">
+                <div class="cap">
+                  <h3>Pattern capture</h3>
+                  <p>Accepts a JSON payload describing the pattern being detected.</p>
+                </div>
+                <div class="cap">
+                  <h3>Evidence capture</h3>
+                  <p>Accepts a JSON payload for supporting evidence alongside the pattern.</p>
+                </div>
+                <div class="cap">
+                  <h3>Persistence</h3>
+                  <p>Stores records in <code>kingsman_threat_patterns</code> and returns the created row.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="grid two-col">
+          <section class="panel" aria-labelledby="flow-title">
+            <div class="panel-head">
+              <h2 class="panel-title" id="flow-title">Submission Flow</h2>
+              <span class="badge b-warn">POST /api/v1/detect</span>
+            </div>
+            <div class="panel-body">
+              <table class="table" role="table" aria-label="Detection submission flow">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Behavior</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Authenticate</td>
+                    <td>Requires key access and a user JWT subject.</td>
+                  </tr>
+                  <tr>
+                    <td>Validate</td>
+                    <td>Rejects requests missing <code>pattern</code> or <code>evidence</code>.</td>
+                  </tr>
+                  <tr>
+                    <td>Persist</td>
+                    <td>Inserts a new detection row and updates timestamps.</td>
+                  </tr>
+                  <tr>
+                    <td>Return</td>
+                    <td>Responds with <code>{ ok: true, data }</code> on success.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="response-title">
+            <div class="panel-head">
+              <h2 class="panel-title" id="response-title">Detection Response Surface</h2>
+              <span class="badge b-danger">Guardrails</span>
+            </div>
+            <div class="panel-body">
+              <div class="capsules">
+                <div class="cap">
+                  <h3>401 · JWT required</h3>
+                  <p>Returned when the authenticated user subject is unavailable.</p>
+                </div>
+                <div class="cap">
+                  <h3>400 · Pattern required</h3>
+                  <p>Returned when <code>pattern</code> is omitted.</p>
+                </div>
+                <div class="cap">
+                  <h3>400 · Evidence required</h3>
+                  <p>Returned when <code>evidence</code> is omitted.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel" aria-labelledby="notes-title">
+          <div class="panel-head">
+            <h2 class="panel-title" id="notes-title">Operational Notes</h2>
+            <span class="badge b-ok">Overlay ready</span>
+          </div>
+          <div class="panel-body">
+            <div class="tag-row" aria-label="Capabilities tags">
+              <span class="tag"><span class="dot"></span> council mandate display</span>
+              <span class="tag"><span class="dot" style="background:var(--accent2)"></span> detection capability summary</span>
+              <span class="tag"><span class="dot" style="background:var(--info)"></span> receipt-style storage</span>
+              <span class="tag"><span class="dot" style="background:var(--warn)"></span> input validation</span>
+            </div>
+            <p class="footer">
+              This page is a standalone HTML overlay for the Kingsman Protocol blueprint step KP-P1-004.
+              It reflects the existing detection route and avoids introducing unsupported routes, tables, or environment variables.
+            </p>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

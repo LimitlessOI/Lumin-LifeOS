@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:17:02.450Z",
+  "generated_at": "2026-07-04T22:17:25.667Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 44,
+  "file_count": 45,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -178,6 +178,13 @@
       "bytes": 20409,
       "mtime": "2026-07-04T21:55:45.827Z",
       "indexed_at": "2026-07-04T21:55:45.827Z"
+    },
+    {
+      "path": "public/overlay/kingsman.html",
+      "synopsis": "HTML page: Kingsman Protocol — Council Mandate",
+      "bytes": 12999,
+      "mtime": "2026-07-04T22:17:25.667Z",
+      "indexed_at": "2026-07-04T22:17:25.667Z"
     },
     {
       "path": "public/overlay/lesson-plan-generator.html",
