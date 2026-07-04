@@ -355,15 +355,22 @@ function tryWriteBlueprintFile(amendmentFile, blueprint) {
 
 function parseBlueprintFromAiResponse(raw) {
   const text = typeof raw === 'string' ? raw : raw?.content || raw?.text || (typeof raw === 'object' ? JSON.stringify(raw) : String(raw));
-  const stripped = text.trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-  // Try direct parse first
+  const stripped = text.trim()
+    .replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '')
+    .replace(/^```\w*\s*/gm, '').replace(/```\s*$/gm, '')
+    .trim();
   try { return JSON.parse(stripped); } catch {}
-  // Extract first {...} block if AI included preamble text
   const start = stripped.indexOf('{');
   const end = stripped.lastIndexOf('}');
   if (start !== -1 && end > start) {
     try { return JSON.parse(stripped.slice(start, end + 1)); } catch {}
   }
+  // Try extracting nested JSON blocks (AI sometimes wraps in text + multiple fences)
+  const jsonBlockMatch = stripped.match(/```json\s*([\s\S]*?)```/i) || stripped.match(/```\s*([\s\S]*?)```/);
+  if (jsonBlockMatch) {
+    try { return JSON.parse(jsonBlockMatch[1].trim()); } catch {}
+  }
+  console.error('[BLUEPRINT-PARSE] Failed to parse AI response:', stripped.slice(0, 300));
   throw new SyntaxError(`AI response is not JSON: ${stripped.slice(0, 120)}...`);
 }
 
@@ -520,7 +527,7 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
             attempt === 0
               ? `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`
               : `IMPORTANT: Respond with ONLY a JSON object — no markdown, no explanation, no preamble.\n\nAmendment to analyze:\n\n${amendmentText.slice(0, 10000)}`,
-            { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+            { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
           ), 60000, 'intent_extraction'
         );
         intent = parseBlueprintFromAiResponse(intentRaw);
@@ -542,7 +549,7 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
             attempt === 0
               ? `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`
               : `IMPORTANT: Respond with ONLY a JSON object — no markdown, no explanation.\n\nPRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now. Start with { and end with }.`,
-            { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+            { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
           ), 90000, 'blueprint_generation'
         );
         blueprint = parseBlueprintFromAiResponse(blueprintRaw);

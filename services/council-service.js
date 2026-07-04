@@ -1350,8 +1350,8 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             ...tokenLimitParam,
             ...(reasoningModel ? {} : { temperature }),
             ...(stopSequences && !isOpenAiNative && { stop: stopSequences }),
+            ...(options.responseFormat === 'json' && isOpenAiNative ? { response_format: { type: 'json_object' } } : {}),
             messages: deltaMessages
-              // Always prepend system message — delta window never carries it
               ? [{ role: "system", content: systemPrompt }, ...deltaMessages]
               : [
                   { role: "system", content: systemPrompt },

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-04 — Added `responseFormat: 'json'` option support: when callers pass `responseFormat: 'json'` and provider is native OpenAI, injects `response_format: { type: 'json_object' }` in the API request body to enforce valid JSON output. Used by blueprint-intake for intent extraction and blueprint generation. Prior: 2026-07-01 |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
