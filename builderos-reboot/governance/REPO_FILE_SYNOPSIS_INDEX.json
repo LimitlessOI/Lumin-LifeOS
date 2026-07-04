@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:53:40.541Z",
+  "generated_at": "2026-07-04T20:56:30.881Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 15,
+  "file_count": 16,
   "files": [
     {
       "path": "db/migrations/20260704_create_teacher_os_documents.sql",
@@ -38,6 +38,13 @@
       "bytes": 629,
       "mtime": "2026-07-04T20:50:05.210Z",
       "indexed_at": "2026-07-04T20:50:05.210Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_video_jobs.sql",
+      "synopsis": "Database migration — 20260704_create_video_jobs.sql.",
+      "bytes": 449,
+      "mtime": "2026-07-04T20:56:30.881Z",
+      "indexed_at": "2026-07-04T20:56:30.881Z"
     },
     {
       "path": "db/migrations/20260705_create_emergency_fund_table.sql",
