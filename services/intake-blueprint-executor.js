@@ -138,8 +138,15 @@ export function buildVerifyFileHints(blueprint) {
     }
     if (step.type === 'esm' && /routes\//.test(rel)) {
       lines.push(`Route signature check: assert routes file includes exact factory line from ${rel}`);
-      if (content.includes('validate-payment-link') || content.includes('validateStripe')) {
-        lines.push('POST validate-payment-link probe: expect HTTP 200, json.ok===true, and (json.valid===true OR json.validationResult?.valid===true)');
+      const routeRe = /router\.(get|post|put)\(\s*(['"`])([^'"`]+)\2/g;
+      let rm;
+      let routeCount = 0;
+      while ((rm = routeRe.exec(content)) && routeCount < 3) {
+        const rpath = rm[3];
+        if (!rpath.includes(':') && !rpath.includes('*')) {
+          lines.push(`Route check: assert ${rel} includes route '${rpath}'`);
+          routeCount++;
+        }
       }
     }
     if (step.type === 'esm' && /services\//.test(rel)) {
@@ -157,12 +164,29 @@ export function buildRouteProbeHints(blueprint) {
     (s) => s.type === 'esm' && /routes\//.test(String(stepTargetFile(s) || '')),
   );
   if (!routeStep) return '';
-  const mount = deriveRouteMountPath(stepTargetFile(routeStep));
+  const routeFile = stepTargetFile(routeStep);
+  const mount = deriveRouteMountPath(routeFile);
+  const absRoute = join(REPO_ROOT, routeFile);
+  let probePaths = [];
+  if (existsSync(absRoute)) {
+    const src = readFileSync(absRoute, 'utf8');
+    const re = /router\.(get|post|put)\(\s*(['"`])([^'"`]+)\2/g;
+    let m;
+    while ((m = re.exec(src))) {
+      const method = m[1].toUpperCase();
+      const path = m[3];
+      if (path.includes(':') || path.includes('*')) continue;
+      probePaths.push(`  ${method} ${mount}${path}`);
+      if (probePaths.length >= 4) break;
+    }
+  }
+  if (!probePaths.length) {
+    probePaths = [`  GET ${mount}/status`];
+  }
   return [
     `VERIFY PROBES — mount base ${mount}. Parse router.get/post/put paths from routes file in files[] ONLY.`,
     `Minimum probes with x-command-key (expect HTTP 200 and ok:true where applicable):`,
-    `  GET ${mount}/sessions`,
-    `  POST ${mount}/validate-payment-link with body { link: "https://buy.stripe.com/test" }`,
+    ...probePaths,
     `FORBIDDEN probe paths: /api/v1/marketingos/*, /integrations, /schedule/*, /rate-limits, or any path not declared in routes file.`,
     `Do NOT copy stale tests from verify-marketing-phase1.mjs.`,
   ].join('\n');
