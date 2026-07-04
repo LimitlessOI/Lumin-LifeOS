@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T17:48:52.638Z",
+  "generated_at": "2026-07-04T17:49:04.272Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11,
+  "file_count": 12,
   "files": [
     {
       "path": "db/migrations/20260704_create_adam_decisions.sql",
@@ -73,6 +73,13 @@
       "bytes": 2693,
       "mtime": "2026-07-04T17:48:48.015Z",
       "indexed_at": "2026-07-04T17:48:48.015Z"
+    },
+    {
+      "path": "routes/progress-routes.js",
+      "synopsis": "Exports createProgressRoutes — routes/progress-routes.js.",
+      "bytes": 2078,
+      "mtime": "2026-07-04T17:49:04.272Z",
+      "indexed_at": "2026-07-04T17:49:04.272Z"
     },
     {
       "path": "startup/register-runtime-routes.js",
