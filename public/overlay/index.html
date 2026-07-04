@@ -1,2 +1,673 @@
-<!-- SYNOPSIS: LifeOS overlay UI — Index. -->
-All AI council members currently unavailable. Check API keys/quotas.
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: API Cost Savings -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#07131f" />
+  <meta name="description" content="API Cost Savings — Live B2B landing page for CFOs, platform teams, and AI operators." />
+  <title>API Cost Savings</title>
+  <style>
+    :root {
+      --bg: #06111b;
+      --bg2: #081826;
+      --panel: rgba(10, 22, 34, 0.86);
+      --panel2: rgba(12, 28, 42, 0.92);
+      --text: #eaf2f8;
+      --muted: #9cb0c0;
+      --line: rgba(255,255,255,0.09);
+      --line2: rgba(255,255,255,0.14);
+      --accent: #39d98a;
+      --accent2: #4ea1ff;
+      --warning: #fbbf24;
+      --shadow: 0 24px 70px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --radius2: 16px;
+      --maxw: 1180px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, rgba(78,161,255,0.18), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(57,217,138,0.14), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(251,191,36,0.12), transparent 22%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    .wrap {
+      width: min(var(--maxw), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(6, 17, 27, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(78,161,255,0.95), rgba(57,217,138,0.92));
+      color: #04111b;
+      font-weight: 900;
+      box-shadow: 0 12px 30px rgba(78,161,255,0.18);
+      flex: 0 0 auto;
+    }
+    .brand-copy { min-width: 0; }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav a {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+    .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border-color: var(--line);
+    }
+    .nav .cta {
+      color: #03131d;
+      background: linear-gradient(135deg, var(--accent), #8af0bc);
+      font-weight: 700;
+      border-color: transparent;
+    }
+
+    .hero {
+      padding: 72px 0 30px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .hero-copy {
+      padding: 18px 0;
+    }
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .pill {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+    .pill.accent {
+      color: #c9f9df;
+      border-color: rgba(57,217,138,0.35);
+      background: rgba(57,217,138,0.08);
+    }
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 10ch;
+    }
+    .hero h2 span {
+      display: block;
+      background: linear-gradient(135deg, #ffffff, #a8d4ff 42%, #84f0ba 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p.lead {
+      margin: 18px 0 0;
+      max-width: 62ch;
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+      box-shadow: none;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: var(--line2); background: rgba(255,255,255,0.05); }
+    .btn.primary {
+      color: #03131d;
+      background: linear-gradient(135deg, var(--accent), #8af0bc);
+      border-color: transparent;
+    }
+    .btn.primary:hover { background: linear-gradient(135deg, #49e597, #a1f5c7); }
+
+    .hero-card {
+      align-self: stretch;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -20% -55% auto;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(57,217,138,0.18), transparent 60%);
+      pointer-events: none;
+    }
+    .hero-card h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      letter-spacing: 0.01em;
+    }
+    .hero-card .sub {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .metric {
+      background: rgba(7, 19, 29, 0.72);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .metric .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .metric .value {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+    .metric .note {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .section {
+      padding: 24px 0 0;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+    .section-head h3 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .card .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(78,161,255,0.12);
+      border: 1px solid rgba(78,161,255,0.18);
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+    .card h4 { margin: 0 0 8px; font-size: 17px; }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .card ul {
+      margin: 14px 0 0;
+      padding-left: 18px;
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .card li { margin: 6px 0; color: var(--muted); }
+
+    .proof {
+      padding: 26px 0 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .quote, .panel {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .quote p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.6;
+      letter-spacing: -0.02em;
+    }
+    .quote .byline {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .panel h4 { margin: 0 0 10px; font-size: 16px; }
+    .panel .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .panel .row:first-of-type { border-top: 0; }
+    .panel .row span:last-child {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .panel .row span:first-child { color: var(--muted); }
+
+    .cta-band {
+      margin: 28px 0 56px;
+      background: linear-gradient(135deg, rgba(78,161,255,0.12), rgba(57,217,138,0.12));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: calc(var(--radius) + 6px);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .cta-band-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+    }
+    .cta-band h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+    .cta-band p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      max-width: 66ch;
+    }
+
+    .footer {
+      padding: 18px 0 30px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .floating-note {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      max-width: min(360px, calc(100vw - 36px));
+      background: rgba(4, 12, 20, 0.82);
+      border: 1px solid rgba(78,161,255,0.22);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .floating-note strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    .floating-note span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .floating-note code {
+      font-family: var(--mono);
+      color: #c8e7ff;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .proof,
+      .cards,
+      .cta-band-inner {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+      .nav { display: none; }
+      .hero { padding-top: 38px; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 22px, var(--maxw)); }
+      .topbar-inner { padding: 12px 0; }
+      .brand h1 { font-size: 16px; }
+      .hero { padding-top: 24px; }
+      .hero p.lead { font-size: 16px; }
+      .hero-actions { flex-direction: column; }
+      .btn { width: 100%; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .floating-note { left: 11px; right: 11px; bottom: 11px; max-width: none; }
+      .cta-band { margin-bottom: 104px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">%</div>
+        <div class="brand-copy">
+          <div class="eyebrow">API Cost Savings</div>
+          <h1>Reduce AI spend without slowing delivery</h1>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="#why">Why now</a>
+        <a href="#how">How it works</a>
+        <a href="#proof">Proof</a>
+        <a href="#contact" class="cta">Book a review</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy reveal">
+          <div class="pill-row">
+            <span class="pill accent">Live B2B landing page</span>
+            <span class="pill">Usage-based optimization</span>
+            <span class="pill">Built for API-heavy teams</span>
+          </div>
+
+          <h2>
+            <span>Cut your AI bill.</span>
+            Keep the workflow.
+          </h2>
+
+          <p class="lead">
+            API Cost Savings helps teams analyze spend, identify optimization opportunities, and convert measurable savings into a recurring service relationship. It is built for organizations already shipping with AI and looking for practical cost reduction.
+          </p>
+
+          <div class="hero-actions" id="contact">
+            <a class="btn primary" href="mailto:hello@apicostsavings.example?subject=API%20Cost%20Savings%20review">Book a savings review</a>
+            <a class="btn" href="#how">See the operating model</a>
+          </div>
+        </div>
+
+        <aside class="hero-card reveal" aria-label="Business summary">
+          <h3>What buyers get</h3>
+          <div class="sub">
+            A simple sales motion: register the client, analyze current spend, surface savings, then attach a service fee to verified value.
+          </div>
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="label">Estimated savings</div>
+              <div class="value">Up to 50%</div>
+              <div class="note">Default analysis path estimates a 50% optimization baseline when detailed usage data is not yet available.</div>
+            </div>
+            <div class="metric">
+              <div class="label">Revenue model</div>
+              <div class="value">25%</div>
+              <div class="note">Service fee can be based on monthly savings, creating direct alignment between value delivered and price paid.</div>
+            </div>
+            <div class="metric">
+              <div class="label">Primary buyer</div>
+              <div class="value">CFO</div>
+              <div class="note">Also relevant for platform leaders and AI ops teams accountable for cost control.</div>
+            </div>
+            <div class="metric">
+              <div class="label">Motion</div>
+              <div class="value">Analyze → optimize</div>
+              <div class="note">The workflow starts with intake and ends with an operational dashboard plus subscription setup.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <h3>Why this exists</h3>
+            <p>Teams are scaling AI usage quickly. Without spend controls, costs rise with traffic, experimentation, and model selection churn.</p>
+          </div>
+        </div>
+
+        <div class="cards">
+          <article class="card reveal">
+            <div class="icon">📈</div>
+            <h4>Visibility before action</h4>
+            <p>Start with a client record and a spend baseline, then use analysis to quantify where the budget is going.</p>
+            <ul>
+              <li>Company and contact intake</li>
+              <li>Current provider capture</li>
+              <li>Monthly spend tracking</li>
+            </ul>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon">⚙️</div>
+            <h4>Optimization levers</h4>
+            <p>Reduce spend through routing, caching, and prompt compression patterns that lower token consumption and model cost.</p>
+            <ul>
+              <li>Route lower-risk tasks to cheaper models</li>
+              <li>Cache repeated responses</li>
+              <li>Compress prompts and reduce tokens</li>
+            </ul>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon">🤝</div>
+            <h4>Aligned monetization</h4>
+            <p>Charge against realized savings, not speculation. This keeps the commercial story simple for enterprise buyers.</p>
+            <ul>
+              <li>Fee tied to savings amount</li>
+              <li>Subscription checkout flow</li>
+              <li>Repeatable service economics</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="wrap proof">
+        <article class="quote reveal">
+          <p>
+            “The best cost reduction story is one where the buyer can understand the baseline, see the optimization, and pay only when the value is concrete.”
+          </p>
+          <div class="byline">Positioning summary for API Cost Savings</div>
+        </article>
+
+        <article class="panel reveal">
+          <h4>Operating flow</h4>
+          <div class="row"><span>1. Register</span><span>Company + email</span></div>
+          <div class="row"><span>2. Analyze</span><span>Current spend + usage</span></div>
+          <div class="row"><span>3. Dashboard</span><span>Daily metrics + projections</span></div>
+          <div class="row"><span>4. Monetize</span><span>Subscription on savings</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="proof">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <h3>What the buyer can expect</h3>
+            <p>A clear outcome-oriented page that positions the service around measurable savings, simple procurement, and ongoing account value.</p>
+          </div>
+        </div>
+
+        <div class="cards">
+          <article class="card reveal">
+            <div class="icon">🧾</div>
+            <h4>Receipts and reporting</h4>
+            <p>Build confidence with dashboard metrics, recorded analysis, and a service summary that can be shared internally.</p>
+          </article>
+          <article class="card reveal">
+            <div class="icon">🔒</div>
+            <h4>Enterprise-friendly posture</h4>
+            <p>Minimal surface area, clear CTAs, and a direct value narrative for evaluation in a B2B buying process.</p>
+          </article>
+          <article class="card reveal">
+            <div class="icon">🚀</div>
+            <h4>Fast conversion</h4>
+            <p>Lead with one promise: find savings quickly, prove them, and turn them into an ongoing optimization service.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band reveal">
+      <div class="wrap cta-band-inner">
+        <div>
+          <h3>Ready to review your AI bill?</h3>
+          <p>Use the landing page to start the sales conversation, capture leads, and move qualified buyers into analysis and subscription.</p>
+        </div>
+        <div class="hero-actions" style="margin-top:0;">
+          <a class="btn primary" href="mailto:hello@apicostsavings.example?subject=Savings%20review%20request">Start the conversation</a>
+          <a class="btn" href="#top">Back to top</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>API Cost Savings landing page overlay for LifeOS.</div>
+      <div>Positioning: analysis, optimization, and subscription-backed savings capture.</div>
+    </div>
+  </footer>
+
+  <div class="floating-note">
+    <strong>Buyer path</strong>
+    <span>Open with a savings review CTA, then move into <code>register → analyze → dashboard → subscription</code>.</span>
+  </div>
+
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>

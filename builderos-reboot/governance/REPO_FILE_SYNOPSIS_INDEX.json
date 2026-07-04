@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:55:13.240Z",
+  "generated_at": "2026-07-04T21:55:45.827Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 36,
+  "file_count": 37,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -143,6 +143,13 @@
       "bytes": 27810,
       "mtime": "2026-07-04T21:24:03.734Z",
       "indexed_at": "2026-07-04T21:24:03.734Z"
+    },
+    {
+      "path": "public/overlay/index.html",
+      "synopsis": "HTML page: API Cost Savings",
+      "bytes": 20409,
+      "mtime": "2026-07-04T21:55:45.827Z",
+      "indexed_at": "2026-07-04T21:55:45.827Z"
     },
     {
       "path": "public/overlay/lesson-plan-generator.html",
