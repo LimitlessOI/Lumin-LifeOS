@@ -603,6 +603,7 @@ export async function runLuminChairTurn(ctx, deps) {
         const isArcOrExecuteRequest = /\b(run|execute|review|check|arc|sentry|status|validate)\b/i.test(cleanedInput)
           && !/\b(create|generate|make|produce|write|draft|start|kick.?off)\b/i.test(cleanedInput);
 
+        _clog(`isArcOrExecuteRequest=${isArcOrExecuteRequest} detectedProductId=${detectedProductId} cleanedInput=${cleanedInput.slice(0,60)}`);
         if (isArcOrExecuteRequest) {
           try {
             const { rows: existingRows } = await deps.pool.query(
@@ -611,6 +612,7 @@ export async function runLuminChairTurn(ctx, deps) {
                ORDER BY created_at DESC LIMIT 1`,
               [detectedProductId]
             );
+            _clog(`existingRows=${existingRows.length} first_status=${existingRows[0]?.status}`);
             if (existingRows.length) {
               const existSession = existingRows[0];
 
@@ -680,6 +682,7 @@ export async function runLuminChairTurn(ctx, deps) {
               return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
             }
           } catch (arcErr) {
+            _clog(`existingSession_error: ${arcErr.message}`);
             console.error('[CHAIR-ARC] Error looking up existing session:', arcErr.message);
           }
         }
