@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:48:26.220Z",
+  "generated_at": "2026-07-04T14:48:32.362Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 7,
+  "file_count": 8,
   "files": [
     {
       "path": "db/migrations/20260704_create_achievements_table.sql",
@@ -24,6 +24,13 @@
       "bytes": 423,
       "mtime": "2026-07-04T14:48:26.220Z",
       "indexed_at": "2026-07-04T14:48:26.220Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_creator_likeness_profiles.sql",
+      "synopsis": "Database migration — 20260704_create_creator_likeness_profiles.sql.",
+      "bytes": 561,
+      "mtime": "2026-07-04T14:48:32.362Z",
+      "indexed_at": "2026-07-04T14:48:32.362Z"
     },
     {
       "path": "public/overlay/future-self-simulator.html",
