@@ -132,6 +132,7 @@ import { createWhiteLabelRoutes } from "../routes/white-label-routes.js";
 import { createClientcareBillingRecoveryRoutes } from "../routes/clientcare-billing-recovery-routes.js";
 import { createDetectRoutes } from "../routes/kingsman-routes.js";
 import { createSprintRoutes } from "../routes/sprint-routes.js";
+import { createOperatorConsumptionRoutes } from "../routes/operator-consumption-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -785,6 +786,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/sprint", createSprintRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [SPRINT] Routes mounted at /api/v1/sprint');
+
+  app.use("/api/v1/operator-consumption", createOperatorConsumptionRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [OPERATOR_CONSUMPTION] Routes mounted at /api/v1/operator-consumption');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
