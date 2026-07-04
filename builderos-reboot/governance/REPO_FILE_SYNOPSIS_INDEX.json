@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:56:33.818Z",
+  "generated_at": "2026-07-04T15:01:55.258Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 14,
   "files": [
@@ -29,8 +29,8 @@
       "path": "db/migrations/20260704_create_creator_channels.sql",
       "synopsis": "Database migration — 20260704_create_creator_channels.sql.",
       "bytes": 423,
-      "mtime": "2026-07-04T14:55:01.558Z",
-      "indexed_at": "2026-07-04T14:55:01.558Z"
+      "mtime": "2026-07-04T15:01:55.258Z",
+      "indexed_at": "2026-07-04T15:01:55.258Z"
     },
     {
       "path": "db/migrations/20260704_create_creator_likeness_profiles.sql",
