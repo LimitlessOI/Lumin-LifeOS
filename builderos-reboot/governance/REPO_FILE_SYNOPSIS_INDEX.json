@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:16:22.357Z",
+  "generated_at": "2026-07-04T23:16:58.011Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 66,
+  "file_count": 67,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -402,6 +402,13 @@
       "bytes": 8195,
       "mtime": "2026-07-04T22:57:45.176Z",
       "indexed_at": "2026-07-04T22:57:45.176Z"
+    },
+    {
+      "path": "services/audit-service.js",
+      "synopsis": "Exports createAuditService — services/audit-service.js.",
+      "bytes": 1738,
+      "mtime": "2026-07-04T23:16:58.011Z",
+      "indexed_at": "2026-07-04T23:16:58.011Z"
     },
     {
       "path": "services/capability-map-service.js",
