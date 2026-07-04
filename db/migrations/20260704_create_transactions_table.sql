@@ -1,4 +1,8 @@
 -- SYNOPSIS: Database migration — 20260704_create_transactions_table.sql.
+-- Purpose: Create transactions table to store transaction data.
+-- Product: TC Service
+-- Blueprint step: TC-P1-001
+
 CREATE TABLE IF NOT EXISTS transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
