@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:46:49.805Z",
+  "generated_at": "2026-07-04T16:46:56.418Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 19,
   "files": [
@@ -42,9 +42,9 @@
     {
       "path": "db/migrations/20260704_create_crm_sequence_enrollments.sql",
       "synopsis": "Database migration — 20260704_create_crm_sequence_enrollments.sql.",
-      "bytes": 518,
-      "mtime": "2026-07-04T16:42:25.993Z",
-      "indexed_at": "2026-07-04T16:42:25.993Z"
+      "bytes": 698,
+      "mtime": "2026-07-04T16:46:56.418Z",
+      "indexed_at": "2026-07-04T16:46:56.418Z"
     },
     {
       "path": "db/migrations/20260704_create_crm_sequences.sql",
