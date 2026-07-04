@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:30:55.844Z",
+  "generated_at": "2026-07-04T16:31:13.797Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 10,
   "files": [
@@ -8,8 +8,8 @@
       "path": "db/migrations/20260704_create_coaching_sessions_table.sql",
       "synopsis": "Database migration — 20260704_create_coaching_sessions_table.sql.",
       "bytes": 594,
-      "mtime": "2026-07-04T16:30:32.165Z",
-      "indexed_at": "2026-07-04T16:30:32.165Z"
+      "mtime": "2026-07-04T16:31:13.797Z",
+      "indexed_at": "2026-07-04T16:31:13.797Z"
     },
     {
       "path": "db/migrations/20260704_create_courses.sql",
