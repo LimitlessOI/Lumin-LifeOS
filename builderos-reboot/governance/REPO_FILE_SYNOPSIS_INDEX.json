@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T17:21:06.976Z",
+  "generated_at": "2026-07-04T17:21:17.012Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 3,
+  "file_count": 4,
   "files": [
     {
       "path": "db/migrations/20260704_create_prospect_sites.sql",
@@ -17,6 +17,13 @@
       "bytes": 738,
       "mtime": "2026-07-04T17:20:54.809Z",
       "indexed_at": "2026-07-04T17:20:54.809Z"
+    },
+    {
+      "path": "routes/egress-proxy-routes.js",
+      "synopsis": "Exports createEaiRoutes — routes/egress-proxy-routes.js.",
+      "bytes": 3161,
+      "mtime": "2026-07-04T17:21:17.012Z",
+      "indexed_at": "2026-07-04T17:21:17.012Z"
     },
     {
       "path": "services/llm-egress-proxy.js",
