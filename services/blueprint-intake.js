@@ -355,6 +355,7 @@ function tryWriteBlueprintFile(amendmentFile, blueprint) {
 
 function parseBlueprintFromAiResponse(raw) {
   const text = typeof raw === 'string' ? raw : raw?.content || raw?.text || (typeof raw === 'object' ? JSON.stringify(raw) : String(raw));
+  console.log(`[BLUEPRINT-PARSE] raw type=${typeof raw} text_len=${text.length} first100=${text.slice(0, 100).replace(/\n/g, '\\n')}`);
   const stripped = text.trim()
     .replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '')
     .replace(/^```\w*\s*/gm, '').replace(/```\s*$/gm, '')
@@ -363,15 +364,16 @@ function parseBlueprintFromAiResponse(raw) {
   const start = stripped.indexOf('{');
   const end = stripped.lastIndexOf('}');
   if (start !== -1 && end > start) {
-    try { return JSON.parse(stripped.slice(start, end + 1)); } catch {}
+    try { return JSON.parse(stripped.slice(start, end + 1)); } catch (e2) {
+      console.error(`[BLUEPRINT-PARSE] brace-extract failed: ${e2.message} substr_len=${end + 1 - start}`);
+    }
   }
-  // Try extracting nested JSON blocks (AI sometimes wraps in text + multiple fences)
   const jsonBlockMatch = stripped.match(/```json\s*([\s\S]*?)```/i) || stripped.match(/```\s*([\s\S]*?)```/);
   if (jsonBlockMatch) {
     try { return JSON.parse(jsonBlockMatch[1].trim()); } catch {}
   }
-  console.error('[BLUEPRINT-PARSE] Failed to parse AI response:', stripped.slice(0, 300));
-  throw new SyntaxError(`AI response is not JSON: ${stripped.slice(0, 120)}...`);
+  console.error('[BLUEPRINT-PARSE] FAILED full text:', text.slice(0, 500));
+  throw new SyntaxError(`AI response is not JSON: ${stripped.slice(0, 200)}...`);
 }
 
 async function updateSession(pool, id, updates) {
@@ -428,9 +430,11 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
           }
         })
         .catch(err => {
-          updateSession(pool, sessionId, { status: 'failed', error_message: err.message }).catch(() => {});
+          const errDetail = `${err.message}`.slice(0, 500);
+          console.error(`[BACKFILL-FAIL] session=${sessionId.slice(0,8)} error=${errDetail}`);
+          updateSession(pool, sessionId, { status: 'failed', error_message: errDetail }).catch(() => {});
           if (typeof onComplete === 'function') {
-            try { onComplete({ sessionId, status: 'failed', error: err.message, ok: false }); } catch { /* */ }
+            try { onComplete({ sessionId, status: 'failed', error: errDetail, ok: false }); } catch { /* */ }
           }
         })
         .finally(() => { _backfillRunning = false; });
