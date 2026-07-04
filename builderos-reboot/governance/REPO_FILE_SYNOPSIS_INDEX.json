@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:09:23.484Z",
+  "generated_at": "2026-07-04T22:16:50.400Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 42,
+  "file_count": 43,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -122,6 +122,13 @@
       "bytes": 395,
       "mtime": "2026-07-04T20:45:15.206Z",
       "indexed_at": "2026-07-04T20:45:15.206Z"
+    },
+    {
+      "path": "db/migrations/20260705_create_kingsman_audit_log.sql",
+      "synopsis": "Database migration — 20260705_create_kingsman_audit_log.sql.",
+      "bytes": 820,
+      "mtime": "2026-07-04T22:16:50.400Z",
+      "indexed_at": "2026-07-04T22:16:50.400Z"
     },
     {
       "path": "db/migrations/20260705_create_tco_customers.sql",
