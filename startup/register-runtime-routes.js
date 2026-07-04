@@ -111,6 +111,7 @@ import { createConfidenceArchitectureRoutes } from "../routes/confidence-archite
 import { createBelongingGuaranteeRoutes } from "../routes/belonging-guarantee-routes.js";
 import { createMusicTalentRoutes } from "../routes/music-talent-routes.js";
 import { createGamePublisherRoutes } from "../routes/game-publisher-routes.js";
+import { createCourseRoutes } from "../routes/course-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -701,6 +702,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/game-publisher", createGamePublisherRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
   logger.info('✅ [GAME_PUBLISHER] Routes mounted at /api/v1/game-publisher');
+
+  app.use("/api/v1/course", createCourseRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [COURSE] Routes mounted at /api/v1/course');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
