@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T11:00:00.110Z",
+  "generated_at": "2026-07-04T11:00:12.382Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260704_create_memory_capsules.sql",
@@ -10,6 +10,13 @@
       "bytes": 578,
       "mtime": "2026-07-04T11:00:00.110Z",
       "indexed_at": "2026-07-04T11:00:00.110Z"
+    },
+    {
+      "path": "scripts/verify-memory-system.mjs",
+      "synopsis": "Exports runAudit — scripts/verify-memory-system.mjs.",
+      "bytes": 5087,
+      "mtime": "2026-07-04T11:00:12.382Z",
+      "indexed_at": "2026-07-04T11:00:12.382Z"
     }
   ]
 }
