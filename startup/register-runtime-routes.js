@@ -103,6 +103,7 @@ import { getRuntimeProfile, isFullRuntimeProfile } from "../services/runtime-mod
 import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
 import { createSocialmediaosCoachingRoutes } from "../routes/socialmediaos-coaching-routes.js";
 import { createLifeRESalesCoachingRoutes } from "../routes/lifere-sales-coaching-routes.js";
+import { createTcAttachmentRoutes } from "../routes/tc-r4r-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -669,6 +670,9 @@ export async function registerRuntimeRoutes(app, deps) {
   } else {
     logger.info("🛑 [SOCIALMEDIAOS] External product routes not mounted (set LIFEOS_ENABLE_EXTERNAL_PRODUCT_ROUTES=true to restore)");
   }
+
+  app.use("/api/v1/tc-r4r", createTcAttachmentRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [TC_R4R] Routes mounted at /api/v1/tc-r4r');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
