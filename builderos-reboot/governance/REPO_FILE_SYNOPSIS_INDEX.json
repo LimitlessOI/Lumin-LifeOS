@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:16:50.400Z",
+  "generated_at": "2026-07-04T22:16:58.146Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 43,
+  "file_count": 44,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -220,6 +220,13 @@
       "bytes": 1829,
       "mtime": "2026-07-04T20:45:23.737Z",
       "indexed_at": "2026-07-04T20:45:23.737Z"
+    },
+    {
+      "path": "routes/kingsman-routes.js",
+      "synopsis": "Exports createDetectRoutes — routes/kingsman-routes.js.",
+      "bytes": 1451,
+      "mtime": "2026-07-04T22:16:58.146Z",
+      "indexed_at": "2026-07-04T22:16:58.146Z"
     },
     {
       "path": "routes/lesson-plan-routes.js",
