@@ -9,6 +9,10 @@
  * - Defer the broad legacy/full-runtime product stack entirely.
  */
 
+const _BOOT_T0 = Date.now();
+const _bootLog = (label) => console.log(`[BOOT] ${label} +${Date.now() - _BOOT_T0}ms`);
+_bootLog('module_eval_start');
+
 import "dotenv/config";
 import express from "express";
 import fs from "fs";
@@ -17,6 +21,7 @@ import process from "node:process";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
 
+_bootLog('stdlib_imports_done');
 import logger from "./services/logger.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
@@ -47,6 +52,7 @@ import { getCachedResponse, cacheResponse } from "./services/response-cache.js";
 import { registerFounderRuntimeRoutes } from "./startup/register-founder-runtime-routes.js";
 import { registerFounderServerRoutes } from "./startup/routes/founder-server-routes.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
+_bootLog('all_imports_done');
 import {
   COMMAND_CENTER_KEY,
   ALLOWED_ORIGINS_LIST,
@@ -321,12 +327,16 @@ process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 
 async function bootFounderRuntime() {
+  _bootLog('bootFounderRuntime_enter');
   startupHealthState.phase = "initializing";
   try {
+    _bootLog('pre_db_query');
     await pool.query("SELECT 1");
     startupHealthState.db = "ok";
     logger.info("✅ Founder-builder database reachable");
+    _bootLog('db_ok');
 
+    _bootLog('pre_registerRoutes');
     await registerFounderRuntimeRoutes(app, {
       pool,
       requireKey,
@@ -339,11 +349,13 @@ async function bootFounderRuntime() {
       commitManyToGitHub,
       platformKernel,
     });
+    _bootLog('registerRoutes_done');
     startupHealthState.runtime_routes = "ok";
     startupHealthState.deferred_services = "ok";
     startupHealthState.phase = "ready";
     startupHealthState.ready = true;
     logger.info("✅ Founder-builder runtime routes mounted");
+    _bootLog('bootFounderRuntime_done');
   } catch (error) {
     startupHealthState.phase = "error";
     startupHealthState.db = startupHealthState.db === "pending" ? "error" : startupHealthState.db;
@@ -353,6 +365,7 @@ async function bootFounderRuntime() {
 }
 
 async function start() {
+  _bootLog('start_enter');
   const selectedPort = Number(PORT) || 8080;
   const host = HOST || "::";
 
@@ -361,11 +374,13 @@ async function start() {
     server.listen(selectedPort, host, () => {
       server.off("error", reject);
       logger.info(`🚀 Founder-builder minimal runtime listening on http://${host}:${selectedPort}`);
+      _bootLog('server_listening');
       resolve();
     });
   });
 
   await bootFounderRuntime();
+  _bootLog('start_complete');
 }
 
 if (process.env.AUTONOMY_NO_LISTEN === "true") {

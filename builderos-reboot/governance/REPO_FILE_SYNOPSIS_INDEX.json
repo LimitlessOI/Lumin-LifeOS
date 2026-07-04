@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T02:35:57.086Z",
+  "generated_at": "2026-07-04T02:48:09.102Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 10889,
   "files": [
@@ -77441,9 +77441,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 11878,
-      "mtime": "2026-07-04T02:33:35.329Z",
-      "indexed_at": "2026-07-04T02:35:57.086Z",
+      "bytes": 12390,
+      "mtime": "2026-07-04T02:48:01.185Z",
+      "indexed_at": "2026-07-04T02:48:09.102Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
