@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:12:39.634Z",
+  "generated_at": "2026-07-04T23:12:48.192Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 62,
+  "file_count": 63,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -402,6 +402,13 @@
       "bytes": 1850,
       "mtime": "2026-07-04T20:52:48.192Z",
       "indexed_at": "2026-07-04T20:52:48.192Z"
+    },
+    {
+      "path": "services/user-service.js",
+      "synopsis": "Exports createUserService — services/user-service.js.",
+      "bytes": 2378,
+      "mtime": "2026-07-04T23:12:48.192Z",
+      "indexed_at": "2026-07-04T23:12:48.192Z"
     },
     {
       "path": "services/video-editing-council.js",
