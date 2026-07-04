@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T18:32:26.861Z",
+  "generated_at": "2026-07-04T18:32:41.494Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11,
+  "file_count": 12,
   "files": [
     {
       "path": "db/migrations/20260704_adam_decisions.sql",
@@ -73,6 +73,16 @@
       "bytes": 4099,
       "mtime": "2026-07-04T18:24:26.603Z",
       "indexed_at": "2026-07-04T18:24:26.603Z"
+    },
+    {
+      "path": "services/receptionist-service.js",
+      "synopsis": "Receptionist service for AI Receptionist blueprint; creates Vapi agent payloads and routes calls through Council AI.",
+      "bytes": 7314,
+      "mtime": "2026-07-04T18:32:41.494Z",
+      "indexed_at": "2026-07-04T18:32:41.494Z",
+      "ssot": [
+        "docs/products/AI_RECEPTIONIST/AI_RECEPTIONIST_HOME.md"
+      ]
     },
     {
       "path": "startup/register-runtime-routes.js",
