@@ -216,6 +216,11 @@ export function createBlueprintIntakeRoutes(app, ctx) {
     }
   });
 
+  // ── AI trust ledger ────────────────────────────────────────────────────────
+  app.get('/api/v1/blueprint/intake/ai-trust', requireKey, (_req, res) => {
+    res.json({ ok: true, ledger: getAiTrustLedger() });
+  });
+
   // ── Read endpoints ────────────────────────────────────────────────────────
   app.get('/api/v1/blueprint/intake/:id', requireKey, async (req, res) => {
     try {
@@ -322,7 +327,4 @@ export function createBlueprintIntakeRoutes(app, ctx) {
     }
   });
 
-  app.get('/api/v1/blueprint/intake/ai-trust', requireKey, (_req, res) => {
-    res.json({ ok: true, ledger: getAiTrustLedger() });
-  });
 }
