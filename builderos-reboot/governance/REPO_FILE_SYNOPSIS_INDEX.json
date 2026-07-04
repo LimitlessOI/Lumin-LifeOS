@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:17:08.370Z",
+  "generated_at": "2026-07-04T20:17:14.630Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 42,
+  "file_count": 43,
   "files": [
     {
       "path": "db/migrations/20230704_create_estimation_log_table.sql",
@@ -10,6 +10,13 @@
       "bytes": 545,
       "mtime": "2026-07-04T20:17:08.370Z",
       "indexed_at": "2026-07-04T20:17:08.370Z"
+    },
+    {
+      "path": "db/migrations/20230704_create_pending_adam_table.sql",
+      "synopsis": "Database migration — 20230704_create_pending_adam_table.sql.",
+      "bytes": 425,
+      "mtime": "2026-07-04T20:17:14.630Z",
+      "indexed_at": "2026-07-04T20:17:14.630Z"
     },
     {
       "path": "db/migrations/20230704_create_project_segments_table.sql",
