@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T12:21:59.447Z",
+  "generated_at": "2026-07-04T12:22:25.852Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 2,
   "files": [
@@ -8,8 +8,8 @@
       "path": "db/migrations/20260704_create_knowledge_base_files.sql",
       "synopsis": "Database migration — 20260704_create_knowledge_base_files.sql.",
       "bytes": 550,
-      "mtime": "2026-07-04T12:21:52.746Z",
-      "indexed_at": "2026-07-04T12:21:52.746Z"
+      "mtime": "2026-07-04T12:22:25.852Z",
+      "indexed_at": "2026-07-04T12:22:25.852Z"
     },
     {
       "path": "db/migrations/20260704_create_system_source_of_truth.sql",
