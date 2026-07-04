@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T00:00:13.996Z",
+  "generated_at": "2026-07-04T00:00:25.458Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 3,
+  "file_count": 4,
   "files": [
     {
       "path": "db/migrations/20260704_create_transactions_table.sql",
@@ -20,6 +20,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/tc-coordinator.js",
+      "synopsis": "Records a new transaction in the database. * @param {object} transactionData - The transaction details. * @param {string} transactionData.userId - The ID of the user initiating the transaction. * @param {number} transactionData.amount - The",
+      "bytes": 3810,
+      "mtime": "2026-07-04T00:00:25.458Z",
+      "indexed_at": "2026-07-04T00:00:25.458Z"
     },
     {
       "path": "services/tc-doc-intake.js",
