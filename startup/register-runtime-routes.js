@@ -127,6 +127,7 @@ import { createRecoveryRoutes } from "../routes/recovery-routes.js";
 import { createLessonPlanRoutes } from "../routes/lesson-plan-routes.js";
 import { createProgressReportRoutes } from "../routes/progress-report-routes.js";
 import { createVideoRoutes } from "../routes/video-pipeline-routes.js";
+import { createYoutubeRoutes } from "../routes/youtube-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -765,6 +766,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/video-pipeline", createVideoRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [VIDEO_PIPELINE] Routes mounted at /api/v1/video-pipeline');
+
+  app.use("/api/v1/youtube", createYoutubeRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [YOUTUBE] Routes mounted at /api/v1/youtube');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
