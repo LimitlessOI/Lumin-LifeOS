@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T08:42:14.774Z",
+  "generated_at": "2026-07-04T08:42:25.928Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260704_create_transactions_table.sql",
@@ -10,6 +10,13 @@
       "bytes": 519,
       "mtime": "2026-07-04T08:42:14.774Z",
       "indexed_at": "2026-07-04T08:42:14.774Z"
+    },
+    {
+      "path": "scripts/verify-tcservice.mjs",
+      "synopsis": "Exports runAudit — scripts/verify-tcservice.mjs.",
+      "bytes": 4621,
+      "mtime": "2026-07-04T08:42:25.928Z",
+      "indexed_at": "2026-07-04T08:42:25.928Z"
     }
   ]
 }
