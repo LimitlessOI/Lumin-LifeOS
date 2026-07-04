@@ -652,6 +652,12 @@ export async function runLuminChairTurn(ctx, deps) {
                     action: 'intake_blueprint', execution_path: 'execute_blueprint',
                     session_id: existSession.id, product: detectedProductId,
                     first_blocker: execResult.error || null, duration_ms: Date.now() - started,
+                    done_synopsis: execResult.ok
+                      ? `${detectedProductId} blueprint executed. ${execResult.already_complete ? 'All targets present — acceptance passed.' : `${execResult.steps_run || 0} steps built.`}`
+                      : `${detectedProductId} blueprint execution failed.`,
+                    done_bullets: execResult.ok
+                      ? [`Product: ${detectedProductId}`, `Steps: ${execResult.steps_run || 0}`, `Acceptance: ${execResult.acceptance?.ok ? 'PASSED' : 'not run'}`]
+                      : [`Product: ${detectedProductId}`, `Error: ${execResult.error}`],
                     human_summary: execResult.ok
                       ? `${detectedProductId} blueprint executed successfully. ${execResult.steps_run || 0} steps processed. ${execResult.already_complete ? 'All targets already present — acceptance passed.' : 'Build complete.'}`
                       : `${detectedProductId} blueprint execution failed: ${execResult.error}`,
@@ -666,7 +672,10 @@ export async function runLuminChairTurn(ctx, deps) {
                   action: 'intake_blueprint', execution_path: 'intake_status_check',
                   session_id: existSession.id, product: detectedProductId,
                   first_blocker: null, duration_ms: Date.now() - started,
-                  human_summary: `${detectedProductId} blueprint is READY to execute (session ${existSession.id}). Say "Execute the ${detectedProductId} blueprint" to build, or POST /api/v1/blueprint/intake/${existSession.id}/execute.`,
+                  done_synopsis: `${detectedProductId} blueprint is ready to execute.`,
+                  done_bullets: [`Product: ${detectedProductId}`, `Status: ready`, `Session: ${existSession.id.slice(0, 8)}`],
+                  next_synopsis: `Say "Execute the ${detectedProductId} blueprint" to build.`,
+                  human_summary: `${detectedProductId} blueprint is READY to execute (session ${existSession.id}). Say "Execute the ${detectedProductId} blueprint" to build.`,
                   human_summary_technical: `Blueprint ready. Execute with POST .../execute.`,
                 }, channel);
                 return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
@@ -752,6 +761,12 @@ export async function runLuminChairTurn(ctx, deps) {
                 action: 'intake_blueprint', execution_path: 'execute_blueprint',
                 session_id: readySession.id, product: detectedProductId,
                 first_blocker: execResult.error || null, duration_ms: Date.now() - started,
+                done_synopsis: execResult.ok
+                  ? `${detectedProductId} blueprint executed. ${execResult.already_complete ? 'All targets present — acceptance passed.' : `${execResult.steps_run || 0} steps built.`}`
+                  : `${detectedProductId} blueprint execution failed.`,
+                done_bullets: execResult.ok
+                  ? [`Product: ${detectedProductId}`, `Steps: ${execResult.steps_run || 0}`, `Acceptance: ${execResult.acceptance?.ok ? 'PASSED' : 'not run'}`]
+                  : [`Product: ${detectedProductId}`, `Error: ${execResult.error}`],
                 human_summary: execResult.ok
                   ? `${detectedProductId} blueprint executed successfully. ${execResult.steps_run || 0} steps processed. ${execResult.already_complete ? 'All targets already present — acceptance passed.' : 'Build complete.'}`
                   : `${detectedProductId} blueprint execution failed: ${execResult.error}`,
@@ -789,7 +804,10 @@ export async function runLuminChairTurn(ctx, deps) {
           async: true,
           first_blocker: null,
           duration_ms: Date.now() - started,
-          human_summary: `Blueprint intake started for ${detectedProductId}. Session ${backfillResult.sessionId} — status: ${backfillResult.status}. Poll GET /api/v1/blueprint/intake/${backfillResult.sessionId} until status is gap_collection or arc_review.`,
+          done_synopsis: `${detectedProductId} blueprint generation started.`,
+          done_bullets: [`Product: ${detectedProductId}`, `Source: ${productHomeFile}`, `Session: ${backfillResult.sessionId.slice(0, 8)}`],
+          next_synopsis: `Chair → Architect → ARC review running. Check status with "Check status of the ${detectedProductId} blueprint".`,
+          human_summary: `Blueprint intake started for ${detectedProductId}. Session ${backfillResult.sessionId} — status: ${backfillResult.status}.`,
           human_summary_technical: `Blueprint intake backfill started for ${detectedProductId} from ${productHomeFile}.`,
         }, channel);
         return {
