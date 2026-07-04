@@ -108,6 +108,7 @@ import { createXxxRoutes } from "../routes/knowledge-base-routes.js";
 import { createFaithStudioRoutes } from "../routes/faith-studio-routes.js";
 import { createFutureRoutes } from "../routes/future-self-simulator-routes.js";
 import { createConfidenceArchitectureRoutes } from "../routes/confidence-architecture-routes.js";
+import { createBelongingGuaranteeRoutes } from "../routes/belonging-guarantee-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -689,6 +690,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/confidence-architecture", createConfidenceArchitectureRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [CONFIDENCE_ARCHITECTURE] Routes mounted at /api/v1/confidence-architecture');
+
+  app.use("/api/v1/belonging-guarantee", createBelongingGuaranteeRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [BELONGING_GUARANTEE] Routes mounted at /api/v1/belonging-guarantee');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
