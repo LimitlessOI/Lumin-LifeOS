@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:49:25.012Z",
+  "generated_at": "2026-07-04T14:49:59.786Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12,
+  "file_count": 13,
   "files": [
     {
       "path": "db/migrations/20260704_create_achievements_table.sql",
@@ -80,6 +80,13 @@
       "bytes": 3603,
       "mtime": "2026-07-04T14:28:43.583Z",
       "indexed_at": "2026-07-04T14:28:43.583Z"
+    },
+    {
+      "path": "services/creator-media-service.js",
+      "synopsis": "Exports createMediaService — services/creator-media-service.js.",
+      "bytes": 10412,
+      "mtime": "2026-07-04T14:49:59.786Z",
+      "indexed_at": "2026-07-04T14:49:59.786Z"
     },
     {
       "path": "startup/register-runtime-routes.js",
