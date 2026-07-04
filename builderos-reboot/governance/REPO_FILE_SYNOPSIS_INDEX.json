@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:37:57.258Z",
+  "generated_at": "2026-07-04T23:38:05.808Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 80,
+  "file_count": 81,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -395,6 +395,13 @@
       "bytes": 1160,
       "mtime": "2026-07-04T20:53:07.264Z",
       "indexed_at": "2026-07-04T20:53:07.264Z"
+    },
+    {
+      "path": "routes/real-estate-training-routes.js",
+      "synopsis": "Exports createRealEstateTrainingRoutes — routes/real-estate-training-routes.js.",
+      "bytes": 2510,
+      "mtime": "2026-07-04T23:38:05.808Z",
+      "indexed_at": "2026-07-04T23:38:05.808Z"
     },
     {
       "path": "routes/replacement-plan-routes.js",
