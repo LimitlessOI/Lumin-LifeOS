@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:17:14.630Z",
+  "generated_at": "2026-07-04T20:17:24.245Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 43,
+  "file_count": 44,
   "files": [
     {
       "path": "db/migrations/20230704_create_estimation_log_table.sql",
@@ -262,6 +262,13 @@
       "bytes": 7968,
       "mtime": "2026-07-04T19:54:35.572Z",
       "indexed_at": "2026-07-04T19:54:35.572Z"
+    },
+    {
+      "path": "services/server-founder-runtime.js",
+      "synopsis": "Exports createServerFounderRuntimeService — services/server-founder-runtime.js.",
+      "bytes": 3064,
+      "mtime": "2026-07-04T20:17:24.245Z",
+      "indexed_at": "2026-07-04T20:17:24.245Z"
     },
     {
       "path": "services/story-canon-engine.js",
