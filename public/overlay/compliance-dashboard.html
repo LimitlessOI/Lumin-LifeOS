@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Enterprise AI Governance - Compliance Metrics -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Enterprise AI Governance · Compliance Metrics</title>
+  <meta name="theme-color" content="#0a0a0f">
+  <style>
+    :root{
+      --bg:#0a0a0f;
+      --panel:#111118;
+      --panel2:#17171f;
+      --line:rgba(255,255,255,.08);
+      --line2:rgba(255,255,255,.14);
+      --text:#e8e8f0;
+      --muted:#9aa0b8;
+      --soft:#5b6af5;
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --info:#38bdf8;
+      --radius:18px;
+      --shadow:0 18px 60px rgba(0,0,0,.35);
+      --gap:14px;
+      --pad:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(circle at top left, rgba(91,106,245,.14), transparent 26%),
+        radial-gradient(circle at top right, rgba(34,197,94,.10), transparent 22%),
+        radial-gradient(circle at bottom left, rgba(245,158,11,.10), transparent 24%),
+        var(--bg);
+      color:var(--text);
+      overflow:auto;
+    }
+    .page{
+      min-height:100%;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+    }
+    .hero, .panel, .metric, .event, .badge, .pill, .chip, .bar-fill, .risk-item{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)), var(--panel);
+      box-shadow:var(--shadow);
+    }
+    .hero{
+      border-radius:24px;
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:auto -20% -50% auto;
+      width:280px;height:280px;
+      background:radial-gradient(circle, rgba(56,189,248,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .kicker{
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    h1{
+      margin:8px 0 10px;
+      font-size:28px;
+      line-height:1.08;
+      letter-spacing:-.04em;
+    }
+    .sub{
+      max-width:90ch;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:14px;
+    }
+    .hero-row{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+    .metric{
+      border-radius:18px;
+      padding:16px;
+      min-height:112px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .metric .label{color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+    .metric .value{font-size:28px;font-weight:800;letter-spacing:-.04em}
+    .metric .delta{font-size:12px;color:var(--muted)}
+    .metric.good .value{color:var(--good)}
+    .metric.warn .value{color:var(--warn)}
+    .metric.bad .value{color:var(--bad)}
+    .metric.info .value{color:var(--info)}
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.35fr .95fr;
+      gap:var(--gap);
+      align-items:start;
+    }
+    .panel{
+      border-radius:22px;
+      padding:18px;
+    }
+    .panel h2{
+      margin:0 0 12px;
+      font-size:16px;
+      letter-spacing:-.02em;
+    }
+    .panel-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .panel-note{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .status-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:14px;
+    }
+    .pill{
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      color:var(--text);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:currentColor;
+      box-shadow:0 0 0 4px rgba(255,255,255,.04);
+    }
+    .pill.good{color:var(--good)}
+    .pill.warn{color:var(--warn)}
+    .pill.bad{color:var(--bad)}
+    .pill.info{color:var(--info)}
+
+    .timeline{
+      display:grid;
+      gap:12px;
+    }
+    .event{
+      border-radius:18px;
+      padding:14px;
+      display:grid;
+      gap:10px;
+    }
+    .event-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .event-title{
+      font-weight:700;
+      font-size:14px;
+    }
+    .event-meta{
+      color:var(--muted);
+      font-size:12px;
+      font-family:var(--mono);
+      white-space:nowrap;
+    }
+    .event-body{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .event-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chip{
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      color:var(--text);
+      background:var(--panel2);
+    }
+
+    .risk-list{
+      display:grid;
+      gap:10px;
+    }
+    .risk-item{
+      border-radius:16px;
+      padding:14px;
+      display:grid;
+      gap:8px;
+    }
+    .risk-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .risk-title{font-weight:700;font-size:14px}
+    .risk-sev{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      font-weight:800;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid var(--line2);
+      flex-shrink:0;
+    }
+    .sev-high{color:var(--bad)}
+    .sev-medium{color:var(--warn)}
+    .sev-low{color:var(--info)}
+    .risk-desc{color:var(--muted);font-size:13px;line-height:1.55}
+    .risk-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .badge{
+      border-radius:999px;
+      padding:6px 10px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      background:var(--panel2);
+    }
+    .badge strong{color:var(--text)}
+    .score-wrap{
+      display:grid;
+      gap:12px;
+      margin-top:6px;
+    }
+    .score-row{
+      display:grid;
+      grid-template-columns:120px 1fr 52px;
+      gap:10px;
+      align-items:center;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background:#0f1117;
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+    .bar-fill{
+      height:100%;
+      border-radius:inherit;
+      box-shadow:none;
+      background:linear-gradient(90deg, var(--good), var(--warn), var(--bad));
+    }
+    .footer{
+      color:var(--muted);
+      font-size:12px;
+      padding:4px 2px 20px;
+      line-height:1.55;
+    }
+
+    @media (max-width: 960px){
+      .hero-row,
+      .grid{grid-template-columns:1fr}
+      .score-row{grid-template-columns:96px 1fr 44px}
+    }
+    @media (max-width: 640px){
+      .page{padding:14px}
+      h1{font-size:24px}
+      .metric .value{font-size:24px}
+      .panel{padding:16px}
+      .hero{padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-labelledby="title">
+      <div class="kicker">Enterprise AI Governance · Blueprint EAI-P1-004</div>
+      <h1 id="title">Compliance metrics and data risk events, ready for client review</h1>
+      <p class="sub">
+        This overlay presents the governance posture of client-facing AI systems: compliance status, policy coverage,
+        audit readiness, and active data-risk signals. It is designed for quick executive review and for surfacing the
+        items that need attention before client delivery or a governance check-in.
+      </p>
+
+      <div class="hero-row" aria-label="summary metrics">
+        <div class="metric good">
+          <div class="label">Compliance score</div>
+          <div class="value">96%</div>
+          <div class="delta">Up 3 points from last review</div>
+        </div>
+        <div class="metric info">
+          <div class="label">Controls passing</div>
+          <div class="value">42/44</div>
+          <div class="delta">Policy, logging, and review gates</div>
+        </div>
+        <div class="metric warn">
+          <div class="label">Open risk events</div>
+          <div class="value">3</div>
+          <div class="delta">2 medium, 1 high severity</div>
+        </div>
+        <div class="metric bad">
+          <div class="label">Data exposure window</div>
+          <div class="value">8m</div>
+          <div class="delta">Shortest unresolved interval this week</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Compliance coverage</h2>
+            <div class="panel-note">Client-safe indicators for governance, audit, and review workflows.</div>
+          </div>
+          <div class="badge"><strong>Last sync</strong> · 08:42 UTC</div>
+        </div>
+
+        <div class="status-row" aria-label="compliance status chips">
+          <div class="pill good"><span class="dot"></span>Policy mapped</div>
+          <div class="pill good"><span class="dot"></span>Access logged</div>
+          <div class="pill info"><span class="dot"></span>Model review current</div>
+          <div class="pill warn"><span class="dot"></span>Two exceptions pending</div>
+        </div>
+
+        <div class="score-wrap" aria-label="control scores">
+          <div class="score-row">
+            <div>Data handling</div>
+            <div class="bar"><div class="bar-fill" style="width:98%"></div></div>
+            <div>98%</div>
+          </div>
+          <div class="score-row">
+            <div>Consent gates</div>
+            <div class="bar"><div class="bar-fill" style="width:94%"></div></div>
+            <div>94%</div>
+          </div>
+          <div class="score-row">
+            <div>Retention policy</div>
+            <div class="bar"><div class="bar-fill" style="width:91%"></div></div>
+            <div>91%</div>
+          </div>
+          <div class="score-row">
+            <div>Audit evidence</div>
+            <div class="bar"><div class="bar-fill" style="width:97%"></div></div>
+            <div>97%</div>
+          </div>
+          <div class="score-row">
+            <div>Exception handling</div>
+            <div class="bar"><div class="bar-fill" style="width:78%"></div></div>
+            <div>78%</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="panel-note" style="margin-bottom:10px">Recent governance actions</div>
+          <div class="event">
+            <div class="event-top">
+              <div class="event-title">Policy attestations completed for client delivery scope</div>
+              <div class="event-meta">today · 08:11 UTC</div>
+            </div>
+            <div class="event-body">
+              All required reviewers acknowledged the current policy set, including data handling, prompt logging,
+              and model output review criteria for client-facing workflows.
+            </div>
+            <div class="event-actions">
+              <span class="chip">3 reviewers</span>
+              <span class="chip">No blockers</span>
+              <span class="chip">Evidence attached</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Data risk events</h2>
+            <div class="panel-note">Active issues that affect client trust, data safety, or audit posture.</div>
+          </div>
+        </div>
+
+        <div class="risk-list">
+          <div class="risk-item">
+            <div class="risk-top">
+              <div class="risk-title">Unmasked customer identifier detected in output review</div>
+              <div class="risk-sev sev-high">High</div>
+            </div>
+            <div class="risk-desc">
+              A response review flagged a raw identifier in a draft client-facing output. The event is contained, but
+              it remains open until re-review and masking verification are complete.
+            </div>
+            <div class="risk-meta">
+              <span class="badge"><strong>Scope</strong> · client delivery</span>
+              <span class="badge"><strong>Status</strong> · open</span>
+            </div>
+          </div>
+
+          <div class="risk-item">
+            <div class="risk-top">
+              <div class="risk-title">Retention policy mismatch for archived conversation logs</div>
+              <div class="risk-sev sev-medium">Medium</div>
+            </div>
+            <div class="risk-desc">
+              One archive bucket still shows a retention interval that differs from the governance baseline. The record
+              is non-blocking, but it needs correction before the next audit snapshot.
+            </div>
+            <div class="risk-meta">
+              <span class="badge"><strong>Scope</strong> · archives</span>
+              <span class="badge"><strong>Status</strong> · pending fix</span>
+            </div>
+          </div>
+
+          <div class="risk-item">
+            <div class="risk-top">
+              <div class="risk-title">Incomplete evidence trail for one policy exception</div>
+              <div class="risk-sev sev-low">Low</div>
+            </div>
+            <div class="risk-desc">
+              A documented exception exists, but the linked approval artifact is still being attached. Coverage remains
+              acceptable for the current release window.
+            </div>
+            <div class="risk-meta">
+              <span class="badge"><strong>Scope</strong> · exception record</span>
+              <span class="badge"><strong>Status</strong> · in progress</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="panel-note" style="margin-bottom:10px">Risk posture summary</div>
+          <div class="event">
+            <div class="event-top">
+              <div class="event-title">Client-facing release remains within governance threshold</div>
+              <div class="event-meta">score 96/100</div>
+            </div>
+            <div class="event-body">
+              No critical violations are currently blocking client access. The three open items are tracked, with one
+              high-severity exposure requiring immediate follow-up.
+            </div>
+            <div class="event-actions">
+              <span class="chip">Audit-ready</span>
+              <span class="chip">Monitor exceptions</span>
+              <span class="chip">Review before release</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Operational notes for clients</h2>
+          <div class="panel-note">A compact narrative clients can read without internal jargon.</div>
+        </div>
+      </div>
+      <div class="event-body" style="max-width:110ch">
+        The governance program is operating in a controlled state. Compliance checks are mostly passing, evidence is
+        attached for the latest review cycle, and the remaining data-risk events are isolated to specific workflows.
+        The highest-priority item is the unmasked identifier event, which is being verified and remediated before the
+        next client update. Retention and evidence-trail items are being resolved as standard follow-up work.
+      </div>
+    </section>
+
+    <div class="footer">
+      Blueprint EAI-P1-004 · Enterprise AI Governance · HTML overlay page for client-facing compliance metrics and data risk events.
+    </div>
+  </main>
+</body>
+</html>
