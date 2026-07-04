@@ -1,9 +1,16 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:15:36.001Z",
+  "generated_at": "2026-07-04T20:16:56.538Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 39,
+  "file_count": 40,
   "files": [
+    {
+      "path": "db/migrations/20230704_create_projects_table.sql",
+      "synopsis": "Database migration — 20230704_create_projects_table.sql.",
+      "bytes": 435,
+      "mtime": "2026-07-04T20:16:56.538Z",
+      "indexed_at": "2026-07-04T20:16:56.538Z"
+    },
     {
       "path": "db/migrations/20230705_create_boldtrail_agents.sql",
       "synopsis": "Database migration — 20230705_create_boldtrail_agents.sql.",
