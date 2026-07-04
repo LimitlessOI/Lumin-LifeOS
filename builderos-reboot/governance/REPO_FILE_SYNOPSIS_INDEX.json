@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T11:25:06.473Z",
+  "generated_at": "2026-07-04T11:25:17.699Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260704_create_memory_capsules.sql",
@@ -10,6 +10,13 @@
       "bytes": 571,
       "mtime": "2026-07-04T11:25:06.473Z",
       "indexed_at": "2026-07-04T11:25:06.473Z"
+    },
+    {
+      "path": "scripts/verify-memory-system.mjs",
+      "synopsis": "MS-P1-004 acceptance audit for memory-system routes.",
+      "bytes": 5086,
+      "mtime": "2026-07-04T11:25:17.699Z",
+      "indexed_at": "2026-07-04T11:25:17.699Z"
     }
   ]
 }

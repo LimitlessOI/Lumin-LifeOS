@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: MS-P1-005 acceptance audit for memory-system.
+ * SYNOPSIS: MS-P1-004 acceptance audit for memory-system routes.
  * Runs live HTTP probes against the memory capsule surface using x-command-key.
  */
 import fs from 'node:fs';
@@ -7,8 +7,7 @@ import path from 'node:path';
 
 const ROOT = process.cwd();
 const ROUTES_FILE = path.join(ROOT, 'routes/memory-routes.js');
-const MIGRATION_USER_PREFERENCE = path.join(ROOT, 'db/migrations/20260704_create_user_preference.sql');
-const MIGRATION_MEMORY_LINKS = path.join(ROOT, 'db/migrations/20260704_create_memory_links.sql');
+const MIGRATION_FILE = path.join(ROOT, 'db/migrations/20260704_create_memory_capsules.sql');
 
 function readFile(relPath) {
   return fs.readFileSync(relPath, 'utf8');
@@ -43,25 +42,22 @@ function extractRoutePaths(source) {
 
 function routeMatchesDeclared(routePaths, probePath) {
   return routePaths.some((declared) => {
+    if (declared === probePath) return true;
     const normalizedDeclared = declared.replace(/:([A-Za-z0-9_]+)/g, '{$1}');
     const normalizedProbe = probePath.replace(/\/[^/]+$/, '/{$id}');
-    return normalizedDeclared === normalizedProbe || declared === probePath;
+    return normalizedDeclared === normalizedProbe;
   });
 }
 
 async function probe(baseUrl, commandKey, method, route, body) {
-  const url = `${baseUrl}${route}`;
-  const init = {
+  const response = await fetch(`${baseUrl}${route}`, {
     method,
     headers: {
       ...(commandKey ? { 'x-command-key': commandKey } : {}),
+      ...(body !== undefined ? { 'content-type': 'application/json' } : {}),
     },
-  };
-  if (body !== undefined) {
-    init.headers['content-type'] = 'application/json';
-    init.body = JSON.stringify(body);
-  }
-  const response = await fetch(url, init);
+    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+  });
   const text = await response.text();
   let json = null;
   try {
@@ -69,7 +65,7 @@ async function probe(baseUrl, commandKey, method, route, body) {
   } catch {
     json = null;
   }
-  return { response, text, json, url };
+  return { response, text, json };
 }
 
 export async function runAudit() {
@@ -77,16 +73,11 @@ export async function runAudit() {
   const commandKey = resolveCommandKey();
   const routesSource = readFile(ROUTES_FILE);
   const routePaths = extractRoutePaths(routesSource);
+  const migrationSource = readFile(MIGRATION_FILE);
 
   const checks = [];
   const fail = (msg) => checks.push({ ok: false, msg });
   const pass = (msg) => checks.push({ ok: true, msg });
-
-  if (!routesSource.includes("import memorySystem from '../core/memory-system.js';")) {
-    fail('route signature check failed');
-  } else {
-    pass('route signature check passed');
-  }
 
   if (!routesSource.includes("createLegacyMemoryRoutes(options = {})")) {
     fail('route factory check failed');
@@ -94,16 +85,16 @@ export async function runAudit() {
     pass('route factory check passed');
   }
 
-  if (!readFile(MIGRATION_USER_PREFERENCE).includes('CREATE TABLE IF NOT EXISTS user_preference')) {
-    fail('user_preference migration literal missing');
+  if (!routesSource.includes("import memorySystem from '../core/memory-system.js';")) {
+    fail('route signature check failed');
   } else {
-    pass('user_preference migration literal present');
+    pass('route signature check passed');
   }
 
-  if (!readFile(MIGRATION_MEMORY_LINKS).includes('CREATE TABLE IF NOT EXISTS memory_links')) {
-    fail('memory_links migration literal missing');
+  if (!migrationSource.includes('CREATE TABLE IF NOT EXISTS memory_capsules')) {
+    fail('migration literal missing');
   } else {
-    pass('memory_links migration literal present');
+    pass('migration literal present');
   }
 
   if (!baseUrl) {
@@ -123,26 +114,24 @@ export async function runAudit() {
     pass('GET /api/v1/memory/status passed');
   }
 
-  const capsuleId =
-    String(
-      statusProbe.json?.capsule?.id ||
-        statusProbe.json?.id ||
-        statusProbe.json?.capsule_id ||
-        statusProbe.json?.data?.id ||
-        '1',
-    );
+  const capsuleId = String(
+    statusProbe.json?.capsule?.id ||
+      statusProbe.json?.id ||
+      statusProbe.json?.capsule_id ||
+      statusProbe.json?.data?.id ||
+      '1',
+  );
 
   const requiredRoutes = [
+    { method: 'GET', route: '/api/v1/memory/capsules/health' },
     { method: 'POST', route: '/api/v1/memory/capsules/signal', body: {} },
     { method: 'POST', route: '/api/v1/memory/capsules/retrieve', body: {} },
-    { method: 'GET', route: '/api/v1/memory/capsules/health' },
     { method: 'GET', route: `/api/v1/memory/capsules/capsule/${encodeURIComponent(capsuleId)}` },
     { method: 'POST', route: '/api/v1/memory/capsules/correct', body: {} },
   ];
 
   for (const item of requiredRoutes) {
-    const declared = routeMatchesDeclared(routePaths, item.route);
-    if (!declared) {
+    if (!routeMatchesDeclared(routePaths, item.route)) {
       fail(`route not declared in routes file: ${item.route}`);
       continue;
     }
