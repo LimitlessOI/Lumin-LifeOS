@@ -752,9 +752,11 @@ Return JSON:
   "ready_to_execute": true|false
 }`;
 
-    const arcRaw = await callCouncilMember('claude',
-      `BLUEPRINT TO REVIEW:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
-      { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
+    const arcRaw = await _withTimeout(
+      callCouncilMember('openai',
+        `BLUEPRINT TO REVIEW:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
+        { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+      ), 60000, 'arc_review'
     );
     const arcReport = parseBlueprintFromAiResponse(arcRaw);
 

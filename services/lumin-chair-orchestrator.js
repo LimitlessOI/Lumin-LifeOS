@@ -593,6 +593,64 @@ export async function runLuminChairTurn(ctx, deps) {
       const started = Date.now();
 
       if (detectedProductId && detectedProductId !== 'marketingos') {
+        const isArcOrExecuteRequest = /\b(run|execute|review|check|arc|sentry|status|validate)\b/i.test(cleanedInput)
+          && !/\b(create|generate|make|produce|write|draft|start|kick.?off)\b/i.test(cleanedInput);
+
+        if (isArcOrExecuteRequest) {
+          try {
+            const { rows: existingRows } = await deps.pool.query(
+              `SELECT id, status, blueprint_json IS NOT NULL AS has_bp FROM blueprint_intake_sessions
+               WHERE product_name = $1 AND status IN ('arc_review','generating','extracting','ready','gap_collection')
+               ORDER BY created_at DESC LIMIT 1`,
+              [detectedProductId]
+            );
+            if (existingRows.length && existingRows[0].has_bp) {
+              const existSession = existingRows[0];
+              const intake = (await import('../services/blueprint-intake.js')).createBlueprintIntakeService(deps.pool, deps.callCouncilMember);
+
+              if (existSession.status === 'arc_review' || existSession.status === 'gap_collection') {
+                setImmediate(() => {
+                  intake.runArcReview(existSession.id).catch(err => {
+                    console.error('[CHAIR-ARC] Background ARC review failed:', err.message);
+                  });
+                });
+                const truth = finalizeTruth({
+                  ok: true, pass_fail: 'RUNNING', command_truth: 'COMMAND_RAN',
+                  action: 'intake_blueprint', execution_path: 'intake_arc_review',
+                  session_id: existSession.id, product: detectedProductId,
+                  async: true, first_blocker: null, duration_ms: Date.now() - started,
+                  human_summary: `ARC review started for ${detectedProductId} blueprint (session ${existSession.id}). The system is reviewing the blueprint, auto-fixing issues, and validating structure. Poll GET /api/v1/blueprint/intake/${existSession.id} for status.`,
+                  human_summary_technical: `ARC review running in background for session ${existSession.id}.`,
+                }, channel);
+                return { statusCode: 202, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+              }
+
+              if (existSession.status === 'ready') {
+                const truth = finalizeTruth({
+                  ok: true, pass_fail: 'PASS', command_truth: 'COMMAND_RAN',
+                  action: 'intake_blueprint', execution_path: 'intake_status_check',
+                  session_id: existSession.id, product: detectedProductId,
+                  first_blocker: null, duration_ms: Date.now() - started,
+                  human_summary: `${detectedProductId} blueprint is READY to execute (session ${existSession.id}). POST /api/v1/blueprint/intake/${existSession.id}/execute to build.`,
+                  human_summary_technical: `Blueprint ready. Execute with POST .../execute.`,
+                }, channel);
+                return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+              }
+
+              const truth = finalizeTruth({
+                ok: true, pass_fail: 'RUNNING', command_truth: 'COMMAND_RAN',
+                action: 'intake_blueprint', execution_path: 'intake_status_check',
+                session_id: existSession.id, product: detectedProductId,
+                first_blocker: null, duration_ms: Date.now() - started,
+                human_summary: `${detectedProductId} blueprint session ${existSession.id} is currently ${existSession.status}. It will proceed automatically.`,
+              }, channel);
+              return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+            }
+          } catch (arcErr) {
+            console.error('[CHAIR-ARC] Error looking up existing session:', arcErr.message);
+          }
+        }
+
         const productHomeFile = `docs/products/${detectedProductId}/PRODUCT_HOME.md`;
         let amendmentText = '';
         try {

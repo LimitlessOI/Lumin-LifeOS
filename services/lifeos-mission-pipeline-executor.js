@@ -83,6 +83,8 @@ export function isIntakeBlueprintIntent(text = '') {
   if (/\b(social\s*media\s*os|socialmediaos|smos)\b/i.test(t) && /\b(blueprint|intake|a to z|a-to-z|build|execute)\b/i.test(t)) return true;
   if (extractIntakeProductName(t) && /\b(blueprint|founder.?packet|intake|product.?home|mission.?pack)\b/i.test(t)
     && /\b(create|generate|make|build|produce|write|draft|start|kick.?off)\b/i.test(t)) return true;
+  if (extractIntakeProductName(t) && /\b(blueprint)\b/i.test(t)
+    && /\b(run|execute|review|check|arc|sentry|status|validate)\b/i.test(t)) return true;
   return false;
 }
 
