@@ -82,7 +82,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
     contractSpec.push(`TEST ASSERTIONS:\n${contract.test_assertions.map(a => `- ${a}`).join('\n')}`);
   }
 
-  const laneModel = 'openai_gpt';
+  const laneModel = 'openai_builder_mini';
 
   return {
     domain: 'lifeos',
