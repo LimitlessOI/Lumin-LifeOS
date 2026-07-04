@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:48:53.203Z",
+  "generated_at": "2026-07-04T23:49:28.787Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 91,
+  "file_count": 92,
   "files": [
     {
       "path": "db/migrations/20260704_create_agent_performance.sql",
@@ -10,6 +10,13 @@
       "bytes": 686,
       "mtime": "2026-07-04T23:48:53.203Z",
       "indexed_at": "2026-07-04T23:48:53.203Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_agent_protocol_violations.sql",
+      "synopsis": "Database migration — 20260704_create_agent_protocol_violations.sql.",
+      "bytes": 1178,
+      "mtime": "2026-07-04T23:49:28.787Z",
+      "indexed_at": "2026-07-04T23:49:28.787Z"
     },
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
