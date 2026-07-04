@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T19:49:50.268Z",
+  "generated_at": "2026-07-04T19:50:33.698Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 21,
+  "file_count": 22,
   "files": [
     {
       "path": "db/migrations/20230705_create_boldtrail_agents.sql",
@@ -115,6 +115,13 @@
       "bytes": 15062,
       "mtime": "2026-07-04T19:13:34.722Z",
       "indexed_at": "2026-07-04T19:13:34.722Z"
+    },
+    {
+      "path": "public/overlay/command-center.html",
+      "synopsis": "HTML page: Site Builder — Operator Command Center",
+      "bytes": 34737,
+      "mtime": "2026-07-04T19:50:33.698Z",
+      "indexed_at": "2026-07-04T19:50:33.698Z"
     },
     {
       "path": "public/overlay/financial_dashboard.html",
