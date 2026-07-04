@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T18:24:10.187Z",
+  "generated_at": "2026-07-04T18:24:16.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 4,
+  "file_count": 5,
   "files": [
     {
       "path": "db/migrations/20260704_adam_decisions.sql",
@@ -10,6 +10,13 @@
       "bytes": 492,
       "mtime": "2026-07-04T18:19:58.983Z",
       "indexed_at": "2026-07-04T18:19:58.983Z"
+    },
+    {
+      "path": "db/migrations/20260705_create_agreements_table.sql",
+      "synopsis": "Database migration — 20260705_create_agreements_table.sql.",
+      "bytes": 368,
+      "mtime": "2026-07-04T18:24:16.262Z",
+      "indexed_at": "2026-07-04T18:24:16.262Z"
     },
     {
       "path": "db/migrations/20260705_create_users_table.sql",
