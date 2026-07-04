@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T19:54:45.934Z",
+  "generated_at": "2026-07-04T19:55:21.967Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 26,
+  "file_count": 27,
   "files": [
     {
       "path": "db/migrations/20230705_create_boldtrail_agents.sql",
@@ -150,6 +150,13 @@
       "bytes": 5284,
       "mtime": "2026-07-04T19:27:30.859Z",
       "indexed_at": "2026-07-04T19:27:30.859Z"
+    },
+    {
+      "path": "routes/recovery-routes.js",
+      "synopsis": "Exports createRecoveryRoutes — routes/recovery-routes.js.",
+      "bytes": 2888,
+      "mtime": "2026-07-04T19:55:21.967Z",
+      "indexed_at": "2026-07-04T19:55:21.967Z"
     },
     {
       "path": "services/boldtrail.js",
