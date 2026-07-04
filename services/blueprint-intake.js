@@ -1138,9 +1138,22 @@ Return JSON:
     }
 
     const ssotPath = `docs/products/${(productName || 'unknown').toLowerCase().replace(/\s+/g, '-')}/PRODUCT_HOME.md`;
+    const slug = productFileSlug(productName);
     for (const s of steps) {
       if (!s.ssot_tag || s.ssot_tag.includes('AMENDMENT_XX') || s.ssot_tag.includes('placeholder')) {
         s.ssot_tag = ssotPath;
+        fixCount++;
+      }
+      if (s.file && /\{[^}]+\}/.test(s.file)) {
+        if (s.type === 'html') {
+          s.file = `public/overlay/${slug}-portal.html`;
+        } else {
+          s.file = s.file.replace(/\{[^}]+\}/g, slug);
+        }
+        fixCount++;
+      }
+      if (s.type === 'html' && s.file && !s.file.endsWith('.html')) {
+        s.type = 'esm';
         fixCount++;
       }
     }
@@ -1221,6 +1234,9 @@ Return JSON:
     for (const s of steps) {
       if (!validTypes.has(s.type)) {
         errors.push({ stepId: s.id, issue: `Invalid type '${s.type}'`, fix: `Use one of: ${[...validTypes].join(', ')}` });
+      }
+      if (s.file && /\{[^}]+\}/.test(s.file)) {
+        errors.push({ stepId: s.id, issue: `File path contains template variable: ${s.file}`, fix: 'Replace with static path' });
       }
     }
 
