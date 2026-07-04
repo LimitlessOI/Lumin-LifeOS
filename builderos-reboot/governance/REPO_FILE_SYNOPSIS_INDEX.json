@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:03:14.707Z",
+  "generated_at": "2026-07-04T23:03:42.011Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 60,
+  "file_count": 61,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -262,6 +262,13 @@
       "bytes": 17398,
       "mtime": "2026-07-04T22:28:38.322Z",
       "indexed_at": "2026-07-04T22:28:38.322Z"
+    },
+    {
+      "path": "public/overlay/status.html",
+      "synopsis": "HTML page: BuilderOS — Build Session Status",
+      "bytes": 18123,
+      "mtime": "2026-07-04T23:03:42.011Z",
+      "indexed_at": "2026-07-04T23:03:42.011Z"
     },
     {
       "path": "public/overlay/success.html",
