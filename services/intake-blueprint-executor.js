@@ -662,14 +662,7 @@ export async function executeIntakeBlueprint({
         );
         row.route_wired = wireResult.body?.route_wired || wireResult.body;
         if (!wireResult.ok) {
-          return {
-            ok: false,
-            error: 'route_wire_failed',
-            failed_step: step.id,
-            target_file: targetFile,
-            route_wired: row.route_wired,
-            results,
-          };
+          failedSteps.push({ step_id: step.id, target_file: targetFile, error: 'route_wire_failed' });
         }
       }
     }
