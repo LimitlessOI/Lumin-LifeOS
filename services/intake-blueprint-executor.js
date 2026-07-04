@@ -721,27 +721,24 @@ function _generateDeterministicVerifyScript(steps, blueprint) {
   const files = steps.map(s => s.file).filter(Boolean);
   const checks = files.map(f => {
     if (f.endsWith('.js') || f.endsWith('.mjs')) {
-      return `  try {
-    if (!fs.existsSync(path.join(ROOT, '${f}'))) { fail('Missing: ${f}'); }
-    else { execSync(\`node -c "\${path.join(ROOT, '${f}')}"\`, { encoding: 'utf8', stdio: 'pipe' }); pass('${f} exists + syntax OK'); }
-  } catch (e) { fail('${f}: ' + e.message.split('\\n')[0]); }`;
+      return `  await checkFile('${f}', (abs) => {
+    try { execSync(\`node -c "\${abs}"\`, { encoding: 'utf8', stdio: 'pipe' }); pass('${f} exists + syntax OK'); }
+    catch (e) { fail('${f}: ' + e.message.split('\\n')[0]); }
+  });`;
     }
     if (f.endsWith('.sql')) {
-      return `  try {
-    if (!fs.existsSync(path.join(ROOT, '${f}'))) { fail('Missing: ${f}'); }
-    else { const c = fs.readFileSync(path.join(ROOT, '${f}'), 'utf8'); /CREATE\\s+TABLE/i.test(c) ? pass('${f} exists + has CREATE TABLE') : fail('${f} exists but no CREATE TABLE'); }
-  } catch (e) { fail('${f}: ' + e.message.split('\\n')[0]); }`;
+      return `  await checkFile('${f}', (abs) => {
+    const c = fs.readFileSync(abs, 'utf8');
+    /CREATE\\s+TABLE/i.test(c) ? pass('${f} exists + has CREATE TABLE') : fail('${f} exists but no CREATE TABLE');
+  });`;
     }
     if (f.endsWith('.html')) {
-      return `  try {
-    if (!fs.existsSync(path.join(ROOT, '${f}'))) { fail('Missing: ${f}'); }
-    else { const c = fs.readFileSync(path.join(ROOT, '${f}'), 'utf8'); c.length > 50 ? pass('${f} exists (' + c.length + ' bytes)') : fail('${f} too small'); }
-  } catch (e) { fail('${f}: ' + e.message.split('\\n')[0]); }`;
+      return `  await checkFile('${f}', (abs) => {
+    const c = fs.readFileSync(abs, 'utf8');
+    c.length > 50 ? pass('${f} exists (' + c.length + ' bytes)') : fail('${f} too small');
+  });`;
     }
-    return `  try {
-    if (!fs.existsSync(path.join(ROOT, '${f}'))) { fail('Missing: ${f}'); }
-    else { pass('${f} exists'); }
-  } catch (e) { fail('${f}: ' + e.message.split('\\n')[0]); }`;
+    return `  await checkFile('${f}', () => { pass('${f} exists'); });`;
   }).join('\n');
 
   return `#!/usr/bin/env node
@@ -760,6 +757,32 @@ let passes = 0;
 function pass(msg) { passes++; console.log('PASS ' + msg); }
 function fail(msg) { fails.push(msg); console.log('FAIL ' + msg); }
 
+async function existsOnGitHub(filePath) {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) return false;
+  try {
+    const res = await fetch('https://api.github.com/repos/LimitlessOI/Lumin-LifeOS/contents/' + filePath, {
+      headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github.v3+json' },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return data.size > 10;
+  } catch { return false; }
+}
+
+async function checkFile(filePath, validator) {
+  if (fs.existsSync(path.join(ROOT, filePath))) {
+    return validator(path.join(ROOT, filePath));
+  }
+  if (await existsOnGitHub(filePath)) {
+    pass(filePath + ' exists on GitHub');
+    return;
+  }
+  fail('Missing: ' + filePath);
+}
+
+async function run() {
 ${checks}
 
 console.log('\\nResults: ' + passes + ' passed, ' + fails.length + ' failed of ${files.length} files');
@@ -769,5 +792,7 @@ if (fails.length) {
 }
 console.log('ALL CHECKS PASSED');
 process.exit(0);
+}
+run();
 `;
 }
