@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-04 |
+| **Last Updated** | 2026-07-04 — Fixed 300s event loop block: `evaluatePointBNavigator()` now accepts `skipAcceptance` flag. All HTTP handler call sites pass `skipAcceptance: true` so the 300s `spawnSync` acceptance command only runs during pipeline execution, not status checks. |
 
 ### Related docs (this product)
 

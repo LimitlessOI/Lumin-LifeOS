@@ -78,7 +78,7 @@ export function isPointBExecuteIntent(text = '') {
     .test(String(text || ''));
 }
 
-export async function evaluatePointBNavigator({ callAI, includeWebResearch = true } = {}) {
+export async function evaluatePointBNavigator({ callAI, includeWebResearch = true, skipAcceptance = false } = {}) {
   let factory;
   try {
     factory = await loadFactoryArcModules();
@@ -139,7 +139,9 @@ export async function evaluatePointBNavigator({ callAI, includeWebResearch = tru
   const blueprint = hasBlueprint ? loadMissionJson(folder, 'BLUEPRINT.json') : null;
   const gate = evaluatePointBGate(folder, { blueprint: blueprint || {} });
   const builderEntry = evaluateBuilderEntryGate(folder);
-  const reached = evaluatePointBTargetReached(folder);
+  const reached = skipAcceptance
+    ? { ok: false, alpha_reached: false, acceptance: { ok: false, skipped: true, reason: 'skip_acceptance_http' } }
+    : evaluatePointBTargetReached(folder);
   const obstacle = lastObstacle(folder);
   const builderRun = loadJson(path.join(folder, 'BUILDER_RUN_RECEIPT.json'));
   const builderRunPass = ['PASS', 'TECHNICAL_PASS', 'INFRA_PASS'].includes(String(builderRun?.verdict || ''));
@@ -317,7 +319,7 @@ export async function runPointBNextAction(status, { asyncSpawn = true, callAI } 
 }
 
 export async function handlePointBFounderMessage(text, opts = {}) {
-  const status = await evaluatePointBNavigator(opts);
+  const status = await evaluatePointBNavigator({ ...opts, skipAcceptance: true });
   const autoRun = opts.autoRun !== false && isPointBExecuteIntent(text);
   const run = autoRun ? await runPointBNextAction(status, opts) : { skipped: true, reason: 'counsel_only' };
   const human_summary = formatPointBStatusSummary(status);

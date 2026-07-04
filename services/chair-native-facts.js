@@ -193,6 +193,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
       facts.point_b_status = await evaluatePointBNavigator({
         callAI: deps.callAI,
         includeWebResearch: /\b(research|competitor|gap|strategy)\b/i.test(text),
+        skipAcceptance: true,
       });
       facts.point_b_summary = formatPointBStatusSummary(facts.point_b_status);
     } catch {

@@ -668,7 +668,7 @@ HOW TO RESPOND:
   async function buildDisplayBundle({ scope = 'overview', missionId = null }) {
     const jobs = pool ? await listCommandControlJobs(pool, { limit: 20 }) : [];
     const haltState = pool ? await getCommandControlHaltState(pool) : null;
-    const pointB = await evaluatePointBNavigator({ callAI: callCouncilMember, includeWebResearch: false });
+    const pointB = await evaluatePointBNavigator({ callAI: callCouncilMember, includeWebResearch: false, skipAcceptance: true });
     const scoped = String(scope || 'overview').toLowerCase();
     const missionJobs = missionId
       ? jobs.filter((job) => String(job.instruction || '').includes(String(missionId)))
@@ -1096,6 +1096,7 @@ HOW TO RESPOND:
       const pointB = await evaluatePointBNavigator({
         callAI: callCouncilMember,
         includeWebResearch: req.query.research === '1',
+        skipAcceptance: true,
       });
       return res.status(200).json({
         ok: true,

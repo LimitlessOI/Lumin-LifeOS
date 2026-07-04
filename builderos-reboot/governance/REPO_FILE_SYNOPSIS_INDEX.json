@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T03:07:00.724Z",
+  "generated_at": "2026-07-04T03:17:56.452Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 10889,
   "files": [
@@ -21582,8 +21582,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3291877,
-      "mtime": "2026-07-04T02:35:10.001Z",
-      "indexed_at": "2026-07-04T02:35:57.086Z"
+      "mtime": "2026-07-04T03:17:45.589Z",
+      "indexed_at": "2026-07-04T03:17:56.452Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -37583,9 +37583,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 124965,
-      "mtime": "2026-07-04T02:35:01.325Z",
-      "indexed_at": "2026-07-04T02:35:57.086Z"
+      "bytes": 125216,
+      "mtime": "2026-07-04T03:17:33.089Z",
+      "indexed_at": "2026-07-04T03:17:56.452Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38019,9 +38019,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 575984,
-      "mtime": "2026-07-04T02:05:23.125Z",
-      "indexed_at": "2026-07-04T02:35:09.709Z"
+      "bytes": 577007,
+      "mtime": "2026-07-04T03:17:04.017Z",
+      "indexed_at": "2026-07-04T03:17:56.452Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63380,9 +63380,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 56727,
-      "mtime": "2026-07-04T02:33:49.801Z",
-      "indexed_at": "2026-07-04T02:35:57.086Z",
+      "bytes": 56779,
+      "mtime": "2026-07-04T03:15:38.129Z",
+      "indexed_at": "2026-07-04T03:17:56.452Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -77441,9 +77441,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 13299,
-      "mtime": "2026-07-04T03:06:54.309Z",
-      "indexed_at": "2026-07-04T03:07:00.724Z",
+      "bytes": 12758,
+      "mtime": "2026-07-04T03:16:25.437Z",
+      "indexed_at": "2026-07-04T03:17:56.452Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -78346,9 +78346,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 9886,
-      "mtime": "2026-07-03T17:36:57.931Z",
-      "indexed_at": "2026-07-04T02:35:09.709Z",
+      "bytes": 9916,
+      "mtime": "2026-07-04T03:15:51.257Z",
+      "indexed_at": "2026-07-04T03:17:56.452Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81488,9 +81488,9 @@
     {
       "path": "services/point-b-navigator.js",
       "synopsis": "Point B navigator — reads POINT_B_TARGET.json and returns next gate action.",
-      "bytes": 12102,
-      "mtime": "2026-07-03T13:23:32.589Z",
-      "indexed_at": "2026-07-04T02:35:09.709Z",
+      "bytes": 12292,
+      "mtime": "2026-07-04T03:16:11.693Z",
+      "indexed_at": "2026-07-04T03:17:56.452Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
