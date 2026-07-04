@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:49:18.555Z",
+  "generated_at": "2026-07-04T14:49:25.012Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11,
+  "file_count": 12,
   "files": [
     {
       "path": "db/migrations/20260704_create_achievements_table.sql",
@@ -38,6 +38,13 @@
       "bytes": 561,
       "mtime": "2026-07-04T14:48:32.362Z",
       "indexed_at": "2026-07-04T14:48:32.362Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_creator_performance_memory.sql",
+      "synopsis": "Database migration — 20260704_create_creator_performance_memory.sql.",
+      "bytes": 734,
+      "mtime": "2026-07-04T14:49:25.012Z",
+      "indexed_at": "2026-07-04T14:49:25.012Z"
     },
     {
       "path": "db/migrations/20260704_create_creator_scripts.sql",
