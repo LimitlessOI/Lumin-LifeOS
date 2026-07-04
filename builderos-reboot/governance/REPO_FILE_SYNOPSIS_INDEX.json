@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:24:03.734Z",
+  "generated_at": "2026-07-04T21:27:27.577Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 30,
+  "file_count": 31,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -199,6 +199,16 @@
       "bytes": 6509,
       "mtime": "2026-07-04T21:16:28.727Z",
       "indexed_at": "2026-07-04T21:16:28.727Z"
+    },
+    {
+      "path": "services/word-keeper-commitment-classifier.js",
+      "synopsis": "Detect and classify commitment language in transcripts.",
+      "bytes": 3741,
+      "mtime": "2026-07-04T21:27:27.577Z",
+      "indexed_at": "2026-07-04T21:27:27.577Z",
+      "ssot": [
+        "docs/products/WORD_KEEPER/WORD_KEEPER_HOME.md"
+      ]
     },
     {
       "path": "services/word-keeper-transcription.js",
