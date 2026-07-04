@@ -125,6 +125,7 @@ import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
 import { createFinancialRevenueRoutes } from "../routes/financial-revenue-routes.js";
 import { createRecoveryRoutes } from "../routes/recovery-routes.js";
 import { createLessonPlanRoutes } from "../routes/lesson-plan-routes.js";
+import { createProgressReportRoutes } from "../routes/progress-report-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -757,6 +758,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/lesson-plan", createLessonPlanRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [LESSON_PLAN] Routes mounted at /api/v1/lesson-plan');
+
+  app.use("/api/v1/progress-report", createProgressReportRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [PROGRESS_REPORT] Routes mounted at /api/v1/progress-report');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
