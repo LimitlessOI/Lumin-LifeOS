@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:52:55.591Z",
+  "generated_at": "2026-07-04T20:52:59.544Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 10,
+  "file_count": 11,
   "files": [
     {
       "path": "db/migrations/20260704_create_teacher_os_documents.sql",
@@ -73,6 +73,16 @@
       "bytes": 1850,
       "mtime": "2026-07-04T20:52:48.192Z",
       "indexed_at": "2026-07-04T20:52:48.192Z"
+    },
+    {
+      "path": "startup/register-runtime-routes.js",
+      "synopsis": "Runtime route composition for the main Express app.",
+      "bytes": 43734,
+      "mtime": "2026-07-04T20:52:59.544Z",
+      "indexed_at": "2026-07-04T20:52:59.544Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     }
   ]
 }
