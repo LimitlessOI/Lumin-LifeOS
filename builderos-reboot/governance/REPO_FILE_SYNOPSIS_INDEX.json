@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T08:19:44.136Z",
+  "generated_at": "2026-07-04T08:27:37.782Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 10889,
   "files": [
@@ -37583,9 +37583,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 126010,
-      "mtime": "2026-07-04T08:19:11.806Z",
-      "indexed_at": "2026-07-04T08:19:44.136Z"
+      "bytes": 126248,
+      "mtime": "2026-07-04T08:27:28.754Z",
+      "indexed_at": "2026-07-04T08:27:37.782Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -79653,9 +79653,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 24154,
-      "mtime": "2026-07-04T08:18:42.378Z",
-      "indexed_at": "2026-07-04T08:19:44.136Z",
+      "bytes": 24158,
+      "mtime": "2026-07-04T08:26:55.418Z",
+      "indexed_at": "2026-07-04T08:27:37.782Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
