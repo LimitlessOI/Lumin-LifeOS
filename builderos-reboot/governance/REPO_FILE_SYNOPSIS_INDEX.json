@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:12:23.051Z",
+  "generated_at": "2026-07-04T21:12:29.545Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 22,
+  "file_count": 23,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -66,6 +66,13 @@
       "bytes": 629,
       "mtime": "2026-07-04T20:50:05.210Z",
       "indexed_at": "2026-07-04T20:50:05.210Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_token_optimizer_daily.sql",
+      "synopsis": "Database migration — 20260704_create_token_optimizer_daily.sql.",
+      "bytes": 398,
+      "mtime": "2026-07-04T21:12:29.545Z",
+      "indexed_at": "2026-07-04T21:12:29.545Z"
     },
     {
       "path": "db/migrations/20260704_create_token_usage_log.sql",
