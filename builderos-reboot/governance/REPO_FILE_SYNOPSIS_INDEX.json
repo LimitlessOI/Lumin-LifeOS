@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:56:02.449Z",
+  "generated_at": "2026-07-04T14:56:19.733Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 14,
   "files": [
@@ -93,10 +93,10 @@
     },
     {
       "path": "services/creator-media-service.js",
-      "synopsis": "Exports createMediaService — services/creator-media-service.js.",
-      "bytes": 10412,
-      "mtime": "2026-07-04T14:49:59.786Z",
-      "indexed_at": "2026-07-04T14:49:59.786Z"
+      "synopsis": "Service module — Creator Media Service.",
+      "bytes": 10613,
+      "mtime": "2026-07-04T14:56:19.733Z",
+      "indexed_at": "2026-07-04T14:56:19.733Z"
     },
     {
       "path": "startup/register-runtime-routes.js",
