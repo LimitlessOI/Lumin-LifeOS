@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:34:23.778Z",
+  "generated_at": "2026-07-04T21:34:32.271Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 32,
+  "file_count": 33,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -136,6 +136,13 @@
       "bytes": 14582,
       "mtime": "2026-07-04T21:16:52.049Z",
       "indexed_at": "2026-07-04T21:16:52.049Z"
+    },
+    {
+      "path": "routes/clientcare-billing-recovery-routes.js",
+      "synopsis": "Exports createClientcareBillingRecoveryRoutes — routes/clientcare-billing-recovery-routes.js.",
+      "bytes": 2239,
+      "mtime": "2026-07-04T21:34:32.271Z",
+      "indexed_at": "2026-07-04T21:34:32.271Z"
     },
     {
       "path": "routes/emergencyFundRoutes.js",
