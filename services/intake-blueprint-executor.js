@@ -61,11 +61,34 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
 
   const scanHints = formatScanHints(step, scan, blueprint);
 
+  const contract = step.contract || {};
+  const contractSpec = [];
+  if (contract.tables?.length) {
+    contractSpec.push(`EXACT TABLE CONTRACT:\n${contract.tables.map(t => `CREATE TABLE IF NOT EXISTS ${t.name} (\n  ${t.columns.join(',\n  ')}\n);`).join('\n')}`);
+  }
+  if (contract.factory_signature) {
+    contractSpec.push(`EXACT FACTORY SIGNATURE: ${contract.factory_signature}`);
+  }
+  if (contract.exports?.length) {
+    contractSpec.push(`REQUIRED EXPORTS: ${contract.exports.join(', ')}`);
+  }
+  if (contract.endpoints?.length) {
+    contractSpec.push(`EXACT ENDPOINTS:\n${contract.endpoints.map(e => `${e.method} ${e.path} (auth: ${e.auth}) body: [${(e.body || []).join(', ')}] → returns ${e.returns || '{ ok }'}`).join('\n')}`);
+  }
+  if (contract.ai_calls?.length) {
+    contractSpec.push(`AI CALLS: ${contract.ai_calls.map(c => `callCouncilMember('${c.alias}', ..., { taskType: '${c.taskType || 'general'}' }) — ${c.purpose}`).join('; ')}`);
+  }
+  if (contract.test_assertions?.length) {
+    contractSpec.push(`TEST ASSERTIONS:\n${contract.test_assertions.map(a => `- ${a}`).join('\n')}`);
+  }
+
+  const laneModel = 'openai';
+
   return {
     domain: 'lifeos',
     mode: 'code',
     execution_only: false,
-    model: 'gemini_flash',
+    model: laneModel,
     target_file: targetFile,
     task: `[intake-blueprint] ${step.id}: ${step.purpose || product}`,
     spec: [
@@ -75,6 +98,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
       `Purpose: ${step.purpose || 'implement step'}`,
       `SSOT: ${ssot}`,
       typeHint,
+      ...contractSpec,
       scanHints,
       'Reference files in files[] are STYLE GUIDES ONLY — write a complete new file for target_file; do not paste partial copies.',
       'Do not modify server.js or core/two-tier-system-init.js — register routes via existing factory pattern only.',

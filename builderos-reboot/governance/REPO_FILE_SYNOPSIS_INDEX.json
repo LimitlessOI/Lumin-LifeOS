@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T03:17:56.452Z",
+  "generated_at": "2026-07-04T08:19:44.136Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 10889,
   "files": [
@@ -37583,9 +37583,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 125216,
-      "mtime": "2026-07-04T03:17:33.089Z",
-      "indexed_at": "2026-07-04T03:17:56.452Z"
+      "bytes": 126010,
+      "mtime": "2026-07-04T08:19:11.806Z",
+      "indexed_at": "2026-07-04T08:19:44.136Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38019,9 +38019,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 577007,
-      "mtime": "2026-07-04T03:17:04.017Z",
-      "indexed_at": "2026-07-04T03:17:56.452Z"
+      "bytes": 577222,
+      "mtime": "2026-07-04T08:19:22.322Z",
+      "indexed_at": "2026-07-04T08:19:44.136Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -77441,9 +77441,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 12758,
-      "mtime": "2026-07-04T03:16:25.437Z",
-      "indexed_at": "2026-07-04T03:17:56.452Z",
+      "bytes": 13405,
+      "mtime": "2026-07-04T08:17:41.758Z",
+      "indexed_at": "2026-07-04T08:19:44.136Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -77732,9 +77732,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 45385,
-      "mtime": "2026-07-04T02:34:47.121Z",
-      "indexed_at": "2026-07-04T02:35:57.086Z",
+      "bytes": 46243,
+      "mtime": "2026-07-04T08:18:22.718Z",
+      "indexed_at": "2026-07-04T08:19:44.136Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -79653,9 +79653,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 22994,
-      "mtime": "2026-07-04T01:22:21.537Z",
-      "indexed_at": "2026-07-04T02:35:09.709Z",
+      "bytes": 24154,
+      "mtime": "2026-07-04T08:18:42.378Z",
+      "indexed_at": "2026-07-04T08:19:44.136Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -80770,9 +80770,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 45460,
-      "mtime": "2026-07-04T02:34:24.129Z",
-      "indexed_at": "2026-07-04T02:35:57.086Z",
+      "bytes": 45421,
+      "mtime": "2026-07-04T08:16:56.494Z",
+      "indexed_at": "2026-07-04T08:19:44.136Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

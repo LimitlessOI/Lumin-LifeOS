@@ -599,7 +599,7 @@ export async function runLuminChairTurn(ctx, deps) {
       const baseUrl = deps.founderBuildBaseUrl || process.env.PUBLIC_BASE_URL || '';
       const started = Date.now();
 
-      if (detectedProductId && detectedProductId !== 'marketingos') {
+      if (detectedProductId) {
         const isArcOrExecuteRequest = /\b(run|execute|review|check|arc|sentry|status|validate)\b/i.test(cleanedInput)
           && !/\b(create|generate|make|produce|write|draft|start|kick.?off)\b/i.test(cleanedInput);
 

@@ -38,7 +38,6 @@ If a section is unclear or missing from the amendment: use the string "UNKNOWN" 
 Do NOT invent requirements. Only extract what is stated or clearly implied.`;
 
 const BLUEPRINT_GEN_SYSTEM = (patterns) => {
-  // Trim large arrays to prevent system prompt bloat; Claude only needs the shape, not all 450 names
   const slim = {
     installed_packages: patterns.installed_packages,
     not_installed: patterns.not_installed,
@@ -52,33 +51,54 @@ const BLUEPRINT_GEN_SYSTEM = (patterns) => {
     existing_routes: (patterns.existing_routes || []).slice(0, 20),
     scanned_at: patterns.scanned_at,
   };
-  return `You are BuilderOS ARC generating a SKELETON blueprint JSON.
+  return `You are BuilderOS ARC generating an EXECUTABLE blueprint JSON.
 
-IMPORTANT: This is a routing skeleton — NOT a full implementation. Steps contain only routing metadata.
-Full file implementations are generated at execution time. Keep the output SHORT and COMPLETE.
+Each step must contain enough contract detail that execution is MECHANICAL — no design decisions left for the coder.
 
 CODEBASE PATTERNS:
 ${JSON.stringify(slim)}
 
-SKELETON FORMAT (every field required, no extras):
-{"_meta":{"product":"...","phase":1,"parent_ssot":"...","blueprint_version":"1.0.0-skeleton","build_rule":"ARC_SKELETON","ssot_tag":"docs/projects/AMENDMENT_XX.md","acceptance_cmd":"node scripts/verify-PRODUCT.mjs"},"env":["ENV_VAR_NAME"],"steps":[{"id":"XXX-P1-001","file":"db/migrations/YYYYMMDD_name.sql","type":"sql","purpose":"one sentence","deps":[],"ssot_tag":"..."},{"id":"XXX-P1-002","file":"services/name.js","type":"esm","purpose":"one sentence","deps":["XXX-P1-001"],"ssot_tag":"..."}]}
+STEP CONTRACT FORMAT (every field required, no extras):
+{"_meta":{"product":"...","phase":1,"parent_ssot":"...","blueprint_version":"1.0.0","build_rule":"ARC_CONTRACT","ssot_tag":"docs/products/PRODUCT/PRODUCT_HOME.md","acceptance_cmd":"node scripts/verify-PRODUCT.mjs"},"env":["ENV_VAR_NAME"],"steps":[...]}
+
+Each step object:
+{
+  "id": "XXX-P1-001",
+  "file": "db/migrations/YYYYMMDD_name.sql",
+  "type": "sql",
+  "purpose": "one sentence",
+  "deps": [],
+  "ssot_tag": "docs/products/PRODUCT/PRODUCT_HOME.md",
+  "contract": {
+    "exports": ["functionName"],
+    "factory_signature": "export function createXxx({ pool, logger })",
+    "endpoints": [{"method":"POST","path":"/api/v1/...","auth":"requireKey","body":["field:type"],"returns":"{ ok, data }"}],
+    "tables": [{"name":"table_name","columns":["id UUID PRIMARY KEY DEFAULT gen_random_uuid()","owner_id TEXT NOT NULL","created_at TIMESTAMPTZ DEFAULT NOW()"]}],
+    "ai_calls": [{"alias":"openai","purpose":"...","taskType":"general"}],
+    "test_assertions": ["HTTP 200 on GET /api/v1/...", "row inserted in table_name"]
+  }
+}
+
+The "contract" field makes execution mechanical:
+- sql steps: "tables" array with exact column definitions
+- esm service steps: "exports" + "factory_signature" (what the module provides)
+- esm route steps: "endpoints" array with method/path/auth/body/returns
+- esm_script steps: "test_assertions" array (what the verify script checks)
+- html steps: no contract needed (static file)
+- All steps with AI: "ai_calls" array
 
 RULES:
-1. id format: PRODUCT_ABBREV-P1-NNN (e.g. SMS-P1-001 for SocialMediaOS)
-2. type values and what they mean:
-   - sql → a .sql file containing DDL (migrations)
-   - esm → a .js service or route module (factory function, exports something)
-   - esm_script → an executable .mjs acceptance test script (run with node, not imported)
-   - html → a .html file in public/
-3. NEVER put a .md file as a step — documentation files are NOT steps
-4. NEVER use type esm_script for a .js or .md file — only for standalone .mjs acceptance scripts
-5. deps: only step IDs defined earlier in this same steps array
-6. GAP_FLAG: only in purpose when truly unknown — NEVER in type field; NEVER use GAP_FLAG after founder answered
-7. Do NOT include: imports, exports, behavior, routes, sql DDL, factory signatures — those are for execution
-8. Keep purpose to one sentence maximum
-9. acceptance_cmd in _meta must be a real node command (e.g. "node scripts/verify-socialmediaos.mjs")
+1. id format: PRODUCT_ABBREV-P1-NNN (e.g. TC-P1-001 for TC Service)
+2. type: sql | esm | esm_script | html — NEVER .md files as steps
+3. esm_script is only for standalone .mjs acceptance scripts
+4. deps: only step IDs defined earlier in steps[]
+5. GAP_FLAG: only in purpose when truly unknown — NEVER in type field
+6. purpose: one sentence, specific action (not vague)
+7. contract: required for sql/esm/esm_script steps — this IS the executable spec
+8. acceptance_cmd in _meta must be a real node command
+9. ssot_tag must point to the actual product home, not AMENDMENT_XX.md
 
-Return ONLY the compact JSON skeleton. No markdown, no fences, no commentary.`;
+Return ONLY the compact JSON. No markdown, no fences, no commentary.`;
 };
 
 const GAP_CONVERSATION_SYSTEM = `You are Lumin (the BuilderOS Chair). A blueprint has gaps that need founder input to resolve.
@@ -351,8 +371,9 @@ async function updateSession(pool, id, updates) {
 export function createBlueprintIntakeService(pool, callCouncilMember) {
 
   // ── FLOW 1: Backfill (existing amendment → blueprint) ─────────────────────
-  // amendmentText takes precedence over amendmentFile — CLI reads locally and passes text,
-  // so the server doesn't need to find the file (docs/ is excluded from Railway Docker image).
+  // amendmentText takes precedence over amendmentFile — CLI reads locally and passes text.
+  // docs/products/** IS included in the Railway Docker image (.dockerignore whitelists it),
+  // but inline text avoids a disk read when the caller already has the content.
   // Returns immediately with session_id; AI processing runs in background.
   let _backfillRunning = false;
   async function startBackfill({ amendmentFile, amendmentText: inlineText, productName, ownerId = null }) {
@@ -414,9 +435,9 @@ ${gapContext}
 Regenerate a complete corrected skeleton blueprint JSON. Documentation .md files are NOT steps.
 Phase 1 code infrastructure (migration, service, routes, verify script) belongs in steps when the founder asked for it.`;
 
-      const blueprintRaw = await callCouncilMember('claude',
+      const blueprintRaw = await callCouncilMember('openai',
         regeneratePrompt,
-        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
+        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
       );
       let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
       const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
@@ -539,9 +560,9 @@ Then output the spec as a JSON block using the intent extraction format.
 
 Ask ONE question at a time. Be brief and direct. You are Lumin — conversational, not formal.`;
 
-    const firstResponse = await callCouncilMember('claude',
+    const firstResponse = await callCouncilMember('openai',
       firstMessage,
-      { systemPromptOverride: greenfieldSystem, maxOutputTokens: 500, taskType: 'general' }
+      { systemPromptOverride: greenfieldSystem, maxOutputTokens: 500, taskType: 'general', product_lane: 'builderos' }
     );
 
     const conversation = [
@@ -567,9 +588,9 @@ You are mid-conversation. Continue naturally. When scope is confirmed say SPEC_R
 Ask ONE question at a time. Be brief.`;
 
     const messages = [...conversation, { role: 'user', content: userMessage }];
-    const response = await callCouncilMember('claude',
+    const response = await callCouncilMember('openai',
       messages.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n\n'),
-      { systemPromptOverride: greenfieldSystem, maxOutputTokens: 600, taskType: 'general' }
+      { systemPromptOverride: greenfieldSystem, maxOutputTokens: 600, taskType: 'general', product_lane: 'builderos' }
     );
 
     messages.push({ role: 'assistant', content: response });
@@ -579,9 +600,9 @@ Ask ONE question at a time. Be brief.`;
       const jsonMatch = response.match(/```json([\s\S]+?)```/) || response.match(/\{[\s\S]+\}/);
       if (jsonMatch) {
         const intent = parseBlueprintFromAiResponse(jsonMatch[0]);
-        const blueprintRaw = await callCouncilMember('claude',
+        const blueprintRaw = await callCouncilMember('openai',
           `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
+          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
         );
         const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
         const gaps = detectGaps(blueprint);
@@ -621,9 +642,9 @@ Ask ONE question at a time. Be brief.`;
     const sessionId = rows[0].id;
 
     try {
-      const patchedRaw = await callCouncilMember('claude',
+      const patchedRaw = await callCouncilMember('openai',
         `FOUNDER ADJUSTMENT REQUEST:\n${adjustmentText}`,
-        { systemPromptOverride: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
+        { systemPromptOverride: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
       );
       const patched = parseBlueprintFromAiResponse(patchedRaw);
       const gaps = detectGaps(patched);
@@ -670,18 +691,21 @@ Ask ONE question at a time. Be brief.`;
     const gapContext = `Open gaps:\n${openGaps.map(g => `- ${g.id}: ${g.description}`).join('\n')}`;
     const messages = [...conversation, { role: 'user', content: userMessage }];
 
-    const response = await callCouncilMember('claude',
+    const response = await callCouncilMember('openai',
       `${gapContext}\n\nCurrent message from founder: ${userMessage}`,
-      { systemPromptOverride: GAP_CONVERSATION_SYSTEM, maxOutputTokens: 400, taskType: 'general' }
+      { systemPromptOverride: GAP_CONVERSATION_SYSTEM, maxOutputTokens: 400, taskType: 'general', product_lane: 'builderos' }
     );
     messages.push({ role: 'assistant', content: response });
 
-    // Extract answers for specific gaps from the conversation
+    // Extract answers for specific gaps — only resolve a gap when the user
+    // explicitly references it by ID or the assistant output contains
+    // GAPS_RESOLVED (all gaps answered). Generic confirmations ("got it",
+    // "confirmed") without a specific gap ID do NOT auto-resolve.
     const gapAnswers = { ...(session.gap_answers_json || {}) };
+    const allGapsResolved = response.includes('GAPS_RESOLVED');
     for (const gap of openGaps) {
-      if (userMessage.toLowerCase().includes(gap.id.toLowerCase()) ||
-          response.toLowerCase().includes('got it') ||
-          response.toLowerCase().includes('confirmed')) {
+      const mentionsGapId = userMessage.toLowerCase().includes(gap.id.toLowerCase());
+      if (mentionsGapId || allGapsResolved) {
         gapAnswers[gap.id] = userMessage;
         gap.resolved = true;
         gap.answer = userMessage;

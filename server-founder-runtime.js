@@ -70,8 +70,15 @@ import {
   GITHUB_REPO,
 } from "./startup/environment.js";
 
+let _unhandledRejectionCount = 0;
+let _lastUnhandledRejection = null;
 process.on('unhandledRejection', (reason) => {
-  logger.error({ err: reason }, 'unhandledRejection — swallowed to keep server alive');
+  _unhandledRejectionCount++;
+  _lastUnhandledRejection = { at: new Date().toISOString(), error: String(reason?.message || reason).slice(0, 200) };
+  logger.error({ err: reason, count: _unhandledRejectionCount }, 'unhandledRejection — swallowed to keep server alive');
+  if (startupHealthState) {
+    startupHealthState.last_error = `unhandledRejection #${_unhandledRejectionCount}: ${String(reason?.message || reason).slice(0, 120)}`;
+  }
 });
 
 const __filename = fileURLToPath(import.meta.url);
@@ -96,7 +103,7 @@ function serializeStartupHealth() {
     ok: true,
     live: true,
     ready: startupHealthState.ready === true,
-    status: startupHealthState.ready === true ? "healthy" : "starting",
+    status: _unhandledRejectionCount > 0 ? 'degraded' : (startupHealthState.ready === true ? 'healthy' : 'starting'),
     checks: {
       server: "ok",
       db: startupHealthState.db,
@@ -106,6 +113,11 @@ function serializeStartupHealth() {
       last_error: startupHealthState.last_error || null,
     },
     startup: { ...startupHealthState },
+    fault_receipts: {
+      unhandled_rejections: _unhandledRejectionCount,
+      last_fault: _lastUnhandledRejection,
+      health_degraded: _unhandledRejectionCount > 0,
+    },
     uptime: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
   };
