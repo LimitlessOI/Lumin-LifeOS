@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T18:28:03.496Z",
+  "generated_at": "2026-07-04T18:28:33.824Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 8,
+  "file_count": 9,
   "files": [
     {
       "path": "db/migrations/20260704_adam_decisions.sql",
@@ -24,6 +24,13 @@
       "bytes": 426,
       "mtime": "2026-07-04T18:24:10.187Z",
       "indexed_at": "2026-07-04T18:24:10.187Z"
+    },
+    {
+      "path": "public/overlay/conflict_arbitrator.html",
+      "synopsis": "HTML page: Conflict Arbitrator",
+      "bytes": 19547,
+      "mtime": "2026-07-04T18:28:33.824Z",
+      "indexed_at": "2026-07-04T18:28:33.824Z"
     },
     {
       "path": "public/overlay/ideavault.html",
