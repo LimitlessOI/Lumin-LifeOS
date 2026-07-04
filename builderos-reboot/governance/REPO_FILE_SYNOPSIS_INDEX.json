@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:28:06.502Z",
+  "generated_at": "2026-07-04T22:28:10.657Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 48,
   "files": [
@@ -339,9 +339,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 45396,
-      "mtime": "2026-07-04T22:17:02.450Z",
-      "indexed_at": "2026-07-04T22:17:02.450Z",
+      "bytes": 45623,
+      "mtime": "2026-07-04T22:28:10.657Z",
+      "indexed_at": "2026-07-04T22:28:10.657Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
