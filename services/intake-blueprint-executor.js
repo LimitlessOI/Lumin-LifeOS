@@ -568,13 +568,16 @@ export async function executeIntakeBlueprint({
       }
     }
 
-    if (!dryRun && targetFile && step.type !== 'sql' && step.type !== 'esm_script') {
+    if (!dryRun && targetFile && step.type !== 'esm_script') {
       const absTarget = join(REPO_ROOT, targetFile);
       if (existsSync(absTarget)) {
         let fileValid = false;
         if (step.type === 'html') {
           const content = readFileSync(absTarget, 'utf8');
           fileValid = content.length > 100 && content.includes('<html');
+        } else if (step.type === 'sql') {
+          const content = readFileSync(absTarget, 'utf8');
+          fileValid = content.length > 10 && /CREATE\s|ALTER\s|INSERT\s/i.test(content);
         } else {
           const checkResult = spawnSync('node', ['-c', absTarget], { encoding: 'utf8', cwd: REPO_ROOT });
           fileValid = checkResult.status === 0;

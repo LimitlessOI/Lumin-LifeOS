@@ -232,7 +232,24 @@ function dedupeVerifySteps(blueprint, productName) {
   const slug = productFileSlug(productName);
   const canonical = `scripts/verify-${slug}.mjs`;
   const verifySteps = (blueprint.steps || []).filter(s => s.type === 'esm_script');
-  if (verifySteps.length <= 1) {
+  if (verifySteps.length === 0) {
+    const prefix = productStepPrefix(productName);
+    const lastStep = (blueprint.steps || []).slice(-1)[0];
+    const depId = lastStep?.id || `${prefix}-P1-001`;
+    const nextNum = (blueprint.steps || []).length + 1;
+    (blueprint.steps || []).push({
+      id: `${prefix}-P1-${String(nextNum).padStart(3, '0')}`,
+      file: canonical,
+      type: 'esm_script',
+      purpose: `Acceptance verification for ${slug}`,
+      deps: [depId],
+      ssot_tag: blueprint._meta?.ssot_tag || 'docs/projects/AMENDMENT_XX.md',
+    });
+    if (blueprint._meta) blueprint._meta.acceptance_cmd = `node ${canonical}`;
+    return blueprint;
+  }
+  if (verifySteps.length === 1) {
+    if (verifySteps[0].file !== canonical) verifySteps[0].file = canonical;
     if (blueprint._meta) blueprint._meta.acceptance_cmd = `node ${canonical}`;
     return blueprint;
   }
