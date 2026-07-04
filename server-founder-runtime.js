@@ -145,6 +145,16 @@ function isSameOrigin(req) {
   }
 }
 
+// Raw request logger — BEFORE any middleware — captures every incoming request
+app.use((req, res, next) => {
+  const _reqT0 = Date.now();
+  console.log(`[REQ-IN] ${req.method} ${req.path} +${_reqT0 - _BOOT_T0}ms`);
+  res.on('finish', () => {
+    console.log(`[REQ-OUT] ${req.method} ${req.path} ${res.statusCode} +${Date.now() - _reqT0}ms`);
+  });
+  next();
+});
+
 // Mount a minimal health route before public/static middleware so Railway can
 // get truthful liveness even if a later route surface regresses.
 app.get("/healthz", (_req, res) => {
@@ -393,8 +403,8 @@ async function start() {
   const _hbInterval = setInterval(() => {
     _hbCount++;
     console.log(`[HEARTBEAT] tick=${_hbCount} +${Date.now() - _BOOT_T0}ms`);
-    if (_hbCount >= 15) clearInterval(_hbInterval);
-  }, 2000);
+    if (_hbCount >= 60) clearInterval(_hbInterval);
+  }, 5000);
   _hbInterval.unref();
 }
 
