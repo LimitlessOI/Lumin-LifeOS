@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Operator Runtime Status -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Operator Runtime Status</title>
+  <style>
+    :root{
+      color-scheme: dark;
+      --bg: #0a0a0f;
+      --bg2: #11111a;
+      --panel: #141420;
+      --panel2: #1a1a2a;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --text: #e8e8f0;
+      --muted: #9aa0bd;
+      --soft: #6d7392;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --err: #ef4444;
+      --info: #60a5fa;
+      --accent: #7c3aed;
+      --shadow: 0 18px 60px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius-lg: 24px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at top right, rgba(124,58,237,0.16), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(96,165,250,0.12), transparent 28%),
+        linear-gradient(180deg, #08080c, #0a0a10 60%, #07070b);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .app {
+      min-height: 100%;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1080px;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 16px;
+      min-height: calc(100vh - 36px);
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)), var(--panel);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(135deg, rgba(124,58,237,0.14), transparent 35%),
+        linear-gradient(225deg, rgba(96,165,250,0.10), transparent 30%);
+      mask: linear-gradient(180deg, rgba(0,0,0,0.85), transparent 88%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 26px;
+      height: 26px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: rgba(124,58,237,0.14);
+      border: 1px solid rgba(124,58,237,0.35);
+      color: #d8c8ff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      max-width: 12ch;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 62ch;
+    }
+
+    .status-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--soft);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.03);
+    }
+    .dot.ok { background: var(--ok); box-shadow: 0 0 0 3px rgba(34,197,94,0.12); }
+    .dot.warn { background: var(--warn); box-shadow: 0 0 0 3px rgba(245,158,11,0.12); }
+    .dot.err { background: var(--err); box-shadow: 0 0 0 3px rgba(239,68,68,0.12); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius);
+      padding: 14px 14px 13px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 5px;
+    }
+
+    .metric-sub {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .ops {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .section {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.025);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .section-note {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    .status-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .status-item {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .status-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .status-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .status-code {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.12);
+      padding: 4px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .status-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      height: 46px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.18);
+      color: var(--text);
+      padding: 0 14px;
+      font: inherit;
+      outline: none;
+      transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+    }
+
+    input:focus {
+      border-color: rgba(124,58,237,0.6);
+      box-shadow: 0 0 0 4px rgba(124,58,237,0.14);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      height: 44px;
+      padding: 0 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .16s ease, opacity .16s ease, background .16s ease, border-color .16s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled { opacity: 0.55; cursor: default; transform: none; }
+
+    .primary {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: white;
+    }
+
+    .secondary {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .danger {
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.28);
+      color: #fecaca;
+    }
+
+    .log {
+      display: grid;
+      gap: 8px;
+      max-height: 280px;
+      overflow: auto;
+      scrollbar-width: thin;
+      padding-right: 2px;
+    }
+
+    .log-line {
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.55;
+      color: #d2d7ef;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.14);
+      word-break: break-word;
+    }
+
+    .log-line.ok { border-color: rgba(34,197,94,0.24); background: rgba(34,197,94,0.06); }
+    .log-line.warn { border-color: rgba(245,158,11,0.24); background: rgba(245,158,11,0.06); }
+    .log-line.err { border-color: rgba(239,68,68,0.24); background: rgba(239,68,68,0.06); }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 10px;
+      color: var(--soft);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .compact {
+      display: grid;
+      gap: 8px;
+    }
+
+    .kv {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .kv:last-child { border-bottom: 0; }
+
+    .kv span:first-child {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .kv span:last-child {
+      color: var(--text);
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 12px;
+      word-break: break-word;
+    }
+
+    .mono {
+      font-family: var(--mono);
+    }
+
+    @media (max-width: 920px) {
+      body { overflow: auto; }
+      .app { padding: 12px; }
+      .shell {
+        grid-template-columns: 1fr;
+        min-height: unset;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero, .ops { padding: 14px; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .status-top { flex-direction: column; align-items: flex-start; }
+      .status-code { white-space: normal; }
+      .section-header { align-items: flex-start; flex-direction: column; }
+      .section-note { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <main class="shell">
+      <section class="panel hero" aria-labelledby="title">
+        <div class="eyebrow"><span class="badge">ZDHP-P1-004</span> Optional HTML output for operator runtime status</div>
+        <h1 id="title">Operator runtime status</h1>
+        <p class="subtitle">
+          A lightweight overlay for the current operator session: connection posture, current work token, shipped code day, and recent intake activity.
+        </p>
+
+        <div class="status-row" aria-label="Current state">
+          <div class="status-pill"><span class="dot ok" id="dot-auth"></span><span id="auth-state">Authenticated</span></div>
+          <div class="status-pill"><span class="dot" id="dot-key"></span><span id="key-state">Command key unknown</span></div>
+          <div class="status-pill"><span class="dot" id="dot-feed"></span><span id="feed-state">Ledger idle</span></div>
+        </div>
+
+        <div class="summary-grid" aria-label="Runtime summary">
+          <div class="metric">
+            <div class="metric-label">Operator</div>
+            <div class="metric-value mono" id="operator-value">—</div>
+            <div class="metric-sub" id="operator-sub">Loaded from the current signed-in session.</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Role</div>
+            <div class="metric-value mono" id="role-value">—</div>
+            <div class="metric-sub" id="role-sub">Used to determine visible controls.</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Latest work token</div>
+            <div class="metric-value mono" id="token-value">—</div>
+            <div class="metric-sub">Most recent intake payload on this page.</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Latest shipped code day</div>
+            <div class="metric-value mono" id="day-value">—</div>
+            <div class="metric-sub">Blueprint reference stored with the ledger entry.</div>
+          </div>
+        </div>
+
+        <div class="footer">
+          Optional overlay page in <span class="mono">public/overlay/</span>. It does not replace any existing shell behavior.
+        </div>
+      </section>
+
+      <aside class="panel ops">
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Runtime input</h2>
+            <div class="section-note">POST /api/v1/lifeos/operator-consumption</div>
+          </div>
+          <div class="content">
+            <form class="form" id="intake-form">
+              <div class="field">
+                <label for="work-token">Work token</label>
+                <input id="work-token" name="work_token" autocomplete="off" placeholder="e.g. ZDHP-P1-004" />
+              </div>
+              <div class="field">
+                <label for="shipped-code-day">Shipped code day</label>
+                <input id="shipped-code-day" name="shipped_code_day" autocomplete="off" placeholder="e.g. 2026-07-04" />
+              </div>
+              <div class="button-row">
+                <button class="primary" type="submit" id="submit-btn">Record intake</button>
+                <button class="secondary" type="button" id="refresh-btn">Refresh ledger</button>
+                <button class="danger" type="button" id="clear-btn">Clear form</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Recent entries</h2>
+            <div class="section-note" id="entry-count">0 records</div>
+          </div>
+          <div class="content">
+            <div class="log" id="ledger-log" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Session details</h2>
+            <div class="section-note">Derived from the current context</div>
+          </div>
+          <div class="content compact">
+            <div class="kv"><span>Current page</span><span>operator-runtime-status</span></div>
+            <div class="kv"><span>Mode</span><span>HTML overlay</span></div>
+            <div class="kv"><span>Purpose</span><span>Optional runtime status</span></div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const qs = new URLSearchParams(location.search);
+      const shell = qs.get('shell') === '1';
+      const context = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false }) || {};
+      const headers = typeof context.headers === 'function' ? context.headers() : {};
+      const apiBase = '/api/v1/lifeos/operator-consumption';
+
+      const els = {
+        authState: document.getElementById('auth-state'),
+        keyState: document.getElementById('key-state'),
+        feedState: document.getElementById('feed-state'),
+        dotAuth: document.getElementById('dot-auth'),
+        dotKey: document.getElementById('dot-key'),
+        dotFeed: document.getElementById('dot-feed'),
+        operatorValue: document.getElementById('operator-value'),
+        roleValue: document.getElementById('role-value'),
+        operatorSub: document.getElementById('operator-sub'),
+        roleSub: document.getElementById('role-sub'),
+        tokenValue: document.getElementById('token-value'),
+        dayValue: document.getElementById('day-value'),
+        form: document.getElementById('intake-form'),
+        workToken: document.getElementById('work-token'),
+        shippedCodeDay: document.getElementById('shipped-code-day'),
+        submitBtn: document.getElementById('submit-btn'),
+        refreshBtn: document.getElementById('refresh-btn'),
+        clearBtn: document.getElementById('clear-btn'),
+        ledgerLog: document.getElementById('ledger-log'),
+        entryCount: document.getElementById('entry-count'),
+      };
+
+      const state = {
+        entries: [],
+        operator: context.USER || context.user || null,
+        role: context.role || null,
+        keyPresent: Boolean(context.KEY || localStorage.getItem('lifeos_key') || localStorage.getItem('commandKey') || localStorage.getItem('command_key')),
+      };
+
+      function setStatus(kind, text) {
+        if (kind === 'auth') {
+          els.authState.textContent = text;
+          els.dotAuth.className = 'dot ' + (/auth/i.test(text) || /signed/i.test(text) ? 'ok' : 'warn');
+        } else if (kind === 'key') {
+          els.keyState.textContent = text;
+          els.dotKey.className = 'dot ' + (/present/i.test(text) ? 'ok' : 'warn');
+        } else if (kind === 'feed') {
+          els.feedState.textContent = text;
+          els.dotFeed.className = 'dot ' + (/loaded|recorded|ok/i.test(text) ? 'ok' : 'warn');
+        }
+      }
+
+      function esc(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function renderSummary() {
+        els.operatorValue.textContent = state.operator || '—';
+        els.roleValue.textContent = state.role || '—';
+        els.operatorSub.textContent = state.operator ? 'Loaded from the current signed-in session.' : 'No operator session surfaced in this view.';
+        els.roleSub.textContent = state.role ? 'Context available for operator consumption endpoints.' : 'Role not available from context.';
+        els.tokenValue.textContent = els.workToken.value.trim() || '—';
+        els.dayValue.textContent = els.shippedCodeDay.value.trim() || '—';
+        setStatus('auth', state.operator ? 'Authenticated' : 'Authentication pending');
+        setStatus('key', state.keyPresent ? 'Command key present' : 'Command key unknown');
+      }
+
+      function renderEntries() {
+        const entries = Array.isArray(state.entries) ? state.entries : [];
+        els.entryCount.textContent = `${entries.length} record${entries.length === 1 ? '' : 's'}`;
+        if (!entries.length) {
+          els.ledgerLog.innerHTML = '<div class="log-line warn">No entries yet. Submit a work token and shipped code day to record intake.</div>';
+          setStatus('feed', 'Ledger idle');
+          return;
+        }
+
+        els.ledgerLog.innerHTML = entries.slice(0, 20).map((row) => {
+          const payload = row.raw_payload || {};
+          const ts = row.logged_at || row.created_at || row.updated_at || '';
+          return `
+            <div class="log-line ok">
+              <strong>#${esc(row.id ?? '—')}</strong> ${esc(row.operator ?? '—')} · ${esc(row.task_id ?? '—')} · ${esc(row.blueprint_id ?? '—')}
+              <br>
+              <span class="mono">${esc(ts)}</span>
+              <br>
+              work_token=${esc(payload.work_token ?? row.task_id ?? '—')}, shipped_code_day=${esc(payload.shipped_code_day ?? row.blueprint_id ?? '—')}
+            </div>
+          `;
+        }).join('');
+        setStatus('feed', 'Ledger loaded');
+      }
+
+      async function loadEntries() {
+        try {
+          const res = await fetch(apiBase, {
+            method: 'GET',
+            headers: {
+              ...headers,
+            },
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            throw new Error(data?.error || 'Failed to load operator consumption');
+          }
+          state.entries = Array.isArray(data.data) ? data.data : [];
+          if (!state.operator && state.entries[0]?.operator) state.operator = state.entries[0].operator;
+          renderSummary();
+          renderEntries();
+        } catch (err) {
+          state.entries = [];
+          renderSummary();
+          els.ledgerLog.innerHTML = `<div class="log-line err">${esc(err.message || 'Unable to load entries')}</div>`;
+          setStatus('feed', 'Feed unavailable');
+        }
+      }
+
+      async function submitEntry(ev) {
+        ev.preventDefault();
+        const workToken = els.workToken.value.trim();
+        const shippedCodeDay = els.shippedCodeDay.value.trim();
+
+        if (!workToken) {
+          els.ledgerLog.innerHTML = '<div class="log-line err">work_token_required</div>';
+          return;
+        }
+        if (!shippedCodeDay) {
+          els.ledgerLog.innerHTML = '<div class="log-line err">shipped_code_day_required</div>';
+          return;
+        }
+
+        els.submitBtn.disabled = true;
+        els.submitBtn.textContent = 'Recording…';
+
+        try {
+          const res = await fetch(apiBase, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...headers,
+            },
+            body: JSON.stringify({ work_token: workToken, shipped_code_day: shippedCodeDay }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            throw new Error(data?.error || 'Failed to record intake');
+          }
+
+          const row = data.data;
+          state.entries = [row, ...state.entries.filter((item) => String(item.id) !== String(row.id))];
+          state.operator = row.operator || state.operator;
+          els.tokenValue.textContent = workToken;
+          els.dayValue.textContent = shippedCodeDay;
+          setStatus('feed', 'Entry recorded');
+          renderSummary();
+          renderEntries();
+        } catch (err) {
+          els.ledgerLog.innerHTML = `<div class="log-line err">${esc(err.message || 'Failed to record intake')}</div>`;
+          setStatus('feed', 'Record failed');
+        } finally {
+          els.submitBtn.disabled = false;
+          els.submitBtn.textContent = 'Record intake';
+        }
+      }
+
+      function clearForm() {
+        els.workToken.value = '';
+        els.shippedCodeDay.value = '';
+        renderSummary();
+      }
+
+      function syncThemeFromParent(theme) {
+        if (theme === 'light') {
+          document.documentElement.style.colorScheme = 'light';
+          document.documentElement.style.setProperty('--bg', '#f6f7fb');
+          document.documentElement.style.setProperty('--bg2', '#ffffff');
+          document.documentElement.style.setProperty('--panel', '#ffffff');
+          document.documentElement.style.setProperty('--panel2', '#f3f5fb');
+          document.documentElement.style.setProperty('--text', '#111827');
+          document.documentElement.style.setProperty('--muted', '#475569');
+          document.documentElement.style.setProperty('--soft', '#64748b');
+        }
+      }
+
+      window.addEventListener('message', (event) => {
+        const type = event?.data?.type;
+        if (type === 'lifeos-theme') syncThemeFromParent(event.data.theme);
+      });
+
+      els.form.addEventListener('submit', submitEntry);
+      els.refreshBtn.addEventListener('click', loadEntries);
+      els.clearBtn.addEventListener('click', clearForm);
+      els.workToken.addEventListener('input', renderSummary);
+      els.shippedCodeDay.addEventListener('input', renderSummary);
+
+      if (shell) {
+        document.body.style.background = 'transparent';
+      }
+
+      renderSummary();
+      renderEntries();
+      loadEntries();
+    })();
+  </script>
+</body>
+</html>
