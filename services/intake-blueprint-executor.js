@@ -543,6 +543,7 @@ export async function executeIntakeBlueprint({
 
   let started = !fromStepId;
   const results = [];
+  const failedSteps = [];
 
   for (const step of steps) {
     if (!started) {
@@ -642,14 +643,8 @@ export async function executeIntakeBlueprint({
     }
 
     if (!row.ok) {
-      return {
-        ok: false,
-        error: 'step_failed',
-        failed_step: step.id,
-        target_file: targetFile,
-        builder: buildResult.body,
-        results,
-      };
+      failedSteps.push({ step_id: step.id, target_file: targetFile, error: buildResult.body?.error || 'step_failed' });
+      continue;
     }
 
     spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: REPO_ROOT, encoding: 'utf8' });
@@ -701,18 +696,21 @@ export async function executeIntakeBlueprint({
     }
   }
 
-  const overallOk = (acceptance ? acceptance.ok : true) && (postDeploy?.ok !== false);
+  const overallOk = (acceptance ? acceptance.ok : true) && (postDeploy?.ok !== false) && failedSteps.length === 0;
 
   return {
     ok: overallOk,
     steps_run: results.length,
     results,
     blueprint: resolvedBlueprint,
+    ...(failedSteps.length ? { failed_steps: failedSteps } : {}),
     ...(acceptance ? { acceptance } : {}),
     ...(postDeploy ? { post_deploy: postDeploy } : {}),
     error: overallOk
       ? undefined
-      : postDeploy?.error || (acceptance?.ok === false ? `acceptance_failed: exit=${acceptance.status} stderr=${(acceptance.stderr || '').slice(0, 200)}` : undefined),
+      : failedSteps.length
+        ? `step_failed: ${failedSteps.map(f => f.step_id).join(', ')}`
+        : postDeploy?.error || (acceptance?.ok === false ? `acceptance_failed: exit=${acceptance.status} stderr=${(acceptance.stderr || '').slice(0, 200)}` : undefined),
   };
 }
 
