@@ -898,7 +898,10 @@ Return JSON:
 
     const verifyStep = steps.find(s => s.type === 'esm_script');
     if (verifyStep && verifyStep.file) {
-      const correctCmd = `node ${verifyStep.file}`;
+      let correctCmd = `node ${verifyStep.file}`;
+      if (verifyStep.file.includes('verify-project')) {
+        correctCmd += ' --all --dry-run';
+      }
       if (!fixed._meta) fixed._meta = {};
       if (fixed._meta.acceptance_cmd !== correctCmd) {
         fixed._meta.acceptance_cmd = correctCmd;
