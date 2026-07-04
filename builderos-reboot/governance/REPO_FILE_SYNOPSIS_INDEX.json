@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:40:56.479Z",
+  "generated_at": "2026-07-04T14:41:02.617Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 5,
   "files": [
@@ -8,8 +8,8 @@
       "path": "db/migrations/20260704_create_achievements_table.sql",
       "synopsis": "Database migration — 20260704_create_achievements_table.sql.",
       "bytes": 499,
-      "mtime": "2026-07-04T14:34:28.970Z",
-      "indexed_at": "2026-07-04T14:34:28.970Z"
+      "mtime": "2026-07-04T14:41:02.617Z",
+      "indexed_at": "2026-07-04T14:41:02.617Z"
     },
     {
       "path": "db/migrations/20260704_create_children_table.sql",
