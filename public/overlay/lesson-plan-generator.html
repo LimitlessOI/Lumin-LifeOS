@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Teacher OS · Lesson Plan Generator -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Teacher OS · Lesson Plan Generator</title>
+  <meta name="theme-color" content="#0f172a">
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#11182d;
+      --panel-2:#16213b;
+      --surface:#1b2745;
+      --surface-2:#223156;
+      --border:rgba(255,255,255,0.10);
+      --border-strong:rgba(255,255,255,0.16);
+      --text:#ecf2ff;
+      --muted:#a7b4d6;
+      --muted-2:#7f90b8;
+      --accent:#6ea8ff;
+      --accent-2:#8b5cf6;
+      --success:#34d399;
+      --warn:#f59e0b;
+      --danger:#fb7185;
+      --radius:20px;
+      --radius-sm:12px;
+      --shadow:0 20px 60px rgba(0,0,0,0.30);
+      --focus:0 0 0 3px rgba(110,168,255,0.25);
+      --maxw: 1120px;
+      color-scheme: dark;
+    }
+    [data-theme="light"]{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --panel-2:#f8fbff;
+      --surface:#eef3fb;
+      --surface-2:#e7eef9;
+      --border:rgba(15,23,42,0.10);
+      --border-strong:rgba(15,23,42,0.16);
+      --text:#0f172a;
+      --muted:#475569;
+      --muted-2:#64748b;
+      --shadow:0 18px 50px rgba(15,23,42,0.10);
+      color-scheme: light;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(110,168,255,0.14), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(139,92,246,0.10), transparent 30%),
+        var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit}
+    button,input,textarea,select{font:inherit}
+    .page{
+      min-height:100%;
+      padding:24px;
+    }
+    .shell{
+      max-width:var(--maxw);
+      margin:0 auto;
+      display:grid;
+      gap:18px;
+    }
+    .hero{
+      background:linear-gradient(135deg, rgba(110,168,255,0.16), rgba(139,92,246,0.12)), var(--panel);
+      border:1px solid var(--border);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hero-inner{
+      padding:28px;
+      display:grid;
+      gap:16px;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .eyebrow .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow:0 0 0 4px rgba(110,168,255,0.12);
+    }
+    h1{
+      margin:0;
+      font-size:clamp(28px, 4vw, 44px);
+      line-height:1.05;
+      letter-spacing:-0.04em;
+    }
+    .subtitle{
+      max-width:72ch;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:15px;
+    }
+    .hero-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:rgba(255,255,255,0.03);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .chip strong{color:var(--text); font-weight:600}
+    .main{
+      display:grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap:18px;
+      align-items:start;
+    }
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card-header{
+      padding:18px 20px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    }
+    .card-title{
+      margin:0;
+      font-size:16px;
+      letter-spacing:-0.02em;
+    }
+    .card-subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+    .card-body{padding:20px}
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+    .field{display:grid; gap:8px}
+    .field.full{grid-column:1 / -1}
+    label{
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .input, .select, .textarea{
+      width:100%;
+      border:1px solid var(--border);
+      background:var(--panel-2);
+      color:var(--text);
+      border-radius:16px;
+      padding:12px 14px;
+      outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .textarea{min-height:130px; resize:vertical; line-height:1.55}
+    .input:focus,.select:focus,.textarea:focus{
+      border-color:rgba(110,168,255,0.55);
+      box-shadow:var(--focus);
+    }
+    .help{
+      font-size:12px;
+      color:var(--muted-2);
+      line-height:1.5;
+    }
+    .toggle-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:11px 14px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--panel-2);
+      cursor:pointer;
+      user-select:none;
+      transition:border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+    .toggle:hover{transform:translateY(-1px)}
+    .toggle input{accent-color:var(--accent)}
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background:var(--panel-2);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-weight:700;
+      transition:transform .18s ease, border-color .18s ease, background .18s ease, opacity .18s ease;
+    }
+    .btn:hover{transform:translateY(-1px); border-color:var(--border-strong)}
+    .btn:disabled{opacity:.55; cursor:not-allowed; transform:none}
+    .btn.primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-color:transparent;
+      color:#fff;
+    }
+    .btn.ghost{
+      background:transparent;
+    }
+    .status{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(255,255,255,0.03);
+      color:var(--muted);
+      font-size:13px;
+      margin-top:14px;
+    }
+    .status[data-kind="success"]{border-color:rgba(52,211,153,0.35); color:#86efac}
+    .status[data-kind="error"]{border-color:rgba(251,113,133,0.35); color:#fda4af}
+    .status[data-kind="warn"]{border-color:rgba(245,158,11,0.35); color:#fcd34d}
+    .preview{
+      display:grid;
+      gap:16px;
+    }
+    .panel-section{
+      padding:20px;
+      display:grid;
+      gap:12px;
+    }
+    .plan-output{
+      white-space:pre-wrap;
+      line-height:1.6;
+      color:var(--text);
+      background:var(--panel-2);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      min-height:240px;
+      overflow:auto;
+    }
+    .output-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .block{
+      padding:14px 16px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:var(--panel-2);
+    }
+    .block h3{
+      margin:0 0 8px;
+      font-size:14px;
+      letter-spacing:-0.01em;
+    }
+    .block p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .list{
+      display:grid;
+      gap:10px;
+    }
+    .list-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--panel-2);
+    }
+    .list-item .bullet{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      flex:0 0 24px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(110,168,255,0.18), rgba(139,92,246,0.18));
+      color:var(--text);
+      font-size:12px;
+      font-weight:700;
+    }
+    .list-item strong{
+      display:block;
+      font-size:13px;
+      margin-bottom:2px;
+    }
+    .list-item span{
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .loading{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .spinner{
+      width:14px;height:14px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,0.18);
+      border-top-color:var(--accent);
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .footer-note{
+      text-align:center;
+      color:var(--muted-2);
+      font-size:12px;
+      line-height:1.5;
+      padding:6px 0 0;
+    }
+    .inline{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .small{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .copy-btn{
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--text);
+      border-radius:10px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:700;
+    }
+    .copy-btn:hover{border-color:var(--border-strong)}
+    .hidden{display:none !important}
+    @media (max-width: 980px){
+      .main{grid-template-columns:1fr}
+    }
+    @media (max-width: 720px){
+      .page{padding:14px}
+      .hero-inner{padding:20px}
+      .card-body{padding:16px}
+      .form-grid{grid-template-columns:1fr}
+      .actions{flex-direction:column}
+      .btn{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="eyebrow"><span class="dot"></span> Teacher OS · Blueprint TOS-P1-010</div>
+          <h1>Generate lesson plans from teacher intent</h1>
+          <p class="subtitle">
+            A focused interface for entering lesson goals, classroom context, and constraints, then generating a structured lesson plan through the Teacher OS lesson-plan endpoint.
+          </p>
+          <div class="hero-meta">
+            <div class="chip"><strong>Purpose</strong> Interface for generating lesson plans</div>
+            <div class="chip"><strong>Route</strong> <span>/api/v1/lesson-plans</span></div>
+            <div class="chip"><strong>Input</strong> teacher intent</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="main">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Lesson plan request</h2>
+              <p class="card-subtitle">Provide the teacher’s intent and any supporting context.</p>
+            </div>
+            <button type="button" class="copy-btn" id="themeToggle">Theme</button>
+          </div>
+          <div class="card-body">
+            <form id="lessonPlanForm">
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="intent">Teacher intent</label>
+                  <textarea
+                    id="intent"
+                    name="intent"
+                    class="textarea"
+                    placeholder="Example: Build a 45-minute Grade 5 math lesson on fractions with a warm-up, guided practice, independent work, and an exit ticket."
+                    required></textarea>
+                  <div class="help">This is the primary text sent to the lesson-plan generator.</div>
+                </div>
+
+                <div class="field">
+                  <label for="gradeLevel">Grade level</label>
+                  <input id="gradeLevel" name="gradeLevel" class="input" placeholder="Grade 5" autocomplete="off">
+                </div>
+
+                <div class="field">
+                  <label for="subject">Subject</label>
+                  <input id="subject" name="subject" class="input" placeholder="Mathematics" autocomplete="off">
+                </div>
+
+                <div class="field">
+                  <label for="duration">Duration</label>
+                  <input id="duration" name="duration" class="input" placeholder="45 minutes" autocomplete="off">
+                </div>
+
+                <div class="field">
+                  <label for="objective">Learning objective</label>
+                  <input id="objective" name="objective" class="input" placeholder="Students will compare simple fractions" autocomplete="off">
+                </div>
+
+                <div class="field full">
+                  <label for="constraints">Constraints / preferences</label>
+                  <textarea
+                    id="constraints"
+                    name="constraints"
+                    class="textarea"
+                    placeholder="Include differentiation, no homework, use manipulatives, and end with a quick formative check."></textarea>
+                </div>
+              </div>
+
+              <div class="field full" style="margin-top:14px">
+                <label>Plan options</label>
+                <div class="toggle-row">
+                  <label class="toggle">
+                    <input type="checkbox" id="includeStandards" checked>
+                    <span>Include standards alignment</span>
+                  </label>
+                  <label class="toggle">
+                    <input type="checkbox" id="includeAssessment" checked>
+                    <span>Include assessment prompts</span>
+                  </label>
+                  <label class="toggle">
+                    <input type="checkbox" id="includeDifferentiation" checked>
+                    <span>Include differentiation</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn primary" id="generateBtn">Generate lesson plan</button>
+                <button type="button" class="btn ghost" id="clearBtn">Clear form</button>
+              </div>
+
+              <div class="status" id="formStatus" data-kind="warn">
+                <span>Ready to generate. Enter teacher intent to begin.</span>
+                <span class="small" id="apiHint">Uses the existing Teacher OS route factory pattern.</span>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <aside class="preview">
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Generated lesson plan</h2>
+                <p class="card-subtitle">Output returned from the lesson-plan generator.</p>
+              </div>
+              <button type="button" class="copy-btn" id="copyOutputBtn">Copy</button>
+            </div>
+            <div class="panel-section">
+              <div class="output-meta">
+                <span id="outputState">No plan generated yet.</span>
+              </div>
+              <div class="plan-output" id="planOutput">Generated content will appear here.</div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Suggested structure</h2>
+                <p class="card-subtitle">A consistent planning scaffold for the interface.</p>
+              </div>
+            </div>
+            <div class="panel-section list">
+              <div class="list-item">
+                <div class="bullet">1</div>
+                <div>
+                  <strong>Context</strong>
+                  <span>Capture grade, subject, duration, and the teacher’s instructional intent.</span>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="bullet">2</div>
+                <div>
+                  <strong>Plan</strong>
+                  <span>Generate a lesson flow with warm-up, instruction, guided practice, independent work, and wrap-up.</span>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="bullet">3</div>
+                <div>
+                  <strong>Support</strong>
+                  <span>Optionally include standards, assessment, and differentiation prompts in the generated response.</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <div class="footer-note">
+        Teacher OS overlay page for lesson-plan generation. The interface submits intent to the lesson-plans endpoint and displays the returned lesson plan.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const form = document.getElementById('lessonPlanForm');
+      const intentEl = document.getElementById('intent');
+      const gradeLevelEl = document.getElementById('gradeLevel');
+      const subjectEl = document.getElementById('subject');
+      const durationEl = document.getElementById('duration');
+      const objectiveEl = document.getElementById('objective');
+      const constraintsEl = document.getElementById('constraints');
+      const includeStandardsEl = document.getElementById('includeStandards');
+      const includeAssessmentEl = document.getElementById('includeAssessment');
+      const includeDifferentiationEl = document.getElementById('includeDifferentiation');
+      const statusEl = document.getElementById('formStatus');
+      const outputEl = document.getElementById('planOutput');
+      const outputStateEl = document.getElementById('outputState');
+      const generateBtn = document.getElementById('generateBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const copyBtn = document.getElementById('copyOutputBtn');
+      const themeToggle = document.getElementById('themeToggle');
+
+      const STORAGE_KEY = 'teacheros.lessonplan.overlay.v1';
+
+      function setStatus(message, kind = 'warn') {
+        statusEl.dataset.kind = kind;
+        statusEl.querySelector('span').textContent = message;
+      }
+
+      function buildIntent() {
+        const parts = [intentEl.value.trim()];
+        const extras = [];
+        const gradeLevel = gradeLevelEl.value.trim();
+        const subject = subjectEl.value.trim();
+        const duration = durationEl.value.trim();
+        const objective = objectiveEl.value.trim();
+        const constraints = constraintsEl.value.trim();
+
+        if (gradeLevel) extras.push(`Grade level: ${gradeLevel}`);
+        if (subject) extras.push(`Subject: ${subject}`);
+        if (duration) extras.push(`Duration: ${duration}`);
+        if (objective) extras.push(`Objective: ${objective}`);
+        if (constraints) extras.push(`Constraints: ${constraints}`);
+
+        const options = [];
+        if (includeStandardsEl.checked) options.push('include standards alignment');
+        if (includeAssessmentEl.checked) options.push('include assessment prompts');
+        if (includeDifferentiationEl.checked) options.push('include differentiation');
+
+        if (extras.length) parts.push(extras.join('\n'));
+        if (options.length) parts.push(`Plan options: ${options.join(', ')}.`);
+        return parts.filter(Boolean).join('\n\n').trim();
+      }
+
+      function persistDraft() {
+        const draft = {
+          intent: intentEl.value,
+          gradeLevel: gradeLevelEl.value,
+          subject: subjectEl.value,
+          duration: durationEl.value,
+          objective: objectiveEl.value,
+          constraints: constraintsEl.value,
+          includeStandards: includeStandardsEl.checked,
+          includeAssessment: includeAssessmentEl.checked,
+          includeDifferentiation: includeDifferentiationEl.checked,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+      }
+
+      function restoreDraft() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const draft = JSON.parse(raw);
+          if (!draft || typeof draft !== 'object') return;
+          intentEl.value = draft.intent || '';
+          gradeLevelEl.value = draft.gradeLevel || '';
+          subjectEl.value = draft.subject || '';
+          durationEl.value = draft.duration || '';
+          objectiveEl.value = draft.objective || '';
+          constraintsEl.value = draft.constraints || '';
+          includeStandardsEl.checked = draft.includeStandards !== false;
+          includeAssessmentEl.checked = draft.includeAssessment !== false;
+          includeDifferentiationEl.checked = draft.includeDifferentiation !== false;
+        } catch {}
+      }
+
+      function renderOutput(value) {
+        const text = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
+        outputEl.textContent = text || 'No plan content returned.';
+        outputStateEl.textContent = value ? 'Plan generated successfully.' : 'Plan generation returned no content.';
+      }
+
+      async function submitPlan(event) {
+        event.preventDefault();
+        const intent = buildIntent();
+        if (!intent) {
+          setStatus('Teacher intent is required.', 'error');
+          return;
+        }
+
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<span class="loading"><span class="spinner"></span>Generating…</span>';
+        setStatus('Sending request to /api/v1/lesson-plans…', 'warn');
+
+        try {
+          const response = await fetch('/api/v1/lesson-plans', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ intent }),
+          });
+
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) {
+            const message = data?.error || `Request failed (${response.status})`;
+            throw new Error(message);
+          }
+
+          if (!data || data.ok !== true) {
+            throw new Error(data?.error || 'Unexpected response');
+          }
+
+          renderOutput(data.data);
+          setStatus('Lesson plan generated and displayed.', 'success');
+        } catch (err) {
+          renderOutput(`Error: ${err.message}`);
+          outputStateEl.textContent = 'Generation failed.';
+          setStatus(err.message || 'Failed to generate lesson plan.', 'error');
+        } finally {
+          generateBtn.disabled = false;
+          generateBtn.textContent = 'Generate lesson plan';
+          persistDraft();
+        }
+      }
+
+      async function copyOutput() {
+        const text = outputEl.textContent || '';
+        if (!text || text === 'Generated content will appear here.') {
+          setStatus('Nothing to copy yet.', 'warn');
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(text);
+          setStatus('Generated plan copied to clipboard.', 'success');
+        } catch {
+          setStatus('Clipboard unavailable in this context.', 'warn');
+        }
+      }
+
+      function clearForm() {
+        form.reset();
+        includeStandardsEl.checked = true;
+        includeAssessmentEl.checked = true;
+        includeDifferentiationEl.checked = true;
+        outputEl.textContent = 'Generated content will appear here.';
+        outputStateEl.textContent = 'No plan generated yet.';
+        localStorage.removeItem(STORAGE_KEY);
+        setStatus('Form cleared.', 'warn');
+      }
+
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('teacheros.theme', theme);
+        themeToggle.textContent = theme === 'light' ? 'Dark' : 'Light';
+      }
+
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || localStorage.getItem('teacheros.theme') || 'dark';
+        applyTheme(current === 'light' ? 'dark' : 'light');
+      }
+
+      restoreDraft();
+      renderOutput('');
+      applyTheme(localStorage.getItem('teacheros.theme') || 'dark');
+
+      form.addEventListener('submit', submitPlan);
+      copyBtn.addEventListener('click', copyOutput);
+      clearBtn.addEventListener('click', clearForm);
+      themeToggle.addEventListener('click', toggleTheme);
+
+      [intentEl, gradeLevelEl, subjectEl, durationEl, objectiveEl, constraintsEl,
+       includeStandardsEl, includeAssessmentEl, includeDifferentiationEl].forEach((el) => {
+        el.addEventListener('input', persistDraft);
+        el.addEventListener('change', persistDraft);
+      });
+    })();
+  </script>
+</body>
+</html>

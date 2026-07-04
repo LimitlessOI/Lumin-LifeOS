@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:56:30.881Z",
+  "generated_at": "2026-07-04T21:08:11.911Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 16,
+  "file_count": 17,
   "files": [
     {
       "path": "db/migrations/20260704_create_teacher_os_documents.sql",
@@ -52,6 +52,13 @@
       "bytes": 395,
       "mtime": "2026-07-04T20:45:15.206Z",
       "indexed_at": "2026-07-04T20:45:15.206Z"
+    },
+    {
+      "path": "public/overlay/lesson-plan-generator.html",
+      "synopsis": "HTML page: Teacher OS · Lesson Plan Generator",
+      "bytes": 24723,
+      "mtime": "2026-07-04T21:08:11.911Z",
+      "indexed_at": "2026-07-04T21:08:11.911Z"
     },
     {
       "path": "routes/emergencyFundRoutes.js",
