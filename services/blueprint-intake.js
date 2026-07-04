@@ -376,6 +376,47 @@ function parseBlueprintFromAiResponse(raw) {
   throw new SyntaxError(`AI response is not JSON: ${stripped.slice(0, 200)}...`);
 }
 
+function extractIntentDeterministic(amendmentText, productName) {
+  const lines = amendmentText.split('\n');
+  const productPurpose = lines.find(l => /^##\s*(WHAT|PURPOSE|OVERVIEW)/i.test(l.trim()))
+    ? lines[lines.findIndex(l => /^##\s*(WHAT|PURPOSE|OVERVIEW)/i.test(l.trim())) + 1]?.trim() || ''
+    : '';
+  const routes = [];
+  const services = [];
+  const tables = [];
+  const envVars = [];
+  for (const line of lines) {
+    const routeMatch = line.match(/`((?:GET|POST|PUT|DELETE|PATCH)\s+\/[^\s`]+)`/i) || line.match(/(\/api\/v1\/[^\s,)`]+)/);
+    if (routeMatch) {
+      const parts = routeMatch[1].split(/\s+/);
+      routes.push({ method: parts.length > 1 ? parts[0] : 'GET', path: parts[parts.length - 1], purpose: line.trim().slice(0, 80), auth: 'requireKey' });
+    }
+    const svcMatch = line.match(/`(services\/([^`/]+)\.js)`/) || line.match(/`([a-z][\w-]+-service)\.js`/i);
+    if (svcMatch) services.push({ name: svcMatch[2] || svcMatch[1].replace('.js', ''), purpose: line.trim().slice(0, 80), ai_operations: [] });
+    const tableMatch = line.match(/`([a-z_]+)`.*(?:table|schema|migration)/i) || line.match(/(?:table|CREATE TABLE)\s+`?([a-z_]+)`?/i);
+    if (tableMatch) tables.push({ name: tableMatch[1], columns: [] });
+    const envMatch = line.match(/`([A-Z][A-Z_]{2,})`/);
+    if (envMatch && !envVars.includes(envMatch[1])) envVars.push(envMatch[1]);
+  }
+  const purposeText = productPurpose || `${productName} product — automated from PRODUCT_HOME.md`;
+  console.log(`[INTENT-DETERMINISTIC] product=${productName} routes=${routes.length} services=${services.length} tables=${tables.length}`);
+  return {
+    product_name: productName,
+    product_purpose: purposeText.slice(0, 200),
+    phase: 1,
+    routes_needed: routes.slice(0, 20),
+    services_needed: services.slice(0, 15),
+    db_tables_needed: tables.slice(0, 15),
+    env_vars_needed: envVars.slice(0, 20),
+    ai_operations: [],
+    acceptance_criteria: [`${productName} server starts`, `${productName} routes respond 200`],
+    non_goals: [],
+    html_files: [],
+    scripts: [{ path: `scripts/verify-${productName}.mjs`, purpose: 'acceptance test runner' }],
+    _deterministic_fallback: true,
+  };
+}
+
 async function updateSession(pool, id, updates) {
   const sets = Object.entries(updates).map(([k, v], i) => `${k} = $${i + 2}`);
   const vals = Object.values(updates).map(v => typeof v === 'object' ? JSON.stringify(v) : v);
@@ -524,6 +565,7 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
 
     _blog('pre_intent_extraction');
     let intent;
+    let aiIntentSucceeded = false;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const intentPrompt = attempt === 0
@@ -539,15 +581,20 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
         if (!intent.product_name && !intent.product_purpose && Object.keys(intent).length < 3) {
           _blog(`intent_empty attempt=${attempt} keys=${Object.keys(intent).join(',')}`);
           if (attempt < 2) continue;
-          throw new Error('Intent extraction returned empty/minimal object after 3 attempts');
+        } else {
+          aiIntentSucceeded = true;
+          break;
         }
-        break;
       } catch (parseErr) {
-        _blog(`intent_extraction_fail attempt=${attempt}: ${parseErr.message.slice(0, 120)}`);
-        if (attempt === 2) throw parseErr;
+        _blog(`intent_extraction_fail attempt=${attempt}: ${parseErr.message.slice(0, 200)}`);
+        if (attempt < 2) continue;
       }
     }
-    _blog('intent_extraction_done');
+    if (!aiIntentSucceeded) {
+      _blog('intent_fallback_deterministic');
+      intent = extractIntentDeterministic(amendmentText, productName);
+    }
+    _blog(`intent_extraction_done ai=${aiIntentSucceeded} keys=${Object.keys(intent).join(',')}`);
     await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
 
     _blog('pre_blueprint_generation');
