@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:31:20.803Z",
+  "generated_at": "2026-07-04T22:31:31.231Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 50,
+  "file_count": 51,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -304,6 +304,13 @@
       "bytes": 5550,
       "mtime": "2026-07-04T22:27:59.027Z",
       "indexed_at": "2026-07-04T22:27:59.027Z"
+    },
+    {
+      "path": "services/capability-map-service.js",
+      "synopsis": "Exports createCapabilityMapService — services/capability-map-service.js.",
+      "bytes": 4115,
+      "mtime": "2026-07-04T22:31:31.231Z",
+      "indexed_at": "2026-07-04T22:31:31.231Z"
     },
     {
       "path": "services/lesson-plan-generator.js",
