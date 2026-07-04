@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: MarketingOS Coaching Consent -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>MarketingOS · Coaching Consent</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-raised: #10101a;
+      --bg-surface: #141421;
+      --bg-surface2: #1a1a2a;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.14);
+      --text: #ececf5;
+      --text-secondary: #a2a2c2;
+      --text-muted: #70708f;
+      --accent: #5b6af5;
+      --accent-soft: rgba(91,106,245,0.12);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 24px 80px rgba(18, 18, 32, 0.35);
+      --pad: 18px;
+      --maxw: 860px;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --bg-raised: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-surface2: #f3f6ff;
+      --border: rgba(15,23,42,0.12);
+      --border-strong: rgba(91,106,245,0.24);
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(91,106,245,0.12), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(16,185,129,0.08), transparent 24%),
+        var(--bg);
+      color: var(--text);
+      overflow-y: auto;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      min-height: 100%;
+      padding:
+        calc(env(safe-area-inset-top, 0px) + 20px)
+        16px
+        calc(env(safe-area-inset-bottom, 0px) + 20px);
+      display: flex;
+      justify-content: center;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: var(--maxw);
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero {
+      background:
+        linear-gradient(135deg, rgba(91,106,245,0.12), rgba(16,185,129,0.08)),
+        var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      color: #fff;
+      font-size: 20px;
+      flex: 0 0 auto;
+      box-shadow: 0 12px 30px rgba(91,106,245,0.25);
+    }
+
+    .brand-copy { min-width: 0; }
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+    h1 {
+      margin: 3px 0 0;
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+    .subhead {
+      margin: 6px 0 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 68ch;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .pill {
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+    .pill strong { color: var(--text); font-weight: 700; }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-hd {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-hd h2 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .card-bd { padding: 18px; }
+
+    .lede {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin: 0 0 14px;
+    }
+
+    .notice {
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      background: rgba(245, 158, 11, 0.08);
+      color: var(--text);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin: 0 0 16px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .section {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .bullets {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bullet {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      display: grid;
+      gap: 4px;
+    }
+    .bullet strong {
+      font-size: 13px;
+      color: var(--text);
+    }
+    .bullet span {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .summary-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-item {
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+    .summary-item .k {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .summary-item .v {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+    }
+
+    .signature-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .sig-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--bg-surface2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 13px;
+      font: inherit;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      min-height: 44px;
+    }
+
+    textarea { min-height: 132px; resize: vertical; line-height: 1.55; }
+
+    input:focus, textarea:focus {
+      border-color: var(--border-strong);
+      box-shadow: 0 0 0 3px rgba(91,106,245,0.14);
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      user-select: none;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+    }
+    .checkbox input { margin-top: 3px; flex: 0 0 auto; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    button {
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 44px;
+      transition: transform .15s ease, opacity .15s ease, border-color .15s ease, background .15s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      color: #fff;
+      box-shadow: 0 12px 26px rgba(91,106,245,0.24);
+    }
+    .btn-secondary {
+      background: var(--bg-surface2);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .footer {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.6;
+      padding: 0 2px 2px;
+    }
+
+    .status {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      min-height: 20px;
+    }
+    .status.ok { color: var(--success); }
+    .status.warn { color: var(--warning); }
+    .status.err { color: #ef4444; }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .print-note {
+      display: none;
+    }
+
+    @media (max-width: 880px) {
+      .content { grid-template-columns: 1fr; }
+      .hero-top { align-items: flex-start; flex-direction: column; }
+      .pill-row { justify-content: flex-start; }
+    }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      .page { padding: 0; }
+      .hero, .card { box-shadow: none; border-color: #ddd; }
+      .btn-primary, .btn-secondary, .no-print { display: none !important; }
+      .print-note { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <section class="hero">
+        <div class="hero-top">
+          <div class="brand">
+            <div class="brand-mark">◎</div>
+            <div class="brand-copy">
+              <div class="eyebrow">MarketingOS · Blueprint MO-P1-005</div>
+              <h1>Coaching Session Consent</h1>
+              <p class="subhead">
+                Review and record consent before any coaching session. This page is an intake overlay for the coaching consent step.
+              </p>
+            </div>
+          </div>
+          <div class="pill-row">
+            <div class="pill"><strong>Type</strong> html overlay</div>
+            <div class="pill"><strong>Step</strong> MO-P1-005</div>
+            <div class="pill"><strong>Purpose</strong> Display consent form</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="content">
+        <section class="card">
+          <div class="card-hd">
+            <h2>Consent form</h2>
+            <div class="mono">SSOT: docs/products/MarketingOS/MarketingOS_HOME.md</div>
+          </div>
+          <div class="card-bd">
+            <p class="lede">
+              Please read each statement carefully. This overlay captures acknowledgement that coaching is a collaborative process
+              and that participation is voluntary.
+            </p>
+
+            <div class="notice">
+              By continuing, you confirm that you understand the coaching relationship, the scope of the session, and your ability
+              to pause or stop participation at any time.
+            </div>
+
+            <div class="section">
+              <div class="section-title">What you are consenting to</div>
+              <div class="bullets">
+                <div class="bullet">
+                  <strong>Coaching conversation</strong>
+                  <span>You agree to participate in a coaching session focused on reflection, planning, and support.</span>
+                </div>
+                <div class="bullet">
+                  <strong>Voluntary participation</strong>
+                  <span>You can decline to answer any question, pause the session, or stop at any time.</span>
+                </div>
+                <div class="bullet">
+                  <strong>Session boundaries</strong>
+                  <span>Coaching is not medical, legal, or crisis intervention. Use the appropriate professional support when needed.</span>
+                </div>
+                <div class="bullet">
+                  <strong>Privacy awareness</strong>
+                  <span>Only share information you are comfortable discussing in the coaching setting.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Consent statement</div>
+              <div class="checkbox">
+                <input id="consent-check" type="checkbox">
+                <label for="consent-check">
+                  I have read the coaching consent information above and agree to proceed with the session under these terms.
+                </label>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Optional note</div>
+              <textarea id="consent-note" placeholder="Optional context, questions, or boundaries for the session..."></textarea>
+            </div>
+
+            <div class="actions no-print">
+              <button class="btn-primary" id="confirm-btn" type="button">Confirm consent</button>
+              <button class="btn-secondary" id="clear-btn" type="button">Clear form</button>
+            </div>
+
+            <div class="status" id="status" aria-live="polite"></div>
+            <p class="footer">
+              If this overlay is embedded in the MarketingOS shell, the hosting page can listen for the consent event and continue the coaching flow.
+            </p>
+          </div>
+        </section>
+
+        <aside class="side-stack">
+          <section class="card">
+            <div class="card-hd">
+              <h2>Session summary</h2>
+            </div>
+            <div class="card-bd">
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <div class="k">Session type</div>
+                  <div class="v">Coaching conversation</div>
+                </div>
+                <div class="summary-item">
+                  <div class="k">User choice</div>
+                  <div class="v">Proceed only after explicit consent</div>
+                </div>
+                <div class="summary-item">
+                  <div class="k">Expected outcome</div>
+                  <div class="v">Record consent and display readiness to continue</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-hd">
+              <h2>Captured details</h2>
+            </div>
+            <div class="card-bd signature-box">
+              <div class="sig-row">
+                <div class="label" for="name">Name</div>
+                <input id="name" type="text" placeholder="Your name">
+              </div>
+              <div class="sig-row">
+                <div class="label" for="date">Date</div>
+                <input id="date" type="date">
+              </div>
+              <div class="sig-row">
+                <div class="label" for="session-id">Session reference</div>
+                <input id="session-id" type="text" placeholder="Optional session reference">
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <div class="print-note">MarketingOS · Coaching Session Consent</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const consentCheck = document.getElementById('consent-check');
+      const consentNote = document.getElementById('consent-note');
+      const nameInput = document.getElementById('name');
+      const dateInput = document.getElementById('date');
+      const sessionIdInput = document.getElementById('session-id');
+      const confirmBtn = document.getElementById('confirm-btn');
+      const clearBtn = document.getElementById('clear-btn');
+      const status = document.getElementById('status');
+
+      function setStatus(message, kind) {
+        status.textContent = message;
+        status.className = 'status' + (kind ? ` ${kind}` : '');
+      }
+
+      function emitConsent(payload) {
+        window.dispatchEvent(new CustomEvent('marketingos:coaching-consent', {
+          detail: payload
+        }));
+        try {
+          window.parent?.postMessage?.({
+            type: 'marketingos:coaching-consent',
+            payload
+          }, '*');
+        } catch {}
+      }
+
+      function getPayload() {
+        return {
+          accepted: !!consentCheck.checked,
+          name: nameInput.value.trim(),
+          date: dateInput.value || null,
+          sessionId: sessionIdInput.value.trim(),
+          note: consentNote.value.trim(),
+          purpose: 'Display consent form for coaching sessions',
+          blueprint: 'MO-P1-005'
+        };
+      }
+
+      confirmBtn.addEventListener('click', () => {
+        if (!consentCheck.checked) {
+          setStatus('Select the consent checkbox before continuing.', 'warn');
+          return;
+        }
+        const payload = getPayload();
+        emitConsent(payload);
+        setStatus('Consent captured and emitted.', 'ok');
+      });
+
+      clearBtn.addEventListener('click', () => {
+        consentCheck.checked = false;
+        consentNote.value = '';
+        nameInput.value = '';
+        sessionIdInput.value = '';
+        dateInput.value = '';
+        setStatus('Form cleared.');
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+          confirmBtn.click();
+        }
+      });
+
+      setStatus('Ready to capture consent.');
+    })();
+  </script>
+</body>
+</html>
