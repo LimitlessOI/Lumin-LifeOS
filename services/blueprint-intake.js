@@ -646,12 +646,14 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
     let blueprint;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
+        const intentSlice = attempt < 2 ? JSON.stringify(intent) : JSON.stringify(intent).slice(0, 4000);
         const bpPrompt = attempt === 0
-          ? `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`
-          : `CRITICAL: Return a JSON object with "_meta" and "steps" array. Each step needs id, file, type, purpose, deps, ssot_tag, contract.\n\nPRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`;
+          ? `PRODUCT INTENT:\n${intentSlice}\n\nGenerate the complete blueprint JSON now.`
+          : `CRITICAL: Return a JSON object with "_meta" and "steps" array. Each step needs id, file, type, purpose, deps, ssot_tag, contract.\n\nPRODUCT INTENT:\n${intentSlice}\n\nGenerate the complete blueprint JSON now.`;
+        const maxTokens = attempt < 2 ? 6000 : 4000;
         const blueprintRaw = await _withTimeout(
           callCouncilMember('openai', bpPrompt,
-            { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
+            { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: maxTokens, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
           ), 90000, 'blueprint_generation'
         );
         _blog(`blueprint_raw_type=${typeof blueprintRaw} len=${String(blueprintRaw).length}`);

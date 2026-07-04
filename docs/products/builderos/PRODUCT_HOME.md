@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-04T15:04 — SQL file-exists skip + verify step auto-inject. Prior session. |
+| **Last Updated** | 2026-07-04T15:27 — Blueprint gen 413 retry with smaller payload. Prior session. |
 
 ### Related docs (this product)
 
@@ -687,7 +687,7 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 | **Amendment Number** | 47 |
 | **Domain** | Mission Runtime |
 | **Status** | **PHASE 2 COMPLETE** — All 7 owned files DONE. 10/10 verifier checks PASS. AIC DISCUSSION-6 (backward transition authority) pending but non-blocking — [GOVERNANCE-GAP] comments in mission-ledger.js. |
-| **Last Updated** | 2026-07-04T15:04 — SQL file-exists skip + verify step auto-inject. Prior session. |
+| **Last Updated** | 2026-07-04T15:27 — Blueprint gen 413 retry with smaller payload. Prior session. |
 | **BPB** | `docs/projects/BPB-0001-MISSION-RUNTIME-V1.md` |
 | **Mission** | MISSION-0001 — Adam + Sherry Household Reliability and Income Engine |
 | **Constitutional Authority** | `docs/constitution/NORTH_STAR_SSOT.md` §2.0D (Mission State Machine Law), §2.0E (BPB Determinism Law) |
@@ -837,7 +837,7 @@ Invalid transitions must return `400 { ok: false, error: "invalid_transition", f
 | **Lifecycle** | `constitutional-adjunct` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `safe` |
-| **Last Updated** | 2026-07-04T15:04 — SQL file-exists skip + verify step auto-inject. Prior session. |
+| **Last Updated** | 2026-07-04T15:27 — Blueprint gen 413 retry with smaller payload. Prior session. |
 | **Verification Command** | `rg -l "C2\\|AIC\\|PSSOT\\|Lens" docs/ --glob '*.md' \| head -20` (deprecation audit) |
 | **Canonical body** | **`docs/BUILDEROS_VOCABULARY.md`** |
 | **Governance body** | **`docs/architecture/DELIBERATION_ARCHITECTURE.md`** |
