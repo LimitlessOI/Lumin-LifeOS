@@ -106,6 +106,7 @@ import { createLifeRESalesCoachingRoutes } from "../routes/lifere-sales-coaching
 import { createTcAttachmentRoutes } from "../routes/tc-r4r-routes.js";
 import { createXxxRoutes } from "../routes/knowledge-base-routes.js";
 import { createFaithStudioRoutes } from "../routes/faith-studio-routes.js";
+import { createFutureRoutes } from "../routes/future-self-simulator-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -681,6 +682,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/faith-studio", createFaithStudioRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [FAITH_STUDIO] Routes mounted at /api/v1/faith-studio');
+
+  app.use("/api/v1/kids-os", createFutureRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [KIDS_OS] Routes mounted at /api/v1/kids-os');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
