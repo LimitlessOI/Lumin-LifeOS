@@ -1143,7 +1143,7 @@ HOW TO RESPOND:
   });
 
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
-    const HANDLER_DEADLINE_MS = 40000;
+    const HANDLER_DEADLINE_MS = 92000;
     const handlerDeadline = setTimeout(() => {
       if (!res.headersSent) {
         res.status(200).json({
