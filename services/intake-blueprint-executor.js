@@ -446,15 +446,31 @@ async function commitToGitHubDirect(targetFile, content, commitMessage) {
 }
 
 export async function postBuilderBuild(baseUrl, commandKey, body) {
-  const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-command-key': commandKey },
-    body: JSON.stringify(body),
-  });
-  let json;
-  const text = await res.text();
-  try { json = JSON.parse(text); } catch { json = { raw: text.slice(0, 800) }; }
-  return { ok: res.ok, status: res.status, body: json };
+  const url = `${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-command-key': commandKey },
+        body: JSON.stringify(body),
+      });
+      const text = await res.text();
+      if (!text && attempt === 0) {
+        console.log(`[EXECUTOR] empty response from builder for ${body.target_file}, retrying...`);
+        continue;
+      }
+      let json;
+      try { json = JSON.parse(text); } catch { json = { raw: text.slice(0, 800) }; }
+      return { ok: res.ok, status: res.status, body: json };
+    } catch (fetchErr) {
+      if (attempt === 0) {
+        console.log(`[EXECUTOR] fetch error for ${body.target_file}: ${fetchErr.message}, retrying...`);
+        continue;
+      }
+      return { ok: false, status: 0, body: { error: fetchErr.message } };
+    }
+  }
+  return { ok: false, status: 0, body: { error: 'builder_unreachable' } };
 }
 
 export async function executeIntakeBlueprint({

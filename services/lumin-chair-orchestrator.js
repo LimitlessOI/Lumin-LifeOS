@@ -682,13 +682,13 @@ export async function runLuminChairTurn(ctx, deps) {
                       : `${detectedProductId} blueprint execution failed.`,
                     done_bullets: execResult.ok
                       ? [`Product: ${detectedProductId}`, `Steps: ${execResult.steps_run || 0}`, `Acceptance: ${execResult.acceptance?.ok ? 'PASSED' : 'not run'}`]
-                      : [`Product: ${detectedProductId}`, `Error: ${execResult.error}`],
+                      : [`Product: ${detectedProductId}`, `Error: ${execResult.error}`, ...(execResult.failed_step ? [`Failed step: ${execResult.failed_step}`] : []), ...(execResult.target_file ? [`Target: ${execResult.target_file}`] : [])],
                     human_summary: execResult.ok
                       ? `${detectedProductId} blueprint executed successfully. ${execResult.steps_run || 0} steps processed. ${execResult.already_complete ? 'All targets already present — acceptance passed.' : 'Build complete.'}`
-                      : `${detectedProductId} blueprint execution failed: ${execResult.error}`,
+                      : `${detectedProductId} blueprint execution failed: ${execResult.error}${execResult.failed_step ? ` (step ${execResult.failed_step}${execResult.target_file ? ` → ${execResult.target_file}` : ''})` : ''}${execResult.builder?.detail ? `. Detail: ${execResult.builder.detail}` : ''}`,
                     human_summary_technical: execResult.ok
                       ? `Execution complete. steps_run=${execResult.steps_run} acceptance=${JSON.stringify(execResult.acceptance?.ok)}`
-                      : `Execution failed: ${execResult.error}`,
+                      : `Execution failed: ${execResult.error} step=${execResult.failed_step} target=${execResult.target_file} detail=${execResult.builder?.detail || execResult.builder?.error || 'none'}`,
                   }, channel);
                   return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
                 }
@@ -811,13 +811,13 @@ export async function runLuminChairTurn(ctx, deps) {
                   : `${detectedProductId} blueprint execution failed.`,
                 done_bullets: execResult.ok
                   ? [`Product: ${detectedProductId}`, `Steps: ${execResult.steps_run || 0}`, `Acceptance: ${execResult.acceptance?.ok ? 'PASSED' : 'not run'}`]
-                  : [`Product: ${detectedProductId}`, `Error: ${execResult.error}`],
+                  : [`Product: ${detectedProductId}`, `Error: ${execResult.error}`, ...(execResult.failed_step ? [`Failed step: ${execResult.failed_step}`] : []), ...(execResult.target_file ? [`Target: ${execResult.target_file}`] : [])],
                 human_summary: execResult.ok
                   ? `${detectedProductId} blueprint executed successfully. ${execResult.steps_run || 0} steps processed. ${execResult.already_complete ? 'All targets already present — acceptance passed.' : 'Build complete.'}`
-                  : `${detectedProductId} blueprint execution failed: ${execResult.error}`,
+                  : `${detectedProductId} blueprint execution failed: ${execResult.error}${execResult.failed_step ? ` (step ${execResult.failed_step}${execResult.target_file ? ` → ${execResult.target_file}` : ''})` : ''}${execResult.builder?.detail ? `. Detail: ${execResult.builder.detail}` : ''}`,
                 human_summary_technical: execResult.ok
                   ? `Execution complete. steps_run=${execResult.steps_run} acceptance=${JSON.stringify(execResult.acceptance?.ok)}`
-                  : `Execution failed: ${execResult.error}`,
+                  : `Execution failed: ${execResult.error} step=${execResult.failed_step} target=${execResult.target_file} detail=${execResult.builder?.detail || execResult.builder?.error || 'none'}`,
               }, channel);
               return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
             }
