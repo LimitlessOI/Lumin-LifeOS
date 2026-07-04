@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T19:27:35.010Z",
+  "generated_at": "2026-07-04T19:31:51.189Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 14,
+  "file_count": 15,
   "files": [
     {
       "path": "db/migrations/20260704_create_call_logs.sql",
@@ -80,6 +80,13 @@
       "bytes": 15062,
       "mtime": "2026-07-04T19:13:34.722Z",
       "indexed_at": "2026-07-04T19:13:34.722Z"
+    },
+    {
+      "path": "public/overlay/financial_dashboard.html",
+      "synopsis": "HTML page: Financial Revenue",
+      "bytes": 20104,
+      "mtime": "2026-07-04T19:31:51.189Z",
+      "indexed_at": "2026-07-04T19:31:51.189Z"
     },
     {
       "path": "routes/financial-revenue-routes.js",
