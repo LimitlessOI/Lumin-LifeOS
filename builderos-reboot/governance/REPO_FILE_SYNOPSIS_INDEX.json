@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T12:27:51.199Z",
+  "generated_at": "2026-07-04T12:28:32.105Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 4,
+  "file_count": 5,
   "files": [
     {
       "path": "db/migrations/20260704_create_knowledge_base_files.sql",
@@ -17,6 +17,13 @@
       "bytes": 426,
       "mtime": "2026-07-04T12:27:51.199Z",
       "indexed_at": "2026-07-04T12:27:51.199Z"
+    },
+    {
+      "path": "public/overlay/knowledge-upload.html",
+      "synopsis": "HTML page: Knowledge Base Upload",
+      "bytes": 30513,
+      "mtime": "2026-07-04T12:28:32.105Z",
+      "indexed_at": "2026-07-04T12:28:32.105Z"
     },
     {
       "path": "routes/knowledge-base-routes.js",
