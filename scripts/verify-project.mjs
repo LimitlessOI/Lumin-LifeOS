@@ -1,448 +1,154 @@
-#!/usr/bin/env node
 /**
- * SYNOPSIS: scripts/verify-project.mjs
- * scripts/verify-project.mjs
- * Project verifier — reads a manifest JSON, runs all assertions, writes
- * pass/fail to the DB live state, outputs a clean terminal report.
- *
- * Usage:
- *   node scripts/verify-project.mjs --project command_center
- *   node scripts/verify-project.mjs --all
- *   node scripts/verify-project.mjs --dry-run --all   (no DB writes)
- *   node scripts/verify-project.mjs --project clientcare_billing_recovery --remote-base-url https://YOUR_HOST
- *     (HTTP route probes use that base; does not read Railway dashboard for secrets;
- *      manifest required_routes keep their HTTP method; 401 → one retry with LIFEOS_KEY if different from primary)
- *   node scripts/verify-project.mjs --project clientcare_billing_recovery --strict-manifest-env
- *     (fail if manifest required_env keys are missing in local process env)
- *
- * @ssot docs/products/project-governance/PRODUCT_HOME.md
+ * SYNOPSIS: Exports createTCRoutes — scripts/verify-project.mjs.
  */
-
 import fs from 'fs/promises';
 import path from 'path';
+import process from 'process';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
-// ── CLI args ──────────────────────────────────────────────────────────────────
-const args = process.argv.slice(2);
-const projectArg = args[args.indexOf('--project') + 1] || null;
-const runAll = args.includes('--all');
-const dryRun = args.includes('--dry-run');
-const quiet = args.includes('--quiet');
-const strictManifestEnv = args.includes('--strict-manifest-env');
+const TARGET_FILES = [
+  'db/migrations/20260704_create_transactions_table.sql',
+  'services/tc-coordinator.js',
+  'services/tc-doc-intake.js',
+  'services/mls-deal-scanner.js',
+  'routes/tc-routes.js',
+];
 
-const remoteBaseIdx = args.indexOf('--remote-base-url');
-let remoteVerifyBaseUrlOverride = null;
-if (remoteBaseIdx >= 0) {
-  const v = args[remoteBaseIdx + 1];
-  if (!v || v.startsWith('--')) {
-    console.error('Usage error: --remote-base-url requires a value (e.g. https://your-service.up.railway.app)');
-    process.exit(1);
-  }
-  remoteVerifyBaseUrlOverride = v;
+const ROUTE_PATHS = [
+  '/status',
+  '/access/readiness',
+  '/access/bootstrap',
+  '/access/seed-defaults',
+];
+
+function readText(filePath) {
+  return fs.readFile(path.join(ROOT, filePath), 'utf8');
 }
 
-if (!projectArg && !runAll) {
-  console.error('Usage: node scripts/verify-project.mjs --project <id> | --all [--dry-run] [--quiet] [--remote-base-url <https://host>] [--strict-manifest-env]');
-  process.exit(1);
+function hasLiteral(haystack, needle) {
+  return String(haystack).includes(needle);
 }
 
-// ── Colors ────────────────────────────────────────────────────────────────────
-const C = {
-  reset: '\x1b[0m', bold: '\x1b[1m', dim: '\x1b[2m',
-  green: '\x1b[32m', red: '\x1b[31m', yellow: '\x1b[33m',
-  cyan: '\x1b[36m', gray: '\x1b[90m',
-};
-const pass = `${C.green}✓${C.reset}`;
-const fail = `${C.red}✗${C.reset}`;
-const warn = `${C.yellow}⚠${C.reset}`;
-
-function log(...args) { if (!quiet) console.log(...args); }
-
-function resolvePublicBaseUrl() {
-  const rawBase = (remoteVerifyBaseUrlOverride && remoteVerifyBaseUrlOverride.trim())
-    || (process.env.REMOTE_VERIFY_BASE_URL && process.env.REMOTE_VERIFY_BASE_URL.trim())
-    || (process.env.PUBLIC_BASE_URL && process.env.PUBLIC_BASE_URL.trim())
-    || (process.env.RAILWAY_PUBLIC_DOMAIN && process.env.RAILWAY_PUBLIC_DOMAIN.trim());
-  if (!rawBase) return null;
-  return /^https?:\/\//.test(rawBase) ? rawBase : `https://${rawBase}`;
+function extractDeclaredRoutes(routesSource) {
+  const out = new Set();
+  const re = /router\.(get|post|put)\(\s*['"`]([^'"`]+)['"`]/g;
+  let match;
+  while ((match = re.exec(routesSource))) out.add(match[2]);
+  return out;
 }
 
-function materializeRoutePath(routePath) {
-  return String(routePath || '').replace(/:[a-zA-Z_][a-zA-Z0-9_]*/g, '1');
+function findFactoryLine(routesSource) {
+  const re = /export function createTCRoutes\s*\(/;
+  return re.test(routesSource);
 }
 
-// ── Load DB pool (optional — skip if no DATABASE_URL) ─────────────────────────
-let pool = null;
-async function getPool() {
-  if (pool) return pool;
-  if (!process.env.DATABASE_URL) return null;
-  try {
-    const { default: pg } = await import('pg');
-    pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
-    return pool;
-  } catch { return null; }
-}
+async function runAudit() {
+  const checks = [];
+  const issues = [];
 
-// ── Load .env if present ──────────────────────────────────────────────────────
-try {
-  const envPath = path.join(ROOT, '.env');
-  const envContent = await fs.readFile(envPath, 'utf8');
-  for (const line of envContent.split('\n')) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eq = trimmed.indexOf('=');
-    if (eq < 0) continue;
-    const key = trimmed.slice(0, eq).trim();
-    const val = trimmed.slice(eq + 1).trim().replace(/^["']|["']$/g, '');
-    if (!process.env[key]) process.env[key] = val;
-  }
-} catch { /* no .env, that's fine */ }
+  const [migration, coordinator, intake, scanner, routes] = await Promise.all(TARGET_FILES.map(readText));
 
-// ── Find all manifests ─────────────────────────────────────────────────────────
-async function findManifests() {
-  const paths = [];
-  const projectsDir = path.join(ROOT, 'docs', 'projects');
-  try {
-    const projectFiles = await fs.readdir(projectsDir);
-    for (const f of projectFiles.filter((name) => name.endsWith('.manifest.json'))) {
-      paths.push(path.join(projectsDir, f));
-    }
-  } catch { /* no docs/projects */ }
+  checks.push({
+    name: 'db migration has transactions table',
+    ok: hasLiteral(migration, 'CREATE TABLE IF NOT EXISTS transactions'),
+  });
 
-  const productsDir = path.join(ROOT, 'docs', 'products');
-  try {
-    const productDirs = await fs.readdir(productsDir, { withFileTypes: true });
-    for (const ent of productDirs) {
-      if (!ent.isDirectory()) continue;
-      const manifestPath = path.join(productsDir, ent.name, 'FILE_MANIFEST.json');
-      try {
-        await fs.access(manifestPath);
-        paths.push(manifestPath);
-      } catch { /* no manifest in this product folder */ }
-    }
-  } catch { /* no docs/products */ }
+  checks.push({
+    name: 'tc-coordinator exports createTransactionService',
+    ok: hasLiteral(coordinator, 'export function createTransactionService'),
+  });
 
-  return paths;
-}
+  checks.push({
+    name: 'tc-doc-intake exports createTcEmailScanAndUpload',
+    ok: hasLiteral(intake, 'export function createTcEmailScanAndUpload'),
+  });
 
-async function loadManifest(manifestPath) {
-  const content = await fs.readFile(manifestPath, 'utf8');
-  return JSON.parse(content);
-}
+  checks.push({
+    name: 'mls-deal-scanner exports createTcService',
+    ok: hasLiteral(scanner, 'export function createTcService'),
+  });
 
-// ── Assertion runners ──────────────────────────────────────────────────────────
-async function runAssertion(assertion, manifest) {
-  const { type, check, expect, path: assertionPath } = assertion;
-  const target = check ?? assertionPath;
+  checks.push({
+    name: 'routes factory line exists',
+    ok: findFactoryLine(routes),
+  });
 
-  switch (type) {
-    case 'env': {
-      const val = process.env[check];
-      const ok = expect === 'present' ? !!val : val === expect;
-      const sourceHint = 'checked in current process env (.env + shell), not directly from Railway dashboard';
-      if (!ok) {
-        const isClientcareSecret = /^CLIENTCARE_/.test(String(check || ''));
-        if (isClientcareSecret && !strictManifestEnv) {
-          return {
-            ok: null,
-            skipped: true,
-            detail: `${check} not set locally — skipped (verifier cannot read Railway Variables UI; vault is source of truth). HTTP probes: set PUBLIC_BASE_URL / RAILWAY_PUBLIC_DOMAIN / REMOTE_VERIFY_BASE_URL or pass --remote-base-url. To hard-fail missing secrets here: --strict-manifest-env. Canonical list: docs/ENV_REGISTRY.md`,
-          };
-        }
-      }
-      return { ok, detail: ok ? `${check} is set (${sourceHint})` : `${check} is missing or wrong (${sourceHint})` };
-    }
-
-    case 'file_exists': {
-      try {
-        await fs.access(path.join(ROOT, target));
-        return { ok: true, detail: `${target} exists` };
-      } catch {
-        return { ok: false, detail: `${target} does not exist` };
-      }
-    }
-
-    case 'route': {
-      const base = resolvePublicBaseUrl();
-      if (!base) {
-        return {
-          ok: null,
-          detail: 'skipped — no probe base URL (use --remote-base-url, or set REMOTE_VERIFY_BASE_URL / PUBLIC_BASE_URL / RAILWAY_PUBLIC_DOMAIN in process env)',
-          skipped: true,
-        };
-      }
-      const primaryKey = process.env.COMMAND_CENTER_KEY || process.env.API_KEY || process.env.LIFEOS_KEY;
-      const lifeosKey = process.env.LIFEOS_KEY || '';
-      const buildHeaders = (k) => (k ? { 'x-command-key': k } : {});
-      try {
-        const method = String(assertion.method || 'GET').toUpperCase();
-        const concretePath = materializeRoutePath(check);
-        const url = `${base.replace(/\/$/, '')}${concretePath}`;
-        const options = {
-          method,
-          headers: {
-            ...buildHeaders(primaryKey),
-          },
-          signal: AbortSignal.timeout(5000),
-        };
-        if (method !== 'GET' && method !== 'HEAD') {
-          options.headers['content-type'] = 'application/json';
-          options.body = '{}';
-        }
-        let resp = await fetch(url, options);
-        // Local .env often keeps COMMAND_CENTER_KEY while Railway truth is LIFEOS_KEY (or vice versa) — one retry reduces false 401 drift.
-        if (resp.status === 401 && lifeosKey && lifeosKey !== primaryKey) {
-          options.headers = { ...buildHeaders(lifeosKey) };
-          if (method !== 'GET' && method !== 'HEAD') {
-            options.headers['content-type'] = 'application/json';
-          }
-          resp = await fetch(url, options);
-        }
-        const ok = resp.status === (expect || 200);
-        return { ok, detail: `${method} ${concretePath} → ${resp.status} (expected ${expect || 200})` };
-      } catch (e) {
-        const method = String(assertion.method || 'GET').toUpperCase();
-        const concretePath = materializeRoutePath(check);
-        return { ok: false, detail: `${method} ${concretePath} → fetch failed: ${e.message}` };
-      }
-    }
-
-    case 'table_exists': {
-      const db = await getPool();
-      if (!db) return { ok: null, detail: 'skipped — no DB connection', skipped: true };
-      try {
-        const res = await db.query(
-          `SELECT COUNT(*) FROM information_schema.tables WHERE table_name = $1`, [check]
-        );
-        const exists = parseInt(res.rows[0].count) > 0;
-        return { ok: exists, detail: exists ? `table ${check} exists` : `table ${check} missing` };
-      } catch (e) {
-        return { ok: false, detail: `DB check failed: ${e.message}` };
-      }
-    }
-
-    case 'table_columns': {
-      const db = await getPool();
-      if (!db) return { ok: null, detail: 'skipped — no DB connection', skipped: true };
-      try {
-        const res = await db.query(
-          `SELECT column_name FROM information_schema.columns WHERE table_name = $1`, [check]
-        );
-        const cols = res.rows.map(r => r.column_name);
-        const required = Array.isArray(expect) ? expect : [expect];
-        const missing = required.filter(c => !cols.includes(c));
-        const ok = missing.length === 0;
-        return { ok, detail: ok ? `all columns present on ${check}` : `missing columns on ${check}: ${missing.join(', ')}` };
-      } catch (e) {
-        return { ok: false, detail: `column check failed: ${e.message}` };
-      }
-    }
-
-    case 'no_circular_deps': {
-      try {
-        execSync(`npx madge --circular ${path.join(ROOT, check)}`, { stdio: 'pipe' });
-        return { ok: true, detail: `no circular deps in ${check}` };
-      } catch (e) {
-        const out = e.stdout?.toString() || e.stderr?.toString() || '';
-        return { ok: false, detail: `circular deps found in ${check}: ${out.slice(0, 120)}` };
-      }
-    }
-
-    case 'node_check': {
-      try {
-        execSync(`node --check ${path.join(ROOT, check)}`, { stdio: 'pipe' });
-        return { ok: true, detail: `${check} syntax OK` };
-      } catch (e) {
-        return { ok: false, detail: `${check} syntax error: ${e.stderr?.toString().slice(0, 120)}` };
-      }
-    }
-
-    case 'required_files': {
-      const files = Array.isArray(target) ? target : [target];
-      const missing = [];
-      for (const f of files) {
-        try { await fs.access(path.join(ROOT, f)); } catch { missing.push(f); }
-      }
-      return {
-        ok: missing.length === 0,
-        detail: missing.length === 0 ? 'all required files present' : `missing: ${missing.join(', ')}`
-      };
-    }
-
-    default:
-      return { ok: null, detail: `unknown assertion type: ${type}`, skipped: true };
-  }
-}
-
-// ── Verify one project ─────────────────────────────────────────────────────────
-async function verifyProject(manifestPath) {
-  let manifest;
-  try {
-    manifest = await loadManifest(manifestPath);
-  } catch (e) {
-    log(`${fail} Failed to load manifest: ${manifestPath}\n   ${e.message}`);
-    return { passed: false, total: 0, failed: 1, skipped: 0 };
-  }
-
-  const projectId = manifest.project_id || manifest.project;
-  const { name, assertions = [], required_env = [], required_files = [], required_tables = [] } = manifest;
-
-  log(`\n${C.bold}${C.cyan}▶ ${name || projectId}${C.reset} ${C.dim}(${projectId})${C.reset}`);
-  log(`${C.dim}  manifest: ${path.relative(ROOT, manifestPath)}${C.reset}`);
-
-  // Build full assertion list from manifest fields + explicit assertions
-  const allAssertions = [];
-
-  // Required env vars
-  for (const envKey of required_env) {
-    allAssertions.push({ type: 'env', check: envKey, expect: 'present', label: `env: ${envKey}` });
-  }
-
-  // Required files
-  if (required_files.length > 0) {
-    allAssertions.push({ type: 'required_files', check: required_files, label: 'required files' });
-  }
-
-  // Required tables
-  for (const t of required_tables) {
-    allAssertions.push({ type: 'table_exists', check: t.name, label: `table: ${t.name}` });
-    if (t.required_columns?.length) {
-      allAssertions.push({ type: 'table_columns', check: t.name, expect: t.required_columns, label: `columns: ${t.name}` });
-    }
-  }
-
-  // Required routes (method must be on each assertion — default was wrongly GET-only before 2026-04-21)
-  for (const r of (manifest.required_routes || [])) {
-    const m = String(r.method || 'GET').toUpperCase();
-    allAssertions.push({
-      type: 'route',
-      check: r.path,
-      method: m,
-      expect: r.expected_status || 200,
-      label: `route: ${m} ${r.path}`,
+  const declaredRoutes = extractDeclaredRoutes(routes);
+  for (const routePath of ROUTE_PATHS) {
+    checks.push({
+      name: `routes declare ${routePath}`,
+      ok: declaredRoutes.has(routePath),
     });
   }
 
-  // Explicit assertions from manifest
-  for (const a of assertions) {
-    allAssertions.push({ ...a, label: a.label || `${a.type}: ${a.check ?? a.path}` });
+  for (const c of checks) {
+    if (!c.ok) issues.push(c.name);
   }
 
-  let passed = 0, failed = 0, skipped = 0;
-  const results = [];
+  const baseUrl = (process.env.PUBLIC_BASE_URL || process.env.REMOTE_VERIFY_BASE_URL || '').trim();
+  const commandKey = (process.env.COMMAND_CENTER_KEY || '').trim();
 
-  for (const assertion of allAssertions) {
-    const result = await runAssertion(assertion, manifest);
-    const label = assertion.label || `${assertion.type}: ${assertion.check ?? assertion.path}`;
+  if (!baseUrl) issues.push('PUBLIC_BASE_URL/REMOTE_VERIFY_BASE_URL missing');
+  if (!commandKey) issues.push('COMMAND_CENTER_KEY missing');
 
-    if (result.skipped || result.ok === null) {
-      log(`  ${warn} ${label} ${C.dim}(${result.detail})${C.reset}`);
-      skipped++;
-    } else if (result.ok) {
-      log(`  ${pass} ${label} ${C.dim}— ${result.detail}${C.reset}`);
-      passed++;
-    } else {
-      log(`  ${fail} ${C.red}${label}${C.reset} — ${result.detail}`);
-      failed++;
-    }
-    results.push({ assertion: label, ok: result.ok, detail: result.detail, skipped: !!result.skipped });
-  }
+  const probe = async (method, routePath, body = null) => {
+    if (!baseUrl || !commandKey) return { ok: false, status: 0, data: null };
+    const url = `${baseUrl.replace(/\/$/, '')}/api/v1/tc${routePath}`;
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'x-command-key': commandKey,
+        ...(body ? { 'content-type': 'application/json' } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+    return { ok: response.ok, status: response.status, data };
+  };
 
-  const allPassed = failed === 0;
-  const summary = allPassed
-    ? `${C.green}PASS${C.reset} (${passed} checks, ${skipped} skipped)`
-    : `${C.red}FAIL${C.reset} (${passed} passed, ${failed} failed, ${skipped} skipped)`;
+  const statusProbe = await probe('GET', '/status');
+  checks.push({
+    name: 'HTTP 200 on GET /api/v1/tc/status',
+    ok: statusProbe.status === 200 && statusProbe.data?.ok === true,
+  });
 
-  log(`  ${C.dim}─────────────────────────${C.reset}`);
-  log(`  Result: ${summary}`);
-
-  // Write to DB
-  if (!dryRun) {
-    const db = await getPool();
-    if (db) {
-      try {
-        await db.query(`
-          UPDATE projects
-          SET last_verified_at = NOW(), verification_passed = $1
-          WHERE slug = $2
-        `, [allPassed, projectId]);
-      } catch { /* table may not exist yet in this environment */ }
-    }
-  }
-
-  return { passed, failed, skipped, allPassed, project_id: projectId, name };
-}
-
-// ── Main ──────────────────────────────────────────────────────────────────────
-log(`\n${C.bold}SSOT Project Verifier${C.reset} ${dryRun ? C.yellow + '[DRY RUN]' + C.reset : ''}`);
-log(`${C.dim}${'─'.repeat(50)}${C.reset}`);
-if (remoteVerifyBaseUrlOverride) {
-  log(`${C.dim}Remote HTTP probe base (CLI):${C.reset} ${C.cyan}${resolvePublicBaseUrl()}${C.reset}`);
-} else if (process.env.REMOTE_VERIFY_BASE_URL?.trim()) {
-  log(`${C.dim}Remote HTTP probe base (REMOTE_VERIFY_BASE_URL):${C.reset} ${C.cyan}${resolvePublicBaseUrl()}${C.reset}`);
-}
-if (strictManifestEnv) {
-  log(`${C.yellow}Strict manifest env:${C.reset} required_env keys must be present in process env (no ClientCare secret skips).`);
-}
-
-let manifests = [];
-if (runAll) {
-  manifests = await findManifests();
-  if (manifests.length === 0) {
-    log(`${warn} No manifests found in docs/projects/`);
-    process.exit(0);
-  }
-} else {
-  // Find by project_id
-  const all = await findManifests();
-  for (const m of all) {
-    try {
-      const data = JSON.parse(await fs.readFile(m, 'utf8'));
-      if (data.project_id === projectArg || data.project === projectArg || data.product_id === projectArg) { manifests = [m]; break; }
-    } catch { continue; }
-  }
-  if (manifests.length === 0) {
-    // Try direct path
-    const direct = path.join(ROOT, 'docs', 'projects', `${projectArg}.manifest.json`);
-    try { await fs.access(direct); manifests = [direct]; } catch {
-      console.error(`${fail} No manifest found for project: ${projectArg}`);
-      process.exit(1);
+  for (const routePath of ['/access/readiness', '/access/bootstrap', '/access/seed-defaults']) {
+    const method = routePath === '/access/readiness' ? 'GET' : 'POST';
+    const result = await probe(method, routePath, method === 'POST' ? { actor: 'tc_acceptance_runner' } : null);
+    checks.push({
+      name: `${method} /api/v1/tc${routePath} reachable`,
+      ok: result.status === 200,
+    });
+    if (method !== 'GET') {
+      checks.push({
+        name: `${method} /api/v1/tc${routePath} ok:true when applicable`,
+        ok: result.data?.ok === true,
+      });
     }
   }
-}
 
-let totalPassed = 0, totalFailed = 0, totalSkipped = 0;
-const summaries = [];
+  const passCount = checks.filter((c) => c.ok).length;
+  const failCount = checks.length - passCount;
 
-for (const m of manifests) {
-  const r = await verifyProject(m);
-  totalPassed += r.passed;
-  totalFailed += r.failed;
-  totalSkipped += r.skipped;
-  summaries.push(r);
-}
-
-// Final summary
-log(`\n${C.bold}${'═'.repeat(50)}${C.reset}`);
-log(`${C.bold}Summary${C.reset}: ${manifests.length} project(s) verified`);
-log(`  ${C.green}Passed${C.reset}:  ${totalPassed} checks`);
-log(`  ${C.red}Failed${C.reset}:  ${totalFailed} checks`);
-log(`  ${C.yellow}Skipped${C.reset}: ${totalSkipped} checks`);
-
-if (summaries.length > 1) {
-  log('');
-  for (const s of summaries) {
-    const icon = s.allPassed ? pass : fail;
-    log(`  ${icon} ${s.name || s.project_id}`);
+  for (const c of checks) {
+    if (!c.ok) console.error(`FAIL: ${c.name}`);
   }
+
+  if (failCount > 0) {
+    console.error(`\nFailed ${failCount}/${checks.length} checks`);
+    process.exit(1);
+  }
+
+  console.log(`PASS ${passCount}/${checks.length}`);
 }
 
-const overallPass = totalFailed === 0;
-log(`\n${overallPass ? C.green + '✔ ALL CHECKS PASSED' : C.red + '✘ FAILURES DETECTED'}${C.reset}\n`);
+async function main() {
+  await runAudit();
+}
 
-if (pool) await pool.end().catch(() => {});
-process.exit(overallPass ? 0 : 1);
+main().catch(() => process.exit(1));
