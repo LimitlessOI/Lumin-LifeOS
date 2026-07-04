@@ -1156,6 +1156,10 @@ Return JSON:
         s.type = 'esm';
         fixCount++;
       }
+      if (s.type === 'html' && s.file && s.file.startsWith('public/') && !s.file.startsWith('public/overlay/')) {
+        s.file = s.file.replace('public/', 'public/overlay/');
+        fixCount++;
+      }
     }
 
     const stepIndex = new Map(steps.map(s => [s.id, s]));
