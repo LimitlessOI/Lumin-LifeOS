@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:57:45.176Z",
+  "generated_at": "2026-07-04T23:03:10.102Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 59,
+  "file_count": 60,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -276,6 +276,13 @@
       "bytes": 14582,
       "mtime": "2026-07-04T21:16:52.049Z",
       "indexed_at": "2026-07-04T21:16:52.049Z"
+    },
+    {
+      "path": "routes/builderos-routes.js",
+      "synopsis": "Exports createBlueprintRoutes — routes/builderos-routes.js.",
+      "bytes": 3846,
+      "mtime": "2026-07-04T23:03:10.102Z",
+      "indexed_at": "2026-07-04T23:03:10.102Z"
     },
     {
       "path": "routes/clientcare-billing-recovery-routes.js",
