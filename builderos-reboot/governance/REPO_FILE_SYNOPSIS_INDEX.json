@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:42:30.330Z",
+  "generated_at": "2026-07-04T22:42:38.866Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 53,
+  "file_count": 54,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -276,6 +276,13 @@
       "bytes": 1528,
       "mtime": "2026-07-04T20:52:55.591Z",
       "indexed_at": "2026-07-04T20:52:55.591Z"
+    },
+    {
+      "path": "routes/operator-consumption-routes.js",
+      "synopsis": "Exports createOperatorConsumptionRoutes — routes/operator-consumption-routes.js.",
+      "bytes": 2393,
+      "mtime": "2026-07-04T22:42:38.866Z",
+      "indexed_at": "2026-07-04T22:42:38.866Z"
     },
     {
       "path": "routes/progress-report-routes.js",
