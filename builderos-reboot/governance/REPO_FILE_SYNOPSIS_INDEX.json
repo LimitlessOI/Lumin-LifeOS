@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:36:11.169Z",
+  "generated_at": "2026-07-04T16:36:17.593Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12,
+  "file_count": 13,
   "files": [
     {
       "path": "db/migrations/20260704_create_coaching_sessions_table.sql",
@@ -24,6 +24,13 @@
       "bytes": 469,
       "mtime": "2026-07-04T16:36:11.169Z",
       "indexed_at": "2026-07-04T16:36:11.169Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_crm_sequences.sql",
+      "synopsis": "Database migration — 20260704_create_crm_sequences.sql.",
+      "bytes": 393,
+      "mtime": "2026-07-04T16:36:17.593Z",
+      "indexed_at": "2026-07-04T16:36:17.593Z"
     },
     {
       "path": "db/migrations/20260704_create_enrollments.sql",
