@@ -28,14 +28,20 @@ import { registerPublicRoutes } from "./routes/public-routes.js";
 
 // Event loop watchdog — detects if the event loop is blocked for >500ms
 let _watchdogLast = Date.now();
+let _watchdogTick = 0;
 setInterval(() => {
   const now = Date.now();
   const delta = now - _watchdogLast;
+  _watchdogTick++;
+  // Log first 5 ticks unconditionally to confirm event loop is alive
+  if (_watchdogTick <= 5) {
+    console.log(`[WATCHDOG] tick=${_watchdogTick} delta=${delta}ms +${now - _BOOT_T0}ms`);
+  }
   if (delta > 1500) {
     console.error(`[WATCHDOG] Event loop blocked for ${delta}ms! mem=${Math.round(process.memoryUsage().heapUsed/1024/1024)}MB rss=${Math.round(process.memoryUsage().rss/1024/1024)}MB`);
   }
   _watchdogLast = now;
-}, 1000).unref();
+}, 500).unref();
 import { createDbPool } from "./services/db.js";
 import { initDb } from "./db/index.js";
 import { startDbHealthMonitor } from "./services/db-health-monitor.js";
@@ -381,6 +387,15 @@ async function start() {
 
   await bootFounderRuntime();
   _bootLog('start_complete');
+
+  // Post-boot heartbeat: detect exactly when event loop blocks
+  let _hbCount = 0;
+  const _hbInterval = setInterval(() => {
+    _hbCount++;
+    console.log(`[HEARTBEAT] tick=${_hbCount} +${Date.now() - _BOOT_T0}ms`);
+    if (_hbCount >= 15) clearInterval(_hbInterval);
+  }, 2000);
+  _hbInterval.unref();
 }
 
 if (process.env.AUTONOMY_NO_LISTEN === "true") {
