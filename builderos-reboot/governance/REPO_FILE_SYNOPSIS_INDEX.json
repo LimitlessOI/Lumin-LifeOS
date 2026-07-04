@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:24:18.167Z",
+  "generated_at": "2026-07-04T20:24:53.387Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 47,
+  "file_count": 48,
   "files": [
     {
       "path": "db/migrations/20230704_create_estimation_log_table.sql",
@@ -269,6 +269,13 @@
       "bytes": 10098,
       "mtime": "2026-07-04T19:46:10.748Z",
       "indexed_at": "2026-07-04T19:46:10.748Z"
+    },
+    {
+      "path": "services/budgetService.js",
+      "synopsis": "Exports createBudgetService — services/budgetService.js.",
+      "bytes": 2610,
+      "mtime": "2026-07-04T20:24:53.387Z",
+      "indexed_at": "2026-07-04T20:24:53.387Z"
     },
     {
       "path": "services/income-drones.js",
