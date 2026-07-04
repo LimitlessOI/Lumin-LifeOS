@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Memory Intelligence -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>Memory Intelligence</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0a0a0f;
+      --bg2: #101018;
+      --panel: #151522;
+      --panel2: #1b1b2b;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.14);
+      --text: #e8e8f0;
+      --muted: #9a9ab8;
+      --muted2: #6d6d89;
+      --accent: #5b6af5;
+      --accent2: #7c3aed;
+      --good: #10b981;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --radius: 18px;
+      --radius-lg: 24px;
+      --shadow: 0 18px 60px rgba(0,0,0,0.35);
+      --font: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --bg2: #eef2ff;
+      --panel: #ffffff;
+      --panel2: #f6f8ff;
+      --border: rgba(15,23,42,0.12);
+      --border-strong: rgba(15,23,42,0.18);
+      --text: #111827;
+      --muted: #475569;
+      --muted2: #64748b;
+      --shadow: 0 18px 42px rgba(15,23,42,0.10);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top right, rgba(91,106,245,0.14), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(124,58,237,0.10), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+      gap: 12px;
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(91,106,245,0.16), rgba(124,58,237,0.10)), var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      min-height: 88px;
+    }
+    .hero-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 12px 28px rgba(91,106,245,0.25);
+      flex-shrink: 0;
+    }
+    .hero-copy { flex: 1; min-width: 0; }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 90ch;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .chip, .btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 999px;
+      min-height: 36px;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease, opacity .15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    .chip:hover, .btn:hover { transform: translateY(-1px); border-color: var(--border-strong); background: rgba(255,255,255,0.06); }
+    .chip.active { border-color: rgba(91,106,245,0.45); background: rgba(91,106,245,0.10); }
+    .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: white; }
+    .btn.primary:hover { opacity: .95; }
+    .btn.ghost { background: transparent; }
+    .grid {
+      min-height: 0;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr) 360px;
+      gap: 12px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .panel-body {
+      padding: 14px;
+      min-height: 0;
+      overflow: auto;
+    }
+    .stack { display: grid; gap: 10px; }
+    .card {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .kpi-grid { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .kpi {
+      padding: 12px;
+      border-radius: 16px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+    }
+    .kpi .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+    .kpi .value { font-size: 20px; font-weight: 800; margin-top: 6px; letter-spacing: -0.03em; }
+    .kpi .hint { font-size: 12px; color: var(--muted2); margin-top: 4px; line-height: 1.4; }
+    .form {
+      display: grid;
+      gap: 10px;
+    }
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font: inherit;
+      outline: none;
+      min-height: 42px;
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(91,106,245,0.45);
+      box-shadow: 0 0 0 3px rgba(91,106,245,0.10);
+    }
+    .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .muted { color: var(--muted); }
+    .mono { font-family: var(--mono); }
+    .list { display: grid; gap: 10px; }
+    .item {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      display: grid;
+      gap: 8px;
+    }
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .badge.good { color: var(--good); border-color: rgba(16,185,129,0.28); background: rgba(16,185,129,0.08); }
+    .badge.warn { color: var(--warn); border-color: rgba(245,158,11,0.28); background: rgba(245,158,11,0.08); }
+    .badge.bad { color: var(--bad); border-color: rgba(239,68,68,0.28); background: rgba(239,68,68,0.08); }
+    .item-title { font-weight: 800; font-size: 13px; line-height: 1.4; }
+    .item-sub { font-size: 12px; color: var(--muted); line-height: 1.45; }
+    .item-meta { font-size: 11px; color: var(--muted2); line-height: 1.45; }
+    .empty {
+      padding: 18px;
+      border: 1px dashed var(--border-strong);
+      border-radius: 18px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 13px;
+      background: rgba(255,255,255,0.02);
+    }
+    .split {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .scroll {
+      min-height: 0;
+      overflow: auto;
+    }
+    .section {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .footer {
+      display: none;
+    }
+    @media (max-width: 1180px) {
+      body { overflow: auto; }
+      .app { height: auto; min-height: 100%; }
+      .grid { grid-template-columns: 1fr; }
+      .panel { min-height: 280px; }
+      .footer { display: block; color: var(--muted2); font-size: 11px; padding: 2px 2px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="hero">
+      <div class="hero-icon">◉</div>
+      <div class="hero-copy">
+        <div class="eyebrow">Memory Intelligence</div>
+        <h1>Interact with the epistemic memory system</h1>
+        <div class="subtitle">
+          Query facts, record evidence, manage debates and lessons, inspect agent authority, and log intent drift from one overlay surface.
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="chip active" data-mode="facts">Facts</button>
+        <button class="chip" data-mode="evidence">Evidence</button>
+        <button class="chip" data-mode="debates">Debates</button>
+        <button class="chip" data-mode="lessons">Lessons</button>
+        <button class="chip" data-mode="agents">Agents</button>
+        <button class="chip" data-mode="drift">Intent Drift</button>
+        <button class="btn ghost" id="theme-btn" type="button">Theme</button>
+        <button class="btn primary" id="refresh-btn" type="button">Refresh</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">System summary</div>
+          <span class="badge" id="health-status">Loading</span>
+        </div>
+        <div class="panel-body">
+          <div class="kpi-grid" id="kpis">
+            <div class="kpi"><div class="label">Facts</div><div class="value">—</div><div class="hint">Stored epistemic facts</div></div>
+            <div class="kpi"><div class="label">Debates</div><div class="value">—</div><div class="hint">Captured debate records</div></div>
+            <div class="kpi"><div class="label">Lessons</div><div class="value">—</div><div class="hint">Reusable lessons</div></div>
+            <div class="kpi"><div class="label">Drifts</div><div class="value">—</div><div class="hint">Intent drift events</div></div>
+          </div>
+          <div style="height:12px"></div>
+          <div class="section">
+            <div class="split">
+              <div class="panel-title">Quick query</div>
+              <span class="badge">GET /health</span>
+            </div>
+            <div class="form">
+              <div class="row">
+                <div class="field">
+                  <label for="q-context">Context</label>
+                  <input id="q-context" placeholder="Optional context">
+                </div>
+                <div class="field">
+                  <label for="q-domain">Domain</label>
+                  <input id="q-domain" placeholder="Optional domain">
+                </div>
+              </div>
+              <div class="row3">
+                <div class="field">
+                  <label for="q-level">Min level</label>
+                  <select id="q-level">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="q-limit">Limit</label>
+                  <input id="q-limit" type="number" min="1" max="100" value="20">
+                </div>
+                <div class="field">
+                  <label for="q-vis">Visibility</label>
+                  <select id="q-vis">
+                    <option value="internal">internal</option>
+                    <option value="public">public</option>
+                    <option value="restricted">restricted</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn primary" id="query-facts-btn" type="button">Query facts</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Workspace</div>
+          <span class="badge" id="mode-badge">facts</span>
+        </div>
+        <div class="panel-body scroll">
+          <div class="stack" id="workspace">
+            <div class="section" data-section="facts">
+              <div class="split">
+                <div class="panel-title">Record fact</div>
+                <span class="badge">POST /facts</span>
+              </div>
+              <div class="form">
+                <div class="field">
+                  <label for="fact-text">Fact text</label>
+                  <textarea id="fact-text" placeholder="Enter the epistemic fact text"></textarea>
+                </div>
+                <div class="row3">
+                  <div class="field"><label for="fact-domain">Domain</label><input id="fact-domain" placeholder="optional"></div>
+                  <div class="field">
+                    <label for="fact-level">Level</label>
+                    <select id="fact-level">
+                      <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+                    </select>
+                  </div>
+                  <div class="field"><label for="fact-visibility">Visibility</label><input id="fact-visibility" placeholder="internal"></div>
+                </div>
+                <div class="row">
+                  <div class="field"><label for="fact-review">Review by</label><input id="fact-review" type="datetime-local"></div>
+                  <div class="field"><label for="fact-created-by">Created by</label><input id="fact-created-by" placeholder="optional"></div>
+                </div>
+                <div class="row">
+                  <div class="field"><label for="fact-context-required">Context required</label><input id="fact-context-required" placeholder="optional"></div>
+                  <div class="field"><label for="fact-false-when">False when</label><input id="fact-false-when" placeholder="optional"></div>
+                </div>
+                <div class="field"><label for="fact-disproof">Disproof recipe</label><textarea id="fact-disproof" placeholder="How to falsify"></textarea></div>
+                <div class="row">
+                  <div class="field"><label for="fact-residue">Residue risk</label><input id="fact-residue" placeholder="optional"></div>
+                  <div class="field"></div>
+                </div>
+                <button class="btn primary" id="save-fact-btn" type="button">Save fact</button>
+              </div>
+            </div>
+
+            <div class="section" data-section="evidence" hidden>
+              <div class="split">
+                <div class="panel-title">Add evidence to fact</div>
+                <span class="badge">POST /facts/:id/evidence</span>
+              </div>
+              <div class="form">
+                <div class="row">
+                  <div class="field"><label for="e-fact-id">Fact ID</label><input id="e-fact-id" placeholder="fact id"></div>
+                  <div class="field"><label for="e-event-type">Event type</label><input id="e-event-type" placeholder="event type"></div>
+                </div>
+                <div class="row">
+                  <div class="field"><label for="e-result">Result</label><input id="e-result" placeholder="result"></div>
+                  <div class="field"><label for="e-source">Source</label><input id="e-source" placeholder="optional"></div>
+                </div>
+                <div class="field"><label for="e-text">Evidence text</label><textarea id="e-text" placeholder="evidence"></textarea></div>
+                <div class="row3">
+                  <div class="field"><label for="e-independent">Independent</label><select id="e-independent"><option value="0">No</option><option value="1">Yes</option></select></div>
+                  <div class="field"><label for="e-quality">Adversarial quality</label><input id="e-quality" type="number" min="0" max="100" placeholder="optional"></div>
+                  <div class="field"><label for="e-override">Override reason</label><input id="e-override" placeholder="optional"></div>
+                </div>
+                <button class="btn primary" id="save-evidence-btn" type="button">Add evidence</button>
+              </div>
+            </div>
+
+            <div class="section" data-section="debates" hidden>
+              <div class="split">
+                <div class="panel-title">Record debate</div>
+                <span class="badge">POST /debates</span>
+              </div>
+              <div class="form">
+                <div class="field"><label for="d-subject">Subject</label><input id="d-subject" placeholder="required subject"></div>
+                <div class="field"><label for="d-body">Debate payload</label><textarea id="d-body" placeholder='JSON body will be sent as-is; include relatedFactId, initialPositions, arguments, consensus, lessonsLearned, etc.'></textarea></div>
+                <button class="btn primary" id="save-debate-btn" type="button">Save debate</button>
+              </div>
+            </div>
+
+            <div class="section" data-section="lessons" hidden>
+              <div class="split">
+                <div class="panel-title">Record lesson</div>
+                <span class="badge">POST /lessons</span>
+              </div>
+              <div class="form">
+                <div class="row">
+                  <div class="field"><label for="l-domain">Domain</label><input id="l-domain" placeholder="required"></div>
+                  <div class="field"><label for="l-impact">Impact class</label><input id="l-impact" placeholder="optional"></div>
+                </div>
+                <div class="field"><label for="l-problem">Problem</label><textarea id="l-problem" placeholder="required problem"></textarea></div>
+                <div class="field"><label for="l-solution">Solution</label><textarea id="l-solution" placeholder="required solution"></textarea></div>
+                <div class="row3">
+                  <div class="field"><label for="l-novel">How novel</label><input id="l-novel" placeholder="optional"></div>
+                  <div class="field"><label for="l-surfaced">Surfaced by</label><input id="l-surfaced" placeholder="optional"></div>
+                  <div class="field"><label for="l-tokens">Write cost tokens</label><input id="l-tokens" type="number" min="0" placeholder="optional"></div>
+                </div>
+                <div class="field"><label for="l-tags">Tags</label><input id="l-tags" placeholder="comma separated"></div>
+                <button class="btn primary" id="save-lesson-btn" type="button">Save lesson</button>
+              </div>
+            </div>
+
+            <div class="section" data-section="agents" hidden>
+              <div class="split">
+                <div class="panel-title">Agent performance and authority</div>
+                <span class="badge">agents</span>
+              </div>
+              <div class="form">
+                <div class="row">
+                  <div class="field"><label for="a-agent-id">Agent ID</label><input id="a-agent-id" placeholder="required"></div>
+                  <div class="field"><label for="a-task-type">Task type</label><input id="a-task-type" placeholder="required"></div>
+                </div>
+                <div class="row">
+                  <div class="field"><label for="a-outcome">Outcome</label><input id="a-outcome" placeholder="correct / incorrect / partial / overridden"></div>
+                  <div class="field"><label for="a-confidence">Confidence at time</label><input id="a-confidence" type="number" min="0" max="100" placeholder="optional"></div>
+                </div>
+                <div class="field"><label for="a-notes">Notes</label><textarea id="a-notes" placeholder="performance notes"></textarea></div>
+                <div class="row">
+                  <button class="btn primary" id="save-performance-btn" type="button">Save performance</button>
+                  <button class="btn" id="load-accuracy-btn" type="button">Load accuracy</button>
+                </div>
+                <div class="row">
+                  <div class="field"><label for="a-authority">Authority status</label>
+                    <select id="a-authority">
+                      <option value="allowed">allowed</option>
+                      <option value="watch">watch</option>
+                      <option value="blocked">blocked</option>
+                    </select>
+                  </div>
+                  <div class="field"><label for="a-reason">Reason</label><input id="a-reason" placeholder="required"></div>
+                </div>
+                <div class="row">
+                  <div class="field"><label for="a-expires">Expires at</label><input id="a-expires" type="datetime-local"></div>
+                  <div class="field"><label for="a-set-by">Set by</label><input id="a-set-by" placeholder="optional"></div>
+                </div>
+                <button class="btn" id="save-authority-btn" type="button">Set authority</button>
+                <div class="empty" id="agent-result">Agent result appears here.</div>
+              </div>
+            </div>
+
+            <div class="section" data-section="drift" hidden>
+              <div class="split">
+                <div class="panel-title">Log intent drift</div>
+                <span class="badge">POST /intent-drift</span>
+              </div>
+              <div class="form">
+                <div class="field"><label for="dr-asked">Asked</label><textarea id="dr-asked" placeholder="what was requested"></textarea></div>
+                <div class="field"><label for="dr-delivered">Delivered</label><textarea id="dr-delivered" placeholder="what was actually delivered"></textarea></div>
+                <div class="row">
+                  <div class="field"><label for="dr-reason">Drift reason</label><input id="dr-reason" placeholder="optional"></div>
+                  <div class="field"><label for="dr-agent">Agent ID</label><input id="dr-agent" placeholder="optional"></div>
+                </div>
+                <div class="field"><label for="dr-fact">Related fact ID</label><input id="dr-fact" placeholder="optional"></div>
+                <button class="btn primary" id="save-drift-btn" type="button">Log drift</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Results</div>
+          <span class="badge" id="results-count">0</span>
+        </div>
+        <div class="panel-body scroll">
+          <div class="list" id="results">
+            <div class="empty">Use the workspace to interact with the Memory Intelligence routes. Results will render here as normalized JSON cards.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">Overlay page for Memory Intelligence. Uses the routes exposed by the Memory Intelligence service.</div>
+  </div>
+
+  <script>
+    const state = {
+      mode: 'facts',
+      summary: null,
+      lastFacts: [],
+      authHeaders: null,
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function getHeaders() {
+      try {
+        const key = localStorage.getItem('commandKey') || localStorage.getItem('command_key') || localStorage.getItem('lifeos_key') || '';
+        return key ? { 'x-command-key': key, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+      } catch {
+        return { 'Content-Type': 'application/json' };
+      }
+    }
+
+    async function api(path, opts = {}) {
+      const res = await fetch(`/api/v1/memory/evidence${path}`, {
+        headers: { ...getHeaders(), ...(opts.headers || {}) },
+        ...opts,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) {
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+      return data;
+    }
+
+    function fmtCount(value) {
+      return Number.isFinite(Number(value)) ? String(value) : '0';
+    }
+
+    function statusBadge(kind, text) {
+      return `<span class="badge ${kind || ''}">${escapeHtml(text)}</span>`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderSummary(summary) {
+      const kpis = $('kpis');
+      if (!summary || !kpis) return;
+      const values = [
+        summary.totalFacts ?? summary.facts ?? 0,
+        summary.totalDebates ?? summary.debates ?? 0,
+        summary.totalLessons ?? summary.lessons ?? 0,
+        summary.openDrifts ?? summary.intentDrifts ?? 0,
+      ];
+      const hints = [
+        'Stored epistemic facts',
+        'Captured debate records',
+        'Reusable lessons',
+        'Open drift events',
+      ];
+      kpis.innerHTML = values.map((v, i) => `
+        <div class="kpi">
+          <div class="label">${['Facts','Debates','Lessons','Drifts'][i]}</div>
+          <div class="value">${escapeHtml(fmtCount(v))}</div>
+          <div class="hint">${escapeHtml(hints[i])}</div>
+        </div>
+      `).join('');
+      $('health-status').textContent = summary.ok ? 'Healthy' : 'Loaded';
+      $('health-status').className = `badge ${summary.ok ? 'good' : ''}`;
+    }
+
+    function renderResults(list, title = 'Results') {
+      const results = $('results');
+      $('results-count').textContent = String(list.length);
+      if (!list.length) {
+        results.innerHTML = `<div class="empty">No records returned.</div>`;
+        return;
+      }
+      results.innerHTML = list.map((item) => {
+        const titleText = item.text || item.subject || item.problem || item.agentId || item.taskType || item.id || 'Record';
+        const subText = item.domain || item.taskType || item.problemClass || item.result || item.outcome || item.visibilityClass || '';
+        const meta = JSON.stringify(item, null, 2);
+        const tags = [];
+        if (item.level != null) tags.push(`level ${item.level}`);
+        if (item.level_label) tags.push(item.level_label);
+        if (item.authorityStatus) tags.push(String(item.authorityStatus));
+        if (item.severity) tags.push(String(item.severity));
+        return `
+          <article class="item">
+            <div class="item-top">
+              <div>
+                <div class="item-title">${escapeHtml(titleText)}</div>
+                ${subText ? `<div class="item-sub">${escapeHtml(subText)}</div>` : ''}
+              </div>
+              <div>${tags.map((t) => statusBadge('', escapeHtml(t))).join(' ')}</div>
+            </div>
+            <pre class="item-meta mono" style="white-space:pre-wrap;overflow:auto;margin:0">${escapeHtml(meta)}</pre>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      document.querySelectorAll('.chip[data-mode]').forEach((chip) => chip.classList.toggle('active', chip.dataset.mode === mode));
+      document.querySelectorAll('.section[data-section]').forEach((section) => section.hidden = section.dataset.section !== mode);
+      $('mode-badge').textContent = mode;
+    }
+
+    async function loadHealth() {
+      const data = await api('/health', { method: 'GET' });
+      state.summary = data.summary;
+      const s = data.summary || {};
+      renderSummary({
+        ok: true,
+        totalFacts: s.totalFacts ?? s.facts ?? 0,
+        totalDebates: s.totalDebates ?? s.debates ?? 0,
+        totalLessons: s.totalLessons ?? s.lessons ?? 0,
+        openDrifts: s.openDrifts ?? s.intentDrifts ?? 0,
+      });
+      const label = s.ok ? 'Healthy' : 'Loaded';
+      $('health-status').textContent = label;
+      $('health-status').className = `badge ${s.ok ? 'good' : ''}`;
+    }
+
+    async function queryFacts() {
+      const params = new URLSearchParams();
+      const context = $('q-context').value.trim();
+      const domain = $('q-domain').value.trim();
+      const minLevel = $('q-level').value;
+      const limit = $('q-limit').value;
+      const visibilityClass = $('q-vis').value;
+      if (context) params.set('context', context);
+      if (domain) params.set('domain', domain);
+      if (minLevel !== '') params.set('minLevel', minLevel);
+      if (limit) params.set('limit', limit);
+      if (visibilityClass) params.set('visibilityClass', visibilityClass);
+      const data = await api(`/facts?${params.toString()}`, { method: 'GET' });
+      state.lastFacts = data.facts || [];
+      renderResults(data.facts || []);
+    }
+
+    async function saveFact() {
+      const body = {
+        text: $('fact-text').value.trim(),
+        domain: $('fact-domain').value.trim() || undefined,
+        level: Number($('fact-level').value),
+        contextRequired: $('fact-context-required').value.trim() || undefined,
+        falseWhen: $('fact-false-when').value.trim() || undefined,
+        disproofRecipe: $('fact-disproof').value.trim() || undefined,
+        visibilityClass: $('fact-visibility').value.trim() || undefined,
+        residueRisk: $('fact-residue').value.trim() || undefined,
+        reviewBy: $('fact-review').value || undefined,
+        createdBy: $('fact-created-by').value.trim() || undefined,
+      };
+      const data = await api('/facts', { method: 'POST', body: JSON.stringify(body) });
+      renderResults([data.fact || data], 'Fact saved');
+      await loadHealth();
+    }
+
+    async function saveEvidence() {
+      const body = {
+        eventType: $('e-event-type').value.trim(),
+        result: $('e-result').value.trim(),
+        evidenceText: $('e-text').value.trim(),
+        source: $('e-source').value.trim() || undefined,
+        sourceIsIndependent: $('e-independent').value === '1',
+        adversarialQuality: $('e-quality').value ? Number($('e-quality').value) : undefined,
+        overrideReason: $('e-override').value.trim() || undefined,
+      };
+      const data = await api(`/facts/${encodeURIComponent($('e-fact-id').value.trim())}/evidence`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+      renderResults([data], 'Evidence saved');
+      await loadHealth();
+    }
+
+    async function saveDebate() {
+      const subject = $('d-subject').value.trim();
+      const raw = $('d-body').value.trim();
+      let body = {};
+      if (raw) {
+        try { body = JSON.parse(raw); } catch (err) { throw new Error(`Debate JSON invalid: ${err.message}`); }
+      }
+      body.subject = subject;
+      const data = await api('/debates', { method: 'POST', body: JSON.stringify(body) });
+      renderResults([data.debate || data], 'Debate saved');
+      await loadHealth();
+    }
+
+    async function saveLesson() {
+      const tags = $('l-tags').value.trim();
+      const body = {
+        domain: $('l-domain').value.trim(),
+        problem: $('l-problem').value.trim(),
+        solution: $('l-solution').value.trim(),
+        impactClass: $('l-impact').value.trim() || undefined,
+        howNovel: $('l-novel').value.trim() || undefined,
+        surfacedBy: $('l-surfaced').value.trim() || undefined,
+        tags: tags ? tags.split(',').map((s) => s.trim()).filter(Boolean) : undefined,
+        writeCostTokens: $('l-tokens').value ? Number($('l-tokens').value) : undefined,
+      };
+      const data = await api('/lessons', { method: 'POST', body: JSON.stringify(body) });
+      renderResults([data.lesson || data], 'Lesson saved');
+      await loadHealth();
+    }
+
+    async function savePerformance() {
+      const body = {
+        agentId: $('a-agent-id').value.trim(),
+        taskType: $('a-task-type').value.trim(),
+        outcome: $('a-outcome').value.trim(),
+        confidenceAtTime: $('a-confidence').value ? Number($('a-confidence').value) : undefined,
+        notes: $('a-notes').value.trim() || undefined,
+      };
+      const data = await api('/agents/performance', { method: 'POST', body: JSON.stringify(body) });
+      $('agent-result').textContent = JSON.stringify(data.record || data, null, 2);
+      await loadHealth();
+    }
+
+    async function loadAccuracy() {
+      const agentId = $('a-agent-id').value.trim();
+      const taskType = $('a-task-type').value.trim();
+      const params = new URLSearchParams();
+      if (taskType) params.set('taskType', taskType);
+      const data = await api(`/agents/${encodeURIComponent(agentId)}/accuracy${params.toString() ? `?${params.toString()}` : ''}`, { method: 'GET' });
+      $('agent-result').textContent = JSON.stringify(data.accuracy || data, null, 2);
+    }
+
+    async function saveAuthority() {
+      const body = {
+        agentId: $('a-agent-id').value.trim(),
+        taskType: $('a-task-type').value.trim(),
+        authorityStatus: $('a-authority').value,
+        reason: $('a-reason').value.trim(),
+        expiresAt: $('a-expires').value || undefined,
+        setBy: $('a-set-by').value.trim() || undefined,
+      };
+      const data = await api('/agents/authority', { method: 'POST', body: JSON.stringify(body) });
+      $('agent-result').textContent = JSON.stringify(data.authority || data, null, 2);
+      await loadHealth();
+    }
+
+    async function saveDrift() {
+      const body = {
+        asked: $('dr-asked').value.trim(),
+        delivered: $('dr-delivered').value.trim(),
+        driftReason: $('dr-reason').value.trim() || undefined,
+        agentId: $('dr-agent').value.trim() || undefined,
+        relatedFactId: $('dr-fact').value.trim() || undefined,
+      };
+      const data = await api('/intent-drift', { method: 'POST', body: JSON.stringify(body) });
+      renderResults([data.event || data], 'Intent drift saved');
+      await loadHealth();
+    }
+
+    async function loadConstants() {
+      try {
+        const data = await api('/constants', { method: 'GET' });
+        if (data.levelLabels) {
+          // no-op; route available for reference and future UI wiring
+        }
+      } catch {}
+    }
+
+    function wire() {
+      $('theme-btn').addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+      });
+      $('refresh-btn').addEventListener('click', refreshAll);
+      $('query-facts-btn').addEventListener('click', async () => {
+        try { await queryFacts(); } catch (err) { renderResults([{ error: err.message }]); }
+      });
+      $('save-fact-btn').addEventListener('click', async () => {
+        try { await saveFact(); } catch (err) { renderResults([{ error: err.message }]); }
+      });
+      $('save-evidence-btn').addEventListener('click', async () => {
+        try { await saveEvidence(); } catch (err) { renderResults([{ error: err.message }]); }
+      });
+      $('save-debate-btn').addEventListener('click', async () => {
+        try { await saveDebate(); } catch (err) { renderResults([{ error: err.message }]); }
+      });
+      $('save-lesson-btn').addEventListener('click', async () => {
+        try { await saveLesson(); } catch (err) { renderResults([{ error: err.message }]); }
+      });
+      $('save-performance-btn').addEventListener('click', async () => {
+        try { await savePerformance(); } catch (err) { $('agent-result').textContent = err.message; }
+      });
+      $('load-accuracy-btn').addEventListener('click', async () => {
+        try { await loadAccuracy(); } catch (err) { $('agent-result').textContent = err.message; }
+      });
+      $('save-authority-btn').addEventListener('click', async () => {
+        try { await saveAuthority(); } catch (err) { $('agent-result').textContent = err.message; }
+      });
+      $('save-drift-btn').addEventListener('click', async () => {
+        try { await saveDrift(); } catch (err) { renderResults([{ error: err.message }]); }
+      });
+      document.querySelectorAll('.chip[data-mode]').forEach((chip) => {
+        chip.addEventListener('click', () => setMode(chip.dataset.mode));
+      });
+    }
+
+    async function refreshAll() {
+      const tasks = [
+        loadHealth(),
+        loadConstants(),
+      ];
+      await Promise.allSettled(tasks);
+      if (state.mode === 'facts') {
+        try { await queryFacts(); } catch {}
+      }
+    }
+
+    (async function init() {
+      wire();
+      try {
+        await refreshAll();
+      } catch (err) {
+        $('health-status').textContent = 'Error';
+        $('health-status').className = 'badge bad';
+        $('results').innerHTML = `<div class="empty">${escapeHtml(err.message)}</div>`;
+      }
+    })();
+  </script>
+</body>
+</html>

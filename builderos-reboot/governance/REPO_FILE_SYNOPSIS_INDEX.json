@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:51:47.353Z",
+  "generated_at": "2026-07-04T23:59:30.467Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 94,
+  "file_count": 95,
   "files": [
     {
       "path": "db/migrations/20260704_create_agent_performance.sql",
@@ -374,6 +374,13 @@
       "bytes": 24314,
       "mtime": "2026-07-04T22:05:25.836Z",
       "indexed_at": "2026-07-04T22:05:25.836Z"
+    },
+    {
+      "path": "public/overlay/memory-intelligence.html",
+      "synopsis": "HTML page: Memory Intelligence",
+      "bytes": 37302,
+      "mtime": "2026-07-04T23:59:30.467Z",
+      "indexed_at": "2026-07-04T23:59:30.467Z"
     },
     {
       "path": "public/overlay/security_receipt.html",
