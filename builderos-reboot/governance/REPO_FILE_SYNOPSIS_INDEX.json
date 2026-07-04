@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:12:48.192Z",
+  "generated_at": "2026-07-04T23:12:57.358Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 63,
+  "file_count": 64,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -346,6 +346,13 @@
       "bytes": 1807,
       "mtime": "2026-07-04T22:28:06.502Z",
       "indexed_at": "2026-07-04T22:28:06.502Z"
+    },
+    {
+      "path": "routes/user-routes.js",
+      "synopsis": "Exports createUserRoutes — routes/user-routes.js.",
+      "bytes": 2948,
+      "mtime": "2026-07-04T23:12:57.358Z",
+      "indexed_at": "2026-07-04T23:12:57.358Z"
     },
     {
       "path": "routes/video-pipeline-routes.js",
