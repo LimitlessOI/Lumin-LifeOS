@@ -5,7 +5,7 @@
 
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
-import { spawnSync } from 'child_process';
+import { spawnSync, spawn } from 'child_process';
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, resolve, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -346,14 +346,22 @@ export function runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey) {
     PUBLIC_BASE_URL: baseUrl.replace(/\/$/, ''),
     COMMAND_CENTER_KEY: commandKey || process.env.COMMAND_CENTER_KEY || '',
   };
-  const r = spawnSync('node', [scriptAbs], { env, encoding: 'utf8', cwd: REPO_ROOT });
-  return {
-    ok: r.status === 0,
-    status: r.status,
-    stdout: (r.stdout || '').slice(-4000),
-    stderr: (r.stderr || '').slice(-2000),
-    script: scriptRel,
-  };
+  return new Promise((res) => {
+    let stdout = '';
+    let stderr = '';
+    const child = spawn('node', [scriptAbs], { env, cwd: REPO_ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    const timer = setTimeout(() => { child.kill('SIGTERM'); }, 60_000);
+    child.stdout.on('data', (d) => { stdout += d; if (stdout.length > 8000) stdout = stdout.slice(-4000); });
+    child.stderr.on('data', (d) => { stderr += d; if (stderr.length > 4000) stderr = stderr.slice(-2000); });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      res({ ok: code === 0, status: code, stdout: stdout.slice(-4000), stderr: stderr.slice(-2000), script: scriptRel });
+    });
+    child.on('error', (err) => {
+      clearTimeout(timer);
+      res({ ok: false, status: null, stdout: '', stderr: err.message, script: scriptRel });
+    });
+  });
 }
 
 function intakeAutoRedeployEnabled() {
@@ -376,7 +384,7 @@ function runIntakeRedeploy({ timeoutMs = 720_000 } = {}) {
   };
 }
 
-export function runPostIntakeDeployAndAcceptance({
+export async function runPostIntakeDeployAndAcceptance({
   baseUrl,
   commandKey,
   acceptanceCmd,
@@ -395,7 +403,7 @@ export function runPostIntakeDeployAndAcceptance({
   }
 
   spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: REPO_ROOT, encoding: 'utf8' });
-  const postAcceptance = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
+  const postAcceptance = await runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
   return {
     ok: postAcceptance.ok === true,
     redeploy: { ok: true },
@@ -483,7 +491,7 @@ export async function executeIntakeBlueprint({
       return target && existsSync(join(REPO_ROOT, target));
     });
     if (allTargetsPresent) {
-      const probe = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
+      const probe = await runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
       if (probe.ok) {
         return {
           ok: true,
@@ -612,11 +620,11 @@ export async function executeIntakeBlueprint({
 
   if (acceptanceCmd && !dryRun) {
     spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: REPO_ROOT, encoding: 'utf8' });
-    acceptance = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
+    acceptance = await runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
   }
 
   if (!dryRun && hadCommits && acceptance?.ok === true) {
-    postDeploy = runPostIntakeDeployAndAcceptance({
+    postDeploy = await runPostIntakeDeployAndAcceptance({
       baseUrl,
       commandKey,
       acceptanceCmd,
