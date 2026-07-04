@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T13:37:08.905Z",
+  "generated_at": "2026-07-04T13:37:14.393Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 2,
+  "file_count": 3,
   "files": [
     {
       "path": "db/migrations/20260704_create_faith_projects.sql",
@@ -17,6 +17,13 @@
       "bytes": 365,
       "mtime": "2026-07-04T13:37:08.905Z",
       "indexed_at": "2026-07-04T13:37:08.905Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_faith_tradition_lenses.sql",
+      "synopsis": "Database migration — 20260704_create_faith_tradition_lenses.sql.",
+      "bytes": 428,
+      "mtime": "2026-07-04T13:37:14.393Z",
+      "indexed_at": "2026-07-04T13:37:14.393Z"
     }
   ]
 }
