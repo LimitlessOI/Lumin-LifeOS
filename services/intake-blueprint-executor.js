@@ -434,6 +434,26 @@ export async function executeIntakeBlueprint({
     }
 
     const targetFile = stepTargetFile(step);
+
+    if (!dryRun && targetFile && step.type !== 'sql') {
+      const absTarget = join(REPO_ROOT, targetFile);
+      if (existsSync(absTarget)) {
+        let fileValid = false;
+        if (step.type === 'html') {
+          const content = readFileSync(absTarget, 'utf8');
+          fileValid = content.length > 100 && content.includes('<html');
+        } else {
+          const checkResult = spawnSync('node', ['-c', absTarget], { encoding: 'utf8', cwd: REPO_ROOT });
+          fileValid = checkResult.status === 0;
+        }
+        if (fileValid) {
+          results.push({ step_id: step.id, target_file: targetFile, ok: true, committed: false, skipped: 'file_exists_valid' });
+          if (onStep) onStep(results[results.length - 1]);
+          continue;
+        }
+      }
+    }
+
     const dispatch = buildStepDispatchBody(step, resolvedBlueprint, sessionId, { scan: scanPatterns });
 
     if (dryRun) {
