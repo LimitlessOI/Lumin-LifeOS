@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T18:24:26.603Z",
+  "generated_at": "2026-07-04T18:27:59.342Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 6,
+  "file_count": 7,
   "files": [
     {
       "path": "db/migrations/20260704_adam_decisions.sql",
@@ -31,6 +31,13 @@
       "bytes": 14529,
       "mtime": "2026-07-04T18:20:34.269Z",
       "indexed_at": "2026-07-04T18:20:34.269Z"
+    },
+    {
+      "path": "routes/conflict-arbitrator-routes.js",
+      "synopsis": "Exports createConflictArbitratorRoutes — routes/conflict-arbitrator-routes.js.",
+      "bytes": 6077,
+      "mtime": "2026-07-04T18:27:59.342Z",
+      "indexed_at": "2026-07-04T18:27:59.342Z"
     },
     {
       "path": "routes/twin-simulate-routes.js",
