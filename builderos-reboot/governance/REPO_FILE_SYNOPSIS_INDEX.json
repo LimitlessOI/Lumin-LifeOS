@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T15:20:32.324Z",
+  "generated_at": "2026-07-04T15:20:38.397Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260704_create_music_students.sql",
@@ -10,6 +10,13 @@
       "bytes": 595,
       "mtime": "2026-07-04T15:20:32.324Z",
       "indexed_at": "2026-07-04T15:20:32.324Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_music_teachers.sql",
+      "synopsis": "Database migration — 20260704_create_music_teachers.sql.",
+      "bytes": 503,
+      "mtime": "2026-07-04T15:20:38.397Z",
+      "indexed_at": "2026-07-04T15:20:38.397Z"
     }
   ]
 }
