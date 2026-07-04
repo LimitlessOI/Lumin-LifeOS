@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:19:13.924Z",
+  "generated_at": "2026-07-04T23:21:16.887Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 70,
+  "file_count": 71,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -199,6 +199,13 @@
       "bytes": 436,
       "mtime": "2026-07-04T23:12:39.634Z",
       "indexed_at": "2026-07-04T23:12:39.634Z"
+    },
+    {
+      "path": "public/overlay/audit.html",
+      "synopsis": "HTML page: LimitlessOS Audit Results",
+      "bytes": 18739,
+      "mtime": "2026-07-04T23:21:16.887Z",
+      "indexed_at": "2026-07-04T23:21:16.887Z"
     },
     {
       "path": "public/overlay/billing_dashboard.html",
