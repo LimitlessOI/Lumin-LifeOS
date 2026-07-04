@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:28:10.657Z",
+  "generated_at": "2026-07-04T22:28:38.322Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 48,
+  "file_count": 49,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -206,6 +206,13 @@
       "bytes": 24314,
       "mtime": "2026-07-04T22:05:25.836Z",
       "indexed_at": "2026-07-04T22:05:25.836Z"
+    },
+    {
+      "path": "public/overlay/sprint-offers.html",
+      "synopsis": "HTML page: Productized Sprint offer selection",
+      "bytes": 17398,
+      "mtime": "2026-07-04T22:28:38.322Z",
+      "indexed_at": "2026-07-04T22:28:38.322Z"
     },
     {
       "path": "public/overlay/success.html",

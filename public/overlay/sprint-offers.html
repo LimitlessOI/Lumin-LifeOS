@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Productized Sprint offer selection -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>Productized Sprint — Offers</title>
+  <style>
+    :root {
+      --bg-base: #0a0a0f;
+      --bg-raised: #0d0d15;
+      --bg-surface: #111118;
+      --bg-surface2: #17171f;
+      --bg-overlay: #1e1e28;
+      --border: rgba(255,255,255,0.08);
+      --border-focus: rgba(255,255,255,0.16);
+      --text-primary: #e8e8f0;
+      --text-secondary: #a0a0c0;
+      --text-muted: #666680;
+      --accent: #5b6af5;
+      --accent-2: #7c3aed;
+      --accent-soft: rgba(91,106,245,0.14);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 24px 70px rgba(0,0,0,0.28);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --page-pad: 20px;
+      --content-max: 1120px;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg-base: #f6f7fb;
+      --bg-raised: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-surface2: #f3f5fb;
+      --bg-overlay: #ffffff;
+      --border: rgba(15,23,42,0.12);
+      --border-focus: rgba(91,106,245,0.28);
+      --text-primary: #111827;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --shadow: 0 22px 60px rgba(15,23,42,0.10);
+      --accent-soft: rgba(91,106,245,0.10);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, Manrope, Avenir Next, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-primary);
+      background:
+        radial-gradient(circle at top right, rgba(91,106,245,0.14), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(124,58,237,0.10), transparent 26%),
+        var(--bg-base);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    .shell {
+      min-height: 100%;
+      padding: calc(20px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) calc(20px + env(safe-area-inset-left, 0px));
+    }
+
+    .wrap {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero {
+      background:
+        linear-gradient(135deg, rgba(91,106,245,0.20), rgba(124,58,237,0.14)),
+        linear-gradient(180deg, rgba(255,255,255,0.08), transparent),
+        var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 20px 0 20px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.8;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+      max-width: 18ch;
+    }
+
+    .hero-copy {
+      margin-top: 12px;
+      color: var(--text-secondary);
+      max-width: 72ch;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .meta-row {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .offer {
+      grid-column: span 4;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent), var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .offer:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-focus);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.32);
+    }
+
+    .offer.selected {
+      border-color: rgba(91,106,245,0.6);
+      box-shadow: 0 0 0 1px rgba(91,106,245,0.2), var(--shadow);
+    }
+
+    .offer.selected::before {
+      content: "Selected";
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .offer-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, rgba(91,106,245,0.18), rgba(124,58,237,0.16));
+      border: 1px solid var(--border);
+    }
+
+    .offer-title {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+    }
+
+    .offer-subtitle {
+      margin-top: 4px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .price {
+      margin: 16px 0 8px;
+      font-size: 32px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .price small {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0;
+    }
+
+    .feature-list {
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 10px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .check {
+      color: var(--success);
+      flex: 0 0 auto;
+      font-weight: 900;
+    }
+
+    .cta-row {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--bg-surface2);
+      color: var(--text-primary);
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 0 14px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--border-focus);
+      transform: translateY(-1px);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .btn.primary:hover { filter: brightness(1.03); }
+
+    .btn.ghost {
+      background: transparent;
+    }
+
+    .selection-panel {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .selection-panel h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+
+    .selection-panel p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .selected-summary {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      background: var(--bg-surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .selected-name {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .selected-desc {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .selection-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .helper {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .mobile-note {
+      display: none;
+    }
+
+    @media (max-width: 920px) {
+      .offer { grid-column: span 12; }
+      .hero { padding: 20px; }
+      .shell { padding: 16px; }
+    }
+
+    @media (max-width: 560px) {
+      h1 { max-width: none; }
+      .selection-actions, .cta-row { width: 100%; }
+      .btn { width: 100%; justify-content: center; }
+      .mobile-note { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="wrap">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow">Productized Sprint · Blueprint PS-P1-004</div>
+        <h1 id="page-title">Choose the service offer that fits your sprint.</h1>
+        <p class="hero-copy">
+          Review the three productized service offers below, then select the one you want to continue with.
+          Your selection is stored in the browser for this overlay session.
+        </p>
+        <div class="meta-row" aria-label="Page metadata">
+          <span class="meta-pill">Three offers</span>
+          <span class="meta-pill">Customer selection</span>
+          <span class="meta-pill">Overlay page</span>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Service offers">
+        <article class="offer selected" data-offer-id="starter" data-offer-name="Starter Sprint">
+          <div class="offer-head">
+            <div class="icon" aria-hidden="true">◐</div>
+            <div>
+              <h2 class="offer-title">Starter Sprint</h2>
+              <div class="offer-subtitle">A focused entry package for a first sprint with clear scope and fast momentum.</div>
+            </div>
+          </div>
+          <div class="price">$2.5k <small>one-time</small></div>
+          <ul class="feature-list">
+            <li><span class="check">✓</span><span>Kickoff alignment and sprint goals</span></li>
+            <li><span class="check">✓</span><span>Scope definition for one priority outcome</span></li>
+            <li><span class="check">✓</span><span>Weekly check-in and delivery notes</span></li>
+          </ul>
+          <div class="cta-row">
+            <button class="btn primary" type="button" data-select-offer="starter">Select Starter</button>
+            <button class="btn ghost" type="button" data-preview-offer="starter">Preview details</button>
+          </div>
+        </article>
+
+        <article class="offer" data-offer-id="growth" data-offer-name="Growth Sprint">
+          <div class="offer-head">
+            <div class="icon" aria-hidden="true">◆</div>
+            <div>
+              <h2 class="offer-title">Growth Sprint</h2>
+              <div class="offer-subtitle">A deeper package for teams that want implementation, iteration, and momentum.</div>
+            </div>
+          </div>
+          <div class="price">$7.5k <small>one-time</small></div>
+          <ul class="feature-list">
+            <li><span class="check">✓</span><span>Strategy + execution plan across the sprint</span></li>
+            <li><span class="check">✓</span><span>Two implementation workstreams</span></li>
+            <li><span class="check">✓</span><span>Mid-sprint review and refinement</span></li>
+          </ul>
+          <div class="cta-row">
+            <button class="btn primary" type="button" data-select-offer="growth">Select Growth</button>
+            <button class="btn ghost" type="button" data-preview-offer="growth">Preview details</button>
+          </div>
+        </article>
+
+        <article class="offer" data-offer-id="scale" data-offer-name="Scale Sprint">
+          <div class="offer-head">
+            <div class="icon" aria-hidden="true">⬢</div>
+            <div>
+              <h2 class="offer-title">Scale Sprint</h2>
+              <div class="offer-subtitle">The highest-touch option for broader delivery, systems, and coordinated launch work.</div>
+            </div>
+          </div>
+          <div class="price">$15k <small>one-time</small></div>
+          <ul class="feature-list">
+            <li><span class="check">✓</span><span>Multi-workstream delivery plan and coordination</span></li>
+            <li><span class="check">✓</span><span>Implementation support across a larger scope</span></li>
+            <li><span class="check">✓</span><span>Executive-level progress review and handoff</span></li>
+          </ul>
+          <div class="cta-row">
+            <button class="btn primary" type="button" data-select-offer="scale">Select Scale</button>
+            <button class="btn ghost" type="button" data-preview-offer="scale">Preview details</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="selection-panel" aria-labelledby="selection-title">
+        <h2 id="selection-title">Current selection</h2>
+        <p>Tap a service offer above to choose it. The selected offer is highlighted and its details appear here.</p>
+
+        <div class="selected-summary" aria-live="polite">
+          <div class="selected-name" id="selected-name">Starter Sprint</div>
+          <div class="selected-desc" id="selected-desc">
+            A focused entry package for a first sprint with clear scope and fast momentum.
+          </div>
+        </div>
+
+        <div class="selection-actions">
+          <button class="btn primary" type="button" id="confirm-selection">Confirm selection</button>
+          <button class="btn" type="button" id="clear-selection">Clear selection</button>
+        </div>
+
+        <div class="helper" id="status-text">Selection saved locally in this overlay session.</div>
+        <div class="mobile-note helper">On mobile, the offer cards stack vertically for easy tapping.</div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const offers = {
+        starter: {
+          name: 'Starter Sprint',
+          description: 'A focused entry package for a first sprint with clear scope and fast momentum.'
+        },
+        growth: {
+          name: 'Growth Sprint',
+          description: 'A deeper package for teams that want implementation, iteration, and momentum.'
+        },
+        scale: {
+          name: 'Scale Sprint',
+          description: 'The highest-touch option for broader delivery, systems, and coordinated launch work.'
+        }
+      };
+
+      const STORAGE_KEY = 'ps_p1_004_selected_offer';
+
+      const selectedName = document.getElementById('selected-name');
+      const selectedDesc = document.getElementById('selected-desc');
+      const statusText = document.getElementById('status-text');
+
+      function setSelected(id, announce = true) {
+        const offer = offers[id];
+        if (!offer) return;
+
+        document.querySelectorAll('.offer').forEach((card) => {
+          card.classList.toggle('selected', card.dataset.offerId === id);
+        });
+
+        selectedName.textContent = offer.name;
+        selectedDesc.textContent = offer.description;
+        localStorage.setItem(STORAGE_KEY, id);
+
+        if (announce) {
+          statusText.textContent = `${offer.name} selected.`;
+        }
+      }
+
+      function clearSelected() {
+        localStorage.removeItem(STORAGE_KEY);
+        document.querySelectorAll('.offer').forEach((card) => card.classList.remove('selected'));
+        selectedName.textContent = 'No offer selected';
+        selectedDesc.textContent = 'Choose one of the three service offers above to continue.';
+        statusText.textContent = 'Selection cleared.';
+      }
+
+      document.querySelectorAll('[data-select-offer]').forEach((button) => {
+        button.addEventListener('click', () => setSelected(button.dataset.selectOffer));
+      });
+
+      document.querySelectorAll('[data-preview-offer]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const offer = offers[button.dataset.previewOffer];
+          if (!offer) return;
+          selectedName.textContent = offer.name;
+          selectedDesc.textContent = offer.description;
+          statusText.textContent = `Previewing ${offer.name}. Use Select to lock it in.`;
+        });
+      });
+
+      document.getElementById('confirm-selection').addEventListener('click', () => {
+        const current = localStorage.getItem(STORAGE_KEY);
+        const offer = offers[current];
+        if (!offer) {
+          statusText.textContent = 'Select an offer first.';
+          return;
+        }
+        statusText.textContent = `${offer.name} confirmed.`;
+      });
+
+      document.getElementById('clear-selection').addEventListener('click', clearSelected);
+
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && offers[saved]) {
+        setSelected(saved, false);
+      }
+    })();
+  </script>
+</body>
+</html>
