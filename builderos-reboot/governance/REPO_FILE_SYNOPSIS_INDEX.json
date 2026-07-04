@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:34:36.405Z",
+  "generated_at": "2026-07-04T21:35:01.017Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 33,
+  "file_count": 34,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -115,6 +115,13 @@
       "bytes": 591,
       "mtime": "2026-07-04T21:15:59.184Z",
       "indexed_at": "2026-07-04T21:15:59.184Z"
+    },
+    {
+      "path": "public/overlay/billing_dashboard.html",
+      "synopsis": "HTML page: ClientCare Billing Recovery",
+      "bytes": 16159,
+      "mtime": "2026-07-04T21:35:01.017Z",
+      "indexed_at": "2026-07-04T21:35:01.017Z"
     },
     {
       "path": "public/overlay/commitment_confirmation.html",
