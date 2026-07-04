@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:15:59.184Z",
+  "generated_at": "2026-07-04T21:16:12.150Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 24,
+  "file_count": 25,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -136,6 +136,13 @@
       "bytes": 3218,
       "mtime": "2026-07-04T20:53:24.938Z",
       "indexed_at": "2026-07-04T20:53:24.938Z"
+    },
+    {
+      "path": "routes/white-label-routes.js",
+      "synopsis": "Exports createWhiteLabelRoutes — routes/white-label-routes.js.",
+      "bytes": 6489,
+      "mtime": "2026-07-04T21:16:12.150Z",
+      "indexed_at": "2026-07-04T21:16:12.150Z"
     },
     {
       "path": "routes/youtube-routes.js",
