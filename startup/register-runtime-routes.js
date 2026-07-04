@@ -129,6 +129,7 @@ import { createProgressReportRoutes } from "../routes/progress-report-routes.js"
 import { createVideoRoutes } from "../routes/video-pipeline-routes.js";
 import { createYoutubeRoutes } from "../routes/youtube-routes.js";
 import { createWhiteLabelRoutes } from "../routes/white-label-routes.js";
+import { createClientcareBillingRecoveryRoutes } from "../routes/clientcare-billing-recovery-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -773,6 +774,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/white-label", createWhiteLabelRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
   logger.info('✅ [WHITE_LABEL] Routes mounted at /api/v1/white-label');
+
+  app.use("/api/v1/clientcare-billing-recovery", createClientcareBillingRecoveryRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
+  logger.info('✅ [CLIENTCARE_BILLING_RECOVERY] Routes mounted at /api/v1/clientcare-billing-recovery');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
