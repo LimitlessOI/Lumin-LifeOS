@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-04 — Acceptance script rewritten: verify-tcservice.mjs now checks all 40 TC service/route files (existence + syntax) plus 2 route probes. All 45 checks pass. |
 
 ---
 
