@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-03T23:59:26.801Z",
+  "generated_at": "2026-07-04T00:00:13.996Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 2,
+  "file_count": 3,
   "files": [
     {
       "path": "db/migrations/20260704_create_transactions_table.sql",
@@ -10,6 +10,16 @@
       "bytes": 804,
       "mtime": "2026-07-03T23:59:06.393Z",
       "indexed_at": "2026-07-03T23:59:06.393Z"
+    },
+    {
+      "path": "services/mls-deal-scanner.js",
+      "synopsis": "Service for AI deal scoring and investor criteria matching. * @ssot docs/products/tc-service/PRODUCT_HOME.md",
+      "bytes": 9503,
+      "mtime": "2026-07-04T00:00:13.996Z",
+      "indexed_at": "2026-07-04T00:00:13.996Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/tc-doc-intake.js",
