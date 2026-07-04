@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:17:24.245Z",
+  "generated_at": "2026-07-04T20:24:05.372Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 44,
+  "file_count": 45,
   "files": [
     {
       "path": "db/migrations/20230704_create_estimation_log_table.sql",
@@ -164,6 +164,13 @@
       "bytes": 628,
       "mtime": "2026-07-04T19:25:56.516Z",
       "indexed_at": "2026-07-04T19:25:56.516Z"
+    },
+    {
+      "path": "db/migrations/20260705_create_income_sources_table.sql",
+      "synopsis": "Database migration — 20260705_create_income_sources_table.sql.",
+      "bytes": 549,
+      "mtime": "2026-07-04T20:24:05.372Z",
+      "indexed_at": "2026-07-04T20:24:05.372Z"
     },
     {
       "path": "db/migrations/20260705_create_project_entitlements.sql",
