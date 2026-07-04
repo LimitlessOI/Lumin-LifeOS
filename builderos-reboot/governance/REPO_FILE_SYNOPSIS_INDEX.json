@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:03:42.011Z",
+  "generated_at": "2026-07-04T23:12:39.634Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 61,
+  "file_count": 62,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -178,6 +178,13 @@
       "bytes": 591,
       "mtime": "2026-07-04T21:15:59.184Z",
       "indexed_at": "2026-07-04T21:15:59.184Z"
+    },
+    {
+      "path": "db/migrations/20260705_lifeos_users.sql",
+      "synopsis": "Database migration — 20260705_lifeos_users.sql.",
+      "bytes": 436,
+      "mtime": "2026-07-04T23:12:39.634Z",
+      "indexed_at": "2026-07-04T23:12:39.634Z"
     },
     {
       "path": "public/overlay/billing_dashboard.html",
