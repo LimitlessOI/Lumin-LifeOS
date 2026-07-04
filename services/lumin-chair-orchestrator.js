@@ -599,30 +599,35 @@ export async function runLuminChairTurn(ctx, deps) {
         if (isArcOrExecuteRequest) {
           try {
             const { rows: existingRows } = await deps.pool.query(
-              `SELECT id, status, blueprint_json IS NOT NULL AS has_bp FROM blueprint_intake_sessions
-               WHERE product_name = $1 AND status IN ('arc_review','generating','extracting','ready','gap_collection')
+              `SELECT id, status, error_message, blueprint_json IS NOT NULL AS has_bp FROM blueprint_intake_sessions
+               WHERE product_name = $1 AND status IN ('arc_review','generating','extracting','ready','gap_collection','failed')
                ORDER BY created_at DESC LIMIT 1`,
               [detectedProductId]
             );
-            if (existingRows.length && existingRows[0].has_bp) {
+            if (existingRows.length) {
               const existSession = existingRows[0];
-              const intake = (await import('../services/blueprint-intake.js')).createBlueprintIntakeService(deps.pool, deps.callCouncilMember);
+
+              if (existSession.status === 'failed') {
+                const truth = finalizeTruth({
+                  ok: false, pass_fail: 'FAIL', command_truth: 'NO_COMMAND_RAN',
+                  action: 'intake_blueprint', execution_path: 'intake_status_check',
+                  session_id: existSession.id, product: detectedProductId,
+                  first_blocker: existSession.error_message || 'unknown_error', duration_ms: Date.now() - started,
+                  human_summary: `${detectedProductId} blueprint session ${existSession.id} FAILED: ${existSession.error_message || 'unknown error'}. Say "Create a blueprint for ${detectedProductId}" to start fresh.`,
+                }, channel);
+                return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+              }
 
               if (existSession.status === 'arc_review' || existSession.status === 'gap_collection') {
-                setImmediate(() => {
-                  intake.runArcReview(existSession.id).catch(err => {
-                    console.error('[CHAIR-ARC] Background ARC review failed:', err.message);
-                  });
-                });
                 const truth = finalizeTruth({
                   ok: true, pass_fail: 'RUNNING', command_truth: 'COMMAND_RAN',
-                  action: 'intake_blueprint', execution_path: 'intake_arc_review',
+                  action: 'intake_blueprint', execution_path: 'intake_status_check',
                   session_id: existSession.id, product: detectedProductId,
-                  async: true, first_blocker: null, duration_ms: Date.now() - started,
-                  human_summary: `ARC review started for ${detectedProductId} blueprint (session ${existSession.id}). The system is reviewing the blueprint, auto-fixing issues, and validating structure. Poll GET /api/v1/blueprint/intake/${existSession.id} for status.`,
-                  human_summary_technical: `ARC review running in background for session ${existSession.id}.`,
+                  first_blocker: null, duration_ms: Date.now() - started,
+                  human_summary: `${detectedProductId} blueprint (session ${existSession.id}) is in ${existSession.status}. ARC review runs automatically as part of the backfill pipeline. Poll GET /api/v1/blueprint/intake/${existSession.id} for updated status.`,
+                  human_summary_technical: `Session ${existSession.id} status: ${existSession.status}.`,
                 }, channel);
-                return { statusCode: 202, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+                return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
               }
 
               if (existSession.status === 'ready') {

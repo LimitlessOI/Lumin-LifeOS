@@ -493,6 +493,14 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
       gaps_json: gaps,
       status: newStatus,
     });
+
+    if (newStatus === 'arc_review') {
+      try {
+        await runArcReview(sessionId);
+      } catch (arcErr) {
+        console.error('[BACKFILL-ARC] ARC review failed in backfill, session stays arc_review:', arcErr.message);
+      }
+    }
   }
 
   // ── FLOW 2: Greenfield (conversation → spec → blueprint) ──────────────────
