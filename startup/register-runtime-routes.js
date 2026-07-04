@@ -121,6 +121,7 @@ import { createCallSimulationRoutes } from "../routes/call-simulation-routes.js"
 import { createPerfectDayRoutes } from "../routes/perfect-day-routes.js";
 import { createProgressRoutes } from "../routes/progress-routes.js";
 import { createConflictArbitratorRoutes } from "../routes/conflict-arbitrator-routes.js";
+import { createReceptionistRoutes } from "../routes/receptionist-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -741,6 +742,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/conflict-arbitrator", createConflictArbitratorRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
   logger.info('✅ [CONFLICT_ARBITRATOR] Routes mounted at /api/v1/conflict-arbitrator');
+
+  app.use("/api/v1/receptionist", createReceptionistRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
+  logger.info('✅ [RECEPTIONIST] Routes mounted at /api/v1/receptionist');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
