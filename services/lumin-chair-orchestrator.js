@@ -650,10 +650,28 @@ export async function runLuminChairTurn(ctx, deps) {
                 const wantsExecute = /\b(execute|build|run|deploy|start)\b/i.test(effectiveInput);
                 if (wantsExecute) {
                   const { executeIntakeBlueprint } = await import('../services/intake-blueprint-executor.js');
-                  const execResult = await executeIntakeBlueprint({
+                  const execPromise = executeIntakeBlueprint({
                     pool: deps.pool, sessionId: existSession.id, baseUrl, commandKey: operatorKey,
                     dryRun: false,
                   });
+                  const EXEC_INLINE_TIMEOUT_MS = 60000;
+                  const timeoutPromise = new Promise(r => setTimeout(() => r(null), EXEC_INLINE_TIMEOUT_MS));
+                  const execResult = await Promise.race([execPromise, timeoutPromise]);
+                  if (!execResult) {
+                    _clog('execute_inline_timeout — continuing in background');
+                    execPromise.then(r => _clog(`execute_bg_done ok=${r?.ok} steps=${r?.steps_run}`)).catch(e => _clog(`execute_bg_err: ${e.message}`));
+                    const truth = finalizeTruth({
+                      ok: true, pass_fail: 'RUNNING', command_truth: 'COMMAND_RAN',
+                      action: 'intake_blueprint', execution_path: 'execute_blueprint_async',
+                      session_id: existSession.id, product: detectedProductId,
+                      first_blocker: null, duration_ms: Date.now() - started,
+                      done_synopsis: `${detectedProductId} blueprint execution started (building code in background).`,
+                      done_bullets: [`Product: ${detectedProductId}`, `Session: ${existSession.id.slice(0,8)}`, `Status: building in background`],
+                      human_summary: `${detectedProductId} blueprint is being executed in the background — code generation takes time for larger blueprints. Check status with "Check status of the ${detectedProductId} blueprint".`,
+                      human_summary_technical: `Execution dispatched async — inline timeout after ${EXEC_INLINE_TIMEOUT_MS}ms. Builder is generating code in background.`,
+                    }, channel);
+                    return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+                  }
                   const truth = finalizeTruth({
                     ok: execResult.ok, pass_fail: execResult.ok ? 'PASS' : 'FAIL', command_truth: 'COMMAND_RAN',
                     action: 'intake_blueprint', execution_path: 'execute_blueprint',
@@ -761,10 +779,28 @@ export async function runLuminChairTurn(ctx, deps) {
             if (readySessions.length) {
               const readySession = readySessions[0];
               const { executeIntakeBlueprint } = await import('../services/intake-blueprint-executor.js');
-              const execResult = await executeIntakeBlueprint({
+              const execPromise2 = executeIntakeBlueprint({
                 pool: deps.pool, sessionId: readySession.id, baseUrl, commandKey: operatorKey,
                 dryRun: false,
               });
+              const EXEC_INLINE_TIMEOUT_MS2 = 60000;
+              const timeoutPromise2 = new Promise(r => setTimeout(() => r(null), EXEC_INLINE_TIMEOUT_MS2));
+              const execResult = await Promise.race([execPromise2, timeoutPromise2]);
+              if (!execResult) {
+                _clog('execute_redirect_inline_timeout — continuing in background');
+                execPromise2.then(r => _clog(`execute_redirect_bg_done ok=${r?.ok} steps=${r?.steps_run}`)).catch(e => _clog(`execute_redirect_bg_err: ${e.message}`));
+                const truth = finalizeTruth({
+                  ok: true, pass_fail: 'RUNNING', command_truth: 'COMMAND_RAN',
+                  action: 'intake_blueprint', execution_path: 'execute_blueprint_async',
+                  session_id: readySession.id, product: detectedProductId,
+                  first_blocker: null, duration_ms: Date.now() - started,
+                  done_synopsis: `${detectedProductId} blueprint execution started (building code in background).`,
+                  done_bullets: [`Product: ${detectedProductId}`, `Session: ${readySession.id.slice(0,8)}`, `Status: building in background`],
+                  human_summary: `${detectedProductId} blueprint is being executed in the background — code generation takes time for larger blueprints. Check status with "Check status of the ${detectedProductId} blueprint".`,
+                  human_summary_technical: `Execution dispatched async — inline timeout after ${EXEC_INLINE_TIMEOUT_MS2}ms. Builder is generating code in background.`,
+                }, channel);
+                return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+              }
               const truth = finalizeTruth({
                 ok: execResult.ok, pass_fail: execResult.ok ? 'PASS' : 'FAIL', command_truth: 'COMMAND_RAN',
                 action: 'intake_blueprint', execution_path: 'execute_blueprint',
