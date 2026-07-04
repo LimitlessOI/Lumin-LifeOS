@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T17:37:54.262Z",
+  "generated_at": "2026-07-04T17:38:00.559Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 2,
+  "file_count": 3,
   "files": [
     {
       "path": "db/migrations/20260704_create_adam_decisions.sql",
@@ -10,6 +10,13 @@
       "bytes": 192,
       "mtime": "2026-07-04T17:37:54.262Z",
       "indexed_at": "2026-07-04T17:37:54.262Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_adam_profile.sql",
+      "synopsis": "Database migration — 20260704_create_adam_profile.sql.",
+      "bytes": 473,
+      "mtime": "2026-07-04T17:38:00.559Z",
+      "indexed_at": "2026-07-04T17:38:00.559Z"
     },
     {
       "path": "db/migrations/20260704_create_conversation_messages.sql",
