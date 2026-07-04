@@ -159,25 +159,41 @@ export function createBlueprintIntakeRoutes(app, ctx) {
   });
 
   // ── Execute — run ARC-ready intake blueprint through BuilderOS ─────────────
+  const executionResults = new Map();
   app.post('/api/v1/blueprint/intake/:id/execute', requireKey, async (req, res) => {
     try {
       const baseUrl = process.env.PUBLIC_BASE_URL || `${req.protocol}://${req.get('host')}`;
       const commandKey = req.headers['x-command-center-key'] || req.headers['x-command-key'] || req.headers['x-lifeos-key'];
-      const result = await executeIntakeBlueprint({
-        pool,
-        sessionId: req.params.id,
-        baseUrl,
-        commandKey,
-        fromStepId: req.body?.from_step || null,
-        dryRun: req.body?.dry_run === true,
-      });
-      if (!result.ok) {
-        return res.status(422).json({ ok: false, ...result });
+      const dryRun = req.body?.dry_run === true;
+      const sync = req.body?.sync === true;
+      const fromStepId = req.body?.from_step || null;
+      if (dryRun || sync) {
+        const result = await executeIntakeBlueprint({ pool, sessionId: req.params.id, baseUrl, commandKey, fromStepId, dryRun });
+        return res.status(result.ok ? 200 : 422).json({ ok: result.ok, ...result });
       }
-      return res.status(200).json({ ok: true, ...result });
+      const sessionId = req.params.id;
+      executionResults.set(sessionId, { status: 'running', started: new Date().toISOString(), results: [] });
+      res.status(202).json({ ok: true, status: 'started', session_id: sessionId, poll: `/api/v1/blueprint/intake/${sessionId}/execute/status` });
+      executeIntakeBlueprint({
+        pool, sessionId, baseUrl, commandKey, fromStepId, dryRun: false,
+        onStep: (step) => {
+          const entry = executionResults.get(sessionId);
+          if (entry) entry.results.push(step);
+        },
+      }).then((result) => {
+        executionResults.set(sessionId, { status: result.ok ? 'complete' : 'failed', ...result, finished: new Date().toISOString() });
+      }).catch((err) => {
+        executionResults.set(sessionId, { status: 'error', error: err.message, finished: new Date().toISOString() });
+      });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
+  });
+
+  app.get('/api/v1/blueprint/intake/:id/execute/status', requireKey, (req, res) => {
+    const entry = executionResults.get(req.params.id);
+    if (!entry) return res.status(404).json({ error: 'no execution in progress or completed for this session' });
+    return res.status(200).json(entry);
   });
 
   // ── ARC review — validate the blueprint, write to disk if ready ───────────
