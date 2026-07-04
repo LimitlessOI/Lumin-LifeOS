@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T21:12:29.545Z",
+  "generated_at": "2026-07-04T21:15:59.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 23,
+  "file_count": 24,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -94,6 +94,13 @@
       "bytes": 395,
       "mtime": "2026-07-04T20:45:15.206Z",
       "indexed_at": "2026-07-04T20:45:15.206Z"
+    },
+    {
+      "path": "db/migrations/20260705_create_white_label_configs.sql",
+      "synopsis": "Database migration — 20260705_create_white_label_configs.sql.",
+      "bytes": 591,
+      "mtime": "2026-07-04T21:15:59.184Z",
+      "indexed_at": "2026-07-04T21:15:59.184Z"
     },
     {
       "path": "public/overlay/lesson-plan-generator.html",
