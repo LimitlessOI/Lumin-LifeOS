@@ -40,13 +40,13 @@ async function checkFile(filePath, validator) {
 }
 
 async function run() {
-  await checkFile('db/migrations/20260704_receptionist_configs.sql', (abs) => {
+  await checkFile('db/migrations/20260704_create_receptionist_configs.sql', (abs) => {
     const c = fs.readFileSync(abs, 'utf8');
-    /CREATE\s+TABLE/i.test(c) ? pass('db/migrations/20260704_receptionist_configs.sql exists + has CREATE TABLE') : fail('db/migrations/20260704_receptionist_configs.sql exists but no CREATE TABLE');
+    /CREATE\s+TABLE/i.test(c) ? pass('db/migrations/20260704_create_receptionist_configs.sql exists + has CREATE TABLE') : fail('db/migrations/20260704_create_receptionist_configs.sql exists but no CREATE TABLE');
   });
-  await checkFile('db/migrations/20260704_call_logs.sql', (abs) => {
+  await checkFile('db/migrations/20260704_create_call_logs.sql', (abs) => {
     const c = fs.readFileSync(abs, 'utf8');
-    /CREATE\s+TABLE/i.test(c) ? pass('db/migrations/20260704_call_logs.sql exists + has CREATE TABLE') : fail('db/migrations/20260704_call_logs.sql exists but no CREATE TABLE');
+    /CREATE\s+TABLE/i.test(c) ? pass('db/migrations/20260704_create_call_logs.sql exists + has CREATE TABLE') : fail('db/migrations/20260704_create_call_logs.sql exists but no CREATE TABLE');
   });
   await checkFile('services/receptionist-service.js', (abs) => {
     try { execSync(`node -c "${abs}"`, { encoding: 'utf8', stdio: 'pipe' }); pass('services/receptionist-service.js exists + syntax OK'); }
@@ -56,13 +56,13 @@ async function run() {
     try { execSync(`node -c "${abs}"`, { encoding: 'utf8', stdio: 'pipe' }); pass('routes/receptionist-routes.js exists + syntax OK'); }
     catch (e) { fail('routes/receptionist-routes.js: ' + e.message.split('\n')[0]); }
   });
-  await checkFile('public/ai-receptionist.html', (abs) => {
+  await checkFile('public/overlay/ai-receptionist.html', (abs) => {
     const c = fs.readFileSync(abs, 'utf8');
-    c.length > 50 ? pass('public/ai-receptionist.html exists (' + c.length + ' bytes)') : fail('public/ai-receptionist.html too small');
+    c.length > 50 ? pass('public/overlay/ai-receptionist.html exists (' + c.length + ' bytes)') : fail('public/overlay/ai-receptionist.html too small');
   });
-  await checkFile('public/checkout-success.html', (abs) => {
+  await checkFile('public/overlay/checkout-success.html', (abs) => {
     const c = fs.readFileSync(abs, 'utf8');
-    c.length > 50 ? pass('public/checkout-success.html exists (' + c.length + ' bytes)') : fail('public/checkout-success.html too small');
+    c.length > 50 ? pass('public/overlay/checkout-success.html exists (' + c.length + ' bytes)') : fail('public/overlay/checkout-success.html too small');
   });
 
 console.log('\nResults: ' + passes + ' passed, ' + fails.length + ' failed of 6 files');
