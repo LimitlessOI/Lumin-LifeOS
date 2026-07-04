@@ -97,6 +97,7 @@ RULES:
 7. contract: required for sql/esm/esm_script steps — this IS the executable spec
 8. acceptance_cmd in _meta must be a real node command
 9. ssot_tag must point to the actual product home, not AMENDMENT_XX.md
+10. File paths NEVER start with src/ — this repo uses services/, routes/, scripts/, db/, public/ at the repo root
 
 Return ONLY the compact JSON. No markdown, no fences, no commentary.`;
 };
@@ -230,7 +231,16 @@ function dedupeVerifySteps(blueprint, productName) {
   return blueprint;
 }
 
+function normalizeStepPaths(blueprint) {
+  for (const step of blueprint?.steps || []) {
+    if (!step.file) continue;
+    // This repo has no src/ directory — services/ routes/ scripts/ are at root
+    step.file = step.file.replace(/^src\//, '');
+  }
+}
+
 function finalizeBlueprint(blueprint, { productName, parentSsot, gapAnswers = null } = {}) {
+  normalizeStepPaths(blueprint);
   stripInvalidSteps(blueprint);
   let gaps = detectGaps(blueprint);
   if ((gaps.length > 0 || (blueprint.steps?.length || 0) < 3) && founderRequestedPhase1Infra(gapAnswers)) {
