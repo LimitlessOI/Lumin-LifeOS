@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:37:34.409Z",
+  "generated_at": "2026-07-04T23:37:42.136Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 78,
+  "file_count": 79,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -339,6 +339,13 @@
       "bytes": 1162,
       "mtime": "2026-07-04T23:18:59.812Z",
       "indexed_at": "2026-07-04T23:18:59.812Z"
+    },
+    {
+      "path": "routes/automation-routes.js",
+      "synopsis": "Exports createAutomationRoutes — routes/automation-routes.js.",
+      "bytes": 1783,
+      "mtime": "2026-07-04T23:37:42.136Z",
+      "indexed_at": "2026-07-04T23:37:42.136Z"
     },
     {
       "path": "routes/builderos-routes.js",
