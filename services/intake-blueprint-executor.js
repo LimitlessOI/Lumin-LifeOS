@@ -483,7 +483,19 @@ export async function executeIntakeBlueprint({
   }
 
   const steps = sortIntakeSteps(resolvedBlueprint.steps);
-  const acceptanceCmd = resolvedBlueprint._meta?.acceptance_cmd;
+  let acceptanceCmd = resolvedBlueprint._meta?.acceptance_cmd;
+  if (acceptanceCmd) {
+    const cmdParts = acceptanceCmd.split(/\s+/);
+    const scriptPath = cmdParts.find(p => p.endsWith('.mjs') || p.endsWith('.js'));
+    if (scriptPath && !existsSync(join(REPO_ROOT, scriptPath))) {
+      const verifyStep = steps.find(s => s.type === 'esm_script' && stepTargetFile(s));
+      if (verifyStep) {
+        const corrected = `node ${stepTargetFile(verifyStep)}`;
+        console.log(`[EXECUTOR] acceptance_cmd self-correct: "${acceptanceCmd}" → "${corrected}"`);
+        acceptanceCmd = corrected;
+      }
+    }
+  }
 
   if (acceptanceCmd && !dryRun && !fromStepId) {
     const allTargetsPresent = steps.every((step) => {
@@ -646,7 +658,7 @@ export async function executeIntakeBlueprint({
     ...(postDeploy ? { post_deploy: postDeploy } : {}),
     error: overallOk
       ? undefined
-      : postDeploy?.error || (acceptance?.ok === false ? 'acceptance_failed' : undefined),
+      : postDeploy?.error || (acceptance?.ok === false ? `acceptance_failed: exit=${acceptance.status} stderr=${(acceptance.stderr || '').slice(0, 200)}` : undefined),
   };
 }
 
