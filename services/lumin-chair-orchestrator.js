@@ -337,6 +337,9 @@ function systemActionChairResponse(ctx, result) {
 }
 
 export async function runLuminChairTurn(ctx, deps) {
+  const _ct0 = Date.now();
+  const _clog = (label) => console.log(`[CHAIR-TURN] ${label} +${Date.now() - _ct0}ms`);
+  _clog('start');
   const {
     cleanedInput,
     normalizedText,
@@ -372,12 +375,14 @@ export async function runLuminChairTurn(ctx, deps) {
   if (!alphaProbe && !resolvedUserId && deps.resolveUserId && (ctx.userHandle || userHandle)) {
     resolvedUserId = await deps.resolveUserId(ctx.userHandle || userHandle).catch(() => null);
   }
+  _clog('resolvedUserId');
 
   let mergedHistory = conversationHistory;
   if (!alphaProbe && deps.luminPersist && resolvedUserId) {
     const serverHist = await loadFounderThreadHistory(deps.luminPersist, resolvedUserId, { limit: 24 });
     mergedHistory = mergeConversationHistory(serverHist, conversationHistory, { max: 24 });
   }
+  _clog('loadHistory');
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
   const actionSource = ctx.originalText || cleanedInput;
@@ -410,6 +415,7 @@ export async function runLuminChairTurn(ctx, deps) {
   const skipIntentGate = force || forceExecute;
   const displayOnlyTurn = shouldDisplayOnly || explicitAction === 'display';
   const isIntake = isIntakeBlueprintIntent(effectiveInput) || isIntakeBlueprintIntent(cleanedInput);
+  _clog(`isIntake=${isIntake}`);
 
   if (!displayOnlyTurn && conversationalMode && !isIntake) {
     const cssTurn = isCssOnlyUiFeedback(cleanedInput) || isCssOnlyUiFeedback(doPrefix.text || cleanedInput);
@@ -586,6 +592,7 @@ export async function runLuminChairTurn(ctx, deps) {
     }
 
     case 'intake_blueprint': {
+      _clog('intake_blueprint_case');
       const detectedProductId = extractIntakeProductName(cleanedInput);
       const sessionId = extractIntakeSessionId(cleanedInput) || SOCIALMEDIAOS_INTAKE_SESSION;
       const operatorKey = deps.operatorKey || process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
@@ -656,6 +663,7 @@ export async function runLuminChairTurn(ctx, deps) {
           }
         }
 
+        _clog('pre_productHome_read');
         const productHomeFile = `docs/products/${detectedProductId}/PRODUCT_HOME.md`;
         let amendmentText = '';
         try {
@@ -668,7 +676,9 @@ export async function runLuminChairTurn(ctx, deps) {
           }
         } catch { /* fall through */ }
 
+        _clog(`productHome_diskRead done=${!!amendmentText}`);
         if (!amendmentText) {
+          _clog('pre_github_fetch');
           try {
             const ghToken = process.env.GITHUB_TOKEN?.trim();
             const ghRepo = process.env.GITHUB_REPO || 'LimitlessOI/Lumin-LifeOS';
@@ -680,6 +690,7 @@ export async function runLuminChairTurn(ctx, deps) {
               if (ghRes.ok) amendmentText = await ghRes.text();
             }
           } catch { /* GitHub fallback failed — fall through to error */ }
+          _clog('post_github_fetch');
         }
 
         if (!amendmentText) {
@@ -696,13 +707,16 @@ export async function runLuminChairTurn(ctx, deps) {
           return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
         }
 
+        _clog('pre_import_intake');
         const intake = (await import('../services/blueprint-intake.js')).createBlueprintIntakeService(deps.pool, deps.callCouncilMember);
+        _clog('pre_startBackfill');
         const backfillResult = await intake.startBackfill({
           amendmentFile: productHomeFile,
           amendmentText,
           productName: detectedProductId,
           ownerId: null,
         });
+        _clog(`post_startBackfill status=${backfillResult.status}`);
 
         const truth = finalizeTruth({
           ok: true,

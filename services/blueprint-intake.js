@@ -454,6 +454,9 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
   }
 
   async function _runBackfill(sessionId, amendmentText) {
+    const _bt0 = Date.now();
+    const _blog = (label) => console.log(`[BACKFILL] ${sessionId.slice(0,8)} ${label} +${Date.now() - _bt0}ms mem=${Math.round(process.memoryUsage().heapUsed/1024/1024)}MB`);
+    _blog('start');
     const { rows: sessionRows } = await pool.query(
       'SELECT product_name FROM blueprint_intake_sessions WHERE id = $1',
       [sessionId]
@@ -461,23 +464,28 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
     const productName = sessionRows[0]?.product_name;
 
     const codebaseScan = await scanCodebasePatterns();
+    _blog('codebaseScan_done');
     await updateSession(pool, sessionId, { codebase_scan_json: codebaseScan });
 
+    _blog('pre_intent_extraction');
     const intentRaw = await _withTimeout(
       callCouncilMember('openai',
         `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
         { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
       ), 60000, 'intent_extraction'
     );
+    _blog('intent_extraction_done');
     const intent = parseBlueprintFromAiResponse(intentRaw);
     await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
 
+    _blog('pre_blueprint_generation');
     const blueprintRaw = await _withTimeout(
       callCouncilMember('openai',
         `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
         { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
       ), 90000, 'blueprint_generation'
     );
+    _blog('blueprint_generation_done');
     let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
     const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
@@ -496,11 +504,15 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
 
     if (newStatus === 'arc_review') {
       try {
+        _blog('pre_arcReview');
         await runArcReview(sessionId);
+        _blog('post_arcReview');
       } catch (arcErr) {
+        _blog(`arcReview_failed: ${arcErr.message}`);
         console.error('[BACKFILL-ARC] ARC review failed in backfill, session stays arc_review:', arcErr.message);
       }
     }
+    _blog('backfill_complete');
   }
 
   // ── FLOW 2: Greenfield (conversation → spec → blueprint) ──────────────────

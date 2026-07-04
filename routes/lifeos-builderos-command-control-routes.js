@@ -1143,8 +1143,12 @@ HOW TO RESPOND:
   });
 
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
+    const _t0 = Date.now();
+    const _log = (label) => console.log(`[FI-MSG] ${label} +${Date.now() - _t0}ms mem=${Math.round(process.memoryUsage().heapUsed/1024/1024)}MB`);
+    _log('handler_start');
     const HANDLER_DEADLINE_MS = 92000;
     const handlerDeadline = setTimeout(() => {
+      _log('handler_deadline_fired');
       if (!res.headersSent) {
         res.status(200).json({
           ok: false,
@@ -1189,9 +1193,11 @@ HOW TO RESPOND:
         || req.body?.alpha_probe === true
         || needsSystemKnowledge(originalText)
         || isIntakeBlueprintIntent(originalText);
+      _log(`skipNormalize=${skipNormalize}`);
       const cleanedInput = skipNormalize
         ? originalText.trim()
         : await normalizeInputText(originalText);
+      _log('cleanedInput_done');
       const inputWasCleaned = cleanedInput !== originalText;
 
       const inferredDisplayScope = summarizeDisplayRequest(cleanedInput);
@@ -1223,6 +1229,7 @@ HOW TO RESPOND:
         }
       }
 
+      _log('pre_inboxGate');
       let inboxGate = null;
       if (!shouldDisplayOnly && founderIntakeGate) {
         inboxGate = await founderIntakeGate.captureAndGate(req, {
@@ -1231,6 +1238,7 @@ HOW TO RESPOND:
           forceApprove: force || explicitExecute,
           autoApproveRoles: EXECUTE_ALLOWED_ROLES,
         });
+        _log('post_inboxGate');
         if (inboxGate?.private) {
           const privateReply = 'Private — not saved. Session only.';
           await persistFounderTurn(req, cleanedInput, privateReply);
@@ -1272,6 +1280,7 @@ HOW TO RESPOND:
       const userId = req.lifeosUser?.sub || null;
       const userHandle = resolveFounderCommandControlHandle(req);
 
+      _log('pre_chairTurn');
       const chairTurnPromise = runLuminChairTurn({
         req,
         originalText,

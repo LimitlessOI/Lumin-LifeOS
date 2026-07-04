@@ -20,6 +20,17 @@ import { createServer } from "http";
 import logger from "./services/logger.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
+
+// Event loop watchdog — detects if the event loop is blocked for >500ms
+let _watchdogLast = Date.now();
+setInterval(() => {
+  const now = Date.now();
+  const delta = now - _watchdogLast;
+  if (delta > 1500) {
+    console.error(`[WATCHDOG] Event loop blocked for ${delta}ms! mem=${Math.round(process.memoryUsage().heapUsed/1024/1024)}MB rss=${Math.round(process.memoryUsage().rss/1024/1024)}MB`);
+  }
+  _watchdogLast = now;
+}, 1000).unref();
 import { createDbPool } from "./services/db.js";
 import { initDb } from "./db/index.js";
 import { startDbHealthMonitor } from "./services/db-health-monitor.js";
