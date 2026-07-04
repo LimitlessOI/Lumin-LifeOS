@@ -941,13 +941,45 @@ Return JSON:
   "ready_to_execute": true|false
 }`;
 
-    const arcRaw = await _withTimeout(
-      callCouncilMember('openai',
-        `BLUEPRINT TO REVIEW:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
-        { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
-      ), 60000, 'arc_review'
-    );
-    const arcReport = parseBlueprintFromAiResponse(arcRaw);
+    let arcReport;
+    try {
+      const arcRaw = await _withTimeout(
+        callCouncilMember('openai',
+          `BLUEPRINT TO REVIEW:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
+          { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+        ), 60000, 'arc_review'
+      );
+      arcReport = parseBlueprintFromAiResponse(arcRaw);
+    } catch (aiParseErr) {
+      console.error(`[ARC-REVIEW] AI response not parseable, falling back to deterministic validation: ${aiParseErr.message}`);
+      recordAiOutcome('openai', 'arc_review', false, session.product_name);
+      const structFallback = _validateBlueprintStructure(blueprint);
+      if (structFallback.valid) {
+        const fixedBp = _autoFixFromArcReport(blueprint, { critical: [], moderate: [], minor: [] }, session.product_name) || blueprint;
+        dedupeVerifySteps(fixedBp, session.product_name);
+        const deterministicFix = _validateBlueprintStructure(fixedBp);
+        const passReport = {
+          critical: [], moderate: [], minor: [],
+          total_critical: 0, total_moderate: 0, total_minor: 0,
+          ready_to_execute: deterministicFix.valid,
+          validation_method: 'deterministic_fallback_ai_parse_failed',
+        };
+        await updateSession(pool, sessionId, { arc_report_json: passReport, blueprint_json: fixedBp, status: deterministicFix.valid ? 'ready' : 'gap_collection' });
+        if (deterministicFix.valid && session.amendment_file) {
+          const blueprintFile = tryWriteBlueprintFile(session.amendment_file, fixedBp);
+          if (blueprintFile) await updateSession(pool, sessionId, { blueprint_file: blueprintFile });
+        }
+        return { arcReport: passReport, status: deterministicFix.valid ? 'ready' : 'gap_collection', autoFixed: true, aiParseFailed: true };
+      }
+      arcReport = {
+        critical: structFallback.errors.map(e => ({ step_id: e.stepId || 'blueprint', issue: e.issue, fix: e.fix })),
+        moderate: [], minor: [],
+        total_critical: structFallback.errors.length,
+        total_moderate: 0, total_minor: 0,
+        ready_to_execute: false,
+        validation_method: 'deterministic_fallback_ai_parse_failed',
+      };
+    }
 
     const hasCritical = Number(arcReport.total_critical) > 0 || (arcReport.critical && arcReport.critical.length > 0);
     const hasModerate = Number(arcReport.total_moderate) > 0 || (arcReport.moderate && arcReport.moderate.length > 0);
