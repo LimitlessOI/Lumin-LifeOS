@@ -1366,7 +1366,9 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           console.error(
             `OpenAI API error: ${response.status} - ${errorText}`
           );
-          throw new Error(`HTTP ${response.status}`);
+          const err = new Error(`HTTP ${response.status}: ${errorText.slice(0, 300)}`);
+          if (response.status === 413) err.nonRetryable = true;
+          throw err;
         }
 
         const json = await response.json();
