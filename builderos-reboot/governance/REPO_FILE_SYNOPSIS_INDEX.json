@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T17:17:09.540Z",
+  "generated_at": "2026-07-04T17:20:54.809Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "db/migrations/20260704_create_prospect_sites.sql",
@@ -10,6 +10,13 @@
       "bytes": 330,
       "mtime": "2026-07-04T17:17:09.540Z",
       "indexed_at": "2026-07-04T17:17:09.540Z"
+    },
+    {
+      "path": "db/migrations/20260705_create_audit_logs.sql",
+      "synopsis": "Database migration — 20260705_create_audit_logs.sql.",
+      "bytes": 738,
+      "mtime": "2026-07-04T17:20:54.809Z",
+      "indexed_at": "2026-07-04T17:20:54.809Z"
     }
   ]
 }
