@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:31:07.420Z",
+  "generated_at": "2026-07-04T23:31:20.910Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 74,
+  "file_count": 75,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -479,6 +479,13 @@
       "bytes": 5807,
       "mtime": "2026-07-04T23:17:10.610Z",
       "indexed_at": "2026-07-04T23:17:10.610Z"
+    },
+    {
+      "path": "services/security_receipts.js",
+      "synopsis": "Exports createSecurityReceiptsService — services/security_receipts.js.",
+      "bytes": 7112,
+      "mtime": "2026-07-04T23:31:20.910Z",
+      "indexed_at": "2026-07-04T23:31:20.910Z"
     },
     {
       "path": "services/user-service.js",
