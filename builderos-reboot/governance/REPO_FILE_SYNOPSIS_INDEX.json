@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:19:03.791Z",
+  "generated_at": "2026-07-04T23:19:13.924Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 69,
+  "file_count": 70,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -360,6 +360,13 @@
       "bytes": 1160,
       "mtime": "2026-07-04T20:53:07.264Z",
       "indexed_at": "2026-07-04T20:53:07.264Z"
+    },
+    {
+      "path": "routes/replacement-plan-routes.js",
+      "synopsis": "Exports createReplacementPlanRoutes — routes/replacement-plan-routes.js.",
+      "bytes": 3773,
+      "mtime": "2026-07-04T23:19:13.924Z",
+      "indexed_at": "2026-07-04T23:19:13.924Z"
     },
     {
       "path": "routes/sprint-routes.js",
