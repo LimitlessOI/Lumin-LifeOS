@@ -135,6 +135,7 @@ import { createSprintRoutes } from "../routes/sprint-routes.js";
 import { createOperatorConsumptionRoutes } from "../routes/operator-consumption-routes.js";
 import { createBlueprintRoutes } from "../routes/builderos-routes.js";
 import { createUserRoutes } from "../routes/user-routes.js";
+import { createAuditRoutes } from "../routes/audit-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const runtimeProfile = getRuntimeProfile();
   const fullRuntimeProfile = isFullRuntimeProfile();
@@ -797,6 +798,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/user", createUserRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [USER] Routes mounted at /api/v1/user');
+
+  app.use("/api/v1/audit", createAuditRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [AUDIT] Routes mounted at /api/v1/audit');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
