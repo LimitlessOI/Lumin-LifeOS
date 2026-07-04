@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:30:44.484Z",
+  "generated_at": "2026-07-04T16:30:55.844Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 9,
+  "file_count": 10,
   "files": [
     {
       "path": "db/migrations/20260704_create_coaching_sessions_table.sql",
@@ -55,6 +55,13 @@
       "ssot": [
         "docs/products/MarketingOS/MarketingOS_HOME.md"
       ]
+    },
+    {
+      "path": "services/content-engine-service.js",
+      "synopsis": "Exports createContentEngineService — services/content-engine-service.js.",
+      "bytes": 5065,
+      "mtime": "2026-07-04T16:30:55.844Z",
+      "indexed_at": "2026-07-04T16:30:55.844Z"
     },
     {
       "path": "services/course-service.js",
