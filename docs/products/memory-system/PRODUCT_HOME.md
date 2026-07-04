@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-04 — Repaired 20260704 memory capsule migration regression: it no longer re-creates an incompatible `memory_capsules(id, owner_id, signal_data, trust_level INTEGER)` table or indexes `owner_id`; it now asserts the canonical May 2026 `capsule_id` schema and adds only canonical indexes. |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
@@ -184,6 +184,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-04 | **`db/migrations/20260704_create_memory_capsules.sql`**, **`scripts/verify-memory-system.mjs`**, **`tests/memory-migration-contract.test.js`**, **`package.json`** — replaced duplicate `memory_capsules` table creation with a canonical-schema guard and indexed only existing canonical columns; verifier now rejects duplicate table/`owner_id` migrations; regression test wired into `npm test`. | Critical boot/apply blocker: environments that already had the canonical May `memory_capsules(capsule_id, ...)` table would fail applying the new migration when it attempted `CREATE INDEX ... owner_id`, leaving full-runtime route boot broken until the migration was fixed. | `node --check scripts/verify-memory-system.mjs`; `node --test tests/memory-migration-contract.test.js`; `npm test` 258 pass / 4 skipped / 0 fail; `npm run lifeos:product-home:verify` PASS; `builder:preflight` still blocked by pre-existing LifeOS `lumin` vs `chair` routing assertion |
 | 2026-06-01 | Constitutional refactor alignment only. Preserved capsule-memory scope as canonical; explicitly marked historian-style prediction/outcome calibration as Amendment 39 authority; added mission-linked retrieval direction without claiming full runtime mission-state enforcement exists yet. | Keep memory authority split honest while aligning to mission-first governance. | ✅ |
 | 2026-05-21 | Memory Capsule Alpha OIL Governance Pass: 17 services/route files written (BT-001–BT-021) + 11 blockers repaired. Files: memory-signal-intake, memory-candidate, memory-capsule, memory-provenance, memory-trust-bridge, memory-oil-bridge, memory-retrieval, memory-links, memory-contradiction, memory-zombie, memory-explanation, memory-relationship, memory-legacy-bridge, memory-receipts, memory-working, memory-health, memory-institutional, routes/memory-capsule-routes. 2 DB migrations (20260521_memory_capsule_core + receipts). | Alpha build + governance pass for MC-F01–F21 per BUILD_QUEUE.json. GAP-FILL: council output had logic inversions, stray fences, truncated files. | `node --check` PASS all 17 files |
 | 2026-05-28 | **Memory namespace audit Phase 2:** `routes/memory-routes.js` — added `LEGACY_META` constant (`memory_authority: 'LEGACY_COMPAT'`, `canonical_replacement: '/api/v1/memory/evidence or /api/v1/memory/capsules'`, `do_not_use_for_builderos_proof: true`) spread into all 5 legacy route responses. Routes mounted at `/api/memories/*` and `/api/v1/memory/legacy/*` now self-report their authority classification to callers. | Close ambiguity: callers must not use legacy CRUD memory routes for BuilderOS proof. No routes deleted. | ✅ `node --check routes/memory-routes.js` |
@@ -197,6 +198,10 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 | 2026-05-21 | Live MC-BENCH pressure test via Railway/Neon: 20/20 PASS, 0 PARTIAL, 0 FAIL. VERDICT: ALPHA_PASS (LIVE). All 5 endpoint probes verified: /health (200), /signal (capsule created), /retrieve (provenance chain returned), /capsule/:id (capsule read), /correct (trust mutation path). | Final live proof for OIL certification. | `node scripts/memory-pressure-test.mjs --live` ALPHA_PASS |
 
 ## Agent Handoff Notes
+
+**Current state (2026-07-04): Critical migration regression repaired locally.**
+
+The 20260704 system-build migration for `memory_capsules` had drifted from the canonical May capsule schema and would crash migration apply on any DB where `memory_capsules` already existed without `owner_id`. The migration now fail-closes on missing/incompatible canonical schema and adds only `created_at`, `fact_id`, and `trust_level` indexes. Next priority is to keep capsule schema changes additive against `20260521_memory_capsule_core.sql` instead of emitting competing `CREATE TABLE memory_capsules` files.
 
 **Current state (2026-05-21): OIL CERTIFIED — ALPHA_PASS (LIVE).**
 

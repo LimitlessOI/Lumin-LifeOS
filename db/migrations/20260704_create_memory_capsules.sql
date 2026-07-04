@@ -1,18 +1,41 @@
 -- SYNOPSIS: Database migration — 20260704_create_memory_capsules.sql.
--- MS-P1-001: memory_capsules table for memory-system
+-- MS-P1-001 repair: assert the canonical capsule schema before adding indexes.
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+DO $$
+BEGIN
+  IF to_regclass('public.memory_capsules') IS NULL THEN
+    RAISE EXCEPTION
+      'memory_capsules is missing; expected db/migrations/20260521_memory_capsule_core.sql to create the canonical capsule_id schema first';
+  END IF;
 
-CREATE TABLE IF NOT EXISTS memory_capsules (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  owner_id TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  signal_data JSONB NOT NULL,
-  trust_level INTEGER DEFAULT 0
-);
+  IF NOT EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'memory_capsules'
+      AND column_name = 'capsule_id'
+  ) THEN
+    RAISE EXCEPTION
+      'memory_capsules has an incompatible schema; expected canonical capsule_id primary key';
+  END IF;
 
-CREATE INDEX IF NOT EXISTS idx_memory_capsules_owner_id
-  ON memory_capsules (owner_id);
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'memory_capsules'
+      AND column_name = 'owner_id'
+  ) THEN
+    RAISE EXCEPTION
+      'memory_capsules has obsolete owner_id schema from a duplicate migration; repair manually before continuing';
+  END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_memory_capsules_created_at
   ON memory_capsules (created_at);
+
+CREATE INDEX IF NOT EXISTS idx_memory_capsules_fact_id
+  ON memory_capsules (fact_id);
+
+CREATE INDEX IF NOT EXISTS idx_memory_capsules_trust_level
+  ON memory_capsules (trust_level);
