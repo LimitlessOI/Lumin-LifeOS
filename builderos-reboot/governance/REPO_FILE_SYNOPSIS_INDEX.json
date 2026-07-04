@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T20:53:28.974Z",
+  "generated_at": "2026-07-04T20:53:36.230Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 14,
+  "file_count": 15,
   "files": [
     {
       "path": "db/migrations/20260704_create_teacher_os_documents.sql",
@@ -73,6 +73,13 @@
       "bytes": 3218,
       "mtime": "2026-07-04T20:53:24.938Z",
       "indexed_at": "2026-07-04T20:53:24.938Z"
+    },
+    {
+      "path": "routes/youtube-routes.js",
+      "synopsis": "Exports createYoutubeRoutes — routes/youtube-routes.js.",
+      "bytes": 1286,
+      "mtime": "2026-07-04T20:53:36.230Z",
+      "indexed_at": "2026-07-04T20:53:36.230Z"
     },
     {
       "path": "services/lesson-plan-generator.js",
