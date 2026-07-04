@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T19:12:41.460Z",
+  "generated_at": "2026-07-04T19:13:08.428Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 2,
+  "file_count": 3,
   "files": [
     {
       "path": "db/migrations/20260704_create_call_logs.sql",
@@ -17,6 +17,13 @@
       "bytes": 687,
       "mtime": "2026-07-04T19:12:34.245Z",
       "indexed_at": "2026-07-04T19:12:34.245Z"
+    },
+    {
+      "path": "public/overlay/ai-receptionist.html",
+      "synopsis": "HTML page: AI Receptionist",
+      "bytes": 14968,
+      "mtime": "2026-07-04T19:13:08.428Z",
+      "indexed_at": "2026-07-04T19:13:08.428Z"
     }
   ]
 }
