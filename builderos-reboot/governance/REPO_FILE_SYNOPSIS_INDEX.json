@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T17:47:59.082Z",
+  "generated_at": "2026-07-04T17:48:34.500Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 9,
+  "file_count": 10,
   "files": [
     {
       "path": "db/migrations/20260704_create_adam_decisions.sql",
@@ -45,6 +45,13 @@
       "bytes": 2417,
       "mtime": "2026-07-04T17:47:41.423Z",
       "indexed_at": "2026-07-04T17:47:41.423Z"
+    },
+    {
+      "path": "routes/call-simulation-routes.js",
+      "synopsis": "Exports createCallSimulationRoutes — routes/call-simulation-routes.js.",
+      "bytes": 3859,
+      "mtime": "2026-07-04T17:48:34.500Z",
+      "indexed_at": "2026-07-04T17:48:34.500Z"
     },
     {
       "path": "routes/coach-chat-routes.js",
