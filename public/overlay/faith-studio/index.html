@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Faith Studio -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Faith Studio">
+  <meta name="theme-color" content="#0f172a">
+  <title>Faith Studio</title>
+  <style>
+    :root {
+      --bg-base: #0f172a;
+      --bg-raised: #111827;
+      --bg-surface: #162033;
+      --bg-surface2: #1f2a44;
+      --bg-overlay: #24314f;
+      --border: rgba(255,255,255,0.08);
+      --border-focus: rgba(255,255,255,0.16);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent: #8b5cf6;
+      --accent-two: #14b8a6;
+      --accent-three: #f59e0b;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --shadow: 0 24px 72px rgba(2, 6, 23, 0.42);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --page-pad: 16px;
+      --section-color: var(--accent);
+      --font-display: "Space Grotesk", "Trebuchet MS", sans-serif;
+      --font-body: "Manrope", "Avenir Next", sans-serif;
+      color-scheme: dark;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg-base: #f6f7fb;
+      --bg-raised: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-surface2: #eef2ff;
+      --bg-overlay: #ffffff;
+      --border: rgba(15,23,42,0.12);
+      --border-focus: rgba(139,92,246,0.24);
+      --text-primary: #111827;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --shadow: 0 18px 48px rgba(15,23,42,0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background:
+        radial-gradient(circle at top right, rgba(139,92,246,0.14), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(20,184,166,0.12), transparent 24%),
+        var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      height: 100svh;
+      padding: calc(var(--safe-top) + var(--page-pad)) var(--page-pad) calc(var(--safe-bottom) + var(--page-pad));
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(139,92,246,0.18), rgba(20,184,166,0.10)),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.72));
+      box-shadow: var(--shadow);
+      padding: 18px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 18px 0 18px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--section-color), transparent);
+      opacity: 0.75;
+    }
+
+    .hero-badge {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #8b5cf6, #14b8a6);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 24px;
+      box-shadow: 0 14px 30px rgba(139,92,246,0.25);
+    }
+
+    .hero-copy { min-width: 0; flex: 1; }
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .title {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 4.4vw, 36px);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      margin: 0 0 8px;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-size: 14px;
+      max-width: 80ch;
+    }
+
+    .stack {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.45fr 0.95fr;
+      gap: 12px;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.68)),
+        var(--bg-raised);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    .panel-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .panel-body {
+      padding: 14px;
+      overflow: auto;
+      min-height: 0;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--bg-surface);
+      padding: 14px;
+      min-height: 148px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(139,92,246,0.12);
+      color: var(--accent);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .card h3 {
+      font-size: 15px;
+      line-height: 1.2;
+      margin: 0;
+      font-family: var(--font-display);
+      letter-spacing: -0.03em;
+    }
+    .card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: var(--bg-surface2);
+      color: var(--text-primary);
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 34px;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+    .chip:hover, .chip:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+      border-color: var(--border-focus);
+      background: rgba(139,92,246,0.12);
+    }
+
+    .scripture-list, .notes-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--bg-surface);
+      padding: 12px 13px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .item-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 6px;
+      background: var(--accent-two);
+      box-shadow: 0 0 0 4px rgba(20,184,166,0.12);
+      flex-shrink: 0;
+    }
+
+    .item-body { min-width: 0; }
+    .item-title {
+      margin: 0 0 4px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .item-text {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+    }
+    .item-meta {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
+      min-height: 128px;
+    }
+
+    .footer-panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.78);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .footer-panel strong {
+      font-family: var(--font-display);
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    .verse {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .action {
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border-radius: 14px;
+      padding: 10px 12px;
+      min-height: 44px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 800;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+    .action:hover, .action:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+      border-color: var(--border-focus);
+      background: rgba(139,92,246,0.12);
+    }
+
+    .status {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .status-pill {
+      border: 1px solid var(--border);
+      background: var(--bg-surface2);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .micropanel {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.18);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 68%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-two));
+    }
+
+    .table {
+      display: grid;
+      gap: 8px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .row:last-child { border-bottom: 0; padding-bottom: 0; }
+    .row b { color: var(--text-primary); }
+
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .page { height: auto; min-height: 100svh; }
+      .stack, .footer { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .page { padding: calc(var(--safe-top) + 10px) 10px calc(var(--safe-bottom) + 10px); gap: 10px; }
+      .hero { padding: 14px; min-height: 108px; }
+      .hero-badge { width: 48px; height: 48px; border-radius: 16px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .action-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-label="Faith Studio overview">
+      <div class="hero-badge" aria-hidden="true">✝︎</div>
+      <div class="hero-copy">
+        <div class="eyebrow">Faith Studio</div>
+        <h1 class="title">A calm workspace for prayer, reflection, and spiritual practice</h1>
+        <div class="subtitle">
+          Faith Studio brings together scripture, prayer rhythms, gratitude, and guided reflection in one focused overlay.
+          Use it for a quiet daily check-in, a prayer draft, a verse review, or a moment of centered reset.
+        </div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-kicker">Daily practice</div>
+            <h2 class="panel-title">Simple faith-centered actions</h2>
+          </div>
+          <div class="status" aria-label="Faith Studio status">
+            <span class="status-pill">Prayer</span>
+            <span class="status-pill">Reflection</span>
+            <span class="status-pill">Scripture</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="card-grid">
+            <article class="card">
+              <div class="card-top">
+                <div class="card-icon">🕊️</div>
+                <div style="flex:1; min-width:0;">
+                  <h3>Morning prayer</h3>
+                  <p>Begin with gratitude, clarity, and a request for wisdom before the day starts moving.</p>
+                </div>
+              </div>
+              <div class="chip-row">
+                <button class="chip" type="button">Start prayer</button>
+                <button class="chip" type="button">Gratitude</button>
+                <button class="chip" type="button">Ask for guidance</button>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-top">
+                <div class="card-icon">📖</div>
+                <div style="flex:1; min-width:0;">
+                  <h3>Scripture focus</h3>
+                  <p>Keep a verse in view, capture a note, and revisit it through the week.</p>
+                </div>
+              </div>
+              <div class="chip-row">
+                <button class="chip" type="button">Open verse</button>
+                <button class="chip" type="button">Add note</button>
+                <button class="chip" type="button">Save insight</button>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-top">
+                <div class="card-icon">📝</div>
+                <div style="flex:1; min-width:0;">
+                  <h3>Reflection journal</h3>
+                  <p>Write what happened, what you felt, and what you want to carry forward in faith.</p>
+                </div>
+              </div>
+              <div class="chip-row">
+                <button class="chip" type="button">New reflection</button>
+                <button class="chip" type="button">End-of-day review</button>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-top">
+                <div class="card-icon">💛</div>
+                <div style="flex:1; min-width:0;">
+                  <h3>Community and care</h3>
+                  <p>Capture prayer requests, encouragement, and reminders to reach out to others.</p>
+                </div>
+              </div>
+              <div class="chip-row">
+                <button class="chip" type="button">Prayer request</button>
+                <button class="chip" type="button">Encouragement</button>
+                <button class="chip" type="button">Follow up</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-kicker">Guided flow</div>
+            <h2 class="panel-title">What this overlay holds</h2>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="scripture-list">
+            <div class="item">
+              <div class="item-mark"></div>
+              <div class="item-body">
+                <div class="item-title">Quiet start</div>
+                <p class="item-text">A place to pause, breathe, and begin with intention before the rest of the platform takes over.</p>
+                <div class="item-meta">Opening rhythm</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="item-mark" style="background: var(--accent-two); box-shadow: 0 0 0 4px rgba(20,184,166,0.12);"></div>
+              <div class="item-body">
+                <div class="item-title">Verse + note pairing</div>
+                <p class="item-text">Keep scripture and personal insight together so meaning is easy to revisit later.</p>
+                <div class="item-meta">Study support</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="item-mark" style="background: var(--accent-three); box-shadow: 0 0 0 4px rgba(245,158,11,0.12);"></div>
+              <div class="item-body">
+                <div class="item-title">Prayer requests</div>
+                <p class="item-text">Track needs, people, and follow-up moments without losing the thread across the week.</p>
+                <div class="item-meta">Care list</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="item-mark" style="background: var(--good); box-shadow: 0 0 0 4px rgba(34,197,94,0.12);"></div>
+              <div class="item-body">
+                <div class="item-title">End-of-day reflection</div>
+                <p class="item-text">Review what felt meaningful, what challenged you, and what to hand over in prayer.</p>
+                <div class="item-meta">Closing practice</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <div class="footer-panel">
+        <strong>Anchor verse</strong>
+        <div class="verse">
+          “Be still, and know that I am God.”<br>
+          Use this space to center, breathe, and return to what matters before making the next move.
+        </div>
+
+        <div class="micropanel">
+          <div class="panel-kicker">Today’s focus</div>
+          <div class="progress" aria-label="Focus progress"><span></span></div>
+          <div class="table">
+            <div class="row"><span>Prayer</span><b>Ready</b></div>
+            <div class="row"><span>Reflection</span><b>Open</b></div>
+            <div class="row"><span>Gratitude</span><b>3 notes</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-panel">
+        <strong>Quick actions</strong>
+        <div class="action-grid">
+          <button class="action" type="button">Write a prayer</button>
+          <button class="action" type="button">Log gratitude</button>
+          <button class="action" type="button">Capture scripture</button>
+          <button class="action" type="button">Open reflection</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function initFaithStudio() {
+      const params = new URLSearchParams(location.search);
+      const shell = params.get('shell') === '1';
+      const theme = (window.__lifeosTheme && typeof window.__lifeosTheme.get === 'function')
+        ? window.__lifeosTheme.get()
+        : localStorage.getItem('lifeos_theme') || 'dark';
+      document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+
+      if (window.parent && window.parent !== window) {
+        try {
+          window.addEventListener('message', (event) => {
+            const data = event && event.data;
+            if (data && data.type === 'lifeos-theme' && data.theme) {
+              document.documentElement.dataset.theme = data.theme === 'light' ? 'light' : 'dark';
+            }
+          });
+        } catch {}
+      }
+
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          try {
+            const toast = document.createElement('div');
+            toast.textContent = 'Faith Studio action captured';
+            toast.style.position = 'fixed';
+            toast.style.left = '50%';
+            toast.style.bottom = '20px';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.zIndex = '9999';
+            toast.style.padding = '10px 14px';
+            toast.style.borderRadius = '999px';
+            toast.style.background = 'rgba(15,23,42,0.92)';
+            toast.style.color = '#fff';
+            toast.style.border = '1px solid rgba(255,255,255,0.12)';
+            toast.style.boxShadow = '0 10px 24px rgba(0,0,0,0.25)';
+            toast.style.fontSize = '12px';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 1300);
+          } catch {}
+        });
+      });
+
+      if (shell) {
+        document.body.style.background = 'transparent';
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T13:38:34.364Z",
+  "generated_at": "2026-07-04T13:39:06.123Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 7,
+  "file_count": 8,
   "files": [
     {
       "path": "db/migrations/20260704_create_faith_outputs.sql",
@@ -38,6 +38,13 @@
       "bytes": 428,
       "mtime": "2026-07-04T13:37:14.393Z",
       "indexed_at": "2026-07-04T13:37:14.393Z"
+    },
+    {
+      "path": "public/overlay/faith-studio/index.html",
+      "synopsis": "HTML page: Faith Studio",
+      "bytes": 20514,
+      "mtime": "2026-07-04T13:39:06.123Z",
+      "indexed_at": "2026-07-04T13:39:06.123Z"
     },
     {
       "path": "routes/faith-studio-routes.js",
