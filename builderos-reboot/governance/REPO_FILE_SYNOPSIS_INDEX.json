@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:20:04.320Z",
+  "generated_at": "2026-07-04T14:21:06.721Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 3,
+  "file_count": 4,
   "files": [
     {
       "path": "db/migrations/20260704_create_achievements_table.sql",
@@ -17,6 +17,13 @@
       "bytes": 441,
       "mtime": "2026-07-04T14:19:58.368Z",
       "indexed_at": "2026-07-04T14:19:58.368Z"
+    },
+    {
+      "path": "routes/future-self-simulator-routes.js",
+      "synopsis": "Exports createFutureRoutes — routes/future-self-simulator-routes.js.",
+      "bytes": 3607,
+      "mtime": "2026-07-04T14:21:06.721Z",
+      "indexed_at": "2026-07-04T14:21:06.721Z"
     },
     {
       "path": "services/confidence-architecture.js",
