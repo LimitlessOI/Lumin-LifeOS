@@ -638,12 +638,33 @@ export async function runLuminChairTurn(ctx, deps) {
               }
 
               if (existSession.status === 'ready') {
+                const wantsExecute = /\b(execute|build|run|deploy|start)\b/i.test(effectiveInput);
+                if (wantsExecute) {
+                  const { executeIntakeBlueprint } = await import('../services/intake-blueprint-executor.js');
+                  const execResult = await executeIntakeBlueprint({
+                    pool: deps.pool, sessionId: existSession.id, baseUrl, commandKey,
+                    dryRun: false,
+                  });
+                  const truth = finalizeTruth({
+                    ok: execResult.ok, pass_fail: execResult.ok ? 'PASS' : 'FAIL', command_truth: 'COMMAND_RAN',
+                    action: 'intake_blueprint', execution_path: 'execute_blueprint',
+                    session_id: existSession.id, product: detectedProductId,
+                    first_blocker: execResult.error || null, duration_ms: Date.now() - started,
+                    human_summary: execResult.ok
+                      ? `${detectedProductId} blueprint executed successfully. ${execResult.steps_run || 0} steps processed. ${execResult.already_complete ? 'All targets already present — acceptance passed.' : 'Build complete.'}`
+                      : `${detectedProductId} blueprint execution failed: ${execResult.error}`,
+                    human_summary_technical: execResult.ok
+                      ? `Execution complete. steps_run=${execResult.steps_run} acceptance=${JSON.stringify(execResult.acceptance?.ok)}`
+                      : `Execution failed: ${execResult.error}`,
+                  }, channel);
+                  return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
+                }
                 const truth = finalizeTruth({
                   ok: true, pass_fail: 'PASS', command_truth: 'COMMAND_RAN',
                   action: 'intake_blueprint', execution_path: 'intake_status_check',
                   session_id: existSession.id, product: detectedProductId,
                   first_blocker: null, duration_ms: Date.now() - started,
-                  human_summary: `${detectedProductId} blueprint is READY to execute (session ${existSession.id}). POST /api/v1/blueprint/intake/${existSession.id}/execute to build.`,
+                  human_summary: `${detectedProductId} blueprint is READY to execute (session ${existSession.id}). Say "Execute the ${detectedProductId} blueprint" to build, or POST /api/v1/blueprint/intake/${existSession.id}/execute.`,
                   human_summary_technical: `Blueprint ready. Execute with POST .../execute.`,
                 }, channel);
                 return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };

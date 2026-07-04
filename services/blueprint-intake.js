@@ -386,7 +386,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
   // but inline text avoids a disk read when the caller already has the content.
   // Returns immediately with session_id; AI processing runs in background.
   let _backfillRunning = false;
-  async function startBackfill({ amendmentFile, amendmentText: inlineText, productName, ownerId = null }) {
+  async function startBackfill({ amendmentFile, amendmentText: inlineText, productName, ownerId = null, onComplete = null }) {
     const amendmentText = inlineText || readAmendment(amendmentFile);
 
     if (_backfillRunning) {
@@ -410,8 +410,21 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
     _backfillRunning = true;
     setImmediate(() => {
       _runBackfill(sessionId, amendmentText)
+        .then(async () => {
+          if (typeof onComplete === 'function') {
+            try {
+              const { rows: finalRows } = await pool.query('SELECT status, blueprint_json FROM blueprint_intake_sessions WHERE id = $1', [sessionId]);
+              const finalStatus = finalRows[0]?.status || 'unknown';
+              const stepCount = finalRows[0]?.blueprint_json?.steps?.length || 0;
+              onComplete({ sessionId, status: finalStatus, stepCount, ok: true });
+            } catch { /* non-critical */ }
+          }
+        })
         .catch(err => {
           updateSession(pool, sessionId, { status: 'failed', error_message: err.message }).catch(() => {});
+          if (typeof onComplete === 'function') {
+            try { onComplete({ sessionId, status: 'failed', error: err.message, ok: false }); } catch { /* */ }
+          }
         })
         .finally(() => { _backfillRunning = false; });
     });
