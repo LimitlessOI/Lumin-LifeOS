@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:37:10.958Z",
+  "generated_at": "2026-07-04T23:37:34.409Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 77,
+  "file_count": 78,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -514,6 +514,16 @@
       "bytes": 868,
       "mtime": "2026-07-04T20:53:15.212Z",
       "indexed_at": "2026-07-04T20:53:15.212Z"
+    },
+    {
+      "path": "services/virtual-real-estate-class.js",
+      "synopsis": "Simulate real-estate scenarios for training via council-member AI calls.",
+      "bytes": 1263,
+      "mtime": "2026-07-04T23:37:34.409Z",
+      "indexed_at": "2026-07-04T23:37:34.409Z",
+      "ssot": [
+        "docs/products/BUSINESS_TOOLS_PRODUCT_HOME/BUSINESS_TOOLS_PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/white-label-service.js",
