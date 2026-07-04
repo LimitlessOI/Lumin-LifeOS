@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: IdeaVault Overlay -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>IdeaVault Overlay</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-base: #0a0a0f;
+      --bg-raised: #0d0d15;
+      --bg-surface: #111118;
+      --bg-surface2: #17171f;
+      --bg-overlay: #1e1e28;
+      --border: rgba(255,255,255,0.08);
+      --border-focus: rgba(255,255,255,0.16);
+      --text-primary: #e8e8f0;
+      --text-secondary: #a0a0c0;
+      --text-muted: #6d6d84;
+      --accent: #7c3aed;
+      --accent-soft: rgba(124,58,237,0.16);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow: 0 24px 80px rgba(0,0,0,0.34);
+      --maxw: 1120px;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg-base: #f6f7fb;
+      --bg-raised: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-surface2: #f3f5fb;
+      --bg-overlay: #ffffff;
+      --border: rgba(15,23,42,0.12);
+      --border-focus: rgba(124,58,237,0.28);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --shadow: 0 22px 70px rgba(15,23,42,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(124,58,237,0.12), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(16,185,129,0.08), transparent 26%),
+        var(--bg-base);
+      color: var(--text-primary);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .shell {
+      height: 100svh;
+      display: flex;
+      flex-direction: column;
+      padding:
+        calc(env(safe-area-inset-top, 0px) + 16px)
+        calc(env(safe-area-inset-right, 0px) + 16px)
+        calc(env(safe-area-inset-bottom, 0px) + 16px)
+        calc(env(safe-area-inset-left, 0px) + 16px);
+      gap: 14px;
+    }
+
+    .frame {
+      flex: 1;
+      min-height: 0;
+      max-width: var(--maxw);
+      width: 100%;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+        var(--bg-raised);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+    }
+
+    .hero {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(124,58,237,0.16), rgba(255,255,255,0.02)),
+        var(--bg-raised);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .hero-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: clamp(24px, 4vw, 38px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      max-width: 78ch;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: flex-start;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--bg-surface2);
+      color: var(--text-primary);
+      border-radius: 999px;
+      min-height: 38px;
+      padding: 0 14px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: var(--border-focus); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), #5b21b6);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .panel {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      min-height: 0;
+      overflow: hidden;
+      padding: 16px 18px 18px;
+    }
+
+    .card {
+      min-width: 0;
+      min-height: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00)), var(--bg-surface);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-head {
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      min-height: 0;
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .compose {
+      display: grid;
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface2);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 14px;
+      padding: 12px 12px;
+      outline: none;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    textarea { min-height: 148px; resize: vertical; line-height: 1.5; }
+    input:focus, textarea:focus, select:focus { border-color: var(--border-focus); background: var(--bg-overlay); }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .idea {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(124,58,237,0.06), transparent), var(--bg-surface2);
+      padding: 12px;
+    }
+
+    .idea-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .idea-title {
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 0 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid rgba(124,58,237,0.18);
+      white-space: nowrap;
+    }
+
+    .idea-desc {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .meta span {
+      font-size: 11px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      border-radius: 999px;
+      padding: 4px 8px;
+    }
+
+    .footer {
+      padding: 12px 18px 16px;
+      color: var(--text-muted);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .footer strong { color: var(--text-secondary); }
+
+    .mobile-stack {
+      display: none;
+      gap: 14px;
+      min-height: 0;
+      flex: 1;
+      padding: 0 18px 18px;
+      overflow: auto;
+    }
+
+    .empty {
+      border: 1px dashed var(--border-focus);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.02);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .shell { height: auto; min-height: 100svh; overflow: auto; }
+      .frame {
+        grid-template-rows: auto auto auto auto;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .shell { padding: 0; }
+      .frame {
+        border: 0;
+        border-radius: 0;
+        min-height: 100svh;
+      }
+      .hero, .panel, .grid, .footer { padding-left: 14px; padding-right: 14px; }
+      .hero { flex-direction: column; }
+      .hero-actions { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <main class="frame" role="main" aria-label="IdeaVault overlay">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">IdeaVault Overlay</div>
+          <h1>Capture ideas, shape them, and keep the vault lightweight.</h1>
+          <p class="subtitle">
+            This static overlay gives IdeaVault a dedicated HTML surface inside the LifeOS shell.
+            It is designed to read cleanly on desktop and mobile, with a compact drafting area and a vault list for quick review.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button class="btn primary" type="button">New idea</button>
+          <button class="btn" type="button">Import note</button>
+          <button class="btn" type="button">Sort recent</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <p class="hint">
+          SSOT alignment: this page is a static HTML overlay for IdeaVault in <code>public/overlay/</code>.
+          It avoids inventing server routes or schema and can be wired into the existing overlay navigation pattern later.
+        </p>
+      </section>
+
+      <section class="grid" aria-label="IdeaVault workspace">
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Draft an idea</div>
+              <div class="card-sub">Short, structured capture for fast entry</div>
+            </div>
+            <span class="chip">Static</span>
+          </div>
+          <div class="card-body">
+            <form class="compose">
+              <div class="field">
+                <div class="label">Title</div>
+                <input type="text" placeholder="Idea title" aria-label="Idea title">
+              </div>
+              <div class="field">
+                <div class="label">Summary</div>
+                <textarea placeholder="What is the idea? Why does it matter?" aria-label="Idea summary"></textarea>
+              </div>
+              <div class="field">
+                <div class="label">Tags</div>
+                <input type="text" placeholder="tag-one, tag-two, tag-three" aria-label="Idea tags">
+              </div>
+              <p class="hint">This surface is intentionally static: it provides the UI shell only, without assumptions about persistence behavior.</p>
+            </form>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Vault preview</div>
+              <div class="card-sub">Recent ideas and quick metadata</div>
+            </div>
+            <span class="chip">Overlay</span>
+          </div>
+          <div class="card-body">
+            <div class="list">
+              <div class="idea">
+                <div class="idea-top">
+                  <h3 class="idea-title">Refine onboarding checklist</h3>
+                  <span class="chip">Ready</span>
+                </div>
+                <p class="idea-desc">Break the first-run journey into three steps so people can land, orient, and continue without friction.</p>
+                <div class="meta">
+                  <span>product</span>
+                  <span>ux</span>
+                  <span>today</span>
+                </div>
+              </div>
+
+              <div class="idea">
+                <div class="idea-top">
+                  <h3 class="idea-title">Compare overlay layouts</h3>
+                  <span class="chip">Review</span>
+                </div>
+                <p class="idea-desc">Use a side-by-side approach to evaluate narrow, stacked, and split-pane compositions before choosing a final default.</p>
+                <div class="meta">
+                  <span>research</span>
+                  <span>layout</span>
+                  <span>later</span>
+                </div>
+              </div>
+
+              <div class="idea">
+                <div class="idea-top">
+                  <h3 class="idea-title">Extract common action chips</h3>
+                  <span class="chip">Queued</span>
+                </div>
+                <p class="idea-desc">Identify patterns that can become reusable quick actions across overlay pages without duplicating interface chrome.</p>
+                <div class="meta">
+                  <span>system</span>
+                  <span>patterns</span>
+                  <span>next</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="mobile-stack" aria-label="Additional notes">
+        <div class="empty">
+          <strong>Mobile-first note</strong><br>
+          The overlay already fits inside a single responsive document. On smaller screens, the layout collapses to one column and remains readable without extra chrome.
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span><strong>IdeaVault</strong> static overlay page</span>
+        <span>public/overlay/idea-vault-overlay.html</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
