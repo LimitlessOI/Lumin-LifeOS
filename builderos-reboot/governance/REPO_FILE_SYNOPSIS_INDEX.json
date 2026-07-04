@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T22:27:47.010Z",
+  "generated_at": "2026-07-04T22:27:59.027Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 46,
+  "file_count": 47,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -276,6 +276,13 @@
       "bytes": 1286,
       "mtime": "2026-07-04T20:53:36.230Z",
       "indexed_at": "2026-07-04T20:53:36.230Z"
+    },
+    {
+      "path": "services/ai-council-service.js",
+      "synopsis": "Exports createAiCouncilService — services/ai-council-service.js.",
+      "bytes": 5550,
+      "mtime": "2026-07-04T22:27:59.027Z",
+      "indexed_at": "2026-07-04T22:27:59.027Z"
     },
     {
       "path": "services/lesson-plan-generator.js",
