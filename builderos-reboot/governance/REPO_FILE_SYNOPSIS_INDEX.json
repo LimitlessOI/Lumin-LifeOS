@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:21:16.887Z",
+  "generated_at": "2026-07-04T23:26:41.402Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 71,
+  "file_count": 72,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -185,6 +185,13 @@
       "bytes": 300,
       "mtime": "2026-07-04T21:55:13.240Z",
       "indexed_at": "2026-07-04T21:55:13.240Z"
+    },
+    {
+      "path": "db/migrations/20260705_create_user_trials.sql",
+      "synopsis": "Database migration — 20260705_create_user_trials.sql.",
+      "bytes": 516,
+      "mtime": "2026-07-04T23:26:41.402Z",
+      "indexed_at": "2026-07-04T23:26:41.402Z"
     },
     {
       "path": "db/migrations/20260705_create_white_label_configs.sql",
