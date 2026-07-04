@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Wellness Studio · Recovery & Relapse Support -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wellness Studio">
+  <meta name="theme-color" content="#0b1020">
+  <title>Wellness Studio · Recovery & Relapse Support</title>
+  <style>
+    :root{
+      --bg:#08111f;
+      --bg2:#0d1728;
+      --panel:#111c30;
+      --panel2:#16253e;
+      --line:rgba(255,255,255,.08);
+      --line2:rgba(134,172,255,.18);
+      --text:#e9eefc;
+      --muted:#9fb0d1;
+      --muted2:#6d7c9e;
+      --accent:#7c9cff;
+      --accent2:#38d39f;
+      --warn:#ffbf69;
+      --danger:#ff6b8b;
+      --ok:#54e0b4;
+      --shadow:0 24px 70px rgba(0,0,0,.35);
+      --radius:22px;
+      --radius2:16px;
+      --pad:18px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124,156,255,.20), transparent 28%),
+        radial-gradient(circle at top right, rgba(56,211,159,.16), transparent 24%),
+        linear-gradient(180deg, #07101d 0%, #0a1425 100%);
+      overflow:hidden;
+    }
+    button,input,textarea,select{font:inherit}
+    a{color:inherit}
+    .app{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(12,19,34,.92), rgba(12,19,34,.76));
+      backdrop-filter: blur(12px);
+      position:relative;
+      z-index:5;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .brand-mark{
+      width:42px;height:42px;border-radius:14px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, var(--accent), #9d7bff);
+      box-shadow:0 10px 30px rgba(124,156,255,.24);
+      flex:0 0 auto;
+      font-size:20px;
+    }
+    .brand-copy{min-width:0}
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:700;
+    }
+    h1{
+      margin:3px 0 0;
+      font-size:18px;
+      line-height:1.15;
+      letter-spacing:-.03em;
+    }
+    .subhead{
+      margin:3px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+      max-width:72ch;
+    }
+    .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .chip,.btn{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:999px;
+      min-height:38px;
+      padding:0 14px;
+      cursor:pointer;
+      transition:transform .15s ease, border-color .15s ease, background .15s ease, opacity .15s ease;
+    }
+    .chip:hover,.btn:hover{transform:translateY(-1px);border-color:var(--line2);background:rgba(255,255,255,.05)}
+    .btn.primary{
+      background:linear-gradient(135deg, var(--accent), #6c7dff);
+      border-color:transparent;
+      box-shadow:0 12px 26px rgba(124,156,255,.24);
+      font-weight:700;
+    }
+    .btn.good{
+      background:linear-gradient(135deg, #1f6f5e, #1b8f73);
+      border-color:transparent;
+      font-weight:700;
+    }
+    .btn.warn{
+      background:linear-gradient(135deg, #72511e, #8d6230);
+      border-color:transparent;
+      font-weight:700;
+    }
+    .btn.danger{
+      background:linear-gradient(135deg, #6f2338, #9e3553);
+      border-color:transparent;
+      font-weight:700;
+    }
+    .shell{
+      display:grid;
+      grid-template-columns: 320px minmax(0,1fr) 360px;
+      gap:16px;
+      padding:16px;
+      min-height:0;
+      flex:1;
+    }
+    .col{
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .panel{
+      background:linear-gradient(180deg, rgba(17,28,48,.96), rgba(12,20,35,.96));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      min-height:0;
+    }
+    .panel-hd{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .panel-title{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.02em;
+    }
+    .panel-sub{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .panel-body{
+      padding:16px;
+      min-height:0;
+      overflow:auto;
+    }
+    .metric-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+    .metric{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+    .metric .k{
+      font-size:11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:700;
+    }
+    .metric .v{
+      margin-top:6px;
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:-.03em;
+    }
+    .metric .s{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .stack{display:grid;gap:10px}
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+    .card strong{display:block;font-size:13px}
+    .card p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+    }
+    .tag.ok{color:#b4ffe5;border-color:rgba(84,224,180,.25);background:rgba(84,224,180,.08)}
+    .tag.warn{color:#ffe1b2;border-color:rgba(255,191,105,.25);background:rgba(255,191,105,.08)}
+    .tag.danger{color:#ffbfd0;border-color:rgba(255,107,139,.25);background:rgba(255,107,139,.08)}
+    .tag.accent{color:#d8e1ff;border-color:rgba(124,156,255,.25);background:rgba(124,156,255,.08)}
+    .divider{height:1px;background:var(--line);margin:14px 0}
+    .list{display:grid;gap:10px}
+    .list-item{
+      display:flex;align-items:flex-start;gap:10px;
+      padding:12px 12px;
+      border-radius:16px;
+      background:rgba(255,255,255,.025);
+      border:1px solid var(--line);
+    }
+    .bullet{
+      width:24px;height:24px;border-radius:8px;
+      display:grid;place-items:center;
+      flex:0 0 auto;
+      background:rgba(124,156,255,.12);
+      border:1px solid rgba(124,156,255,.2);
+      color:#dce3ff;
+      font-size:13px;
+      margin-top:1px;
+    }
+    .item-copy{min-width:0}
+    .item-copy strong{font-size:13px}
+    .item-copy p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+    .timeline{display:grid;gap:12px}
+    .step{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:12px;border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.025);
+    }
+    .step-num{
+      width:28px;height:28px;border-radius:999px;flex:0 0 auto;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, rgba(124,156,255,.24), rgba(56,211,159,.18));
+      border:1px solid rgba(124,156,255,.24);
+      font-weight:800;font-size:12px;
+    }
+    .step-copy strong{display:block;font-size:13px}
+    .step-copy p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+    .workspace{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      min-height:0;
+    }
+    .hero{
+      background:
+        radial-gradient(circle at top right, rgba(124,156,255,.18), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(56,211,159,.16), transparent 22%),
+        linear-gradient(180deg, rgba(18,30,53,.98), rgba(11,17,29,.98));
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      display:grid;
+      gap:16px;
+      min-height:0;
+    }
+    .hero-top{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .hero-copy{min-width:0;max-width:760px}
+    .hero-copy h2{
+      margin:0;
+      font-size:24px;
+      letter-spacing:-.04em;
+    }
+    .hero-copy p{
+      margin:8px 0 0;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:13px;
+      max-width:80ch;
+    }
+    .hero-badges{display:flex;gap:8px;flex-wrap:wrap}
+    .section{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+      min-height:0;
+    }
+    .form-grid{
+      display:grid;
+      gap:12px;
+    }
+    .field{
+      display:grid;
+      gap:6px;
+    }
+    .field label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .field input,.field textarea,.field select{
+      width:100%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:16px;
+      min-height:44px;
+      padding:11px 12px;
+      outline:none;
+    }
+    .field textarea{min-height:110px;resize:vertical}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(124,156,255,.38);box-shadow:0 0 0 3px rgba(124,156,255,.09)}
+    .tiny{font-size:12px;color:var(--muted);line-height:1.5}
+    .switches{display:grid;gap:10px}
+    .switch{
+      display:flex;align-items:flex-start;gap:10px;
+      padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);
+    }
+    .switch input{margin-top:3px}
+    .switch strong{display:block;font-size:13px}
+    .switch p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+    .pill-row{display:flex;gap:8px;flex-wrap:wrap}
+    .footer{
+      padding:0 16px 16px;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .mobile-stack{display:none}
+    .hide{display:none !important}
+    @media (max-width: 1180px){
+      .shell{grid-template-columns: 300px minmax(0,1fr)}
+      .right-col{display:none}
+    }
+    @media (max-width: 860px){
+      body{overflow:auto}
+      .shell{grid-template-columns:1fr;padding:12px}
+      .left-col,.right-col{display:none}
+      .mobile-stack{display:flex}
+      .topbar{padding:16px}
+      .hero{padding:16px;border-radius:24px}
+      .section{grid-template-columns:1fr}
+      .metric-grid{grid-template-columns:1fr 1fr}
+    }
+    .tabs{
+      display:flex;gap:8px;flex-wrap:wrap;
+    }
+    .tab{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:999px;
+      min-height:36px;
+      padding:0 12px;
+      cursor:pointer;
+    }
+    .tab.active{
+      background:rgba(124,156,255,.12);
+      border-color:rgba(124,156,255,.25);
+      color:#dfe6ff;
+    }
+    .relapse-safety{
+      display:grid;
+      gap:10px;
+    }
+    .safety-item{
+      padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.025)
+    }
+    .safety-item strong{display:block;font-size:13px}
+    .safety-item p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+    .statusline{
+      display:flex;align-items:center;gap:8px;flex-wrap:wrap
+    }
+    .statusbar{
+      display:flex;flex-direction:column;gap:8px
+    }
+    .meter{
+      height:10px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;border:1px solid var(--line)
+    }
+    .meter > div{height:100%;border-radius:inherit;background:linear-gradient(90deg, var(--accent2), var(--accent))}
+    .meter.warn > div{background:linear-gradient(90deg, var(--warn), #ff9f43)}
+    .meter.danger > div{background:linear-gradient(90deg, var(--danger), #ff8f70)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:11px;
+      padding:3px 7px;
+      border-radius:6px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#dbe4ff;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">◌</div>
+      <div class="brand-copy">
+        <div class="eyebrow">Wellness Studio · Blueprint WS-P1-006</div>
+        <h1>Recovery & relapse support</h1>
+        <p class="subhead">Manage recovery supports, relapse-prevention routines, and the response plan your team uses when risk rises.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="chip" data-action="tab" data-tab="overview">Overview</button>
+      <button class="chip" data-action="tab" data-tab="supports">Supports</button>
+      <button class="chip" data-action="tab" data-tab="relapse">Relapse plan</button>
+      <button class="btn primary" data-action="save">Save changes</button>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div class="col left-col">
+      <div class="panel">
+        <div class="panel-hd">
+          <div>
+            <h3 class="panel-title">Recovery snapshot</h3>
+            <div class="panel-sub">Current plan state and the top support signals for this profile.</div>
+          </div>
+          <span class="tag accent">Active</span>
+        </div>
+        <div class="panel-body">
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="k">Stability score</div>
+              <div class="v">82%</div>
+              <div class="s">Healthy routines are consistent this week.</div>
+            </div>
+            <div class="metric">
+              <div class="k">Risk level</div>
+              <div class="v">Low</div>
+              <div class="s">No urgent relapse flags are set.</div>
+            </div>
+            <div class="metric">
+              <div class="k">Support check-ins</div>
+              <div class="v">4</div>
+              <div class="s">People or groups currently engaged.</div>
+            </div>
+            <div class="metric">
+              <div class="k">Plan adherence</div>
+              <div class="v">91%</div>
+              <div class="s">Supports are being used as written.</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="stack">
+            <div class="card">
+              <div class="row">
+                <strong>What is working</strong>
+                <span class="tag ok">Keep</span>
+              </div>
+              <p>Morning check-ins, sponsor contact, and nighttime shutdown routine are all active.</p>
+            </div>
+            <div class="card">
+              <div class="row">
+                <strong>Watch this</strong>
+                <span class="tag warn">Monitor</span>
+              </div>
+              <p>Stress spikes after work and during unstructured evenings.</p>
+            </div>
+            <div class="card">
+              <div class="row">
+                <strong>Escalation point</strong>
+                <span class="tag danger">Act early</span>
+              </div>
+              <p>If cravings, secrecy, or missed contacts stack up, move into the relapse response steps.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd">
+          <div>
+            <h3 class="panel-title">Signals</h3>
+            <div class="panel-sub">Track the cues that usually show up before things slip.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="list">
+            <div class="list-item">
+              <div class="bullet">1</div>
+              <div class="item-copy">
+                <strong>Trigger patterns</strong>
+                <p>Places, people, or times that increase risk.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet">2</div>
+              <div class="item-copy">
+                <strong>Early warning signs</strong>
+                <p>Isolation, missed meals, sleep disruption, or secrecy.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet">3</div>
+              <div class="item-copy">
+                <strong>Protective actions</strong>
+                <p>Call support, leave the situation, hydrate, rest, and reset the next hour.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="chips">
+            <span class="kbd">trigger</span>
+            <span class="kbd">craving</span>
+            <span class="kbd">check-in</span>
+            <span class="kbd">sponsor</span>
+            <span class="kbd">reset</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col workspace">
+      <div class="hero">
+        <div class="hero-top">
+          <div class="hero-copy">
+            <h2>Recovery plan editor</h2>
+            <p>
+              Capture the support network, the prevention routine, and the exact steps to follow when relapse risk increases.
+              This page is designed to keep the plan visible, simple, and actionable.
+            </p>
+          </div>
+          <div class="hero-badges">
+            <span class="tag accent">Recovery</span>
+            <span class="tag ok">Support network</span>
+            <span class="tag warn">Relapse prevention</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="panel" style="box-shadow:none">
+            <div class="panel-hd">
+              <div>
+                <h3 class="panel-title">Plan details</h3>
+                <div class="panel-sub">Keep the support plan current and easy to act on.</div>
+              </div>
+              <span class="tag">Editable</span>
+            </div>
+            <div class="panel-body">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="goal">Recovery goal</label>
+                  <input id="goal" value="Stay connected, reduce exposure, and maintain daily recovery routines" />
+                </div>
+                <div class="field">
+                  <label for="support-team">Support team</label>
+                  <input id="support-team" value="Sponsor · therapist · trusted friend · group check-in" />
+                </div>
+                <div class="field">
+                  <label for="routine">Daily routine</label>
+                  <textarea id="routine">Morning reflection, midday check-in, food/water, short walk, evening support contact, sleep wind-down.</textarea>
+                </div>
+                <div class="field">
+                  <label for="notes">Notes</label>
+                  <textarea id="notes">Keep the plan visible. When pressure builds, simplify the day and ask for direct help early.</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="box-shadow:none">
+            <div class="panel-hd">
+              <div>
+                <h3 class="panel-title">Support controls</h3>
+                <div class="panel-sub">Turn support features on and keep them aligned to the plan.</div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="switches">
+                <label class="switch">
+                  <input type="checkbox" checked />
+                  <span>
+                    <strong>Daily recovery check-in</strong>
+                    <p>Prompt for a status update once per day.</p>
+                  </span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" checked />
+                  <span>
+                    <strong>Relapse warning reminders</strong>
+                    <p>Surface warning signs and action steps when risk rises.</p>
+                  </span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" />
+                  <span>
+                    <strong>Escalation outreach</strong>
+                    <p>Prepare the call/text flow for a trusted support person.</p>
+                  </span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" checked />
+                  <span>
+                    <strong>Nighttime protection mode</strong>
+                    <p>Reduce friction, avoid isolation, and keep the evening simple.</p>
+                  </span>
+                </label>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="statusbar">
+                <div class="statusline">
+                  <span class="tag ok">Prevention active</span>
+                  <span class="tag">Last updated today</span>
+                </div>
+                <div class="tiny">Use this area for practical supports only: contacts, routines, reminders, and response steps.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-stack panel">
+        <div class="panel-hd">
+          <div>
+            <h3 class="panel-title">Recovery snapshot</h3>
+            <div class="panel-sub">Compact view for smaller screens.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="metric-grid">
+            <div class="metric"><div class="k">Stability score</div><div class="v">82%</div></div>
+            <div class="metric"><div class="k">Risk level</div><div class="v">Low</div></div>
+            <div class="metric"><div class="k">Check-ins</div><div class="v">4</div></div>
+            <div class="metric"><div class="k">Adherence</div><div class="v">91%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col right-col">
+      <div class="panel">
+        <div class="panel-hd">
+          <div>
+            <h3 class="panel-title">Relapse response plan</h3>
+            <div class="panel-sub">A short, direct sequence for when the risk crosses the line.</div>
+          </div>
+          <span class="tag danger">Ready</span>
+        </div>
+        <div class="panel-body">
+          <div class="timeline">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-copy">
+                <strong>Pause and name the moment</strong>
+                <p>Say what is happening without negotiating with it.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-copy">
+                <strong>Break the pattern</strong>
+                <p>Leave the trigger, change location, and reduce access.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-copy">
+                <strong>Contact support</strong>
+                <p>Call or text the first person on the list and report honestly.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-copy">
+                <strong>Recover the day</strong>
+                <p>Food, water, rest, and a new plan for the next few hours.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="relapse-safety">
+            <div class="safety-item">
+              <strong>Make it easier to tell the truth</strong>
+              <p>Keep the first step short and specific so it is usable during stress.</p>
+            </div>
+            <div class="safety-item">
+              <strong>Reduce shame loops</strong>
+              <p>Recovery support works better when the plan stays visible and non-punitive.</p>
+            </div>
+            <div class="safety-item">
+              <strong>Return to routine fast</strong>
+              <p>Do the minimum set of stabilizing actions and rebuild from there.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd">
+          <div>
+            <h3 class="panel-title">Action list</h3>
+            <div class="panel-sub">Common things to manage from this interface.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="list">
+            <div class="list-item">
+              <div class="bullet">•</div>
+              <div class="item-copy">
+                <strong>Assign support contacts</strong>
+                <p>Choose who gets called first when risk appears.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet">•</div>
+              <div class="item-copy">
+                <strong>Define relapse triggers</strong>
+                <p>List the situations that need an immediate response.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet">•</div>
+              <div class="item-copy">
+                <strong>Set prevention habits</strong>
+                <p>Keep the smallest daily routines that protect stability.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet">•</div>
+              <div class="item-copy">
+                <strong>Review after incidents</strong>
+                <p>Capture what happened and tighten the plan based on reality.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="pill-row">
+            <span class="tag ok">Contacts</span>
+            <span class="tag accent">Routine</span>
+            <span class="tag warn">Triggers</span>
+            <span class="tag danger">Escalation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Blueprint WS-P1-006 · Interface for managing recovery and relapse support features.
+  </div>
+</div>
+
+<script>
+  const state = {
+    tab: 'overview',
+  };
+
+  const tabPanels = {
+    overview: [],
+    supports: [],
+    relapse: [],
+  };
+
+  function setActiveTab(tab) {
+    state.tab = tab;
+    document.querySelectorAll('[data-action="tab"]').forEach(btn => {
+      const active = btn.dataset.tab === tab;
+      btn.classList.toggle('active', active);
+    });
+    const body = document.body;
+    body.dataset.tab = tab;
+    if (tab === 'overview') {
+      document.querySelector('.hero-copy h2').textContent = 'Recovery plan editor';
+    } else if (tab === 'supports') {
+      document.querySelector('.hero-copy h2').textContent = 'Support controls';
+    } else if (tab === 'relapse') {
+      document.querySelector('.hero-copy h2').textContent = 'Relapse response plan';
+    }
+  }
+
+  function saveChanges() {
+    const payload = {
+      goal: document.getElementById('goal')?.value || '',
+      supportTeam: document.getElementById('support-team')?.value || '',
+      routine: document.getElementById('routine')?.value || '',
+      notes: document.getElementById('notes')?.value || '',
+      tab: state.tab,
+      savedAt: new Date().toISOString(),
+    };
+    localStorage.setItem('wellness-studio-wsp1-006', JSON.stringify(payload));
+    toast('Changes saved');
+  }
+
+  function toast(msg) {
+    let el = document.getElementById('toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'toast';
+      el.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:10px 14px;border-radius:999px;background:rgba(12,18,30,.96);border:1px solid rgba(124,156,255,.28);color:#e9eefc;z-index:9999;box-shadow:0 16px 40px rgba(0,0,0,.3);font-size:13px;';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => { el.style.opacity = '0'; }, 2200);
+  }
+
+  function loadSaved() {
+    try {
+      const raw = localStorage.getItem('wellness-studio-wsp1-006');
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (data.goal) document.getElementById('goal').value = data.goal;
+      if (data.supportTeam) document.getElementById('support-team').value = data.supportTeam;
+      if (data.routine) document.getElementById('routine').value = data.routine;
+      if (data.notes) document.getElementById('notes').value = data.notes;
+      if (data.tab) setActiveTab(data.tab);
+    } catch {}
+  }
+
+  document.addEventListener('click', (e) => {
+    const tabBtn = e.target.closest('[data-action="tab"]');
+    if (tabBtn && tabBtn.dataset.tab) setActiveTab(tabBtn.dataset.tab);
+    const saveBtn = e.target.closest('[data-action="save"]');
+    if (saveBtn) saveChanges();
+  });
+
+  loadSaved();
+</script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T19:55:26.046Z",
+  "generated_at": "2026-07-04T20:01:18.052Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 27,
+  "file_count": 28,
   "files": [
     {
       "path": "db/migrations/20230705_create_boldtrail_agents.sql",
@@ -143,6 +143,13 @@
       "bytes": 20104,
       "mtime": "2026-07-04T19:31:51.189Z",
       "indexed_at": "2026-07-04T19:31:51.189Z"
+    },
+    {
+      "path": "public/overlay/recovery_support.html",
+      "synopsis": "HTML page: Wellness Studio · Recovery & Relapse Support",
+      "bytes": 29571,
+      "mtime": "2026-07-04T20:01:18.052Z",
+      "indexed_at": "2026-07-04T20:01:18.052Z"
     },
     {
       "path": "routes/financial-revenue-routes.js",
