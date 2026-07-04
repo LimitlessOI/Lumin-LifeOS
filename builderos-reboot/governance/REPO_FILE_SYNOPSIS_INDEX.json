@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:51:39.797Z",
+  "generated_at": "2026-07-04T23:51:47.353Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 93,
+  "file_count": 94,
   "files": [
     {
       "path": "db/migrations/20260704_create_agent_performance.sql",
@@ -87,6 +87,13 @@
       "bytes": 433,
       "mtime": "2026-07-04T22:46:28.890Z",
       "indexed_at": "2026-07-04T22:46:28.890Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_intent_drift_events.sql",
+      "synopsis": "Database migration — 20260704_create_intent_drift_events.sql.",
+      "bytes": 666,
+      "mtime": "2026-07-04T23:51:47.353Z",
+      "indexed_at": "2026-07-04T23:51:47.353Z"
     },
     {
       "path": "db/migrations/20260704_create_lessons_learned.sql",
