@@ -404,6 +404,31 @@ export function runPostIntakeDeployAndAcceptance({
   };
 }
 
+async function commitToGitHubDirect(targetFile, content, commitMessage) {
+  const token = (process.env.GITHUB_TOKEN || '').trim();
+  const repo = process.env.GITHUB_REPO;
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  if (!token || !repo) return { ok: false, error: 'GITHUB_TOKEN or GITHUB_REPO not configured' };
+  const [owner, repoName] = repo.split('/');
+  const apiBase = `https://api.github.com/repos/${owner}/${repoName}/contents/${targetFile}`;
+  const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+  let sha;
+  try {
+    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
+    if (getRes.ok) { sha = (await getRes.json()).sha; }
+  } catch { /* new file */ }
+  const body = {
+    message: commitMessage,
+    content: Buffer.from(content, 'utf8').toString('base64'),
+    branch,
+    ...(sha ? { sha } : {}),
+  };
+  const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+  if (putRes.ok || putRes.status === 201) return { ok: true };
+  const errText = await putRes.text().catch(() => '');
+  return { ok: false, error: errText.slice(0, 300), status: putRes.status };
+}
+
 export async function postBuilderBuild(baseUrl, commandKey, body) {
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
     method: 'POST',
@@ -531,11 +556,9 @@ export async function executeIntakeBlueprint({
       writeFileSync(absPath, verifyCode, 'utf8');
       const syntaxOk = spawnSync('node', ['-c', absPath], { encoding: 'utf8', cwd: REPO_ROOT });
       if (syntaxOk.status === 0) {
-        spawnSync('git', ['add', targetFile], { cwd: REPO_ROOT, encoding: 'utf8' });
-        const commitMsg = `[system-build] ${resolvedBlueprint?.product || 'blueprint'} ${step.id} ${targetFile} (self-healed)`;
-        const commitResult = spawnSync('git', ['commit', '-m', commitMsg, '--', targetFile], { cwd: REPO_ROOT, encoding: 'utf8' });
-        if (commitResult.status === 0) {
-          spawnSync('git', ['push', 'origin', 'main'], { cwd: REPO_ROOT, encoding: 'utf8' });
+        const commitMsg = `[system-build] ${resolvedBlueprint?.product || 'blueprint'} ${step.id} ${targetFile} (self-healed)\n\nGAP-FILL: AI builder returned prose refusal instead of code — deterministic verify script generated from blueprint step manifest. No other path.`;
+        const commitRes = await commitToGitHubDirect(targetFile, verifyCode, commitMsg);
+        if (commitRes.ok) {
           row.ok = true;
           row.committed = true;
           row.self_healed = true;
