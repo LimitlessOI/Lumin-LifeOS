@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: Game Publisher -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>Game Publisher</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #17171f;
+      --text: #e8e8f0;
+      --muted: #9a9ab6;
+      --border: rgba(255,255,255,0.08);
+      --accent: #5b6af5;
+      --accent2: #22d3ee;
+      --good: #34d399;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 24px 80px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius-lg: 24px;
+      --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, rgba(91,106,245,0.16), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(34,211,238,0.10), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .shell {
+      height: 100svh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(91,106,245,0.16), rgba(34,211,238,0.10)), var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 8px;
+    }
+
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .game-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      flex: 0 0 auto;
+      box-shadow: 0 16px 36px rgba(91,106,245,0.24);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 32px);
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 78ch;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .panel {
+      background: rgba(17,17,24,0.92);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .panel-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .panel-body {
+      padding: 16px;
+      height: calc(100% - 58px);
+      overflow: auto;
+    }
+
+    .form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+    }
+
+    .label-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .label-text {
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .help-text {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      resize: vertical;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text);
+      padding: 14px 14px;
+      font: inherit;
+      line-height: 1.5;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: rgba(91,106,245,0.55);
+      box-shadow: 0 0 0 4px rgba(91,106,245,0.12);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .btn {
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      font-weight: 700;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      border-color: transparent;
+      box-shadow: 0 14px 30px rgba(91,106,245,0.20);
+    }
+    .btn.primary:hover { background: linear-gradient(135deg, #6677ff, #8b5cf6); }
+    .btn.ghost { background: transparent; }
+
+    .hint-bar {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hint-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .hint-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      padding: 12px 12px 12px 14px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .hint-card strong {
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .hint-card code {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #c7d2fe;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .canvas-wrap {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .game-stage {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      place-items: stretch;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 26%),
+        radial-gradient(circle at 80% 30%, rgba(91,106,245,0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: linear-gradient(180deg, #0d1220, #090c14);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .hud {
+      pointer-events: auto;
+      display: grid;
+      gap: 8px;
+    }
+
+    .hud-card {
+      background: rgba(10,10,15,0.72);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px;
+      padding: 10px 12px;
+      backdrop-filter: blur(8px);
+      min-width: 170px;
+    }
+
+    .hud-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: 12px;
+      margin: 2px 0;
+      color: var(--muted);
+    }
+
+    .hud-row strong { color: var(--text); font-weight: 700; }
+
+    .top-right {
+      display: grid;
+      gap: 8px;
+      justify-items: end;
+    }
+
+    .mobile-controls {
+      display: none;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .touch-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 22px;
+      font-weight: 800;
+      touch-action: manipulation;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0 4px;
+      min-height: 20px;
+    }
+
+    .mono { font-family: var(--mono); }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%) translateY(8px);
+      background: rgba(10,10,15,0.92);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      box-shadow: var(--shadow);
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .shell { height: auto; min-height: 100svh; overflow: visible; }
+      .main { grid-template-columns: 1fr; }
+      .mobile-controls { display: flex; }
+      .panel-body { height: auto; max-height: 560px; }
+      .canvas-wrap { min-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero" aria-label="Game Publisher intro">
+      <div class="kicker">Game Publisher · GP-P1-004</div>
+      <div class="title-row">
+        <div class="game-badge" aria-hidden="true">🎮</div>
+        <div>
+          <h1>Playable browser game file</h1>
+          <p class="subtitle">
+            A complete standalone browser game surface for the Game Publisher blueprint. Use the editor to tune the scene,
+            then press Play to run the game in the canvas.
+          </p>
+        </div>
+      </div>
+      <div class="status">
+        <span class="pill" id="game-state-pill">Ready</span>
+        <span>Keyboard: <span class="mono">Arrow Keys / WASD</span> move, <span class="mono">Space</span> dash, <span class="mono">R</span> restart, <span class="mono">P</span> pause</span>
+      </div>
+    </section>
+
+    <div class="main">
+      <section class="panel" aria-label="Game editor">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Scene Setup</div>
+            <div class="panel-subtitle">Edit the prompt, then generate a fresh playable run.</div>
+          </div>
+          <button class="btn ghost" id="reset-btn" type="button">Reset defaults</button>
+        </div>
+        <div class="panel-body">
+          <div class="form">
+            <label for="game-description">
+              <div class="label-row">
+                <span class="label-text">Game description</span>
+                <span class="help-text" id="char-count">0 chars</span>
+              </div>
+              <textarea id="game-description" placeholder="Describe the browser game concept, goals, hazards, art style, and win condition."></textarea>
+            </label>
+
+            <div class="actions">
+              <button class="btn primary" id="play-btn" type="button">Play</button>
+              <button class="btn" id="pause-btn" type="button">Pause</button>
+              <button class="btn" id="generate-btn" type="button">Generate scene</button>
+            </div>
+
+            <div class="hint-bar">
+              <div class="hint-grid">
+                <div class="hint-card">
+                  <strong>Blueprint target</strong>
+                  <code>HTML overlay page in public/overlay/</code>
+                </div>
+                <div class="hint-card">
+                  <strong>Runtime behavior</strong>
+                  <code>Self-contained canvas game with score, lives, hazards, goal, and restart loop.</code>
+                </div>
+                <div class="hint-card">
+                  <strong>Notes</strong>
+                  <code>This page does not depend on server routes. It is a playable file by itself.</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel canvas-wrap" aria-label="Game preview">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Playable Canvas</div>
+            <div class="panel-subtitle" id="scene-label">Orbit Run</div>
+          </div>
+          <div class="panel-subtitle mono" id="seed-label">seed: 004</div>
+        </div>
+        <div class="game-stage">
+          <canvas id="game-canvas" width="1280" height="800" aria-label="Playable game canvas"></canvas>
+          <div class="overlay">
+            <div class="hud">
+              <div class="hud-card">
+                <div class="hud-row"><span>Score</span><strong id="score">0</strong></div>
+                <div class="hud-row"><span>Best</span><strong id="best">0</strong></div>
+                <div class="hud-row"><span>Lives</span><strong id="lives">3</strong></div>
+              </div>
+              <div class="hud-card">
+                <div class="hud-row"><span>Mission</span><strong id="mission">Collect stars</strong></div>
+                <div class="hud-row"><span>Status</span><strong id="status">Running</strong></div>
+              </div>
+            </div>
+            <div class="top-right">
+              <div class="hud-card">
+                <div class="hud-row"><span>Controls</span><strong>Move / Dash</strong></div>
+                <div class="hud-row"><span>Goal</span><strong id="goal">Reach 25</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mobile-controls" aria-label="Touch controls">
+          <button class="touch-btn" id="left-btn" type="button">◀</button>
+          <button class="touch-btn" id="dash-btn" type="button">●</button>
+          <button class="touch-btn" id="right-btn" type="button">▶</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <span id="footer-message">Standalone playable browser game file.</span>
+      <span class="mono" id="runtime-message">canvas · 60fps loop</span>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById('game-canvas');
+      const ctx = canvas.getContext('2d');
+      const descEl = document.getElementById('game-description');
+      const playBtn = document.getElementById('play-btn');
+      const pauseBtn = document.getElementById('pause-btn');
+      const generateBtn = document.getElementById('generate-btn');
+      const resetBtn = document.getElementById('reset-btn');
+      const scoreEl = document.getElementById('score');
+      const bestEl = document.getElementById('best');
+      const livesEl = document.getElementById('lives');
+      const missionEl = document.getElementById('mission');
+      const statusEl = document.getElementById('status');
+      const goalEl = document.getElementById('goal');
+      const charCountEl = document.getElementById('char-count');
+      const statePill = document.getElementById('game-state-pill');
+      const sceneLabel = document.getElementById('scene-label');
+      const seedLabel = document.getElementById('seed-label');
+      const footerMessage = document.getElementById('footer-message');
+      const runtimeMessage = document.getElementById('runtime-message');
+      const toastEl = document.getElementById('toast');
+
+      const STORAGE_KEY = 'lifeos_game_publisher_gp_p1_004';
+      const BEST_KEY = 'lifeos_game_publisher_gp_p1_004_best';
+
+      const defaultDescription = 'Collect stars while avoiding orbiting hazards. Dash through gaps, survive longer, and reach the target score to win.';
+      descEl.value = defaultDescription;
+      charCountEl.textContent = `${defaultDescription.length} chars`;
+
+      const state = {
+        running: false,
+        paused: false,
+        over: false,
+        victory: false,
+        score: 0,
+        best: Number(localStorage.getItem(BEST_KEY) || 0),
+        lives: 3,
+        goal: 25,
+        time: 0,
+        spawnTimer: 0,
+        hazardTimer: 0,
+        dashCooldown: 0,
+        pulse: 0,
+        seed: 4,
+        keys: new Set(),
+        pointer: { left: false, right: false, dash: false },
+        player: { x: 640, y: 660, vx: 0, vy: 0, r: 18, dash: 0 },
+        stars: [],
+        hazards: [],
+        particles: [],
+        title: 'Orbit Run',
+        theme: 'space',
+        message: 'Collect stars',
+      };
+
+      seedLabel.textContent = 'seed: 004';
+
+      function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+      function rand() {
+        state.seed = (state.seed * 1664525 + 1013904223) >>> 0;
+        return state.seed / 4294967296;
+      }
+      function randRange(min, max) { return min + rand() * (max - min); }
+
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('show');
+        clearTimeout(toastEl._t);
+        toastEl._t = setTimeout(() => toastEl.classList.remove('show'), 1500);
+      }
+
+      function setStatePill(text) {
+        statePill.textContent = text;
+      }
+
+      function updateUI() {
+        scoreEl.textContent = state.score;
+        bestEl.textContent = state.best;
+        livesEl.textContent = state.lives;
+        missionEl.textContent = state.message;
+        statusEl.textContent = state.over ? (state.victory ? 'Victory' : 'Game Over') : (state.paused ? 'Paused' : 'Running');
+        goalEl.textContent = `Reach ${state.goal}`;
+        footerMessage.textContent = state.victory
+          ? 'Victory achieved. Press R to restart or generate a new scene.'
+          : state.over
+            ? 'Game over. Press R to restart.'
+            : 'Standalone playable browser game file.';
+      }
+
+      function savePrefs() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          description: descEl.value,
+          title: state.title,
+          goal: state.goal,
+          theme: state.theme,
+          seed: state.seed,
+        }));
+      }
+
+      function loadPrefs() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const saved = JSON.parse(raw);
+          if (saved && typeof saved.description === 'string') descEl.value = saved.description;
+        } catch {}
+      }
+
+      function resetGame(keepBest = true) {
+        state.running = true;
+        state.paused = false;
+        state.over = false;
+        state.victory = false;
+        state.score = 0;
+        state.lives = 3;
+        state.time = 0;
+        state.spawnTimer = 0;
+        state.hazardTimer = 0;
+        state.dashCooldown = 0;
+        state.pulse = 0;
+        state.stars = [];
+        state.hazards = [];
+        state.particles = [];
+        state.player = { x: canvas.width / 2, y: canvas.height - 120, vx: 0, vy: 0, r: 18, dash: 0 };
+        if (!keepBest) {
+          state.best = 0;
+          localStorage.removeItem(BEST_KEY);
+        }
+        syncSceneFromDescription(descEl.value);
+        updateUI();
+        setStatePill('Ready');
+      }
+
+      function syncSceneFromDescription(text) {
+        const desc = String(text || '').trim().toLowerCase();
+        const options = [
+          { key: 'space', title: 'Orbit Run', message: 'Collect stars', goal: 25, accent: '#5b6af5' },
+          { key: 'neon', title: 'Neon Drift', message: 'Avoid drones', goal: 30, accent: '#22d3ee' },
+          { key: 'forest', title: 'Forest Sprint', message: 'Gather fireflies', goal: 20, accent: '#34d399' },
+          { key: 'desert', title: 'Dune Dash', message: 'Cross the sands', goal: 28, accent: '#f59e0b' },
+        ];
+        let chosen = options[0];
+        if (desc.includes('drone') || desc.includes('neon')) chosen = options[1];
+        else if (desc.includes('forest') || desc.includes('firefly')) chosen = options[2];
+        else if (desc.includes('desert') || desc.includes('dune')) chosen = options[3];
+        if (desc.includes('boss')) chosen.goal += 10;
+        if (desc.includes('hard')) chosen.goal += 5;
+        if (desc.includes('easy')) chosen.goal = Math.max(12, chosen.goal - 6);
+
+        state.title = chosen.title;
+        state.message = chosen.message;
+        state.goal = chosen.goal;
+        state.theme = chosen.key;
+        sceneLabel.textContent = state.title;
+        runtimeMessage.textContent = `${state.theme} · ${state.goal} goal`;
+        document.documentElement.style.setProperty('--accent', chosen.accent);
+        savePrefs();
+        updateUI();
+      }
+
+      function spawnStar() {
+        const ring = randRange(120, 340);
+        const angle = randRange(0, Math.PI * 2);
+        const x = canvas.width / 2 + Math.cos(angle) * ring;
+        const y = canvas.height / 2 + Math.sin(angle) * (ring * 0.72);
+        state.stars.push({
+          x: clamp(x, 40, canvas.width - 40),
+          y: clamp(y, 80, canvas.height - 40),
+          r: randRange(8, 11),
+          spin: randRange(0, Math.PI * 2),
+          value: 1,
+        });
+      }
+
+      function spawnHazard() {
+        const edge = Math.floor(randRange(0, 4));
+        const speed = randRange(0.9, 2.3) + state.score * 0.02;
+        const obj = { x: 0, y: 0, vx: 0, vy: 0, r: randRange(14, 22) };
+        if (edge === 0) { obj.x = randRange(20, canvas.width - 20); obj.y = -20; obj.vx = randRange(-0.5, 0.5); obj.vy = speed; }
+        if (edge === 1) { obj.x = canvas.width + 20; obj.y = randRange(20, canvas.height - 20); obj.vx = -speed; obj.vy = randRange(-0.5, 0.5); }
+        if (edge === 2) { obj.x = randRange(20, canvas.width - 20); obj.y = canvas.height + 20; obj.vx = randRange(-0.5, 0.5); obj.vy = -speed; }
+        if (edge === 3) { obj.x = -20; obj.y = randRange(20, canvas.height - 20); obj.vx = speed; obj.vy = randRange(-0.5, 0.5); }
+        obj.spin = randRange(0, Math.PI * 2);
+        obj.kind = state.theme === 'forest' ? 'thorn' : (state.theme === 'desert' ? 'orb' : 'drone');
+        state.hazards.push(obj);
+      }
+
+      function burst(x, y, color, count = 12) {
+        for (let i = 0; i < count; i++) {
+          state.particles.push({
+            x, y,
+            vx: Math.cos((i / count) * Math.PI * 2) * randRange(1, 4),
+            vy: Math.sin((i / count) * Math.PI * 2) * randRange(1, 4),
+            life: randRange(18, 44),
+            color,
+            r: randRange(1.5, 3.5),
+          });
+        }
+      }
+
+      function distance(a, b) {
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        return Math.hypot(dx, dy);
+      }
+
+      function gameOver(victory = false) {
+        state.over = true;
+        state.victory = victory;
+        state.running = false;
+        if (state.score > state.best) {
+          state.best = state.score;
+          localStorage.setItem(BEST_KEY, String(state.best));
+        }
+        setStatePill(victory ? 'Victory' : 'Game Over');
+        updateUI();
+        toast(victory ? 'Mission complete' : 'Try again');
+      }
+
+      function handleInput() {
+        const left = state.keys.has('ArrowLeft') || state.keys.has('KeyA') || state.pointer.left;
+        const right = state.keys.has('ArrowRight') || state.keys.has('KeyD') || state.pointer.right;
+        const up = state.keys.has('ArrowUp') || state.keys.has('KeyW');
+        const down = state.keys.has('ArrowDown') || state.keys.has('KeyS');
+        const dash = state.keys.has('Space') || state.pointer.dash;
+
+        const accel = 0.34;
+        if (left) state.player.vx -= accel;
+        if (right) state.player.vx += accel;
+        if (up) state.player.vy -= accel;
+        if (down) state.player.vy += accel;
+        if (dash && state.dashCooldown <= 0 && !state.over && !state.paused) {
+          state.dashCooldown = 38;
+          state.player.dash = 10;
+          burst(state.player.x, state.player.y, '#c7d2fe', 16);
+        }
+      }
+
+      function update(dt) {
+        if (!state.running || state.paused || state.over) return;
+        state.time += dt;
+        state.pulse += dt;
+        state.spawnTimer += dt;
+        state.hazardTimer += dt;
+        state.dashCooldown = Math.max(0, state.dashCooldown - dt);
+        state.player.dash = Math.max(0, state.player.dash - dt);
+
+        handleInput();
+
+        state.player.vx *= 0.94;
+        state.player.vy *= 0.94;
+        const maxSpeed = state.player.dash > 0 ? 7.2 : 4.2;
+        state.player.vx = clamp(state.player.vx, -maxSpeed, maxSpeed);
+        state.player.vy = clamp(state.player.vy, -maxSpeed, maxSpeed);
+        state.player.x = clamp(state.player.x + state.player.vx, 24, canvas.width - 24);
+        state.player.y = clamp(state.player.y + state.player.vy, 34, canvas.height - 24);
+
+        if (state.spawnTimer > Math.max(28, 70 - state.score)) {
+          state.spawnTimer = 0;
+          spawnStar();
+        }
+        if (state.hazardTimer > Math.max(42, 96 - state.score * 0.8)) {
+          state.hazardTimer = 0;
+          spawnHazard();
+        }
+
+        state.stars.forEach((s) => s.spin += dt * 0.03);
+        for (let i = state.stars.length - 1; i >= 0; i--) {
+          const s = state.stars[i];
+          if (distance(state.player, s) < state.player.r + s.r + 4) {
+            state.stars.splice(i, 1);
+            state.score += s.value;
+            burst(s.x, s.y, '#fbbf24', 10);
+            if (state.score >= state.goal) {
+              if (state.score > state.best) {
+                state.best = state.score;
+                localStorage.setItem(BEST_KEY, String(state.best));
+              }
+              updateUI();
+              gameOver(true);
+              return;
+            }
+            updateUI();
+          }
+        }
+
+        for (let i = state.hazards.length - 1; i >= 0; i--) {
+          const h = state.hazards[i];
+          h.x += h.vx * dt * 0.12;
+          h.y += h.vy * dt * 0.12;
+          h.spin += dt * 0.04;
+          if (distance(state.player, h) < state.player.r + h.r - 1) {
+            state.hazards.splice(i, 1);
+            state.lives -= 1;
+            burst(state.player.x, state.player.y, '#fb7185', 16);
+            updateUI();
+            if (state.lives <= 0) gameOver(false);
+          } else if (h.x < -80 || h.x > canvas.width + 80 || h.y < -80 || h.y > canvas.height + 80) {
+            state.hazards.splice(i, 1);
+          }
+        }
+
+        for (let i = state.particles.length - 1; i >= 0; i--) {
+          const p = state.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.98;
+          p.vy *= 0.98;
+          p.life -= 1;
+          if (p.life <= 0) state.particles.splice(i, 1);
+        }
+      }
+
+      function drawBackground() {
+        const w = canvas.width, h = canvas.height;
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, '#0b1120');
+        grad.addColorStop(1, '#060810');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.save();
+        ctx.globalAlpha = 0.9;
+        for (let i = 0; i < 70; i++) {
+          const x = (i * 173) % w;
+          const y = ((i * 97) % h);
+          const a = 0.2 + ((i % 6) * 0.06);
+          ctx.fillStyle = `rgba(255,255,255,${a})`;
+          ctx.fillRect(x, y, 2, 2);
+        }
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(w / 2, h / 2);
+        const rings = state.theme === 'forest' ? 2 : 3;
+        for (let i = 0; i < rings; i++) {
+          ctx.strokeStyle = `rgba(255,255,255,${0.05 - i * 0.01})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(0, 0, 120 + i * 82, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawPlayer() {
+        const p = state.player;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(Math.atan2(p.vy, p.vx) * 0.2);
+        const glow = ctx.createRadialGradient(0, 0, 3, 0, 0, 30);
+        glow.addColorStop(0, 'rgba(255,255,255,0.45)');
+        glow.addColorStop(1, 'rgba(91,106,245,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#dbeafe';
+        ctx.beginPath();
+        ctx.moveTo(0, -22);
+        ctx.lineTo(18, 18);
+        ctx.lineTo(0, 10);
+        ctx.lineTo(-18, 18);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = state.player.dash > 0 ? '#a7f3d0' : '#93c5fd';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, 18, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawStar(s) {
+        ctx.save();
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.spin);
+        const glow = ctx.createRadialGradient(0, 0, 1, 0, 0, s.r * 3.2);
+        glow.addColorStop(0, 'rgba(251,191,36,0.9)');
+        glow.addColorStop(1, 'rgba(251,191,36,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, s.r * 3.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#fef3c7';
+        ctx.strokeStyle = '#fbbf24';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          const a = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+          const r = i % 2 === 0 ? s.r + 2 : s.r * 0.45;
+          const x = Math.cos(a) * r;
+          const y = Math.sin(a) * r;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawHazard(h) {
+        ctx.save();
+        ctx.translate(h.x, h.y);
+        ctx.rotate(h.spin);
+        const g = ctx.createRadialGradient(0, 0, 1, 0, 0, h.r * 2.8);
+        g.addColorStop(0, 'rgba(239,68,68,0.55)');
+        g.addColorStop(1, 'rgba(239,68,68,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(0, 0, h.r * 2.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = h.kind === 'thorn' ? '#86efac' : (h.kind === 'orb' ? '#fca5a5' : '#fda4af');
+        ctx.strokeStyle = '#1f2937';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        if (h.kind === 'thorn') {
+          for (let i = 0; i < 8; i++) {
+            const a = (Math.PI * 2 * i) / 8;
+            const r = i % 2 === 0 ? h.r : h.r * 0.55;
+            const x = Math.cos(a) * r;
+            const y = Math.sin(a) * r;
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+        } else {
+          ctx.arc(0, 0, h.r, 0, Math.PI * 2);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawParticles() {
+        for (const p of state.particles) {
+          ctx.save();
+          ctx.globalAlpha = clamp(p.life / 44, 0, 1);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function draw() {
+        drawBackground();
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.lineWidth = 1;
+        for (let i = 1; i < 7; i++) {
+          ctx.beginPath();
+          const y = 110 + i * 90;
+          ctx.moveTo(18, y);
+          ctx.lineTo(canvas.width - 18, y);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        state.stars.forEach(drawStar);
+        state.hazards.forEach(drawHazard);
+        drawParticles();
+        drawPlayer();
+
+        if (state.paused || state.over) {
+          ctx.save();
+          ctx.fillStyle = 'rgba(0,0,0,0.40)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#fff';
+          ctx.textAlign = 'center';
+          ctx.font = '700 42px ' + getComputedStyle(document.body).fontFamily;
+          ctx.fillText(state.victory ? 'Victory!' : 'Paused', canvas.width / 2, canvas.height / 2 - 10);
+          ctx.font = '500 18px ' + getComputedStyle(document.body).fontFamily;
+          ctx.fillStyle = 'rgba(255,255,255,0.88)';
+          ctx.fillText(state.over ? 'Press R to restart' : 'Press P to resume', canvas.width / 2, canvas.height / 2 + 26);
+          ctx.restore();
+        }
+      }
+
+      let last = performance.now();
+      function loop(now) {
+        const dt = Math.min(32, now - last);
+        last = now;
+        update(dt);
+        draw();
+        requestAnimationFrame(loop);
+      }
+
+      function start() {
+        state.running = true;
+        state.paused = false;
+        setStatePill('Running');
+        updateUI();
+        toast('Game started');
+      }
+
+      function togglePause() {
+        if (state.over) return;
+        state.paused = !state.paused;
+        setStatePill(state.paused ? 'Paused' : 'Running');
+        updateUI();
+        toast(state.paused ? 'Paused' : 'Resumed');
+      }
+
+      function generateScene() {
+        const raw = descEl.value.trim();
+        if (!raw) {
+          toast('Add a description first');
+          return;
+        }
+        syncSceneFromDescription(raw);
+        resetGame(true);
+        toast(`Generated ${state.title}`);
+      }
+
+      function resizeCanvas() {
+        const stage = canvas.parentElement;
+        const rect = stage.getBoundingClientRect();
+        const scale = window.devicePixelRatio || 1;
+        canvas.width = Math.max(720, Math.floor(rect.width * scale));
+        canvas.height = Math.max(420, Math.floor(rect.height * scale));
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+        canvas.width = Math.floor(rect.width * scale);
+        canvas.height = Math.floor(rect.height * scale);
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+      }
+
+      function bindHold(btn, key) {
+        const down = () => { state.pointer[key] = true; };
+        const up = () => { state.pointer[key] = false; };
+        btn.addEventListener('pointerdown', (e) => { e.preventDefault(); down(); btn.setPointerCapture(e.pointerId); });
+        btn.addEventListener('pointerup', (e) => { e.preventDefault(); up(); });
+        btn.addEventListener('pointercancel', up);
+        btn.addEventListener('pointerleave', up);
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','KeyA','KeyD','KeyW','KeyS','KeyP','KeyR'].includes(e.code)) {
+          e.preventDefault();
+        }
+        state.keys.add(e.code);
+        if (e.code === 'KeyP') togglePause();
+        if (e.code === 'KeyR') resetGame();
+      });
+
+      window.addEventListener('keyup', (e) => {
+        state.keys.delete(e.code);
+      });
+
+      descEl.addEventListener('input', () => {
+        charCountEl.textContent = `${descEl.value.length} chars`;
+        syncSceneFromDescription(descEl.value);
+      });
+
+      playBtn.addEventListener('click', () => {
+        if (state.over) resetGame();
+        start();
+      });
+
+      pauseBtn.addEventListener('click', togglePause);
+      generateBtn.addEventListener('click', generateScene);
+      resetBtn.addEventListener('click', () => {
+        descEl.value = defaultDescription;
+        charCountEl.textContent = `${defaultDescription.length} chars`;
+        syncSceneFromDescription(defaultDescription);
+        resetGame();
+        toast('Defaults restored');
+      });
+
+      bindHold(document.getElementById('left-btn'), 'left');
+      bindHold(document.getElementById('right-btn'), 'right');
+      bindHold(document.getElementById('dash-btn'), 'dash');
+
+      window.addEventListener('resize', resizeCanvas);
+
+      loadPrefs();
+      syncSceneFromDescription(descEl.value);
+      resizeCanvas();
+      resetGame();
+      updateUI();
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>
