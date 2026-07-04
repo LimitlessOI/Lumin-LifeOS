@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T14:55:43.508Z",
+  "generated_at": "2026-07-04T14:55:49.674Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 14,
   "files": [
@@ -57,8 +57,8 @@
       "path": "db/migrations/20260704_create_creator_videos.sql",
       "synopsis": "Database migration — 20260704_create_creator_videos.sql.",
       "bytes": 664,
-      "mtime": "2026-07-04T14:49:12.879Z",
-      "indexed_at": "2026-07-04T14:49:12.879Z"
+      "mtime": "2026-07-04T14:55:49.674Z",
+      "indexed_at": "2026-07-04T14:55:49.674Z"
     },
     {
       "path": "public/overlay/future-self-simulator.html",
