@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:26:41.402Z",
+  "generated_at": "2026-07-04T23:26:49.780Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 72,
+  "file_count": 73,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -451,6 +451,13 @@
       "bytes": 2473,
       "mtime": "2026-07-04T20:52:40.421Z",
       "indexed_at": "2026-07-04T20:52:40.421Z"
+    },
+    {
+      "path": "services/make-com-generator.js",
+      "synopsis": "Exports createMakeComGenerator — services/make-com-generator.js.",
+      "bytes": 1500,
+      "mtime": "2026-07-04T23:26:49.780Z",
+      "indexed_at": "2026-07-04T23:26:49.780Z"
     },
     {
       "path": "services/progress-report-drafter.js",
