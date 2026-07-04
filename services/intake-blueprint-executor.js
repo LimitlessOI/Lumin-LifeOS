@@ -483,7 +483,7 @@ export async function executeIntakeBlueprint({
 
     const targetFile = stepTargetFile(step);
 
-    if (!dryRun && targetFile && step.type !== 'sql') {
+    if (!dryRun && targetFile && step.type !== 'sql' && step.type !== 'esm_script') {
       const absTarget = join(REPO_ROOT, targetFile);
       if (existsSync(absTarget)) {
         let fileValid = false;
