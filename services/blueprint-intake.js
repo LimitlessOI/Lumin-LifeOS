@@ -520,21 +520,27 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
 
     _blog('pre_intent_extraction');
     let intent;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < 3; attempt++) {
       try {
+        const intentPrompt = attempt === 0
+          ? `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`
+          : `CRITICAL: You MUST return a JSON object with at least "product_name" and "product_purpose" fields. Do NOT return an empty object.\n\nAmendment to analyze:\n\n${amendmentText.slice(0, 10000)}`;
         const intentRaw = await _withTimeout(
-          callCouncilMember('openai',
-            attempt === 0
-              ? `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`
-              : `IMPORTANT: Respond with ONLY a JSON object — no markdown, no explanation, no preamble.\n\nAmendment to analyze:\n\n${amendmentText.slice(0, 10000)}`,
+          callCouncilMember('openai', intentPrompt,
             { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
           ), 60000, 'intent_extraction'
         );
+        _blog(`intent_raw_type=${typeof intentRaw} len=${String(intentRaw).length} preview=${String(intentRaw).slice(0,80)}`);
         intent = parseBlueprintFromAiResponse(intentRaw);
+        if (!intent.product_name && !intent.product_purpose && Object.keys(intent).length < 3) {
+          _blog(`intent_empty attempt=${attempt} keys=${Object.keys(intent).join(',')}`);
+          if (attempt < 2) continue;
+          throw new Error('Intent extraction returned empty/minimal object after 3 attempts');
+        }
         break;
       } catch (parseErr) {
-        _blog(`intent_extraction_parse_fail attempt=${attempt}: ${parseErr.message.slice(0, 100)}`);
-        if (attempt === 1) throw parseErr;
+        _blog(`intent_extraction_fail attempt=${attempt}: ${parseErr.message.slice(0, 120)}`);
+        if (attempt === 2) throw parseErr;
       }
     }
     _blog('intent_extraction_done');
@@ -542,24 +548,30 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
 
     _blog('pre_blueprint_generation');
     let blueprint;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < 3; attempt++) {
       try {
+        const bpPrompt = attempt === 0
+          ? `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`
+          : `CRITICAL: Return a JSON object with "_meta" and "steps" array. Each step needs id, file, type, purpose, deps, ssot_tag, contract.\n\nPRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`;
         const blueprintRaw = await _withTimeout(
-          callCouncilMember('openai',
-            attempt === 0
-              ? `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`
-              : `IMPORTANT: Respond with ONLY a JSON object — no markdown, no explanation.\n\nPRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now. Start with { and end with }.`,
+          callCouncilMember('openai', bpPrompt,
             { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false, responseFormat: 'json' }
           ), 90000, 'blueprint_generation'
         );
+        _blog(`blueprint_raw_type=${typeof blueprintRaw} len=${String(blueprintRaw).length}`);
         blueprint = parseBlueprintFromAiResponse(blueprintRaw);
+        if (!blueprint.steps || !Array.isArray(blueprint.steps) || blueprint.steps.length === 0) {
+          _blog(`blueprint_empty attempt=${attempt} keys=${Object.keys(blueprint).join(',')}`);
+          if (attempt < 2) continue;
+          throw new Error('Blueprint generation returned object without steps array after 3 attempts');
+        }
         break;
       } catch (parseErr) {
-        _blog(`blueprint_generation_parse_fail attempt=${attempt}: ${parseErr.message.slice(0, 100)}`);
-        if (attempt === 1) throw parseErr;
+        _blog(`blueprint_generation_fail attempt=${attempt}: ${parseErr.message.slice(0, 120)}`);
+        if (attempt === 2) throw parseErr;
       }
     }
-    _blog('blueprint_generation_done');
+    _blog(`blueprint_generation_done steps=${blueprint.steps?.length}`);
 
     const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
       productName,
