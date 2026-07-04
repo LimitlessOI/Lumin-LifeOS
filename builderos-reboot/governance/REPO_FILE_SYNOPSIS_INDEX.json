@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T19:46:10.748Z",
+  "generated_at": "2026-07-04T19:49:50.268Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 20,
+  "file_count": 21,
   "files": [
     {
       "path": "db/migrations/20230705_create_boldtrail_agents.sql",
@@ -38,6 +38,13 @@
       "bytes": 661,
       "mtime": "2026-07-04T19:12:41.460Z",
       "indexed_at": "2026-07-04T19:12:41.460Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_outreach_log.sql",
+      "synopsis": "Database migration — 20260704_create_outreach_log.sql.",
+      "bytes": 416,
+      "mtime": "2026-07-04T19:49:50.268Z",
+      "indexed_at": "2026-07-04T19:49:50.268Z"
     },
     {
       "path": "db/migrations/20260704_create_receptionist_configs.sql",
