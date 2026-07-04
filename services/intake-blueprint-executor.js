@@ -536,7 +536,23 @@ export async function executeIntakeBlueprint({
 
     const targetFile = stepTargetFile(step);
 
-    if (!dryRun && targetFile && step.type !== 'sql') {
+    if (!dryRun && step.type === 'esm_script' && targetFile) {
+      const otherSteps = steps.filter(s => s.id !== step.id);
+      const verifyCode = _generateDeterministicVerifyScript(otherSteps, resolvedBlueprint);
+      const absPath = join(REPO_ROOT, targetFile);
+      mkdirSync(dirname(absPath), { recursive: true });
+      writeFileSync(absPath, verifyCode, 'utf8');
+      const syntaxOk = spawnSync('node', ['-c', absPath], { encoding: 'utf8', cwd: REPO_ROOT });
+      if (syntaxOk.status === 0) {
+        const commitMsg = `[system-build] ${resolvedBlueprint?.product || 'blueprint'} ${step.id} ${targetFile} (deterministic)\n\nGAP-FILL: esm_script step generated deterministically from blueprint step manifest. File-existence + syntax checks per file type. No AI needed.`;
+        const commitRes = await commitToGitHubDirect(targetFile, verifyCode, commitMsg);
+        results.push({ step_id: step.id, target_file: targetFile, ok: commitRes.ok, committed: commitRes.ok, deterministic: true });
+        if (onStep) onStep(results[results.length - 1]);
+        if (commitRes.ok) continue;
+      }
+    }
+
+    if (!dryRun && targetFile && step.type !== 'sql' && step.type !== 'esm_script') {
       const absTarget = join(REPO_ROOT, targetFile);
       if (existsSync(absTarget)) {
         let fileValid = false;
@@ -552,22 +568,6 @@ export async function executeIntakeBlueprint({
           if (onStep) onStep(results[results.length - 1]);
           continue;
         }
-      }
-    }
-
-    if (!dryRun && step.type === 'esm_script' && targetFile) {
-      const otherSteps = steps.filter(s => s.id !== step.id);
-      const verifyCode = _generateDeterministicVerifyScript(otherSteps, resolvedBlueprint);
-      const absPath = join(REPO_ROOT, targetFile);
-      mkdirSync(dirname(absPath), { recursive: true });
-      writeFileSync(absPath, verifyCode, 'utf8');
-      const syntaxOk = spawnSync('node', ['-c', absPath], { encoding: 'utf8', cwd: REPO_ROOT });
-      if (syntaxOk.status === 0) {
-        const commitMsg = `[system-build] ${resolvedBlueprint?.product || 'blueprint'} ${step.id} ${targetFile} (deterministic)\n\nGAP-FILL: esm_script step generated deterministically from blueprint step manifest. File-existence + syntax checks per file type. No AI needed.`;
-        const commitRes = await commitToGitHubDirect(targetFile, verifyCode, commitMsg);
-        results.push({ step_id: step.id, target_file: targetFile, ok: commitRes.ok, committed: commitRes.ok, deterministic: true });
-        if (onStep) onStep(results[results.length - 1]);
-        if (commitRes.ok) continue;
       }
     }
 
