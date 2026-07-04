@@ -570,8 +570,8 @@ export async function executeIntakeBlueprint({
 
     if (!dryRun && targetFile && step.type !== 'esm_script') {
       const absTarget = join(REPO_ROOT, targetFile);
+      let fileValid = false;
       if (existsSync(absTarget)) {
-        let fileValid = false;
         if (step.type === 'html') {
           const content = readFileSync(absTarget, 'utf8');
           fileValid = content.length > 100 && content.includes('<html');
@@ -582,11 +582,22 @@ export async function executeIntakeBlueprint({
           const checkResult = spawnSync('node', ['-c', absTarget], { encoding: 'utf8', cwd: REPO_ROOT });
           fileValid = checkResult.status === 0;
         }
-        if (fileValid) {
-          results.push({ step_id: step.id, target_file: targetFile, ok: true, committed: false, skipped: 'file_exists_valid' });
-          if (onStep) onStep(results[results.length - 1]);
-          continue;
-        }
+      } else if (process.env.GITHUB_TOKEN) {
+        try {
+          const ghRes = await fetch(`https://api.github.com/repos/LimitlessOI/Lumin-LifeOS/contents/${targetFile}`, {
+            headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' },
+            signal: AbortSignal.timeout(5000),
+          });
+          if (ghRes.ok) {
+            const ghData = await ghRes.json();
+            if (ghData.size > 10) fileValid = true;
+          }
+        } catch {}
+      }
+      if (fileValid) {
+        results.push({ step_id: step.id, target_file: targetFile, ok: true, committed: false, skipped: 'file_exists_valid' });
+        if (onStep) onStep(results[results.length - 1]);
+        continue;
       }
     }
 
