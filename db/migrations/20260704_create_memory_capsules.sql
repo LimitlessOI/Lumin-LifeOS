@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS memory_capsules (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   owner_id TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  signal_data JSONB NOT NULL,
+  data JSONB NOT NULL,
   trust_level INTEGER DEFAULT 0
 );
 
