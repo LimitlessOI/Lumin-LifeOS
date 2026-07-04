@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:42:50.472Z",
+  "generated_at": "2026-07-04T16:42:57.051Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 18,
+  "file_count": 19,
   "files": [
     {
       "path": "db/migrations/20260704_create_coaching_sessions_table.sql",
@@ -73,6 +73,13 @@
       "bytes": 638,
       "mtime": "2026-07-04T16:26:03.770Z",
       "indexed_at": "2026-07-04T16:26:03.770Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_outbound_consent.sql",
+      "synopsis": "Database migration — 20260704_create_outbound_consent.sql.",
+      "bytes": 521,
+      "mtime": "2026-07-04T16:42:57.051Z",
+      "indexed_at": "2026-07-04T16:42:57.051Z"
     },
     {
       "path": "db/migrations/20260704_create_students.sql",
