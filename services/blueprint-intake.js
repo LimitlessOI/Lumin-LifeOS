@@ -512,25 +512,47 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
     await updateSession(pool, sessionId, { codebase_scan_json: codebaseScan });
 
     _blog('pre_intent_extraction');
-    const intentRaw = await _withTimeout(
-      callCouncilMember('openai',
-        `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
-        { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
-      ), 60000, 'intent_extraction'
-    );
+    let intent;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const intentRaw = await _withTimeout(
+          callCouncilMember('openai',
+            attempt === 0
+              ? `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`
+              : `IMPORTANT: Respond with ONLY a JSON object — no markdown, no explanation, no preamble.\n\nAmendment to analyze:\n\n${amendmentText.slice(0, 10000)}`,
+            { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 4000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+          ), 60000, 'intent_extraction'
+        );
+        intent = parseBlueprintFromAiResponse(intentRaw);
+        break;
+      } catch (parseErr) {
+        _blog(`intent_extraction_parse_fail attempt=${attempt}: ${parseErr.message.slice(0, 100)}`);
+        if (attempt === 1) throw parseErr;
+      }
+    }
     _blog('intent_extraction_done');
-    const intent = parseBlueprintFromAiResponse(intentRaw);
     await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
 
     _blog('pre_blueprint_generation');
-    const blueprintRaw = await _withTimeout(
-      callCouncilMember('openai',
-        `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
-        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
-      ), 90000, 'blueprint_generation'
-    );
+    let blueprint;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const blueprintRaw = await _withTimeout(
+          callCouncilMember('openai',
+            attempt === 0
+              ? `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`
+              : `IMPORTANT: Respond with ONLY a JSON object — no markdown, no explanation.\n\nPRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now. Start with { and end with }.`,
+            { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', product_lane: 'builderos', allowModelDowngrade: false }
+          ), 90000, 'blueprint_generation'
+        );
+        blueprint = parseBlueprintFromAiResponse(blueprintRaw);
+        break;
+      } catch (parseErr) {
+        _blog(`blueprint_generation_parse_fail attempt=${attempt}: ${parseErr.message.slice(0, 100)}`);
+        if (attempt === 1) throw parseErr;
+      }
+    }
     _blog('blueprint_generation_done');
-    let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
     const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
       productName,

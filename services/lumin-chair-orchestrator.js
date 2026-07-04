@@ -617,23 +617,30 @@ export async function runLuminChairTurn(ctx, deps) {
               const existSession = existingRows[0];
 
               if (existSession.status === 'failed') {
+                const errMsg = existSession.error_message || 'unknown error';
                 const truth = finalizeTruth({
                   ok: false, pass_fail: 'FAIL', command_truth: 'NO_COMMAND_RAN',
                   action: 'intake_blueprint', execution_path: 'intake_status_check',
                   session_id: existSession.id, product: detectedProductId,
-                  first_blocker: existSession.error_message || 'unknown_error', duration_ms: Date.now() - started,
-                  human_summary: `${detectedProductId} blueprint session ${existSession.id} FAILED: ${existSession.error_message || 'unknown error'}. Say "Create a blueprint for ${detectedProductId}" to start fresh.`,
+                  first_blocker: errMsg, duration_ms: Date.now() - started,
+                  done_synopsis: `${detectedProductId} blueprint generation failed.`,
+                  done_bullets: [`Product: ${detectedProductId}`, `Error: ${errMsg.slice(0, 80)}`],
+                  next_synopsis: `Say "Create a blueprint for ${detectedProductId}" to retry.`,
+                  human_summary: `${detectedProductId} blueprint FAILED: ${errMsg}. Say "Create a blueprint for ${detectedProductId}" to retry.`,
                 }, channel);
                 return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
               }
 
               if (existSession.status === 'arc_review' || existSession.status === 'gap_collection') {
+                const stageLabel = existSession.status === 'arc_review' ? 'ARC reviewing blueprint' : 'Collecting founder input on gaps';
                 const truth = finalizeTruth({
                   ok: true, pass_fail: 'RUNNING', command_truth: 'COMMAND_RAN',
                   action: 'intake_blueprint', execution_path: 'intake_status_check',
                   session_id: existSession.id, product: detectedProductId,
                   first_blocker: null, duration_ms: Date.now() - started,
-                  human_summary: `${detectedProductId} blueprint (session ${existSession.id}) is in ${existSession.status}. ARC review runs automatically as part of the backfill pipeline. Poll GET /api/v1/blueprint/intake/${existSession.id} for updated status.`,
+                  done_synopsis: `${detectedProductId} blueprint in progress.`,
+                  done_bullets: [`Product: ${detectedProductId}`, `Stage: ${stageLabel}`, `Session: ${existSession.id.slice(0, 8)}`],
+                  human_summary: `${detectedProductId} blueprint is in ${existSession.status}. ${stageLabel}.`,
                   human_summary_technical: `Session ${existSession.id} status: ${existSession.status}.`,
                 }, channel);
                 return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
@@ -686,7 +693,9 @@ export async function runLuminChairTurn(ctx, deps) {
                 action: 'intake_blueprint', execution_path: 'intake_status_check',
                 session_id: existSession.id, product: detectedProductId,
                 first_blocker: null, duration_ms: Date.now() - started,
-                human_summary: `${detectedProductId} blueprint session ${existSession.id} is currently ${existSession.status}. It will proceed automatically.`,
+                done_synopsis: `${detectedProductId} blueprint is processing (${existSession.status}).`,
+                done_bullets: [`Product: ${detectedProductId}`, `Status: ${existSession.status}`, `Session: ${existSession.id.slice(0, 8)}`],
+                human_summary: `${detectedProductId} blueprint session is currently ${existSession.status}. It will proceed automatically.`,
               }, channel);
               return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
             }
