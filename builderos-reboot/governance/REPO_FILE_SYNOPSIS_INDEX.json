@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:26:19.786Z",
+  "generated_at": "2026-07-04T16:26:23.737Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 6,
+  "file_count": 7,
   "files": [
     {
       "path": "db/migrations/20260704_create_courses.sql",
@@ -45,6 +45,16 @@
       "bytes": 1265,
       "mtime": "2026-07-04T16:26:10.669Z",
       "indexed_at": "2026-07-04T16:26:10.669Z"
+    },
+    {
+      "path": "startup/register-runtime-routes.js",
+      "synopsis": "Runtime route composition for the main Express app.",
+      "bytes": 40336,
+      "mtime": "2026-07-04T16:26:23.737Z",
+      "indexed_at": "2026-07-04T16:26:23.737Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     }
   ]
 }
