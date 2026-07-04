@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T12:28:32.105Z",
+  "generated_at": "2026-07-04T12:28:42.882Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 5,
+  "file_count": 6,
   "files": [
     {
       "path": "db/migrations/20260704_create_knowledge_base_files.sql",
@@ -31,6 +31,13 @@
       "bytes": 4146,
       "mtime": "2026-07-04T12:22:42.542Z",
       "indexed_at": "2026-07-04T12:22:42.542Z"
+    },
+    {
+      "path": "scripts/verify-knowledge-upload.mjs",
+      "synopsis": "Exports runAudit — scripts/verify-knowledge-upload.mjs.",
+      "bytes": 3960,
+      "mtime": "2026-07-04T12:28:42.882Z",
+      "indexed_at": "2026-07-04T12:28:42.882Z"
     },
     {
       "path": "startup/register-runtime-routes.js",
