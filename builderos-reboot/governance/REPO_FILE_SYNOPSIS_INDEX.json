@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T17:48:38.400Z",
+  "generated_at": "2026-07-04T17:48:48.015Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 10,
+  "file_count": 11,
   "files": [
     {
       "path": "db/migrations/20260704_create_adam_decisions.sql",
@@ -66,6 +66,13 @@
       "bytes": 4498,
       "mtime": "2026-07-04T17:41:52.667Z",
       "indexed_at": "2026-07-04T17:41:52.667Z"
+    },
+    {
+      "path": "routes/perfect-day-routes.js",
+      "synopsis": "Exports createPerfectDayRoutes — routes/perfect-day-routes.js.",
+      "bytes": 2693,
+      "mtime": "2026-07-04T17:48:48.015Z",
+      "indexed_at": "2026-07-04T17:48:48.015Z"
     },
     {
       "path": "startup/register-runtime-routes.js",
