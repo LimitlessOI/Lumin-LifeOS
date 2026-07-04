@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T16:31:24.103Z",
+  "generated_at": "2026-07-04T16:31:34.600Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 10,
   "files": [
@@ -56,9 +56,9 @@
     {
       "path": "services/content-engine-service.js",
       "synopsis": "Exports createContentEngineService — services/content-engine-service.js.",
-      "bytes": 5065,
-      "mtime": "2026-07-04T16:30:55.844Z",
-      "indexed_at": "2026-07-04T16:30:55.844Z"
+      "bytes": 3537,
+      "mtime": "2026-07-04T16:31:34.600Z",
+      "indexed_at": "2026-07-04T16:31:34.600Z"
     },
     {
       "path": "services/course-service.js",
