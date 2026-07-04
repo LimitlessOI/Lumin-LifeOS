@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T23:48:39.698Z",
+  "generated_at": "2026-07-04T23:48:47.004Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 89,
+  "file_count": 90,
   "files": [
     {
       "path": "db/migrations/20260704_create_ai_unmetered_exceptions.sql",
@@ -66,6 +66,13 @@
       "bytes": 433,
       "mtime": "2026-07-04T22:46:28.890Z",
       "indexed_at": "2026-07-04T22:46:28.890Z"
+    },
+    {
+      "path": "db/migrations/20260704_create_lessons_learned.sql",
+      "synopsis": "Database migration — 20260704_create_lessons_learned.sql.",
+      "bytes": 786,
+      "mtime": "2026-07-04T23:48:47.004Z",
+      "indexed_at": "2026-07-04T23:48:47.004Z"
     },
     {
       "path": "db/migrations/20260704_create_operator_consumption_ledger.sql",
