@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-04T15:54 — OpenAI 413 error body in diagnostics. Prior session. |
+| **Last Updated** | 2026-07-04T16:03 — Builder lane bypasses rules engine to prevent model downgrade. Prior session. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-04T15:54 — OpenAI 413 error body in diagnostics. Prior session. |
+| **Last Updated** | 2026-07-04T16:03 — Builder lane bypasses rules engine to prevent model downgrade. Prior session. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 

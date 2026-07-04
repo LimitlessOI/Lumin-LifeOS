@@ -995,17 +995,19 @@ export function createCouncilService({
     kingsmanAudit({ pool, member, taskType, prompt }).catch(() => {});
 
     // ── Rules engine pre-flight — deterministic no-AI answers + lightweight routing ──
-    // Voice Rail / founder comms: never reroute member or force model mismatch (operator picked engine).
-    const ruleDecision = founderComms
+    // Voice Rail / founder comms / builder lane: never reroute member or force model mismatch.
+    // Builder lane callers set allowModelDowngrade=false and specific taskType explicitly;
+    // rules engine pattern matching (e.g. /\bjson\b/) would override those to free-tier models.
+    const ruleDecision = (founderComms || builderLane)
       ? {
           matched: false,
           action: 'continue',
           receipt: {
             engine: 'rules-engine-v1',
-            ruleId: 'skip.founder_comms',
+            ruleId: founderComms ? 'skip.founder_comms' : 'skip.builder_lane',
             category: 'routing',
             confidence: 0,
-            reason: 'founder comms bypass',
+            reason: founderComms ? 'founder comms bypass' : 'builder lane bypass — caller controls model/taskType',
           },
         }
       : rulesEngine.evaluate({
