@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T15:02:01.133Z",
+  "generated_at": "2026-07-04T15:02:07.502Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 14,
   "files": [
@@ -50,8 +50,8 @@
       "path": "db/migrations/20260704_create_creator_scripts.sql",
       "synopsis": "Database migration — 20260704_create_creator_scripts.sql.",
       "bytes": 482,
-      "mtime": "2026-07-04T14:55:43.508Z",
-      "indexed_at": "2026-07-04T14:55:43.508Z"
+      "mtime": "2026-07-04T15:02:07.502Z",
+      "indexed_at": "2026-07-04T15:02:07.502Z"
     },
     {
       "path": "db/migrations/20260704_create_creator_videos.sql",
