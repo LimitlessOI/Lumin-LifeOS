@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: HTML page: LifeOS Overlay -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="referrer" content="same-origin" />
+  <meta name="color-scheme" content="dark light" />
+  <title>LifeOS Overlay</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --panel: #111118;
+      --panel-2: #17171f;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8f0;
+      --muted: #9999bb;
+      --accent: #5b6af5;
+      --radius: 18px;
+      --shadow: 0 18px 48px rgba(0,0,0,0.35);
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: transparent;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .overlay-root {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+      background:
+        radial-gradient(circle at top right, rgba(91,106,245,0.14), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(124,58,237,0.10), transparent 26%),
+        var(--bg);
+    }
+
+    .overlay-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: var(--bg);
+    }
+
+    .overlay-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      background:
+        radial-gradient(circle at top right, rgba(91,106,245,0.14), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(124,58,237,0.10), transparent 26%),
+        var(--bg);
+    }
+
+    .overlay-card {
+      width: min(720px, 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(17,17,24,0.92), rgba(13,13,21,0.92));
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .overlay-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .overlay-copy {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .overlay-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay-root">
+    <iframe
+      class="overlay-frame"
+      id="lifeos-overlay-frame"
+      src="/overlay/lifeos-app.html?layout=desktop"
+      title="LifeOS Universal Overlay"
+      allow="clipboard-write; microphone; camera; autoplay"
+      loading="eager"
+      referrerpolicy="same-origin"
+    ></iframe>
+
+    <noscript>
+      <div class="overlay-fallback">
+        <div class="overlay-card">
+          <div class="overlay-title">LifeOS Universal Overlay</div>
+          <div class="overlay-copy">
+            JavaScript is required to load the overlay experience.
+          </div>
+        </div>
+      </div>
+    </noscript>
+  </div>
+
+  <script>
+    (function () {
+      const frame = document.getElementById('lifeos-overlay-frame');
+      if (!frame) return;
+
+      try {
+        const url = new URL(frame.getAttribute('src'), window.location.href);
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.has('page')) url.searchParams.set('page', params.get('page'));
+        if (params.has('layout')) url.searchParams.set('layout', params.get('layout'));
+        if (params.has('stack')) url.searchParams.set('stack', params.get('stack'));
+        if (params.has('direct_system')) url.searchParams.set('direct_system', params.get('direct_system'));
+        if (params.has('lumin_voice')) url.searchParams.set('lumin_voice', params.get('lumin_voice'));
+
+        frame.src = url.toString();
+      } catch (_) {}
+    })();
+  </script>
+</body>
+</html>
