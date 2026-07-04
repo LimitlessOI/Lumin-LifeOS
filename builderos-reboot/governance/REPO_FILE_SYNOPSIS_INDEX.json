@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-04T17:41:52.667Z",
+  "generated_at": "2026-07-04T17:41:56.730Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 5,
+  "file_count": 6,
   "files": [
     {
       "path": "db/migrations/20260704_create_adam_decisions.sql",
@@ -38,6 +38,16 @@
       "bytes": 4498,
       "mtime": "2026-07-04T17:41:52.667Z",
       "indexed_at": "2026-07-04T17:41:52.667Z"
+    },
+    {
+      "path": "startup/register-runtime-routes.js",
+      "synopsis": "Runtime route composition for the main Express app.",
+      "bytes": 40802,
+      "mtime": "2026-07-04T17:41:56.730Z",
+      "indexed_at": "2026-07-04T17:41:56.730Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     }
   ]
 }
