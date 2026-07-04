@@ -50,29 +50,36 @@ export function extractIntakeSessionId(text = '') {
   return null;
 }
 
-const KNOWN_PRODUCTS = new Map([
-  ['tc service', 'tc-service'], ['tc services', 'tc-service'], ['tc-service', 'tc-service'],
-  ['socialmediaos', 'marketingos'], ['social media os', 'marketingos'], ['smos', 'marketingos'], ['marketingos', 'marketingos'],
-  ['lifeos', 'lifeos'], ['life os', 'lifeos'],
-  ['lifere', 'lifere'], ['life re', 'lifere'],
-  ['boldtrail', 'boldtrail'], ['bold trail', 'boldtrail'],
-  ['site builder', 'site-builder'], ['site-builder', 'site-builder'],
-  ['ai council', 'ai-council'], ['ai-council', 'ai-council'],
-  ['memory system', 'memory-system'], ['memory-system', 'memory-system'],
-  ['financial revenue', 'financial-revenue'], ['financial-revenue', 'financial-revenue'],
-  ['command center', 'command-center'], ['command-center', 'command-center'],
-  ['builderos', 'builderos'], ['builder os', 'builderos'],
-  ['limitlessos', 'limitlessos'], ['limitless os', 'limitlessos'],
-  ['video pipeline', 'video-pipeline'], ['video-pipeline', 'video-pipeline'],
-  ['project governance', 'project-governance'], ['project-governance', 'project-governance'],
-  ['universal overlay', 'universal-overlay'], ['universal-overlay', 'universal-overlay'],
-  ['token accounting', 'token-accounting-os'], ['token-accounting-os', 'token-accounting-os'],
+const MANUAL_ALIASES = new Map([
+  ['tc service', 'tc-service'], ['tc services', 'tc-service'],
+  ['socialmediaos', 'marketingos'], ['social media os', 'marketingos'], ['smos', 'marketingos'],
+  ['life os', 'lifeos'], ['life re', 'lifere'], ['bold trail', 'boldtrail'],
+  ['builder os', 'builderos'], ['limitless os', 'limitlessos'],
 ]);
+
+let _allProductIds = null;
+function getAllProductIds() {
+  if (_allProductIds) return _allProductIds;
+  const docsDir = path.join(REPO_ROOT, 'docs', 'products');
+  try {
+    _allProductIds = fs.readdirSync(docsDir, { withFileTypes: true })
+      .filter(d => d.isDirectory() && fs.existsSync(path.join(docsDir, d.name, 'PRODUCT_HOME.md')))
+      .map(d => d.name);
+  } catch { _allProductIds = []; }
+  return _allProductIds;
+}
 
 export function extractIntakeProductName(text = '') {
   const t = String(text || '').toLowerCase();
-  for (const [pattern, productId] of KNOWN_PRODUCTS) {
+  for (const [pattern, productId] of MANUAL_ALIASES) {
     if (t.includes(pattern)) return productId;
+  }
+  for (const pid of getAllProductIds()) {
+    if (t.includes(pid)) return pid;
+    const spaced = pid.replace(/-/g, ' ');
+    if (spaced !== pid && t.includes(spaced)) return pid;
+    const noDash = pid.replace(/-/g, '');
+    if (noDash !== pid && t.includes(noDash)) return pid;
   }
   return null;
 }
