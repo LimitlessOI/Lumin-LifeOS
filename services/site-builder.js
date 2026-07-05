@@ -28,6 +28,8 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import logger from './logger.js';
 import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.js';
+import CompetitorBenchmark from './competitor-benchmark.js';
+import PresenceAudit from './presence-audit.js';
 
 const TAILWIND_CDN = 'https://cdn.tailwindcss.com';
 const ALPINE_CDN = 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js';
@@ -84,8 +86,25 @@ export default class SiteBuilder {
       // Step 2: Determine best POS partner for their industry
       const posPartner = this.selectPosPartner(businessInfo.industry || businessInfo.keywords || []);
 
+      // Step 2b: Benchmark competitors → client-facing scorecard + design brief that grounds generation
+      let benchmark = null;
+      let presence = null;
+      const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
+      if (this.callCouncil && competitorUrls.length > 0) {
+        try {
+          benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
+        } catch (err) {
+          logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
+        }
+        try {
+          presence = await this.auditPresence(businessInfo, competitorUrls);
+        } catch (err) {
+          logger.warn('[SITE] presence audit failed (continuing)', { clientId, error: err.message });
+        }
+      }
+
       // Step 3: Generate main site HTML
-      let siteHtml = await this.generateSiteHtml(businessInfo, { clientId, posPartner, ...options });
+      let siteHtml = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief: benchmark?.designBrief, ...options });
       let qualityReport = this.scoreSiteHtml(siteHtml, businessInfo);
 
       // Step 3b: Deterministic patch — inject schema, focus styles, sticky CTA regardless of AI output
@@ -140,6 +159,11 @@ export default class SiteBuilder {
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
       await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
 
+      // Client-facing competitor scorecard (only when we actually analyzed competitors)
+      if ((benchmark && benchmark.analyzedCount > 0) || presence) {
+        await fs.writeFile(path.join(deployDir, 'scorecard.html'), this.generateScorecardHtml(businessInfo, benchmark, presence));
+      }
+
       for (const post of blogPosts) {
         const postDir = path.join(deployDir, 'blog', post.slug);
         await fs.mkdir(postDir, { recursive: true });
@@ -155,8 +179,11 @@ export default class SiteBuilder {
         blogPosts: blogPosts.map(p => ({ slug: p.slug, title: p.title })),
         videos: videos.length,
         qualityReport,
+        benchmark,
+        presence,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
+        scorecardUrl: (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
       };
       await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
 
@@ -174,6 +201,8 @@ export default class SiteBuilder {
         blogPosts: blogPosts.length,
         posPartner: posPartner.name,
         qualityReport,
+        benchmark,
+        presence,
         metadata,
       };
     } catch (err) {
@@ -322,10 +351,13 @@ Return ONLY valid JSON with this exact structure:
    * Full funnel: Hero → Problem → Services → Proof → Offer → FAQ → Blog → Videos → Footer
    */
   async generateSiteHtml(info, options = {}) {
-    const { clientId, posPartner } = options;
+    const { clientId, posPartner, designBrief } = options;
     const primary = info.primaryColor || '#7C3AED';
     const accent = info.accentColor || '#EC4899';
     const designIntel = await this.loadDesignIntel();
+    const competitorBrief = designBrief?.text
+      ? `\n\nCOMPETITOR-INFORMED DESIGN BRIEF (beat the market, do not copy):\n${designBrief.text}`
+      : '';
 
     const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
 
@@ -391,7 +423,7 @@ SEO REQUIREMENTS:
 - Internal links between sections
 
 DESIGN INTELLIGENCE:
-${designIntel}
+${designIntel}${competitorBrief}
 
 DESIGN REQUIREMENTS:
 - Use Tailwind utility classes for layout and components, plus one concise <style> block for theme tokens and a few intentional visual effects
@@ -430,11 +462,39 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
   }
 
   /**
+   * Fix malformed inline SVG data-URI backgrounds. Models often emit
+   * style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"...\">...')"
+   * — the backslash-escaped double quotes are literal in HTML, so the first inner
+   * double quote closes the style attribute early and the tail (');"> ) leaks as
+   * visible text in the page. We percent-encode the SVG so it is delimiter-safe
+   * inside a double-quoted attribute. Idempotent.
+   */
+  sanitizeInlineSvgBackgrounds(html) {
+    let h = String(html || '');
+    // Match url( [optional quote] data:image/svg+xml<prefix>, <svg...></svg> [optional quote] )
+    const re = /url\(\s*['"]?\s*(data:image\/svg\+xml[^,]*,)([\s\S]*?<\/svg>)\s*['"]?\s*\)/gi;
+    return h.replace(re, (match, prefix, svg) => {
+      const encoded = svg
+        .replace(/\\+(["'])/g, '$1') // drop backslash escapes (\" -> ", \' -> ')
+        .replace(/%(?![0-9a-fA-F]{2})/g, '%25') // escape stray % not already an encoding
+        .replace(/"/g, '%22')
+        .replace(/'/g, '%27')
+        .replace(/</g, '%3C')
+        .replace(/>/g, '%3E')
+        .replace(/ /g, '%20')
+        .replace(/\n/g, '');
+      // Single-quoted url() with a fully percent-encoded SVG contains no delimiter
+      // characters, so it is safe inside a double-quoted style attribute.
+      return `url('${prefix}${encoded}')`;
+    });
+  }
+
+  /**
    * Deterministic post-processor: inject elements the quality scorer requires
    * that AI models sometimes omit. Safe to call multiple times (idempotent).
    */
   patchSiteHtml(html, info = {}) {
-    let h = String(html || '');
+    let h = this.sanitizeInlineSvgBackgrounds(String(html || ''));
     const primary = info.primaryColor || '#7C3AED';
     const accent = info.accentColor || '#EC4899';
     const phone = info.phone || '';
@@ -685,6 +745,133 @@ Return ONLY valid JSON array:
   </main>
 </body>
 </html>`;
+  }
+
+  /**
+   * Benchmark competitor sites: returns a client-facing 1-10 scorecard per site
+   * (strengths/weaknesses) plus a design brief that grounds generation in the
+   * real market instead of a generic template.
+   */
+  async benchmarkCompetitors(businessInfo, competitorUrls = []) {
+    const benchmark = new CompetitorBenchmark({ callCouncil: this.callCouncil });
+    return benchmark.benchmark({ businessInfo, competitorUrls });
+  }
+
+  /**
+   * Head-to-head presence audit: scores the business AND competitors across
+   * website/GBP/Instagram/Facebook/LinkedIn and returns a gap/opportunity readout.
+   */
+  async auditPresence(businessInfo, competitorUrls = []) {
+    const audit = new PresenceAudit({ callCouncil: this.callCouncil });
+    return audit.compare({ businessInfo, competitorUrls });
+  }
+
+  /**
+   * Render a client-facing competitor scorecard page. Shows each competitor's
+   * 1-10 score with what they do well / poorly, and how the new site beats them.
+   */
+  generateScorecardHtml(info, benchmark, presence = null) {
+    const primary = info.primaryColor || '#7C3AED';
+    const accent = info.accentColor || '#EC4899';
+    const name = info.businessName || 'Your Business';
+    const presenceSection = presence ? this.generatePresenceSectionHtml(presence) : '';
+    const cards = (benchmark?.scorecards || [])
+      .map(c => {
+        const scoreLabel = c.score != null ? `${c.score}/10` : 'N/A';
+        const host = (() => { try { return new URL(c.url).hostname.replace(/^www\./, ''); } catch { return c.url; } })();
+        const well = (c.doesWell || []).map(x => `<li>${this.escapeHtml(x)}</li>`).join('') || '<li>—</li>';
+        const poor = (c.doesPoorly || []).map(x => `<li>${this.escapeHtml(x)}</li>`).join('') || '<li>—</li>';
+        return `<div class="card">
+      <div class="card-head">
+        <span class="host">${this.escapeHtml(host)}</span>
+        <span class="score">${scoreLabel}</span>
+      </div>
+      <p class="summary">${this.escapeHtml(c.summary || '')}</p>
+      <div class="cols">
+        <div><h4 class="good">What they do well</h4><ul>${well}</ul></div>
+        <div><h4 class="bad">Where they fall short</h4><ul>${poor}</ul></div>
+      </div>
+    </div>`;
+      })
+      .join('\n');
+    const brief = benchmark?.designBrief || {};
+    const beat = (brief.beat || []).map(x => `<li>${this.escapeHtml(x)}</li>`).join('');
+    return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${this.escapeHtml(name)} — Competitor Scorecard</title>
+<style>
+  :root{--primary:${primary};--accent:${accent}}
+  *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a2e;background:#faf9fc}
+  header{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:48px 24px;text-align:center}
+  header h1{margin:0 0 8px;font-size:28px}header p{margin:0;opacity:.9}
+  main{max-width:960px;margin:0 auto;padding:32px 20px}
+  .card{background:#fff;border:1px solid #eee;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+  .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .host{font-weight:700;font-size:18px}
+  .score{font-weight:800;font-size:20px;color:var(--primary);background:rgba(124,58,237,.08);padding:4px 12px;border-radius:999px}
+  .summary{color:#555;margin:.25rem 0 1rem}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:640px){.cols{grid-template-columns:1fr}}
+  h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+  h4.good{color:#16a34a}h4.bad{color:#dc2626}
+  ul{margin:0;padding-left:18px;color:#333;font-size:14px;line-height:1.6}
+  .beat{background:#fff;border:2px solid var(--primary);border-radius:16px;padding:24px;margin-top:8px}
+  .beat h3{margin:0 0 10px;color:var(--primary)}
+  .section-title{font-size:20px;margin:8px 0 16px}
+  table.presence{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden}
+  table.presence th,table.presence td{padding:12px 14px;text-align:left;border-bottom:1px solid #f0f0f0;font-size:14px}
+  table.presence th{background:#f7f5fb;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#555}
+  .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
+  .b-ahead{background:#dcfce7;color:#166534}.b-behind{background:#fee2e2;color:#991b1b}
+  .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:#f3f4f6;color:#6b7280}
+  .gap{background:#fff;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:16px 0}
+</style></head>
+<body>
+<header>
+  <h1>Presence & Competitor Scorecard for ${this.escapeHtml(name)}</h1>
+  <p>An honest look at where you stand across every channel — and how we help you win.</p>
+</header>
+<main>
+  ${presenceSection}
+  ${cards ? `<h2 class="section-title">Competitor websites, scored</h2>${cards}` : ''}
+  ${beat ? `<div class="beat"><h3>How your new site wins</h3><ul>${beat}</ul></div>` : ''}
+  ${!presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
+</main>
+</body></html>`;
+  }
+
+  /**
+   * Render the head-to-head presence section: per-channel you-vs-competitors
+   * table + plain-English gap/opportunity readout.
+   */
+  generatePresenceSectionHtml(presence) {
+    const labels = { website: 'Website', google: 'Google Business', instagram: 'Instagram', facebook: 'Facebook', linkedin: 'LinkedIn' };
+    const verdictBadge = v => {
+      const map = { ahead: ['b-ahead', 'You lead'], behind: ['b-behind', 'Behind'], even: ['b-even', 'Even'], open_lane: ['b-open', 'Open lane'], unknown: ['b-unknown', '—'] };
+      const [cls, txt] = map[v] || map.unknown;
+      return `<span class="badge ${cls}">${txt}</span>`;
+    };
+    const rows = (presence.perChannel || [])
+      .map(c => {
+        const you = c.clientScore != null ? `${c.clientScore}/10` : '—';
+        const comp = c.competitorAvg != null ? `${c.competitorAvg}/10` : (c.competitorsPresent ? 'present' : '—');
+        return `<tr><td>${labels[c.channel] || c.channel}</td><td>${you}</td><td>${comp} <small>(${c.competitorsPresent}/${c.totalCompetitors})</small></td><td>${verdictBadge(c.verdict)}</td></tr>`;
+      })
+      .join('');
+    const gap = presence.gap || {};
+    const quickWins = (gap.quickWins || []).map(w => `<li>${this.escapeHtml(w)}</li>`).join('');
+    return `<h2 class="section-title">Your online presence vs. competitors</h2>
+  <table class="presence">
+    <thead><tr><th>Channel</th><th>You</th><th>Competitors (avg)</th><th>Verdict</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  ${gap.summary ? `<div class="gap"><p>${this.escapeHtml(gap.summary)}</p>${gap.biggestOpportunity ? `<p><strong>Biggest opportunity:</strong> ${this.escapeHtml(gap.biggestOpportunity)}</p>` : ''}${quickWins ? `<p><strong>Quick wins:</strong></p><ul>${quickWins}</ul>` : ''}</div>` : ''}`;
+  }
+
+  escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   async loadDesignIntel() {

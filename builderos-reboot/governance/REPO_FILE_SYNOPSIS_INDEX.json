@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T19:14:13.512Z",
+  "generated_at": "2026-07-05T19:14:55.595Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11165,
+  "file_count": 11167,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21582,8 +21582,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3368448,
-      "mtime": "2026-07-05T19:14:08.198Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z"
+      "mtime": "2026-07-05T19:14:50.080Z",
+      "indexed_at": "2026-07-05T19:14:55.595Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -35087,8 +35087,8 @@
       "path": "db/migrations/20260705_repair_prospect_sites_schema.sql",
       "synopsis": "Database migration — repair prospect_sites table to match prospect-pipeline.js expectations.",
       "bytes": 4546,
-      "mtime": "2026-07-05T19:13:53.280Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z"
+      "mtime": "2026-07-05T19:14:28.963Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
@@ -38636,8 +38636,8 @@
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
       "bytes": 9605,
-      "mtime": "2026-07-05T19:13:53.281Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z"
+      "mtime": "2026-07-05T19:14:28.963Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
@@ -38846,8 +38846,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 581090,
-      "mtime": "2026-07-05T19:13:53.282Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z"
+      "mtime": "2026-07-05T19:14:28.964Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39195,17 +39195,17 @@
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 6521,
-      "mtime": "2026-06-29T17:21:08.011Z",
-      "indexed_at": "2026-07-05T19:11:13.600Z",
+      "bytes": 6595,
+      "mtime": "2026-07-05T19:14:45.891Z",
+      "indexed_at": "2026-07-05T19:14:55.595Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 54134,
-      "mtime": "2026-07-05T19:13:53.284Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z"
+      "bytes": 57720,
+      "mtime": "2026-07-05T19:14:45.891Z",
+      "indexed_at": "2026-07-05T19:14:55.595Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -39386,16 +39386,16 @@
       "path": "docs/products/white-label/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 553,
-      "mtime": "2026-07-05T19:13:53.284Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "mtime": "2026-07-05T19:14:28.965Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
       "bytes": 8572,
-      "mtime": "2026-07-05T19:13:53.284Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z"
+      "mtime": "2026-07-05T19:14:28.965Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -61485,8 +61485,8 @@
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
       "bytes": 29546,
-      "mtime": "2026-07-05T19:13:53.284Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "mtime": "2026-07-05T19:14:28.966Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z",
       "synopsis_index_only": true
     },
     {
@@ -65250,9 +65250,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 18144,
-      "mtime": "2026-07-05T19:13:53.285Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "bytes": 20319,
+      "mtime": "2026-07-05T19:14:45.891Z",
+      "indexed_at": "2026-07-05T19:14:55.595Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -65443,8 +65443,8 @@
       "path": "routes/white-label-routes.js",
       "synopsis": "Exports createWhiteLabelRoutes — routes/white-label-routes.js.",
       "bytes": 6851,
-      "mtime": "2026-07-05T19:13:53.285Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "mtime": "2026-07-05T19:14:28.966Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
@@ -80483,6 +80483,16 @@
       ]
     },
     {
+      "path": "services/competitor-benchmark.js",
+      "synopsis": "Competitor Benchmark — scrapes competitor & best-in-industry sites, scores each 1-10 with strengths/weaknesses, synthesizes a design brief for Site Builder.",
+      "bytes": 10498,
+      "mtime": "2026-07-05T19:14:45.891Z",
+      "indexed_at": "2026-07-05T19:14:55.595Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/confidence-architecture.js",
       "synopsis": "Exports createConfidenceArchitecture — services/confidence-architecture.js.",
       "bytes": 4980,
@@ -83420,6 +83430,16 @@
       "indexed_at": "2026-07-05T19:11:13.600Z"
     },
     {
+      "path": "services/presence-audit.js",
+      "synopsis": "Presence Audit — scores a business AND its competitors across every channel (website, Google Business Profile, Instagram, Facebook, LinkedIn) and produces a head-to-head gap/opportunity comparison.",
+      "bytes": 9958,
+      "mtime": "2026-07-05T19:14:45.891Z",
+      "indexed_at": "2026-07-05T19:14:55.595Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/preview-expiry-cron.js",
       "synopsis": "Preview Site Expiry Cron",
       "bytes": 1789,
@@ -83904,9 +83924,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 35420,
-      "mtime": "2026-06-29T17:21:08.977Z",
-      "indexed_at": "2026-07-05T19:11:13.600Z",
+      "bytes": 45765,
+      "mtime": "2026-07-05T19:14:45.892Z",
+      "indexed_at": "2026-07-05T19:14:55.595Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85246,8 +85266,8 @@
       "path": "startup/database.js",
       "synopsis": "startup/database.js",
       "bytes": 3478,
-      "mtime": "2026-07-05T19:13:53.285Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "mtime": "2026-07-05T19:14:28.966Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
@@ -85304,8 +85324,8 @@
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
       "bytes": 47975,
-      "mtime": "2026-07-05T19:13:53.285Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "mtime": "2026-07-05T19:14:28.966Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86287,8 +86307,8 @@
       "path": "tests/migration-safety.test.js",
       "synopsis": "Regression guards for startup migration safety.",
       "bytes": 1420,
-      "mtime": "2026-07-05T19:13:53.285Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "mtime": "2026-07-05T19:14:28.966Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
@@ -86481,8 +86501,8 @@
       "path": "tests/site-builder-routes-security.test.js",
       "synopsis": "Security regressions for Site Builder routes.",
       "bytes": 3503,
-      "mtime": "2026-07-05T19:13:53.285Z",
-      "indexed_at": "2026-07-05T19:14:13.512Z",
+      "mtime": "2026-07-05T19:14:28.966Z",
+      "indexed_at": "2026-07-05T19:14:39.407Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
