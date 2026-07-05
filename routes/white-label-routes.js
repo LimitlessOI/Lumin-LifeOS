@@ -1,8 +1,8 @@
 /**
  * SYNOPSIS: Exports createWhiteLabelRoutes — routes/white-label-routes.js.
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
 import express from 'express';
-import { callCouncilMember } from '../services/council-member.js';
 
 const BOOLEAN_FIELDS = ['hide_tiers', 'hide_models', 'hide_costs', 'hide_architecture'];
 const TEXT_FIELDS = ['api_response_format', 'brand_name', 'custom_domain', 'custom_logo'];
@@ -39,11 +39,20 @@ function sanitizeCouncilResponse(result) {
   return result ?? null;
 }
 
-export function createWhiteLabelRoutes(app, ctx) {
-  const { pool, requireKey, logger } = app || {};
+export function createWhiteLabelRoutes(app, ctx = {}) {
+  const { pool, logger } = ctx;
+  const requireKey = ctx.requireKey || ctx.rk || ((_req, res) => {
+    res.status(503).json({ ok: false, error: 'auth_middleware_unavailable' });
+  });
+  const callCouncilMember = ctx.callCouncilMember || ctx.callCouncilWithFailover;
   const router = express.Router();
 
   async function invokeCouncil(prompt, taskType = 'general') {
+    if (typeof callCouncilMember !== 'function') {
+      const err = new Error('council_member_unavailable');
+      err.status = 503;
+      throw err;
+    }
     const result = await callCouncilMember('openai', prompt, { taskType });
     return sanitizeCouncilResponse(result);
   }
