@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T00:49:33.094Z",
+  "generated_at": "2026-07-05T01:14:53.367Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11049,
+  "file_count": 11052,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21581,9 +21581,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3335970,
-      "mtime": "2026-07-05T00:34:23.117Z",
-      "indexed_at": "2026-07-05T00:34:34.166Z"
+      "bytes": 3337013,
+      "mtime": "2026-07-05T01:14:36.563Z",
+      "indexed_at": "2026-07-05T01:14:53.367Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38093,9 +38093,9 @@
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail",
-      "bytes": 10908,
-      "mtime": "2026-07-03T13:23:32.273Z",
-      "indexed_at": "2026-07-04T20:29:25.322Z"
+      "bytes": 12035,
+      "mtime": "2026-07-05T01:13:55.103Z",
+      "indexed_at": "2026-07-05T01:14:53.367Z"
     },
     {
       "path": "docs/products/BUILDEROS.md",
@@ -63943,6 +63943,16 @@
       "indexed_at": "2026-07-04T20:29:25.322Z"
     },
     {
+      "path": "routes/crm-routes.js",
+      "synopsis": "CRM interface routes — provider-agnostic surface over the active CrmProvider.",
+      "bytes": 2524,
+      "mtime": "2026-07-05T01:13:12.567Z",
+      "indexed_at": "2026-07-05T01:14:53.367Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/deliberation-governance-routes.js",
       "synopsis": "Deliberation governance API — v2.7 CnclRoster, scorecard, Hist, CFO, gate, consensus.",
       "bytes": 7585,
@@ -79881,6 +79891,26 @@
       ]
     },
     {
+      "path": "services/crm-intelligence.js",
+      "synopsis": "CRM intelligence layer — segmentation + super-fan/referral scoring over any CrmProvider.",
+      "bytes": 4711,
+      "mtime": "2026-07-05T01:12:56.347Z",
+      "indexed_at": "2026-07-05T01:14:53.367Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/crm-provider.js",
+      "synopsis": "CrmProvider abstraction — every product talks to \"the CRM\" through one interface.",
+      "bytes": 5335,
+      "mtime": "2026-07-05T01:12:31.451Z",
+      "indexed_at": "2026-07-05T01:14:53.367Z",
+      "ssot": [
+        "docs/products/boldtrail/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/data-sovereignty.js",
       "synopsis": "services/data-sovereignty.js",
       "bytes": 6212,
@@ -84423,9 +84453,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 4276,
-      "mtime": "2026-07-05T00:26:56.273Z",
-      "indexed_at": "2026-07-05T00:27:52.823Z",
+      "bytes": 4478,
+      "mtime": "2026-07-05T01:13:20.939Z",
+      "indexed_at": "2026-07-05T01:14:53.367Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

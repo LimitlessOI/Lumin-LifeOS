@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/boldtrail/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-05 |
 
 ---
 
@@ -50,8 +50,13 @@ Routes:
 - `routes/agent-recruitment-routes.js`
 
 Services:
+- `services/crm-provider.js` — **provider-agnostic CrmProvider interface**; BoldTrail is the default impl. Consumers call `getCrmProvider()`, never BoldTrail directly. Swap via `CRM_PROVIDER` env.
+- `services/crm-intelligence.js` — segmentation (hot/warm/clients/sphere/cold) + super-fan/referral propensity scoring on top of any provider
 - `services/lifere-boldtrail-bridge.js` — LifeRE reads BoldTrail pipeline; approval-gated note write-back
 - `src/integrations/boldtrail.js` — kvCORE v2 contacts, notes, tags, filtered list, normalize
+
+Routes (add):
+- `routes/crm-routes.js` — `/api/v1/crm/{status,contacts,segments,super-fans}` provider-agnostic surface
 
 DB tables (from law anchor):
 - `boldtrail_email_drafts` — AI-generated emails pending review/send
@@ -143,6 +148,7 @@ Deep integration with BoldTrail (real estate CRM platform). Automates lead follo
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-07-05 | **CrmProvider abstraction** — `services/crm-provider.js` (interface + BoldTrail default impl, `CRM_PROVIDER` selectable), `services/crm-intelligence.js` (segmentation + super-fan/referral scoring), `routes/crm-routes.js` mounted at `/api/v1/crm/*` in founder-builder runtime | Adam: "We control the interface. BoldTrail is just a database." Use free BoldTrail now, own the intelligence layer, swap the store later with zero consumer changes. Repositions Outreach CRM as intelligence, not a competing contact store. | ✅ node -c + runtime import/scoring smoke | deploy + wire consumers (Site Builder prospects, LifeRE) onto `getCrmProvider()` |
 | 2026-06-25 | **`addContactNote`** — kvCORE `/contact/:id/action/note` requires `details` field (422 without it) | CRM alpha note write-back via follow-up/approve | ✅ node --check | deploy + crm-alpha-test |
 | 2026-06-25 | **`src/integrations/boldtrail.js`** — `createOrUpdateContact` tries `POST /contact` (kvCORE v2 singular) with fallbacks; `addContactNote` tries `/contact/:id/action/note` PUT/POST; `findContactByEmail`, `extractCreatedContactId`, `buildKvCoreContactPayload` | Adam CRM alpha: create returned 405 on `POST /contacts`; notes 404 on `/contacts/:id/notes` | ✅ node --check | deploy + `npm run lifeos:crm:alpha:test` |
 | 2026-06-22 | **LifeRE ↔ BoldTrail bridge** — `lifere-boldtrail-bridge.js`, enhanced `boldtrail.js` (filtered contacts + normalize), LifeRE routes + overlay sync UI. BoldTrail = CRM SoR; LifeRE = command layer with approval before write-back. | Adam: optimize EXP BoldTrail connection; don't rebuild CRM/campaigns/IDX — pull pipeline into LifeRE top-3 + follow-up queue. | ✅ `node --check` | Deploy + probe token; register BoldTrail webhooks (Phase 2) |
