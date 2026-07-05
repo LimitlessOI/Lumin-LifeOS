@@ -11,6 +11,7 @@ import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-route
 import { createLifeOSBuilderOSCommandControlRoutes } from "../routes/lifeos-builderos-command-control-routes.js";
 import { createLifeRERoutes } from "../routes/lifere-os-routes.js";
 import { createBlueprintIntakeRoutes } from "../routes/blueprint-intake-routes.js";
+import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 
@@ -106,6 +107,17 @@ export async function registerFounderRuntimeRoutes(app, deps) {
 
   createBlueprintIntakeRoutes(app, { pool, requireKey, callCouncilMember });
   logger.info("✅ [BLUEPRINT-INTAKE] Founder-builder routes mounted at /api/v1/blueprint/intake");
+
+  const siteBaseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+    : `http://localhost:${process.env.PORT || 8080}`;
+  createSiteBuilderRoutes(app, {
+    pool,
+    requireKey,
+    callCouncilMember,
+    baseUrl: siteBaseUrl,
+  });
+  logger.info("✅ [SITE-BUILDER] Founder-builder routes mounted at /api/v1/sites");
 
   return {
     tcCoordinator: null,
