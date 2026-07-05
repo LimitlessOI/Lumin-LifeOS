@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: scripts/verify-project.mjs — project-governance verification checks.
+ */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

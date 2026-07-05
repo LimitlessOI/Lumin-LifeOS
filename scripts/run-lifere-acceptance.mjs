@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: scripts/run-lifere-acceptance.mjs — runs the LifeRE acceptance test suite.
+ */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
