@@ -2,7 +2,6 @@
  * SYNOPSIS: Exports createWhiteLabelRoutes — routes/white-label-routes.js.
  */
 import express from 'express';
-import { callCouncilMember } from '../services/council-member.js';
 
 const BOOLEAN_FIELDS = ['hide_tiers', 'hide_models', 'hide_costs', 'hide_architecture'];
 const TEXT_FIELDS = ['api_response_format', 'brand_name', 'custom_domain', 'custom_logo'];
@@ -41,9 +40,13 @@ function sanitizeCouncilResponse(result) {
 
 export function createWhiteLabelRoutes(app, ctx) {
   const { pool, requireKey, logger } = app || {};
+  const callCouncilMember = ctx?.callCouncilMember || app?.callCouncilMember;
   const router = express.Router();
 
   async function invokeCouncil(prompt, taskType = 'general') {
+    if (typeof callCouncilMember !== 'function') {
+      throw new Error('callCouncilMember_unavailable');
+    }
     const result = await callCouncilMember('openai', prompt, { taskType });
     return sanitizeCouncilResponse(result);
   }

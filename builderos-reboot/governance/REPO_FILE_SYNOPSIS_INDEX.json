@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T00:49:33.094Z",
+  "generated_at": "2026-07-05T01:55:40.583Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11049,
+  "file_count": 11051,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38565,9 +38565,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 580240,
-      "mtime": "2026-07-05T00:38:34.681Z",
-      "indexed_at": "2026-07-05T00:38:49.625Z"
+      "bytes": 580574,
+      "mtime": "2026-07-05T01:55:30.931Z",
+      "indexed_at": "2026-07-05T01:55:40.583Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64915,6 +64915,13 @@
       "indexed_at": "2026-07-04T20:29:25.322Z"
     },
     {
+      "path": "routes/white-label-routes.js",
+      "synopsis": "Exports createWhiteLabelRoutes — routes/white-label-routes.js.",
+      "bytes": 6613,
+      "mtime": "2026-07-05T01:54:02.103Z",
+      "indexed_at": "2026-07-05T01:55:40.583Z"
+    },
+    {
       "path": "routes/word-keeper-routes.js",
       "synopsis": "routes/word-keeper-routes.js — Amendment 16 (Word Keeper & Integrity Engine)",
       "bytes": 21121,
@@ -84074,6 +84081,13 @@
       ]
     },
     {
+      "path": "services/white-label-service.js",
+      "synopsis": "Exports createWhiteLabelService — services/white-label-service.js.",
+      "bytes": 6537,
+      "mtime": "2026-07-05T01:53:53.935Z",
+      "indexed_at": "2026-07-05T01:55:40.583Z"
+    },
+    {
       "path": "services/wisdom-truth-auditor.js",
       "synopsis": "Wisdom truth auditor — red-team truth gates, scan enforcement gaps, challenge assumptions.",
       "bytes": 12191,
@@ -84433,9 +84447,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 43479,
-      "mtime": "2026-07-04T20:13:11.384Z",
-      "indexed_at": "2026-07-04T20:29:25.322Z",
+      "bytes": 47975,
+      "mtime": "2026-07-05T01:54:19.107Z",
+      "indexed_at": "2026-07-05T01:55:40.583Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
