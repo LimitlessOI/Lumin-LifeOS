@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-30 |
+| **Last Updated** | 2026-07-05 |
 
 ---
 
@@ -47,6 +47,7 @@ Routes:
 
 Services:
 - `services/site-builder.js` — core: scrape → AI generate → deploy
+- `services/competitor-benchmark.js` — scrape competitor/best-in-industry sites, score each 1-10 with strengths/weaknesses, synthesize design brief fed into generation
 - `services/site-builder-quality-scorer.js` — conversion/accessibility QA + send gate
 - `services/prospect-pipeline.js` — mock site + cold email outreach
 - `services/site-builder-postmark-helper.js` — Postmark outreach send
@@ -82,6 +83,7 @@ All Site Builder conversations, brainstorms, and session dumps live at:
 **Authority:** Subordinate to SSOT North Star Constitution
 **Last Updated:** 2026-06-25 — `core/two-tier-system-init.js` — added `createBlueprintIntakeRoutes` import and registration call. Prior: 2026-05-12 — **RL1 repair loop** — `services/site-builder-postmark-helper.js` + **`npm run operator:repair-loop`** (`scripts/operator-repair-loop-once.mjs`) + `tests/site-builder-postmark-helper.test.js` ( **`node:path`** import — verify gate); quarantine clear for **`site-builder-postmark-send`**. Prior: 2026-05-11 — Emergency restore: createSiteBuilderRoutes factory removed by autonomous builder; server crash fix: `patchSiteHtml()` deterministic injection, maxOutputTokens 800→14k, gemini_flash for generation (replaces chatgpt→groq_llama alias that was capping output at 800 tokens), repair passes 1→2, focus-styles regex fixed. Site quality benchmark: 35.6%/F → 88.5%/B after patch. Full automation loop now wired: prospect discovery → batch ranking by opportunity score → mock site build → email outreach → view tracking (auto, via pixel) → reply detection (auto, via Postmark webhook) → follow-up cron → pipeline report. New in this session: command center overlay (operator UI), batch ranker script, pipeline analytics report, preview view tracking pixel, Postmark reply webhook, opportunity scorer accuracy upgrade (30+ booking platforms, chain/franchise cap). All 31/33 verifier checks pass; only 2 remaining failures are `SITE_BASE_URL` + `EMAIL_FROM` env vars (Adam sets in Railway to activate email sending).
 **Last Updated:** 2026-06-30 — `core/two-tier-system-init.js` now honors the founder-builder runtime profile and suppresses auxiliary expansion services outside explicit `full` runtime mode, which keeps the site-builder lane from piggybacking on founder/builder alpha boot unless intentionally re-enabled.
+**Last Updated:** 2026-07-05 — **Design v1: competitor benchmarking + client-facing scorecard + hero SVG fix.** (1) `sanitizeInlineSvgBackgrounds()` in `services/site-builder.js` percent-encodes malformed inline-SVG data-URI backgrounds so backslash-escaped quotes no longer break the style attribute and leak `');">` as visible hero text (root cause of the "meh" glitch on WellRoundedMamma test). (2) New `services/competitor-benchmark.js`: `benchmark({businessInfo,competitorUrls})` does a lightweight fetch-scrape of each competitor, AI-scores each **1-10** with concrete `doesWell[]`/`doesPoorly[]`, and synthesizes a `designBrief` (adopt winning patterns, beat common weaknesses) that is injected into the generation prompt so sites are built against the real market, not a generic template. (3) `generateScorecardHtml()` renders a branded, XSS-safe client-facing scorecard page written to `previews/<id>/scorecard.html` — the trust-builder Adam asked for ("show them what competitors do well/poorly, get them invested"). (4) New route `POST /api/v1/sites/competitor-scorecard` (standalone) + `competitorUrls` accepted on `/build`. Rationale (Adam): "look at what competitors' and best-in-industry sites look like… score every competitor 1-10… the more we get them invested, the more trust, the more they pay." Verify: `node -c` all touched files + benchmark/scorecard smoke tests (signals, scoring, brief synthesis, XSS escaping) PASS. Next: aesthetic-quality scorer dimension, real imagery pipeline, free spec logo, real-time interactive editor.
 
 ---
 

@@ -126,17 +126,39 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    */
   router.post('/build', requireKey, buildLimiter, async (req, res) => {
     try {
-      const { url, businessUrl, businessInfo } = req.body;
+      const { url, businessUrl, businessInfo, competitorUrls } = req.body;
       const targetUrl = url || businessUrl;
       if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
 
-      logger.info('[SITE] Build request', { url: targetUrl });
+      logger.info('[SITE] Build request', { url: targetUrl, competitors: (competitorUrls || []).length });
       const builder = getSiteBuilder({ callCouncilMember, baseUrl });
-      const result = await builder.buildFromUrl(targetUrl, { businessInfo });
+      const result = await builder.buildFromUrl(targetUrl, { businessInfo, competitorUrls });
 
       res.json({ ok: result.success, ...result });
     } catch (err) {
       logger.error('[SITE] Build error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * POST /api/v1/sites/competitor-scorecard
+   * Standalone competitor analysis — scores each competitor 1-10 with strengths/weaknesses
+   * and returns a design brief. Client-facing value-add; also used inside /build.
+   * Body: { competitorUrls: string[], businessInfo?, industry? }
+   */
+  router.post('/competitor-scorecard', requireKey, buildLimiter, async (req, res) => {
+    try {
+      const { competitorUrls, businessInfo, industry } = req.body;
+      if (!Array.isArray(competitorUrls) || competitorUrls.length === 0) {
+        return res.status(400).json({ ok: false, error: 'competitorUrls (non-empty array) is required' });
+      }
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const info = businessInfo || { industry };
+      const result = await builder.benchmarkCompetitors(info, competitorUrls);
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      logger.error('[SITE] Competitor scorecard error', { error: err.message });
       res.status(500).json({ ok: false, error: err.message });
     }
   });
