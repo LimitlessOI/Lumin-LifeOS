@@ -15,6 +15,10 @@ import path from "path";
 
 const MIGRATIONS_DIR = path.join(process.cwd(), "db", "migrations");
 
+export function isSafeIdempotentMigrationFailure(message) {
+  return /already exists|duplicate key/i.test(String(message || ""));
+}
+
 async function ensureMigrationsTable(pool) {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -75,10 +79,10 @@ export async function initDatabase(pool, logger) {
       logger.info(`[DB] ✅ Applied migration: ${filename}`);
       ran++;
     } catch (err) {
-      // Mark as applied if it's a non-destructive idempotent failure (column/table already exists,
-      // duplicate key, etc.) — these will never succeed on retry and would block boot forever.
+      // Mark as applied only for narrow, non-destructive idempotent failures.
+      // Missing objects must retry; they usually mean a prerequisite migration did not run.
       const msg = String(err.message || '');
-      const isIdempotentFailure = /already exists|duplicate key|does not exist|cannot drop/i.test(msg);
+      const isIdempotentFailure = isSafeIdempotentMigrationFailure(msg);
       if (isIdempotentFailure) {
         await markApplied(pool, filename).catch(() => {});
         logger.warn(`[DB] ⚠️ Migration ${filename} failed (idempotent, marked applied): ${msg}`);
