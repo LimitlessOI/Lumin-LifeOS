@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T16:04:28.552Z",
+  "generated_at": "2026-07-05T19:04:57.014Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11172,
   "files": [
@@ -37109,9 +37109,9 @@
     {
       "path": "docs/ENV_REGISTRY.md",
       "synopsis": "ENV_REGISTRY.md — Environment Variable Registry",
-      "bytes": 34403,
-      "mtime": "2026-07-05T02:05:05.379Z",
-      "indexed_at": "2026-07-05T16:04:27.825Z"
+      "bytes": 36592,
+      "mtime": "2026-07-05T19:04:50.502Z",
+      "indexed_at": "2026-07-05T19:04:57.014Z"
     },
     {
       "path": "docs/ENVIRONMENT_SETUP.md",

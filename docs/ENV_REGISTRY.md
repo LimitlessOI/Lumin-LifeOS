@@ -206,6 +206,30 @@ Tuning only; defaults are wired in **`routes/lifeos-council-builder-routes.js`**
 
 ---
 
+## 🏭 Builder supervisor — multi-lane, model, cost & safety knobs (Railway)
+
+Controls the autonomous multi-lane build engine (`scripts/autonomy/builder-supervisor.js` + `builder-agents.mjs`). All optional with safe defaults; set only to tune cost/scale/safety.
+
+| Variable | Status | Purpose | Default | Used By |
+|---|---|---|---|---|
+| `OPENAI_API_KEY` | ⚠️ NEEDED (for cheap lanes) | Enables OpenAI "hands" per build lane | — | `builder-agents.mjs` |
+| `BUILDER_AGENT` | 🔲 OPTIONAL | `openai` \| `claude-cli`. Wins over auto-detect | auto: openai if key else claude-cli | `builder-agents.mjs` |
+| `BUILDER_OPENAI_MODEL` | 🔲 OPTIONAL | Default OpenAI model for lanes | `gpt-4o-mini` | `builder-agents.mjs` |
+| `BUILDER_MODEL_<CLASS>` | 🔲 OPTIONAL | Per-stability-class model (e.g. `BUILDER_MODEL_SAFE`, `BUILDER_MODEL_REVIEW`) | falls back to `BUILDER_OPENAI_MODEL` | `builder-supervisor.js` |
+| `BUILDER_OPENAI_COST_IN_PER_1M` / `_OUT_PER_1M` | 🔲 OPTIONAL | Override token pricing for USD estimates | model table | `builder-agents.mjs` |
+| `BUILDER_MAX_CONCURRENT` | 🔲 OPTIONAL | Parallel build lanes | `3` | `builder-supervisor.js` |
+| `BUILDER_QUEUE_LIMIT` | 🔲 OPTIONAL | Max pending segments pulled per run | `20` | `builder-supervisor.js` |
+| `BUILDER_MAX_RUN_USD` | 🔲 OPTIONAL | Hard per-run spend ceiling (est USD); 0 = unlimited | `0` | `builder-supervisor.js` |
+| `BUILDER_OPENAI_CALL_TIMEOUT_MS` | 🔲 OPTIONAL | Per-call abort timeout | `120000` | `builder-agents.mjs` |
+| `BUILDER_AGENT_TIMEOUT_MS` | 🔲 OPTIONAL | Overall per-lane wall-clock deadline | `900000` | `builder-agents.mjs` |
+| `BUILDER_OPENAI_RETRIES` | 🔲 OPTIONAL | Retries on transient 429/5xx/network | `3` | `builder-agents.mjs` |
+| `BUILDER_OPENAI_RETRY_BASE_MS` | 🔲 OPTIONAL | Exponential backoff base | `500` | `builder-agents.mjs` |
+| `BUILDER_LOCK_TTL_MS` | 🔲 OPTIONAL | Stale single-run lock reclaim age | `1800000` | `builder-supervisor.js` |
+
+> **To run cheap OpenAI lanes in prod:** set `OPENAI_API_KEY` **and** `BUILDER_AGENT=openai`. Without the key, lanes fall back to the Claude CLI (unavailable in Railway) and the run exits at the safety gate.
+
+---
+
 ## 📧 Email
 
 | Variable | Status | Purpose | Used By |
