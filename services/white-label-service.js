@@ -1,8 +1,6 @@
 /**
  * SYNOPSIS: Exports createWhiteLabelService — services/white-label-service.js.
  */
-import { callCouncilMember } from './council-member.js';
-
 function asTrimmedString(value) {
   if (value === null || value === undefined) return '';
   return String(value).trim();
@@ -59,9 +57,12 @@ function extractOwnerId(req) {
   return req?.lifeosUser?.sub || null;
 }
 
-export function createWhiteLabelService(pool, callCouncilMemberFn = callCouncilMember) {
+export function createWhiteLabelService(pool, callCouncilMemberFn) {
   if (!pool || typeof pool.query !== 'function') {
     throw new Error('pool_required');
+  }
+  if (typeof callCouncilMemberFn !== 'function') {
+    throw new Error('callCouncilMember_required');
   }
 
   async function invokeCouncil(prompt) {

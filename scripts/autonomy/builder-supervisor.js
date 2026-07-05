@@ -42,6 +42,10 @@ import pg from 'pg';
 import { reviewSegment, formatCouncilSummary } from '../../services/builder-council-review.js';
 import { scoreOutcome } from '../../services/model-performance.js';
 import { isAutonomyPaused, isDirectedMode } from '../../services/runtime-modes.js';
+import { resolveAgentKind, agentAvailability, runBuilderAgent } from './builder-agents.mjs';
+import { planBatches } from './builder-batching.mjs';
+import { acquireLock, releaseLock } from './builder-runlock.mjs';
+import { recordBuildEconomics } from '../../services/build-economics.js';
 
 const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -50,6 +54,11 @@ const ROOT = path.resolve(__dirname, '..', '..');
 // ── Config ────────────────────────────────────────────────────────────────────
 
 const MAX_CONCURRENT     = parseInt(process.env.BUILDER_MAX_CONCURRENT ?? '3', 10);
+// Hard spend ceiling per supervisor run in estimated USD (0 = unlimited).
+// Once accumulated lane spend reaches this, no new batches start.
+const MAX_RUN_USD        = Number(process.env.BUILDER_MAX_RUN_USD) || 0;
+// Max pending segments pulled into a single run (batched by MAX_CONCURRENT).
+const QUEUE_LIMIT        = Math.max(1, parseInt(process.env.BUILDER_QUEUE_LIMIT ?? '20', 10) || 20);
 // Prefer the project-local npm binary (version-pinned) over the global install.
 // The @anthropic-ai/claude-code npm package installs the binary at node_modules/.bin/claude.
 const LOCAL_CLAUDE_BIN   = path.join(ROOT, 'node_modules', '.bin', 'claude');
@@ -57,6 +66,15 @@ const CLAUDE_BIN         = process.env.CLAUDE_BIN
   ?? (fs.existsSync(LOCAL_CLAUDE_BIN) ? LOCAL_CLAUDE_BIN : '/Users/adamhopkins/.local/bin/claude');
 const ALLOWED_TOOLS      = 'Read,Edit,Write,Bash,Glob,Grep';
 const MAX_TURNS          = parseInt(process.env.BUILDER_MAX_TURNS ?? '30', 10);
+// Which coding agent is the "hands" for each lane. OpenAI (cheap) is preferred
+// when a key is present; the Claude CLI remains available via BUILDER_AGENT=claude-cli.
+const AGENT_KIND         = resolveAgentKind(process.env);
+// Cost lever: let each stability class run on a different (cheaper/stronger)
+// OpenAI model, e.g. BUILDER_MODEL_SAFE=gpt-4o-mini, BUILDER_MODEL_REVIEW=gpt-4o.
+function resolveModelForSegment(segment) {
+  const cls = String(segment?.stability_class || '').toUpperCase();
+  return (cls && process.env[`BUILDER_MODEL_${cls}`]) || process.env.BUILDER_OPENAI_MODEL || undefined;
+}
 const WORKTREE_BASE      = path.resolve(ROOT, '..', 'builder-worktrees');
 const GITHUB_TOKEN       = process.env.GITHUB_TOKEN;
 const GITHUB_REPO        = process.env.GITHUB_REPO ?? 'adamhopkins/Lumin-LifeOS';
@@ -108,8 +126,9 @@ function assertSafeToRun() {
   if (isAutonomyPaused()) {
     throw new Error('PAUSE_AUTONOMY=1 — builder supervisor paused');
   }
-  if (!fs.existsSync(CLAUDE_BIN)) {
-    throw new Error(`Claude Code CLI not found at ${CLAUDE_BIN} — set CLAUDE_BIN env var`);
+  const avail = agentAvailability(AGENT_KIND, { claudeBinExists: fs.existsSync(CLAUDE_BIN), env: process.env });
+  if (!avail.ok) {
+    throw new Error(avail.reason);
   }
 }
 
@@ -136,10 +155,11 @@ async function fetchPendingSegments(pool) {
     sql += ` AND p.slug = $${params.length}`;
   }
 
+  params.push(QUEUE_LIMIT);
   sql += ` ORDER BY
     CASE p.priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END,
     ps.sort_order ASC, ps.id ASC
-    LIMIT 20`;
+    LIMIT $${params.length}`;
 
   const { rows } = await pool.query(sql, params);
   return rows;
@@ -253,6 +273,26 @@ async function deleteBranch(br) {
   try {
     await git('branch', '-D', br);
   } catch (_) { /* branch may already be pushed */ }
+}
+
+// Remove worktrees orphaned by a crashed/killed prior run so a fresh run starts
+// clean. Runs are serialized (route guards concurrent supervisor spawns), so
+// any seg-* worktree present at startup is stale.
+async function pruneStaleWorktrees() {
+  try {
+    await git('worktree', 'prune');
+    if (fs.existsSync(WORKTREE_BASE)) {
+      for (const d of fs.readdirSync(WORKTREE_BASE)) {
+        if (!d.startsWith('seg-')) continue;
+        const p = worktreePath(d.slice('seg-'.length));
+        await git('worktree', 'remove', '--force', p);
+        try { fs.rmSync(p, { recursive: true, force: true }); } catch (_) {}
+      }
+    }
+    logger.info('[WT] Pruned stale worktrees from prior runs');
+  } catch (e) {
+    logger.warn(`[WT] Prune skipped: ${e.message}`);
+  }
 }
 
 // ── Build the task prompt ─────────────────────────────────────────────────────
@@ -453,6 +493,17 @@ async function processSegment(pool, segment) {
   let wt = null;
   let br = null;
   const startTime = Date.now();
+  let reviewMs = 0;
+  let agentMs = 0;
+  let verifyMs = 0;
+  let diffStats = { files: 0, added: 0, deleted: 0 };
+  let lastResult = null;
+  const econSnapshot = () => ({
+    estimatedUsd: lastResult?.usage?.estimatedUsd || 0,
+    totalTokens: lastResult?.usage?.totalTokens || 0,
+    agent: lastResult?.agent || AGENT_KIND,
+    totalMs: Date.now() - startTime,
+  });
 
   try {
     // Mark in progress
@@ -489,6 +540,7 @@ async function processSegment(pool, segment) {
     logger.info(`[COUNCIL] Reviewing seg-${id} with ${personaKey} persona (${segment.review_tier || 'tier_2'})...`);
 
     let councilGuidance = '';
+    const reviewStart = Date.now();
     try {
       const review = await reviewSegment({
         segment,
@@ -545,17 +597,32 @@ async function processSegment(pool, segment) {
       // Council failure never blocks the build — log and continue
       logger.warn(`[COUNCIL] Review failed (non-fatal): ${reviewErr.message} — proceeding without review`);
     }
+    reviewMs = Date.now() - reviewStart;
 
     // Create isolated worktree
     ({ wt, br } = await createWorktree(id, slugPart));
 
     // Build and run prompt (with any council guidance appended)
     const prompt = buildPrompt(segment) + councilGuidance;
-    logger.info(`[TASK] Spawning Claude Code for seg-${id}...`);
-    const result = await spawnClaude(prompt, wt);
+    logger.info(`[TASK] Running ${AGENT_KIND} agent for seg-${id}...`);
+    const result = await runBuilderAgent({
+      kind: AGENT_KIND,
+      prompt,
+      cwd: wt,
+      logger,
+      model: resolveModelForSegment(segment),
+      allowedFiles: segment.allowed_files,
+      maxTurns: MAX_TURNS,
+      claudeRunner: spawnClaude,
+    });
 
+    lastResult = result;
+    agentMs = Math.round((result.elapsedMinutes || 0) * 60000);
     const elapsedHours = parseFloat((result.elapsedMinutes / 60).toFixed(3));
-    logger.info(`[TASK] seg-${id} finished in ${result.elapsedMinutes}min, exit=${result.exitCode}, tools=[${(result.toolsUsed || []).join(',')}]`);
+    const costNote = result.usage
+      ? `, tokens=${result.usage.totalTokens} (est $${result.usage.estimatedUsd})`
+      : '';
+    logger.info(`[TASK] seg-${id} finished in ${result.elapsedMinutes}min, exit=${result.exitCode}, agent=${result.agent || AGENT_KIND}, tools=[${(result.toolsUsed || []).join(',')}]${costNote}`);
 
     // Log stdout to file
     const taskLogPath = path.join(LOG_DIR, `seg-${id}-${TIMESTAMP}.log`);
@@ -577,7 +644,7 @@ async function processSegment(pool, segment) {
       logger.warn(`[TASK] seg-${id} blocked — needs human: ${reason}`);
       await removeWorktree(wt);
       await deleteBranch(br);
-      return { segmentId: id, status: 'needs_human', reason };
+      return { segmentId: id, status: 'needs_human', reason, economics: econSnapshot() };
     }
 
     // Check exit code
@@ -595,7 +662,7 @@ async function processSegment(pool, segment) {
       });
       await removeWorktree(wt);
       await deleteBranch(br);
-      return { segmentId: id, status: 'failed', exitCode: result.exitCode };
+      return { segmentId: id, status: 'failed', exitCode: result.exitCode, economics: econSnapshot() };
     }
 
     // Protected file enforcement — verify builder only touched allowed files
@@ -628,6 +695,7 @@ async function processSegment(pool, segment) {
       logger.info(`[ENFORCE] seg-${id} file boundary check passed (${changedFiles.length} files, all allowed)`);
     }
 
+    const verifyStart = Date.now();
     // Post-build verification gate — all checks must pass before PR
     const { stdout: jsFilesOut } = await gitInWorktree(wt, 'diff', '--name-only', 'HEAD');
     const changedJsFiles = [...jsFilesOut.split('\n').filter(f => f.endsWith('.js'))];
@@ -683,6 +751,17 @@ async function processSegment(pool, segment) {
       return { segmentId: id, status: 'verification_failed', failedChecks: checkResults.filter(c => !c.passed) };
     }
     logger.info(`[VERIFY] All ${checkResults.length} verification checks passed for seg-${id}`);
+    verifyMs = Date.now() - verifyStart;
+    try {
+      const { stdout: numstat } = await gitInWorktree(wt, 'diff', '--numstat', 'HEAD');
+      for (const line of numstat.split('\n')) {
+        const [a, d] = line.trim().split(/\s+/);
+        if (a === undefined || a === '') continue;
+        diffStats.files += 1;
+        diffStats.added += Number(a) || 0;
+        diffStats.deleted += Number(d) || 0;
+      }
+    } catch (_) { /* diff stats are non-fatal telemetry */ }
 
     // Commit changes
     const hadChanges = await commitWorktreeChanges(wt, title, id);
@@ -715,16 +794,38 @@ async function processSegment(pool, segment) {
       }
     } catch (_) { /* non-fatal */ }
 
+    await recordBuildEconomics(pool, {
+      segmentId: id, projectId: project_id, projectSlug: project_slug,
+      stabilityClass: segment.stability_class, agent: lastResult?.agent || AGENT_KIND,
+      model: lastResult?.usage?.model, outcome: hadChanges ? 'done' : 'no_changes',
+      reviewMs, agentMs, verifyMs, totalMs: Date.now() - startTime,
+      promptTokens: lastResult?.usage?.promptTokens, completionTokens: lastResult?.usage?.completionTokens,
+      totalTokens: lastResult?.usage?.totalTokens, estimatedUsd: lastResult?.usage?.estimatedUsd,
+      filesChanged: diffStats.files, linesAdded: diffStats.added, linesDeleted: diffStats.deleted,
+    });
+
     // Clean up worktree (branch stays for the PR)
     if (fs.existsSync(wt)) {
       try { await git('worktree', 'remove', '--force', wt); } catch (_) {}
     }
 
     logger.info(`[TASK] seg-${id} DONE${prUrl ? ` — PR: ${prUrl}` : ' (no file changes)'}`);
-    return { segmentId: id, status: 'done', prUrl, elapsedMinutes: result.elapsedMinutes };
+    return { segmentId: id, status: 'done', prUrl, elapsedMinutes: result.elapsedMinutes, economics: econSnapshot() };
 
   } catch (err) {
     logger.error(`[TASK] seg-${id} threw: ${err.message}`);
+
+    try {
+      await recordBuildEconomics(pool, {
+        segmentId: id, projectId: project_id, projectSlug: project_slug,
+        stabilityClass: segment.stability_class, agent: lastResult?.agent || AGENT_KIND,
+        model: lastResult?.usage?.model, outcome: 'failed',
+        reviewMs, agentMs, verifyMs, totalMs: Date.now() - startTime,
+        promptTokens: lastResult?.usage?.promptTokens, completionTokens: lastResult?.usage?.completionTokens,
+        totalTokens: lastResult?.usage?.totalTokens, estimatedUsd: lastResult?.usage?.estimatedUsd,
+        filesChanged: diffStats.files, linesAdded: diffStats.added, linesDeleted: diffStats.deleted,
+      });
+    } catch (_) {}
 
     try { await markSegmentBlocked(pool, id, err.message.slice(0, 300)); } catch (_) {}
     try {
@@ -746,17 +847,20 @@ async function processSegment(pool, segment) {
       try { await deleteBranch(br); } catch (_) {}
     }
 
-    return { segmentId: id, status: 'error', error: err.message };
+    return { segmentId: id, status: 'error', error: err.message, economics: econSnapshot() };
   }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
+const LOCK_PATH = path.join(ROOT, 'scripts', 'autonomy', '.supervisor.lock');
+const LOCK_TTL_MS = Number(process.env.BUILDER_LOCK_TTL_MS) || 30 * 60 * 1000;
+
 async function main() {
   ensureDir(LOG_DIR);
   logger.info('══════════════════════════════════════════════════');
   logger.info('  LifeOS Builder Supervisor starting');
-  logger.info(`  max-concurrent=${MAX_CONCURRENT} | max-turns=${MAX_TURNS} | dry-run=${DRY_RUN}`);
+  logger.info(`  agent=${AGENT_KIND} | max-concurrent=${MAX_CONCURRENT} | max-turns=${MAX_TURNS} | dry-run=${DRY_RUN}`);
   if (projectFilter) logger.info(`  project-filter=${projectFilter}`);
   logger.info('══════════════════════════════════════════════════');
 
@@ -767,6 +871,15 @@ async function main() {
     logger.warn(`[SAFETY] ${e.message} — exiting cleanly`);
     process.exit(0);
   }
+
+  // Single-run lock: refuse to start if another supervisor is already running,
+  // so two runs can't prune each other's worktrees or race on branch names.
+  const lock = acquireLock(LOCK_PATH, { pid: process.pid, now: Date.now(), ttlMs: LOCK_TTL_MS });
+  if (!lock.ok) {
+    logger.warn(`[LOCK] Another supervisor run holds the lock (pid=${lock.heldBy?.pid}) — exiting cleanly`);
+    process.exit(0);
+  }
+  if (lock.reclaimed) logger.warn('[LOCK] Reclaimed a stale lock from a crashed prior run');
 
   const pool = createPool();
 
@@ -782,13 +895,30 @@ async function main() {
 
     logger.info(`[MAIN] Found ${segments.length} pending segment(s)`);
 
-    // Process in batches of MAX_CONCURRENT
+    // Clean up any worktrees orphaned by a prior crashed run before we start.
+    if (!DRY_RUN) await pruneStaleWorktrees();
+
+    // Plan file-scope-safe batches: no two lanes in the same batch may write
+    // the same file, so parallel lanes can never collide at merge/PR time.
+    const batches = planBatches(segments, MAX_CONCURRENT);
     const results = [];
-    for (let i = 0; i < segments.length; i += MAX_CONCURRENT) {
-      const batch = segments.slice(i, i + MAX_CONCURRENT);
-      logger.info(`[MAIN] Running batch ${Math.floor(i / MAX_CONCURRENT) + 1}: ${batch.map(s => `seg-${s.id}`).join(', ')}`);
+    let spentUsd = 0;
+    let stoppedForBudget = false;
+    for (let b = 0; b < batches.length; b += 1) {
+      // Budget guardrail: stop starting new batches once the run's accumulated
+      // spend hits BUILDER_MAX_RUN_USD (0 = unlimited). Protects a limited
+      // wallet from a runaway multi-lane run; remaining segments stay pending.
+      if (MAX_RUN_USD > 0 && spentUsd >= MAX_RUN_USD) {
+        stoppedForBudget = true;
+        const skipped = batches.slice(b).flat().length;
+        logger.warn(`[BUDGET] Run spend est $${spentUsd.toFixed(4)} reached cap $${MAX_RUN_USD} — stopping. ${skipped} segment(s) left pending.`);
+        break;
+      }
+      const batch = batches[b];
+      logger.info(`[MAIN] Running batch ${b + 1}/${batches.length}: ${batch.map(s => `seg-${s.id}`).join(', ')}`);
       const batchResults = await Promise.all(batch.map(seg => processSegment(pool, seg)));
       results.push(...batchResults);
+      spentUsd += batchResults.reduce((s, r) => s + (r.economics?.estimatedUsd || 0), 0);
     }
 
     // Summary
@@ -796,8 +926,30 @@ async function main() {
     const blocked = results.filter(r => r.status === 'needs_human' || r.status === 'blocked').length;
     const failed  = results.filter(r => r.status === 'failed' || r.status === 'error').length;
 
+    const byAgent = {};
+    for (const r of results) {
+      const a = r.economics?.agent;
+      if (!a) continue;
+      byAgent[a] = byAgent[a] || { estimatedUsd: 0, totalTokens: 0, segments: 0 };
+      byAgent[a].estimatedUsd += r.economics.estimatedUsd || 0;
+      byAgent[a].totalTokens += r.economics.totalTokens || 0;
+      byAgent[a].segments += 1;
+    }
+    for (const a of Object.keys(byAgent)) byAgent[a].estimatedUsd = parseFloat(byAgent[a].estimatedUsd.toFixed(5));
+    const economics = {
+      totalEstimatedUsd: parseFloat(results.reduce((s, r) => s + (r.economics?.estimatedUsd || 0), 0).toFixed(4)),
+      totalTokens: results.reduce((s, r) => s + (r.economics?.totalTokens || 0), 0),
+      byAgent,
+      budgetUsd: MAX_RUN_USD || null,
+      stoppedForBudget,
+    };
+    if (stoppedForBudget) {
+      logger.warn(`[BUDGET] Run halted at cap $${MAX_RUN_USD}. Raise BUILDER_MAX_RUN_USD or re-run to continue remaining segments.`);
+    }
+
     logger.info('══════════════════════════════════════════════════');
     logger.info(`  DONE: ${done}  |  NEEDS HUMAN: ${blocked}  |  FAILED: ${failed}`);
+    logger.info(`  COST: est $${economics.totalEstimatedUsd}  |  tokens=${economics.totalTokens}`);
     logger.info(`  Log: ${LOG_FILE}`);
     logger.info('══════════════════════════════════════════════════');
 
@@ -809,12 +961,14 @@ async function main() {
       projectFilter,
       totalSegments: segments.length,
       done, blocked, failed,
+      economics,
       results,
       logFile: LOG_FILE,
     }, null, 2));
 
   } finally {
     await pool.end();
+    releaseLock(LOCK_PATH, { pid: process.pid });
   }
 }
 

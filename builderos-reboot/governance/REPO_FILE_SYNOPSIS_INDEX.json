@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T19:14:55.595Z",
+  "generated_at": "2026-07-05T19:16:56.024Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11167,
+  "file_count": 11174,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21582,8 +21582,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3368448,
-      "mtime": "2026-07-05T19:14:50.080Z",
-      "indexed_at": "2026-07-05T19:14:55.595Z"
+      "mtime": "2026-07-05T19:16:50.819Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -34902,6 +34902,13 @@
       "indexed_at": "2026-07-05T19:11:13.600Z"
     },
     {
+      "path": "db/migrations/20260705_build_economics.sql",
+      "synopsis": "Database migration — 20260705_build_economics.sql.",
+      "bytes": 1698,
+      "mtime": "2026-07-05T19:16:17.074Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z"
+    },
+    {
       "path": "db/migrations/20260705_create_agreements_table.sql",
       "synopsis": "Database migration — 20260705_create_agreements_table.sql.",
       "bytes": 368,
@@ -35087,8 +35094,8 @@
       "path": "db/migrations/20260705_repair_prospect_sites_schema.sql",
       "synopsis": "Database migration — repair prospect_sites table to match prospect-pipeline.js expectations.",
       "bytes": 4546,
-      "mtime": "2026-07-05T19:14:28.963Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z"
+      "mtime": "2026-07-05T19:15:02.710Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
@@ -37102,9 +37109,9 @@
     {
       "path": "docs/ENV_REGISTRY.md",
       "synopsis": "ENV_REGISTRY.md — Environment Variable Registry",
-      "bytes": 34403,
-      "mtime": "2026-07-03T21:46:43.729Z",
-      "indexed_at": "2026-07-05T19:11:13.600Z"
+      "bytes": 36592,
+      "mtime": "2026-07-05T19:16:17.074Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z"
     },
     {
       "path": "docs/ENVIRONMENT_SETUP.md",
@@ -38636,8 +38643,8 @@
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
       "bytes": 9605,
-      "mtime": "2026-07-05T19:14:28.963Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z"
+      "mtime": "2026-07-05T19:15:02.710Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
@@ -38846,8 +38853,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 581090,
-      "mtime": "2026-07-05T19:14:28.964Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z"
+      "mtime": "2026-07-05T19:15:33.138Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39167,9 +39174,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 55507,
-      "mtime": "2026-07-03T21:46:43.844Z",
-      "indexed_at": "2026-07-05T19:11:13.600Z"
+      "bytes": 63701,
+      "mtime": "2026-07-05T19:16:17.075Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -39195,17 +39202,17 @@
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 6595,
-      "mtime": "2026-07-05T19:14:45.891Z",
-      "indexed_at": "2026-07-05T19:14:55.595Z",
+      "bytes": 6521,
+      "mtime": "2026-06-29T17:21:08.011Z",
+      "indexed_at": "2026-07-05T19:11:13.600Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 57720,
-      "mtime": "2026-07-05T19:14:45.891Z",
-      "indexed_at": "2026-07-05T19:14:55.595Z"
+      "bytes": 54134,
+      "mtime": "2026-07-05T19:15:02.712Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -39386,16 +39393,16 @@
       "path": "docs/products/white-label/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 553,
-      "mtime": "2026-07-05T19:14:28.965Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z",
+      "mtime": "2026-07-05T19:15:02.712Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/white-label/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — White Label",
       "bytes": 8572,
-      "mtime": "2026-07-05T19:14:28.965Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z"
+      "mtime": "2026-07-05T19:15:02.713Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z"
     },
     {
       "path": "docs/products/WHITELABEL.md",
@@ -61485,8 +61492,8 @@
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
       "bytes": 29546,
-      "mtime": "2026-07-05T19:14:28.966Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z",
+      "mtime": "2026-07-05T19:15:02.713Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "synopsis_index_only": true
     },
     {
@@ -64182,9 +64189,9 @@
     {
       "path": "routes/builder-supervisor-routes.js",
       "synopsis": "routes/builder-supervisor-routes.js",
-      "bytes": 8181,
-      "mtime": "2026-06-29T17:21:08.500Z",
-      "indexed_at": "2026-07-05T19:11:13.600Z",
+      "bytes": 10727,
+      "mtime": "2026-07-05T19:16:17.076Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -65250,9 +65257,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 20319,
-      "mtime": "2026-07-05T19:14:45.891Z",
-      "indexed_at": "2026-07-05T19:14:55.595Z",
+      "bytes": 18144,
+      "mtime": "2026-07-05T19:15:02.713Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -65443,8 +65450,8 @@
       "path": "routes/white-label-routes.js",
       "synopsis": "Exports createWhiteLabelRoutes — routes/white-label-routes.js.",
       "bytes": 6851,
-      "mtime": "2026-07-05T19:14:28.966Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z",
+      "mtime": "2026-07-05T19:15:33.139Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "ssot": [
         "docs/products/white-label/PRODUCT_HOME.md"
       ]
@@ -65669,6 +65676,26 @@
       "indexed_at": "2026-07-05T19:11:13.600Z"
     },
     {
+      "path": "scripts/autonomy/builder-agents.mjs",
+      "synopsis": "scripts/autonomy/builder-agents.mjs — model-agnostic \"hands\" for the builder supervisor.",
+      "bytes": 15639,
+      "mtime": "2026-07-05T19:16:17.077Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/autonomy/builder-batching.mjs",
+      "synopsis": "scripts/autonomy/builder-batching.mjs — concurrency-safe batch planner for the builder supervisor.",
+      "bytes": 1783,
+      "mtime": "2026-07-05T19:16:17.077Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/autonomy/builder-queue.json",
       "synopsis": "Script — Builder Queue.",
       "bytes": 3393,
@@ -65677,11 +65704,21 @@
       "synopsis_index_only": true
     },
     {
+      "path": "scripts/autonomy/builder-runlock.mjs",
+      "synopsis": "scripts/autonomy/builder-runlock.mjs — single-run lock for the builder supervisor.",
+      "bytes": 1709,
+      "mtime": "2026-07-05T19:16:17.077Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/autonomy/builder-supervisor.js",
       "synopsis": "scripts/autonomy/builder-supervisor.js",
-      "bytes": 35631,
-      "mtime": "2026-06-30T16:01:52.788Z",
-      "indexed_at": "2026-07-05T19:11:13.600Z",
+      "bytes": 43419,
+      "mtime": "2026-07-05T19:16:17.077Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -79600,6 +79637,16 @@
       "indexed_at": "2026-07-05T19:11:13.600Z"
     },
     {
+      "path": "services/build-economics.js",
+      "synopsis": "services/build-economics.js — record + predict build cost and time.",
+      "bytes": 7070,
+      "mtime": "2026-07-05T19:16:17.077Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/build-proof-contract.js",
       "synopsis": "Canonical build transport proof contract for governed code-changing actions.",
       "bytes": 1980,
@@ -80480,16 +80527,6 @@
       "indexed_at": "2026-07-05T19:11:13.600Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
-      ]
-    },
-    {
-      "path": "services/competitor-benchmark.js",
-      "synopsis": "Competitor Benchmark — scrapes competitor & best-in-industry sites, scores each 1-10 with strengths/weaknesses, synthesizes a design brief for Site Builder.",
-      "bytes": 10498,
-      "mtime": "2026-07-05T19:14:45.891Z",
-      "indexed_at": "2026-07-05T19:14:55.595Z",
-      "ssot": [
-        "docs/products/site-builder/PRODUCT_HOME.md"
       ]
     },
     {
@@ -83430,16 +83467,6 @@
       "indexed_at": "2026-07-05T19:11:13.600Z"
     },
     {
-      "path": "services/presence-audit.js",
-      "synopsis": "Presence Audit — scores a business AND its competitors across every channel (website, Google Business Profile, Instagram, Facebook, LinkedIn) and produces a head-to-head gap/opportunity comparison.",
-      "bytes": 9958,
-      "mtime": "2026-07-05T19:14:45.891Z",
-      "indexed_at": "2026-07-05T19:14:55.595Z",
-      "ssot": [
-        "docs/products/site-builder/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/preview-expiry-cron.js",
       "synopsis": "Preview Site Expiry Cron",
       "bytes": 1789,
@@ -83924,9 +83951,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 45765,
-      "mtime": "2026-07-05T19:14:45.892Z",
-      "indexed_at": "2026-07-05T19:14:55.595Z",
+      "bytes": 35420,
+      "mtime": "2026-06-29T17:21:08.977Z",
+      "indexed_at": "2026-07-05T19:11:13.600Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -84942,9 +84969,9 @@
     {
       "path": "services/white-label-service.js",
       "synopsis": "Exports createWhiteLabelService — services/white-label-service.js.",
-      "bytes": 6509,
-      "mtime": "2026-07-05T19:10:02.205Z",
-      "indexed_at": "2026-07-05T19:11:13.600Z"
+      "bytes": 6537,
+      "mtime": "2026-07-05T19:16:17.077Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z"
     },
     {
       "path": "services/wisdom-truth-auditor.js",
@@ -85266,8 +85293,8 @@
       "path": "startup/database.js",
       "synopsis": "startup/database.js",
       "bytes": 3478,
-      "mtime": "2026-07-05T19:14:28.966Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z",
+      "mtime": "2026-07-05T19:15:02.714Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
@@ -85324,8 +85351,8 @@
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
       "bytes": 47975,
-      "mtime": "2026-07-05T19:14:28.966Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z",
+      "mtime": "2026-07-05T19:15:33.140Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85633,11 +85660,41 @@
       "indexed_at": "2026-07-05T19:11:13.600Z"
     },
     {
+      "path": "tests/build-economics.test.js",
+      "synopsis": "tests/build-economics.test.js — unit tests for build cost/time prediction.",
+      "bytes": 3300,
+      "mtime": "2026-07-05T19:16:17.077Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/build-proof-contract.test.js",
       "synopsis": "js — tests/build-proof-contract.test.js.",
       "bytes": 2133,
       "mtime": "2026-07-03T00:17:45.105Z",
       "indexed_at": "2026-07-05T19:11:13.600Z"
+    },
+    {
+      "path": "tests/builder-agents.test.js",
+      "synopsis": "tests/builder-agents.test.js — unit tests for the model-agnostic builder agent.",
+      "bytes": 7872,
+      "mtime": "2026-07-05T19:16:17.078Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/builder-batching.test.js",
+      "synopsis": "tests/builder-batching.test.js — unit tests for concurrency-safe batch planning.",
+      "bytes": 2072,
+      "mtime": "2026-07-05T19:16:17.078Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/builder-blueprint-gate.test.js",
@@ -85657,6 +85714,16 @@
       "indexed_at": "2026-07-05T19:11:13.600Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/builder-runlock.test.js",
+      "synopsis": "tests/builder-runlock.test.js — unit tests for the single-run supervisor lock.",
+      "bytes": 1960,
+      "mtime": "2026-07-05T19:16:17.078Z",
+      "indexed_at": "2026-07-05T19:16:56.024Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
       ]
     },
     {
@@ -86307,8 +86374,8 @@
       "path": "tests/migration-safety.test.js",
       "synopsis": "Regression guards for startup migration safety.",
       "bytes": 1420,
-      "mtime": "2026-07-05T19:14:28.966Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z",
+      "mtime": "2026-07-05T19:15:02.714Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
@@ -86501,8 +86568,8 @@
       "path": "tests/site-builder-routes-security.test.js",
       "synopsis": "Security regressions for Site Builder routes.",
       "bytes": 3503,
-      "mtime": "2026-07-05T19:14:28.966Z",
-      "indexed_at": "2026-07-05T19:14:39.407Z",
+      "mtime": "2026-07-05T19:15:02.714Z",
+      "indexed_at": "2026-07-05T19:15:59.931Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

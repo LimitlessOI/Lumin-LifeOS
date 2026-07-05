@@ -11,11 +11,14 @@
  *   GET  /api/v1/builder/queue        segments that are queued / in-progress
  *   POST /api/v1/builder/pause        set PAUSE_AUTONOMY-equivalent in memory
  *   POST /api/v1/builder/resume       clear the pause
+ *   GET  /api/v1/builder/economics/estimate  predict a project's build cost + time
+ *   GET  /api/v1/builder/economics/history   recorded per-segment cost/time + averages
  *
  * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';
+import { estimateProjectBuild, getHistoryStats, estimateSegments } from '../services/build-economics.js';
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -177,7 +180,55 @@ export function createBuilderSupervisorRoutes({ requireKey, pool }) {
       const active   = rows.filter(r => r.status === 'in_progress');
       const blocked  = rows.filter(r => r.status === 'blocked');
 
-      res.json({ ok: true, queue: { safe, review, highRisk, active, blocked } });
+      // Projected cost + ETA for the pending queue, learned from past builds.
+      let projected = null;
+      try {
+        const summary = await getHistoryStats(pool);
+        const pending = [...safe, ...review, ...highRisk];
+        projected = {
+          safe: estimateSegments(safe, summary),
+          allPending: estimateSegments(pending, summary),
+        };
+      } catch (_) { /* estimate is best-effort; queue still returns without it */ }
+
+      res.json({ ok: true, queue: { safe, review, highRisk, active, blocked }, projected });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── GET /api/v1/builder/economics/estimate ─────────────────────────────────
+  // Predict cost + time for a project's remaining (or all) segments.
+  router.get('/economics/estimate', requireKey, async (req, res) => {
+    try {
+      const projectId = parseInt(req.query.projectId, 10);
+      if (!Number.isFinite(projectId)) {
+        return res.status(400).json({ ok: false, error: 'projectId query param required (integer)' });
+      }
+      const includeDone = String(req.query.includeDone || '') === 'true';
+      const estimate = await estimateProjectBuild(pool, { projectId, includeDone });
+      res.json({ ok: true, estimate });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── GET /api/v1/builder/economics/history ──────────────────────────────────
+  // Recent recorded segment economics + rolling averages (by stability class).
+  router.get('/economics/history', requireKey, async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit, 10) || 25, 200);
+      const summary = await getHistoryStats(pool);
+      const { rows } = await pool.query(
+        `SELECT id, segment_id, project_id, project_slug, stability_class, agent, model,
+                outcome, review_ms, agent_ms, verify_ms, total_ms,
+                total_tokens, estimated_usd, files_changed, lines_added, lines_deleted, created_at
+           FROM build_economics
+          ORDER BY created_at DESC
+          LIMIT $1`,
+        [limit],
+      );
+      res.json({ ok: true, summary, recent: rows });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

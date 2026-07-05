@@ -59,6 +59,7 @@ data/builder-daemon.lock
 data/token-optimizer-stats.json
 data/bp-priority-guardrails-last-run.json
 data/autonomy.lock
+scripts/autonomy/.supervisor.lock
 data/token-efficiency-log.jsonl
 data/lifeos-operational-grade-log.jsonl
 data/lifeos-operational-grade-last-run.json
