@@ -11,12 +11,12 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/financial-revenue/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-05 |
 
 ---
 **Status:** LIVE (partial)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-07-05 — startup migration runner safety narrowed so missing-object failures retry instead of being marked applied.
 
 ---
 
@@ -142,5 +142,5 @@ Every other financial tool tracks what you earned and spent after the fact; Life
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
-| 2026-07-05 | **Migration runner resilience for idempotent failures.** `startup/database.js` — migrations that fail with provably idempotent errors (`already exists`, `does not exist`, `duplicate key`, `cannot drop`) are now marked as applied and boot continues. These failures can never succeed on retry but previously threw and blocked ALL route registration. Only idempotent failures are swallowed — real failures (FK violations, syntax errors) still throw per Phase 13 policy. | Server boot blocked with `column "created_at" does not exist` from a BuilderOS-generated migration, preventing route registration. | `node -c startup/database.js` |
+| 2026-07-05 | **Migration runner safety repair.** `startup/database.js` now treats only narrow already-present/duplicate errors as safe to mark applied. Missing relation/column failures (`does not exist`) and failed drops retry on next boot instead of being permanently inserted into `schema_migrations`. Added `tests/migration-safety.test.js`. | The earlier 2026-07-05 resilience regex reintroduced the Phase 13 failure mode: a dependency/schema-mismatch migration could be silently marked applied, leaving the DB permanently drifted. | `node --test tests/migration-safety.test.js`; `node --check startup/database.js` |
 | 2026-05-26 | **Phase 13 (BuilderOS) — Migration failure detection fix:** `startup/database.js` (+3 lines, ~4 line change in catch block). Removed `await markApplied(pool, filename).catch(() => {})` from the catch block in `initDatabase()`. Failed migrations now log at `error` level with "will retry on next boot" message and do NOT get inserted into `schema_migrations`. This means failed migrations retry on every boot until they succeed. Root cause of this fix: the `self_repair_memory_events` table was never created because all 3 migration attempts failed (FK reference to `epistemic_facts` table which didn't exist, then BEGIN/COMMIT wrapping issues) but were silently marked as applied — so the failure was permanently hidden. Migrations must be idempotent (`IF NOT EXISTS`) for retry to be safe; most existing migrations already are. `node --check` PASS. Zone 4 file (startup/ path) — GAP-FILL: direct surgical fix, not builder. | Failed migrations silently skipped on every subsequent boot. Phase 13 directive: "stop failed migrations from being marked applied." | `node --check` PASS |

@@ -5,11 +5,12 @@
   "name": "White Label",
   "canonical_home": "docs/products/white-label/PRODUCT_HOME.md",
   "amendment_path": "docs/products/white-label/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-05",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "docs/products/white-label/PRODUCT_HOME.md",
-    "docs/products/white-label/FILE_MANIFEST.json"
+    "docs/products/white-label/FILE_MANIFEST.json",
+    "routes/white-label-routes.js"
   ],
   "shared_dependencies": [],
   "history_anchors": []

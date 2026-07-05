@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createWhiteLabelRoutes — routes/white-label-routes.js.
+ * @ssot docs/products/white-label/PRODUCT_HOME.md
  */
 import express from 'express';
 
@@ -38,14 +39,19 @@ function sanitizeCouncilResponse(result) {
   return result ?? null;
 }
 
-export function createWhiteLabelRoutes(app, ctx) {
-  const { pool, requireKey, logger } = app || {};
-  const callCouncilMember = ctx?.callCouncilMember || app?.callCouncilMember;
+export function createWhiteLabelRoutes(app, ctx = {}) {
+  const { pool, logger } = ctx;
+  const requireKey = ctx.requireKey || ctx.rk || ((_req, res) => {
+    res.status(503).json({ ok: false, error: 'auth_middleware_unavailable' });
+  });
+  const callCouncilMember = ctx.callCouncilMember || ctx.callCouncilWithFailover;
   const router = express.Router();
 
   async function invokeCouncil(prompt, taskType = 'general') {
     if (typeof callCouncilMember !== 'function') {
-      throw new Error('callCouncilMember_unavailable');
+      const err = new Error('council_member_unavailable');
+      err.status = 503;
+      throw err;
     }
     const result = await callCouncilMember('openai', prompt, { taskType });
     return sanitizeCouncilResponse(result);
