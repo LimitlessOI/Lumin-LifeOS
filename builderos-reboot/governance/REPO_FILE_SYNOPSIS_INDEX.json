@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T00:27:52.823Z",
+  "generated_at": "2026-07-05T00:34:34.166Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11048,
+  "file_count": 11049,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21581,9 +21581,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3335818,
-      "mtime": "2026-07-04T20:29:19.308Z",
-      "indexed_at": "2026-07-04T20:29:25.322Z"
+      "bytes": 3335970,
+      "mtime": "2026-07-05T00:34:23.117Z",
+      "indexed_at": "2026-07-05T00:34:34.166Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -34802,6 +34802,13 @@
       "bytes": 426,
       "mtime": "2026-07-04T18:36:17.072Z",
       "indexed_at": "2026-07-04T20:29:25.322Z"
+    },
+    {
+      "path": "db/migrations/20260705_repair_prospect_sites_schema.sql",
+      "synopsis": "Database migration — repair prospect_sites table to match prospect-pipeline.js expectations.",
+      "bytes": 2354,
+      "mtime": "2026-07-05T00:34:16.669Z",
+      "indexed_at": "2026-07-05T00:34:34.166Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
