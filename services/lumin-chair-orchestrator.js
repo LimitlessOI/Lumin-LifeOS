@@ -79,6 +79,7 @@ import {
   loadFounderThreadHistory,
   mergeConversationHistory,
 } from './lumin-thread-context.js';
+import { runChairDirectAgent } from './chair-direct-agent.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -312,6 +313,34 @@ function chairWorkExecutorResponse(ctx, result) {
   };
 }
 
+function chairDirectAgentResponse(ctx, agentRes) {
+  const committed = agentRes.command_ran === true;
+  const truth = finalizeTruth({
+    ok: agentRes.ok !== false,
+    pass_fail: committed ? 'PASS' : 'NO_COMMAND_RAN',
+    command_truth: committed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+    action: 'chair',
+    chair_direct_agent: true,
+    direct_connection: true,
+    build_receipt: agentRes.build || null,
+    human_summary_technical: agentRes.reply,
+    conversational_mode: ctx.conversationalMode,
+  }, 'chair');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('chair', {
+      ...truth,
+      chair_direct_agent: true,
+      direct_connection: true,
+      conversational_mode: ctx.conversationalMode,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+    }),
+  };
+}
+
 function systemActionChairResponse(ctx, result) {
   const truth = finalizeTruth({
     ok: result.ok === true,
@@ -383,6 +412,39 @@ export async function runLuminChairTurn(ctx, deps) {
     mergedHistory = mergeConversationHistory(serverHist, conversationHistory, { max: 24 });
   }
   _clog('loadHistory');
+
+  // ── DIRECT CHAIR AGENT (front door) ──
+  // Adam talks straight to the Chair (the AI): it answers AND acts (real build tool), no keyword-router middle layer.
+  const directAgentOn = process.env.CHAIR_DIRECT_AGENT !== '0';
+  if (directAgentOn && conversationalMode && !shouldDisplayOnly && !ctx.alphaProbe && explicitAction !== 'display') {
+    try {
+      _clog('direct_agent_start');
+      const agentRes = await runChairDirectAgent({
+        message: ctx.originalText || cleanedInput,
+        history: mergedHistory,
+        deps: {
+          callAI: deps.callCouncilMember,
+          routeToBuilder: deps.routeToBuilder,
+          operatorKey: deps.operatorKey,
+          pool: deps.pool,
+        },
+        ctx: {
+          userId: resolvedUserId,
+          userHandle: ctx.userHandle || userHandle || null,
+          user_role,
+        },
+      });
+      _clog(`direct_agent_done ok=${agentRes?.ok} cmd=${agentRes?.command_ran}`);
+      if (agentRes && agentRes.reply) {
+        return chairDirectAgentResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+          agentRes,
+        );
+      }
+    } catch (agentErr) {
+      _clog(`direct_agent_error: ${agentErr.message} — falling back to legacy routing`);
+    }
+  }
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
   const actionSource = ctx.originalText || cleanedInput;
