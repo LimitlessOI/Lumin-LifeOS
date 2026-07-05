@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: scripts/verify-project.mjs — verifies a project's structure/acceptance gates.
+ */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
