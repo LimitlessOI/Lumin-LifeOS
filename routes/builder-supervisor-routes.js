@@ -18,7 +18,7 @@
  */
 
 import { Router } from 'express';
-import { estimateProjectBuild, getHistoryStats } from '../services/build-economics.js';
+import { estimateProjectBuild, getHistoryStats, estimateSegments } from '../services/build-economics.js';
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -180,7 +180,18 @@ export function createBuilderSupervisorRoutes({ requireKey, pool }) {
       const active   = rows.filter(r => r.status === 'in_progress');
       const blocked  = rows.filter(r => r.status === 'blocked');
 
-      res.json({ ok: true, queue: { safe, review, highRisk, active, blocked } });
+      // Projected cost + ETA for the pending queue, learned from past builds.
+      let projected = null;
+      try {
+        const summary = await getHistoryStats(pool);
+        const pending = [...safe, ...review, ...highRisk];
+        projected = {
+          safe: estimateSegments(safe, summary),
+          allPending: estimateSegments(pending, summary),
+        };
+      } catch (_) { /* estimate is best-effort; queue still returns without it */ }
+
+      res.json({ ok: true, queue: { safe, review, highRisk, active, blocked }, projected });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

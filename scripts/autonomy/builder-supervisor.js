@@ -464,6 +464,12 @@ async function processSegment(pool, segment) {
   let verifyMs = 0;
   let diffStats = { files: 0, added: 0, deleted: 0 };
   let lastResult = null;
+  const econSnapshot = () => ({
+    estimatedUsd: lastResult?.usage?.estimatedUsd || 0,
+    totalTokens: lastResult?.usage?.totalTokens || 0,
+    agent: lastResult?.agent || AGENT_KIND,
+    totalMs: Date.now() - startTime,
+  });
 
   try {
     // Mark in progress
@@ -603,7 +609,7 @@ async function processSegment(pool, segment) {
       logger.warn(`[TASK] seg-${id} blocked — needs human: ${reason}`);
       await removeWorktree(wt);
       await deleteBranch(br);
-      return { segmentId: id, status: 'needs_human', reason };
+      return { segmentId: id, status: 'needs_human', reason, economics: econSnapshot() };
     }
 
     // Check exit code
@@ -621,7 +627,7 @@ async function processSegment(pool, segment) {
       });
       await removeWorktree(wt);
       await deleteBranch(br);
-      return { segmentId: id, status: 'failed', exitCode: result.exitCode };
+      return { segmentId: id, status: 'failed', exitCode: result.exitCode, economics: econSnapshot() };
     }
 
     // Protected file enforcement — verify builder only touched allowed files
@@ -769,7 +775,7 @@ async function processSegment(pool, segment) {
     }
 
     logger.info(`[TASK] seg-${id} DONE${prUrl ? ` — PR: ${prUrl}` : ' (no file changes)'}`);
-    return { segmentId: id, status: 'done', prUrl, elapsedMinutes: result.elapsedMinutes };
+    return { segmentId: id, status: 'done', prUrl, elapsedMinutes: result.elapsedMinutes, economics: econSnapshot() };
 
   } catch (err) {
     logger.error(`[TASK] seg-${id} threw: ${err.message}`);
@@ -806,7 +812,7 @@ async function processSegment(pool, segment) {
       try { await deleteBranch(br); } catch (_) {}
     }
 
-    return { segmentId: id, status: 'error', error: err.message };
+    return { segmentId: id, status: 'error', error: err.message, economics: econSnapshot() };
   }
 }
 
@@ -856,8 +862,25 @@ async function main() {
     const blocked = results.filter(r => r.status === 'needs_human' || r.status === 'blocked').length;
     const failed  = results.filter(r => r.status === 'failed' || r.status === 'error').length;
 
+    const byAgent = {};
+    for (const r of results) {
+      const a = r.economics?.agent;
+      if (!a) continue;
+      byAgent[a] = byAgent[a] || { estimatedUsd: 0, totalTokens: 0, segments: 0 };
+      byAgent[a].estimatedUsd += r.economics.estimatedUsd || 0;
+      byAgent[a].totalTokens += r.economics.totalTokens || 0;
+      byAgent[a].segments += 1;
+    }
+    for (const a of Object.keys(byAgent)) byAgent[a].estimatedUsd = parseFloat(byAgent[a].estimatedUsd.toFixed(5));
+    const economics = {
+      totalEstimatedUsd: parseFloat(results.reduce((s, r) => s + (r.economics?.estimatedUsd || 0), 0).toFixed(4)),
+      totalTokens: results.reduce((s, r) => s + (r.economics?.totalTokens || 0), 0),
+      byAgent,
+    };
+
     logger.info('══════════════════════════════════════════════════');
     logger.info(`  DONE: ${done}  |  NEEDS HUMAN: ${blocked}  |  FAILED: ${failed}`);
+    logger.info(`  COST: est $${economics.totalEstimatedUsd}  |  tokens=${economics.totalTokens}`);
     logger.info(`  Log: ${LOG_FILE}`);
     logger.info('══════════════════════════════════════════════════');
 
@@ -869,6 +892,7 @@ async function main() {
       projectFilter,
       totalSegments: segments.length,
       done, blocked, failed,
+      economics,
       results,
       logFile: LOG_FILE,
     }, null, 2));
