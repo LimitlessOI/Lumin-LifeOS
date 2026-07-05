@@ -56,6 +56,7 @@ test('openai tool-loop writes allowed files, jails paths, enforces allowlist', a
       return {
         ok: true,
         json: async () => ({
+          usage: { prompt_tokens: 1000, completion_tokens: 500, total_tokens: 1500 },
           choices: [{ message: { content: '', tool_calls: [
             { id: 'c1', function: { name: 'write_file', arguments: JSON.stringify({ path: 'services/foo.js', content: 'export const x = 1;\n' }) } },
             { id: 'c2', function: { name: 'write_file', arguments: JSON.stringify({ path: '../escape.js', content: 'bad' }) } },
@@ -67,6 +68,7 @@ test('openai tool-loop writes allowed files, jails paths, enforces allowlist', a
     return {
       ok: true,
       json: async () => ({
+        usage: { prompt_tokens: 2000, completion_tokens: 500, total_tokens: 2500 },
         choices: [{ message: { content: '', tool_calls: [
           { id: 'c4', function: { name: 'node_check', arguments: JSON.stringify({ path: 'services/foo.js' }) } },
           { id: 'c5', function: { name: 'finish', arguments: JSON.stringify({ summary: 'wrote foo' }) } },
@@ -89,6 +91,10 @@ test('openai tool-loop writes allowed files, jails paths, enforces allowlist', a
     assert.ok(!fs.existsSync(path.join(cwd, 'notallowed.js')), 'allowlist enforced');
     assert.ok(r.toolsUsed.includes('node_check'), 'node_check executed');
     assert.match(r.stdout, /wrote foo/);
+    assert.equal(r.usage.totalTokens, 4000, 'usage summed across turns');
+    assert.equal(r.usage.calls, 2, 'usage call count');
+    // gpt-4o-mini default: (3000/1e6*0.15) + (1000/1e6*0.6) = 0.00045 + 0.0006 = 0.00105
+    assert.equal(r.usage.estimatedUsd, 0.00105, 'estimated cost computed');
   } finally {
     globalThis.fetch = originalFetch;
     fs.rmSync(cwd, { recursive: true, force: true });

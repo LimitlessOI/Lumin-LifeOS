@@ -167,6 +167,23 @@ function jailPath(cwd, relInput) {
   return { ok: true, abs, rel };
 }
 
+// Approximate USD per 1M tokens by model (input/output). Overridable via env so
+// price changes never require a code edit. Unknown models fall back to the
+// cheapest default so cost is estimated conservatively rather than dropped.
+const COST_PER_1M = {
+  'gpt-4o-mini': { in: 0.15, out: 0.6 },
+  'gpt-4o': { in: 2.5, out: 10 },
+  'gpt-4.1': { in: 2, out: 8 },
+  'gpt-4.1-mini': { in: 0.4, out: 1.6 },
+  'gpt-4.1-nano': { in: 0.1, out: 0.4 },
+};
+
+function estimateCostUsd(model, promptTokens, completionTokens, env = process.env) {
+  const inRate = Number(env.BUILDER_OPENAI_COST_IN_PER_1M) || COST_PER_1M[model]?.in || COST_PER_1M['gpt-4o-mini'].in;
+  const outRate = Number(env.BUILDER_OPENAI_COST_OUT_PER_1M) || COST_PER_1M[model]?.out || COST_PER_1M['gpt-4o-mini'].out;
+  return parseFloat((((promptTokens / 1e6) * inRate) + ((completionTokens / 1e6) * outRate)).toFixed(5));
+}
+
 async function callOpenAi({ apiKey, model, messages }) {
   const res = await fetch(OPENAI_URL, {
     method: 'POST',
@@ -194,6 +211,8 @@ async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env
   let events = 0;
   let needsHuman = null;
   let finished = null;
+  const usage = { promptTokens: 0, completionTokens: 0, totalTokens: 0, calls: 0, model, estimatedUsd: 0 };
+  const withUsage = (r) => ({ ...r, usage: { ...usage, estimatedUsd: estimateCostUsd(model, usage.promptTokens, usage.completionTokens, env) } });
   const scopeNote = allowSet
     ? `\n\nYou may ONLY write to these files: ${[...allowSet].join(', ')}. Writes elsewhere are rejected.`
     : '';
@@ -213,13 +232,20 @@ async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env
     try {
       response = await callOpenAi({ apiKey, model, messages });
     } catch (err) {
-      return { ...errorResult(`openai call failed: ${err.message}`, AGENT_OPENAI), elapsedMinutes: elapsed(startTime), toolsUsed, eventCount: events };
+      return withUsage({ ...errorResult(`openai call failed: ${err.message}`, AGENT_OPENAI), elapsedMinutes: elapsed(startTime), toolsUsed, eventCount: events });
     }
     events += 1;
+    const u = response?.usage;
+    if (u) {
+      usage.promptTokens += u.prompt_tokens || 0;
+      usage.completionTokens += u.completion_tokens || 0;
+      usage.totalTokens += u.total_tokens || 0;
+      usage.calls += 1;
+    }
     const choice = response?.choices?.[0];
     const msg = choice?.message;
     if (!msg) {
-      return { ...errorResult('openai returned no message', AGENT_OPENAI), elapsedMinutes: elapsed(startTime), toolsUsed, eventCount: events };
+      return withUsage({ ...errorResult('openai returned no message', AGENT_OPENAI), elapsedMinutes: elapsed(startTime), toolsUsed, eventCount: events });
     }
 
     const toolCalls = msg.tool_calls || [];
@@ -262,12 +288,12 @@ async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env
 
   const elapsedMinutes = elapsed(startTime);
   if (needsHuman) {
-    return { exitCode: 0, stdout: `NEEDS_HUMAN: ${needsHuman}`, stderr: '', elapsedMinutes, toolsUsed, eventCount: events, agent: AGENT_OPENAI };
+    return withUsage({ exitCode: 0, stdout: `NEEDS_HUMAN: ${needsHuman}`, stderr: '', elapsedMinutes, toolsUsed, eventCount: events, agent: AGENT_OPENAI });
   }
   if (finished === null) {
-    return { exitCode: 1, stdout: '', stderr: `openai agent hit turn budget (${turnBudget}) without finishing`, elapsedMinutes, toolsUsed, eventCount: events, agent: AGENT_OPENAI };
+    return withUsage({ exitCode: 1, stdout: '', stderr: `openai agent hit turn budget (${turnBudget}) without finishing`, elapsedMinutes, toolsUsed, eventCount: events, agent: AGENT_OPENAI });
   }
-  return { exitCode: 0, stdout: finished || 'done', stderr: '', elapsedMinutes, toolsUsed, eventCount: events, agent: AGENT_OPENAI };
+  return withUsage({ exitCode: 0, stdout: finished || 'done', stderr: '', elapsedMinutes, toolsUsed, eventCount: events, agent: AGENT_OPENAI });
 }
 
 async function execTool(name, args, { cwd, allowSet }) {

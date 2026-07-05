@@ -568,7 +568,10 @@ async function processSegment(pool, segment) {
     });
 
     const elapsedHours = parseFloat((result.elapsedMinutes / 60).toFixed(3));
-    logger.info(`[TASK] seg-${id} finished in ${result.elapsedMinutes}min, exit=${result.exitCode}, tools=[${(result.toolsUsed || []).join(',')}]`);
+    const costNote = result.usage
+      ? `, tokens=${result.usage.totalTokens} (est $${result.usage.estimatedUsd})`
+      : '';
+    logger.info(`[TASK] seg-${id} finished in ${result.elapsedMinutes}min, exit=${result.exitCode}, agent=${result.agent || AGENT_KIND}, tools=[${(result.toolsUsed || []).join(',')}]${costNote}`);
 
     // Log stdout to file
     const taskLogPath = path.join(LOG_DIR, `seg-${id}-${TIMESTAMP}.log`);
