@@ -16,6 +16,7 @@
 ---
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
+**Last Updated:** 2026-07-05 — builder supervisor is now model-agnostic: `scripts/autonomy/builder-agents.mjs` abstracts the per-lane coding agent (the "hands") behind `runBuilderAgent({ kind, ... })`, and `builder-supervisor.js` selects it via `BUILDER_AGENT` (default: OpenAI when `OPENAI_API_KEY` present, else Claude CLI). The OpenAI agent is a bounded tool-loop (list_dir/read_file/write_file/node_check/finish/needs_human) path-jailed to the lane worktree and honoring `allowed_files`. Lets each concurrent lane run on cheap OpenAI hands instead of the unavailable/expensive Claude CLI — the biggest lever on cost-per-product. Safety gate now checks the selected agent's availability instead of hard-requiring the Claude CLI.
 **Last Updated:** 2026-06-29 — never-stop product factory scheduler started in boot-domains.js
 **Last Updated:** 2026-07-03 — Legacy overlay retirement (cleanup batch 6): `startup/routes/server-routes.js` file-write allowlist no longer includes the now-archived `public/overlay/command-center.html` (only `public/overlay/command-center.js` + `package.json` remain servable/writable). The 12 forbidden overlay prototypes were archived to `docs/history/legacy-overlays/` with old `/overlay/*.html` paths 301-redirecting to `/lifeos?direct_system=1`; governed under redirect-and-archive (no live 404s, reversible).
 **Last Updated:** 2026-07-01 — Railway runtime selection is now hard-locked to `founder_builder` regardless of stale full-runtime flags. Local salvage/full-runtime work may still opt into `full`, but Railway production can no longer drift back into the broader legacy/full lane during founder-builder alpha.
@@ -75,6 +76,8 @@ docs/products/project-governance/PRODUCT_HOME.md
 docs/products/project-governance/FILE_MANIFEST.json
 docs/products/project-governance/READINESS_CHECKLIST.md
 routes/builder-supervisor-routes.js
+scripts/autonomy/builder-supervisor.js
+scripts/autonomy/builder-agents.mjs
 scripts/verify-project.mjs
 scripts/check-coupling.mjs
 scripts/ssot-staleness-check.mjs
@@ -228,6 +231,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-07-05 | **`scripts/autonomy/builder-agents.mjs`** (new) + **`scripts/autonomy/builder-supervisor.js`** — extracted a model-agnostic `BuilderAgent` (`runBuilderAgent`, `resolveAgentKind`, `agentAvailability`); supervisor selects the per-lane agent via `BUILDER_AGENT` and delegates the Claude CLI path through `claudeRunner` (behavior unchanged) while adding a native OpenAI tool-loop agent (path-jailed to the worktree, `allowed_files`-enforced). Safety gate now validates the selected agent instead of always requiring the Claude CLI. | Adam: build the builder for multiple lanes + scalability, and use cheap OpenAI as the hands to squeeze every dollar. The Claude CLI is unavailable in the Railway/CI environment and expensive; OpenAI-per-lane is the cost lever. | AM19 | `node --check` both files + `node --test tests/builder-agents.test.js` PASS |
 | 2026-06-30 | `services/runtime-modes.js` — added explicit runtime profile helpers (`getRuntimeProfile`, `isFullRuntimeProfile`, `isFounderBuilderRuntimeProfile`) and made `founder_builder` the default profile. | The system needed a machine-enforced distinction between founder/builder alpha runtime and the wider legacy/full product runtime so BuilderOS and founder proofing stop booting the whole historical surface by default. | AM19 | local syntax PASS |
 | 2026-07-01 | `services/runtime-modes.js` — Railway is now unconditionally hard-locked to `founder_builder`; local/full salvage may still opt into `full`, but Railway ignores stale full-runtime unlock flags. This supersedes the earlier same-day row that still described a conditional Railway escape hatch. | Production logs showed the broader legacy/full runtime was still booting old product systems on Railway. Founder-builder alpha needs a real fail-closed lane, not a paper guard that old env flags can bypass. | AM19 | `node --test tests/runtime-modes.test.js` PASS |
 | 2026-07-01 | `services/runtime-modes.js` — Railway now stays on `founder_builder` unless `LIFEOS_ALLOW_FULL_RUNTIME_ON_RAILWAY=true` is also set alongside the existing full-runtime flags. | Production was still able to drift back into the broader legacy runtime even though BuilderOS founder alpha is the active system lane. The lock makes Railway fail closed to the builder-first runtime until full runtime is deliberately re-authorized. | AM19 | local mode snapshot PASS |

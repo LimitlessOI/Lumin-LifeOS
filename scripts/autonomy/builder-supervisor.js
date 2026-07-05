@@ -42,6 +42,7 @@ import pg from 'pg';
 import { reviewSegment, formatCouncilSummary } from '../../services/builder-council-review.js';
 import { scoreOutcome } from '../../services/model-performance.js';
 import { isAutonomyPaused, isDirectedMode } from '../../services/runtime-modes.js';
+import { resolveAgentKind, agentAvailability, runBuilderAgent } from './builder-agents.mjs';
 
 const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -57,6 +58,9 @@ const CLAUDE_BIN         = process.env.CLAUDE_BIN
   ?? (fs.existsSync(LOCAL_CLAUDE_BIN) ? LOCAL_CLAUDE_BIN : '/Users/adamhopkins/.local/bin/claude');
 const ALLOWED_TOOLS      = 'Read,Edit,Write,Bash,Glob,Grep';
 const MAX_TURNS          = parseInt(process.env.BUILDER_MAX_TURNS ?? '30', 10);
+// Which coding agent is the "hands" for each lane. OpenAI (cheap) is preferred
+// when a key is present; the Claude CLI remains available via BUILDER_AGENT=claude-cli.
+const AGENT_KIND         = resolveAgentKind(process.env);
 const WORKTREE_BASE      = path.resolve(ROOT, '..', 'builder-worktrees');
 const GITHUB_TOKEN       = process.env.GITHUB_TOKEN;
 const GITHUB_REPO        = process.env.GITHUB_REPO ?? 'adamhopkins/Lumin-LifeOS';
@@ -108,8 +112,9 @@ function assertSafeToRun() {
   if (isAutonomyPaused()) {
     throw new Error('PAUSE_AUTONOMY=1 — builder supervisor paused');
   }
-  if (!fs.existsSync(CLAUDE_BIN)) {
-    throw new Error(`Claude Code CLI not found at ${CLAUDE_BIN} — set CLAUDE_BIN env var`);
+  const avail = agentAvailability(AGENT_KIND, { claudeBinExists: fs.existsSync(CLAUDE_BIN), env: process.env });
+  if (!avail.ok) {
+    throw new Error(avail.reason);
   }
 }
 
@@ -551,8 +556,16 @@ async function processSegment(pool, segment) {
 
     // Build and run prompt (with any council guidance appended)
     const prompt = buildPrompt(segment) + councilGuidance;
-    logger.info(`[TASK] Spawning Claude Code for seg-${id}...`);
-    const result = await spawnClaude(prompt, wt);
+    logger.info(`[TASK] Running ${AGENT_KIND} agent for seg-${id}...`);
+    const result = await runBuilderAgent({
+      kind: AGENT_KIND,
+      prompt,
+      cwd: wt,
+      logger,
+      allowedFiles: segment.allowed_files,
+      maxTurns: MAX_TURNS,
+      claudeRunner: spawnClaude,
+    });
 
     const elapsedHours = parseFloat((result.elapsedMinutes / 60).toFixed(3));
     logger.info(`[TASK] seg-${id} finished in ${result.elapsedMinutes}min, exit=${result.exitCode}, tools=[${(result.toolsUsed || []).join(',')}]`);
@@ -756,7 +769,7 @@ async function main() {
   ensureDir(LOG_DIR);
   logger.info('══════════════════════════════════════════════════');
   logger.info('  LifeOS Builder Supervisor starting');
-  logger.info(`  max-concurrent=${MAX_CONCURRENT} | max-turns=${MAX_TURNS} | dry-run=${DRY_RUN}`);
+  logger.info(`  agent=${AGENT_KIND} | max-concurrent=${MAX_CONCURRENT} | max-turns=${MAX_TURNS} | dry-run=${DRY_RUN}`);
   if (projectFilter) logger.info(`  project-filter=${projectFilter}`);
   logger.info('══════════════════════════════════════════════════');
 
