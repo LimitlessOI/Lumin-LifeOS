@@ -122,6 +122,36 @@ test('openai agent does not retry a non-transient 400', async () => {
   }
 });
 
+test('openai agent honors a per-segment model override', async () => {
+  const originalFetch = globalThis.fetch;
+  let seenModel = null;
+  globalThis.fetch = async (_url, opts) => {
+    seenModel = JSON.parse(opts.body).model;
+    return {
+      ok: true,
+      json: async () => ({
+        usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+        choices: [{ message: { content: '', tool_calls: [
+          { id: 'f', function: { name: 'finish', arguments: JSON.stringify({ summary: 'ok' }) } },
+        ] } }],
+      }),
+    };
+  };
+  try {
+    const r = await runBuilderAgent({
+      kind: AGENT_OPENAI,
+      prompt: 'x',
+      cwd: os.tmpdir(),
+      model: 'gpt-4o',
+      env: { OPENAI_API_KEY: `sk-${'x'.repeat(20)}`, BUILDER_OPENAI_MODEL: 'gpt-4o-mini' },
+    });
+    assert.equal(seenModel, 'gpt-4o', 'explicit model override wins over env default');
+    assert.equal(r.usage.model, 'gpt-4o');
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test('openai tool-loop writes allowed files, jails paths, enforces allowlist', async () => {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'builder-wt-'));
   const originalFetch = globalThis.fetch;

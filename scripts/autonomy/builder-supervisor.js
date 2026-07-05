@@ -68,6 +68,12 @@ const MAX_TURNS          = parseInt(process.env.BUILDER_MAX_TURNS ?? '30', 10);
 // Which coding agent is the "hands" for each lane. OpenAI (cheap) is preferred
 // when a key is present; the Claude CLI remains available via BUILDER_AGENT=claude-cli.
 const AGENT_KIND         = resolveAgentKind(process.env);
+// Cost lever: let each stability class run on a different (cheaper/stronger)
+// OpenAI model, e.g. BUILDER_MODEL_SAFE=gpt-4o-mini, BUILDER_MODEL_REVIEW=gpt-4o.
+function resolveModelForSegment(segment) {
+  const cls = String(segment?.stability_class || '').toUpperCase();
+  return (cls && process.env[`BUILDER_MODEL_${cls}`]) || process.env.BUILDER_OPENAI_MODEL || undefined;
+}
 const WORKTREE_BASE      = path.resolve(ROOT, '..', 'builder-worktrees');
 const GITHUB_TOKEN       = process.env.GITHUB_TOKEN;
 const GITHUB_REPO        = process.env.GITHUB_REPO ?? 'adamhopkins/Lumin-LifeOS';
@@ -603,6 +609,7 @@ async function processSegment(pool, segment) {
       prompt,
       cwd: wt,
       logger,
+      model: resolveModelForSegment(segment),
       allowedFiles: segment.allowed_files,
       maxTurns: MAX_TURNS,
       claudeRunner: spawnClaude,

@@ -232,10 +232,10 @@ async function callOpenAi({ apiKey, model, messages, timeoutMs, retries = 3, bas
   throw lastErr;
 }
 
-async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env = process.env }) {
+async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, model: modelOverride, env = process.env }) {
   const startTime = Date.now();
   const apiKey = String(env.OPENAI_API_KEY || '').trim();
-  const model = String(env.BUILDER_OPENAI_MODEL || env.OPENAI_MODEL || 'gpt-4o-mini').trim();
+  const model = String(modelOverride || env.BUILDER_OPENAI_MODEL || env.OPENAI_MODEL || 'gpt-4o-mini').trim();
   const turnBudget = Number.isFinite(maxTurns) && maxTurns > 0 ? maxTurns : 30;
   const callTimeoutMs = Number(env.BUILDER_OPENAI_CALL_TIMEOUT_MS) || 120000;
   const deadlineMs = Number(env.BUILDER_AGENT_TIMEOUT_MS) || 900000; // 15 min hard wall-clock cap
