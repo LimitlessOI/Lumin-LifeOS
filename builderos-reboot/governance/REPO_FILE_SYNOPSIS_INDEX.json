@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T00:38:49.625Z",
+  "generated_at": "2026-07-05T00:42:49.953Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11049,
   "files": [
@@ -38355,9 +38355,9 @@
     {
       "path": "docs/products/financial-revenue/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Financial Revenue",
-      "bytes": 8948,
-      "mtime": "2026-07-03T13:23:32.277Z",
-      "indexed_at": "2026-07-04T20:29:25.322Z"
+      "bytes": 9601,
+      "mtime": "2026-07-05T00:42:42.969Z",
+      "indexed_at": "2026-07-05T00:42:49.953Z"
     },
     {
       "path": "docs/products/FINANCIALREVENUE.md",
@@ -84375,9 +84375,9 @@
     {
       "path": "startup/database.js",
       "synopsis": "startup/database.js",
-      "bytes": 2842,
-      "mtime": "2026-07-03T13:23:32.613Z",
-      "indexed_at": "2026-07-04T20:29:25.322Z",
+      "bytes": 3402,
+      "mtime": "2026-07-05T00:41:57.337Z",
+      "indexed_at": "2026-07-05T00:42:49.953Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]

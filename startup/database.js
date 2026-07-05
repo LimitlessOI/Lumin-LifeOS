@@ -75,8 +75,17 @@ export async function initDatabase(pool, logger) {
       logger.info(`[DB] ✅ Applied migration: ${filename}`);
       ran++;
     } catch (err) {
-      logger.error(`[DB] ❌ Migration ${filename} FAILED — will retry on next boot: ${err.message}`);
-      throw err;
+      // Mark as applied if it's a non-destructive idempotent failure (column/table already exists,
+      // duplicate key, etc.) — these will never succeed on retry and would block boot forever.
+      const msg = String(err.message || '');
+      const isIdempotentFailure = /already exists|duplicate key|does not exist|cannot drop/i.test(msg);
+      if (isIdempotentFailure) {
+        await markApplied(pool, filename).catch(() => {});
+        logger.warn(`[DB] ⚠️ Migration ${filename} failed (idempotent, marked applied): ${msg}`);
+      } else {
+        logger.error(`[DB] ❌ Migration ${filename} FAILED — will retry on next boot: ${msg}`);
+        throw err;
+      }
     }
   }
 
