@@ -44,7 +44,8 @@ import { scoreOutcome } from '../../services/model-performance.js';
 import { isAutonomyPaused, isDirectedMode } from '../../services/runtime-modes.js';
 import { resolveAgentKind, agentAvailability, runBuilderAgent } from './builder-agents.mjs';
 import { planBatches } from './builder-batching.mjs';
-import { acquireLock, releaseLock } from './builder-runlock.mjs';
+import { loopControl, sleep } from './builder-loop.mjs';
+import { acquireLock, releaseLock, refreshLock } from './builder-runlock.mjs';
 import { recordBuildEconomics } from '../../services/build-economics.js';
 
 const execFileAsync = promisify(execFile);
@@ -59,6 +60,15 @@ const MAX_CONCURRENT     = parseInt(process.env.BUILDER_MAX_CONCURRENT ?? '3', 1
 const MAX_RUN_USD        = Number(process.env.BUILDER_MAX_RUN_USD) || 0;
 // Max pending segments pulled into a single run (batched by MAX_CONCURRENT).
 const QUEUE_LIMIT        = Math.max(1, parseInt(process.env.BUILDER_QUEUE_LIMIT ?? '20', 10) || 20);
+// "Never idle" continuous mode: after draining the queue, keep polling for new
+// priorities and building until the wallet cap is hit. Off by default so a
+// one-shot cron invocation still behaves as a single pass.
+const CONTINUOUS         = String(process.env.BUILDER_CONTINUOUS ?? '').toLowerCase() === 'true';
+const LOOP_IDLE_MS       = Math.max(1000, Number(process.env.BUILDER_LOOP_IDLE_MS) || 60000);
+// Safety caps (0 = unlimited). MAX_IDLE_CYCLES bounds empty polls; MAX_CYCLES
+// bounds total cycles. Set both to 0 for a truly never-stop worker.
+const LOOP_MAX_IDLE      = Math.max(0, parseInt(process.env.BUILDER_LOOP_MAX_IDLE_CYCLES ?? '0', 10) || 0);
+const LOOP_MAX_CYCLES    = Math.max(0, parseInt(process.env.BUILDER_LOOP_MAX_CYCLES ?? '0', 10) || 0);
 // Prefer the project-local npm binary (version-pinned) over the global install.
 // The @anthropic-ai/claude-code npm package installs the binary at node_modules/.bin/claude.
 const LOCAL_CLAUDE_BIN   = path.join(ROOT, 'node_modules', '.bin', 'claude');
@@ -884,41 +894,86 @@ async function main() {
   const pool = createPool();
 
   try {
-    const segments = await fetchPendingSegments(pool);
-    if (segments.length === 0) {
-      logger.info('[MAIN] No safe pending segments found — nothing to do');
-      logger.info('[MAIN] Hint: projects must have build_ready=TRUE to be picked up.');
-      logger.info('[MAIN] See docs/products/project-governance/READINESS_CHECKLIST.md to qualify a project,');
-      logger.info('[MAIN] then call POST /api/v1/projects/:slug/readiness/mark-ready');
-      return;
-    }
-
-    logger.info(`[MAIN] Found ${segments.length} pending segment(s)`);
-
     // Clean up any worktrees orphaned by a prior crashed run before we start.
     if (!DRY_RUN) await pruneStaleWorktrees();
 
-    // Plan file-scope-safe batches: no two lanes in the same batch may write
-    // the same file, so parallel lanes can never collide at merge/PR time.
-    const batches = planBatches(segments, MAX_CONCURRENT);
+    if (CONTINUOUS) {
+      logger.info(`[LOOP] Continuous mode ON — will keep building priorities (idle poll ${LOOP_IDLE_MS}ms, max-idle=${LOOP_MAX_IDLE || '∞'}, max-cycles=${LOOP_MAX_CYCLES || '∞'}, budget=${MAX_RUN_USD ? `$${MAX_RUN_USD}` : '∞'})`);
+    }
+
     const results = [];
     let spentUsd = 0;
     let stoppedForBudget = false;
-    for (let b = 0; b < batches.length; b += 1) {
-      // Budget guardrail: stop starting new batches once the run's accumulated
-      // spend hits BUILDER_MAX_RUN_USD (0 = unlimited). Protects a limited
-      // wallet from a runaway multi-lane run; remaining segments stay pending.
-      if (MAX_RUN_USD > 0 && spentUsd >= MAX_RUN_USD) {
-        stoppedForBudget = true;
-        const skipped = batches.slice(b).flat().length;
-        logger.warn(`[BUDGET] Run spend est $${spentUsd.toFixed(4)} reached cap $${MAX_RUN_USD} — stopping. ${skipped} segment(s) left pending.`);
+    let totalSegments = 0;
+    let cycle = 0;
+    let idleCycles = 0;
+
+    // ── Never-idle run loop ──────────────────────────────────────────────────
+    // Drain the queue, then (in continuous mode) poll for newly-added priorities
+    // and keep building until the wallet cap, a cycle/idle cap, or (one-shot) an
+    // empty queue stops us.
+    for (;;) {
+      cycle += 1;
+      // Heartbeat the lock so a long run isn't reclaimed as a "stale" crash.
+      refreshLock(LOCK_PATH, { pid: process.pid, now: Date.now() });
+
+      const segments = await fetchPendingSegments(pool);
+      const decision = loopControl({
+        pendingCount: segments.length,
+        continuous: CONTINUOUS,
+        spentUsd,
+        maxRunUsd: MAX_RUN_USD,
+        cycle,
+        maxCycles: LOOP_MAX_CYCLES,
+        idleCycles,
+        maxIdleCycles: LOOP_MAX_IDLE,
+      });
+
+      if (decision.action === 'stop') {
+        if (decision.reason === 'budget_cap') stoppedForBudget = true;
+        if (decision.reason === 'queue_empty' && cycle === 1) {
+          logger.info('[MAIN] No safe pending segments found — nothing to do');
+          logger.info('[MAIN] Hint: projects must have build_ready=TRUE to be picked up.');
+          logger.info('[MAIN] See docs/products/project-governance/READINESS_CHECKLIST.md to qualify a project,');
+          logger.info('[MAIN] then call POST /api/v1/projects/:slug/readiness/mark-ready');
+        } else {
+          logger.info(`[LOOP] Stopping after ${cycle} cycle(s) — reason=${decision.reason}`);
+        }
         break;
       }
-      const batch = batches[b];
-      logger.info(`[MAIN] Running batch ${b + 1}/${batches.length}: ${batch.map(s => `seg-${s.id}`).join(', ')}`);
-      const batchResults = await Promise.all(batch.map(seg => processSegment(pool, seg)));
-      results.push(...batchResults);
-      spentUsd += batchResults.reduce((s, r) => s + (r.economics?.estimatedUsd || 0), 0);
+
+      if (decision.action === 'idle') {
+        idleCycles += 1;
+        logger.info(`[LOOP] Queue empty — idle poll ${idleCycles}${LOOP_MAX_IDLE ? `/${LOOP_MAX_IDLE}` : ''}, sleeping ${LOOP_IDLE_MS}ms for new priorities`);
+        await sleep(LOOP_IDLE_MS);
+        continue;
+      }
+
+      // action === 'process'
+      idleCycles = 0;
+      totalSegments += segments.length;
+      logger.info(`[LOOP] Cycle ${cycle}: found ${segments.length} pending segment(s)`);
+
+      // Plan file-scope-safe batches: no two lanes in the same batch may write
+      // the same file, so parallel lanes can never collide at merge/PR time.
+      const batches = planBatches(segments, MAX_CONCURRENT);
+      for (let b = 0; b < batches.length; b += 1) {
+        // Budget guardrail: stop starting new batches once accumulated spend
+        // hits BUILDER_MAX_RUN_USD (0 = unlimited). Protects a limited wallet.
+        if (MAX_RUN_USD > 0 && spentUsd >= MAX_RUN_USD) {
+          stoppedForBudget = true;
+          const skipped = batches.slice(b).flat().length;
+          logger.warn(`[BUDGET] Run spend est $${spentUsd.toFixed(4)} reached cap $${MAX_RUN_USD} — stopping. ${skipped} segment(s) left pending.`);
+          break;
+        }
+        const batch = batches[b];
+        logger.info(`[MAIN] Running batch ${b + 1}/${batches.length}: ${batch.map(s => `seg-${s.id}`).join(', ')}`);
+        const batchResults = await Promise.all(batch.map(seg => processSegment(pool, seg)));
+        results.push(...batchResults);
+        spentUsd += batchResults.reduce((s, r) => s + (r.economics?.estimatedUsd || 0), 0);
+      }
+
+      if (stoppedForBudget) break;
     }
 
     // Summary
@@ -959,7 +1014,9 @@ async function main() {
       runAt: new Date().toISOString(),
       dryRun: DRY_RUN,
       projectFilter,
-      totalSegments: segments.length,
+      continuous: CONTINUOUS,
+      cycles: cycle,
+      totalSegments,
       done, blocked, failed,
       economics,
       results,

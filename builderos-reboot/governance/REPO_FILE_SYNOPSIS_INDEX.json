@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T19:17:23.988Z",
+  "generated_at": "2026-07-05T19:23:41.807Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11179,
+  "file_count": 11181,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37109,9 +37109,9 @@
     {
       "path": "docs/ENV_REGISTRY.md",
       "synopsis": "ENV_REGISTRY.md — Environment Variable Registry",
-      "bytes": 36592,
-      "mtime": "2026-07-05T19:16:17.074Z",
-      "indexed_at": "2026-07-05T19:17:21.882Z"
+      "bytes": 37410,
+      "mtime": "2026-07-05T19:23:16.730Z",
+      "indexed_at": "2026-07-05T19:23:41.807Z"
     },
     {
       "path": "docs/ENVIRONMENT_SETUP.md",
@@ -39174,9 +39174,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 63701,
-      "mtime": "2026-07-05T19:16:17.075Z",
-      "indexed_at": "2026-07-05T19:17:21.882Z"
+      "bytes": 64622,
+      "mtime": "2026-07-05T19:22:56.954Z",
+      "indexed_at": "2026-07-05T19:23:41.807Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -65706,6 +65706,16 @@
       ]
     },
     {
+      "path": "scripts/autonomy/builder-loop.mjs",
+      "synopsis": "scripts/autonomy/builder-loop.mjs — \"never idle\" continuous-run control for the builder supervisor.",
+      "bytes": 1834,
+      "mtime": "2026-07-05T19:20:45.122Z",
+      "indexed_at": "2026-07-05T19:23:41.807Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "scripts/autonomy/builder-queue.json",
       "synopsis": "Script — Builder Queue.",
       "bytes": 3393,
@@ -65716,9 +65726,9 @@
     {
       "path": "scripts/autonomy/builder-runlock.mjs",
       "synopsis": "scripts/autonomy/builder-runlock.mjs — single-run lock for the builder supervisor.",
-      "bytes": 1709,
-      "mtime": "2026-07-05T19:16:17.077Z",
-      "indexed_at": "2026-07-05T19:17:21.882Z",
+      "bytes": 2239,
+      "mtime": "2026-07-05T19:20:52.466Z",
+      "indexed_at": "2026-07-05T19:23:41.807Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -65726,9 +65736,9 @@
     {
       "path": "scripts/autonomy/builder-supervisor.js",
       "synopsis": "scripts/autonomy/builder-supervisor.js",
-      "bytes": 43419,
-      "mtime": "2026-07-05T19:16:17.077Z",
-      "indexed_at": "2026-07-05T19:17:21.882Z",
+      "bytes": 46146,
+      "mtime": "2026-07-05T19:21:52.154Z",
+      "indexed_at": "2026-07-05T19:23:41.807Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -85757,6 +85767,16 @@
       ]
     },
     {
+      "path": "tests/builder-loop.test.js",
+      "synopsis": "tests/builder-loop.test.js — unit tests for the never-idle continuous-run control.",
+      "bytes": 1884,
+      "mtime": "2026-07-05T19:22:13.718Z",
+      "indexed_at": "2026-07-05T19:23:41.807Z",
+      "ssot": [
+        "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/builder-outcome-verifier.test.js",
       "synopsis": "Regression: wrong commit content cannot pass requested-outcome verification.",
       "bytes": 2726,
@@ -85769,9 +85789,9 @@
     {
       "path": "tests/builder-runlock.test.js",
       "synopsis": "tests/builder-runlock.test.js — unit tests for the single-run supervisor lock.",
-      "bytes": 1960,
-      "mtime": "2026-07-05T19:16:17.078Z",
-      "indexed_at": "2026-07-05T19:17:21.882Z",
+      "bytes": 2681,
+      "mtime": "2026-07-05T19:22:30.310Z",
+      "indexed_at": "2026-07-05T19:23:41.807Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]

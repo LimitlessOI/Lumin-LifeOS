@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { acquireLock, releaseLock, isLockStale } from '../scripts/autonomy/builder-runlock.mjs';
+import { acquireLock, releaseLock, refreshLock, isLockStale } from '../scripts/autonomy/builder-runlock.mjs';
 
 const tmpLock = () => path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'runlock-')), '.lock');
 
@@ -47,4 +47,20 @@ test('isLockStale treats missing/corrupt locks as stale', () => {
   assert.equal(isLockStale({}, 100, 50), true);
   assert.equal(isLockStale({ ts: 90 }, 100, 50), false);
   assert.equal(isLockStale({ ts: 10 }, 100, 50), true);
+});
+
+test('refreshLock bumps the owner ts so a long run is not reclaimed as stale', () => {
+  const lp = tmpLock();
+  acquireLock(lp, { pid: 1, now: 0, ttlMs: 1000 });
+  // Without a refresh, now=5000 would be stale (age 5000 > ttl 1000).
+  assert.equal(refreshLock(lp, { pid: 1, now: 4000 }), true);
+  const contender = acquireLock(lp, { pid: 2, now: 4500, ttlMs: 1000 });
+  assert.equal(contender.ok, false); // still fresh thanks to the heartbeat
+  assert.equal(contender.heldBy.pid, 1);
+});
+
+test('refreshLock refuses to bump a lock owned by another pid', () => {
+  const lp = tmpLock();
+  acquireLock(lp, { pid: 1, now: 0, ttlMs: 1000 });
+  assert.equal(refreshLock(lp, { pid: 999, now: 500 }), false);
 });

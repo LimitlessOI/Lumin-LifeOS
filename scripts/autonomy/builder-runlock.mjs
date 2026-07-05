@@ -36,6 +36,20 @@ export function acquireLock(lockPath, { pid, now, ttlMs, fsImpl = fs }) {
   }
 }
 
+// Heartbeat: rewrite our lock's timestamp so a long-running continuous loop is
+// not mistaken for a crashed run and reclaimed by a second invocation.
+export function refreshLock(lockPath, { pid, now, fsImpl = fs } = {}) {
+  try {
+    if (!fsImpl.existsSync(lockPath)) return false;
+    const cur = JSON.parse(fsImpl.readFileSync(lockPath, 'utf8'));
+    if (pid && cur.pid !== pid) return false;
+    fsImpl.writeFileSync(lockPath, JSON.stringify({ pid: cur.pid, ts: now }));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function releaseLock(lockPath, { pid, fsImpl = fs } = {}) {
   try {
     if (!fsImpl.existsSync(lockPath)) return;

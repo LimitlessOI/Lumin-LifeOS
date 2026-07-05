@@ -225,8 +225,14 @@ Controls the autonomous multi-lane build engine (`scripts/autonomy/builder-super
 | `BUILDER_OPENAI_RETRIES` | 🔲 OPTIONAL | Retries on transient 429/5xx/network | `3` | `builder-agents.mjs` |
 | `BUILDER_OPENAI_RETRY_BASE_MS` | 🔲 OPTIONAL | Exponential backoff base | `500` | `builder-agents.mjs` |
 | `BUILDER_LOCK_TTL_MS` | 🔲 OPTIONAL | Stale single-run lock reclaim age | `1800000` | `builder-supervisor.js` |
+| `BUILDER_CONTINUOUS` | 🔲 OPTIONAL | "Never idle" mode — keep polling & building priorities after draining the queue | `false` | `builder-loop.mjs` |
+| `BUILDER_LOOP_IDLE_MS` | 🔲 OPTIONAL | Sleep between empty-queue polls in continuous mode | `60000` | `builder-supervisor.js` |
+| `BUILDER_LOOP_MAX_IDLE_CYCLES` | 🔲 OPTIONAL | Stop after N empty polls; `0` = poll forever | `0` | `builder-supervisor.js` |
+| `BUILDER_LOOP_MAX_CYCLES` | 🔲 OPTIONAL | Stop after N total cycles; `0` = unlimited | `0` | `builder-supervisor.js` |
 
 > **To run cheap OpenAI lanes in prod:** set `OPENAI_API_KEY` **and** `BUILDER_AGENT=openai`. Without the key, lanes fall back to the Claude CLI (unavailable in Railway) and the run exits at the safety gate.
+>
+> **Never-stop worker:** set `BUILDER_CONTINUOUS=true` (with `BUILDER_LOOP_MAX_IDLE_CYCLES=0`, `BUILDER_LOOP_MAX_CYCLES=0`) so the supervisor keeps building queued priorities until tokens/`BUILDER_MAX_RUN_USD` run out. Keep `BUILDER_MAX_RUN_USD` set as the wallet guardrail.
 
 ---
 
