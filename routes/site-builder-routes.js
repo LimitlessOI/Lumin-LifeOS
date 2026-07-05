@@ -22,7 +22,7 @@ import rateLimit from 'express-rate-limit';
 import SiteBuilder, { POS_PARTNERS } from '../services/site-builder.js';
 import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
-import { getRegistryHealth } from '../services/env-registry-map.js';
+
 
 let _siteBuilder = null;
 let _prospectPipeline = null;
@@ -430,17 +430,47 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   /**
    * GET /api/v1/sites/launch-readiness
-   * Revenue readiness check — env vars, blockers, missing needed config.
+   * Site Builder revenue readiness — checks only Site Builder env vars.
    */
   router.get('/launch-readiness', async (req, res) => {
-    const healthReport = getRegistryHealth();
-    const revenueBlockers = (healthReport.revenueBlockers || []).map(i => i.name);
-    const missingNeeded = (healthReport.missingNeeded || []).map(i => i.name);
+    const siteBuilderVars = {
+      POSTMARK_SERVER_TOKEN: { required: true, purpose: 'Cold email sending via Postmark' },
+      EMAIL_FROM: { required: true, purpose: 'Sender email address for outreach' },
+      SLACK_WEBHOOK_URL: { required: false, purpose: 'Warm lead notifications (optional)' },
+    };
+
+    const blockers = [];
+    const missing = [];
+    const present = [];
+
+    for (const [name, info] of Object.entries(siteBuilderVars)) {
+      const val = (process.env[name] || '').trim();
+      if (!val) {
+        if (info.required) blockers.push({ name, purpose: info.purpose });
+        missing.push({ name, purpose: info.purpose, required: info.required });
+      } else {
+        present.push(name);
+      }
+    }
+
+    const capabilities = {
+      site_build: true,
+      preview_serving: true,
+      quality_scoring: true,
+      prospect_db: !!pool,
+      cold_email_sending: !!process.env.POSTMARK_SERVER_TOKEN,
+      pos_partner_referrals: true,
+      follow_up_sequence: !!process.env.POSTMARK_SERVER_TOKEN,
+      slack_notifications: !!process.env.SLACK_WEBHOOK_URL,
+    };
+
     res.json({
       ok: true,
-      ready: revenueBlockers.length === 0 && missingNeeded.length === 0,
-      revenue_blockers: revenueBlockers,
-      missing_needed: missingNeeded,
+      ready: blockers.length === 0,
+      revenue_blockers: blockers,
+      missing: missing,
+      present: present,
+      capabilities,
       checked_at: new Date().toISOString(),
     });
   });
