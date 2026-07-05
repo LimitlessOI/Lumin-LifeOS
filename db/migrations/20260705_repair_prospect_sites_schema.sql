@@ -1,9 +1,7 @@
 -- SYNOPSIS: Database migration — repair prospect_sites table to match prospect-pipeline.js expectations.
 -- The 20260704_create_prospect_sites.sql migration created a minimal table (id UUID, site_name, created_at)
--- that doesn't match the columns prospect-pipeline.js INSERT expects (client_id TEXT PK, business_url, etc.).
--- This migration drops the incorrect table and recreates with the correct schema from 20260313.
-
-DROP TABLE IF EXISTS prospect_sites;
+-- that doesn't match the columns prospect-pipeline.js INSERT expects (client_id TEXT, business_url, etc.).
+-- Repair in place so production prospect rows from the canonical 20260313 migration are never deleted.
 
 CREATE TABLE IF NOT EXISTS prospect_sites (
   client_id         TEXT PRIMARY KEY,
@@ -25,6 +23,56 @@ CREATE TABLE IF NOT EXISTS prospect_sites (
   created_at        TIMESTAMPTZ DEFAULT NOW(),
   updated_at        TIMESTAMPTZ DEFAULT NOW()
 );
+
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS client_id TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS business_url TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS contact_email TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS contact_name TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS business_name TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS preview_url TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS email_sent BOOLEAN DEFAULT FALSE;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'built';
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS deal_value REAL;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS pos_partner TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS industry TEXT;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS metadata JSONB;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS follow_up_count INTEGER DEFAULT 0;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_follow_up_at TIMESTAMPTZ;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_contacted_at TIMESTAMPTZ;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_viewed_at TIMESTAMPTZ;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_name = 'prospect_sites'
+      AND column_name = 'id'
+  ) THEN
+    EXECUTE 'UPDATE prospect_sites SET client_id = id::text WHERE client_id IS NULL';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_name = 'prospect_sites'
+      AND column_name = 'site_name'
+  ) THEN
+    EXECUTE 'UPDATE prospect_sites SET business_url = site_name WHERE business_url IS NULL';
+  END IF;
+END $$;
+
+UPDATE prospect_sites
+   SET client_id = 'prospect_' || md5(ctid::text)
+ WHERE client_id IS NULL;
+
+UPDATE prospect_sites
+   SET business_url = COALESCE(business_name, preview_url, contact_email, client_id)
+ WHERE business_url IS NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_prospect_sites_client_id_unique ON prospect_sites(client_id);
 
 CREATE INDEX IF NOT EXISTS idx_prospect_sites_status ON prospect_sites(status);
 CREATE INDEX IF NOT EXISTS idx_prospect_sites_contact ON prospect_sites(contact_email);

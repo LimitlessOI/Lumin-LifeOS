@@ -17,8 +17,9 @@
  *   createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMember, baseUrl, outreachAutomation });
  */
 
-import { Router } from 'express';
+import express, { Router } from 'express';
 import rateLimit from 'express-rate-limit';
+import path from 'node:path';
 import SiteBuilder, { POS_PARTNERS } from '../services/site-builder.js';
 import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
@@ -112,12 +113,13 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     legacyHeaders: false,
   });
 
-  // Serve preview sites statically at /previews/*
-  app.use('/previews', async (req, res, next) => {
-    const { default: path } = await import('path');
-    const filePath = path.join(process.cwd(), 'public/previews', req.path === '/' ? '/index.html' : req.path);
-    res.sendFile(filePath, (err) => { if (err) next(); });
-  });
+  app.use(
+    '/previews',
+    express.static(path.join(process.cwd(), 'public', 'previews'), {
+      dotfiles: 'ignore',
+      index: 'index.html',
+    })
+  );
 
   /**
    * POST /api/v1/sites/build
@@ -324,12 +326,15 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    */
   router.post('/email-reply-webhook', async (req, res) => {
     const webhookToken = process.env.POSTMARK_WEBHOOK_TOKEN;
-    if (webhookToken) {
-      const provided = req.headers['x-postmark-signature'] || req.headers['x-webhook-token'] || req.query.token;
-      if (!provided || provided !== webhookToken) {
-        logger.warn('[SITE] Reply webhook — invalid token');
-        return res.status(403).json({ ok: false, error: 'invalid token' });
-      }
+    if (!webhookToken) {
+      logger.error('[SITE] Reply webhook disabled — POSTMARK_WEBHOOK_TOKEN is not configured');
+      return res.status(503).json({ ok: false, error: 'webhook not configured' });
+    }
+
+    const provided = req.headers['x-postmark-signature'] || req.headers['x-webhook-token'] || req.query.token;
+    if (!provided || provided !== webhookToken) {
+      logger.warn('[SITE] Reply webhook — invalid token');
+      return res.status(403).json({ ok: false, error: 'invalid token' });
     }
 
     res.json({ ok: true }); // Respond quickly so Postmark doesn't retry

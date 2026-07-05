@@ -11,12 +11,12 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/white-label/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-05 |
 
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-13
+**Last Updated:** 2026-07-05 — route import/registration crash repaired.
 
 ---
 
@@ -74,6 +74,7 @@ The entire LimitlessOS platform packaged as white-label for other agencies, brok
 ## CURRENT STATE
 - **KNOW:** `white_label_configs` table exists in DB
 - **KNOW:** Config endpoints exist in server.js (minimal — ~25 lines)
+- **KNOW:** `routes/white-label-routes.js` imports cleanly and receives runtime dependencies through its route context.
 - **THINK:** The actual response transformation (stripping model names etc.) may not be fully implemented
 - **DON'T KNOW:** Whether any white-label partners are active
 
@@ -134,3 +135,9 @@ White-label config is a DB row — adding a new config field (e.g., `hide_pricin
 
 ### Gate 5 — How We Beat Them
 GoHighLevel sells agencies a white-label CRM; LifeOS sells agencies a white-label AI operating system that generates websites, games, and videos, coaches their clients' sales teams, tracks commitments, and optimizes its own AI costs — a complete business infrastructure they could never build themselves, under their own brand, for the cost of two employee hours per month.
+
+## Change Receipts
+
+| Date | What Changed | Why | Verified |
+|---|---|---|---|
+| 2026-07-05 | `routes/white-label-routes.js` removed the dead `services/council-member.js` import, added its `@ssot` tag, reads `pool`/`requireKey`/`callCouncilMember` from context, and `startup/register-runtime-routes.js` now passes `callCouncilMember` into the route factory. | The route-surface import guard caught a boot-crash risk, and full-runtime registration would also throw because the factory read dependencies from the Express app object. | `node --test tests/spine-import-resolution.test.js`; `node --check routes/white-label-routes.js startup/register-runtime-routes.js` |

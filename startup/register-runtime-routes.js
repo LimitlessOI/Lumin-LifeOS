@@ -783,7 +783,7 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/youtube", createYoutubeRoutes({ pool, requireKey: requireUserOrKey, logger }));
   logger.info('✅ [YOUTUBE] Routes mounted at /api/v1/youtube');
 
-  app.use("/api/v1/white-label", createWhiteLabelRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
+  app.use("/api/v1/white-label", createWhiteLabelRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, callCouncilMember, logger }));
   logger.info('✅ [WHITE_LABEL] Routes mounted at /api/v1/white-label');
 
   app.use("/api/v1/clientcare-billing-recovery", createClientcareBillingRecoveryRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
