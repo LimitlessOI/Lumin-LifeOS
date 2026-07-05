@@ -51,6 +51,7 @@ import { createDeploymentService } from "./services/deployment-service.js";
 import { getCachedResponse, cacheResponse } from "./services/response-cache.js";
 import { registerFounderRuntimeRoutes } from "./startup/register-founder-runtime-routes.js";
 import { registerFounderServerRoutes } from "./startup/routes/founder-server-routes.js";
+import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 _bootLog('all_imports_done');
 import {
@@ -357,6 +358,10 @@ async function bootFounderRuntime() {
     startupHealthState.db = "ok";
     logger.info("✅ Founder-builder database reachable");
     _bootLog('db_ok');
+
+    _bootLog('pre_migrations');
+    await initDatabase(pool, logger);
+    _bootLog('migrations_done');
 
     _bootLog('pre_registerRoutes');
     await registerFounderRuntimeRoutes(app, {

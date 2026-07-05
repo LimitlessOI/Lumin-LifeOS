@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-05T00:34:34.166Z",
+  "generated_at": "2026-07-05T00:38:49.625Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11049,
   "files": [
@@ -38565,9 +38565,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 579299,
-      "mtime": "2026-07-05T00:27:37.217Z",
-      "indexed_at": "2026-07-05T00:27:52.823Z"
+      "bytes": 580240,
+      "mtime": "2026-07-05T00:38:34.681Z",
+      "indexed_at": "2026-07-05T00:38:49.625Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -78453,9 +78453,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 13405,
-      "mtime": "2026-07-04T08:17:41.758Z",
-      "indexed_at": "2026-07-04T20:29:25.322Z",
+      "bytes": 13563,
+      "mtime": "2026-07-05T00:38:19.665Z",
+      "indexed_at": "2026-07-05T00:38:49.625Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
