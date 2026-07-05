@@ -43,6 +43,7 @@ import { reviewSegment, formatCouncilSummary } from '../../services/builder-coun
 import { scoreOutcome } from '../../services/model-performance.js';
 import { isAutonomyPaused, isDirectedMode } from '../../services/runtime-modes.js';
 import { resolveAgentKind, agentAvailability, runBuilderAgent } from './builder-agents.mjs';
+import { recordBuildEconomics } from '../../services/build-economics.js';
 
 const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -458,6 +459,11 @@ async function processSegment(pool, segment) {
   let wt = null;
   let br = null;
   const startTime = Date.now();
+  let reviewMs = 0;
+  let agentMs = 0;
+  let verifyMs = 0;
+  let diffStats = { files: 0, added: 0, deleted: 0 };
+  let lastResult = null;
 
   try {
     // Mark in progress
@@ -494,6 +500,7 @@ async function processSegment(pool, segment) {
     logger.info(`[COUNCIL] Reviewing seg-${id} with ${personaKey} persona (${segment.review_tier || 'tier_2'})...`);
 
     let councilGuidance = '';
+    const reviewStart = Date.now();
     try {
       const review = await reviewSegment({
         segment,
@@ -550,6 +557,7 @@ async function processSegment(pool, segment) {
       // Council failure never blocks the build — log and continue
       logger.warn(`[COUNCIL] Review failed (non-fatal): ${reviewErr.message} — proceeding without review`);
     }
+    reviewMs = Date.now() - reviewStart;
 
     // Create isolated worktree
     ({ wt, br } = await createWorktree(id, slugPart));
@@ -567,6 +575,8 @@ async function processSegment(pool, segment) {
       claudeRunner: spawnClaude,
     });
 
+    lastResult = result;
+    agentMs = Math.round((result.elapsedMinutes || 0) * 60000);
     const elapsedHours = parseFloat((result.elapsedMinutes / 60).toFixed(3));
     const costNote = result.usage
       ? `, tokens=${result.usage.totalTokens} (est $${result.usage.estimatedUsd})`
@@ -644,6 +654,7 @@ async function processSegment(pool, segment) {
       logger.info(`[ENFORCE] seg-${id} file boundary check passed (${changedFiles.length} files, all allowed)`);
     }
 
+    const verifyStart = Date.now();
     // Post-build verification gate — all checks must pass before PR
     const { stdout: jsFilesOut } = await gitInWorktree(wt, 'diff', '--name-only', 'HEAD');
     const changedJsFiles = [...jsFilesOut.split('\n').filter(f => f.endsWith('.js'))];
@@ -699,6 +710,17 @@ async function processSegment(pool, segment) {
       return { segmentId: id, status: 'verification_failed', failedChecks: checkResults.filter(c => !c.passed) };
     }
     logger.info(`[VERIFY] All ${checkResults.length} verification checks passed for seg-${id}`);
+    verifyMs = Date.now() - verifyStart;
+    try {
+      const { stdout: numstat } = await gitInWorktree(wt, 'diff', '--numstat', 'HEAD');
+      for (const line of numstat.split('\n')) {
+        const [a, d] = line.trim().split(/\s+/);
+        if (a === undefined || a === '') continue;
+        diffStats.files += 1;
+        diffStats.added += Number(a) || 0;
+        diffStats.deleted += Number(d) || 0;
+      }
+    } catch (_) { /* diff stats are non-fatal telemetry */ }
 
     // Commit changes
     const hadChanges = await commitWorktreeChanges(wt, title, id);
@@ -731,6 +753,16 @@ async function processSegment(pool, segment) {
       }
     } catch (_) { /* non-fatal */ }
 
+    await recordBuildEconomics(pool, {
+      segmentId: id, projectId: project_id, projectSlug: project_slug,
+      stabilityClass: segment.stability_class, agent: lastResult?.agent || AGENT_KIND,
+      model: lastResult?.usage?.model, outcome: hadChanges ? 'done' : 'no_changes',
+      reviewMs, agentMs, verifyMs, totalMs: Date.now() - startTime,
+      promptTokens: lastResult?.usage?.promptTokens, completionTokens: lastResult?.usage?.completionTokens,
+      totalTokens: lastResult?.usage?.totalTokens, estimatedUsd: lastResult?.usage?.estimatedUsd,
+      filesChanged: diffStats.files, linesAdded: diffStats.added, linesDeleted: diffStats.deleted,
+    });
+
     // Clean up worktree (branch stays for the PR)
     if (fs.existsSync(wt)) {
       try { await git('worktree', 'remove', '--force', wt); } catch (_) {}
@@ -741,6 +773,18 @@ async function processSegment(pool, segment) {
 
   } catch (err) {
     logger.error(`[TASK] seg-${id} threw: ${err.message}`);
+
+    try {
+      await recordBuildEconomics(pool, {
+        segmentId: id, projectId: project_id, projectSlug: project_slug,
+        stabilityClass: segment.stability_class, agent: lastResult?.agent || AGENT_KIND,
+        model: lastResult?.usage?.model, outcome: 'failed',
+        reviewMs, agentMs, verifyMs, totalMs: Date.now() - startTime,
+        promptTokens: lastResult?.usage?.promptTokens, completionTokens: lastResult?.usage?.completionTokens,
+        totalTokens: lastResult?.usage?.totalTokens, estimatedUsd: lastResult?.usage?.estimatedUsd,
+        filesChanged: diffStats.files, linesAdded: diffStats.added, linesDeleted: diffStats.deleted,
+      });
+    } catch (_) {}
 
     try { await markSegmentBlocked(pool, id, err.message.slice(0, 300)); } catch (_) {}
     try {

@@ -178,7 +178,7 @@ const COST_PER_1M = {
   'gpt-4.1-nano': { in: 0.1, out: 0.4 },
 };
 
-function estimateCostUsd(model, promptTokens, completionTokens, env = process.env) {
+export function estimateCostUsd(model, promptTokens, completionTokens, env = process.env) {
   const inRate = Number(env.BUILDER_OPENAI_COST_IN_PER_1M) || COST_PER_1M[model]?.in || COST_PER_1M['gpt-4o-mini'].in;
   const outRate = Number(env.BUILDER_OPENAI_COST_OUT_PER_1M) || COST_PER_1M[model]?.out || COST_PER_1M['gpt-4o-mini'].out;
   return parseFloat((((promptTokens / 1e6) * inRate) + ((completionTokens / 1e6) * outRate)).toFixed(5));
