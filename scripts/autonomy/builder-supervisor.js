@@ -53,6 +53,9 @@ const ROOT = path.resolve(__dirname, '..', '..');
 // ── Config ────────────────────────────────────────────────────────────────────
 
 const MAX_CONCURRENT     = parseInt(process.env.BUILDER_MAX_CONCURRENT ?? '3', 10);
+// Hard spend ceiling per supervisor run in estimated USD (0 = unlimited).
+// Once accumulated lane spend reaches this, no new batches start.
+const MAX_RUN_USD        = Number(process.env.BUILDER_MAX_RUN_USD) || 0;
 // Prefer the project-local npm binary (version-pinned) over the global install.
 // The @anthropic-ai/claude-code npm package installs the binary at node_modules/.bin/claude.
 const LOCAL_CLAUDE_BIN   = path.join(ROOT, 'node_modules', '.bin', 'claude');
@@ -876,11 +879,23 @@ async function main() {
     // the same file, so parallel lanes can never collide at merge/PR time.
     const batches = planBatches(segments, MAX_CONCURRENT);
     const results = [];
+    let spentUsd = 0;
+    let stoppedForBudget = false;
     for (let b = 0; b < batches.length; b += 1) {
+      // Budget guardrail: stop starting new batches once the run's accumulated
+      // spend hits BUILDER_MAX_RUN_USD (0 = unlimited). Protects a limited
+      // wallet from a runaway multi-lane run; remaining segments stay pending.
+      if (MAX_RUN_USD > 0 && spentUsd >= MAX_RUN_USD) {
+        stoppedForBudget = true;
+        const skipped = batches.slice(b).flat().length;
+        logger.warn(`[BUDGET] Run spend est $${spentUsd.toFixed(4)} reached cap $${MAX_RUN_USD} — stopping. ${skipped} segment(s) left pending.`);
+        break;
+      }
       const batch = batches[b];
       logger.info(`[MAIN] Running batch ${b + 1}/${batches.length}: ${batch.map(s => `seg-${s.id}`).join(', ')}`);
       const batchResults = await Promise.all(batch.map(seg => processSegment(pool, seg)));
       results.push(...batchResults);
+      spentUsd += batchResults.reduce((s, r) => s + (r.economics?.estimatedUsd || 0), 0);
     }
 
     // Summary
@@ -902,7 +917,12 @@ async function main() {
       totalEstimatedUsd: parseFloat(results.reduce((s, r) => s + (r.economics?.estimatedUsd || 0), 0).toFixed(4)),
       totalTokens: results.reduce((s, r) => s + (r.economics?.totalTokens || 0), 0),
       byAgent,
+      budgetUsd: MAX_RUN_USD || null,
+      stoppedForBudget,
     };
+    if (stoppedForBudget) {
+      logger.warn(`[BUDGET] Run halted at cap $${MAX_RUN_USD}. Raise BUILDER_MAX_RUN_USD or re-run to continue remaining segments.`);
+    }
 
     logger.info('══════════════════════════════════════════════════');
     logger.info(`  DONE: ${done}  |  NEEDS HUMAN: ${blocked}  |  FAILED: ${failed}`);
