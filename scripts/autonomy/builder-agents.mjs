@@ -184,12 +184,24 @@ export function estimateCostUsd(model, promptTokens, completionTokens, env = pro
   return parseFloat((((promptTokens / 1e6) * inRate) + ((completionTokens / 1e6) * outRate)).toFixed(5));
 }
 
-async function callOpenAi({ apiKey, model, messages }) {
-  const res = await fetch(OPENAI_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, messages, tools: TOOL_DEFS, temperature: 0 }),
-  });
+async function callOpenAi({ apiKey, model, messages, timeoutMs }) {
+  const controller = new AbortController();
+  const ms = Number.isFinite(timeoutMs) && timeoutMs > 0 ? timeoutMs : 120000;
+  const timer = setTimeout(() => controller.abort(), ms);
+  let res;
+  try {
+    res = await fetch(OPENAI_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages, tools: TOOL_DEFS, temperature: 0 }),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err.name === 'AbortError') throw new Error(`openai call timed out after ${ms}ms`);
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
   const raw = await res.json();
   if (!res.ok) {
     const msg = raw?.error?.message || `openai http ${res.status}`;
@@ -203,6 +215,8 @@ async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env
   const apiKey = String(env.OPENAI_API_KEY || '').trim();
   const model = String(env.BUILDER_OPENAI_MODEL || env.OPENAI_MODEL || 'gpt-4o-mini').trim();
   const turnBudget = Number.isFinite(maxTurns) && maxTurns > 0 ? maxTurns : 30;
+  const callTimeoutMs = Number(env.BUILDER_OPENAI_CALL_TIMEOUT_MS) || 120000;
+  const deadlineMs = Number(env.BUILDER_AGENT_TIMEOUT_MS) || 900000; // 15 min hard wall-clock cap
   const allowSet = Array.isArray(allowedFiles) && allowedFiles.length ? new Set(allowedFiles) : null;
 
   if (!apiKey) return errorResult('OPENAI_API_KEY missing', AGENT_OPENAI);
@@ -228,9 +242,12 @@ async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env
   ];
 
   for (let turn = 0; turn < turnBudget; turn += 1) {
+    if (Date.now() - startTime > deadlineMs) {
+      return withUsage({ ...errorResult(`openai agent exceeded wall-clock deadline (${deadlineMs}ms)`, AGENT_OPENAI), elapsedMinutes: elapsed(startTime), toolsUsed, eventCount: events });
+    }
     let response;
     try {
-      response = await callOpenAi({ apiKey, model, messages });
+      response = await callOpenAi({ apiKey, model, messages, timeoutMs: callTimeoutMs });
     } catch (err) {
       return withUsage({ ...errorResult(`openai call failed: ${err.message}`, AGENT_OPENAI), elapsedMinutes: elapsed(startTime), toolsUsed, eventCount: events });
     }

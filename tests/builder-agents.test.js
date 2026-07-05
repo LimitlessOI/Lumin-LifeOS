@@ -46,6 +46,30 @@ test('openai agent fails closed without a key', async () => {
   assert.match(r.stderr, /OPENAI_API_KEY/);
 });
 
+test('openai agent aborts a hung call via per-call timeout', async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = (_url, opts) => new Promise((_resolve, reject) => {
+    // Never resolves on its own — only the AbortController should end it.
+    opts?.signal?.addEventListener('abort', () => {
+      const e = new Error('aborted');
+      e.name = 'AbortError';
+      reject(e);
+    });
+  });
+  try {
+    const r = await runBuilderAgent({
+      kind: AGENT_OPENAI,
+      prompt: 'x',
+      cwd: os.tmpdir(),
+      env: { OPENAI_API_KEY: `sk-${'x'.repeat(20)}`, BUILDER_OPENAI_CALL_TIMEOUT_MS: '50' },
+    });
+    assert.equal(r.exitCode, 1);
+    assert.match(r.stderr, /timed out/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test('openai tool-loop writes allowed files, jails paths, enforces allowlist', async () => {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'builder-wt-'));
   const originalFetch = globalThis.fetch;
