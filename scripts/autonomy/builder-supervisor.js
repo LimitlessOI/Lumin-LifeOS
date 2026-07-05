@@ -43,6 +43,7 @@ import { reviewSegment, formatCouncilSummary } from '../../services/builder-coun
 import { scoreOutcome } from '../../services/model-performance.js';
 import { isAutonomyPaused, isDirectedMode } from '../../services/runtime-modes.js';
 import { resolveAgentKind, agentAvailability, runBuilderAgent } from './builder-agents.mjs';
+import { planBatches } from './builder-batching.mjs';
 import { recordBuildEconomics } from '../../services/build-economics.js';
 
 const execFileAsync = promisify(execFile);
@@ -259,6 +260,26 @@ async function deleteBranch(br) {
   try {
     await git('branch', '-D', br);
   } catch (_) { /* branch may already be pushed */ }
+}
+
+// Remove worktrees orphaned by a crashed/killed prior run so a fresh run starts
+// clean. Runs are serialized (route guards concurrent supervisor spawns), so
+// any seg-* worktree present at startup is stale.
+async function pruneStaleWorktrees() {
+  try {
+    await git('worktree', 'prune');
+    if (fs.existsSync(WORKTREE_BASE)) {
+      for (const d of fs.readdirSync(WORKTREE_BASE)) {
+        if (!d.startsWith('seg-')) continue;
+        const p = worktreePath(d.slice('seg-'.length));
+        await git('worktree', 'remove', '--force', p);
+        try { fs.rmSync(p, { recursive: true, force: true }); } catch (_) {}
+      }
+    }
+    logger.info('[WT] Pruned stale worktrees from prior runs');
+  } catch (e) {
+    logger.warn(`[WT] Prune skipped: ${e.message}`);
+  }
 }
 
 // ── Build the task prompt ─────────────────────────────────────────────────────
@@ -848,11 +869,16 @@ async function main() {
 
     logger.info(`[MAIN] Found ${segments.length} pending segment(s)`);
 
-    // Process in batches of MAX_CONCURRENT
+    // Clean up any worktrees orphaned by a prior crashed run before we start.
+    if (!DRY_RUN) await pruneStaleWorktrees();
+
+    // Plan file-scope-safe batches: no two lanes in the same batch may write
+    // the same file, so parallel lanes can never collide at merge/PR time.
+    const batches = planBatches(segments, MAX_CONCURRENT);
     const results = [];
-    for (let i = 0; i < segments.length; i += MAX_CONCURRENT) {
-      const batch = segments.slice(i, i + MAX_CONCURRENT);
-      logger.info(`[MAIN] Running batch ${Math.floor(i / MAX_CONCURRENT) + 1}: ${batch.map(s => `seg-${s.id}`).join(', ')}`);
+    for (let b = 0; b < batches.length; b += 1) {
+      const batch = batches[b];
+      logger.info(`[MAIN] Running batch ${b + 1}/${batches.length}: ${batch.map(s => `seg-${s.id}`).join(', ')}`);
       const batchResults = await Promise.all(batch.map(seg => processSegment(pool, seg)));
       results.push(...batchResults);
     }
