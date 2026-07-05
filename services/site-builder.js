@@ -29,6 +29,7 @@ import path from 'path';
 import logger from './logger.js';
 import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.js';
 import CompetitorBenchmark from './competitor-benchmark.js';
+import PresenceAudit from './presence-audit.js';
 
 const TAILWIND_CDN = 'https://cdn.tailwindcss.com';
 const ALPINE_CDN = 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js';
@@ -87,12 +88,18 @@ export default class SiteBuilder {
 
       // Step 2b: Benchmark competitors → client-facing scorecard + design brief that grounds generation
       let benchmark = null;
+      let presence = null;
       const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
       if (this.callCouncil && competitorUrls.length > 0) {
         try {
           benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
         } catch (err) {
           logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
+        }
+        try {
+          presence = await this.auditPresence(businessInfo, competitorUrls);
+        } catch (err) {
+          logger.warn('[SITE] presence audit failed (continuing)', { clientId, error: err.message });
         }
       }
 
@@ -153,8 +160,8 @@ export default class SiteBuilder {
       await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
 
       // Client-facing competitor scorecard (only when we actually analyzed competitors)
-      if (benchmark && benchmark.analyzedCount > 0) {
-        await fs.writeFile(path.join(deployDir, 'scorecard.html'), this.generateScorecardHtml(businessInfo, benchmark));
+      if ((benchmark && benchmark.analyzedCount > 0) || presence) {
+        await fs.writeFile(path.join(deployDir, 'scorecard.html'), this.generateScorecardHtml(businessInfo, benchmark, presence));
       }
 
       for (const post of blogPosts) {
@@ -173,9 +180,10 @@ export default class SiteBuilder {
         videos: videos.length,
         qualityReport,
         benchmark,
+        presence,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
-        scorecardUrl: benchmark && benchmark.analyzedCount > 0 ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
+        scorecardUrl: (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
       };
       await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
 
@@ -194,6 +202,7 @@ export default class SiteBuilder {
         posPartner: posPartner.name,
         qualityReport,
         benchmark,
+        presence,
         metadata,
       };
     } catch (err) {
@@ -749,13 +758,23 @@ Return ONLY valid JSON array:
   }
 
   /**
+   * Head-to-head presence audit: scores the business AND competitors across
+   * website/GBP/Instagram/Facebook/LinkedIn and returns a gap/opportunity readout.
+   */
+  async auditPresence(businessInfo, competitorUrls = []) {
+    const audit = new PresenceAudit({ callCouncil: this.callCouncil });
+    return audit.compare({ businessInfo, competitorUrls });
+  }
+
+  /**
    * Render a client-facing competitor scorecard page. Shows each competitor's
    * 1-10 score with what they do well / poorly, and how the new site beats them.
    */
-  generateScorecardHtml(info, benchmark) {
+  generateScorecardHtml(info, benchmark, presence = null) {
     const primary = info.primaryColor || '#7C3AED';
     const accent = info.accentColor || '#EC4899';
     const name = info.businessName || 'Your Business';
+    const presenceSection = presence ? this.generatePresenceSectionHtml(presence) : '';
     const cards = (benchmark?.scorecards || [])
       .map(c => {
         const scoreLabel = c.score != null ? `${c.score}/10` : 'N/A';
@@ -798,17 +817,55 @@ Return ONLY valid JSON array:
   ul{margin:0;padding-left:18px;color:#333;font-size:14px;line-height:1.6}
   .beat{background:#fff;border:2px solid var(--primary);border-radius:16px;padding:24px;margin-top:8px}
   .beat h3{margin:0 0 10px;color:var(--primary)}
+  .section-title{font-size:20px;margin:8px 0 16px}
+  table.presence{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden}
+  table.presence th,table.presence td{padding:12px 14px;text-align:left;border-bottom:1px solid #f0f0f0;font-size:14px}
+  table.presence th{background:#f7f5fb;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#555}
+  .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
+  .b-ahead{background:#dcfce7;color:#166534}.b-behind{background:#fee2e2;color:#991b1b}
+  .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:#f3f4f6;color:#6b7280}
+  .gap{background:#fff;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:16px 0}
 </style></head>
 <body>
 <header>
-  <h1>Competitor Scorecard for ${this.escapeHtml(name)}</h1>
-  <p>An honest look at ${benchmark?.analyzedCount || 0} competitor site(s) — and how your new site beats them.</p>
+  <h1>Presence & Competitor Scorecard for ${this.escapeHtml(name)}</h1>
+  <p>An honest look at where you stand across every channel — and how we help you win.</p>
 </header>
 <main>
-  ${cards || '<p>No competitor sites could be analyzed.</p>'}
+  ${presenceSection}
+  ${cards ? `<h2 class="section-title">Competitor websites, scored</h2>${cards}` : ''}
   ${beat ? `<div class="beat"><h3>How your new site wins</h3><ul>${beat}</ul></div>` : ''}
+  ${!presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
 </main>
 </body></html>`;
+  }
+
+  /**
+   * Render the head-to-head presence section: per-channel you-vs-competitors
+   * table + plain-English gap/opportunity readout.
+   */
+  generatePresenceSectionHtml(presence) {
+    const labels = { website: 'Website', google: 'Google Business', instagram: 'Instagram', facebook: 'Facebook', linkedin: 'LinkedIn' };
+    const verdictBadge = v => {
+      const map = { ahead: ['b-ahead', 'You lead'], behind: ['b-behind', 'Behind'], even: ['b-even', 'Even'], open_lane: ['b-open', 'Open lane'], unknown: ['b-unknown', '—'] };
+      const [cls, txt] = map[v] || map.unknown;
+      return `<span class="badge ${cls}">${txt}</span>`;
+    };
+    const rows = (presence.perChannel || [])
+      .map(c => {
+        const you = c.clientScore != null ? `${c.clientScore}/10` : '—';
+        const comp = c.competitorAvg != null ? `${c.competitorAvg}/10` : (c.competitorsPresent ? 'present' : '—');
+        return `<tr><td>${labels[c.channel] || c.channel}</td><td>${you}</td><td>${comp} <small>(${c.competitorsPresent}/${c.totalCompetitors})</small></td><td>${verdictBadge(c.verdict)}</td></tr>`;
+      })
+      .join('');
+    const gap = presence.gap || {};
+    const quickWins = (gap.quickWins || []).map(w => `<li>${this.escapeHtml(w)}</li>`).join('');
+    return `<h2 class="section-title">Your online presence vs. competitors</h2>
+  <table class="presence">
+    <thead><tr><th>Channel</th><th>You</th><th>Competitors (avg)</th><th>Verdict</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  ${gap.summary ? `<div class="gap"><p>${this.escapeHtml(gap.summary)}</p>${gap.biggestOpportunity ? `<p><strong>Biggest opportunity:</strong> ${this.escapeHtml(gap.biggestOpportunity)}</p>` : ''}${quickWins ? `<p><strong>Quick wins:</strong></p><ul>${quickWins}</ul>` : ''}</div>` : ''}`;
   }
 
   escapeHtml(s) {

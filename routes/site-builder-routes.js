@@ -164,6 +164,26 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * POST /api/v1/sites/presence-report
+   * Head-to-head presence audit — scores the business AND competitors across
+   * website/GBP/Instagram/Facebook/LinkedIn and returns a gap/opportunity readout.
+   * Body: { businessInfo | url, competitorUrls: string[] }
+   */
+  router.post('/presence-report', requireKey, buildLimiter, async (req, res) => {
+    try {
+      const { businessInfo, url, competitorUrls, industry } = req.body;
+      const info = businessInfo || (url ? { sourceUrl: url, website: url, industry } : null);
+      if (!info) return res.status(400).json({ ok: false, error: 'businessInfo or url is required' });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const result = await builder.auditPresence(info, Array.isArray(competitorUrls) ? competitorUrls : []);
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      logger.error('[SITE] Presence report error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * POST /api/v1/sites/prospect
    * Build a mock site for a prospect + send cold outreach email.
    * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo? }

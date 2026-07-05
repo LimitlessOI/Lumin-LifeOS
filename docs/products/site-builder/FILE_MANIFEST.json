@@ -5,7 +5,7 @@
   "name": "Site Builder & Prospect Pipeline",
   "canonical_home": "docs/products/site-builder/PRODUCT_HOME.md",
   "amendment_path": "docs/products/site-builder/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-05",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "docs/products/site-builder/PRODUCT_HOME.md",
@@ -24,6 +24,8 @@
     "services/site-builder-quality-scorer.js",
     "services/site-builder-revenue-service.js",
     "services/site-builder.js",
+    "services/competitor-benchmark.js",
+    "services/presence-audit.js",
     "prompts/lifeos-site-builder.md",
     "scripts/site-builder-prospect-discovery.mjs",
     "scripts/site-builder-batch-rank.mjs",

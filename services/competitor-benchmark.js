@@ -31,6 +31,16 @@ export default class CompetitorBenchmark {
    * we only need text/structure signals for the AI to reason about design quality.
    */
   async scrapeLite(url) {
+    const raw = await this.fetchRaw(url);
+    if (!raw.ok) return { url, ok: false, status: raw.status, error: raw.error };
+    return { url, ok: true, status: raw.status, ...this.extractSignals(raw.html) };
+  }
+
+  /**
+   * Raw HTML fetch with timeout. Returns { url, ok, status, html, error }.
+   * Shared by scrapeLite and the presence auditor (which also needs raw links).
+   */
+  async fetchRaw(url) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
@@ -40,10 +50,10 @@ export default class CompetitorBenchmark {
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LuminBot/1.0; +https://lumin.ai)' },
       });
       const html = await res.text();
-      return { url, ok: res.ok, status: res.status, ...this.extractSignals(html) };
+      return { url, ok: res.ok, status: res.status, html };
     } catch (err) {
-      logger.warn('[BENCHMARK] scrape failed', { url, error: err.message });
-      return { url, ok: false, status: 0, error: err.message };
+      logger.warn('[BENCHMARK] fetch failed', { url, error: err.message });
+      return { url, ok: false, status: 0, html: '', error: err.message };
     } finally {
       clearTimeout(timer);
     }
