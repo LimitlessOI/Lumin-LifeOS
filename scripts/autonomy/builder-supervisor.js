@@ -44,6 +44,7 @@ import { scoreOutcome } from '../../services/model-performance.js';
 import { isAutonomyPaused, isDirectedMode } from '../../services/runtime-modes.js';
 import { resolveAgentKind, agentAvailability, runBuilderAgent } from './builder-agents.mjs';
 import { planBatches } from './builder-batching.mjs';
+import { acquireLock, releaseLock } from './builder-runlock.mjs';
 import { recordBuildEconomics } from '../../services/build-economics.js';
 
 const execFileAsync = promisify(execFile);
@@ -852,6 +853,9 @@ async function processSegment(pool, segment) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
+const LOCK_PATH = path.join(ROOT, 'scripts', 'autonomy', '.supervisor.lock');
+const LOCK_TTL_MS = Number(process.env.BUILDER_LOCK_TTL_MS) || 30 * 60 * 1000;
+
 async function main() {
   ensureDir(LOG_DIR);
   logger.info('══════════════════════════════════════════════════');
@@ -867,6 +871,15 @@ async function main() {
     logger.warn(`[SAFETY] ${e.message} — exiting cleanly`);
     process.exit(0);
   }
+
+  // Single-run lock: refuse to start if another supervisor is already running,
+  // so two runs can't prune each other's worktrees or race on branch names.
+  const lock = acquireLock(LOCK_PATH, { pid: process.pid, now: Date.now(), ttlMs: LOCK_TTL_MS });
+  if (!lock.ok) {
+    logger.warn(`[LOCK] Another supervisor run holds the lock (pid=${lock.heldBy?.pid}) — exiting cleanly`);
+    process.exit(0);
+  }
+  if (lock.reclaimed) logger.warn('[LOCK] Reclaimed a stale lock from a crashed prior run');
 
   const pool = createPool();
 
@@ -955,6 +968,7 @@ async function main() {
 
   } finally {
     await pool.end();
+    releaseLock(LOCK_PATH, { pid: process.pid });
   }
 }
 
