@@ -184,7 +184,9 @@ export function estimateCostUsd(model, promptTokens, completionTokens, env = pro
   return parseFloat((((promptTokens / 1e6) * inRate) + ((completionTokens / 1e6) * outRate)).toFixed(5));
 }
 
-async function callOpenAi({ apiKey, model, messages, timeoutMs }) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function callOpenAiOnce({ apiKey, model, messages, timeoutMs }) {
   const controller = new AbortController();
   const ms = Number.isFinite(timeoutMs) && timeoutMs > 0 ? timeoutMs : 120000;
   const timer = setTimeout(() => controller.abort(), ms);
@@ -204,10 +206,30 @@ async function callOpenAi({ apiKey, model, messages, timeoutMs }) {
   }
   const raw = await res.json();
   if (!res.ok) {
-    const msg = raw?.error?.message || `openai http ${res.status}`;
-    throw new Error(msg);
+    const e = new Error(raw?.error?.message || `openai http ${res.status}`);
+    e.status = res.status;
+    throw e;
   }
   return raw;
+}
+
+// Transient failures (rate limits + 5xx + network drops) are retried with
+// exponential backoff so a scaled multi-lane run rides out provider hiccups.
+async function callOpenAi({ apiKey, model, messages, timeoutMs, retries = 3, baseMs = 500 }) {
+  let lastErr;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      return await callOpenAiOnce({ apiKey, model, messages, timeoutMs });
+    } catch (err) {
+      lastErr = err;
+      const status = err.status;
+      const transient = status === 429 || (status >= 500 && status < 600) || status === undefined;
+      const timedOut = /timed out/.test(err.message || '');
+      if (!transient || timedOut || attempt === retries) throw err;
+      await sleep(baseMs * 2 ** attempt);
+    }
+  }
+  throw lastErr;
 }
 
 async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env = process.env }) {
@@ -217,6 +239,8 @@ async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env
   const turnBudget = Number.isFinite(maxTurns) && maxTurns > 0 ? maxTurns : 30;
   const callTimeoutMs = Number(env.BUILDER_OPENAI_CALL_TIMEOUT_MS) || 120000;
   const deadlineMs = Number(env.BUILDER_AGENT_TIMEOUT_MS) || 900000; // 15 min hard wall-clock cap
+  const retries = Number.isFinite(Number(env.BUILDER_OPENAI_RETRIES)) ? Number(env.BUILDER_OPENAI_RETRIES) : 3;
+  const retryBaseMs = Number(env.BUILDER_OPENAI_RETRY_BASE_MS) || 500;
   const allowSet = Array.isArray(allowedFiles) && allowedFiles.length ? new Set(allowedFiles) : null;
 
   if (!apiKey) return errorResult('OPENAI_API_KEY missing', AGENT_OPENAI);
@@ -247,7 +271,7 @@ async function runOpenAiAgent({ prompt, cwd, logger, allowedFiles, maxTurns, env
     }
     let response;
     try {
-      response = await callOpenAi({ apiKey, model, messages, timeoutMs: callTimeoutMs });
+      response = await callOpenAi({ apiKey, model, messages, timeoutMs: callTimeoutMs, retries, baseMs: retryBaseMs });
     } catch (err) {
       return withUsage({ ...errorResult(`openai call failed: ${err.message}`, AGENT_OPENAI), elapsedMinutes: elapsed(startTime), toolsUsed, eventCount: events });
     }

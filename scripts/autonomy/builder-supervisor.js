@@ -56,6 +56,8 @@ const MAX_CONCURRENT     = parseInt(process.env.BUILDER_MAX_CONCURRENT ?? '3', 1
 // Hard spend ceiling per supervisor run in estimated USD (0 = unlimited).
 // Once accumulated lane spend reaches this, no new batches start.
 const MAX_RUN_USD        = Number(process.env.BUILDER_MAX_RUN_USD) || 0;
+// Max pending segments pulled into a single run (batched by MAX_CONCURRENT).
+const QUEUE_LIMIT        = Math.max(1, parseInt(process.env.BUILDER_QUEUE_LIMIT ?? '20', 10) || 20);
 // Prefer the project-local npm binary (version-pinned) over the global install.
 // The @anthropic-ai/claude-code npm package installs the binary at node_modules/.bin/claude.
 const LOCAL_CLAUDE_BIN   = path.join(ROOT, 'node_modules', '.bin', 'claude');
@@ -146,10 +148,11 @@ async function fetchPendingSegments(pool) {
     sql += ` AND p.slug = $${params.length}`;
   }
 
+  params.push(QUEUE_LIMIT);
   sql += ` ORDER BY
     CASE p.priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END,
     ps.sort_order ASC, ps.id ASC
-    LIMIT 20`;
+    LIMIT $${params.length}`;
 
   const { rows } = await pool.query(sql, params);
   return rows;

@@ -70,6 +70,58 @@ test('openai agent aborts a hung call via per-call timeout', async () => {
   }
 });
 
+test('openai agent retries transient 5xx then succeeds', async () => {
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls += 1;
+    if (calls <= 2) return { ok: false, status: 500, json: async () => ({ error: { message: 'server error' } }) };
+    return {
+      ok: true,
+      json: async () => ({
+        usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 },
+        choices: [{ message: { content: '', tool_calls: [
+          { id: 'f', function: { name: 'finish', arguments: JSON.stringify({ summary: 'ok' }) } },
+        ] } }],
+      }),
+    };
+  };
+  try {
+    const r = await runBuilderAgent({
+      kind: AGENT_OPENAI,
+      prompt: 'x',
+      cwd: os.tmpdir(),
+      env: { OPENAI_API_KEY: `sk-${'x'.repeat(20)}`, BUILDER_OPENAI_RETRY_BASE_MS: '1', BUILDER_OPENAI_RETRIES: '3' },
+    });
+    assert.equal(r.exitCode, 0);
+    assert.equal(calls, 3, 'retried twice then succeeded');
+    assert.match(r.stdout, /ok/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('openai agent does not retry a non-transient 400', async () => {
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls += 1;
+    return { ok: false, status: 400, json: async () => ({ error: { message: 'bad request' } }) };
+  };
+  try {
+    const r = await runBuilderAgent({
+      kind: AGENT_OPENAI,
+      prompt: 'x',
+      cwd: os.tmpdir(),
+      env: { OPENAI_API_KEY: `sk-${'x'.repeat(20)}`, BUILDER_OPENAI_RETRY_BASE_MS: '1' },
+    });
+    assert.equal(r.exitCode, 1);
+    assert.equal(calls, 1, 'no retry on 4xx');
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test('openai tool-loop writes allowed files, jails paths, enforces allowlist', async () => {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'builder-wt-'));
   const originalFetch = globalThis.fetch;
