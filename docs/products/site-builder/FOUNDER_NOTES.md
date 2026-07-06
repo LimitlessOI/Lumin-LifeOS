@@ -11,6 +11,50 @@ Last captured: 2026-07-06
 
 ---
 
+## Founder requirements — 2026-07-06 session (editor + research)
+
+### Live preview editor (client-facing, both modes available)
+- **AI chat + mic box** on the preview: the client types OR speaks (microphone)
+  a plain-language change ("make the hero video bigger, move testimonials up,
+  warmer colors") and the system rewrites the site and reloads. They do not
+  manually touch anything — they give directions, it gets done.
+- **Manual controls** available alongside: drag/reorder sections, click-to-edit
+  text, hide/show sections, color pickers. Both modes coexist — not either/or.
+- **Template switcher** to flip between design variants live.
+- **Color-palette toggle** — palettes are NOT random. Derived from (a) the
+  business's current site brand colors, (b) what competitors use, and (c) proven
+  wellness/conversion color theory.
+
+### Competitor research — DUAL CATEGORY (hard requirement)
+- The subject (Sherry) is BOTH a **midwife** and a **wellness practitioner**.
+- The system must benchmark BOTH categories every time: **home-birth / midwifery
+  sites AND wellness-practitioner sites** — and take the best of each.
+- Analysis must know a business can have multiple practice categories and search
+  competitors for each. Midwifery is the primary comparison but wellness is
+  required too.
+- Actually DO live competitor search (the first wellroundedmomma build did not —
+  no competitor URLs were passed). Look at how competitors do it, what we can do
+  better.
+
+### Socials + YouTube — actively discovered (not just on-page links)
+- Do not only read links present on their website. **Actively search** for their
+  YouTube channel, Instagram, etc. — even if not linked on the site — and LIST
+  what is found.
+- YouTube counts as a social. Sherry has a full YouTube channel; her videos are
+  the highest-trust content and must be pulled into a real "Watch & Learn"
+  gallery (real embeds, not a "coming soon" placeholder).
+
+### Conversion / funnel theory (build toward)
+- One goal per page; remove distractions competing with the primary CTA.
+- Add a low-friction lead magnet (free download / free video) to capture the
+  ~90% not ready to book cold — biggest conversion lever.
+- Video social proof near the CTA; sticky mobile CTA; honest urgency (real
+  limited slots, never fake countdowns).
+- Funnel: hook (video) → value (lead magnet) → trust (real testimonials+video)
+  → low-friction ask (free consult) → automated email follow-up.
+
+---
+
 ## What the product is
 
 A done-for-you website builder for wellness/health businesses. It scrapes a
