@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T22:04:12.710Z",
+  "generated_at": "2026-07-06T22:45:08.773Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 2,
+  "file_count": 3,
   "files": [
     {
       "path": "services/site-builder-competitor-categories.js",
@@ -10,6 +10,13 @@
       "bytes": 3595,
       "mtime": "2026-07-06T21:57:35.729Z",
       "indexed_at": "2026-07-06T21:57:35.729Z"
+    },
+    {
+      "path": "services/site-builder-social-discovery.js",
+      "synopsis": "Exports extractYouTubeChannelId — services/site-builder-social-discovery.js.",
+      "bytes": 9643,
+      "mtime": "2026-07-06T22:45:08.773Z",
+      "indexed_at": "2026-07-06T22:45:08.773Z"
     },
     {
       "path": "services/tmp-probe-hello.js",
