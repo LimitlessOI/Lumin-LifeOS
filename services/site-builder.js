@@ -31,6 +31,7 @@ import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.
 import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
+import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID } from './site-builder-design-systems.js';
 
 const TAILWIND_CDN = 'https://cdn.tailwindcss.com';
 const ALPINE_CDN = 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js';
@@ -41,10 +42,12 @@ const MAX_REPAIR_PASSES = Math.max(0, Number(process.env.SITE_BUILDER_REPAIR_PAS
 const GENERATION_MAX_TOKENS = Number(process.env.SITE_BUILDER_GEN_TOKENS || '14000');
 const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '14000');
 // Design quality is driven mostly by the generation model. claude_sonnet (16k output)
-// produces markedly better design than the free gemini_flash. Env-overridable; on any
-// provider error we fall back to gemini_flash so a build never hard-fails.
+// produces markedly better design. Founder rule (2026-07-06): a PRODUCT never runs on a
+// free-tier model — only strong, paid models are hardwired into what the system ships.
+// Env-overridable; on any provider error we fall back to another STRONG model (gpt-4o),
+// NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
 const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'claude_sonnet';
-const GENERATION_FALLBACK_MODEL = 'gemini_flash';
+const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'openai_gpt';
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
 // reviews, ratings, and facts. Fails closed (no data) when no search provider key is set —
 // never fabricates. Disabled entirely with SITE_BUILDER_ENRICH=false.
@@ -259,6 +262,197 @@ export default class SiteBuilder {
       logger.error('[SITE] Build failed', { clientId, error: err.message });
       return { success: false, clientId, error: err.message };
     }
+  }
+
+  /**
+   * Build MULTIPLE design variants of the same site so the client can toggle
+   * between cutting-edge templates and pick the one they love. Scraping,
+   * real-data enrichment and content stay identical across variants — only the
+   * visual design system changes. Produces a switcher preview page (index.html)
+   * that lets the client cycle through each variant in place.
+   *
+   * options: { variantCount, styleIds:[], enrich, skipRepair, ...buildFromUrl opts }
+   */
+  async buildVariants(targetUrl, options = {}) {
+    const clientId = `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || 3));
+    const systems = pickDesignSystems(count, options.styleIds || []);
+    logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id) });
+
+    try {
+      const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
+
+      if (ENRICHMENT_ENABLED && options.enrich !== false) {
+        try {
+          businessInfo.verifiedData = await this.enrichWithRealData(businessInfo, options);
+        } catch (err) {
+          logger.warn('[SITE] enrichment failed (continuing without external data)', { clientId, error: err.message });
+        }
+      }
+
+      const posPartner = this.selectPosPartner(businessInfo.industry || businessInfo.keywords || []);
+
+      let designBrief = null;
+      const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
+      if (this.callCouncil && competitorUrls.length > 0) {
+        try {
+          const benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
+          designBrief = benchmark?.designBrief || null;
+        } catch (err) {
+          logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
+        }
+      }
+
+      // Shared content (built once, reused across every variant)
+      const blogPosts = await this.generateBlogPosts(businessInfo, 3);
+      const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
+      const sitemap = this.generateSitemap(clientId, blogPosts);
+      const robots = this.generateRobots();
+
+      const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
+      await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
+      await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
+      await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
+      await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
+      for (const post of blogPosts) {
+        const postDir = path.join(deployDir, 'blog', post.slug);
+        await fs.mkdir(postDir, { recursive: true });
+        await fs.writeFile(path.join(postDir, 'index.html'), post.html);
+      }
+
+      const pixel = this.baseUrl
+        ? `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`
+        : '';
+
+      const variants = [];
+      for (const ds of systems) {
+        try {
+          let html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds });
+          html = this.patchSiteHtml(html, businessInfo);
+          let quality = this.scoreSiteHtml(html, businessInfo);
+          if (!options.skipRepair && this.callCouncil && quality.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
+            const repaired = this.patchSiteHtml(
+              await this.improveSiteHtml(html, businessInfo, quality, { clientId, posPartner, pass: 1 }),
+              businessInfo,
+            );
+            const rScore = this.scoreSiteHtml(repaired, businessInfo);
+            if (rScore.scorePct > quality.scorePct) { html = repaired; quality = rScore; }
+          }
+          if (pixel && html.includes('</body>')) html = html.replace('</body>', `${pixel}\n</body>`);
+          const vDir = path.join(deployDir, 'variants', ds.id);
+          await fs.mkdir(vDir, { recursive: true });
+          await fs.writeFile(path.join(vDir, 'index.html'), html);
+          variants.push({ id: ds.id, name: ds.name, blurb: ds.blurb, file: `variants/${ds.id}/index.html`, scorePct: quality.scorePct });
+        } catch (err) {
+          logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
+        }
+      }
+
+      if (!variants.length) throw new Error('all variant generations failed');
+
+      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants);
+      await fs.writeFile(path.join(deployDir, 'index.html'), switcher);
+
+      const metadata = {
+        clientId,
+        targetUrl,
+        businessInfo,
+        posPartner,
+        variants,
+        blogPosts: blogPosts.map((p) => ({ slug: p.slug, title: p.title })),
+        createdAt: new Date().toISOString(),
+        previewUrl: `${this.baseUrl}/previews/${clientId}`,
+        mode: 'variants',
+      };
+      await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
+
+      logger.info('[SITE] Variants deployed', { clientId, count: variants.length, previewUrl: metadata.previewUrl });
+      return {
+        success: true,
+        clientId,
+        previewUrl: metadata.previewUrl,
+        businessName: businessInfo.businessName,
+        variants,
+        posPartner: posPartner.name,
+        metadata,
+      };
+    } catch (err) {
+      logger.error('[SITE] Variant build failed', { clientId, error: err.message });
+      return { success: false, clientId, error: err.message };
+    }
+  }
+
+  /**
+   * Build the variant switcher shell: a top bar of design buttons + an iframe
+   * that swaps between the generated variants, plus a "Use this design" action
+   * that records the client's choice (best-effort beacon).
+   */
+  generateVariantSwitcher(info, clientId, variants) {
+    const name = (info.businessName || 'Your Website').replace(/</g, '&lt;');
+    const selectBase = this.baseUrl ? `${this.baseUrl}/api/v1/sites/select-design` : '';
+    const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, blurb: v.blurb, file: v.file })));
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${name} — Choose your design</title>
+<script src="${TAILWIND_CDN}"></script>
+<style>
+  :root { --bar: #0f172a; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .chip { transition: all .15s ease; }
+  .chip[aria-pressed="true"] { background:#fff; color:#0f172a; font-weight:600; }
+  iframe { border:0; width:100%; height:calc(100vh - 116px); display:block; background:#fff; }
+</style>
+</head>
+<body class="bg-slate-900">
+  <div x-data="switcher()" x-init="init()">
+    <header class="bg-slate-900 text-white px-4 pt-3 pb-3 sticky top-0 z-10 shadow-lg">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <p class="text-xs uppercase tracking-widest text-slate-400">Preview for</p>
+          <h1 class="text-lg font-semibold leading-tight">${name}</h1>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-slate-400 mb-1" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name"></p>
+          <button @click="choose()" class="bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg">✓ Use this design</button>
+        </div>
+      </div>
+      <p class="text-xs text-slate-400 mt-2">Not loving it? Toggle through the designs below — each is a different professionally-designed style.</p>
+      <nav class="mt-2 flex gap-2 overflow-x-auto pb-1">
+        <template x-for="(v,i) in variants" :key="v.id">
+          <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400"
+            :aria-pressed="i===index" @click="show(i)" x-text="v.name"></button>
+        </template>
+      </nav>
+    </header>
+    <iframe :src="current.file" :title="current.name" x-ref="frame"></iframe>
+    <div x-show="saved" x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl">
+      Saved — <span x-text="current.name"></span> selected. We'll be in touch.
+    </div>
+  </div>
+<script src="${ALPINE_CDN}" defer></script>
+<script>
+  function switcher(){
+    return {
+      variants: ${data},
+      index: 0,
+      saved: false,
+      get current(){ return this.variants[this.index]; },
+      init(){ const h = parseInt(new URLSearchParams(location.search).get('v')); if(!isNaN(h) && this.variants[h]) this.index = h; },
+      show(i){ this.index = i; this.saved = false; },
+      choose(){
+        this.saved = true;
+        var base = ${JSON.stringify(selectBase)};
+        if(base){ try { navigator.sendBeacon ? navigator.sendBeacon(base + '?id=${clientId}&style=' + this.current.id) : fetch(base + '?id=${clientId}&style=' + this.current.id, {mode:'no-cors'}); } catch(e){} }
+        setTimeout(()=>{ this.saved = false; }, 4000);
+      },
+    };
+  }
+</script>
+</body>
+</html>`;
   }
 
   /**
@@ -496,6 +690,9 @@ Return ONLY valid JSON:
     const competitorBrief = designBrief?.text
       ? `\n\nCOMPETITOR-INFORMED DESIGN BRIEF (beat the market, do not copy):\n${designBrief.text}`
       : '';
+    const designSystemBlock = options.designSystem
+      ? `\n\n${renderDesignSystemDirectives(options.designSystem)}`
+      : '';
 
     const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
 
@@ -566,7 +763,7 @@ SEO REQUIREMENTS:
 - Internal links between sections
 
 DESIGN INTELLIGENCE:
-${designIntel}${competitorBrief}
+${designIntel}${competitorBrief}${designSystemBlock}
 
 DESIGN REQUIREMENTS:
 - Use Tailwind utility classes for layout and components, plus one concise <style> block for theme tokens and a few intentional visual effects
@@ -584,8 +781,8 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
 
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
-    // Prefer the higher-quality design model (claude_sonnet, 16k output). Fall back to the
-    // free gemini_flash on any provider error so a build never hard-fails.
+    // Prefer the higher-quality design model (claude_sonnet, 16k output). Fall back to another
+    // STRONG paid model (gpt-4o) on any provider error — never a free tier (founder rule).
     // allowModelDowngrade:false prevents selectOptimalModel from overriding to groq_llama (4096 token limit)
     let response;
     try {
@@ -774,7 +971,8 @@ CURRENT HTML:
 ${existingHtml}
 `;
 
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false });
+    // Repair rewrites the actual client-facing site HTML → use the STRONG product model.
+    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
@@ -805,8 +1003,9 @@ Return ONLY valid JSON array:
   }
 ]`;
 
-    // gemini_flash for blog content — 3 posts × 600-800 words each exceeds groq's 4096-token limit
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: 4000, allowModelDowngrade: false });
+    // Blog posts are client-facing product content → use the STRONG product model
+    // (never a free tier). 3 posts × 600-800 words needs long output; claude_sonnet (16k) fits.
+    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), allowModelDowngrade: false });
     try {
       const jsonMatch = response.match(/\[[\s\S]+\]/);
       const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];

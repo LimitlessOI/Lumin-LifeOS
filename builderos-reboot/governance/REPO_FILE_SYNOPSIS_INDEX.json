@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T16:53:52.324Z",
+  "generated_at": "2026-07-06T17:18:23.207Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11183,
+  "file_count": 11185,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39210,9 +39210,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 58927,
-      "mtime": "2026-07-06T16:52:57.287Z",
-      "indexed_at": "2026-07-06T16:53:52.324Z"
+      "bytes": 60997,
+      "mtime": "2026-07-06T17:17:13.523Z",
+      "indexed_at": "2026-07-06T17:18:23.207Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -65267,9 +65267,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 20319,
-      "mtime": "2026-07-06T04:57:07.104Z",
-      "indexed_at": "2026-07-06T16:53:36.587Z",
+      "bytes": 24404,
+      "mtime": "2026-07-06T17:08:40.979Z",
+      "indexed_at": "2026-07-06T17:18:23.207Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -83975,11 +83975,31 @@
       "indexed_at": "2026-07-06T16:53:36.587Z"
     },
     {
+      "path": "services/site-builder-design-systems.js",
+      "synopsis": "Site Builder design-system library.",
+      "bytes": 10904,
+      "mtime": "2026-07-06T17:18:19.475Z",
+      "indexed_at": "2026-07-06T17:18:23.207Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/site-builder-email-templates.js",
       "synopsis": "services/site-builder-email-templates.js",
       "bytes": 3474,
       "mtime": "2026-07-03T13:23:32.593Z",
       "indexed_at": "2026-07-06T16:53:36.587Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/site-builder-logo-studio.js",
+      "synopsis": "Site Builder — Logo Studio.",
+      "bytes": 14273,
+      "mtime": "2026-07-06T17:18:19.487Z",
+      "indexed_at": "2026-07-06T17:18:23.207Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -84031,9 +84051,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 54827,
-      "mtime": "2026-07-06T16:52:57.287Z",
-      "indexed_at": "2026-07-06T16:53:52.324Z",
+      "bytes": 64870,
+      "mtime": "2026-07-06T17:14:31.891Z",
+      "indexed_at": "2026-07-06T17:18:23.207Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
