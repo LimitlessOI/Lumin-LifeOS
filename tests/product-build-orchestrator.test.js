@@ -1,0 +1,104 @@
+/**
+ * SYNOPSIS: js — tests/product-build-orchestrator.test.js.
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
+ */
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  normalizeQueue,
+  selectNextStep,
+  runNextStep,
+  queueSummary,
+  STEP_STATUS,
+} from '../services/product-build-orchestrator.js';
+
+function makeQueue(steps) {
+  return normalizeQueue({ schema: 'product_build_queue_v1', product_id: 'test', verify_script: 'scripts/noop.mjs', steps });
+}
+
+test('normalizeQueue rejects bad schema and missing fields', () => {
+  assert.throws(() => normalizeQueue({ schema: 'nope', steps: [] }));
+  assert.throws(() => normalizeQueue({ schema: 'product_build_queue_v1', steps: [{ task: 'x', target_file: 'y' }] }), /needs an id/);
+  assert.throws(() => normalizeQueue({ schema: 'product_build_queue_v1', steps: [{ id: 'a', task: 't' }] }), /target_file/);
+  assert.throws(() => normalizeQueue({ schema: 'product_build_queue_v1', steps: [{ id: 'a', target_file: 'f' }] }), /task/);
+  assert.throws(() => normalizeQueue({ schema: 'product_build_queue_v1', steps: [
+    { id: 'a', target_file: 'f', task: 't' }, { id: 'a', target_file: 'g', task: 'u' },
+  ] }), /duplicate/);
+});
+
+test('selectNextStep skips founder-gated and respects depends_on', () => {
+  const q = makeQueue([
+    { id: 'gated', target_file: 'f', task: 't', founder_gated: true },
+    { id: 'b', target_file: 'f2', task: 't2', depends_on: ['a'] },
+    { id: 'a', target_file: 'f1', task: 't1' },
+  ]);
+  const first = selectNextStep(q);
+  assert.equal(first.step.id, 'a', 'a has no deps, comes before b which depends on a');
+  assert.deepEqual(first.gated.map((g) => g.id), ['gated']);
+
+  q.steps.find((s) => s.id === 'a').status = STEP_STATUS.DONE;
+  assert.equal(selectNextStep(q).step.id, 'b', 'b unblocks once a is done');
+});
+
+test('runNextStep marks done only when build has SHA AND verify passes', async () => {
+  const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
+  const r = await runNextStep(q, {
+    buildFn: async () => ({ ok: true, commit_sha: 'abc123' }),
+    verifyFn: async () => ({ ok: true }),
+  });
+  assert.equal(r.ok, true);
+  assert.equal(r.verified, true);
+  assert.equal(q.steps[0].status, STEP_STATUS.DONE);
+  assert.equal(q.steps[0].commit_sha, 'abc123');
+});
+
+test('build that claims ok but returns no SHA is treated as failure (no false green)', async () => {
+  const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
+  const r = await runNextStep(q, {
+    buildFn: async () => ({ ok: true }), // no commit_sha
+    verifyFn: async () => ({ ok: true }),
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.stage, 'build');
+  assert.match(r.reason, /no_commit_sha/);
+  assert.equal(q.steps[0].status, STEP_STATUS.PENDING, 'retryable, not done');
+});
+
+test('verify failure keeps step retryable then blocks after maxAttempts (no spin)', async () => {
+  const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
+  const opts = {
+    buildFn: async () => ({ ok: true, commit_sha: 'sha' }),
+    verifyFn: async () => ({ ok: false, detail: 'tests red' }),
+    maxAttempts: 2,
+  };
+  let r = await runNextStep(q, opts);
+  assert.equal(r.ok, false);
+  assert.equal(q.steps[0].status, STEP_STATUS.PENDING);
+  r = await runNextStep(q, opts);
+  assert.equal(r.blocked, true);
+  assert.equal(q.steps[0].status, STEP_STATUS.BLOCKED, 'blocked after 2 attempts — loop moves on');
+});
+
+test('done queue surfaces founder-gated ids as awaiting_founder', async () => {
+  const q = makeQueue([
+    { id: 'a', target_file: 'f', task: 't', status: STEP_STATUS.DONE },
+    { id: 'g', target_file: 'f2', task: 't2', founder_gated: true },
+  ]);
+  const r = await runNextStep(q, { buildFn: async () => ({ ok: true, commit_sha: 'x' }) });
+  assert.equal(r.done, true);
+  assert.deepEqual(r.awaiting_founder, ['g']);
+});
+
+test('queueSummary counts by status', () => {
+  const q = makeQueue([
+    { id: 'a', target_file: 'f', task: 't', status: STEP_STATUS.DONE },
+    { id: 'b', target_file: 'f', task: 't' },
+    { id: 'c', target_file: 'f', task: 't', founder_gated: true },
+  ]);
+  const s = queueSummary(q);
+  assert.equal(s.total, 3);
+  assert.equal(s.done, 1);
+  assert.equal(s.pending, 1);
+  assert.equal(s.founder_gated, 1);
+  assert.equal(s.complete, false);
+});

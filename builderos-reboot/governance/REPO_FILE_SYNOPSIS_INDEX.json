@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T17:18:23.207Z",
+  "generated_at": "2026-07-06T17:29:21.031Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11185,
+  "file_count": 11188,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 127105,
-      "mtime": "2026-07-06T16:52:57.263Z",
-      "indexed_at": "2026-07-06T16:53:36.587Z"
+      "bytes": 129006,
+      "mtime": "2026-07-06T17:28:44.795Z",
+      "indexed_at": "2026-07-06T17:29:21.031Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39198,6 +39198,14 @@
       "bytes": 2491,
       "mtime": "2026-07-03T13:23:32.289Z",
       "indexed_at": "2026-07-06T16:53:36.587Z"
+    },
+    {
+      "path": "docs/products/site-builder/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 2552,
+      "mtime": "2026-07-06T17:26:25.983Z",
+      "indexed_at": "2026-07-06T17:29:21.031Z",
+      "synopsis_index_only": true
     },
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
@@ -83338,9 +83346,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 9714,
-      "mtime": "2026-07-03T13:23:32.589Z",
-      "indexed_at": "2026-07-06T16:53:36.587Z",
+      "bytes": 13391,
+      "mtime": "2026-07-06T17:28:11.295Z",
+      "indexed_at": "2026-07-06T17:29:21.031Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83552,6 +83560,16 @@
       "bytes": 1789,
       "mtime": "2026-07-03T13:23:32.593Z",
       "indexed_at": "2026-07-06T16:53:36.587Z"
+    },
+    {
+      "path": "services/product-build-orchestrator.js",
+      "synopsis": "General product-build orchestrator — turns a product's structured",
+      "bytes": 6531,
+      "mtime": "2026-07-06T17:27:05.843Z",
+      "indexed_at": "2026-07-06T17:29:21.031Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/product-readiness.js",
@@ -86588,6 +86606,16 @@
       "indexed_at": "2026-07-06T16:53:36.587Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/product-build-orchestrator.test.js",
+      "synopsis": "js — tests/product-build-orchestrator.test.js.",
+      "bytes": 4306,
+      "mtime": "2026-07-06T17:29:20.207Z",
+      "indexed_at": "2026-07-06T17:29:21.031Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
