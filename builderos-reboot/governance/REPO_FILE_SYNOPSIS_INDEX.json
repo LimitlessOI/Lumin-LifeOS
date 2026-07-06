@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T22:25:55.342Z",
+  "generated_at": "2026-07-06T22:33:25.487Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11205,
   "files": [
@@ -38852,9 +38852,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 588465,
-      "mtime": "2026-07-06T19:53:30.071Z",
-      "indexed_at": "2026-07-06T22:25:41.504Z"
+      "bytes": 590737,
+      "mtime": "2026-07-06T22:33:05.720Z",
+      "indexed_at": "2026-07-06T22:33:25.487Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -82086,9 +82086,9 @@
     {
       "path": "services/lifeos-execution-truth.js",
       "synopsis": "Hard execution-truth gate — never emit PASS / COMMITTED without proof.",
-      "bytes": 32835,
-      "mtime": "2026-07-03T13:23:32.585Z",
-      "indexed_at": "2026-07-06T22:25:41.504Z",
+      "bytes": 34044,
+      "mtime": "2026-07-06T22:31:58.344Z",
+      "indexed_at": "2026-07-06T22:33:25.487Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86511,9 +86511,12 @@
     {
       "path": "tests/lifeos-execution-truth.test.js",
       "synopsis": "Exports createLifeOSBuilderOSCommandControlRoutes — tests/lifeos-execution-truth.test.js.",
-      "bytes": 6802,
-      "mtime": "2026-07-03T13:23:32.617Z",
-      "indexed_at": "2026-07-06T22:25:41.504Z"
+      "bytes": 8158,
+      "mtime": "2026-07-06T22:33:19.492Z",
+      "indexed_at": "2026-07-06T22:33:25.487Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/lifeos-service-doctrine.test.js",

@@ -27,6 +27,24 @@ const BROWSER_CODE_MARKERS = [
   /\bclassList\.(add|remove|toggle)\b/,
 ];
 
+// Renderer/SSR marker: a server module that RETURNS markup (emits HTML strings)
+// legitimately contains browser tokens inside those strings — they never execute
+// in Node, so they cannot crash on import.
+const HTML_EMITTER_MARKERS = [
+  /\bexport\s+(?:default\s+)?function\s+\w*(?:render|html|markup|fragment|page|template|shell|pane|sidebar|canvas|panel)\w*/i,
+  /\bexport\s+const\s+\w*(?:render|html|markup|fragment|page|template|shell|pane|sidebar|canvas|panel)\w*\s*=/i,
+];
+
+// Remove string-literal contents (backtick, double, single) so that browser
+// tokens inside emitted markup are not mistaken for executable top-level code.
+// Backticks stripped first: template literals may contain unbalanced quotes.
+function stripStringLiterals(text) {
+  return String(text || '')
+    .replace(/`(?:\\.|[^`\\])*`/gs, '``')
+    .replace(/"(?:\\.|[^"\\])*"/g, '""')
+    .replace(/'(?:\\.|[^'\\])*'/g, "''");
+}
+
 const SERVER_MODULE_MARKERS = [
   /from\s+['"]express['"]/,
   /\bexpress\.Router\b/,
@@ -51,16 +69,20 @@ export function detectGeneratedLayerViolation(targetFile, output) {
   const isServerPath = /^(routes|services|middleware|startup)\/[\w.-]+\.js$/i.test(normalized);
   if (!isServerPath) return null;
 
-  const browserHits = BROWSER_CODE_MARKERS.filter((r) => r.test(text)).length;
+  // Browser tokens inside string literals are emitted markup, not executed code —
+  // they never crash Node on import. Only flag tokens in real executable code.
+  const code = stripStringLiterals(text);
+  const browserHits = BROWSER_CODE_MARKERS.filter((r) => r.test(code)).length;
   const serverHits = SERVER_MODULE_MARKERS.filter((r) => r.test(text)).length;
+  const isHtmlEmitter = HTML_EMITTER_MARKERS.some((r) => r.test(text));
 
-  if (/\bdocument\./.test(text) && serverHits === 0) {
+  if (/\bdocument\./.test(code) && serverHits === 0) {
     return {
       code: 'ROUTE_STUB_REWRITE',
       detail: `Browser DOM code in ${normalized} — Node crashes on import (document is not defined). Railway healthcheck will fail.`,
     };
   }
-  if (browserHits >= 2 && serverHits === 0) {
+  if (browserHits >= 2 && serverHits === 0 && !isHtmlEmitter) {
     return {
       code: 'ROUTE_STUB_REWRITE',
       detail: `Frontend UI code committed to ${normalized} — missing Express/server module exports.`,

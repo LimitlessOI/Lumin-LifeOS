@@ -1,5 +1,7 @@
 /**
  * SYNOPSIS: Exports createLifeOSBuilderOSCommandControlRoutes — tests/lifeos-execution-truth.test.js.
+ *
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import assert from 'node:assert/strict';
 import {
@@ -38,6 +40,35 @@ function testMassShrinkDetection() {
   );
   assert.ok(hit);
   assert.equal(hit.code, 'SERVER_FILE_MASS_SHRINK');
+}
+
+function testSsrRendererNotFlagged() {
+  // A server module that RETURNS HTML (browser code lives only inside the
+  // emitted string) must NOT be flagged — it never executes in Node.
+  const renderer = [
+    'const ATTR = "data-editor-sidebar";',
+    'export function renderSidebar(services = []) {',
+    '  return `<aside ${ATTR}>',
+    '    <script>',
+    '      document.querySelectorAll("[data-service]").forEach((el) => {',
+    '        el.classList.add("ready");',
+    '        el.addEventListener("click", () => localStorage.setItem("svc", el.id));',
+    '      });',
+    '    </script>',
+    '  </aside>`;',
+    '}',
+  ].join('\n');
+  const hit = detectGeneratedLayerViolation('services/site-builder-editor-sidebar.js', renderer);
+  assert.equal(hit, null);
+}
+
+function testTopLevelDomStillFlagged() {
+  // document.* in real executable code (not inside a string) must still fail —
+  // stripping string literals must not mask a genuine import-time crash.
+  const broken = 'export function renderSidebar() { return "ok"; }\nconst el = document.getElementById("x");\n';
+  const hit = detectGeneratedLayerViolation('services/site-builder-editor-sidebar.js', broken);
+  assert.ok(hit);
+  assert.equal(hit.code, 'ROUTE_STUB_REWRITE');
 }
 
 function testScopeIncomplete() {
@@ -175,6 +206,8 @@ function testMissionPipelineIntentDetectsPointBPacket() {
 
 testRouteStubDetection();
 testMassShrinkDetection();
+testSsrRendererNotFlagged();
+testTopLevelDomStillFlagged();
 testScopeIncomplete();
 testEnforceTruthFailsCommsProofBuild();
 testEnforceTruthRequiresShaOnBuild();
