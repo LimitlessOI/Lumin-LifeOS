@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T21:57:35.729Z",
+  "generated_at": "2026-07-06T22:04:12.710Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "services/site-builder-competitor-categories.js",
@@ -10,6 +10,13 @@
       "bytes": 3595,
       "mtime": "2026-07-06T21:57:35.729Z",
       "indexed_at": "2026-07-06T21:57:35.729Z"
+    },
+    {
+      "path": "services/tmp-probe-hello.js",
+      "synopsis": "Exports hello — services/tmp-probe-hello.js.",
+      "bytes": 133,
+      "mtime": "2026-07-06T22:04:12.710Z",
+      "indexed_at": "2026-07-06T22:04:12.710Z"
     }
   ]
 }
