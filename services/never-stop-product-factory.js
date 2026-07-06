@@ -39,6 +39,36 @@ export function extractBuilderFailure(body) {
   return null;
 }
 
+/**
+ * Default planner model access for auto-enrolling products into build lanes.
+ * Founder rule: only a strong PAID model may be hardwired — uses Anthropic
+ * (claude sonnet) directly. Returns null (fail-closed) when no key is present,
+ * so the plan lane simply skips rather than fabricating a queue.
+ */
+export function defaultPlannerCallModel() {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) return null;
+  const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+  return async (_member, prompt, opts = {}) => {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: opts.maxOutputTokens || 2000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    const j = await res.json();
+    if (!res.ok) throw new Error(`anthropic ${res.status}: ${JSON.stringify(j).slice(0, 200)}`);
+    return (j.content || []).map((c) => c.text || '').join('');
+  };
+}
+
 export function neverStopProductsEnabled() {
   return process.env.BUILDEROS_NEVER_STOP === '1'
     || process.env.NEVER_STOP_PRODUCTS === '1'
@@ -497,7 +527,8 @@ export async function runProductExpansionCycle(options = {}) {
       break;
     }
     case 'plan_build_queue': {
-      result = { ...result, ...(await runPlanBuildQueue(task, { callModel: options.callModel, logger })) };
+      const callModel = options.callModel || defaultPlannerCallModel();
+      result = { ...result, ...(await runPlanBuildQueue(task, { callModel, logger })) };
       break;
     }
     case 'acceptance_repair':

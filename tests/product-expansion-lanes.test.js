@@ -5,7 +5,17 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mapConcurrent, runProductExpansionLanes } from '../services/never-stop-product-factory.js';
+import { mapConcurrent, runProductExpansionLanes, defaultPlannerCallModel } from '../services/never-stop-product-factory.js';
+
+test('defaultPlannerCallModel is fail-closed when no paid key is present', () => {
+  const saved = process.env.ANTHROPIC_API_KEY;
+  delete process.env.ANTHROPIC_API_KEY;
+  try {
+    assert.equal(defaultPlannerCallModel(), null);
+  } finally {
+    if (saved !== undefined) process.env.ANTHROPIC_API_KEY = saved;
+  }
+});
 
 test('mapConcurrent respects the concurrency ceiling and preserves order', async () => {
   let inFlight = 0;
