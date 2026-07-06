@@ -20,6 +20,24 @@ const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
 const LOG_PATH = path.join(ROOT, 'data/never-stop-product-factory-log.jsonl');
 const STATE_PATH = path.join(ROOT, 'data/never-stop-product-factory-state.json');
 const WATCHLIST_PATH = path.join(ROOT, 'data/truth-watchlist.jsonl');
+const BUILD_REPAIR_ATTEMPTS = Number(process.env.NEVER_STOP_BUILD_REPAIR_ATTEMPTS || 3);
+
+/**
+ * Pull the most specific, verbatim failure text out of a blocked builder
+ * response so the next attempt can be told exactly what went wrong. Prefers the
+ * pre-commit gate's runtime output over the generic top-level error.
+ */
+export function extractBuilderFailure(body) {
+  if (!body || typeof body !== 'object') return null;
+  const v = body.governance && body.governance.verifier;
+  const vb = v && v.body;
+  const specific = vb && (vb.runtime_output || vb.syntax_error);
+  if (specific) return String(specific).slice(0, 1500);
+  if (v && v.stdout) return String(v.stdout).slice(0, 1500);
+  if (body.hint) return String(body.hint).slice(0, 1500);
+  if (body.error) return String(body.error).slice(0, 1500);
+  return null;
+}
 
 export function neverStopProductsEnabled() {
   return process.env.BUILDEROS_NEVER_STOP === '1'
@@ -332,20 +350,36 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     return { ok: false, detail: 'build_queue_load_failed', error: e.message };
   }
 
-  const buildFn = async ({ target_file, task: stepTask, spec }) => {
+  const buildFn = async ({ target_file, task: stepTask, spec, last_error }) => {
     if (!baseUrl || !commandKey) return { ok: false, error: 'missing PUBLIC_BASE_URL / COMMAND_CENTER_KEY' };
-    const build = await postBuilderBuild(baseUrl, commandKey, {
-      domain: 'lifeos',
-      mode: 'code',
-      target_file,
-      task: `[never-stop] ${stepTask}`,
-      spec,
-      platform_gap_fill: true,
-      platform_gap_fill_reason: `Autonomous product-build orchestrator executing queued BUILD_QUEUE.json step for product ${task.product_id} (${task.step_id}): ${stepTask}`.slice(0, 480),
-    });
-    const b = build.body || {};
-    const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
-    return { ok: build.ok, commit_sha, error: build.ok ? null : (b.error || `HTTP ${build.status}`) };
+    // Verbatim error carry-forward: the builder's pre-commit gate RUNS the code
+    // and blocks a commit on any runtime/anti-pattern failure. Retrying the same
+    // prompt just regenerates the same bug (spin). Instead, feed the builder its
+    // own verbatim failure and demand a root-cause fix — the "waterboard the AI
+    // with its own error" self-repair pattern — until it commits or we exhaust.
+    let priorError = last_error || null;
+    for (let attempt = 1; attempt <= BUILD_REPAIR_ATTEMPTS; attempt += 1) {
+      const repairBlock = priorError
+        ? `\n\nREPAIR REQUIRED — your previous attempt was REJECTED by the pre-commit runtime gate with this VERBATIM error. Fix the ROOT CAUSE (do not suppress or swallow it), then output the full corrected file:\n${priorError}`
+        : '';
+      const build = await postBuilderBuild(baseUrl, commandKey, {
+        domain: 'lifeos',
+        mode: 'code',
+        target_file,
+        task: `[never-stop] ${stepTask}${repairBlock}`,
+        spec,
+        platform_gap_fill: true,
+        platform_gap_fill_reason: `Autonomous product-build orchestrator executing queued BUILD_QUEUE.json step for product ${task.product_id} (${task.step_id}): ${stepTask}`.slice(0, 480),
+      });
+      const b = build.body || {};
+      const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
+      if (build.ok && commit_sha) {
+        return { ok: true, commit_sha, error: null, repair_attempts: attempt - 1 };
+      }
+      priorError = extractBuilderFailure(b) || (build.ok ? 'no_commit_sha' : `HTTP ${build.status}`);
+      logger?.warn?.({ target_file, attempt, error: String(priorError).slice(0, 200) }, '[never-stop] build rejected — carrying verbatim error forward');
+    }
+    return { ok: false, commit_sha: null, error: priorError || 'build_failed_after_repair_attempts' };
   };
 
   const verifyFn = async ({ verify_script }) => {
