@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T17:51:49.331Z",
+  "generated_at": "2026-07-06T17:53:18.342Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11187,
+  "file_count": 11192,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21287,8 +21287,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 20826,
-      "mtime": "2026-07-06T17:51:35.573Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z",
+      "mtime": "2026-07-06T17:52:14.891Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z",
       "synopsis_index_only": true
     },
     {
@@ -21582,8 +21582,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3376252,
-      "mtime": "2026-07-06T17:51:44.627Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z"
+      "mtime": "2026-07-06T17:53:13.772Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 127872,
-      "mtime": "2026-07-06T17:51:35.581Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z"
+      "bytes": 130616,
+      "mtime": "2026-07-06T17:53:09.949Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38853,8 +38853,8 @@
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
       "bytes": 587973,
-      "mtime": "2026-07-06T17:51:35.583Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z"
+      "mtime": "2026-07-06T17:52:14.897Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39200,6 +39200,14 @@
       "indexed_at": "2026-07-06T10:40:28.450Z"
     },
     {
+      "path": "docs/products/site-builder/BUILD_QUEUE.json",
+      "synopsis": "Documentation — BUILD QUEUE.",
+      "bytes": 2552,
+      "mtime": "2026-07-06T17:53:09.950Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 6595,
@@ -39210,9 +39218,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 57720,
-      "mtime": "2026-07-06T04:57:07.100Z",
-      "indexed_at": "2026-07-06T10:40:28.450Z"
+      "bytes": 60997,
+      "mtime": "2026-07-06T17:53:09.950Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64616,8 +64624,8 @@
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
       "bytes": 60262,
-      "mtime": "2026-07-06T17:51:35.583Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z",
+      "mtime": "2026-07-06T17:52:14.897Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -65267,9 +65275,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 20319,
-      "mtime": "2026-07-06T04:57:07.104Z",
-      "indexed_at": "2026-07-06T10:40:28.450Z",
+      "bytes": 24404,
+      "mtime": "2026-07-06T17:53:09.950Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -65784,8 +65792,8 @@
       "path": "scripts/bp-priority-never-stop.mjs",
       "synopsis": "Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.",
       "bytes": 12791,
-      "mtime": "2026-07-06T17:51:35.583Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z",
+      "mtime": "2026-07-06T17:52:14.898Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z",
       "ssot": [
         "builderos-reboot/BP_PRIORITY.json",
         "docs/products/AUTHORITY_BOUNDARIES.md"
@@ -79740,8 +79748,8 @@
       "path": "services/builder-mission-selection.js",
       "synopsis": "Builder-actionable mission selection for the never-stop lane.",
       "bytes": 2202,
-      "mtime": "2026-07-06T17:51:35.583Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z",
+      "mtime": "2026-07-06T17:52:14.898Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81396,8 +81404,8 @@
       "path": "services/founder-usability-verdict.js",
       "synopsis": "Parse a founder's plain-language usability verdict from chat.",
       "bytes": 2350,
-      "mtime": "2026-07-06T17:51:35.583Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z",
+      "mtime": "2026-07-06T17:52:14.898Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83358,9 +83366,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 9714,
-      "mtime": "2026-07-03T13:23:32.589Z",
-      "indexed_at": "2026-07-06T10:40:28.450Z",
+      "bytes": 13391,
+      "mtime": "2026-07-06T17:53:09.951Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83572,6 +83580,16 @@
       "bytes": 1789,
       "mtime": "2026-07-03T13:23:32.593Z",
       "indexed_at": "2026-07-06T10:40:28.450Z"
+    },
+    {
+      "path": "services/product-build-orchestrator.js",
+      "synopsis": "General product-build orchestrator — turns a product's structured",
+      "bytes": 7452,
+      "mtime": "2026-07-06T17:53:09.951Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/product-readiness.js",
@@ -83995,11 +84013,31 @@
       "indexed_at": "2026-07-06T10:40:28.450Z"
     },
     {
+      "path": "services/site-builder-design-systems.js",
+      "synopsis": "Site Builder design-system library.",
+      "bytes": 10904,
+      "mtime": "2026-07-06T17:53:09.951Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/site-builder-email-templates.js",
       "synopsis": "services/site-builder-email-templates.js",
       "bytes": 3474,
       "mtime": "2026-07-03T13:23:32.593Z",
       "indexed_at": "2026-07-06T10:40:28.450Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/site-builder-logo-studio.js",
+      "synopsis": "Site Builder — Logo Studio.",
+      "bytes": 14273,
+      "mtime": "2026-07-06T17:53:09.951Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -84051,9 +84089,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 45765,
-      "mtime": "2026-07-06T04:57:07.108Z",
-      "indexed_at": "2026-07-06T10:40:28.450Z",
+      "bytes": 64870,
+      "mtime": "2026-07-06T17:53:09.951Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85820,8 +85858,8 @@
       "path": "tests/builder-mission-selection.test.js",
       "synopsis": "js — tests/builder-mission-selection.test.js.",
       "bytes": 2549,
-      "mtime": "2026-07-06T17:51:35.583Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z"
+      "mtime": "2026-07-06T17:52:14.898Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z"
     },
     {
       "path": "tests/builder-outcome-verifier.test.js",
@@ -86302,8 +86340,8 @@
       "path": "tests/founder-usability-verdict.test.js",
       "synopsis": "js — tests/founder-usability-verdict.test.js.",
       "bytes": 1567,
-      "mtime": "2026-07-06T17:51:35.584Z",
-      "indexed_at": "2026-07-06T17:51:49.331Z"
+      "mtime": "2026-07-06T17:52:14.898Z",
+      "indexed_at": "2026-07-06T17:53:01.563Z"
     },
     {
       "path": "tests/fsar_artifact.test.js",
@@ -86602,6 +86640,16 @@
       "indexed_at": "2026-07-06T10:40:28.450Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/product-build-orchestrator.test.js",
+      "synopsis": "js — tests/product-build-orchestrator.test.js.",
+      "bytes": 5272,
+      "mtime": "2026-07-06T17:53:09.951Z",
+      "indexed_at": "2026-07-06T17:53:18.342Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
