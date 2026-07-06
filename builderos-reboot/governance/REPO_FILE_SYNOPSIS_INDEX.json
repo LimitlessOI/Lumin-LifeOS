@@ -1,15 +1,15 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T22:45:08.773Z",
+  "generated_at": "2026-07-06T23:02:05.553Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 3,
   "files": [
     {
       "path": "services/site-builder-competitor-categories.js",
       "synopsis": "Exports classifyPracticeCategories — services/site-builder-competitor-categories.js.",
-      "bytes": 3595,
-      "mtime": "2026-07-06T21:57:35.729Z",
-      "indexed_at": "2026-07-06T21:57:35.729Z"
+      "bytes": 3753,
+      "mtime": "2026-07-06T23:02:05.553Z",
+      "indexed_at": "2026-07-06T23:02:05.553Z"
     },
     {
       "path": "services/site-builder-social-discovery.js",
