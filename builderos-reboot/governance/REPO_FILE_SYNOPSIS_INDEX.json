@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T18:42:06.422Z",
+  "generated_at": "2026-07-06T18:52:43.869Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11200,
+  "file_count": 11201,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 141060,
-      "mtime": "2026-07-06T18:34:54.187Z",
-      "indexed_at": "2026-07-06T18:35:01.718Z"
+      "bytes": 142475,
+      "mtime": "2026-07-06T18:52:37.331Z",
+      "indexed_at": "2026-07-06T18:52:43.869Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -65944,9 +65944,9 @@
     {
       "path": "scripts/builderos-builder-output-verifier.mjs",
       "synopsis": "BuilderOS — unified 4-gate output verification pipeline.",
-      "bytes": 5545,
-      "mtime": "2026-07-03T13:23:32.525Z",
-      "indexed_at": "2026-07-06T18:30:05.763Z",
+      "bytes": 6096,
+      "mtime": "2026-07-06T18:51:04.907Z",
+      "indexed_at": "2026-07-06T18:52:43.869Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -80095,9 +80095,9 @@
     {
       "path": "services/builderos-precommit-governance.js",
       "synopsis": "BuilderOS pre-commit governance wrapper.",
-      "bytes": 3935,
-      "mtime": "2026-07-03T13:23:32.569Z",
-      "indexed_at": "2026-07-06T18:30:05.763Z",
+      "bytes": 4419,
+      "mtime": "2026-07-06T18:50:55.319Z",
+      "indexed_at": "2026-07-06T18:52:43.869Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md",
         "docs/projects/builderos-remediation/BLUEPRINT.md"
@@ -86086,6 +86086,16 @@
       "bytes": 1635,
       "mtime": "2026-07-03T13:23:32.613Z",
       "indexed_at": "2026-07-06T18:30:05.763Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/builderos-precommit-runtime-gate.test.js",
+      "synopsis": "Regression — BuilderOS pre-commit runtime gate (Gate 4) must resolve",
+      "bytes": 2632,
+      "mtime": "2026-07-06T18:52:06.487Z",
+      "indexed_at": "2026-07-06T18:52:43.869Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

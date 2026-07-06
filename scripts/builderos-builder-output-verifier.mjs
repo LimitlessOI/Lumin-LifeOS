@@ -88,7 +88,16 @@ export async function runVerification(targetFile, opts = {}) {
   let runtimeOutput = 'skipped_not_cli';
   const isAcceptanceVerifyScript = /scripts\/verify-[\w-]+\.mjs$/i.test(String(logicalTarget || ''));
   if (isCliScript && !isAcceptanceVerifyScript) {
-    const runtimeRun = spawnSync('node', [absTarget], { stdio: 'pipe', timeout: 5000 });
+    // Gate 4 actually EXECUTES the generated script. Sanitize the child env so a
+    // probe run can never reach production data: strip DB/credential vars and
+    // flag the run so well-behaved scripts stay in their safe dry-run path.
+    const gateEnv = { ...process.env, BUILDEROS_RUNTIME_PROBE: '1', NODE_ENV: 'test' };
+    for (const key of Object.keys(gateEnv)) {
+      if (/^(PG|POSTGRES|DATABASE)/i.test(key) || /(SECRET|TOKEN|PASSWORD|API_KEY|PRIVATE_KEY)$/i.test(key)) {
+        delete gateEnv[key];
+      }
+    }
+    const runtimeRun = spawnSync('node', [absTarget], { stdio: 'pipe', timeout: 5000, cwd: ROOT, env: gateEnv });
     const stdout = runtimeRun.stdout?.toString().trim() || '';
     runtimeOk = runtimeRun.status === 0 && stdout.length > 0;
     runtimeOutput = stdout.slice(0, 200) || runtimeRun.stderr?.toString().trim().slice(0, 200) || '';
