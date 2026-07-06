@@ -44,6 +44,19 @@ Last captured: 2026-07-06
   the highest-trust content and must be pulled into a real "Watch & Learn"
   gallery (real embeds, not a "coming soon" placeholder).
 
+### Editor is a 3-pane WORKSPACE + service ladder (2026-07-06)
+- Layout: **left = services sidebar**, **center = the live website**, **right = chat window**.
+- The website edits in real time: **click an element to change it**, OR **talk/type** and it
+  changes live.
+- Left sidebar = à-la-carte add-on services (the revenue ladder), e.g.: logo & brand kit,
+  corporate/brand package, ClickFunnels build + ad placement/management, managed Google
+  Business Profile + local SEO, social-media management, SEO/content care plan.
+- HONESTY GUARDRAILS: never promise "rank #1" on Google — SEO can't guarantee it; frame as
+  "managed GBP + local SEO to maximize ranking". Each service is a real paid offering
+  (one-time or monthly MRR), consistent with the product revenue model.
+- SYNERGY: the sidebar is **competitor-aware** — the Strategy tab feeds it so the right
+  upsell surfaces first ("competitors don't run ads / have no booking funnel — want that?").
+
 ### Conversion / funnel theory (build toward)
 - One goal per page; remove distractions competing with the primary CTA.
 - Add a low-friction lead magnet (free download / free video) to capture the

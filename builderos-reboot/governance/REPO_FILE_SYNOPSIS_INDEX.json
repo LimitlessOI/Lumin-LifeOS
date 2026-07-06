@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T20:43:48.427Z",
+  "generated_at": "2026-07-06T20:48:20.672Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11202,
   "files": [
@@ -39202,9 +39202,9 @@
     {
       "path": "docs/products/site-builder/BUILD_QUEUE.json",
       "synopsis": "Documentation — BUILD QUEUE.",
-      "bytes": 10824,
-      "mtime": "2026-07-06T20:43:30.707Z",
-      "indexed_at": "2026-07-06T20:43:48.427Z",
+      "bytes": 12733,
+      "mtime": "2026-07-06T20:47:42.075Z",
+      "indexed_at": "2026-07-06T20:48:20.672Z",
       "synopsis_index_only": true
     },
     {
@@ -39225,16 +39225,16 @@
     {
       "path": "docs/products/site-builder/FOUNDER_NOTES.md",
       "synopsis": "Site Builder — Founder Notes (verbatim intent, captured from conversation)",
-      "bytes": 6719,
-      "mtime": "2026-07-06T20:43:30.707Z",
-      "indexed_at": "2026-07-06T20:43:48.427Z"
+      "bytes": 7682,
+      "mtime": "2026-07-06T20:48:07.379Z",
+      "indexed_at": "2026-07-06T20:48:20.672Z"
     },
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 63697,
-      "mtime": "2026-07-06T20:43:30.707Z",
-      "indexed_at": "2026-07-06T20:43:48.427Z"
+      "bytes": 64190,
+      "mtime": "2026-07-06T20:48:15.183Z",
+      "indexed_at": "2026-07-06T20:48:20.672Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
