@@ -10,9 +10,10 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary } from './product-build-orchestrator.js';
+import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
+import { extractBacklog, planBuildQueue } from './build-queue-planner.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -146,6 +147,71 @@ export function discoverBuildQueueWork() {
   return found;
 }
 
+/**
+ * Scale lever: find products that have a PRODUCT_HOME with a documented backlog
+ * but NO BUILD_QUEUE.json yet, so the loop can auto-plan a queue for them (via
+ * the injected planner model) and pull them into the autonomous build lane.
+ * Grounded in real documented work only — never fabricated.
+ */
+export function discoverPlanWork() {
+  const productsDir = path.join(ROOT, 'docs/products');
+  const found = [];
+  let productIds = [];
+  try {
+    productIds = fs.readdirSync(productsDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
+  } catch {
+    return found;
+  }
+  for (const productId of productIds) {
+    if (fs.existsSync(queuePathForProduct(productId))) continue;
+    const homePath = path.join(productsDir, productId, 'PRODUCT_HOME.md');
+    if (!fs.existsSync(homePath)) continue;
+    let backlogCount = 0;
+    try {
+      backlogCount = extractBacklog(fs.readFileSync(homePath, 'utf8')).length;
+    } catch { backlogCount = 0; }
+    if (backlogCount === 0) continue;
+    found.push({
+      id: `plan_build_queue_${productId}`,
+      kind: 'plan_build_queue',
+      priority: 5,
+      product: productId,
+      product_id: productId,
+      home_path: homePath,
+      detail: `${backlogCount} documented backlog item(s), no BUILD_QUEUE yet`,
+    });
+  }
+  return found;
+}
+
+/**
+ * Auto-plan a BUILD_QUEUE.json for a product from its PRODUCT_HOME backlog using
+ * the injected planner model, then persist it so subsequent cycles execute the
+ * steps. Fail-closed: writes nothing if planning yields no valid queue.
+ */
+async function runPlanBuildQueue(task, { callModel, logger } = {}) {
+  if (typeof callModel !== 'function') {
+    return { ok: false, detail: 'plan_skipped_no_model' };
+  }
+  let homeText = '';
+  try {
+    homeText = fs.readFileSync(task.home_path, 'utf8');
+  } catch (e) {
+    return { ok: false, detail: 'home_read_failed', error: e.message };
+  }
+  const planned = await planBuildQueue({ productId: task.product_id, homeText, callModel, logger });
+  if (!planned || !planned.queue) {
+    return { ok: false, detail: 'plan_produced_no_queue' };
+  }
+  const queuePath = queuePathForProduct(task.product_id);
+  fs.mkdirSync(path.dirname(queuePath), { recursive: true });
+  fs.writeFileSync(queuePath, `${JSON.stringify(planned.queue, null, 2)}\n`);
+  log({ event: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length });
+  return { ok: true, detail: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length };
+}
+
 export async function discoverProductExpansionWork(options = {}) {
   const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
   const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
@@ -153,6 +219,7 @@ export async function discoverProductExpansionWork(options = {}) {
   const pointB = loadPointBTarget();
 
   items.push(...discoverBuildQueueWork());
+  items.push(...discoverPlanWork());
 
   const bpIncomplete = loadBpItems().filter((i) => isQueueItemIncomplete(i, { pointBTarget: pointB }));
   if (bpIncomplete.length && !process.env.BUILDEROS_AUTOPILOT) {
@@ -361,6 +428,10 @@ export async function runProductExpansionCycle(options = {}) {
     }
     case 'product_build_step': {
       result = { ...result, ...(await runProductBuildStep(task, { baseUrl, commandKey, logger })) };
+      break;
+    }
+    case 'plan_build_queue': {
+      result = { ...result, ...(await runPlanBuildQueue(task, { callModel: options.callModel, logger })) };
       break;
     }
     case 'acceptance_repair':

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T17:59:25.492Z",
+  "generated_at": "2026-07-06T18:19:04.230Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11196,
+  "file_count": 11199,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 137470,
-      "mtime": "2026-07-06T17:59:06.755Z",
-      "indexed_at": "2026-07-06T17:59:25.492Z"
+      "bytes": 139061,
+      "mtime": "2026-07-06T18:18:50.883Z",
+      "indexed_at": "2026-07-06T18:19:04.230Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39214,6 +39214,13 @@
       "mtime": "2026-07-05T19:16:16.866Z",
       "indexed_at": "2026-07-06T17:55:17.263Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/site-builder/FOUNDER_NOTES.md",
+      "synopsis": "Site Builder — Founder Notes (verbatim intent, captured from conversation)",
+      "bytes": 4234,
+      "mtime": "2026-07-06T18:19:03.383Z",
+      "indexed_at": "2026-07-06T18:19:04.230Z"
     },
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
@@ -79695,6 +79702,16 @@
       ]
     },
     {
+      "path": "services/build-queue-planner.js",
+      "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
+      "bytes": 9366,
+      "mtime": "2026-07-06T18:16:16.575Z",
+      "indexed_at": "2026-07-06T18:19:04.230Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/builder-audit-before-done.js",
       "synopsis": "services/builder-audit-before-done.js",
       "bytes": 12010,
@@ -83376,9 +83393,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 15004,
-      "mtime": "2026-07-06T17:58:27.931Z",
-      "indexed_at": "2026-07-06T17:59:25.492Z",
+      "bytes": 17908,
+      "mtime": "2026-07-06T18:17:53.223Z",
+      "indexed_at": "2026-07-06T18:19:04.230Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85833,6 +85850,13 @@
       "bytes": 2133,
       "mtime": "2026-07-03T00:17:45.105Z",
       "indexed_at": "2026-07-06T17:55:17.263Z"
+    },
+    {
+      "path": "tests/build-queue-planner.test.js",
+      "synopsis": "js — tests/build-queue-planner.test.js.",
+      "bytes": 5920,
+      "mtime": "2026-07-06T18:19:03.399Z",
+      "indexed_at": "2026-07-06T18:19:04.230Z"
     },
     {
       "path": "tests/builder-agents.test.js",
