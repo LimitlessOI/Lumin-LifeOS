@@ -9,7 +9,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { getActiveQueueItem } from '../services/bp-priority-completion.js';
+import {
+  getActiveBuilderMission,
+  getFounderGatedMissions,
+} from '../services/builder-mission-selection.js';
 import { runFoundationPipelineLoop } from '../factory-staging/factory-core/arc/run-foundation.js';
 import { founderStopActive } from '../factory-staging/factory-core/arc/gate-enforcement.js';
 import { loadPointBTarget } from '../factory-staging/factory-core/arc/foundation/point-b-target.js';
@@ -24,6 +27,42 @@ const neverStop = process.env.BUILDEROS_NEVER_STOP === '1'
   || process.env.NEVER_STOP_PRODUCTS === '1'
   || process.env.BUILDEROS_AUTOPILOT === '1';
 
+// Anti-spin: a mission that spins its full per-run attempt budget without
+// reaching Point B this many times is treated as structurally blocked
+// (e.g. roadmap has no BUILDER_READY phases — ARC can never hand it to the
+// builder). It is skipped for the rest of this session and escalated to the
+// founder, instead of being re-run forever (the infinite-retry token burn).
+const MAX_EXHAUSTED_RUNS_PER_MISSION = Number(
+  process.argv.find((a) => a.startsWith('--max-exhausted='))?.split('=')[1] || 2,
+);
+const BLOCKED_LOG_PATH = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  'data/never-stop-blocked-missions.jsonl',
+);
+const blockedMissionIds = new Set();
+
+function recordBlockedMission(mission, last) {
+  const stoppage = last?.loopReceipt?.stoppage || null;
+  const row = {
+    at: new Date().toISOString(),
+    mission_id: mission.mission_id,
+    rank: mission.rank,
+    verdict: mission.verdict,
+    reason: 'structural_block_no_progress',
+    stoppage_reason: stoppage?.reason || null,
+    total_attempts: last?.loopReceipt?.total_attempts ?? null,
+    obstacles: last?.loopReceipt?.obstacles?.length ?? null,
+    escalate_to_founder: true,
+    note: 'Foundation loop exhausted its attempt budget without reaching Point B — '
+      + 'builder cannot advance this mission (likely no BUILDER_READY roadmap phases). '
+      + 'Needs founder intent/roadmap repair.',
+  };
+  fs.mkdirSync(path.dirname(BLOCKED_LOG_PATH), { recursive: true });
+  fs.appendFileSync(BLOCKED_LOG_PATH, `${JSON.stringify(row)}\n`);
+  return row;
+}
+
 function log(row) {
   fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
   fs.appendFileSync(LOG_PATH, `${JSON.stringify({ at: new Date().toISOString(), ...row })}\n`);
@@ -33,9 +72,12 @@ function loadQueue() {
   return JSON.parse(fs.readFileSync(BP_PATH, 'utf8'));
 }
 
-function activeMission(items) {
+function builderMission(items) {
   const pointB = loadPointBTarget();
-  return getActiveQueueItem(items || [], { pointBTarget: pointB });
+  return getActiveBuilderMission(items || [], {
+    pointBTarget: pointB,
+    excludeMissionIds: blockedMissionIds,
+  });
 }
 
 function tryRedeploy() {
@@ -158,8 +200,21 @@ async function runCycle() {
   }
 
   const queue = loadQueue();
-  const mission = activeMission(queue.items || []);
+  const items = queue.items || [];
+  const mission = builderMission(items);
   if (!mission) {
+    // No builder-actionable work. Distinguish "truly done" from
+    // "only a founder usability verdict is left" so we never loop the
+    // builder on a human-gated mission (the attempt-N rebuild waste).
+    const founderGated = getFounderGatedMissions(items, { pointBTarget: loadPointBTarget() });
+    if (founderGated.length) {
+      log({
+        event: 'awaiting_founder_confirmation',
+        never_stop: neverStop,
+        missions: founderGated.map((m) => m.mission_id),
+      });
+      return { halt: !neverStop, reason: 'awaiting_founder_confirmation' };
+    }
     log({ event: 'queue_complete', never_stop: neverStop });
     if (neverStop) {
       return { halt: false, reason: 'queue_complete_expansion' };
@@ -171,6 +226,7 @@ async function runCycle() {
 
   const missionFolder = path.join(ROOT, 'builderos-reboot/MISSIONS', mission.mission_id);
 
+  let exhaustedRuns = 0;
   while (true) {
     if (founderStopActive().active && !neverStop) {
       log({ event: 'founder_stop' });
@@ -183,6 +239,7 @@ async function runCycle() {
       mission_id: mission.mission_id,
       ok: last.ok,
       point_b_reached: last.point_b_reached,
+      attempt_budget_exhausted: Boolean(last.attempt_budget_exhausted),
       total_attempts: last.loopReceipt?.total_attempts,
       obstacles: last.loopReceipt?.obstacles?.length,
     });
@@ -200,6 +257,27 @@ async function runCycle() {
       return { halt: true, reason: 'founder_stop' };
     }
 
+    // Anti-spin: the run burned its whole per-run attempt budget without
+    // reaching Point B. Retrying gives it another full budget with the same
+    // structural blocker (e.g. no BUILDER_READY roadmap phases). After a small
+    // number of such runs, mark the mission blocked, escalate to the founder,
+    // and let the caller advance to the next builder-actionable mission.
+    if (last.attempt_budget_exhausted) {
+      exhaustedRuns += 1;
+      if (exhaustedRuns >= MAX_EXHAUSTED_RUNS_PER_MISSION) {
+        const record = recordBlockedMission(mission, last);
+        blockedMissionIds.add(mission.mission_id);
+        log({
+          event: 'mission_blocked_skipped',
+          mission_id: mission.mission_id,
+          exhausted_runs: exhaustedRuns,
+          stoppage_reason: record.stoppage_reason,
+          blocked_total: blockedMissionIds.size,
+        });
+        return { halt: false, blocked: true, mission_id: mission.mission_id };
+      }
+    }
+
     spawnSync('sleep', [String(Math.ceil(sleepMs / 1000))], { cwd: ROOT });
   }
 }
@@ -207,7 +285,7 @@ async function runCycle() {
 if (once) {
   (async () => {
     const result = await runCycle();
-    if (result.reason === 'queue_complete_expansion' && neverStop) {
+    if ((result.reason === 'queue_complete_expansion' || result.reason === 'awaiting_founder_confirmation') && neverStop) {
       const { runProductExpansionCycle } = await import('../services/never-stop-product-factory.js');
       const exp = await runProductExpansionCycle({ logger: console });
       process.exit(exp.ok !== false ? 0 : 1);
@@ -230,11 +308,19 @@ if (once) {
         console.error(JSON.stringify(result, null, 2));
         process.exit(1);
       }
-      if (result.reason === 'queue_complete_expansion') {
+      // A mission was just marked structurally blocked — advance immediately
+      // to the next builder-actionable mission (no sleep) rather than idling.
+      if (result.blocked) {
+        log({ event: 'advance_after_block', blocked_mission: result.mission_id, blocked_total: blockedMissionIds.size });
+        continue;
+      }
+      if (result.reason === 'queue_complete_expansion' || result.reason === 'awaiting_founder_confirmation') {
         const { runProductExpansionCycle } = await import('../services/never-stop-product-factory.js');
         await runProductExpansionCycle({ logger: console });
       }
-      if (result.reason === 'queue_complete_expansion' || result.reason === 'pre_build_gate_fail') {
+      if (result.reason === 'queue_complete_expansion'
+        || result.reason === 'awaiting_founder_confirmation'
+        || result.reason === 'pre_build_gate_fail') {
         spawnSync('sleep', [String(Math.ceil(sleepMs / 1000))], { cwd: ROOT });
       }
     }
