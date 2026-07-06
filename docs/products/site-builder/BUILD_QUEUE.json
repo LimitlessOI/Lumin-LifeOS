@@ -19,22 +19,64 @@
     },
     {
       "id": "sb-preview-expiry-sweep",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/site-builder-preview-expiry-cron.mjs",
       "task": "Preview-expiry sweep: delete preview directories older than PREVIEW_TTL_DAYS (default 30) under public/previews and mark the matching prospect_sites row expired, printing a JSON summary. Fail-closed: never delete outside public/previews.",
       "spec": "Node ESM CLI script runnable via `node scripts/site-builder-preview-expiry-cron.mjs`; it ends with a main() call and process.exit. CRITICAL GATE-SAFETY CONSTRAINTS (must all hold): (1) PREVIEW_TTL_DAYS defaults to 30 when the env var is unset or blank — never throw for a missing env var. (2) Do NOT import any database client (e.g. 'pg') at module top level — the only allowed top-level imports are node builtins (fs, path, url, os). If DB access is needed, use a dynamic `await import('pg')` INSIDE the apply branch only. (3) SAFE BY DEFAULT: the script runs as a DRY RUN unless BOTH process.env.SWEEP_APPLY==='1' AND process.env.DATABASE_URL is set. In dry-run mode it must delete NOTHING and touch no database — it only scans public/previews (if present), and always prints a single-line JSON summary { mode, scanned, expired, deleted, skipped } to stdout and exits 0. (4) Resolve preview root as path.resolve(process.cwd(),'public/previews'); before every unlink, verify the resolved target path startsWith(root + path.sep); skip anything failing that guard and count it in skipped. (5) Always print the JSON summary to stdout and exit 0 on success (non-zero only on an unexpected internal error). Keep it a single self-contained file.",
       "depends_on": [],
       "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "02f2e809c",
+      "proof": "Built autonomously by the never-stop loop after activation on prod (lumin-web service). 227-line dry-run-safe script: TTL validation/defaults, SWEEP_APPLY gate, path-traversal guard, JSON summary. node --check passes."
+    },
+    {
+      "id": "sb-editor-shell",
+      "status": "pending",
+      "target_file": "services/site-builder-editor.js",
+      "task": "Create the live client-facing preview EDITOR WORKSPACE renderer. Export renderEditorShell({ businessName, clientId, siteFile, variants, palettes, editToken, baseUrl, strategy, services }) that returns ONE complete HTML string laid out as a THREE-PANE workspace: LEFT = a services/upsell sidebar rendered from services[] (each { id, name, blurb, price, cadence, recommended }) where clicking a service marks it selected (highlight + running 'your plan' list) and fires a best-effort beacon to `${baseUrl}/api/v1/sites/select-service?id=<clientId>&service=<id>`; CENTER = the generated site in a same-origin iframe (siteFile) with a mobile/desktop device toggle that sets iframe width, click-to-edit (clicking a text element in the iframe makes it contenteditable), and per-top-level-section move-up/move-down/hide controls; RIGHT = a chat panel with a text box AND a microphone button to describe a change in plain language, POSTing { clientId, file, instruction, token } to `${baseUrl}/api/v1/sites/edit` then reloading the iframe on success. Above the panes: template-switcher chips built from variants[] (each {id,name,file}) that change the iframe src, palette swatches from palettes[] ({name,primary,accent}) that POST an /edit recolor instruction, and a Save button that POSTs the iframe's serialized outerHTML to `${baseUrl}/api/v1/sites/save-edits` as { clientId, file, html, token }. Also render a 'Strategy' view of strategy.synopsis (string) + strategy.competitors[] ({name,category,score,strengths,weaknesses}) as 1–10 scorecards, and let strategy drive which services carry a 'recommended' badge in the sidebar.",
+      "spec": "Single self-contained ESM module, ZERO side effects at import, no network, no DB, no project imports (inline any constants). Named export renderEditorShell AND default export. HTML must be a full document using Tailwind CDN (https://cdn.tailwindcss.com) and Alpine.js CDN (https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js, defer). HTML-escape businessName and all strategy text before interpolation. Microphone uses window.webkitSpeechRecognition||window.SpeechRecognition; if unavailable, hide the mic button and show a tooltip 'Voice not supported in this browser' — never throw. All fetch calls include the editToken from a JS const; on non-2xx show an inline error, never a blank failure. Manual-mode DOM injection must be wrapped in try/catch and operate only on iframe.contentDocument top-level children. Keep everything in this one file. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "depends_on": [],
+      "founder_gated": false,
       "attempts": 0
     },
     {
-      "id": "sb-customization-ui",
-      "status": "founder_gated",
-      "target_file": "public/overlay/site-builder-customize.html",
-      "task": "Client-facing customization panel: let a prospect tweak palette/services/photos on their generated preview before publish.",
-      "spec": "Blocked on founder direction: needs Adam to confirm the exact fields prospects may edit and whether edits persist server-side or stay client-side. Do not build until founder-gated flag is cleared.",
+      "id": "sb-editor-endpoints",
+      "status": "pending",
+      "target_file": "routes/site-builder-editor-routes.js",
+      "task": "New Express route module exporting createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl }) that mounts three POST endpoints under /api/v1/sites: `/edit` (AI edit), `/save-edits` (manual save), and `/revert` (restore the most recent .bak). All three authenticate with a PER-PREVIEW token (NOT the global command key): read public/previews/<clientId>/meta.json and require body.token === meta.editToken, else respond 403. `/edit` reads the target file (body.file, relative, under the client's preview dir), calls callCouncilMember with a STRONG paid model, passing the current HTML + the user's instruction + strict anti-fabrication TRUTH rules, asking it to return the ENTIRE modified HTML document; validate the response contains '<html'; write a timestamped .bak of the old file then overwrite; respond { ok:true }. `/save-edits` validates body.html contains '<html', writes a .bak then overwrites body.file. `/revert` restores the newest .bak for body.file.",
+      "spec": "Single self-contained ESM file. Named export createSiteBuilderEditorRoutes + default. PATH SAFETY (hard, fail-closed): resolve previewsRoot = path.resolve(process.cwd(),'public/previews') ONCE; for every file access resolve the candidate and require resolved.startsWith(previewsRoot + path.sep) AND clientId matches /^[\\w-]+$/ AND file has no '..' — otherwise 403. Never read/write outside previewsRoot. Token check fails closed when meta.json is missing, unreadable, or has no editToken. No database. Use express.json() body parsing already present. Wrap AI/file errors and respond JSON { ok:false, error } with appropriate status; never leak absolute paths in errors. TRUTH rules passed to the model must forbid inventing prices, stats, ratings, review counts, and named testimonials. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "depends_on": ["sb-editor-shell"],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "sb-competitor-categories",
+      "status": "pending",
+      "target_file": "services/site-builder-competitor-categories.js",
+      "task": "Create a helper that classifies a wellness business into ALL of its practice categories (a business can be several at once — e.g. midwife AND general wellness) and returns per-category competitor search queries. Export classifyPracticeCategories(businessInfo) -> { categories: [{ id, label, searchQueries[] }] } covering at least 'midwifery' (home birth, midwife, doula, birth support) and 'wellness' (holistic wellness, wellness practitioner) detection from businessInfo.industry/services/keywords, and buildDualCategoryQueries(businessInfo) that always returns queries for BOTH midwifery and wellness when either is detected, so the benchmark compares against both lanes.",
+      "spec": "Single self-contained ESM module, pure functions, no network/DB/imports. Named exports classifyPracticeCategories and buildDualCategoryQueries + default export object. Case-insensitive keyword matching over arrays that may be undefined (guard everything). Deterministic output. Never throw on missing fields. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
-      "founder_gated": true,
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "sb-social-discovery",
+      "status": "pending",
+      "target_file": "services/site-builder-social-discovery.js",
+      "task": "Create a social-media discovery helper that finds a business's social profiles — especially YouTube — even when not linked on their website. Export async discoverSocials(businessInfo, { fetchImpl }) that (1) collects any social URLs already present in businessInfo, and (2) builds candidate handles from the business name and, when a fetchImpl is provided, verifies likely YouTube (youtube.com/@handle), Instagram, and Facebook URLs by HEAD/GET and returns only reachable ones. Also export extractYouTubeChannelId(html) to pull a channelId from a YouTube page's HTML. Returns { youtube: {url,channelId}|null, instagram, facebook, tiktok, others[] }.",
+      "spec": "Single self-contained ESM module. Named exports discoverSocials, extractYouTubeChannelId + default. NETWORK IS OPTIONAL AND INJECTED: never import a network library; use the provided fetchImpl (default to globalThis.fetch) and if it is unavailable, return only the socials already known from businessInfo (fail-open to no-op, never throw). Wrap every fetch in try/catch with a short timeout via AbortController. Do not fabricate a profile — only return URLs actually confirmed reachable or already provided. Guard all businessInfo fields. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "sb-service-catalog",
+      "status": "pending",
+      "target_file": "services/site-builder-service-catalog.js",
+      "task": "Create the à-la-carte add-on SERVICE CATALOG that powers the editor's left sidebar. Export SERVICE_CATALOG (array of { id, name, blurb, price, cadence }) covering: logo & brand kit, corporate/brand package, ClickFunnels build + ad placement/management, managed Google Business Profile + local SEO, social-media management, and an SEO/content care plan — with honest, GOAL-based (never GUARANTEE) copy. For the Google offering use exactly this framing: 'managed Google Business Profile + local SEO with the GOAL of ranking on the first page of results for your category' — a goal/minimum-expectation, NEVER a guarantee and NEVER 'guaranteed #1'. Each service may carry an optional `results` proof object ({ headline, sampleSize, onFirstPage, atNumberOne }) — real, MEASURED client outcomes only (e.g. '11 of 15 managed businesses rank on page one, 9 at #1'); export formatResultsProof(results) that returns a short honest string ONLY when results.sampleSize>0, and returns null (hide the block) otherwise — NEVER fabricate outcome numbers. Export recommendServices(strategy) that, given the competitor strategy object ({ competitors:[{doesPoorly/weaknesses}], gaps }), returns the SAME catalog with a boolean `recommended` flag set on the services that address the biggest competitor gaps (e.g. flag ad-management/funnel when competitors lack ads, flag video/social when competitors lack video). Prices come from the product revenue model, not invented.",
+      "spec": "Single self-contained ESM module, pure data + pure functions, no network/DB/imports/side effects. Named exports SERVICE_CATALOG, recommendServices, formatResultsProof + default. recommendServices must never throw on missing/partial strategy (guard everything, default to no recommendations). Copy must comply with the product's TRUTH non-negotiables: no guaranteed rankings, no fabricated outcomes. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "depends_on": [],
+      "founder_gated": false,
       "attempts": 0
     }
   ]
