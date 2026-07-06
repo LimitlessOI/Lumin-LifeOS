@@ -8,13 +8,36 @@ import { createMemoryIntelligenceService } from './memory-intelligence-service.j
 import { isCssOnlyUiFeedback } from './builder-instruction-target.js';
 import { buildAttemptCarryForwardContext } from './self-repair-attempt-context.js';
 import { researchObstacleBlocker } from './obstacle-web-research.js';
-import { QUORUM_ROUNDS_PER_STAGE } from './self-repair-escalation-policy.js';
+import { QUORUM_ROUNDS_PER_STAGE, isKnowledgeGapBlocker } from './self-repair-escalation-policy.js';
 
 export const FOUNDER_SOLO_ATTEMPT_MAX = Number(process.env.FOUNDER_SOLO_ATTEMPT_MAX || '3');
 
-const QUORUM_2_MEMBERS = ['openai_builder_mini', 'deepseek'];
-const QUORUM_3_MEMBERS = ['openai_builder_mini', 'openai_builder_standard', 'claude_sonnet'];
+// Verbatim error text passed into a quorum is capped to keep prompts bounded but
+// still carries the ACTUAL failure (stack/test output), not a paraphrase.
+const VERBATIM_MAX = Math.max(500, Number(process.env.FOUNDER_QUORUM_VERBATIM_MAX || '4000'));
+// One model red-teams the chosen fix before a build run is spent on it (on by default).
+const CRITIQUE_ENABLED = process.env.FOUNDER_QUORUM_CRITIQUE !== '0';
+
+function parseMembers(envVal, fallback) {
+  const parsed = String(envVal || '').split(',').map((s) => s.trim()).filter(Boolean);
+  return parsed.length ? parsed : fallback;
+}
+
+// Diversity beats size: each tier pairs DIFFERENT model families so they fail
+// differently and catch each other's blind spots — not stronger flavors of one
+// model. Tier 2 = OpenAI + DeepSeek; tier 3 = OpenAI + Anthropic + Google.
+const QUORUM_2_MEMBERS = parseMembers(process.env.FOUNDER_QUORUM_2_MEMBERS, ['openai_builder_mini', 'deepseek']);
+const QUORUM_3_MEMBERS = parseMembers(process.env.FOUNDER_QUORUM_3_MEMBERS, ['openai_builder_standard', 'claude_sonnet', 'gemini_flash']);
 const CHAIR_MEMBER = process.env.FOUNDER_CHAIR_MEMBER || 'claude_sonnet';
+
+function firstVerbatim(...vals) {
+  for (const v of vals) {
+    if (v == null) continue;
+    const s = typeof v === 'string' ? v : (() => { try { return JSON.stringify(v); } catch { return ''; } })();
+    if (s && s.trim()) return s;
+  }
+  return '';
+}
 
 const STATIC_FOUNDER_LESSONS = [
   'Theme-only CSS commits fail when inline styles in lifeos-app.html / lifeos-dashboard.html override theme-overrides.',
@@ -25,15 +48,21 @@ const STATIC_FOUNDER_LESSONS = [
 ];
 
 function buildFailureContext({ task, attempts, blocker, verification, targetFile }) {
+  const verbatimError = firstVerbatim(
+    verification?.stderr, verification?.stdout, verification?.output,
+    verification?.detail, verification?.evidence, verification?.message,
+  ).slice(0, VERBATIM_MAX);
   return {
     task: String(task || '').slice(0, 2000),
     target_file: targetFile || null,
-    blocker: String(blocker || 'unknown').slice(0, 500),
+    blocker: String(blocker || 'unknown').slice(0, 2000),
     verification_code: verification?.code || null,
+    verbatim_error: verbatimError || null,
     solo_attempts: (attempts || []).map((a) => ({
       attempt: a.attempt,
       pass_fail: a.pass_fail,
       blocker: a.blocker,
+      error: firstVerbatim(a.error, a.stderr, a.output, a.detail).slice(0, VERBATIM_MAX) || null,
       repair_applied: a.repair_applied || null,
       target_file: a.target_file || null,
       attempt_context: a.attempt_context || null,
@@ -56,7 +85,7 @@ TASK: ${context.task}
 TARGET: ${context.target_file || '(inferred)'}
 BLOCKER: ${context.blocker}
 VERIFICATION: ${context.verification_code || 'n/a'}
-${cssHint}
+${context.verbatim_error ? `EXACT ERROR (verbatim — solve THIS, do not paraphrase or guess a different error):\n${context.verbatim_error}\n` : ''}${cssHint}
 
 INSTITUTIONAL LESSONS (CFO + Hist):
 ${lessons.map((l, i) => `${i + 1}. ${l}`).join('\n')}
@@ -94,6 +123,82 @@ export function parseQuorumResponse(text) {
   } catch (err) {
     return { ok: false, error: err.message };
   }
+}
+
+export function mergePlansByConfidence(plans = []) {
+  if (!plans.length) return null;
+  return plans.reduce((best, p) => (
+    (p.plan?.confidence || 0) > (best.plan?.confidence || 0) ? p : best
+  ), plans[0]);
+}
+
+// Pick a critic that is NOT the plan's likely author when we can tell; otherwise
+// prefer the strongest available voice. Keeps the red-team a fresh perspective.
+export function pickCritic(members = [], avoidMember = null) {
+  const pool = members.filter((m) => m && m !== avoidMember);
+  const list = pool.length ? pool : members;
+  return list.find((m) => m === 'claude_sonnet') || list[list.length - 1] || null;
+}
+
+export function buildCritiquePrompt({ context, plan }) {
+  return `You are the RED-TEAM critic. Before we spend a real build run on the fix below, find why it will FAIL. Be adversarial but fair.
+
+TASK: ${context.task}
+BLOCKER: ${context.blocker}
+${context.verbatim_error ? `EXACT ERROR (verbatim):\n${context.verbatim_error}\n` : ''}
+PROPOSED FIX (chosen by the quorum):
+${JSON.stringify(plan, null, 2)}
+
+If the fix is sound, approve it. If it is close but flawed, return a concrete revised_plan (same shape). If it cannot work, reject it.
+Respond with ONLY valid JSON (no markdown fences):
+{
+  "verdict": "approve|revise|reject",
+  "critique": "one or two sentences on the real risk",
+  "revised_plan": { "root_cause": "...", "fix_approach": "css_patch|redeploy_wait|target_reroute|builder_execute|chair_synthesis", "target_files": [], "augmented_task": "...", "confidence": 1-10 } or null,
+  "confidence": 1-10
+}`;
+}
+
+export function parseCritiqueResponse(text) {
+  const raw = String(text || '').trim();
+  const jsonMatch = raw.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) return { ok: false, error: 'no_json_in_critique' };
+  try {
+    const parsed = JSON.parse(jsonMatch[0]);
+    const verdict = String(parsed.verdict || '').toLowerCase();
+    if (!['approve', 'revise', 'reject'].includes(verdict)) {
+      return { ok: false, error: 'critique_missing_verdict' };
+    }
+    return { ok: true, result: { ...parsed, verdict } };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+// Fold a critique back into the chosen plan without ever throwing away a valid
+// plan: revise adopts a concrete revision, reject caps confidence so a weaker
+// downstream tier can still surpass it, approve just annotates.
+export function applyCritiqueToPlan(plan, critique) {
+  if (!critique || !critique.ok) return { plan, critique: null };
+  const c = critique.result;
+  if (c.verdict === 'revise' && c.revised_plan && c.revised_plan.augmented_task && c.revised_plan.fix_approach) {
+    return { plan: { ...plan, ...c.revised_plan, critiqued: 'revised', critique_note: c.critique || null }, critique: c };
+  }
+  if (c.verdict === 'reject') {
+    return { plan: { ...plan, confidence: Math.min(Number(plan.confidence) || 1, 2), critiqued: 'rejected', critique_note: c.critique || null }, critique: c };
+  }
+  return { plan: { ...plan, critiqued: 'approved', critique_note: c.critique || null }, critique: c };
+}
+
+async function critiquePlan({ callCouncilMember, members, context, plan, maxTokens }) {
+  if (!CRITIQUE_ENABLED || !callCouncilMember || !plan) return { plan, critique: null };
+  const critic = pickCritic(members);
+  if (!critic) return { plan, critique: null };
+  const res = await callMember(callCouncilMember, critic, buildCritiquePrompt({ context, plan }), Math.min(maxTokens || 4000, 3000));
+  if (!res.ok) return { plan, critique: null };
+  const parsed = parseCritiqueResponse(res.text);
+  const applied = applyCritiqueToPlan(plan, parsed.ok ? parsed : null);
+  return { plan: applied.plan, critique: applied.critique ? { critic, ...applied.critique } : null };
 }
 
 export async function loadFounderBuildLessons(pool, limit = 8) {
@@ -193,16 +298,25 @@ async function runQuorumDeliberation({ stage, members, callCouncilMember, contex
     };
   }
 
-  const merged = plans.reduce((best, p) => (
-    (p.plan.confidence || 0) > (best.plan.confidence || 0) ? p : best
-  ), plans[0]);
+  const merged = mergePlansByConfidence(plans);
+
+  // Critique-before-execute: one model red-teams the chosen fix before we spend
+  // a real build run on it. Never blocks — on any failure we keep the merged plan.
+  const { plan: finalPlan, critique } = await critiquePlan({
+    callCouncilMember,
+    members,
+    context,
+    plan: merged.plan,
+    maxTokens,
+  });
 
   return {
     stage,
     members,
     ok: true,
     attempt_context: carryForward.attempt_context,
-    plan: merged.plan,
+    plan: finalPlan,
+    critique,
     perspectives: okResponses.map((r) => ({
       member: r.member,
       excerpt: String(r.text || '').slice(0, 400),
@@ -226,7 +340,10 @@ async function runQuorumStageWithRetry({
   let lastResult = null;
 
   for (let round = 1; round <= rounds; round++) {
-    if (round === rounds && context.blocker) {
+    // Final round always researches; an earlier round researches early when the
+    // blocker looks like a knowledge gap outside sources can close (adaptive).
+    const adaptiveEarly = round === rounds - 1 && isKnowledgeGapBlocker(context.blocker);
+    if ((round === rounds || adaptiveEarly) && context.blocker) {
       const research = await researchObstacleBlocker({
         phase: stage,
         violations: [context.blocker, String(context.task || '').slice(0, 200)].filter(Boolean),
@@ -234,7 +351,7 @@ async function runQuorumStageWithRetry({
         kind: 'quorum_blocker',
       }).catch(() => ({ ok: false, fix_hints: [] }));
       if (research.ok && research.fix_hints?.length) {
-        roundWebHints = [...roundWebHints, ...research.fix_hints];
+        roundWebHints = [...new Set([...roundWebHints, ...research.fix_hints])];
       }
     }
 

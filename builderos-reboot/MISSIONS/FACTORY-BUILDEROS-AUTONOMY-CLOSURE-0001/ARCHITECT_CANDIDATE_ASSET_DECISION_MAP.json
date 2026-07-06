@@ -118,7 +118,7 @@
         "services/self-repair-execution-log.js"
       ],
       "decision": "REUSE_WITH_REMEDIATION",
-      "reason": "PB authority, receipt writing, memory, and telemetry are useful. EXECUTOR_MAX_ATTEMPTS=2 is weaker than founder doctrine.",
+      "reason": "PB authority, receipt writing, memory, and telemetry are useful. RESOLVED 2026-07-03: EXECUTOR_MAX_ATTEMPTS now = SELF_REPAIR_MAX_ATTEMPTS (3), matching founder three-attempt doctrine; remediation below is satisfied.",
       "required_remediation": [
         "Adopt three-attempt repair doctrine.",
         "Require prior lessons and local code truth fields.",

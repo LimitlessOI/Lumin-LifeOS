@@ -1019,8 +1019,9 @@ export async function runFounderBuildWithSelfRepair(options) {
   let soloWebResearchHints = [];
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    if (shouldRunWebSearchBeforeAttempt(attempt) && attempts.length > 0) {
-      const lastBlocker = attempts.at(-1)?.blocker;
+    const lastSoloBlocker = attempts.at(-1)?.blocker;
+    if (shouldRunWebSearchBeforeAttempt(attempt, lastSoloBlocker) && attempts.length > 0) {
+      const lastBlocker = lastSoloBlocker;
       if (lastBlocker) {
         const research = await researchObstacleBlocker({
           phase: 'builder_task_solo',

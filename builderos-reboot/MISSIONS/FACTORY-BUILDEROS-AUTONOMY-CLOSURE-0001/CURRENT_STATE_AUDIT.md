@@ -96,21 +96,30 @@ The system has no canonical shared helper that distinguishes:
 - Point-B-complete,
 - and queue-runnable incomplete work.
 
-### 4. Self-repair attempt law is weaker than the founder doctrine
+### 4. Self-repair attempt law — RESOLVED (2026-07-03)
 
 Canonical source:
 
+- `services/self-repair-escalation-policy.js`
 - `services/self-repair-executor.js`
 - `services/founder-build-self-repair.js`
+- `services/founder-build-quorum-escalation.js`
 
-Verified truth:
+Original finding (superseded):
 
 - `EXECUTOR_MAX_ATTEMPTS = 2`
 - founder doctrine in this thread requires three-attempt escalation patterns with lessons carry-forward and research before higher escalation
 
+Verified truth now:
+
+- `SELF_REPAIR_MAX_ATTEMPTS = 3` and `EXECUTOR_MAX_ATTEMPTS = SELF_REPAIR_MAX_ATTEMPTS` (= 3). The 2-attempt cap is gone.
+- Solo tier runs 3 attempts (initial → +lessons → +research/consensus); web search fires before the final attempt, and **adaptively before attempt 2 when the blocker is a knowledge gap** (`shouldRunWebSearchBeforeAttempt` + `isKnowledgeGapBlocker`).
+- On solo exhaustion the ladder climbs 2-AI → 3-AI → Chair → Adam (`runFounderBuildQuorumEscalation`), 3 rounds per tier, web search before each tier's final (and adaptively earlier) round, all prior attempts/lessons/research/deliberations carried forward. Wired at `routes/lifeos-builderos-command-control-routes.js`.
+- Refinements (2026-07-03): tiers use **cross-family** models (tier 2 OpenAI+DeepSeek; tier 3 OpenAI+Anthropic+Google), the **verbatim error** is carried into the quorum prompt (not paraphrased), and a **critique-before-execute** red-team pass vets the chosen fix before a build run is spent.
+
 Conclusion:
 
-Self-repair policy is under-specified and under-enforced.
+Self-repair policy now matches the founder doctrine and is enforced + unit-tested (`tests/self-repair-escalation-policy.test.js`, `tests/founder-build-quorum-escalation.test.js`). Remaining gap is operational: the ladder only runs when a builder agent provider is configured and autonomy is not paused/directed.
 
 ### 5. Improvement loop is advisory, not enforceable
 

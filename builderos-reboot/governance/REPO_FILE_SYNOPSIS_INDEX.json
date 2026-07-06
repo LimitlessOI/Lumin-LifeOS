@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T04:57:57.115Z",
+  "generated_at": "2026-07-06T05:42:27.864Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11182,
   "files": [
@@ -21835,9 +21835,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/ARCHITECT_CANDIDATE_ASSET_DECISION_MAP.json",
       "synopsis": "BuilderOS artifact — ARCHITECT CANDIDATE ASSET DECISION MAP.",
-      "bytes": 15547,
-      "mtime": "2026-06-29T17:21:07.237Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z",
+      "bytes": 15642,
+      "mtime": "2026-07-06T05:41:45.953Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z",
       "synopsis_index_only": true
     },
     {
@@ -21974,9 +21974,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/CURRENT_STATE_AUDIT.md",
       "synopsis": "Verified current-state audit for BuilderOS autonomy closure",
-      "bytes": 8873,
-      "mtime": "2026-07-03T00:17:44.930Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z"
+      "bytes": 10242,
+      "mtime": "2026-07-06T05:40:53.225Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/DO_NOT_INVENT.json",
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 125010,
-      "mtime": "2026-07-05T19:10:02.179Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z"
+      "bytes": 126494,
+      "mtime": "2026-07-06T05:41:37.117Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -81174,9 +81174,9 @@
     {
       "path": "services/founder-build-quorum-escalation.js",
       "synopsis": "Founder build quorum escalation — solo cap → 2-AI → 3-AI → Chair → Adam.",
-      "bytes": 17112,
-      "mtime": "2026-06-30T15:22:43.419Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z",
+      "bytes": 23067,
+      "mtime": "2026-07-06T05:39:34.201Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -81194,9 +81194,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 44710,
-      "mtime": "2026-07-03T16:30:52.645Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z",
+      "bytes": 44772,
+      "mtime": "2026-07-06T05:37:57.573Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83865,9 +83865,9 @@
     {
       "path": "services/self-repair-escalation-policy.js",
       "synopsis": "Canonical self-repair escalation policy for BuilderOS repair loops.",
-      "bytes": 938,
-      "mtime": "2026-07-03T00:17:45.103Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z",
+      "bytes": 2978,
+      "mtime": "2026-07-06T05:37:51.449Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
@@ -86184,9 +86184,9 @@
     {
       "path": "tests/founder-build-quorum-escalation.test.js",
       "synopsis": "js — tests/founder-build-quorum-escalation.test.js.",
-      "bytes": 2250,
-      "mtime": "2026-06-27T17:13:00.453Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z"
+      "bytes": 4627,
+      "mtime": "2026-07-06T05:40:23.561Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z"
     },
     {
       "path": "tests/founder-build-result-truth.test.js",
@@ -86616,9 +86616,9 @@
     {
       "path": "tests/self-repair-escalation-policy.test.js",
       "synopsis": "js — tests/self-repair-escalation-policy.test.js.",
-      "bytes": 1093,
-      "mtime": "2026-07-03T00:17:45.106Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z"
+      "bytes": 2818,
+      "mtime": "2026-07-06T05:40:01.197Z",
+      "indexed_at": "2026-07-06T05:42:27.864Z"
     },
     {
       "path": "tests/self-repair-execution-log.test.js",
