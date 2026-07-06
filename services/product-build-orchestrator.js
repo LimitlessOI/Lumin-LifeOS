@@ -102,8 +102,12 @@ export function persistQueue(queue, { root = ROOT } = {}) {
  *   - a build that returns ok but NO commit_sha is treated as FAILURE, not pass.
  *   - a step is only marked done when BOTH build (with SHA) AND verify pass.
  *   - after maxAttempts failures the step is BLOCKED (loop moves on, no spin).
+ *   - OPTIONAL deployProofFn({ commit_sha }) -> { ok } proves the running deploy
+ *     actually serves the built SHA before the step is called "live" (closes the
+ *     "false live" gap). When provided and it fails, the step stays retryable
+ *     (build/verify succeeded but the deploy hasn't caught up).
  */
-export async function runNextStep(queue, { buildFn, verifyFn, maxAttempts = 3, logger = console } = {}) {
+export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, maxAttempts = 3, logger = console } = {}) {
   if (typeof buildFn !== 'function') throw new Error('runNextStep requires buildFn');
   const { step, gated } = selectNextStep(queue);
   if (!step) {
@@ -142,10 +146,24 @@ export async function runNextStep(queue, { buildFn, verifyFn, maxAttempts = 3, l
     return failStep(step, queue, maxAttempts, { stage: 'verify', reason: verify.detail || 'verify_failed', commit_sha: sha }, logger);
   }
 
+  let deployProven = null;
+  if (typeof deployProofFn === 'function') {
+    const proof = await deployProofFn({ commit_sha: sha, product_id: queue.product_id, step });
+    deployProven = Boolean(proof && proof.ok);
+    if (!deployProven) {
+      return failStep(step, queue, maxAttempts, {
+        stage: 'deploy',
+        reason: (proof && proof.reason) || 'deploy_does_not_serve_built_sha (not live — no false live)',
+        commit_sha: sha,
+      }, logger);
+    }
+  }
+
   step.status = STEP_STATUS.DONE;
   step.completed_at = new Date().toISOString();
-  logger?.info?.({ step: step.id, commit_sha: sha }, '[PRODUCT-BUILD] step done');
-  return { ok: true, step_id: step.id, commit_sha: sha, verified: true, summary: queueSummary(queue) };
+  if (deployProven !== null) step.deploy_proven = deployProven;
+  logger?.info?.({ step: step.id, commit_sha: sha, deploy_proven: deployProven }, '[PRODUCT-BUILD] step done');
+  return { ok: true, step_id: step.id, commit_sha: sha, verified: true, deploy_proven: deployProven, summary: queueSummary(queue) };
 }
 
 function failStep(step, queue, maxAttempts, info, logger) {

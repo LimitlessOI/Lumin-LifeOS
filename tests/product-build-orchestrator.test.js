@@ -64,6 +64,27 @@ test('build that claims ok but returns no SHA is treated as failure (no false gr
   assert.equal(q.steps[0].status, STEP_STATUS.PENDING, 'retryable, not done');
 });
 
+test('deployProofFn gates "live": step stays retryable until the deploy serves the built SHA (no false live)', async () => {
+  const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
+  const base = {
+    buildFn: async () => ({ ok: true, commit_sha: 'abc123' }),
+    verifyFn: async () => ({ ok: true }),
+    maxAttempts: 3,
+  };
+
+  // deploy has not caught up yet -> not done, retryable
+  let r = await runNextStep(q, { ...base, deployProofFn: async () => ({ ok: false, reason: 'deploy_serves_different_sha' }) });
+  assert.equal(r.ok, false);
+  assert.equal(r.stage, 'deploy');
+  assert.equal(q.steps[0].status, STEP_STATUS.PENDING, 'retryable — build+verify passed but not live');
+
+  // deploy now serves the built sha -> done + deploy_proven
+  r = await runNextStep(q, { ...base, deployProofFn: async () => ({ ok: true }) });
+  assert.equal(r.ok, true);
+  assert.equal(r.deploy_proven, true);
+  assert.equal(q.steps[0].status, STEP_STATUS.DONE);
+});
+
 test('verify failure keeps step retryable then blocks after maxAttempts (no spin)', async () => {
   const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
   const opts = {

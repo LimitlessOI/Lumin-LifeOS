@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T17:29:21.031Z",
+  "generated_at": "2026-07-06T17:47:27.081Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11188,
   "files": [
@@ -21581,9 +21581,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3375131,
-      "mtime": "2026-07-06T16:53:36.867Z",
-      "indexed_at": "2026-07-06T16:53:52.324Z"
+      "bytes": 3376652,
+      "mtime": "2026-07-06T17:47:17.739Z",
+      "indexed_at": "2026-07-06T17:47:27.081Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 129006,
-      "mtime": "2026-07-06T17:28:44.795Z",
-      "indexed_at": "2026-07-06T17:29:21.031Z"
+      "bytes": 129849,
+      "mtime": "2026-07-06T17:47:09.347Z",
+      "indexed_at": "2026-07-06T17:47:27.081Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -83564,9 +83564,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 6531,
-      "mtime": "2026-07-06T17:27:05.843Z",
-      "indexed_at": "2026-07-06T17:29:21.031Z",
+      "bytes": 7452,
+      "mtime": "2026-07-06T17:46:31.183Z",
+      "indexed_at": "2026-07-06T17:47:27.081Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86611,9 +86611,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 4306,
-      "mtime": "2026-07-06T17:29:20.207Z",
-      "indexed_at": "2026-07-06T17:29:21.031Z",
+      "bytes": 5272,
+      "mtime": "2026-07-06T17:46:48.715Z",
+      "indexed_at": "2026-07-06T17:47:27.081Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
