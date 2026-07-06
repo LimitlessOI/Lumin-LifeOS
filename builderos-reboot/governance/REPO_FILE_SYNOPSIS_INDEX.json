@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T04:57:57.115Z",
+  "generated_at": "2026-07-06T05:24:43.093Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11182,
   "files": [
@@ -21582,8 +21582,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3374744,
-      "mtime": "2026-07-06T04:57:56.412Z",
-      "indexed_at": "2026-07-06T04:57:57.115Z"
+      "mtime": "2026-07-06T05:24:25.284Z",
+      "indexed_at": "2026-07-06T05:24:43.093Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38852,9 +38852,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 582874,
-      "mtime": "2026-07-06T04:57:39.173Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z"
+      "bytes": 583841,
+      "mtime": "2026-07-06T05:24:13.108Z",
+      "indexed_at": "2026-07-06T05:24:43.093Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -80163,9 +80163,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — the founder talks straight to the Chair (the AI), which can ANSWER and ACT.",
-      "bytes": 10726,
-      "mtime": "2026-07-06T04:57:39.173Z",
-      "indexed_at": "2026-07-06T04:57:54.986Z",
+      "bytes": 11160,
+      "mtime": "2026-07-06T05:23:39.628Z",
+      "indexed_at": "2026-07-06T05:24:43.093Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
