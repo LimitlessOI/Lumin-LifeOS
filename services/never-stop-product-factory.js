@@ -11,11 +11,14 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
 import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary } from './product-build-orchestrator.js';
+import { waitForDeploySha } from './deploy-truth.js';
+import { enforceClaim, toWatchlist } from './truth-ladder.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
 const LOG_PATH = path.join(ROOT, 'data/never-stop-product-factory-log.jsonl');
 const STATE_PATH = path.join(ROOT, 'data/never-stop-product-factory-state.json');
+const WATCHLIST_PATH = path.join(ROOT, 'data/truth-watchlist.jsonl');
 
 export function neverStopProductsEnabled() {
   return process.env.BUILDEROS_NEVER_STOP === '1'
@@ -287,11 +290,42 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     return { ok: r.status === 0, detail: r.status === 0 ? 'verify_pass' : `verify_exit_${r.status}` };
   };
 
-  const outcome = await runNextStep(queue, { buildFn, verifyFn, logger });
+  // Deploy-truth gate: after build+verify, trigger a redeploy and refuse to mark
+  // the step "live" until the running deployment actually serves the built SHA.
+  const deployProofFn = async ({ commit_sha }) => {
+    if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
+    if (!commit_sha) return { ok: false, reason: 'no_commit_sha_to_prove' };
+    await tryRedeploy();
+    const proof = await waitForDeploySha({
+      expectedSha: commit_sha,
+      baseUrl,
+      fetchFn: (...a) => fetch(...a),
+      attempts: 20,
+      intervalMs: 15_000,
+    });
+    return { ok: proof.ok, reason: proof.ok ? null : (proof.reason || 'deploy_did_not_serve_sha'), served_sha: proof.served_sha };
+  };
+
+  const outcome = await runNextStep(queue, { buildFn, verifyFn, deployProofFn, logger });
   persistQueue(queue);
-  log({ event: 'product_build_step', product_id: task.product_id, step_id: task.step_id, outcome });
-  if (outcome.ok && outcome.commit_sha) await tryRedeploy();
-  return { ok: outcome.ok, detail: 'product_build_step', outcome, summary: queueSummary(queue) };
+
+  // Truth-ladder the outcome: a "live" claim only holds at KNOW when the deploy
+  // was proven; otherwise it is downgraded and parked on the re-confirm watchlist.
+  const claim = enforceClaim({
+    id: `${task.product_id}:${task.step_id}`,
+    kind: 'deploy',
+    text: `product step ${task.step_id} built + verified + served live`,
+    grade: 'KNOW',
+    proof: outcome.ok && outcome.deploy_proven ? { deploy_verified: true, commit_sha: outcome.commit_sha } : null,
+  });
+  const watch = toWatchlist([claim]);
+  if (watch.length) {
+    fs.mkdirSync(path.dirname(WATCHLIST_PATH), { recursive: true });
+    for (const w of watch) fs.appendFileSync(WATCHLIST_PATH, `${JSON.stringify(w)}\n`);
+  }
+
+  log({ event: 'product_build_step', product_id: task.product_id, step_id: task.step_id, outcome, claim_grade: claim.grade, claim_flags: claim.flags });
+  return { ok: outcome.ok, detail: 'product_build_step', outcome, claim, summary: queueSummary(queue) };
 }
 
 export async function runProductExpansionCycle(options = {}) {
