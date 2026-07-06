@@ -1,4 +1,4 @@
-<!-- LifeOS deployment README. -->
+<!-- LifeOS / BuilderOS — Chair-native system. Lumin is the operating intelligence. -->
 <!-- SYNOPSIS: Deployment and Monitoring Instructions -->
 
 ```markdown

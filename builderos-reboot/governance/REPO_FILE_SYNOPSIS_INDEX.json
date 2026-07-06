@@ -1,15 +1,15 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T07:21:22.469Z",
+  "generated_at": "2026-07-06T07:21:34.497Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 1,
   "files": [
     {
       "path": "README.md",
       "synopsis": "Deployment and Monitoring Instructions",
-      "bytes": 1384,
-      "mtime": "2026-07-06T07:21:22.469Z",
-      "indexed_at": "2026-07-06T07:21:22.469Z"
+      "bytes": 1439,
+      "mtime": "2026-07-06T07:21:34.497Z",
+      "indexed_at": "2026-07-06T07:21:34.497Z"
     }
   ]
 }
