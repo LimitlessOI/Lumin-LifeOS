@@ -76,7 +76,7 @@ test('waitForDeploySha polls until the deploy advances', async () => {
   let call = 0;
   const fetchFn = async () => {
     call += 1;
-    const sha = call >= 3 ? 'd0052b05b' : 'oldsha0';
+    const sha = call >= 3 ? 'd0052b05b' : 'aaaaaaa';
     return jsonResponse({ codegen: { deploy_commit_sha: sha } });
   };
   const r = await waitForDeploySha({ expectedSha: 'd0052b05b', baseUrl: 'https://x', fetchFn, attempts: 5, sleepFn: async () => {} });
@@ -85,7 +85,7 @@ test('waitForDeploySha polls until the deploy advances', async () => {
 });
 
 test('waitForDeploySha gives up after attempts, never false-positives', async () => {
-  const fetchFn = async () => jsonResponse({ codegen: { deploy_commit_sha: 'oldsha0' } });
+  const fetchFn = async () => jsonResponse({ codegen: { deploy_commit_sha: 'aaaaaaa' } });
   const r = await waitForDeploySha({ expectedSha: 'd0052b05b', baseUrl: 'https://x', fetchFn, attempts: 3, sleepFn: async () => {} });
   assert.equal(r.ok, false);
   assert.equal(r.attempts_used, 3);
