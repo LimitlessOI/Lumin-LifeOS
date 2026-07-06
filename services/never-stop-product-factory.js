@@ -123,6 +123,27 @@ function spawnAsync(cmd, args, options = {}) {
 }
 
 /**
+ * Bounded-concurrency map: run `fn` over `items` with at most `limit` in flight
+ * at once, preserving input order in the results. This is the primitive that
+ * lets the factory build MULTIPLE product lanes in parallel instead of one task
+ * per cycle — the expensive part (the builder AI call per product) overlaps.
+ */
+export async function mapConcurrent(items, limit, fn) {
+  const results = new Array(items.length);
+  const width = Math.max(1, Math.min(Number(limit) || 1, items.length));
+  let cursor = 0;
+  const worker = async () => {
+    while (cursor < items.length) {
+      const idx = cursor;
+      cursor += 1;
+      results[idx] = await fn(items[idx], idx);
+    }
+  };
+  await Promise.all(Array.from({ length: width }, worker));
+  return results;
+}
+
+/**
  * Scan every product home for a structured BUILD_QUEUE.json that still has an
  * actionable (non-gated, dependency-satisfied) step. This is the general work
  * source that fixes "the loop had nothing buildable" — instead of two hardcoded
@@ -325,6 +346,16 @@ async function tryRedeploy() {
   return { ok: r.status === 0, status: r.status };
 }
 
+// Coalesce concurrent redeploy requests: when several parallel lanes each commit
+// and ask for a redeploy at once, we want ONE Railway redeploy, not N thrashing
+// deploys. Callers that arrive while a redeploy is in flight share its promise.
+let _redeployInFlight = null;
+async function coalescedRedeploy() {
+  if (_redeployInFlight) return _redeployInFlight;
+  _redeployInFlight = tryRedeploy().finally(() => { _redeployInFlight = null; });
+  return _redeployInFlight;
+}
+
 async function postBuilderBuild(baseUrl, commandKey, body) {
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
     method: 'POST',
@@ -397,7 +428,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
   const deployProofFn = async ({ commit_sha }) => {
     if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
     if (!commit_sha) return { ok: false, reason: 'no_commit_sha_to_prove' };
-    await tryRedeploy();
+    await coalescedRedeploy();
     const proof = await waitForDeploySha({
       expectedSha: commit_sha,
       baseUrl,
@@ -499,6 +530,58 @@ export async function runProductExpansionCycle(options = {}) {
   writeState({ status: 'idle', last_task: task, last_result: result, cycles: (readState().cycles || 0) + 1 });
   logger?.info?.({ task: task.id, ok: result.ok }, '[NEVER-STOP-PRODUCT-FACTORY] cycle complete');
   return result;
+}
+
+/**
+ * MULTIPLE LANES: build every product's next actionable step CONCURRENTLY, up to
+ * `concurrency` at once, instead of one task per cycle. Phase 1 overlaps the
+ * expensive per-product builder calls (bounded by `mapConcurrent`); redeploys are
+ * coalesced into a single Railway deploy so parallel lanes don't thrash the
+ * platform. Each lane still honors the full contract: real commit SHA, verify,
+ * deploy-truth, truth-ladder — no false green, no false live.
+ *
+ * Dependency-injected (`laneStepFn`) so the concurrency behavior is unit-testable
+ * without a live builder or network.
+ */
+export async function runProductExpansionLanes(options = {}) {
+  const logger = options.logger || console;
+  const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
+  const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
+  const concurrency = Number(options.concurrency || process.env.NEVER_STOP_LANES || 3);
+
+  if (!options.laneStepFn) {
+    const token = hasTokenCapacity();
+    if (!token.ok) {
+      log({ event: 'lanes_token_halt', reason: token.reason });
+      return { ok: false, halted: true, reason: 'token_capacity', detail: token.reason };
+    }
+  }
+
+  const discover = options.discoverFn || discoverBuildQueueWork;
+  const work = discover();
+  if (!work.length) {
+    log({ event: 'expansion_lanes_empty' });
+    return { ok: true, lanes: 0, built: 0, live: 0, detail: 'no_build_queue_work' };
+  }
+
+  const laneStepFn = options.laneStepFn
+    || ((task) => runProductBuildStep(task, { baseUrl, commandKey, logger }));
+
+  writeState({ status: 'running_lanes', lanes: work.map((w) => w.id), concurrency });
+  const results = await mapConcurrent(work, concurrency, async (task) => {
+    try {
+      const r = await laneStepFn(task, { baseUrl, commandKey, logger });
+      return { task_id: task.id, product_id: task.product_id, ...r };
+    } catch (e) {
+      return { task_id: task.id, product_id: task.product_id, ok: false, error: e.message };
+    }
+  });
+
+  const built = results.filter((r) => r && r.outcome && (r.outcome.commit_sha || (r.outcome.outcome && r.outcome.outcome.commit_sha))).length;
+  const live = results.filter((r) => r && r.outcome && r.outcome.deploy_proven).length;
+  log({ event: 'expansion_lanes', lanes: work.length, built, live });
+  writeState({ status: 'idle', last_lanes: work.map((w) => w.id), lanes_built: built, lanes_live: live });
+  return { ok: true, lanes: work.length, built, live, results };
 }
 
 function readState() {
