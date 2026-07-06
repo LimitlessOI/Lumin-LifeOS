@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-04T20:29 — route_wire_failed also continues. |
+| **Last Updated** | 2026-07-03 — Founder-build progress streaming: `services/founder-build-job-store.js` now tracks an ordered `steps[]` per job (via new `appendFounderBuildJobStep()`, deduped, capped at 60), and `services/founder-build-self-repair.js` threads an `onProgress` callback through the build + CSS-patch pipelines to emit real milestones ("Reading your request", "Building the change", "Searching online for a fix", "Committing code", "Deploying to production", "Checking it worked live"); `startFounderBuildJob()` wires those into the job's steps so the founder UI can show the system's live background work. Prior: 2026-07-04T20:29 — route_wire_failed also continues. |
 
 ### Related docs (this product)
 

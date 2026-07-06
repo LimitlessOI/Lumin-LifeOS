@@ -45,6 +45,7 @@ import {
   createFounderBuildJob,
   getFounderBuildJob,
   setFounderBuildJobResult,
+  appendFounderBuildJobStep,
 } from './founder-build-job-store.js';
 import {
   createFounderInterfaceBuildJobRecord,
@@ -363,7 +364,12 @@ async function runCssPatchWithVerification({
   quorumStage = null,
   patchFn = applyAssistantBubbleCssPatch,
   executionPath = 'founder_css_patch',
+  onProgress = null,
 }) {
+  const emit = (label, detail) => {
+    if (typeof onProgress !== 'function') return;
+    try { onProgress({ label, detail: detail || null }); } catch { /* progress is best-effort */ }
+  };
   const effectiveSkipQuorum = skipQuorum === true;
   const baseCheck = assertFounderBuildBaseUrl(baseUrl);
   if (!baseCheck.ok) {
@@ -386,6 +392,7 @@ async function runCssPatchWithVerification({
   const loadedLessons = await loadFounderBuildLessons(pool);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    emit(attempt === 1 ? 'Writing the change' : `Retrying (attempt ${attempt})`);
     const carryForward = prepareRetryContext({
       attempt,
       attempts,
@@ -425,6 +432,7 @@ async function runCssPatchWithVerification({
 
     let execRes;
     try {
+      emit('Committing code');
       execRes = await commitCssPatchViaBuilder({ baseUrl: verifiedBase, commandKey, patchResult });
     } catch (err) {
       attempts.push({
@@ -484,9 +492,11 @@ async function runCssPatchWithVerification({
 
     if (!redeployTriggered) {
       redeployTriggered = true;
+      emit('Deploying to production');
       await triggerRailwayRedeploy({ baseUrl: verifiedBase, commandKey });
     }
 
+    emit('Checking it worked live');
     let verification = await runFounderSuccessGate({
       task,
       executionPath,
@@ -898,7 +908,14 @@ export async function runFounderBuildWithSelfRepair(options) {
     callCouncilMember = null,
     pool = null,
     quorumStage = null,
+    onProgress = null,
   } = options;
+
+  const emit = (label, detail) => {
+    if (typeof onProgress !== 'function') return;
+    try { onProgress({ label, detail: detail || null }); } catch { /* progress is best-effort */ }
+  };
+  emit('Reading your request');
 
   const base = String(baseUrl || '').replace(/\/$/, '');
   const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
@@ -994,6 +1011,7 @@ export async function runFounderBuildWithSelfRepair(options) {
       quorumStage,
       patchFn: applyVisualUiPatch,
       executionPath: 'founder_visual_ui_patch',
+      onProgress,
     });
   }
 
@@ -1011,6 +1029,7 @@ export async function runFounderBuildWithSelfRepair(options) {
       callCouncilMember,
       pool,
       quorumStage,
+      onProgress,
     });
   }
 
@@ -1019,10 +1038,12 @@ export async function runFounderBuildWithSelfRepair(options) {
   let soloWebResearchHints = [];
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    emit(attempt === 1 ? 'Building the change' : `Retrying (attempt ${attempt})`);
     const lastSoloBlocker = attempts.at(-1)?.blocker;
     if (shouldRunWebSearchBeforeAttempt(attempt, lastSoloBlocker) && attempts.length > 0) {
       const lastBlocker = lastSoloBlocker;
       if (lastBlocker) {
+        emit('Searching online for a fix');
         const research = await researchObstacleBlocker({
           phase: 'builder_task_solo',
           violations: [lastBlocker, currentTask.slice(0, 200)].filter(Boolean),
@@ -1135,6 +1156,7 @@ export async function runFounderBuildWithSelfRepair(options) {
       const execTarget = taskJson.target_file || taskJson.placement?.target_file || targetFile;
       const execEdit = editPatch && execTarget === targetFile;
       const execAdditive = !execEdit && (additivePatch || isZone3AdditiveTarget(execTarget, repoRoot));
+      emit('Committing code');
       const execRes = await postJson(`${base}/api/v1/lifeos/builder/execute`, headers, {
         output: taskJson.output,
         target_file: execTarget,
@@ -1269,6 +1291,10 @@ export async function runFounderBuildWithSelfRepair(options) {
 
 export function startFounderBuildJob(options) {
   const jobId = createFounderBuildJob({ task: options.task, userId: options.userId || null });
+  const jobOptions = {
+    ...options,
+    onProgress: (step) => { appendFounderBuildJobStep(jobId, step); },
+  };
   if (options.pool) {
     createFounderInterfaceBuildJobRecord(options.pool, {
       id: jobId,
@@ -1280,7 +1306,7 @@ export function startFounderBuildJob(options) {
   }
   setImmediate(async () => {
     try {
-      const buildPromise = runFounderBuildWithSelfRepair(options);
+      const buildPromise = runFounderBuildWithSelfRepair(jobOptions);
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(
           () => reject(new Error(`founder_build_job_timeout after ${FOUNDER_BUILD_JOB_TIMEOUT_MS}ms`)),
