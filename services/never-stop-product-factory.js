@@ -21,6 +21,37 @@ const LOG_PATH = path.join(ROOT, 'data/never-stop-product-factory-log.jsonl');
 const STATE_PATH = path.join(ROOT, 'data/never-stop-product-factory-state.json');
 const WATCHLIST_PATH = path.join(ROOT, 'data/truth-watchlist.jsonl');
 const BUILD_REPAIR_ATTEMPTS = Number(process.env.NEVER_STOP_BUILD_REPAIR_ATTEMPTS || 3);
+const PRODUCT_PRIORITY_PATH = path.join(ROOT, 'docs/products/PRODUCT_BUILD_PRIORITY.json');
+
+/**
+ * Founder-owned financial priority order for product builds. Returns an ordered
+ * array of product_ids (highest financial priority first). Fail-open to [] so a
+ * missing/malformed file never blocks the loop — it just falls back to
+ * maturity-based ordering.
+ */
+export function loadProductPriority() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(PRODUCT_PRIORITY_PATH, 'utf8'));
+    return Array.isArray(raw.priority) ? raw.priority.filter((id) => typeof id === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Rank a product to a fraction in [0,1) used as a tiebreaker within a work
+ * kind: LISTED products (founder financial priority) sort first, in list order;
+ * UNLISTED products sort after all listed ones, ordered by definition maturity
+ * (larger documented backlog / more fleshed-out home builds earlier). Lower =
+ * built sooner. Pure function.
+ */
+export function productRankFraction(productId, priorityList = [], maturity = 0) {
+  const idx = priorityList.indexOf(productId);
+  if (idx >= 0) return idx * 1e-4; // listed: 0.0000, 0.0001, ... always < unlisted
+  const m = Number.isFinite(maturity) && maturity > 0 ? maturity : 0;
+  // Unlisted: 0.5 (no backlog) down toward 0.01 as maturity grows — always > any listed rank.
+  return Math.max(0.01, 0.5 - Math.min(0.49, m * 1e-3));
+}
 
 /**
  * Pull the most specific, verbatim failure text out of a blocked builder
@@ -242,6 +273,7 @@ export function discoverBuildQueueWork() {
   } catch {
     return found;
   }
+  const priorityList = loadProductPriority();
   for (const productId of productIds) {
     const queuePath = path.join(productsDir, productId, 'BUILD_QUEUE.json');
     if (!fs.existsSync(queuePath)) continue;
@@ -252,7 +284,7 @@ export function discoverBuildQueueWork() {
         found.push({
           id: `product_build_${productId}_${step.id}`,
           kind: 'product_build_step',
-          priority: 2,
+          priority: 2 + productRankFraction(productId, priorityList),
           product: productId,
           product_id: productId,
           step_id: step.id,
@@ -284,6 +316,7 @@ export function discoverPlanWork() {
   } catch {
     return found;
   }
+  const priorityList = loadProductPriority();
   for (const productId of productIds) {
     if (fs.existsSync(queuePathForProduct(productId))) continue;
     const homePath = path.join(productsDir, productId, 'PRODUCT_HOME.md');
@@ -296,7 +329,7 @@ export function discoverPlanWork() {
     found.push({
       id: `plan_build_queue_${productId}`,
       kind: 'plan_build_queue',
-      priority: 5,
+      priority: 5 + productRankFraction(productId, priorityList, backlogCount),
       product: productId,
       product_id: productId,
       home_path: homePath,

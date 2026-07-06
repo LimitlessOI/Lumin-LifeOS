@@ -1,0 +1,22 @@
+{
+  "_authority": {
+    "domain": "Product",
+    "status": "CANONICAL",
+    "owner": "Founder (Adam)",
+    "purpose": "Founder-owned financial priority order for the autonomous product-build loop. The never-stop factory builds eligible product work in this order (highest financial priority first). This is a BUSINESS decision — edit `priority` to change what the system builds first."
+  },
+  "schema": "product_build_priority_v1",
+  "updated_at": "2026-07-06",
+  "rules": {
+    "financial_first": "`priority` is an ordered list of product_ids by financial priority, highest first. The loop builds listed products before unlisted ones.",
+    "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity — a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
+    "skip_undefined": "Products with no documented backlog AND no BUILD_QUEUE.json are skipped entirely until the founder adds ideas/features (existing loop behavior — never fabricated work).",
+    "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
+  },
+  "priority": [
+    "site-builder"
+  ],
+  "notes": [
+    "Seeded 2026-07-06 with site-builder first per founder direction: it is the nearest revenue and the product being finished end-to-end first. Other products fall to maturity-based ordering until the founder sets their financial rank here."
+  ]
+}
