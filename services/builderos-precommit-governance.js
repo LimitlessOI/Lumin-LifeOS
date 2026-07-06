@@ -6,8 +6,7 @@
  */
 
 import { spawnSync } from 'child_process';
-import { existsSync, unlinkSync, writeFileSync } from 'fs';
-import { tmpdir } from 'os';
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { runBuildPipeline } from './builderos-build-pipeline.js';
@@ -16,10 +15,16 @@ import { normalizeBuilderCodegenOutput } from './builderos-codegen-normalize.js'
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const VERIFIER_SCRIPT = join(ROOT, 'scripts', 'builderos-builder-output-verifier.mjs');
+// Verify generated code from INSIDE the repo tree (node_modules/.cache) rather
+// than the OS temp dir: ESM bare-specifier resolution walks up from the file's
+// own location, so a /tmp file can never resolve real deps like `pg`. Writing
+// under the repo lets the runtime gate actually run dependency-using scripts.
+const VERIFY_TMP_DIR = join(ROOT, 'node_modules', '.cache', 'builderos-precommit');
 
 function runUnifiedVerifierOnContent(content, originalLines = null, resolvedTarget = null) {
-  const tempPath = join(tmpdir(), `builderos-precommit-${Date.now()}.mjs`);
+  const tempPath = join(VERIFY_TMP_DIR, `builderos-precommit-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.mjs`);
   try {
+    mkdirSync(VERIFY_TMP_DIR, { recursive: true });
     writeFileSync(tempPath, content, 'utf8');
     const args = [VERIFIER_SCRIPT, tempPath, originalLines !== null && originalLines !== undefined ? String(originalLines) : ''];
     if (resolvedTarget) args.push(resolvedTarget);

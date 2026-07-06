@@ -10,15 +10,64 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary } from './product-build-orchestrator.js';
+import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
+import { extractBacklog, planBuildQueue } from './build-queue-planner.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
 const LOG_PATH = path.join(ROOT, 'data/never-stop-product-factory-log.jsonl');
 const STATE_PATH = path.join(ROOT, 'data/never-stop-product-factory-state.json');
 const WATCHLIST_PATH = path.join(ROOT, 'data/truth-watchlist.jsonl');
+const BUILD_REPAIR_ATTEMPTS = Number(process.env.NEVER_STOP_BUILD_REPAIR_ATTEMPTS || 3);
+
+/**
+ * Pull the most specific, verbatim failure text out of a blocked builder
+ * response so the next attempt can be told exactly what went wrong. Prefers the
+ * pre-commit gate's runtime output over the generic top-level error.
+ */
+export function extractBuilderFailure(body) {
+  if (!body || typeof body !== 'object') return null;
+  const v = body.governance && body.governance.verifier;
+  const vb = v && v.body;
+  const specific = vb && (vb.runtime_output || vb.syntax_error);
+  if (specific) return String(specific).slice(0, 1500);
+  if (v && v.stdout) return String(v.stdout).slice(0, 1500);
+  if (body.hint) return String(body.hint).slice(0, 1500);
+  if (body.error) return String(body.error).slice(0, 1500);
+  return null;
+}
+
+/**
+ * Default planner model access for auto-enrolling products into build lanes.
+ * Founder rule: only a strong PAID model may be hardwired — uses Anthropic
+ * (claude sonnet) directly. Returns null (fail-closed) when no key is present,
+ * so the plan lane simply skips rather than fabricating a queue.
+ */
+export function defaultPlannerCallModel() {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) return null;
+  const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+  return async (_member, prompt, opts = {}) => {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: opts.maxOutputTokens || 2000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    const j = await res.json();
+    if (!res.ok) throw new Error(`anthropic ${res.status}: ${JSON.stringify(j).slice(0, 200)}`);
+    return (j.content || []).map((c) => c.text || '').join('');
+  };
+}
 
 export function neverStopProductsEnabled() {
   return process.env.BUILDEROS_NEVER_STOP === '1'
@@ -104,6 +153,27 @@ function spawnAsync(cmd, args, options = {}) {
 }
 
 /**
+ * Bounded-concurrency map: run `fn` over `items` with at most `limit` in flight
+ * at once, preserving input order in the results. This is the primitive that
+ * lets the factory build MULTIPLE product lanes in parallel instead of one task
+ * per cycle — the expensive part (the builder AI call per product) overlaps.
+ */
+export async function mapConcurrent(items, limit, fn) {
+  const results = new Array(items.length);
+  const width = Math.max(1, Math.min(Number(limit) || 1, items.length));
+  let cursor = 0;
+  const worker = async () => {
+    while (cursor < items.length) {
+      const idx = cursor;
+      cursor += 1;
+      results[idx] = await fn(items[idx], idx);
+    }
+  };
+  await Promise.all(Array.from({ length: width }, worker));
+  return results;
+}
+
+/**
  * Scan every product home for a structured BUILD_QUEUE.json that still has an
  * actionable (non-gated, dependency-satisfied) step. This is the general work
  * source that fixes "the loop had nothing buildable" — instead of two hardcoded
@@ -146,6 +216,71 @@ export function discoverBuildQueueWork() {
   return found;
 }
 
+/**
+ * Scale lever: find products that have a PRODUCT_HOME with a documented backlog
+ * but NO BUILD_QUEUE.json yet, so the loop can auto-plan a queue for them (via
+ * the injected planner model) and pull them into the autonomous build lane.
+ * Grounded in real documented work only — never fabricated.
+ */
+export function discoverPlanWork() {
+  const productsDir = path.join(ROOT, 'docs/products');
+  const found = [];
+  let productIds = [];
+  try {
+    productIds = fs.readdirSync(productsDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
+  } catch {
+    return found;
+  }
+  for (const productId of productIds) {
+    if (fs.existsSync(queuePathForProduct(productId))) continue;
+    const homePath = path.join(productsDir, productId, 'PRODUCT_HOME.md');
+    if (!fs.existsSync(homePath)) continue;
+    let backlogCount = 0;
+    try {
+      backlogCount = extractBacklog(fs.readFileSync(homePath, 'utf8')).length;
+    } catch { backlogCount = 0; }
+    if (backlogCount === 0) continue;
+    found.push({
+      id: `plan_build_queue_${productId}`,
+      kind: 'plan_build_queue',
+      priority: 5,
+      product: productId,
+      product_id: productId,
+      home_path: homePath,
+      detail: `${backlogCount} documented backlog item(s), no BUILD_QUEUE yet`,
+    });
+  }
+  return found;
+}
+
+/**
+ * Auto-plan a BUILD_QUEUE.json for a product from its PRODUCT_HOME backlog using
+ * the injected planner model, then persist it so subsequent cycles execute the
+ * steps. Fail-closed: writes nothing if planning yields no valid queue.
+ */
+async function runPlanBuildQueue(task, { callModel, logger } = {}) {
+  if (typeof callModel !== 'function') {
+    return { ok: false, detail: 'plan_skipped_no_model' };
+  }
+  let homeText = '';
+  try {
+    homeText = fs.readFileSync(task.home_path, 'utf8');
+  } catch (e) {
+    return { ok: false, detail: 'home_read_failed', error: e.message };
+  }
+  const planned = await planBuildQueue({ productId: task.product_id, homeText, callModel, logger });
+  if (!planned || !planned.queue) {
+    return { ok: false, detail: 'plan_produced_no_queue' };
+  }
+  const queuePath = queuePathForProduct(task.product_id);
+  fs.mkdirSync(path.dirname(queuePath), { recursive: true });
+  fs.writeFileSync(queuePath, `${JSON.stringify(planned.queue, null, 2)}\n`);
+  log({ event: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length });
+  return { ok: true, detail: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length };
+}
+
 export async function discoverProductExpansionWork(options = {}) {
   const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
   const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
@@ -153,6 +288,7 @@ export async function discoverProductExpansionWork(options = {}) {
   const pointB = loadPointBTarget();
 
   items.push(...discoverBuildQueueWork());
+  items.push(...discoverPlanWork());
 
   const bpIncomplete = loadBpItems().filter((i) => isQueueItemIncomplete(i, { pointBTarget: pointB }));
   if (bpIncomplete.length && !process.env.BUILDEROS_AUTOPILOT) {
@@ -240,6 +376,16 @@ async function tryRedeploy() {
   return { ok: r.status === 0, status: r.status };
 }
 
+// Coalesce concurrent redeploy requests: when several parallel lanes each commit
+// and ask for a redeploy at once, we want ONE Railway redeploy, not N thrashing
+// deploys. Callers that arrive while a redeploy is in flight share its promise.
+let _redeployInFlight = null;
+async function coalescedRedeploy() {
+  if (_redeployInFlight) return _redeployInFlight;
+  _redeployInFlight = tryRedeploy().finally(() => { _redeployInFlight = null; });
+  return _redeployInFlight;
+}
+
 async function postBuilderBuild(baseUrl, commandKey, body) {
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
     method: 'POST',
@@ -265,19 +411,36 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     return { ok: false, detail: 'build_queue_load_failed', error: e.message };
   }
 
-  const buildFn = async ({ target_file, task: stepTask, spec }) => {
+  const buildFn = async ({ target_file, task: stepTask, spec, last_error }) => {
     if (!baseUrl || !commandKey) return { ok: false, error: 'missing PUBLIC_BASE_URL / COMMAND_CENTER_KEY' };
-    const build = await postBuilderBuild(baseUrl, commandKey, {
-      domain: 'lifeos',
-      mode: 'code',
-      target_file,
-      task: `[never-stop] ${stepTask}`,
-      spec,
-      platform_gap_fill: true,
-    });
-    const b = build.body || {};
-    const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
-    return { ok: build.ok, commit_sha, error: build.ok ? null : (b.error || `HTTP ${build.status}`) };
+    // Verbatim error carry-forward: the builder's pre-commit gate RUNS the code
+    // and blocks a commit on any runtime/anti-pattern failure. Retrying the same
+    // prompt just regenerates the same bug (spin). Instead, feed the builder its
+    // own verbatim failure and demand a root-cause fix — the "waterboard the AI
+    // with its own error" self-repair pattern — until it commits or we exhaust.
+    let priorError = last_error || null;
+    for (let attempt = 1; attempt <= BUILD_REPAIR_ATTEMPTS; attempt += 1) {
+      const repairBlock = priorError
+        ? `\n\nREPAIR REQUIRED — your previous attempt was REJECTED by the pre-commit runtime gate with this VERBATIM error. Fix the ROOT CAUSE (do not suppress or swallow it), then output the full corrected file:\n${priorError}`
+        : '';
+      const build = await postBuilderBuild(baseUrl, commandKey, {
+        domain: 'lifeos',
+        mode: 'code',
+        target_file,
+        task: `[never-stop] ${stepTask}${repairBlock}`,
+        spec,
+        platform_gap_fill: true,
+        platform_gap_fill_reason: `Autonomous product-build orchestrator executing queued BUILD_QUEUE.json step for product ${task.product_id} (${task.step_id}): ${stepTask}`.slice(0, 480),
+      });
+      const b = build.body || {};
+      const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
+      if (build.ok && commit_sha) {
+        return { ok: true, commit_sha, error: null, repair_attempts: attempt - 1 };
+      }
+      priorError = extractBuilderFailure(b) || (build.ok ? 'no_commit_sha' : `HTTP ${build.status}`);
+      logger?.warn?.({ target_file, attempt, error: String(priorError).slice(0, 200) }, '[never-stop] build rejected — carrying verbatim error forward');
+    }
+    return { ok: false, commit_sha: null, error: priorError || 'build_failed_after_repair_attempts' };
   };
 
   const verifyFn = async ({ verify_script }) => {
@@ -295,7 +458,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
   const deployProofFn = async ({ commit_sha }) => {
     if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
     if (!commit_sha) return { ok: false, reason: 'no_commit_sha_to_prove' };
-    await tryRedeploy();
+    await coalescedRedeploy();
     const proof = await waitForDeploySha({
       expectedSha: commit_sha,
       baseUrl,
@@ -363,6 +526,11 @@ export async function runProductExpansionCycle(options = {}) {
       result = { ...result, ...(await runProductBuildStep(task, { baseUrl, commandKey, logger })) };
       break;
     }
+    case 'plan_build_queue': {
+      const callModel = options.callModel || defaultPlannerCallModel();
+      result = { ...result, ...(await runPlanBuildQueue(task, { callModel, logger })) };
+      break;
+    }
     case 'acceptance_repair':
     case 'schema_or_crud': {
       const build = await postBuilderBuild(baseUrl, commandKey, {
@@ -393,6 +561,58 @@ export async function runProductExpansionCycle(options = {}) {
   writeState({ status: 'idle', last_task: task, last_result: result, cycles: (readState().cycles || 0) + 1 });
   logger?.info?.({ task: task.id, ok: result.ok }, '[NEVER-STOP-PRODUCT-FACTORY] cycle complete');
   return result;
+}
+
+/**
+ * MULTIPLE LANES: build every product's next actionable step CONCURRENTLY, up to
+ * `concurrency` at once, instead of one task per cycle. Phase 1 overlaps the
+ * expensive per-product builder calls (bounded by `mapConcurrent`); redeploys are
+ * coalesced into a single Railway deploy so parallel lanes don't thrash the
+ * platform. Each lane still honors the full contract: real commit SHA, verify,
+ * deploy-truth, truth-ladder — no false green, no false live.
+ *
+ * Dependency-injected (`laneStepFn`) so the concurrency behavior is unit-testable
+ * without a live builder or network.
+ */
+export async function runProductExpansionLanes(options = {}) {
+  const logger = options.logger || console;
+  const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
+  const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
+  const concurrency = Number(options.concurrency || process.env.NEVER_STOP_LANES || 3);
+
+  if (!options.laneStepFn) {
+    const token = hasTokenCapacity();
+    if (!token.ok) {
+      log({ event: 'lanes_token_halt', reason: token.reason });
+      return { ok: false, halted: true, reason: 'token_capacity', detail: token.reason };
+    }
+  }
+
+  const discover = options.discoverFn || discoverBuildQueueWork;
+  const work = discover();
+  if (!work.length) {
+    log({ event: 'expansion_lanes_empty' });
+    return { ok: true, lanes: 0, built: 0, live: 0, detail: 'no_build_queue_work' };
+  }
+
+  const laneStepFn = options.laneStepFn
+    || ((task) => runProductBuildStep(task, { baseUrl, commandKey, logger }));
+
+  writeState({ status: 'running_lanes', lanes: work.map((w) => w.id), concurrency });
+  const results = await mapConcurrent(work, concurrency, async (task) => {
+    try {
+      const r = await laneStepFn(task, { baseUrl, commandKey, logger });
+      return { task_id: task.id, product_id: task.product_id, ...r };
+    } catch (e) {
+      return { task_id: task.id, product_id: task.product_id, ok: false, error: e.message };
+    }
+  });
+
+  const built = results.filter((r) => r && r.outcome && (r.outcome.commit_sha || (r.outcome.outcome && r.outcome.outcome.commit_sha))).length;
+  const live = results.filter((r) => r && r.outcome && r.outcome.deploy_proven).length;
+  log({ event: 'expansion_lanes', lanes: work.length, built, live });
+  writeState({ status: 'idle', last_lanes: work.map((w) => w.id), lanes_built: built, lanes_live: live });
+  return { ok: true, lanes: work.length, built, live, results };
 }
 
 function readState() {

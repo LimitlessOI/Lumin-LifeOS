@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-06 |
+| **Last Updated** | 2026-07-06 — A/B subject-line testing (`pickSubjectVariant`) built autonomously by the product-build orchestrator |
 
 ---
 
@@ -293,6 +293,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-06 | **`services/site-builder-email-templates.js` — `pickSubjectVariant(prospectId, variants=DEFAULT_SUBJECT_VARIANTS)` + `DEFAULT_SUBJECT_VARIANTS`.** Pure, network-free A/B subject-line assignment: deterministic FNV-1a hash of `prospectId` → stable variant index so opens/replies can be attributed per variant. Existing `getEmailSubject`/template exports unchanged. **Built autonomously** by the product-build orchestrator (`BUILD_QUEUE.json` step `sb-ab-subject-testing`) through the live `/build` primitive — the first Site Builder feature the autonomous factory shipped after the `platform_gap_fill_reason` build-gate fix. | Founder ask: A/B test cold-outreach subject lines; and prove the factory can build a real product step end-to-end. | committed `9cfc4e59`; `node --check services/site-builder-email-templates.js` |
 | 2026-06-30 | `core/two-tier-system-init.js` now suppresses auxiliary expansion boot services when LifeOS is running in the default `founder_builder` runtime profile. | Site Builder should not auto-inflate the founder/builder alpha runtime; it remains available in full runtime, but no longer piggybacks on the narrower BuilderOS proof surface. | `node --check core/two-tier-system-init.js` |
 | 2026-06-25 | **`core/two-tier-system-init.js`** — added `createBlueprintIntakeRoutes` import + registration after `createCommandCenterRoutes`. No change to site builder logic. | Blueprint Intake Service needs to be registered at boot alongside all other route factories. | `node --check core/two-tier-system-init.js` ✅ |
 | 2026-05-13 | **Recovery commit — `services/site-builder-postmark-helper.js` first-time committed to git.** File existed as working-tree untracked since RL1 (2026-05-12) but was never pushed to `origin/main`. Also committed: `tests/site-builder-postmark-helper.test.js` (same situation — RL1 regression test, never pushed). Root cause: local rebased onto 32 Railway autonomous commits (`origin/main`); untracked files exposed as missing; stash recovered them; committed here for first time. `npm test` 8/8 pass; compliance 12/12 pass. | Working-tree files must live in git so Railway CI and cold agents can use them. No logic changes — file content unchanged from stash. | `npm test` 8/8; `node --check services/site-builder-postmark-helper.js` |

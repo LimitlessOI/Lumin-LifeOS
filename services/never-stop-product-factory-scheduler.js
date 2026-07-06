@@ -11,6 +11,8 @@ import {
   neverStopProductsEnabled,
   hasTokenCapacity,
   runProductExpansionCycle,
+  runProductExpansionLanes,
+  discoverBuildQueueWork,
 } from './never-stop-product-factory.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -74,7 +76,14 @@ export async function runNeverStopProductFactoryOnce({ logger } = {}) {
   state.lastRunAt = new Date().toISOString();
   state.totalRuns += 1;
   try {
-    const result = await runProductExpansionCycle({ logger });
+    // MULTIPLE LANES: when 2+ products have actionable build-queue steps, build
+    // them in parallel (bounded) instead of one task per tick. Fall back to the
+    // single-task expansion cycle when there is only one (or zero) lane of work.
+    let buildLaneCount = 0;
+    try { buildLaneCount = discoverBuildQueueWork().length; } catch { buildLaneCount = 0; }
+    const result = buildLaneCount > 1
+      ? await runProductExpansionLanes({ logger })
+      : await runProductExpansionCycle({ logger });
     state.lastExitCode = result.ok ? 0 : 1;
     writeReceipt({ ok: result.ok !== false, ...result, ran_at: state.lastRunAt });
     return result;
