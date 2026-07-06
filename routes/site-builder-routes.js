@@ -20,7 +20,10 @@
 import express, { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import path from 'node:path';
+import { promises as fsp } from 'node:fs';
 import SiteBuilder, { POS_PARTNERS } from '../services/site-builder.js';
+import { DESIGN_SYSTEMS } from '../services/site-builder-design-systems.js';
+import { generateLogoStudioPage } from '../services/site-builder-logo-studio.js';
 import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
 
@@ -140,6 +143,62 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     } catch (err) {
       logger.error('[SITE] Build error', { error: err.message });
       res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * POST /api/v1/sites/build-variants
+   * Build multiple design variants of the same site so the client can toggle
+   * between cutting-edge templates and pick the one they love.
+   * Body: { url|businessUrl, variantCount?, styleIds?, businessInfo?, competitorUrls? }
+   */
+  router.post('/build-variants', requireKey, buildLimiter, async (req, res) => {
+    try {
+      const { url, businessUrl, businessInfo, competitorUrls, variantCount, styleIds } = req.body;
+      const targetUrl = url || businessUrl;
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
+
+      logger.info('[SITE] Build-variants request', { url: targetUrl, variantCount: variantCount || null });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const result = await builder.buildVariants(targetUrl, { businessInfo, competitorUrls, variantCount, styleIds });
+
+      res.json({ ok: result.success, ...result });
+    } catch (err) {
+      logger.error('[SITE] Build-variants error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * GET /api/v1/sites/design-systems
+   * List the available cutting-edge design templates the builder can produce.
+   */
+  router.get('/design-systems', (req, res) => {
+    res.json({ ok: true, designSystems: DESIGN_SYSTEMS.map(({ id, name, blurb }) => ({ id, name, blurb })) });
+  });
+
+  /**
+   * GET /api/v1/sites/logo-studio
+   * Serve the interactive Logo Studio page. If a clientId is given, prefills the
+   * business name/colors from that preview's metadata; otherwise uses query params.
+   * Query: { clientId?, name?, primary?, accent?, tagline? }
+   */
+  router.get('/logo-studio', async (req, res) => {
+    try {
+      const { clientId, name, primary, accent, tagline } = req.query;
+      let info = { businessName: name, primaryColor: primary, accentColor: accent, tagline };
+      if (clientId && /^[\w-]+$/.test(String(clientId))) {
+        try {
+          const metaPath = path.join(process.cwd(), 'public/previews', String(clientId), 'meta.json');
+          const meta = JSON.parse(await fsp.readFile(metaPath, 'utf8'));
+          if (meta.businessInfo) info = { ...meta.businessInfo, ...info, businessName: name || meta.businessInfo.businessName };
+        } catch { /* fall back to query params */ }
+      }
+      res.set('Content-Type', 'text/html; charset=utf-8');
+      res.send(generateLogoStudioPage(info));
+    } catch (err) {
+      logger.error('[SITE] Logo studio error', { error: err.message });
+      res.status(500).send('Logo studio unavailable');
     }
   });
 
@@ -357,6 +416,36 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       }
     } catch (err) {
       logger.warn('[SITE] Preview view DB update failed', { error: err.message });
+    }
+  });
+
+  /**
+   * GET /api/v1/sites/select-design
+   * Best-effort beacon fired when a prospect clicks "Use this design" on the
+   * variant switcher. No auth (called from prospect's browser). A design pick is
+   * a strong buying signal — log it and notify Slack.
+   */
+  router.get('/select-design', async (req, res) => {
+    const { id, style } = req.query;
+    res.set('Cache-Control', 'no-store');
+    res.status(204).end();
+    if (!id) return;
+    logger.info('[SITE] Design selected — hot lead', { clientId: id, style });
+    try {
+      let businessName = id;
+      if (pool) {
+        const r = await pool.query(
+          `UPDATE prospect_sites SET status = 'viewed', last_viewed_at = NOW(), updated_at = NOW()
+             WHERE client_id = $1 RETURNING business_name, preview_url, contact_email`,
+          [id]
+        );
+        if (r.rowCount > 0) businessName = r.rows[0].business_name || id;
+      }
+      notifySlack('viewed', businessName,
+        `*Picked design:* \`${style || 'unknown'}\`\n*Lead ID:* \`${id}\`\nThis prospect toggled through the designs and chose one — strong buying signal.`
+      );
+    } catch (err) {
+      logger.warn('[SITE] select-design tracking failed', { error: err.message });
     }
   });
 

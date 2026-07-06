@@ -68,6 +68,10 @@ import {
   confirmFounderUsability,
   scorePredictionsForMissionUsability,
 } from '../services/founder-usability-confirm.js';
+import {
+  parseFounderUsabilityVerdict,
+  loadFounderGatedMissions,
+} from '../services/founder-usability-verdict.js';
 
 const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
 
@@ -1186,6 +1190,68 @@ HOW TO RESPOND:
           reason: 'NO_COMMAND_RAN',
           error: 'text or text_file is required',
         });
+      }
+
+      // Founder usability verdict from plain chat.
+      // Only a human founder can clear the final Point B gate. When a mission is
+      // technically done and awaiting that verdict, and the founder plainly says
+      // it works (or doesn't), record the sign-off instead of just conversing.
+      // Conservative: fires only when a founder-gated mission exists and the
+      // verdict is unambiguous — never fakes a Point B pass.
+      if (originalText) {
+        try {
+          const gated = loadFounderGatedMissions();
+          if (gated.length) {
+            const verdict = parseFounderUsabilityVerdict(originalText);
+            if (verdict) {
+              const target = (missionId && gated.find((m) => m.mission_id === missionId)) || gated[0];
+              if (verdict.pass && originalText.trim().length < 12) {
+                clearTimeout(handlerDeadline);
+                return res.status(200).json({
+                  ok: true,
+                  interface: 'Lumin',
+                  action: 'chair',
+                  chair_direct_agent: true,
+                  command_truth: 'NO_COMMAND_RAN',
+                  pass_fail: 'NO_COMMAND_RAN',
+                  awaiting_founder_confirmation: target.mission_id,
+                  human_summary: `Want to sign off ${target.mission_id} as working? Tell me one line about what you tried (e.g. "signed up and logged in, works great") — I record your words as the proof, so I need a full sentence, not just "works".`,
+                });
+              }
+              const result = confirmFounderUsability({
+                missionId: target.mission_id,
+                pass: verdict.pass,
+                quote: originalText.trim(),
+                actor: req.lifeosUser?.email || req.lifeosUser?.id || 'founder',
+              });
+              if (result.ok) {
+                try {
+                  await scorePredictionsForMissionUsability(target.mission_id, {
+                    pass: verdict.pass,
+                    quote: originalText.trim(),
+                  });
+                } catch { /* prediction scoring is best-effort */ }
+              }
+              clearTimeout(handlerDeadline);
+              return res.status(200).json({
+                ...result,
+                interface: 'Lumin',
+                action: 'chair',
+                chair_direct_agent: true,
+                founder_usability_recorded: result.ok === true,
+                command_truth: result.ok ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+                pass_fail: result.ok ? (verdict.pass ? 'PASS' : 'FAIL') : 'FAIL',
+                human_summary: result.ok
+                  ? (verdict.pass
+                    ? `Recorded your sign-off on ${target.mission_id} — that's the founder verdict only you can give, so Point B is now clear on that gate. I logged your exact words as the proof.`
+                    : `Recorded that ${target.mission_id} is NOT working for you yet. It stays blocked and goes back for a fix — tell me what was wrong and I'll route it.`)
+                  : (result.error || 'Could not record the verdict.'),
+              });
+            }
+          }
+        } catch (verdictErr) {
+          _log(`usability_verdict_error=${verdictErr.message}`);
+        }
       }
 
       // Normalize input first: fix misspellings, voice-to-text errors, garbled phrasing
