@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T23:02:05.553Z",
+  "generated_at": "2026-07-06T23:51:23.856Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 3,
+  "file_count": 4,
   "files": [
     {
       "path": "services/site-builder-competitor-categories.js",
@@ -10,6 +10,13 @@
       "bytes": 3753,
       "mtime": "2026-07-06T23:02:05.553Z",
       "indexed_at": "2026-07-06T23:02:05.553Z"
+    },
+    {
+      "path": "services/site-builder-service-catalog.js",
+      "synopsis": "SPEC INCOMPLETE: product revenue model prices were not provided in the prompt or injected repository context, so price values are left null rather than invented.",
+      "bytes": 7294,
+      "mtime": "2026-07-06T23:51:23.856Z",
+      "indexed_at": "2026-07-06T23:51:23.856Z"
     },
     {
       "path": "services/site-builder-social-discovery.js",
