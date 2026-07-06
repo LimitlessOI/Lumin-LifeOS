@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-05 |
+| **Last Updated** | 2026-07-06 |
 
 ---
 
@@ -369,6 +369,7 @@ Every website agency requires the prospect to raise their hand first; LifeOS inv
 
 | Date | What changed | Why | Status | Verified |
 |---|---|---|---|---|
+| 2026-07-06 | **Truthful generation + real-data enrichment + design-model upgrade.** `services/site-builder.js`: (1) generation prompt rewritten with a top-priority TRUTH RULE — the model may no longer invent prices, star ratings, review/client counts, years-in-business, or named testimonials; social-proof bar and pricing tiers are omitted when no real data exists (was: prompt literally told it to invent "200+ served / 5★" stats and "buyable" price tiers). (2) New `enrichWithRealData()` searches the business's live web presence (Google/Yelp/Facebook) for REAL rating/reviews/facts via real search providers only (no AI-memory fallback) and injects a `VERIFIED REAL DATA` block into the prompt; fails closed (no data → nothing used) when no `BRAVE_SEARCH_API_KEY`/`PERPLEXITY_API_KEY` is set. (3) Generation model now `SITE_BUILDER_GEN_MODEL` (default `claude_sonnet`, 16k output) for better design, falling back to `gemini_flash` on provider error. | Founder review: generated sites fabricated pricing/stats/testimonials not on the prospect's real site (FTC risk previously logged in Gate 3) and design quality was weak. | ✅ | `node --check services/site-builder.js`; `npm test` (302 pass) |
 | 2026-07-05 | **Critical bug repair.** `db/migrations/20260705_repair_prospect_sites_schema.sql` now repairs `prospect_sites` in place instead of dropping/recreating it; `routes/site-builder-routes.js` now serves previews through `express.static` rooted at `public/previews` and fails the Postmark reply webhook closed when `POSTMARK_WEBHOOK_TOKEN` is unset. Added `tests/site-builder-routes-security.test.js` plus migration safety coverage. | Auto-migration boot could delete existing production prospect rows, `/previews/*` could traverse outside the preview root, and an unset webhook token allowed unauthenticated status mutations. | ✅ | `node --test tests/migration-safety.test.js tests/site-builder-routes-security.test.js`; `node --check routes/site-builder-routes.js` |
 | 2026-07-05 | **`routes/site-builder-routes.js`** — launch-readiness endpoint now checks only Site Builder env vars (`POSTMARK_SERVER_TOKEN`, `EMAIL_FROM`, `SLACK_WEBHOOK_URL`) instead of all platform vars via `getRegistryHealth()`. Returns structured `capabilities` object (site_build, preview_serving, cold_email_sending, etc.) and removes false revenue blockers (TC_IMAP_*, GOOGLE_*) that are unrelated to Site Builder. Removed unused `getRegistryHealth` import. | Launch-readiness reported TC Service and Google OAuth vars as Site Builder blockers, masking the real 2-var blocker (Postmark + email sender). | ✅ | `node -c routes/site-builder-routes.js` |
 | 2026-05-12 | **`tests/site-builder-postmark-helper.test.js`** — **`import path from "node:path"`** (fix **`npm test`**). | RL1 verify gate must pass in CI. | ✅ | `npm test` |
