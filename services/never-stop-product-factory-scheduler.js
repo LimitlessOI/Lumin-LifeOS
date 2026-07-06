@@ -13,6 +13,8 @@ import {
   runProductExpansionCycle,
   runProductExpansionLanes,
   discoverBuildQueueWork,
+  dailyBuildBudget,
+  recordDailyBuildAttempts,
 } from './never-stop-product-factory.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -56,6 +58,7 @@ export function getNeverStopProductFactoryStatus() {
       last_run_at: state.lastRunAt,
       total_runs: state.totalRuns,
       token_halt_since: state.tokenHaltSince,
+      daily_budget: dailyBuildBudget(),
       receipt_path: path.relative(REPO_ROOT, RECEIPT_PATH),
     },
   };
@@ -71,6 +74,12 @@ export async function runNeverStopProductFactoryOnce({ logger } = {}) {
     writeReceipt({ ok: false, halted: true, reason: 'token_capacity', detail: token.reason });
     return { ok: false, halted: true, reason: 'token_capacity' };
   }
+  // COST GUARDRAIL: refuse to spend once the day's builder-attempt cap is hit.
+  const budget = dailyBuildBudget();
+  if (!budget.ok) {
+    writeReceipt({ ok: false, halted: true, reason: 'daily_budget', detail: budget });
+    return { ok: false, halted: true, reason: 'daily_budget', detail: budget };
+  }
   state.tokenHaltSince = null;
   state.running = true;
   state.lastRunAt = new Date().toISOString();
@@ -84,8 +93,10 @@ export async function runNeverStopProductFactoryOnce({ logger } = {}) {
     const result = buildLaneCount > 1
       ? await runProductExpansionLanes({ logger })
       : await runProductExpansionCycle({ logger });
+    const attempts = Array.isArray(result?.results) ? result.results.length : (result?.halted ? 0 : 1);
+    recordDailyBuildAttempts(attempts);
     state.lastExitCode = result.ok ? 0 : 1;
-    writeReceipt({ ok: result.ok !== false, ...result, ran_at: state.lastRunAt });
+    writeReceipt({ ok: result.ok !== false, ...result, attempts, budget: dailyBuildBudget(), ran_at: state.lastRunAt });
     return result;
   } catch (err) {
     state.lastExitCode = 1;
