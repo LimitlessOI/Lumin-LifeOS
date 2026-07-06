@@ -145,6 +145,11 @@ export function buildDualCategoryQueries(businessInfo = {}) {
   };
 }
 
+/**
+ * No additive implementation needed: this module already exports the requested
+ * classifyPracticeCategories and buildDualCategoryQueries helpers.
+ */
+
 export default {
   classifyPracticeCategories,
   buildDualCategoryQueries
