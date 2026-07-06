@@ -7,13 +7,15 @@
   "steps": [
     {
       "id": "sb-ab-subject-testing",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-email-templates.js",
       "task": "Add A/B subject-line testing to cold outreach: pickSubjectVariant(prospect, variants) that deterministically assigns each prospect to one of N subject variants (hash of prospect id) and records the assigned variant so opens/replies can be attributed per variant.",
       "spec": "Pure function, no network. Export pickSubjectVariant(prospectId, variants[]) -> { variant, index }. Deterministic by hashing prospectId. Add a DEFAULT_SUBJECT_VARIANTS array. Do not change existing exported template functions' signatures.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "9cfc4e591748a06b2aa3a083b72645b2be0c068f",
+      "proof": "Built autonomously via /build primitive; verified deterministic FNV-1a assignment, near-uniform distribution (996/995/1009 across 3000 ids), input validation, custom-variant support."
     },
     {
       "id": "sb-preview-expiry-sweep",

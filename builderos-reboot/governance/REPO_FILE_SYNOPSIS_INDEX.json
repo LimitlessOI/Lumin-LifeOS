@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T18:30:07.162Z",
+  "generated_at": "2026-07-06T18:31:15.359Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11199,
+  "file_count": 11200,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39202,10 +39202,17 @@
     {
       "path": "docs/products/site-builder/BUILD_QUEUE.json",
       "synopsis": "Documentation — BUILD QUEUE.",
-      "bytes": 2552,
-      "mtime": "2026-07-06T18:28:44.995Z",
-      "indexed_at": "2026-07-06T18:30:05.763Z",
+      "bytes": 2814,
+      "mtime": "2026-07-06T18:31:10.331Z",
+      "indexed_at": "2026-07-06T18:31:15.359Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/site-builder/conversations/2026-07-06-site-builder-requirements.md",
+      "synopsis": "2026-07-06 — Site Builder requirements (founder session)",
+      "bytes": 2843,
+      "mtime": "2026-07-06T18:31:15.067Z",
+      "indexed_at": "2026-07-06T18:31:15.359Z"
     },
     {
       "path": "docs/products/site-builder/FILE_MANIFEST.json",
