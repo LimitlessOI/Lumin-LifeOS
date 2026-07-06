@@ -5,7 +5,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mapConcurrent, runProductExpansionLanes, defaultPlannerCallModel, dailyBuildBudget } from '../services/never-stop-product-factory.js';
+import { mapConcurrent, runProductExpansionLanes, defaultPlannerCallModel, dailyBuildBudget, productRankFraction, loadProductPriority } from '../services/never-stop-product-factory.js';
 
 test('defaultPlannerCallModel is fail-closed when no paid key is present', () => {
   const saved = process.env.ANTHROPIC_API_KEY;
@@ -75,6 +75,31 @@ test('a failing lane never counts as built or live (no false green)', async () =
   });
   assert.equal(res.built, 1);
   assert.equal(res.live, 1);
+});
+
+test('productRankFraction: listed products sort first, in founder order', () => {
+  const list = ['site-builder', 'marketingos'];
+  const sb = productRankFraction('site-builder', list);
+  const mos = productRankFraction('marketingos', list);
+  assert.equal(sb, 0);
+  assert.ok(mos > sb, 'later-listed product ranks after earlier-listed');
+  assert.ok(mos < 0.01, 'listed products stay well below unlisted range');
+});
+
+test('productRankFraction: unlisted always sort after listed, more mature first', () => {
+  const list = ['site-builder'];
+  const listedMax = productRankFraction('site-builder', list);
+  const unlistedThin = productRankFraction('faith-studio', list, 0);
+  const unlistedRich = productRankFraction('lifeos', list, 40);
+  assert.ok(unlistedThin > listedMax, 'unlisted ranks after any listed product');
+  assert.ok(unlistedRich < unlistedThin, 'more documented backlog builds sooner');
+  assert.ok(unlistedRich >= 0.01, 'never crosses into the listed range');
+});
+
+test('loadProductPriority reads the founder-owned list and includes site-builder', () => {
+  const list = loadProductPriority();
+  assert.ok(Array.isArray(list));
+  assert.equal(list[0], 'site-builder');
 });
 
 test('dailyBuildBudget: cap=0 disables the guardrail (unlimited)', () => {
