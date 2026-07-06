@@ -6,6 +6,41 @@
 /**
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
+export const DEFAULT_SUBJECT_VARIANTS = [
+  'Welcome to your new site!',
+  'Check out your free preview site',
+  'Your site is live and waiting!',
+];
+
+function hashProspectId(prospectId) {
+  const input = String(prospectId);
+  let hash = 2166136261;
+
+  for (let index = 0; index < input.length; index += 1) {
+    hash ^= input.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return hash >>> 0;
+}
+
+export function pickSubjectVariant(prospectId, variants = DEFAULT_SUBJECT_VARIANTS) {
+  if (prospectId === null || prospectId === undefined || String(prospectId).length === 0) {
+    throw new Error('prospectId is required');
+  }
+
+  if (!Array.isArray(variants) || variants.length === 0) {
+    throw new Error('variants must be a non-empty array');
+  }
+
+  const index = hashProspectId(prospectId) % variants.length;
+
+  return {
+    variant: variants[index],
+    index,
+  };
+}
+
 export function getEmailSubject(type, businessName) {
   switch (type) {
     case 'initial':

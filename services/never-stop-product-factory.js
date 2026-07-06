@@ -341,6 +341,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       task: `[never-stop] ${stepTask}`,
       spec,
       platform_gap_fill: true,
+      platform_gap_fill_reason: `Autonomous product-build orchestrator executing queued BUILD_QUEUE.json step for product ${task.product_id} (${task.step_id}): ${stepTask}`.slice(0, 480),
     });
     const b = build.body || {};
     const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
