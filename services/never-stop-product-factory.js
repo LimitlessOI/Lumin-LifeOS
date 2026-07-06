@@ -10,6 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
+import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary } from './product-build-orchestrator.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -99,11 +100,56 @@ function spawnAsync(cmd, args, options = {}) {
   });
 }
 
+/**
+ * Scan every product home for a structured BUILD_QUEUE.json that still has an
+ * actionable (non-gated, dependency-satisfied) step. This is the general work
+ * source that fixes "the loop had nothing buildable" — instead of two hardcoded
+ * tasks, any product can declare ordered buildable steps and the loop executes
+ * them one at a time.
+ */
+export function discoverBuildQueueWork() {
+  const productsDir = path.join(ROOT, 'docs/products');
+  const found = [];
+  let productIds = [];
+  try {
+    productIds = fs.readdirSync(productsDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
+  } catch {
+    return found;
+  }
+  for (const productId of productIds) {
+    const queuePath = path.join(productsDir, productId, 'BUILD_QUEUE.json');
+    if (!fs.existsSync(queuePath)) continue;
+    try {
+      const queue = loadBuildQueue(productId);
+      const { step } = selectNextStep(queue);
+      if (step) {
+        found.push({
+          id: `product_build_${productId}_${step.id}`,
+          kind: 'product_build_step',
+          priority: 2,
+          product: productId,
+          product_id: productId,
+          step_id: step.id,
+          target_file: step.target_file,
+          detail: `next buildable step: ${step.id}`,
+        });
+      }
+    } catch (e) {
+      log({ event: 'build_queue_parse_error', product_id: productId, error: e.message });
+    }
+  }
+  return found;
+}
+
 export async function discoverProductExpansionWork(options = {}) {
   const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
   const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
   const items = [];
   const pointB = loadPointBTarget();
+
+  items.push(...discoverBuildQueueWork());
 
   const bpIncomplete = loadBpItems().filter((i) => isQueueItemIncomplete(i, { pointBTarget: pointB }));
   if (bpIncomplete.length && !process.env.BUILDEROS_AUTOPILOT) {
@@ -203,6 +249,51 @@ async function postBuilderBuild(baseUrl, commandKey, body) {
   return { ok: res.ok, status: res.status, body: json };
 }
 
+/**
+ * Execute one queued product build step end-to-end: hand the step to the live
+ * builder primitive, require a real commit SHA (no false green), run the
+ * product's verify script, and persist the queue (done / retry / blocked).
+ */
+async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
+  let queue;
+  try {
+    queue = loadBuildQueue(task.product_id);
+  } catch (e) {
+    return { ok: false, detail: 'build_queue_load_failed', error: e.message };
+  }
+
+  const buildFn = async ({ target_file, task: stepTask, spec }) => {
+    if (!baseUrl || !commandKey) return { ok: false, error: 'missing PUBLIC_BASE_URL / COMMAND_CENTER_KEY' };
+    const build = await postBuilderBuild(baseUrl, commandKey, {
+      domain: 'lifeos',
+      mode: 'code',
+      target_file,
+      task: `[never-stop] ${stepTask}`,
+      spec,
+      platform_gap_fill: true,
+    });
+    const b = build.body || {};
+    const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
+    return { ok: build.ok, commit_sha, error: build.ok ? null : (b.error || `HTTP ${build.status}`) };
+  };
+
+  const verifyFn = async ({ verify_script }) => {
+    if (!verify_script) return { ok: true, detail: 'no_verify_script' };
+    const r = await spawnAsync(process.execPath, [verify_script], {
+      cwd: ROOT,
+      env: { ...process.env, PUBLIC_BASE_URL: baseUrl, COMMAND_CENTER_KEY: commandKey },
+      timeout: 120_000,
+    });
+    return { ok: r.status === 0, detail: r.status === 0 ? 'verify_pass' : `verify_exit_${r.status}` };
+  };
+
+  const outcome = await runNextStep(queue, { buildFn, verifyFn, logger });
+  persistQueue(queue);
+  log({ event: 'product_build_step', product_id: task.product_id, step_id: task.step_id, outcome });
+  if (outcome.ok && outcome.commit_sha) await tryRedeploy();
+  return { ok: outcome.ok, detail: 'product_build_step', outcome, summary: queueSummary(queue) };
+}
+
 export async function runProductExpansionCycle(options = {}) {
   const logger = options.logger || console;
   const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
@@ -232,6 +323,10 @@ export async function runProductExpansionCycle(options = {}) {
     default: {
       log({ event: 'bp_scheduler_deferred', task_id: task.id, kind: task.kind });
       result = { ...result, ok: true, detail: 'deferred_to_bp_scheduler' };
+      break;
+    }
+    case 'product_build_step': {
+      result = { ...result, ...(await runProductBuildStep(task, { baseUrl, commandKey, logger })) };
       break;
     }
     case 'acceptance_repair':

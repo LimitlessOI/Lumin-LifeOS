@@ -30,6 +30,8 @@ import logger from './logger.js';
 import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.js';
 import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
+import { createWebSearchService } from './web-search-service.js';
+import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID } from './site-builder-design-systems.js';
 
 const TAILWIND_CDN = 'https://cdn.tailwindcss.com';
 const ALPINE_CDN = 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js';
@@ -39,6 +41,17 @@ const TARGET_QUALITY_SCORE = Number(process.env.SITE_BUILDER_TARGET_SCORE || '88
 const MAX_REPAIR_PASSES = Math.max(0, Number(process.env.SITE_BUILDER_REPAIR_PASSES || '2'));
 const GENERATION_MAX_TOKENS = Number(process.env.SITE_BUILDER_GEN_TOKENS || '14000');
 const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '14000');
+// Design quality is driven mostly by the generation model. claude_sonnet (16k output)
+// produces markedly better design. Founder rule (2026-07-06): a PRODUCT never runs on a
+// free-tier model — only strong, paid models are hardwired into what the system ships.
+// Env-overridable; on any provider error we fall back to another STRONG model (gpt-4o),
+// NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
+const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'claude_sonnet';
+const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'openai_gpt';
+// Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
+// reviews, ratings, and facts. Fails closed (no data) when no search provider key is set —
+// never fabricates. Disabled entirely with SITE_BUILDER_ENRICH=false.
+const ENRICHMENT_ENABLED = String(process.env.SITE_BUILDER_ENRICH || 'true') !== 'false';
 
 // POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
 export const POS_PARTNERS = {
@@ -65,6 +78,29 @@ export const POS_PARTNERS = {
   },
 };
 
+/**
+ * Render the VERIFIED REAL DATA block for the generation prompt. Only real, sourced
+ * facts gathered by enrichWithRealData() appear here. When empty, the block explicitly
+ * tells the model no verified external data was found so it must not invent any.
+ */
+function renderVerifiedData(verified) {
+  if (!verified || (!verified.rating && !(verified.testimonials || []).length && !(verified.facts || []).length && !(verified.designCues || []).length)) {
+    return 'VERIFIED REAL DATA (from the business\'s live web presence): NONE FOUND.\n- No external rating, reviews, or facts were verified. Do NOT invent any. Omit the social-proof bar and testimonial quotes entirely.\n';
+  }
+  const lines = ['VERIFIED REAL DATA (from the business\'s live web presence — these are REAL, use them; cite the source):'];
+  if (verified.rating) {
+    const rc = verified.reviewCount ? ` from ${verified.reviewCount} reviews` : '';
+    lines.push(`- Rating: ${verified.rating}★${rc} (source: ${verified.ratingSource || 'web'})`);
+  }
+  for (const f of verified.facts || []) lines.push(`- Fact: ${f}`);
+  for (const t of verified.testimonials || []) {
+    const src = t.source ? ` — via ${t.source}` : '';
+    lines.push(`- Real review: "${String(t.text).slice(0, 280)}"${src}`);
+  }
+  for (const d of verified.designCues || []) lines.push(`- Design cue from their socials (honor this in the visual style): ${d}`);
+  return lines.join('\n') + '\n';
+}
+
 export default class SiteBuilder {
   constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '' } = {}) {
     this.callCouncil = callCouncil;
@@ -82,6 +118,23 @@ export default class SiteBuilder {
     try {
       // Step 1: Scrape business info
       const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
+
+      // Step 1b: Enrich with REAL data from the business's live web presence
+      // (Google/Yelp/Facebook reviews, rating, facts). Fails closed — never fabricates.
+      if (ENRICHMENT_ENABLED && options.enrich !== false) {
+        try {
+          businessInfo.verifiedData = await this.enrichWithRealData(businessInfo, options);
+          if (businessInfo.verifiedData) {
+            logger.info('[SITE] enrichment found real data', {
+              clientId,
+              rating: businessInfo.verifiedData.rating || null,
+              testimonials: (businessInfo.verifiedData.testimonials || []).length,
+            });
+          }
+        } catch (err) {
+          logger.warn('[SITE] enrichment failed (continuing without external data)', { clientId, error: err.message });
+        }
+      }
 
       // Step 2: Determine best POS partner for their industry
       const posPartner = this.selectPosPartner(businessInfo.industry || businessInfo.keywords || []);
@@ -212,6 +265,197 @@ export default class SiteBuilder {
   }
 
   /**
+   * Build MULTIPLE design variants of the same site so the client can toggle
+   * between cutting-edge templates and pick the one they love. Scraping,
+   * real-data enrichment and content stay identical across variants — only the
+   * visual design system changes. Produces a switcher preview page (index.html)
+   * that lets the client cycle through each variant in place.
+   *
+   * options: { variantCount, styleIds:[], enrich, skipRepair, ...buildFromUrl opts }
+   */
+  async buildVariants(targetUrl, options = {}) {
+    const clientId = `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || 3));
+    const systems = pickDesignSystems(count, options.styleIds || []);
+    logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id) });
+
+    try {
+      const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
+
+      if (ENRICHMENT_ENABLED && options.enrich !== false) {
+        try {
+          businessInfo.verifiedData = await this.enrichWithRealData(businessInfo, options);
+        } catch (err) {
+          logger.warn('[SITE] enrichment failed (continuing without external data)', { clientId, error: err.message });
+        }
+      }
+
+      const posPartner = this.selectPosPartner(businessInfo.industry || businessInfo.keywords || []);
+
+      let designBrief = null;
+      const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
+      if (this.callCouncil && competitorUrls.length > 0) {
+        try {
+          const benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
+          designBrief = benchmark?.designBrief || null;
+        } catch (err) {
+          logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
+        }
+      }
+
+      // Shared content (built once, reused across every variant)
+      const blogPosts = await this.generateBlogPosts(businessInfo, 3);
+      const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
+      const sitemap = this.generateSitemap(clientId, blogPosts);
+      const robots = this.generateRobots();
+
+      const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
+      await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
+      await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
+      await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
+      await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
+      for (const post of blogPosts) {
+        const postDir = path.join(deployDir, 'blog', post.slug);
+        await fs.mkdir(postDir, { recursive: true });
+        await fs.writeFile(path.join(postDir, 'index.html'), post.html);
+      }
+
+      const pixel = this.baseUrl
+        ? `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`
+        : '';
+
+      const variants = [];
+      for (const ds of systems) {
+        try {
+          let html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds });
+          html = this.patchSiteHtml(html, businessInfo);
+          let quality = this.scoreSiteHtml(html, businessInfo);
+          if (!options.skipRepair && this.callCouncil && quality.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
+            const repaired = this.patchSiteHtml(
+              await this.improveSiteHtml(html, businessInfo, quality, { clientId, posPartner, pass: 1 }),
+              businessInfo,
+            );
+            const rScore = this.scoreSiteHtml(repaired, businessInfo);
+            if (rScore.scorePct > quality.scorePct) { html = repaired; quality = rScore; }
+          }
+          if (pixel && html.includes('</body>')) html = html.replace('</body>', `${pixel}\n</body>`);
+          const vDir = path.join(deployDir, 'variants', ds.id);
+          await fs.mkdir(vDir, { recursive: true });
+          await fs.writeFile(path.join(vDir, 'index.html'), html);
+          variants.push({ id: ds.id, name: ds.name, blurb: ds.blurb, file: `variants/${ds.id}/index.html`, scorePct: quality.scorePct });
+        } catch (err) {
+          logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
+        }
+      }
+
+      if (!variants.length) throw new Error('all variant generations failed');
+
+      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants);
+      await fs.writeFile(path.join(deployDir, 'index.html'), switcher);
+
+      const metadata = {
+        clientId,
+        targetUrl,
+        businessInfo,
+        posPartner,
+        variants,
+        blogPosts: blogPosts.map((p) => ({ slug: p.slug, title: p.title })),
+        createdAt: new Date().toISOString(),
+        previewUrl: `${this.baseUrl}/previews/${clientId}`,
+        mode: 'variants',
+      };
+      await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
+
+      logger.info('[SITE] Variants deployed', { clientId, count: variants.length, previewUrl: metadata.previewUrl });
+      return {
+        success: true,
+        clientId,
+        previewUrl: metadata.previewUrl,
+        businessName: businessInfo.businessName,
+        variants,
+        posPartner: posPartner.name,
+        metadata,
+      };
+    } catch (err) {
+      logger.error('[SITE] Variant build failed', { clientId, error: err.message });
+      return { success: false, clientId, error: err.message };
+    }
+  }
+
+  /**
+   * Build the variant switcher shell: a top bar of design buttons + an iframe
+   * that swaps between the generated variants, plus a "Use this design" action
+   * that records the client's choice (best-effort beacon).
+   */
+  generateVariantSwitcher(info, clientId, variants) {
+    const name = (info.businessName || 'Your Website').replace(/</g, '&lt;');
+    const selectBase = this.baseUrl ? `${this.baseUrl}/api/v1/sites/select-design` : '';
+    const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, blurb: v.blurb, file: v.file })));
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${name} — Choose your design</title>
+<script src="${TAILWIND_CDN}"></script>
+<style>
+  :root { --bar: #0f172a; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .chip { transition: all .15s ease; }
+  .chip[aria-pressed="true"] { background:#fff; color:#0f172a; font-weight:600; }
+  iframe { border:0; width:100%; height:calc(100vh - 116px); display:block; background:#fff; }
+</style>
+</head>
+<body class="bg-slate-900">
+  <div x-data="switcher()" x-init="init()">
+    <header class="bg-slate-900 text-white px-4 pt-3 pb-3 sticky top-0 z-10 shadow-lg">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <p class="text-xs uppercase tracking-widest text-slate-400">Preview for</p>
+          <h1 class="text-lg font-semibold leading-tight">${name}</h1>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-slate-400 mb-1" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name"></p>
+          <button @click="choose()" class="bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg">✓ Use this design</button>
+        </div>
+      </div>
+      <p class="text-xs text-slate-400 mt-2">Not loving it? Toggle through the designs below — each is a different professionally-designed style.</p>
+      <nav class="mt-2 flex gap-2 overflow-x-auto pb-1">
+        <template x-for="(v,i) in variants" :key="v.id">
+          <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400"
+            :aria-pressed="i===index" @click="show(i)" x-text="v.name"></button>
+        </template>
+      </nav>
+    </header>
+    <iframe :src="current.file" :title="current.name" x-ref="frame"></iframe>
+    <div x-show="saved" x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl">
+      Saved — <span x-text="current.name"></span> selected. We'll be in touch.
+    </div>
+  </div>
+<script src="${ALPINE_CDN}" defer></script>
+<script>
+  function switcher(){
+    return {
+      variants: ${data},
+      index: 0,
+      saved: false,
+      get current(){ return this.variants[this.index]; },
+      init(){ const h = parseInt(new URLSearchParams(location.search).get('v')); if(!isNaN(h) && this.variants[h]) this.index = h; },
+      show(i){ this.index = i; this.saved = false; },
+      choose(){
+        this.saved = true;
+        var base = ${JSON.stringify(selectBase)};
+        if(base){ try { navigator.sendBeacon ? navigator.sendBeacon(base + '?id=${clientId}&style=' + this.current.id) : fetch(base + '?id=${clientId}&style=' + this.current.id, {mode:'no-cors'}); } catch(e){} }
+        setTimeout(()=>{ this.saved = false; }, 4000);
+      },
+    };
+  }
+</script>
+</body>
+</html>`;
+  }
+
+  /**
    * Scrape business info from existing website using Puppeteer.
    * Extracts: name, tagline, services, contact, colors, testimonials, social links.
    */
@@ -330,6 +574,94 @@ Return ONLY valid JSON with this exact structure:
   }
 
   /**
+   * Enrich a business profile with REAL, sourced data from its live web presence
+   * (Google Business, Yelp, Facebook, its own socials): rating, review count, real
+   * review snippets, and verifiable facts. Uses real search providers only — no AI
+   * fabrication fallback (callAI is intentionally omitted). Returns null when no
+   * search provider key is configured or nothing verifiable is found. Fails closed:
+   * it will NEVER invent a rating, review, or fact.
+   */
+  async enrichWithRealData(info, options = {}) {
+    const search = createWebSearchService({
+      BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
+      PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
+      // No callAI on purpose — factual enrichment must come from real search, not model memory.
+    });
+
+    const name = info.businessName;
+    if (!name) return null;
+    const locale = info.location ? ` ${info.location}` : '';
+    const queries = [
+      `${name}${locale} reviews rating`,
+      `${name}${locale} yelp`,
+      `${name}${locale} google reviews`,
+      `${name}${locale} facebook`,
+    ];
+
+    const snippets = [];
+    for (const q of queries) {
+      try {
+        const { source, results } = await search.search(q, { count: 4 });
+        if (source === 'none' || !results.length) continue;
+        for (const r of results) {
+          if (r.description) snippets.push({ title: r.title || '', text: r.description, url: r.url || '' });
+        }
+      } catch (err) {
+        logger.warn('[SITE] enrichment query failed', { q, error: err.message });
+      }
+    }
+
+    // No provider key / no results → fail closed, no fabrication.
+    if (!snippets.length || !this.callCouncil) return null;
+
+    // Extract ONLY what is literally present in the real snippets. The extractor is
+    // instructed to leave fields null rather than infer or estimate.
+    const corpus = snippets.map((s) => `SOURCE: ${s.url}\nTITLE: ${s.title}\nTEXT: ${s.text}`).join('\n\n').slice(0, 6000);
+    const prompt = `Below are REAL web search result snippets about a business named "${name}".
+Extract ONLY facts that are literally stated in the snippets. If a value is not explicitly present, use null. NEVER estimate, infer, round, or invent.
+
+SNIPPETS:
+${corpus}
+
+Return ONLY valid JSON:
+{
+  "rating": number 1-5 or null (only if an explicit star rating appears),
+  "reviewCount": integer or null (only if an explicit review count appears),
+  "ratingSource": "Google" | "Yelp" | "Facebook" | null,
+  "testimonials": [{ "text": "verbatim quote from a real review", "source": "Google|Yelp|Facebook" }] (only real quotes actually present; else []),
+  "facts": ["short verifiable fact explicitly stated, e.g. 'Open since 2011'"] (else []),
+  "designCues": ["visual/brand style cues actually described in the snippets, e.g. 'earthy green + cream palette', 'minimalist photography', 'calm spa aesthetic'"] (only if described; else [])
+}`;
+    let parsed;
+    try {
+      const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction' });
+      const m = resp.match(/\{[\s\S]+\}/);
+      parsed = m ? JSON.parse(m[0]) : null;
+    } catch (err) {
+      logger.warn('[SITE] enrichment extraction failed', { error: err.message });
+      return null;
+    }
+    if (!parsed) return null;
+
+    const rating = typeof parsed.rating === 'number' && parsed.rating >= 1 && parsed.rating <= 5 ? parsed.rating : null;
+    const testimonials = Array.isArray(parsed.testimonials)
+      ? parsed.testimonials.filter((t) => t && typeof t.text === 'string' && t.text.trim().length > 12).slice(0, 4)
+      : [];
+    const facts = Array.isArray(parsed.facts) ? parsed.facts.filter((f) => typeof f === 'string' && f.trim()).slice(0, 4) : [];
+    const designCues = Array.isArray(parsed.designCues) ? parsed.designCues.filter((d) => typeof d === 'string' && d.trim()).slice(0, 5) : [];
+
+    if (!rating && !testimonials.length && !facts.length && !designCues.length) return null;
+    return {
+      rating,
+      reviewCount: Number.isInteger(parsed.reviewCount) ? parsed.reviewCount : null,
+      ratingSource: parsed.ratingSource || null,
+      testimonials,
+      facts,
+      designCues,
+    };
+  }
+
+  /**
    * Select best POS partner based on business industry/keywords.
    */
   selectPosPartner(industryOrKeywords) {
@@ -358,6 +690,9 @@ Return ONLY valid JSON with this exact structure:
     const competitorBrief = designBrief?.text
       ? `\n\nCOMPETITOR-INFORMED DESIGN BRIEF (beat the market, do not copy):\n${designBrief.text}`
       : '';
+    const designSystemBlock = options.designSystem
+      ? `\n\n${renderDesignSystemDirectives(options.designSystem)}`
+      : '';
 
     const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
 
@@ -377,11 +712,16 @@ BUSINESS PROFILE:
 - Booking URL: ${info.bookingUrl || '#book'}
 - Brand colors: Primary ${primary}, Accent ${accent}
 - Testimonials: ${(info.testimonials || []).join(' | ')}
-
+${renderVerifiedData(info.verifiedData)}
 PAYMENT/BOOKING SYSTEM:
 - We recommend ${posPartner.name} for scheduling + payments
 - Referral link: ${posPartner.url}
 - Include a "Book Now" CTA that links to booking system
+
+TRUTH RULE (HIGHEST PRIORITY — overrides everything below):
+- NEVER invent facts. Do not fabricate prices, dollar amounts, star ratings, review counts, client/family counts, years in business, awards, or named testimonials/quotes.
+- Use ONLY the concrete facts provided in the BUSINESS PROFILE and VERIFIED REAL DATA below. If a fact is not provided, leave it out entirely — do not guess or approximate.
+- A shorter, truthful page ALWAYS beats an impressive-looking page built on invented claims. Empty is better than fake.
 
 HARD REQUIREMENTS:
 1. Output ONE complete HTML file — nothing else, no explanation
@@ -398,12 +738,12 @@ HARD REQUIREMENTS:
 CLICK FUNNEL STRUCTURE (in this exact order):
 1. NAVIGATION: Logo + nav links + "Book Free Call" CTA button (sticky)
 2. HERO: Bold headline about transformation/outcome (not features). Subheadline. Two CTAs: primary "Book Your Free Consultation" + secondary "See How It Works". Add a subtle background gradient using primary color.
-3. SOCIAL PROOF BAR: 3 trust stats (e.g., "200+ families served", "5★ rated", "10 years experience") — infer from business info
+3. SOCIAL PROOF BAR: ONLY include real, provided metrics (e.g. a real Google/Yelp rating + review count, or a verified years-in-business figure) from VERIFIED REAL DATA. If no real metrics are provided, OMIT this bar entirely — do NOT invent stats like "200+ served" or "5★ rated".
 4. PROBLEM SECTION: "Does this sound familiar?" — 3 pain points as cards with icons (use emoji)
 5. SOLUTION SECTION: "Here's how we help" — 3-step process with numbered steps
-6. SERVICES SECTION: Service cards with name, description, price range (if known), "Learn More" CTA
-7. TESTIMONIALS: 3 testimonials or proof cards in a clean grid. Use real ones if provided. If none are provided, use trust-building proof cards or a "what clients value" section and label it clearly.
-8. OFFER/PACKAGES: 2-3 clear pricing tiers with features list and "Get Started" CTA — make them buyable
+6. SERVICES SECTION: Service cards with name and description. Include a price ONLY if a real price is provided for that service — otherwise no price. "Learn More" / "Book" CTA.
+7. TESTIMONIALS: Prefer REAL reviews from VERIFIED REAL DATA — quote them verbatim with the source (e.g. "— via Google"). If NO real reviews are provided, you MAY show up to 2 illustrative sample testimonials, but EACH card MUST carry a clearly visible small-print label reading exactly: "AI-generated testimonial sample — not a real client review". Never present a sample as real, never invent a real client's name, and never attach a star rating to a sample.
+8. OFFER/PACKAGES: Show pricing ONLY if a real price/priceRange is provided in the BUSINESS PROFILE or VERIFIED REAL DATA. If real pricing exists, present it accurately. If NO real pricing is provided, do NOT invent tiers or dollar amounts — instead show a single "Request pricing / Book a free consultation" CTA that links to booking.
 9. ABOUT SECTION: Brief about the practitioner, warm and personal
 10. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click)
 11. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt placeholders (links to /blog/)
@@ -423,7 +763,7 @@ SEO REQUIREMENTS:
 - Internal links between sections
 
 DESIGN INTELLIGENCE:
-${designIntel}${competitorBrief}
+${designIntel}${competitorBrief}${designSystemBlock}
 
 DESIGN REQUIREMENTS:
 - Use Tailwind utility classes for layout and components, plus one concise <style> block for theme tokens and a few intentional visual effects
@@ -441,9 +781,20 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
 
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
-    // gemini_flash: free, 8192+ output tokens — necessary for full 15-section HTML
+    // Prefer the higher-quality design model (claude_sonnet, 16k output). Fall back to another
+    // STRONG paid model (gpt-4o) on any provider error — never a free tier (founder rule).
     // allowModelDowngrade:false prevents selectOptimalModel from overriding to groq_llama (4096 token limit)
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
+    let response;
+    try {
+      response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
+    } catch (err) {
+      if (GENERATION_MODEL !== GENERATION_FALLBACK_MODEL) {
+        logger.warn('[SITE] primary generation model failed, falling back', { model: GENERATION_MODEL, error: err.message });
+        response = await this.callCouncil(GENERATION_FALLBACK_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
+      } else {
+        throw err;
+      }
+    }
     let clean = response.replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     // Strip markdown fences AI models sometimes wrap HTML in (```html...``` or ```...```)
     clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
@@ -620,7 +971,8 @@ CURRENT HTML:
 ${existingHtml}
 `;
 
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false });
+    // Repair rewrites the actual client-facing site HTML → use the STRONG product model.
+    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
@@ -651,8 +1003,9 @@ Return ONLY valid JSON array:
   }
 ]`;
 
-    // gemini_flash for blog content — 3 posts × 600-800 words each exceeds groq's 4096-token limit
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: 4000, allowModelDowngrade: false });
+    // Blog posts are client-facing product content → use the STRONG product model
+    // (never a free tier). 3 posts × 600-800 words needs long output; claude_sonnet (16k) fits.
+    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), allowModelDowngrade: false });
     try {
       const jsonMatch = response.match(/\[[\s\S]+\]/);
       const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
