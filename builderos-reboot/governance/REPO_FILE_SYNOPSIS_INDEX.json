@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T20:51:52.265Z",
+  "generated_at": "2026-07-06T20:54:23.742Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11202,
   "files": [
@@ -39202,9 +39202,9 @@
     {
       "path": "docs/products/site-builder/BUILD_QUEUE.json",
       "synopsis": "Documentation — BUILD QUEUE.",
-      "bytes": 12889,
-      "mtime": "2026-07-06T20:49:09.699Z",
-      "indexed_at": "2026-07-06T20:51:51.594Z",
+      "bytes": 13304,
+      "mtime": "2026-07-06T20:54:09.859Z",
+      "indexed_at": "2026-07-06T20:54:23.742Z",
       "synopsis_index_only": true
     },
     {
