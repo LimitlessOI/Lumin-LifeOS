@@ -125,6 +125,7 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, max
     spec: step.spec || '',
     last_error: step.last_error || null,
     attempt: step.attempts,
+    max_output_tokens: step.max_output_tokens || null,
   });
 
   const sha = build && (build.commit_sha || build.sha);

@@ -495,8 +495,11 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     return { ok: false, detail: 'build_queue_load_failed', error: e.message };
   }
 
-  const buildFn = async ({ target_file, task: stepTask, spec, last_error }) => {
+  const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens }) => {
     if (!baseUrl || !commandKey) return { ok: false, error: 'missing PUBLIC_BASE_URL / COMMAND_CENTER_KEY' };
+    const stepTokenBudget = Number.isFinite(Number(max_output_tokens)) && Number(max_output_tokens) > 0
+      ? Number(max_output_tokens)
+      : null;
     // Verbatim error carry-forward: the builder's pre-commit gate RUNS the code
     // and blocks a commit on any runtime/anti-pattern failure. Retrying the same
     // prompt just regenerates the same bug (spin). Instead, feed the builder its
@@ -515,6 +518,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         spec,
         platform_gap_fill: true,
         platform_gap_fill_reason: `Autonomous product-build orchestrator executing queued BUILD_QUEUE.json step for product ${task.product_id} (${task.step_id}): ${stepTask}`.slice(0, 480),
+        ...(stepTokenBudget ? { max_output_tokens: stepTokenBudget } : {}),
       });
       const b = build.body || {};
       const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
