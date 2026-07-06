@@ -1018,6 +1018,8 @@ HOW TO RESPOND:
         status: 'running',
         pass_fail: 'RUNNING',
         command_truth: 'BUILD_ATTEMPTED',
+        steps: Array.isArray(job.steps) ? job.steps : [],
+        started_at: job.created_at || null,
       });
     }
     if (job.result?.pass_fail === 'PASS' && job.result?.committed === true) {

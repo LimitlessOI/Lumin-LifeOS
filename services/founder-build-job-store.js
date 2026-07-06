@@ -31,10 +31,31 @@ export function createFounderBuildJob({ task, userId = null } = {}) {
     user_id: userId,
     status: 'running',
     result: null,
+    steps: [],
     created_at: now,
     updated_at: now,
   });
   return id;
+}
+
+const MAX_JOB_STEPS = 60;
+
+export function appendFounderBuildJobStep(id, step) {
+  const job = jobs.get(id);
+  if (!job) return false;
+  const label = String(step?.label || step || '').trim();
+  if (!label) return false;
+  if (!Array.isArray(job.steps)) job.steps = [];
+  const last = job.steps[job.steps.length - 1];
+  if (last && last.label === label) return false;
+  job.steps.push({
+    label: label.slice(0, 160),
+    detail: String(step?.detail || '').slice(0, 400) || null,
+    at: Date.now(),
+  });
+  if (job.steps.length > MAX_JOB_STEPS) job.steps.splice(0, job.steps.length - MAX_JOB_STEPS);
+  job.updated_at = Date.now();
+  return true;
 }
 
 export function setFounderBuildJobResult(id, result) {

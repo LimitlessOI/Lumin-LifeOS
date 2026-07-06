@@ -1696,6 +1696,64 @@
       margin-top: 4px;
     }
 
+    /* Live "thinking" panel — shows the system's real background work */
+    .lumin-think {
+      align-self: flex-start;
+      max-width: 87%;
+      padding: 10px 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(99,102,241,0.30);
+      background: linear-gradient(135deg, rgba(99,102,241,0.10), rgba(56,189,248,0.08));
+      font-size: 12px;
+      color: var(--studio-text, #e5e7eb);
+      box-shadow: 0 8px 24px rgba(20,28,40,0.08);
+    }
+    .lumin-think-head {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 700; font-size: 12px; letter-spacing: 0.02em;
+    }
+    .lumin-think-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #6366f1; box-shadow: 0 0 0 0 rgba(99,102,241,0.6);
+      animation: lumin-think-pulse 1.1s infinite;
+    }
+    @keyframes lumin-think-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(99,102,241,0.55); }
+      70% { box-shadow: 0 0 0 7px rgba(99,102,241,0); }
+      100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+    }
+    .lumin-think-elapsed { margin-left: auto; opacity: 0.7; font-variant-numeric: tabular-nums; font-weight: 500; }
+    .lumin-think-steps { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .lumin-think-step { display: flex; align-items: flex-start; gap: 7px; opacity: 0.5; transition: opacity 0.2s; }
+    .lumin-think-step.done { opacity: 1; }
+    .lumin-think-step.active { opacity: 1; font-weight: 600; }
+    .lumin-think-step .ico { flex: 0 0 auto; width: 14px; text-align: center; }
+    .lumin-think-step.active .ico { animation: lumin-think-spin 0.9s linear infinite; }
+    @keyframes lumin-think-spin { to { transform: rotate(360deg); } }
+
+    /* Voice / read-aloud controls in the drawer header */
+    .lumin-voice-ctrl { display: inline-flex; align-items: center; gap: 4px; }
+    .lumin-voice-btn {
+      background: transparent; border: 1px solid var(--studio-border, rgba(255,255,255,0.15));
+      color: var(--studio-text-secondary, #9ca3af); border-radius: 8px;
+      width: 26px; height: 24px; font-size: 12px; cursor: pointer; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .lumin-voice-btn:hover { color: var(--studio-text, #fff); }
+    .lumin-voice-btn.on { color: #6366f1; border-color: rgba(99,102,241,0.6); }
+    .lumin-voice-rate { font-size: 10px; opacity: 0.7; min-width: 30px; text-align: center; font-variant-numeric: tabular-nums; }
+    .lumin-input-attach {
+      background: transparent; border: none; color: var(--studio-text-muted, #6b7280);
+      cursor: pointer; font-size: 16px; padding: 0 4px;
+    }
+    .lumin-input-attach:hover { color: var(--studio-text, #fff); }
+    .lumin-attach-chip {
+      display: inline-flex; align-items: center; gap: 6px; margin: 0 0 6px;
+      padding: 4px 8px; border-radius: 8px; font-size: 11px;
+      background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); color: var(--studio-text, #e5e7eb);
+    }
+    .lumin-attach-chip button { background: none; border: none; color: inherit; cursor: pointer; font-size: 13px; line-height: 1; }
+
     /* Empty state */
     .lumin-empty {
       flex: 1;
@@ -2405,6 +2463,12 @@
       <button type="button" class="lumin-dock-btn" id="lumin-pin-btn" onclick="toggleLuminPin()">Pin</button>
       <button type="button" class="lumin-dock-btn" id="lumin-min-btn" onclick="toggleLuminMinimize()">Min</button>
     </div>
+    <div class="lumin-voice-ctrl" id="lumin-voice-ctrl">
+      <button type="button" class="lumin-voice-btn" id="lumin-tts-toggle" onclick="luminToggleReadAloud()" title="Read replies aloud in a feminine voice">🔈</button>
+      <button type="button" class="lumin-voice-btn" id="lumin-tts-slower" onclick="luminAdjustReadRate(-0.1)" title="Read slower">‹</button>
+      <span class="lumin-voice-rate" id="lumin-tts-rate">1.0×</span>
+      <button type="button" class="lumin-voice-btn" id="lumin-tts-faster" onclick="luminAdjustReadRate(0.1)" title="Read faster">›</button>
+    </div>
     <span class="lumin-history-link" onclick="openFullChat()">Full history →</span>
     <button class="lumin-drawer-close" onclick="closeLuminDrawer()">✕</button>
   </div>
@@ -2424,6 +2488,7 @@
   </div>
 
   <div class="lumin-input-bar">
+    <div id="lumin-attach-chips"></div>
     <div class="lumin-input-wrap">
       <textarea
         class="lumin-input"
@@ -2432,8 +2497,11 @@
         rows="3"
         onkeydown="luminHandleKey(event)"
         oninput="luminAutoResize(this)"></textarea>
-      <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input">🎙</button>
+      <button type="button" class="lumin-input-attach" id="lumin-attach-btn" onclick="document.getElementById('lumin-file-input').click()" title="Attach a file">📎</button>
+      <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input (tap to toggle)">🎙</button>
+      <button class="lumin-input-mic" id="lumin-ptt-btn" title="Push-to-talk — hold, speak, release to send">🎤</button>
     </div>
+    <input type="file" id="lumin-file-input" multiple style="display:none" onchange="luminOnFilePick(event)" />
     <button class="lumin-send-btn" id="lumin-send-btn" onclick="luminSend()" title="Send">↑</button>
     <button type="button" class="lumin-dock-btn" id="lumin-save-moment-btn" onclick="luminSaveLastMoment()" title="Save last reply as lesson/moment">★</button>
   </div>
@@ -3199,6 +3267,9 @@ const luminState = {
   wakeListenActive: false,
   lastReply: '',
   chatHistory: [],
+  readAloud: { enabled: false, rate: 1.0 },
+  attachments: [],
+  thinkTimers: {},
 };
 
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
@@ -3445,7 +3516,7 @@ async function luminFetchJsonWithTimeout(url, init = {}, timeoutMs = LUMIN_SEND_
   }
 }
 
-async function pollFounderBuildJob(jobId, pollUrl) {
+async function pollFounderBuildJob(jobId, pollUrl, onTick) {
   const deadline = Date.now() + 660000;
   while (Date.now() < deadline) {
     const res = await fetch(pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`, {
@@ -3454,6 +3525,7 @@ async function pollFounderBuildJob(jobId, pollUrl) {
     });
     const data = await res.json();
     if (res.status === 202 || data.pass_fail === 'RUNNING') {
+      if (typeof onTick === 'function') { try { onTick(data); } catch { /* non-fatal */ } }
       await new Promise((resolve) => setTimeout(resolve, 2500));
       continue;
     }
@@ -3479,22 +3551,30 @@ function applyLuminShellAction(data) {
 async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');
   let msg = safePromptText(opts.text || input?.value || '');
-  if (!msg || luminState.sending) return;
+  const hasAttachments = Array.isArray(luminState.attachments) && luminState.attachments.length > 0;
+  if ((!msg && !hasAttachments) || luminState.sending) return;
   const voiceTurn = opts.voice === true || luminState.voiceTurn;
   luminState.voiceTurn = false;
   if (!USE_DIRECT_SYSTEM_CHAT && !luminState.threadId) { await luminCreateThread(); }
 
+  // Fold any attached files into the outbound message so the Chair can read them.
+  const attachBlock = luminBuildAttachmentBlock();
+  const outboundMsg = attachBlock ? (msg ? `${msg}\n\n${attachBlock}` : attachBlock) : msg;
+  const attachNames = hasAttachments ? luminState.attachments.map((a) => a.name).join(', ') : '';
+  const displayMsg = hasAttachments ? `${msg}${msg ? '\n' : ''}📎 ${attachNames}` : msg;
+
   // Remove empty state
   document.getElementById('lumin-empty')?.remove();
 
-  _appendLuminMsg('user', msg, new Date().toISOString(), true);
+  _appendLuminMsg('user', displayMsg, new Date().toISOString(), true);
   input.value = '';
   luminAutoResize(input);
+  luminClearAttachments();
 
   document.querySelectorAll('.lumin-msg.thinking').forEach((el) => el.remove());
 
   const thinkId = 'lumin-think-' + Date.now();
-  _appendLuminMsgRaw(thinkId, 'thinking', voiceTurn ? 'Lumin is listening…' : 'Lumin is working…');
+  luminStartThinkPanel(thinkId, voiceTurn ? 'Listening…' : 'Working on it');
 
   luminState.sending = true;
   document.getElementById('lumin-send-btn').disabled = true;
@@ -3504,7 +3584,7 @@ async function luminSend(opts = {}) {
   try {
     const reqBody = USE_DIRECT_SYSTEM_CHAT
       ? {
-          text: msg,
+          text: outboundMsg,
           action: 'auto',
           stage: 'system',
           source_mode: voiceTurn ? 'voice' : 'text',
@@ -3519,7 +3599,7 @@ async function luminSend(opts = {}) {
           },
           client_version: '20260626f',
         }
-      : { user: USER || 'adam', message: msg };
+      : { user: USER || 'adam', message: outboundMsg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
       ? DIRECT_SYSTEM_ENDPOINT
       : `${CHAT_BASE}/threads/${luminState.threadId}/messages`;
@@ -3530,13 +3610,13 @@ async function luminSend(opts = {}) {
       body: JSON.stringify(reqBody),
     });
     if (USE_DIRECT_SYSTEM_CHAT && res.status === 202 && data.job_id) {
-      const polled = await pollFounderBuildJob(data.job_id, data.poll_url);
+      const polled = await pollFounderBuildJob(data.job_id, data.poll_url, (tick) => luminUpdateThinkPanel(thinkId, tick));
       res = polled.res;
       data = polled.data;
     }
 
     // Remove thinking bubble
-    document.getElementById(thinkId)?.remove();
+    luminStopThinkPanel(thinkId);
 
     if (res.status === 401 || res.status === 403) {
       const renewed = await CTX.refreshIfNeeded();
@@ -3550,10 +3630,11 @@ async function luminSend(opts = {}) {
         const retry = retryResult.res;
         const retryData = retryResult.data;
         if (retry.ok) {
-          document.getElementById(thinkId)?.remove();
+          luminStopThinkPanel(thinkId);
           let reply = formatDirectSystemReply(retryData);
           reply = appendClientBubbleProof(reply, retryData);
-          _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
+          luminState.lastReply = reply;
+          luminDeliverReply(reply, voiceTurn);
           applyLuminShellAction(retryData);
           return;
         }
@@ -3567,15 +3648,13 @@ async function luminSend(opts = {}) {
       let reply = formatDirectSystemReply(data);
       reply = appendClientBubbleProof(reply, data);
       luminState.lastReply = reply;
-      _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
+      luminDeliverReply(reply, voiceTurn);
       applyLuminShellAction(data);
-      if (voiceTurn) speakLuminReply(reply);
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
       }
     } else if (data.ok && data.assistant_message) {
-      _appendLuminMsg('assistant', data.assistant_message.content, data.assistant_message.created_at, true);
-      if (voiceTurn) speakLuminReply(data.assistant_message.content);
+      luminDeliverReply(data.assistant_message.content, voiceTurn, data.assistant_message.created_at);
       // Badge on FAB if drawer is closed
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
@@ -3584,7 +3663,7 @@ async function luminSend(opts = {}) {
       _appendLuminMsgRaw(null, 'assistant', 'Sorry, something went wrong. Try again.');
     }
   } catch (err) {
-    document.getElementById(thinkId)?.remove();
+    luminStopThinkPanel(thinkId);
     const message = err?.name === 'AbortError'
       ? 'Lumin timed out waiting for the system. Nothing completed on this turn. Try again.'
       : `Connection error: ${err.message}`;
@@ -3715,6 +3794,39 @@ function luminAutoResize(el) {
 /* founder-lumin-voice-send:start — mechanical voice "send it" wire */
 let luminDrawerVoiceCtrl = null;
 let luminSpaceMicHeld = false;
+let luminPttHeld = false;
+
+function luminWirePushToTalk() {
+  const ptt = document.getElementById('lumin-ptt-btn');
+  if (!ptt || ptt.__wired) return;
+  ptt.__wired = true;
+  const start = (e) => {
+    e.preventDefault();
+    if (luminPttHeld || luminState.sending) return;
+    if (!luminDrawerVoiceCtrl?.startMic) { toast('Voice input needs Chrome or Safari.'); return; }
+    luminPttHeld = true;
+    ptt.classList.add('voice-active');
+    const s = document.getElementById('lumin-status-text');
+    if (s) s.textContent = 'Listening — release to send';
+    try { luminDrawerVoiceCtrl.startMic(); } catch { luminPttHeld = false; ptt.classList.remove('voice-active'); }
+  };
+  const stop = (e) => {
+    if (!luminPttHeld) return;
+    e.preventDefault();
+    luminPttHeld = false;
+    ptt.classList.remove('voice-active');
+    try { luminDrawerVoiceCtrl?.stopMic?.(); } catch {}
+    setTimeout(() => {
+      const v = (document.getElementById('lumin-input')?.value || '').trim();
+      if (v && !luminState.sending) luminSend({ text: v, voice: true });
+    }, 400);
+  };
+  ptt.addEventListener('mousedown', start);
+  ptt.addEventListener('touchstart', start, { passive: false });
+  ptt.addEventListener('mouseup', stop);
+  ptt.addEventListener('mouseleave', stop);
+  ptt.addEventListener('touchend', stop);
+}
 
 function initLuminDrawerVoiceSend() {
   if (!window.LifeOSVoiceChat || luminDrawerVoiceCtrl) return;
@@ -3761,9 +3873,20 @@ function initLuminDrawerVoiceSend() {
       if (luminDrawerVoiceCtrl) luminDrawerVoiceCtrl.stopMic();
     });
   }
+  luminWirePushToTalk();
 }
 
-document.addEventListener('DOMContentLoaded', () => { initLuminDrawerVoiceSend(); });
+document.addEventListener('DOMContentLoaded', () => {
+  luminInitReadAloudPrefs();
+  // The voice module script may still be loading — retry init until it's ready.
+  let tries = 0;
+  const tryInit = () => {
+    initLuminDrawerVoiceSend();
+    if (luminDrawerVoiceCtrl || tries++ > 40) return;
+    setTimeout(tryInit, 250);
+  };
+  tryInit();
+});
 /* founder-lumin-voice-send:end */
 
 
@@ -3801,21 +3924,232 @@ function routeVoiceToLuminChair(transcript, meta = {}) {
   luminSend({ text: transcript, voice: true });
 }
 
+/* ── Read-aloud (feminine voice + speed control) ───────────────────────── */
+const LUMIN_TTS_KEY = 'lifeos_lumin_read_aloud';
+const LUMIN_TTS_RATE_KEY = 'lifeos_lumin_read_rate';
+const LUMIN_TTS_RATE_MIN = 0.75;
+const LUMIN_TTS_RATE_MAX = 1.15;
+
+function luminInitReadAloudPrefs() {
+  try {
+    luminState.readAloud.enabled = localStorage.getItem(LUMIN_TTS_KEY) === 'true';
+    const r = parseFloat(localStorage.getItem(LUMIN_TTS_RATE_KEY));
+    if (!Number.isNaN(r)) luminState.readAloud.rate = Math.min(Math.max(r, LUMIN_TTS_RATE_MIN), LUMIN_TTS_RATE_MAX);
+  } catch { /* defaults */ }
+  luminUpdateVoiceCtrlUi();
+}
+
+function luminUpdateVoiceCtrlUi() {
+  const toggle = document.getElementById('lumin-tts-toggle');
+  const rateEl = document.getElementById('lumin-tts-rate');
+  if (toggle) {
+    toggle.classList.toggle('on', luminState.readAloud.enabled);
+    toggle.textContent = luminState.readAloud.enabled ? '🔊' : '🔈';
+    toggle.title = luminState.readAloud.enabled ? 'Read-aloud ON — click to mute' : 'Read replies aloud in a feminine voice';
+  }
+  if (rateEl) rateEl.textContent = `${luminState.readAloud.rate.toFixed(2).replace(/0$/, '')}×`;
+}
+
+function luminToggleReadAloud() {
+  luminState.readAloud.enabled = !luminState.readAloud.enabled;
+  try { localStorage.setItem(LUMIN_TTS_KEY, String(luminState.readAloud.enabled)); } catch {}
+  if (!luminState.readAloud.enabled) { try { window.LifeOSVoiceChat?.stopSpeaking?.(); window.speechSynthesis?.cancel(); } catch {} }
+  luminUpdateVoiceCtrlUi();
+  toast(luminState.readAloud.enabled ? 'Reading replies aloud' : 'Read-aloud off');
+}
+
+function luminAdjustReadRate(delta) {
+  let r = luminState.readAloud.rate + delta;
+  r = Math.min(Math.max(Math.round(r * 100) / 100, LUMIN_TTS_RATE_MIN), LUMIN_TTS_RATE_MAX);
+  luminState.readAloud.rate = r;
+  try { localStorage.setItem(LUMIN_TTS_RATE_KEY, String(r)); } catch {}
+  luminUpdateVoiceCtrlUi();
+}
+
 function speakLuminReply(text) {
-  if (!window.speechSynthesis || !text) return;
-  const plain = String(text)
+  const plain = String(text || '')
     .replace(/\b(PASS|FAIL|COMMAND_RAN|NO_COMMAND_RAN)\b/g, '')
     .replace(/— Lumin ·[^\n]*/g, '')
     .trim()
-    .slice(0, 600);
+    .slice(0, 1600);
   if (!plain) return;
+  const rate = luminState.readAloud.rate || 0.95;
+  try {
+    if (window.LifeOSVoiceChat && typeof window.LifeOSVoiceChat.speakText === 'function') {
+      window.LifeOSVoiceChat.speakText(plain, { rate, pitch: 1.04 });
+      return;
+    }
+  } catch { /* fall back to native */ }
+  if (!window.speechSynthesis) return;
   try {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(plain);
-    u.rate = 1;
+    u.rate = rate;
     u.lang = 'en-US';
     window.speechSynthesis.speak(u);
   } catch { /* non-fatal */ }
+}
+
+/* Deliver a reply: type it out live while a feminine voice reads it when read-aloud is on. */
+function luminDeliverReply(reply, voiceTurn, createdAt) {
+  const text = String(reply || '');
+  const ts = createdAt || new Date().toISOString();
+  const speak = luminState.readAloud.enabled === true || voiceTurn === true;
+  if (speak && text) {
+    speakLuminReply(text);
+    luminTypewriterAppend(text, ts);
+  } else {
+    _appendLuminMsg('assistant', text, ts, true);
+  }
+}
+
+function luminTypewriterAppend(content, createdAt) {
+  const container = document.getElementById('lumin-messages');
+  if (!container) return;
+  const full = String(content || '');
+  const div = document.createElement('div');
+  div.className = 'lumin-msg assistant';
+  const body = document.createElement('div');
+  body.style.cssText = 'white-space:pre-wrap;word-break:break-word;';
+  div.appendChild(body);
+  container.appendChild(div);
+  luminState.chatHistory.push({ role: 'assistant', content: full });
+  if (luminState.chatHistory.length > 40) luminState.chatHistory.shift();
+  const time = createdAt ? new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+  const step = Math.max(2, Math.round(3 * (luminState.readAloud.rate || 1)));
+  let i = 0;
+  const timer = setInterval(() => {
+    i += step;
+    body.innerHTML = _escHtml(full.slice(0, i));
+    container.scrollTop = container.scrollHeight;
+    if (i >= full.length) {
+      clearInterval(timer);
+      body.innerHTML = _escHtml(full);
+      if (time) {
+        const t = document.createElement('div');
+        t.className = 'lumin-msg-time';
+        t.textContent = time;
+        div.appendChild(t);
+      }
+      container.scrollTop = container.scrollHeight;
+    }
+  }, 22);
+}
+
+/* ── Live "thinking" panel — shows the system's real background work ─────── */
+function luminStartThinkPanel(id, title) {
+  const container = document.getElementById('lumin-messages');
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = 'lumin-think';
+  div.id = id;
+  div.innerHTML = `
+    <div class="lumin-think-head">
+      <span class="lumin-think-dot"></span>
+      <span class="lumin-think-title">${_escHtml(title || 'Working on it')}</span>
+      <span class="lumin-think-elapsed" data-elapsed>0s</span>
+    </div>
+    <ul class="lumin-think-steps"><li class="lumin-think-step active"><span class="ico">◍</span><span>Getting started…</span></li></ul>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  const startTs = Date.now();
+  luminState.thinkTimers[id] = {
+    startTs,
+    steps: [],
+    intervalId: setInterval(() => {
+      const el = document.getElementById(id)?.querySelector('[data-elapsed]');
+      if (el) el.textContent = luminFormatElapsed(Date.now() - luminState.thinkTimers[id].startTs);
+    }, 1000),
+  };
+}
+
+function luminFormatElapsed(ms) {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 60) return `${s}s`;
+  return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, '0')}s`;
+}
+
+function luminUpdateThinkPanel(id, data) {
+  const entry = luminState.thinkTimers[id];
+  const div = document.getElementById(id);
+  if (!entry || !div) return;
+  if (data && typeof data.started_at === 'number') entry.startTs = data.started_at;
+  const steps = Array.isArray(data?.steps) ? data.steps : [];
+  if (!steps.length) return;
+  entry.steps = steps;
+  const ul = div.querySelector('.lumin-think-steps');
+  if (!ul) return;
+  ul.innerHTML = steps.map((s, idx) => {
+    const active = idx === steps.length - 1;
+    const cls = active ? 'active' : 'done';
+    const ico = active ? '◍' : '✓';
+    const detail = s.detail ? ` <span style="opacity:0.7">— ${_escHtml(String(s.detail))}</span>` : '';
+    return `<li class="lumin-think-step ${cls}"><span class="ico">${ico}</span><span>${_escHtml(String(s.label || ''))}${detail}</span></li>`;
+  }).join('');
+  const c = document.getElementById('lumin-messages');
+  if (c) c.scrollTop = c.scrollHeight;
+}
+
+function luminStopThinkPanel(id) {
+  const entry = luminState.thinkTimers[id];
+  if (entry) {
+    clearInterval(entry.intervalId);
+    delete luminState.thinkTimers[id];
+  }
+  document.getElementById(id)?.remove();
+}
+
+/* ── File upload ─────────────────────────────────────────────────────────── */
+const LUMIN_MAX_ATTACH = 5;
+const LUMIN_MAX_TEXT_BYTES = 200 * 1024;
+const LUMIN_TEXT_EXT = /\.(txt|md|markdown|json|csv|tsv|log|js|mjs|ts|jsx|tsx|html|css|xml|yaml|yml|py|sh|sql|env|ini|conf)$/i;
+
+function luminOnFilePick(event) {
+  const files = Array.from(event.target?.files || []);
+  event.target.value = '';
+  files.forEach((file) => {
+    if (luminState.attachments.length >= LUMIN_MAX_ATTACH) {
+      toast(`Up to ${LUMIN_MAX_ATTACH} files at a time`);
+      return;
+    }
+    const record = { name: file.name, size: file.size, type: file.type || '', text: null };
+    luminState.attachments.push(record);
+    if (LUMIN_TEXT_EXT.test(file.name) && file.size <= LUMIN_MAX_TEXT_BYTES) {
+      const reader = new FileReader();
+      reader.onload = () => { record.text = String(reader.result || '').slice(0, LUMIN_MAX_TEXT_BYTES); };
+      reader.onerror = () => { record.text = null; };
+      reader.readAsText(file);
+    }
+  });
+  luminRenderAttachChips();
+}
+
+function luminRenderAttachChips() {
+  const wrap = document.getElementById('lumin-attach-chips');
+  if (!wrap) return;
+  wrap.innerHTML = luminState.attachments.map((a, i) =>
+    `<span class="lumin-attach-chip">📎 ${_escHtml(a.name)} <button type="button" onclick="luminRemoveAttachment(${i})" title="Remove">✕</button></span>`
+  ).join('');
+}
+
+function luminRemoveAttachment(idx) {
+  luminState.attachments.splice(idx, 1);
+  luminRenderAttachChips();
+}
+
+function luminClearAttachments() {
+  luminState.attachments = [];
+  luminRenderAttachChips();
+}
+
+function luminBuildAttachmentBlock() {
+  if (!luminState.attachments.length) return '';
+  const parts = luminState.attachments.map((a) => {
+    const head = `FILE: ${a.name} (${Math.round((a.size || 0) / 1024) || 1}KB${a.type ? ', ' + a.type : ''})`;
+    if (a.text) return `${head}\n---\n${a.text}\n---`;
+    return `${head} — binary/unsupported for inline read; note its name and ask me for its contents if needed.`;
+  });
+  return `[Attached files from founder]\n${parts.join('\n\n')}`;
 }
 
 function toggleLuminWakeListen() {

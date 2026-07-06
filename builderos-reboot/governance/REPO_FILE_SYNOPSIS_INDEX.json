@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T05:49:53.953Z",
+  "generated_at": "2026-07-06T06:13:25.055Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11182,
   "files": [
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 126494,
-      "mtime": "2026-07-06T05:49:44.335Z",
-      "indexed_at": "2026-07-06T05:49:51.866Z"
+      "bytes": 127105,
+      "mtime": "2026-07-06T06:12:02.965Z",
+      "indexed_at": "2026-07-06T06:13:25.055Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38852,9 +38852,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 583841,
-      "mtime": "2026-07-06T05:49:27.427Z",
-      "indexed_at": "2026-07-06T05:49:51.866Z"
+      "bytes": 584314,
+      "mtime": "2026-07-06T06:11:42.165Z",
+      "indexed_at": "2026-07-06T06:13:25.055Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63143,9 +63143,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 157106,
-      "mtime": "2026-07-06T04:57:12.423Z",
-      "indexed_at": "2026-07-06T05:49:51.866Z"
+      "bytes": 172224,
+      "mtime": "2026-07-06T06:09:51.425Z",
+      "indexed_at": "2026-07-06T06:13:25.055Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -64615,9 +64615,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 56779,
-      "mtime": "2026-07-05T19:10:02.192Z",
-      "indexed_at": "2026-07-06T05:49:51.866Z",
+      "bytes": 56881,
+      "mtime": "2026-07-06T06:04:02.309Z",
+      "indexed_at": "2026-07-06T06:13:25.055Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81154,9 +81154,9 @@
     {
       "path": "services/founder-build-job-store.js",
       "synopsis": "In-process founder build job store — avoids Railway proxy 502 on long CSS verify loops.",
-      "bytes": 1958,
-      "mtime": "2026-06-29T17:44:54.518Z",
-      "indexed_at": "2026-07-06T05:49:51.866Z",
+      "bytes": 2624,
+      "mtime": "2026-07-06T06:01:15.589Z",
+      "indexed_at": "2026-07-06T06:13:25.055Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -81194,9 +81194,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 44772,
-      "mtime": "2026-07-06T05:49:44.338Z",
-      "indexed_at": "2026-07-06T05:49:51.866Z",
+      "bytes": 45759,
+      "mtime": "2026-07-06T06:03:52.033Z",
+      "indexed_at": "2026-07-06T06:13:25.055Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
