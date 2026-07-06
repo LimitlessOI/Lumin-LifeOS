@@ -105,6 +105,24 @@ function main() {
 
   const files = [...byPath.values()].sort((a, b) => a.path.localeCompare(b.path));
 
+  // Catastrophic-shrink guard: a partial checkout (e.g. the prod builder's
+  // container, where `git ls-files` lists tracked paths but the files aren't on
+  // disk) would delete most entries and silently wipe the index. Refuse to
+  // write a drastically smaller index unless explicitly allowed.
+  const priorCount = (prior.files || []).length;
+  if (
+    !stagedOnly
+    && priorCount >= 100
+    && files.length < priorCount * 0.5
+    && process.env.ALLOW_INDEX_SHRINK !== '1'
+  ) {
+    console.error(
+      `❌ Synopsis index refused: would shrink from ${priorCount} to ${files.length} entries `
+      + `(likely a partial checkout). Set ALLOW_INDEX_SHRINK=1 to override.`,
+    );
+    process.exit(1);
+  }
+
   const payload = {
     schema: 'repo_file_synopsis_index_v1',
     generated_at: indexedAt,

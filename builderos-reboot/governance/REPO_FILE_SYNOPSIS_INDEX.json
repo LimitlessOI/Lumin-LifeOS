@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T20:21:26.622Z",
+  "generated_at": "2026-07-06T20:24:41.238Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11202,
   "files": [
@@ -39466,9 +39466,9 @@
     {
       "path": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ZERO DRIFT HANDOFF PROTOCOL",
-      "bytes": 102560,
-      "mtime": "2026-07-03T13:23:32.293Z",
-      "indexed_at": "2026-07-06T20:21:25.903Z"
+      "bytes": 103020,
+      "mtime": "2026-07-06T20:24:14.475Z",
+      "indexed_at": "2026-07-06T20:24:41.238Z"
     },
     {
       "path": "docs/products/ZERODRIFTHANDOFFPROTOCOL.md",
@@ -66526,9 +66526,9 @@
     {
       "path": "scripts/generate-file-synopsis-index.mjs",
       "synopsis": "Build/update REPO_FILE_SYNOPSIS_INDEX.json for all git-tracked indexable files.",
-      "bytes": 3191,
-      "mtime": "2026-07-03T13:23:32.529Z",
-      "indexed_at": "2026-07-06T20:21:25.903Z",
+      "bytes": 3904,
+      "mtime": "2026-07-06T20:23:53.679Z",
+      "indexed_at": "2026-07-06T20:24:41.238Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]

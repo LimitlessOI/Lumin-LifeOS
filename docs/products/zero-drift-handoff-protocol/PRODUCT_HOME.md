@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/zero-drift-handoff-protocol/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-06 — `scripts/generate-file-synopsis-index.mjs` now has a catastrophic-shrink guard: it refuses to write an index that drops below 50% of the prior entry count (when prior ≥ 100) unless `ALLOW_INDEX_SHRINK=1`. This stops the autonomous prod builder — whose container has a partial checkout where `git ls-files` lists tracked paths that aren't on disk — from silently wiping the 11k-entry index on every commit (observed on autonomous commit `02f2e809c`). |
 
 ---
 | Field | Value |
