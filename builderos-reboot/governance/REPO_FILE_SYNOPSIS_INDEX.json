@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T07:21:34.497Z",
+  "generated_at": "2026-07-06T10:39:53.584Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 1,
+  "file_count": 2,
   "files": [
     {
       "path": "README.md",
@@ -10,6 +10,16 @@
       "bytes": 1439,
       "mtime": "2026-07-06T07:21:34.497Z",
       "indexed_at": "2026-07-06T07:21:34.497Z"
+    },
+    {
+      "path": "scripts/overnight-build-proof.mjs",
+      "synopsis": "Exports overnightBuildProof — scripts/overnight-build-proof.mjs.",
+      "bytes": 281,
+      "mtime": "2026-07-06T10:39:53.584Z",
+      "indexed_at": "2026-07-06T10:39:53.584Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     }
   ]
 }
