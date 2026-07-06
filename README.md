@@ -1,3 +1,4 @@
+<!-- LifeOS / BuilderOS — Adam Hopkins founder system -->
 <!-- SYNOPSIS: Deployment and Monitoring Instructions -->
 
 ```markdown
