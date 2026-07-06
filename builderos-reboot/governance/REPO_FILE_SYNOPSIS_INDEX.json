@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T19:18:49.995Z",
+  "generated_at": "2026-07-06T19:38:28.118Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11202,
   "files": [
@@ -38416,9 +38416,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 144169,
-      "mtime": "2026-07-06T19:18:43.299Z",
-      "indexed_at": "2026-07-06T19:18:49.995Z"
+      "bytes": 145105,
+      "mtime": "2026-07-06T19:38:13.547Z",
+      "indexed_at": "2026-07-06T19:38:28.118Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38852,9 +38852,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 587973,
-      "mtime": "2026-07-06T17:57:12.935Z",
-      "indexed_at": "2026-07-06T18:30:05.763Z"
+      "bytes": 588465,
+      "mtime": "2026-07-06T19:38:19.983Z",
+      "indexed_at": "2026-07-06T19:38:28.118Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -79294,9 +79294,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 13563,
-      "mtime": "2026-07-05T00:38:19.665Z",
-      "indexed_at": "2026-07-06T18:30:05.763Z",
+      "bytes": 14186,
+      "mtime": "2026-07-06T19:36:37.551Z",
+      "indexed_at": "2026-07-06T19:38:28.118Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83390,9 +83390,9 @@
     {
       "path": "services/never-stop-product-factory-scheduler.js",
       "synopsis": "Railway + local scheduler — never-stop product factory (only halts on token exhaustion).",
-      "bytes": 5268,
-      "mtime": "2026-07-06T19:12:34.943Z",
-      "indexed_at": "2026-07-06T19:13:01.359Z",
+      "bytes": 5846,
+      "mtime": "2026-07-06T19:36:24.935Z",
+      "indexed_at": "2026-07-06T19:38:28.118Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83400,9 +83400,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 25097,
-      "mtime": "2026-07-06T19:17:48.671Z",
-      "indexed_at": "2026-07-06T19:18:49.995Z",
+      "bytes": 26724,
+      "mtime": "2026-07-06T19:36:01.023Z",
+      "indexed_at": "2026-07-06T19:38:28.118Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85522,9 +85522,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 4478,
-      "mtime": "2026-07-06T04:57:07.108Z",
-      "indexed_at": "2026-07-06T18:30:05.763Z",
+      "bytes": 4806,
+      "mtime": "2026-07-06T19:37:02.251Z",
+      "indexed_at": "2026-07-06T19:38:28.118Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86726,9 +86726,9 @@
     {
       "path": "tests/product-expansion-lanes.test.js",
       "synopsis": "Multiple-lane concurrency — the factory builds several products'",
-      "bytes": 2921,
-      "mtime": "2026-07-06T19:18:02.315Z",
-      "indexed_at": "2026-07-06T19:18:49.995Z",
+      "bytes": 3925,
+      "mtime": "2026-07-06T19:37:50.303Z",
+      "indexed_at": "2026-07-06T19:38:28.118Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

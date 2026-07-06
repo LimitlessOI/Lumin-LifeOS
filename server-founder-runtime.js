@@ -51,6 +51,7 @@ import { createDeploymentService } from "./services/deployment-service.js";
 import { getCachedResponse, cacheResponse } from "./services/response-cache.js";
 import { registerFounderRuntimeRoutes } from "./startup/register-founder-runtime-routes.js";
 import { registerFounderServerRoutes } from "./startup/routes/founder-server-routes.js";
+import { startNeverStopProductFactoryScheduler } from "./services/never-stop-product-factory-scheduler.js";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 _bootLog('all_imports_done');
@@ -382,6 +383,16 @@ async function bootFounderRuntime() {
     startupHealthState.phase = "ready";
     startupHealthState.ready = true;
     logger.info("✅ Founder-builder runtime routes mounted");
+
+    // AUTONOMOUS BUILD LOOP: the founder-builder lane is the only runtime that
+    // boots on Railway, and it already mounts the `/build` primitive — so the
+    // never-stop product factory must start here (self-gated on
+    // BUILDEROS_NEVER_STOP / daily budget) or the system never builds on its own.
+    try {
+      startNeverStopProductFactoryScheduler({ logger });
+    } catch (schedErr) {
+      logger.warn("[NEVER-STOP-FACTORY] failed to start in founder runtime", { error: schedErr.message });
+    }
     _bootLog('bootFounderRuntime_done');
   } catch (error) {
     startupHealthState.phase = "error";

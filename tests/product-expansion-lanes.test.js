@@ -5,7 +5,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mapConcurrent, runProductExpansionLanes, defaultPlannerCallModel } from '../services/never-stop-product-factory.js';
+import { mapConcurrent, runProductExpansionLanes, defaultPlannerCallModel, dailyBuildBudget } from '../services/never-stop-product-factory.js';
 
 test('defaultPlannerCallModel is fail-closed when no paid key is present', () => {
   const saved = process.env.ANTHROPIC_API_KEY;
@@ -75,4 +75,32 @@ test('a failing lane never counts as built or live (no false green)', async () =
   });
   assert.equal(res.built, 1);
   assert.equal(res.live, 1);
+});
+
+test('dailyBuildBudget: cap=0 disables the guardrail (unlimited)', () => {
+  const saved = process.env.NEVER_STOP_DAILY_STEP_CAP;
+  process.env.NEVER_STOP_DAILY_STEP_CAP = '0';
+  try {
+    const b = dailyBuildBudget();
+    assert.equal(b.ok, true);
+    assert.equal(b.unlimited, true);
+    assert.equal(b.remaining, Infinity);
+  } finally {
+    if (saved === undefined) delete process.env.NEVER_STOP_DAILY_STEP_CAP;
+    else process.env.NEVER_STOP_DAILY_STEP_CAP = saved;
+  }
+});
+
+test('dailyBuildBudget: positive cap reports a finite remaining ceiling', () => {
+  const saved = process.env.NEVER_STOP_DAILY_STEP_CAP;
+  process.env.NEVER_STOP_DAILY_STEP_CAP = '60';
+  try {
+    const b = dailyBuildBudget();
+    assert.equal(b.cap, 60);
+    assert.ok(b.remaining <= 60 && b.remaining >= 0);
+    assert.equal(b.ok, b.remaining > 0);
+  } finally {
+    if (saved === undefined) delete process.env.NEVER_STOP_DAILY_STEP_CAP;
+    else process.env.NEVER_STOP_DAILY_STEP_CAP = saved;
+  }
 });

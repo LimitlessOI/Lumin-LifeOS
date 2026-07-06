@@ -88,6 +88,57 @@ export function hasTokenCapacity() {
   return { ok: true, keys: present.length };
 }
 
+const BUDGET_PATH = path.join(ROOT, 'data/never-stop-daily-budget.json');
+
+function utcDayKey(d = new Date()) {
+  return d.toISOString().slice(0, 10);
+}
+
+/**
+ * Hard cost guardrail: cap the number of builder attempts (each ≈ one paid
+ * `/build` call) the autonomous loop may spend per UTC day. Bounds runaway
+ * spend even though the loop otherwise never stops. `NEVER_STOP_DAILY_STEP_CAP`
+ * (default 60) — set to 0 to disable the cap.
+ */
+export function dailyBuildBudget() {
+  const cap = Number(process.env.NEVER_STOP_DAILY_STEP_CAP ?? 60);
+  const today = utcDayKey();
+  let used = 0;
+  try {
+    const j = JSON.parse(fs.readFileSync(BUDGET_PATH, 'utf8'));
+    if (j && j.day === today) used = Number(j.used) || 0;
+  } catch {
+    // no budget file yet
+  }
+  if (!Number.isFinite(cap) || cap <= 0) {
+    return { ok: true, unlimited: true, cap: 0, used, remaining: Infinity, day: today };
+  }
+  const remaining = Math.max(0, cap - used);
+  return { ok: remaining > 0, cap, used, remaining, day: today };
+}
+
+export function recordDailyBuildAttempts(n) {
+  const attempts = Math.max(0, Number(n) || 0);
+  if (!attempts) return;
+  const today = utcDayKey();
+  let used = 0;
+  try {
+    const j = JSON.parse(fs.readFileSync(BUDGET_PATH, 'utf8'));
+    if (j && j.day === today) used = Number(j.used) || 0;
+  } catch {
+    // reset for a new day
+  }
+  try {
+    fs.mkdirSync(path.dirname(BUDGET_PATH), { recursive: true });
+    fs.writeFileSync(
+      BUDGET_PATH,
+      `${JSON.stringify({ day: today, used: used + attempts, updated_at: new Date().toISOString() }, null, 2)}\n`,
+    );
+  } catch {
+    // non-fatal
+  }
+}
+
 function log(row) {
   fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
   fs.appendFileSync(LOG_PATH, `${JSON.stringify({ at: new Date().toISOString(), ...row })}\n`);

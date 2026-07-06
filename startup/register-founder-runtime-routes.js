@@ -15,6 +15,7 @@ import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
+import { getNeverStopProductFactoryStatus } from "../services/never-stop-product-factory-scheduler.js";
 
 export async function registerFounderRuntimeRoutes(app, deps) {
   const {
@@ -122,6 +123,11 @@ export async function registerFounderRuntimeRoutes(app, deps) {
 
   createCrmRoutes(app, { requireKey, logger });
   logger.info("✅ [CRM] Founder-builder routes mounted at /api/v1/crm (provider-agnostic)");
+
+  app.get("/api/v1/lifeos/never-stop/status", requireKey, (_req, res) => {
+    res.json(getNeverStopProductFactoryStatus());
+  });
+  logger.info("✅ [NEVER-STOP] Status route mounted at /api/v1/lifeos/never-stop/status");
 
   return {
     tcCoordinator: null,
