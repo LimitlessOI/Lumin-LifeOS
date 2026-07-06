@@ -85,7 +85,23 @@ function isZone3AdditiveTarget(target, repoRoot) {
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
-const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
+const DEFAULT_FOUNDER_BUILD_JOB_TIMEOUT_MS = 480000;
+
+function founderBuildJobTimeoutMs() {
+  const value = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || DEFAULT_FOUNDER_BUILD_JOB_TIMEOUT_MS);
+  return Number.isFinite(value) && value > 0 ? value : DEFAULT_FOUNDER_BUILD_JOB_TIMEOUT_MS;
+}
+
+function scheduleFounderBuildTimeoutNotice(jobId) {
+  const timeoutMs = founderBuildJobTimeoutMs();
+  const timer = setTimeout(() => {
+    appendFounderBuildJobStep(jobId, {
+      label: 'Still working past the response budget',
+      detail: `Founder build exceeded ${Math.round(timeoutMs / 1000)}s; keeping the job running until the real build receipt lands.`,
+    });
+  }, timeoutMs);
+  return () => clearTimeout(timer);
+}
 
 function isRetriableBlocker(blocker = '', code = '') {
   const b = String(blocker);
@@ -1289,8 +1305,9 @@ export async function runFounderBuildWithSelfRepair(options) {
   return baseFailure;
 }
 
-export function startFounderBuildJob(options) {
+export function startFounderBuildJob(options, internals = {}) {
   const jobId = createFounderBuildJob({ task: options.task, userId: options.userId || null });
+  const runBuild = typeof internals.runBuild === 'function' ? internals.runBuild : runFounderBuildWithSelfRepair;
   const jobOptions = {
     ...options,
     onProgress: (step) => { appendFounderBuildJobStep(jobId, step); },
@@ -1305,15 +1322,9 @@ export function startFounderBuildJob(options) {
     });
   }
   setImmediate(async () => {
+    const clearTimeoutNotice = scheduleFounderBuildTimeoutNotice(jobId);
     try {
-      const buildPromise = runFounderBuildWithSelfRepair(jobOptions);
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(
-          () => reject(new Error(`founder_build_job_timeout after ${FOUNDER_BUILD_JOB_TIMEOUT_MS}ms`)),
-          FOUNDER_BUILD_JOB_TIMEOUT_MS,
-        );
-      });
-      const result = await Promise.race([buildPromise, timeoutPromise]);
+      const result = await runBuild(jobOptions);
       setFounderBuildJobResult(jobId, result);
       if (options.pool) {
         await persistFounderBuildJobResult(options.pool, jobId, result).catch((err) => {
@@ -1330,6 +1341,8 @@ export function startFounderBuildJob(options) {
       if (options.pool) {
         await persistFounderBuildJobResult(options.pool, jobId, failResult).catch(() => {});
       }
+    } finally {
+      clearTimeoutNotice();
     }
   });
   return jobId;
