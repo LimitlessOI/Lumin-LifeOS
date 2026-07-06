@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-30",
+  "updated_at": "2026-07-06",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BP_PRIORITY is the scheduler queue; each mission's founder packet and blueprint remain the execution authority.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
