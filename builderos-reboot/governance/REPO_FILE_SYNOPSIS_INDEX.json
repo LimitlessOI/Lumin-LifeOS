@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T08:00:53.775Z",
+  "generated_at": "2026-07-06T10:36:53.273Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11186,
   "files": [
@@ -21581,9 +21581,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3375962,
-      "mtime": "2026-07-06T08:00:24.385Z",
-      "indexed_at": "2026-07-06T08:00:53.775Z"
+      "bytes": 3375915,
+      "mtime": "2026-07-06T10:36:38.790Z",
+      "indexed_at": "2026-07-06T10:36:53.273Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38852,9 +38852,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 586004,
-      "mtime": "2026-07-06T07:56:04.089Z",
-      "indexed_at": "2026-07-06T08:00:53.775Z"
+      "bytes": 587973,
+      "mtime": "2026-07-06T10:36:29.354Z",
+      "indexed_at": "2026-07-06T10:36:53.273Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65783,9 +65783,9 @@
     {
       "path": "scripts/bp-priority-never-stop.mjs",
       "synopsis": "Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.",
-      "bytes": 9782,
-      "mtime": "2026-07-06T07:55:06.945Z",
-      "indexed_at": "2026-07-06T08:00:53.775Z",
+      "bytes": 12791,
+      "mtime": "2026-07-06T10:36:29.358Z",
+      "indexed_at": "2026-07-06T10:36:53.273Z",
       "ssot": [
         "builderos-reboot/BP_PRIORITY.json",
         "docs/products/AUTHORITY_BOUNDARIES.md"
@@ -79729,9 +79729,9 @@
     {
       "path": "services/builder-mission-selection.js",
       "synopsis": "Builder-actionable mission selection for the never-stop lane.",
-      "bytes": 1661,
-      "mtime": "2026-07-06T07:54:44.549Z",
-      "indexed_at": "2026-07-06T08:00:53.775Z",
+      "bytes": 2202,
+      "mtime": "2026-07-06T10:36:29.358Z",
+      "indexed_at": "2026-07-06T10:36:53.273Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85809,9 +85809,9 @@
     {
       "path": "tests/builder-mission-selection.test.js",
       "synopsis": "js — tests/builder-mission-selection.test.js.",
-      "bytes": 1606,
-      "mtime": "2026-07-06T07:55:25.745Z",
-      "indexed_at": "2026-07-06T08:00:53.775Z"
+      "bytes": 2549,
+      "mtime": "2026-07-06T10:36:29.358Z",
+      "indexed_at": "2026-07-06T10:36:53.273Z"
     },
     {
       "path": "tests/builder-outcome-verifier.test.js",
