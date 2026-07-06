@@ -9,7 +9,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { getActiveQueueItem } from '../services/bp-priority-completion.js';
+import {
+  getActiveBuilderMission,
+  getFounderGatedMissions,
+} from '../services/builder-mission-selection.js';
 import { runFoundationPipelineLoop } from '../factory-staging/factory-core/arc/run-foundation.js';
 import { founderStopActive } from '../factory-staging/factory-core/arc/gate-enforcement.js';
 import { loadPointBTarget } from '../factory-staging/factory-core/arc/foundation/point-b-target.js';
@@ -33,9 +36,9 @@ function loadQueue() {
   return JSON.parse(fs.readFileSync(BP_PATH, 'utf8'));
 }
 
-function activeMission(items) {
+function builderMission(items) {
   const pointB = loadPointBTarget();
-  return getActiveQueueItem(items || [], { pointBTarget: pointB });
+  return getActiveBuilderMission(items || [], { pointBTarget: pointB });
 }
 
 function tryRedeploy() {
@@ -158,8 +161,21 @@ async function runCycle() {
   }
 
   const queue = loadQueue();
-  const mission = activeMission(queue.items || []);
+  const items = queue.items || [];
+  const mission = builderMission(items);
   if (!mission) {
+    // No builder-actionable work. Distinguish "truly done" from
+    // "only a founder usability verdict is left" so we never loop the
+    // builder on a human-gated mission (the attempt-N rebuild waste).
+    const founderGated = getFounderGatedMissions(items, { pointBTarget: loadPointBTarget() });
+    if (founderGated.length) {
+      log({
+        event: 'awaiting_founder_confirmation',
+        never_stop: neverStop,
+        missions: founderGated.map((m) => m.mission_id),
+      });
+      return { halt: !neverStop, reason: 'awaiting_founder_confirmation' };
+    }
     log({ event: 'queue_complete', never_stop: neverStop });
     if (neverStop) {
       return { halt: false, reason: 'queue_complete_expansion' };
@@ -207,7 +223,7 @@ async function runCycle() {
 if (once) {
   (async () => {
     const result = await runCycle();
-    if (result.reason === 'queue_complete_expansion' && neverStop) {
+    if ((result.reason === 'queue_complete_expansion' || result.reason === 'awaiting_founder_confirmation') && neverStop) {
       const { runProductExpansionCycle } = await import('../services/never-stop-product-factory.js');
       const exp = await runProductExpansionCycle({ logger: console });
       process.exit(exp.ok !== false ? 0 : 1);
@@ -230,11 +246,13 @@ if (once) {
         console.error(JSON.stringify(result, null, 2));
         process.exit(1);
       }
-      if (result.reason === 'queue_complete_expansion') {
+      if (result.reason === 'queue_complete_expansion' || result.reason === 'awaiting_founder_confirmation') {
         const { runProductExpansionCycle } = await import('../services/never-stop-product-factory.js');
         await runProductExpansionCycle({ logger: console });
       }
-      if (result.reason === 'queue_complete_expansion' || result.reason === 'pre_build_gate_fail') {
+      if (result.reason === 'queue_complete_expansion'
+        || result.reason === 'awaiting_founder_confirmation'
+        || result.reason === 'pre_build_gate_fail') {
         spawnSync('sleep', [String(Math.ceil(sleepMs / 1000))], { cwd: ROOT });
       }
     }
