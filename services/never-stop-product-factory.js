@@ -483,6 +483,50 @@ async function postBuilderBuild(baseUrl, commandKey, body) {
 }
 
 /**
+ * Commit a product's updated BUILD_QUEUE.json straight to the repo via the
+ * GitHub Contents API (the same transport the builder primitive already uses),
+ * so step status + attempt counts persist across the redeploys the deploy-truth
+ * gate triggers. Fail-open: any missing credential / API error is returned, not
+ * thrown, so it can never crash the loop. Skips the write when content is
+ * unchanged so it does not spawn a redeploy for a no-op.
+ */
+async function commitQueueStatusToRepo(queue, stepId) {
+  const token = (process.env.GITHUB_TOKEN || '').trim();
+  const repo = (process.env.GITHUB_REPO || '').trim();
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  if (!token || !repo) return { ok: false, error: 'no_github_credentials' };
+  const localPath = queue._sourcePath || queuePathForProduct(queue.product_id);
+  const relPath = path.relative(ROOT, localPath).split(path.sep).join('/');
+  const { _sourcePath, ...clean } = queue;
+  const content = `${JSON.stringify(clean, null, 2)}\n`;
+  const [owner, repoName] = repo.split('/');
+  if (!owner || !repoName) return { ok: false, error: 'malformed_github_repo' };
+  const apiBase = `https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}`;
+  const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+  let sha;
+  try {
+    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
+    if (getRes.ok) {
+      const cur = await getRes.json();
+      sha = cur.sha;
+      if (cur.content && Buffer.from(cur.content, 'base64').toString('utf8') === content) {
+        return { ok: false, error: 'no_change' };
+      }
+    }
+  } catch { /* treat as new file */ }
+  const body = {
+    message: `[never-stop] queue status: ${queue.product_id} (${stepId})`,
+    content: Buffer.from(content, 'utf8').toString('base64'),
+    branch,
+    ...(sha ? { sha } : {}),
+  };
+  const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+  if (putRes.ok || putRes.status === 201) return { ok: true };
+  const errText = await putRes.text().catch(() => '');
+  return { ok: false, error: errText.slice(0, 200), status: putRes.status };
+}
+
+/**
  * Execute one queued product build step end-to-end: hand the step to the live
  * builder primitive, require a real commit SHA (no false green), run the
  * product's verify script, and persist the queue (done / retry / blocked).
@@ -559,6 +603,19 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
 
   const outcome = await runNextStep(queue, { buildFn, verifyFn, deployProofFn, logger });
   persistQueue(queue);
+  // Durability (fixes rebuild-forever): persistQueue only writes the container's
+  // LOCAL filesystem. deployProofFn triggers a redeploy that restarts from a fresh
+  // git checkout, so a step marked "done" (and its attempt count) is lost and the
+  // loop rebuilds the same step every cycle, never advancing. Commit the updated
+  // queue back to the repo so status + attempts survive the redeploy.
+  try {
+    const committed = await commitQueueStatusToRepo(queue, task.step_id);
+    if (!committed.ok && committed.error !== 'no_change') {
+      logger?.warn?.({ product_id: task.product_id, step_id: task.step_id, error: committed.error }, '[never-stop] queue-status commit failed');
+    }
+  } catch (e) {
+    logger?.warn?.({ product_id: task.product_id, error: e.message }, '[never-stop] queue-status commit threw');
+  }
 
   // Truth-ladder the outcome: a "live" claim only holds at KNOW when the deploy
   // was proven; otherwise it is downgraded and parked on the re-confirm watchlist.

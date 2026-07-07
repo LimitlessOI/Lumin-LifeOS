@@ -1,11 +1,17 @@
 {
-  "status": "running",
-  "current_task": {
+  "status": "idle",
+  "last_task": {
     "id": "bp_priority_foundation",
     "kind": "foundation_pipeline",
     "priority": 1,
-    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-    "detail": "1 incomplete BP item(s)"
+    "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+    "detail": "2 incomplete BP item(s)"
   },
-  "updated_at": "2026-06-29T20:04:13.003Z"
+  "last_result": {
+    "ok": true,
+    "task_id": "bp_priority_foundation",
+    "detail": "deferred_to_bp_scheduler"
+  },
+  "cycles": 1,
+  "updated_at": "2026-07-07T01:08:14.782Z"
 }

@@ -147,3 +147,6 @@
 {"at":"2026-06-29T19:55:42.984Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"bp_never_stop_once"}
 {"at":"2026-06-29T19:55:42.986Z","event":"cycle","cycles":49,"ok":true,"detail":"bp_never_stop_once"}
 {"at":"2026-06-29T20:04:13.003Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"PRODUCT-LIFEOS-USER-AUTH-V1-0001","detail":"1 incomplete BP item(s)"}}
+{"at":"2026-07-07T01:08:14.782Z","event":"cycle_start","task":{"id":"bp_priority_foundation","kind":"foundation_pipeline","priority":1,"mission_id":"FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001","detail":"2 incomplete BP item(s)"}}
+{"at":"2026-07-07T01:08:14.782Z","event":"bp_scheduler_deferred","task_id":"bp_priority_foundation","kind":"foundation_pipeline"}
+{"at":"2026-07-07T01:08:14.782Z","event":"cycle_complete","task_id":"bp_priority_foundation","ok":true,"detail":"deferred_to_bp_scheduler"}
