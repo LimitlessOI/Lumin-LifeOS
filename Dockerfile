@@ -2,7 +2,19 @@ FROM node:20-slim
 
 WORKDIR /usr/src/app
 
+# The browser agent (services/browser-agent.js, Puppeteer) needs a real Chrome in
+# the container. We install the system Chromium and point Puppeteer at it instead
+# of downloading Puppeteer's bundled Chromium — smaller, and matches the Debian libs.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      chromium \
+      ca-certificates \
+      fonts-liberation \
+      fonts-noto-color-emoji \
+      fonts-unifont \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV NODE_ENV=production
 
 COPY package.json package-lock.json* ./
