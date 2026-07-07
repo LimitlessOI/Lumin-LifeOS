@@ -59,10 +59,14 @@ export class NotificationService {
 
     let host = hostname;
     try {
-      const resolved = dns.lookupSync(hostname, { family: 4 });
-      host = resolved.address;
+      const addresses = dns.resolve4Sync(hostname);
+      if (addresses?.length) host = addresses[0];
     } catch {
-      /* keep hostname */
+      try {
+        host = dns.lookupSync(hostname, { family: 4 }).address;
+      } catch {
+        if (hostname.includes('gmail.com')) host = '142.250.80.109';
+      }
     }
 
     return { hostname, host, port, secure: port === 465 };
