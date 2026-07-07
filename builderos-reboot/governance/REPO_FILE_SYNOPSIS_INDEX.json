@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T20:42:10.487Z",
+  "generated_at": "2026-07-07T21:09:36.439Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11260,
+  "file_count": 11263,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29545,6 +29545,16 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "builderos-reboot/scripts/general-browser-agent-live-proof.mjs",
+      "synopsis": "Behavioral proof for services/general-browser-agent-live.js.",
+      "bytes": 3783,
+      "mtime": "2026-07-07T21:07:30.135Z",
+      "indexed_at": "2026-07-07T21:09:36.439Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "builderos-reboot/scripts/general-browser-agent-proof.mjs",
       "synopsis": "Proof for the general goal-driven browser agent core",
       "bytes": 6866,
@@ -29856,6 +29866,14 @@
       "bytes": 3531,
       "mtime": "2026-07-07T18:57:52.115Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "builderos-reboot/scripts/specs/browser-agent-live.step.json",
+      "synopsis": "Exports runGoalOnSession — builderos-reboot/scripts/specs/browser-agent-live.step.json.",
+      "bytes": 2640,
+      "mtime": "2026-07-07T21:06:15.515Z",
+      "indexed_at": "2026-07-07T21:09:36.439Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/scripts/specs/browser-agent-runtime.step.json",
@@ -39428,9 +39446,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 95217,
-      "mtime": "2026-07-07T20:41:49.227Z",
-      "indexed_at": "2026-07-07T20:42:10.487Z"
+      "bytes": 96644,
+      "mtime": "2026-07-07T21:09:17.283Z",
+      "indexed_at": "2026-07-07T21:09:36.439Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -65602,9 +65620,9 @@
     {
       "path": "routes/tc-routes.js",
       "synopsis": "tc-routes.js",
-      "bytes": 151108,
-      "mtime": "2026-07-03T13:23:32.525Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 153652,
+      "mtime": "2026-07-07T21:08:58.643Z",
+      "indexed_at": "2026-07-07T21:09:36.439Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -81813,6 +81831,17 @@
       "bytes": 12031,
       "mtime": "2026-07-03T13:23:32.581Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "services/general-browser-agent-live.js",
+      "synopsis": "@ssot docs/products/tc-service/PRODUCT_HOME.md",
+      "bytes": 1896,
+      "mtime": "2026-07-07T21:09:33.331Z",
+      "indexed_at": "2026-07-07T21:09:36.439Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md",
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/general-browser-agent-runtime.js",
