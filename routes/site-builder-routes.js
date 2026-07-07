@@ -572,6 +572,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     const siteBuilderVars = {
       POSTMARK_SERVER_TOKEN: { required: true, purpose: 'Cold email sending via Postmark' },
       EMAIL_FROM: { required: true, purpose: 'Sender email address for outreach' },
+      EMAIL_PROVIDER: { required: true, purpose: 'Email provider selector (postmark recommended)' },
+      SITE_BASE_URL: { required: false, purpose: 'Public preview URL base (falls back to RAILWAY_PUBLIC_DOMAIN)' },
+      STRIPE_SECRET_KEY: { required: true, purpose: 'Entry publish checkout ($49 default)' },
       SLACK_WEBHOOK_URL: { required: false, purpose: 'Warm lead notifications (optional)' },
     };
 
@@ -594,7 +597,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       preview_serving: true,
       quality_scoring: true,
       prospect_db: !!pool,
-      cold_email_sending: !!process.env.POSTMARK_SERVER_TOKEN,
+      cold_email_sending: !!process.env.POSTMARK_SERVER_TOKEN && !!process.env.EMAIL_FROM,
+      publish_checkout: !!process.env.STRIPE_SECRET_KEY,
+      live_editor: true,
       pos_partner_referrals: true,
       follow_up_sequence: !!process.env.POSTMARK_SERVER_TOKEN,
       slack_notifications: !!process.env.SLACK_WEBHOOK_URL,

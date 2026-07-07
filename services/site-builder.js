@@ -26,12 +26,33 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import crypto from 'node:crypto';
 import logger from './logger.js';
 import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.js';
 import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
 import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID } from './site-builder-design-systems.js';
+import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+
+function createEditToken() {
+  return crypto.randomBytes(24).toString('hex');
+}
+
+function injectPreviewChrome(html, { clientId, baseUrl, editToken }) {
+  if (!html || !clientId || !baseUrl) return html;
+  const safeBase = String(baseUrl).replace(/\/$/, '');
+  const publishUrl = `${safeBase}/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+  const editorUrl = `${safeBase}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken || '')}`;
+  const bar = `
+<div id="sb-preview-chrome" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:rgba(17,24,39,.96);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -8px 30px rgba(0,0,0,.25)">
+  <span>Your free preview — customize it or publish when ready.</span>
+  <a href="${editorUrl}" style="background:#334155;color:#fff;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600">Open editor</a>
+  <a href="${publishUrl}" style="background:#7c3aed;color:#fff;padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600">Publish ${SITE_BUILDER_PRICING.publish.display}</a>
+</div>`;
+  if (html.includes('</body>')) return html.replace('</body>', `${bar}\n</body>`);
+  return `${html}${bar}`;
+}
 
 const TAILWIND_CDN = 'https://cdn.tailwindcss.com';
 const ALPINE_CDN = 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js';
@@ -201,11 +222,13 @@ export default class SiteBuilder {
       const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
       await fs.mkdir(deployDir, { recursive: true });
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
+      const editToken = createEditToken();
 
       // Inject view tracking pixel — when prospect opens preview we auto-mark them as 'viewed'
       if (this.baseUrl) {
         const pixel = `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`;
         siteHtml = siteHtml.includes('</body>') ? siteHtml.replace('</body>', `${pixel}\n</body>`) : siteHtml;
+        siteHtml = injectPreviewChrome(siteHtml, { clientId, baseUrl: this.baseUrl, editToken });
       }
       await fs.writeFile(path.join(deployDir, 'index.html'), siteHtml);
       await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
@@ -234,9 +257,12 @@ export default class SiteBuilder {
         qualityReport,
         benchmark,
         presence,
+        editToken,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
         scorecardUrl: (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
+        editorUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/editor?clientId=${clientId}&token=${editToken}` : null,
+        publishCheckoutUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${clientId}` : null,
       };
       await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
 
@@ -350,7 +376,8 @@ export default class SiteBuilder {
 
       if (!variants.length) throw new Error('all variant generations failed');
 
-      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants);
+      const editToken = createEditToken();
+      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken);
       await fs.writeFile(path.join(deployDir, 'index.html'), switcher);
 
       const metadata = {
@@ -360,8 +387,11 @@ export default class SiteBuilder {
         posPartner,
         variants,
         blogPosts: blogPosts.map((p) => ({ slug: p.slug, title: p.title })),
+        editToken,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
+        editorUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/editor?clientId=${clientId}&token=${editToken}` : null,
+        publishCheckoutUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${clientId}` : null,
         mode: 'variants',
       };
       await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
@@ -387,9 +417,13 @@ export default class SiteBuilder {
    * that swaps between the generated variants, plus a "Use this design" action
    * that records the client's choice (best-effort beacon).
    */
-  generateVariantSwitcher(info, clientId, variants) {
+  generateVariantSwitcher(info, clientId, variants, editToken = '') {
     const name = (info.businessName || 'Your Website').replace(/</g, '&lt;');
     const selectBase = this.baseUrl ? `${this.baseUrl}/api/v1/sites/select-design` : '';
+    const publishUrl = this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}` : '';
+    const editorUrl = this.baseUrl && editToken
+      ? `${this.baseUrl}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken)}`
+      : '';
     const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, blurb: v.blurb, file: v.file })));
     return `<!DOCTYPE html>
 <html lang="en">
@@ -414,8 +448,10 @@ export default class SiteBuilder {
           <p class="text-xs uppercase tracking-widest text-slate-400">Preview for</p>
           <h1 class="text-lg font-semibold leading-tight">${name}</h1>
         </div>
-        <div class="text-right">
-          <p class="text-xs text-slate-400 mb-1" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name"></p>
+        <div class="text-right flex flex-wrap gap-2 justify-end items-center">
+          ${editorUrl ? `<a href="${editorUrl}" class="bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold px-3 py-2 rounded-lg">Editor</a>` : ''}
+          ${publishUrl ? `<a href="${publishUrl}" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-3 py-2 rounded-lg">Publish ${SITE_BUILDER_PRICING.publish.display}</a>` : ''}
+          <p class="text-xs text-slate-400 mb-1 w-full" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name"></p>
           <button @click="choose()" class="bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg">✓ Use this design</button>
         </div>
       </div>

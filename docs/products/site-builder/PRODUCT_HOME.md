@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-07 — **Readiness corrected to `REVENUE_READY`**: the documented 4-env-var hard blocker is resolved in prod — live `GET /api/v1/sites/launch-readiness` returns `ready: true, revenue_blockers: []` (POSTMARK_SERVER_TOKEN + EMAIL_FROM present; cold email + follow-up + preview all live). Only optional `SLACK_WEBHOOK_URL` remains. A real end-to-end outreach in prod is recommended as proof-of-pipeline before scaling. Prior: 2026-07-06 — queued the live preview EDITOR into the autonomous BUILD_QUEUE (switcher + AI chat/mic edit + manual controls + palette + competitor Strategy tab + dual-category benchmark + social/YouTube discovery). |
+| **Last Updated** | 2026-07-07 — Entry monetization: $49 publish checkout, live editor shell, NotificationService on founder runtime, pilot script. |
 
 ---
 
@@ -25,13 +25,15 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 
 ## Readiness state
 
-`REVENUE_READY` (as of 2026-07-07)
+`PARTIAL_CODE_PRESENT`
 
-Code is complete, DB tables live in Neon, and the prior 4-env-var blocker is **RESOLVED** — the live `GET /api/v1/sites/launch-readiness` endpoint reports `ready: true, revenue_blockers: []` in production. Verified-present: `POSTMARK_SERVER_TOKEN`, `EMAIL_FROM`. Live capabilities: `site_build`, `preview_serving`, `quality_scoring`, `prospect_db`, `cold_email_sending`, `follow_up_sequence`, `pos_partner_referrals`. The full money path (build → preview → cold email → sell upgrade) is wired and live.
+Code is complete. DB tables confirmed live in Neon production. Blocked only on 4 Railway env var values. No BuilderOS mission pack exists yet; one is needed before this can re-enter the autonomous queue.
 
-**Only remaining (optional):** `SLACK_WEBHOOK_URL` — warm-lead notifications (NOT required for revenue).
-
-**Not-yet-proven (not a blocker):** a real end-to-end outreach in prod — one prospect site built + preview served + cold email delivered + upgrade sale — has not yet been observed. Recommend running one live proof-of-pipeline before scaling outreach volume.
+**Hard blocker:** Railway env vars not set:
+- `POSTMARK_SERVER_TOKEN` — email sending
+- `EMAIL_FROM` — sender address / `SITE_BASE_URL` — preview URL base
+- `EMAIL_PROVIDER` — provider selector
+- (Optional) `AFFILIATE_JANE_APP_URL`, `AFFILIATE_MINDBODY_URL`, `AFFILIATE_SQUARE_URL`
 
 ## Owned runtime files
 
@@ -100,10 +102,12 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 ## REVENUE MODEL
 | Revenue Stream | Amount | Notes |
 |---------------|--------|-------|
-| One-time site build | $997–$1,997 | Per client |
-| Monthly care plan (site + SEO + content) | $297–$597/mo | Recurring MRR |
+| **Entry publish (front door)** | **$49 one-time** (env: `SITE_BUILDER_PUBLISH_CENTS`) | Free preview → low-friction checkout → second sales |
+| Monthly care plan (site + SEO + content) | **$97/mo** entry → scale to $297–$597/mo | Recurring MRR after publish |
+| À-la-carte sidebar upsells | $97–$1,497 + management | Logo, GBP/SEO, ads/funnels, social — competitor-aware |
+| Legacy closer tiers | $997–$1,997 one-time | Upsell after entry publish — not cold-email front door |
 | POS referral commission | $50–$2,500 | Per signup via our affiliate link |
-| **Target:** | $500+/day | From 2–3 monthly clients + referrals |
+| **Target:** | Usage first, MRR second | Foot-in-door beats one-shot $997 until funnel proves |
 
 ### POS Commission Partners
 | Partner | Best For | Commission | Affiliate Program |
@@ -370,6 +374,7 @@ Every website agency requires the prospect to raise their hand first; LifeOS inv
 
 | Date | What changed | Why | Status | Verified |
 |---|---|---|---|---|
+| 2026-07-07 | **Entry monetization path shipped.** (1) `config/site-builder-pricing.js` — founder entry model: **$49 publish**, $97/mo care, upsell catalog prices. (2) `services/site-builder-entry-checkout.js` + `routes/site-builder-checkout-routes.js` — Stripe checkout + success verification → `prospect_sites.status=converted`. (3) `services/site-builder-editor.js` + `routes/site-builder-editor-routes.js` — 3-pane editor shell, `/edit` `/save-edits` `/revert` `/select-service`. (4) `services/site-builder.js` — `editToken`, preview chrome (editor + publish CTA), variant switcher publish links. (5) `services/site-builder-service-catalog.js` — real upsell prices. (6) Founder runtime wires `NotificationService` + checkout + editor routes. (7) `scripts/site-builder-pilot-prospects.mjs` + `npm run site-builder:pilot`. Launch-readiness now checks Stripe + email provider. | Founder: start building entry product — free preview, $49 publish, second-sale sidebar; get to money. | ✅ | `node --check` on touched routes/services |
 | 2026-07-06 | **Design-template library + variant toggle + Logo Studio + no-free-tier-in-product rule.** (1) New `services/site-builder-design-systems.js` — a curated library of 10 cutting-edge design systems (Editorial Luxe, Organic Warm, Clinical Clean, Bold Gradient, Luxe Minimal, Dark Aura, Neo-Retro, Swiss Grid, Soft Pastel, Refined Brutalist); each is a full prose directive block (typography/palette/layout/components/motion) injected into the generation prompt. Exports `getDesignSystem`, `pickDesignSystems`, `renderDesignSystemDirectives`. (2) `services/site-builder.js` `generateSiteHtml()` accepts `options.designSystem` and injects its directives; new `buildVariants()` builds N designs of the same site (shared content, only the design system changes) and writes a **variant-switcher** `index.html` that lets the client toggle between designs live and click "Use this design" (best-effort beacon → hot-lead Slack alert). (3) New `services/site-builder-logo-studio.js` — a self-contained interactive Logo Studio (6 layouts, icon set, fonts, palettes, live SVG preview, SVG/PNG download, auto text-fitting) served at `GET /api/v1/sites/logo-studio`. (4) Routes: `POST /api/v1/sites/build-variants`, `GET /api/v1/sites/design-systems`, `GET /api/v1/sites/logo-studio`, `GET /api/v1/sites/select-design`. (5) **Founder rule (no free-tier model in a product):** generation fallback changed `gemini_flash` → `openai_gpt` (paid); repair pass + blog content moved from `gemini_flash` to the strong `SITE_BUILDER_GEN_MODEL`. | Founder: "their design taste is probably trash — OUR templates should be many, custom, cutting-edge, and they should be able to toggle between them… and a logo designer if they want to play with logo design." Plus: "we don't use any free-tier AIs for a product." | ✅ | `node --check` all touched files; live build of 3 variants (editorial-luxe 92.3, bold-gradient 88.5, organic-warm 88.5) — screenshots confirm 3 visually distinct designs, working toggle, no fabricated pricing/stats; Logo Studio rendered + verified |
 | 2026-07-06 | **Truthful generation + real-data enrichment + design-model upgrade.** `services/site-builder.js`: (1) generation prompt rewritten with a top-priority TRUTH RULE — the model may no longer invent prices, star ratings, review/client counts, years-in-business, or named testimonials; social-proof bar and pricing tiers are omitted when no real data exists (was: prompt literally told it to invent "200+ served / 5★" stats and "buyable" price tiers). (2) New `enrichWithRealData()` searches the business's live web presence (Google/Yelp/Facebook) for REAL rating/reviews/facts via real search providers only (no AI-memory fallback) and injects a `VERIFIED REAL DATA` block into the prompt; fails closed (no data → nothing used) when no `BRAVE_SEARCH_API_KEY`/`PERPLEXITY_API_KEY` is set. (3) Generation model now `SITE_BUILDER_GEN_MODEL` (default `claude_sonnet`, 16k output) for better design, falling back to `gemini_flash` on provider error. | Founder review: generated sites fabricated pricing/stats/testimonials not on the prospect's real site (FTC risk previously logged in Gate 3) and design quality was weak. | ✅ | `node --check services/site-builder.js`; `npm test` (302 pass) |
 | 2026-07-05 | **Critical bug repair.** `db/migrations/20260705_repair_prospect_sites_schema.sql` now repairs `prospect_sites` in place instead of dropping/recreating it; `routes/site-builder-routes.js` now serves previews through `express.static` rooted at `public/previews` and fails the Postmark reply webhook closed when `POSTMARK_WEBHOOK_TOKEN` is unset. Added `tests/site-builder-routes-security.test.js` plus migration safety coverage. | Auto-migration boot could delete existing production prospect rows, `/previews/*` could traverse outside the preview root, and an unset webhook token allowed unauthenticated status mutations. | ✅ | `node --test tests/migration-safety.test.js tests/site-builder-routes-security.test.js`; `node --check routes/site-builder-routes.js` |
