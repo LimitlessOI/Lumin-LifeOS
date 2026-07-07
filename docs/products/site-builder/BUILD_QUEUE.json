@@ -135,8 +135,8 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "f79caedd4f0f0ed1eb2a1cba78461cb4dff351d3",
-      "last_attempt_at": "2026-07-07T07:00:58.901Z",
-      "completed_at": "2026-07-07T07:00:59.655Z"
+      "last_attempt_at": "2026-07-07T06:59:27.708Z",
+      "completed_at": "2026-07-07T06:59:43.591Z"
     },
     {
       "id": "sb-competitor-categories",
@@ -169,13 +169,16 @@
     },
     {
       "id": "sb-service-catalog",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-service-catalog.js",
       "task": "Create the à-la-carte add-on SERVICE CATALOG that powers the editor's left sidebar. Export SERVICE_CATALOG (array of { id, name, blurb, price, cadence }) covering: logo & brand kit, corporate/brand package, ClickFunnels build + ad placement/management, managed Google Business Profile + local SEO, social-media management, and an SEO/content care plan — with honest, GOAL-based (never GUARANTEE) copy. For the Google offering use exactly this framing: 'managed Google Business Profile + local SEO with the GOAL of ranking on the first page of results for your category' — a goal/minimum-expectation, NEVER a guarantee and NEVER 'guaranteed #1'. Each service may carry an optional `results` proof object ({ headline, sampleSize, onFirstPage, atNumberOne }) — real, MEASURED client outcomes only (e.g. '11 of 15 managed businesses rank on page one, 9 at #1'); export formatResultsProof(results) that returns a short honest string ONLY when results.sampleSize>0, and returns null (hide the block) otherwise — NEVER fabricate outcome numbers. Export recommendServices(strategy) that, given the competitor strategy object ({ competitors:[{doesPoorly/weaknesses}], gaps }), returns the SAME catalog with a boolean `recommended` flag set on the services that address the biggest competitor gaps (e.g. flag ad-management/funnel when competitors lack ads, flag video/social when competitors lack video). Prices come from the product revenue model, not invented.",
       "spec": "Single self-contained ESM module, pure data + pure functions, no network/DB/imports/side effects. Named exports SERVICE_CATALOG, recommendServices, formatResultsProof + default. recommendServices must never throw on missing/partial strategy (guard everything, default to no recommendations). Copy must comply with the product's TRUTH non-negotiables: no guaranteed rankings, no fabricated outcomes. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "a2f3048610ab166c739aedb0bace762f7465d729",
+      "last_attempt_at": "2026-07-07T07:02:16.746Z",
+      "completed_at": "2026-07-07T07:02:18.427Z"
     }
   ]
 }
