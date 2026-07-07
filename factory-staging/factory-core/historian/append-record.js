@@ -31,6 +31,7 @@ export function appendStepExecutionRecord({
   sentryReview,
   tsosResult,
   behaviorResults,
+  authoringResult,
 }) {
   return appendHistorianRecord({
     type: 'step_execution',
@@ -45,6 +46,17 @@ export function appendStepExecutionRecord({
     // receipt is the only ground truth for whether a behavior was verified, so
     // it stores the actual results, never a pass/fail summary.
     behavior_assertions: Array.isArray(behaviorResults) ? behaviorResults : [],
+    // STEP 4 codegen provenance — which model tier authored the content, whether
+    // it escalated, and the sha of what was written. assertion_provenance records
+    // that the proof assertions came from the blueprint, not the codegen.
+    codegen: authoringResult && authoringResult.ok
+      ? {
+          model_tier: authoringResult.model_tier || null,
+          escalated: Boolean(authoringResult.escalated),
+          content_sha256: authoringResult.content_sha256 || null,
+          assertion_provenance: authoringResult.assertion_provenance || null,
+        }
+      : null,
     mission_state: 'Verification',
     trust_level: 'outcome-linked',
   });

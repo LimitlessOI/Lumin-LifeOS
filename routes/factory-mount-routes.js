@@ -18,8 +18,9 @@ import { summarizeHistorian } from '../factory-staging/factory-core/historian/ap
 import { summarizeHistory } from '../factory-staging/factory-core/historian/mission-history.js';
 import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-summary.js';
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
+import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 
-export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl } = {}) {
+export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, callCouncilMember } = {}) {
   const router = express.Router();
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
 
@@ -40,6 +41,43 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl } =
     },
     readFile: async (relPath) => fs.readFileSync(resolveRepoPath(relPath), 'utf8'),
   };
+
+  // STEP 4 codegen runner (the "hands"), injected at the route boundary so
+  // factory-core stays pure. It returns CANDIDATE CONTENT ONLY — never assertions
+  // (assertion-provenance lock). Cheapest capable tier first; escalate only on
+  // failure/empty output. The authored content is untrusted input that SENTRY
+  // proves independently via the Step-3 behavior gate.
+  const codegenRunner = callCouncilMember
+    ? {
+        generate: async ({ task, target_file, spec, tiers }) => {
+          const prompt = [
+            'You are a code-authoring hand for a governed build factory.',
+            'Output ONLY the exact, complete file content for the target file.',
+            'No explanation, no commentary, no markdown fences — just the file body.',
+            `TARGET FILE: ${target_file}`,
+            task ? `TASK: ${task}` : '',
+            spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
+          ].filter(Boolean).join('\n\n');
+          let lastError = null;
+          for (let i = 0; i < tiers.length; i += 1) {
+            const member = tiers[i];
+            try {
+              const raw = await callCouncilMember(member, prompt, { taskType: 'builder_lane' });
+              const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
+              if (content && content.trim()) {
+                return { content, model_tier: member, escalated: i > 0 };
+              }
+              lastError = `empty_output_from:${member}`;
+            } catch (err) {
+              lastError = String(err?.message || err);
+            }
+          }
+          return { content: null, error: lastError || 'all_tiers_failed' };
+        },
+      }
+    : null;
+
+  const dispatchOptions = { assertionRunner, codegenRunner };
 
   router.get('/factory/readiness', guard, (_req, res) => {
     try {
@@ -74,7 +112,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl } =
 
   router.post('/factory/execute-step', guard, async (req, res) => {
     try {
-      const { httpStatus, body } = await dispatchExecuteStep(req.body || {}, { assertionRunner });
+      const { httpStatus, body } = await dispatchExecuteStep(req.body || {}, dispatchOptions);
       res.status(httpStatus).json(body);
     } catch (err) {
       res.status(500).json({ ok: false, status: 'FACTORY_EXECUTE_STEP_ERROR', error: err?.message || String(err) });
@@ -83,7 +121,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl } =
 
   router.post('/factory/execute-mission', guard, async (req, res) => {
     try {
-      const { httpStatus, body } = await dispatchExecuteMission(req.body || {}, { assertionRunner });
+      const { httpStatus, body } = await dispatchExecuteMission(req.body || {}, dispatchOptions);
       res.status(httpStatus).json(body);
     } catch (err) {
       res.status(500).json({ ok: false, status: 'FACTORY_EXECUTE_MISSION_ERROR', error: err?.message || String(err) });
