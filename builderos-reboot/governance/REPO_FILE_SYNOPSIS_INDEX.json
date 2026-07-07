@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T05:49:40.487Z",
+  "generated_at": "2026-07-07T06:02:51.009Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11214,
+  "file_count": 11215,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84105,6 +84105,13 @@
       "bytes": 5362,
       "mtime": "2026-07-07T02:10:02.864Z",
       "indexed_at": "2026-07-07T02:10:02.864Z"
+    },
+    {
+      "path": "services/site-builder-editor.js",
+      "synopsis": "CRITICAL: This script runs in the browser, not Node.",
+      "bytes": 963,
+      "mtime": "2026-07-07T06:02:51.009Z",
+      "indexed_at": "2026-07-07T06:02:51.009Z"
     },
     {
       "path": "services/site-builder-email-templates.js",
