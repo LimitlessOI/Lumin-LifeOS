@@ -52,20 +52,35 @@ export class NotificationService {
     this._smtpTransporter = null;
   }
 
+  _resolveSmtpConnection() {
+    const hostname = process.env.SMTP_HOST || 'smtp.gmail.com';
+    let port = Number(process.env.SMTP_PORT || 465);
+    const onRailway = !!(process.env.RAILWAY_ENVIRONMENT_ID || process.env.RAILWAY_PUBLIC_DOMAIN);
+    if (onRailway && port === 587) port = 465;
+
+    let host = hostname;
+    try {
+      const resolved = dns.lookupSync(hostname, { family: 4 });
+      host = resolved.address;
+    } catch {
+      /* keep hostname */
+    }
+
+    return { hostname, host, port, secure: port === 465 };
+  }
+
   _getSmtpTransporter() {
     if (this._smtpTransporter) return this._smtpTransporter;
-    const smtpPort = Number(process.env.SMTP_PORT || 465);
+    const { hostname, host, port, secure } = this._resolveSmtpConnection();
     this._smtpTransporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: smtpPort,
-      secure: smtpPort === 465,
+      host,
+      port,
+      secure,
       family: 4,
       connectionTimeout: 20000,
       greetingTimeout: 20000,
       socketTimeout: 20000,
-      lookup: (hostname, _options, callback) => {
-        dns.lookup(hostname, { family: 4, all: false }, callback);
-      },
+      tls: { servername: hostname },
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
