@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T19:49:37.015Z",
+  "generated_at": "2026-07-07T19:55:47.644Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11250,
+  "file_count": 11252,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29390,6 +29390,13 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "builderos-reboot/scripts/build-queue-adapter-proof.mjs",
+      "synopsis": "STEP 5e proof — the BUILD_QUEUE -> governed ship-queue adapter, the",
+      "bytes": 5029,
+      "mtime": "2026-07-07T19:55:00.207Z",
+      "indexed_at": "2026-07-07T19:55:47.644Z"
+    },
+    {
       "path": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
       "synopsis": "Builder pre-build simulation — maps step decision gaps before execute-mission writes files.",
       "bytes": 4997,
@@ -38494,9 +38501,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 183885,
-      "mtime": "2026-07-07T19:49:26.131Z",
-      "indexed_at": "2026-07-07T19:49:37.015Z"
+      "bytes": 186197,
+      "mtime": "2026-07-07T19:55:37.059Z",
+      "indexed_at": "2026-07-07T19:55:47.644Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -59334,6 +59341,16 @@
       "bytes": 4901,
       "mtime": "2026-07-07T19:31:06.595Z",
       "indexed_at": "2026-07-07T19:33:17.736Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "factory-staging/factory-core/bpb/build-queue-step-adapter.js",
+      "synopsis": "STEP 5e — adapt a per-product docs/products/<id>/BUILD_QUEUE.json step",
+      "bytes": 5554,
+      "mtime": "2026-07-07T19:54:32.763Z",
+      "indexed_at": "2026-07-07T19:55:47.644Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
