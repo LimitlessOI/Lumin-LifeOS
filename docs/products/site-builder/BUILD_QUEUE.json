@@ -57,15 +57,15 @@
     },
     {
       "id": "sb-editor-chat",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-editor-chat.js",
       "task": "Render the RIGHT pane of the editor workspace: the AI chat + voice panel. Export renderChatPanel({ clientId, editToken, baseUrl }) returning an HTML STRING FRAGMENT with a scrollable message list, a text input, a Send button, and a microphone button. Sending (typed or spoken) appends the user's message to the list and POSTs { clientId, file: null, instruction, token } to `${baseUrl}/api/v1/sites/edit`; on success it appends a confirmation and dispatches a window CustomEvent 'sb-editor:reload' so the canvas can reload its iframe. Include a short helper hint line telling the client they can type or speak what they want changed.",
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderChatPanel + default export. Returns a STRING (HTML fragment). Microphone uses window.webkitSpeechRecognition||window.SpeechRecognition; if unavailable, hide the mic button and show a tooltip 'Voice not supported in this browser' — never throw. Every fetch includes editToken; non-2xx shows an inline error bubble, never blank. Inline script wrapped in try/catch. Define local htmlEscape(). @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T01:59:04.623Z",
+      "last_attempt_at": "2026-07-07T02:02:24.960Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
