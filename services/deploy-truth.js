@@ -29,6 +29,26 @@ export function shasMatch(a, b) {
 }
 
 /**
+ * Interpret a GitHub compare status (`GET /repos/:o/:r/compare/:base...:head`,
+ * called with base=builtSha, head=servedSha) into "does the running deploy
+ * already CONTAIN the built commit?".
+ *
+ *   identical → served IS the built commit               → contains
+ *   behind    → base(built) is behind head(served), i.e.
+ *               served is a descendant that includes built → contains
+ *   ahead     → served is BEHIND the built commit          → does NOT contain
+ *   diverged  → served is on a different line              → does NOT contain
+ *
+ * This is what makes deploy-proof correct in a busy repo: once ANY redeploy
+ * serves a SHA at or after the built commit, the built code is genuinely live —
+ * an exact-SHA match is not required (and is unachievable once later commits,
+ * e.g. the queue-status commit or a sibling lane, advance HEAD).
+ */
+export function interpretCompareStatus(status) {
+  return status === 'identical' || status === 'behind';
+}
+
+/**
  * Extract the deployed commit SHA from a /api/v1/lifeos/builder/ready body.
  * Tolerant of both the top-level and nested (codegen / builder) shapes.
  */
@@ -64,6 +84,7 @@ export async function proveDeployServesSha({
   fetchFn = globalThis.fetch,
   readyPath = '/api/v1/lifeos/builder/ready',
   timeoutMs = 15_000,
+  compareFn = null,
 } = {}) {
   const expected = normalizeSha(expectedSha);
   if (!expected) return { ok: false, matches: false, reason: 'invalid_expected_sha', expected_sha: expectedSha || null, served_sha: null };
@@ -92,25 +113,40 @@ export async function proveDeployServesSha({
   const served = extractDeployedSha(body);
   if (!served) return { ok: false, matches: false, reason: 'ready_exposes_no_sha', expected_sha: expected, served_sha: null };
 
-  const matches = shasMatch(expected, served);
-  return {
-    ok: matches,
-    matches,
-    served_sha: served,
-    expected_sha: expected,
-    reason: matches ? 'deploy_serves_expected_sha' : 'deploy_serves_different_sha',
-  };
+  if (shasMatch(expected, served)) {
+    return { ok: true, matches: true, served_sha: served, expected_sha: expected, reason: 'deploy_serves_expected_sha' };
+  }
+
+  // Exact SHA differs. In a busy repo the served SHA is usually a DESCENDANT of
+  // the built commit (a later queue-status commit or sibling lane advanced HEAD),
+  // in which case the built code IS live. Confirm containment via the injected
+  // compareFn (GitHub compare). Only 'behind'/'identical' count as live; a
+  // failed/absent comparison stays a truthful "not proven" (fail-closed).
+  if (typeof compareFn === 'function') {
+    let compareStatus = null;
+    try {
+      compareStatus = await compareFn(expected, served);
+    } catch {
+      compareStatus = null;
+    }
+    if (interpretCompareStatus(compareStatus)) {
+      return { ok: true, matches: false, contains: true, served_sha: served, expected_sha: expected, compare_status: compareStatus, reason: 'deploy_contains_built_sha' };
+    }
+    return { ok: false, matches: false, contains: false, served_sha: served, expected_sha: expected, compare_status: compareStatus, reason: 'deploy_serves_different_sha' };
+  }
+
+  return { ok: false, matches: false, served_sha: served, expected_sha: expected, reason: 'deploy_serves_different_sha' };
 }
 
 /**
  * Poll until the deploy serves the expected SHA or attempts run out. Lets a
  * redeploy finish before we accept/reject "live" (Railway takes ~1-2 min).
  */
-export async function waitForDeploySha({ expectedSha, baseUrl, fetchFn, attempts = 10, intervalMs = 15_000, sleepFn } = {}) {
+export async function waitForDeploySha({ expectedSha, baseUrl, fetchFn, attempts = 10, intervalMs = 15_000, sleepFn, compareFn = null } = {}) {
   const sleep = sleepFn || ((ms) => new Promise((r) => setTimeout(r, ms)));
   let last = { ok: false, matches: false, reason: 'not_attempted', expected_sha: normalizeSha(expectedSha), served_sha: null };
   for (let i = 0; i < Math.max(1, attempts); i += 1) {
-    last = await proveDeployServesSha({ expectedSha, baseUrl, fetchFn });
+    last = await proveDeployServesSha({ expectedSha, baseUrl, fetchFn, compareFn });
     last.attempts_used = i + 1;
     if (last.ok) return last;
     if (i < attempts - 1) await sleep(intervalMs);

@@ -10,6 +10,7 @@ import {
   extractDeployedSha,
   proveDeployServesSha,
   waitForDeploySha,
+  interpretCompareStatus,
 } from '../services/deploy-truth.js';
 
 function jsonResponse(body, ok = true, status = 200) {
@@ -89,4 +90,48 @@ test('waitForDeploySha gives up after attempts, never false-positives', async ()
   const r = await waitForDeploySha({ expectedSha: 'd0052b05b', baseUrl: 'https://x', fetchFn, attempts: 3, sleepFn: async () => {} });
   assert.equal(r.ok, false);
   assert.equal(r.attempts_used, 3);
+});
+
+test('interpretCompareStatus: served contains built iff identical/behind', () => {
+  assert.equal(interpretCompareStatus('identical'), true);
+  assert.equal(interpretCompareStatus('behind'), true); // built is behind served → served includes built
+  assert.equal(interpretCompareStatus('ahead'), false); // served is behind built → not live
+  assert.equal(interpretCompareStatus('diverged'), false);
+  assert.equal(interpretCompareStatus(null), false);
+});
+
+test('proveDeployServesSha OK when served sha is a DESCENDANT that contains the built commit', async () => {
+  // Busy repo: a later queue-status commit advanced HEAD, so served != built exactly,
+  // but the built code IS live. compareFn(built, served) === "behind" proves containment.
+  const fetchFn = async () => jsonResponse({ codegen: { deploy_commit_sha: 'ffffff0abc123' } });
+  const compareFn = async (base, head) => {
+    assert.equal(base, 'd0052b0');
+    assert.equal(head, 'ffffff0abc123');
+    return 'behind';
+  };
+  const r = await proveDeployServesSha({ expectedSha: 'd0052b0', baseUrl: 'https://x', fetchFn, compareFn });
+  assert.equal(r.ok, true);
+  assert.equal(r.matches, false);
+  assert.equal(r.contains, true);
+  assert.equal(r.reason, 'deploy_contains_built_sha');
+});
+
+test('proveDeployServesSha FAILS (no false live) when served is BEHIND the built commit', async () => {
+  const fetchFn = async () => jsonResponse({ codegen: { deploy_commit_sha: 'aaaaaa0def456' } });
+  const compareFn = async () => 'ahead'; // built is ahead of served → served does NOT contain built
+  const r = await proveDeployServesSha({ expectedSha: 'd0052b0', baseUrl: 'https://x', fetchFn, compareFn });
+  assert.equal(r.ok, false);
+  assert.equal(r.contains, false);
+  assert.equal(r.reason, 'deploy_serves_different_sha');
+});
+
+test('proveDeployServesSha stays fail-closed when compareFn errors or is absent', async () => {
+  const fetchFn = async () => jsonResponse({ codegen: { deploy_commit_sha: 'bbbbbb0fed789' } });
+  const threw = await proveDeployServesSha({ expectedSha: 'd0052b0', baseUrl: 'https://x', fetchFn, compareFn: async () => { throw new Error('gh down'); } });
+  assert.equal(threw.ok, false);
+  assert.equal(threw.reason, 'deploy_serves_different_sha');
+
+  const noCompare = await proveDeployServesSha({ expectedSha: 'd0052b0', baseUrl: 'https://x', fetchFn });
+  assert.equal(noCompare.ok, false);
+  assert.equal(noCompare.reason, 'deploy_serves_different_sha');
 });
