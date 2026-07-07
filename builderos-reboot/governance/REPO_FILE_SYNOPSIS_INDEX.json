@@ -1,9 +1,16 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-06T23:51:23.856Z",
+  "generated_at": "2026-07-07T00:58:13.209Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 4,
+  "file_count": 5,
   "files": [
+    {
+      "path": "db/migrations/20260629_socialmediaos_schema_align.sql",
+      "synopsis": "Align socialmediaos tables with services/socialmediaos-service.js column contract.",
+      "bytes": 1014,
+      "mtime": "2026-07-07T00:58:13.209Z",
+      "indexed_at": "2026-07-07T00:58:13.209Z"
+    },
     {
       "path": "services/site-builder-competitor-categories.js",
       "synopsis": "Exports classifyPracticeCategories — services/site-builder-competitor-categories.js.",
