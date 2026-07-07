@@ -39,10 +39,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T02:42:04.318Z",
+      "last_attempt_at": "2026-07-07T02:42:10.293Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
-      "revived_at": "2026-07-07T02:42:04.318Z"
+      "revived_at": "2026-07-07T02:42:10.293Z"
     },
     {
       "id": "sb-editor-canvas",
@@ -57,7 +57,7 @@
       "last_attempt_at": "2026-07-07T01:43:52.822Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
-      "revived_at": "2026-07-07T02:42:04.318Z"
+      "revived_at": "2026-07-07T02:42:10.293Z"
     },
     {
       "id": "sb-editor-chat",
@@ -72,7 +72,7 @@
       "last_attempt_at": "2026-07-07T02:04:18.424Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
-      "revived_at": "2026-07-07T02:42:04.318Z"
+      "revived_at": "2026-07-07T02:42:10.293Z"
     },
     {
       "id": "sb-editor-strategy",
@@ -87,7 +87,7 @@
       "last_attempt_at": "2026-07-07T02:19:00.085Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
-      "revived_at": "2026-07-07T02:42:04.318Z"
+      "revived_at": "2026-07-07T02:42:10.293Z"
     },
     {
       "id": "sb-editor-shell",
