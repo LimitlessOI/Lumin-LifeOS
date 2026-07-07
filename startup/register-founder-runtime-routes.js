@@ -16,6 +16,7 @@ import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import { getNeverStopProductFactoryStatus } from "../services/never-stop-product-factory-scheduler.js";
+import { autoRegisterProductModules, getModuleHealth } from "./auto-register-product-modules.js";
 
 export async function registerFounderRuntimeRoutes(app, deps) {
   const {
@@ -128,6 +129,31 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     res.json(getNeverStopProductFactoryStatus());
   });
   logger.info("✅ [NEVER-STOP] Status route mounted at /api/v1/lifeos/never-stop/status");
+
+  // Convention-based auto-registration: mount every opt-in product module listed
+  // in config/auto-registered-product-modules.json, recording per-module boot
+  // health. This is what lets the autonomous loop ship a NEW route/UI module and
+  // have it go LIVE without editing this protected composition root — and the
+  // health manifest is read by the functional-proof completion gate / self-repair.
+  try {
+    const autoResults = await autoRegisterProductModules(app, {
+      pool,
+      requireKey: requireUserOrKey,
+      callCouncilMember,
+      logger,
+      baseUrl: siteBaseUrl,
+      commitToGitHub,
+      commitManyToGitHub,
+    }, { logger });
+    logger.info(`✅ [AUTO-REGISTER] ${autoResults.filter((r) => r.status === "mounted").length}/${autoResults.length} product module(s) mounted`);
+  } catch (autoErr) {
+    logger.warn("[AUTO-REGISTER] auto-registration pass failed", { error: autoErr.message });
+  }
+
+  app.get("/api/v1/lifeos/builder/module-health", requireKey, (_req, res) => {
+    res.json(getModuleHealth());
+  });
+  logger.info("✅ [MODULE-HEALTH] Route mounted at /api/v1/lifeos/builder/module-health");
 
   return {
     tcCoordinator: null,
