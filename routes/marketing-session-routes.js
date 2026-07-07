@@ -7,7 +7,7 @@ const router = Router();
 
 // Helper to extract owner_id
 const getOwnerId = (req) => {
-    return req.user?.id || req.body.owner_id || req.query.owner_id;
+    return req.lifeosUser?.sub || req.user?.id || req.body.owner_id || req.query.owner_id;
 };
 
 // Helper to safely parse JSON from council member
@@ -44,14 +44,17 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { consent_type, consent_text } = req.body;
 
-            const validConsentTypes = ['initial', 'terms_update', 'data_sharing']; // Derived from typical consent types
+            const validConsentTypes = ['session_recording', 'voice_reuse', 'likeness_reuse', 'data_sharing'];
             if (!validConsentTypes.includes(consent_type)) {
                 return res.status(400).json({ ok: false, error: 'Invalid consent_type.' });
             }
+            if (!consent_text || typeof consent_text !== 'string') {
+                return res.status(400).json({ ok: false, error: 'consent_text is required.' });
+            }
 
             const result = await pool.query(
-                `INSERT INTO marketing_consent_records (owner_id, consent_type, consent_text) VALUES ($1, $2, $3) RETURNING id`,
-                [owner_id, consent_type, consent_text]
+                `INSERT INTO marketing_consent_records (owner_id, consent_type, consent_text, ip_address) VALUES ($1, $2, $3, $4) RETURNING id`,
+                [owner_id, consent_type, consent_text, req.ip || null]
             );
             res.status(201).json({ ok: true, id: result.rows[0].id });
         } catch (error) {
@@ -73,18 +76,26 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 return res.status(400).json({ ok: false, error: 'consent_record_id is required.' });
             }
 
-            // Validate consent_record_id
             const consentCheck = await pool.query(
-                `SELECT id FROM marketing_consent_records WHERE id = $1 AND owner_id = $2`,
+                `SELECT id FROM marketing_consent_records WHERE id = $1 AND owner_id = $2 AND revoked_at IS NULL`,
                 [consent_record_id, owner_id]
             );
             if (consentCheck.rows.length === 0) {
                 return res.status(400).json({ ok: false, error: 'Invalid or unknown consent_record_id.' });
             }
 
+            const validSessionTypes = ['coaching', 'interview', 'freestyle'];
+            const validInputModes = ['text', 'audio', 'both'];
+            const sessionType = validSessionTypes.includes(req.body.session_type) ? req.body.session_type : 'coaching';
+            const inputMode = validInputModes.includes(req.body.input_mode) ? req.body.input_mode : 'text';
+
             const result = await pool.query(
                 `INSERT INTO marketing_sessions (owner_id, consent_record_id, input_mode, session_type, status, coach_messages_json) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-                [owner_id, consent_record_id, 'text', 'coaching', 'active', JSON.stringify([])]
+                [owner_id, consent_record_id, inputMode, sessionType, 'active', JSON.stringify([])]
+            );
+            await pool.query(
+                `UPDATE marketing_consent_records SET session_id = $1 WHERE id = $2 AND owner_id = $3`,
+                [result.rows[0].id, consent_record_id, owner_id]
             );
             res.status(201).json({ ok: true, ...result.rows[0] });
         } catch (error) {
@@ -190,7 +201,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 throw new Error('AI extraction response was not a valid JSON array.');
             }
 
-            const validExtractionTypes = ['target_audience', 'pain_point', 'solution', 'call_to_action', 'benefit', 'hook_idea', 'testimonial', 'objection', 'value_proposition']; // Derived from typical content types
+            const validExtractionTypes = ['hook', 'story', 'teaching', 'objection', 'offer', 'cta', 'emotional_truth'];
             const insertedExtractions = [];
 
             for (const item of extractions) {
@@ -199,11 +210,15 @@ export async function registerMarketingSessionRoutes(app, deps) {
                     continue;
                 }
                 const insertResult = await pool.query(
-                    `INSERT INTO marketing_content_extractions (session_id, owner_id, extraction_type, raw_text, confidence_score, source_quote) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-                    [id, owner_id, item.extraction_type, item.raw_text, item.confidence_score, item.source_quote || item.raw_text]
+                    `INSERT INTO marketing_content_extractions (session_id, extraction_type, raw_text, confidence_score, source_quote) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+                    [id, item.extraction_type, item.raw_text, item.confidence_score, item.source_quote || item.raw_text]
                 );
                 insertedExtractions.push(insertResult.rows[0]);
             }
+            await pool.query(
+                `UPDATE marketing_sessions SET extraction_run_at = NOW() WHERE id = $1 AND owner_id = $2`,
+                [id, owner_id]
+            );
 
             res.status(200).json({ ok: true, extractions: insertedExtractions });
         } catch (error) {
@@ -241,28 +256,28 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const brandVoice = channelProfileResult.rows[0]?.brand_voice_json || { tone: 'professional', style: 'direct' };
 
             const extractionsResult = await pool.query(
-                `SELECT * FROM marketing_content_extractions WHERE session_id = $1 AND owner_id = $2 ORDER BY id ASC`,
-                [id, owner_id]
+                `SELECT * FROM marketing_content_extractions WHERE session_id = $1 ORDER BY id ASC`,
+                [id]
             );
             const extractions = extractionsResult.rows;
 
             const generatedPieces = [];
-            const validPlatforms = ['facebook', 'instagram', 'twitter', 'linkedin', 'blog', 'email']; // Derived from common platforms
-            const validFormats = ['text_post', 'short_video_script', 'long_form_article', 'email_newsletter']; // Derived from common formats
+            const validPlatforms = ['instagram', 'linkedin', 'x', 'facebook', 'email', 'general'];
+            const validFormats = ['post', 'caption', 'hook', 'subject_line', 'thread', 'short_script'];
 
             for (const extraction of extractions) {
-                const generationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, generate a marketing content piece based on the following extraction. The piece should be suitable for a social media post or a short article snippet. Extraction type: ${extraction.extraction_type}, Raw text: "${extraction.raw_text}". Focus on creating compelling copy. Return a JSON object: { "platform": "facebook", "format": "text_post", "content_text": "Generated content here" }. Choose a platform and format from: ${validPlatforms.join(', ')} and ${validFormats.join(', ')}.`;
+                const generationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, generate a marketing content piece based on the following extraction. The piece should be suitable for a social media post or a short article snippet. Extraction type: ${extraction.extraction_type}, Raw text: "${extraction.raw_text}". Focus on creating compelling copy. Return a JSON object: { "platform": "linkedin", "format": "post", "content_text": "Generated content here" }. Choose a platform and format from: ${validPlatforms.join(', ')} and ${validFormats.join(', ')}.`;
 
                 const aiResponseText = await callCouncilMember('marketing-generator', generationPrompt);
                 const generatedContent = parseCouncilResponse(aiResponseText);
 
                 if (generatedContent && generatedContent.content_text) {
-                    const platform = validPlatforms.includes(generatedContent.platform) ? generatedContent.platform : 'blog';
-                    const format = validFormats.includes(generatedContent.format) ? generatedContent.format : 'text_post';
+                    const platform = validPlatforms.includes(generatedContent.platform) ? generatedContent.platform : 'general';
+                    const format = validFormats.includes(generatedContent.format) ? generatedContent.format : 'post';
 
                     const insertResult = await pool.query(
-                        `INSERT INTO marketing_content_pieces (session_id, owner_id, platform, format, content_text, status, generated_by_model, source_extraction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-                        [id, owner_id, platform, format, generatedContent.content_text, 'draft', 'marketing-generator', extraction.id]
+                        `INSERT INTO marketing_content_pieces (session_id, extraction_id, platform, format, content_text, status, generated_by_model) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+                        [id, extraction.id, platform, format, generatedContent.content_text, 'draft', 'marketing-generator']
                     );
                     generatedPieces.push(insertResult.rows[0]);
                 } else {
@@ -271,7 +286,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
             }
 
             await pool.query(
-                `UPDATE marketing_sessions SET status = 'completed' WHERE id = $1 AND owner_id = $2`,
+                `UPDATE marketing_sessions SET status = 'completed', generation_run_at = NOW(), completed_at = NOW() WHERE id = $1 AND owner_id = $2`,
                 [id, owner_id]
             );
 
@@ -315,7 +330,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { id } = req.params;
             const contentResult = await pool.query(
-                `SELECT * FROM marketing_content_pieces WHERE session_id = $1 AND owner_id = $2 ORDER BY created_at ASC`,
+                `SELECT p.* FROM marketing_content_pieces p JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 ORDER BY p.created_at ASC`,
                 [id, owner_id]
             );
             res.status(200).json({ ok: true, pieces: contentResult.rows });
@@ -334,10 +349,13 @@ export async function registerMarketingSessionRoutes(app, deps) {
             }
 
             const { id } = req.params;
-            const { action, hint } = req.body;
+            const { hint } = req.body;
+            const requestedAction = req.body.action || req.body.status;
+            const actionMap = { approved: 'approve', rejected: 'reject' };
+            const action = actionMap[requestedAction] || requestedAction;
 
             const pieceResult = await pool.query(
-                `SELECT * FROM marketing_content_pieces WHERE id = $1 AND owner_id = $2`,
+                `SELECT p.* FROM marketing_content_pieces p JOIN marketing_sessions s ON s.id = p.session_id WHERE p.id = $1 AND s.owner_id = $2`,
                 [id, owner_id]
             );
             if (pieceResult.rows.length === 0) {
@@ -371,8 +389,8 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 const brandVoice = channelProfileResult.rows[0]?.brand_voice_json || { tone: 'professional', style: 'direct' };
 
                 const extractionResult = await pool.query(
-                    `SELECT raw_text, extraction_type FROM marketing_content_extractions WHERE id = $1 AND owner_id = $2`,
-                    [currentPiece.source_extraction_id, owner_id]
+                    `SELECT e.raw_text, e.extraction_type FROM marketing_content_extractions e JOIN marketing_sessions s ON s.id = e.session_id WHERE e.id = $1 AND s.owner_id = $2`,
+                    [currentPiece.extraction_id, owner_id]
                 );
                 if (extractionResult.rows.length === 0) {
                     return res.status(400).json({ ok: false, error: 'Source extraction for regeneration not found.' });
@@ -412,7 +430,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { id } = req.params;
             const approvedPiecesResult = await pool.query(
-                `SELECT platform, format, content_text FROM marketing_content_pieces WHERE session_id = $1 AND owner_id = $2 AND status = 'approved' ORDER BY created_at ASC`,
+                `SELECT p.platform, p.format, p.content_text FROM marketing_content_pieces p JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved' ORDER BY p.created_at ASC`,
                 [id, owner_id]
             );
 
