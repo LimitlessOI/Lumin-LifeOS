@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T08:39:07.204Z",
+  "generated_at": "2026-07-07T08:47:07.358Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11217,
+  "file_count": 11218,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65063,6 +65063,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/marketing-session-routes.js",
+      "synopsis": "Registers MarketingSessionRoutes routes/handlers (routes/marketing-session-routes.js).",
+      "bytes": 10745,
+      "mtime": "2026-07-07T08:47:07.358Z",
+      "indexed_at": "2026-07-07T08:47:07.358Z"
     },
     {
       "path": "routes/memory-capsule-routes.js",
