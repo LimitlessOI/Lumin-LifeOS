@@ -14,11 +14,12 @@ import fs from 'node:fs';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
 import { dispatchExecuteMission } from '../factory-staging/factory-core/builder/run-mission.js';
 import { runBpbIntakeGate } from '../factory-staging/factory-core/bpb/intake-gate.js';
-import { summarizeHistorian } from '../factory-staging/factory-core/historian/append-record.js';
+import { summarizeHistorian, appendHistorianRecord } from '../factory-staging/factory-core/historian/append-record.js';
 import { summarizeHistory } from '../factory-staging/factory-core/historian/mission-history.js';
 import { summarizeTsosMetrics } from '../factory-staging/factory-core/tsos/tsos-summary.js';
 import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/remote-truth-reconciler.js';
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
+import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 
 export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, callCouncilMember } = {}) {
   const router = express.Router();
@@ -119,6 +120,33 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
     }
   });
 
+  // STEP 5c — the governed shipping runner as a live surface. Walks a build queue
+  // and ships EVERY step through the governed pipe (in-process dispatchExecuteStep:
+  // BPB->Builder->SENTRY->TSOS->Historian) instead of the legacy ungoverned /build.
+  // Century's flag: crash/block signals are recorded durably to the Historian with
+  // resume_from, so a mid-queue failure is loud + resumable, never a silent skip.
+  router.post('/factory/ship-queue', guard, async (req, res) => {
+    try {
+      const { mission_id, blueprint_id, steps, start_index, skip_intake_gate } = req.body || {};
+      if (!Array.isArray(steps) || steps.length === 0) {
+        return res.status(400).json({ ok: false, error: 'steps[] required' });
+      }
+      const dispatch = async ({ mission_id: m, blueprint_id: b, step }) => dispatchExecuteStep(
+        { mission_id: m, blueprint_id: b, step, skip_intake_gate: skip_intake_gate === true },
+        dispatchOptions,
+      );
+      const signal = async (sig) => {
+        appendHistorianRecord({ type: 'governed_shipping_signal', mission_id, blueprint_id, ...sig, trust_level: 'outcome-linked' });
+      };
+      const outcome = await runGovernedShippingQueue({
+        steps, mission_id, blueprint_id, dispatch, signal, startIndex: Number(start_index) || 0,
+      });
+      res.status(outcome.ok ? 200 : 422).json(outcome);
+    } catch (err) {
+      res.status(500).json({ ok: false, status: 'FACTORY_SHIP_QUEUE_ERROR', error: err?.message || String(err) });
+    }
+  });
+
   router.post('/factory/execute-mission', guard, async (req, res) => {
     try {
       const { httpStatus, body } = await dispatchExecuteMission(req.body || {}, dispatchOptions);
@@ -128,6 +156,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
     }
   });
 
-  if (logger?.info) logger.info('✅ [FACTORY-MOUNT] Governed factory mounted at /factory/{execute-step,execute-mission,gates/intake,readiness,historian/summary,tsos/summary}');
+  if (logger?.info) logger.info('✅ [FACTORY-MOUNT] Governed factory mounted at /factory/{execute-step,ship-queue,execute-mission,gates/intake,readiness,historian/summary,tsos/summary}');
   return router;
 }
