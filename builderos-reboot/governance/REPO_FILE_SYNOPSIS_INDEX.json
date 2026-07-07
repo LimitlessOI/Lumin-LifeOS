@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T01:32:36.936Z",
+  "generated_at": "2026-07-07T01:50:10.239Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11210,
+  "file_count": 11211,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84084,6 +84084,13 @@
       "bytes": 19745,
       "mtime": "2026-07-07T01:32:36.936Z",
       "indexed_at": "2026-07-07T01:32:36.936Z"
+    },
+    {
+      "path": "services/site-builder-editor-chat.js",
+      "synopsis": "Exports renderChatPanel — services/site-builder-editor-chat.js.",
+      "bytes": 12142,
+      "mtime": "2026-07-07T01:50:10.239Z",
+      "indexed_at": "2026-07-07T01:50:10.239Z"
     },
     {
       "path": "services/site-builder-editor-sidebar.js",
