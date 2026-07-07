@@ -1,0 +1,45 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "marketingos",
+  "verify_script": null,
+  "notes": "MarketingOS autonomous build queue. First module: SocialMediaOS (SMOS) Phase 1 — the Founder Story Session MVP (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1, §6 exact spec). Steps are single-file and gate-safe. Phase 1 is TEXT-MODE ONLY here: the audio-upload path is intentionally EXCLUDED because it depends on Cloudflare R2 env vars that are UNVERIFIED (§6 readiness gate) — never build a step whose runtime dependency is unproven. Later phases (calendar, atoms, video, publishing) enroll as their readiness gates open; they are NOT queued as buildable code yet because they are gated on Phase 1 exit criteria / infra (FFmpeg, BullMQ, OAuth) per §5.",
+  "updated_at": "2026-07-07",
+  "steps": [
+    {
+      "id": "mos-phase1-schema",
+      "status": "pending",
+      "target_file": "db/migrations/20260707_marketing_phase1_schema.sql",
+      "task": "SQL migration that creates the five Phase 1 MarketingOS tables EXACTLY as specified in docs/products/marketingos/PRODUCT_HOME.md §6 Database Schema: marketing_consent_records, marketing_sessions, marketing_content_extractions, marketing_content_pieces, marketing_channel_profiles — with the exact columns, CHECK constraints, foreign keys, defaults, and the named indexes from the spec. The repo currently ships only a neutered placeholder (db/migrations/[date]_marketing_schema.sql containing `SELECT 1;`), so these tables do not exist yet.",
+      "spec": "Pure PostgreSQL DDL, applied on boot by the migration runner. MUST be idempotent and non-destructive: use CREATE TABLE IF NOT EXISTS and CREATE INDEX IF NOT EXISTS for every object; NO DROP, NO ALTER that loses data, NO TRUNCATE. Copy the column definitions, CHECK constraints (consent_type, session_type, input_mode, status, extraction_type, platform, format), the REFERENCES clauses (content_extractions/content_pieces → marketing_sessions ON DELETE CASCADE; sessions.consent_record_id → marketing_consent_records), the no_revocation_update CHECK on consent, and all indexes verbatim from §6. Start the file with the standard `-- SYNOPSIS:` comment line. @ssot docs/products/marketingos/PRODUCT_HOME.md.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 4000,
+      "revive_count": 0
+    },
+    {
+      "id": "mos-session-routes",
+      "status": "pending",
+      "target_file": "routes/marketing-session-routes.js",
+      "task": "New Express route module exporting registerMarketingSessionRoutes(app, { pool, callCouncilMember, requireKey }) that mounts the Phase 1 SocialMediaOS session API from docs/products/marketingos/PRODUCT_HOME.md §6 Route List, TEXT-MODE ONLY (do NOT implement POST /sessions/:id/audio — audio depends on unverified R2 storage). Mount, all requireKey-gated: POST /api/v1/marketing/consent (create a marketing_consent_records row, returns its id); POST /api/v1/marketing/sessions (requires consent_record_id, creates a marketing_sessions row input_mode='text'); POST /api/v1/marketing/sessions/:id/coach (call services/marketing-coach.js sendCoachMessage(sessionId,userMessage,pool), append to coach_messages_json, return { response, hookDetected, hookText }); POST /api/v1/marketing/sessions/:id/extract (call services/marketing-content-engine.js extractFromTranscript(transcript, sessionId, pool)); POST /api/v1/marketing/sessions/:id/generate (call generatePieces(sessionId, extractions, channelProfile, pool)); GET /api/v1/marketing/sessions/:id (session state); GET /api/v1/marketing/sessions/:id/content (all marketing_content_pieces with status); PATCH /api/v1/marketing/content/:id (approve/reject, or regenerate via regeneratePiece(pieceId, hint, pool)); GET /api/v1/marketing/sessions/:id/export (return the approved pieces as a formatted downloadable text pack, Content-Disposition attachment); GET + PUT /api/v1/marketing/channel-profile (get-or-create / update the caller's marketing_channel_profiles row).",
+      "spec": "Single self-contained ESM server module. Import the existing services (services/marketing-coach.js, services/marketing-content-engine.js) by their documented exports (§6 Service List) — do not reimplement them. Use parameterised SQL via the injected pool (NO string interpolation into SQL — fail-closed against injection). Validate every state transition against the CHECK-constraint enum values from §6. Consent MUST exist before a session is created (reject with 400 if consent_record_id is missing/invalid). This is a SERVER module: ZERO top-level references to window/document/browser globals. Wrap all handler bodies in try/catch and respond JSON { ok:false, error } with an appropriate status; never leak stack traces or secrets. Named export registerMarketingSessionRoutes + default. @ssot docs/products/marketingos/PRODUCT_HOME.md.",
+      "depends_on": ["mos-phase1-schema"],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 8000,
+      "revive_count": 0
+    },
+    {
+      "id": "mos-session-ui",
+      "status": "pending",
+      "target_file": "services/marketing-session-ui.js",
+      "task": "New server-rendered UI module exporting registerMarketingSessionUi(app) that serves the Phase 1 SocialMediaOS screens from docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1 UI screens as HTML pages: GET /marketing (landing/dashboard — start a new session), GET /marketing/session/new (consent + session setup), GET /marketing/session/:id (coaching conversation, text input; posts to /api/v1/marketing/sessions/:id/coach), GET /marketing/session/:id/content (review + approve generated pieces; PATCHes /api/v1/marketing/content/:id), GET /marketing/session/:id/export (download the content pack via /api/v1/marketing/sessions/:id/export). Clean, conversion-minded, single-column layout consistent with the existing product's visual tone.",
+      "spec": "Single self-contained ESM server module. CRITICAL SSR RULE: this file is imported by Node on the server, so it MUST have ZERO top-level references to window, document, localStorage, navigator, fetch-on-load, or any browser global. Each route handler returns a complete HTML document as a template-literal STRING; any client-side behaviour (form submit, fetch calls to the /api/v1/marketing/* endpoints, approve buttons) lives ONLY inside a <script>…</script> string embedded in that returned HTML — never as top-level module code. No database access in this module (the pages call the JSON API from the browser). No fabricated stats/testimonials/pricing. Escape any interpolated dynamic text. Named export registerMarketingSessionUi + default. @ssot docs/products/marketingos/PRODUCT_HOME.md.",
+      "depends_on": ["mos-session-routes"],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 9000,
+      "revive_count": 0
+    }
+  ]
+}
