@@ -37,7 +37,7 @@
     },
     {
       "id": "mos-session-ui",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-session-ui-routes.js",
       "task": "New, SELF-CONTAINED server-rendered UI route module exporting `registerMarketingSessionUiRoutes(app, deps)` (also default) that serves the Phase 1 SocialMediaOS screens from docs/products/marketingos/PRODUCT_HOME.md §5 as HTML pages: GET /marketing (landing/dashboard — start a new session); GET /marketing/session/new (consent + session setup — posts to /api/v1/marketing/consent then /api/v1/marketing/sessions); GET /marketing/session/:id (coaching conversation, text input; posts to /api/v1/marketing/sessions/:id/coach and shows the coach replies + HOOK DETECTED flags); GET /marketing/session/:id/content (review + approve generated pieces; PATCHes /api/v1/marketing/content/:id); GET /marketing/session/:id/export (download the content pack via /api/v1/marketing/sessions/:id/export). Clean, conversion-minded, single-column layout consistent with the product's visual tone.",
       "spec": "Single self-contained ESM server module, AUTO-REGISTERED (config entry already present: path routes/marketing-session-ui-routes.js, register registerMarketingSessionUiRoutes) — do NOT edit server.js or any boot file. CRITICAL SSR RULE: this file is imported by Node on the server, so it MUST have ZERO top-level references to window/document/localStorage/navigator/fetch or any browser global. Each route handler returns a COMPLETE HTML document as a template-literal STRING; ALL client-side behaviour (form submit, fetch calls to the /api/v1/marketing/* endpoints, approve buttons) lives ONLY inside a <script>…</script> string embedded in that returned HTML — never as top-level module code. No database access in this module (pages call the JSON API from the browser). No fabricated stats/testimonials/pricing. Escape any interpolated dynamic text. deps may be unused but keep the (app, deps) signature. Named export registerMarketingSessionUiRoutes + default. Start with the standard `// SYNOPSIS:` + `@ssot docs/products/marketingos/PRODUCT_HOME.md` header.",
@@ -45,9 +45,12 @@
         "mos-session-routes"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 12000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "518629045be8f5a5b965a9de1df18a000acbbd7e",
+      "last_attempt_at": "2026-07-07T10:58:16.862Z",
+      "completed_at": "2026-07-07T10:58:17.694Z"
     }
   ]
 }
