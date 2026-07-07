@@ -262,14 +262,10 @@ export default class ProspectPipeline {
     }
 
     const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
-    const emailContent = await this.generateOutreachEmail({
-      contactName: row.contact_name || 'there',
-      businessName: row.business_name || 'your business',
-      previewUrl: row.preview_url,
-      industry: metadata.businessInfo?.industry,
-      posPartnerName: metadata.posPartner,
-      painPoints: [],
-    });
+    const emailContent = {
+      subject: `${row.business_name || 'Your business'} — free website upgrade preview`,
+      html: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url, []),
+    };
 
     const delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
     const emailSent = delivery?.success !== false;

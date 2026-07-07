@@ -54,12 +54,15 @@ export class NotificationService {
 
   _getSmtpTransporter() {
     if (this._smtpTransporter) return this._smtpTransporter;
-    const smtpPort = Number(process.env.SMTP_PORT || 587);
+    const smtpPort = Number(process.env.SMTP_PORT || 465);
     this._smtpTransporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: smtpPort,
       secure: smtpPort === 465,
       family: 4,
+      connectionTimeout: 20000,
+      greetingTimeout: 20000,
+      socketTimeout: 20000,
       lookup: (hostname, _options, callback) => {
         dns.lookup(hostname, { family: 4, all: false }, callback);
       },
