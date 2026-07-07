@@ -2,7 +2,6 @@
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
 import { Router } from 'express';
-import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
@@ -83,10 +82,9 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 return res.status(400).json({ ok: false, error: 'Invalid or unknown consent_record_id.' });
             }
 
-            const session_id = uuidv4();
             const result = await pool.query(
-                `INSERT INTO marketing_sessions (id, owner_id, consent_record_id, input_mode, session_type, status, coach_messages_json) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-                [session_id, owner_id, consent_record_id, 'text', 'coaching', 'active', JSON.stringify([])]
+                `INSERT INTO marketing_sessions (owner_id, consent_record_id, input_mode, session_type, status, coach_messages_json) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+                [owner_id, consent_record_id, 'text', 'coaching', 'active', JSON.stringify([])]
             );
             res.status(201).json({ ok: true, ...result.rows[0] });
         } catch (error) {

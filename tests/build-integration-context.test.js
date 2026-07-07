@@ -12,14 +12,16 @@ import {
   parseSchemaFromMigrations,
   selectRelevantTables,
   buildIntegrationContext,
+  readInstalledPackages,
   INJECTED_DEPS_CONTRACT,
 } from '../services/build-integration-context.js';
 
-function tmpRepoWithMigrations(sqlByFile) {
+function tmpRepoWithMigrations(sqlByFile, pkg) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'bic-'));
   const dir = path.join(root, 'db', 'migrations');
   fs.mkdirSync(dir, { recursive: true });
   for (const [name, sql] of Object.entries(sqlByFile)) fs.writeFileSync(path.join(dir, name), sql);
+  if (pkg) fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(pkg));
   return root;
 }
 
@@ -94,6 +96,36 @@ test('buildIntegrationContext omits mount convention for non-route targets but k
   });
   assert.doesNotMatch(context, /register[A-Z]/);
   assert.match(context, /INJECTED DEPENDENCIES/);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('readInstalledPackages reads prod + dev deps and dedupes; empty on missing pkg', () => {
+  const root = tmpRepoWithMigrations(
+    { 'm.sql': 'CREATE TABLE x (a int);' },
+    { dependencies: { express: '^4', pg: '^8' }, devDependencies: { pg: '^8', eslint: '^9' } },
+  );
+  assert.deepEqual(readInstalledPackages(root), ['eslint', 'express', 'pg']);
+  fs.rmSync(root, { recursive: true, force: true });
+  assert.deepEqual(readInstalledPackages('/no/such/repo'), []);
+});
+
+test('buildIntegrationContext lists available packages + forbids uuid/JS-side ids when schema present', () => {
+  const root = tmpRepoWithMigrations(
+    { 'm.sql': 'CREATE TABLE marketing_sessions (id uuid, founder_id text, created_at timestamptz);' },
+    { dependencies: { express: '^4', pg: '^8' } },
+  );
+  const { context, packages } = buildIntegrationContext({
+    root,
+    targetFile: 'routes/marketing-session-routes.js',
+    productId: 'marketingos',
+    task: 'create marketing sessions',
+  });
+  assert.deepEqual(packages, ['express', 'pg']);
+  assert.match(context, /AVAILABLE NPM PACKAGES/);
+  assert.match(context, /express, pg/);
+  // The exact class that caused the uuid false-done: don't invent ids / import uuid
+  assert.match(context, /DB-DEFAULTED/);
+  assert.match(context, /do NOT import a uuid package/i);
   fs.rmSync(root, { recursive: true, force: true });
 });
 

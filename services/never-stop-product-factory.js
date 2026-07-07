@@ -721,7 +721,17 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     // verifyFn + deployProofFn still gate it, so this is not a false green: the
     // artifact must exist AND be served live before the step is marked done, and
     // a broken/stub file fails verify with a different error.
-    if (targetFileExists(target_file)) {
+    //
+    // SELF-REPAIR BYPASS: if the step carries a last_error, the existing file is
+    // KNOWN-BROKEN (a prior verify / deploy-proof / module-health failure wrote
+    // it). Re-completing via its last commit would just re-fail the same gate
+    // forever (short-circuit → gate fail → carry error → short-circuit …). So
+    // when an error is carried, DO NOT short-circuit — fall through to a real
+    // /build that regenerates the file with the verbatim error fed in, letting
+    // the loop fix its own broken artifact (e.g. an import of an uninstalled
+    // package the functional-proof gate caught). New/clean steps still complete
+    // idempotently via the short-circuit below.
+    if (targetFileExists(target_file) && !last_error) {
       const builtSha = await lastCommitShaForFile(target_file);
       if (builtSha) {
         logger?.warn?.({ target_file, built: builtSha.slice(0, 8) }, '[never-stop] pre-existing artifact — completing via last-touching commit (builder cannot rebuild an existing file)');
