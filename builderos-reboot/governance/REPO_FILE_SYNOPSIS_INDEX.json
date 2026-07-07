@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T16:51:22.528Z",
+  "generated_at": "2026-07-07T16:59:52.534Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11232,
   "files": [
@@ -21589,8 +21589,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3390151,
-      "mtime": "2026-07-07T16:50:42.799Z",
-      "indexed_at": "2026-07-07T16:51:22.528Z"
+      "mtime": "2026-07-07T16:59:42.035Z",
+      "indexed_at": "2026-07-07T16:59:52.534Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38452,9 +38452,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 174015,
-      "mtime": "2026-07-07T11:06:21.382Z",
-      "indexed_at": "2026-07-07T16:50:42.501Z"
+      "bytes": 176230,
+      "mtime": "2026-07-07T16:59:26.027Z",
+      "indexed_at": "2026-07-07T16:59:52.534Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -79822,9 +79822,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 10134,
-      "mtime": "2026-07-07T11:06:21.382Z",
-      "indexed_at": "2026-07-07T16:50:42.501Z",
+      "bytes": 16174,
+      "mtime": "2026-07-07T16:58:28.627Z",
+      "indexed_at": "2026-07-07T16:59:52.534Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86082,9 +86082,9 @@
     {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
-      "bytes": 6853,
-      "mtime": "2026-07-07T11:06:21.386Z",
-      "indexed_at": "2026-07-07T16:50:42.501Z"
+      "bytes": 9837,
+      "mtime": "2026-07-07T16:57:08.483Z",
+      "indexed_at": "2026-07-07T16:59:52.534Z"
     },
     {
       "path": "tests/builder-agents.test.js",
