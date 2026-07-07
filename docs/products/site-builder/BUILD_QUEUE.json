@@ -54,7 +54,7 @@
       "founder_gated": false,
       "attempts": 2,
       "max_output_tokens": 12288,
-      "last_attempt_at": "2026-07-07T04:00:05.363Z",
+      "last_attempt_at": "2026-07-07T04:00:19.728Z",
       "last_error": "deploy_serves_different_sha",
       "revive_count": 2,
       "revived_at": "2026-07-07T03:49:39.166Z",
