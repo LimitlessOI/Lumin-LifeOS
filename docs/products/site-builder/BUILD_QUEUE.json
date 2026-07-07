@@ -116,10 +116,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T05:24:09.790Z",
+      "last_attempt_at": "2026-07-07T05:24:18.590Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
-      "revived_at": "2026-07-07T05:24:09.789Z"
+      "revived_at": "2026-07-07T05:24:18.589Z"
     },
     {
       "id": "sb-editor-endpoints",
