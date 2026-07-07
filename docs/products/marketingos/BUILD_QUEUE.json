@@ -100,7 +100,7 @@
       "attempts": 3,
       "max_output_tokens": 12000,
       "revive_count": 0,
-      "last_attempt_at": "2026-07-07T11:49:13.978Z",
+      "last_attempt_at": "2026-07-07T11:49:18.559Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
