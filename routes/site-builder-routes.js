@@ -404,6 +404,24 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * POST /api/v1/sites/prospects/:clientId/resend-outreach
+   * Resend initial cold email for a built prospect (no site rebuild).
+   */
+  router.post('/prospects/:clientId/resend-outreach', requireKey, async (req, res) => {
+    try {
+      const { clientId } = req.params;
+      const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
+      const result = await pipeline.resendOutreachEmail(clientId);
+      if (!result.success) {
+        return res.status(result.error === 'prospect not found' ? 404 : 400).json({ ok: false, ...result });
+      }
+      return res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * POST /api/v1/sites/analyze
    * Score a prospect's EXISTING website to determine outreach priority.
    * Body: { businessUrl }

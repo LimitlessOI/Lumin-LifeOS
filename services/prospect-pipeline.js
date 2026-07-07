@@ -183,6 +183,7 @@ export default class ProspectPipeline {
 
     // Step 3: Send email (if contact email provided and not skipped)
     let emailSent = false;
+    let emailSendError = null;
     if (contactEmail && !skipEmail && !qaHold) {
       try {
         const delivery = await this.sendEmail(contactEmail, emailContent.subject, emailContent.html);
@@ -190,9 +191,11 @@ export default class ProspectPipeline {
         if (emailSent) {
           logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
         } else {
-          logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: delivery?.error || 'unknown' });
+          emailSendError = delivery?.error || 'unknown';
+          logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: emailSendError });
         }
       } catch (err) {
+        emailSendError = err.message;
         logger.warn('[PROSPECT] Email send failed', { error: err.message });
       }
     }
@@ -219,6 +222,7 @@ export default class ProspectPipeline {
       metadata: {
         ...(buildResult.metadata || {}),
         qualityReport,
+        ...(emailSendError ? { emailSendError, emailSendAttemptAt: new Date().toISOString() } : {}),
       },
     });
 
@@ -232,6 +236,66 @@ export default class ProspectPipeline {
       emailSubject: emailContent.subject,
       businessName: biz,
       posPartner: buildResult.posPartner,
+      emailSendError,
+    };
+  }
+
+  /**
+   * Resend initial outreach email for an existing prospect (no rebuild).
+   */
+  async resendOutreachEmail(clientId) {
+    if (!this.pool || !this.sendEmail) return { success: false, error: 'pool and sendEmail are required' };
+
+    let row;
+    try {
+      const result = await this.pool.query('SELECT * FROM prospect_sites WHERE client_id = $1', [clientId]);
+      row = result.rows[0];
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+
+    if (!row) return { success: false, error: 'prospect not found' };
+    if (!row.contact_email) return { success: false, error: 'contact email missing' };
+    if (!row.preview_url) return { success: false, error: 'preview not built yet' };
+    if (String(row.status || '').toLowerCase() === 'qa_hold') {
+      return { success: false, error: 'prospect is on qa_hold' };
+    }
+
+    const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+    const emailContent = await this.generateOutreachEmail({
+      contactName: row.contact_name || 'there',
+      businessName: row.business_name || 'your business',
+      previewUrl: row.preview_url,
+      industry: metadata.businessInfo?.industry,
+      posPartnerName: metadata.posPartner,
+      painPoints: [],
+    });
+
+    const delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
+    const emailSent = delivery?.success !== false;
+
+    await this.recordProspect({
+      businessUrl: row.business_url,
+      contactEmail: row.contact_email,
+      contactName: row.contact_name,
+      businessName: row.business_name,
+      clientId: row.client_id,
+      previewUrl: row.preview_url,
+      emailSent,
+      status: emailSent ? 'sent' : row.status,
+      metadata: {
+        ...metadata,
+        ...(emailSent
+          ? { emailResentAt: new Date().toISOString() }
+          : { emailSendError: delivery?.error || 'unknown', emailResendAttemptAt: new Date().toISOString() }),
+      },
+    });
+
+    return {
+      success: emailSent,
+      clientId,
+      emailSent,
+      error: emailSent ? null : (delivery?.error || 'send failed'),
     };
   }
 
