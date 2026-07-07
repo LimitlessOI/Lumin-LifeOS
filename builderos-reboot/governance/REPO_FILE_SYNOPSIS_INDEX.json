@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T20:33:04.099Z",
+  "generated_at": "2026-07-07T20:42:10.487Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11256,
+  "file_count": 11260,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29476,6 +29476,16 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "builderos-reboot/scripts/factory-author-local.mjs",
+      "synopsis": "Conductor harness — run the GOVERNED FACTORY authoring+SENTRY pipe",
+      "bytes": 8018,
+      "mtime": "2026-07-07T20:40:26.451Z",
+      "indexed_at": "2026-07-07T20:42:10.487Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "builderos-reboot/scripts/factory-ci.mjs",
       "synopsis": "Single CI entry: run all factory verification scripts. Single CI entry: run all factory verification scripts.",
       "bytes": 2085,
@@ -29540,6 +29550,16 @@
       "bytes": 6866,
       "mtime": "2026-07-07T20:21:19.611Z",
       "indexed_at": "2026-07-07T20:22:27.903Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "builderos-reboot/scripts/general-browser-agent-runtime-proof.mjs",
+      "synopsis": "Behavioral proof for services/general-browser-agent-runtime.js.",
+      "bytes": 6206,
+      "mtime": "2026-07-07T20:39:20.767Z",
+      "indexed_at": "2026-07-07T20:42:10.487Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -29836,6 +29856,14 @@
       "bytes": 3531,
       "mtime": "2026-07-07T18:57:52.115Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "builderos-reboot/scripts/specs/browser-agent-runtime.step.json",
+      "synopsis": "Exports observePage — builderos-reboot/scripts/specs/browser-agent-runtime.step.json.",
+      "bytes": 4744,
+      "mtime": "2026-07-07T20:40:32.235Z",
+      "indexed_at": "2026-07-07T20:42:10.487Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/scripts/sync-acceptance-from-blueprint.mjs",
@@ -39400,9 +39428,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 93779,
-      "mtime": "2026-07-07T20:21:48.163Z",
-      "indexed_at": "2026-07-07T20:22:27.903Z"
+      "bytes": 95217,
+      "mtime": "2026-07-07T20:41:49.227Z",
+      "indexed_at": "2026-07-07T20:42:10.487Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -81785,6 +81813,16 @@
       "bytes": 12031,
       "mtime": "2026-07-03T13:23:32.581Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "services/general-browser-agent-runtime.js",
+      "synopsis": "Exports observePage — services/general-browser-agent-runtime.js.",
+      "bytes": 4695,
+      "mtime": "2026-07-07T20:42:09.723Z",
+      "indexed_at": "2026-07-07T20:42:10.487Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/general-browser-agent.js",
