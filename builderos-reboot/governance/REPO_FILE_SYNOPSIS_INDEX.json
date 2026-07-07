@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T19:26:14.091Z",
+  "generated_at": "2026-07-07T19:33:17.736Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11244,
+  "file_count": 11247,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29605,6 +29605,13 @@
       "indexed_at": "2026-07-07T19:26:14.091Z"
     },
     {
+      "path": "builderos-reboot/scripts/governed-shipping-runner-proof.mjs",
+      "synopsis": "STEP 5b proof — BPB assertion authorship + the governed shipping",
+      "bytes": 7898,
+      "mtime": "2026-07-07T19:32:51.703Z",
+      "indexed_at": "2026-07-07T19:33:17.736Z"
+    },
+    {
       "path": "builderos-reboot/scripts/greenfield-integration.mjs",
       "synopsis": "Integration test: greenfield exact_content step via dispatchExecuteStep. Integration test: greenfield exact_content step via dispatchExecuteStep.",
       "bytes": 1452,
@@ -38473,9 +38480,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 179314,
-      "mtime": "2026-07-07T19:26:01.411Z",
-      "indexed_at": "2026-07-07T19:26:14.091Z"
+      "bytes": 181435,
+      "mtime": "2026-07-07T19:33:07.371Z",
+      "indexed_at": "2026-07-07T19:33:17.736Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -59306,6 +59313,16 @@
       "bytes": 4255,
       "mtime": "2026-07-03T13:23:32.465Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "factory-staging/factory-core/bpb/author-assertions.js",
+      "synopsis": "STEP 5b — BPB authors behavior_assertions from the BLUEPRINT SPEC at",
+      "bytes": 4901,
+      "mtime": "2026-07-07T19:31:06.595Z",
+      "indexed_at": "2026-07-07T19:33:17.736Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "factory-staging/factory-core/bpb/intake-gate.js",
@@ -81731,6 +81748,16 @@
       "bytes": 2051,
       "mtime": "2026-07-07T19:24:10.915Z",
       "indexed_at": "2026-07-07T19:26:14.091Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/governed-shipping-runner.js",
+      "synopsis": "STEP 5b — the governed shipping runner. Walks a build queue and ships",
+      "bytes": 5025,
+      "mtime": "2026-07-07T19:31:38.951Z",
+      "indexed_at": "2026-07-07T19:33:17.736Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
