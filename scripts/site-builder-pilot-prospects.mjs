@@ -25,6 +25,19 @@ function resolveBaseUrl() {
   return `http://localhost:${process.env.PORT || 8080}`;
 }
 
+async function pollProspectStatus(baseUrl, commandKey, clientId, maxWaitMs = 600000) {
+  const started = Date.now();
+  while (Date.now() - started < maxWaitMs) {
+    const res = await fetch(`${baseUrl}/api/v1/sites/prospects/${encodeURIComponent(clientId)}/status`, {
+      headers: { 'x-command-key': commandKey },
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (payload.status === 'sent' || payload.status === 'failed') return payload;
+    await new Promise((r) => setTimeout(r, 5000));
+  }
+  return { status: 'timeout', clientId };
+}
+
 async function main() {
   const baseUrl = resolveBaseUrl();
   const commandKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_COMMAND_KEY;
@@ -35,6 +48,7 @@ async function main() {
 
   const skipEmail = process.argv.includes('--skip-email');
   const dryRun = process.argv.includes('--dry-run');
+  const noPoll = process.argv.includes('--no-poll');
   const prospects = loadPilotList();
 
   console.log(JSON.stringify({
@@ -42,6 +56,7 @@ async function main() {
     baseUrl,
     count: prospects.length,
     skipEmail,
+    noPoll,
   }));
 
   if (dryRun) process.exit(0);
@@ -54,6 +69,7 @@ async function main() {
       contactName: prospect.contactName,
       businessName: prospect.businessName,
       skipEmail,
+      async: true,
       businessInfo: prospect.industry ? { industry: prospect.industry, ...(prospect.businessInfo || {}) } : prospect.businessInfo,
     };
 
@@ -67,15 +83,22 @@ async function main() {
     });
 
     const payload = await response.json().catch(() => ({}));
+    let final = payload;
+
+    if (!noPoll && response.status === 202 && payload.clientId) {
+      final = await pollProspectStatus(baseUrl, commandKey, payload.clientId);
+    }
+
     results.push({
       businessUrl: prospect.businessUrl,
-      ok: response.ok && payload.ok !== false,
-      status: response.status,
-      clientId: payload.clientId || null,
-      previewUrl: payload.previewUrl || null,
-      emailSent: payload.emailSent,
-      qaHold: payload.qaHold,
-      error: payload.error || null,
+      ok: (response.status === 202 || response.ok) && final.status !== 'failed' && final.status !== 'timeout',
+      httpStatus: response.status,
+      clientId: payload.clientId || final.clientId || null,
+      previewUrl: final.previewUrl || payload.previewUrl || null,
+      jobStatus: final.status || payload.status || null,
+      emailSent: final.emailSent ?? payload.emailSent,
+      qaHold: final.qaHold ?? payload.qaHold,
+      error: final.error || payload.error || null,
     });
   }
 

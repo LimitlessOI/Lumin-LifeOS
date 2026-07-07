@@ -5,7 +5,7 @@
  *
  * Endpoints:
  *   POST /api/v1/sites/build              — Build a new site from a business URL
- *   POST /api/v1/sites/prospect           — Build mock site + send cold outreach email
+ *   POST /api/v1/sites/prospect           — Async build + cold email (202 Accepted; poll /prospects/:id/status)
  *   GET  /api/v1/sites/previews           — List all built preview sites
  *   GET  /api/v1/sites/prospects          — List all prospects in DB
  *   POST /api/v1/sites/follow-up          — Send follow-up email to a prospect
@@ -26,6 +26,11 @@ import { DESIGN_SYSTEMS } from '../services/site-builder-design-systems.js';
 import { generateLogoStudioPage } from '../services/site-builder-logo-studio.js';
 import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
+import {
+  enqueueProspectJob,
+  getProspectJobStatus,
+  evaluateSiteBuilderEmailReadiness,
+} from '../services/site-builder-prospect-runner.js';
 
 
 let _siteBuilder = null;
@@ -246,23 +251,53 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   /**
    * POST /api/v1/sites/prospect
-   * Build a mock site for a prospect + send cold outreach email.
-   * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo? }
+   * Async by default: returns 202 immediately, builds + emails in background.
+   * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo?, sync? }
+   * sync=true waits for full pipeline (may hit Railway HTTP timeout on long builds).
    */
   router.post('/prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
-      const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo } = req.body;
+      const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
 
-      logger.info('[SITE] Prospect request', { businessUrl, contactEmail });
+      logger.info('[SITE] Prospect request', { businessUrl, contactEmail, sync: !!sync });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
-      const result = await pipeline.processProspect({
-        businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo,
-      });
 
-      res.json({ ok: result.success, ...result });
+      const options = {
+        businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo,
+      };
+
+      if (sync === true || req.query.sync === '1') {
+        const result = await pipeline.processProspect(options);
+        return res.json({ ok: result.success, async: false, ...result });
+      }
+
+      const job = await enqueueProspectJob(pipeline, options);
+      if (!job.ok) {
+        return res.status(job.error?.includes('already running') ? 409 : 400).json(job);
+      }
+
+      return res.status(202).json(job);
     } catch (err) {
       logger.error('[SITE] Prospect pipeline error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * GET /api/v1/sites/prospects/:clientId/status
+   * Poll async prospect job — building → sent | built | qa_hold | failed
+   */
+  router.get('/prospects/:clientId/status', requireKey, async (req, res) => {
+    try {
+      const { clientId } = req.params;
+      if (!clientId || !/^[\w-]+$/.test(clientId)) {
+        return res.status(400).json({ ok: false, error: 'Invalid clientId' });
+      }
+      const status = await getProspectJobStatus(pool, clientId);
+      if (!status.ok) return res.status(404).json(status);
+      return res.json(status);
+    } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
   });
@@ -283,12 +318,19 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
       const results = [];
       for (const prospect of prospects) {
-        const result = await pipeline.processProspect(prospect);
-        results.push(result);
+        const job = await enqueueProspectJob(pipeline, prospect);
+        results.push(job);
       }
 
-      const succeeded = results.filter(r => r.success).length;
-      res.json({ ok: true, total: prospects.length, succeeded, failed: prospects.length - succeeded, results });
+      const accepted = results.filter((r) => r.ok).length;
+      res.status(202).json({
+        ok: true,
+        async: true,
+        total: prospects.length,
+        accepted,
+        failed: prospects.length - accepted,
+        results,
+      });
     } catch (err) {
       logger.error('[SITE] Bulk prospect error', { error: err.message });
       res.status(500).json({ ok: false, error: err.message });
@@ -569,25 +611,28 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    * Site Builder revenue readiness — checks only Site Builder env vars.
    */
   router.get('/launch-readiness', async (req, res) => {
+    const emailReadiness = evaluateSiteBuilderEmailReadiness(process.env);
+
     const siteBuilderVars = {
-      POSTMARK_SERVER_TOKEN: { required: true, purpose: 'Cold email sending via Postmark' },
       EMAIL_FROM: { required: true, purpose: 'Sender email address for outreach' },
-      EMAIL_PROVIDER: { required: true, purpose: 'Email provider selector (postmark recommended)' },
+      EMAIL_PROVIDER: { required: true, purpose: 'Email provider: smtp (Gmail) or postmark' },
       SITE_BASE_URL: { required: false, purpose: 'Public preview URL base (falls back to RAILWAY_PUBLIC_DOMAIN)' },
       STRIPE_SECRET_KEY: { required: true, purpose: 'Entry publish checkout ($49 default)' },
       SLACK_WEBHOOK_URL: { required: false, purpose: 'Warm lead notifications (optional)' },
     };
 
-    const blockers = [];
+    const blockers = [...emailReadiness.blockers];
     const missing = [];
-    const present = [];
+    const present = [...emailReadiness.present];
 
     for (const [name, info] of Object.entries(siteBuilderVars)) {
       const val = (process.env[name] || '').trim();
       if (!val) {
-        if (info.required) blockers.push({ name, purpose: info.purpose });
+        if (info.required && !blockers.some((b) => b.name === name)) {
+          blockers.push({ name, purpose: info.purpose });
+        }
         missing.push({ name, purpose: info.purpose, required: info.required });
-      } else {
+      } else if (!present.includes(name)) {
         present.push(name);
       }
     }
@@ -597,11 +642,12 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       preview_serving: true,
       quality_scoring: true,
       prospect_db: !!pool,
-      cold_email_sending: !!process.env.POSTMARK_SERVER_TOKEN && !!process.env.EMAIL_FROM,
+      async_prospect_jobs: true,
+      cold_email_sending: emailReadiness.coldEmailSending,
       publish_checkout: !!process.env.STRIPE_SECRET_KEY,
       live_editor: true,
       pos_partner_referrals: true,
-      follow_up_sequence: !!process.env.POSTMARK_SERVER_TOKEN,
+      follow_up_sequence: emailReadiness.coldEmailSending,
       slack_notifications: !!process.env.SLACK_WEBHOOK_URL,
     };
 
@@ -609,8 +655,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       ok: true,
       ready: blockers.length === 0,
       revenue_blockers: blockers,
-      missing: missing,
-      present: present,
+      missing,
+      present,
+      email_provider: emailReadiness.provider,
       capabilities,
       checked_at: new Date().toISOString(),
     });

@@ -133,7 +133,7 @@ export default class SiteBuilder {
    * Full pipeline: URL → scraped info → new site → deploy → return preview URL
    */
   async buildFromUrl(targetUrl, options = {}) {
-    const clientId = `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
     logger.info('[SITE] Building site from URL', { clientId, targetUrl });
 
     try {
