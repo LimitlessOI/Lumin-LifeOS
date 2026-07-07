@@ -100,10 +100,10 @@
       "attempts": 3,
       "max_output_tokens": 12000,
       "revive_count": 1,
-      "last_attempt_at": "2026-07-07T12:20:50.060Z",
+      "last_attempt_at": "2026-07-07T12:21:57.873Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "f7875927db4d72036e4ac80fde792c5784711457",
-      "completed_at": "2026-07-07T12:21:36.660Z"
+      "completed_at": "2026-07-07T12:21:58.722Z"
     },
     {
       "id": "mos-phase2-ui",
