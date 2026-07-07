@@ -39,7 +39,7 @@
       "founder_gated": false,
       "attempts": 3,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T03:49:00.599Z",
+      "last_attempt_at": "2026-07-07T03:49:39.166Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 3,
       "revived_at": "2026-07-07T03:39:44.185Z"
@@ -57,7 +57,7 @@
       "last_attempt_at": "2026-07-07T03:29:54.196Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 2,
-      "revived_at": "2026-07-07T03:49:00.599Z"
+      "revived_at": "2026-07-07T03:49:39.166Z"
     },
     {
       "id": "sb-editor-chat",
