@@ -27,9 +27,11 @@
         "mos-phase1-schema"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 14000,
-      "revive_count": 0
+      "revive_count": 0,
+      "last_attempt_at": "2026-07-07T09:52:31.402Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
       "id": "mos-session-ui",
