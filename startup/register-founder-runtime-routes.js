@@ -17,6 +17,7 @@ import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.j
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import { getNeverStopProductFactoryStatus } from "../services/never-stop-product-factory-scheduler.js";
 import { autoRegisterProductModules, getModuleHealth } from "./auto-register-product-modules.js";
+import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
 
 export async function registerFounderRuntimeRoutes(app, deps) {
   const {
@@ -129,6 +130,8 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     res.json(getNeverStopProductFactoryStatus());
   });
   logger.info("✅ [NEVER-STOP] Status route mounted at /api/v1/lifeos/never-stop/status");
+
+  app.use(createFactoryMountRoutes({ requireKey, logger }));
 
   // Convention-based auto-registration: mount every opt-in product module listed
   // in config/auto-registered-product-modules.json, recording per-module boot
