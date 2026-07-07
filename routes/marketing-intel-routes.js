@@ -1,4 +1,4 @@
-// SYNOPSIS: SocialMediaOS content-intelligence JSON API routes
+// SYNOPSIS: SocialMediaOS content-intelligence JSON API route module
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
 import express from 'express';
@@ -7,125 +7,150 @@ import { scoreEarnedAttention } from '../services/marketing-script-scorer.js';
 import { publishOrKill } from '../services/marketing-publish-gate.js';
 import { repurposePiece } from '../services/marketing-repurpose.js';
 
-function jsonError(res, status, error) {
-  return res.status(status).json({ ok: false, error });
+function makeErrorResponse(error, fallbackStatus = 500) {
+  const message = error instanceof Error ? error.message : String(error ?? 'Unknown error');
+  return {
+    status: fallbackStatus,
+    body: {
+      ok: false,
+      error: message,
+    },
+  };
 }
 
-function isNonEmptyString(value) {
-  return typeof value === 'string' && value.trim().length > 0;
-}
-
-function clampCount(value) {
-  if (value === undefined || value === null || value === '') return undefined;
-  const n = Number(value);
-  if (!Number.isFinite(n)) return null;
-  const int = Math.trunc(n);
-  if (int < 1) return null;
-  return int;
+function pickServiceResult(result) {
+  if (result && typeof result === 'object' && 'status' in result && 'body' in result) {
+    return result;
+  }
+  return {
+    status: 200,
+    body: {
+      ok: true,
+      result,
+    },
+  };
 }
 
 export function registerMarketingIntelRoutes(app, deps = {}) {
   if (!app || typeof app.post !== 'function') {
-    throw new Error('registerMarketingIntelRoutes requires an Express app');
+    throw new Error('registerMarketingIntelRoutes requires an Express app instance');
   }
 
   const requireKey = deps.requireKey;
-  const callCouncilMember = deps.callCouncilMember;
-  const logger = deps.logger ?? console;
-
   if (typeof requireKey !== 'function') {
     throw new Error('registerMarketingIntelRoutes requires deps.requireKey');
   }
+
+  const callCouncilMember = deps.callCouncilMember;
   if (typeof callCouncilMember !== 'function') {
     throw new Error('registerMarketingIntelRoutes requires deps.callCouncilMember');
   }
 
-  app.post('/api/v1/marketing/intel/titles', requireKey, async (req, res) => {
+  const wrap = (handler) => async (req, res) => {
     try {
-      const { topic, transcript, count } = req.body ?? {};
-      const parsedCount = clampCount(count);
+      const result = await handler(req, res);
+      const { status, body } = pickServiceResult(result);
+      res.status(status).json(body);
+    } catch (error) {
+      const { status, body } = makeErrorResponse(error);
+      res.status(status).json(body);
+    }
+  };
 
-      if (!isNonEmptyString(topic)) {
-        return jsonError(res, 400, 'Missing required field: topic');
+  app.post(
+    '/api/v1/marketing/intel/titles',
+    requireKey,
+    wrap(async (req) => {
+      const { topic, transcript, count } = req.body ?? {};
+      if (!topic || typeof topic !== 'string' || !topic.trim()) {
+        return {
+          status: 400,
+          body: { ok: false, error: 'Missing required field: topic' },
+        };
       }
-      if (count !== undefined && parsedCount === null) {
-        return jsonError(res, 400, 'Invalid field: count');
+
+      const normalizedCount = count == null ? undefined : Number(count);
+      if (normalizedCount !== undefined && (!Number.isFinite(normalizedCount) || normalizedCount <= 0)) {
+        return {
+          status: 400,
+          body: { ok: false, error: 'Invalid field: count' },
+        };
       }
 
       const result = await generateTitleUniverse({
         topic: topic.trim(),
-        transcript: isNonEmptyString(transcript) ? transcript.trim() : undefined,
-        count: parsedCount,
-        callCouncilMember
+        transcript: typeof transcript === 'string' ? transcript : undefined,
+        count: normalizedCount,
+        callCouncilMember,
       });
 
-      return res.json(result);
-    } catch (error) {
-      logger.error?.({ err: error }, 'marketing intel titles failed');
-      return jsonError(res, 500, 'Failed to generate title universe');
-    }
-  });
+      return pickServiceResult(result);
+    })
+  );
 
-  app.post('/api/v1/marketing/intel/score-script', requireKey, async (req, res) => {
-    try {
+  app.post(
+    '/api/v1/marketing/intel/score-script',
+    requireKey,
+    wrap(async (req) => {
       const { scriptText } = req.body ?? {};
-
-      if (!isNonEmptyString(scriptText)) {
-        return jsonError(res, 400, 'Missing required field: scriptText');
+      if (!scriptText || typeof scriptText !== 'string' || !scriptText.trim()) {
+        return {
+          status: 400,
+          body: { ok: false, error: 'Missing required field: scriptText' },
+        };
       }
 
       const result = await scoreEarnedAttention({
         scriptText: scriptText.trim(),
-        callCouncilMember
+        callCouncilMember,
       });
 
-      return res.json(result);
-    } catch (error) {
-      logger.error?.({ err: error }, 'marketing intel score-script failed');
-      return jsonError(res, 500, 'Failed to score script');
-    }
-  });
+      return pickServiceResult(result);
+    })
+  );
 
-  app.post('/api/v1/marketing/intel/publish-gate', requireKey, async (req, res) => {
-    try {
+  app.post(
+    '/api/v1/marketing/intel/publish-gate',
+    requireKey,
+    wrap(async (req) => {
       const { piece } = req.body ?? {};
-
-      if (piece === undefined || piece === null) {
-        return jsonError(res, 400, 'Missing required field: piece');
+      if (!piece || typeof piece !== 'object') {
+        return {
+          status: 400,
+          body: { ok: false, error: 'Missing required field: piece' },
+        };
       }
 
       const result = await publishOrKill({
         piece,
-        callCouncilMember
+        callCouncilMember,
       });
 
-      return res.json(result);
-    } catch (error) {
-      logger.error?.({ err: error }, 'marketing intel publish-gate failed');
-      return jsonError(res, 500, 'Failed to evaluate publish gate');
-    }
-  });
+      return pickServiceResult(result);
+    })
+  );
 
-  app.post('/api/v1/marketing/intel/repurpose', requireKey, async (req, res) => {
-    try {
+  app.post(
+    '/api/v1/marketing/intel/repurpose',
+    requireKey,
+    wrap(async (req) => {
       const { piece, formats } = req.body ?? {};
-
-      if (piece === undefined || piece === null) {
-        return jsonError(res, 400, 'Missing required field: piece');
+      if (!piece || typeof piece !== 'object') {
+        return {
+          status: 400,
+          body: { ok: false, error: 'Missing required field: piece' },
+        };
       }
 
       const result = await repurposePiece({
         piece,
         formats,
-        callCouncilMember
+        callCouncilMember,
       });
 
-      return res.json(result);
-    } catch (error) {
-      logger.error?.({ err: error }, 'marketing intel repurpose failed');
-      return jsonError(res, 500, 'Failed to repurpose piece');
-    }
-  });
+      return pickServiceResult(result);
+    })
+  );
 
   return app;
 }
