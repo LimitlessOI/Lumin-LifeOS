@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T09:34:00.531Z",
+  "generated_at": "2026-07-07T09:38:01.220Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11223,
+  "file_count": 11225,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38438,9 +38438,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 167091,
-      "mtime": "2026-07-07T09:33:39.441Z",
-      "indexed_at": "2026-07-07T09:34:00.531Z"
+      "bytes": 168774,
+      "mtime": "2026-07-07T09:37:42.722Z",
+      "indexed_at": "2026-07-07T09:38:01.220Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -61543,9 +61543,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29626,
-      "mtime": "2026-07-07T09:33:21.337Z",
-      "indexed_at": "2026-07-07T09:34:00.531Z",
+      "bytes": 29666,
+      "mtime": "2026-07-07T09:37:29.846Z",
+      "indexed_at": "2026-07-07T09:38:01.220Z",
       "synopsis_index_only": true
     },
     {
@@ -79743,6 +79743,16 @@
       ]
     },
     {
+      "path": "services/build-integration-context.js",
+      "synopsis": "Real integration context for the autonomous /build call — live DB",
+      "bytes": 8011,
+      "mtime": "2026-07-07T09:36:30.918Z",
+      "indexed_at": "2026-07-07T09:38:01.220Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/build-proof-contract.js",
       "synopsis": "Canonical build transport proof contract for governed code-changing actions.",
       "bytes": 1980,
@@ -83451,9 +83461,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 46725,
-      "mtime": "2026-07-07T09:32:41.049Z",
-      "indexed_at": "2026-07-07T09:34:00.531Z",
+      "bytes": 47524,
+      "mtime": "2026-07-07T09:36:52.038Z",
+      "indexed_at": "2026-07-07T09:38:01.220Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85983,6 +85993,16 @@
       "indexed_at": "2026-07-07T08:32:45.782Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/build-integration-context.test.js",
+      "synopsis": "Tests for the /build integration-context builder (schema digest +",
+      "bytes": 4542,
+      "mtime": "2026-07-07T09:37:14.942Z",
+      "indexed_at": "2026-07-07T09:38:01.220Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {

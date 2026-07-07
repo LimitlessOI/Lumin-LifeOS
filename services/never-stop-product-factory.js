@@ -14,6 +14,7 @@ import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractBacklog, planBuildQueue } from './build-queue-planner.js';
+import { buildIntegrationContext } from './build-integration-context.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -732,6 +733,17 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     // prompt just regenerates the same bug (spin). Instead, feed the builder its
     // own verbatim failure and demand a root-cause fix — the "waterboard the AI
     // with its own error" self-repair pattern — until it commits or we exhaust.
+    // Real integration context: give the builder the live DB schema, the exact
+    // injected deps it will receive at register(app, deps), and the auto-mount
+    // convention — so generated code COMPOSES with the running system instead of
+    // importing modules/exports/tables that do not exist (the false-done class).
+    let integrationBlock = '';
+    try {
+      const ctx = buildIntegrationContext({ root: ROOT, targetFile: target_file, productId: task.product_id, task: stepTask });
+      integrationBlock = `\n\n${ctx.context}`;
+    } catch (ctxErr) {
+      logger?.warn?.({ target_file, error: ctxErr.message }, '[never-stop] integration-context build failed (continuing without it)');
+    }
     let priorError = last_error || null;
     for (let attempt = 1; attempt <= BUILD_REPAIR_ATTEMPTS; attempt += 1) {
       const repairBlock = priorError
@@ -741,7 +753,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
         domain: 'lifeos',
         mode: 'code',
         target_file,
-        task: `[never-stop] ${stepTask}${repairBlock}`,
+        task: `[never-stop] ${stepTask}${integrationBlock}${repairBlock}`,
         spec,
         platform_gap_fill: true,
         platform_gap_fill_reason: `Autonomous product-build orchestrator executing queued BUILD_QUEUE.json step for product ${task.product_id} (${task.step_id}): ${stepTask}`.slice(0, 480),
