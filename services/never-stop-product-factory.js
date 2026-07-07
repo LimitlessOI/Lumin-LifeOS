@@ -758,12 +758,22 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       // + deploy-proof still gate it (no false green: the file must exist AND be
       // served live before the step is marked done; a genuinely wrong/broken
       // file fails verify with a different error).
+      //   (c) the builder committed the NEW file to GitHub (b.committed) but the
+      //       /build response did not surface commit_sha in any known field.
+      // The local-disk check is DELIBERATELY NOT used as a precondition here:
+      // the prod container's checkout lags the repo by many commits (the queue
+      // churns every tick), so targetFileExists is false even for a file the
+      // build JUST committed — which is exactly why sb-editor-shell was rebuilt
+      // and re-blocked 4×. lastCommitShaForFile falls back to the GitHub API, so
+      // it resolves the freshly-committed SHA from the repo regardless of local
+      // state; if it returns null the file exists NOWHERE → genuine failure.
+      const committed = b.committed === true;
       const emptyEditNoOp = !commit_sha && isEmptyEditNoOp(b);
-      if (!commit_sha && (build.ok || emptyEditNoOp) && targetFileExists(target_file)) {
+      if (!commit_sha && (build.ok || committed || emptyEditNoOp)) {
         const builtSha = await lastCommitShaForFile(target_file);
         if (builtSha) {
-          logger?.warn?.({ target_file, built: builtSha.slice(0, 8), empty_edit: emptyEditNoOp }, '[never-stop] no-op build — file already present, completing via last-touching commit');
-          return { ok: true, commit_sha: builtSha, error: null, no_op: true, repair_attempts: attempt - 1 };
+          logger?.warn?.({ target_file, built: builtSha.slice(0, 8), empty_edit: emptyEditNoOp, committed }, '[never-stop] build committed without a surfaced sha (or local checkout lags repo) — completing via last-touching commit');
+          return { ok: true, commit_sha: builtSha, error: null, no_op: !committed, repair_attempts: attempt - 1 };
         }
       }
       priorError = extractBuilderFailure(b) || (build.ok ? 'no_commit_sha' : `HTTP ${build.status}`);
