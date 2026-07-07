@@ -1,0 +1,103 @@
+# SYNOPSIS: yml — .github/workflows/auto-merge-devin-prs.yml — auto-merge green Devin-authored PRs into main so the system ships its own work.
+name: Auto-Merge Devin PRs
+
+# Founder authorization (Adam): the system merges its own PRs. This workflow
+# merges a PR into main ONLY when ALL of these hold:
+#   - the PR author is the Devin bot (devin-ai-integration[bot])
+#   - the PR targets `main`, is open, and is not a draft
+#   - every check on the head commit has concluded SUCCESS (no failures/pending)
+#   - GitHub reports the PR mergeable (no conflicts)
+# Halt switch: create/point `.github/AUTO_MERGE_OFF` (any content) on main to disable.
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, synchronize, ready_for_review, labeled]
+  check_suite:
+    types: [completed]
+  workflow_run:
+    workflows: ["*"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+concurrency:
+  group: auto-merge-${{ github.event.pull_request.number || github.event.check_suite.head_sha || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  auto-merge:
+    name: Auto-merge green Devin PRs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Bail if kill-switch present
+        id: killswitch
+        run: |
+          if [ -f .github/AUTO_MERGE_OFF ]; then
+            echo "Auto-merge disabled via .github/AUTO_MERGE_OFF — exiting."
+            echo "disabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "disabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve candidate PR numbers
+        if: steps.killswitch.outputs.disabled != 'true'
+        id: candidates
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.check_suite.head_sha || github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          nums=""
+          if [ "$EVENT_NAME" = "pull_request_target" ] && [ -n "${PR_NUMBER:-}" ]; then
+            nums="$PR_NUMBER"
+          elif [ -n "${HEAD_SHA:-}" ]; then
+            # Find open PRs whose head is this commit.
+            nums="$(gh pr list --state open --base main --json number,headRefOid \
+              --jq "[.[] | select(.headRefOid==\"$HEAD_SHA\") | .number] | join(\" \")")"
+          fi
+          echo "numbers=$nums" >> "$GITHUB_OUTPUT"
+          echo "Candidate PRs: '$nums'"
+
+      - name: Merge each PR that is Devin-authored and fully green
+        if: steps.killswitch.outputs.disabled != 'true' && steps.candidates.outputs.numbers != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for n in ${{ steps.candidates.outputs.numbers }}; do
+            echo "::group::Evaluating PR #$n"
+            meta="$(gh pr view "$n" --json number,author,isDraft,state,baseRefName,mergeable,mergeStateStatus,statusCheckRollup)"
+
+            author="$(echo "$meta" | jq -r '.author.login')"
+            is_draft="$(echo "$meta" | jq -r '.isDraft')"
+            state="$(echo "$meta" | jq -r '.state')"
+            base="$(echo "$meta" | jq -r '.baseRefName')"
+            mergeable="$(echo "$meta" | jq -r '.mergeable')"
+
+            if [ "$author" != "devin-ai-integration[bot]" ]; then echo "skip: author=$author not Devin bot"; echo '::endgroup::'; continue; fi
+            if [ "$state" != "OPEN" ]; then echo "skip: state=$state"; echo '::endgroup::'; continue; fi
+            if [ "$is_draft" = "true" ]; then echo "skip: draft"; echo '::endgroup::'; continue; fi
+            if [ "$base" != "main" ]; then echo "skip: base=$base"; echo '::endgroup::'; continue; fi
+            if [ "$mergeable" = "CONFLICTING" ]; then echo "skip: has conflicts"; echo '::endgroup::'; continue; fi
+
+            # Every check on the head commit must have concluded green
+            # (SUCCESS/NEUTRAL/SKIPPED). Any FAILURE/pending/in-progress blocks.
+            total="$(echo "$meta" | jq '[.statusCheckRollup[]?] | length')"
+            if [ "${total:-0}" -eq 0 ]; then echo "skip: no checks reported yet"; echo '::endgroup::'; continue; fi
+            green="$(echo "$meta" | jq '[.statusCheckRollup[]? | (.conclusion? // .state? // "PENDING") | ascii_upcase] | all(. == "SUCCESS" or . == "NEUTRAL" or . == "SKIPPED")')"
+            if [ "$green" != "true" ]; then echo "skip: not all $total checks green"; echo '::endgroup::'; continue; fi
+
+            echo "PR #$n is Devin-authored, open, $total checks all green, mergeable=$mergeable — merging."
+            gh pr merge "$n" --merge --delete-branch || echo "merge attempt failed for #$n (branch protection or race) — will retry on next event"
+            echo '::endgroup::'
+          done
