@@ -116,7 +116,7 @@
       "founder_gated": false,
       "attempts": 3,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T06:16:14.265Z",
+      "last_attempt_at": "2026-07-07T06:16:49.591Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T05:24:18.589Z"
