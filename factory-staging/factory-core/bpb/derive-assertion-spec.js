@@ -21,6 +21,8 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
+import { collectExpectationFields } from './build-queue-step-adapter.js';
+
 const SERVER_CODE_DIR_RE = /^(routes|services|middleware|startup)\/|^factory-staging\/factory-core\//;
 
 function isServerCodeTarget(target) {
@@ -76,6 +78,22 @@ export function deriveAssertionSpecFromBlueprintStep(step, ctx = {}) {
   }
   if (Array.isArray(step?.behavior_assertions) && step.behavior_assertions.length > 0) {
     return { assertion_spec: null, coverage: 'declared', derived_from: 'mission_override_behavior_assertions' };
+  }
+
+  // 1.5) explicitly-declared checkable expectation on the step itself
+  //      (expected_exports / route / file_contains). Authored by BPB/founder,
+  //      not the Builder — so this is evidence, not a self-graded criterion.
+  const stepDeclared = collectExpectationFields(step);
+  if (Object.keys(stepDeclared).length > 0) {
+    return { assertion_spec: stepDeclared, coverage: 'declared_intent', derived_from: 'step_declared_expectation' };
+  }
+
+  // 1.6) explicit, STRUCTURED acceptance block (step.acceptance.{route|
+  //      expected_exports|file_contains}). Deterministic extraction only — never
+  //      parsed from freeform task/spec prose, so nothing is invented.
+  const accepted = collectExpectationFields(step?.acceptance);
+  if (Object.keys(accepted).length > 0) {
+    return { assertion_spec: accepted, coverage: 'derived_intent', derived_from: 'explicit_acceptance_field' };
   }
 
   // 2) write_file_exact with inline exact_content — we KNOW the exact bytes, so
@@ -142,7 +160,7 @@ export function auditBlueprintCoverage(blueprint, resolveSource = () => null) {
       gap_steps.push({ step_id: step?.step_id, target_file: step?.target_file, action_type: step?.action_type, gap_kind, reason: d.reason });
     }
   }
-  const provable = (by_coverage.declared || 0) + (by_coverage.derived_exact || 0) + (by_coverage.derived_source || 0) + (by_coverage.not_required || 0);
+  const provable = (by_coverage.declared || 0) + (by_coverage.declared_intent || 0) + (by_coverage.derived_intent || 0) + (by_coverage.derived_exact || 0) + (by_coverage.derived_source || 0) + (by_coverage.not_required || 0);
   return {
     mission_id: blueprint?.mission_id || blueprint?.blueprint_id || null,
     total: steps.length,
