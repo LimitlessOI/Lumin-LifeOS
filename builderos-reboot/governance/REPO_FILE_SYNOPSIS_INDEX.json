@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T06:21:32.779Z",
+  "generated_at": "2026-07-07T06:23:51.988Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11215,
   "files": [
@@ -84108,10 +84108,10 @@
     },
     {
       "path": "services/site-builder-editor.js",
-      "synopsis": "CRITICAL: All client-side JavaScript must be embedded here.",
-      "bytes": 880,
-      "mtime": "2026-07-07T06:21:32.779Z",
-      "indexed_at": "2026-07-07T06:21:32.779Z"
+      "synopsis": "CRITICAL: This script runs in the browser, not Node.",
+      "bytes": 1430,
+      "mtime": "2026-07-07T06:23:51.988Z",
+      "indexed_at": "2026-07-07T06:23:51.988Z"
     },
     {
       "path": "services/site-builder-email-templates.js",
