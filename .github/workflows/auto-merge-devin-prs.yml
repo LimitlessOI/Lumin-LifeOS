@@ -126,15 +126,32 @@ jobs:
             if [ "$is_draft" = "true" ]; then echo "skip: draft"; echo '::endgroup::'; continue; fi
             if [ "$base" != "main" ]; then echo "skip: base=$base"; echo '::endgroup::'; continue; fi
 
-            # Every check on the head commit must have concluded green
+            # Every EXTERNAL check on the head commit must have concluded green
             # (SUCCESS/NEUTRAL/SKIPPED). Any FAILURE/pending/in-progress blocks.
             # We evaluate this BEFORE any auto-resolve so we only ever rebase a PR
             # whose CODE is already vetted; auto-resolve then touches only generated
             # files, leaving the vetted code diff unchanged.
-            total="$(echo "$meta" | jq '[.statusCheckRollup[]?] | length')"
-            if [ "${total:-0}" -eq 0 ]; then echo "skip: no checks reported yet"; echo '::endgroup::'; continue; fi
-            green="$(echo "$meta" | jq '[.statusCheckRollup[]? | (.conclusion? // .state? // "PENDING") | ascii_upcase] | all(. == "SUCCESS" or . == "NEUTRAL" or . == "SKIPPED")')"
-            if [ "$green" != "true" ]; then echo "skip: not all $total checks green"; echo '::endgroup::'; continue; fi
+            #
+            # CRITICAL: exclude THIS workflow's own check ("Auto-merge green Devin
+            # PRs") from the gate. A pull_request_target run registers its own
+            # in-progress check-run on the PR head, so counting it made every run
+            # see "not all checks green" and skip itself — a deadlock for bot PRs,
+            # which (being opened with GITHUB_TOKEN) receive NO external pull_request
+            # CI and therefore never get a non-self-counting workflow_run trigger.
+            SELF_NAME="Auto-merge green Devin PRs"
+            SELF_WF="Auto-Merge Devin PRs"
+            ext="$(echo "$meta" | jq --arg n "$SELF_NAME" --arg w "$SELF_WF" \
+              '[.statusCheckRollup[]? | select(((.name // .context // "") != $n) and ((.workflowName // "") != $w))]')"
+            total="$(echo "$ext" | jq 'length')"
+            # No external checks (typical for a token-opened bot PR) → nothing to
+            # wait on; the code was authored by the trusted loop, so treat as green.
+            if [ "${total:-0}" -eq 0 ]; then
+              echo "no external checks on head — proceeding (bot PR, code is loop-authored)."
+              green=true
+            else
+              green="$(echo "$ext" | jq '[.[] | (.conclusion? // .state? // "PENDING") | ascii_upcase] | all(. == "SUCCESS" or . == "NEUTRAL" or . == "SKIPPED")')"
+            fi
+            if [ "$green" != "true" ]; then echo "skip: not all $total external checks green"; echo '::endgroup::'; continue; fi
 
             # Busy-repo auto-resolve: if the loop advanced main and the PR now only
             # conflicts in whitelisted generated files, rebase+resolve+push so it

@@ -1,190 +1,205 @@
-// SYNOPSIS: SocialMediaOS "publish or kill" gate for content intelligence.
+// SYNOPSIS: SocialMediaOS content intelligence gate for publish-or-kill decisions.
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
-const REQUIRED_GATE_NAMES = [
-  'hook_retention_15s',
-  'reason_to_stay_30s',
-  'thumbnail_title_match',
-  'info_accuracy',
-  'differentiation'
-];
+const CHECK_NAMES = Object.freeze({
+  hook: 'hook_15s',
+  stay: 'stay_30s',
+  thumbnail: 'thumbnail_matches_title',
+  accuracy: 'info_accurate',
+  novelty: 'competitor_edge',
+});
 
-function safeTrim(value) {
-  return typeof value === 'string' ? value.trim() : '';
+function normalizeText(value) {
+  return String(value ?? '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
-function toLower(value) {
-  return safeTrim(value).toLowerCase();
+function lower(value) {
+  return normalizeText(value).toLowerCase();
 }
 
-function words(value) {
-  return toLower(value)
-    .split(/[^a-z0-9]+/g)
-    .filter(Boolean);
+function wordCount(value) {
+  const text = normalizeText(value);
+  if (!text) return 0;
+  return text.split(/\s+/).filter(Boolean).length;
 }
 
-function unique(arr) {
-  return [...new Set(arr)];
+function scoreHook(text) {
+  const s = lower(text);
+  let score = 0;
+  const cues = [
+    'you won’t believe',
+    'watch until',
+    'in 15 seconds',
+    '15 seconds',
+    'the reason',
+    'here’s why',
+    'why this works',
+    'stop scrolling',
+    'what happens next',
+    'most people miss',
+    'the simplest way',
+    'the mistake',
+  ];
+  for (const cue of cues) if (s.includes(cue)) score += 1;
+  if (wordCount(text) <= 18) score += 1;
+  if (/[!?]/.test(text)) score += 0.5;
+  return score;
 }
 
-function overlapScore(a, b) {
-  const aw = unique(words(a));
-  const bw = new Set(words(b));
-  if (!aw.length) return 0;
-  let hit = 0;
-  for (const token of aw) if (bw.has(token)) hit += 1;
-  return hit / aw.length;
+function scoreStay(text) {
+  const s = lower(text);
+  let score = 0;
+  const cues = [
+    'step by step',
+    'in this video',
+    'by the end',
+    'example',
+    'framework',
+    'checklist',
+    'breakdown',
+    'before and after',
+    'use this',
+    'do this instead',
+    'real numbers',
+    'specific',
+  ];
+  for (const cue of cues) if (s.includes(cue)) score += 1;
+  if (wordCount(text) >= 35) score += 1;
+  return score;
 }
 
-function containsAny(text, terms) {
-  const t = toLower(text);
-  return terms.some((term) => t.includes(term));
+function thumbnailMatchesTitle(title, thumbnailConcept) {
+  const t = lower(title);
+  const c = lower(thumbnailConcept);
+  if (!c) return null;
+  const titleTokens = t.split(/[^a-z0-9]+/).filter(Boolean);
+  const conceptTokens = c.split(/[^a-z0-9]+/).filter(Boolean);
+  const overlap = titleTokens.filter((token) => conceptTokens.includes(token));
+  return overlap.length > 0 || conceptTokens.some((token) => titleTokens.includes(token));
 }
 
-function buildLocalHeuristics(piece) {
-  const title = safeTrim(piece?.title);
-  const hook = safeTrim(piece?.hook);
-  const body = safeTrim(piece?.body);
-  const thumbnailConcept = safeTrim(piece?.thumbnailConcept);
-  const fullText = [title, hook, body].filter(Boolean).join(' ');
+function infoLooksAccurate(piece) {
+  const text = lower([piece?.title, piece?.hook, piece?.body].filter(Boolean).join(' '));
+  if (!text) return false;
+  const riskyClaims = [
+    'guaranteed',
+    '100%',
+    'always',
+    'never fails',
+    'secret',
+    'proof',
+    'scientifically proven',
+    'instant results',
+    'make money fast',
+  ];
+  if (riskyClaims.some((claim) => text.includes(claim))) return false;
+  const body = normalizeText(piece?.body);
+  return body.length >= 40;
+}
 
-  const hookWords = words(hook);
-  const titleWords = words(title);
-  const bodyWords = words(body);
-
-  const hookRetains = hookWords.length >= 6 && hookWords.length <= 28 && /[?!.:]/.test(hook) ? true : hookWords.length >= 6;
-  const reasonsToStay = bodyWords.length >= 35 || containsAny(fullText, ['because', 'why', 'how', 'step', 'steps', 'proof', 'example', 'demo', 'framework', 'mistake', 'results', 'data']);
-  const thumbnailMatches = thumbnailConcept
-    ? overlapScore(title, thumbnailConcept) >= 0.25 || overlapScore(hook, thumbnailConcept) >= 0.2
-    : true;
-
-  const infoAccurate = title.length > 0 && hook.length > 0 && body.length > 0 && bodyWords.length >= 25;
-  const differentiation = containsAny(fullText, [
-    'not',
-    'instead',
-    'unique',
-    'counterintuitive',
-    'different',
-    'competitor',
-    'vs',
-    'better than',
-    'most people',
-    'few',
-    'rare',
-    'new'
-  ]) || bodyWords.length >= 40;
-
-  return {
-    hook_retention_15s: {
-      pass: hookRetains,
-      reason: hookRetains ? 'hook appears concise enough to carry early attention' : 'hook is too weak or too short to likely retain attention'
-    },
-    reason_to_stay_30s: {
-      pass: reasonsToStay,
-      reason: reasonsToStay ? 'body gives a substantive reason to continue' : 'body does not give enough reason to keep watching'
-    },
-    thumbnail_title_match: {
-      pass: thumbnailMatches,
-      reason: thumbnailMatches ? 'thumbnail concept aligns with title/hook' : 'thumbnail concept appears mismatched to the title/hook'
-    },
-    info_accuracy: {
-      pass: infoAccurate,
-      reason: infoAccurate ? 'content has enough concrete substance to be plausibly accurate' : 'content is too thin to judge as accurate'
-    },
-    differentiation: {
-      pass: differentiation,
-      reason: differentiation ? 'content suggests a distinct angle or substantive value' : 'content does not clearly differentiate itself'
-    }
-  };
+function parseCouncilDecision(raw) {
+  const text = normalizeText(raw);
+  const lowered = text.toLowerCase();
+  if (!text) return { pass: null, reason: 'empty_response' };
+  if (lowered.includes('pass') || lowered.includes('publish') || lowered.includes('yes')) {
+    return { pass: true, reason: text.slice(0, 240) };
+  }
+  if (lowered.includes('fail') || lowered.includes('hold') || lowered.includes('no') || lowered.includes('kill')) {
+    return { pass: false, reason: text.slice(0, 240) };
+  }
+  return { pass: null, reason: text.slice(0, 240) };
 }
 
 async function askCouncil(callCouncilMember, role, prompt) {
-  if (typeof callCouncilMember !== 'function') return null;
+  if (typeof callCouncilMember !== 'function') return { pass: null, reason: 'ai_unavailable' };
   try {
-    return await callCouncilMember(role, prompt);
+    const raw = await callCouncilMember(role, prompt);
+    return parseCouncilDecision(raw);
   } catch {
-    return null;
+    return { pass: null, reason: 'ai_unavailable' };
   }
 }
 
-function parseCouncilJudgement(raw) {
-  if (typeof raw !== 'string' || !raw.trim()) return null;
-  const text = raw.trim();
-
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    try {
-      const parsed = JSON.parse(jsonMatch[0]);
-      if (parsed && typeof parsed === 'object') return parsed;
-    } catch {}
-  }
-
-  const lowered = text.toLowerCase();
-  const pass = lowered.includes('pass') || lowered.includes('publish') || lowered.includes('yes');
-  const fail = lowered.includes('fail') || lowered.includes('hold') || lowered.includes('kill') || lowered.includes('no');
-  if (pass || fail) return { pass: pass && !fail, reason: text };
-  return { reason: text };
-}
-
-async function publishOrKill({ callCouncilMember, piece } = {}) {
+export async function publishOrKill({ callCouncilMember, piece } = {}) {
   try {
-    const local = buildLocalHeuristics(piece);
     const checks = [];
     const blockingReasons = [];
 
-    for (const name of REQUIRED_GATE_NAMES) {
-      const localCheck = local[name];
-      if (!localCheck) continue;
+    const title = normalizeText(piece?.title);
+    const hook = normalizeText(piece?.hook);
+    const body = normalizeText(piece?.body);
+    const thumbnailConcept = normalizeText(piece?.thumbnailConcept);
 
-      let check = { name, pass: localCheck.pass, reason: localCheck.reason };
+    const hookLocalScore = scoreHook(hook);
+    const hookPass = hookLocalScore >= 1.5;
+    checks.push({
+      name: CHECK_NAMES.hook,
+      pass: hookPass,
+      reason: hookPass ? 'hook appears strong for fast attention' : 'hook is too weak or generic for 15s attention',
+    });
+    if (!hookPass) blockingReasons.push('hook');
 
-      if (typeof callCouncilMember === 'function') {
-        const aiPrompt = [
-          `Evaluate this SocialMediaOS content piece for the gate "${name}".`,
-          `Return a concise decision with reason.`,
-          `Title: ${safeTrim(piece?.title) || '(empty)'}`,
-          `Hook: ${safeTrim(piece?.hook) || '(empty)'}`,
-          `Body: ${safeTrim(piece?.body) || '(empty)'}`,
-          `Thumbnail concept: ${safeTrim(piece?.thumbnailConcept) || '(none)'}`
-        ].join('\n');
+    const stayLocalScore = scoreStay(body);
+    const stayPass = stayLocalScore >= 1;
+    checks.push({
+      name: CHECK_NAMES.stay,
+      pass: stayPass,
+      reason: stayPass ? 'body appears to justify staying to 30s' : 'body does not clearly justify staying to 30s',
+    });
+    if (!stayPass) blockingReasons.push('stay');
 
-        const raw = await askCouncil(callCouncilMember, 'editor', aiPrompt);
-        if (raw == null) {
-          check = { ...check, pass: null, reason: 'ai_unavailable' };
-        } else {
-          const judged = parseCouncilJudgement(raw);
-          if (judged && typeof judged.pass === 'boolean') {
-            check = { name, pass: judged.pass, reason: safeTrim(judged.reason) || raw.trim() };
-          } else if (judged && judged.reason) {
-            check = { name, pass: localCheck.pass, reason: safeTrim(judged.reason) || localCheck.reason };
-          }
-        }
-      } else if (['hook_retention_15s', 'reason_to_stay_30s', 'thumbnail_title_match', 'info_accuracy', 'differentiation'].includes(name)) {
-        check = { name, pass: null, reason: 'ai_unavailable' };
-      }
+    const thumbnailPass = thumbnailConcept ? thumbnailMatchesTitle(title, thumbnailConcept) : null;
+    checks.push({
+      name: CHECK_NAMES.thumbnail,
+      pass: thumbnailPass,
+      reason:
+        thumbnailPass === null
+          ? 'thumbnail_concept_unavailable'
+          : thumbnailPass
+            ? 'thumbnail concept matches title'
+            : 'thumbnail concept does not match title',
+    });
+    if (thumbnailPass === false) blockingReasons.push('thumbnail');
 
-      checks.push(check);
-      if (check.pass === false) blockingReasons.push(`${name}: ${check.reason}`);
-    }
+    const accuracyPass = infoLooksAccurate(piece);
+    checks.push({
+      name: CHECK_NAMES.info_accurate,
+      pass: accuracyPass,
+      reason: accuracyPass ? 'no obvious accuracy red flags detected' : 'possible accuracy risk or insufficient substance',
+    });
+    if (!accuracyPass) blockingReasons.push('accuracy');
 
-    const requiredPasses = checks.every((c) => c.pass === true);
-    const verdict = requiredPasses ? 'publish' : 'hold';
+    const noveltyPrompt = [
+      'Assess whether this content has a competitive edge that competitors do not usually have.',
+      'Return a concise decision with reasoning.',
+      `Title: ${title || '(missing)'}`,
+      `Hook: ${hook || '(missing)'}`,
+      `Body: ${body || '(missing)'}`,
+    ].join('\n');
 
+    const noveltyDecision = await askCouncil(callCouncilMember, 'SocialMediaOS competitor edge judge', noveltyPrompt);
+    checks.push({
+      name: CHECK_NAMES.novelty,
+      pass: noveltyDecision.pass,
+      reason: noveltyDecision.reason,
+    });
+    if (noveltyDecision.pass === false) blockingReasons.push('novelty');
+
+    const requiredPasses = checks.every((check) => check.pass === true);
     return {
       ok: true,
-      verdict,
+      verdict: requiredPasses ? 'publish' : 'hold',
       checks,
-      blockingReasons: verdict === 'publish' ? [] : blockingReasons
+      blockingReasons: requiredPasses ? [] : [...new Set(blockingReasons)],
     };
   } catch (error) {
     return {
       ok: false,
-      error: {
-        message: error instanceof Error ? error.message : String(error)
-      }
+      error: error instanceof Error ? error.message : String(error),
     };
   }
 }
 
-export { publishOrKill };
 export default publishOrKill;
