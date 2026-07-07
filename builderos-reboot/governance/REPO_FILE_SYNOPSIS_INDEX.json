@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T03:33:19.113Z",
+  "generated_at": "2026-07-07T03:54:46.609Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11213,
   "files": [
@@ -21589,8 +21589,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3384226,
-      "mtime": "2026-07-07T03:33:17.772Z",
-      "indexed_at": "2026-07-07T03:33:19.113Z"
+      "mtime": "2026-07-07T03:54:45.357Z",
+      "indexed_at": "2026-07-07T03:54:46.609Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38423,9 +38423,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 157300,
-      "mtime": "2026-07-07T03:33:05.060Z",
-      "indexed_at": "2026-07-07T03:33:19.113Z"
+      "bytes": 158691,
+      "mtime": "2026-07-07T03:54:32.625Z",
+      "indexed_at": "2026-07-07T03:54:46.609Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -83415,9 +83415,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 39184,
-      "mtime": "2026-07-07T03:32:48.056Z",
-      "indexed_at": "2026-07-07T03:33:19.113Z",
+      "bytes": 40565,
+      "mtime": "2026-07-07T03:54:12.893Z",
+      "indexed_at": "2026-07-07T03:54:46.609Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

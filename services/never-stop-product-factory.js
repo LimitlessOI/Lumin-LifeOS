@@ -642,6 +642,25 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     const stepTokenBudget = Number.isFinite(Number(max_output_tokens)) && Number(max_output_tokens) > 0
       ? Number(max_output_tokens)
       : null;
+    // Pre-existing artifact short-circuit. The target file may already exist on
+    // the deployed spine, built by an earlier attempt/session. The builder
+    // primitive CANNOT re-produce a commit for it — by design: its Zone-3
+    // governance refuses to regenerate a large existing file (it would emit a
+    // stub → ZONE3_PATCH_REQUIRED), and an already-correct file yields an empty
+    // edit patch (HTTP 422 "edit output is not a non-empty JSON array"). Both
+    // mean "already built", not "failed" — but /build can never return a SHA, so
+    // the step would spin no_commit_sha → block → revive → forever. Complete it
+    // honestly via the file's last-touching commit BEFORE burning a build call.
+    // verifyFn + deployProofFn still gate it, so this is not a false green: the
+    // artifact must exist AND be served live before the step is marked done, and
+    // a broken/stub file fails verify with a different error.
+    if (targetFileExists(target_file)) {
+      const builtSha = await lastCommitShaForFile(target_file);
+      if (builtSha) {
+        logger?.warn?.({ target_file, built: builtSha.slice(0, 8) }, '[never-stop] pre-existing artifact — completing via last-touching commit (builder cannot rebuild an existing file)');
+        return { ok: true, commit_sha: builtSha, error: null, no_op: true, pre_existing: true };
+      }
+    }
     // Verbatim error carry-forward: the builder's pre-commit gate RUNS the code
     // and blocks a commit on any runtime/anti-pattern failure. Retrying the same
     // prompt just regenerates the same bug (spin). Instead, feed the builder its
