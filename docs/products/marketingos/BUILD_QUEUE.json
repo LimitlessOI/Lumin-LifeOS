@@ -22,7 +22,7 @@
     },
     {
       "id": "mos-session-routes",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-session-routes.js",
       "task": "New Express route module exporting registerMarketingSessionRoutes(app, { pool, callCouncilMember, requireKey }) that mounts the Phase 1 SocialMediaOS session API from docs/products/marketingos/PRODUCT_HOME.md §6 Route List, TEXT-MODE ONLY (do NOT implement POST /sessions/:id/audio — audio depends on unverified R2 storage). Mount, all requireKey-gated: POST /api/v1/marketing/consent (create a marketing_consent_records row, returns its id); POST /api/v1/marketing/sessions (requires consent_record_id, creates a marketing_sessions row input_mode='text'); POST /api/v1/marketing/sessions/:id/coach (call services/marketing-coach.js sendCoachMessage(sessionId,userMessage,pool), append to coach_messages_json, return { response, hookDetected, hookText }); POST /api/v1/marketing/sessions/:id/extract (call services/marketing-content-engine.js extractFromTranscript(transcript, sessionId, pool)); POST /api/v1/marketing/sessions/:id/generate (call generatePieces(sessionId, extractions, channelProfile, pool)); GET /api/v1/marketing/sessions/:id (session state); GET /api/v1/marketing/sessions/:id/content (all marketing_content_pieces with status); PATCH /api/v1/marketing/content/:id (approve/reject, or regenerate via regeneratePiece(pieceId, hint, pool)); GET /api/v1/marketing/sessions/:id/export (return the approved pieces as a formatted downloadable text pack, Content-Disposition attachment); GET + PUT /api/v1/marketing/channel-profile (get-or-create / update the caller's marketing_channel_profiles row).",
       "spec": "Single self-contained ESM server module. Import the existing services (services/marketing-coach.js, services/marketing-content-engine.js) by their documented exports (§6 Service List) — do not reimplement them. Use parameterised SQL via the injected pool (NO string interpolation into SQL — fail-closed against injection). Validate every state transition against the CHECK-constraint enum values from §6. Consent MUST exist before a session is created (reject with 400 if consent_record_id is missing/invalid). This is a SERVER module: ZERO top-level references to window/document/browser globals. Wrap all handler bodies in try/catch and respond JSON { ok:false, error } with an appropriate status; never leak stack traces or secrets. Named export registerMarketingSessionRoutes + default. @ssot docs/products/marketingos/PRODUCT_HOME.md.",
@@ -30,9 +30,12 @@
         "mos-phase1-schema"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 8000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "1bb071756da6e7e54416bfcf939ca36ae464f71c",
+      "last_attempt_at": "2026-07-07T08:51:00.268Z",
+      "completed_at": "2026-07-07T08:51:00.858Z"
     },
     {
       "id": "mos-session-ui",
