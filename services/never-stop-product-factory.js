@@ -457,24 +457,34 @@ export async function discoverProductExpansionWork(options = {}) {
     });
     if (smosVerify.status !== 0) {
       items.push({
+        // Priority 6 (lowest): a legacy acceptance-repair must NEVER outrank real
+        // BUILD_QUEUE steps (priority ~2.x). Its only remedy is the schema-align
+        // migration below — which is a no-op once applied and cannot fix a
+        // missing route/handler — so letting it win starves every queued product
+        // and thrashes redeploys. It runs only when nothing else is actionable.
         id: 'smos_acceptance_repair',
         kind: 'acceptance_repair',
-        priority: 2,
+        priority: 6,
         product: 'SocialMediaOS',
         detail: 'verify-socialmediaos.mjs failing',
       });
     }
   }
 
+  // Only enqueue the schema remedy when the migration file does NOT yet exist —
+  // i.e. there is genuine schema work to create. Once the migration exists it is
+  // idempotent and applied, so a still-failing session probe is a route/handler
+  // gap, not a schema gap; re-running the schema build can never fix it and only
+  // loops forever. In that case we leave it to the real BUILD_QUEUE work.
   const sessionProbe = await probeSmoSessionCreate(baseUrl, commandKey);
-  if (!sessionProbe.ok) {
+  if (!sessionProbe.ok && !smosSchemaMigrationPending()) {
     items.push({
       id: 'smos_session_crud',
       kind: 'schema_or_crud',
-      priority: 2,
+      priority: 6,
       product: 'SocialMediaOS',
       detail: `POST /socialmediaos/sessions → ${sessionProbe.status || sessionProbe.reason}`,
-      migration_pending: smosSchemaMigrationPending(),
+      migration_pending: true,
     });
   }
 
@@ -907,6 +917,16 @@ export async function runProductExpansionCycle(options = {}) {
     }
     case 'acceptance_repair':
     case 'schema_or_crud': {
+      // THRASH GUARD: never rebuild+redeploy the schema-align migration once it
+      // already exists. It is idempotent and already applied, so rebuilding it
+      // cannot change anything and each build triggers a redeploy that resets the
+      // loop — an infinite ~60s churn. If the file exists, the remaining failure
+      // is a route/handler gap (fixed by BUILD_QUEUE steps), not a schema gap.
+      if (smosSchemaMigrationPending()) {
+        log({ event: 'schema_align_noop', reason: 'migration_exists_probe_still_failing_needs_route_fix' });
+        result = { ...result, ok: true, detail: 'schema_align_already_applied_no_op', needs: 'route/handler fix, not schema' };
+        break;
+      }
       const build = await postBuilderBuild(baseUrl, commandKey, {
         domain: 'lifeos',
         mode: 'code',
