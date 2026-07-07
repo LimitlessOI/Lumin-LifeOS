@@ -1,7 +1,7 @@
 {
   "schema": "auto_registered_product_modules_v1",
   "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file — no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
-  "updated_at": "2026-07-08",
+  "updated_at": "2026-07-09",
   "modules": [
     {
       "path": "routes/marketing-session-routes.js",
@@ -14,6 +14,18 @@
       "register": "registerMarketingSessionUiRoutes",
       "enabled": true,
       "note": "MarketingOS SocialMediaOS Phase 1 SSR screens (§5). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE."
+    },
+    {
+      "path": "routes/marketing-calendar-routes.js",
+      "register": "registerMarketingCalendarRoutes",
+      "enabled": true,
+      "note": "MarketingOS Phase 2 calendar/atoms JSON API (§5 Phase 2). Built by the loop (queued mos-phase2-routes); once deployed the boot mounts it and the functional-proof gate verifies /api/v1/marketing/calendar + /atoms are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+    },
+    {
+      "path": "routes/marketing-calendar-ui-routes.js",
+      "register": "registerMarketingCalendarUiRoutes",
+      "enabled": true,
+      "note": "MarketingOS Phase 2 SSR content-calendar + atom-library screens (§5 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE."
     }
   ]
 }
