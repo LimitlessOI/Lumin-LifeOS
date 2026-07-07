@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T19:33:17.736Z",
+  "generated_at": "2026-07-07T19:38:53.376Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11247,
   "files": [
@@ -38916,9 +38916,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 598022,
-      "mtime": "2026-07-07T19:13:44.875Z",
-      "indexed_at": "2026-07-07T19:14:50.031Z"
+      "bytes": 599365,
+      "mtime": "2026-07-07T19:38:36.283Z",
+      "indexed_at": "2026-07-07T19:38:53.376Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64568,9 +64568,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 6381,
-      "mtime": "2026-07-07T19:11:53.035Z",
-      "indexed_at": "2026-07-07T19:14:50.031Z",
+      "bytes": 8010,
+      "mtime": "2026-07-07T19:37:39.571Z",
+      "indexed_at": "2026-07-07T19:38:53.376Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
