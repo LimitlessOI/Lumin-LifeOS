@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T17:04:10.276Z",
+  "generated_at": "2026-07-07T17:05:58.816Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11234,
   "files": [
@@ -83131,9 +83131,9 @@
     {
       "path": "services/marketing-script-scorer.js",
       "synopsis": "SocialMediaOS Earned Attention script scorer.",
-      "bytes": 5969,
-      "mtime": "2026-07-07T17:04:10.276Z",
-      "indexed_at": "2026-07-07T17:04:10.276Z",
+      "bytes": 8355,
+      "mtime": "2026-07-07T17:05:58.816Z",
+      "indexed_at": "2026-07-07T17:05:58.816Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

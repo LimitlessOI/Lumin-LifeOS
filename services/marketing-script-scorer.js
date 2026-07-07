@@ -2,65 +2,25 @@
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
 const BLOCKS = [
-  { key: 'hook', label: '0-15s hook', min: 0, max: 15 },
-  { key: 'prove', label: '15-30s prove', min: 15, max: 30 },
-  { key: 'value', label: '30-60s value', min: 30, max: 60 },
-  { key: 'deepen', label: '1-2min deepen', min: 60, max: 120 },
-  { key: 'substance', label: '2-5min substance', min: 120, max: 300 },
-  { key: 'payoff', label: '5min+ payoff', min: 300, max: Infinity },
+  { key: 'hook', label: '0-15s hook', start: 0, end: 15 },
+  { key: 'prove', label: '15-30s prove', start: 15, end: 30 },
+  { key: 'value', label: '30-60s value', start: 30, end: 60 },
+  { key: 'deepen', label: '1-2min deepen', start: 60, end: 120 },
+  { key: 'substance', label: '2-5min substance', start: 120, end: 300 },
+  { key: 'payoff', label: '5min+ payoff', start: 300, end: Infinity },
 ];
 
-function normalizeText(scriptText) {
-  return String(scriptText ?? '')
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    .trim();
-}
-
-function segmentScript(scriptText) {
-  const text = normalizeText(scriptText);
-  if (!text) return [];
-
-  const lines = text.split('\n');
-  const chunks = [];
-  let current = [];
-
-  for (const line of lines) {
-    if (/^\s*(?:\d+[\).\:-]|[-*•])\s+/.test(line) && current.length) {
-      chunks.push(current.join('\n').trim());
-      current = [line];
-    } else {
-      current.push(line);
-    }
-  }
-  if (current.length) chunks.push(current.join('\n').trim());
-
-  if (chunks.length > 1) return chunks.filter(Boolean);
-
-  const sentences = text
-    .split(/(?<=[.!?])\s+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  if (sentences.length <= 1) return [text];
-
-  const approxTarget = Math.max(1, Math.ceil(sentences.length / BLOCKS.length));
-  const segmented = [];
-  for (let i = 0; i < sentences.length; i += approxTarget) {
-    segmented.push(sentences.slice(i, i + approxTarget).join(' ').trim());
-  }
-  return segmented.filter(Boolean);
-}
-
-function extractJsonObject(raw) {
-  const text = String(raw ?? '').trim();
-  if (!text) return null;
+function safeJsonParse(text) {
+  if (typeof text !== 'string') return null;
+  const trimmed = text.trim();
+  if (!trimmed) return null;
 
   const candidates = [];
-  const first = text.indexOf('{');
-  const last = text.lastIndexOf('}');
-  if (first !== -1 && last !== -1 && last > first) candidates.push(text.slice(first, last + 1));
-  candidates.push(text);
+  const firstBrace = trimmed.indexOf('{');
+  const firstBracket = trimmed.indexOf('[');
+  if (firstBrace >= 0) candidates.push(trimmed.slice(firstBrace));
+  if (firstBracket >= 0) candidates.push(trimmed.slice(firstBracket));
+  candidates.unshift(trimmed);
 
   for (const candidate of candidates) {
     try {
@@ -68,135 +28,210 @@ function extractJsonObject(raw) {
     } catch {}
   }
 
+  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced?.[1]) {
+    try {
+      return JSON.parse(fenced[1]);
+    } catch {}
+  }
+
   return null;
 }
 
-function asBoolean(v) {
-  if (typeof v === 'boolean') return v;
-  if (typeof v === 'number') return v !== 0;
-  if (typeof v === 'string') {
-    const s = v.trim().toLowerCase();
-    if (['true', 'yes', 'y', '1'].includes(s)) return true;
-    if (['false', 'no', 'n', '0'].includes(s)) return false;
-  }
-  return false;
+function normalizeText(v) {
+  return typeof v === 'string' ? v : '';
 }
 
-function parseAssessment(raw) {
-  const parsed = extractJsonObject(raw);
-  if (!parsed) return { ok: false, reason: 'unparseable_model_output', raw };
+function splitScriptIntoBlocks(scriptText) {
+  const text = normalizeText(scriptText);
+  const lower = text.toLowerCase();
 
-  return {
-    ok: true,
-    parsed,
-  };
-}
+  const markers = [
+    { key: 'hook', patterns: [/hook/i, /0\s*[-–]?\s*15\ss/i, /first\s*15/i] },
+    { key: 'prove', patterns: [/prove/i, /15\s*[-–]?\s*30\ss/i] },
+    { key: 'value', patterns: [/value/i, /30\s*[-–]?\s*60\ss/i] },
+    { key: 'deepen', patterns: [/deepen/i, /1\s*[-–]?\s*2\smin/i] },
+    { key: 'substance', patterns: [/substance/i, /2\s*[-–]?\s*5\smin/i] },
+    { key: 'payoff', patterns: [/payoff/i, /5\s*\+?\smin/i] },
+  ];
 
-function buildPrompt(block) {
-  return [
-    'You are scoring one script block in the Earned Attention Script Framework.',
-    `Framework block: ${block.label}`,
-    'Return ONLY valid JSON with keys:',
-    '{',
-    '  "delivered": boolean,',
-    '  "plantsNextHook": boolean,',
-    '  "note": string',
-    '}',
-    'Criteria:',
-    '- delivered = this block accomplishes its intended job for the audience',
-    '- plantsNextHook = it creates curiosity/continuity that naturally leads to the next block',
-    '- note = concise reason grounded in the provided text',
-  ].join('\n');
-}
-
-function makeFallbackAssessment(blockText, block) {
-  const hasText = Boolean(blockText && blockText.trim());
-  const length = blockText.trim().length;
-  const delivered = hasText && length > 20;
-  const plantsNextHook = hasText && /\?|\bnext\b|\bbut\b|\byet\b|\bhowever\b|\bthen\b/i.test(blockText);
-  return {
-    delivered,
-    plantsNextHook,
-    note: hasText
-      ? 'Heuristic fallback used because model output could not be parsed.'
-      : 'Empty block.',
-  };
-}
-
-function computeRetentionRisk(blockResults) {
-  const blocks = BLOCKS.map((b) => {
-    const found = blockResults.find((r) => r.block === b.label);
-    return found || { delivered: false, plantsNextHook: false };
-  });
-
-  const failed = blocks.filter((b) => !b.delivered).length;
-  const weakContinuity = blocks.filter((b) => !b.plantsNextHook).length;
-
-  if (failed >= 3 || weakContinuity >= 4) return 'high';
-  if (failed >= 1 || weakContinuity >= 2) return 'med';
-  return 'low';
-}
-
-export async function scoreEarnedAttention({ callCouncilMember, scriptText }) {
-  try {
-    const text = normalizeText(scriptText);
-    const segments = segmentScript(text);
-    const blockResults = [];
-
-    for (let i = 0; i < BLOCKS.length; i += 1) {
-      const block = BLOCKS[i];
-      const blockText = segments[i] ?? '';
-      const prompt = buildPrompt(block) + '\n\nSCRIPT BLOCK TEXT:\n' + (blockText || '[empty]');
-
-      let raw;
-      try {
-        raw = await callCouncilMember('socialmediaos_earned_attention_scorer', prompt, {
-          temperature: 0,
-        });
-      } catch (error) {
-        raw = null;
+  const found = [];
+  for (const marker of markers) {
+    for (const pattern of marker.patterns) {
+      const m = lower.match(pattern);
+      if (m) {
+        found.push({ key: marker.key, index: m.index ?? -1, length: m[0].length });
+        break;
       }
+    }
+  }
+  found.sort((a, b) => a.index - b.index);
 
-      const assessment = raw == null ? null : parseAssessment(raw);
-      const result = assessment?.ok
-        ? {
-            delivered: asBoolean(assessment.parsed.delivered),
-            plantsNextHook: asBoolean(assessment.parsed.plantsNextHook),
-            note: String(assessment.parsed.note ?? '').trim() || 'No note provided.',
-          }
-        : makeFallbackAssessment(blockText, block);
+  if (found.length >= 2) {
+    const segments = [];
+    for (let i = 0; i < found.length; i++) {
+      const cur = found[i];
+      const next = found[i + 1];
+      const start = Math.max(0, cur.index);
+      const end = next ? Math.max(start, next.index) : text.length;
+      segments.push({ key: cur.key, text: text.slice(start, end).trim() });
+    }
+    return segments;
+  }
 
-      blockResults.push({
-        block: block.label,
-        delivered: result.delivered,
-        plantsNextHook: result.plantsNextHook,
-        note: result.note,
-      });
+  const parts = text
+    .split(/\n\s*\n+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  if (parts.length >= 2) {
+    const chunkSize = Math.max(1, Math.ceil(parts.length / BLOCKS.length));
+    return BLOCKS.map((b, idx) => ({
+      key: b.key,
+      text: parts.slice(idx * chunkSize, (idx + 1) * chunkSize).join('\n\n').trim(),
+    }));
+  }
+
+  const sentences = text
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  if (!sentences.length) return BLOCKS.map((b) => ({ key: b.key, text: '' }));
+
+  const chunkSize = Math.max(1, Math.ceil(sentences.length / BLOCKS.length));
+  const segments = BLOCKS.map((b, idx) => ({
+    key: b.key,
+    text: sentences.slice(idx * chunkSize, (idx + 1) * chunkSize).join(' ').trim(),
+  }));
+
+  while (segments.length < BLOCKS.length) segments.push({ key: BLOCKS[segments.length].key, text: '' });
+  return segments.slice(0, BLOCKS.length);
+}
+
+function scoreSegment(segmentText, blockKey) {
+  const text = normalizeText(segmentText);
+  const lower = text.toLowerCase();
+
+  const hasAny = (...patterns) => patterns.some((p) => p.test(lower));
+  const wordCount = lower.split(/\s+/).filter(Boolean).length;
+
+  let delivered = false;
+  let plantsNextHook = false;
+  let note = 'insufficient evidence';
+
+  if (!text) {
+    return { delivered: false, plantsNextHook: false, note: 'empty segment' };
+  }
+
+  switch (blockKey) {
+    case 'hook':
+      delivered = hasAny(/\b(you|your|imagine|stop|why|what if|here's|today)\b/, /\?/);
+      plantsNextHook = hasAny(/\b(but|however|next|wait|and then|here's the catch|stay tuned)\b/);
+      note = delivered ? 'opens with attention-grabbing framing' : 'no clear attention hook';
+      break;
+    case 'prove':
+      delivered = hasAny(/\b(proof|result|numbers?|stats?|case study|example|here's what happened|show)\b/);
+      plantsNextHook = hasAny(/\b(so|which means|that said|this matters|because)\b/);
+      note = delivered ? 'includes proof or evidence' : 'proof is not explicit';
+      break;
+    case 'value':
+      delivered = hasAny(/\b(value|steps?|framework|takeaway|learn|apply|use this|tips?)\b/) || wordCount >= 20;
+      plantsNextHook = hasAny(/\b(also|next|then|more importantly|now)\b/);
+      note = delivered ? 'delivers usable value' : 'value is thin';
+      break;
+    case 'deepen':
+      delivered = hasAny(/\b(why it works|deeper|root cause|trade-off|nuance|context)\b/) || wordCount >= 35;
+      plantsNextHook = hasAny(/\b(so what's next|keep going|the real issue|the key)\b/);
+      note = delivered ? 'adds depth and explanation' : 'depth is limited';
+      break;
+    case 'substance':
+      delivered = hasAny(/\b(implementation|process|system|details|mechanics|operating)\b/) || wordCount >= 50;
+      plantsNextHook = hasAny(/\b(lastly|one more thing|finally|in practice|to make it work)\b/);
+      note = delivered ? 'has substantial content' : 'substance is light';
+      break;
+    case 'payoff':
+      delivered = hasAny(/\b(so what|bottom line|result|payoff|outcome|action|next step|call to action)\b/) || wordCount >= 15;
+      plantsNextHook = hasAny(/\b(next time|follow for|part 2|if you want more)\b/);
+      note = delivered ? 'lands the payoff or CTA' : 'payoff is not clear';
+      break;
+    default:
+      note = 'unknown block';
+  }
+
+  return { delivered, plantsNextHook, note };
+}
+
+function computeRetentionRisk(results) {
+  const deliveredCount = results.filter((r) => r.delivered).length;
+  const weakestIndex = results.findIndex((r) => !r.delivered);
+  if (deliveredCount >= 5) return 'low';
+  if (deliveredCount >= 3) return 'med';
+  return 'high';
+}
+
+export async function scoreEarnedAttention({ callCouncilMember, scriptText } = {}) {
+  try {
+    if (typeof callCouncilMember !== 'function') {
+      return {
+        ok: false,
+        error: 'missing_callCouncilMember',
+      };
     }
 
-    const weakest = blockResults.find((b) => !b.delivered) || blockResults[0] || null;
+    const text = normalizeText(scriptText);
+    const segments = splitScriptIntoBlocks(text);
+
+    const blockResults = segments.map((segment, idx) => {
+      const scored = scoreSegment(segment.text, BLOCKS[idx].key);
+      return {
+        block: BLOCKS[idx].label,
+        ...scored,
+      };
+    });
+
+    const weakestBlock = blockResults.find((b) => !b.delivered)?.block ?? blockResults[0]?.block ?? null;
     const retentionRisk = computeRetentionRisk(blockResults);
-    const notes = blockResults
-      .filter((b) => b.note)
-      .map((b) => `${b.block}: ${b.note}`);
+
+    const councilPrompt = [
+      'Score this social media script for earned attention.',
+      'Use the framework blocks: 0-15s hook, 15-30s prove, 30-60s value, 1-2min deepen, 2-5min substance, 5min+ payoff.',
+      'Return only concise JSON with overall judgment and one short note per weak block.',
+      '',
+      `Script:\n${text}`,
+    ].join('\n');
+
+    let councilRaw = '';
+    try {
+      councilRaw = await callCouncilMember('content-intelligence', councilPrompt, { temperature: 0.1 });
+    } catch (e) {
+      councilRaw = '';
+    }
+
+    const councilParsed = safeJsonParse(councilRaw);
+    const councilNotes = Array.isArray(councilParsed?.notes)
+      ? councilParsed.notes.map((n) => String(n)).filter(Boolean)
+      : [];
 
     return {
       ok: true,
       blocks: blockResults,
       overall: {
         retentionRisk,
-        weakestBlock: weakest ? weakest.block : null,
-        notes,
+        weakestBlock,
+        notes: councilNotes.length ? councilNotes : blockResults.filter((b) => !b.delivered).map((b) => `${b.block}: ${b.note}`),
       },
     };
   } catch (error) {
     return {
       ok: false,
-      error: {
-        message: error instanceof Error ? error.message : String(error),
-      },
+      error: error instanceof Error ? error.message : String(error),
     };
   }
 }
 
 export default scoreEarnedAttention;
+
+// ASSUMPTIONS:
+// - Script text is free-form and may or may not include explicit time markers; segmentation falls back to paragraph/sentence distribution.
+// - The AI hook is used as a secondary advisory input, but the module remains functional without relying on its output structure.
