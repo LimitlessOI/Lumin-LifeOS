@@ -89,7 +89,7 @@
     },
     {
       "id": "mos-phase2-routes",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/marketing-calendar-routes.js",
       "task": "MarketingOS Phase 2 calendar/atoms JSON API (§5 Phase 2 New routes). SELF-CONTAINED Express route module exporting registerMarketingCalendarRoutes(app, deps) (also default export). deps = { pool, requireKey, callCouncilMember, logger, baseUrl }. Endpoints, ALL guarded by deps.requireKey and scoped to the caller's owner_id (req.user?.id else req.body.owner_id/req.query.owner_id; 400 if absent): GET /api/v1/marketing/calendar (return this owner's marketing_calendar_slots joined to marketing_content_pieces for a 30-day window, default from today); POST /api/v1/marketing/atoms (insert a marketing_content_atoms row from { atom_type, text, session_id?, source_extraction_id?, tags?, reuse_consent_level? } — validate atom_type + reuse_consent_level against the schema CHECK values — return the created row); GET /api/v1/marketing/atoms (list this owner's atoms, newest first, optional ?atom_type filter). May import services/marketing-brand-voice.js (buildBrandVoiceProfile/scoreContentAgainstVoice) to expose an optional POST /api/v1/marketing/brand-voice/rebuild that rebuilds the profile — but do NOT import any non-existent module.",
       "spec": "Single self-contained ESM server module, AUTO-REGISTERED via config/auto-registered-product-modules.json (entry pre-added: path routes/marketing-calendar-routes.js, register registerMarketingCalendarRoutes) — do NOT edit server.js or any boot file. ZERO top-level browser globals (server module). Parameterised SQL only ($1,$2 …) via deps.pool — never interpolate. Use ONLY the exact Phase 2 table/column names (marketing_content_atoms, marketing_calendar_slots, marketing_brand_voice_profiles) + Phase 1 tables; ids/timestamps are DB-defaulted so INSERT WITHOUT them and RETURNING * to read back. Validate enums against the schema CHECK values and 400 on violation. Wrap each handler in try/catch → JSON { ok:false, error } with a sensible status; never leak stacks/secrets. Named export registerMarketingCalendarRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -97,10 +97,10 @@
         "mos-brand-voice"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "max_output_tokens": 12000,
       "revive_count": 0,
-      "last_attempt_at": "2026-07-07T11:44:46.480Z",
+      "last_attempt_at": "2026-07-07T11:49:13.978Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
