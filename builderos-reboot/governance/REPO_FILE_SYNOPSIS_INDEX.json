@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T12:18:01.956Z",
+  "generated_at": "2026-07-07T12:27:00.304Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11231,
+  "file_count": 11232,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65092,6 +65092,16 @@
       "bytes": 7641,
       "mtime": "2026-07-07T12:18:01.956Z",
       "indexed_at": "2026-07-07T12:18:01.956Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/marketing-calendar-ui-routes.js",
+      "synopsis": "MarketingOS Phase 2 UI routes for content calendar and atom library browser.",
+      "bytes": 18396,
+      "mtime": "2026-07-07T12:27:00.304Z",
+      "indexed_at": "2026-07-07T12:27:00.304Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
