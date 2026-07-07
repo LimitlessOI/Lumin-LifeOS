@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T17:32:45.218Z",
+  "generated_at": "2026-07-07T17:32:49.132Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11236,
   "files": [
@@ -83140,10 +83140,10 @@
     },
     {
       "path": "services/marketing-repurpose.js",
-      "synopsis": "SocialMediaOS content repurposing helper for turning one source piece into platform-specific outputs.",
-      "bytes": 4598,
-      "mtime": "2026-07-07T17:32:45.218Z",
-      "indexed_at": "2026-07-07T17:32:45.218Z",
+      "synopsis": "Repurpose a source piece into multiple marketing formats using only the injected AI hook.",
+      "bytes": 5134,
+      "mtime": "2026-07-07T17:32:49.132Z",
+      "indexed_at": "2026-07-07T17:32:49.132Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
