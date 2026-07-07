@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T17:38:48.218Z",
+  "generated_at": "2026-07-07T17:57:45.848Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11236,
+  "file_count": 11237,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65102,6 +65102,16 @@
       "bytes": 18396,
       "mtime": "2026-07-07T17:22:52.740Z",
       "indexed_at": "2026-07-07T17:22:57.589Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/marketing-intel-routes.js",
+      "synopsis": "SocialMediaOS content-intelligence JSON API routes",
+      "bytes": 4172,
+      "mtime": "2026-07-07T17:57:45.848Z",
+      "indexed_at": "2026-07-07T17:57:45.848Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
