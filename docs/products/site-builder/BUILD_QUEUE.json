@@ -152,12 +152,12 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-07T05:13:26.820Z",
+      "last_attempt_at": "2026-07-07T05:13:28.044Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:53:53.254Z",
       "commit_sha": "108ab3ccbfb5f3aed44b1c763653151a3b80aee5",
-      "completed_at": "2026-07-07T05:13:28.066Z",
+      "completed_at": "2026-07-07T05:13:29.307Z",
       "deploy_proven": true
     },
     {
