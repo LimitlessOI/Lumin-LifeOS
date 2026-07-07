@@ -115,9 +115,11 @@
         "mos-phase2-routes"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 12000,
-      "revive_count": 0
+      "revive_count": 0,
+      "last_attempt_at": "2026-07-07T12:26:59.335Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ]
 }
