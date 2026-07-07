@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T19:38:53.376Z",
+  "generated_at": "2026-07-07T19:49:37.015Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11247,
+  "file_count": 11250,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29369,6 +29369,13 @@
       ]
     },
     {
+      "path": "builderos-reboot/scripts/bp-priority-coverage-audit.mjs",
+      "synopsis": "STEP 5d — the batch validation the Chair demanded BEFORE any fence",
+      "bytes": 3427,
+      "mtime": "2026-07-07T19:48:24.559Z",
+      "indexed_at": "2026-07-07T19:49:37.015Z"
+    },
+    {
       "path": "builderos-reboot/scripts/bpb-mechanical-probe-coverage.mjs",
       "synopsis": "Mechanical BPB fix: add missing probe_id rows to ACCEPTANCE_TESTS from catalog. Mechanical BPB fix: add missing probe_id rows to ACCEPTANCE_TESTS from catalog.",
       "bytes": 1360,
@@ -29412,6 +29419,13 @@
       "bytes": 1224,
       "mtime": "2026-07-03T13:23:32.009Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "builderos-reboot/scripts/derive-assertion-spec-proof.mjs",
+      "synopsis": "STEP 5d proof — the Century/SENTRY hardening of BPB spec extraction",
+      "bytes": 4157,
+      "mtime": "2026-07-07T19:48:49.779Z",
+      "indexed_at": "2026-07-07T19:49:37.015Z"
     },
     {
       "path": "builderos-reboot/scripts/emit-mission-spend-snapshot.mjs",
@@ -38480,9 +38494,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 181435,
-      "mtime": "2026-07-07T19:33:07.371Z",
-      "indexed_at": "2026-07-07T19:33:17.736Z"
+      "bytes": 183885,
+      "mtime": "2026-07-07T19:49:26.131Z",
+      "indexed_at": "2026-07-07T19:49:37.015Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -59320,6 +59334,16 @@
       "bytes": 4901,
       "mtime": "2026-07-07T19:31:06.595Z",
       "indexed_at": "2026-07-07T19:33:17.736Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "factory-staging/factory-core/bpb/derive-assertion-spec.js",
+      "synopsis": "STEP 5d — BPB derives an `assertion_spec` from an EXISTING mission",
+      "bytes": 7673,
+      "mtime": "2026-07-07T19:48:20.115Z",
+      "indexed_at": "2026-07-07T19:49:37.015Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
