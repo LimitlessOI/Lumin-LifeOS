@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T18:59:10.044Z",
+  "generated_at": "2026-07-07T19:14:50.031Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11240,
+  "file_count": 11242,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3392268,
-      "mtime": "2026-07-07T18:59:09.915Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z"
+      "bytes": 3393559,
+      "mtime": "2026-07-07T19:14:18.923Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -29391,6 +29391,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "builderos-reboot/scripts/codegen-dumbpipe-proof.mjs",
+      "synopsis": "STEP 4 proof — codegen as an untrusted \"dumb pipe\" authoring sub-step.",
+      "bytes": 5738,
+      "mtime": "2026-07-07T19:12:50.771Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z"
     },
     {
       "path": "builderos-reboot/scripts/compare-run-directories.sh",
@@ -38895,9 +38902,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 596669,
-      "mtime": "2026-07-07T18:57:52.119Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z"
+      "bytes": 598022,
+      "mtime": "2026-07-07T19:13:44.875Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -59308,6 +59315,16 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "factory-staging/factory-core/builder/authoring.js",
+      "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
+      "bytes": 4148,
+      "mtime": "2026-07-07T19:09:49.759Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "factory-staging/factory-core/builder/blocked-return.js",
       "synopsis": "Exports buildBlockedReturn — factory-staging/factory-core/builder/blocked-return.js.",
       "bytes": 492,
@@ -59331,9 +59348,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 9130,
-      "mtime": "2026-07-07T18:57:52.119Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z"
+      "bytes": 10968,
+      "mtime": "2026-07-07T19:11:06.011Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -59455,9 +59472,9 @@
     {
       "path": "factory-staging/factory-core/historian/append-record.js",
       "synopsis": "Exports appendHistorianRecord — factory-staging/factory-core/historian/append-record.js.",
-      "bytes": 2580,
-      "mtime": "2026-07-07T18:57:52.119Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z"
+      "bytes": 3185,
+      "mtime": "2026-07-07T19:11:21.099Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z"
     },
     {
       "path": "factory-staging/factory-core/historian/MEMORY_AUTHORITY_MAP.md",
@@ -64527,9 +64544,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 4469,
-      "mtime": "2026-07-07T18:57:52.119Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 6381,
+      "mtime": "2026-07-07T19:11:53.035Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85800,9 +85817,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 6215,
-      "mtime": "2026-07-07T18:57:52.119Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 6234,
+      "mtime": "2026-07-07T19:12:11.015Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85810,9 +85827,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 48492,
-      "mtime": "2026-07-07T18:57:52.119Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 48530,
+      "mtime": "2026-07-07T19:12:06.051Z",
+      "indexed_at": "2026-07-07T19:14:50.031Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
