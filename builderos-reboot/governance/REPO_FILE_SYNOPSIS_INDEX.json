@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T01:11:54.233Z",
+  "generated_at": "2026-07-07T01:12:40.041Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11209,
   "files": [
@@ -84081,9 +84081,9 @@
     {
       "path": "services/site-builder-editor-sidebar.js",
       "synopsis": "Exports renderSidebar — services/site-builder-editor-sidebar.js.",
-      "bytes": 5944,
-      "mtime": "2026-07-07T01:11:54.233Z",
-      "indexed_at": "2026-07-07T01:11:54.233Z"
+      "bytes": 10341,
+      "mtime": "2026-07-07T01:12:40.041Z",
+      "indexed_at": "2026-07-07T01:12:40.041Z"
     },
     {
       "path": "services/site-builder-email-templates.js",
