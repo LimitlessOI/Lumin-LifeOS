@@ -143,8 +143,15 @@ export function persistQueue(queue, { root = ROOT } = {}) {
  *     actually serves the built SHA before the step is called "live" (closes the
  *     "false live" gap). When provided and it fails, the step stays retryable
  *     (build/verify succeeded but the deploy hasn't caught up).
+ *   - OPTIONAL moduleHealthFn({ commit_sha, step }) -> { ok, reason } is the
+ *     FUNCTIONAL-PROOF gate: after the deploy is proven live, it confirms the
+ *     step's module actually LOADED + MOUNTED on that deploy (read from the
+ *     boot module-health manifest). A route that built + deployed but threw on
+ *     import / was never registered is NOT done — it stays retryable and the
+ *     verbatim mount error is carried into step.last_error so the next build
+ *     attempt repairs the root cause (kills the "false done" class).
  */
-export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, maxAttempts = 3, logger = console } = {}) {
+export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, moduleHealthFn, maxAttempts = 3, logger = console } = {}) {
   if (typeof buildFn !== 'function') throw new Error('runNextStep requires buildFn');
   const { step, gated } = selectNextStep(queue);
   if (!step) {
@@ -199,11 +206,60 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, max
     }
   }
 
+  let functionalProven = null;
+  if (typeof moduleHealthFn === 'function') {
+    const health = await moduleHealthFn({ commit_sha: sha, product_id: queue.product_id, step });
+    functionalProven = Boolean(health && health.ok);
+    if (!functionalProven) {
+      return failStep(step, queue, maxAttempts, {
+        stage: 'functional_proof',
+        reason: (health && health.reason) || 'module_not_mounted (built + live but the module did not load — no false done)',
+        commit_sha: sha,
+      }, logger);
+    }
+  }
+
   step.status = STEP_STATUS.DONE;
   step.completed_at = new Date().toISOString();
   if (deployProven !== null) step.deploy_proven = deployProven;
-  logger?.info?.({ step: step.id, commit_sha: sha, deploy_proven: deployProven }, '[PRODUCT-BUILD] step done');
-  return { ok: true, step_id: step.id, commit_sha: sha, verified: true, deploy_proven: deployProven, summary: queueSummary(queue) };
+  if (functionalProven !== null) step.functional_proven = functionalProven;
+  logger?.info?.({ step: step.id, commit_sha: sha, deploy_proven: deployProven, functional_proven: functionalProven }, '[PRODUCT-BUILD] step done');
+  return { ok: true, step_id: step.id, commit_sha: sha, verified: true, deploy_proven: deployProven, functional_proven: functionalProven, summary: queueSummary(queue) };
+}
+
+/**
+ * FUNCTIONAL-PROOF evaluation (pure, network-free so it is unit-testable).
+ * Given the boot module-health manifest body and a step's target_file, decide
+ * whether the step is functionally proven (its module actually mounted LIVE).
+ *
+ * Only `routes/*.js|.mjs` targets MUST boot-mount to be provable — a route that
+ * built + deployed but is not in the module-health manifest as `mounted` is
+ * unreachable (false done). Non-route targets (services, migrations, config)
+ * are gated by verify + deploy-proof, not by auto-registration, so they pass
+ * through (`applicable:false`).
+ */
+export function evaluateModuleHealthForStep(healthBody, targetFile) {
+  const target = String(targetFile || '');
+  if (!/^routes\/.+\.(js|mjs)$/.test(target)) {
+    return { ok: true, applicable: false, reason: 'no_mountable_module_for_step' };
+  }
+  const modules = Array.isArray(healthBody?.modules) ? healthBody.modules : [];
+  const entry = modules.find((m) => m && m.module === target);
+  if (!entry) {
+    return {
+      ok: false,
+      applicable: true,
+      reason: `route module not auto-registered — add {"path":"${target}","register":"<registerFn>","enabled":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)`,
+    };
+  }
+  if (entry.status !== 'mounted') {
+    return {
+      ok: false,
+      applicable: true,
+      reason: `module_not_mounted (${target}): ${entry.error || 'unknown import/mount failure'}`,
+    };
+  }
+  return { ok: true, applicable: true, reason: 'module_mounted' };
 }
 
 function failStep(step, queue, maxAttempts, info, logger) {
