@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T16:51:22.528Z",
+  "generated_at": "2026-07-07T16:55:51.126Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11232,
+  "file_count": 11233,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83134,6 +83134,16 @@
       "bytes": 12869,
       "mtime": "2026-07-07T08:55:50.599Z",
       "indexed_at": "2026-07-07T08:55:50.599Z"
+    },
+    {
+      "path": "services/marketing-title-universe.js",
+      "synopsis": "Generate a 50-title universe for a marketing topic, score variations, and return the top 5.",
+      "bytes": 4473,
+      "mtime": "2026-07-07T16:55:51.126Z",
+      "indexed_at": "2026-07-07T16:55:51.126Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/marketing-transcriber.js",
