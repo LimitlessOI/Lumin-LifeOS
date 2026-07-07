@@ -31,18 +31,21 @@
     },
     {
       "id": "sb-editor-sidebar",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/site-builder-editor-sidebar.js",
       "task": "Render the LEFT pane of the editor workspace: the services/upsell sidebar. Export renderSidebar({ services, clientId, baseUrl }) that returns an HTML STRING FRAGMENT (not a full document) for a vertical list built from services[] (each { id, name, blurb, price, cadence, recommended }). Services flagged recommended show a small 'Recommended' badge and sort first. Clicking a service toggles a 'selected' highlight, adds/removes it from a running 'Your plan' summary at the bottom of the sidebar, and fires a best-effort beacon (navigator.sendBeacon, fall back to fetch with keepalive) to `${baseUrl}/api/v1/sites/select-service?id=<clientId>&service=<id>`. Include a small inline <script> that wires the click behavior via event delegation on the fragment's root element.",
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no network at import, no DB, no project imports. Named export renderSidebar + default export. Returns a STRING (an HTML fragment, NOT a full <html> document). Define a local htmlEscape() and escape name/blurb/price/cadence before interpolation. Guard services as possibly undefined -> default []. The inline script must be wrapped in try/catch and never throw if elements are missing. Deterministic given the same input ordering. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 1,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T03:49:39.166Z",
+      "last_attempt_at": "2026-07-07T04:21:09.706Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
-      "revive_count": 3,
-      "revived_at": "2026-07-07T03:39:44.185Z"
+      "revive_count": 4,
+      "revived_at": "2026-07-07T04:21:09.706Z",
+      "commit_sha": "8d71ee09344d9be598bd3fb8e2aa7058e409006c",
+      "completed_at": "2026-07-07T04:21:10.968Z",
+      "deploy_proven": true
     },
     {
       "id": "sb-editor-canvas",
