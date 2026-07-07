@@ -39,7 +39,7 @@
       "founder_gated": false,
       "attempts": 2,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T01:19:11.719Z",
+      "last_attempt_at": "2026-07-07T01:19:19.426Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
