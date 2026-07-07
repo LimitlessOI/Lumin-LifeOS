@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-06 — Queued the live preview EDITOR into the autonomous BUILD_QUEUE (switcher + AI chat/mic edit + manual controls + palette + competitor Strategy tab + dual-category benchmark + social/YouTube discovery). Founder cleared the `sb-customization-ui` gate; steps expanded into single-file tasks for the never-stop loop to build. |
+| **Last Updated** | 2026-07-07 — **Readiness corrected to `REVENUE_READY`**: the documented 4-env-var hard blocker is resolved in prod — live `GET /api/v1/sites/launch-readiness` returns `ready: true, revenue_blockers: []` (POSTMARK_SERVER_TOKEN + EMAIL_FROM present; cold email + follow-up + preview all live). Only optional `SLACK_WEBHOOK_URL` remains. A real end-to-end outreach in prod is recommended as proof-of-pipeline before scaling. Prior: 2026-07-06 — queued the live preview EDITOR into the autonomous BUILD_QUEUE (switcher + AI chat/mic edit + manual controls + palette + competitor Strategy tab + dual-category benchmark + social/YouTube discovery). |
 
 ---
 
@@ -25,15 +25,13 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 
 ## Readiness state
 
-`PARTIAL_CODE_PRESENT`
+`REVENUE_READY` (as of 2026-07-07)
 
-Code is complete. DB tables confirmed live in Neon production. Blocked only on 4 Railway env var values. No BuilderOS mission pack exists yet; one is needed before this can re-enter the autonomous queue.
+Code is complete, DB tables live in Neon, and the prior 4-env-var blocker is **RESOLVED** — the live `GET /api/v1/sites/launch-readiness` endpoint reports `ready: true, revenue_blockers: []` in production. Verified-present: `POSTMARK_SERVER_TOKEN`, `EMAIL_FROM`. Live capabilities: `site_build`, `preview_serving`, `quality_scoring`, `prospect_db`, `cold_email_sending`, `follow_up_sequence`, `pos_partner_referrals`. The full money path (build → preview → cold email → sell upgrade) is wired and live.
 
-**Hard blocker:** Railway env vars not set:
-- `POSTMARK_SERVER_TOKEN` — email sending
-- `EMAIL_FROM` — sender address / `SITE_BASE_URL` — preview URL base
-- `EMAIL_PROVIDER` — provider selector
-- (Optional) `AFFILIATE_JANE_APP_URL`, `AFFILIATE_MINDBODY_URL`, `AFFILIATE_SQUARE_URL`
+**Only remaining (optional):** `SLACK_WEBHOOK_URL` — warm-lead notifications (NOT required for revenue).
+
+**Not-yet-proven (not a blocker):** a real end-to-end outreach in prod — one prospect site built + preview served + cold email delivered + upgrade sale — has not yet been observed. Recommend running one live proof-of-pipeline before scaling outreach volume.
 
 ## Owned runtime files
 

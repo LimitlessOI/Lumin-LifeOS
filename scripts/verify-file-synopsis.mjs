@@ -43,6 +43,11 @@ function loadIndexMap() {
 function skipStaleCheck(rel) {
   return (
     /^data\/.*-last-run\.json$/.test(rel)
+    // Autonomous-loop runtime state files rewrite their own size every cycle on
+    // prod; byte-freshness can never converge for a PR branch, so exempt them
+    // from the stale check (an index row is still required — only drift is waived).
+    || /^data\/never-stop-.*\.json$/.test(rel)
+    || /^data\/builderos-.*-state\.json$/.test(rel)
     || rel === 'docs/AGENT_RULES.compact.md'
     || /^builderos-reboot\/MISSIONS\/[^/]+\/(?:receipts\/|CONTENT\/)/.test(rel)
     || /^builderos-reboot\/MISSIONS\/[^/]+\/[A-Z_]+\.json$/.test(rel)

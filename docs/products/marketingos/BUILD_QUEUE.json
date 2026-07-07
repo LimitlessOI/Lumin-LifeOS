@@ -4,6 +4,7 @@
   "verify_script": null,
   "notes": "MarketingOS autonomous build queue — SocialMediaOS (SMOS) Phase 1, the Founder Story Session MVP (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1, §6 exact spec). TEXT-MODE ONLY: the audio-upload path (POST /sessions/:id/audio) is intentionally EXCLUDED because it depends on Cloudflare R2 env vars that are UNVERIFIED (§6 readiness gate). RE-QUEUED 2026-07-08 after the self-refinement spine (auto-registration + functional-proof gate + integration context) landed: the loop's original Phase 1 was false-done — the schema migration implemented the WRONG spec (generic ingestion schema), the route/UI modules imported non-existent service exports + a missing ./ai-council.js and were never mounted. The corrected §6 schema ships directly in this re-queue PR (delicate DROP of the empty mis-built tables — non-destructive, zero rows). The route + UI modules are re-queued as SELF-CONTAINED single-file modules (no external service imports) so they COMPOSE and the functional-proof gate can prove them LIVE. Both are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and module-health verifies them before the step can be done.",
   "updated_at": "2026-07-09",
+  "content_intel_notes": "CONTENT INTELLIGENCE BATCH QUEUED 2026-07-09 (buildable subset of docs/products/marketingos/socialmediaos/PRODUCT_HOME.md Priority Ideas — NO external infra, AI only via injected callCouncilMember, composes with existing content): smos-title-universe (#4 50-title universe), smos-script-scorer (Earned-Attention framework), smos-publish-gate (#19 publish-or-kill), smos-repurpose (#42/#27 multiplier + LinkedIn carousel), and smos-intel-routes exposing all four at /api/v1/marketing/intel/*. The route module is pre-registered in config/auto-registered-product-modules.json so the functional-proof gate proves the endpoints LIVE before done. Chosen because §5 Phases 3-5 are infra-gated (FFmpeg/Whisper, social API keys UNVERIFIED) — these intelligence features ship value now with zero unverified dependencies.",
   "phase2_notes": "PHASE 2 QUEUED 2026-07-09 (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 2 — Social Content Calendar): four composing single-file steps — schema (marketing_content_atoms / marketing_brand_voice_profiles / marketing_calendar_slots, FK to Phase 1 tables), a LOCAL/no-AI brand-voice fingerprint+scorer service, the calendar/atoms JSON API, and the SSR calendar + atom-library UI. Route + UI modules are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and the functional-proof gate proves /api/v1/marketing/calendar + /marketing/calendar are LIVE before each step flips to done. Phase 3 (Video Clip Workflow) is intentionally NOT queued — its §5 spec has a BLOCKED dependency (FFmpeg on Railway + Whisper word-timestamps UNVERIFIED); it enrolls once those are verified.",
   "steps": [
     {
@@ -122,6 +123,76 @@
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "38fac5148fd2bbf96dc1f4b516084f7c5aa7f0e2",
       "completed_at": "2026-07-07T12:31:03.395Z"
+    },
+    {
+      "id": "smos-title-universe",
+      "status": "pending",
+      "target_file": "services/marketing-title-universe.js",
+      "task": "SocialMediaOS Content Intelligence — '50-title universe' (docs/products/marketingos/socialmediaos/PRODUCT_HOME.md Priority Idea #4: generate and score 50 title variations, pick top 5). SELF-CONTAINED ESM module. Export async generateTitleUniverse({ callCouncilMember, topic, transcript, count = 50 }). Use deps.callCouncilMember (async (role, prompt) => string) as the ONLY AI hook — do NOT import any AI SDK directly. Prompt the model to produce `count` distinct title variations for the topic, then score each 0-100 on curiosity/clarity/specificity and return { ok:true, titles:[{ text, score, rationale }], top5 }. Parse the model's text defensively (it may wrap JSON in prose — extract the JSON array/object; on parse failure return { ok:false, reason:'unparseable_model_output', raw }).",
+      "spec": "Single self-contained ESM module. NO DB, NO network except via the injected callCouncilMember. Import ONLY node: builtins. Guard everything in try/catch → return structured { ok:false, error } (never throw raw). Deterministic shape: always return an object with an `ok` boolean. Named export generateTitleUniverse (+ default export of the same). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-phase2-ui"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 6000,
+      "revive_count": 0
+    },
+    {
+      "id": "smos-script-scorer",
+      "status": "pending",
+      "target_file": "services/marketing-script-scorer.js",
+      "task": "SocialMediaOS Content Intelligence — 'Earned Attention' script scorer (socialmediaos PRODUCT_HOME 'The Earned Attention Script Framework': scripts are chains of micro-contracts scored per block — 0-15s hook, 15-30s prove, 30-60s value, 1-2min deepen, 2-5min substance, 5min+ payoff). SELF-CONTAINED ESM module. Export async scoreEarnedAttention({ callCouncilMember, scriptText }). Segment the script into the framework blocks, and for each return { block, delivered:boolean, plantsNextHook:boolean, note }; also return an overall { retentionRisk:'low'|'med'|'high', weakestBlock, notes[] }. callCouncilMember is the ONLY AI hook.",
+      "spec": "Single self-contained ESM module. NO DB, NO network except the injected callCouncilMember. Import ONLY node: builtins. Parse model text defensively (extract JSON; on failure return { ok:false, reason:'unparseable_model_output', raw }). try/catch everything → structured { ok:false, error }. Named export scoreEarnedAttention (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "smos-title-universe"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 6000,
+      "revive_count": 0
+    },
+    {
+      "id": "smos-publish-gate",
+      "status": "pending",
+      "target_file": "services/marketing-publish-gate.js",
+      "task": "SocialMediaOS Content Intelligence — 'Publish or kill' gate (socialmediaos PRODUCT_HOME Priority Idea #19: hook in 15s? reason to stay at 30s? thumbnail matches title? info accurate? something competitors don't have?). SELF-CONTAINED ESM module. Export async publishOrKill({ callCouncilMember, piece }) where piece = { title, hook, body, thumbnailConcept? }. Run the five gate checks (a couple are cheap local heuristics on the text; the judgement calls use callCouncilMember) and return { ok:true, verdict:'publish'|'hold', checks:[{ name, pass:boolean, reason }], blockingReasons:[] }. verdict is 'publish' only if every REQUIRED check passes.",
+      "spec": "Single self-contained ESM module. NO DB. callCouncilMember is the ONLY AI hook and may be omitted — if absent, run the local heuristic checks only and mark AI-dependent checks { pass:null, reason:'ai_unavailable' } (never throw). Import ONLY node: builtins. Parse model text defensively. try/catch everything → structured { ok:false, error }. Named export publishOrKill (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "smos-script-scorer"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 6000,
+      "revive_count": 0
+    },
+    {
+      "id": "smos-repurpose",
+      "status": "pending",
+      "target_file": "services/marketing-repurpose.js",
+      "task": "SocialMediaOS Content Intelligence — repurpose/podcast multiplier (socialmediaos PRODUCT_HOME Priority Idea #42: one piece → YouTube + LinkedIn posts + email segments + short clips; #27 LinkedIn carousel machine). SELF-CONTAINED ESM module. Export async repurposePiece({ callCouncilMember, piece, formats = ['linkedin_carousel','short_clips','email_segments'] }). For each requested format, use callCouncilMember to transform the source piece and return { ok:true, outputs: { linkedin_carousel:[...slides], short_clips:[...], email_segments:[...] } } (only the requested formats). callCouncilMember is the ONLY AI hook.",
+      "spec": "Single self-contained ESM module. NO DB, NO network except the injected callCouncilMember. Import ONLY node: builtins. Validate `formats` against the known set and ignore unknown ones. Parse model text defensively per format. try/catch everything → structured { ok:false, error }. Named export repurposePiece (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "smos-publish-gate"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 6000,
+      "revive_count": 0
+    },
+    {
+      "id": "smos-intel-routes",
+      "status": "pending",
+      "target_file": "routes/marketing-intel-routes.js",
+      "task": "SocialMediaOS Content Intelligence JSON API — exposes the four content-intelligence services. SELF-CONTAINED Express route module exporting registerMarketingIntelRoutes(app, deps) (also default). deps = { pool, requireKey, callCouncilMember, logger, baseUrl }. Import the four sibling services (services/marketing-title-universe.js, services/marketing-script-scorer.js, services/marketing-publish-gate.js, services/marketing-repurpose.js) — these are built by the preceding steps, so import them by their exact relative path. Endpoints, ALL guarded by deps.requireKey: POST /api/v1/marketing/intel/titles ({ topic, transcript?, count? } → generateTitleUniverse); POST /api/v1/marketing/intel/score-script ({ scriptText } → scoreEarnedAttention); POST /api/v1/marketing/intel/publish-gate ({ piece } → publishOrKill); POST /api/v1/marketing/intel/repurpose ({ piece, formats? } → repurposePiece). Each handler passes deps.callCouncilMember into the service and returns its structured result.",
+      "spec": "Single self-contained ESM server module, AUTO-REGISTERED via config/auto-registered-product-modules.json (entry pre-added: path routes/marketing-intel-routes.js, register registerMarketingIntelRoutes) — do NOT edit server.js or any boot file. ZERO top-level browser globals (server module). Wrap each handler in try/catch → JSON { ok:false, error } with a sensible status; never leak stacks/secrets. Validate request bodies and 400 on missing required fields. Do NOT import any module that does not exist — only the four named sibling services + express. Named export registerMarketingIntelRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "smos-repurpose"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 12000,
+      "revive_count": 0
     }
   ]
 }
