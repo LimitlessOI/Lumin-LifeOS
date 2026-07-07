@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T10:54:37.838Z",
+  "generated_at": "2026-07-07T11:06:16.023Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11228,
+  "file_count": 11227,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38445,9 +38445,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 172110,
-      "mtime": "2026-07-07T10:35:08.190Z",
-      "indexed_at": "2026-07-07T10:35:22.343Z"
+      "bytes": 174015,
+      "mtime": "2026-07-07T11:06:00.530Z",
+      "indexed_at": "2026-07-07T11:06:16.023Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -65100,16 +65100,6 @@
       ]
     },
     {
-      "path": "routes/marketing-session-ui-routes.js",
-      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 22090,
-      "mtime": "2026-07-07T10:54:37.838Z",
-      "indexed_at": "2026-07-07T10:54:37.838Z",
-      "ssot": [
-        "docs/products/marketingos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "routes/memory-capsule-routes.js",
       "synopsis": "routes/memory-capsule-routes.js",
       "bytes": 4521,
@@ -79795,9 +79785,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 9366,
-      "mtime": "2026-07-06T19:21:22.167Z",
-      "indexed_at": "2026-07-07T08:32:45.782Z",
+      "bytes": 10134,
+      "mtime": "2026-07-07T11:04:26.782Z",
+      "indexed_at": "2026-07-07T11:06:16.023Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83491,9 +83481,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 48704,
-      "mtime": "2026-07-07T10:34:20.046Z",
-      "indexed_at": "2026-07-07T10:35:22.343Z",
+      "bytes": 50735,
+      "mtime": "2026-07-07T11:05:08.714Z",
+      "indexed_at": "2026-07-07T11:06:16.023Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86045,9 +86035,9 @@
     {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
-      "bytes": 5920,
-      "mtime": "2026-07-06T19:21:22.167Z",
-      "indexed_at": "2026-07-07T08:32:45.782Z"
+      "bytes": 6853,
+      "mtime": "2026-07-07T11:05:31.426Z",
+      "indexed_at": "2026-07-07T11:06:16.023Z"
     },
     {
       "path": "tests/builder-agents.test.js",

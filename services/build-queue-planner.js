@@ -5,6 +5,7 @@
  * "scale" lever: the orchestrator executes queues; this generates them.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
+import crypto from 'node:crypto';
 import { STEP_STATUS } from './product-build-orchestrator.js';
 
 // Only strong, paid models are hardwired into what the system ships (founder rule).
@@ -45,6 +46,19 @@ export function extractBacklog(homeText) {
     out.push(text);
   }
   return out;
+}
+
+/**
+ * Stable content hash of a backlog item list, order-independent. The loop stamps
+ * this onto a planned queue so it can tell when a product's DOCUMENTED backlog
+ * has actually changed (new phase written) vs. is unchanged — and only re-plans
+ * a completed queue when there is genuinely new documented work. This is what
+ * keeps self-extension waste-free (no planner model call per idle cycle).
+ */
+export function backlogSignature(items) {
+  const list = Array.isArray(items) ? items : [];
+  const norm = list.map((s) => String(s || '').trim().toLowerCase()).filter(Boolean).sort();
+  return crypto.createHash('sha256').update(norm.join('\n')).digest('hex').slice(0, 16);
 }
 
 const UI_HINT = /\b(ui|panel|page|screen|customi[sz]e|logo|design|frontend|client-facing|overlay|\.html)\b/i;
@@ -220,6 +234,7 @@ export async function planBuildQueue({
     product_id: productId,
     ...(verifyScript ? { verify_script: verifyScript } : (existingQueue?.verify_script ? { verify_script: existingQueue.verify_script } : {})),
     planned_at: new Date().toISOString(),
+    backlog_signature: backlogSignature(backlog),
     steps: [...existingSteps, ...added],
   };
 
