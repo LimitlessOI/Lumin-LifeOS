@@ -76,9 +76,9 @@
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no network, no DB, no project imports. Named export renderStrategyPanel + default export. Returns a STRING (HTML fragment). Define local htmlEscape() and escape ALL strategy text (synopsis, names, strengths, weaknesses) before interpolation. Clamp score into 0–10 for the bar width. Guard every field as possibly undefined. Never fabricate competitors or scores — only render what is provided. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T02:08:32.752Z",
+      "last_attempt_at": "2026-07-07T02:14:09.622Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
