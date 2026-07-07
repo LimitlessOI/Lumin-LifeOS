@@ -84,8 +84,8 @@
       "max_output_tokens": 8000,
       "revive_count": 0,
       "commit_sha": "78b0ca59b630a85709212182ce61cb09d431a899",
-      "last_attempt_at": "2026-07-07T11:36:30.954Z",
-      "completed_at": "2026-07-07T11:36:31.955Z"
+      "last_attempt_at": "2026-07-07T11:34:57.491Z",
+      "completed_at": "2026-07-07T11:34:58.113Z"
     },
     {
       "id": "mos-phase2-routes",
@@ -97,9 +97,11 @@
         "mos-brand-voice"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 12000,
-      "revive_count": 0
+      "revive_count": 0,
+      "last_attempt_at": "2026-07-07T11:38:39.412Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
       "id": "mos-phase2-ui",
