@@ -1,124 +1,84 @@
-// SYNOPSIS: SocialMediaOS content-intelligence JSON API route module
+// SYNOPSIS: SocialMediaOS Content Intelligence JSON API route registration
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
-
-import express from 'express';
 import { generateTitleUniverse } from '../services/marketing-title-universe.js';
 import { scoreEarnedAttention } from '../services/marketing-script-scorer.js';
 import { publishOrKill } from '../services/marketing-publish-gate.js';
 import { repurposePiece } from '../services/marketing-repurpose.js';
 
-function makeErrorResponse(error, fallbackStatus = 500) {
-  const message = error instanceof Error ? error.message : String(error ?? 'Unknown error');
-  return {
-    status: fallbackStatus,
-    body: {
-      ok: false,
-      error: message,
-    },
-  };
+function sendError(res, status, error) {
+  return res.status(status).json({ ok: false, error });
 }
 
-function pickServiceResult(result) {
-  if (result && typeof result === 'object' && 'status' in result && 'body' in result) {
-    return result;
-  }
-  return {
-    status: 200,
-    body: {
-      ok: true,
-      result,
-    },
-  };
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function toPositiveInt(value, fallback) {
+  if (value === undefined || value === null || value === '') return fallback;
+  const n = Number.parseInt(value, 10);
+  return Number.isInteger(n) && n > 0 ? n : fallback;
 }
 
 export function registerMarketingIntelRoutes(app, deps = {}) {
-  if (!app || typeof app.post !== 'function') {
-    throw new Error('registerMarketingIntelRoutes requires an Express app instance');
-  }
-
   const requireKey = deps.requireKey;
+  const callCouncilMember = deps.callCouncilMember;
+  const logger = deps.logger ?? console;
+
   if (typeof requireKey !== 'function') {
     throw new Error('registerMarketingIntelRoutes requires deps.requireKey');
   }
-
-  const callCouncilMember = deps.callCouncilMember;
   if (typeof callCouncilMember !== 'function') {
     throw new Error('registerMarketingIntelRoutes requires deps.callCouncilMember');
   }
 
-  const wrap = (handler) => async (req, res) => {
+  app.post('/api/v1/marketing/intel/titles', requireKey, async (req, res) => {
     try {
-      const result = await handler(req, res);
-      const { status, body } = pickServiceResult(result);
-      res.status(status).json(body);
-    } catch (error) {
-      const { status, body } = makeErrorResponse(error);
-      res.status(status).json(body);
-    }
-  };
-
-  app.post(
-    '/api/v1/marketing/intel/titles',
-    requireKey,
-    wrap(async (req) => {
-      const { topic, transcript, count } = req.body ?? {};
-      if (!topic || typeof topic !== 'string' || !topic.trim()) {
-        return {
-          status: 400,
-          body: { ok: false, error: 'Missing required field: topic' },
-        };
+      const topic = req.body?.topic;
+      if (!isNonEmptyString(topic)) {
+        return sendError(res, 400, 'Missing required field: topic');
       }
 
-      const normalizedCount = count == null ? undefined : Number(count);
-      if (normalizedCount !== undefined && (!Number.isFinite(normalizedCount) || normalizedCount <= 0)) {
-        return {
-          status: 400,
-          body: { ok: false, error: 'Invalid field: count' },
-        };
-      }
+      const count = toPositiveInt(req.body?.count, 10);
+      const transcript = isNonEmptyString(req.body?.transcript) ? req.body.transcript : undefined;
 
       const result = await generateTitleUniverse({
         topic: topic.trim(),
-        transcript: typeof transcript === 'string' ? transcript : undefined,
-        count: normalizedCount,
+        transcript,
+        count,
         callCouncilMember,
       });
 
-      return pickServiceResult(result);
-    })
-  );
+      return res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error }, 'marketing intel titles failed');
+      return sendError(res, 500, 'Failed to generate title universe');
+    }
+  });
 
-  app.post(
-    '/api/v1/marketing/intel/score-script',
-    requireKey,
-    wrap(async (req) => {
-      const { scriptText } = req.body ?? {};
-      if (!scriptText || typeof scriptText !== 'string' || !scriptText.trim()) {
-        return {
-          status: 400,
-          body: { ok: false, error: 'Missing required field: scriptText' },
-        };
+  app.post('/api/v1/marketing/intel/score-script', requireKey, async (req, res) => {
+    try {
+      const scriptText = req.body?.scriptText;
+      if (!isNonEmptyString(scriptText)) {
+        return sendError(res, 400, 'Missing required field: scriptText');
       }
 
       const result = await scoreEarnedAttention({
-        scriptText: scriptText.trim(),
+        scriptText: scriptText,
         callCouncilMember,
       });
 
-      return pickServiceResult(result);
-    })
-  );
+      return res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error }, 'marketing intel score-script failed');
+      return sendError(res, 500, 'Failed to score script');
+    }
+  });
 
-  app.post(
-    '/api/v1/marketing/intel/publish-gate',
-    requireKey,
-    wrap(async (req) => {
-      const { piece } = req.body ?? {};
-      if (!piece || typeof piece !== 'object') {
-        return {
-          status: 400,
-          body: { ok: false, error: 'Missing required field: piece' },
-        };
+  app.post('/api/v1/marketing/intel/publish-gate', requireKey, async (req, res) => {
+    try {
+      const piece = req.body?.piece;
+      if (piece === undefined || piece === null || piece === '') {
+        return sendError(res, 400, 'Missing required field: piece');
       }
 
       const result = await publishOrKill({
@@ -126,33 +86,33 @@ export function registerMarketingIntelRoutes(app, deps = {}) {
         callCouncilMember,
       });
 
-      return pickServiceResult(result);
-    })
-  );
+      return res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error }, 'marketing intel publish-gate failed');
+      return sendError(res, 500, 'Failed to evaluate publish gate');
+    }
+  });
 
-  app.post(
-    '/api/v1/marketing/intel/repurpose',
-    requireKey,
-    wrap(async (req) => {
-      const { piece, formats } = req.body ?? {};
-      if (!piece || typeof piece !== 'object') {
-        return {
-          status: 400,
-          body: { ok: false, error: 'Missing required field: piece' },
-        };
+  app.post('/api/v1/marketing/intel/repurpose', requireKey, async (req, res) => {
+    try {
+      const piece = req.body?.piece;
+      if (piece === undefined || piece === null || piece === '') {
+        return sendError(res, 400, 'Missing required field: piece');
       }
 
+      const formats = req.body?.formats;
       const result = await repurposePiece({
         piece,
         formats,
         callCouncilMember,
       });
 
-      return pickServiceResult(result);
-    })
-  );
-
-  return app;
+      return res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error }, 'marketing intel repurpose failed');
+      return sendError(res, 500, 'Failed to repurpose piece');
+    }
+  });
 }
 
 export default registerMarketingIntelRoutes;
