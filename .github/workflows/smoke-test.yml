@@ -50,6 +50,12 @@ jobs:
         run: npm test --if-present
         env:
           NODE_ENV: test
+          # Import-resolution/smoke tests load real route modules, whose import
+          # chain calls loadRuntimeEnv() (config/runtime-env.js) which hard-throws
+          # without COMMAND_CENTER_KEY. A dummy value lets modules import so the
+          # tests can do their real job (catch missing exports / boot crashes).
+          # This is NOT a secret — production supplies the real key via Railway.
+          COMMAND_CENTER_KEY: ci-import-smoke-dummy-key
 
       - name: Record CI evidence (memory system)
         if: success()

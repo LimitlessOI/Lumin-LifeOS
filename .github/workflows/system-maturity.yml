@@ -23,4 +23,9 @@ jobs:
       - name: System maturity check (CI mode — see script for skips)
         env:
           CI: "true"
+          # Maturity check runs the test suite, which imports real route modules
+          # whose import chain calls loadRuntimeEnv() (hard-throws without
+          # COMMAND_CENTER_KEY). Dummy value lets modules import; NOT a secret —
+          # production supplies the real key via Railway.
+          COMMAND_CENTER_KEY: ci-import-smoke-dummy-key
         run: npm run verify:maturity
