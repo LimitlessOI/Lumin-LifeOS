@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T08:55:17.388Z",
+  "generated_at": "2026-07-07T08:55:50.599Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11219,
   "files": [
@@ -83045,10 +83045,10 @@
     },
     {
       "path": "services/marketing-session-ui.js",
-      "synopsis": "Helper to escape HTML for dynamic content",
-      "bytes": 16219,
-      "mtime": "2026-07-07T08:55:17.388Z",
-      "indexed_at": "2026-07-07T08:55:17.388Z"
+      "synopsis": "services/marketing-session-ui.js",
+      "bytes": 12869,
+      "mtime": "2026-07-07T08:55:50.599Z",
+      "indexed_at": "2026-07-07T08:55:50.599Z"
     },
     {
       "path": "services/marketing-transcriber.js",

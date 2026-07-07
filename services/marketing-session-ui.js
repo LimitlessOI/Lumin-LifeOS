@@ -1,107 +1,81 @@
 /**
- * SYNOPSIS: Helper to escape HTML for dynamic content
+ * SYNOPSIS: services/marketing-session-ui.js
  */
-import express from 'express';
+// services/marketing-session-ui.js
+import escape from 'lodash.escape';
 
-// Helper to escape HTML for dynamic content
-const escapeHtml = (unsafe) => {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-};
-
-// Base HTML structure for consistency
-const baseHtml = (title, bodyContent, clientScript = '') => `
+const generateHtml = (title, body, scripts = '') => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(title)} | MarketingOS</title>
+    <title>${escape(title)} - MarketingOS</title>
     <style>
-        body { font-family: sans-serif; margin: 2rem; background-color: #f4f7f6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        body { font-family: sans-serif; margin: 2em; line-height: 1.6; color: #333; max-width: 600px; margin-left: auto; margin-right: auto; }
         h1, h2 { color: #2c3e50; }
-        button, input[type="submit"] { background-color: #3498db; color: white; padding: 0.75rem 1.25rem; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
-        button:hover, input[type="submit"]:hover { background-color: #2980b9; }
-        input[type="text"], textarea { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        .form-group { margin-bottom: 1.5rem; }
-        .message { padding: 1rem; margin-bottom: 1rem; border-radius: 4px; background-color: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; }
-        .error { background-color: #ffebee; border: 1px solid #ef9a9a; color: #c62828; }
-        .content-card { background-color: #f9f9f9; border: 1px solid #eee; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
-        .content-card button { margin-top: 0.5rem; margin-right: 0.5rem; }
-        .button-group { display: flex; gap: 10px; margin-top: 1rem; }
+        label { display: block; margin-bottom: 0.5em; font-weight: bold; }
+        input[type="text"], textarea, select { width: 100%; padding: 0.8em; margin-bottom: 1em; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #3498db; color: white; padding: 0.8em 1.2em; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
+        button:hover { background-color: #2980b9; }
+        .form-group { margin-bottom: 1.5em; }
+        .message { padding: 1em; margin-bottom: 1em; border-radius: 4px; }
+        .message.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .message.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .content-item { border: 1px solid #eee; padding: 1em; margin-bottom: 1em; border-radius: 4px; }
+        .content-item.approved { background-color: #e6ffe6; }
+        .content-item.rejected { background-color: #ffe6e6; }
     </style>
 </head>
 <body>
-    <div class="container">
-        ${bodyContent}
-    </div>
-    ${clientScript ? `<script>${clientScript}</script>` : ''}
+    ${body}
+    ${scripts ? `<script>${scripts}</script>` : ''}
 </body>
 </html>
 `;
 
 export function registerMarketingSessionUi(app) {
-  // GET /marketing (landing/dashboard — start a new session)
-  app.get('/marketing', (req, res) => {
-    const bodyContent = `
-            <h1>Marketing Session Dashboard</h1>
-            <p>Welcome to MarketingOS. Start a new session to generate content for your social media campaigns.</p>
-            <form action="/marketing/session/new" method="GET">
-                <button type="submit">Start New Session</button>
-            </form>
-            <h2>Recent Sessions</h2>
-            <p>No recent sessions found. Start a new one!</p>
-            <!-- In a real app, this would fetch and display recent sessions -->
-        `;
-    res.send(baseHtml('Marketing Dashboard', bodyContent));
-  });
+    // GET /marketing (landing/dashboard — start a new session)
+    app.get('/marketing', (req, res) => {
+        const html = generateHtml(
+            'Marketing Dashboard',
+            `
+            <h1>MarketingOS Dashboard</h1>
+            <p>Welcome to MarketingOS. Start a new social media content generation session.</p>
+            <button onclick="window.location.href='/marketing/session/new'">Start New Session</button>
+            `
+        );
+        res.send(html);
+    });
 
-  // GET /marketing/session/new (consent + session setup)
-  app.get('/marketing/session/new', (req, res) => {
-    const bodyContent = `
-            <h1>New Marketing Session Setup</h1>
-            <p>Before we begin, please review the following and provide initial details for your campaign.</p>
-            <div class="form-group">
-                <label><input type="checkbox" id="consentCheckbox"> I understand that content generated by AI may require review and editing.</label>
-            </div>
+    // GET /marketing/session/new (consent + session setup)
+    app.get('/marketing/session/new', (req, res) => {
+        const html = generateHtml(
+            'New Marketing Session',
+            `
+            <h1>New Social Media Session</h1>
+            <p>This tool helps generate social media content. By proceeding, you agree to review and approve all generated content before publication.</p>
             <form id="newSessionForm">
                 <div class="form-group">
-                    <label for="campaignName">Campaign Name:</label>
-                    <input type="text" id="campaignName" name="campaignName" placeholder="e.g., Summer Sale 2024" required>
+                    <label for="platform">Target Platform:</label>
+                    <select id="platform" name="platform" required>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="twitter">Twitter</option>
+                        <option value="facebook">Facebook</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="targetAudience">Target Audience:</label>
-                    <input type="text" id="targetAudience" name="targetAudience" placeholder="e.g., Young adults interested in tech" required>
+                    <label for="topic">Session Topic:</label>
+                    <input type="text" id="topic" name="topic" placeholder="e.g., 'New product launch for SaaS', 'Company culture post'" required>
                 </div>
-                <div class="form-group">
-                    <label for="campaignGoal">Campaign Goal:</label>
-                    <textarea id="campaignGoal" name="campaignGoal" rows="3" placeholder="e.g., Increase brand awareness and drive sign-ups" required></textarea>
-                </div>
-                <button type="submit" id="startSessionButton" disabled>Create Session</button>
+                <button type="submit">Start Session</button>
             </form>
-        `;
-    const clientScript = `
-            const consentCheckbox = document.getElementById('consentCheckbox');
-            const startSessionButton = document.getElementById('startSessionButton');
-            const newSessionForm = document.getElementById('newSessionForm');
-
-            consentCheckbox.addEventListener('change', () => {
-                startSessionButton.disabled = !consentCheckbox.checked;
-            });
-
-            newSessionForm.addEventListener('submit', async (e) => {
+            `,
+            `
+            document.getElementById('newSessionForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                startSessionButton.disabled = true;
-                startSessionButton.textContent = 'Creating...';
-                const campaignName = document.getElementById('campaignName').value;
-                const targetAudience = document.getElementById('targetAudience').value;
-                const campaignGoal = document.getElementById('campaignGoal').value;
+                const platform = document.getElementById('platform').value;
+                const topic = document.getElementById('topic').value;
 
                 try {
                     const response = await fetch('/api/v1/marketing/sessions', {
@@ -109,71 +83,63 @@ export function registerMarketingSessionUi(app) {
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ campaignName, targetAudience, campaignGoal }),
+                        body: JSON.stringify({ platform, topic }),
                     });
-
+                    const data = await response.json();
                     if (response.ok) {
-                        const data = await response.json();
                         window.location.href = \`/marketing/session/\${data.sessionId}\`;
                     } else {
-                        const errorData = await response.json();
-                        alert('Error creating session: ' + (errorData.message || response.statusText));
-                        startSessionButton.disabled = false;
-                        startSessionButton.textContent = 'Create Session';
+                        alert('Error starting session: ' + (data.message || response.statusText));
                     }
                 } catch (error) {
                     console.error('Network error:', error);
-                    alert('Network error creating session.');
-                    startSessionButton.disabled = false;
-                    startSessionButton.textContent = 'Create Session';
+                    alert('Network error. Please try again.');
                 }
             });
-        `;
-    res.send(baseHtml('New Marketing Session', bodyContent, clientScript));
-  });
+            `
+        );
+        res.send(html);
+    });
 
-  // GET /marketing/session/:id (coaching conversation, text input; posts to /api/v1/marketing/sessions/:id/coach)
-  app.get('/marketing/session/:id', (req, res) => {
-    const sessionId = escapeHtml(req.params.id);
-    const bodyContent = `
-            <h1>Marketing Session: ${sessionId}</h1>
-            <p>Provide additional context or ask for specific content ideas. Your input guides the AI.</p>
-            <div id="conversationLog">
-                <p><strong>System:</strong> Welcome to your session. How can I help you generate content today?</p>
+    // GET /marketing/session/:id (coaching conversation, text input; posts to /api/v1/marketing/sessions/:id/coach)
+    app.get('/marketing/session/:id', (req, res) => {
+        const sessionId = escape(req.params.id);
+        const html = generateHtml(
+            'Session Coaching',
+            `
+            <h1>Session Coaching: ${sessionId}</h1>
+            <div id="conversation">
+                <p><strong>System:</strong> How can I assist you with this marketing session?</p>
             </div>
             <form id="coachForm">
                 <div class="form-group">
-                    <label for="userInput">Your Message:</label>
-                    <textarea id="userInput" name="userInput" rows="4" placeholder="e.g., 'I need engaging captions for Instagram stories about our new product launch.' or 'Focus on benefits for small businesses.'" required></textarea>
+                    <label for="message">Your Input:</label>
+                    <textarea id="message" name="message" rows="4" placeholder="e.g., 'Generate ideas for a LinkedIn post about Q3 results'"></textarea>
                 </div>
-                <button type="submit">Send Message</button>
-                <a href="/marketing/session/${sessionId}/content" style="margin-left: 1rem;">Review Content</a>
+                <button type="submit">Send</button>
             </form>
-        `;
-    const clientScript = `
-            const coachForm = document.getElementById('coachForm');
-            const userInput = document.getElementById('userInput');
-            const conversationLog = document.getElementById('conversationLog');
+            `,
+            `
             const sessionId = '${sessionId}';
+            const conversationDiv = document.getElementById('conversation');
+            const coachForm = document.getElementById('coachForm');
+            const messageInput = document.getElementById('message');
 
-            const appendMessage = (sender, message, isError = false) => {
+            const addMessage = (sender, text) => {
                 const p = document.createElement('p');
-                p.innerHTML = \`<strong>\${sender}:</strong> \${escapeHtml(message)}\`;
-                if (isError) {
-                    p.classList.add('error');
-                }
-                conversationLog.appendChild(p);
-                conversationLog.scrollTop = conversationLog.scrollHeight;
+                p.innerHTML = \`<strong>\${sender}:</strong> \${text}\`;
+                conversationDiv.appendChild(p);
+                conversationDiv.scrollTop = conversationDiv.scrollHeight; // Scroll to bottom
             };
 
             coachForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const message = userInput.value;
-                if (!message.trim()) return;
+                const message = messageInput.value.trim();
+                if (!message) return;
 
-                appendMessage('You', message);
-                userInput.value = '';
-                
+                addMessage('You', message);
+                messageInput.value = ''; // Clear input
+
                 try {
                     const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/coach\`, {
                         method: 'POST',
@@ -182,132 +148,119 @@ export function registerMarketingSessionUi(app) {
                         },
                         body: JSON.stringify({ message }),
                     });
-
+                    const data = await response.json();
                     if (response.ok) {
-                        const data = await response.json();
-                        appendMessage('AI', data.response); // Assuming API returns { response: "..." }
+                        addMessage('System', data.response);
                     } else {
-                        const errorData = await response.json();
-                        appendMessage('Error', 'Failed to get AI response: ' + (errorData.message || response.statusText), true);
+                        addMessage('System', 'Error: ' + (data.message || response.statusText));
                     }
                 } catch (error) {
                     console.error('Network error:', error);
-                    appendMessage('Error', 'Network error during AI interaction.', true);
+                    addMessage('System', 'Network error. Please try again.');
                 }
             });
-        `;
-    res.send(baseHtml(`Session: ${sessionId}`, bodyContent, clientScript));
-  });
+            `
+        );
+        res.send(html);
+    });
 
-  // GET /marketing/session/:id/content (review + approve generated pieces; PATCHes /api/v1/marketing/content/:id)
-  app.get('/marketing/session/:id/content', (req, res) => {
-    const sessionId = escapeHtml(req.params.id);
-    const bodyContent = `
-            <h1>Review & Approve Content for Session: ${sessionId}</h1>
-            <p>Review the generated content pieces below. Approve the ones you like, or request revisions from the AI.</p>
+    // GET /marketing/session/:id/content (review + approve generated pieces; PATCHes /api/v1/marketing/content/:id)
+    app.get('/marketing/session/:id/content', async (req, res) => {
+        const sessionId = escape(req.params.id);
+        let contentItemsHtml = '<p>No content generated yet. Use the coaching interface to generate content.</p>';
+        let scripts = `const sessionId = '${sessionId}';`;
+
+        try {
+            // Fetch content items for the session (assuming an API to list them)
+            const apiResponse = await fetch(`http://localhost:3000/api/v1/marketing/sessions/${sessionId}/content`); // Assume API is on same host/port
+            if (apiResponse.ok) {
+                const contentItems = await apiResponse.json();
+                if (contentItems && contentItems.length > 0) {
+                    contentItemsHtml = contentItems.map(item => `
+                        <div class="content-item ${item.status === 'approved' ? 'approved' : item.status === 'rejected' ? 'rejected' : ''}" id="content-item-${escape(item.id)}">
+                            <h3>${escape(item.title || 'Untitled Content')}</h3>
+                            <p>${escape(item.text)}</p>
+                            <p><em>Status: <span id="status-${escape(item.id)}">${escape(item.status)}</span></em></p>
+                            <button onclick="updateContentStatus('${escape(item.id)}', 'approved')" ${item.status === 'approved' ? 'disabled' : ''}>Approve</button>
+                            <button onclick="updateContentStatus('${escape(item.id)}', 'rejected')" ${item.status === 'rejected' ? 'disabled' : ''}>Reject</button>
+                        </div>
+                    `).join('');
+
+                    scripts += `
+                    async function updateContentStatus(contentId, status) {
+                        try {
+                            const response = await fetch(\`/api/v1/marketing/content/\${contentId}\`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ status }),
+                            });
+                            const data = await response.json();
+                            if (response.ok) {
+                                const statusSpan = document.getElementById(\`status-\${contentId}\`);
+                                if (statusSpan) statusSpan.textContent = status;
+                                const contentDiv = document.getElementById(\`content-item-\${contentId}\`);
+                                if (contentDiv) {
+                                    contentDiv.classList.remove('approved', 'rejected');
+                                    if (status === 'approved') contentDiv.classList.add('approved');
+                                    if (status === 'rejected') contentDiv.classList.add('rejected');
+                                    // Disable buttons after action
+                                    contentDiv.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                                }
+                            } else {
+                                alert('Error updating content: ' + (data.message || response.statusText));
+                            }
+                        } catch (error) {
+                            console.error('Network error:', error);
+                            alert('Network error. Please try again.');
+                        }
+                    }
+                    `;
+                }
+            } else {
+                contentItemsHtml = `<p class="message error">Failed to load content: ${apiResponse.statusText}</p>`;
+            }
+        } catch (error) {
+            console.error('Error fetching content:', error);
+            contentItemsHtml = `<p class="message error">Network error fetching content. Please try again.</p>`;
+        }
+
+
+        const html = generateHtml(
+            'Review Content',
+            `
+            <h1>Review & Approve Content: ${sessionId}</h1>
+            <p>Review the generated content pieces below. Approve or reject each piece as needed.</p>
             <div id="contentList">
-                <p>Loading content...</p>
+                ${contentItemsHtml}
             </div>
-            <div class="button-group">
-                <a href="/marketing/session/${sessionId}" class="button">Back to Coaching</a>
-                <button id="exportContentButton">Proceed to Export</button>
-            </div>
-        `;
-    const clientScript = `
-            const contentList = document.getElementById('contentList');
-            const exportContentButton = document.getElementById('exportContentButton');
+            <p><button onclick="window.location.href='/marketing/session/${sessionId}/export'">Proceed to Export</button></p>
+            `,
+            scripts
+        );
+        res.send(html);
+    });
+
+    // GET /marketing/session/:id/export (download the content pack via /api/v1/marketing/sessions/:id/export)
+    app.get('/marketing/session/:id/export', (req, res) => {
+        const sessionId = escape(req.params.id);
+        const html = generateHtml(
+            'Export Content',
+            `
+            <h1>Export Content Pack: ${sessionId}</h1>
+            <p>Your content session is complete. You can now download the approved content pack.</p>
+            <button onclick="downloadContentPack('${sessionId}')">Download Content Pack</button>
+            `,
+            `
             const sessionId = '${sessionId}';
-
-            const fetchContent = async () => {
-                contentList.innerHTML = '<p>Loading content...</p>';
-                try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/content\`);
-                    if (response.ok) {
-                        const contentPieces = await response.json(); // Assuming array of { id, text, type, status }
-                        if (contentPieces.length === 0) {
-                            contentList.innerHTML = '<p>No content generated yet. Go back to coaching to generate some!</p>';
-                        } else {
-                            contentList.innerHTML = contentPieces.map(piece => \`
-                                <div class="content-card" data-id="\${piece.id}">
-                                    <p><strong>Type:</strong> \${escapeHtml(piece.type || 'General')}</p>
-                                    <p>\${escapeHtml(piece.text)}</p>
-                                    <p><strong>Status:</strong> <span id="status-\${piece.id}">\${escapeHtml(piece.status)}</span></p>
-                                    <button class="approve-btn" data-id="\${piece.id}" \${piece.status === 'approved' ? 'disabled' : ''}>Approve</button>
-                                    <button class="reject-btn" data-id="\${piece.id}" \${piece.status === 'rejected' ? 'disabled' : ''}>Reject</button>
-                                </div>
-                            \`).join('');
-                            document.querySelectorAll('.approve-btn').forEach(button => {
-                                button.addEventListener('click', () => updateContentStatus(button.dataset.id, 'approved'));
-                            });
-                            document.querySelectorAll('.reject-btn').forEach(button => {
-                                button.addEventListener('click', () => updateContentStatus(button.dataset.id, 'rejected'));
-                            });
-                        }
-                    } else {
-                        const errorData = await response.json();
-                        contentList.innerHTML = \`<p class="error">Error loading content: \${escapeHtml(errorData.message || response.statusText)}</p>\`;
-                    }
-                } catch (error) {
-                    console.error('Network error:', error);
-                    contentList.innerHTML = '<p class="error">Network error loading content.</p>';
-                }
-            };
-
-            const updateContentStatus = async (contentId, status) => {
-                try {
-                    const response = await fetch(\`/api/v1/marketing/content/\${contentId}\`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ status }),
-                    });
-
-                    if (response.ok) {
-                        document.getElementById(\`status-\${contentId}\`).textContent = status;
-                        const card = document.querySelector(\`[data-id="\${contentId}"]\`);
-                        if (card) {
-                            card.querySelector('.approve-btn').disabled = (status === 'approved');
-                            card.querySelector('.reject-btn').disabled = (status === 'rejected');
-                        }
-                    } else {
-                        const errorData = await response.json();
-                        alert('Error updating status: ' + (errorData.message || response.statusText));
-                    }
-                } catch (error) {
-                    console.error('Network error:', error);
-                    alert('Network error updating status.');
-                }
-            };
-
-            exportContentButton.addEventListener('click', () => {
-                window.location.href = \`/marketing/session/\${sessionId}/export\`;
-            });
-
-            fetchContent();
-        `;
-    res.send(baseHtml(`Review Content: ${sessionId}`, bodyContent, clientScript));
-  });
-
-  // GET /marketing/session/:id/export (download the content pack via /api/v1/marketing/sessions/:id/export)
-  app.get('/marketing/session/:id/export', (req, res) => {
-    const sessionId = escapeHtml(req.params.id);
-    const bodyContent = `
-            <h1>Export Content for Session: ${sessionId}</h1>
-            <p>Your content pack is ready for download. It includes all approved content pieces for this session.</p>
-            <button id="downloadButton">Download Content Pack</button>
-            <a href="/marketing/session/${sessionId}/content" style="margin-left: 1rem;">Back to Review</a>
-        `;
-    const clientScript = `
-            const downloadButton = document.getElementById('downloadButton');
-            const sessionId = '${sessionId}';
-
-            downloadButton.addEventListener('click', () => {
+            function downloadContentPack(sessionId) {
                 window.location.href = \`/api/v1/marketing/sessions/\${sessionId}/export\`;
-            });
-        `;
-    res.send(baseHtml(`Export Content: ${sessionId}`, bodyContent, clientScript));
-  });
+            }
+            `
+        );
+        res.send(html);
+    });
 }
 
 export default registerMarketingSessionUi;
