@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T02:13:56.458Z",
+  "generated_at": "2026-07-07T02:25:58.302Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11212,
   "files": [
@@ -84180,9 +84180,9 @@
     {
       "path": "services/site-builder-social-discovery.js",
       "synopsis": "Exports extractYouTubeChannelId — services/site-builder-social-discovery.js.",
-      "bytes": 9643,
-      "mtime": "2026-07-07T01:05:43.309Z",
-      "indexed_at": "2026-07-07T01:08:47.122Z"
+      "bytes": 9801,
+      "mtime": "2026-07-07T02:25:58.302Z",
+      "indexed_at": "2026-07-07T02:25:58.302Z"
     },
     {
       "path": "services/site-builder.js",
