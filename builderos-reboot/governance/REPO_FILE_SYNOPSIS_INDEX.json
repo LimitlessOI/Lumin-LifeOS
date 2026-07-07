@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T17:34:52.459Z",
+  "generated_at": "2026-07-07T17:36:01.162Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11236,
   "files": [
@@ -83140,10 +83140,10 @@
     },
     {
       "path": "services/marketing-repurpose.js",
-      "synopsis": "Repurpose a source piece into requested SocialMediaOS output formats using the injected council AI hook.",
-      "bytes": 5609,
-      "mtime": "2026-07-07T17:34:52.459Z",
-      "indexed_at": "2026-07-07T17:34:52.459Z",
+      "synopsis": "Repurpose a source piece into requested social/media formats using the live council AI hook.",
+      "bytes": 4285,
+      "mtime": "2026-07-07T17:36:01.162Z",
+      "indexed_at": "2026-07-07T17:36:01.162Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
