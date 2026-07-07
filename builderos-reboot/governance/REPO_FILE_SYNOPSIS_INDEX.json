@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T21:09:36.439Z",
+  "generated_at": "2026-07-07T21:14:43.607Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11263,
+  "file_count": 11264,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30235,9 +30235,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 2834,
-      "mtime": "2026-07-07T16:46:21.127Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 3333,
+      "mtime": "2026-07-07T21:13:59.191Z",
+      "indexed_at": "2026-07-07T21:14:43.607Z",
       "synopsis_index_only": true
     },
     {
@@ -39446,9 +39446,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 96644,
-      "mtime": "2026-07-07T21:09:17.283Z",
-      "indexed_at": "2026-07-07T21:09:36.439Z"
+      "bytes": 97790,
+      "mtime": "2026-07-07T21:14:30.595Z",
+      "indexed_at": "2026-07-07T21:14:43.607Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -64732,6 +64732,16 @@
       ]
     },
     {
+      "path": "routes/general-browser-agent-routes.js",
+      "synopsis": "CONDUCTOR-GLUE founder-lane route module for the general goal-driven",
+      "bytes": 3710,
+      "mtime": "2026-07-07T21:13:40.727Z",
+      "indexed_at": "2026-07-07T21:14:43.607Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/goals-routes.js",
       "synopsis": "Exports createGoalsRoutes — routes/goals-routes.js.",
       "bytes": 4498,
@@ -65620,9 +65630,9 @@
     {
       "path": "routes/tc-routes.js",
       "synopsis": "tc-routes.js",
-      "bytes": 153652,
-      "mtime": "2026-07-07T21:08:58.643Z",
-      "indexed_at": "2026-07-07T21:09:36.439Z",
+      "bytes": 151108,
+      "mtime": "2026-07-07T21:13:52.879Z",
+      "indexed_at": "2026-07-07T21:14:43.607Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
