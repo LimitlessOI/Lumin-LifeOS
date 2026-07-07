@@ -1,45 +1,43 @@
--- SYNOPSIS: Creates the initial MarketingOS tables for consent, sessions, content extractions, content pieces, and channel profiles.
-
+-- SYNOPSIS: Creates the initial MarketingOS database schema.
 CREATE TABLE IF NOT EXISTS marketing_consent_records (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
-    consent_type TEXT NOT NULL,
-    consented_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    consent_type TEXT NOT NULL CHECK (consent_type IN ('opt_in', 'opt_out')),
+    source TEXT NOT NULL,
+    timestamp TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     revoked_at TIMESTAMPTZ,
-    data_policy_version TEXT NOT NULL,
-    CHECK (consent_type IN ('email', 'sms', 'push', 'cookie_analytics', 'cookie_marketing')),
-    CHECK (revoked_at IS NULL OR revoked_at > consented_at),
-    CONSTRAINT no_revocation_update CHECK (OLD.revoked_at IS NULL OR NEW.revoked_at = OLD.revoked_at)
+    data JSONB,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (revoked_at IS NULL OR revoked_at >= created_at)
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_marketing_consent_records_user_type_source ON marketing_consent_records (user_id, consent_type, source) WHERE revoked_at IS NULL;
 CREATE INDEX IF NOT EXISTS idx_marketing_consent_records_user_id ON marketing_consent_records (user_id);
-CREATE INDEX IF NOT EXISTS idx_marketing_consent_records_consent_type ON marketing_consent_records (consent_type);
 
 CREATE TABLE IF NOT EXISTS marketing_sessions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
-    consent_record_id UUID REFERENCES marketing_consent_records(id),
-    session_type TEXT NOT NULL,
-    started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    ended_at TIMESTAMPTZ,
+    consent_record_id UUID REFERENCES marketing_consent_records(id) ON DELETE CASCADE,
+    session_type TEXT NOT NULL CHECK (session_type IN ('web', 'email', 'app', 'api')),
+    start_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    end_time TIMESTAMPTZ,
     metadata JSONB,
-    CHECK (session_type IN ('website_visit', 'app_session', 'email_interaction', 'sms_interaction', 'ad_interaction'))
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_marketing_sessions_user_id ON marketing_sessions (user_id);
-CREATE INDEX IF NOT EXISTS idx_marketing_sessions_session_type ON marketing_sessions (session_type);
+CREATE INDEX IF NOT EXISTS idx_marketing_sessions_consent_record_id ON marketing_sessions (consent_record_id);
+CREATE INDEX IF NOT EXISTS idx_marketing_sessions_start_time ON marketing_sessions (start_time);
 
 CREATE TABLE IF NOT EXISTS marketing_content_extractions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     session_id UUID NOT NULL REFERENCES marketing_sessions(id) ON DELETE CASCADE,
-    extracted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    input_mode TEXT NOT NULL,
-    status TEXT NOT NULL,
-    extraction_type TEXT NOT NULL,
-    extracted_data JSONB,
-    CHECK (input_mode IN ('manual', 'api', 'scrape', 'webhook')),
-    CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
-    CHECK (extraction_type IN ('text', 'image', 'audio', 'video', 'structured_data'))
+    input_mode TEXT NOT NULL CHECK (input_mode IN ('manual', 'api', 'crawler')),
+    status TEXT NOT NULL CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
+    extraction_type TEXT NOT NULL CHECK (extraction_type IN ('text', 'image', 'audio', 'video', 'document', 'webpage')),
+    source_url TEXT,
+    extracted_data JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX IF NOT EXISTS idx_marketing_content_extractions_session_id ON marketing_content_extractions (session_id);
@@ -48,25 +46,30 @@ CREATE INDEX IF NOT EXISTS idx_marketing_content_extractions_status ON marketing
 CREATE TABLE IF NOT EXISTS marketing_content_pieces (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     extraction_id UUID NOT NULL REFERENCES marketing_content_extractions(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     title TEXT,
-    content TEXT,
+    body TEXT,
     url TEXT,
-    metadata JSONB
+    author TEXT,
+    published_at TIMESTAMPTZ,
+    metadata JSONB,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX IF NOT EXISTS idx_marketing_content_pieces_extraction_id ON marketing_content_pieces (extraction_id);
+CREATE INDEX IF NOT EXISTS idx_marketing_content_pieces_published_at ON marketing_content_pieces (published_at);
 
 CREATE TABLE IF NOT EXISTS marketing_channel_profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
-    platform TEXT NOT NULL,
-    profile_identifier TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    platform TEXT NOT NULL CHECK (platform IN ('email', 'sms', 'push', 'webhook', 'in_app')),
+    identifier TEXT NOT NULL,
+    format TEXT NOT NULL CHECK (format IN ('text', 'html', 'json', 'xml')),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
     metadata JSONB,
-    CHECK (platform IN ('email', 'sms', 'push', 'facebook', 'instagram', 'twitter', 'linkedin', 'google_ads', 'tiktok')),
-    UNIQUE (user_id, platform, profile_identifier)
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (user_id, platform, identifier)
 );
 
 CREATE INDEX IF NOT EXISTS idx_marketing_channel_profiles_user_id ON marketing_channel_profiles (user_id);
