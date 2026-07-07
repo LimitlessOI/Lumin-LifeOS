@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T17:20:42.322Z",
+  "generated_at": "2026-07-07T18:25:24.495Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11235,
+  "file_count": 11236,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3390151,
-      "mtime": "2026-07-07T16:50:42.799Z",
-      "indexed_at": "2026-07-07T16:51:22.528Z"
+      "bytes": 3391555,
+      "mtime": "2026-07-07T18:24:46.571Z",
+      "indexed_at": "2026-07-07T18:25:24.495Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38888,9 +38888,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 592943,
-      "mtime": "2026-07-07T09:30:12.537Z",
-      "indexed_at": "2026-07-07T16:50:42.501Z"
+      "bytes": 594574,
+      "mtime": "2026-07-07T18:24:36.667Z",
+      "indexed_at": "2026-07-07T18:25:24.495Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -64508,6 +64508,16 @@
       "indexed_at": "2026-07-07T16:50:42.501Z"
     },
     {
+      "path": "routes/factory-mount-routes.js",
+      "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
+      "bytes": 3231,
+      "mtime": "2026-07-07T18:22:53.375Z",
+      "indexed_at": "2026-07-07T18:25:24.495Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/faith-studio-routes.js",
       "synopsis": "Exports createFaithStudioRoutes — routes/faith-studio-routes.js.",
       "bytes": 10511,
@@ -85763,9 +85773,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 48276,
-      "mtime": "2026-07-07T09:30:12.541Z",
-      "indexed_at": "2026-07-07T16:50:42.501Z",
+      "bytes": 48480,
+      "mtime": "2026-07-07T18:23:03.779Z",
+      "indexed_at": "2026-07-07T18:25:24.495Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
