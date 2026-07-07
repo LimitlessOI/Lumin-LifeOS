@@ -1,190 +1,232 @@
-// SYNOPSIS: SocialMediaOS "publish or kill" gate for content intelligence.
+// SYNOPSIS: SocialMediaOS content intelligence gate that decides publish vs hold using local heuristics plus optional council-member judgments.
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
-const REQUIRED_GATE_NAMES = [
-  'hook_retention_15s',
-  'reason_to_stay_30s',
-  'thumbnail_title_match',
-  'info_accuracy',
-  'differentiation'
-];
-
-function safeTrim(value) {
-  return typeof value === 'string' ? value.trim() : '';
+function normalizeText(value) {
+  return String(value ?? "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function toLower(value) {
-  return safeTrim(value).toLowerCase();
+function wordCount(text) {
+  const normalized = normalizeText(text);
+  if (!normalized) return 0;
+  return normalized.split(" ").filter(Boolean).length;
 }
 
-function words(value) {
-  return toLower(value)
-    .split(/[^a-z0-9]+/g)
-    .filter(Boolean);
+function sentenceCount(text) {
+  const normalized = normalizeText(text);
+  if (!normalized) return 0;
+  const matches = normalized.match(/[.!?]+(\s|$)/g);
+  return matches ? matches.length : 1;
 }
 
-function unique(arr) {
-  return [...new Set(arr)];
+function parseBooleanLikeText(text) {
+  const t = normalizeText(text).toLowerCase();
+  if (!t) return null;
+  if (/\b(true|yes|pass|publish|ok|approve|green)\b/.test(t)) return true;
+  if (/\b(false|no|fail|hold|reject|red)\b/.test(t)) return false;
+  return null;
 }
 
-function overlapScore(a, b) {
-  const aw = unique(words(a));
-  const bw = new Set(words(b));
-  if (!aw.length) return 0;
-  let hit = 0;
-  for (const token of aw) if (bw.has(token)) hit += 1;
-  return hit / aw.length;
+function extractReason(text) {
+  const normalized = normalizeText(text);
+  if (!normalized) return "";
+  const lines = normalized.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  return lines[0] || normalized.slice(0, 240);
 }
 
-function containsAny(text, terms) {
-  const t = toLower(text);
-  return terms.some((term) => t.includes(term));
+function hasQuestionableAccuracySignals({ title, hook, body }) {
+  const combined = normalizeText([title, hook, body].join(" "));
+  const signals = [
+    /\b(always|never|guaranteed|guarantee|100%|perfect|instantly|without effort)\b/i,
+    /\bsecret\b/i,
+    /\binsider\b/i,
+    /\bshocking\b/i,
+    /\breveals?\b/i,
+    /\bno one\b/i,
+    /\bbest\b/i,
+  ];
+  return signals.some((re) => re.test(combined));
 }
 
-function buildLocalHeuristics(piece) {
-  const title = safeTrim(piece?.title);
-  const hook = safeTrim(piece?.hook);
-  const body = safeTrim(piece?.body);
-  const thumbnailConcept = safeTrim(piece?.thumbnailConcept);
-  const fullText = [title, hook, body].filter(Boolean).join(' ');
+function localHeuristics(piece) {
+  const checks = [];
 
-  const hookWords = words(hook);
-  const titleWords = words(title);
-  const bodyWords = words(body);
+  const title = normalizeText(piece?.title);
+  const hook = normalizeText(piece?.hook);
+  const body = normalizeText(piece?.body);
+  const thumbnailConcept = normalizeText(piece?.thumbnailConcept);
 
-  const hookRetains = hookWords.length >= 6 && hookWords.length <= 28 && /[?!.:]/.test(hook) ? true : hookWords.length >= 6;
-  const reasonsToStay = bodyWords.length >= 35 || containsAny(fullText, ['because', 'why', 'how', 'step', 'steps', 'proof', 'example', 'demo', 'framework', 'mistake', 'results', 'data']);
-  const thumbnailMatches = thumbnailConcept
-    ? overlapScore(title, thumbnailConcept) >= 0.25 || overlapScore(hook, thumbnailConcept) >= 0.2
-    : true;
+  const hookWords = wordCount(hook);
+  const bodyWords = wordCount(body);
+  const titleWords = wordCount(title);
+  const totalWords = wordCount([title, hook, body].join(" "));
+  const bodySentences = sentenceCount(body);
 
-  const infoAccurate = title.length > 0 && hook.length > 0 && body.length > 0 && bodyWords.length >= 25;
-  const differentiation = containsAny(fullText, [
-    'not',
-    'instead',
-    'unique',
-    'counterintuitive',
-    'different',
-    'competitor',
-    'vs',
-    'better than',
-    'most people',
-    'few',
-    'rare',
-    'new'
-  ]) || bodyWords.length >= 40;
+  const hookKeepsAttention = hookWords > 0 && hookWords <= 22 && !hook.endsWith(".");
+  checks.push({
+    name: "hook_15s_fit",
+    pass: hookKeepsAttention && totalWords >= 20,
+    reason: hookKeepsAttention
+      ? "hook is concise enough for a short attention window"
+      : "hook is too long or missing for a quick attention window",
+  });
 
-  return {
-    hook_retention_15s: {
-      pass: hookRetains,
-      reason: hookRetains ? 'hook appears concise enough to carry early attention' : 'hook is too weak or too short to likely retain attention'
-    },
-    reason_to_stay_30s: {
-      pass: reasonsToStay,
-      reason: reasonsToStay ? 'body gives a substantive reason to continue' : 'body does not give enough reason to keep watching'
-    },
-    thumbnail_title_match: {
-      pass: thumbnailMatches,
-      reason: thumbnailMatches ? 'thumbnail concept aligns with title/hook' : 'thumbnail concept appears mismatched to the title/hook'
-    },
-    info_accuracy: {
-      pass: infoAccurate,
-      reason: infoAccurate ? 'content has enough concrete substance to be plausibly accurate' : 'content is too thin to judge as accurate'
-    },
-    differentiation: {
-      pass: differentiation,
-      reason: differentiation ? 'content suggests a distinct angle or substantive value' : 'content does not clearly differentiate itself'
-    }
-  };
+  const reasonToStayAt30s = bodyWords >= 45 || bodySentences >= 3;
+  checks.push({
+    name: "reason_to_stay_30s",
+    pass: reasonToStayAt30s,
+    reason: reasonToStayAt30s
+      ? "enough substance to justify a longer watch"
+      : "not enough substance to justify the longer segment",
+  });
+
+  let thumbnailMatchesTitle = true;
+  if (title && thumbnailConcept) {
+    const titleTokens = title.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 4);
+    const thumbLower = thumbnailConcept.toLowerCase();
+    const overlap = titleTokens.filter((token) => thumbLower.includes(token));
+    thumbnailMatchesTitle = overlap.length > 0;
+  } else if (!thumbnailConcept) {
+    thumbnailMatchesTitle = true;
+  } else {
+    thumbnailMatchesTitle = false;
+  }
+  checks.push({
+    name: "thumbnail_matches_title",
+    pass: thumbnailMatchesTitle,
+    reason: thumbnailMatchesTitle
+      ? "thumbnail concept aligns with the title"
+      : "thumbnail concept does not clearly match the title",
+  });
+
+  const infoAccurate = !hasQuestionableAccuracySignals({ title, hook, body });
+  checks.push({
+    name: "info_accurate",
+    pass: infoAccurate,
+    reason: infoAccurate
+      ? "no strong exaggerated or misleading claims detected"
+      : "copy contains potentially exaggerated or misleading claims",
+  });
+
+  const somethingCompetitorsDontHave = bodyWords >= 35 && /(\bunique\b|\bdifferent\b|\bonly\b|\bfirst\b|\bnew\b|\bcontrarian\b|\bedge\b|\badvantage\b)/i.test(
+    [title, hook, body].join(" ")
+  );
+  checks.push({
+    name: "competitor_edge",
+    pass: somethingCompetitorsDontHave,
+    reason: somethingCompetitorsDontHave
+      ? "piece suggests a differentiator or edge"
+      : "no clear differentiator surfaced from the text",
+  });
+
+  return checks;
 }
 
 async function askCouncil(callCouncilMember, role, prompt) {
-  if (typeof callCouncilMember !== 'function') return null;
+  if (typeof callCouncilMember !== "function") {
+    return { pass: null, reason: "ai_unavailable" };
+  }
   try {
-    return await callCouncilMember(role, prompt);
-  } catch {
-    return null;
+    const raw = await callCouncilMember(role, prompt, { temperature: 0.2 });
+    const pass = parseBooleanLikeText(raw);
+    const reason = extractReason(raw) || "ai_review_completed";
+    return { pass, reason: reason || "ai_review_completed" };
+  } catch (error) {
+    return { pass: null, reason: `ai_error:${error?.message || String(error)}` };
   }
 }
 
-function parseCouncilJudgement(raw) {
-  if (typeof raw !== 'string' || !raw.trim()) return null;
-  const text = raw.trim();
-
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    try {
-      const parsed = JSON.parse(jsonMatch[0]);
-      if (parsed && typeof parsed === 'object') return parsed;
-    } catch {}
-  }
-
-  const lowered = text.toLowerCase();
-  const pass = lowered.includes('pass') || lowered.includes('publish') || lowered.includes('yes');
-  const fail = lowered.includes('fail') || lowered.includes('hold') || lowered.includes('kill') || lowered.includes('no');
-  if (pass || fail) return { pass: pass && !fail, reason: text };
-  return { reason: text };
-}
-
-async function publishOrKill({ callCouncilMember, piece } = {}) {
+export async function publishOrKill({ callCouncilMember, piece }) {
   try {
-    const local = buildLocalHeuristics(piece);
-    const checks = [];
-    const blockingReasons = [];
+    const safePiece = {
+      title: normalizeText(piece?.title),
+      hook: normalizeText(piece?.hook),
+      body: normalizeText(piece?.body),
+      thumbnailConcept: normalizeText(piece?.thumbnailConcept),
+    };
 
-    for (const name of REQUIRED_GATE_NAMES) {
-      const localCheck = local[name];
-      if (!localCheck) continue;
+    const checks = [...localHeuristics(safePiece)];
 
-      let check = { name, pass: localCheck.pass, reason: localCheck.reason };
+    const aiHookPrompt = [
+      "Decide whether this content should publish or hold.",
+      "Return a short verdict and one short reason.",
+      "Criteria:",
+      "- hook must work in ~15s attention window",
+      "- give a reason to stay ~30s if content has enough substance",
+      "- thumbnail must match the title if a thumbnail concept is provided",
+      "- info must be accurate and not exaggerated",
+      "- look for a real differentiator vs competitors",
+      "",
+      `TITLE: ${safePiece.title || "(missing)"}`,
+      `HOOK: ${safePiece.hook || "(missing)"}`,
+      `BODY: ${safePiece.body || "(missing)"}`,
+      `THUMBNAIL: ${safePiece.thumbnailConcept || "(missing)"}`,
+    ].join("\n");
 
-      if (typeof callCouncilMember === 'function') {
-        const aiPrompt = [
-          `Evaluate this SocialMediaOS content piece for the gate "${name}".`,
-          `Return a concise decision with reason.`,
-          `Title: ${safeTrim(piece?.title) || '(empty)'}`,
-          `Hook: ${safeTrim(piece?.hook) || '(empty)'}`,
-          `Body: ${safeTrim(piece?.body) || '(empty)'}`,
-          `Thumbnail concept: ${safeTrim(piece?.thumbnailConcept) || '(none)'}`
-        ].join('\n');
+    const aiChecks = [
+      { name: "hook_15s_fit_ai", role: "editor", label: "hook_15s_fit" },
+      { name: "reason_to_stay_30s_ai", role: "editor", label: "reason_to_stay_30s" },
+      { name: "thumbnail_matches_title_ai", role: "designer", label: "thumbnail_matches_title" },
+      { name: "info_accurate_ai", role: "fact_checker", label: "info_accurate" },
+      { name: "competitor_edge_ai", role: "strategist", label: "competitor_edge" },
+    ];
 
-        const raw = await askCouncil(callCouncilMember, 'editor', aiPrompt);
-        if (raw == null) {
-          check = { ...check, pass: null, reason: 'ai_unavailable' };
-        } else {
-          const judged = parseCouncilJudgement(raw);
-          if (judged && typeof judged.pass === 'boolean') {
-            check = { name, pass: judged.pass, reason: safeTrim(judged.reason) || raw.trim() };
-          } else if (judged && judged.reason) {
-            check = { name, pass: localCheck.pass, reason: safeTrim(judged.reason) || localCheck.reason };
-          }
-        }
-      } else if (['hook_retention_15s', 'reason_to_stay_30s', 'thumbnail_title_match', 'info_accuracy', 'differentiation'].includes(name)) {
-        check = { name, pass: null, reason: 'ai_unavailable' };
-      }
-
-      checks.push(check);
-      if (check.pass === false) blockingReasons.push(`${name}: ${check.reason}`);
+    for (const spec of aiChecks) {
+      const result = await askCouncil(callCouncilMember, spec.role, aiHookPrompt + `\n\nFOCUS: ${spec.label}`);
+      checks.push({
+        name: spec.name,
+        pass: result.pass,
+        reason: result.reason,
+      });
     }
 
-    const requiredPasses = checks.every((c) => c.pass === true);
-    const verdict = requiredPasses ? 'publish' : 'hold';
+    const requiredCheckNames = [
+      "hook_15s_fit",
+      "reason_to_stay_30s",
+      "thumbnail_matches_title",
+      "info_accurate",
+      "competitor_edge",
+    ];
+
+    const blockingReasons = [];
+    for (const name of requiredCheckNames) {
+      const check = checks.find((c) => c.name === name || c.name === `${name}_ai`);
+      if (!check) {
+        blockingReasons.push(`${name}:missing`);
+        continue;
+      }
+      if (check.pass === false) blockingReasons.push(`${name}:${check.reason}`);
+      if (check.pass == null) blockingReasons.push(`${name}:${check.reason || "ai_unavailable"}`);
+    }
+
+    const allLocalPass = requiredCheckNames.every((name) => {
+      const check = checks.find((c) => c.name === name);
+      return check?.pass === true;
+    });
+
+    const allAiPassOrUnavailable = aiChecks.every((spec) => {
+      const check = checks.find((c) => c.name === spec.name);
+      return check?.pass === true || check?.pass == null;
+    });
+
+    const verdict = allLocalPass && allAiPassOrUnavailable && blockingReasons.length === 0 ? "publish" : "hold";
 
     return {
       ok: true,
       verdict,
       checks,
-      blockingReasons: verdict === 'publish' ? [] : blockingReasons
+      blockingReasons,
     };
   } catch (error) {
     return {
       ok: false,
       error: {
-        message: error instanceof Error ? error.message : String(error)
-      }
+        message: error?.message || String(error),
+        name: error?.name || "Error",
+      },
     };
   }
 }
 
-export { publishOrKill };
 export default publishOrKill;
