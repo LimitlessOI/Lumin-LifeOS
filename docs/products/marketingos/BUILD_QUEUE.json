@@ -30,10 +30,10 @@
       "attempts": 1,
       "max_output_tokens": 14000,
       "revive_count": 2,
-      "last_attempt_at": "2026-07-07T10:49:28.364Z",
+      "last_attempt_at": "2026-07-07T10:49:33.021Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "e3b0b4a1f15f1d276c944ce7f0ff06fede7c6c55",
-      "completed_at": "2026-07-07T10:49:29.587Z"
+      "completed_at": "2026-07-07T10:49:34.567Z"
     },
     {
       "id": "mos-session-ui",
