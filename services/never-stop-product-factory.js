@@ -579,6 +579,46 @@ async function postBuilderBuild(baseUrl, commandKey, body) {
  * thrown, so it can never crash the loop. Skips the write when content is
  * unchanged so it does not spawn a redeploy for a no-op.
  */
+// Runtime fields the loop OWNS on a step. Everything else on a step (task, spec,
+// depends_on, target_file, max_output_tokens, …) is author/oversight-owned and
+// must be preserved verbatim from the repo. Persisting status must NOT clobber a
+// concurrent spec edit — the loop's in-container queue is a stale snapshot from
+// boot time, so writing it whole reverted every external BUILD_QUEUE edit.
+const QUEUE_RUNTIME_STEP_FIELDS = [
+  'status', 'attempts', 'commit_sha', 'built_sha', 'proof',
+  'last_attempt_at', 'last_attempt', 'last_error', 'revive_count',
+  'completed_at', 'no_op', 'pre_existing',
+];
+
+/**
+ * Merge the loop's runtime step status onto the LATEST repo queue, so an
+ * external edit to a step's spec/task (or any non-runtime field) is preserved.
+ * Base = repo version; for each repo step overlay only the runtime fields from
+ * the in-memory queue; append any in-memory-only steps; keep repo step order.
+ * Falls back to the raw in-memory queue if the repo copy can't be parsed.
+ */
+export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
+  if (!repoQueue || !Array.isArray(repoQueue.steps)) return memQueue;
+  const memById = new Map((memQueue.steps || []).map((s) => [s.id, s]));
+  const merged = { ...repoQueue };
+  merged.updated_at = memQueue.updated_at || repoQueue.updated_at;
+  const seen = new Set();
+  merged.steps = repoQueue.steps.map((repoStep) => {
+    const memStep = memById.get(repoStep.id);
+    if (!memStep) return repoStep;
+    seen.add(repoStep.id);
+    const out = { ...repoStep };
+    for (const f of QUEUE_RUNTIME_STEP_FIELDS) {
+      if (Object.prototype.hasOwnProperty.call(memStep, f)) out[f] = memStep[f];
+    }
+    return out;
+  });
+  for (const memStep of memQueue.steps || []) {
+    if (!seen.has(memStep.id)) merged.steps.push(memStep);
+  }
+  return merged;
+}
+
 async function commitQueueStatusToRepo(queue, stepId) {
   const token = (process.env.GITHUB_TOKEN || '').trim();
   const repo = (process.env.GITHUB_REPO || '').trim();
@@ -587,32 +627,48 @@ async function commitQueueStatusToRepo(queue, stepId) {
   const localPath = queue._sourcePath || queuePathForProduct(queue.product_id);
   const relPath = path.relative(ROOT, localPath).split(path.sep).join('/');
   const { _sourcePath, ...clean } = queue;
-  const content = `${JSON.stringify(clean, null, 2)}\n`;
   const [owner, repoName] = repo.split('/');
   if (!owner || !repoName) return { ok: false, error: 'malformed_github_repo' };
   const apiBase = `https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}`;
   const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
-  let sha;
-  try {
-    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-    if (getRes.ok) {
-      const cur = await getRes.json();
-      sha = cur.sha;
-      if (cur.content && Buffer.from(cur.content, 'base64').toString('utf8') === content) {
-        return { ok: false, error: 'no_change' };
+
+  // Re-fetch + merge + PUT, retrying on a lost race (409/422 sha mismatch) so a
+  // sibling commit landing between GET and PUT doesn't drop this status update.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let sha;
+    let toWrite = clean;
+    let repoContent = null;
+    try {
+      const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
+      if (getRes.ok) {
+        const cur = await getRes.json();
+        sha = cur.sha;
+        if (cur.content) {
+          repoContent = Buffer.from(cur.content, 'base64').toString('utf8');
+          try {
+            toWrite = mergeQueueRuntimeStatus(JSON.parse(repoContent), clean);
+          } catch { toWrite = clean; }
+        }
       }
+    } catch { /* treat as new file */ }
+    const content = `${JSON.stringify(toWrite, null, 2)}\n`;
+    // Skip a no-op write (would spawn a pointless redeploy).
+    if (repoContent !== null && repoContent === content) {
+      return { ok: false, error: 'no_change' };
     }
-  } catch { /* treat as new file */ }
-  const body = {
-    message: `[never-stop] queue status: ${queue.product_id} (${stepId})`,
-    content: Buffer.from(content, 'utf8').toString('base64'),
-    branch,
-    ...(sha ? { sha } : {}),
-  };
-  const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
-  if (putRes.ok || putRes.status === 201) return { ok: true };
-  const errText = await putRes.text().catch(() => '');
-  return { ok: false, error: errText.slice(0, 200), status: putRes.status };
+    const body = {
+      message: `[never-stop] queue status: ${queue.product_id} (${stepId})`,
+      content: Buffer.from(content, 'utf8').toString('base64'),
+      branch,
+      ...(sha ? { sha } : {}),
+    };
+    const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+    if (putRes.ok || putRes.status === 201) return { ok: true };
+    if (putRes.status === 409 || putRes.status === 422) continue; // lost the race — re-fetch and retry
+    const errText = await putRes.text().catch(() => '');
+    return { ok: false, error: errText.slice(0, 200), status: putRes.status };
+  }
+  return { ok: false, error: 'sha_race_exhausted' };
 }
 
 /**

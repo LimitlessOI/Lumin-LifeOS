@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T04:54:02.430Z",
+  "generated_at": "2026-07-07T05:11:50.914Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11213,
+  "file_count": 11214,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38423,9 +38423,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 159954,
-      "mtime": "2026-07-07T04:16:17.217Z",
-      "indexed_at": "2026-07-07T04:16:33.509Z"
+      "bytes": 161006,
+      "mtime": "2026-07-07T05:11:41.841Z",
+      "indexed_at": "2026-07-07T05:11:50.914Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -83415,9 +83415,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 40565,
-      "mtime": "2026-07-07T03:54:12.893Z",
-      "indexed_at": "2026-07-07T03:54:46.609Z",
+      "bytes": 43138,
+      "mtime": "2026-07-07T05:10:53.525Z",
+      "indexed_at": "2026-07-07T05:11:50.914Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86700,6 +86700,16 @@
       "bytes": 2036,
       "mtime": "2026-07-07T03:32:29.580Z",
       "indexed_at": "2026-07-07T03:33:19.113Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/never-stop-queue-merge.test.js",
+      "synopsis": "Unit tests for mergeQueueRuntimeStatus — the loop must persist only",
+      "bytes": 3026,
+      "mtime": "2026-07-07T05:11:09.705Z",
+      "indexed_at": "2026-07-07T05:11:50.914Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
