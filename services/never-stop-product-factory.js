@@ -260,6 +260,22 @@ export async function lastCommitShaForFile(targetFile) {
   return githubLastCommitShaForFile(targetFile);
 }
 
+export function isEmptyEditNoOp(buildBody) {
+  // True when the builder entered EDIT-PATCH mode (the target file exists, so it
+  // diffs rather than writes) and the model returned an EMPTY edit array — i.e.
+  // it found nothing to change because the file is already correct. The build
+  // endpoint surfaces this as HTTP 422 `output: "[]"` / "edit output is not a
+  // non-empty JSON array". This is an already-built no-op, not a real failure.
+  const b = buildBody || {};
+  return Boolean(
+    b.output === '[]'
+    || /edit output is not a non-empty json array/i.test(String(b.error || ''))
+    || (b.gap_recommendation
+        && b.gap_recommendation.stage === 'edit_patch'
+        && /non-empty json array/i.test(String(b.gap_recommendation.reason || '')))
+  );
+}
+
 async function githubLastCommitShaForFile(targetFile) {
   const token = (process.env.GITHUB_TOKEN || '').trim();
   const repo = (process.env.GITHUB_REPO || '').trim();
@@ -651,19 +667,27 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       if (build.ok && commit_sha) {
         return { ok: true, commit_sha, error: null, repair_attempts: attempt - 1 };
       }
-      // Idempotent completion: the builder ran cleanly but produced NO new commit
-      // because target_file already exists with the desired content (a no-op
-      // build — the artifact was shipped by an earlier attempt/session). That is
-      // a legitimately-already-built step, NOT a failure. Without this, a step
-      // whose file is already correct can never finish: every rebuild is a no-op,
+      // Idempotent completion: the builder produced NO new commit because
+      // target_file already exists with the desired content (a no-op — the
+      // artifact was shipped by an earlier attempt/session). That is a
+      // legitimately-already-built step, NOT a failure. Two shapes signal it:
+      //   (a) build.ok with no commit_sha (clean run, nothing to change), or
+      //   (b) the builder entered EDIT-PATCH mode (the file exists, so it diffs
+      //       instead of writing) and the model returned an EMPTY edit array
+      //       (`output: "[]"`), which the edit stage rejects as HTTP 422
+      //       "edit output is not a non-empty JSON array" — i.e. it found
+      //       nothing to edit *because the file is already correct*.
+      // Without this, such a step can never finish: every rebuild is a no-op,
       // yields no SHA, exhausts maxAttempts, and re-blocks forever. Complete it
-      // honestly using the file's last-touching commit as the built SHA so verify
-      // + deploy-proof still gate it (no false green — the file must exist AND be
-      // served live before the step is marked done).
-      if (build.ok && !commit_sha && targetFileExists(target_file)) {
+      // honestly using the file's last-touching commit as the built SHA — verify
+      // + deploy-proof still gate it (no false green: the file must exist AND be
+      // served live before the step is marked done; a genuinely wrong/broken
+      // file fails verify with a different error).
+      const emptyEditNoOp = !commit_sha && isEmptyEditNoOp(b);
+      if (!commit_sha && (build.ok || emptyEditNoOp) && targetFileExists(target_file)) {
         const builtSha = await lastCommitShaForFile(target_file);
         if (builtSha) {
-          logger?.warn?.({ target_file, built: builtSha.slice(0, 8) }, '[never-stop] no-op build — file already present, completing via last-touching commit');
+          logger?.warn?.({ target_file, built: builtSha.slice(0, 8), empty_edit: emptyEditNoOp }, '[never-stop] no-op build — file already present, completing via last-touching commit');
           return { ok: true, commit_sha: builtSha, error: null, no_op: true, repair_attempts: attempt - 1 };
         }
       }
