@@ -39,10 +39,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T03:15:01.021Z",
+      "last_attempt_at": "2026-07-07T03:15:31.730Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 2,
-      "revived_at": "2026-07-07T03:15:01.021Z"
+      "revived_at": "2026-07-07T03:15:31.729Z"
     },
     {
       "id": "sb-editor-canvas",
