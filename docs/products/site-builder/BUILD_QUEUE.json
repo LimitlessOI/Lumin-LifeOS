@@ -37,8 +37,10 @@
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no network at import, no DB, no project imports. Named export renderSidebar + default export. Returns a STRING (an HTML fragment, NOT a full <html> document). Define a local htmlEscape() and escape name/blurb/price/cadence before interpolation. Guard services as possibly undefined -> default []. The inline script must be wrapped in try/catch and never throw if elements are missing. Deterministic given the same input ordering. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 7168
+      "attempts": 1,
+      "max_output_tokens": 7168,
+      "last_attempt_at": "2026-07-07T01:14:35.490Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
       "id": "sb-editor-canvas",
@@ -79,7 +81,12 @@
       "target_file": "services/site-builder-editor.js",
       "task": "Compose the full three-pane editor workspace document from the already-built pane modules. Import renderSidebar from './site-builder-editor-sidebar.js', renderCanvas from './site-builder-editor-canvas.js', renderChatPanel from './site-builder-editor-chat.js', and renderStrategyPanel from './site-builder-editor-strategy.js'. Export renderEditorShell({ businessName, clientId, siteFile, variants, palettes, editToken, baseUrl, strategy, services }) that returns ONE complete HTML document: a top bar showing the business name, then a THREE-COLUMN layout — LEFT = renderSidebar({ services, clientId, baseUrl }), CENTER = renderCanvas({ siteFile, variants, palettes, clientId, editToken, baseUrl }), RIGHT = a right column containing renderChatPanel({ clientId, editToken, baseUrl }) above a collapsible 'Strategy' section holding renderStrategyPanel({ strategy }). Add a small inline <script> that listens for the 'sb-editor:reload' window event and reloads the center iframe. This module is ONLY composition + document scaffold — it must not re-implement pane internals.",
       "spec": "Single self-contained ESM module. It MAY import the four sibling pane modules by relative path (they are committed before this step via depends_on). Named export renderEditorShell + default export. Returns a full HTML document using Tailwind CDN (https://cdn.tailwindcss.com) and Alpine.js CDN (https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js, defer). Define a local htmlEscape() and escape businessName before interpolation. Guard every destructured field (default services/variants/palettes/strategy sensibly). No DB, no network at import time. Keep this file small — delegate all pane markup to the imported render functions. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
-      "depends_on": ["sb-editor-sidebar", "sb-editor-canvas", "sb-editor-chat", "sb-editor-strategy"],
+      "depends_on": [
+        "sb-editor-sidebar",
+        "sb-editor-canvas",
+        "sb-editor-chat",
+        "sb-editor-strategy"
+      ],
       "founder_gated": false,
       "attempts": 0,
       "max_output_tokens": 8192
@@ -90,7 +97,9 @@
       "target_file": "routes/site-builder-editor-routes.js",
       "task": "New Express route module exporting createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl }) that mounts three POST endpoints under /api/v1/sites: `/edit` (AI edit), `/save-edits` (manual save), and `/revert` (restore the most recent .bak). All three authenticate with a PER-PREVIEW token (NOT the global command key): read public/previews/<clientId>/meta.json and require body.token === meta.editToken, else respond 403. `/edit` reads the target file (body.file, relative, under the client's preview dir), calls callCouncilMember with a STRONG paid model, passing the current HTML + the user's instruction + strict anti-fabrication TRUTH rules, asking it to return the ENTIRE modified HTML document; validate the response contains '<html'; write a timestamped .bak of the old file then overwrite; respond { ok:true }. `/save-edits` validates body.html contains '<html', writes a .bak then overwrites body.file. `/revert` restores the newest .bak for body.file.",
       "spec": "Single self-contained ESM file. Named export createSiteBuilderEditorRoutes + default. PATH SAFETY (hard, fail-closed): resolve previewsRoot = path.resolve(process.cwd(),'public/previews') ONCE; for every file access resolve the candidate and require resolved.startsWith(previewsRoot + path.sep) AND clientId matches /^[\\w-]+$/ AND file has no '..' — otherwise 403. Never read/write outside previewsRoot. Token check fails closed when meta.json is missing, unreadable, or has no editToken. No database. Use express.json() body parsing already present. Wrap AI/file errors and respond JSON { ok:false, error } with appropriate status; never leak absolute paths in errors. TRUTH rules passed to the model must forbid inventing prices, stats, ratings, review counts, and named testimonials. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
-      "depends_on": ["sb-editor-shell"],
+      "depends_on": [
+        "sb-editor-shell"
+      ],
       "founder_gated": false,
       "attempts": 0
     },
