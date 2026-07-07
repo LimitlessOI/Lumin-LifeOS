@@ -1,164 +1,278 @@
 /**
- * SYNOPSIS: Exports createSiteBuilderEditorRoutes — routes/site-builder-editor-routes.js.
+ * SYNOPSIS: Site Builder live preview editor API (edit / save / revert / shell).
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { Router } from 'express';
-import path from 'path';
-import fs from 'fs/promises';
-import { existsSync } from 'fs';
+import { promises as fsp } from 'node:fs';
+import path from 'node:path';
+import logger from '../services/logger.js';
+import { renderEditorShell } from '../services/site-builder-editor.js';
+import { recommendServices } from '../services/site-builder-service-catalog.js';
 
-const previewsRoot = path.resolve(process.cwd(), 'public/previews');
+const PREVIEWS_ROOT = path.resolve(process.cwd(), 'public/previews');
+const CLIENT_ID_RE = /^[\w-]+$/;
 
-const sanitizePath = (clientId, filePath) => {
-  if (!clientId || !/^[\\w-]+$/.test(clientId)) {
-    return null;
-  }
-  if (filePath.includes('..') || path.isAbsolute(filePath)) {
-    return null;
-  }
+function resolvePreviewFile(clientId, relativeFile) {
+  if (!CLIENT_ID_RE.test(String(clientId))) return null;
+  const rel = String(relativeFile || 'index.html').replace(/^\/+/, '');
+  if (!rel || rel.includes('..')) return null;
+  const clientRoot = path.resolve(PREVIEWS_ROOT, clientId);
+  const resolved = path.resolve(clientRoot, rel);
+  const relative = path.relative(clientRoot, resolved);
+  if (relative.startsWith('..') || path.isAbsolute(relative)) return null;
+  return resolved;
+}
 
-  const resolvedPath = path.resolve(previewsRoot, clientId, filePath);
-  if (!resolvedPath.startsWith(path.join(previewsRoot, clientId) + path.sep) && resolvedPath !== path.join(previewsRoot, clientId)) {
-    return null;
-  }
-  return resolvedPath;
-};
-
-const authenticateEditor = async (req, res, next) => {
-  const { clientId, token } = req.body;
-
-  if (!clientId || !token) {
-    return res.status(403).json({ ok: false, error: 'Missing client ID or token.' });
-  }
-
-  const metaPath = sanitizePath(clientId, 'meta.json');
-  if (!metaPath) {
-    return res.status(403).json({ ok: false, error: 'Invalid client ID or path.' });
-  }
-
+async function readMeta(clientId) {
+  const metaPath = path.join(PREVIEWS_ROOT, clientId, 'meta.json');
   try {
-    const metaContent = await fs.readFile(metaPath, 'utf8');
-    const meta = JSON.parse(metaContent);
-
-    if (meta.editToken !== token) {
-      return res.status(403).json({ ok: false, error: 'Invalid authentication token.' });
-    }
-    next();
-  } catch (error) {
-    console.error(`Authentication failed for client ${clientId}: ${error.message}`);
-    return res.status(403).json({ ok: false, error: 'Authentication failed.' });
+    return JSON.parse(await fsp.readFile(metaPath, 'utf8'));
+  } catch {
+    return null;
   }
-};
+}
 
-export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl }) {
+async function assertEditToken(clientId, token) {
+  const meta = await readMeta(clientId);
+  if (!meta?.editToken) return { ok: false, status: 403, error: 'Editor token unavailable' };
+  if (String(token || '') !== String(meta.editToken)) {
+    return { ok: false, status: 403, error: 'Invalid editor token' };
+  }
+  return { ok: true, meta };
+}
+
+function buildStrategyFromMeta(meta) {
+  const competitors = [];
+  const benchmark = meta?.benchmark;
+  if (benchmark?.competitors && Array.isArray(benchmark.competitors)) {
+    for (const c of benchmark.competitors) {
+      competitors.push({
+        name: c.name || c.url || 'Competitor',
+        category: c.category || 'market',
+        score: c.score,
+        strengths: c.doesWell || c.strengths || [],
+        weaknesses: c.doesPoorly || c.weaknesses || [],
+      });
+    }
+  }
+  const synopsis =
+    meta?.presence?.gap?.summary ||
+    benchmark?.designBrief?.summary ||
+    benchmark?.designBrief ||
+    '';
+  return { synopsis: typeof synopsis === 'string' ? synopsis : '', competitors };
+}
+
+function buildEditorContext(meta, clientId, baseUrl) {
+  const businessName = meta?.businessInfo?.businessName || meta?.businessName || 'Your site';
+  const variants = Array.isArray(meta?.variants)
+    ? meta.variants
+    : [{ id: 'default', name: 'Default', file: 'index.html' }];
+  const primary = meta?.primaryColor || meta?.businessInfo?.primaryColor || '#7C3AED';
+  const accent = meta?.accentColor || meta?.businessInfo?.accentColor || '#EC4899';
+  const palettes = [
+    { name: 'Brand', primary, accent },
+    { name: 'Warm', primary: '#B45309', accent: '#F59E0B' },
+    { name: 'Clinical', primary: '#0F766E', accent: '#14B8A6' },
+  ];
+  const strategy = buildStrategyFromMeta(meta);
+  const services = recommendServices(strategy);
+  return {
+    businessName,
+    clientId,
+    siteFile: 'index.html',
+    variants,
+    palettes,
+    editToken: meta.editToken,
+    baseUrl,
+    strategy,
+    services,
+  };
+}
+
+async function backupFile(absPath) {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupPath = `${absPath}.${stamp}.bak`;
+  const current = await fsp.readFile(absPath, 'utf8');
+  await fsp.writeFile(backupPath, current, 'utf8');
+  return backupPath;
+}
+
+async function findLatestBackup(absPath) {
+  const dir = path.dirname(absPath);
+  const base = path.basename(absPath);
+  const entries = await fsp.readdir(dir);
+  const backups = entries
+    .filter((name) => name.startsWith(`${base}.`) && name.endsWith('.bak'))
+    .sort()
+    .reverse();
+  return backups[0] ? path.join(dir, backups[0]) : null;
+}
+
+function extractHtmlFromModelResponse(text) {
+  const raw = String(text || '');
+  const fenced = raw.match(/```html?\s*([\s\S]*?)```/i);
+  const candidate = fenced ? fenced[1].trim() : raw.trim();
+  const htmlMatch = candidate.match(/<html[\s\S]*<\/html>/i);
+  return htmlMatch ? htmlMatch[0] : (candidate.includes('<html') ? candidate : null);
+}
+
+export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl, pool } = {}) {
   const router = Router();
 
-  router.post('/edit', authenticateEditor, async (req, res) => {
-    const { clientId, file, instruction } = req.body;
-
-    const targetFilePath = sanitizePath(clientId, file);
-    if (!targetFilePath) {
-      return res.status(403).json({ ok: false, error: 'Invalid file path.' });
-    }
-
+  router.get('/editor', async (req, res) => {
     try {
-      const originalHtml = await fs.readFile(targetFilePath, 'utf8');
+      const clientId = String(req.query.clientId || req.query.id || '').trim();
+      const token = String(req.query.token || '').trim();
+      if (!CLIENT_ID_RE.test(clientId)) {
+        return res.status(400).send('Invalid preview id.');
+      }
 
-      const truthRules = [
-        "Do not invent prices, stats, ratings, or review counts.",
-        "Do not fabricate named testimonials or customer quotes."
-      ];
+      const auth = await assertEditToken(clientId, token);
+      if (!auth.ok) return res.status(auth.status).send(auth.error);
 
-      const modelResponse = await callCouncilMember('strong-paid-model', {
-        prompt: `The user wants to modify the following HTML document based on their instruction. Return the ENTIRE modified HTML document. Ensure all HTML is valid and well-formed. Do not omit any part of the document unless explicitly instructed.\n\nCurrent HTML:\n${originalHtml}\n\nUser Instruction: ${instruction}\n\nStrict Rules: ${truthRules.join(' ')}`,
+      const ctx = buildEditorContext(auth.meta, clientId, baseUrl);
+      res.set('Content-Type', 'text/html; charset=utf-8');
+      res.send(renderEditorShell(ctx));
+    } catch (err) {
+      logger.error('[SITE-EDITOR] shell error', { error: err.message });
+      res.status(500).send('Editor unavailable.');
+    }
+  });
+
+  router.post('/edit', async (req, res) => {
+    try {
+      const { clientId, file, instruction, token } = req.body || {};
+      if (!CLIENT_ID_RE.test(String(clientId || ''))) {
+        return res.status(400).json({ ok: false, error: 'clientId required' });
+      }
+      const auth = await assertEditToken(clientId, token);
+      if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
+
+      const targetFile = file || 'index.html';
+      const absPath = resolvePreviewFile(clientId, targetFile);
+      if (!absPath) return res.status(403).json({ ok: false, error: 'Invalid file path' });
+
+      const currentHtml = await fsp.readFile(absPath, 'utf8');
+      if (!callCouncilMember) {
+        return res.status(503).json({ ok: false, error: 'AI editor unavailable' });
+      }
+
+      const prompt = `You are editing a live business website HTML document.
+
+TRUTH RULES (mandatory):
+- Do NOT invent prices, star ratings, review counts, years in business, or named testimonials.
+- Only modify what the user's instruction asks for.
+- Return the ENTIRE modified HTML document starting with <html.
+
+CURRENT HTML:
+${currentHtml.slice(0, 120000)}
+
+USER INSTRUCTION:
+${String(instruction || '').slice(0, 4000)}
+
+Return ONLY the full modified HTML document.`;
+
+      const modelResponse = await callCouncilMember('gemini_flash', prompt, {
+        maxOutputTokens: 14000,
+        taskType: 'site_builder_edit',
       });
-
-      if (!modelResponse || typeof modelResponse !== 'string' || !modelResponse.includes('<html')) {
-        return res.status(500).json({ ok: false, error: 'AI response was invalid or incomplete.' });
+      const responseText = typeof modelResponse === 'string'
+        ? modelResponse
+        : modelResponse?.text || modelResponse?.content || '';
+      const nextHtml = extractHtmlFromModelResponse(responseText);
+      if (!nextHtml || !/<html/i.test(nextHtml)) {
+        return res.status(422).json({ ok: false, error: 'Model did not return valid HTML' });
       }
 
-      const backupPath = `${targetFilePath}.${Date.now()}.bak`;
-      await fs.writeFile(backupPath, originalHtml, 'utf8');
-      await fs.writeFile(targetFilePath, modelResponse, 'utf8');
-
-      res.json({ ok: true });
-    } catch (error) {
-      console.error(`Error processing AI edit for ${clientId}/${file}: ${error.message}`);
-      res.status(500).json({ ok: false, error: 'Failed to process AI edit.' });
+      await backupFile(absPath);
+      await fsp.writeFile(absPath, nextHtml, 'utf8');
+      res.json({ ok: true, file: targetFile });
+    } catch (err) {
+      logger.error('[SITE-EDITOR] edit error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  router.post('/save-edits', authenticateEditor, async (req, res) => {
-    const { clientId, file, html } = req.body;
-
-    if (!html || !html.includes('<html')) {
-      return res.status(400).json({ ok: false, error: 'Invalid HTML content provided.' });
-    }
-
-    const targetFilePath = sanitizePath(clientId, file);
-    if (!targetFilePath) {
-      return res.status(403).json({ ok: false, error: 'Invalid file path.' });
-    }
-
+  router.post('/save-edits', async (req, res) => {
     try {
-      if (existsSync(targetFilePath)) {
-        const originalHtml = await fs.readFile(targetFilePath, 'utf8');
-        const backupPath = `${targetFilePath}.${Date.now()}.bak`;
-        await fs.writeFile(backupPath, originalHtml, 'utf8');
+      const { clientId, file, html, token } = req.body || {};
+      if (!CLIENT_ID_RE.test(String(clientId || ''))) {
+        return res.status(400).json({ ok: false, error: 'clientId required' });
       }
-      await fs.writeFile(targetFilePath, html, 'utf8');
-      res.json({ ok: true });
-    } catch (error) {
-      console.error(`Error saving manual edits for ${clientId}/${file}: ${error.message}`);
-      res.status(500).json({ ok: false, error: 'Failed to save edits.' });
+      const auth = await assertEditToken(clientId, token);
+      if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
+
+      const targetFile = file || 'index.html';
+      const absPath = resolvePreviewFile(clientId, targetFile);
+      if (!absPath) return res.status(403).json({ ok: false, error: 'Invalid file path' });
+      if (!html || !/<html/i.test(String(html))) {
+        return res.status(400).json({ ok: false, error: 'Valid html document required' });
+      }
+
+      await backupFile(absPath);
+      await fsp.writeFile(absPath, String(html), 'utf8');
+      res.json({ ok: true, file: targetFile });
+    } catch (err) {
+      logger.error('[SITE-EDITOR] save error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  router.post('/revert', authenticateEditor, async (req, res) => {
-    const { clientId, file } = req.body;
-
-    const targetFilePath = sanitizePath(clientId, file);
-    if (!targetFilePath) {
-      return res.status(403).json({ ok: false, error: 'Invalid file path.' });
-    }
-
+  router.post('/revert', async (req, res) => {
     try {
-      const dirname = path.dirname(targetFilePath);
-      const filename = path.basename(targetFilePath);
-      const filesInDir = await fs.readdir(dirname);
-
-      const bakFiles = filesInDir
-        .filter(f => f.startsWith(filename) && f.endsWith('.bak'))
-        .map(f => ({
-          name: f,
-          timestamp: parseInt(f.split('.').slice(-2, -1)[0], 10)
-        }))
-        .filter(f => !isNaN(f.timestamp))
-        .sort((a, b) => b.timestamp - a.timestamp); // Newest first
-
-      if (bakFiles.length === 0) {
-        return res.status(404).json({ ok: false, error: 'No backup files found to revert.' });
+      const { clientId, file, token } = req.body || {};
+      if (!CLIENT_ID_RE.test(String(clientId || ''))) {
+        return res.status(400).json({ ok: false, error: 'clientId required' });
       }
+      const auth = await assertEditToken(clientId, token);
+      if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
 
-      const newestBakPath = path.join(dirname, bakFiles[0].name);
-      const backupContent = await fs.readFile(newestBakPath, 'utf8');
+      const targetFile = file || 'index.html';
+      const absPath = resolvePreviewFile(clientId, targetFile);
+      if (!absPath) return res.status(403).json({ ok: false, error: 'Invalid file path' });
 
-      // Optionally, create a backup of the current file before reverting
-      if (existsSync(targetFilePath)) {
-         const currentContent = await fs.readFile(targetFilePath, 'utf8');
-         const preRevertBackupPath = `${targetFilePath}.${Date.now()}.pre_revert.bak`;
-         await fs.writeFile(preRevertBackupPath, currentContent, 'utf8');
-      }
+      const latestBackup = await findLatestBackup(absPath);
+      if (!latestBackup) return res.status(404).json({ ok: false, error: 'No backup found' });
 
-      await fs.writeFile(targetFilePath, backupContent, 'utf8');
-      res.json({ ok: true });
-    } catch (error) {
-      console.error(`Error reverting file ${clientId}/${file}: ${error.message}`);
-      res.status(500).json({ ok: false, error: 'Failed to revert file.' });
+      const restored = await fsp.readFile(latestBackup, 'utf8');
+      await fsp.writeFile(absPath, restored, 'utf8');
+      res.json({ ok: true, file: targetFile, restoredFrom: path.basename(latestBackup) });
+    } catch (err) {
+      logger.error('[SITE-EDITOR] revert error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/select-service', async (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.status(204).end();
+
+    const clientId = String(req.query.id || req.query.clientId || '').trim();
+    const serviceId = String(req.query.service || '').trim();
+    if (!CLIENT_ID_RE.test(clientId) || !serviceId) return;
+
+    logger.info('[SITE-EDITOR] Service selected', { clientId, serviceId });
+    if (!pool) return;
+    try {
+      await pool.query(
+        `UPDATE prospect_sites
+            SET metadata = jsonb_set(
+                  COALESCE(metadata, '{}'::jsonb),
+                  '{selected_services}',
+                  COALESCE(metadata->'selected_services', '[]'::jsonb) || jsonb_build_array($2::text)
+                ),
+                updated_at = NOW()
+          WHERE client_id = $1`,
+        [clientId, serviceId]
+      );
+    } catch (err) {
+      logger.warn('[SITE-EDITOR] select-service DB update failed', { error: err.message });
     }
   });
 
   app.use('/api/v1/sites', router);
-  return router;
+  logger.info('[SITE-EDITOR] Editor routes mounted at /api/v1/sites/editor, /edit, /save-edits, /revert, /select-service');
 }
 
 export default createSiteBuilderEditorRoutes;

@@ -360,6 +360,7 @@ The repo has more capability than any single document admits. The problem is not
 | Site builder prospect ranker | `PRESENT` | `services/site-builder-prospect-ranker.js` |
 | Site builder email templates | `PRESENT` | `services/site-builder-email-templates.js` |
 | Prospect pipeline | `PRESENT` | `services/prospect-pipeline.js` |
+| Site builder async prospect jobs | `PRESENT` | `services/site-builder-prospect-runner.js`, `POST /api/v1/sites/prospect` (202), `GET …/prospects/:id/status` |
 | Preview expiry cron | `PRESENT` | `services/preview-expiry-cron.js` (30-day auto-expiry) |
 | Outreach CRM | `PRESENT` | `routes/outreach-crm-routes.js`, `services/outreach-engine.js` |
 | Email reader + triage | `PRESENT` | `services/email-reader.js`, `services/email-triage.js` |

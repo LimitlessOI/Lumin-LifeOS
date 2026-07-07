@@ -55,6 +55,7 @@ import { startNeverStopProductFactoryScheduler } from "./services/never-stop-pro
 import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
+import { NotificationService } from "./core/notification-service.js";
 _bootLog('all_imports_done');
 import {
   COMMAND_CENTER_KEY,
@@ -366,6 +367,7 @@ async function bootFounderRuntime() {
     _bootLog('migrations_done');
 
     _bootLog('pre_registerRoutes');
+    const notificationService = new NotificationService({ pool });
     await registerFounderRuntimeRoutes(app, {
       pool,
       requireKey,
@@ -377,6 +379,7 @@ async function bootFounderRuntime() {
       commitToGitHub,
       commitManyToGitHub,
       platformKernel,
+      notificationService,
     });
     _bootLog('registerRoutes_done');
     startupHealthState.runtime_routes = "ok";

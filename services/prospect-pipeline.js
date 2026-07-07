@@ -32,12 +32,13 @@
 
 import logger from './logger.js';
 import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
+import { createProspectClientId } from './site-builder-prospect-runner.js';
 
-// Pricing tiers to include in outreach emails
+// Entry-product pricing (foot-in-door → care plan + add-ons)
 const PRICING = {
-  starter: { name: 'Starter', price: '$997', description: 'New site + SEO + 3 blog posts' },
-  growth: { name: 'Growth', price: '$1,497', description: 'Starter + monthly SEO content + social media sync' },
-  full: { name: 'Full Service', price: '$297/mo', description: 'Everything managed: site, SEO, blogs, social, POS setup + booking system' },
+  publish: { name: 'Publish', price: '$49', description: 'Go live with your upgraded site' },
+  care: { name: 'Care plan', price: '$97/mo', description: 'Site + SEO + content maintenance' },
+  pos: { name: 'POS referral', price: 'Commission', description: 'Jane / Mindbody / Square setup' },
 };
 
 function createNoopEmailAdapter() {
@@ -54,6 +55,74 @@ export default class ProspectPipeline {
     this.callCouncil = callCouncil;
     this.sendEmail = sendEmail; // fn(to, subject, html) => Promise
     this.baseUrl = baseUrl;
+  }
+
+  generateClientId() {
+    return createProspectClientId();
+  }
+
+  async reserveProspectJob(options = {}) {
+    const {
+      businessUrl,
+      contactEmail,
+      contactName = '',
+      businessName = '',
+      clientId = this.generateClientId(),
+    } = options;
+
+    if (!businessUrl) return { ok: false, error: 'businessUrl required' };
+
+    if (!this.pool) {
+      return {
+        ok: true,
+        clientId,
+        status: 'building',
+        reserved: false,
+        warning: 'No database pool — job tracking in-memory only',
+      };
+    }
+
+    try {
+      await this.pool.query(
+        `INSERT INTO prospect_sites
+          (client_id, business_url, contact_email, contact_name, business_name, preview_url, email_sent, status, metadata, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, NULL, false, 'building', $6::jsonb, NOW(), NOW())`,
+        [
+          clientId,
+          businessUrl,
+          contactEmail || null,
+          contactName || null,
+          businessName || null,
+          JSON.stringify({ jobStartedAt: new Date().toISOString(), async: true }),
+        ]
+      );
+      return { ok: true, clientId, status: 'building', reserved: true };
+    } catch (err) {
+      logger.error('[PROSPECT] reserveProspectJob failed', { clientId, error: err.message });
+      return { ok: false, error: err.message };
+    }
+  }
+
+  async failProspectJob(clientId, errorMessage) {
+    if (!this.pool || !clientId) return;
+    try {
+      await this.pool.query(
+        `UPDATE prospect_sites
+            SET status = 'failed',
+                metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+                updated_at = NOW()
+          WHERE client_id = $1`,
+        [
+          clientId,
+          JSON.stringify({
+            jobError: String(errorMessage || 'unknown').slice(0, 500),
+            jobFailedAt: new Date().toISOString(),
+          }),
+        ]
+      );
+    } catch (err) {
+      logger.warn('[PROSPECT] failProspectJob update failed', { clientId, error: err.message });
+    }
   }
 
   /**
@@ -89,6 +158,7 @@ export default class ProspectPipeline {
     // Step 1: Build their mock site
     const buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
       businessInfo: options.businessInfo || null,
+      clientId: options.clientId || null,
     });
 
     if (!buildResult.success) {
@@ -136,12 +206,13 @@ export default class ProspectPipeline {
     }
 
     // Step 4: Record in DB
+    const clientId = options.clientId || buildResult.clientId;
     await this.recordProspect({
       businessUrl,
       contactEmail,
       contactName: name,
       businessName: biz,
-      clientId: buildResult.clientId,
+      clientId,
       previewUrl,
       emailSent,
       status: qaHold ? 'qa_hold' : (emailSent ? 'sent' : 'built'),
@@ -153,7 +224,7 @@ export default class ProspectPipeline {
 
     return {
       success: true,
-      clientId: buildResult.clientId,
+      clientId,
       previewUrl,
       emailSent,
       qaHold,
@@ -253,7 +324,7 @@ Return ONLY valid JSON:
   <p>Best,<br>The Lumin AI Team</p>
   <hr style="margin-top: 40px; border: none; border-top: 1px solid #eee;">
   <p style="font-size: 11px; color: #999;">
-    Pricing if interested: Site build from $997 | Monthly care plan from $297/mo<br>
+    Publish your preview from $49 | Care plan from $97/mo<br>
     <a href="${previewUrl}" style="color: #7C3AED;">${previewUrl}</a>
   </p>
 </body>
@@ -268,9 +339,19 @@ Return ONLY valid JSON:
     try {
       await this.pool.query(
         `INSERT INTO prospect_sites
-          (client_id, business_url, contact_email, contact_name, business_name, preview_url, email_sent, status, metadata, created_at, last_contacted_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), CASE WHEN $7 THEN NOW() ELSE NULL END)
-         ON CONFLICT (client_id) DO NOTHING`,
+          (client_id, business_url, contact_email, contact_name, business_name, preview_url, email_sent, status, metadata, created_at, updated_at, last_contacted_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb, NOW(), NOW(), CASE WHEN $7 THEN NOW() ELSE NULL END)
+         ON CONFLICT (client_id) DO UPDATE SET
+           business_url = EXCLUDED.business_url,
+           contact_email = COALESCE(EXCLUDED.contact_email, prospect_sites.contact_email),
+           contact_name = COALESCE(EXCLUDED.contact_name, prospect_sites.contact_name),
+           business_name = COALESCE(EXCLUDED.business_name, prospect_sites.business_name),
+           preview_url = EXCLUDED.preview_url,
+           email_sent = EXCLUDED.email_sent,
+           status = EXCLUDED.status,
+           metadata = EXCLUDED.metadata,
+           updated_at = NOW(),
+           last_contacted_at = CASE WHEN EXCLUDED.email_sent THEN NOW() ELSE prospect_sites.last_contacted_at END`,
         [
           data.clientId,
           data.businessUrl,
@@ -280,7 +361,7 @@ Return ONLY valid JSON:
           data.previewUrl,
           data.emailSent || false,
           data.status || (data.emailSent ? 'sent' : 'built'),
-          JSON.stringify(data.metadata || {}),
+          JSON.stringify({ ...(data.metadata || {}), jobCompletedAt: new Date().toISOString() }),
         ]
       );
     } catch (err) {
