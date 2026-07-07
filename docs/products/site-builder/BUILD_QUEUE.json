@@ -50,8 +50,10 @@
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderCanvas + default export. Returns a STRING (HTML fragment, NOT a full document). Define local htmlEscape(); escape siteFile and all variant/palette text. Every fetch includes the editToken (from a JS const) and on non-2xx shows an inline error — never a silent/blank failure. All iframe DOM access wrapped in try/catch guarding cross-origin/null contentDocument; never throw. Guard variants/palettes as possibly undefined -> []. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 12288
+      "attempts": 1,
+      "max_output_tokens": 12288,
+      "last_attempt_at": "2026-07-07T01:35:01.450Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
       "id": "sb-editor-chat",
