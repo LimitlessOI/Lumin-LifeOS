@@ -18,6 +18,8 @@ Claude, CUR, Codex, and C2 **fight disagreements out here first**. Adam is not t
 
 **Push by default:** After every shippable change — **commit → push `main` → redeploy Railway** — without being asked. Adam only says **hold** when he means it (`don't push`, `hold`, `local only`). **If commit or push fails, fix the blocker and retry until push succeeds** — do not stop and wait.
 
+**SO-001 — CONDUCTOR ONLY (Chair-ratified, receipt `LIFERE_COUNCIL_1783456053893`, 2026-07-03):** The AI agent (Devin/Claude/etc.) is the **conductor**, not the hands. New server-code modules under `services/`, `routes/`, `middleware/`, or `factory-staging/factory-core/` that codegen could author **MUST be built through the governed factory** (`/factory/ship-queue` `author_then_write`, cheapest tier first) so SENTRY proves them independently. Hand-authoring such a module yourself is a **DRIFT VIOLATION** — the exact failure that has burned usage. Allowed for you to hand-write: specs, blueprint `assertion_spec`s, orchestration/glue, docs, scripts/CI. **Honesty non-negotiable:** never claim a browser-agent (or any) module "works"/"shipped"/"passed" without a real **SENTRY pass receipt** or deploy receipt — an unbacked claim is a **honesty violation**, not a slip. Label KNOW / THINK / GUESS. Self-report drift the moment you notice it; do not continue.
+
 ---
 
 ## READ ORDER (every session, in order)
