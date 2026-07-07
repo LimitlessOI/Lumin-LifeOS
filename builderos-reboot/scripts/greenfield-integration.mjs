@@ -19,7 +19,7 @@ const step = blueprint.steps[0];
 const { dispatchExecuteStep } = await import(
   path.join(REPO_ROOT, 'factory-staging/factory-core/builder/run-step.js')
 );
-const { httpStatus, body } = dispatchExecuteStep({
+const { httpStatus, body } = await dispatchExecuteStep({
   mission_id: 'FACTORY-GREENFIELD-0001',
   blueprint_id: blueprint.blueprint_id,
   step,

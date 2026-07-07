@@ -123,13 +123,13 @@ export function registerFactoryRoutes(app) {
     }
   });
 
-  app.post(factoryExecuteMissionRoute.path, (req, res) => {
-    const { httpStatus, body } = dispatchExecuteMission(req.body || {});
+  app.post(factoryExecuteMissionRoute.path, async (req, res) => {
+    const { httpStatus, body } = await dispatchExecuteMission(req.body || {});
     res.status(httpStatus).json(body);
   });
 
-  app.post(factoryExecuteStepRoute.path, (req, res) => {
-    const { httpStatus, body } = dispatchExecuteStep(req.body || {});
+  app.post(factoryExecuteStepRoute.path, async (req, res) => {
+    const { httpStatus, body } = await dispatchExecuteStep(req.body || {});
     res.status(httpStatus).json(body);
   });
 }

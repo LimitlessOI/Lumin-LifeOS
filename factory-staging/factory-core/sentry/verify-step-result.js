@@ -6,6 +6,7 @@ import { antiPatternCheck } from './anti-pattern-check.js';
 import { futureLookbackReview } from './future-lookback.js';
 import { unintendedConsequenceCheck } from './unintended-consequence-check.js';
 import { checkProofFreshness } from './proof-freshness.js';
+import { evaluateBehaviorGate } from './behavior-assertions.js';
 
 export function verifyStepResult(step, builderResult, context = {}) {
   const contract = context.contract
@@ -19,6 +20,7 @@ export function verifyStepResult(step, builderResult, context = {}) {
   const future = futureLookbackReview({ step, builderResult });
   const unintended = unintendedConsequenceCheck({ step, builderResult });
   const freshness = checkProofFreshness(context.mission_id);
+  const behavior = evaluateBehaviorGate(step, context.behavior || {});
 
   const blocking = [];
   if (!contract.pass) blocking.push('acceptance_contract');
@@ -26,6 +28,7 @@ export function verifyStepResult(step, builderResult, context = {}) {
   if (!future.pass) blocking.push('future_lookback');
   if (!unintended.pass) blocking.push('unintended_consequence');
   if (!freshness.pass) blocking.push('proof_freshness');
+  if (!behavior.pass) blocking.push('behavior_proof');
 
   const pass = blocking.length === 0 && builderResult.status === 'DONE';
 
@@ -33,12 +36,13 @@ export function verifyStepResult(step, builderResult, context = {}) {
     implementation_status: pass ? 'PASS' : 'FAIL',
     stepId: step.step_id,
     resultStatus: builderResult.status,
-    verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check', 'future_lookback', 'proof_freshness'],
+    verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check', 'future_lookback', 'proof_freshness', 'behavior_proof'],
     contract,
     anti_pattern: antiPattern,
     future_lookback: future,
     unintended_consequence: unintended,
     proof_freshness: freshness,
+    behavior_proof: behavior,
     blocking_findings: blocking,
     pass,
   };

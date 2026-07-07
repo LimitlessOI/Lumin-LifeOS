@@ -26,7 +26,7 @@ for (const m of queue.missions) {
     results.push({ mission_id: m.mission_id, status: 'no_blueprint' });
     continue;
   }
-  const { httpStatus, body } = dispatchExecuteMission({ mission_id: m.mission_id, dry_run: true });
+  const { httpStatus, body } = await dispatchExecuteMission({ mission_id: m.mission_id, dry_run: true });
   results.push({
     mission_id: m.mission_id,
     httpStatus,

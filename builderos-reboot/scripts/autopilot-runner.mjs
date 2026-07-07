@@ -64,7 +64,7 @@ if (!fs.existsSync(blueprintPath)) {
 
 if (!execute) {
   const { dispatchExecuteMission } = await import('../../factory-staging/factory-core/builder/run-mission.js');
-  const { httpStatus, body } = dispatchExecuteMission({ mission_id: missionId, dry_run: true });
+  const { httpStatus, body } = await dispatchExecuteMission({ mission_id: missionId, dry_run: true });
   console.log(JSON.stringify({ httpStatus, body }, null, 2));
   console.log('\nDry-run only. Re-run with --execute to materialize.');
   process.exit(httpStatus === 200 ? 0 : 1);

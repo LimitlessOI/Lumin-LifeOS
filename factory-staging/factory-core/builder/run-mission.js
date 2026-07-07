@@ -37,7 +37,7 @@ export function loadBlueprintFromRepo(missionId) {
   return JSON.parse(fs.readFileSync(blueprintPath, 'utf8'));
 }
 
-export function dispatchExecuteMission(body) {
+export async function dispatchExecuteMission(body, options = {}) {
   const mission_id = body?.mission_id;
   const dry_run = Boolean(body?.dry_run);
 
@@ -67,12 +67,12 @@ export function dispatchExecuteMission(body) {
       continue;
     }
 
-    const { httpStatus, body: stepBody } = dispatchExecuteStep({
+    const { httpStatus, body: stepBody } = await dispatchExecuteStep({
       mission_id,
       blueprint_id: blueprint.blueprint_id,
       step,
       skip_intake_gate: body?.skip_intake_gate === true,
-    });
+    }, options);
 
     results.push({
       step_id: step.step_id,

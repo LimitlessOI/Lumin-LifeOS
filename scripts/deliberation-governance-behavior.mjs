@@ -359,7 +359,7 @@ assert('unknown REP rejected', !unknownRep.ok);
 {
   const prev = process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE;
   delete process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE;
-  const blocked = dispatchExecuteStep({
+  const blocked = await dispatchExecuteStep({
     skip_intake_gate: true,
     mission_id: 'M1',
     step: { step_id: 'S1', sandbox_boundary: 'test' },

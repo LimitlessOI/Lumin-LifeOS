@@ -244,7 +244,7 @@ export async function registerRuntimeRoutes(app, deps) {
     );
     logger.info("✅ [BUILDEROS-C2] Founder-builder routes mounted");
 
-    app.use(createFactoryMountRoutes({ requireKey, logger }));
+    app.use(createFactoryMountRoutes({ requireKey, logger, pool }));
 
     return {
       tcCoordinator: null,
@@ -872,7 +872,7 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use(createMemoryStatusRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-STATUS] Routes mounted at /api/v1/lifeos/command-center/memory/status');
 
-  app.use(createFactoryMountRoutes({ requireKey, logger }));
+  app.use(createFactoryMountRoutes({ requireKey, logger, pool }));
 
   return {
     tcCoordinator,

@@ -20,7 +20,7 @@ function hashObj(obj) {
 
 const runs = [];
 for (const label of ['run-a', 'run-b', 'run-c']) {
-  const { httpStatus, body } = dispatchExecuteMission({
+  const { httpStatus, body } = await dispatchExecuteMission({
     mission_id: 'FACTORY-REBOOT-0005',
     dry_run: true,
   });
