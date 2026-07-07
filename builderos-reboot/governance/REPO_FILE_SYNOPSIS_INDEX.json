@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T08:36:09.404Z",
+  "generated_at": "2026-07-07T08:38:56.833Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11216,
+  "file_count": 11217,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35103,6 +35103,13 @@
       "bytes": 4546,
       "mtime": "2026-07-06T04:57:07.092Z",
       "indexed_at": "2026-07-07T08:32:45.782Z"
+    },
+    {
+      "path": "db/migrations/20260707_marketing_phase1_schema.sql",
+      "synopsis": "Creates the initial MarketingOS tables for consent, sessions, content extractions, content pieces, and channel profiles.",
+      "bytes": 3516,
+      "mtime": "2026-07-07T08:38:56.833Z",
+      "indexed_at": "2026-07-07T08:38:56.833Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
