@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T11:32:14.769Z",
+  "generated_at": "2026-07-07T12:16:31.163Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11230,
+  "file_count": 11231,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65084,6 +65084,16 @@
       "indexed_at": "2026-07-07T11:18:36.284Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/marketing-calendar-routes.js",
+      "synopsis": "MarketingOS Phase 2 calendar/atoms JSON API routes.",
+      "bytes": 6014,
+      "mtime": "2026-07-07T12:16:31.163Z",
+      "indexed_at": "2026-07-07T12:16:31.163Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
     {
