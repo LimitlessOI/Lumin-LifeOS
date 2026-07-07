@@ -57,12 +57,12 @@
       "founder_gated": false,
       "attempts": 3,
       "max_output_tokens": 12288,
-      "last_attempt_at": "2026-07-07T04:25:36.016Z",
+      "last_attempt_at": "2026-07-07T04:25:25.144Z",
       "last_error": "deploy_serves_different_sha",
       "revive_count": 2,
       "revived_at": "2026-07-07T03:49:39.166Z",
       "commit_sha": "afeda3304c3d569b2510df1a618da467095c4e9f",
-      "completed_at": "2026-07-07T04:25:37.234Z",
+      "completed_at": "2026-07-07T04:25:26.766Z",
       "deploy_proven": true
     },
     {
@@ -75,12 +75,12 @@
       "founder_gated": false,
       "attempts": 2,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T04:30:21.895Z",
+      "last_attempt_at": "2026-07-07T04:29:07.838Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:42:10.293Z",
       "commit_sha": "9bf23be78a8c9645598a8b50d2e024c7ce9e6d07",
-      "completed_at": "2026-07-07T04:30:23.536Z",
+      "completed_at": "2026-07-07T04:29:09.239Z",
       "deploy_proven": true
     },
     {
@@ -93,17 +93,17 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T04:40:03.362Z",
+      "last_attempt_at": "2026-07-07T04:35:45.910Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:42:10.293Z",
       "commit_sha": "b3ad9358a39e178e14036d7d4fad581b51d5d280",
-      "completed_at": "2026-07-07T04:40:04.521Z",
+      "completed_at": "2026-07-07T04:35:47.639Z",
       "deploy_proven": true
     },
     {
       "id": "sb-editor-shell",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "services/site-builder-editor.js",
       "task": "Compose the full three-pane editor workspace document from the already-built pane modules. Import renderSidebar from './site-builder-editor-sidebar.js', renderCanvas from './site-builder-editor-canvas.js', renderChatPanel from './site-builder-editor-chat.js', and renderStrategyPanel from './site-builder-editor-strategy.js'. Export renderEditorShell({ businessName, clientId, siteFile, variants, palettes, editToken, baseUrl, strategy, services }) that returns ONE complete HTML document: a top bar showing the business name, then a THREE-COLUMN layout — LEFT = renderSidebar({ services, clientId, baseUrl }), CENTER = renderCanvas({ siteFile, variants, palettes, clientId, editToken, baseUrl }), RIGHT = a right column containing renderChatPanel({ clientId, editToken, baseUrl }) above a collapsible 'Strategy' section holding renderStrategyPanel({ strategy }). Add the reload behaviour as a literal <script>...</script> string EMBEDDED INSIDE the returned HTML document (part of the template literal) — NOT as top-level module code. CRITICAL: this file is imported by Node on the server, so it MUST have ZERO top-level references to window, document, or any browser global; ALL client-side JavaScript (event listeners, iframe reload, etc.) belongs inside the returned HTML string within a <script> tag. Top-level browser code crashes Node on import and fails the Railway healthcheck. This module is ONLY composition + document scaffold — it must not re-implement pane internals.",
       "spec": "Single self-contained ESM module. It MAY import the four sibling pane modules by relative path (they are committed before this step via depends_on). Named export renderEditorShell + default export. Returns a full HTML document using Tailwind CDN (https://cdn.tailwindcss.com) and Alpine.js CDN (https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js, defer). Define a local htmlEscape() and escape businessName before interpolation. Guard every destructured field (default services/variants/palettes/strategy sensibly). No DB, no network, and NO top-level window/document/browser-global access at import time — any client-side behaviour must live only inside the returned HTML string as <script> content (server imports this module; top-level browser globals crash Node). Keep this file small — delegate all pane markup to the imported render functions. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
@@ -114,11 +114,11 @@
         "sb-editor-strategy"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 1,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T06:21:03.803Z",
+      "last_attempt_at": "2026-07-07T06:25:14.154Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
-      "revive_count": 1,
+      "revive_count": 2,
       "revived_at": "2026-07-07T05:24:18.589Z"
     },
     {
@@ -154,12 +154,12 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-07T05:15:58.142Z",
+      "last_attempt_at": "2026-07-07T05:09:57.657Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:53:53.254Z",
       "commit_sha": "108ab3ccbfb5f3aed44b1c763653151a3b80aee5",
-      "completed_at": "2026-07-07T05:15:59.394Z",
+      "completed_at": "2026-07-07T05:09:59.033Z",
       "deploy_proven": true
     },
     {
