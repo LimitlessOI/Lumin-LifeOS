@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   extractBacklog,
+  backlogSignature,
   shouldFounderGate,
   normalizePlannedStep,
   validatePlannedQueue,
@@ -90,6 +91,21 @@ test('planBuildQueue turns backlog into a validated queue via injected model', a
   const ui = res.queue.steps.find((s) => s.id === 'customize');
   assert.equal(ui.founder_gated, true);
   assert.equal(validatePlannedQueue(res.queue).ok, true);
+});
+
+test('backlogSignature is stable, order-independent, and changes with new work', () => {
+  const a = backlogSignature(['Build A', 'Build B']);
+  assert.equal(a, backlogSignature(['build b', ' Build A ']), 'order + case + whitespace independent');
+  assert.notEqual(a, backlogSignature(['Build A', 'Build B', 'Build C']), 'new documented item changes signature');
+  assert.equal(backlogSignature([]), backlogSignature(undefined));
+});
+
+test('planBuildQueue stamps the backlog_signature onto the queue (self-extend marker)', async () => {
+  const callModel = async () => JSON.stringify({
+    steps: [{ id: 'expiry-sweep', target_file: 'scripts/preview-expiry-cron.mjs', task: 'Nightly preview-expiry sweep', spec: 'cron' }],
+  });
+  const res = await planBuildQueue({ productId: 'site-builder', homeText: HOME, callModel });
+  assert.equal(res.queue.backlog_signature, backlogSignature(extractBacklog(HOME)));
 });
 
 test('planBuildQueue de-duplicates against existing queue steps', async () => {

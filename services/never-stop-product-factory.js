@@ -10,10 +10,10 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep } from './product-build-orchestrator.js';
+import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, STEP_STATUS } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
-import { extractBacklog, planBuildQueue } from './build-queue-planner.js';
+import { extractBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
 import { buildIntegrationContext } from './build-integration-context.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -383,22 +383,52 @@ export function discoverPlanWork() {
   }
   const priorityList = loadProductPriority();
   for (const productId of productIds) {
-    if (fs.existsSync(queuePathForProduct(productId))) continue;
     const homePath = path.join(productsDir, productId, 'PRODUCT_HOME.md');
     if (!fs.existsSync(homePath)) continue;
-    let backlogCount = 0;
+    let backlog = [];
     try {
-      backlogCount = extractBacklog(fs.readFileSync(homePath, 'utf8')).length;
-    } catch { backlogCount = 0; }
-    if (backlogCount === 0) continue;
+      backlog = extractBacklog(fs.readFileSync(homePath, 'utf8'));
+    } catch { backlog = []; }
+    if (backlog.length === 0) continue;
+
+    // NEW-PRODUCT ENROLL: home has documented backlog but no queue yet.
+    if (!fs.existsSync(queuePathForProduct(productId))) {
+      found.push({
+        id: `plan_build_queue_${productId}`,
+        kind: 'plan_build_queue',
+        priority: 5 + productRankFraction(productId, priorityList, backlog.length),
+        product: productId,
+        product_id: productId,
+        home_path: homePath,
+        detail: `${backlog.length} documented backlog item(s), no BUILD_QUEUE yet`,
+      });
+      continue;
+    }
+
+    // SELF-EXTEND: a product whose queue is FULLY DONE re-plans from its own
+    // PRODUCT_HOME when new work has been documented since the last plan — this
+    // is how the loop "adds more to itself" once a phase ships, without a human
+    // hand-authoring the next phase. Gated hard to avoid churn/waste:
+    //   (1) EVERY step must be `done` — never extend on top of a still-building
+    //       or blocked phase (the build path revives/finishes those first);
+    //   (2) the documented backlog signature must have CHANGED since the queue
+    //       was last planned — otherwise re-planning the same backlog burns a
+    //       planner model call every idle cycle for zero new steps.
+    let queue;
+    try { queue = loadBuildQueue(productId); } catch { continue; }
+    const steps = Array.isArray(queue.steps) ? queue.steps : [];
+    const allDone = steps.length > 0 && steps.every((s) => s.status === STEP_STATUS.DONE);
+    if (!allDone) continue;
+    if (queue.backlog_signature && queue.backlog_signature === backlogSignature(backlog)) continue;
     found.push({
-      id: `plan_build_queue_${productId}`,
+      id: `extend_build_queue_${productId}`,
       kind: 'plan_build_queue',
-      priority: 5 + productRankFraction(productId, priorityList, backlogCount),
+      priority: 6 + productRankFraction(productId, priorityList, backlog.length),
       product: productId,
       product_id: productId,
       home_path: homePath,
-      detail: `${backlogCount} documented backlog item(s), no BUILD_QUEUE yet`,
+      extend: true,
+      detail: `queue complete (${steps.length} done) + ${backlog.length} documented backlog item(s) — re-plan next phase`,
     });
   }
   return found;
@@ -419,14 +449,21 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   } catch (e) {
     return { ok: false, detail: 'home_read_failed', error: e.message };
   }
-  const planned = await planBuildQueue({ productId: task.product_id, homeText, callModel, logger });
+  // When EXTENDING a completed queue, pass the existing queue so the planner
+  // appends only genuinely-new documented steps (deduped by id + target_file/
+  // task) onto the shipped ones — the loop grows its own backlog in place.
+  let existingQueue = null;
+  if (task.extend) {
+    try { existingQueue = loadBuildQueue(task.product_id); } catch { existingQueue = null; }
+  }
+  const planned = await planBuildQueue({ productId: task.product_id, homeText, existingQueue, callModel, logger });
   if (!planned || !planned.queue) {
     return { ok: false, detail: 'plan_produced_no_queue' };
   }
   const queuePath = queuePathForProduct(task.product_id);
   fs.mkdirSync(path.dirname(queuePath), { recursive: true });
   fs.writeFileSync(queuePath, `${JSON.stringify(planned.queue, null, 2)}\n`);
-  log({ event: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length });
+  log({ event: 'build_queue_planned', product_id: task.product_id, extend: Boolean(task.extend), steps: planned.queue.steps.length, added: planned.added.length });
   return { ok: true, detail: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length };
 }
 
