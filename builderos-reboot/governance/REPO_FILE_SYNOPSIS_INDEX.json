@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T12:17:38.747Z",
+  "generated_at": "2026-07-07T12:18:01.956Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11231,
   "files": [
@@ -65089,9 +65089,9 @@
     {
       "path": "routes/marketing-calendar-routes.js",
       "synopsis": "MarketingOS Phase 2 calendar/atoms JSON API routes.",
-      "bytes": 7539,
-      "mtime": "2026-07-07T12:17:38.747Z",
-      "indexed_at": "2026-07-07T12:17:38.747Z",
+      "bytes": 7641,
+      "mtime": "2026-07-07T12:18:01.956Z",
+      "indexed_at": "2026-07-07T12:18:01.956Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

@@ -1,198 +1,253 @@
 // SYNOPSIS: MarketingOS Phase 2 calendar/atoms JSON API routes.
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
-const DEFAULT_WINDOW_DAYS = 30;
-
-const ATOM_TYPES = new Set(['insight', 'headline', 'hook', 'cta', 'story', 'offer', 'objection', 'value_prop', 'other']);
-const REUSE_CONSENT_LEVELS = new Set(['none', 'internal', 'approved', 'full']);
+import { buildBrandVoiceProfile, scoreContentAgainstVoice } from '../services/marketing-brand-voice.js';
 
 function jsonError(res, status, error) {
   return res.status(status).json({ ok: false, error });
 }
 
-function getOwnerId(req) {
+function resolveOwnerId(req) {
   return req.user?.id ?? req.body?.owner_id ?? req.query?.owner_id ?? null;
 }
 
-function parseDateOnly(value) {
-  if (!value) return null;
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toISOString().slice(0, 10);
+function parseLimitWindow(value) {
+  const n = Number.parseInt(String(value ?? ''), 10);
+  return Number.isFinite(n) && n > 0 ? n : 30;
 }
 
-function validateEnum(value, allowed, fieldName) {
-  if (value == null) return null;
-  if (!allowed.has(value)) {
-    const allowedList = Array.from(allowed).join(', ');
-    const err = new Error(`Invalid ${fieldName}; allowed values: ${allowedList}`);
-    err.status = 400;
-    throw err;
-  }
-  return value;
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
 }
 
-async function handleCalendarGet(req, res, deps) {
-  try {
-    const ownerId = getOwnerId(req);
-    if (!ownerId) return jsonError(res, 400, 'owner_id is required');
-
-    const fromDate = parseDateOnly(req.query?.from) || new Date().toISOString().slice(0, 10);
-    const days = Number.parseInt(req.query?.days ?? `${DEFAULT_WINDOW_DAYS}`, 10);
-    const windowDays = Number.isFinite(days) && days > 0 && days <= 365 ? days : DEFAULT_WINDOW_DAYS;
-
-    const sql = `
-      SELECT
-        mcs.*,
-        mcp.title,
-        mcp.body,
-        mcp.url,
-        mcp.author,
-        mcp.published_at,
-        mcp.metadata,
-        mcp.session_id,
-        mcp.platform AS content_platform,
-        mcp.format AS content_format,
-        mcp.content_text,
-        mcp.status AS content_status,
-        mcp.generated_by_model,
-        mcp.regeneration_count
-      FROM marketing_calendar_slots mcs
-      LEFT JOIN marketing_content_pieces mcp
-        ON mcp.id = mcs.content_piece_id
-      WHERE mcs.owner_id = $1
-        AND mcs.scheduled_date >= $2::date
-        AND mcs.scheduled_date < ($2::date + ($3 || ' days')::interval)
-      ORDER BY mcs.scheduled_date ASC, mcs.created_at ASC
-    `;
-    const { rows } = await deps.pool.query(sql, [ownerId, fromDate, windowDays]);
-    return res.json({ ok: true, owner_id: ownerId, from: fromDate, days: windowDays, rows });
-  } catch (err) {
-    deps.logger?.error?.({ err }, 'marketing calendar get failed');
-    return jsonError(res, err.status || 500, err.message || 'Failed to load marketing calendar');
-  }
-}
-
-async function handleAtomsPost(req, res, deps) {
-  try {
-    const ownerId = getOwnerId(req);
-    if (!ownerId) return jsonError(res, 400, 'owner_id is required');
-
-    const { atom_type, text, session_id = null, source_extraction_id = null, tags = null, reuse_consent_level = null } = req.body ?? {};
-    if (!atom_type) return jsonError(res, 400, 'atom_type is required');
-    if (!text) return jsonError(res, 400, 'text is required');
-
-    validateEnum(atom_type, ATOM_TYPES, 'atom_type');
-    if (reuse_consent_level != null) validateEnum(reuse_consent_level, REUSE_CONSENT_LEVELS, 'reuse_consent_level');
-
-    const normalizedTags = tags == null ? null : (Array.isArray(tags) ? tags : tags);
-
-    const sql = `
-      INSERT INTO marketing_content_atoms
-        (owner_id, session_id, source_extraction_id, atom_type, text, tags, reuse_consent_level)
-      VALUES
-        ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *
-    `;
-    const params = [ownerId, session_id, source_extraction_id, atom_type, text, normalizedTags, reuse_consent_level];
-    const { rows } = await deps.pool.query(sql, params);
-
-    return res.status(201).json({ ok: true, row: rows[0] });
-  } catch (err) {
-    deps.logger?.error?.({ err }, 'marketing atoms post failed');
-    return jsonError(res, err.status || 500, err.message || 'Failed to create marketing atom');
-  }
-}
-
-async function handleAtomsGet(req, res, deps) {
-  try {
-    const ownerId = getOwnerId(req);
-    if (!ownerId) return jsonError(res, 400, 'owner_id is required');
-
-    const atomType = req.query?.atom_type ?? null;
-    if (atomType != null) validateEnum(atomType, ATOM_TYPES, 'atom_type');
-
-    const params = [ownerId];
-    let where = `WHERE owner_id = $1`;
-    if (atomType) {
-      params.push(atomType);
-      where += ` AND atom_type = $2`;
-    }
-
-    const sql = `
-      SELECT *
-      FROM marketing_content_atoms
-      ${where}
-      ORDER BY created_at DESC
-    `;
-    const { rows } = await deps.pool.query(sql, params);
-
-    return res.json({ ok: true, owner_id: ownerId, rows });
-  } catch (err) {
-    deps.logger?.error?.({ err }, 'marketing atoms get failed');
-    return jsonError(res, err.status || 500, err.message || 'Failed to list marketing atoms');
-  }
-}
-
-async function handleBrandVoiceRebuild(req, res, deps) {
-  try {
-    const ownerId = getOwnerId(req);
-    if (!ownerId) return jsonError(res, 400, 'owner_id is required');
-
-    const existing = await deps.pool.query(
-      `SELECT * FROM marketing_brand_voice_profiles WHERE owner_id = $1 ORDER BY updated_at DESC LIMIT 1`,
-      [ownerId]
-    );
-
-    const countResult = await deps.pool.query(
-      `SELECT COUNT(*)::int AS session_count FROM marketing_sessions WHERE owner_id = $1`,
-      [ownerId]
-    );
-
-    let profileJson = null;
-
+function normalizeTags(tags) {
+  if (tags == null) return null;
+  if (Array.isArray(tags)) return tags;
+  if (typeof tags === 'string') {
+    const trimmed = tags.trim();
+    if (!trimmed) return null;
     try {
-      const { buildBrandVoiceProfile, scoreContentAgainstVoice } = await import('../services/marketing-brand-voice.js');
-      if (typeof buildBrandVoiceProfile === 'function') {
-        profileJson = await buildBrandVoiceProfile({ ownerId, pool: deps.pool, logger: deps.logger, baseUrl: deps.baseUrl });
-      }
-      if (profileJson && typeof scoreContentAgainstVoice === 'function') {
-        profileJson = {
-          ...profileJson,
-          sample_score: await scoreContentAgainstVoice(profileJson, profileJson.sample_text ?? '')
-        };
-      }
-    } catch (err) {
-      deps.logger?.warn?.({ err }, 'marketing brand voice service import or rebuild failed; falling back to persistence update');
+      const parsed = JSON.parse(trimmed);
+      return Array.isArray(parsed) ? parsed : trimmed.split(',').map((s) => s.trim()).filter(Boolean);
+    } catch {
+      return trimmed.split(',').map((s) => s.trim()).filter(Boolean);
     }
-
-    const upsert = existing.rows[0]
-      ? await deps.pool.query(
-          `UPDATE marketing_brand_voice_profiles
-           SET profile_json = $2, source_session_count = $3, updated_at = NOW()
-           WHERE id = $1
-           RETURNING *`,
-          [existing.rows[0].id, profileJson ?? existing.rows[0].profile_json, countResult.rows[0].session_count]
-        )
-      : await deps.pool.query(
-          `INSERT INTO marketing_brand_voice_profiles (owner_id, profile_json, source_session_count)
-           VALUES ($1, $2, $3)
-           RETURNING *`,
-          [ownerId, profileJson ?? {}, countResult.rows[0].session_count]
-        );
-
-    return res.json({ ok: true, row: upsert.rows[0] });
-  } catch (err) {
-    deps.logger?.error?.({ err }, 'marketing brand voice rebuild failed');
-    return jsonError(res, err.status || 500, err.message || 'Failed to rebuild brand voice profile');
   }
+  return tags;
 }
+
+const ALLOWED_ATOM_TYPES = new Set([
+  'hook',
+  'angle',
+  'claim',
+  'cta',
+  'bullet',
+  'caption',
+  'thread',
+  'post',
+  'email',
+  'script',
+  'headline',
+  'subheadline',
+  'value_prop',
+  'proof',
+  'story',
+  'offer',
+  'faq',
+  'other'
+]);
+
+const ALLOWED_REUSE_CONSENT_LEVELS = new Set([
+  'none',
+  'internal',
+  'limited',
+  'full'
+]);
 
 export function registerMarketingCalendarRoutes(app, deps) {
-  app.get('/api/v1/marketing/calendar', deps.requireKey, (req, res) => handleCalendarGet(req, res, deps));
-  app.post('/api/v1/marketing/atoms', deps.requireKey, (req, res) => handleAtomsPost(req, res, deps));
-  app.get('/api/v1/marketing/atoms', deps.requireKey, (req, res) => handleAtomsGet(req, res, deps));
-  app.post('/api/v1/marketing/brand-voice/rebuild', deps.requireKey, (req, res) => handleBrandVoiceRebuild(req, res, deps));
+  const { pool, requireKey, callCouncilMember, logger, baseUrl } = deps || {};
+  if (!app || !pool || !requireKey) {
+    throw new Error('registerMarketingCalendarRoutes requires app, deps.pool, and deps.requireKey');
+  }
+
+  app.get('/api/v1/marketing/calendar', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req);
+      if (!ownerId) return jsonError(res, 400, 'owner_id is required');
+
+      const windowDays = parseLimitWindow(req.query?.days);
+      const startDate = req.query?.from || new Date().toISOString().slice(0, 10);
+
+      const { rows } = await pool.query(
+        `
+        SELECT
+          s.*,
+          p.title AS content_piece_title,
+          p.body AS content_piece_body,
+          p.url AS content_piece_url,
+          p.author AS content_piece_author,
+          p.published_at AS content_piece_published_at,
+          p.metadata AS content_piece_metadata,
+          p.session_id AS content_piece_session_id,
+          p.platform AS content_piece_platform,
+          p.format AS content_piece_format,
+          p.content_text AS content_piece_content_text,
+          p.status AS content_piece_status,
+          p.generated_by_model AS content_piece_generated_by_model,
+          p.regeneration_count AS content_piece_regeneration_count
+        FROM marketing_calendar_slots s
+        LEFT JOIN marketing_content_pieces p
+          ON p.id = s.content_piece_id
+        WHERE s.owner_id = $1
+          AND s.scheduled_date >= $2::date
+          AND s.scheduled_date < ($2::date + ($3::int * INTERVAL '1 day'))
+        ORDER BY s.scheduled_date ASC, s.created_at ASC
+        `,
+        [ownerId, startDate, windowDays]
+      );
+
+      return res.json({ ok: true, data: rows });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing calendar fetch failed');
+      return jsonError(res, 500, 'failed to fetch calendar');
+    }
+  });
+
+  app.post('/api/v1/marketing/atoms', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req);
+      if (!ownerId) return jsonError(res, 400, 'owner_id is required');
+
+      const { atom_type, text, session_id, source_extraction_id, tags, reuse_consent_level } = req.body || {};
+
+      if (!isNonEmptyString(atom_type)) return jsonError(res, 400, 'atom_type is required');
+      if (!ALLOWED_ATOM_TYPES.has(atom_type)) {
+        return jsonError(res, 400, 'invalid atom_type');
+      }
+      if (!isNonEmptyString(text)) return jsonError(res, 400, 'text is required');
+
+      if (reuse_consent_level != null && !ALLOWED_REUSE_CONSENT_LEVELS.has(reuse_consent_level)) {
+        return jsonError(res, 400, 'invalid reuse_consent_level');
+      }
+
+      const normalizedTags = normalizeTags(tags);
+
+      const { rows } = await pool.query(
+        `
+        INSERT INTO marketing_content_atoms
+          (owner_id, session_id, source_extraction_id, atom_type, text, tags, reuse_consent_level)
+        VALUES
+          ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *
+        `,
+        [
+          ownerId,
+          session_id ?? null,
+          source_extraction_id ?? null,
+          atom_type,
+          text,
+          normalizedTags,
+          reuse_consent_level ?? null
+        ]
+      );
+
+      return res.status(201).json({ ok: true, data: rows[0] });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing atom insert failed');
+      return jsonError(res, 500, 'failed to create atom');
+    }
+  });
+
+  app.get('/api/v1/marketing/atoms', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req);
+      if (!ownerId) return jsonError(res, 400, 'owner_id is required');
+
+      const atomType = req.query?.atom_type;
+      const params = [ownerId];
+      let clause = 'WHERE owner_id = $1';
+
+      if (isNonEmptyString(atomType)) {
+        if (!ALLOWED_ATOM_TYPES.has(atomType)) return jsonError(res, 400, 'invalid atom_type');
+        params.push(atomType);
+        clause += ` AND atom_type = $${params.length}`;
+      }
+
+      const { rows } = await pool.query(
+        `
+        SELECT *
+        FROM marketing_content_atoms
+        ${clause}
+        ORDER BY created_at DESC
+        `,
+        params
+      );
+
+      return res.json({ ok: true, data: rows });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing atom list failed');
+      return jsonError(res, 500, 'failed to list atoms');
+    }
+  });
+
+  app.post('/api/v1/marketing/brand-voice/rebuild', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req);
+      if (!ownerId) return jsonError(res, 400, 'owner_id is required');
+
+      if (typeof buildBrandVoiceProfile !== 'function') {
+        return jsonError(res, 500, 'brand voice rebuild unavailable');
+      }
+
+      const { rows: sessions } = await pool.query(
+        `
+        SELECT *
+        FROM marketing_sessions
+        WHERE owner_id = $1
+        ORDER BY created_at DESC
+        `,
+        [ownerId]
+      );
+
+      const profile = await buildBrandVoiceProfile({
+        owner_id: ownerId,
+        sessions,
+        baseUrl,
+        callCouncilMember,
+        pool,
+        logger
+      });
+
+      if (typeof scoreContentAgainstVoice === 'function' && profile) {
+        try {
+          await scoreContentAgainstVoice(profile, '');
+        } catch (innerError) {
+          logger?.warn?.({ err: innerError }, 'brand voice scoring probe failed');
+        }
+      }
+
+      const payload = {
+        owner_id: ownerId,
+        profile
+      };
+
+      await pool.query(
+        `
+        INSERT INTO marketing_brand_voice_profiles
+          (owner_id, profile_json, source_session_count)
+        VALUES
+          ($1, $2, $3)
+        ON CONFLICT DO NOTHING
+        `,
+        [ownerId, profile ?? null, Array.isArray(sessions) ? sessions.length : 0]
+      );
+
+      return res.json({ ok: true, data: payload });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'brand voice rebuild failed');
+      return jsonError(res, 500, 'failed to rebuild brand voice');
+    }
+  });
 }
 
 export default registerMarketingCalendarRoutes;
