@@ -160,7 +160,7 @@
     },
     {
       "id": "smos-publish-gate",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-publish-gate.js",
       "task": "SocialMediaOS Content Intelligence — 'Publish or kill' gate (socialmediaos PRODUCT_HOME Priority Idea #19: hook in 15s? reason to stay at 30s? thumbnail matches title? info accurate? something competitors don't have?). SELF-CONTAINED ESM module. Export async publishOrKill({ callCouncilMember, piece }) where piece = { title, hook, body, thumbnailConcept? }. Run the five gate checks (a couple are cheap local heuristics on the text; the judgement calls use callCouncilMember) and return { ok:true, verdict:'publish'|'hold', checks:[{ name, pass:boolean, reason }], blockingReasons:[] }. verdict is 'publish' only if every REQUIRED check passes.",
       "spec": "Single self-contained ESM module. NO DB. callCouncilMember is the ONLY AI hook and may be omitted — if absent, run the local heuristic checks only and mark AI-dependent checks { pass:null, reason:'ai_unavailable' } (never throw). Import ONLY node: builtins. Parse model text defensively. try/catch everything → structured { ok:false, error }. Named export publishOrKill (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -168,9 +168,12 @@
         "smos-script-scorer"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 6000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "2f54070e2f9a86e00923ab1e07f222ea13964e8f",
+      "last_attempt_at": "2026-07-07T17:26:35.651Z",
+      "completed_at": "2026-07-07T17:26:36.298Z"
     },
     {
       "id": "smos-repurpose",
