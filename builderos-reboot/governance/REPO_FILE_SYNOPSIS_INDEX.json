@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T17:18:37.641Z",
+  "generated_at": "2026-07-07T17:20:42.322Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11235,
   "files": [
@@ -21,9 +21,9 @@
     {
       "path": ".github/workflows/auto-merge-devin-prs.yml",
       "synopsis": "yml — .github/workflows/auto-merge-devin-prs.yml — auto-merge green Devin-authored PRs into main so the system ships its own work.",
-      "bytes": 9225,
-      "mtime": "2026-07-07T09:30:12.525Z",
-      "indexed_at": "2026-07-07T16:50:42.501Z"
+      "bytes": 10255,
+      "mtime": "2026-07-07T17:20:36.283Z",
+      "indexed_at": "2026-07-07T17:20:42.322Z"
     },
     {
       "path": ".github/workflows/autopilot-build.yml",
