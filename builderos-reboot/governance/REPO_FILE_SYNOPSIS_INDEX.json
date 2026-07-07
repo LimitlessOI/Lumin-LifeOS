@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T08:47:21.924Z",
+  "generated_at": "2026-07-07T08:55:17.388Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11218,
+  "file_count": 11219,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83042,6 +83042,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/marketing-session-ui.js",
+      "synopsis": "Helper to escape HTML for dynamic content",
+      "bytes": 16219,
+      "mtime": "2026-07-07T08:55:17.388Z",
+      "indexed_at": "2026-07-07T08:55:17.388Z"
     },
     {
       "path": "services/marketing-transcriber.js",
