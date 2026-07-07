@@ -189,8 +189,8 @@
       "max_output_tokens": 6000,
       "revive_count": 0,
       "commit_sha": "45d40f8dde86897a02337bd6c876de9adeefec01",
-      "last_attempt_at": "2026-07-07T17:54:37.408Z",
-      "completed_at": "2026-07-07T17:54:37.992Z"
+      "last_attempt_at": "2026-07-07T17:55:51.069Z",
+      "completed_at": "2026-07-07T17:55:51.778Z"
     },
     {
       "id": "smos-intel-routes",
