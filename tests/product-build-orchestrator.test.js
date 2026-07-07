@@ -9,6 +9,7 @@ import {
   selectNextStep,
   runNextStep,
   queueSummary,
+  reviveStaleBlockedSteps,
   STEP_STATUS,
 } from '../services/product-build-orchestrator.js';
 
@@ -122,4 +123,36 @@ test('queueSummary counts by status', () => {
   assert.equal(s.pending, 1);
   assert.equal(s.founder_gated, 1);
   assert.equal(s.complete, false);
+});
+
+test('reviveStaleBlockedSteps revives blocked steps past cooldown, bounded, never founder-gated', () => {
+  const old = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const fresh = new Date().toISOString();
+  const q = makeQueue([
+    { id: 'stale', target_file: 'f1', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old },
+    { id: 'recent', target_file: 'f2', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: fresh },
+    { id: 'gated', target_file: 'f3', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old, founder_gated: true },
+    { id: 'exhausted', target_file: 'f4', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old, revive_count: 6 },
+    { id: 'done', target_file: 'f5', task: 't', status: STEP_STATUS.DONE },
+  ]);
+  const revived = reviveStaleBlockedSteps(q);
+  assert.deepEqual(revived, ['stale'], 'only the stale, non-gated, non-exhausted blocked step revives');
+  const stale = q.steps.find((s) => s.id === 'stale');
+  assert.equal(stale.status, STEP_STATUS.PENDING);
+  assert.equal(stale.attempts, 0, 'attempts reset so it gets a fresh maxAttempts window');
+  assert.equal(stale.revive_count, 1);
+  assert.equal(q.steps.find((s) => s.id === 'recent').status, STEP_STATUS.BLOCKED, 'within cooldown stays blocked');
+  assert.equal(q.steps.find((s) => s.id === 'gated').status, STEP_STATUS.BLOCKED, 'founder-gated never auto-revives');
+  assert.equal(q.steps.find((s) => s.id === 'exhausted').status, STEP_STATUS.BLOCKED, 'revive cap respected');
+});
+
+test('reviveStaleBlockedSteps makes a blocked step selectable again', () => {
+  const old = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const q = makeQueue([
+    { id: 'a', target_file: 'f1', task: 't', status: STEP_STATUS.BLOCKED, attempts: 3, last_attempt_at: old },
+    { id: 'b', target_file: 'f2', task: 't', depends_on: ['a'] },
+  ]);
+  assert.equal(selectNextStep(q).step, null, 'blocked a strands dependent b');
+  reviveStaleBlockedSteps(q);
+  assert.equal(selectNextStep(q).step.id, 'a', 'revived a is selectable');
 });

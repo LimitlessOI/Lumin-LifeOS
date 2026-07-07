@@ -72,6 +72,43 @@ export function selectNextStep(queue) {
   return { step: null, gated };
 }
 
+export const DEFAULT_REVIVE_COOLDOWN_MS = 15 * 60 * 1000;
+export const DEFAULT_MAX_REVIVES = 6;
+
+/**
+ * Self-healing: a step that failed maxAttempts is marked BLOCKED, which is
+ * TERMINAL, so selectNextStep skips it forever. That is correct for a genuinely
+ * broken step, but it also permanently strands a step that was blocked by a
+ * TRANSIENT or since-fixed failure (e.g. the deploy-proof false-negative that
+ * blocked already-built editor panes). Downstream steps that depend on it then
+ * never build either. This revives such steps back to PENDING once a cooldown
+ * has elapsed, with a bounded revive_count so a truly broken step still stops
+ * (the daily cost cap is the second backstop). Founder-gated steps are never
+ * revived — only Adam clears those. Mutates queue.steps; returns revived ids.
+ */
+export function reviveStaleBlockedSteps(queue, {
+  cooldownMs = DEFAULT_REVIVE_COOLDOWN_MS,
+  maxRevives = DEFAULT_MAX_REVIVES,
+  now = Date.now(),
+} = {}) {
+  const revived = [];
+  for (const step of queue.steps) {
+    if (step.status !== STEP_STATUS.BLOCKED) continue;
+    if (step.founder_gated) continue;
+    const reviveCount = typeof step.revive_count === 'number' ? step.revive_count : 0;
+    if (reviveCount >= maxRevives) continue;
+    const lastAt = Date.parse(step.last_attempt_at || step.completed_at || '');
+    const waited = Number.isFinite(lastAt) ? now - lastAt : Infinity;
+    if (waited < cooldownMs) continue;
+    step.status = STEP_STATUS.PENDING;
+    step.attempts = 0;
+    step.revive_count = reviveCount + 1;
+    step.revived_at = new Date(now).toISOString();
+    revived.push(step.id);
+  }
+  return revived;
+}
+
 export function queueSummary(queue) {
   const by = { pending: 0, building: 0, done: 0, blocked: 0, founder_gated: 0 };
   for (const s of queue.steps) {

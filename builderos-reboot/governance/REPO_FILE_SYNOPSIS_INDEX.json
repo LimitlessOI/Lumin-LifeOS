@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T02:29:37.759Z",
+  "generated_at": "2026-07-07T02:36:46.736Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11212,
   "files": [
@@ -21589,8 +21589,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3383891,
-      "mtime": "2026-07-07T02:29:31.800Z",
-      "indexed_at": "2026-07-07T02:29:37.759Z"
+      "mtime": "2026-07-07T02:36:38.368Z",
+      "indexed_at": "2026-07-07T02:36:46.736Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38423,9 +38423,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 151091,
-      "mtime": "2026-07-07T02:29:31.776Z",
-      "indexed_at": "2026-07-07T02:29:31.776Z"
+      "bytes": 152220,
+      "mtime": "2026-07-07T02:36:30.244Z",
+      "indexed_at": "2026-07-07T02:36:46.736Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -83415,9 +83415,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 33483,
-      "mtime": "2026-07-07T02:29:31.776Z",
-      "indexed_at": "2026-07-07T02:29:31.776Z",
+      "bytes": 34001,
+      "mtime": "2026-07-07T02:36:01.272Z",
+      "indexed_at": "2026-07-07T02:36:46.736Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83633,9 +83633,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 7576,
-      "mtime": "2026-07-07T01:07:40.468Z",
-      "indexed_at": "2026-07-07T01:08:47.122Z",
+      "bytes": 9227,
+      "mtime": "2026-07-07T02:36:01.272Z",
+      "indexed_at": "2026-07-07T02:36:46.736Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86790,9 +86790,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 5272,
-      "mtime": "2026-07-06T17:54:32.367Z",
-      "indexed_at": "2026-07-07T01:08:47.122Z",
+      "bytes": 7405,
+      "mtime": "2026-07-07T02:36:01.272Z",
+      "indexed_at": "2026-07-07T02:36:46.736Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
