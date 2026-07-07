@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T02:10:02.864Z",
+  "generated_at": "2026-07-07T02:13:56.458Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11212,
   "files": [
@@ -21,9 +21,9 @@
     {
       "path": ".github/workflows/auto-merge-devin-prs.yml",
       "synopsis": "yml — .github/workflows/auto-merge-devin-prs.yml — auto-merge green Devin-authored PRs into main so the system ships its own work.",
-      "bytes": 4871,
-      "mtime": "2026-07-07T01:06:27.038Z",
-      "indexed_at": "2026-07-07T01:08:47.122Z"
+      "bytes": 9225,
+      "mtime": "2026-07-07T02:13:24.252Z",
+      "indexed_at": "2026-07-07T02:13:56.458Z"
     },
     {
       "path": ".github/workflows/autopilot-build.yml",
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3382811,
-      "mtime": "2026-07-07T01:08:48.474Z",
-      "indexed_at": "2026-07-07T01:08:49.185Z"
+      "bytes": 3383891,
+      "mtime": "2026-07-07T02:13:48.516Z",
+      "indexed_at": "2026-07-07T02:13:56.458Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39481,9 +39481,9 @@
     {
       "path": "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ZERO DRIFT HANDOFF PROTOCOL",
-      "bytes": 103614,
-      "mtime": "2026-07-06T21:31:21.636Z",
-      "indexed_at": "2026-07-07T01:08:47.122Z"
+      "bytes": 104205,
+      "mtime": "2026-07-07T02:13:34.012Z",
+      "indexed_at": "2026-07-07T02:13:56.458Z"
     },
     {
       "path": "docs/products/ZERODRIFTHANDOFFPROTOCOL.md",
@@ -66736,9 +66736,9 @@
     {
       "path": "scripts/lib/file-synopsis.mjs",
       "synopsis": "Shared helpers — detect, infer, inject SYNOPSIS headers; index entry builders.",
-      "bytes": 10975,
-      "mtime": "2026-07-03T00:17:46.216Z",
-      "indexed_at": "2026-07-07T01:08:47.122Z",
+      "bytes": 11419,
+      "mtime": "2026-07-07T02:13:24.252Z",
+      "indexed_at": "2026-07-07T02:13:56.458Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
       ]
