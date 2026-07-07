@@ -33,19 +33,23 @@ export function shasMatch(a, b) {
  * called with base=builtSha, head=servedSha) into "does the running deploy
  * already CONTAIN the built commit?".
  *
- *   identical → served IS the built commit               → contains
- *   behind    → base(built) is behind head(served), i.e.
- *               served is a descendant that includes built → contains
- *   ahead     → served is BEHIND the built commit          → does NOT contain
- *   diverged  → served is on a different line              → does NOT contain
+ * GitHub's `status` is reported from the HEAD's perspective relative to base:
  *
- * This is what makes deploy-proof correct in a busy repo: once ANY redeploy
- * serves a SHA at or after the built commit, the built code is genuinely live —
- * an exact-SHA match is not required (and is unachievable once later commits,
- * e.g. the queue-status commit or a sibling lane, advance HEAD).
+ *   identical → served IS the built commit                    → contains
+ *   ahead     → head(served) is AHEAD of base(built), i.e.
+ *               served is a descendant that includes built     → contains
+ *   behind    → head(served) is BEHIND base(built), i.e.
+ *               served is missing the built commit             → does NOT contain
+ *   diverged  → served is on a different line                  → does NOT contain
+ *
+ * (Equivalently: served contains built iff `behind_by === 0`.) This is what
+ * makes deploy-proof correct in a busy repo: once ANY redeploy serves a SHA at
+ * or after the built commit, the built code is genuinely live — an exact-SHA
+ * match is not required (and is unachievable once later commits, e.g. the
+ * queue-status commit or a sibling lane, advance HEAD).
  */
 export function interpretCompareStatus(status) {
-  return status === 'identical' || status === 'behind';
+  return status === 'identical' || status === 'ahead';
 }
 
 /**
