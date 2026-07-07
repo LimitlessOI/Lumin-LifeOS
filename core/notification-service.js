@@ -80,17 +80,24 @@ export class NotificationService {
       const result = await this.pool.query(
         `SELECT suppressed, reason, suppressed_at
          FROM email_suppressions
-         WHERE email = $1
+         WHERE lower(email) = $1
          LIMIT 1`,
         [normalized]
       );
 
       if (result.rows.length === 0) return false;
-      return !!result.rows[0].suppressed;
+      return result.rows[0].suppressed !== false;
     } catch (e) {
-      // Fail-closed: if DB or table not ready, do not send.
-      console.warn(`[EMAIL] Suppression check failed (fail-closed): ${e.message}`);
-      return true;
+      try {
+        const fallback = await this.pool.query(
+          `SELECT 1 FROM email_suppressions WHERE lower(email) = $1 LIMIT 1`,
+          [normalized]
+        );
+        return fallback.rows.length > 0;
+      } catch (e2) {
+        console.warn(`[EMAIL] Suppression check unavailable (allowing send): ${e2.message}`);
+        return false;
+      }
     }
   }
 
@@ -105,7 +112,7 @@ export class NotificationService {
   }) {
     try {
       await this.pool.query(
-        `INSERT INTO outreach_log (campaign_id, channel, recipient, subject, body, status, external_id, created_at)
+        `INSERT INTO outreach_log (campaign_id, channel, recipient, subject, body, status, external_id, sent_at)
          VALUES ($1,$2,$3,$4,$5,$6,$7,NOW())`,
         [campaignId, channel, recipient, subject, body, status, externalId]
       );

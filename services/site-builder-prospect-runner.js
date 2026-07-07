@@ -111,7 +111,7 @@ export async function getProspectJobStatus(pool, clientId) {
       emailSent: row.email_sent,
       businessName: row.business_name,
       contactEmail: row.contact_email,
-      error: metadata.jobError || metadata.lastError || null,
+      error: metadata.jobError || metadata.lastError || metadata.emailSendError || null,
       updatedAt: row.updated_at,
       createdAt: row.created_at,
     };
