@@ -29,24 +29,51 @@ export function sandboxBoundaryForTarget(target) {
   return slash > 0 ? `${t.slice(0, slash)}/**` : t;
 }
 
+// Parse an EXPLICIT "METHOD /path" (or bare "/path") route declaration. Returns
+// null for anything that is not an unambiguous route string — never guesses.
+export function parseRouteDeclaration(value) {
+  if (value && typeof value === 'object' && typeof value.path === 'string' && value.path.trim()) {
+    return value;
+  }
+  const text = String(value || '').trim();
+  if (!text) return null;
+  const withMethod = text.match(/^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(\/\S*)$/i);
+  if (withMethod) return { method: withMethod[1].toUpperCase(), path: withMethod[2] };
+  if (text.startsWith('/') && !/\s/.test(text)) return { path: text };
+  return null;
+}
+
+// Collect the checkable expectation fields declared on a source object
+// (a BUILD_QUEUE step, or its structured `acceptance` block). NON-FABRICATING:
+// only reads explicitly-declared expected_exports / route / file_contains.
+export function collectExpectationFields(src) {
+  const spec = {};
+  if (Array.isArray(src?.expected_exports) && src.expected_exports.length > 0) {
+    const names = src.expected_exports.filter((n) => typeof n === 'string' && n.trim());
+    if (names.length) spec.expected_exports = names;
+  }
+  const route = parseRouteDeclaration(src?.route);
+  if (route) spec.route = route;
+  if (Array.isArray(src?.file_contains) && src.file_contains.length > 0) {
+    const arr = src.file_contains.filter((s) => typeof s === 'string' && s.trim());
+    if (arr.length) spec.file_contains = arr;
+  }
+  return spec;
+}
+
 // Normalise a BUILD_QUEUE step's declared expectation into an assertion_spec.
-// Recognises step.assertion_spec (object), step.expected_exports (string[]),
-// step.route ({path,...}). Returns {} when nothing verifiable is declared.
+// Recognises step.assertion_spec (object), step-level expected_exports/route/
+// file_contains, and an EXPLICIT structured step.acceptance block (route as
+// object or "METHOD /path" string, expected_exports, file_contains). Returns {}
+// when nothing verifiable is declared. Never reads freeform task/spec prose.
 export function assertionSpecFromBuildQueueStep(step) {
   if (step?.assertion_spec && typeof step.assertion_spec === 'object' && Object.keys(step.assertion_spec).length > 0) {
     return { ...step.assertion_spec };
   }
-  const spec = {};
-  if (Array.isArray(step?.expected_exports) && step.expected_exports.length > 0) {
-    spec.expected_exports = step.expected_exports.filter((n) => typeof n === 'string' && n.trim());
-  }
-  if (step?.route && typeof step.route.path === 'string' && step.route.path.trim()) {
-    spec.route = step.route;
-  }
-  if (Array.isArray(step?.file_contains) && step.file_contains.length > 0) {
-    spec.file_contains = step.file_contains.filter((s) => typeof s === 'string' && s.trim());
-  }
-  return spec;
+  const stepLevel = collectExpectationFields(step);
+  if (Object.keys(stepLevel).length > 0) return stepLevel;
+  // Fall back to an explicit, structured acceptance block authored by BPB/founder.
+  return collectExpectationFields(step?.acceptance);
 }
 
 /**
