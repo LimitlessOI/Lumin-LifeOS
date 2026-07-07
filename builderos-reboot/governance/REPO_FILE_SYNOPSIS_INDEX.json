@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T20:00:28.795Z",
+  "generated_at": "2026-07-07T20:22:27.903Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11254,
+  "file_count": 11256,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3393559,
-      "mtime": "2026-07-07T19:14:18.923Z",
-      "indexed_at": "2026-07-07T19:14:50.031Z"
+      "bytes": 3398119,
+      "mtime": "2026-07-07T20:22:13.259Z",
+      "indexed_at": "2026-07-07T20:22:27.903Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -29533,6 +29533,16 @@
       "bytes": 2825,
       "mtime": "2026-07-07T18:57:52.115Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "builderos-reboot/scripts/general-browser-agent-proof.mjs",
+      "synopsis": "Proof for the general goal-driven browser agent core",
+      "bytes": 6866,
+      "mtime": "2026-07-07T20:21:19.611Z",
+      "indexed_at": "2026-07-07T20:22:27.903Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "builderos-reboot/scripts/generate-factory-reboot-0004.mjs",
@@ -39390,9 +39400,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 92306,
-      "mtime": "2026-07-04T11:53:31.402Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z"
+      "bytes": 93779,
+      "mtime": "2026-07-07T20:21:48.163Z",
+      "indexed_at": "2026-07-07T20:22:27.903Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -81775,6 +81785,16 @@
       "bytes": 12031,
       "mtime": "2026-07-03T13:23:32.581Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "services/general-browser-agent.js",
+      "synopsis": "General goal-driven browser agent — the loop that lets the system",
+      "bytes": 8434,
+      "mtime": "2026-07-07T20:20:46.047Z",
+      "indexed_at": "2026-07-07T20:22:27.903Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/glvar-monitor.js",
