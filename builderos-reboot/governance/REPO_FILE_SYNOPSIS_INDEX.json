@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T22:08:25.081Z",
+  "generated_at": "2026-07-07T22:12:49.251Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11272,
   "files": [
@@ -31135,9 +31135,9 @@
     {
       "path": "core/notification-service.js",
       "synopsis": "NotificationService",
-      "bytes": 12346,
-      "mtime": "2026-07-07T22:08:22.536Z",
-      "indexed_at": "2026-07-07T22:08:25.081Z",
+      "bytes": 12373,
+      "mtime": "2026-07-07T22:12:46.372Z",
+      "indexed_at": "2026-07-07T22:12:49.251Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -39412,9 +39412,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 66953,
-      "mtime": "2026-07-07T22:08:22.538Z",
-      "indexed_at": "2026-07-07T22:08:25.081Z"
+      "bytes": 67260,
+      "mtime": "2026-07-07T22:12:46.417Z",
+      "indexed_at": "2026-07-07T22:12:49.251Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",

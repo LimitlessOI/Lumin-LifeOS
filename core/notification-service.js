@@ -58,8 +58,11 @@ export class NotificationService {
     this._smtpTransporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: smtpPort,
-      secure: smtpPort === 465, // SSL on 465, STARTTLS on 587
-      family: 4,    // Force IPv4 — Railway containers don't support outbound IPv6
+      secure: smtpPort === 465,
+      family: 4,
+      lookup: (hostname, _options, callback) => {
+        dns.lookup(hostname, { family: 4, all: false }, callback);
+      },
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
