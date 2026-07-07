@@ -3,24 +3,20 @@
  */
 function htmlEscape(value) {
   return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
-function jsLiteral(value) {
-  return JSON.stringify(value ?? null)
-    .replace(/</g, "\\u003C")
-    .replace(/>/g, "\\u003E")
-    .replace(/&/g, "\\u0026")
-    .replace(/\u2028/g, "\\u2028")
-    .replace(/\u2029/g, "\\u2029");
-}
-
-function normalizeList(value) {
-  return Array.isArray(value) ? value : [];
+function scriptJson(value) {
+  return JSON.stringify(value)
+    .replaceAll("<", "\\u003c")
+    .replaceAll(">", "\\u003e")
+    .replaceAll("&", "\\u0026")
+    .replaceAll("\u2028", "\\u2028")
+    .replaceAll("\u2029", "\\u2029");
 }
 
 export function renderCanvas({
@@ -31,584 +27,576 @@ export function renderCanvas({
   editToken,
   baseUrl
 } = {}) {
-  const safeSiteFile = String(siteFile ?? "");
-  const safeClientId = String(clientId ?? "");
-  const safeEditToken = String(editToken ?? "");
-  const safeBaseUrl = String(baseUrl ?? "");
-  const safeVariants = normalizeList(variants).map((variant) => ({
-    id: String(variant?.id ?? ""),
-    name: String(variant?.name ?? variant?.id ?? variant?.file ?? "Template"),
-    file: String(variant?.file ?? "")
-  }));
-  const safePalettes = normalizeList(palettes).map((palette) => ({
-    name: String(palette?.name ?? "Palette"),
-    primary: String(palette?.primary ?? ""),
-    accent: String(palette?.accent ?? "")
-  }));
+  const safeVariants = Array.isArray(variants) ? variants : [];
+  const safePalettes = Array.isArray(palettes) ? palettes : [];
+  const initialFile = String(siteFile ?? "");
+  const data = {
+    siteFile: initialFile,
+    variants: safeVariants.map((variant) => ({
+      id: String(variant?.id ?? ""),
+      name: String(variant?.name ?? ""),
+      file: String(variant?.file ?? "")
+    })),
+    palettes: safePalettes.map((palette) => ({
+      name: String(palette?.name ?? ""),
+      primary: String(palette?.primary ?? ""),
+      accent: String(palette?.accent ?? "")
+    })),
+    clientId: String(clientId ?? ""),
+    editToken: String(editToken ?? ""),
+    baseUrl: String(baseUrl ?? "")
+  };
 
-  const variantChips = safeVariants.map((variant) => {
-    const isActive = variant.file === safeSiteFile;
-    return [
-      `<button type="button" class="lifeos-canvas-chip${isActive ? " is-active" : ""}"`,
-      ` data-template-file="${htmlEscape(variant.file)}"`,
-      ` data-template-id="${htmlEscape(variant.id)}"`,
-      ` title="${htmlEscape(variant.file)}"`,
-      ` aria-pressed="${isActive ? "true" : "false"}">`,
-      `${htmlEscape(variant.name)}`,
-      `</button>`
-    ].join("");
-  }).join("");
+  const variantChips = data.variants
+    .map((variant) => {
+      const isActive = variant.file === initialFile;
+      return `<button type="button" class="lifeos-canvas-chip${isActive ? " is-active" : ""}" data-lifeos-template-file="${htmlEscape(variant.file)}" data-lifeos-template-id="${htmlEscape(variant.id)}">${htmlEscape(variant.name || variant.id || variant.file)}</button>`;
+    })
+    .join("");
 
-  const paletteSwatches = safePalettes.map((palette, index) => [
-    `<button type="button" class="lifeos-palette-swatch" data-palette-index="${index}" title="${htmlEscape(palette.name)}">`,
-    `<span class="lifeos-palette-dot" style="background:${htmlEscape(palette.primary)}"></span>`,
-    `<span class="lifeos-palette-dot" style="background:${htmlEscape(palette.accent)}"></span>`,
-    `<span class="lifeos-palette-name">${htmlEscape(palette.name)}</span>`,
-    `</button>`
-  ].join("")).join("");
+  const paletteSwatches = data.palettes
+    .map((palette) => {
+      return `<button type="button" class="lifeos-canvas-swatch" data-lifeos-palette-name="${htmlEscape(palette.name)}" data-lifeos-palette-primary="${htmlEscape(palette.primary)}" data-lifeos-palette-accent="${htmlEscape(palette.accent)}" title="${htmlEscape(palette.name)}"><span class="lifeos-canvas-swatch-color" style="background:${htmlEscape(palette.primary)}"></span><span class="lifeos-canvas-swatch-color" style="background:${htmlEscape(palette.accent)}"></span><span class="lifeos-canvas-swatch-name">${htmlEscape(palette.name)}</span></button>`;
+    })
+    .join("");
 
   return `
-<div class="lifeos-canvas-pane" data-lifeos-canvas>
+<section class="lifeos-canvas" data-lifeos-canvas-root>
   <style>
-    .lifeos-canvas-pane {
+    .lifeos-canvas {
       display: flex;
       flex-direction: column;
       min-height: 0;
       height: 100%;
-      width: 100%;
-      background: #f7f7f8;
-      color: #18181b;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7fb;
+      color: #172033;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      position: relative;
     }
     .lifeos-canvas-toolbar {
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
-      padding: 10px 12px;
-      border-bottom: 1px solid #e4e4e7;
+      padding: 12px;
+      border-bottom: 1px solid rgba(23, 32, 51, 0.1);
       background: #ffffff;
-      flex: 0 0 auto;
+      z-index: 3;
     }
     .lifeos-canvas-group {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .lifeos-canvas-label {
       font-size: 12px;
       line-height: 1;
       font-weight: 700;
-      color: #71717a;
+      color: rgba(23, 32, 51, 0.62);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
     }
     .lifeos-canvas-chip,
-    .lifeos-device-button,
-    .lifeos-save-button,
-    .lifeos-palette-swatch {
-      appearance: none;
-      border: 1px solid #d4d4d8;
+    .lifeos-canvas-device,
+    .lifeos-canvas-save,
+    .lifeos-canvas-swatch {
+      border: 1px solid rgba(23, 32, 51, 0.14);
       background: #ffffff;
-      color: #18181b;
+      color: #172033;
       border-radius: 999px;
-      min-height: 32px;
-      padding: 6px 10px;
+      padding: 8px 11px;
       font: inherit;
       font-size: 13px;
       line-height: 1;
       cursor: pointer;
+      transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
     }
     .lifeos-canvas-chip:hover,
-    .lifeos-device-button:hover,
-    .lifeos-save-button:hover,
-    .lifeos-palette-swatch:hover {
-      border-color: #a1a1aa;
-      background: #fafafa;
+    .lifeos-canvas-device:hover,
+    .lifeos-canvas-save:hover,
+    .lifeos-canvas-swatch:hover {
+      border-color: rgba(42, 95, 255, 0.46);
+      box-shadow: 0 2px 10px rgba(23, 32, 51, 0.08);
     }
     .lifeos-canvas-chip.is-active,
-    .lifeos-device-button.is-active {
-      border-color: #18181b;
-      background: #18181b;
+    .lifeos-canvas-device.is-active {
       color: #ffffff;
+      background: #2a5fff;
+      border-color: #2a5fff;
     }
-    .lifeos-palette-swatch {
+    .lifeos-canvas-save {
+      margin-left: auto;
+      color: #ffffff;
+      background: #172033;
+      border-color: #172033;
+      font-weight: 700;
+    }
+    .lifeos-canvas-swatch {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding-left: 8px;
+      padding: 6px 9px;
     }
-    .lifeos-palette-dot {
-      display: inline-block;
+    .lifeos-canvas-swatch-color {
       width: 14px;
       height: 14px;
       border-radius: 999px;
-      border: 1px solid rgba(0,0,0,0.16);
+      border: 1px solid rgba(23, 32, 51, 0.16);
+      display: inline-block;
     }
-    .lifeos-palette-name {
+    .lifeos-canvas-swatch-name {
       max-width: 110px;
       overflow: hidden;
-      white-space: nowrap;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .lifeos-save-button {
-      margin-left: auto;
-      border-color: #16a34a;
-      background: #16a34a;
-      color: #ffffff;
-      font-weight: 700;
-    }
-    .lifeos-save-button:hover {
-      border-color: #15803d;
-      background: #15803d;
-    }
-    .lifeos-canvas-error {
-      display: none;
-      margin: 10px 12px 0;
-      padding: 9px 10px;
-      border: 1px solid #fecaca;
-      border-radius: 10px;
-      background: #fef2f2;
-      color: #991b1b;
+    .lifeos-canvas-status {
+      width: 100%;
+      min-height: 18px;
       font-size: 13px;
-      line-height: 1.35;
-      flex: 0 0 auto;
+      line-height: 18px;
+      color: rgba(23, 32, 51, 0.72);
     }
-    .lifeos-canvas-error:not(:empty) {
-      display: block;
+    .lifeos-canvas-status.is-error {
+      color: #b42318;
     }
-    .lifeos-canvas-frame-wrap {
+    .lifeos-canvas-status.is-ok {
+      color: #027a48;
+    }
+    .lifeos-canvas-stage {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 420px;
+      overflow: auto;
+      padding: 18px;
       display: flex;
       justify-content: center;
       align-items: stretch;
-      min-height: 0;
-      flex: 1 1 auto;
-      padding: 14px;
-      overflow: auto;
     }
-    .lifeos-site-frame {
+    .lifeos-canvas-frame-wrap {
+      position: relative;
       width: 100%;
-      min-height: 720px;
+      min-height: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .lifeos-canvas-frame {
+      width: 100%;
+      min-height: 100%;
       height: 100%;
-      max-width: 100%;
-      border: 1px solid #d4d4d8;
-      border-radius: 14px;
+      border: 1px solid rgba(23, 32, 51, 0.14);
+      border-radius: 16px;
       background: #ffffff;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+      box-shadow: 0 18px 60px rgba(23, 32, 51, 0.12);
       transition: width 160ms ease;
     }
-    .lifeos-canvas-pane.is-mobile .lifeos-site-frame {
-      width: 390px;
+    .lifeos-canvas-section-controls {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .lifeos-canvas-section-control {
+      position: absolute;
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      pointer-events: auto;
+      transform: translateY(-50%);
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(23, 32, 51, 0.86);
+      box-shadow: 0 8px 24px rgba(23, 32, 51, 0.18);
+    }
+    .lifeos-canvas-section-control button {
+      border: 0;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #172033;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 26px;
+      padding: 0;
     }
   </style>
 
-  <div class="lifeos-canvas-toolbar" role="toolbar" aria-label="Site canvas controls">
+  <div class="lifeos-canvas-toolbar">
     <div class="lifeos-canvas-group" aria-label="Templates">
       <span class="lifeos-canvas-label">Template</span>
       ${variantChips}
     </div>
-
     <div class="lifeos-canvas-group" aria-label="Palettes">
       <span class="lifeos-canvas-label">Palette</span>
       ${paletteSwatches}
     </div>
-
-    <div class="lifeos-canvas-group" aria-label="Device preview">
+    <div class="lifeos-canvas-group" aria-label="Device">
       <span class="lifeos-canvas-label">Device</span>
-      <button type="button" class="lifeos-device-button is-active" data-device="desktop" aria-pressed="true">Desktop</button>
-      <button type="button" class="lifeos-device-button" data-device="mobile" aria-pressed="false">Mobile</button>
+      <button type="button" class="lifeos-canvas-device is-active" data-lifeos-device="desktop">Desktop</button>
+      <button type="button" class="lifeos-canvas-device" data-lifeos-device="mobile">Mobile</button>
     </div>
-
-    <button type="button" class="lifeos-save-button" data-save-edits>Save</button>
+    <button type="button" class="lifeos-canvas-save" data-lifeos-save>Save</button>
+    <div class="lifeos-canvas-status" data-lifeos-status aria-live="polite"></div>
   </div>
 
-  <div class="lifeos-canvas-error" data-canvas-error role="alert" aria-live="polite"></div>
-
-  <div class="lifeos-canvas-frame-wrap">
-    <iframe class="lifeos-site-frame" data-site-frame src="${htmlEscape(safeSiteFile)}" title="Live site canvas"></iframe>
+  <div class="lifeos-canvas-stage" data-lifeos-stage>
+    <div class="lifeos-canvas-frame-wrap" data-lifeos-frame-wrap>
+      <iframe class="lifeos-canvas-frame" data-lifeos-iframe src="${htmlEscape(initialFile)}"></iframe>
+      <div class="lifeos-canvas-section-controls" data-lifeos-section-controls></div>
+    </div>
   </div>
 
   <script>
     (function () {
-      var root = document.currentScript && document.currentScript.closest('[data-lifeos-canvas]');
+      const config = ${scriptJson(data)};
+      const editToken = config.editToken;
+      const root = document.currentScript && document.currentScript.closest("[data-lifeos-canvas-root]");
       if (!root) return;
 
-      var editToken = ${jsLiteral(safeEditToken)};
-      var clientId = ${jsLiteral(safeClientId)};
-      var initialFile = ${jsLiteral(safeSiteFile)};
-      var baseUrl = ${jsLiteral(safeBaseUrl)};
-      var palettes = ${jsLiteral(safePalettes)};
-      var currentFile = initialFile;
-
-      var iframe = root.querySelector('[data-site-frame]');
-      var errorBox = root.querySelector('[data-canvas-error]');
-      var saveButton = root.querySelector('[data-save-edits]');
-
-      function showError(message) {
-        if (!errorBox) return;
-        errorBox.textContent = String(message || 'Something went wrong.');
-      }
-
-      function clearError() {
-        if (!errorBox) return;
-        errorBox.textContent = '';
-      }
+      const iframe = root.querySelector("[data-lifeos-iframe]");
+      const frameWrap = root.querySelector("[data-lifeos-frame-wrap]");
+      const controlsLayer = root.querySelector("[data-lifeos-section-controls]");
+      const statusEl = root.querySelector("[data-lifeos-status]");
+      const state = {
+        currentFile: config.siteFile || "",
+        device: "desktop"
+      };
 
       function endpoint(path) {
-        var base = String(baseUrl || '').replace(/\\/$/, '');
+        const base = String(config.baseUrl || "").replace(/\\/$/, "");
         return base + path;
       }
 
+      function setStatus(message, type) {
+        if (!statusEl) return;
+        statusEl.textContent = message || "";
+        statusEl.classList.toggle("is-error", type === "error");
+        statusEl.classList.toggle("is-ok", type === "ok");
+      }
+
+      async function readError(response) {
+        try {
+          const text = await response.text();
+          return text || (response.status + " " + response.statusText);
+        } catch (_error) {
+          return response.status + " " + response.statusText;
+        }
+      }
+
       async function postJson(url, payload) {
-        clearError();
-
-        var body = Object.assign({}, payload || {}, { token: editToken });
-
-        try {
-          var response = await fetch(url, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Edit-Token': editToken
-            },
-            body: JSON.stringify(body)
-          });
-
-          if (!response.ok) {
-            var details = '';
-            try {
-              details = await response.text();
-            } catch (_) {
-              details = '';
-            }
-            showError('Request failed (' + response.status + '). ' + String(details || response.statusText || '').slice(0, 240));
-            return null;
-          }
-
-          try {
-            return await response.json();
-          } catch (_) {
-            return {};
-          }
-        } catch (error) {
-          showError('Request failed. ' + (error && error.message ? error.message : String(error)));
-          return null;
-        }
-      }
-
-      function withIframeDocument(callback) {
-        try {
-          if (!iframe) throw new Error('Canvas iframe was not found.');
-          var doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
-          if (!doc) throw new Error('Canvas document is unavailable.');
-          return callback(doc);
-        } catch (error) {
-          showError('Canvas access failed. ' + (error && error.message ? error.message : String(error)));
-          return null;
-        }
-      }
-
-      function setActiveButtons(buttons, activeButton) {
-        Array.prototype.forEach.call(buttons || [], function (button) {
-          var active = button === activeButton;
-          button.classList.toggle('is-active', active);
-          button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(Object.assign({}, payload, { token: editToken }))
         });
-      }
-
-      function installSectionControls(doc) {
-        try {
-          if (!doc || !doc.body) return;
-
-          if (!doc.querySelector('style[data-lifeos-editor-control-style]')) {
-            var style = doc.createElement('style');
-            style.setAttribute('data-lifeos-editor-control', 'true');
-            style.setAttribute('data-lifeos-editor-control-style', 'true');
-            style.textContent = [
-              '[data-lifeos-editor-control]{box-sizing:border-box;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
-              '.lifeos-section-controls{position:absolute;top:8px;right:8px;z-index:2147483647;display:flex;gap:4px;padding:4px;border:1px solid rgba(24,24,27,.14);border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 8px 24px rgba(15,23,42,.14);}',
-              '.lifeos-section-controls button{appearance:none;border:1px solid #d4d4d8;border-radius:999px;background:#fff;color:#18181b;cursor:pointer;font:600 11px/1 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:5px 7px;}',
-              '.lifeos-section-controls button:hover{background:#f4f4f5;border-color:#a1a1aa;}',
-              '[data-lifeos-editable="true"]{outline:2px solid #2563eb!important;outline-offset:2px;}'
-            ].join('');
-            (doc.head || doc.documentElement).appendChild(style);
-          }
-
-          Array.prototype.forEach.call(doc.body.children || [], function (section) {
-            try {
-              if (!section || section.nodeType !== 1) return;
-              if (section.hasAttribute('data-lifeos-editor-control')) return;
-              if (section.querySelector(':scope > .lifeos-section-controls[data-lifeos-editor-control]')) return;
-
-              var computed = doc.defaultView && doc.defaultView.getComputedStyle
-                ? doc.defaultView.getComputedStyle(section)
-                : null;
-
-              if (computed && computed.position === 'static') {
-                section.setAttribute('data-lifeos-editor-positioned', 'true');
-                section.style.position = 'relative';
-              }
-
-              var controls = doc.createElement('div');
-              controls.className = 'lifeos-section-controls';
-              controls.setAttribute('data-lifeos-editor-control', 'true');
-              controls.setAttribute('contenteditable', 'false');
-
-              var up = doc.createElement('button');
-              up.type = 'button';
-              up.textContent = 'Up';
-              up.setAttribute('data-lifeos-editor-control', 'true');
-
-              var down = doc.createElement('button');
-              down.type = 'button';
-              down.textContent = 'Down';
-              down.setAttribute('data-lifeos-editor-control', 'true');
-
-              var hide = doc.createElement('button');
-              hide.type = 'button';
-              hide.textContent = 'Hide';
-              hide.setAttribute('data-lifeos-editor-control', 'true');
-
-              function stop(event) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-
-              controls.addEventListener('mousedown', stop, true);
-              controls.addEventListener('click', stop, true);
-
-              up.addEventListener('click', function (event) {
-                stop(event);
-                try {
-                  var previous = section.previousElementSibling;
-                  if (previous && !previous.hasAttribute('data-lifeos-editor-control')) {
-                    section.parentNode.insertBefore(section, previous);
-                  }
-                } catch (error) {
-                  showError('Move up failed. ' + (error && error.message ? error.message : String(error)));
-                }
-              });
-
-              down.addEventListener('click', function (event) {
-                stop(event);
-                try {
-                  var next = section.nextElementSibling;
-                  if (next && !next.hasAttribute('data-lifeos-editor-control')) {
-                    section.parentNode.insertBefore(next, section);
-                  }
-                } catch (error) {
-                  showError('Move down failed. ' + (error && error.message ? error.message : String(error)));
-                }
-              });
-
-              hide.addEventListener('click', function (event) {
-                stop(event);
-                try {
-                  section.hidden = true;
-                } catch (error) {
-                  showError('Hide failed. ' + (error && error.message ? error.message : String(error)));
-                }
-              });
-
-              controls.appendChild(up);
-              controls.appendChild(down);
-              controls.appendChild(hide);
-              section.appendChild(controls);
-            } catch (error) {
-              showError('Section controls failed. ' + (error && error.message ? error.message : String(error)));
-            }
-          });
-        } catch (error) {
-          showError('Section controls failed. ' + (error && error.message ? error.message : String(error)));
+        if (!response.ok) {
+          throw new Error(await readError(response));
         }
+        return response;
       }
 
-      function findTextElementAtPoint(doc, event) {
+      function safeDocument() {
         try {
-          var node = null;
-
-          if (doc.caretPositionFromPoint) {
-            var position = doc.caretPositionFromPoint(event.clientX, event.clientY);
-            node = position && position.offsetNode;
-          } else if (doc.caretRangeFromPoint) {
-            var range = doc.caretRangeFromPoint(event.clientX, event.clientY);
-            node = range && range.startContainer;
-          }
-
-          if (node && node.nodeType === 3 && node.parentElement) {
-            return node.parentElement;
-          }
-
-          var target = event.target;
-          if (!target || target.nodeType !== 1) return null;
-          return target.closest('p,h1,h2,h3,h4,h5,h6,span,a,button,li,label,blockquote,figcaption,td,th');
-        } catch (_) {
+          if (!iframe || !iframe.contentDocument) return null;
+          return iframe.contentDocument;
+        } catch (_error) {
           return null;
         }
       }
 
-      function installClickToEdit(doc) {
+      function topLevelChildren() {
         try {
-          if (!doc || doc.__lifeosClickToEditInstalled) return;
-          doc.__lifeosClickToEditInstalled = true;
+          const doc = safeDocument();
+          if (!doc || !doc.body) return [];
+          return Array.from(doc.body.children || []).filter(function (child) {
+            return child && child.nodeType === 1;
+          });
+        } catch (_error) {
+          return [];
+        }
+      }
 
-          doc.addEventListener('click', function (event) {
+      function clearControls() {
+        if (controlsLayer) controlsLayer.replaceChildren();
+      }
+
+      function refreshControls() {
+        try {
+          clearControls();
+          const doc = safeDocument();
+          if (!doc || !doc.body || !iframe || !frameWrap || !controlsLayer) return;
+
+          const iframeRect = iframe.getBoundingClientRect();
+          const wrapRect = frameWrap.getBoundingClientRect();
+          const children = topLevelChildren();
+
+          children.forEach(function (child, index) {
+            if (!child || child.hidden || child.style.display === "none") return;
+
+            var rect;
             try {
-              var target = event.target;
-              if (target && target.closest && target.closest('[data-lifeos-editor-control]')) return;
+              rect = child.getBoundingClientRect();
+            } catch (_error) {
+              return;
+            }
 
-              var element = findTextElementAtPoint(doc, event);
-              if (!element || element === doc.body || element === doc.documentElement) return;
-              if (element.closest && element.closest('[data-lifeos-editor-control]')) return;
+            if (!rect || rect.width === 0 || rect.height === 0) return;
 
-              element.setAttribute('contenteditable', 'true');
-              element.setAttribute('data-lifeos-editable', 'true');
+            const control = document.createElement("div");
+            control.className = "lifeos-canvas-section-control";
+            control.style.left = Math.max(8, iframeRect.left - wrapRect.left + rect.left + 8) + "px";
+            control.style.top = Math.max(18, iframeRect.top - wrapRect.top + rect.top + 24) + "px";
 
+            const up = document.createElement("button");
+            up.type = "button";
+            up.textContent = "↑";
+            up.title = "Move section up";
+            up.disabled = index === 0;
+            up.addEventListener("click", function () {
               try {
-                element.focus({ preventScroll: true });
-              } catch (_) {
-                try { element.focus(); } catch (__) {}
-              }
-
-              try {
-                var selection = doc.defaultView && doc.defaultView.getSelection && doc.defaultView.getSelection();
-                var range = doc.createRange();
-                range.selectNodeContents(element);
-                range.collapse(false);
-                if (selection) {
-                  selection.removeAllRanges();
-                  selection.addRange(range);
+                const previous = child.previousElementSibling;
+                if (previous && child.parentNode) {
+                  child.parentNode.insertBefore(child, previous);
+                  refreshControls();
                 }
-              } catch (_) {}
+              } catch (error) {
+                setStatus("Could not move section up: " + error.message, "error");
+              }
+            });
+
+            const down = document.createElement("button");
+            down.type = "button";
+            down.textContent = "↓";
+            down.title = "Move section down";
+            down.disabled = index === children.length - 1;
+            down.addEventListener("click", function () {
+              try {
+                const next = child.nextElementSibling;
+                if (next && child.parentNode) {
+                  child.parentNode.insertBefore(next, child);
+                  refreshControls();
+                }
+              } catch (error) {
+                setStatus("Could not move section down: " + error.message, "error");
+              }
+            });
+
+            const hide = document.createElement("button");
+            hide.type = "button";
+            hide.textContent = "×";
+            hide.title = "Hide section";
+            hide.addEventListener("click", function () {
+              try {
+                child.style.display = "none";
+                refreshControls();
+              } catch (error) {
+                setStatus("Could not hide section: " + error.message, "error");
+              }
+            });
+
+            control.append(up, down, hide);
+            controlsLayer.append(control);
+          });
+        } catch (_error) {
+          clearControls();
+        }
+      }
+
+      function textNodeFromPoint(doc, event) {
+        try {
+          if (doc.caretPositionFromPoint) {
+            const position = doc.caretPositionFromPoint(event.clientX, event.clientY);
+            if (position && position.offsetNode && position.offsetNode.nodeType === Node.TEXT_NODE) {
+              return position.offsetNode;
+            }
+          }
+        } catch (_error) {}
+
+        try {
+          if (doc.caretRangeFromPoint) {
+            const range = doc.caretRangeFromPoint(event.clientX, event.clientY);
+            if (range && range.startContainer && range.startContainer.nodeType === Node.TEXT_NODE) {
+              return range.startContainer;
+            }
+          }
+        } catch (_error) {}
+
+        try {
+          const target = event.target;
+          if (!target) return null;
+          const walker = doc.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
+            acceptNode: function (node) {
+              return node && node.nodeValue && node.nodeValue.trim()
+                ? NodeFilter.FILTER_ACCEPT
+                : NodeFilter.FILTER_REJECT;
+            }
+          });
+          return walker.nextNode();
+        } catch (_error) {
+          return null;
+        }
+      }
+
+      function enableClickToEdit() {
+        try {
+          const doc = safeDocument();
+          if (!doc || !doc.body || doc.__lifeosClickToEditBound) return;
+          doc.__lifeosClickToEditBound = true;
+
+          doc.addEventListener("click", function (event) {
+            try {
+              const textNode = textNodeFromPoint(doc, event);
+              if (!textNode || !textNode.parentElement) return;
+
+              const element = textNode.parentElement;
+              if (element === doc.body || element === doc.documentElement) return;
 
               event.preventDefault();
               event.stopPropagation();
+
+              element.setAttribute("contenteditable", "true");
+              element.focus();
+
+              try {
+                const selection = doc.getSelection();
+                const range = doc.createRange();
+                range.selectNodeContents(textNode);
+                selection.removeAllRanges();
+                selection.addRange(range);
+              } catch (_selectionError) {}
+
+              setStatus("Editing text. Save when finished.", "ok");
             } catch (error) {
-              showError('Click-to-edit failed. ' + (error && error.message ? error.message : String(error)));
+              setStatus("Could not enable text editing: " + error.message, "error");
             }
           }, true);
-        } catch (error) {
-          showError('Click-to-edit setup failed. ' + (error && error.message ? error.message : String(error)));
-        }
+
+          doc.addEventListener("input", function () {
+            try {
+              refreshControls();
+            } catch (_error) {}
+          }, true);
+        } catch (_error) {}
       }
 
-      function installIframeEditing() {
-        withIframeDocument(function (doc) {
-          installClickToEdit(doc);
-          installSectionControls(doc);
-        });
-      }
-
-      function serializeIframeDocument() {
-        return withIframeDocument(function (doc) {
+      function bindIframe() {
+        if (!iframe) return;
+        iframe.addEventListener("load", function () {
           try {
-            var clone = doc.documentElement.cloneNode(true);
-
-            Array.prototype.forEach.call(clone.querySelectorAll('[data-lifeos-editor-control]'), function (node) {
-              if (node && node.parentNode) node.parentNode.removeChild(node);
-            });
-
-            Array.prototype.forEach.call(clone.querySelectorAll('[data-lifeos-editable]'), function (node) {
-              node.removeAttribute('data-lifeos-editable');
-              node.removeAttribute('contenteditable');
-            });
-
-            Array.prototype.forEach.call(clone.querySelectorAll('[data-lifeos-editor-positioned]'), function (node) {
-              node.removeAttribute('data-lifeos-editor-positioned');
-            });
-
-            return clone.outerHTML;
-          } catch (error) {
-            showError('Serialize failed. ' + (error && error.message ? error.message : String(error)));
-            return null;
-          }
+            enableClickToEdit();
+            refreshControls();
+            setStatus("", "");
+          } catch (_error) {}
         });
       }
 
-      Array.prototype.forEach.call(root.querySelectorAll('[data-template-file]'), function (button) {
-        button.addEventListener('click', function () {
-          clearError();
-          var nextFile = button.getAttribute('data-template-file') || '';
-          currentFile = nextFile;
-          setActiveButtons(root.querySelectorAll('[data-template-file]'), button);
-
-          try {
-            if (iframe) iframe.src = nextFile;
-          } catch (error) {
-            showError('Template switch failed. ' + (error && error.message ? error.message : String(error)));
-          }
-        });
-      });
-
-      Array.prototype.forEach.call(root.querySelectorAll('[data-palette-index]'), function (button) {
-        button.addEventListener('click', function () {
-          var index = Number(button.getAttribute('data-palette-index'));
-          var palette = palettes[index];
-
-          if (!palette) {
-            showError('Palette was not found.');
-            return;
-          }
-
-          postJson(endpoint('/api/v1/sites/edit'), {
-            clientId: clientId,
-            file: currentFile,
-            instruction: {
-              type: 'recolor',
-              palette: palette
-            }
+      root.querySelectorAll("[data-lifeos-template-file]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          const file = button.getAttribute("data-lifeos-template-file") || "";
+          state.currentFile = file;
+          root.querySelectorAll("[data-lifeos-template-file]").forEach(function (chip) {
+            chip.classList.toggle("is-active", chip === button);
           });
-        });
-      });
-
-      Array.prototype.forEach.call(root.querySelectorAll('[data-device]'), function (button) {
-        button.addEventListener('click', function () {
-          clearError();
-          var device = button.getAttribute('data-device') || 'desktop';
-          setActiveButtons(root.querySelectorAll('[data-device]'), button);
-          root.classList.toggle('is-mobile', device === 'mobile');
-
+          clearControls();
           try {
-            if (iframe) iframe.style.width = device === 'mobile' ? '390px' : '100%';
+            iframe.src = file;
+            setStatus("Template loaded.", "ok");
           } catch (error) {
-            showError('Device toggle failed. ' + (error && error.message ? error.message : String(error)));
+            setStatus("Could not load template: " + error.message, "error");
           }
         });
       });
 
+      root.querySelectorAll("[data-lifeos-palette-name]").forEach(function (button) {
+        button.addEventListener("click", async function () {
+          const palette = {
+            name: button.getAttribute("data-lifeos-palette-name") || "",
+            primary: button.getAttribute("data-lifeos-palette-primary") || "",
+            accent: button.getAttribute("data-lifeos-palette-accent") || ""
+          };
+
+          setStatus("Applying palette…", "");
+          try {
+            await postJson(endpoint("/api/v1/sites/edit"), {
+              clientId: config.clientId,
+              file: state.currentFile,
+              instruction: {
+                type: "recolor",
+                palette: palette
+              }
+            });
+            setStatus("Palette applied.", "ok");
+            try {
+              if (iframe && iframe.contentWindow) iframe.contentWindow.location.reload();
+            } catch (_reloadError) {}
+          } catch (error) {
+            setStatus("Palette failed: " + error.message, "error");
+          }
+        });
+      });
+
+      root.querySelectorAll("[data-lifeos-device]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          const device = button.getAttribute("data-lifeos-device") || "desktop";
+          state.device = device;
+          root.querySelectorAll("[data-lifeos-device]").forEach(function (deviceButton) {
+            deviceButton.classList.toggle("is-active", deviceButton === button);
+          });
+
+          if (iframe) {
+            iframe.style.width = device === "mobile" ? "390px" : "100%";
+            iframe.style.maxWidth = device === "mobile" ? "100%" : "";
+          }
+
+          window.setTimeout(refreshControls, 180);
+        });
+      });
+
+      const saveButton = root.querySelector("[data-lifeos-save]");
       if (saveButton) {
-        saveButton.addEventListener('click', async function () {
-          var html = serializeIframeDocument();
-          if (!html) return;
-
-          await postJson(endpoint('/api/v1/sites/save-edits'), {
-            clientId: clientId,
-            file: currentFile,
-            html: html
-          });
-        });
-      }
-
-      if (iframe) {
-        iframe.addEventListener('load', function () {
+        saveButton.addEventListener("click", async function () {
+          setStatus("Saving…", "");
           try {
-            installIframeEditing();
+            const doc = safeDocument();
+            if (!doc || !doc.documentElement) {
+              setStatus("Save failed: iframe document is unavailable.", "error");
+              return;
+            }
+
+            const html = doc.documentElement.outerHTML;
+            await postJson(endpoint("/api/v1/sites/save-edits"), {
+              clientId: config.clientId,
+              file: state.currentFile,
+              html: html
+            });
+            setStatus("Saved.", "ok");
           } catch (error) {
-            showError('Canvas setup failed. ' + (error && error.message ? error.message : String(error)));
+            setStatus("Save failed: " + error.message, "error");
           }
         });
-
-        try {
-          installIframeEditing();
-        } catch (error) {
-          showError('Canvas setup failed. ' + (error && error.message ? error.message : String(error)));
-        }
       }
+
+      window.addEventListener("resize", function () {
+        try {
+          refreshControls();
+        } catch (_error) {}
+      });
+
+      bindIframe();
+
+      try {
+        if (safeDocument()) {
+          enableClickToEdit();
+          refreshControls();
+        }
+      } catch (_error) {}
     })();
   </script>
-</div>`;
+</section>`.trim();
 }
 
 export default renderCanvas;

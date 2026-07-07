@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T01:31:16.985Z",
+  "generated_at": "2026-07-07T01:32:36.936Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11210,
   "files": [
@@ -84081,9 +84081,9 @@
     {
       "path": "services/site-builder-editor-canvas.js",
       "synopsis": "Exports renderCanvas — services/site-builder-editor-canvas.js.",
-      "bytes": 21567,
-      "mtime": "2026-07-07T01:31:16.985Z",
-      "indexed_at": "2026-07-07T01:31:16.985Z"
+      "bytes": 19745,
+      "mtime": "2026-07-07T01:32:36.936Z",
+      "indexed_at": "2026-07-07T01:32:36.936Z"
     },
     {
       "path": "services/site-builder-editor-sidebar.js",
