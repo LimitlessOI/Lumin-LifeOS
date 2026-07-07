@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T11:23:39.666Z",
+  "generated_at": "2026-07-07T11:23:47.163Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11229,
   "files": [
@@ -35129,9 +35129,9 @@
     {
       "path": "db/migrations/20260709_marketing_phase2_calendar.sql",
       "synopsis": "MarketingOS Phase 2 schema migration for content atoms, brand voice profiles, and calendar slots",
-      "bytes": 1691,
-      "mtime": "2026-07-07T11:23:39.666Z",
-      "indexed_at": "2026-07-07T11:23:39.666Z"
+      "bytes": 1645,
+      "mtime": "2026-07-07T11:23:47.163Z",
+      "indexed_at": "2026-07-07T11:23:47.163Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
