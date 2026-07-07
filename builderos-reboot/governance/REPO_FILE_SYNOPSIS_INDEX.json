@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T22:49:09.566Z",
+  "generated_at": "2026-07-07T23:29:41.222Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11272,
   "files": [
@@ -105,9 +105,9 @@
     {
       "path": ".github/workflows/smoke-test.yml",
       "synopsis": "yml — .github/workflows/smoke-test.yml.",
-      "bytes": 1366,
-      "mtime": "2026-06-21T21:40:25.607Z",
-      "indexed_at": "2026-07-07T22:27:14.629Z"
+      "bytes": 1829,
+      "mtime": "2026-07-07T23:29:18.484Z",
+      "indexed_at": "2026-07-07T23:29:41.222Z"
     },
     {
       "path": ".github/workflows/ssot-compliance.yml",
@@ -119,9 +119,9 @@
     {
       "path": ".github/workflows/system-maturity.yml",
       "synopsis": "yml — .github/workflows/system-maturity.yml.",
-      "bytes": 724,
-      "mtime": "2026-06-21T21:40:25.638Z",
-      "indexed_at": "2026-07-07T22:27:14.629Z"
+      "bytes": 1077,
+      "mtime": "2026-07-07T23:29:26.948Z",
+      "indexed_at": "2026-07-07T23:29:41.222Z"
     },
     {
       "path": ".gitlab-ci.yml",
