@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T09:47:09.709Z",
+  "generated_at": "2026-07-07T09:58:53.810Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11226,
+  "file_count": 11227,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64080,6 +64080,16 @@
       "bytes": 8857,
       "mtime": "2026-07-03T13:23:31.841Z",
       "indexed_at": "2026-07-07T08:32:45.782Z"
+    },
+    {
+      "path": "routes/_probe-marketing-ping-routes.js",
+      "synopsis": "Exposes a health check endpoint for MarketingOS.",
+      "bytes": 279,
+      "mtime": "2026-07-07T09:58:53.810Z",
+      "indexed_at": "2026-07-07T09:58:53.810Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/account-manager-routes.js",
