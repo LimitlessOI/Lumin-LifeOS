@@ -1,7 +1,22 @@
-// SYNOPSIS: Repurpose a source piece into multiple marketing formats using only the injected AI hook.
+// SYNOPSIS: Repurpose a source piece into multiple SocialMediaOS content formats using only the injected AI hook.
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
 const KNOWN_FORMATS = new Set(['linkedin_carousel', 'short_clips', 'email_segments']);
+
+function normalizeFormats(formats) {
+  const input = Array.isArray(formats) ? formats : ['linkedin_carousel', 'short_clips', 'email_segments'];
+  return [...new Set(input)].filter((format) => KNOWN_FORMATS.has(format));
+}
+
+function compactText(value) {
+  if (value == null) return '';
+  if (typeof value === 'string') return value.trim();
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return String(value);
+  }
+}
 
 function safeJsonParse(text) {
   if (typeof text !== 'string') return null;
@@ -9,164 +24,146 @@ function safeJsonParse(text) {
   if (!trimmed) return null;
 
   const candidates = [trimmed];
+
   const firstBrace = trimmed.indexOf('{');
+  const lastBrace = trimmed.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    candidates.push(trimmed.slice(firstBrace, lastBrace + 1));
+  }
+
   const firstBracket = trimmed.indexOf('[');
-  const starts = [firstBrace, firstBracket].filter((n) => n >= 0);
-  if (starts.length > 0) {
-    const start = Math.min(...starts);
-    candidates.push(trimmed.slice(start));
+  const lastBracket = trimmed.lastIndexOf(']');
+  if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+    candidates.push(trimmed.slice(firstBracket, lastBracket + 1));
   }
 
   for (const candidate of candidates) {
     try {
       return JSON.parse(candidate);
-    } catch {}
+    } catch {
+      // continue
+    }
   }
+
   return null;
 }
 
 function toArrayOfStrings(value) {
   if (Array.isArray(value)) {
-    return value
-      .flatMap((item) => {
-        if (typeof item === 'string') return [item];
-        if (item && typeof item === 'object') {
-          const preferred =
-            item.text ??
-            item.copy ??
-            item.content ??
-            item.slide ??
-            item.body ??
-            item.segment ??
-            item.caption ??
-            item.title;
-          return typeof preferred === 'string' ? [preferred] : [];
-        }
-        return [];
-      })
-      .map((s) => s.trim())
-      .filter(Boolean);
+    return value.map((item) => (typeof item === 'string' ? item.trim() : compactText(item).trim())).filter(Boolean);
   }
 
   if (typeof value === 'string') {
-    const trimmed = value.trim();
-    if (!trimmed) return [];
-    const lines = trimmed
-      .split(/\n+/)
-      .map((line) => line.replace(/^[-*•\d.)\s]+/, '').trim())
+    const parsed = safeJsonParse(value);
+    if (Array.isArray(parsed)) return toArrayOfStrings(parsed);
+    if (parsed && typeof parsed === 'object') return toArrayOfStrings(parsed);
+    return value
+      .split(/\n{2,}|\n(?=\s*(?:[-*•]|\d+[.)]|\d+\s*[:\-]))/g)
+      .map((s) => s.replace(/^\s*(?:[-*•]|\d+[.)]|\d+\s*[:\-])\s*/, '').trim())
       .filter(Boolean);
-    return lines.length > 1 ? lines : [trimmed];
+  }
+
+  if (value && typeof value === 'object') {
+    const preferredKeys = ['slides', 'items', 'steps', 'segments', 'clips', 'bullets', 'points', 'output', 'content', 'text'];
+    for (const key of preferredKeys) {
+      if (key in value) {
+        const arr = toArrayOfStrings(value[key]);
+        if (arr.length) return arr;
+      }
+    }
+    const values = Object.values(value).flatMap((v) => toArrayOfStrings(v));
+    return values.filter(Boolean);
   }
 
   return [];
 }
 
-function normalizeSourcePiece(piece) {
-  if (piece == null) return '';
-  if (typeof piece === 'string') return piece.trim();
-  if (typeof piece !== 'object') return String(piece).trim();
+function extractFormatPayload(parsed, format) {
+  if (!parsed) return [];
+  if (Array.isArray(parsed)) return toArrayOfStrings(parsed);
+  if (typeof parsed === 'string') return toArrayOfStrings(parsed);
 
-  const fields = [
-    piece.body,
-    piece.content_text,
-    piece.text,
-    piece.title,
-    piece.summary,
-    piece.description,
-    piece.extracted_data,
-  ];
-
-  const parts = fields
-    .flatMap((v) => {
-      if (typeof v === 'string') return [v.trim()];
-      if (v && typeof v === 'object') {
-        const parsed = safeJsonParse(JSON.stringify(v));
-        return parsed ? [JSON.stringify(parsed)] : [];
-      }
-      return [];
-    })
-    .filter(Boolean);
-
-  return parts.join('\n\n').trim();
-}
-
-function extractFormattedOutput(format, modelText) {
-  const parsed = safeJsonParse(modelText);
   if (parsed && typeof parsed === 'object') {
-    if (format === 'linkedin_carousel') {
-      const slides =
-        parsed.slides ??
-        parsed.carousel ??
-        parsed.linkedin_carousel ??
-        parsed.output ??
-        parsed.items ??
-        parsed.content;
-      const arr = toArrayOfStrings(slides);
+    const candidates = [
+      parsed[format],
+      parsed.output?.[format],
+      parsed.outputs?.[format],
+      parsed.result?.[format],
+      parsed.data?.[format],
+      parsed.content?.[format]
+    ];
+
+    for (const candidate of candidates) {
+      const arr = toArrayOfStrings(candidate);
       if (arr.length) return arr;
     }
-    if (format === 'short_clips') {
-      const clips = parsed.clips ?? parsed.short_clips ?? parsed.output ?? parsed.items ?? parsed.content;
-      const arr = toArrayOfStrings(clips);
-      if (arr.length) return arr;
-    }
-    if (format === 'email_segments') {
-      const segments =
-        parsed.segments ??
-        parsed.email_segments ??
-        parsed.output ??
-        parsed.items ??
-        parsed.content;
-      const arr = toArrayOfStrings(segments);
-      if (arr.length) return arr;
-    }
+
+    const generic = toArrayOfStrings(parsed);
+    if (generic.length) return generic;
   }
 
-  const fallback = toArrayOfStrings(modelText);
-  return fallback;
+  return [];
 }
 
-async function repurposePiece({ callCouncilMember, piece, formats = ['linkedin_carousel', 'short_clips', 'email_segments'] }) {
+async function repurposePiece({ callCouncilMember, piece, formats = ['linkedin_carousel', 'short_clips', 'email_segments'] } = {}) {
   try {
     if (typeof callCouncilMember !== 'function') {
-      return { ok: false, error: 'callCouncilMember must be a function' };
+      throw new Error('callCouncilMember must be a function');
     }
 
-    const requested = [...new Set(Array.isArray(formats) ? formats : [])].filter((f) => KNOWN_FORMATS.has(f));
-    const source = normalizeSourcePiece(piece);
+    const validFormats = normalizeFormats(formats);
+    const sourcePiece = piece && typeof piece === 'object' ? piece : { text: compactText(piece) };
 
-    if (!source) {
-      return { ok: false, error: 'piece is empty or unsupported' };
+    const sourceText = compactText(
+      sourcePiece.body ??
+        sourcePiece.content_text ??
+        sourcePiece.content ??
+        sourcePiece.text ??
+        sourcePiece.summary ??
+        sourcePiece.title ??
+        piece
+    );
+
+    if (!sourceText) {
+      throw new Error('piece must contain source text');
     }
+
+    const basePayload = {
+      piece: sourcePiece,
+      source_text: sourceText,
+      requested_formats: validFormats
+    };
 
     const outputs = {};
 
-    for (const format of requested) {
-      const role = 'marketing_content_repurerposer';
+    for (const format of validFormats) {
       const prompt = [
-        `Repurpose the source piece into ${format}.`,
-        'Return only the transformed content.',
-        'Be concise and production-ready.',
-        'If asked for a carousel, provide slide-by-slide copy.',
-        'If asked for short clips, provide short standalone clip concepts or captions.',
-        'If asked for email segments, provide segmented email copy.',
+        `Transform the source piece into the requested format: ${format}.`,
+        'Return only the content for that format.',
+        'Be concise, practical, and audience-appropriate.',
+        'If the format is carousel or segments, return an ordered list structure.',
+        'If the format is short_clips, return a list of clip ideas or clip scripts.',
         '',
         'SOURCE PIECE:',
-        source,
+        sourceText,
+        '',
+        'SOURCE OBJECT:',
+        JSON.stringify(basePayload)
       ].join('\n');
 
-      const modelText = await callCouncilMember(role, prompt, { format });
-      const items = extractFormattedOutput(format, modelText);
-
-      if (format === 'linkedin_carousel') outputs.linkedin_carousel = items;
-      if (format === 'short_clips') outputs.short_clips = items;
-      if (format === 'email_segments') outputs.email_segments = items;
+      const raw = await callCouncilMember('content_strategist', prompt, { format });
+      const parsed = safeJsonParse(raw);
+      const items = extractFormatPayload(parsed, format);
+      outputs[format] = items.length ? items : toArrayOfStrings(raw);
     }
 
     return { ok: true, outputs };
   } catch (error) {
     return {
       ok: false,
-      error: error instanceof Error ? error.message : String(error),
+      error: {
+        message: error instanceof Error ? error.message : String(error)
+      }
     };
   }
 }
