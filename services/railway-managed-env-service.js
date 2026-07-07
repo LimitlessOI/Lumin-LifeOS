@@ -68,7 +68,22 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "NEVER_STOP_PRODUCTS",
   "NEVER_STOP_INTERVAL_MS",
   "BUILDEROS_NEVER_STOP_INTERVAL_MS",
+  "GOVERNED_FACTORY_ONLY",
+  "GOVERNED_AUTONOMOUS_SHIP",
+  "GOVERNED_AUTONOMOUS_SHIP_INTERVAL_MS",
 ]);
+
+// Separation-of-powers ratchet (Chair receipt LIFERE_COUNCIL_1783462353983):
+// the system may ENABLE its own governance fence but may never disable it via a
+// managed write — only a human, editing Railway directly, can turn oversight OFF.
+// A managed write that would set one of these to a non-truthy value is rejected.
+const ENABLE_ONLY_KEYS = new Set(["GOVERNED_FACTORY_ONLY"]);
+const TRUTHY_VALUES = new Set(["1", "true", "yes", "on"]);
+
+function isEnableOnlyViolation(envName, value) {
+  if (!ENABLE_ONLY_KEYS.has(envName)) return false;
+  return !TRUTHY_VALUES.has(String(value).trim().toLowerCase());
+}
 
 const BLOCKED_KEYS = new Set([
   "DATABASE_URL",
@@ -231,6 +246,9 @@ export function createRailwayManagedEnvService({
     if (!allow.ok) throw new Error(allow.reason);
     if (value === undefined || value === null || value === "") {
       throw new Error("value is required");
+    }
+    if (isEnableOnlyViolation(envName, value)) {
+      throw new Error(`${envName} is enable-only: the system cannot disable its own governance fence — a human must turn it off directly in Railway`);
     }
 
     const encryptedValue = encrypt(String(value));
