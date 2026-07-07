@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T19:55:47.644Z",
+  "generated_at": "2026-07-07T20:00:28.795Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11252,
+  "file_count": 11254,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29619,6 +29619,13 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "builderos-reboot/scripts/governed-build-queue-scheduler-proof.mjs",
+      "synopsis": "STEP 5f proof — the governed BUILD_QUEUE scheduler that gathers",
+      "bytes": 4453,
+      "mtime": "2026-07-07T19:59:56.387Z",
+      "indexed_at": "2026-07-07T20:00:28.795Z"
+    },
+    {
       "path": "builderos-reboot/scripts/governed-factory-fence-proof.mjs",
       "synopsis": "STEP 5 proof — governed-factory enforcement fence. Proves the single",
       "bytes": 3018,
@@ -38501,9 +38508,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 186197,
-      "mtime": "2026-07-07T19:55:37.059Z",
-      "indexed_at": "2026-07-07T19:55:47.644Z"
+      "bytes": 187829,
+      "mtime": "2026-07-07T20:00:17.183Z",
+      "indexed_at": "2026-07-07T20:00:28.795Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -81782,6 +81789,16 @@
       "bytes": 8100,
       "mtime": "2026-07-03T13:23:32.581Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "services/governed-build-queue-scheduler.js",
+      "synopsis": "STEP 5f — the governed BUILD_QUEUE scheduler. Gathers the shippable",
+      "bytes": 3203,
+      "mtime": "2026-07-07T19:59:33.983Z",
+      "indexed_at": "2026-07-07T20:00:28.795Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/governed-factory-guard.js",
