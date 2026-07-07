@@ -194,7 +194,7 @@
     },
     {
       "id": "smos-intel-routes",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-intel-routes.js",
       "task": "SocialMediaOS Content Intelligence JSON API — exposes the four content-intelligence services. SELF-CONTAINED Express route module exporting registerMarketingIntelRoutes(app, deps) (also default). deps = { pool, requireKey, callCouncilMember, logger, baseUrl }. Import the four sibling services (services/marketing-title-universe.js, services/marketing-script-scorer.js, services/marketing-publish-gate.js, services/marketing-repurpose.js) — these are built by the preceding steps, so import them by their exact relative path. Endpoints, ALL guarded by deps.requireKey: POST /api/v1/marketing/intel/titles ({ topic, transcript?, count? } → generateTitleUniverse); POST /api/v1/marketing/intel/score-script ({ scriptText } → scoreEarnedAttention); POST /api/v1/marketing/intel/publish-gate ({ piece } → publishOrKill); POST /api/v1/marketing/intel/repurpose ({ piece, formats? } → repurposePiece). Each handler passes deps.callCouncilMember into the service and returns its structured result.",
       "spec": "Single self-contained ESM server module, AUTO-REGISTERED via config/auto-registered-product-modules.json (entry pre-added: path routes/marketing-intel-routes.js, register registerMarketingIntelRoutes) — do NOT edit server.js or any boot file. ZERO top-level browser globals (server module). Wrap each handler in try/catch → JSON { ok:false, error } with a sensible status; never leak stacks/secrets. Validate request bodies and 400 on missing required fields. Do NOT import any module that does not exist — only the four named sibling services + express. Named export registerMarketingIntelRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -202,9 +202,12 @@
         "smos-repurpose"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 12000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "0b4b5d968a1de449eeb608f2e2a05f058332434c",
+      "last_attempt_at": "2026-07-07T18:02:18.804Z",
+      "completed_at": "2026-07-07T18:02:34.793Z"
     }
   ]
 }
