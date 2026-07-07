@@ -129,8 +129,8 @@
       "spec": "Single self-contained ESM module. Named exports discoverSocials, extractYouTubeChannelId + default. NETWORK IS OPTIONAL AND INJECTED: never import a network library; use the provided fetchImpl (default to globalThis.fetch) and if it is unavailable, return only the socials already known from businessInfo (fail-open to no-op, never throw). Wrap every fetch in try/catch with a short timeout via AbortController. Do not fabricate a profile — only return URLs actually confirmed reachable or already provided. Guard all businessInfo fields. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-07T02:29:04.512Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-07-07T02:30:31.126Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
