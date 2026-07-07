@@ -177,7 +177,7 @@
     },
     {
       "id": "smos-repurpose",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-repurpose.js",
       "task": "SocialMediaOS Content Intelligence — repurpose/podcast multiplier (socialmediaos PRODUCT_HOME Priority Idea #42: one piece → YouTube + LinkedIn posts + email segments + short clips; #27 LinkedIn carousel machine). SELF-CONTAINED ESM module. Export async repurposePiece({ callCouncilMember, piece, formats = ['linkedin_carousel','short_clips','email_segments'] }). For each requested format, use callCouncilMember to transform the source piece and return { ok:true, outputs: { linkedin_carousel:[...slides], short_clips:[...], email_segments:[...] } } (only the requested formats). callCouncilMember is the ONLY AI hook.",
       "spec": "Single self-contained ESM module. NO DB, NO network except the injected callCouncilMember. Import ONLY node: builtins. Validate `formats` against the known set and ignore unknown ones. Parse model text defensively per format. try/catch everything → structured { ok:false, error }. Named export repurposePiece (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -185,9 +185,12 @@
         "smos-publish-gate"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 6000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "45d40f8dde86897a02337bd6c876de9adeefec01",
+      "last_attempt_at": "2026-07-07T17:54:37.408Z",
+      "completed_at": "2026-07-07T17:54:37.992Z"
     },
     {
       "id": "smos-intel-routes",
