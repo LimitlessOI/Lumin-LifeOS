@@ -15,6 +15,7 @@ import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
 import { buildIntegrationContext } from './build-integration-context.js';
+import { assertUngovernedShippingAllowed } from './governed-factory-guard.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -608,6 +609,14 @@ async function githubCompareStatus(baseSha, headSha) {
 }
 
 async function postBuilderBuild(baseUrl, commandKey, body) {
+  // STEP 5 enforcement fence — the single chokepoint where the ungoverned
+  // autonomous loop ships. When the governed factory is the shipping path, any
+  // side-channel that reaches here fails closed (no legacy /build call). This is
+  // what makes "no bypass remains" provable, not merely asserted.
+  const fence = assertUngovernedShippingAllowed('postBuilderBuild');
+  if (!fence.allowed) {
+    return { ok: false, status: 423, body: { blocked: true, ...fence } };
+  }
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-command-key': commandKey },
@@ -966,6 +975,12 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
 
 export async function runProductExpansionCycle(options = {}) {
   const logger = options.logger || console;
+  const fence = assertUngovernedShippingAllowed('runProductExpansionCycle');
+  if (!fence.allowed) {
+    log({ event: 'governed_factory_only_blocked', ...fence });
+    writeState({ status: 'governed_factory_only', reason: fence.reason });
+    return { ok: false, blocked: true, ...fence };
+  }
   const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
   const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
   const token = hasTokenCapacity();
@@ -1059,6 +1074,12 @@ export async function runProductExpansionCycle(options = {}) {
  */
 export async function runProductExpansionLanes(options = {}) {
   const logger = options.logger || console;
+  const fence = assertUngovernedShippingAllowed('runProductExpansionLanes');
+  if (!fence.allowed) {
+    log({ event: 'governed_factory_only_blocked', ...fence });
+    writeState({ status: 'governed_factory_only', reason: fence.reason });
+    return { ok: false, blocked: true, lanes: 0, built: 0, live: 0, ...fence };
+  }
   const baseUrl = options.baseUrl || process.env.PUBLIC_BASE_URL || '';
   const commandKey = options.commandKey || process.env.COMMAND_CENTER_KEY || '';
   const concurrency = Number(options.concurrency || process.env.NEVER_STOP_LANES || 3);

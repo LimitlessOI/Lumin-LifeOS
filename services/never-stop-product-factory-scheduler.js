@@ -16,6 +16,7 @@ import {
   dailyBuildBudget,
   recordDailyBuildAttempts,
 } from './never-stop-product-factory.js';
+import { governedFactoryOnly } from './governed-factory-guard.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT_PATH = path.join(REPO_ROOT, 'data/never-stop-product-factory-receipt.json');
@@ -127,6 +128,12 @@ const guardedNeverStopTick = createUsefulWorkGuard({
 });
 
 export function startNeverStopProductFactoryScheduler({ logger } = {}) {
+  // STEP 5 fence: when the governed factory is the shipping path, the ungoverned
+  // autonomous loop must not even start. Code ships through /factory/execute-step.
+  if (governedFactoryOnly()) {
+    logger?.info?.('[NEVER-STOP-FACTORY] fenced off — GOVERNED_FACTORY_ONLY active; ship via /factory/execute-step');
+    return null;
+  }
   if (!neverStopProductsEnabled()) {
     logger?.info?.('[NEVER-STOP-FACTORY] disabled — set BUILDEROS_NEVER_STOP=1 or BUILDEROS_AUTOPILOT=1');
     return null;
