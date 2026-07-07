@@ -138,8 +138,8 @@
       "max_output_tokens": 6000,
       "revive_count": 0,
       "commit_sha": "83cf5b5020955300c5e4da63a4279754218960d2",
-      "last_attempt_at": "2026-07-07T16:59:52.410Z",
-      "completed_at": "2026-07-07T16:59:53.015Z"
+      "last_attempt_at": "2026-07-07T17:00:03.572Z",
+      "completed_at": "2026-07-07T17:00:04.296Z"
     },
     {
       "id": "smos-script-scorer",
