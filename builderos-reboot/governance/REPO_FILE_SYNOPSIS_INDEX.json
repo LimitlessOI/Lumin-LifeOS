@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T09:59:54.540Z",
+  "generated_at": "2026-07-07T10:06:35.331Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11227,
   "files": [
@@ -38445,9 +38445,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 168774,
-      "mtime": "2026-07-07T09:37:42.722Z",
-      "indexed_at": "2026-07-07T09:38:01.220Z"
+      "bytes": 170697,
+      "mtime": "2026-07-07T10:05:20.182Z",
+      "indexed_at": "2026-07-07T10:06:35.331Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38990,9 +38990,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 81959,
-      "mtime": "2026-07-07T09:46:44.622Z",
-      "indexed_at": "2026-07-07T09:47:09.709Z"
+      "bytes": 82673,
+      "mtime": "2026-07-07T10:05:36.654Z",
+      "indexed_at": "2026-07-07T10:06:35.331Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -65092,9 +65092,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 25715,
-      "mtime": "2026-07-07T09:59:54.540Z",
-      "indexed_at": "2026-07-07T09:59:54.540Z",
+      "bytes": 25617,
+      "mtime": "2026-07-07T10:04:15.658Z",
+      "indexed_at": "2026-07-07T10:06:35.331Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -79765,9 +79765,9 @@
     {
       "path": "services/build-integration-context.js",
       "synopsis": "Real integration context for the autonomous /build call — live DB",
-      "bytes": 8011,
-      "mtime": "2026-07-07T09:36:30.918Z",
-      "indexed_at": "2026-07-07T09:38:01.220Z",
+      "bytes": 9348,
+      "mtime": "2026-07-07T10:02:05.846Z",
+      "indexed_at": "2026-07-07T10:06:35.331Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83481,9 +83481,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 47524,
-      "mtime": "2026-07-07T09:36:52.038Z",
-      "indexed_at": "2026-07-07T09:38:01.220Z",
+      "bytes": 48244,
+      "mtime": "2026-07-07T10:02:28.522Z",
+      "indexed_at": "2026-07-07T10:06:35.331Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86018,9 +86018,9 @@
     {
       "path": "tests/build-integration-context.test.js",
       "synopsis": "Tests for the /build integration-context builder (schema digest +",
-      "bytes": 4542,
-      "mtime": "2026-07-07T09:37:14.942Z",
-      "indexed_at": "2026-07-07T09:38:01.220Z",
+      "bytes": 6021,
+      "mtime": "2026-07-07T10:03:06.074Z",
+      "indexed_at": "2026-07-07T10:06:35.331Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -12,6 +12,24 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /**
+ * Read the installed npm dependency names from package.json (prod + dev). The
+ * builder must import ONLY these packages (plus node builtins + repo-relative
+ * files that exist) — importing an uninstalled package makes the module fail to
+ * load, which the functional-proof gate then rejects (a false-done otherwise).
+ */
+export function readInstalledPackages(root) {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+    return Array.from(new Set([
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.devDependencies || {}),
+    ])).sort();
+  } catch {
+    return [];
+  }
+}
+
+/**
  * The exact deps object auto-registered product modules receive at
  * register(app, deps) — kept in sync with what the founder-runtime boot passes
  * in startup/register-founder-runtime-routes.js. Generated code MUST use these
@@ -160,12 +178,19 @@ export function buildIntegrationContext({
   if (tables.length) {
     lines.push('LIVE DB SCHEMA (use these EXACT table + column names via deps.pool; do NOT invent tables or columns):');
     for (const t of tables) lines.push(`- ${t}(${schema[t].join(', ')})`);
+    lines.push('- id / created_at / updated_at columns are DB-DEFAULTED (gen_random_uuid() / NOW()) — do NOT generate UUIDs or timestamps in JS and do NOT import a uuid package; INSERT without them and let the DB fill them (use RETURNING to read them back).');
   } else {
     lines.push('LIVE DB SCHEMA: no existing table matched this step. If you need persistence, add a migration at db/migrations/<date>_<name>.sql (applied on boot) rather than assuming a table exists.');
   }
 
+  const packages = readInstalledPackages(root);
   lines.push('');
-  lines.push('RULES: import only modules that exist in this repo; never import a sibling service export you have not confirmed exists. Prefer deps over new imports. Unreachable/broken code will fail the functional-proof gate.');
+  if (packages.length) {
+    lines.push(`AVAILABLE NPM PACKAGES — import ONLY from this list (plus node: builtins and repo-relative files that already exist). Importing anything else fails at load time (module not found) and the functional-proof gate will reject the step: ${packages.join(', ')}.`);
+  }
 
-  return { context: lines.join('\n'), tables, schemaTableCount: Object.keys(schema).length };
+  lines.push('');
+  lines.push('RULES: import only packages in the AVAILABLE list above and repo files you have confirmed exist; never import a sibling service export you have not confirmed exists. Prefer deps over new imports. Unreachable/broken code will fail the functional-proof gate.');
+
+  return { context: lines.join('\n'), tables, packages, schemaTableCount: Object.keys(schema).length };
 }
