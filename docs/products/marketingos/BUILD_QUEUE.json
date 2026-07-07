@@ -107,7 +107,7 @@
     },
     {
       "id": "mos-phase2-ui",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-calendar-ui-routes.js",
       "task": "MarketingOS Phase 2 UI (§5 Phase 2 UI screens: content calendar view + atom library browser). SELF-CONTAINED server-rendered route module exporting registerMarketingCalendarUiRoutes(app, deps) (also default). Serves: GET /marketing/calendar (a 30-day content-calendar grid that fetches /api/v1/marketing/calendar in the browser and lets the user mark a scheduled_date per piece); GET /marketing/atoms (atom library browser that fetches /api/v1/marketing/atoms and can POST a new atom). Clean single-column layout consistent with the Phase 1 /marketing pages.",
       "spec": "Single self-contained ESM server module, AUTO-REGISTERED (config entry pre-added: path routes/marketing-calendar-ui-routes.js, register registerMarketingCalendarUiRoutes) — do NOT edit server.js or any boot file. CRITICAL SSR RULE: imported by Node on the server → ZERO top-level references to window/document/localStorage/navigator/fetch. Each handler RETURNS a complete HTML document as a template-literal STRING; ALL client behaviour (fetch calls to /api/v1/marketing/*, calendar interactions, atom create) lives ONLY inside an embedded <script>…</script> string, never as top-level module code. No DB access here (pages call the JSON API from the browser). No fabricated stats/testimonials/pricing. Escape interpolated dynamic text. Keep the (app, deps) signature even if deps is unused. Named export registerMarketingCalendarUiRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -118,8 +118,10 @@
       "attempts": 1,
       "max_output_tokens": 12000,
       "revive_count": 0,
-      "last_attempt_at": "2026-07-07T12:26:59.335Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "last_attempt_at": "2026-07-07T12:29:39.973Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "commit_sha": "38fac5148fd2bbf96dc1f4b516084f7c5aa7f0e2",
+      "completed_at": "2026-07-07T12:29:41.097Z"
     }
   ]
 }
