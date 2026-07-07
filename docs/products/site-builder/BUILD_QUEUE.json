@@ -37,12 +37,12 @@
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no network at import, no DB, no project imports. Named export renderSidebar + default export. Returns a STRING (an HTML fragment, NOT a full <html> document). Define a local htmlEscape() and escape name/blurb/price/cadence before interpolation. Guard services as possibly undefined -> default []. The inline script must be wrapped in try/catch and never throw if elements are missing. Deterministic given the same input ordering. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T03:15:31.730Z",
+      "last_attempt_at": "2026-07-07T03:19:10.303Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 2,
-      "revived_at": "2026-07-07T03:15:31.729Z"
+      "revived_at": "2026-07-07T03:15:01.021Z"
     },
     {
       "id": "sb-editor-canvas",
