@@ -1,0 +1,13 @@
+{
+  "id": "browser-agent-live-orchestration",
+  "product_id": "tc-service",
+  "mission_id": "general-browser-agent",
+  "target_file": "services/general-browser-agent-live.js",
+  "max_output_tokens": 3000,
+  "task": "Author a thin orchestration service that runs the milestone-1 general browser loop against a LIVE browser session using the runtime adapters and a cheapest-tier model decider. It wires already-proven pieces together; it must contain no novel browser logic of its own.",
+  "spec": "ES module. JSDoc header must contain '@ssot docs/products/tc-service/PRODUCT_HOME.md'. Import { runBrowserGoal } from './general-browser-agent.js' and { observePage, makeDecider, makeEvidenceVerifier, makeAccountConfirmer, executeAction } from './general-browser-agent-runtime.js'. Export exactly one async function:\n\nexport async function runGoalOnSession({ session, goal, startUrl = null, callModel, tiers = ['cerebras_llama','openai','claude_sonnet'], mustContain = [], mustHaveSelector = [], expectSiteHost = null, expectAccountText = null, maxSteps = 20, onScreenshot = null, logger = console }) — it must:\n1) Build observe = async () => observePage(session).\n2) Build decideAction = makeDecider({ callModel, tiers }).\n3) Build act = async (action) => executeAction(session, action).\n4) Build verifyGoal = makeEvidenceVerifier({ mustContain, mustHaveSelector }).\n5) Build confirmContext: if expectSiteHost or expectAccountText is set, confirmContext = makeAccountConfirmer({ expectSiteHost, expectAccountText }); else null.\n6) Build expectedContext: if expectSiteHost or expectAccountText is set, expectedContext = { site: expectSiteHost, account: expectAccountText }; else null.\n7) Build onStep = async (rec) => { if the session has a screenshot function, call const shot = await session.screenshot('step-' + (rec.step ?? 'x')).catch(() => null); if onScreenshot is a function, await onScreenshot({ step: rec.step, action: rec.action, screenshot: shot }); }. onStep must never throw (wrap in try/catch).\n8) return await runBrowserGoal({ goal, startUrl, expectedContext, observe, decideAction, act, verifyGoal, confirmContext, onStep, maxSteps }).\n\nDo not add ret/console noise beyond optional logger.info. Do not implement observe/act/decide yourself — only compose the imported functions. The function must not throw for a missing screenshot capability; guard it.",
+  "expected_exports": ["runGoalOnSession"],
+  "file_contains": ["@ssot docs/products/tc-service/PRODUCT_HOME.md", "runBrowserGoal", "makeDecider"],
+  "proof_command": "builderos-reboot/scripts/general-browser-agent-live-proof.mjs",
+  "max_attempts": 5
+}
