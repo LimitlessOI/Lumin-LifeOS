@@ -15,6 +15,7 @@ import {
   computeUpdatedIndex,
   INDEX_REL,
 } from '../scripts/lib/file-synopsis.mjs';
+import { resolveSynopsisIndexFromRaw } from '../services/deployment-service.js';
 
 test('stripWrappingCodeFence — removes a whole-file ```json fence', () => {
   const fenced = '```json\n{\n  "a": 1\n}\n```';
@@ -84,4 +85,35 @@ test('computeUpdatedIndex — output rows are sorted by path', () => {
   ]);
   const paths = idx.files.map((e) => e.path);
   assert.deepEqual(paths, [...paths].sort((a, b) => a.localeCompare(b)));
+});
+
+// ── resolveSynopsisIndexFromRaw: the anti-wipe contract ──────────────────────
+// Regression guard for the index-wipe bug: the GitHub Contents API returns 200
+// with an EMPTY body for files > 1 MB unless the raw media type is used. The old
+// code decoded that empty content to "" and returned { files: [] }, so the next
+// computeUpdatedIndex rebuilt the ~3.4 MB / 11k-entry index from just the one
+// committed file — a full wipe. This must now throw so callers skip the index
+// co-commit and leave the existing index intact.
+
+test('resolveSynopsisIndexFromRaw — 404 means the index is legitimately absent', () => {
+  assert.deepEqual(resolveSynopsisIndexFromRaw(404, ''), { files: [] });
+});
+
+test('resolveSynopsisIndexFromRaw — parses a valid full index verbatim', () => {
+  const full = JSON.stringify({ schema: 'repo_file_synopsis_index_v1', files: [{ path: 'services/a.js' }, { path: 'services/b.js' }] });
+  const out = resolveSynopsisIndexFromRaw(200, full);
+  assert.equal(out.files.length, 2);
+});
+
+test('resolveSynopsisIndexFromRaw — THROWS on empty 200 body (the >1MB trap) — never wipes', () => {
+  assert.throws(() => resolveSynopsisIndexFromRaw(200, ''), /empty body/);
+  assert.throws(() => resolveSynopsisIndexFromRaw(200, '   \n'), /empty body/);
+});
+
+test('resolveSynopsisIndexFromRaw — THROWS on unparseable body — never wipes', () => {
+  assert.throws(() => resolveSynopsisIndexFromRaw(200, 'not json'), /not valid JSON/);
+});
+
+test('resolveSynopsisIndexFromRaw — THROWS on transient non-2xx read failure', () => {
+  assert.throws(() => resolveSynopsisIndexFromRaw(502, ''), /HTTP 502/);
 });
