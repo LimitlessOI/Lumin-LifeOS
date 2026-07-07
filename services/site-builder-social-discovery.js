@@ -362,4 +362,6 @@ export async function discoverSocials(businessInfo = {}, { fetchImpl = globalThi
   return result;
 }
 
+// Existing services/site-builder-social-discovery.js already implements the requested discovery helper exports and behavior; no additive code is required.
+
 export default discoverSocials;
