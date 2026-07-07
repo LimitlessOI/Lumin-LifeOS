@@ -3,7 +3,8 @@
   "product_id": "marketingos",
   "verify_script": null,
   "notes": "MarketingOS autonomous build queue — SocialMediaOS (SMOS) Phase 1, the Founder Story Session MVP (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1, §6 exact spec). TEXT-MODE ONLY: the audio-upload path (POST /sessions/:id/audio) is intentionally EXCLUDED because it depends on Cloudflare R2 env vars that are UNVERIFIED (§6 readiness gate). RE-QUEUED 2026-07-08 after the self-refinement spine (auto-registration + functional-proof gate + integration context) landed: the loop's original Phase 1 was false-done — the schema migration implemented the WRONG spec (generic ingestion schema), the route/UI modules imported non-existent service exports + a missing ./ai-council.js and were never mounted. The corrected §6 schema ships directly in this re-queue PR (delicate DROP of the empty mis-built tables — non-destructive, zero rows). The route + UI modules are re-queued as SELF-CONTAINED single-file modules (no external service imports) so they COMPOSE and the functional-proof gate can prove them LIVE. Both are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and module-health verifies them before the step can be done.",
-  "updated_at": "2026-07-08",
+  "updated_at": "2026-07-09",
+  "phase2_notes": "PHASE 2 QUEUED 2026-07-09 (docs/products/marketingos/PRODUCT_HOME.md §5 Phase 2 — Social Content Calendar): four composing single-file steps — schema (marketing_content_atoms / marketing_brand_voice_profiles / marketing_calendar_slots, FK to Phase 1 tables), a LOCAL/no-AI brand-voice fingerprint+scorer service, the calendar/atoms JSON API, and the SSR calendar + atom-library UI. Route + UI modules are pre-registered in config/auto-registered-product-modules.json so the boot auto-mounts them and the functional-proof gate proves /api/v1/marketing/calendar + /marketing/calendar are LIVE before each step flips to done. Phase 3 (Video Clip Workflow) is intentionally NOT queued — its §5 spec has a BLOCKED dependency (FFmpeg on Railway + Whisper word-timestamps UNVERIFIED); it enrolls once those are verified.",
   "steps": [
     {
       "id": "mos-phase1-schema",
@@ -51,6 +52,62 @@
       "commit_sha": "518629045be8f5a5b965a9de1df18a000acbbd7e",
       "last_attempt_at": "2026-07-07T10:58:17.573Z",
       "completed_at": "2026-07-07T10:58:18.286Z"
+    },
+    {
+      "id": "mos-phase2-schema",
+      "status": "pending",
+      "target_file": "db/migrations/20260709_marketing_phase2_calendar.sql",
+      "task": "MarketingOS Phase 2 (Social Content Calendar, docs/products/marketingos/PRODUCT_HOME.md §5 Phase 2) schema migration: create the three new tables that back the content-atom library, brand-voice profile, and 30-day calendar. Compose with the existing Phase 1 §6 tables (marketing_sessions, marketing_content_pieces, marketing_content_extractions) via owner_id and foreign keys — do NOT alter or drop any Phase 1 table.",
+      "spec": "Idempotent Postgres migration using CREATE TABLE IF NOT EXISTS only. ALL id/created_at/updated_at columns are DB-DEFAULTED (id UUID DEFAULT gen_random_uuid() PRIMARY KEY, timestamps DEFAULT NOW()) — do NOT expect the app to supply them. Tables: (1) marketing_content_atoms — owner_id TEXT NOT NULL, session_id UUID REFERENCES marketing_sessions(id), source_extraction_id UUID REFERENCES marketing_content_extractions(id), atom_type TEXT NOT NULL CHECK (atom_type IN ('hook','story','insight','cta')), text TEXT NOT NULL, tags JSONB NOT NULL DEFAULT '[]'::jsonb, reuse_consent_level TEXT NOT NULL DEFAULT 'session_only' CHECK (reuse_consent_level IN ('session_only','90d','perpetual')), created_at TIMESTAMPTZ DEFAULT NOW(); index on (owner_id). (2) marketing_brand_voice_profiles — owner_id TEXT NOT NULL UNIQUE, profile_json JSONB NOT NULL DEFAULT '{}'::jsonb, source_session_count INTEGER NOT NULL DEFAULT 0, updated_at TIMESTAMPTZ DEFAULT NOW(). (3) marketing_calendar_slots — owner_id TEXT NOT NULL, content_piece_id UUID REFERENCES marketing_content_pieces(id), scheduled_date DATE NOT NULL, platform TEXT, status TEXT NOT NULL DEFAULT 'planned' CHECK (status IN ('planned','approved','used')), created_at TIMESTAMPTZ DEFAULT NOW(); index on (owner_id, scheduled_date). Start with a `-- SYNOPSIS:` comment and `-- @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-session-ui"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 4000,
+      "revive_count": 0
+    },
+    {
+      "id": "mos-brand-voice",
+      "status": "pending",
+      "target_file": "services/marketing-brand-voice.js",
+      "task": "MarketingOS Phase 2 brand-voice service (§5 Phase 2, 'brand voice profile built from ≥3 approved sessions, not manual' + 'brand voice fingerprinting: score new content against voice profile'). SELF-CONTAINED ESM module — no external service imports. Export async buildBrandVoiceProfile(pool, ownerId) and scoreContentAgainstVoice(profile, text). Fingerprinting is LOCAL/deterministic — NO new AI calls per §5 cost-control ('runs locally using stored session data').",
+      "spec": "Single self-contained ESM module. buildBrandVoiceProfile(pool, ownerId): read the owner's APPROVED marketing_content_pieces (join via marketing_sessions on owner_id; treat status/approved flag defensively), require >= 3 distinct approved sessions or return { ok:false, reason:'insufficient_sessions', sessionCount }. Compute a deterministic fingerprint with plain JS ONLY (no AI, no network): avg sentence length, avg word length, top N recurring non-stopword phrases/tokens, punctuation/emoji cadence, hook-pattern counts — store as profile_json; UPSERT into marketing_brand_voice_profiles (INSERT ... ON CONFLICT (owner_id) DO UPDATE) with source_session_count; return { ok:true, profile, sessionCount }. scoreContentAgainstVoice(profile, text): pure function returning { score: 0..1, notes: string[] } comparing the text's metrics to the stored profile (no DB, no AI). Use parameterised SQL ($1,$2 …) via the passed pool — never string-interpolate. Guard everything in try/catch and return structured errors, never throw raw. Named exports buildBrandVoiceProfile + scoreContentAgainstVoice. Import ONLY node: builtins / installed packages / existing repo-relative files. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-phase2-schema"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 8000,
+      "revive_count": 0
+    },
+    {
+      "id": "mos-phase2-routes",
+      "status": "pending",
+      "target_file": "routes/marketing-calendar-routes.js",
+      "task": "MarketingOS Phase 2 calendar/atoms JSON API (§5 Phase 2 New routes). SELF-CONTAINED Express route module exporting registerMarketingCalendarRoutes(app, deps) (also default export). deps = { pool, requireKey, callCouncilMember, logger, baseUrl }. Endpoints, ALL guarded by deps.requireKey and scoped to the caller's owner_id (req.user?.id else req.body.owner_id/req.query.owner_id; 400 if absent): GET /api/v1/marketing/calendar (return this owner's marketing_calendar_slots joined to marketing_content_pieces for a 30-day window, default from today); POST /api/v1/marketing/atoms (insert a marketing_content_atoms row from { atom_type, text, session_id?, source_extraction_id?, tags?, reuse_consent_level? } — validate atom_type + reuse_consent_level against the schema CHECK values — return the created row); GET /api/v1/marketing/atoms (list this owner's atoms, newest first, optional ?atom_type filter). May import services/marketing-brand-voice.js (buildBrandVoiceProfile/scoreContentAgainstVoice) to expose an optional POST /api/v1/marketing/brand-voice/rebuild that rebuilds the profile — but do NOT import any non-existent module.",
+      "spec": "Single self-contained ESM server module, AUTO-REGISTERED via config/auto-registered-product-modules.json (entry pre-added: path routes/marketing-calendar-routes.js, register registerMarketingCalendarRoutes) — do NOT edit server.js or any boot file. ZERO top-level browser globals (server module). Parameterised SQL only ($1,$2 …) via deps.pool — never interpolate. Use ONLY the exact Phase 2 table/column names (marketing_content_atoms, marketing_calendar_slots, marketing_brand_voice_profiles) + Phase 1 tables; ids/timestamps are DB-defaulted so INSERT WITHOUT them and RETURNING * to read back. Validate enums against the schema CHECK values and 400 on violation. Wrap each handler in try/catch → JSON { ok:false, error } with a sensible status; never leak stacks/secrets. Named export registerMarketingCalendarRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-brand-voice"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 12000,
+      "revive_count": 0
+    },
+    {
+      "id": "mos-phase2-ui",
+      "status": "pending",
+      "target_file": "routes/marketing-calendar-ui-routes.js",
+      "task": "MarketingOS Phase 2 UI (§5 Phase 2 UI screens: content calendar view + atom library browser). SELF-CONTAINED server-rendered route module exporting registerMarketingCalendarUiRoutes(app, deps) (also default). Serves: GET /marketing/calendar (a 30-day content-calendar grid that fetches /api/v1/marketing/calendar in the browser and lets the user mark a scheduled_date per piece); GET /marketing/atoms (atom library browser that fetches /api/v1/marketing/atoms and can POST a new atom). Clean single-column layout consistent with the Phase 1 /marketing pages.",
+      "spec": "Single self-contained ESM server module, AUTO-REGISTERED (config entry pre-added: path routes/marketing-calendar-ui-routes.js, register registerMarketingCalendarUiRoutes) — do NOT edit server.js or any boot file. CRITICAL SSR RULE: imported by Node on the server → ZERO top-level references to window/document/localStorage/navigator/fetch. Each handler RETURNS a complete HTML document as a template-literal STRING; ALL client behaviour (fetch calls to /api/v1/marketing/*, calendar interactions, atom create) lives ONLY inside an embedded <script>…</script> string, never as top-level module code. No DB access here (pages call the JSON API from the browser). No fabricated stats/testimonials/pricing. Escape interpolated dynamic text. Keep the (app, deps) signature even if deps is unused. Named export registerMarketingCalendarUiRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-phase2-routes"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 12000,
+      "revive_count": 0
     }
   ]
 }
