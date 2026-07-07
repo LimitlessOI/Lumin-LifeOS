@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T11:31:51.739Z",
+  "generated_at": "2026-07-07T11:32:14.769Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11230,
   "files": [
@@ -83081,9 +83081,9 @@
     {
       "path": "services/marketing-brand-voice.js",
       "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 11072,
-      "mtime": "2026-07-07T11:31:51.739Z",
-      "indexed_at": "2026-07-07T11:31:51.739Z",
+      "bytes": 11418,
+      "mtime": "2026-07-07T11:32:14.769Z",
+      "indexed_at": "2026-07-07T11:32:14.769Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

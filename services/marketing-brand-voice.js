@@ -1,149 +1,147 @@
 // SYNOPSIS:
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
-import { Pool } from 'pg'; // Explicitly import Pool for type hinting, though deps.pool is passed.
 
-/**
- * Calculates basic linguistic metrics for text.
- * @param {string} text
- * @returns {{avgSentenceLength: number, avgWordLength: number, wordCount: number, sentenceCount: number, punctuationCount: number, emojiCount: number}}
- */
-function calculateTextMetrics(text) {
-  const sentences = text.split(/[.!?…]+/).filter(s => s.trim().length > 0);
-  const words = text.toLowerCase().match(/\b\w+\b/g) || [];
-  const punctuation = (text.match(/[.,!?;:'"(){}[\]\-—–—…—]/g) || []).length;
-  const emojis = (text.match(/[\p{Emoji_Presentation}\p{Emoji}\p{Emoji_Modifier}\p{Emoji_Component}]/gu) || []).length;
+import { Pool } from 'pg'; // Explicitly import Pool from pg
 
-  const wordCount = words.length;
-  const sentenceCount = sentences.length;
+// --- Utility Functions for Brand Voice Fingerprinting ---
 
-  const totalWordLength = words.reduce((sum, word) => sum + word.length, 0);
-  const avgWordLength = wordCount > 0 ? totalWordLength / wordCount : 0;
-  const avgSentenceLength = sentenceCount > 0 ? wordCount / sentenceCount : 0;
+// Simple tokenization: split by whitespace and common punctuation, convert to lowercase
+const tokenize = (text) => text.toLowerCase().match(/\b\w+\b/g) || [];
 
-  return {
-    avgSentenceLength,
-    avgWordLength,
-    wordCount,
-    sentenceCount,
-    punctuationCount: punctuation,
-    emojiCount: emojis
-  };
-}
+// Basic stop words (extend as needed)
+const stopWords = new Set([
+  'the', 'a', 'an', 'and', 'or', 'but', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+  'to', 'of', 'in', 'on', 'at', 'for', 'with', 'by', 'from', 'as', 'it', 'its', 'he', 'she', 'they',
+  'we', 'you', 'your', 'my', 'our', 'i', 'me', 'us', 'him', 'her', 'them', 'this', 'that', 'these',
+  'those', 'what', 'where', 'when', 'why', 'how', 'which', 'who', 'whom', 'can', 'will', 'would',
+  'should', 'could', 'get', 'got', 'have', 'has', 'had', 'do', 'does', 'did', 'not', 'no', 'yes',
+  'up', 'down', 'out', 'in', 'over', 'under', 'then', 'now', 'just', 'only', 'very', 'much', 'many',
+  'also', 'about', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such',
+  'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'don', 'nt', 'll', 'm', 're', 've',
+  'd'
+]);
 
-/**
- * Extracts top N non-stopword phrases/tokens.
- * A very basic implementation for deterministic local processing.
- * @param {string} text
- * @param {number} n
- * @returns {string[]}
- */
-function extractTopPhrases(text, n = 10) {
-  const stopwords = new Set([
-    'a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'so', 'yet',
-    'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
-    'have', 'has', 'had', 'do', 'does', 'did',
-    'of', 'in', 'on', 'at', 'by', 'with', 'from', 'to', 'into', 'onto',
-    'this', 'that', 'these', 'those', 'it', 'its', 'he', 'him', 'his', 'she', 'her', 'hers', 'we', 'us', 'our', 'ours', 'you', 'your', 'yours', 'they', 'them', 'their', 'theirs',
-    'i', 'me', 'my', 'mine', 'myself', 'yourself', 'himself', 'herself', 'itself', 'ourselves', 'yourselves', 'themselves',
-    'can', 'will', 'would', 'should', 'could', 'may', 'might', 'must',
-    'about', 'above', 'after', 'again', 'against', 'all', 'any', 'as', 'away', 'back', 'before', 'below', 'between', 'both', 'down', 'during', 'each', 'few', 'for', 'further', 'here', 'how', 'if', 'just', 'more', 'most', 'no', 'not', 'now', 'only', 'other', 'out', 'over', 'same', 'some', 'such', 'than', 'then', 'there', 'through', 'up', 'very', 'what', 'when', 'where', 'which', 'while', 'who', 'whom', 'why', 'with', 'without'
-  ]);
+// Function to calculate average word length
+const calculateAvgWordLength = (text) => {
+  const words = text.match(/\b\w+\b/g);
+  if (!words || words.length === 0) return 0;
+  const totalLength = words.reduce((sum, word) => sum + word.length, 0);
+  return totalLength / words.length;
+};
 
-  const words = text.toLowerCase().match(/\b\w+\b/g) || [];
-  const filteredWords = words.filter(word => !stopwords.has(word));
+// Function to calculate average sentence length
+const calculateAvgSentenceLength = (text) => {
+  const sentences = text.split(/[.!?…]+(?=\s|$)/).filter(s => s.trim().length > 0);
+  if (!sentences || sentences.length === 0) return 0;
+  const totalWords = sentences.reduce((sum, sentence) => {
+    const words = sentence.match(/\b\w+\b/g);
+    return sum + (words ? words.length : 0);
+  }, 0);
+  return totalWords / sentences.length;
+};
 
-  const wordFrequencies = {};
-  for (const word of filteredWords) {
-    wordFrequencies[word] = (wordFrequencies[word] || 0) + 1;
+// Function to find top N recurring non-stopword phrases/tokens (simple n-grams)
+const getTopNRecurringPhrases = (text, n = 5, phraseLength = 2) => {
+  const tokens = tokenize(text).filter(token => !stopWords.has(token));
+  const phraseCounts = {};
+
+  for (let i = 0; i <= tokens.length - phraseLength; i++) {
+    const phrase = tokens.slice(i, i + phraseLength).join(' ');
+    if (phrase.length > 0) {
+      phraseCounts[phrase] = (phraseCounts[phrase] || 0) + 1;
+    }
   }
 
-  const sortedWords = Object.entries(wordFrequencies).sort(([, countA], [, countB]) => countB - countA);
-  return sortedWords.slice(0, n).map(([word]) => word);
-}
+  return Object.entries(phraseCounts)
+    .sort(([, countA], [, countB]) => countB - countA)
+    .slice(0, n)
+    .map(([phrase]) => phrase);
+};
 
-/**
- * Deterministically computes a brand voice fingerprint from text.
- * @param {string} text
- * @returns {object}
- */
-function computeVoiceFingerprint(text) {
-  const metrics = calculateTextMetrics(text);
-  const topPhrases = extractTopPhrases(text);
+// Function to analyze punctuation and emoji cadence
+const analyzePunctuationAndEmoji = (text) => {
+  const punctuationRegex = /[.,!?;:'"-(){}[\]]/g;
+  const emojiRegex = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu;
 
-  // A very basic 'hook pattern' detection. This would be highly domain-specific in a real system.
-  // For now, let's just count common question marks or exclamation points at sentence start/end.
-  const hookPatterns = {
-    questionStart: (text.match(/^[Ww]hat|How|Why|When|Where|Who|Is|Are|Do|Does|Did|Can|Could|Should|Would/g) || []).length,
-    exclamationEnd: (text.match(/!$/gm) || []).length, // end of line/paragraph
-    questionEnd: (text.match(/\?$/gm) || []).length, // end of line/paragraph
-  };
+  const punctuationMatches = text.match(punctuationRegex);
+  const emojiMatches = text.match(emojiRegex);
 
   return {
-    ...metrics,
-    topPhrases,
-    hookPatterns
+    punctuationCount: punctuationMatches ? punctuationMatches.length : 0,
+    emojiCount: emojiMatches ? emojiMatches.length : 0,
+    totalChars: text.length,
   };
-}
+};
+
+// Function to detect simple hook patterns (e.g., questions, imperatives)
+const detectHookPatterns = (text) => {
+  let questionCount = (text.match(/\?/g) || []).length;
+  let exclamationCount = (text.match(/!/g) || []).length;
+  let imperativeCount = (text.match(/\b(buy|learn|discover|start|join|get|try|check out)\b/gi) || []).length; // Simple imperative verbs
+
+  return {
+    questionCount,
+    exclamationCount,
+    imperativeCount,
+  };
+};
 
 /**
  * Builds a brand voice profile for a given owner from approved marketing content.
  * Requires at least 3 distinct approved sessions.
- * @param {Pool} pool - node-postgres Pool
- * @param {string} ownerId
+ *
+ * @param {Pool} pool - node-postgres Pool instance.
+ * @param {string} ownerId - The owner's ID.
  * @returns {Promise<{ok: boolean, profile?: object, sessionCount?: number, reason?: string}>}
  */
 export async function buildBrandVoiceProfile(pool, ownerId) {
   try {
     const query = `
       SELECT
-        mcp.content_text,
-        ms.id AS session_id
+          mc.content_text,
+          ms.id AS session_id
       FROM
-        marketing_content_pieces mcp
+          marketing_content_pieces mcp
       JOIN
-        marketing_sessions ms ON mcp.session_id = ms.id
+          marketing_content mc ON mcp.content_text = mc.content_data -- Assuming content_text is in marketing_content.content_data as per schema, and mcp.content_text is the join key. If not, this join needs adjustment based on actual data model.
+      JOIN
+          marketing_sessions ms ON mcp.session_id = ms.id
       WHERE
-        ms.owner_id = $1
-        AND mcp.status = 'approved' -- Assuming 'approved' is the status for approved content
-        AND mcp.content_text IS NOT NULL
-        AND mcp.content_text != ''
-      GROUP BY
-        mcp.content_text, ms.id; -- Group by content_text and session_id to ensure distinct content from distinct sessions
+          ms.owner_id = $1
+          AND mcp.status = 'approved'
+          AND mc.content_type = 'marketing_content_piece_text';
     `;
-
     const { rows } = await pool.query(query, [ownerId]);
 
     if (rows.length === 0) {
       return { ok: false, reason: 'no_approved_content', sessionCount: 0 };
     }
 
-    const uniqueSessionIds = new Set(rows.map(row => row.session_id));
-    if (uniqueSessionIds.size < 3) {
-      return { ok: false, reason: 'insufficient_sessions', sessionCount: uniqueSessionIds.size };
+    const distinctSessionIds = new Set(rows.map(row => row.session_id));
+    if (distinctSessionIds.size < 3) {
+      return { ok: false, reason: 'insufficient_sessions', sessionCount: distinctSessionIds.size };
     }
 
-    const allFingerprints = rows.map(row => computeVoiceFingerprint(row.content_text));
-
-    // Aggregate fingerprints to create a single profile
-    const aggregatedProfile = {
-      avgSentenceLength: allFingerprints.reduce((sum, fp) => sum + fp.avgSentenceLength, 0) / allFingerprints.length,
-      avgWordLength: allFingerprints.reduce((sum, fp) => sum + fp.avgWordLength, 0) / allFingerprints.length,
-      wordCount: allFingerprints.reduce((sum, fp) => sum + fp.wordCount, 0), // Total word count
-      sentenceCount: allFingerprints.reduce((sum, fp) => sum + fp.sentenceCount, 0), // Total sentence count
-      punctuationCount: allFingerprints.reduce((sum, fp) => sum + fp.punctuationCount, 0),
-      emojiCount: allFingerprints.reduce((sum, fp) => sum + fp.emojiCount, 0),
-      // For top phrases, aggregate all and then pick top N from the combined set
-      topPhrases: extractTopPhrases(rows.map(row => row.content_text).join(' '), 10),
-      // Aggregate hook patterns (sum counts)
-      hookPatterns: {
-        questionStart: allFingerprints.reduce((sum, fp) => sum + fp.hookPatterns.questionStart, 0),
-        exclamationEnd: allFingerprints.reduce((sum, fp) => sum + fp.hookPatterns.exclamationEnd, 0),
-        questionEnd: allFingerprints.reduce((sum, fp) => sum + fp.hookPatterns.questionEnd, 0),
+    let allContentText = '';
+    rows.forEach(row => {
+      if (typeof row.content_text === 'string') {
+        allContentText += row.content_text + ' ';
       }
-    };
+    });
 
-    const profileJson = JSON.stringify(aggregatedProfile);
-    const sourceSessionCount = uniqueSessionIds.size;
+    if (allContentText.trim().length === 0) {
+      return { ok: false, reason: 'no_processable_content_text', sessionCount: distinctSessionIds.size };
+    }
+
+    // Compute deterministic fingerprint
+    const profile = {
+      avgSentenceLength: calculateAvgSentenceLength(allContentText),
+      avgWordLength: calculateAvgWordLength(allContentText),
+      topPhrases: getTopNRecurringPhrases(allContentText),
+      punctuationAndEmojiCadence: analyzePunctuationAndEmoji(allContentText),
+      hookPatternCounts: detectHookPatterns(allContentText),
+      // Add more metrics as needed
+    };
 
     const upsertQuery = `
       INSERT INTO marketing_brand_voice_profiles (owner_id, profile_json, source_session_count)
@@ -152,98 +150,130 @@ export async function buildBrandVoiceProfile(pool, ownerId) {
       SET profile_json = EXCLUDED.profile_json,
           source_session_count = EXCLUDED.source_session_count,
           updated_at = NOW()
-      RETURNING *;
+      RETURNING id, owner_id, profile_json, source_session_count, updated_at;
     `;
+    const upsertResult = await pool.query(upsertQuery, [ownerId, JSON.stringify(profile), distinctSessionIds.size]);
 
-    const upsertResult = await pool.query(upsertQuery, [ownerId, profileJson, sourceSessionCount]);
-    const storedProfile = upsertResult.rows[0];
-
-    return { ok: true, profile: storedProfile.profile_json, sessionCount: storedProfile.source_session_count };
+    return {
+      ok: true,
+      profile: upsertResult.rows[0].profile_json,
+      sessionCount: upsertResult.rows[0].source_session_count
+    };
 
   } catch (error) {
-    // deps.logger.error({ error, ownerId }, 'Failed to build brand voice profile');
-    return { ok: false, reason: 'internal_error', details: error.message };
+    console.error('Error building brand voice profile:', error);
+    return { ok: false, reason: 'internal_error', error: error.message };
   }
 }
 
 /**
- * Scores new content against a stored brand voice profile.
- * Pure function, no DB or AI calls.
- * @param {object} profile - The brand voice profile (parsed JSON)
- * @param {string} text - The content to score
+ * Scores new content against an existing brand voice profile.
+ * This is a pure function, no DB or AI access.
+ *
+ * @param {object} profile - The brand voice profile (profile_json from DB).
+ * @param {string} text - The content text to score.
  * @returns {{score: number, notes: string[]}}
  */
 export function scoreContentAgainstVoice(profile, text) {
   const notes = [];
   let score = 1.0; // Start with a perfect score and deduct points
 
-  const contentFingerprint = computeVoiceFingerprint(text);
+  if (!profile || typeof text !== 'string' || text.trim().length === 0) {
+    return { score: 0, notes: ['Invalid profile or empty text provided.'] };
+  }
 
-  // Compare linguistic metrics
-  const metricComparisons = [
-    { name: 'avgSentenceLength', weight: 0.2, threshold: 0.3 }, // 30% deviation allowed
-    { name: 'avgWordLength', weight: 0.2, threshold: 0.2 },
-    // Punctuation and emoji cadence could be ratios rather than absolute counts for better comparison
-    // For simplicity, we'll compare counts relative to word count
-    { name: 'punctuationRatio', weight: 0.1, threshold: 0.5,
-      getValue: (fp) => fp.wordCount > 0 ? fp.punctuationCount / fp.wordCount : 0,
-      getProfileValue: (p) => p.wordCount > 0 ? p.punctuationCount / p.wordCount : 0
-    },
-    { name: 'emojiRatio', weight: 0.1, threshold: 1.0, // More lenient for emojis
-      getValue: (fp) => fp.wordCount > 0 ? fp.emojiCount / fp.wordCount : 0,
-      getProfileValue: (p) => p.wordCount > 0 ? p.emojiCount / p.wordCount : 0
-    },
-  ];
+  // Calculate metrics for the new text
+  const textMetrics = {
+    avgSentenceLength: calculateAvgSentenceLength(text),
+    avgWordLength: calculateAvgWordLength(text),
+    topPhrases: getTopNRecurringPhrases(text),
+    punctuationAndEmojiCadence: analyzePunctuationAndEmoji(text),
+    hookPatternCounts: detectHookPatterns(text),
+  };
 
-  for (const { name, weight, threshold, getValue, getProfileValue } of metricComparisons) {
-    const profileValue = getProfileValue ? getProfileValue(profile) : profile[name];
-    const contentValue = getValue ? getValue(contentFingerprint) : contentFingerprint[name];
+  // Compare metrics and adjust score
+  const toleranceFactor = 0.2; // 20% deviation is acceptable
 
-    if (profileValue === 0 && contentValue === 0) continue; // Both are zero, perfect match
-
-    const deviation = Math.abs(contentValue - profileValue) / (profileValue === 0 ? 1 : profileValue); // Avoid division by zero
-    if (deviation > threshold) {
-      score -= weight * Math.min(1, deviation / threshold); // Deduct proportionally, cap at full weight
-      notes.push(`${name} deviates significantly (profile: ${profileValue.toFixed(2)}, content: ${contentValue.toFixed(2)})`);
+  // Avg Sentence Length
+  if (profile.avgSentenceLength > 0) {
+    const diff = Math.abs(textMetrics.avgSentenceLength - profile.avgSentenceLength) / profile.avgSentenceLength;
+    if (diff > toleranceFactor) {
+      score -= Math.min(0.2, diff * 0.5); // Deduct up to 20%
+      notes.push(`Avg sentence length deviation: ${diff.toFixed(2)} (profile: ${profile.avgSentenceLength.toFixed(1)}, content: ${textMetrics.avgSentenceLength.toFixed(1)})`);
     }
   }
 
-  // Compare top phrases (overlap)
+  // Avg Word Length
+  if (profile.avgWordLength > 0) {
+    const diff = Math.abs(textMetrics.avgWordLength - profile.avgWordLength) / profile.avgWordLength;
+    if (diff > toleranceFactor) {
+      score -= Math.min(0.2, diff * 0.5);
+      notes.push(`Avg word length deviation: ${diff.toFixed(2)} (profile: ${profile.avgWordLength.toFixed(1)}, content: ${textMetrics.avgWordLength.toFixed(1)})`);
+    }
+  }
+
+  // Top Phrases (check for overlap)
   const profilePhrases = new Set(profile.topPhrases || []);
-  const contentPhrases = new Set(contentFingerprint.topPhrases || []);
-  let commonPhrases = 0;
-  for (const phrase of contentPhrases) {
+  const textPhrases = new Set(textMetrics.topPhrases || []);
+  let matchedPhrases = 0;
+  textPhrases.forEach(phrase => {
     if (profilePhrases.has(phrase)) {
-      commonPhrases++;
+      matchedPhrases++;
     }
-  }
-  const phraseOverlapRatio = profilePhrases.size > 0 ? commonPhrases / profilePhrases.size : 1;
-  if (phraseOverlapRatio < 0.5) { // If less than 50% overlap
-    score -= 0.2;
-    notes.push(`Low overlap in key phrases (overlap: ${commonPhrases}/${profilePhrases.size})`);
-  }
-
-  // Compare hook patterns (simple deviation for now)
-  const hookPatternComparisons = [
-    { name: 'questionStart', weight: 0.05, threshold: 0.5 },
-    { name: 'exclamationEnd', weight: 0.05, threshold: 0.5 },
-    { name: 'questionEnd', weight: 0.05, threshold: 0.5 },
-  ];
-
-  for (const { name, weight, threshold } of hookPatternComparisons) {
-    const profileValue = profile.hookPatterns[name] || 0;
-    const contentValue = contentFingerprint.hookPatterns[name] || 0;
-
-    if (profileValue === 0 && contentValue === 0) continue;
-
-    const deviation = Math.abs(contentValue - profileValue) / (profileValue === 0 ? 1 : profileValue);
-    if (deviation > threshold) {
-      score -= weight * Math.min(1, deviation / threshold);
-      notes.push(`Hook pattern '${name}' deviates (profile: ${profileValue}, content: ${contentValue})`);
+  });
+  if (profilePhrases.size > 0) {
+    const matchRatio = matchedPhrases / profilePhrases.size;
+    if (matchRatio < 0.5) { // If less than 50% of profile phrases are matched
+      score -= (0.1 * (1 - matchRatio)); // Deduct up to 10%
+      notes.push(`Low phrase overlap: ${matchedPhrases} of ${profilePhrases.size} profile phrases matched.`);
     }
   }
 
-  // Ensure score is within 0-1 range
+
+  // Punctuation and Emoji Cadence (simple comparison)
+  const profilePunc = profile.punctuationAndEmojiCadence || {};
+  const textPunc = textMetrics.punctuationAndEmojiCadence || {};
+
+  if (profilePunc.totalChars > 0) {
+    const profilePuncRatio = (profilePunc.punctuationCount || 0) / profilePunc.totalChars;
+    const textPuncRatio = (textPunc.punctuationCount || 0) / textPunc.totalChars;
+    const puncDiff = Math.abs(textPuncRatio - profilePuncRatio);
+    if (puncDiff > 0.05) { // 5% difference in punctuation ratio
+      score -= Math.min(0.1, puncDiff * 1.0); // Deduct up to 10%
+      notes.push(`Punctuation ratio deviation: ${puncDiff.toFixed(2)} (profile: ${profilePuncRatio.toFixed(2)}, content: ${textPuncRatio.toFixed(2)})`);
+    }
+
+    const profileEmojiRatio = (profilePunc.emojiCount || 0) / profilePunc.totalChars;
+    const textEmojiRatio = (textPunc.emojiCount || 0) / textPunc.totalChars;
+    const emojiDiff = Math.abs(textEmojiRatio - profileEmojiRatio);
+    if (emojiDiff > 0.02) { // 2% difference in emoji ratio
+      score -= Math.min(0.05, emojiDiff * 2.0); // Deduct up to 5%
+      notes.push(`Emoji ratio deviation: ${emojiDiff.toFixed(2)} (profile: ${profileEmojiRatio.toFixed(2)}, content: ${textEmojiRatio.toFixed(2)})`);
+    }
+  }
+
+
+  // Hook Pattern Counts (simple comparison of ratios)
+  const profileHooks = profile.hookPatternCounts || {};
+  const textHooks = textMetrics.hookPatternCounts || {};
+  const totalTextWords = text.match(/\b\w+\b/g)?.length || 1; // Avoid division by zero
+
+  const compareHookMetric = (metricName, weight = 0.05) => {
+    const profileRatio = (profileHooks[metricName] || 0) / totalTextWords;
+    const textRatio = (textHooks[metricName] || 0) / totalTextWords;
+    const diff = Math.abs(textRatio - profileRatio);
+    if (diff > 0.01) { // 1% difference
+      score -= Math.min(weight, diff * 5.0);
+      notes.push(`${metricName} ratio deviation: ${diff.toFixed(2)} (profile: ${profileRatio.toFixed(2)}, content: ${textRatio.toFixed(2)})`);
+    }
+  };
+
+  compareHookMetric('questionCount');
+  compareHookMetric('exclamationCount');
+  compareHookMetric('imperativeCount');
+
+
+  // Ensure score is between 0 and 1
   score = Math.max(0, Math.min(1, score));
 
   return { score: parseFloat(score.toFixed(2)), notes };
