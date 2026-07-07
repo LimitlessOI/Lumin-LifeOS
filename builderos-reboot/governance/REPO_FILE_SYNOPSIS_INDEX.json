@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T23:31:46.114Z",
+  "generated_at": "2026-07-07T23:45:50.412Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11273,
+  "file_count": 11275,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3404141,
-      "mtime": "2026-07-07T23:31:46.060Z",
-      "indexed_at": "2026-07-07T23:31:46.114Z"
+      "bytes": 3404827,
+      "mtime": "2026-07-07T23:45:28.632Z",
+      "indexed_at": "2026-07-07T23:45:50.412Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -29690,6 +29690,16 @@
       "indexed_at": "2026-07-07T23:31:46.114Z"
     },
     {
+      "path": "builderos-reboot/scripts/governed-fence-ratchet-proof.mjs",
+      "synopsis": "Offline proof of the governed-fence enable-only ratchet",
+      "bytes": 2570,
+      "mtime": "2026-07-07T23:44:02.436Z",
+      "indexed_at": "2026-07-07T23:45:50.412Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "builderos-reboot/scripts/governed-shipping-runner-proof.mjs",
       "synopsis": "STEP 5b proof — BPB assertion authorship + the governed shipping",
       "bytes": 7898,
@@ -30252,9 +30262,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 3333,
-      "mtime": "2026-07-07T23:29:11.328Z",
-      "indexed_at": "2026-07-07T23:31:46.114Z",
+      "bytes": 3948,
+      "mtime": "2026-07-07T23:43:34.524Z",
+      "indexed_at": "2026-07-07T23:45:50.412Z",
       "synopsis_index_only": true
     },
     {
@@ -38598,9 +38608,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 193644,
-      "mtime": "2026-07-07T23:31:40.148Z",
-      "indexed_at": "2026-07-07T23:31:46.114Z"
+      "bytes": 195632,
+      "mtime": "2026-07-07T23:44:58.192Z",
+      "indexed_at": "2026-07-07T23:45:50.412Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -64781,6 +64791,16 @@
       "bytes": 4498,
       "mtime": "2026-07-04T17:47:15.839Z",
       "indexed_at": "2026-07-07T23:31:46.114Z"
+    },
+    {
+      "path": "routes/governed-fence-routes.js",
+      "synopsis": "CONDUCTOR-GLUE founder-lane route for the governed-factory fence",
+      "bytes": 4820,
+      "mtime": "2026-07-07T23:43:27.444Z",
+      "indexed_at": "2026-07-07T23:45:50.412Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/idea-queue-routes.js",
