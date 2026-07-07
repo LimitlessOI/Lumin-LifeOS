@@ -568,6 +568,8 @@ function jsFullFileCodegenHints() {
     '4. Do NOT output HTML, JSON, SQL, or mixed-language wrappers unless the target file itself is that format.',
     '5. Start immediately with code or a valid JS comment, and end with valid JS syntax.',
     '6. Violating this contract makes the output unusable — the build system will syntax-check and reject it.',
+    '7. SERVER MODULE — NO TOP-LEVEL BROWSER GLOBALS: files under routes/, services/, middleware/, startup/ are imported by Node on the server. They MUST NOT reference document, window, localStorage, navigator, or other browser globals at the top level or in any code that runs at import time — that throws "document is not defined" and fails the Railway deploy healthcheck. The pre-commit gate rejects this.',
+    '8. CLIENT-SIDE JS GOES INSIDE RETURNED HTML: if the module renders a page, emit any browser-side JavaScript (event listeners, document/window access) ONLY as string content inside the HTML you return — e.g. within a <script>…</script> tag in a template literal — never as executable module code. Server modules build HTML strings; the browser runs the script, not Node.',
   ].join('\n');
 }
 
