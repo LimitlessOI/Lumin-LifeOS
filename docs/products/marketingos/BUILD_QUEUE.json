@@ -72,7 +72,7 @@
     },
     {
       "id": "mos-brand-voice",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-brand-voice.js",
       "task": "MarketingOS Phase 2 brand-voice service (§5 Phase 2, 'brand voice profile built from ≥3 approved sessions, not manual' + 'brand voice fingerprinting: score new content against voice profile'). SELF-CONTAINED ESM module — no external service imports. Export async buildBrandVoiceProfile(pool, ownerId) and scoreContentAgainstVoice(profile, text). Fingerprinting is LOCAL/deterministic — NO new AI calls per §5 cost-control ('runs locally using stored session data').",
       "spec": "Single self-contained ESM module. buildBrandVoiceProfile(pool, ownerId): read the owner's APPROVED marketing_content_pieces (join via marketing_sessions on owner_id; treat status/approved flag defensively), require >= 3 distinct approved sessions or return { ok:false, reason:'insufficient_sessions', sessionCount }. Compute a deterministic fingerprint with plain JS ONLY (no AI, no network): avg sentence length, avg word length, top N recurring non-stopword phrases/tokens, punctuation/emoji cadence, hook-pattern counts — store as profile_json; UPSERT into marketing_brand_voice_profiles (INSERT ... ON CONFLICT (owner_id) DO UPDATE) with source_session_count; return { ok:true, profile, sessionCount }. scoreContentAgainstVoice(profile, text): pure function returning { score: 0..1, notes: string[] } comparing the text's metrics to the stored profile (no DB, no AI). Use parameterised SQL ($1,$2 …) via the passed pool — never string-interpolate. Guard everything in try/catch and return structured errors, never throw raw. Named exports buildBrandVoiceProfile + scoreContentAgainstVoice. Import ONLY node: builtins / installed packages / existing repo-relative files. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -80,9 +80,12 @@
         "mos-phase2-schema"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 8000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "f6a52fd044d1427775c1a64c497482c78ad966a9",
+      "last_attempt_at": "2026-07-07T11:31:33.719Z",
+      "completed_at": "2026-07-07T11:34:00.792Z"
     },
     {
       "id": "mos-phase2-routes",
