@@ -470,6 +470,31 @@ async function coalescedRedeploy() {
   return _redeployInFlight;
 }
 
+// Ask GitHub whether the running deploy's SHA already CONTAINS the built commit.
+// GET /repos/:o/:r/compare/:base...:head with base=built, head=served returns a
+// `status` of identical | behind | ahead | diverged. `behind`/`identical` mean
+// the served commit is at or after the built one → the built code is live even
+// though the exact SHA differs. Returns null on any failure so the caller stays
+// fail-closed (a null comparison never counts as "live").
+async function githubCompareStatus(baseSha, headSha) {
+  const token = (process.env.GITHUB_TOKEN || '').trim();
+  const repo = (process.env.GITHUB_REPO || '').trim();
+  if (!token || !repo || !baseSha || !headSha) return null;
+  const [owner, repoName] = repo.split('/');
+  if (!owner || !repoName) return null;
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${owner}/${repoName}/compare/${baseSha}...${headSha}`,
+      { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } },
+    );
+    if (!res.ok) return null;
+    const body = await res.json();
+    return body && typeof body.status === 'string' ? body.status : null;
+  } catch {
+    return null;
+  }
+}
+
 async function postBuilderBuild(baseUrl, commandKey, body) {
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
     method: 'POST',
@@ -587,6 +612,13 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
 
   // Deploy-truth gate: after build+verify, trigger a redeploy and refuse to mark
   // the step "live" until the running deployment actually serves the built SHA.
+  // In a busy repo (queue-status commits + up to NEVER_STOP_LANES parallel lanes)
+  // the served SHA is almost always a DESCENDANT of the built commit, never an
+  // exact match — so the proof also accepts a deploy whose SHA CONTAINS the built
+  // commit, confirmed via the GitHub compare API. Without this, steps that built
+  // fine were marked `blocked` after maxAttempts because exact-match could never
+  // land (the "loop builds it but never finishes it" bug). The wait window is
+  // widened to ~10 min to outlast a full Railway rebuild.
   const deployProofFn = async ({ commit_sha }) => {
     if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
     if (!commit_sha) return { ok: false, reason: 'no_commit_sha_to_prove' };
@@ -595,10 +627,16 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       expectedSha: commit_sha,
       baseUrl,
       fetchFn: (...a) => fetch(...a),
-      attempts: 20,
+      attempts: 40,
       intervalMs: 15_000,
+      compareFn: githubCompareStatus,
     });
-    return { ok: proof.ok, reason: proof.ok ? null : (proof.reason || 'deploy_did_not_serve_sha'), served_sha: proof.served_sha };
+    return {
+      ok: proof.ok,
+      reason: proof.ok ? null : (proof.reason || 'deploy_did_not_serve_sha'),
+      served_sha: proof.served_sha,
+      contains: proof.contains || false,
+    };
   };
 
   const outcome = await runNextStep(queue, { buildFn, verifyFn, deployProofFn, logger });
