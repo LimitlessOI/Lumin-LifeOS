@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T01:50:10.239Z",
+  "generated_at": "2026-07-07T01:50:39.793Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11211,
   "files": [
@@ -84088,9 +84088,9 @@
     {
       "path": "services/site-builder-editor-chat.js",
       "synopsis": "Exports renderChatPanel — services/site-builder-editor-chat.js.",
-      "bytes": 12142,
-      "mtime": "2026-07-07T01:50:10.239Z",
-      "indexed_at": "2026-07-07T01:50:10.239Z"
+      "bytes": 12491,
+      "mtime": "2026-07-07T01:50:39.793Z",
+      "indexed_at": "2026-07-07T01:50:39.793Z"
     },
     {
       "path": "services/site-builder-editor-sidebar.js",
