@@ -135,8 +135,8 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "f79caedd4f0f0ed1eb2a1cba78461cb4dff351d3",
-      "last_attempt_at": "2026-07-07T06:59:27.708Z",
-      "completed_at": "2026-07-07T06:59:43.591Z"
+      "last_attempt_at": "2026-07-07T07:00:41.816Z",
+      "completed_at": "2026-07-07T07:00:42.611Z"
     },
     {
       "id": "sb-competitor-categories",
@@ -177,8 +177,8 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "a2f3048610ab166c739aedb0bace762f7465d729",
-      "last_attempt_at": "2026-07-07T07:02:20.331Z",
-      "completed_at": "2026-07-07T07:02:21.929Z"
+      "last_attempt_at": "2026-07-07T07:03:32.112Z",
+      "completed_at": "2026-07-07T07:03:33.627Z"
     }
   ]
 }
