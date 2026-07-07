@@ -155,8 +155,8 @@
       "max_output_tokens": 6000,
       "revive_count": 0,
       "commit_sha": "edea0bdc53da80b625e1db2f9a45af03b4fe7709",
-      "last_attempt_at": "2026-07-07T17:10:02.461Z",
-      "completed_at": "2026-07-07T17:10:03.148Z"
+      "last_attempt_at": "2026-07-07T17:10:19.125Z",
+      "completed_at": "2026-07-07T17:10:19.812Z"
     },
     {
       "id": "smos-publish-gate",
