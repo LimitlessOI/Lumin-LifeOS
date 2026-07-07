@@ -124,7 +124,7 @@ const queue = JSON.parse(fs.readFileSync('builderos-reboot/MISSION_QUEUE.json', 
 const queued = queue.missions.find((m) => m.status === 'queued' || m.status === 'pending');
 if (queued) {
   const { dispatchExecuteMission } = await import('../../factory-staging/factory-core/builder/run-mission.js');
-  const { httpStatus, body } = dispatchExecuteMission({ mission_id: queued.mission_id, dry_run: true });
+  const { httpStatus, body } = await dispatchExecuteMission({ mission_id: queued.mission_id, dry_run: true });
   step('queued_objective_dry_run', httpStatus === 200 && body.ok, {
     mission_id: queued.mission_id,
     httpStatus,

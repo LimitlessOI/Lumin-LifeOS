@@ -34,7 +34,7 @@ const step = {
 const before = fs.existsSync(resolveRepoPath(targetRel));
 if (before) fs.unlinkSync(resolveRepoPath(targetRel));
 
-const { httpStatus, body } = dispatchExecuteStep({
+const { httpStatus, body } = await dispatchExecuteStep({
   mission_id: 'FACTORY-REBOOT-0005',
   blueprint_id: 'integration-proof',
   step,

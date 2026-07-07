@@ -13,6 +13,7 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
+import { runBehaviorAssertions } from '../sentry/behavior-assertions.js';
 import { REPO_ROOT, FACTORY_ROOT, resolveRepoPath } from '../repo-paths.js';
 
 export { REPO_ROOT, FACTORY_ROOT, resolveRepoPath };
@@ -126,11 +127,12 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
   };
 }
 
-export function dispatchExecuteStep(body) {
+export async function dispatchExecuteStep(body, options = {}) {
   const mission_id = body?.mission_id || 'unknown';
   const blueprint_id = body?.blueprint_id || 'unknown';
   const step = body?.step;
   const skipIntake = body?.skip_intake_gate === true;
+  const assertionRunner = options?.assertionRunner || null;
 
   if (!step?.step_id || !step?.sandbox_boundary) {
     return {
@@ -174,8 +176,18 @@ export function dispatchExecuteStep(body) {
     return { httpStatus: 409, body: builderResult };
   }
 
+  const declaredAssertions = Array.isArray(step.behavior_assertions) ? step.behavior_assertions : [];
+  const runnerAvailable = Boolean(assertionRunner);
+  const behaviorResults = declaredAssertions.length && runnerAvailable
+    ? await runBehaviorAssertions(declaredAssertions, assertionRunner)
+    : [];
+
   const sentryContract = verifyStepContract({ mission_id, step, builderResult });
-  const sentryVerify = verifyStepResult(step, builderResult, { mission_id, contract: sentryContract });
+  const sentryVerify = verifyStepResult(step, builderResult, {
+    mission_id,
+    contract: sentryContract,
+    behavior: { runnerAvailable, results: behaviorResults },
+  });
   const sentryReview = buildSentryReview({
     mission_id,
     step,
@@ -241,6 +253,7 @@ export function dispatchExecuteStep(body) {
     builderResult,
     sentryReview,
     tsosResult,
+    behaviorResults,
   });
 
   return {
@@ -254,10 +267,11 @@ export function dispatchExecuteStep(body) {
         contract: sentryContract,
         verify: sentryVerify,
         review: sentryReview,
-        verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check', 'future_lookback', 'proof_freshness'],
+        verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check', 'future_lookback', 'proof_freshness', 'behavior_proof'],
+        behavior_proof: { runner_available: runnerAvailable, results: behaviorResults },
       },
       tsos: { ...tsosResult, evaluation: tsosEval },
-      historian: { recorded: true, mission_state: 'Verification' },
+      historian: { recorded: true, mission_state: 'Verification', behavior_assertions: behaviorResults },
     },
   };
 }

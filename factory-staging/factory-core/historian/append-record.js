@@ -30,6 +30,7 @@ export function appendStepExecutionRecord({
   builderResult,
   sentryReview,
   tsosResult,
+  behaviorResults,
 }) {
   return appendHistorianRecord({
     type: 'step_execution',
@@ -40,6 +41,10 @@ export function appendStepExecutionRecord({
     builder_status: builderResult?.status,
     sentry_status: sentryReview?.implementation_status,
     tsos_latency_ms: tsosResult?.metrics?.latency_ms,
+    // Raw per-assertion behavioral-proof outputs, verbatim — Chair ruling: the
+    // receipt is the only ground truth for whether a behavior was verified, so
+    // it stores the actual results, never a pass/fail summary.
+    behavior_assertions: Array.isArray(behaviorResults) ? behaviorResults : [],
     mission_state: 'Verification',
     trust_level: 'outcome-linked',
   });

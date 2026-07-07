@@ -38,7 +38,7 @@ const prediction = recordPrediction({
   domain: 'factory-proof-loop',
 });
 
-const { httpStatus, body } = dispatchExecuteStep({
+const { httpStatus, body } = await dispatchExecuteStep({
   mission_id: missionId,
   blueprint_id: blueprint.blueprint_id,
   step,

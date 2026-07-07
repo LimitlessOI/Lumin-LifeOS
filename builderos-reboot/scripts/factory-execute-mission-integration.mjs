@@ -12,7 +12,7 @@ const { dispatchExecuteMission } = await import(
   path.join(REPO_ROOT, 'factory-staging/factory-core/builder/run-mission.js')
 );
 
-const { httpStatus, body } = dispatchExecuteMission({
+const { httpStatus, body } = await dispatchExecuteMission({
   mission_id: 'FACTORY-REBOOT-0005',
   dry_run: true,
 });

@@ -30,7 +30,7 @@ for (const label of ['run-a', 'run-b', 'run-c']) {
   const liveTarget = path.join(REPO_ROOT, targetRel);
   if (fs.existsSync(liveTarget)) fs.unlinkSync(liveTarget);
 
-  const { httpStatus, body } = dispatchExecuteStep({
+  const { httpStatus, body } = await dispatchExecuteStep({
     mission_id: 'FACTORY-GREENFIELD-0001',
     blueprint_id: blueprint.blueprint_id,
     step,

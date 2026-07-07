@@ -54,7 +54,7 @@ const step = {
 
 if (fs.existsSync(resolveRepoPath(targetRel))) fs.unlinkSync(resolveRepoPath(targetRel));
 
-const { httpStatus, body } = dispatchExecuteStep({
+const { httpStatus, body } = await dispatchExecuteStep({
   mission_id: 'FACTORY-REBOOT-0005',
   blueprint_id: 'tools-integration',
   step,

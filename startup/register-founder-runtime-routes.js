@@ -131,7 +131,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   });
   logger.info("✅ [NEVER-STOP] Status route mounted at /api/v1/lifeos/never-stop/status");
 
-  app.use(createFactoryMountRoutes({ requireKey, logger }));
+  app.use(createFactoryMountRoutes({ requireKey, logger, pool, baseUrl: siteBaseUrl }));
 
   // Convention-based auto-registration: mount every opt-in product module listed
   // in config/auto-registered-product-modules.json, recording per-module boot
