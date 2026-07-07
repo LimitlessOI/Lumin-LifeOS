@@ -33,11 +33,11 @@
 import logger from './logger.js';
 import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
 
-// Pricing tiers to include in outreach emails
+// Entry-product pricing (foot-in-door → care plan + add-ons)
 const PRICING = {
-  starter: { name: 'Starter', price: '$997', description: 'New site + SEO + 3 blog posts' },
-  growth: { name: 'Growth', price: '$1,497', description: 'Starter + monthly SEO content + social media sync' },
-  full: { name: 'Full Service', price: '$297/mo', description: 'Everything managed: site, SEO, blogs, social, POS setup + booking system' },
+  publish: { name: 'Publish', price: '$49', description: 'Go live with your upgraded site' },
+  care: { name: 'Care plan', price: '$97/mo', description: 'Site + SEO + content maintenance' },
+  pos: { name: 'POS referral', price: 'Commission', description: 'Jane / Mindbody / Square setup' },
 };
 
 function createNoopEmailAdapter() {

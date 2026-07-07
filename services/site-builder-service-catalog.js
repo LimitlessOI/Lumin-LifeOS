@@ -1,7 +1,12 @@
 /**
- * SYNOPSIS: SPEC INCOMPLETE: product revenue model prices were not provided in the prompt or injected repository context, so price values are left null rather than invented.
+ * SYNOPSIS: À-la-carte service catalog for editor sidebar upsells.
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
-const PRICE_FROM_REVENUE_MODEL = null;
+import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+
+function upsellPrice(id) {
+  return SITE_BUILDER_PRICING.upsells[id]?.display || null;
+}
 
 export const SERVICE_CATALOG = [
   {
@@ -9,7 +14,7 @@ export const SERVICE_CATALOG = [
     name: "Logo & brand kit",
     blurb:
       "A clean logo system, color palette, typography direction, and starter brand assets so the business looks consistent everywhere it shows up.",
-    price: PRICE_FROM_REVENUE_MODEL,
+    price: upsellPrice('logo-brand-kit'),
     cadence: "one-time",
   },
   {
@@ -17,7 +22,7 @@ export const SERVICE_CATALOG = [
     name: "Corporate / brand package",
     blurb:
       "A deeper brand package for teams that need sharper positioning, more polished presentation assets, and a more complete visual system.",
-    price: PRICE_FROM_REVENUE_MODEL,
+    price: upsellPrice('corporate-brand-package'),
     cadence: "one-time",
   },
   {
@@ -25,7 +30,7 @@ export const SERVICE_CATALOG = [
     name: "ClickFunnels build + ad placement / management",
     blurb:
       "A focused funnel build with ad placement and management aimed at turning paid traffic into qualified leads and measurable follow-up opportunities.",
-    price: PRICE_FROM_REVENUE_MODEL,
+    price: upsellPrice('clickfunnels-build-ad-placement-management'),
     cadence: "build + monthly management",
   },
   {
@@ -33,7 +38,7 @@ export const SERVICE_CATALOG = [
     name: "Managed Google Business Profile + local SEO",
     blurb:
       "managed Google Business Profile + local SEO with the GOAL of ranking on the first page of results for your category",
-    price: PRICE_FROM_REVENUE_MODEL,
+    price: upsellPrice('google-business-profile-local-seo'),
     cadence: "monthly",
   },
   {
@@ -41,7 +46,7 @@ export const SERVICE_CATALOG = [
     name: "Social-media management",
     blurb:
       "Consistent social content planning and posting designed to keep the business visible, current, and easier for prospects to trust.",
-    price: PRICE_FROM_REVENUE_MODEL,
+    price: upsellPrice('social-media-management'),
     cadence: "monthly",
   },
   {
@@ -49,7 +54,7 @@ export const SERVICE_CATALOG = [
     name: "SEO / content care plan",
     blurb:
       "Ongoing SEO and content maintenance focused on improving site quality, covering useful search topics, and building stronger organic visibility over time.",
-    price: PRICE_FROM_REVENUE_MODEL,
+    price: upsellPrice('seo-content-care-plan'),
     cadence: "monthly",
   },
 ];
@@ -297,5 +302,3 @@ export const formatResultsProof = (results) => {
 };
 
 export default SERVICE_CATALOG;
-
-// SPEC INCOMPLETE: product revenue model prices were not provided in the prompt or injected repository context, so price values are left null rather than invented.

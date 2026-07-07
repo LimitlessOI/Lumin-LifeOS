@@ -12,6 +12,8 @@ import { createLifeOSBuilderOSCommandControlRoutes } from "../routes/lifeos-buil
 import { createLifeRERoutes } from "../routes/lifere-os-routes.js";
 import { createBlueprintIntakeRoutes } from "../routes/blueprint-intake-routes.js";
 import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
+import createSiteBuilderCheckoutRoutes from "../routes/site-builder-checkout-routes.js";
+import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
@@ -29,6 +31,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     commitToGitHub,
     commitManyToGitHub,
     platformKernel,
+    notificationService,
   } = deps;
 
   const councilChatAI = callCouncilMember
@@ -120,8 +123,15 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     requireKey,
     callCouncilMember,
     baseUrl: siteBaseUrl,
+    notificationService,
   });
   logger.info("✅ [SITE-BUILDER] Founder-builder routes mounted at /api/v1/sites");
+
+  createSiteBuilderCheckoutRoutes(app, { pool, baseUrl: siteBaseUrl });
+  logger.info("✅ [SITE-BUILDER] Publish checkout mounted at /api/v1/sites/publish/*");
+
+  createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl: siteBaseUrl, pool });
+  logger.info("✅ [SITE-BUILDER] Live editor mounted at /api/v1/sites/editor");
 
   createCrmRoutes(app, { requireKey, logger });
   logger.info("✅ [CRM] Founder-builder routes mounted at /api/v1/crm (provider-agnostic)");
