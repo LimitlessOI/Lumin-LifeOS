@@ -130,7 +130,7 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-07T02:29:03.716Z",
+      "last_attempt_at": "2026-07-07T02:29:04.512Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
