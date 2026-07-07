@@ -93,6 +93,34 @@ function decodeGitHubContent(encoded = '') {
   }
 }
 
+/**
+ * Decide the current synopsis-index payload from a raw GitHub response.
+ * Pure + exported so the anti-wipe contract is unit-testable:
+ *   - 404               → { files: [] } (index legitimately absent)
+ *   - non-2xx           → throw (transient read failure — do NOT rebuild)
+ *   - 2xx empty body    → throw (the >1 MB Contents-API base64 trap — a raw
+ *                         fetch of an existing file is never empty)
+ *   - 2xx unparseable   → throw (corrupt — refuse to overwrite)
+ *   - 2xx valid JSON    → parsed index
+ * Every throw is non-destructive: callers skip the index co-commit and leave
+ * the existing ~11k-entry index intact rather than truncating it.
+ */
+export function resolveSynopsisIndexFromRaw(status, rawText) {
+  if (status === 404) return { files: [] };
+  if (!(status >= 200 && status < 300)) {
+    throw new Error(`Could not read ${INDEX_REL} (HTTP ${status})`);
+  }
+  const raw = String(rawText || '');
+  if (!raw.trim()) {
+    throw new Error(`${INDEX_REL} returned empty body — refusing to rebuild index from empty`);
+  }
+  try {
+    return JSON.parse(raw);
+  } catch (e) {
+    throw new Error(`${INDEX_REL} raw content not valid JSON — refusing to wipe index: ${e.message}`);
+  }
+}
+
 export function createDeploymentService(deps) {
   const {
     pool,
@@ -577,20 +605,19 @@ export function createDeploymentService(deps) {
   }
 
   async function fetchCurrentSynopsisIndex(owner, repo, targetBranch) {
+    // Fetch with the RAW media type, NOT the default JSON+base64 Contents shape.
+    // The Contents API only base64-encodes `content` for files <= 1 MB; for a
+    // larger file (the index is ~3.4 MB) it returns 200 with an EMPTY `content`
+    // and `encoding: "none"`. Decoding that yields "" → previously this returned
+    // `{ files: [] }`, and computeUpdatedIndex then rebuilt the index from ONLY
+    // the just-committed file — wiping all ~11k entries on every autonomous
+    // commit. The raw media type streams the full bytes (up to 100 MB).
     const res = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${INDEX_REL}?ref=${targetBranch}`,
-      { headers: githubAuthHeaders() },
+      { headers: { ...githubAuthHeaders(), Accept: 'application/vnd.github.raw' } },
     );
-    if (res.status === 404) return { files: [] };
-    if (!res.ok) throw new Error(`Could not read ${INDEX_REL} (HTTP ${res.status})`);
-    const data = await res.json();
-    const decoded = decodeGitHubContent(data.content);
-    if (!decoded) return { files: [] };
-    try {
-      return JSON.parse(decoded);
-    } catch {
-      return { files: [] };
-    }
+    const raw = res.status === 404 ? '' : await res.text();
+    return resolveSynopsisIndexFromRaw(res.status, raw);
   }
 
   // Fetch the live index and return the pretty-printed content with fresh rows
