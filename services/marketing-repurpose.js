@@ -1,171 +1,115 @@
-// SYNOPSIS: Repurpose one source piece into social-media and email formats using only the injected council member hook.
+// SYNOPSIS: Repurpose one source piece into platform-specific content variants using the injected council member only.
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
 const KNOWN_FORMATS = new Set(['linkedin_carousel', 'short_clips', 'email_segments']);
 
-function normalizeFormats(formats) {
-  const input = Array.isArray(formats) ? formats : ['linkedin_carousel', 'short_clips', 'email_segments'];
-  return [...new Set(input)].filter((format) => KNOWN_FORMATS.has(format));
-}
-
-function safeJsonParse(text) {
-  if (typeof text !== 'string') return null;
-  const trimmed = text.trim();
+function safeJsonParse(value) {
+  if (value == null) return null;
+  if (typeof value !== 'string') return value;
+  const trimmed = value.trim();
   if (!trimmed) return null;
+  try {
+    return JSON.parse(trimmed);
+  } catch {
+    return null;
+  }
+}
 
-  const attempts = [trimmed];
-  const firstBrace = trimmed.indexOf('{');
-  const firstBracket = trimmed.indexOf('[');
-  const start = firstBrace === -1 ? firstBracket : firstBracket === -1 ? firstBrace : Math.min(firstBrace, firstBracket);
-  if (start > 0) attempts.push(trimmed.slice(start));
-
-  for (const candidate of attempts) {
+function toText(value) {
+  if (value == null) return '';
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) return value.map(toText).filter(Boolean).join('\n');
+  if (typeof value === 'object') {
+    if (typeof value.text === 'string') return value.text;
+    if (typeof value.content === 'string') return value.content;
+    if (typeof value.body === 'string') return value.body;
     try {
-      return JSON.parse(candidate);
-    } catch {}
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
   }
-  return null;
+  return String(value);
 }
 
-function toPlainText(piece) {
-  if (piece == null) return '';
-  if (typeof piece === 'string') return piece;
-  if (typeof piece === 'object') {
-    return [
-      piece.title,
-      piece.body,
-      piece.content_text,
-      piece.text,
-      piece.summary,
-      piece.url,
-    ]
-      .filter(Boolean)
-      .map((v) => String(v))
-      .join('\n\n');
+function normalizeSourcePiece(piece) {
+  if (piece == null) return { title: '', body: '', raw: piece };
+  if (typeof piece === 'string') return { title: '', body: piece, raw: piece };
+  const title = toText(piece.title || piece.name || '');
+  const body =
+    toText(piece.body ?? piece.content ?? piece.content_text ?? piece.text ?? piece.summary ?? piece.raw_text ?? '');
+  return { title, body, raw: piece };
+}
+
+function ensureArrayOutput(parsed, format) {
+  if (Array.isArray(parsed)) return parsed.map((item) => toText(item)).filter((s) => s.trim().length > 0);
+  if (parsed && typeof parsed === 'object') {
+    const keysByFormat = {
+      linkedin_carousel: ['slides', 'carousel', 'cards', 'items', 'output'],
+      short_clips: ['clips', 'items', 'segments', 'output'],
+      email_segments: ['segments', 'emails', 'items', 'output'],
+    };
+    for (const key of keysByFormat[format] || []) {
+      if (Array.isArray(parsed[key])) return parsed[key].map((item) => toText(item)).filter((s) => s.trim().length > 0);
+    }
+    if (typeof parsed.text === 'string') return [parsed.text];
+    if (typeof parsed.content === 'string') return [parsed.content];
   }
-  return String(piece);
+  return [];
 }
 
-function extractArrayLike(parsed, keys) {
-  if (!parsed || typeof parsed !== 'object') return null;
-  for (const key of keys) {
-    const value = parsed[key];
-    if (Array.isArray(value)) return value;
-    if (typeof value === 'string' && value.trim()) return [value.trim()];
-  }
-  return null;
-}
+function buildPrompt(format, piece) {
+  const sourceTitle = piece.title ? `Title: ${piece.title}\n` : '';
+  const sourceBody = piece.body ? `Body:\n${piece.body}\n` : '';
+  const constraints = {
+    linkedin_carousel:
+      'Return ONLY JSON. Shape: {"slides":["Slide 1 text","Slide 2 text", "..."]}. Make it a strong LinkedIn carousel with a hook slide, concise progression, and a CTA slide.',
+    short_clips:
+      'Return ONLY JSON. Shape: {"clips":["Clip 1 text","Clip 2 text", "..."]}. Each clip should be a short, self-contained social clip script or caption with punchy framing.',
+    email_segments:
+      'Return ONLY JSON. Shape: {"segments":["Segment 1 text","Segment 2 text", "..."]}. Write email-ready segments that can be stitched into a sequence or newsletter blocks.',
+  };
 
-function coerceArray(value) {
-  if (Array.isArray(value)) return value.filter((item) => item != null).map((item) => String(item).trim()).filter(Boolean);
-  if (typeof value === 'string') return value.split(/\n{2,}|\r?\n(?=\s*[-*•\d])/).map((s) => s.trim()).filter(Boolean);
-  if (value == null) return [];
-  return [String(value).trim()].filter(Boolean);
-}
-
-function parseLinkedInCarousel(text) {
-  const parsed = safeJsonParse(text);
-  const slides =
-    extractArrayLike(parsed, ['slides', 'carousel', 'linkedin_carousel', 'cards']) ??
-    coerceArray(text)
-      .map((line) => line.replace(/^\s*(?:slide\s*\d+[:\-]?\s*|[-*•]\s*)/i, '').trim())
-      .filter(Boolean);
-
-  return slides;
-}
-
-function parseShortClips(text) {
-  const parsed = safeJsonParse(text);
-  const clips =
-    extractArrayLike(parsed, ['clips', 'short_clips', 'shorts', 'segments']) ??
-    coerceArray(text)
-      .map((line) => line.replace(/^\s*(?:clip\s*\d+[:\-]?\s*|[-*•]\s*)/i, '').trim())
-      .filter(Boolean);
-
-  return clips;
-}
-
-function parseEmailSegments(text) {
-  const parsed = safeJsonParse(text);
-  const segments =
-    extractArrayLike(parsed, ['segments', 'email_segments', 'emails', 'newsletter_segments']) ??
-    coerceArray(text)
-      .map((line) => line.replace(/^\s*(?:segment\s*\d+[:\-]?\s*|[-*•]\s*)/i, '').trim())
-      .filter(Boolean);
-
-  return segments;
-}
-
-function buildPrompt(format, sourceText) {
-  const base = `Repurpose the following source piece into ${format}. Return concise, production-ready output for that format only.
-
-SOURCE PIECE:
-${sourceText}`;
-
-  if (format === 'linkedin_carousel') {
-    return `${base}
-
-Requirements:
-- Return 5 to 10 slides.
-- Each slide should be a short, punchy line or paragraph.
-- Optimize for a LinkedIn carousel.
-- Prefer strong hooks, clear progression, and a closing CTA.
-- Output as JSON with a "slides" array or as plain slides separated clearly.`;
-  }
-
-  if (format === 'short_clips') {
-    return `${base}
-
-Requirements:
-- Return 3 to 8 short clip ideas.
-- Each clip should include a tight hook and a single core idea.
-- Optimize for repurposing into short-form video clips.
-- Output as JSON with a "clips" array or as plain clip entries clearly separated.`;
-  }
-
-  if (format === 'email_segments') {
-    return `${base}
-
-Requirements:
-- Return 3 to 6 email segments.
-- Each segment should be a useful standalone email angle, section, or excerpt.
-- Optimize for email repurposing.
-- Output as JSON with a "segments" array or as plain segments clearly separated.`;
-  }
-
-  return base;
+  return [
+    'You are repurposing a single source piece into the requested format.',
+    `Format: ${format}`,
+    constraints[format],
+    'Preserve the source meaning; do not add unsupported claims.',
+    'If the source is sparse, use only what is supported and keep output concise.',
+    '',
+    sourceTitle + sourceBody,
+  ].join('\n');
 }
 
 export async function repurposePiece({ callCouncilMember, piece, formats = ['linkedin_carousel', 'short_clips', 'email_segments'] } = {}) {
   try {
     if (typeof callCouncilMember !== 'function') {
-      return { ok: false, error: 'callCouncilMember is required' };
+      return { ok: false, error: 'callCouncilMember must be a function' };
     }
 
-    const requestedFormats = normalizeFormats(formats);
-    const sourceText = toPlainText(piece);
+    const source = normalizeSourcePiece(piece);
+    const requested = Array.isArray(formats) ? formats : [formats];
+    const validFormats = [...new Set(requested)].filter((f) => KNOWN_FORMATS.has(f));
 
     const outputs = {};
-
-    for (const format of requestedFormats) {
-      const prompt = buildPrompt(format, sourceText);
-      const raw = await callCouncilMember('content_repurposer', prompt, { format });
-
-      if (format === 'linkedin_carousel') {
-        outputs.linkedin_carousel = parseLinkedInCarousel(raw);
-      } else if (format === 'short_clips') {
-        outputs.short_clips = parseShortClips(raw);
-      } else if (format === 'email_segments') {
-        outputs.email_segments = parseEmailSegments(raw);
+    for (const format of validFormats) {
+      try {
+        const prompt = buildPrompt(format, source);
+        const raw = await callCouncilMember('content_repurerposer', prompt, { format });
+        const parsed = safeJsonParse(raw);
+        const items = ensureArrayOutput(parsed, format);
+        outputs[format] = items.length > 0 ? items : [toText(raw).trim()].filter(Boolean);
+      } catch (error) {
+        return {
+          ok: false,
+          error: `Failed to generate ${format}: ${error instanceof Error ? error.message : String(error)}`,
+        };
       }
     }
 
     return { ok: true, outputs };
   } catch (error) {
-    return {
-      ok: false,
-      error: error instanceof Error ? error.message : String(error),
-    };
+    return { ok: false, error: error instanceof Error ? error.message : String(error) };
   }
 }
 
