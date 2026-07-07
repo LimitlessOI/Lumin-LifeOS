@@ -79,6 +79,7 @@ import { createCanonicalSystemRoutes } from "../routes/canonical-system-routes.j
 import { createTsosEfficiencyRoutes } from "../routes/tsos-efficiency-routes.js";
 import { createLifeOSBuilderOSCommandControlRoutes } from "../routes/lifeos-builderos-command-control-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
+import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
 import { createDeliberationGovernanceRoutes } from "../routes/deliberation-governance-routes.js";
 import rateLimit from "express-rate-limit";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
@@ -242,6 +243,8 @@ export async function registerRuntimeRoutes(app, deps) {
       createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember })
     );
     logger.info("✅ [BUILDEROS-C2] Founder-builder routes mounted");
+
+    app.use(createFactoryMountRoutes({ requireKey, logger }));
 
     return {
       tcCoordinator: null,
@@ -868,6 +871,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [TSOS-EFFICIENCY] Routes mounted at /api/v1/lifeos/builderos/tsos-efficiency');
   app.use(createMemoryStatusRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-STATUS] Routes mounted at /api/v1/lifeos/command-center/memory/status');
+
+  app.use(createFactoryMountRoutes({ requireKey, logger }));
 
   return {
     tcCoordinator,
