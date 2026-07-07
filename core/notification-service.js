@@ -55,8 +55,7 @@ export class NotificationService {
   _resolveSmtpConnection() {
     const hostname = process.env.SMTP_HOST || 'smtp.gmail.com';
     let port = Number(process.env.SMTP_PORT || 465);
-    const onRailway = !!(process.env.RAILWAY_ENVIRONMENT_ID || process.env.RAILWAY_PUBLIC_DOMAIN);
-    if (onRailway && port === 587) port = 465;
+    if (hostname.includes('gmail.com') && port === 587) port = 465;
 
     let host = hostname;
     try {
