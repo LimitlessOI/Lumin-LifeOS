@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T11:18:50.572Z",
+  "generated_at": "2026-07-07T11:23:39.666Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11228,
+  "file_count": 11229,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35125,6 +35125,13 @@
       "bytes": 5622,
       "mtime": "2026-07-07T10:01:42.770Z",
       "indexed_at": "2026-07-07T11:18:36.284Z"
+    },
+    {
+      "path": "db/migrations/20260709_marketing_phase2_calendar.sql",
+      "synopsis": "MarketingOS Phase 2 schema migration for content atoms, brand voice profiles, and calendar slots",
+      "bytes": 1691,
+      "mtime": "2026-07-07T11:23:39.666Z",
+      "indexed_at": "2026-07-07T11:23:39.666Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
