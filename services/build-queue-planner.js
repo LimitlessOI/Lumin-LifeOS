@@ -18,6 +18,22 @@ const BACKLOG_HEADING = /^#{1,6}\s*(build plan|remaining|not (yet )?done|to ?do|
 const HEADING = /^#{1,6}\s+/;
 const BULLET = /^\s*(?:[-*+]|\d+[.)])\s+(.*\S)\s*$/;
 
+// The section that holds the real phased roadmap. Phases are only extracted while
+// inside it, so unrelated "### Phase N Tables" subsections in a technical-spec
+// section are NOT mistaken for buildable phases.
+const PHASE_SECTION_HEADING = /^#{1,3}\s*(?:\d+\.\s*)?(?:[\w-]+\s+)*?(phased build plan|build plan|roadmap|phased? roadmap)\b/i;
+// A documented product phase inside that section: "### Phase 2 — Social Content
+// Calendar". Require a title separator (— : -) so bare "Phase N Tables" headings
+// (SQL spec subsections) are not treated as buildable phases.
+const PHASE_HEADING = /^(#{2,6})\s*Phase\s+(\d+[a-z]?)\s*[—:–-]\s+(.+)$/i;
+// A phase whose body/heading carries any of these is NOT auto-buildable — either
+// it depends on unverified/blocked infra (never build on unverified infra) or it
+// is a manual/non-code sprint. Deterministic gate; keeps the loop from queuing
+// steps it structurally cannot finish.
+const PHASE_NOT_BUILDABLE = /\b(UNVERIFIED|BLOCKED|requires app review|manual revenue|manual\b)/i;
+// Heading-level "already shipped" markers — skip so we don't re-queue done phases.
+const PHASE_DONE = /(✅|~~|\bdone\b|\bshipped\b|\bcomplete[d]?\b)/i;
+
 /**
  * Pull candidate remaining-work bullet lines from a PRODUCT_HOME.md body. Reads
  * bullets that sit under a backlog-style heading until the next heading. Returns
@@ -45,7 +61,70 @@ export function extractBacklog(homeText) {
     seen.add(key);
     out.push(text);
   }
+  // Also fold in any documented, buildable PHASE specs (sub-headings + prose),
+  // de-duplicated against bullet backlog. This is what lets the loop plan the
+  // NEXT documented phase of a product (e.g. a "### Phase 2 — …" spec), not just
+  // flat backlog bullets — the core "adds more to itself" lever.
+  for (const item of extractPhaseSpecs(homeText)) {
+    const key = item.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
   return out;
+}
+
+/**
+ * Extract documented, AUTO-BUILDABLE phase specs from a PRODUCT_HOME body. Each
+ * "### Phase N — Title" sub-heading plus its prose body becomes ONE rich backlog
+ * item the planner can decompose into single-file steps. Deterministic + purely
+ * extractive (never fabricates). A phase is SKIPPED when it is:
+ *   - already shipped (heading carries a done/✅ marker), or
+ *   - not buildable on current infra (body/heading carries UNVERIFIED / BLOCKED /
+ *     "requires app review" / manual-sprint markers) — never build on unverified
+ *     infra, which is exactly the class of false-done that stalled the loop.
+ * Returns condensed single-line strings: "Phase N — Title: <condensed body>".
+ */
+export function extractPhaseSpecs(homeText) {
+  if (typeof homeText !== 'string' || !homeText.trim()) return [];
+  const lines = homeText.split(/\r?\n/);
+  const specs = [];
+  let current = null; // { num, title, level, body: [] }
+  let sectionLevel = 0; // heading level of the phased-roadmap section (0 = outside)
+  const flush = () => {
+    if (!current) return;
+    const heading = `Phase ${current.num}${current.title ? ` — ${current.title}` : ''}`;
+    const body = current.body.join(' ').replace(/\s+/g, ' ').trim();
+    const combined = `${heading} ${body}`;
+    if (!PHASE_DONE.test(heading) && !PHASE_NOT_BUILDABLE.test(combined) && body.length >= 12) {
+      specs.push(`${heading}: ${body.slice(0, 400)}`.trim());
+    }
+    current = null;
+  };
+  for (const line of lines) {
+    const hm = line.match(/^(#{1,6})\s+/);
+    // Enter/exit the phased-roadmap section so unrelated "Phase N" headings in a
+    // technical-spec section are never treated as buildable phases.
+    if (hm) {
+      const lvl = hm[1].length;
+      if (PHASE_SECTION_HEADING.test(line)) { flush(); sectionLevel = lvl; continue; }
+      if (sectionLevel && lvl <= sectionLevel) { flush(); sectionLevel = 0; }
+    }
+    if (!sectionLevel) continue;
+    const pm = line.match(PHASE_HEADING);
+    if (pm) {
+      flush();
+      current = { num: pm[2], title: (pm[3] || '').replace(/[*_`]/g, '').trim(), level: pm[1].length, body: [] };
+      continue;
+    }
+    if (!current) continue;
+    // A heading of same-or-higher level ends the phase block.
+    if (hm && hm[1].length <= current.level) { flush(); continue; }
+    const stripped = line.replace(/^\s*(?:[-*+]|\d+[.)])\s+/, '').replace(/[*_`>#]/g, '').trim();
+    if (stripped) current.body.push(stripped);
+  }
+  flush();
+  return specs;
 }
 
 /**
@@ -133,19 +212,25 @@ export function validatePlannedQueue(queue) {
   return { ok: errors.length === 0, errors };
 }
 
-function buildPrompt(productId, backlog, verifyScript) {
+function buildPrompt(productId, backlog, verifyScript, builtFiles = []) {
   return `You are a build planner for an autonomous software factory. Turn the REAL, already-documented remaining work for product "${productId}" into an ordered JSON build queue.
 
 DOCUMENTED REMAINING WORK (do NOT invent anything beyond these items — each step must map to one of them):
 ${backlog.map((b, i) => `${i + 1}. ${b}`).join('\n')}
-
+${builtFiles.length ? `\nALREADY BUILT — these files/features are DONE. Do NOT propose them or re-create their behaviour:\n${builtFiles.map((f) => `- ${f}`).join('\n')}\n` : ''}
 Rules:
 - Output ONLY minified JSON, no prose, no markdown fences.
 - Shape: {"steps":[{"id","target_file","task","spec","depends_on":[],"founder_gated":bool}]}
-- Each step edits exactly ONE concrete repo file (target_file). Prefer existing conventional paths (services/*.js, routes/*.js, public/overlay/*.html, scripts/*.mjs).
+- Each step edits exactly ONE concrete repo file (target_file). Prefer existing conventional paths (services/*.js, routes/*.js, public/overlay/*.html, scripts/*.mjs, db/migrations/*.sql).
 - "task" is a short imperative; "spec" is the acceptance/definition-of-done for that file.
+- COMPOSITION (so the generated code actually runs and mounts — non-negotiable):
+  - Each file must be SELF-CONTAINED: import ONLY node builtins, packages already installed, or sibling files created by an EARLIER step in this same queue (wire those with depends_on). NEVER import a package or file that does not exist.
+  - A route module must export a register function (e.g. registerXRoutes(app, deps)) and be added to config/auto-registered-product-modules.json — NEVER instruct editing server.js or any boot file.
+  - SQL migrations: CREATE TABLE IF NOT EXISTS only; id/created_at/updated_at are DB-DEFAULTED (gen_random_uuid()/now()) — do NOT import uuid or generate ids in JS. Never DROP/ALTER a table that holds data.
+  - Server modules must have ZERO top-level browser globals (window/document/fetch); client JS lives only inside returned HTML strings.
+  - AI must be called via the injected callCouncilMember(role, prompt) dep — never import an AI SDK directly.
 - Set founder_gated:true for any customer-facing UI or brand/design surface.
-- Use depends_on (by step id) only when one step truly requires another first.
+- Use depends_on (by step id) only when one step truly requires another first; order steps so schema → service → routes → UI.
 - At most ${MAX_STEPS} steps. Ground every step in the documented work above; if an item is too vague to build, omit it rather than guessing.
 ${verifyScript ? `- The product's verify command is: ${verifyScript}` : ''}`;
 }
@@ -192,9 +277,16 @@ export async function planBuildQueue({
     return null;
   }
 
+  const existingStepsPre = Array.isArray(existingQueue?.steps) ? existingQueue.steps : [];
+  const doneFiles = [...new Set(
+    existingStepsPre
+      .filter((s) => s.status === STEP_STATUS.DONE && s.target_file)
+      .map((s) => String(s.target_file)),
+  )];
+
   let raw;
   try {
-    raw = await callModel(model, buildPrompt(productId, backlog, verifyScript), {
+    raw = await callModel(model, buildPrompt(productId, backlog, verifyScript, doneFiles), {
       maxOutputTokens: 2000,
       allowModelDowngrade: false,
     });
@@ -210,6 +302,10 @@ export async function planBuildQueue({
   const existingSteps = Array.isArray(existingQueue?.steps) ? existingQueue.steps : [];
   const existingIds = new Set(existingSteps.map((s) => s.id));
   const existingFingerprints = new Set(existingSteps.map((s) => `${s.target_file}::${s.task}`.toLowerCase()));
+  // Never re-queue a file that is already DONE — even if the model proposes a
+  // different task for it (guards a completed phase from being rebuilt when its
+  // spec is still present in the documented backlog).
+  const doneFileSet = new Set(doneFiles.map((f) => f.toLowerCase()));
 
   const added = [];
   for (let i = 0; i < proposed.length && added.length < maxSteps; i++) {
@@ -217,6 +313,7 @@ export async function planBuildQueue({
     if (!step) continue;
     const fp = `${step.target_file}::${step.task}`.toLowerCase();
     if (existingIds.has(step.id) || existingFingerprints.has(fp)) continue;
+    if (doneFileSet.has(String(step.target_file).toLowerCase())) continue;
     // ensure id uniqueness after slugify collisions
     let uid = step.id;
     let n = 2;
