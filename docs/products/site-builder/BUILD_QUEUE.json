@@ -39,12 +39,12 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T04:21:09.706Z",
+      "last_attempt_at": "2026-07-07T04:21:19.761Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 4,
-      "revived_at": "2026-07-07T04:21:09.706Z",
+      "revived_at": "2026-07-07T04:21:19.761Z",
       "commit_sha": "8d71ee09344d9be598bd3fb8e2aa7058e409006c",
-      "completed_at": "2026-07-07T04:21:10.968Z",
+      "completed_at": "2026-07-07T04:21:21.414Z",
       "deploy_proven": true
     },
     {
