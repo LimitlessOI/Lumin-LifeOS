@@ -118,10 +118,10 @@
       "attempts": 1,
       "max_output_tokens": 12000,
       "revive_count": 0,
-      "last_attempt_at": "2026-07-07T12:29:39.973Z",
+      "last_attempt_at": "2026-07-07T12:29:42.065Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": "38fac5148fd2bbf96dc1f4b516084f7c5aa7f0e2",
-      "completed_at": "2026-07-07T12:29:41.097Z"
+      "completed_at": "2026-07-07T12:29:42.757Z"
     }
   ]
 }
