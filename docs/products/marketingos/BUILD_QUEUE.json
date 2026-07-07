@@ -126,7 +126,7 @@
     },
     {
       "id": "smos-title-universe",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-title-universe.js",
       "task": "SocialMediaOS Content Intelligence — '50-title universe' (docs/products/marketingos/socialmediaos/PRODUCT_HOME.md Priority Idea #4: generate and score 50 title variations, pick top 5). SELF-CONTAINED ESM module. Export async generateTitleUniverse({ callCouncilMember, topic, transcript, count = 50 }). Use deps.callCouncilMember (async (role, prompt) => string) as the ONLY AI hook — do NOT import any AI SDK directly. Prompt the model to produce `count` distinct title variations for the topic, then score each 0-100 on curiosity/clarity/specificity and return { ok:true, titles:[{ text, score, rationale }], top5 }. Parse the model's text defensively (it may wrap JSON in prose — extract the JSON array/object; on parse failure return { ok:false, reason:'unparseable_model_output', raw }).",
       "spec": "Single self-contained ESM module. NO DB, NO network except via the injected callCouncilMember. Import ONLY node: builtins. Guard everything in try/catch → return structured { ok:false, error } (never throw raw). Deterministic shape: always return an object with an `ok` boolean. Named export generateTitleUniverse (+ default export of the same). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -134,9 +134,12 @@
         "mos-phase2-ui"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 6000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "83cf5b5020955300c5e4da63a4279754218960d2",
+      "last_attempt_at": "2026-07-07T16:59:52.410Z",
+      "completed_at": "2026-07-07T16:59:53.015Z"
     },
     {
       "id": "smos-script-scorer",
