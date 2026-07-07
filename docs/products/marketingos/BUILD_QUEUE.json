@@ -172,8 +172,8 @@
       "max_output_tokens": 6000,
       "revive_count": 0,
       "commit_sha": "2f54070e2f9a86e00923ab1e07f222ea13964e8f",
-      "last_attempt_at": "2026-07-07T17:26:45.842Z",
-      "completed_at": "2026-07-07T17:26:46.656Z"
+      "last_attempt_at": "2026-07-07T17:28:13.121Z",
+      "completed_at": "2026-07-07T17:28:14.310Z"
     },
     {
       "id": "smos-repurpose",
