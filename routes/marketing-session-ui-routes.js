@@ -53,6 +53,42 @@ function renderPage(title, bodyHtml, clientScript = '') {
         ${bodyHtml}
     </div>
     <script>
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+        function getMarketingStoredValue(key) {
+            try { return localStorage.getItem(key) || ''; } catch { return ''; }
+        }
+        function marketingOwnerId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('owner_id') || getMarketingStoredValue('marketing_owner_id') || '';
+        }
+        function marketingApiUrl(path) {
+            const ownerId = marketingOwnerId();
+            if (!ownerId) return path;
+            return path + (path.includes('?') ? '&' : '?') + 'owner_id=' + encodeURIComponent(ownerId);
+        }
+        function marketingJsonHeaders() {
+            const headers = { 'Content-Type': 'application/json' };
+            const params = new URLSearchParams(window.location.search);
+            const commandKey = params.get('key')
+                || getMarketingStoredValue('COMMAND_CENTER_KEY')
+                || getMarketingStoredValue('commandKey')
+                || getMarketingStoredValue('lifeos_command_key');
+            const token = getMarketingStoredValue('lifeos_jwt') || getMarketingStoredValue('lifeosToken');
+            if (commandKey) headers['x-command-key'] = commandKey;
+            else if (token) headers.Authorization = 'Bearer ' + token;
+            return headers;
+        }
+        function withMarketingOwner(body) {
+            const ownerId = marketingOwnerId();
+            return ownerId ? { ...body, owner_id: ownerId } : body;
+        }
         ${clientScript}
     </script>
 </body>
@@ -87,9 +123,9 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 <div class="form-group">
                     <label for="sessionType">Session Type:</label>
                     <select id="sessionType" name="sessionType" required>
-                        <option value="social_media">Social Media Content</option>
-                        <option value="blog_post">Blog Post</option>
-                        <option value="email_campaign">Email Campaign</option>
+                        <option value="coaching">Coaching Session</option>
+                        <option value="interview">Interview</option>
+                        <option value="freestyle">Freestyle</option>
                     </select>
                 </div>
                 <button type="submit">Proceed to Session</button>
@@ -115,15 +151,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
                 try {
                     // Step 1: Post consent
-                    const consentResponse = await fetch('/api/v1/marketing/consent', {
+                    const consentResponse = await fetch(marketingApiUrl('/api/v1/marketing/consent'), {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            consent_type: 'marketing_session',
+                        headers: marketingJsonHeaders(),
+                        body: JSON.stringify(withMarketingOwner({
+                            consent_type: 'session_recording',
                             consent_text: 'I agree to allow MarketingOS to process my input and generate marketing content based on the provided information. I understand that I am responsible for reviewing and approving all generated content before publication.',
                             consented_at: new Date().toISOString(),
                             data: { session_type: sessionType }
-                        })
+                        }))
                     });
                     const consentData = await consentResponse.json();
 
@@ -132,15 +168,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     }
 
                     // Step 2: Create session
-                    const sessionResponse = await fetch('/api/v1/marketing/sessions', {
+                    const sessionResponse = await fetch(marketingApiUrl('/api/v1/marketing/sessions'), {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
+                        headers: marketingJsonHeaders(),
+                        body: JSON.stringify(withMarketingOwner({
                             consent_record_id: consentData.id,
                             session_type: sessionType,
                             input_mode: 'text', // Assuming text input for now
                             status: 'initialized'
-                        })
+                        }))
                     });
                     const sessionData = await sessionResponse.json();
 
@@ -148,10 +184,11 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                         throw new Error(sessionData.error || 'Failed to start session.');
                     }
 
-                    window.location.href = \`/marketing/session/\${sessionData.id}\`;
+                    const ownerId = marketingOwnerId();
+                    window.location.href = '/marketing/session/' + encodeURIComponent(sessionData.id) + (ownerId ? '?owner_id=' + encodeURIComponent(ownerId) : '');
 
                 } catch (error) {
-                    logger.error('Error in new session setup:', error);
+                    console.error('Error in new session setup:', error);
                     messageDiv.innerText = 'Error: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
@@ -164,6 +201,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     // GET /marketing/session/:id (coaching conversation, text input)
     app.get('/marketing/session/:id', (req, res) => {
         const sessionId = req.params.id;
+        const ownerQuery = req.query.owner_id ? `?owner_id=${encodeURIComponent(req.query.owner_id)}` : '';
         const body = `
             <h1>Marketing Coaching Session: ${escapeHtml(sessionId)}</h1>
             <p>Tell me about your business, your goals, and what kind of content you'd like to create.</p>
@@ -178,8 +216,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 <button type="submit">Send to Coach</button>
             </form>
             <div id="message" class="message" style="display:none;"></div>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/content">Review & Approve Content</a></p>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/export">Export Content Pack</a></p>
+            <p><a href="/marketing/session/${escapeHtml(sessionId)}/content${ownerQuery}">Review & Approve Content</a></p>
+            <p><a href="/marketing/session/${escapeHtml(sessionId)}/export${ownerQuery}">Export Content Pack</a></p>
         `;
         const clientScript = `
             const sessionId = "${escapeHtml(sessionId)}";
@@ -188,14 +226,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function fetchSessionDetails() {
                 try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`);
-                    const session = await response.json();
+                    const response = await fetch(marketingApiUrl(\`/api/v1/marketing/sessions/\${sessionId}\`), { headers: marketingJsonHeaders() });
+                    const data = await response.json();
                     if (!response.ok) {
-                        throw new Error(session.error || 'Failed to fetch session details.');
+                        throw new Error(data.error || 'Failed to fetch session details.');
                     }
-                    renderConversation(session.coach_messages_json || []);
+                    renderConversation(data.session?.coach_messages_json || []);
                 } catch (error) {
-                    logger.error('Error fetching session details:', error);
+                    console.error('Error fetching session details:', error);
                     messageDiv.innerText = 'Error loading conversation: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
@@ -236,14 +274,15 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
 
                 // Add user message to UI immediately
-                renderConversation([...(await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`).then(r => r.json())).coach_messages_json || [], { role: 'user', content: userInput }]);
+                const existingData = await fetch(marketingApiUrl(\`/api/v1/marketing/sessions/\${sessionId}\`), { headers: marketingJsonHeaders() }).then(r => r.json());
+                renderConversation([...(existingData.session?.coach_messages_json || []), { role: 'user', content: userInput }]);
                 document.getElementById('userInput').value = ''; // Clear input
 
                 try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/coach\`, {
+                    const response = await fetch(marketingApiUrl(\`/api/v1/marketing/sessions/\${sessionId}/coach\`), {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: userInput })
+                        headers: marketingJsonHeaders(),
+                        body: JSON.stringify(withMarketingOwner({ message: userInput }))
                     });
                     const data = await response.json();
 
@@ -255,7 +294,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     fetchSessionDetails();
 
                 } catch (error) {
-                    logger.error('Error in coaching session:', error);
+                    console.error('Error in coaching session:', error);
                     messageDiv.innerText = 'Error: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
@@ -270,6 +309,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     // GET /marketing/session/:id/content (review + approve generated pieces)
     app.get('/marketing/session/:id/content', (req, res) => {
         const sessionId = req.params.id;
+        const ownerQuery = req.query.owner_id ? `?owner_id=${encodeURIComponent(req.query.owner_id)}` : '';
         const body = `
             <h1>Review & Approve Content for Session: ${escapeHtml(sessionId)}</h1>
             <p>Review the generated content pieces below. Approve the ones you want to keep, or reject those that need refinement.</p>
@@ -277,8 +317,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 <p>Loading content...</p>
             </div>
             <div id="message" class="message" style="display:none;"></div>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}">Back to Coaching Session</a></p>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/export"><button>Proceed to Export</button></a></p>
+            <p><a href="/marketing/session/${escapeHtml(sessionId)}${ownerQuery}">Back to Coaching Session</a></p>
+            <p><a href="/marketing/session/${escapeHtml(sessionId)}/export${ownerQuery}"><button>Proceed to Export</button></a></p>
         `;
         const clientScript = `
             const sessionId = "${escapeHtml(sessionId)}";
@@ -287,13 +327,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function fetchContentPieces() {
                 try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/content\`);
-                    const contentPieces = await response.json();
+                    const response = await fetch(marketingApiUrl(\`/api/v1/marketing/sessions/\${sessionId}/content\`), { headers: marketingJsonHeaders() });
+                    const data = await response.json();
 
                     if (!response.ok) {
-                        throw new Error(contentPieces.error || 'Failed to fetch content pieces.');
+                        throw new Error(data.error || 'Failed to fetch content pieces.');
                     }
 
+                    const contentPieces = data.pieces || [];
                     if (contentPieces.length === 0) {
                         contentListDiv.innerHTML = '<p>No content pieces generated yet. Please continue your coaching session.</p>';
                         return;
@@ -308,26 +349,26 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                             <p>\${escapeHtml(piece.content_text || piece.body || 'No content text available.')}</p>
                             \${piece.url ? \`<p><a href="\${escapeHtml(piece.url)}" target="_blank">View Source/Draft</a></p>\` : ''}
                             <div class="actions">
-                                <button onclick="updateContentStatus('\${escapeHtml(piece.id)}', 'approved')" \${piece.status === 'approved' ? 'disabled' : ''}>Approve</button>
-                                <button onclick="updateContentStatus('\${escapeHtml(piece.id)}', 'rejected')" \${piece.status === 'rejected' ? 'disabled' : ''}>Reject</button>
+                                <button onclick="updateContentStatus('\${escapeHtml(piece.id)}', 'approve')" \${piece.status === 'approved' ? 'disabled' : ''}>Approve</button>
+                                <button onclick="updateContentStatus('\${escapeHtml(piece.id)}', 'reject')" \${piece.status === 'rejected' ? 'disabled' : ''}>Reject</button>
                             </div>
                         </div>
                     \`).join('');
 
                 } catch (error) {
-                    logger.error('Error fetching content pieces:', error);
+                    console.error('Error fetching content pieces:', error);
                     contentListDiv.innerHTML = '<p class="message error">Error loading content: ' + escapeHtml(error.message) + '</p>';
                 }
             }
 
-            async function updateContentStatus(contentId, newStatus) {
+            async function updateContentStatus(contentId, action) {
                 messageDiv.style.display = 'none';
                 messageDiv.className = 'message';
                 try {
-                    const response = await fetch(\`/api/v1/marketing/content/\${contentId}\`, {
+                    const response = await fetch(marketingApiUrl(\`/api/v1/marketing/content/\${contentId}\`), {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: newStatus })
+                        headers: marketingJsonHeaders(),
+                        body: JSON.stringify(withMarketingOwner({ action }))
                     });
                     const data = await response.json();
 
@@ -335,6 +376,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                         throw new Error(data.error || 'Failed to update content status.');
                     }
 
+                    const newStatus = data.piece?.status || (action === 'approve' ? 'approved' : 'rejected');
                     messageDiv.innerText = \`Content \${escapeHtml(contentId)} status updated to \${escapeHtml(newStatus)}.\`;
                     messageDiv.className = 'message success';
                     messageDiv.style.display = 'block';
@@ -350,7 +392,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     }
 
                 } catch (error) {
-                    logger.error('Error updating content status:', error);
+                    console.error('Error updating content status:', error);
                     messageDiv.innerText = 'Error: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
@@ -365,12 +407,13 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     // GET /marketing/session/:id/export (download the content pack)
     app.get('/marketing/session/:id/export', (req, res) => {
         const sessionId = req.params.id;
+        const ownerQuery = req.query.owner_id ? `?owner_id=${encodeURIComponent(req.query.owner_id)}` : '';
         const body = `
             <h1>Export Content Pack for Session: ${escapeHtml(sessionId)}</h1>
             <p>Your content is ready to be exported. Click the button below to download your content pack.</p>
             <button id="downloadButton">Download Content Pack</button>
             <div id="message" class="message" style="display:none;"></div>
-            <p><a href="/marketing/session/${escapeHtml(sessionId)}/content">Back to Content Review</a></p>
+            <p><a href="/marketing/session/${escapeHtml(sessionId)}/content${ownerQuery}">Back to Content Review</a></p>
         `;
         const clientScript = `
             const sessionId = "${escapeHtml(sessionId)}";
@@ -381,14 +424,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 messageDiv.className = 'message';
                 try {
                     // Redirect directly to the API endpoint, which should trigger a file download
-                    window.location.href = \`/api/v1/marketing/sessions/\${sessionId}/export\`;
+                    window.location.href = marketingApiUrl(\`/api/v1/marketing/sessions/\${sessionId}/export\`);
                     // Note: The download might not show a direct success message here
                     // as the browser handles the file download.
                     messageDiv.innerText = 'Download initiated. Please check your downloads folder.';
                     messageDiv.className = 'message success';
                     messageDiv.style.display = 'block';
                 } catch (error) {
-                    logger.error('Error initiating download:', error);
+                    console.error('Error initiating download:', error);
                     messageDiv.innerText = 'Error initiating download: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
