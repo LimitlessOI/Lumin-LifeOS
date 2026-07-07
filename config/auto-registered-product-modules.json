@@ -1,0 +1,6 @@
+{
+  "schema": "auto_registered_product_modules_v1",
+  "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file — no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
+  "updated_at": "2026-07-07",
+  "modules": []
+}

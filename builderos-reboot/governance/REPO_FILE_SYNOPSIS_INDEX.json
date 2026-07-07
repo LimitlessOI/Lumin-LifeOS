@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T08:55:50.599Z",
+  "generated_at": "2026-07-07T09:28:23.927Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11219,
+  "file_count": 11222,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30121,6 +30121,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "config/auto-registered-product-modules.json",
+      "synopsis": "Configuration — Auto Registered Product Modules.",
+      "bytes": 496,
+      "mtime": "2026-07-07T09:19:04.985Z",
+      "indexed_at": "2026-07-07T09:27:46.409Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "config/blockchain-config.yaml",
       "synopsis": "Configuration — Blockchain Config.",
       "bytes": 379,
@@ -38430,9 +38438,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 164182,
-      "mtime": "2026-07-07T08:32:34.897Z",
-      "indexed_at": "2026-07-07T08:33:20.418Z"
+      "bytes": 165632,
+      "mtime": "2026-07-07T09:27:29.105Z",
+      "indexed_at": "2026-07-07T09:28:23.927Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38866,9 +38874,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 592430,
-      "mtime": "2026-07-07T05:49:20.345Z",
-      "indexed_at": "2026-07-07T08:32:45.782Z"
+      "bytes": 592943,
+      "mtime": "2026-07-07T09:23:45.409Z",
+      "indexed_at": "2026-07-07T09:27:46.409Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -61535,9 +61543,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29546,
-      "mtime": "2026-07-06T04:57:07.100Z",
-      "indexed_at": "2026-07-07T08:32:45.782Z",
+      "bytes": 29590,
+      "mtime": "2026-07-07T09:22:53.909Z",
+      "indexed_at": "2026-07-07T09:27:46.409Z",
       "synopsis_index_only": true
     },
     {
@@ -85568,6 +85576,16 @@
       "indexed_at": "2026-07-07T08:32:45.782Z"
     },
     {
+      "path": "startup/auto-register-product-modules.js",
+      "synopsis": "Convention-based auto-registration for product modules + a boot",
+      "bytes": 5083,
+      "mtime": "2026-07-07T09:21:36.585Z",
+      "indexed_at": "2026-07-07T09:27:46.409Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
       "bytes": 20755,
@@ -85628,9 +85646,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 4806,
-      "mtime": "2026-07-06T19:53:30.071Z",
-      "indexed_at": "2026-07-07T08:32:45.782Z",
+      "bytes": 6047,
+      "mtime": "2026-07-07T09:21:16.621Z",
+      "indexed_at": "2026-07-07T09:27:46.409Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85922,6 +85940,16 @@
       "bytes": 2471,
       "mtime": "2026-07-03T13:23:32.613Z",
       "indexed_at": "2026-07-07T08:32:45.782Z"
+    },
+    {
+      "path": "tests/auto-register-product-modules.test.js",
+      "synopsis": "Auto-registration + module-health manifest guard.",
+      "bytes": 3826,
+      "mtime": "2026-07-07T09:21:57.053Z",
+      "indexed_at": "2026-07-07T09:27:46.409Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/bp-priority-completion.test.js",
