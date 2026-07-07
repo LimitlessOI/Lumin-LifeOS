@@ -234,6 +234,30 @@ function spawnAsync(cmd, args, options = {}) {
   });
 }
 
+export function targetFileExists(targetFile) {
+  if (!targetFile) return false;
+  try {
+    return fs.statSync(path.join(ROOT, targetFile)).size > 0;
+  } catch {
+    return false;
+  }
+}
+
+export async function lastCommitShaForFile(targetFile) {
+  // The commit that LAST modified target_file is the true "built" SHA for a
+  // no-op rebuild: it holds the file's current content and is a stable ancestor
+  // of whatever the running deploy serves, so deploy-proof containment passes
+  // reliably. (HEAD would be wrong — later queue-status commits keep advancing
+  // HEAD past the served SHA, so the deploy could never be proven to contain it.)
+  try {
+    const r = await spawnAsync('git', ['log', '-1', '--format=%H', '--', targetFile], { cwd: ROOT, timeout: 10_000 });
+    const sha = String(r.stdout || '').trim();
+    return /^[0-9a-f]{40}$/i.test(sha) ? sha : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Bounded-concurrency map: run `fn` over `items` with at most `limit` in flight
  * at once, preserving input order in the results. This is the primitive that
@@ -603,6 +627,22 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       const commit_sha = b.commit_sha || b.sha || b.commit || (b.result && b.result.commit_sha) || null;
       if (build.ok && commit_sha) {
         return { ok: true, commit_sha, error: null, repair_attempts: attempt - 1 };
+      }
+      // Idempotent completion: the builder ran cleanly but produced NO new commit
+      // because target_file already exists with the desired content (a no-op
+      // build — the artifact was shipped by an earlier attempt/session). That is
+      // a legitimately-already-built step, NOT a failure. Without this, a step
+      // whose file is already correct can never finish: every rebuild is a no-op,
+      // yields no SHA, exhausts maxAttempts, and re-blocks forever. Complete it
+      // honestly using the file's last-touching commit as the built SHA so verify
+      // + deploy-proof still gate it (no false green — the file must exist AND be
+      // served live before the step is marked done).
+      if (build.ok && !commit_sha && targetFileExists(target_file)) {
+        const builtSha = await lastCommitShaForFile(target_file);
+        if (builtSha) {
+          logger?.warn?.({ target_file, built: builtSha.slice(0, 8) }, '[never-stop] no-op build — file already present, completing via last-touching commit');
+          return { ok: true, commit_sha: builtSha, error: null, no_op: true, repair_attempts: attempt - 1 };
+        }
       }
       priorError = extractBuilderFailure(b) || (build.ok ? 'no_commit_sha' : `HTTP ${build.status}`);
       logger?.warn?.({ target_file, attempt, error: String(priorError).slice(0, 200) }, '[never-stop] build rejected — carrying verbatim error forward');
