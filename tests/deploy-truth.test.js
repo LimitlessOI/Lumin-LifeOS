@@ -92,22 +92,23 @@ test('waitForDeploySha gives up after attempts, never false-positives', async ()
   assert.equal(r.attempts_used, 3);
 });
 
-test('interpretCompareStatus: served contains built iff identical/behind', () => {
+test('interpretCompareStatus: served contains built iff identical/ahead', () => {
   assert.equal(interpretCompareStatus('identical'), true);
-  assert.equal(interpretCompareStatus('behind'), true); // built is behind served → served includes built
-  assert.equal(interpretCompareStatus('ahead'), false); // served is behind built → not live
+  assert.equal(interpretCompareStatus('ahead'), true); // head(served) is ahead of base(built) → served includes built
+  assert.equal(interpretCompareStatus('behind'), false); // head(served) is behind base(built) → missing built → not live
   assert.equal(interpretCompareStatus('diverged'), false);
   assert.equal(interpretCompareStatus(null), false);
 });
 
 test('proveDeployServesSha OK when served sha is a DESCENDANT that contains the built commit', async () => {
   // Busy repo: a later queue-status commit advanced HEAD, so served != built exactly,
-  // but the built code IS live. compareFn(built, served) === "behind" proves containment.
+  // but the built code IS live. compareFn(base=built, head=served) === "ahead"
+  // (head is ahead of base) proves containment.
   const fetchFn = async () => jsonResponse({ codegen: { deploy_commit_sha: 'ffffff0abc123' } });
   const compareFn = async (base, head) => {
     assert.equal(base, 'd0052b0');
     assert.equal(head, 'ffffff0abc123');
-    return 'behind';
+    return 'ahead';
   };
   const r = await proveDeployServesSha({ expectedSha: 'd0052b0', baseUrl: 'https://x', fetchFn, compareFn });
   assert.equal(r.ok, true);
@@ -118,7 +119,7 @@ test('proveDeployServesSha OK when served sha is a DESCENDANT that contains the 
 
 test('proveDeployServesSha FAILS (no false live) when served is BEHIND the built commit', async () => {
   const fetchFn = async () => jsonResponse({ codegen: { deploy_commit_sha: 'aaaaaa0def456' } });
-  const compareFn = async () => 'ahead'; // built is ahead of served → served does NOT contain built
+  const compareFn = async () => 'behind'; // head(served) is behind base(built) → served does NOT contain built
   const r = await proveDeployServesSha({ expectedSha: 'd0052b0', baseUrl: 'https://x', fetchFn, compareFn });
   assert.equal(r.ok, false);
   assert.equal(r.contains, false);

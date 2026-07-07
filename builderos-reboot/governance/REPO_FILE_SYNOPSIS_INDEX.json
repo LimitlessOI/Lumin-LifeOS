@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T03:54:46.609Z",
+  "generated_at": "2026-07-07T04:16:33.509Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11213,
   "files": [
@@ -21589,8 +21589,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3384226,
-      "mtime": "2026-07-07T03:54:45.357Z",
-      "indexed_at": "2026-07-07T03:54:46.609Z"
+      "mtime": "2026-07-07T04:16:32.113Z",
+      "indexed_at": "2026-07-07T04:16:33.509Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38423,9 +38423,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 158691,
-      "mtime": "2026-07-07T03:54:32.625Z",
-      "indexed_at": "2026-07-07T03:54:46.609Z"
+      "bytes": 159954,
+      "mtime": "2026-07-07T04:16:17.217Z",
+      "indexed_at": "2026-07-07T04:16:33.509Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -80905,9 +80905,9 @@
     {
       "path": "services/deploy-truth.js",
       "synopsis": "Deploy-truth proof — never call a build \"live\" until the running",
-      "bytes": 6830,
-      "mtime": "2026-07-07T02:29:31.776Z",
-      "indexed_at": "2026-07-07T02:29:31.776Z",
+      "bytes": 7052,
+      "mtime": "2026-07-07T04:15:49.337Z",
+      "indexed_at": "2026-07-07T04:16:33.509Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86305,9 +86305,9 @@
     {
       "path": "tests/deploy-truth.test.js",
       "synopsis": "js — tests/deploy-truth.test.js.",
-      "bytes": 6723,
-      "mtime": "2026-07-07T02:29:31.776Z",
-      "indexed_at": "2026-07-07T02:29:31.776Z",
+      "bytes": 6814,
+      "mtime": "2026-07-07T04:16:00.637Z",
+      "indexed_at": "2026-07-07T04:16:33.509Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
