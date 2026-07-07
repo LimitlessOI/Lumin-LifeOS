@@ -116,10 +116,10 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T05:22:49.993Z",
+      "last_attempt_at": "2026-07-07T05:24:09.790Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
-      "revived_at": "2026-07-07T05:22:49.993Z"
+      "revived_at": "2026-07-07T05:24:09.789Z"
     },
     {
       "id": "sb-editor-endpoints",
@@ -154,12 +154,12 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-07T05:11:21.462Z",
+      "last_attempt_at": "2026-07-07T05:11:48.144Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:53:53.254Z",
       "commit_sha": "108ab3ccbfb5f3aed44b1c763653151a3b80aee5",
-      "completed_at": "2026-07-07T05:11:23.295Z",
+      "completed_at": "2026-07-07T05:11:49.410Z",
       "deploy_proven": true
     },
     {
