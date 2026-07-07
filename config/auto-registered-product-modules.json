@@ -26,6 +26,12 @@
       "register": "registerMarketingCalendarUiRoutes",
       "enabled": true,
       "note": "MarketingOS Phase 2 SSR content-calendar + atom-library screens (§5 Phase 2). Built by the loop (queued mos-phase2-ui); mounted here so module-health proves /marketing/calendar loads LIVE."
+    },
+    {
+      "path": "routes/marketing-intel-routes.js",
+      "register": "registerMarketingIntelRoutes",
+      "enabled": true,
+      "note": "SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
     }
   ]
 }
