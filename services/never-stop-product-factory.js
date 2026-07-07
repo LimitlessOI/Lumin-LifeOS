@@ -722,19 +722,25 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     // artifact must exist AND be served live before the step is marked done, and
     // a broken/stub file fails verify with a different error.
     //
-    // SELF-REPAIR BYPASS: if the step carries a last_error, the existing file is
-    // KNOWN-BROKEN (a prior verify / deploy-proof / module-health failure wrote
-    // it). Re-completing via its last commit would just re-fail the same gate
-    // forever (short-circuit → gate fail → carry error → short-circuit …). So
-    // when an error is carried, DO NOT short-circuit — fall through to a real
-    // /build that regenerates the file with the verbatim error fed in, letting
-    // the loop fix its own broken artifact (e.g. an import of an uninstalled
-    // package the functional-proof gate caught). New/clean steps still complete
-    // idempotently via the short-circuit below.
-    if (targetFileExists(target_file) && !last_error) {
+    // SELF-REPAIR NOTE: this short-circuit ALWAYS fires for an existing file,
+    // even when the step carries a `last_error`. That is deliberate — the
+    // arbiter of "is this artifact actually good?" is the functional-proof gate
+    // (verify + deploy-proof + module-health `mounted`), NOT the queue's stale
+    // last_error. If the file was repaired out-of-band (or by a corrected
+    // regeneration on an earlier tick), completing via its last commit lets the
+    // gate re-check the LIVE module and flip the step to `done`; if it is still
+    // broken the gate re-fails it with the real mount error (no false-done).
+    // We do NOT force a `/build` here: the builder refuses to regenerate a large
+    // existing file (Zone-3 stub guard / empty edit-patch), so forcing it only
+    // yields `no_commit_sha` and re-blocks the step forever. The real prevention
+    // for the class of bug that produced the original broken artifact (importing
+    // an uninstalled package) lives in the integration context fed to `/build`
+    // (installed-package allowlist + DB-defaulted-ids rule), which stops the bad
+    // code from being generated in the first place.
+    if (targetFileExists(target_file)) {
       const builtSha = await lastCommitShaForFile(target_file);
       if (builtSha) {
-        logger?.warn?.({ target_file, built: builtSha.slice(0, 8) }, '[never-stop] pre-existing artifact — completing via last-touching commit (builder cannot rebuild an existing file)');
+        logger?.warn?.({ target_file, built: builtSha.slice(0, 8) }, '[never-stop] pre-existing artifact — completing via last-touching commit (functional-proof gate arbitrates health)');
         return { ok: true, commit_sha: builtSha, error: null, no_op: true, pre_existing: true };
       }
     }
