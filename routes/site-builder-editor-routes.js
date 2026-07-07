@@ -3,188 +3,156 @@
  */
 import { Router } from 'express';
 import path from 'path';
-import { promises as fs } from 'fs';
+import fs from 'fs/promises';
+import { existsSync } from 'fs';
 
 const previewsRoot = path.resolve(process.cwd(), 'public/previews');
 
-const validatePath = (clientId, filePath) => {
-  if (!clientId || !/^[a-zA-Z0-9-]+$/.test(clientId)) {
-    return null; // Invalid clientId
+const sanitizePath = (clientId, filePath) => {
+  if (!clientId || !/^[\\w-]+$/.test(clientId)) {
+    return null;
+  }
+  if (filePath.includes('..') || path.isAbsolute(filePath)) {
+    return null;
   }
 
   const resolvedPath = path.resolve(previewsRoot, clientId, filePath);
-
-  if (!resolvedPath.startsWith(path.join(previewsRoot, clientId + path.sep))) {
-    return null; // Path traversal attempt
+  if (!resolvedPath.startsWith(path.join(previewsRoot, clientId) + path.sep) && resolvedPath !== path.join(previewsRoot, clientId)) {
+    return null;
   }
-
-  if (resolvedPath.includes('..')) {
-    return null; // Path traversal attempt with '..'
-  }
-
   return resolvedPath;
 };
 
-const readMetaJson = async (clientId) => {
-  const metaPath = validatePath(clientId, 'meta.json');
-  if (!metaPath) {
-    throw new Error('Invalid client ID or meta.json path');
-  }
-  try {
-    const metaContent = await fs.readFile(metaPath, 'utf8');
-    return JSON.parse(metaContent);
-  } catch (error) {
-    if (error.code === 'ENOENT' || error.name === 'SyntaxError') {
-      return null;
-    }
-    throw error;
-  }
-};
-
-const authenticate = async (req, res, next) => {
+const authenticateEditor = async (req, res, next) => {
   const { clientId, token } = req.body;
 
   if (!clientId || !token) {
-    return res.status(400).json({ ok: false, error: 'Missing clientId or token' });
+    return res.status(403).json({ ok: false, error: 'Missing client ID or token.' });
+  }
+
+  const metaPath = sanitizePath(clientId, 'meta.json');
+  if (!metaPath) {
+    return res.status(403).json({ ok: false, error: 'Invalid client ID or path.' });
   }
 
   try {
-    const meta = await readMetaJson(clientId);
-    if (!meta || meta.editToken !== token) {
-      return res.status(403).json({ ok: false, error: 'Authentication failed' });
+    const metaContent = await fs.readFile(metaPath, 'utf8');
+    const meta = JSON.parse(metaContent);
+
+    if (meta.editToken !== token) {
+      return res.status(403).json({ ok: false, error: 'Invalid authentication token.' });
     }
     next();
   } catch (error) {
-    console.error(`Authentication error for clientId ${clientId}:`, error);
-    return res.status(500).json({ ok: false, error: 'Server error during authentication' });
+    console.error(`Authentication failed for client ${clientId}: ${error.message}`);
+    return res.status(403).json({ ok: false, error: 'Authentication failed.' });
   }
 };
 
 export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl }) {
   const router = Router();
 
-  router.post('/edit', authenticate, async (req, res) => {
+  router.post('/edit', authenticateEditor, async (req, res) => {
     const { clientId, file, instruction } = req.body;
-    if (!file || !instruction) {
-      return res.status(400).json({ ok: false, error: 'Missing file or instruction' });
-    }
 
-    const filePath = validatePath(clientId, file);
-    if (!filePath) {
-      return res.status(403).json({ ok: false, error: 'Invalid file path' });
+    const targetFilePath = sanitizePath(clientId, file);
+    if (!targetFilePath) {
+      return res.status(403).json({ ok: false, error: 'Invalid file path.' });
     }
 
     try {
-      const originalContent = await fs.readFile(filePath, 'utf8');
+      const originalHtml = await fs.readFile(targetFilePath, 'utf8');
 
-      const truthRules = `
-        You must not invent or fabricate any of the following:
-        - Prices
-        - Statistics
-        - Ratings
-        - Review counts
-        - Named testimonials (e.g., "John Doe says...")
-        Only use information explicitly provided or inferable from the existing HTML.
-      `;
+      const truthRules = [
+        "Do not invent prices, stats, ratings, or review counts.",
+        "Do not fabricate named testimonials or customer quotes."
+      ];
 
-      const aiResponse = await callCouncilMember('strong', {
-        prompt: `The user wants to edit the following HTML document based on the instruction provided. Return the ENTIRE modified HTML document.
-        
-        Current HTML:
-        ${originalContent}
-
-        User Instruction:
-        ${instruction}
-
-        ${truthRules}
-        `,
+      const modelResponse = await callCouncilMember('strong-paid-model', {
+        prompt: `The user wants to modify the following HTML document based on their instruction. Return the ENTIRE modified HTML document. Ensure all HTML is valid and well-formed. Do not omit any part of the document unless explicitly instructed.\n\nCurrent HTML:\n${originalHtml}\n\nUser Instruction: ${instruction}\n\nStrict Rules: ${truthRules.join(' ')}`,
       });
 
-      if (!aiResponse || typeof aiResponse !== 'string' || !aiResponse.includes('<html')) {
+      if (!modelResponse || typeof modelResponse !== 'string' || !modelResponse.includes('<html')) {
         return res.status(500).json({ ok: false, error: 'AI response was invalid or incomplete.' });
       }
 
-      const backupPath = `${filePath}.${Date.now()}.bak`;
-      await fs.writeFile(backupPath, originalContent, 'utf8');
-      await fs.writeFile(filePath, aiResponse, 'utf8');
+      const backupPath = `${targetFilePath}.${Date.now()}.bak`;
+      await fs.writeFile(backupPath, originalHtml, 'utf8');
+      await fs.writeFile(targetFilePath, modelResponse, 'utf8');
 
       res.json({ ok: true });
     } catch (error) {
-      console.error(`Error processing AI edit for ${clientId}/${file}:`, error);
+      console.error(`Error processing AI edit for ${clientId}/${file}: ${error.message}`);
       res.status(500).json({ ok: false, error: 'Failed to process AI edit.' });
     }
   });
 
-  router.post('/save-edits', authenticate, async (req, res) => {
+  router.post('/save-edits', authenticateEditor, async (req, res) => {
     const { clientId, file, html } = req.body;
-    if (!file || !html) {
-      return res.status(400).json({ ok: false, error: 'Missing file or html content' });
+
+    if (!html || !html.includes('<html')) {
+      return res.status(400).json({ ok: false, error: 'Invalid HTML content provided.' });
     }
 
-    if (!html.includes('<html')) {
-      return res.status(400).json({ ok: false, error: 'Invalid HTML content.' });
-    }
-
-    const filePath = validatePath(clientId, file);
-    if (!filePath) {
-      return res.status(403).json({ ok: false, error: 'Invalid file path' });
+    const targetFilePath = sanitizePath(clientId, file);
+    if (!targetFilePath) {
+      return res.status(403).json({ ok: false, error: 'Invalid file path.' });
     }
 
     try {
-      const originalContent = await fs.readFile(filePath, 'utf8');
-      const backupPath = `${filePath}.${Date.now()}.bak`;
-      await fs.writeFile(backupPath, originalContent, 'utf8');
-      await fs.writeFile(filePath, html, 'utf8');
-
+      if (existsSync(targetFilePath)) {
+        const originalHtml = await fs.readFile(targetFilePath, 'utf8');
+        const backupPath = `${targetFilePath}.${Date.now()}.bak`;
+        await fs.writeFile(backupPath, originalHtml, 'utf8');
+      }
+      await fs.writeFile(targetFilePath, html, 'utf8');
       res.json({ ok: true });
     } catch (error) {
-      console.error(`Error saving manual edits for ${clientId}/${file}:`, error);
+      console.error(`Error saving manual edits for ${clientId}/${file}: ${error.message}`);
       res.status(500).json({ ok: false, error: 'Failed to save edits.' });
     }
   });
 
-  router.post('/revert', authenticate, async (req, res) => {
+  router.post('/revert', authenticateEditor, async (req, res) => {
     const { clientId, file } = req.body;
-    if (!file) {
-      return res.status(400).json({ ok: false, error: 'Missing file' });
-    }
 
-    const filePath = validatePath(clientId, file);
-    if (!filePath) {
-      return res.status(403).json({ ok: false, error: 'Invalid file path' });
+    const targetFilePath = sanitizePath(clientId, file);
+    if (!targetFilePath) {
+      return res.status(403).json({ ok: false, error: 'Invalid file path.' });
     }
 
     try {
-      const backupDir = path.dirname(filePath);
-      const fileName = path.basename(filePath);
-      const filesInDir = await fs.readdir(backupDir);
+      const dirname = path.dirname(targetFilePath);
+      const filename = path.basename(targetFilePath);
+      const filesInDir = await fs.readdir(dirname);
 
-      const backups = filesInDir
-        .filter(f => f.startsWith(`${fileName}.`) && f.endsWith('.bak'))
+      const bakFiles = filesInDir
+        .filter(f => f.startsWith(filename) && f.endsWith('.bak'))
         .map(f => ({
           name: f,
-          timestamp: parseInt(f.substring(fileName.length + 1, f.length - 4), 10)
+          timestamp: parseInt(f.split('.').slice(-2, -1)[0], 10)
         }))
-        .filter(b => !isNaN(b.timestamp))
+        .filter(f => !isNaN(f.timestamp))
         .sort((a, b) => b.timestamp - a.timestamp); // Newest first
 
-      if (backups.length === 0) {
-        return res.status(404).json({ ok: false, error: 'No backup file found to revert.' });
+      if (bakFiles.length === 0) {
+        return res.status(404).json({ ok: false, error: 'No backup files found to revert.' });
       }
 
-      const latestBackupPath = path.join(backupDir, backups[0].name);
-      const backupContent = await fs.readFile(latestBackupPath, 'utf8');
+      const newestBakPath = path.join(dirname, bakFiles[0].name);
+      const backupContent = await fs.readFile(newestBakPath, 'utf8');
 
-      // Create a backup of the current file before reverting
-      const currentContent = await fs.readFile(filePath, 'utf8');
-      const currentBackupPath = `${filePath}.${Date.now()}.bak`;
-      await fs.writeFile(currentBackupPath, currentContent, 'utf8');
+      // Optionally, create a backup of the current file before reverting
+      if (existsSync(targetFilePath)) {
+         const currentContent = await fs.readFile(targetFilePath, 'utf8');
+         const preRevertBackupPath = `${targetFilePath}.${Date.now()}.pre_revert.bak`;
+         await fs.writeFile(preRevertBackupPath, currentContent, 'utf8');
+      }
 
-      await fs.writeFile(filePath, backupContent, 'utf8');
-
+      await fs.writeFile(targetFilePath, backupContent, 'utf8');
       res.json({ ok: true });
     } catch (error) {
-      console.error(`Error reverting file for ${clientId}/${file}:`, error);
+      console.error(`Error reverting file ${clientId}/${file}: ${error.message}`);
       res.status(500).json({ ok: false, error: 'Failed to revert file.' });
     }
   });
