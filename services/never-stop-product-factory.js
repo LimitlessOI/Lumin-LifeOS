@@ -673,10 +673,19 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
     if (!commit_sha) return { ok: false, reason: 'no_commit_sha_to_prove' };
     await coalescedRedeploy();
+    // The /ready endpoint is auth-gated (401 without the command key), so the
+    // proof MUST send it — otherwise every proof fails `ready_http_401`, the
+    // deploy is never provable, and no step can ever reach `done` (the real
+    // reason built steps stalled). Merge the header onto whatever opts the
+    // prover passes (it sends Cache-Control + an abort signal).
+    const authedFetch = (url, opts = {}) => fetch(url, {
+      ...opts,
+      headers: { ...(opts.headers || {}), 'x-command-key': commandKey },
+    });
     const proof = await waitForDeploySha({
       expectedSha: commit_sha,
       baseUrl,
-      fetchFn: (...a) => fetch(...a),
+      fetchFn: authedFetch,
       attempts: 40,
       intervalMs: 15_000,
       compareFn: githubCompareStatus,
