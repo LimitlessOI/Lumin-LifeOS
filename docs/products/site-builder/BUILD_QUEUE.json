@@ -129,13 +129,16 @@
     },
     {
       "id": "sb-social-discovery",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-social-discovery.js",
       "task": "Create a social-media discovery helper that finds a business's social profiles — especially YouTube — even when not linked on their website. Export async discoverSocials(businessInfo, { fetchImpl }) that (1) collects any social URLs already present in businessInfo, and (2) builds candidate handles from the business name and, when a fetchImpl is provided, verifies likely YouTube (youtube.com/@handle), Instagram, and Facebook URLs by HEAD/GET and returns only reachable ones. Also export extractYouTubeChannelId(html) to pull a channelId from a YouTube page's HTML. Returns { youtube: {url,channelId}|null, instagram, facebook, tiktok, others[] }.",
       "spec": "Single self-contained ESM module. Named exports discoverSocials, extractYouTubeChannelId + default. NETWORK IS OPTIONAL AND INJECTED: never import a network library; use the provided fetchImpl (default to globalThis.fetch) and if it is unavailable, return only the socials already known from businessInfo (fail-open to no-op, never throw). Wrap every fetch in try/catch with a short timeout via AbortController. Do not fabricate a profile — only return URLs actually confirmed reachable or already provided. Guard all businessInfo fields. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "108ab3ccbfb5f3aed44b1c763653151a3b80aee5",
+      "last_attempt_at": "2026-07-07T21:46:06.871Z",
+      "completed_at": "2026-07-07T21:46:09.499Z"
     },
     {
       "id": "sb-service-catalog",
