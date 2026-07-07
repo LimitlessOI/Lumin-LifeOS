@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T01:50:39.793Z",
+  "generated_at": "2026-07-07T02:10:02.864Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11211,
+  "file_count": 11212,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84098,6 +84098,13 @@
       "bytes": 10341,
       "mtime": "2026-07-07T01:12:40.041Z",
       "indexed_at": "2026-07-07T01:12:40.041Z"
+    },
+    {
+      "path": "services/site-builder-editor-strategy.js",
+      "synopsis": "Exports renderStrategyPanel — services/site-builder-editor-strategy.js.",
+      "bytes": 5362,
+      "mtime": "2026-07-07T02:10:02.864Z",
+      "indexed_at": "2026-07-07T02:10:02.864Z"
     },
     {
       "path": "services/site-builder-email-templates.js",
