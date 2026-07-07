@@ -1,6 +1,19 @@
 {
   "schema": "auto_registered_product_modules_v1",
   "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file — no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
-  "updated_at": "2026-07-07",
-  "modules": []
+  "updated_at": "2026-07-08",
+  "modules": [
+    {
+      "path": "routes/marketing-session-routes.js",
+      "register": "registerMarketingSessionRoutes",
+      "enabled": true,
+      "note": "MarketingOS SocialMediaOS Phase 1 JSON API (§6). The autonomous loop rebuilds this file (re-queued mos-session-routes); once deployed the boot mounts it here and the functional-proof gate verifies /api/v1/marketing/* is LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+    },
+    {
+      "path": "routes/marketing-session-ui-routes.js",
+      "register": "registerMarketingSessionUiRoutes",
+      "enabled": true,
+      "note": "MarketingOS SocialMediaOS Phase 1 SSR screens (§5). Rebuilt by the loop (re-queued mos-session-ui); mounted here so module-health proves the /marketing pages load LIVE."
+    }
+  ]
 }

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T09:38:01.220Z",
+  "generated_at": "2026-07-07T09:47:09.709Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11225,
+  "file_count": 11226,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30123,9 +30123,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 496,
-      "mtime": "2026-07-07T09:19:04.985Z",
-      "indexed_at": "2026-07-07T09:27:46.409Z",
+      "bytes": 1353,
+      "mtime": "2026-07-07T09:45:22.398Z",
+      "indexed_at": "2026-07-07T09:47:09.709Z",
       "synopsis_index_only": true
     },
     {
@@ -35120,6 +35120,13 @@
       "indexed_at": "2026-07-07T08:39:07.204Z"
     },
     {
+      "path": "db/migrations/20260708_marketing_phase1_schema_v2.sql",
+      "synopsis": "MarketingOS SocialMediaOS Phase 1 schema — CORRECT §6 founder-story spec.",
+      "bytes": 5622,
+      "mtime": "2026-07-07T09:45:02.966Z",
+      "indexed_at": "2026-07-07T09:47:09.709Z"
+    },
+    {
       "path": "db/migrations/builderos_command_control.sql",
       "synopsis": "Database migration — builderos_command_control.sql.",
       "bytes": 1596,
@@ -38983,9 +38990,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 79805,
-      "mtime": "2026-07-07T08:00:26.197Z",
-      "indexed_at": "2026-07-07T08:32:45.782Z"
+      "bytes": 81959,
+      "mtime": "2026-07-07T09:46:44.622Z",
+      "indexed_at": "2026-07-07T09:47:09.709Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
