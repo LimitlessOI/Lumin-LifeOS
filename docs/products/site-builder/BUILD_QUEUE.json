@@ -125,7 +125,7 @@
     },
     {
       "id": "sb-editor-endpoints",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-editor-routes.js",
       "task": "New Express route module exporting createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl }) that mounts three POST endpoints under /api/v1/sites: `/edit` (AI edit), `/save-edits` (manual save), and `/revert` (restore the most recent .bak). All three authenticate with a PER-PREVIEW token (NOT the global command key): read public/previews/<clientId>/meta.json and require body.token === meta.editToken, else respond 403. `/edit` reads the target file (body.file, relative, under the client's preview dir), calls callCouncilMember with a STRONG paid model, passing the current HTML + the user's instruction + strict anti-fabrication TRUTH rules, asking it to return the ENTIRE modified HTML document; validate the response contains '<html'; write a timestamped .bak of the old file then overwrite; respond { ok:true }. `/save-edits` validates body.html contains '<html', writes a .bak then overwrites body.file. `/revert` restores the newest .bak for body.file.",
       "spec": "Single self-contained ESM file. Named export createSiteBuilderEditorRoutes + default. PATH SAFETY (hard, fail-closed): resolve previewsRoot = path.resolve(process.cwd(),'public/previews') ONCE; for every file access resolve the candidate and require resolved.startsWith(previewsRoot + path.sep) AND clientId matches /^[\\w-]+$/ AND file has no '..' — otherwise 403. Never read/write outside previewsRoot. Token check fails closed when meta.json is missing, unreadable, or has no editToken. No database. Use express.json() body parsing already present. Wrap AI/file errors and respond JSON { ok:false, error } with appropriate status; never leak absolute paths in errors. TRUTH rules passed to the model must forbid inventing prices, stats, ratings, review counts, and named testimonials. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
@@ -133,7 +133,10 @@
         "sb-editor-shell"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "f79caedd4f0f0ed1eb2a1cba78461cb4dff351d3",
+      "last_attempt_at": "2026-07-07T06:59:27.708Z",
+      "completed_at": "2026-07-07T06:59:43.591Z"
     },
     {
       "id": "sb-competitor-categories",
