@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   extractBacklog,
+  extractPhaseSpecs,
   backlogSignature,
   shouldFounderGate,
   normalizePlannedStep,
@@ -124,6 +125,62 @@ test('planBuildQueue de-duplicates against existing queue steps', async () => {
   assert.equal(res.added.length, 1, 'only the genuinely new step is added');
   assert.equal(res.added[0].id, 'expiry-sweep');
   assert.equal(res.queue.steps.length, 2);
+});
+
+const PHASED_HOME = `
+# MarketingOS
+## 5. A-to-Z Phased Build Plan
+### Phase 0 — Manual Revenue Sprint
+Manual outreach by the founder to land first customers. No code.
+### Phase 1 — Founder Story Session MVP
+Record a founder session and produce a content pack.
+- Cloudflare R2 (audio upload) — UNVERIFIED pending Railway env vars
+### Phase 2 — Social Content Calendar
+Build a content-atom library, a brand-voice fingerprint, and a 30-day calendar.
+Compose with the Phase 1 tables via owner_id.
+### Phase 3 — Video Clip Workflow
+BLOCKED dependency: FFmpeg on Railway must be VERIFIED before video processing.
+### Phase 8 — Funnel + Campaign Engine
+One coaching session becomes a complete campaign package: landing page copy, a 5-email nurture sequence, and a PDF lead magnet outline.
+## 6. Technical Spec
+Not a phase.
+`;
+
+test('extractPhaseSpecs keeps only buildable phases; skips manual/done/unverified/blocked', () => {
+  const specs = extractPhaseSpecs(PHASED_HOME);
+  const titles = specs.map((s) => s.split(':')[0]);
+  assert.ok(titles.some((t) => /Phase 2 — Social Content Calendar/.test(t)), 'buildable Phase 2 kept');
+  assert.ok(titles.some((t) => /Phase 8 — Funnel/.test(t)), 'buildable Phase 8 kept');
+  assert.ok(!titles.some((t) => /Phase 0/.test(t)), 'manual sprint skipped');
+  assert.ok(!titles.some((t) => /Phase 1/.test(t)), 'phase with UNVERIFIED infra skipped');
+  assert.ok(!titles.some((t) => /Phase 3/.test(t)), 'BLOCKED phase skipped');
+  // rich body captured (decomposable by the planner)
+  const p2 = specs.find((s) => /Phase 2/.test(s));
+  assert.ok(/brand-voice/i.test(p2) && /calendar/i.test(p2), 'phase body text carried into the item');
+});
+
+test('extractBacklog folds phase specs in alongside bullet backlog', () => {
+  const items = extractBacklog(PHASED_HOME);
+  assert.ok(items.some((i) => /Phase 2 — Social Content Calendar/.test(i)), 'phase surfaces as backlog');
+  // a product with ONLY a phased plan (no bullet backlog heading) is now enrollable
+  assert.ok(items.length >= 2);
+});
+
+test('planBuildQueue never re-queues an already-DONE file, even on a new task', async () => {
+  const existingQueue = {
+    schema: 'product_build_queue_v1',
+    product_id: 'marketingos',
+    steps: [{ id: 'p2-routes', target_file: 'routes/marketing-calendar-routes.js', task: 'calendar API', status: 'done', depends_on: [], attempts: 1 }],
+  };
+  const callModel = async () => JSON.stringify({
+    steps: [
+      { id: 'redo-routes', target_file: 'routes/marketing-calendar-routes.js', task: 'improve calendar API', spec: 'x' },
+      { id: 'new-svc', target_file: 'services/marketing-funnel.js', task: 'campaign package builder', spec: 'y' },
+    ],
+  });
+  const res = await planBuildQueue({ productId: 'marketingos', homeText: PHASED_HOME, existingQueue, callModel });
+  assert.equal(res.added.length, 1, 'the done file is not rebuilt');
+  assert.equal(res.added[0].target_file, 'services/marketing-funnel.js');
 });
 
 test('planBuildQueue fails closed: no backlog, no model, or empty/garbage output -> null', async () => {
