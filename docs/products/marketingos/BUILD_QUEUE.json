@@ -27,10 +27,10 @@
         "mos-phase1-schema"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 14000,
       "revive_count": 0,
-      "last_attempt_at": "2026-07-07T09:52:08.457Z",
+      "last_attempt_at": "2026-07-07T09:58:53.166Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
