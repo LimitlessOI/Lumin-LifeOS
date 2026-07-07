@@ -116,7 +116,7 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T05:25:44.776Z",
+      "last_attempt_at": "2026-07-07T05:27:24.439Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T05:24:18.589Z"
@@ -154,12 +154,12 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "last_attempt_at": "2026-07-07T05:11:48.144Z",
+      "last_attempt_at": "2026-07-07T05:13:26.820Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:53:53.254Z",
       "commit_sha": "108ab3ccbfb5f3aed44b1c763653151a3b80aee5",
-      "completed_at": "2026-07-07T05:11:49.410Z",
+      "completed_at": "2026-07-07T05:13:28.066Z",
       "deploy_proven": true
     },
     {
