@@ -1,8 +1,14 @@
 {
   "schema": "auto_registered_product_modules_v1",
   "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file — no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
-  "updated_at": "2026-07-03",
+  "updated_at": "2026-07-07",
   "modules": [
+    {
+      "path": "routes/governed-fence-routes.js",
+      "register": "registerGovernedFenceRoutes",
+      "enabled": true,
+      "note": "CONDUCTOR-GLUE separation-of-powers switch. Mounts GET /api/v1/factory/governance/fence + POST .../fence/enable so the SYSTEM can turn its own governance fence ON (GOVERNED_FACTORY_ONLY=1) via Railway API + self-redeploy, but is physically unable to turn it OFF (enable-only ratchet — only a human in Railway can). PR #272 added the guard; this mounts the live surface that was missing so the flip can actually happen. Chair receipt LIFERE_COUNCIL_1783462353983."
+    },
     {
       "path": "routes/general-browser-agent-routes.js",
       "register": "registerGeneralBrowserAgentRoutes",
