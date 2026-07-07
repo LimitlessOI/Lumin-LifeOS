@@ -10,7 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct } from './product-build-orchestrator.js';
+import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractBacklog, planBuildQueue } from './build-queue-planner.js';
@@ -279,6 +279,7 @@ export function discoverBuildQueueWork() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = loadBuildQueue(productId);
+      reviveStaleBlockedSteps(queue);
       const { step } = selectNextStep(queue);
       if (step) {
         found.push({
@@ -562,6 +563,15 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     queue = loadBuildQueue(task.product_id);
   } catch (e) {
     return { ok: false, detail: 'build_queue_load_failed', error: e.message };
+  }
+
+  // Self-heal steps stranded as BLOCKED by a transient/since-fixed failure
+  // before selecting work, so a fixed bug (e.g. the deploy-proof false-negative)
+  // lets the loop finish the step instead of skipping it forever. Bounded +
+  // persisted below so the revive survives the redeploy.
+  const revived = reviveStaleBlockedSteps(queue);
+  if (revived.length) {
+    log({ event: 'blocked_steps_revived', product_id: task.product_id, revived });
   }
 
   const buildFn = async ({ target_file, task: stepTask, spec, last_error, max_output_tokens }) => {
