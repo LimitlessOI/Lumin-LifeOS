@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T07:32:58.057Z",
+  "generated_at": "2026-07-07T07:33:52.792Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11216,
   "files": [
@@ -34301,10 +34301,10 @@
     },
     {
       "path": "db/migrations/20260629_socialmediaos_schema_align.sql",
-      "synopsis": "Database migration — 20260629_socialmediaos_schema_align.sql.",
-      "bytes": 900,
-      "mtime": "2026-07-07T07:32:58.057Z",
-      "indexed_at": "2026-07-07T07:32:58.057Z"
+      "synopsis": "Align socialmediaos tables with services/socialmediaos-service.js column contract.",
+      "bytes": 1014,
+      "mtime": "2026-07-07T07:33:52.792Z",
+      "indexed_at": "2026-07-07T07:33:52.792Z"
     },
     {
       "path": "db/migrations/20260630_neon_archive_abandoned_tables.sql",
