@@ -1,6 +1,4 @@
--- SYNOPSIS: Align socialmediaos tables with services/socialmediaos-service.js column contract.
--- MOS-P1-SCHEMA-ALIGN — fixes POST /sessions 500 (missing scheduled_for, session_id, etc.)
-
+-- SYNOPSIS: Database migration — 20260629_socialmediaos_schema_align.sql.
 ALTER TABLE socialmediaos_sessions ADD COLUMN IF NOT EXISTS scheduled_for TIMESTAMPTZ;
 ALTER TABLE socialmediaos_sessions ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ;
 ALTER TABLE socialmediaos_sessions ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ;
