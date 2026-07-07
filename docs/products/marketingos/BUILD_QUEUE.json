@@ -39,7 +39,7 @@
     },
     {
       "id": "mos-session-ui",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-session-ui.js",
       "task": "New server-rendered UI module exporting registerMarketingSessionUi(app) that serves the Phase 1 SocialMediaOS screens from docs/products/marketingos/PRODUCT_HOME.md §5 Phase 1 UI screens as HTML pages: GET /marketing (landing/dashboard — start a new session), GET /marketing/session/new (consent + session setup), GET /marketing/session/:id (coaching conversation, text input; posts to /api/v1/marketing/sessions/:id/coach), GET /marketing/session/:id/content (review + approve generated pieces; PATCHes /api/v1/marketing/content/:id), GET /marketing/session/:id/export (download the content pack via /api/v1/marketing/sessions/:id/export). Clean, conversion-minded, single-column layout consistent with the existing product's visual tone.",
       "spec": "Single self-contained ESM server module. CRITICAL SSR RULE: this file is imported by Node on the server, so it MUST have ZERO top-level references to window, document, localStorage, navigator, fetch-on-load, or any browser global. Each route handler returns a complete HTML document as a template-literal STRING; any client-side behaviour (form submit, fetch calls to the /api/v1/marketing/* endpoints, approve buttons) lives ONLY inside a <script>…</script> string embedded in that returned HTML — never as top-level module code. No database access in this module (the pages call the JSON API from the browser). No fabricated stats/testimonials/pricing. Escape any interpolated dynamic text. Named export registerMarketingSessionUi + default. @ssot docs/products/marketingos/PRODUCT_HOME.md.",
@@ -47,9 +47,12 @@
         "mos-session-routes"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 9000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "07186779a93eda19de3b04ec95b5edc2d764b9f4",
+      "last_attempt_at": "2026-07-07T08:59:11.048Z",
+      "completed_at": "2026-07-07T08:59:11.624Z"
     }
   ]
 }
