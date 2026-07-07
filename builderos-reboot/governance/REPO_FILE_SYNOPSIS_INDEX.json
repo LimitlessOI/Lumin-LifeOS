@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T17:13:45.202Z",
+  "generated_at": "2026-07-07T17:14:14.474Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11235,
   "files": [
@@ -83130,10 +83130,10 @@
     },
     {
       "path": "services/marketing-publish-gate.js",
-      "synopsis": "SocialMediaOS Content Intelligence publish-or-kill gate.",
-      "bytes": 8718,
-      "mtime": "2026-07-07T17:13:45.202Z",
-      "indexed_at": "2026-07-07T17:13:45.202Z",
+      "synopsis": "SocialMediaOS \"publish or kill\" gate for content intelligence.",
+      "bytes": 6283,
+      "mtime": "2026-07-07T17:14:14.474Z",
+      "indexed_at": "2026-07-07T17:14:14.474Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
