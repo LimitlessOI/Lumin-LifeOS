@@ -39,12 +39,12 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T04:21:09.706Z",
+      "last_attempt_at": "2026-07-07T04:21:19.761Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 4,
-      "revived_at": "2026-07-07T04:21:09.706Z",
+      "revived_at": "2026-07-07T04:21:19.761Z",
       "commit_sha": "8d71ee09344d9be598bd3fb8e2aa7058e409006c",
-      "completed_at": "2026-07-07T04:21:10.968Z",
+      "completed_at": "2026-07-07T04:21:21.414Z",
       "deploy_proven": true
     },
     {
@@ -57,12 +57,12 @@
       "founder_gated": false,
       "attempts": 3,
       "max_output_tokens": 12288,
-      "last_attempt_at": "2026-07-07T04:24:08.156Z",
+      "last_attempt_at": "2026-07-07T04:25:25.144Z",
       "last_error": "deploy_serves_different_sha",
       "revive_count": 2,
       "revived_at": "2026-07-07T03:49:39.166Z",
       "commit_sha": "afeda3304c3d569b2510df1a618da467095c4e9f",
-      "completed_at": "2026-07-07T04:24:09.343Z",
+      "completed_at": "2026-07-07T04:25:26.766Z",
       "deploy_proven": true
     },
     {
@@ -75,12 +75,12 @@
       "founder_gated": false,
       "attempts": 2,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T04:27:58.303Z",
+      "last_attempt_at": "2026-07-07T04:29:07.838Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:42:10.293Z",
       "commit_sha": "9bf23be78a8c9645598a8b50d2e024c7ce9e6d07",
-      "completed_at": "2026-07-07T04:27:59.774Z",
+      "completed_at": "2026-07-07T04:29:09.239Z",
       "deploy_proven": true
     },
     {
@@ -93,12 +93,12 @@
       "founder_gated": false,
       "attempts": 1,
       "max_output_tokens": 7168,
-      "last_attempt_at": "2026-07-07T04:34:35.380Z",
+      "last_attempt_at": "2026-07-07T04:35:45.910Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "revive_count": 1,
       "revived_at": "2026-07-07T02:42:10.293Z",
       "commit_sha": "b3ad9358a39e178e14036d7d4fad581b51d5d280",
-      "completed_at": "2026-07-07T04:34:36.549Z",
+      "completed_at": "2026-07-07T04:35:47.639Z",
       "deploy_proven": true
     },
     {
