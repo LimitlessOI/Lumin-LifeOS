@@ -63,9 +63,9 @@
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderChatPanel + default export. Returns a STRING (HTML fragment). Microphone uses window.webkitSpeechRecognition||window.SpeechRecognition; if unavailable, hide the mic button and show a tooltip 'Voice not supported in this browser' — never throw. Every fetch includes editToken; non-2xx shows an inline error bubble, never blank. Inline script wrapped in try/catch. Define local htmlEscape(). @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 8192,
-      "last_attempt_at": "2026-07-07T01:55:03.733Z",
+      "last_attempt_at": "2026-07-07T01:59:08.796Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
