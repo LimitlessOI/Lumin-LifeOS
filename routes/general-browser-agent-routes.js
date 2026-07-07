@@ -9,9 +9,11 @@
  * prod without editing the protected composition root.
  * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
+import fs from 'fs';
 import { createAccountManager } from '../services/account-manager.js';
 import { createTCBrowserAgent } from '../services/tc-browser-agent.js';
 import { runGoalOnSession } from '../services/general-browser-agent-live.js';
+import { getChromiumLaunchOptions, createSession } from '../services/browser-agent.js';
 
 export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
   const requireKey = deps.requireKey;
@@ -28,6 +30,34 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
     if (!accountManagerPromise) accountManagerPromise = Promise.resolve(createAccountManager({ pool, logger }));
     return accountManagerPromise;
   };
+
+  // Diagnostic: ground-truth whether a launchable Chrome exists in THIS container.
+  app.get('/api/v1/browser-agent/diag', requireKey, async (req, res) => {
+    const opts = getChromiumLaunchOptions({});
+    const execPath = opts.executablePath || process.env.PUPPETEER_EXECUTABLE_PATH || null;
+    const diag = {
+      env_executable_path: process.env.PUPPETEER_EXECUTABLE_PATH || null,
+      chrome_bin: process.env.CHROME_BIN || null,
+      resolved_executable_path: execPath,
+      executable_exists: execPath ? fs.existsSync(execPath) : false,
+      candidates: {},
+      launch: null,
+    };
+    for (const p of ['/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable']) {
+      diag.candidates[p] = fs.existsSync(p);
+    }
+    let session = null;
+    try {
+      session = await createSession();
+      const obs = await session.observe?.().catch(() => null);
+      diag.launch = { ok: true, url: obs?.url ?? null };
+    } catch (err) {
+      diag.launch = { ok: false, error: err.message };
+    } finally {
+      if (session?.close) await session.close().catch(() => {});
+    }
+    return res.json(diag);
+  });
 
   app.post('/api/v1/browser-agent/run', requireKey, async (req, res) => {
     const {
