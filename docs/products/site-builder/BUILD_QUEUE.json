@@ -44,15 +44,15 @@
     },
     {
       "id": "sb-editor-canvas",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/site-builder-editor-canvas.js",
       "task": "Render the CENTER pane of the editor workspace: the live site canvas. Export renderCanvas({ siteFile, variants, palettes, clientId, editToken, baseUrl }) returning an HTML STRING FRAGMENT containing: (1) a top toolbar with template-switcher chips built from variants[] (each {id,name,file}) that set the iframe src, palette swatches from palettes[] (each {name,primary,accent}) that POST a recolor instruction to `${baseUrl}/api/v1/sites/edit`, a mobile/desktop device toggle that sets the iframe width, and a Save button that POSTs the iframe document's serialized outerHTML to `${baseUrl}/api/v1/sites/save-edits` as { clientId, file, html, token }; (2) a same-origin <iframe> loading siteFile; (3) an inline <script> giving click-to-edit (clicking a text node in the iframe makes it contentEditable) and per-top-level-section move-up / move-down / hide controls operating only on iframe.contentDocument top-level children.",
       "spec": "Single self-contained ESM module, ZERO import-time side effects, no project imports. Named export renderCanvas + default export. Returns a STRING (HTML fragment, NOT a full document). Define local htmlEscape(); escape siteFile and all variant/palette text. Every fetch includes the editToken (from a JS const) and on non-2xx shows an inline error — never a silent/blank failure. All iframe DOM access wrapped in try/catch guarding cross-origin/null contentDocument; never throw. Guard variants/palettes as possibly undefined -> []. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "max_output_tokens": 12288,
-      "last_attempt_at": "2026-07-07T01:39:58.142Z",
+      "last_attempt_at": "2026-07-07T01:44:11.124Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
