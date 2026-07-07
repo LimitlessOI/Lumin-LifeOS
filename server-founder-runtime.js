@@ -52,6 +52,7 @@ import { getCachedResponse, cacheResponse } from "./services/response-cache.js";
 import { registerFounderRuntimeRoutes } from "./startup/register-founder-runtime-routes.js";
 import { registerFounderServerRoutes } from "./startup/routes/founder-server-routes.js";
 import { startNeverStopProductFactoryScheduler } from "./services/never-stop-product-factory-scheduler.js";
+import { startGovernedAutonomousShippingLoop } from "./services/governed-autonomous-shipping-loop.js";
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 _bootLog('all_imports_done');
@@ -392,6 +393,15 @@ async function bootFounderRuntime() {
       startNeverStopProductFactoryScheduler({ logger });
     } catch (schedErr) {
       logger.warn("[NEVER-STOP-FACTORY] failed to start in founder runtime", { error: schedErr.message });
+    }
+    // STEP 5g: the governed autonomous shipping loop. Self-gated on
+    // GOVERNED_FACTORY_ONLY — it only owns throughput once the fence is ON, so
+    // starting it here is a no-op until cutover and never double-ships with the
+    // legacy never-stop loop above.
+    try {
+      startGovernedAutonomousShippingLoop({ logger });
+    } catch (govErr) {
+      logger.warn("[GOVERNED-AUTONOMOUS-SHIP] failed to start in founder runtime", { error: govErr.message });
     }
     _bootLog('bootFounderRuntime_done');
   } catch (error) {

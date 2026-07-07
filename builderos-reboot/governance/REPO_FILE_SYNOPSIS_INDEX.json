@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T20:33:04.099Z",
+  "generated_at": "2026-07-07T22:03:03.163Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11256,
+  "file_count": 11258,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29629,6 +29629,13 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "builderos-reboot/scripts/governed-autonomous-shipping-loop-proof.mjs",
+      "synopsis": "STEP 5g proof — the governed AUTONOMOUS shipping loop.",
+      "bytes": 5443,
+      "mtime": "2026-07-07T22:01:49.320Z",
+      "indexed_at": "2026-07-07T22:03:03.163Z"
+    },
+    {
       "path": "builderos-reboot/scripts/governed-build-queue-scheduler-proof.mjs",
       "synopsis": "STEP 5f proof — the governed BUILD_QUEUE scheduler that gathers",
       "bytes": 4453,
@@ -38518,9 +38525,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 187829,
-      "mtime": "2026-07-07T20:00:17.183Z",
-      "indexed_at": "2026-07-07T20:00:28.795Z"
+      "bytes": 190213,
+      "mtime": "2026-07-07T22:02:47.340Z",
+      "indexed_at": "2026-07-07T22:03:03.163Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -79531,9 +79538,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 14186,
-      "mtime": "2026-07-06T19:53:30.071Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 14763,
+      "mtime": "2026-07-07T21:59:49.332Z",
+      "indexed_at": "2026-07-07T22:03:03.163Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81809,6 +81816,16 @@
       "bytes": 8100,
       "mtime": "2026-07-03T13:23:32.581Z",
       "indexed_at": "2026-07-07T18:59:10.044Z"
+    },
+    {
+      "path": "services/governed-autonomous-shipping-loop.js",
+      "synopsis": "STEP 5g — the governed AUTONOMOUS shipping loop. When the STEP 5a",
+      "bytes": 8817,
+      "mtime": "2026-07-07T22:00:33.088Z",
+      "indexed_at": "2026-07-07T22:03:03.163Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/governed-build-queue-scheduler.js",
