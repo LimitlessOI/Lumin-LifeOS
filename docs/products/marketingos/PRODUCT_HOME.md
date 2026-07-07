@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/socialmediaos/*` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-07 — Founder authorized building MarketingOS next (after site-builder completed 11/11 autonomously): start with SocialMediaOS Phase 1, then continue through the rest of MarketingOS. Enrolled `marketingos` at rank 2 in `docs/products/PRODUCT_BUILD_PRIORITY.json` with a buildable Phase 1 `BUILD_QUEUE.json` (schema migration, text-mode session routes, session UI). The R2-dependent audio-upload path and any Adam-copy-dependent specifics are intentionally EXCLUDED from the queue (never build on unverified infra / unresolved business copy); those enroll as their gates open. |
 
 ---
 
@@ -44,7 +44,7 @@ Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-found
 | **First Module** | SocialMediaOS |
 | **Verification Command** | `node scripts/verify-project.mjs --project marketingos` |
 | **Manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
-| **Build Ready** | `NOT_READY` — Phase 0 (manual) can start today; Phase 1 code starts after Adam decisions in §12 are resolved |
+| **Build Ready** | `PHASE_1_CODE_AUTHORIZED` (2026-07-07) — Founder directed the autonomous loop to build SocialMediaOS Phase 1 now. The §12 open questions (pricing lead, first vertical, Creator Media OS relationship) are marketing/copy business decisions that do NOT block the Phase 1 session-pipeline CODE (schema, coach/extract/generate routes, review/export UI); the queue avoids baking in any unresolved copy. Audio/R2 remains gated on env-var verification. |
 
 ---
 
