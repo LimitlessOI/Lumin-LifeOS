@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T19:14:50.031Z",
+  "generated_at": "2026-07-07T19:26:14.091Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11242,
+  "file_count": 11244,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -29598,6 +29598,13 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "builderos-reboot/scripts/governed-factory-fence-proof.mjs",
+      "synopsis": "STEP 5 proof — governed-factory enforcement fence. Proves the single",
+      "bytes": 3018,
+      "mtime": "2026-07-07T19:25:32.099Z",
+      "indexed_at": "2026-07-07T19:26:14.091Z"
+    },
+    {
       "path": "builderos-reboot/scripts/greenfield-integration.mjs",
       "synopsis": "Integration test: greenfield exact_content step via dispatchExecuteStep. Integration test: greenfield exact_content step via dispatchExecuteStep.",
       "bytes": 1452,
@@ -38466,9 +38473,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 177559,
-      "mtime": "2026-07-07T18:58:54.295Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z"
+      "bytes": 179314,
+      "mtime": "2026-07-07T19:26:01.411Z",
+      "indexed_at": "2026-07-07T19:26:14.091Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -81719,6 +81726,16 @@
       "indexed_at": "2026-07-07T18:59:10.044Z"
     },
     {
+      "path": "services/governed-factory-guard.js",
+      "synopsis": "STEP 5 governed-factory enforcement fence. Single source of truth for",
+      "bytes": 2051,
+      "mtime": "2026-07-07T19:24:10.915Z",
+      "indexed_at": "2026-07-07T19:26:14.091Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/health-extensions.js",
       "synopsis": "services/health-extensions.js",
       "bytes": 23659,
@@ -83612,9 +83629,9 @@
     {
       "path": "services/never-stop-product-factory-scheduler.js",
       "synopsis": "Railway + local scheduler — never-stop product factory (only halts on token exhaustion).",
-      "bytes": 5846,
-      "mtime": "2026-07-06T19:53:30.071Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 6251,
+      "mtime": "2026-07-07T19:24:49.551Z",
+      "indexed_at": "2026-07-07T19:26:14.091Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83622,9 +83639,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 50735,
-      "mtime": "2026-07-07T11:06:21.386Z",
-      "indexed_at": "2026-07-07T18:59:10.044Z",
+      "bytes": 51908,
+      "mtime": "2026-07-07T19:24:36.311Z",
+      "indexed_at": "2026-07-07T19:26:14.091Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
