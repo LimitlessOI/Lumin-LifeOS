@@ -143,7 +143,7 @@
     },
     {
       "id": "smos-script-scorer",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-script-scorer.js",
       "task": "SocialMediaOS Content Intelligence — 'Earned Attention' script scorer (socialmediaos PRODUCT_HOME 'The Earned Attention Script Framework': scripts are chains of micro-contracts scored per block — 0-15s hook, 15-30s prove, 30-60s value, 1-2min deepen, 2-5min substance, 5min+ payoff). SELF-CONTAINED ESM module. Export async scoreEarnedAttention({ callCouncilMember, scriptText }). Segment the script into the framework blocks, and for each return { block, delivered:boolean, plantsNextHook:boolean, note }; also return an overall { retentionRisk:'low'|'med'|'high', weakestBlock, notes[] }. callCouncilMember is the ONLY AI hook.",
       "spec": "Single self-contained ESM module. NO DB, NO network except the injected callCouncilMember. Import ONLY node: builtins. Parse model text defensively (extract JSON; on failure return { ok:false, reason:'unparseable_model_output', raw }). try/catch everything → structured { ok:false, error }. Named export scoreEarnedAttention (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -151,9 +151,12 @@
         "smos-title-universe"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 6000,
-      "revive_count": 0
+      "revive_count": 0,
+      "commit_sha": "edea0bdc53da80b625e1db2f9a45af03b4fe7709",
+      "last_attempt_at": "2026-07-07T17:08:34.512Z",
+      "completed_at": "2026-07-07T17:09:05.990Z"
     },
     {
       "id": "smos-publish-gate",
