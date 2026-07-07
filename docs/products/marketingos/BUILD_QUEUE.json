@@ -83,9 +83,9 @@
       "attempts": 1,
       "max_output_tokens": 8000,
       "revive_count": 0,
-      "commit_sha": "f6a52fd044d1427775c1a64c497482c78ad966a9",
-      "last_attempt_at": "2026-07-07T11:31:33.719Z",
-      "completed_at": "2026-07-07T11:34:00.792Z"
+      "commit_sha": "78b0ca59b630a85709212182ce61cb09d431a899",
+      "last_attempt_at": "2026-07-07T11:34:57.491Z",
+      "completed_at": "2026-07-07T11:34:58.113Z"
     },
     {
       "id": "mos-phase2-routes",
