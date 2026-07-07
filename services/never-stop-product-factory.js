@@ -249,10 +249,33 @@ export async function lastCommitShaForFile(targetFile) {
   // of whatever the running deploy serves, so deploy-proof containment passes
   // reliably. (HEAD would be wrong — later queue-status commits keep advancing
   // HEAD past the served SHA, so the deploy could never be proven to contain it.)
+  // Try local git first (dev/test), then the GitHub API — the deployed container
+  // dockerignores `.git/`, so `git log` returns nothing in prod and we MUST fall
+  // back to the API (same creds the queue-status committer already uses).
   try {
     const r = await spawnAsync('git', ['log', '-1', '--format=%H', '--', targetFile], { cwd: ROOT, timeout: 10_000 });
     const sha = String(r.stdout || '').trim();
-    return /^[0-9a-f]{40}$/i.test(sha) ? sha : null;
+    if (/^[0-9a-f]{40}$/i.test(sha)) return sha;
+  } catch { /* no local .git — fall through to the API */ }
+  return githubLastCommitShaForFile(targetFile);
+}
+
+async function githubLastCommitShaForFile(targetFile) {
+  const token = (process.env.GITHUB_TOKEN || '').trim();
+  const repo = (process.env.GITHUB_REPO || '').trim();
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  if (!token || !repo || !targetFile) return null;
+  const [owner, repoName] = repo.split('/');
+  if (!owner || !repoName) return null;
+  try {
+    const url = `https://api.github.com/repos/${owner}/${repoName}/commits?path=${encodeURIComponent(targetFile)}&sha=${encodeURIComponent(branch)}&per_page=1`;
+    const res = await fetch(url, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+    });
+    if (!res.ok) return null;
+    const arr = await res.json();
+    const sha = Array.isArray(arr) && arr[0] && arr[0].sha;
+    return /^[0-9a-f]{40}$/i.test(sha || '') ? sha : null;
   } catch {
     return null;
   }
