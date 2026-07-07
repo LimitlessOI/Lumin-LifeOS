@@ -381,61 +381,6 @@ export function createTCRoutes(
     });
   });
 
-  // POST /api/v1/tc/browser-agent/run — CONDUCTOR-GLUE: wires the proven general
-  // browser loop (runGoalOnSession) to a live GLVAR session + cheapest-tier decider.
-  // Authors no browser logic itself; every piece it calls is independently proven.
-  router.post('/browser-agent/run', requireKey, express.json(), async (req, res) => {
-    const {
-      goal, site = 'glvar', startUrl = null,
-      mustContain = [], mustHaveSelector = [],
-      expectSiteHost = null, expectAccountText = null, maxSteps = 20,
-    } = req.body || {};
-    if (!goal || !String(goal).trim()) return res.status(400).json({ ok: false, error: 'goal is required' });
-    if (typeof callCouncilMember !== 'function') return res.status(503).json({ ok: false, error: 'model decider unavailable (callCouncilMember not injected)' });
-    if (site !== 'glvar') return res.status(400).json({ ok: false, error: `unsupported site: ${site} (only glvar wired)` });
-
-    let session = null;
-    const screenshots = [];
-    try {
-      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { runGoalOnSession } = await import('../services/general-browser-agent-live.js');
-      const accountManager = await getAccountManager();
-      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
-      const login = await tcBrowser.loginToGLVAR(false);
-      session = login.session;
-
-      const callModel = (member, prompt) => callCouncilMember(member, prompt, { taskType: 'browser_agent' });
-      const result = await runGoalOnSession({
-        session,
-        goal: String(goal),
-        startUrl,
-        callModel,
-        tiers: ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openai_gpt', 'claude_sonnet'],
-        mustContain,
-        mustHaveSelector,
-        expectSiteHost,
-        expectAccountText,
-        maxSteps: Math.min(Number(maxSteps) || 20, 30),
-        onScreenshot: ({ step, screenshot }) => { if (screenshot) screenshots.push({ step, screenshot }); },
-        logger,
-      });
-      return res.json({
-        ok: result.ok,
-        reached: result.reached,
-        reason: result.reason,
-        evidence: result.evidence,
-        template: result.template,
-        steps: result.steps,
-        screenshots,
-      });
-    } catch (err) {
-      logger.error?.({ err: err.message }, '[TC-ROUTES] browser-agent/run failed');
-      return res.status(500).json({ ok: false, error: err.message, screenshots });
-    } finally {
-      if (session?.close) await session.close().catch(() => {});
-    }
-  });
-
   router.get('/access/readiness', requireKey, async (_req, res) => {
     try {
       const readiness = await accessService.getAccessReadiness();
