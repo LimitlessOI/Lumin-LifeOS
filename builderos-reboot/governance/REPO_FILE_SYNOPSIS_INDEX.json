@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T06:12:21.974Z",
+  "generated_at": "2026-07-07T06:18:06.908Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11215,
   "files": [
@@ -84108,10 +84108,10 @@
     },
     {
       "path": "services/site-builder-editor.js",
-      "synopsis": "Exports renderEditorShell — services/site-builder-editor.js.",
-      "bytes": 4853,
-      "mtime": "2026-07-07T06:12:21.974Z",
-      "indexed_at": "2026-07-07T06:12:21.974Z"
+      "synopsis": "Utility to escape HTML for safe interpolation",
+      "bytes": 5831,
+      "mtime": "2026-07-07T06:18:06.908Z",
+      "indexed_at": "2026-07-07T06:18:06.908Z"
     },
     {
       "path": "services/site-builder-email-templates.js",
