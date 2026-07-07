@@ -10,7 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps } from './product-build-orchestrator.js';
+import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractBacklog, planBuildQueue } from './build-queue-planner.js';
@@ -840,7 +840,31 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     };
   };
 
-  const outcome = await runNextStep(queue, { buildFn, verifyFn, deployProofFn, logger });
+  // FUNCTIONAL-PROOF gate: once the deploy is proven to serve the built SHA,
+  // confirm the step's module actually LOADED + MOUNTED on that deploy by reading
+  // the boot module-health manifest. A route that built + deployed but threw on
+  // import (or was never auto-registered) is unreachable — not `done`. On failure
+  // the verbatim mount error is carried into step.last_error so the next build
+  // attempt repairs the root cause instead of re-marking a false done.
+  const moduleHealthFn = async ({ step }) => {
+    if (!/^routes\/.+\.(js|mjs)$/.test(String(step?.target_file || ''))) {
+      return { ok: true, reason: 'no_mountable_module_for_step' };
+    }
+    if (!baseUrl) return { ok: false, reason: 'no_base_url_for_module_health' };
+    let body;
+    try {
+      const res = await fetch(`${baseUrl}/api/v1/lifeos/builder/module-health`, {
+        headers: { 'x-command-key': commandKey },
+      });
+      if (!res.ok) return { ok: false, reason: `module_health_http_${res.status}` };
+      body = await res.json();
+    } catch (e) {
+      return { ok: false, reason: `module_health_unreachable: ${e.message}` };
+    }
+    return evaluateModuleHealthForStep(body, step.target_file);
+  };
+
+  const outcome = await runNextStep(queue, { buildFn, verifyFn, deployProofFn, moduleHealthFn, logger });
   persistQueue(queue);
   // Durability (fixes rebuild-forever): persistQueue only writes the container's
   // LOCAL filesystem. deployProofFn triggers a redeploy that restarts from a fresh

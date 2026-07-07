@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-07T09:28:23.927Z",
+  "generated_at": "2026-07-07T09:34:00.531Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11222,
+  "file_count": 11223,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38438,9 +38438,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 165632,
-      "mtime": "2026-07-07T09:27:29.105Z",
-      "indexed_at": "2026-07-07T09:28:23.927Z"
+      "bytes": 167091,
+      "mtime": "2026-07-07T09:33:39.441Z",
+      "indexed_at": "2026-07-07T09:34:00.531Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -61543,9 +61543,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29590,
-      "mtime": "2026-07-07T09:22:53.909Z",
-      "indexed_at": "2026-07-07T09:27:46.409Z",
+      "bytes": 29626,
+      "mtime": "2026-07-07T09:33:21.337Z",
+      "indexed_at": "2026-07-07T09:34:00.531Z",
       "synopsis_index_only": true
     },
     {
@@ -83451,9 +83451,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 45470,
-      "mtime": "2026-07-07T08:32:03.089Z",
-      "indexed_at": "2026-07-07T08:33:20.418Z",
+      "bytes": 46725,
+      "mtime": "2026-07-07T09:32:41.049Z",
+      "indexed_at": "2026-07-07T09:34:00.531Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -83669,9 +83669,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 9227,
-      "mtime": "2026-07-07T02:36:01.272Z",
-      "indexed_at": "2026-07-07T08:32:45.782Z",
+      "bytes": 12047,
+      "mtime": "2026-07-07T09:32:16.745Z",
+      "indexed_at": "2026-07-07T09:34:00.531Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86554,6 +86554,16 @@
       "bytes": 1441,
       "mtime": "2026-07-03T13:23:32.617Z",
       "indexed_at": "2026-07-07T08:32:45.782Z"
+    },
+    {
+      "path": "tests/functional-proof-gate.test.js",
+      "synopsis": "Functional-proof completion gate + self-diagnosis carry-forward.",
+      "bytes": 5073,
+      "mtime": "2026-07-07T09:33:13.285Z",
+      "indexed_at": "2026-07-07T09:34:00.531Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/insurance-card-parse.test.js",
