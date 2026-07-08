@@ -461,9 +461,22 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   // planner localizes them into concrete target_file steps (the doc backlog may
   // be empty for a product enrolled purely by a gate FAIL).
   const extraBacklog = Array.isArray(task.sentry_findings) ? task.sentry_findings : [];
-  const planned = await planBuildQueue({ productId: task.product_id, homeText, existingQueue, extraBacklog, callModel, logger });
+  // VISIBILITY: planBuildQueue fails CLOSED to null for several distinct reasons
+  // (model call threw, model returned no parseable steps, every step filtered as
+  // dedupe/already-done, invalid queue). Bare null gave a single opaque
+  // `plan_produced_no_queue` receipt that could not be diagnosed without a
+  // redeploy. Capture the planner's own warn/info reason and surface it in the
+  // receipt + log so recent_events names exactly which branch failed.
+  let planReason = null;
+  const capturingLogger = {
+    warn: (obj, msg) => { planReason = { level: 'warn', msg, ...(obj && typeof obj === 'object' ? obj : {}) }; logger?.warn?.(obj, msg); },
+    info: (obj, msg) => { if (!planReason) planReason = { level: 'info', msg, ...(obj && typeof obj === 'object' ? obj : {}) }; logger?.info?.(obj, msg); },
+    error: (obj, msg) => { planReason = { level: 'error', msg, ...(obj && typeof obj === 'object' ? obj : {}) }; logger?.error?.(obj, msg); },
+  };
+  const planned = await planBuildQueue({ productId: task.product_id, homeText, existingQueue, extraBacklog, callModel, logger: capturingLogger });
   if (!planned || !planned.queue) {
-    return { ok: false, detail: 'plan_produced_no_queue' };
+    log({ event: 'plan_produced_no_queue', product_id: task.product_id, reason: planReason });
+    return { ok: false, detail: 'plan_produced_no_queue', reason: planReason };
   }
   // Stamp the findings signature so discoverSentryFixWork won't re-plan the same
   // findings next cycle (WASTE-SAFE) — only clears when the gate emits new findings.
