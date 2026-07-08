@@ -383,6 +383,21 @@ export function createLifeOSFinanceRoutes({ pool, requireKey, logger, callCounci
   return router;
 }
 
+/**
+ * Auto-register entry point. Mounts the finance router at /api/v1/lifeos/finance
+ * so the founder-builder runtime lane serves it WITHOUT editing the protected
+ * composition root. This is what makes the dashboard's GET .../finance/goals
+ * resolve instead of 404 (SENTRY lifeos-founder-ui: no_js_errors).
+ */
+export function registerLifeOSFinanceRoutes(app, deps = {}) {
+  const { pool, requireKey, logger, callCouncilMember = null } = deps;
+  app.use(
+    '/api/v1/lifeos/finance',
+    createLifeOSFinanceRoutes({ pool, requireKey, logger, callCouncilMember })
+  );
+  logger?.info?.('✅ [LIFEOS-FINANCE] Founder-builder routes mounted at /api/v1/lifeos/finance');
+}
+
 // ── CSV helpers ───────────────────────────────────────────────────────────────
 
 function parseCSVLine(line) {

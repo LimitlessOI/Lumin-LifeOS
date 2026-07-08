@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T07:58:09.094Z",
+  "generated_at": "2026-07-08T17:08:03.915Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11289,
   "files": [
@@ -21589,8 +21589,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3409242,
-      "mtime": "2026-07-08T07:57:23.725Z",
-      "indexed_at": "2026-07-08T07:58:09.094Z"
+      "mtime": "2026-07-08T17:07:51.811Z",
+      "indexed_at": "2026-07-08T17:08:03.915Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30270,9 +30270,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 4739,
-      "mtime": "2026-07-08T01:17:37.524Z",
-      "indexed_at": "2026-07-08T07:54:58.767Z",
+      "bytes": 5356,
+      "mtime": "2026-07-08T17:06:08.967Z",
+      "indexed_at": "2026-07-08T17:08:03.915Z",
       "synopsis_index_only": true
     },
     {
@@ -39052,9 +39052,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 599365,
-      "mtime": "2026-07-07T19:41:58.519Z",
-      "indexed_at": "2026-07-08T07:54:58.767Z"
+      "bytes": 600567,
+      "mtime": "2026-07-08T17:07:24.535Z",
+      "indexed_at": "2026-07-08T17:08:03.915Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65161,9 +65161,9 @@
     {
       "path": "routes/lifeos-finance-routes.js",
       "synopsis": "LifeOS Personal Finance API — mirror / clarity only; not investment advice.",
-      "bytes": 18335,
-      "mtime": "2026-07-03T13:23:32.521Z",
-      "indexed_at": "2026-07-08T07:54:58.767Z",
+      "bytes": 19010,
+      "mtime": "2026-07-08T17:06:01.787Z",
+      "indexed_at": "2026-07-08T17:08:03.915Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
