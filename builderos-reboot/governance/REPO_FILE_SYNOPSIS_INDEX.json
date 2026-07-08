@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T20:16:39.236Z",
+  "generated_at": "2026-07-08T20:32:40.979Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11290,
   "files": [
@@ -38623,9 +38623,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 203453,
-      "mtime": "2026-07-08T20:15:52.807Z",
-      "indexed_at": "2026-07-08T20:16:38.574Z"
+      "bytes": 204629,
+      "mtime": "2026-07-08T20:32:31.931Z",
+      "indexed_at": "2026-07-08T20:32:40.979Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -80195,9 +80195,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 16647,
-      "mtime": "2026-07-08T18:54:26.007Z",
-      "indexed_at": "2026-07-08T20:16:38.574Z",
+      "bytes": 17008,
+      "mtime": "2026-07-08T20:32:18.239Z",
+      "indexed_at": "2026-07-08T20:32:40.979Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84005,9 +84005,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 60445,
-      "mtime": "2026-07-08T20:15:27.295Z",
-      "indexed_at": "2026-07-08T20:16:38.574Z",
+      "bytes": 61539,
+      "mtime": "2026-07-08T20:32:18.239Z",
+      "indexed_at": "2026-07-08T20:32:40.979Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

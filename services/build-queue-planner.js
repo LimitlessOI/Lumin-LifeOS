@@ -305,7 +305,10 @@ export async function planBuildQueue({
 
   const parsed = parseModelJson(raw);
   const proposed = Array.isArray(parsed?.steps) ? parsed.steps : [];
-  if (!proposed.length) return null;
+  if (!proposed.length) {
+    logger?.warn?.({ productId, rawLen: String(raw || '').length }, '[BUILD-QUEUE-PLANNER] model returned no parseable steps — fail closed');
+    return null;
+  }
 
   const existingSteps = Array.isArray(existingQueue?.steps) ? existingQueue.steps : [];
   const existingIds = new Set(existingSteps.map((s) => s.id));
@@ -332,7 +335,10 @@ export async function planBuildQueue({
     added.push(step);
   }
 
-  if (!added.length) return null;
+  if (!added.length) {
+    logger?.warn?.({ productId, proposed: proposed.length, doneFiles: doneFiles.length }, '[BUILD-QUEUE-PLANNER] all proposed steps filtered (dedupe/already-done/no target_file) — fail closed');
+    return null;
+  }
 
   const queue = {
     schema: 'product_build_queue_v1',
