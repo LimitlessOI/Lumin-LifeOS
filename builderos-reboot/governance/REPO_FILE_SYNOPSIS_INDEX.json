@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T21:01:08.063Z",
+  "generated_at": "2026-07-08T21:03:29.754Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11293,
   "files": [
@@ -33970,9 +33970,9 @@
     {
       "path": "db/migrations/20260420_lifeos_phase2_schema.sql",
       "synopsis": "Database migration — 20260420_lifeos_phase2_schema.sql.",
-      "bytes": 4870,
-      "mtime": "2026-07-08T21:01:08.063Z",
-      "indexed_at": "2026-07-08T21:01:08.063Z"
+      "bytes": 2152,
+      "mtime": "2026-07-08T21:03:29.754Z",
+      "indexed_at": "2026-07-08T21:03:29.754Z"
     },
     {
       "path": "db/migrations/20260421_lane_intel.sql",
