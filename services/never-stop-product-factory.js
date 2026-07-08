@@ -1079,10 +1079,29 @@ export async function runProductExpansionCycle(options = {}) {
   }
 
   const work = await discoverProductExpansionWork({ baseUrl, commandKey });
-  const task = work[0];
+  // This loop can only BUILD certain kinds; foundation_pipeline and
+  // founder_usability_gap are handled by the separate BP scheduler and here only
+  // hit the deferred no-op case. If such a defer-only kind is highest priority it
+  // would be re-selected every cycle — starving actionable BUILD_QUEUE / SENTRY
+  // fix work and burning a daily-budget attempt on nothing. So prefer the
+  // highest-priority task this runner can actually act on, and only fall back to
+  // the deferred item when there is genuinely nothing buildable.
+  const DEFER_ONLY_KINDS = new Set(['foundation_pipeline', 'founder_usability_gap']);
+  const actionable = work.find((w) => w && !DEFER_ONLY_KINDS.has(w.kind));
+  const task = actionable || work[0];
   if (!task) {
     log({ event: 'expansion_empty_unexpected' });
     return { ok: false, reason: 'no_work' };
+  }
+  if (actionable && work[0] && work[0].id !== actionable.id) {
+    log({
+      event: 'skipped_defer_only_top',
+      skipped: work[0].id,
+      skipped_kind: work[0].kind,
+      selected: actionable.id,
+      selected_kind: actionable.kind,
+      note: `skipped ${work[0].id} (defer-only, kind: ${work[0].kind}) — advancing to next buildable ${actionable.id} (kind: ${actionable.kind})`,
+    });
   }
 
   log({ event: 'cycle_start', task });
