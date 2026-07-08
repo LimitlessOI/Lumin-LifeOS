@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T19:59:18.772Z",
+  "generated_at": "2026-07-08T20:04:57.552Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11290,
   "files": [
@@ -37421,9 +37421,9 @@
     {
       "path": "docs/governance/CHAIR_CONSENSUS_LEDGER.md",
       "synopsis": "Chair Consensus Ledger",
-      "bytes": 3242,
-      "mtime": "2026-07-08T19:59:07.187Z",
-      "indexed_at": "2026-07-08T19:59:18.114Z"
+      "bytes": 3869,
+      "mtime": "2026-07-08T20:04:44.915Z",
+      "indexed_at": "2026-07-08T20:04:57.552Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
@@ -38623,9 +38623,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 200876,
-      "mtime": "2026-07-08T19:58:39.071Z",
-      "indexed_at": "2026-07-08T19:59:18.114Z"
+      "bytes": 201973,
+      "mtime": "2026-07-08T20:04:22.691Z",
+      "indexed_at": "2026-07-08T20:04:57.552Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -38732,9 +38732,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 105320,
-      "mtime": "2026-07-03T21:48:48.016Z",
-      "indexed_at": "2026-07-08T19:59:18.114Z"
+      "bytes": 105708,
+      "mtime": "2026-07-08T20:04:07.427Z",
+      "indexed_at": "2026-07-08T20:04:57.552Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -65018,9 +65018,9 @@
     {
       "path": "routes/lifeos-command-center-routes.js",
       "synopsis": "routes/lifeos-command-center-routes.js",
-      "bytes": 61641,
-      "mtime": "2026-07-03T13:23:32.521Z",
-      "indexed_at": "2026-07-08T19:59:18.114Z",
+      "bytes": 61732,
+      "mtime": "2026-07-08T20:04:02.395Z",
+      "indexed_at": "2026-07-08T20:04:57.552Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -83995,9 +83995,9 @@
     {
       "path": "services/never-stop-product-factory-scheduler.js",
       "synopsis": "Railway + local scheduler — never-stop product factory (only halts on token exhaustion).",
-      "bytes": 6251,
-      "mtime": "2026-07-07T19:28:50.711Z",
-      "indexed_at": "2026-07-08T19:59:18.114Z",
+      "bytes": 6841,
+      "mtime": "2026-07-08T20:04:02.395Z",
+      "indexed_at": "2026-07-08T20:04:57.552Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84005,9 +84005,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 58694,
-      "mtime": "2026-07-08T19:58:39.071Z",
-      "indexed_at": "2026-07-08T19:59:18.114Z",
+      "bytes": 60024,
+      "mtime": "2026-07-08T20:04:02.395Z",
+      "indexed_at": "2026-07-08T20:04:57.552Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

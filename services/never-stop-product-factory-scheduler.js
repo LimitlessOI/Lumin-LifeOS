@@ -15,6 +15,8 @@ import {
   discoverBuildQueueWork,
   dailyBuildBudget,
   recordDailyBuildAttempts,
+  readRecentFactoryLog,
+  factoryRuntimeEnvPresence,
 } from './never-stop-product-factory.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
 
@@ -45,7 +47,15 @@ export function getNeverStopProductFactoryState() {
   return { ...state, receipt_path: RECEIPT_PATH };
 }
 
-export function getNeverStopProductFactoryStatus() {
+function readLastReceipt() {
+  try {
+    return JSON.parse(fs.readFileSync(RECEIPT_PATH, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+export function getNeverStopProductFactoryStatus({ events = 25 } = {}) {
   const token = hasTokenCapacity();
   const enabled = neverStopProductsEnabled();
   const intervalMs = Number(process.env.NEVER_STOP_INTERVAL_MS || process.env.BUILDEROS_NEVER_STOP_INTERVAL_MS || 5 * 60 * 1000);
@@ -61,6 +71,12 @@ export function getNeverStopProductFactoryStatus() {
       token_halt_since: state.tokenHaltSince,
       daily_budget: dailyBuildBudget(),
       receipt_path: path.relative(REPO_ROOT, RECEIPT_PATH),
+      // OBSERVABILITY: what the loop is actually deciding each cycle + whether the
+      // runtime env it needs to commit/plan is present (booleans only). This is
+      // the blind spot — total_runs alone can't explain zero-commit cycles.
+      env_present: factoryRuntimeEnvPresence(),
+      last_receipt: readLastReceipt(),
+      recent_events: readRecentFactoryLog(events),
     },
   };
 }

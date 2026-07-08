@@ -430,9 +430,10 @@ export function createCommandCenterAggregateRoutes({ requireKey, pool }) {
    */
   router.get('/api/v1/lifeos/command-center/never-stop-product-factory', requireKey, async (req, res, next) => {
     try {
+      const events = Math.min(200, Math.max(1, Number(req.query.events) || 25));
       res.json({
         read_path: 'GET /api/v1/lifeos/command-center/never-stop-product-factory',
-        ...getNeverStopProductFactoryStatus(),
+        ...getNeverStopProductFactoryStatus({ events }),
       });
     } catch (err) {
       next(err);
