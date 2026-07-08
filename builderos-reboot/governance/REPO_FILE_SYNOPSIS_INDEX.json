@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T21:50:28.078Z",
+  "generated_at": "2026-07-08T21:52:03.916Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11299,
   "files": [
@@ -82775,9 +82775,9 @@
     {
       "path": "services/lifeos-important-dates.js",
       "synopsis": "Exports addDate — services/lifeos-important-dates.js.",
-      "bytes": 1194,
-      "mtime": "2026-07-08T21:50:28.078Z",
-      "indexed_at": "2026-07-08T21:50:28.078Z"
+      "bytes": 1788,
+      "mtime": "2026-07-08T21:52:03.916Z",
+      "indexed_at": "2026-07-08T21:52:03.916Z"
     },
     {
       "path": "services/lifeos-legacy-core.js",
