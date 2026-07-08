@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T20:51:31.858Z",
+  "generated_at": "2026-07-08T20:58:24.475Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11290,
+  "file_count": 11292,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38623,9 +38623,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 206147,
-      "mtime": "2026-07-08T20:49:20.136Z",
-      "indexed_at": "2026-07-08T20:51:31.858Z"
+      "bytes": 207314,
+      "mtime": "2026-07-08T20:58:16.268Z",
+      "indexed_at": "2026-07-08T20:58:24.475Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -84297,6 +84297,16 @@
       ]
     },
     {
+      "path": "services/provider-key-health.js",
+      "synopsis": "Provider API-key health — enumerate the AI/LLM/tool keys Railway",
+      "bytes": 9184,
+      "mtime": "2026-07-08T20:57:25.532Z",
+      "indexed_at": "2026-07-08T20:58:24.475Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/purpose-discovery.js",
       "synopsis": "services/purpose-discovery.js",
       "bytes": 8283,
@@ -86246,9 +86256,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 6791,
-      "mtime": "2026-07-07T23:29:11.332Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z",
+      "bytes": 7582,
+      "mtime": "2026-07-08T20:57:38.680Z",
+      "indexed_at": "2026-07-08T20:58:24.475Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87534,6 +87544,16 @@
       "bytes": 899,
       "mtime": "2026-07-03T13:23:32.617Z",
       "indexed_at": "2026-07-08T20:32:52.818Z"
+    },
+    {
+      "path": "tests/provider-key-health.test.js",
+      "synopsis": "Provider key-health service — structure + absent-path (no network).",
+      "bytes": 1830,
+      "mtime": "2026-07-08T20:58:00.940Z",
+      "indexed_at": "2026-07-08T20:58:24.475Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/quality_regression.test.js",
