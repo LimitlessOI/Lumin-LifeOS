@@ -45,6 +45,34 @@ which runs on prod where Chrome launches.
 6. The system builds the fixes through the governed pipe; the conductor authors
    the spec + proof only. Do not hand-write feature fixes; do not fake approval.
 
+## Solution-mandatory (founder principle, 2026-07-03 — "we don't believe in impossible")
+
+> "When SENTRY flags a problem, it should also give a solution. And that's true
+> of everything — it should always be offering a solution, whether it's right or
+> wrong. We don't believe in impossible. It's impossible until we learn
+> otherwise, like the two-minute mile."
+
+**Every SENTRY finding is INVALID unless it carries a proposed solution.** A flag
+without a proposed fix is not a finding — it is an incomplete report and does not
+satisfy the gate's reporting contract. Therefore:
+
+7. Each failed assertion and each UX friction point MUST include a
+   `proposed_solution` (a concrete next step: the file/route/spec to change, the
+   config to set, or the experiment to run). "Right or wrong" is acceptable — a
+   wrong-but-concrete proposal is better than silence, because it can be tried,
+   measured, and improved. Uncertainty is labeled (KNOW / THINK / GUESS), never
+   used as a reason to omit the proposal.
+8. "Impossible" / "can't be done" is not a permitted terminal state. The correct
+   framing is "not solved **yet**" plus the next thing to try. If a solution is
+   genuinely unknown, the proposed solution is the smallest experiment that would
+   reduce the uncertainty.
+9. These proposed solutions are the system's self-fix fuel: the system converts
+   each finding+solution into a governed improvement proposal (see
+   `services/builderos-improvement-loop.js`, which routes findings →
+   blueprint-delta → build → re-verify). This is how the system does the
+   conductor's job continuously — flag, propose, build, re-test — without waiting
+   on a human.
+
 ## Provenance
 
 - Layer A: PR #280. Layer B: PR #281. Content-truth guard: PR #282.

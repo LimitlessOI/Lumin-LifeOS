@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T05:28:28.038Z",
+  "generated_at": "2026-07-08T05:34:57.545Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11280,
   "files": [
@@ -30056,9 +30056,9 @@
     {
       "path": "CLAUDE.md",
       "synopsis": "CLAUDE.md — LifeOS/LimitlessOS Project Instructions",
-      "bytes": 10406,
-      "mtime": "2026-07-08T01:25:19.572Z",
-      "indexed_at": "2026-07-08T01:25:19.697Z"
+      "bytes": 11151,
+      "mtime": "2026-07-08T05:34:50.517Z",
+      "indexed_at": "2026-07-08T05:34:57.545Z"
     },
     {
       "path": "client/orchestrator-app/main.js",
@@ -58733,9 +58733,9 @@
     {
       "path": "docs/SENTRY_PREALPHA_DOCTRINE.md",
       "synopsis": "SENTRY Pre-Alpha Completion Doctrine (Standing Order SO-002)",
-      "bytes": 2673,
-      "mtime": "2026-07-08T01:25:19.580Z",
-      "indexed_at": "2026-07-08T01:25:19.697Z"
+      "bytes": 4357,
+      "mtime": "2026-07-08T05:34:44.033Z",
+      "indexed_at": "2026-07-08T05:34:57.545Z"
     },
     {
       "path": "docs/SESSION_HANDOFF.md",
