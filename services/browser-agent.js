@@ -47,8 +47,17 @@ const BASE_ARGS = [
   "--no-first-run",
 ];
 
+// Prefer an explicitly-set CHROME_BIN. Otherwise IGNORE the distro chromium
+// wrapper (/usr/bin/chromium) even if PUPPETEER_EXECUTABLE_PATH points at it —
+// its version mismatched puppeteer and crashed on launch. undefined lets
+// puppeteer resolve its OWN matched bundled Chrome from PUPPETEER_CACHE_DIR.
+function resolveExecutablePath() {
+  const envPath = process.env.CHROME_BIN || process.env.PUPPETEER_EXECUTABLE_PATH || "";
+  return envPath && envPath !== "/usr/bin/chromium" ? envPath : undefined;
+}
+
 export function getChromiumLaunchOptions({ headless = true, pipe = false, extraArgs = [] } = {}) {
-  const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_BIN || undefined;
+  const executablePath = resolveExecutablePath();
   return {
     headless: headless === true ? "new" : headless,
     executablePath,
@@ -66,8 +75,7 @@ export function getChromiumLaunchOptions({ headless = true, pipe = false, extraA
  * instead of guessing and redeploying repeatedly.
  */
 export async function probeLaunchConfigs() {
-  const executablePath =
-    process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_BIN || undefined;
+  const executablePath = resolveExecutablePath();
   const configs = [
     { name: "new+ws", headless: "new", pipe: false, args: BASE_ARGS },
     { name: "new+pipe", headless: "new", pipe: true, args: BASE_ARGS },

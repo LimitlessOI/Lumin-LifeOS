@@ -37,17 +37,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libxshmfence1 \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-# Chrome tries to reach a system dbus daemon on launch; in a container there is
-# none, and the failed connection can abort startup. Pointing it at /dev/null
-# makes Chrome skip dbus instead of crashing.
-ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
+# Use Puppeteer's OWN matched Chrome build, not the distro chromium. The Debian
+# `chromium` package is a v150 wrapper while puppeteer 24.x expects its matched
+# build; that mismatch crashed on launch (starts, then dies with Code: null and
+# no fatal message). We still install the apt `chromium` above only for its
+# shared-library closure. Puppeteer downloads its Chrome into PUPPETEER_CACHE_DIR
+# at build time and resolves it automatically at runtime (no executablePath).
+ENV PUPPETEER_CACHE_DIR=/usr/src/app/.cache/puppeteer
 ENV NODE_ENV=production
 
 COPY package.json package-lock.json* ./
 COPY scripts/install-git-hooks.mjs scripts/install-git-hooks.mjs
 RUN npm ci --omit=dev
+RUN npx puppeteer browsers install chrome
 
 COPY . .
 
