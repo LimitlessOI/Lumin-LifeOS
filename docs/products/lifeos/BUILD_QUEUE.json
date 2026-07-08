@@ -79,7 +79,7 @@
     },
     {
       "id": "s06",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/lifeos-phase2-routes.js",
       "task": "Register all phase-2 REST endpoints under /api/v1/lifeos",
       "spec": "ESM module exporting registerLifeosPhase2Routes(app, deps) where deps={db, callCouncilMember, notifyFn}. Mounts: POST /api/v1/lifeos/sleep (logSleep), GET /api/v1/lifeos/sleep/summary, POST /api/v1/lifeos/habits (create habit), POST /api/v1/lifeos/habits/:id/log (log completion, increments streak), GET /api/v1/lifeos/habits, POST /api/v1/lifeos/journal/voice (accepts {transcript}, calls callCouncilMember('lumin', extractionPrompt), returns {commitments,patterns,emotionalSignals,suggestedActions}), POST /api/v1/lifeos/gratitude (logGratitude), GET /api/v1/lifeos/gratitude/themes, POST /api/v1/lifeos/finance/net-worth (insert snapshot), GET /api/v1/lifeos/finance/net-worth (list snapshots), POST /api/v1/lifeos/future-self/letter (createLetter), GET /api/v1/lifeos/future-self/letter, POST /api/v1/lifeos/energy (insert energy_log), GET /api/v1/lifeos/energy/curve (AI summary via callCouncilMember), POST /api/v1/lifeos/important-dates, GET /api/v1/lifeos/important-dates, POST /api/v1/lifeos/learning-queue (insert), GET /api/v1/lifeos/learning-queue, PATCH /api/v1/lifeos/learning-queue/:id (update status/key_insight). Imports services from s02,s03,s04,s05 plus inline db helpers for habits/energy/net-worth/learning-queue. All handlers validate req.user exists (401 if not). No browser globals.",
@@ -90,11 +90,11 @@
         "s05"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 1,
       "commit_sha": "50b94d0543f940dc1208e16ee29a09b4eda692c7",
-      "last_attempt_at": "2026-07-08T22:33:07.450Z",
+      "last_attempt_at": "2026-07-08T22:50:13.312Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "revive_count": 1
+      "revive_count": 2
     },
     {
       "id": "s07",
