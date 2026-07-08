@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T21:59:13.587Z",
+  "generated_at": "2026-07-08T22:11:54.473Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11300,
+  "file_count": 11301,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -67318,6 +67318,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/lifeos-phase2-scheduler.mjs",
+      "synopsis": "Exports runPhase2Tick — scripts/lifeos-phase2-scheduler.mjs.",
+      "bytes": 2027,
+      "mtime": "2026-07-08T22:11:54.473Z",
+      "indexed_at": "2026-07-08T22:11:54.473Z"
     },
     {
       "path": "scripts/lifeos-provision-member.mjs",
