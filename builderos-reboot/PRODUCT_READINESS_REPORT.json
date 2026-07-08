@@ -1,13 +1,13 @@
 {
   "schema": "product_readiness_report_v1",
-  "updated_at": "2026-06-29T17:24:44.666Z",
+  "updated_at": "2026-07-08T06:27:20.299Z",
   "authority": {
     "product_registry": "docs/products/PRODUCT_REGISTRY.json",
     "bp_priority": "builderos-reboot/BP_PRIORITY.json",
     "point_b_target": "builderos-reboot/POINT_B_TARGET.json"
   },
   "summary": {
-    "products": 43,
+    "products": 44,
     "missing_product_homes": 0,
     "active_bp_products": 3,
     "point_b_complete_products": 0
@@ -156,7 +156,7 @@
           "rank": 8,
           "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-FOUNDER-UI",
           "blueprint_status": "complete",
-          "verdict": "TECHNICAL_PASS",
+          "verdict": "FAIL",
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": null
@@ -611,20 +611,20 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-06-29T00:46:42.880Z",
+            "at": "2026-07-08T06:27:20.299Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
         },
         {
-          "rank": 11,
+          "rank": 13,
           "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
           "blueprint_status": "complete",
           "verdict": "TECHNICAL_PASS",
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-06-29T17:24:44.666Z",
+            "at": "2026-06-30T17:20:53.767Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
@@ -648,13 +648,13 @@
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
         "ok": true,
         "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
-        "stale_against_objective": true
+        "stale_against_objective": false
       },
       "alpha_readiness": {
         "ok": true,
         "ready_for_alpha_testing": true,
         "ready_for_alpha_gate": false,
-        "stale_against_objective": true
+        "stale_against_objective": false
       },
       "point_b_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
       "point_b_locked": false,
@@ -672,11 +672,48 @@
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
+        },
+        {
+          "rank": 12,
+          "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+          "blueprint_status": "complete",
+          "verdict": "TECHNICAL_PASS",
+          "founder_usability_pass": false,
+          "completion_receipt_id": null,
+          "artifact_sync": {
+            "at": "2026-06-30T04:24:42.494Z",
+            "mode": "technical_acceptance",
+            "status": "CURRENT"
+          }
         }
       ],
       "notes": [
         "Current Point B anchor for the system path.",
         "Technical pass does not equal founder usability pass."
+      ]
+    },
+    {
+      "product_id": "limitlessos",
+      "name": "LimitlessOS",
+      "canonical_home": "docs/products/limitlessos/PRODUCT_HOME.md",
+      "canonical_home_exists": true,
+      "law_path": "docs/products/limitlessos/PRODUCT_HOME.md",
+      "law_path_exists": true,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "READY_FOR_PRODUCT_DEVELOPMENT",
+      "ui_alpha_gate": {
+        "receipt": "products/receipts/UI_ALPHA_GATE.json",
+        "ok": true,
+        "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+        "stale_against_objective": false
+      },
+      "alpha_readiness": null,
+      "point_b_mission_id": null,
+      "point_b_locked": false,
+      "default_runtime_surface": null,
+      "bp_priority": [],
+      "notes": [
+        "Business operating umbrella — founder vision 2026-06-29; modules in child product homes."
       ]
     },
     {
@@ -1190,7 +1227,7 @@
   ],
   "freshness": {
     "status": "CURRENT",
-    "updated_at": "2026-06-29T17:24:44.666Z",
+    "updated_at": "2026-07-08T06:27:20.299Z",
     "authority_paths": [
       "docs/products/PRODUCT_REGISTRY.json",
       "builderos-reboot/BP_PRIORITY.json",

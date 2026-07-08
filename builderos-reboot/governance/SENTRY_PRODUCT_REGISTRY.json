@@ -1,0 +1,43 @@
+{
+  "schema": "sentry_product_registry_v1",
+  "doctrine": "SO-002",
+  "description": "Single source of truth for which BP products are governed by the SENTRY pre-alpha completion gate and what their two doctrine layers are. The generic engine (scripts/sentry-prealpha-gate.mjs) runs any product defined here purely from this config: Layer A structural (no browser) + Layer B human-sim (real browser), both fail-closed, both emitting solution-mandatory findings into a per-product self-fix feed the improvement loop consumes. This generalizes SO-002 beyond Site Builder to every registered product.",
+  "products": [
+    {
+      "id": "site-builder",
+      "title": "Site Builder",
+      "ssot": "docs/products/site-builder/PRODUCT_HOME.md",
+      "findingsFeed": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
+      "layers": [
+        {
+          "name": "A+B",
+          "kind": "composite",
+          "type": "gate-script",
+          "run": ["scripts/sentry-site-builder-prealpha-gate.mjs"],
+          "feedFrom": "products/receipts/SENTRY_FINDINGS_FEED.json",
+          "requiresEnv": ["PUBLIC_BASE_URL", "COMMAND_CENTER_KEY"],
+          "deferrableWithoutEnv": true,
+          "note": "Delegates to the proven Site Builder composite gate (prep preview -> Layer A structural -> Layer B human-sim -> feed). The engine consumes the feed it emits."
+        }
+      ]
+    },
+    {
+      "id": "lifeos-founder-ui",
+      "title": "LifeOS Founder UI (chat + drawer + build)",
+      "ssot": "docs/products/lifeos/PRODUCT_HOME.md",
+      "findingsFeed": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
+      "layers": [
+        {
+          "name": "B",
+          "kind": "human-sim",
+          "type": "command",
+          "run": ["scripts/run-real-app-e2e.mjs"],
+          "receipt": "products/receipts/REAL_APP_E2E.json",
+          "requiresEnv": ["PUBLIC_BASE_URL"],
+          "deferrableWithoutEnv": true,
+          "note": "Drives the real LifeOS app in a real browser as the founder would: loads app, opens the Lumin drawer, asks counsel questions, runs a direct build, checks for JS/plumbing errors. Failing checks become solution-mandatory findings."
+        }
+      ]
+    }
+  ]
+}

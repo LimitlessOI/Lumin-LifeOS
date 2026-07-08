@@ -1,0 +1,62 @@
+{
+  "schema": "sentry_findings_feed_v1",
+  "product": "lifeos-founder-ui",
+  "generated_at": "2026-07-08T06:39:46.825Z",
+  "findings_count": 4,
+  "without_solution": 0,
+  "findings": [
+    {
+      "code": "no_js_errors",
+      "detail": "Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Error loading goals: Error: HTTP 404\n    at loadGoals (https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos-d; Failed to load resource: the server responded with a status of 40",
+      "proposed_solution": "Reproduce \"no_js_errors\" in the layer-b walkthrough, then fix the first failing behavior: Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Failed to load res",
+      "proposed_solution_source": "synthesized",
+      "severity": "error",
+      "source": "layer-b"
+    },
+    {
+      "code": "smos_question",
+      "detail": "no workflow content: \"Point B right now: LifeOS Consumer Alpha — a real user can sign up, log in, Lumin greets them by name with the correct t\"",
+      "proposed_solution": "Reproduce \"smos_question\" in the layer-b walkthrough, then fix the first failing behavior: no workflow content: \"Point B right now: LifeOS Consumer Alpha — a real user can sign up, log in, Lumin greets them by name with the correct t\"",
+      "proposed_solution_source": "synthesized",
+      "severity": "error",
+      "source": "layer-b"
+    },
+    {
+      "code": "counsel_only_bypass",
+      "detail": "thin answer, no builder content: \"The workflow is a 5-stage gate system:\n\n1. **content_brief** — You (or a template) generate a brief for the relocation c\"",
+      "proposed_solution": "Reproduce \"counsel_only_bypass\" in the layer-b walkthrough, then fix the first failing behavior: thin answer, no builder content: \"The workflow is a 5-stage gate system:\n\n1. **content_brief** — You (or a template) generate a brief for the relocation c\"",
+      "proposed_solution_source": "synthesized",
+      "severity": "error",
+      "source": "layer-b"
+    },
+    {
+      "code": "drawer_direct_build",
+      "detail": "missing terminal PASS + transport/commit proof: \"Here's how BuilderOS implements a change — the actual mechanics, no performance. **The path a change travels:**\n\n1. **Founder message hits the API** — `/api/v1/lifeos/builderos/command-control/founder-interface/message`.\"",
+      "proposed_solution": "Reproduce \"drawer_direct_build\" in the layer-b walkthrough, then fix the first failing behavior: missing terminal PASS + transport/commit proof: \"Here's how BuilderOS implements a change — the actual mechanics, no performance. **The path a change travels:**",
+      "proposed_solution_source": "synthesized",
+      "severity": "error",
+      "source": "layer-b"
+    }
+  ],
+  "readiness": {
+    "blockers": [
+      {
+        "code": "no_js_errors",
+        "detail": "Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Error loading goals: Error: HTTP 404\n    at loadGoals (https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos-d; Failed to load resource: the server responded with a status of 40"
+      },
+      {
+        "code": "smos_question",
+        "detail": "no workflow content: \"Point B right now: LifeOS Consumer Alpha — a real user can sign up, log in, Lumin greets them by name with the correct t\""
+      },
+      {
+        "code": "counsel_only_bypass",
+        "detail": "thin answer, no builder content: \"The workflow is a 5-stage gate system:\n\n1. **content_brief** — You (or a template) generate a brief for the relocation c\""
+      },
+      {
+        "code": "drawer_direct_build",
+        "detail": "missing terminal PASS + transport/commit proof: \"Here's how BuilderOS implements a change — the actual mechanics, no performance. **The path a change travels:**\n\n1. **Founder message hits the API** — `/api/v1/lifeos/builderos/command-control/founder-interface/message`.\""
+      }
+    ],
+    "warnings": []
+  }
+}
