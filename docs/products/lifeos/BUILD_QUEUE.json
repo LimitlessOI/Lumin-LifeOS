@@ -1,0 +1,155 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "lifeos",
+  "planned_at": "2026-07-08T20:57:28.573Z",
+  "backlog_signature": "554bd608226b9a58",
+  "steps": [
+    {
+      "id": "s01",
+      "status": "pending",
+      "target_file": "db/migrations/20260420_lifeos_phase2_schema.sql",
+      "task": "Create all phase-2 tables with IF NOT EXISTS guards",
+      "spec": "Migration emits CREATE TABLE IF NOT EXISTS for: sleep_logs(id uuid PK default gen_random_uuid(), user_id uuid, date date, bedtime timestamptz, wake_time timestamptz, quality smallint, dreams text, hrv_ms int, created_at timestamptz default now()), habits(id uuid PK default gen_random_uuid(), user_id uuid, title text, trigger text, cue text, reward text, streak int default 0, active boolean default true, created_at timestamptz default now(), updated_at timestamptz default now()), habit_logs(id uuid PK default gen_random_uuid(), user_id uuid, habit_id uuid references habits(id), logged_at timestamptz default now()), gratitude_logs(id uuid PK default gen_random_uuid(), user_id uuid, date date, entries jsonb, created_at timestamptz default now()), net_worth_snapshots(id uuid PK default gen_random_uuid(), user_id uuid, snapshot_date date, assets_cents bigint, liabilities_cents bigint, created_at timestamptz default now()), future_self_letters(id uuid PK default gen_random_uuid(), user_id uuid, content text, deliver_on date, delivered boolean default false, created_at timestamptz default now()), energy_logs(id uuid PK default gen_random_uuid(), user_id uuid, logged_at timestamptz, level smallint, notes text, created_at timestamptz default now()), important_dates(id uuid PK default gen_random_uuid(), user_id uuid, person_name text, date date, type text, notes text, created_at timestamptz default now()), learning_queue(id uuid PK default gen_random_uuid(), user_id uuid, title text, type text, url text, status text default 'queued', key_insight text, created_at timestamptz default now(), updated_at timestamptz default now()). No DROP, no ALTER, no uuid package import.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s02",
+      "status": "pending",
+      "target_file": "services/lifeos-sleep.js",
+      "task": "Implement sleep tracking service extending health-intelligence pattern",
+      "spec": "ESM module. Exports: logSleep(db, userId, payload) inserts into sleep_logs; getSleepSummary(db, userId, days) returns rows; getSleepScoreContribution(db, userId, date) returns +2 if quality>=7 else +1 if quality>=5 else 0 (used by daily scorecard). No top-level browser globals. No AI SDK import; accepts optional callCouncilMember dep for HRV insight narrative. All DB calls use parameterised pg queries.",
+      "depends_on": [
+        "s01"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s03",
+      "status": "pending",
+      "target_file": "services/lifeos-gratitude.js",
+      "task": "Implement gratitude logging service with AI theme analysis",
+      "spec": "ESM module. Exports: logGratitude(db, userId, date, entries[3]) upserts into gratitude_logs; getGratitudeThemes(db, callCouncilMember, userId) fetches last 30 days of entries, concatenates, calls callCouncilMember('analyst', prompt) and returns theme summary string; getGratitudeScoreContribution(db, userId, date) returns +1 if a gratitude_logs row exists for that date else 0. No browser globals.",
+      "depends_on": [
+        "s01"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s04",
+      "status": "pending",
+      "target_file": "services/lifeos-future-self.js",
+      "task": "Implement future-self letter service with scheduler delivery check",
+      "spec": "ESM module. Exports: createLetter(db, userId, content, deliverOn) inserts into future_self_letters; checkAndDeliverLetters(db, notifyFn) selects rows where deliver_on <= CURRENT_DATE and delivered=false, calls notifyFn(userId, content) for each, then UPDATE future_self_letters SET delivered=true WHERE id=row.id; getLetters(db, userId) returns all rows for user. notifyFn is injected — no direct import of notification SDK.",
+      "depends_on": [
+        "s01"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s05",
+      "status": "pending",
+      "target_file": "services/lifeos-important-dates.js",
+      "task": "Implement important-dates service with 7-day and day-of scheduler scan",
+      "spec": "ESM module. Exports: addDate(db, userId, payload) inserts into important_dates; scanUpcomingDates(db, notifyFn) selects rows where (date - CURRENT_DATE) IN (7,0) using date_part arithmetic ignoring year (anniversary recurrence), calls notifyFn(userId, row) for each match; listDates(db, userId) returns all rows. No browser globals. No uuid import.",
+      "depends_on": [
+        "s01"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s06",
+      "status": "pending",
+      "target_file": "routes/lifeos-phase2-routes.js",
+      "task": "Register all phase-2 REST endpoints under /api/v1/lifeos",
+      "spec": "ESM module exporting registerLifeosPhase2Routes(app, deps) where deps={db, callCouncilMember, notifyFn}. Mounts: POST /api/v1/lifeos/sleep (logSleep), GET /api/v1/lifeos/sleep/summary, POST /api/v1/lifeos/habits (create habit), POST /api/v1/lifeos/habits/:id/log (log completion, increments streak), GET /api/v1/lifeos/habits, POST /api/v1/lifeos/journal/voice (accepts {transcript}, calls callCouncilMember('lumin', extractionPrompt), returns {commitments,patterns,emotionalSignals,suggestedActions}), POST /api/v1/lifeos/gratitude (logGratitude), GET /api/v1/lifeos/gratitude/themes, POST /api/v1/lifeos/finance/net-worth (insert snapshot), GET /api/v1/lifeos/finance/net-worth (list snapshots), POST /api/v1/lifeos/future-self/letter (createLetter), GET /api/v1/lifeos/future-self/letter, POST /api/v1/lifeos/energy (insert energy_log), GET /api/v1/lifeos/energy/curve (AI summary via callCouncilMember), POST /api/v1/lifeos/important-dates, GET /api/v1/lifeos/important-dates, POST /api/v1/lifeos/learning-queue (insert), GET /api/v1/lifeos/learning-queue, PATCH /api/v1/lifeos/learning-queue/:id (update status/key_insight). Imports services from s02,s03,s04,s05 plus inline db helpers for habits/energy/net-worth/learning-queue. All handlers validate req.user exists (401 if not). No browser globals.",
+      "depends_on": [
+        "s02",
+        "s03",
+        "s04",
+        "s05"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s07",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register phase-2 route module for auto-mount",
+      "spec": "Add entry {\"module\":\"routes/lifeos-phase2-routes.js\",\"register\":\"registerLifeosPhase2Routes\",\"deps\":[\"db\",\"callCouncilMember\",\"notifyFn\"]} to the JSON array. Preserve all existing entries. File must remain valid JSON.",
+      "depends_on": [
+        "s06"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s08",
+      "status": "pending",
+      "target_file": "scripts/lifeos-phase2-scheduler.mjs",
+      "task": "Scheduler tick for future-self letters, important-dates scans, and calendar protection conflict checks",
+      "spec": "ESM script. On invocation (called by existing cron runner via import): imports checkAndDeliverLetters from s04, scanUpcomingDates from s05. Calls both with db and a lightweight notifyFn that inserts a row into a `notifications` table (INSERT INTO notifications(user_id,type,payload) VALUES($1,$2,$3) — uses IF NOT EXISTS assumption from existing schema). Also queries energy_logs for each active user to detect if an energy curve needs refresh (calls GET /api/v1/lifeos/energy/curve internally via fetch to localhost — skipped if env SKIP_INTERNAL_FETCH=true). No browser globals. Exports runPhase2Tick(db) as named export.",
+      "depends_on": [
+        "s04",
+        "s05"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s09",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-habits.html",
+      "task": "Habit tracker UI section for lifeos-today overlay",
+      "spec": "Standalone HTML partial (no full html/head/body wrappers needed — rendered into today overlay). Contains: habit list rendered from GET /api/v1/lifeos/habits; each row shows title, streak badge, trigger cue chip, log-today button (POST /api/v1/lifeos/habits/:id/log); add-habit form (title, trigger, cue, reward fields); streak resets visually at 0. All JS inline in <script> tags using fetch(). No window.onload race — use DOMContentLoaded. No external CDN imports beyond what host page already provides (assumes Bootstrap and vanilla JS). Founder-gated because customer-facing UI.",
+      "depends_on": [
+        "s06"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "s10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-finance-networth.html",
+      "task": "Net worth dashboard overlay section in lifeos-finance.html style",
+      "spec": "HTML partial. Shows: monthly net worth chart (canvas, drawn with inline Chart.js call assuming Chart is on host page); current snapshot card (total assets, total liabilities, net = assets-liabilities rendered in cents converted to dollars); add-snapshot form (snapshot_date, assets_cents, liabilities_cents). Data fetched from GET /api/v1/lifeos/finance/net-worth on DOMContentLoaded. POST form submits to same base route. All JS inline. Founder-gated.",
+      "depends_on": [
+        "s06"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "s11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-future-self.html",
+      "task": "Letter to Future Self overlay UI",
+      "spec": "HTML partial. Two panels: (1) compose panel — textarea for content, date input for deliver_on, submit POST /api/v1/lifeos/future-self/letter; (2) sent letters list — GET /api/v1/lifeos/future-self/letter renders cards showing deliver_on date, delivered badge, and content preview (truncated at 120 chars) for delivered letters only (undelivered show 'sealed — opens [date]'). All JS inline, DOMContentLoaded. Founder-gated.",
+      "depends_on": [
+        "s06"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "s12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-learning-queue.html",
+      "task": "Reading and Learning Queue overlay UI wired to growth/mastery module",
+      "spec": "HTML partial. Renders list from GET /api/v1/lifeos/learning-queue grouped by status (queued / in-progress / done). Each card shows title, type badge (book/article/course), url link, key_insight textarea (PATCHed on blur to /api/v1/lifeos/learning-queue/:id). Add-item form: title, type select, url. Status cycle button (queued→in-progress→done). On status=done, prompt user for key_insight inline. All JS inline. Founder-gated.",
+      "depends_on": [
+        "s06"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    }
+  ],
+  "sentry_signature": "e13571a50ae90b27"
+}
