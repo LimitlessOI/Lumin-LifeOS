@@ -18,6 +18,7 @@ import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import { getNeverStopProductFactoryStatus } from "../services/never-stop-product-factory-scheduler.js";
+import { checkAllProviders } from "../services/provider-key-health.js";
 import { autoRegisterProductModules, getModuleHealth } from "./auto-register-product-modules.js";
 import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
 
@@ -140,6 +141,20 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     res.json(getNeverStopProductFactoryStatus());
   });
   logger.info("✅ [NEVER-STOP] Status route mounted at /api/v1/lifeos/never-stop/status");
+
+  // Reports which provider API keys Railway actually has and tests each one live
+  // (funded / needs_payment / invalid / absent) with a per-provider billing link.
+  // Never returns a key value. Founder ask: "the system should know what keys are
+  // in there and which need a card."
+  app.get("/api/v1/lifeos/provider-key-health", requireKey, async (req, res) => {
+    try {
+      const includeAbsent = req.query.includeAbsent !== "false";
+      res.json({ ok: true, ...(await checkAllProviders({ includeAbsent })) });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+  logger.info("✅ [PROVIDER-KEYS] Health route mounted at /api/v1/lifeos/provider-key-health");
 
   app.use(createFactoryMountRoutes({ requireKey, logger, pool, baseUrl: siteBaseUrl, callCouncilMember }));
 
