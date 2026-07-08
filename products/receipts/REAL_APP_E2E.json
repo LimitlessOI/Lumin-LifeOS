@@ -1,17 +1,13 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-06-28T23:18:48.849Z",
-  "base": "https://robust-magic-production.up.railway.app",
-  "ok": true,
+  "at": "2026-07-08T06:39:03.760Z",
+  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "ok": false,
   "passed": [
     "app_loads",
-    "no_js_errors",
     "lumin_fab_visible",
     "lumin_drawer_opens",
     "chat_response",
-    "smos_question",
-    "counsel_only_bypass",
-    "drawer_direct_build",
     "navigate_lifere",
     "alpha_readiness",
     "alpha_daily_cycle",
@@ -21,15 +17,20 @@
     "logged_out_redirect_shape",
     "logged_out_overlay_redirect_shape"
   ],
-  "failed": [],
+  "failed": [
+    "no_js_errors",
+    "smos_question",
+    "counsel_only_bypass",
+    "drawer_direct_build"
+  ],
   "results": {
     "app_loads": {
       "ok": true,
       "detail": "HTTP 200, title=\"LifeOS\""
     },
     "no_js_errors": {
-      "ok": true,
-      "detail": "no unallowlisted pageerror/console.error signals"
+      "ok": false,
+      "detail": "Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Error loading goals: Error: HTTP 404\n    at loadGoals (https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos-d; Failed to load resource: the server responded with a status of 404 (); Error loading calendar: Error: HTTP 404\n    at loadCalendar (https://lumin-web-production-e3a9.up.railway.app/overlay/li; Failed to load resource: the server responded with a status of 404 (); Error loading MITs: SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON; Failed to load resource: the server responded with a status of 404 ()"
     },
     "lumin_fab_visible": {
       "ok": true,
@@ -41,19 +42,19 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "37 chars: \"⏳ RUNNING\nBuild job started.\n04:05 PM…\""
+      "detail": "5171 chars: \"SENTRY / CENTURY ADVERSARIAL PASS — brutal, no diplomacy. ---\n\n(a) CODEGEN-AS-EX…\""
     },
     "smos_question": {
-      "ok": true,
-      "detail": "workflow present, no bleed"
+      "ok": false,
+      "detail": "no workflow content: \"Point B right now: LifeOS Consumer Alpha — a real user can sign up, log in, Lumin greets them by name with the correct t\""
     },
     "counsel_only_bypass": {
-      "ok": true,
-      "detail": "counseled without running build"
+      "ok": false,
+      "detail": "thin answer, no builder content: \"The workflow is a 5-stage gate system:\n\n1. **content_brief** — You (or a template) generate a brief for the relocation c\""
     },
     "drawer_direct_build": {
-      "ok": true,
-      "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Path: builder_task_execute File: scripts/lifeos-direct-build-smoke-test.mjs Co"
+      "ok": false,
+      "detail": "missing terminal PASS + transport/commit proof: \"Here's how BuilderOS implements a change — the actual mechanics, no performance. **The path a change travels:**\n\n1. **Founder message hits the API** — `/api/v1/lifeos/builderos/command-control/founder-interface/message`.\""
     },
     "navigate_lifere": {
       "ok": true,
@@ -69,7 +70,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "2518 chars visible"
+      "detail": "2445 chars visible"
     },
     "page_nav": {
       "ok": true,

@@ -73,7 +73,34 @@ satisfy the gate's reporting contract. Therefore:
    conductor's job continuously — flag, propose, build, re-test — without waiting
    on a human.
 
+## Generalized across ALL products (2026-07-03 — Chair consensus LIFERE_COUNCIL_1783489419170)
+
+SO-002 is **not Site-Builder-only**. Every BP product that a client or the founder
+touches is governed by the same two-layer gate, declared as config — not code — in
+`builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json`. A product-agnostic engine
+runs any registered product purely from that registry:
+
+- Engine: `scripts/sentry-prealpha-gate.mjs` (conductor SCRIPT; authors no product
+  code, only orchestrates each product's already-proven layer scripts/endpoints).
+- Run one: `npm run sentry:gate -- <product-id>` · all: `npm run sentry:gate:all`
+  · list: `npm run sentry:gate:list`.
+- Each product declares its `layers` (Layer A structural + Layer B human-sim) and a
+  per-product `findingsFeed`. The engine folds every failing signal through the
+  system-authored closer and writes `products/receipts/SENTRY_FINDINGS_FEED.<id>.json`
+  (solution-mandatory: `without_solution` must be 0). Fail-closed: any layer that ran
+  and did not pass fails the gate; layers whose required env is absent are DEFERRED
+  (never faked) so full proof requires running on prod with creds.
+
+Registered at ratification: `site-builder` (delegates to the proven composite gate),
+`lifeos-founder-ui` (Layer B = real-app E2E — the founder chat/drawer/build). New
+products are onboarded by adding a registry entry, not by writing a new gate.
+
+10. A product is not "generalized-complete" until it appears in the registry AND its
+    gate has run fully-satisfied (all layers ran and passed) on prod.
+
 ## Provenance
 
 - Layer A: PR #280. Layer B: PR #281. Content-truth guard: PR #282.
 - Editor iframe fix the gate was built to catch: PR #279.
+- Solution-mandatory amendment: PR #286. Self-fix closer: PR #287–#288.
+- Generalization engine + registry (all products): this PR.

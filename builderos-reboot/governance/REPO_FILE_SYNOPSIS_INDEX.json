@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T06:48:12.290Z",
+  "generated_at": "2026-07-08T06:48:35.129Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11283,
+  "file_count": 11288,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3407430,
-      "mtime": "2026-07-08T06:14:38.985Z",
-      "indexed_at": "2026-07-08T06:15:07.294Z"
+      "bytes": 3408999,
+      "mtime": "2026-07-08T06:48:26.201Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21654,6 +21654,14 @@
       "bytes": 407,
       "mtime": "2026-07-08T05:35:31.301Z",
       "indexed_at": "2026-07-08T05:35:36.695Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
+      "synopsis": "BuilderOS artifact — SENTRY PRODUCT REGISTRY.",
+      "bytes": 2215,
+      "mtime": "2026-07-08T06:37:56.297Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z",
       "synopsis_index_only": true
     },
     {
@@ -39432,9 +39440,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 76178,
-      "mtime": "2026-07-08T06:03:23.897Z",
-      "indexed_at": "2026-07-08T06:04:06.158Z"
+      "bytes": 77102,
+      "mtime": "2026-07-08T06:45:42.421Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -58740,9 +58748,9 @@
     {
       "path": "docs/SENTRY_PREALPHA_DOCTRINE.md",
       "synopsis": "SENTRY Pre-Alpha Completion Doctrine (Standing Order SO-002)",
-      "bytes": 4357,
-      "mtime": "2026-07-08T05:35:36.197Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z"
+      "bytes": 6081,
+      "mtime": "2026-07-08T06:40:54.125Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z"
     },
     {
       "path": "docs/SESSION_HANDOFF.md",
@@ -61777,9 +61785,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 29951,
-      "mtime": "2026-07-08T05:35:31.891Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 30153,
+      "mtime": "2026-07-08T06:38:49.629Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z",
       "synopsis_index_only": true
     },
     {
@@ -61952,9 +61960,9 @@
     {
       "path": "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json",
       "synopsis": "Product receipt — BUILDEROS FOUNDER UI PROOF.",
-      "bytes": 16388,
-      "mtime": "2026-07-08T05:35:31.894Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 17167,
+      "mtime": "2026-07-08T06:27:20.313Z",
+      "indexed_at": "2026-07-08T06:48:26.150Z",
       "synopsis_index_only": true
     },
     {
@@ -62576,9 +62584,9 @@
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 2384,
-      "mtime": "2026-07-08T05:35:31.895Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 3538,
+      "mtime": "2026-07-08T06:39:46.813Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z",
       "synopsis_index_only": true
     },
     {
@@ -62587,6 +62595,30 @@
       "bytes": 3712,
       "mtime": "2026-07-08T05:35:31.896Z",
       "indexed_at": "2026-07-08T05:35:36.695Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SENTRY_FINDINGS_FEED.json",
+      "synopsis": "Product receipt — SENTRY FINDINGS FEED.",
+      "bytes": 214,
+      "mtime": "2026-07-08T06:45:15.073Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
+      "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
+      "bytes": 4337,
+      "mtime": "2026-07-08T06:39:46.821Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
+      "synopsis": "Product receipt — SENTRY FINDINGS FEED.Site Builder.",
+      "bytes": 244,
+      "mtime": "2026-07-08T06:46:23.117Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z",
       "synopsis_index_only": true
     },
     {
@@ -68198,6 +68230,16 @@
       "indexed_at": "2026-07-08T05:35:36.695Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/sentry-prealpha-gate.mjs",
+      "synopsis": "Product-agnostic SENTRY pre-alpha completion gate — the generalized",
+      "bytes": 10288,
+      "mtime": "2026-07-08T06:46:12.301Z",
+      "indexed_at": "2026-07-08T06:48:35.129Z",
+      "ssot": [
+        "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json"
       ]
     },
     {
