@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-07-06",
+  "updated_at": "2026-07-08",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BP_PRIORITY is the scheduler queue; each mission's founder packet and blueprint remain the execution authority.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
@@ -208,15 +208,15 @@
       "blueprint_status": "complete",
       "acceptance_command": "npm run builderos:autonomy-closure:build-deploy-truth",
       "receipt_path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
-      "verdict": "WAITING_FOR_PROOF",
-      "receipt_verdict": "WAITING_FOR_PROOF",
-      "git_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
+      "verdict": "TECHNICAL_PASS",
+      "receipt_verdict": "PASS",
+      "git_sha": "dc9e1cadb50ad682f0c13a0137f35756144a2c5a",
       "production_base": "https://lumin-web-production-e3a9.up.railway.app",
       "build_method": "system-build",
-      "note": "Internal BuilderOS build/deploy/runtime proof is not live yet; production `/api/v1/lifeos/builder/ready` timed out on 2026-06-30, so deploy truth remains waiting for proof.",
+      "note": "Internal BuilderOS build/deploy/runtime proof.",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/OBJECTIVE_VERDICT.json",
-      "technical_pass_at": "2026-06-30T12:02:16.651Z"
+      "technical_pass_at": "2026-07-08T06:13:49.583Z"
     },
     {
       "rank": 8,

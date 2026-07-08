@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T06:04:06.158Z",
+  "generated_at": "2026-07-08T06:15:07.294Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11283,
   "files": [
@@ -21293,9 +21293,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 20826,
-      "mtime": "2026-07-08T05:35:31.218Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 20684,
+      "mtime": "2026-07-08T06:13:49.761Z",
+      "indexed_at": "2026-07-08T06:15:07.294Z",
       "synopsis_index_only": true
     },
     {
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3406791,
-      "mtime": "2026-07-08T05:35:36.425Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z"
+      "bytes": 3407430,
+      "mtime": "2026-07-08T06:14:38.985Z",
+      "indexed_at": "2026-07-08T06:15:07.294Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -21949,9 +21949,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 32185,
-      "mtime": "2026-07-08T05:35:31.221Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 32182,
+      "mtime": "2026-07-08T06:13:49.765Z",
+      "indexed_at": "2026-07-08T06:15:07.294Z",
       "synopsis_index_only": true
     },
     {
@@ -61944,9 +61944,9 @@
     {
       "path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "synopsis": "Product receipt — BUILDEROS BUILD DEPLOY TRUTH.",
-      "bytes": 1493,
-      "mtime": "2026-07-08T05:35:31.894Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 1913,
+      "mtime": "2026-07-08T06:13:49.765Z",
+      "indexed_at": "2026-07-08T06:15:07.294Z",
       "synopsis_index_only": true
     },
     {
@@ -80133,9 +80133,9 @@
     {
       "path": "services/build-proof-contract.js",
       "synopsis": "Canonical build transport proof contract for governed code-changing actions.",
-      "bytes": 1980,
-      "mtime": "2026-07-08T05:35:32.027Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 4603,
+      "mtime": "2026-07-08T06:13:33.813Z",
+      "indexed_at": "2026-07-08T06:15:07.294Z",
       "ssot": [
         "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
       ]
