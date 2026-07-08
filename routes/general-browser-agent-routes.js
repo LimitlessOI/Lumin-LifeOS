@@ -10,6 +10,7 @@
  * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 import fs from 'fs';
+import { execFileSync } from 'child_process';
 import { createAccountManager } from '../services/account-manager.js';
 import { createTCBrowserAgent } from '../services/tc-browser-agent.js';
 import { runGoalOnSession } from '../services/general-browser-agent-live.js';
@@ -45,6 +46,19 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
     };
     for (const p of ['/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable']) {
       diag.candidates[p] = fs.existsSync(p);
+    }
+    // Ground-truth the binary itself: version + any unresolved shared libs.
+    const exe = execPath || '/usr/bin/chromium';
+    try {
+      diag.chromium_version = execFileSync(exe, ['--version'], { timeout: 10_000 }).toString().trim();
+    } catch (err) {
+      diag.chromium_version = { error: String(err.message || err).split('\n')[0] };
+    }
+    try {
+      const ldd = execFileSync('ldd', [exe], { timeout: 10_000 }).toString();
+      diag.ldd_missing = ldd.split('\n').filter((l) => /not found/.test(l)).map((l) => l.trim());
+    } catch (err) {
+      diag.ldd_missing = { error: String(err.message || err).split('\n')[0] };
     }
     let session = null;
     try {
