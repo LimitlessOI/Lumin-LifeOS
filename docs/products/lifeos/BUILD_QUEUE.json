@@ -19,7 +19,7 @@
     },
     {
       "id": "s02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-sleep.js",
       "task": "Implement sleep tracking service extending health-intelligence pattern",
       "spec": "ESM module. Exports: logSleep(db, userId, payload) inserts into sleep_logs; getSleepSummary(db, userId, days) returns rows; getSleepScoreContribution(db, userId, date) returns +2 if quality>=7 else +1 if quality>=5 else 0 (used by daily scorecard). No top-level browser globals. No AI SDK import; accepts optional callCouncilMember dep for HRV insight narrative. All DB calls use parameterised pg queries.",
@@ -27,7 +27,10 @@
         "s01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "e2a463986dcbb29e4b50830c019c0f76a704cfdf",
+      "last_attempt_at": "2026-07-08T21:32:31.516Z",
+      "completed_at": "2026-07-08T21:32:32.128Z"
     },
     {
       "id": "s03",
