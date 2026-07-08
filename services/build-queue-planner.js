@@ -261,13 +261,21 @@ export async function planBuildQueue({
   homeText,
   existingQueue = null,
   verifyScript = null,
+  extraBacklog = [],
   callModel,
   model = PLANNER_MODEL,
   maxSteps = MAX_STEPS,
   logger = console,
 } = {}) {
   if (!productId) return null;
-  const backlog = extractBacklog(homeText);
+  // extraBacklog carries non-doc-sourced work (e.g. SENTRY self-fix findings)
+  // that must also be planned into concrete target_file steps. It is merged with
+  // the documented backlog and de-duplicated; still purely additive, never fabricated.
+  const documented = extractBacklog(homeText);
+  const extra = (Array.isArray(extraBacklog) ? extraBacklog : [])
+    .map((s) => String(s || '').trim())
+    .filter((s) => s.length >= 6);
+  const backlog = [...new Set([...documented, ...extra])];
   if (!backlog.length) {
     logger?.info?.({ productId }, '[BUILD-QUEUE-PLANNER] no documented backlog — nothing to plan');
     return null;

@@ -191,3 +191,40 @@ test('planBuildQueue fails closed: no backlog, no model, or empty/garbage output
   // model returns steps with no usable file -> null
   assert.equal(await planBuildQueue({ productId: 'p', homeText: HOME, callModel: async () => JSON.stringify({ steps: [{ task: 'x' }] }) }), null);
 });
+
+test('planBuildQueue plans from extraBacklog even when the product home has no backlog (SENTRY self-fix)', async () => {
+  let seenPrompt = '';
+  const callModel = async (_model, prompt) => {
+    seenPrompt = prompt;
+    return JSON.stringify({
+      steps: [{ id: 'fix-goals-404', target_file: 'startup/register-runtime-routes.js', task: 'Mount finance goals read route in founder_builder profile', spec: 'so dashboard loadGoals stops 404ing' }],
+    });
+  };
+  const res = await planBuildQueue({
+    productId: 'lifeos',
+    homeText: '# LifeOS\n## Current State\nno backlog section here',
+    extraBacklog: ['SENTRY no_js_errors: dashboard loadGoals 404 — Proposed fix: mount the finance goals route in the founder_builder profile'],
+    callModel,
+  });
+  assert.ok(res, 'plans a queue purely from the SENTRY finding');
+  assert.equal(res.added.length, 1);
+  assert.equal(res.added[0].target_file, 'startup/register-runtime-routes.js');
+  // solution-mandatory: the finding+fix reaches the planner prompt so the build has a concrete action
+  assert.ok(/no_js_errors/.test(seenPrompt) && /Proposed fix/.test(seenPrompt));
+});
+
+test('planBuildQueue de-duplicates extraBacklog against the documented backlog', async () => {
+  let backlogCount = null;
+  const callModel = async (_model, prompt) => {
+    backlogCount = (prompt.match(/Add A\/B subject-line testing to the email templates/g) || []).length;
+    return JSON.stringify({ steps: [{ id: 's', target_file: 'services/x.js', task: 't', spec: 's' }] });
+  };
+  await planBuildQueue({
+    productId: 'p',
+    homeText: HOME,
+    // same text as a documented bullet -> must not appear twice in the prompt
+    extraBacklog: ['Add A/B subject-line testing to the email templates'],
+    callModel,
+  });
+  assert.equal(backlogCount, 1, 'duplicate backlog line is de-duplicated');
+});

@@ -457,15 +457,102 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   if (task.extend) {
     try { existingQueue = loadBuildQueue(task.product_id); } catch { existingQueue = null; }
   }
-  const planned = await planBuildQueue({ productId: task.product_id, homeText, existingQueue, callModel, logger });
+  // SENTRY self-fix tasks carry their findings+solutions as extra backlog so the
+  // planner localizes them into concrete target_file steps (the doc backlog may
+  // be empty for a product enrolled purely by a gate FAIL).
+  const extraBacklog = Array.isArray(task.sentry_findings) ? task.sentry_findings : [];
+  const planned = await planBuildQueue({ productId: task.product_id, homeText, existingQueue, extraBacklog, callModel, logger });
   if (!planned || !planned.queue) {
     return { ok: false, detail: 'plan_produced_no_queue' };
   }
+  // Stamp the findings signature so discoverSentryFixWork won't re-plan the same
+  // findings next cycle (WASTE-SAFE) — only clears when the gate emits new findings.
+  if (task.sentry_signature) planned.queue.sentry_signature = task.sentry_signature;
   const queuePath = queuePathForProduct(task.product_id);
   fs.mkdirSync(path.dirname(queuePath), { recursive: true });
   fs.writeFileSync(queuePath, `${JSON.stringify(planned.queue, null, 2)}\n`);
-  log({ event: 'build_queue_planned', product_id: task.product_id, extend: Boolean(task.extend), steps: planned.queue.steps.length, added: planned.added.length });
+  log({ event: 'build_queue_planned', product_id: task.product_id, extend: Boolean(task.extend), sentry: Boolean(task.sentry_signature), steps: planned.queue.steps.length, added: planned.added.length });
   return { ok: true, detail: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length };
+}
+
+const SENTRY_REGISTRY_PATH = path.join(ROOT, 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json');
+
+// Map a SENTRY registry product to the docs/products directory that owns its
+// BUILD_QUEUE, derived from its `ssot` (docs/products/<dir>/PRODUCT_HOME.md).
+// The registry id (e.g. "lifeos-founder-ui") is NOT always the queue dir
+// (e.g. "lifeos") — discoverBuildQueueWork iterates docs/products dirs, so the
+// planner must write the queue under the real dir for the loop to pick it up.
+function sentryProductQueueDir(ssot) {
+  const m = String(ssot || '').match(/docs\/products\/([^/]+)\/PRODUCT_HOME\.md$/);
+  return m ? m[1] : null;
+}
+
+/**
+ * SELF-FIX LOOP CLOSE (SO-002 last mile). SENTRY writes solution-mandatory
+ * findings into per-product feeds; this turns each product's OPEN findings into
+ * a `plan_build_queue` task whose backlog IS those findings+solutions. The
+ * existing planner then authors concrete target_file steps, which the proven
+ * discoverBuildQueueWork -> build -> verify -> deploy-truth -> SENTRY re-gate
+ * path executes. So a SENTRY finding becomes a shipped fix with no conductor —
+ * the system fixes itself. Fail-closed and WASTE-SAFE: emits nothing when a
+ * feed is missing/empty, and skips a product whose queue already carries the
+ * current findings signature (no re-planning the same findings every cycle).
+ */
+export function discoverSentryFixWork() {
+  let registry;
+  try {
+    registry = JSON.parse(fs.readFileSync(SENTRY_REGISTRY_PATH, 'utf8'));
+  } catch {
+    return [];
+  }
+  const products = Array.isArray(registry?.products) ? registry.products : [];
+  const priorityList = loadProductPriority();
+  const found = [];
+  for (const product of products) {
+    const feedRel = String(product?.findingsFeed || '');
+    const queueDir = sentryProductQueueDir(product?.ssot);
+    if (!feedRel || !queueDir) continue;
+    let feed;
+    try {
+      feed = JSON.parse(fs.readFileSync(path.join(ROOT, feedRel), 'utf8'));
+    } catch {
+      continue;
+    }
+    const raw = Array.isArray(feed?.findings) ? feed.findings : [];
+    // Solution-mandatory: a finding is only actionable if it carries a fix, so
+    // the planned step always has a concrete next action to build.
+    const backlog = raw
+      .filter((f) => f && (f.proposed_solution || f.solution))
+      .map((f) => {
+        const code = String(f.code || f.id || 'FINDING');
+        const detail = String(f.detail || f.note || '').slice(0, 300);
+        const fix = String(f.proposed_solution || f.solution || '').slice(0, 400);
+        return `SENTRY ${code}: ${detail} — Proposed fix: ${fix}`;
+      });
+    if (!backlog.length) continue;
+
+    const sig = backlogSignature(backlog);
+    let existingQueue = null;
+    try { existingQueue = loadBuildQueue(queueDir); } catch { existingQueue = null; }
+    // Already planned these exact findings — don't burn a planner call re-doing it.
+    if (existingQueue?.sentry_signature && existingQueue.sentry_signature === sig) continue;
+
+    found.push({
+      id: `sentry_fix_plan_${queueDir}`,
+      kind: 'plan_build_queue',
+      // Gate FAILs are top-tier product work: plan them just under fresh build
+      // steps so the loop localizes+fixes them before lower-priority expansion.
+      priority: 2 + productRankFraction(queueDir, priorityList),
+      product: queueDir,
+      product_id: queueDir,
+      home_path: path.join(ROOT, product.ssot),
+      extend: Boolean(existingQueue),
+      sentry_findings: backlog,
+      sentry_signature: sig,
+      detail: `${backlog.length} open SENTRY finding(s) for ${product.id} — plan self-fix steps`,
+    });
+  }
+  return found;
 }
 
 export async function discoverProductExpansionWork(options = {}) {
@@ -476,6 +563,7 @@ export async function discoverProductExpansionWork(options = {}) {
 
   items.push(...discoverBuildQueueWork());
   items.push(...discoverPlanWork());
+  items.push(...discoverSentryFixWork());
 
   const bpIncomplete = loadBpItems().filter((i) => isQueueItemIncomplete(i, { pointBTarget: pointB }));
   if (bpIncomplete.length && !process.env.BUILDEROS_AUTOPILOT) {
