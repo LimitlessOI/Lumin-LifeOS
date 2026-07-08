@@ -49,7 +49,7 @@
     },
     {
       "id": "s04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-future-self.js",
       "task": "Implement future-self letter service with scheduler delivery check",
       "spec": "ESM module. Exports: createLetter(db, userId, content, deliverOn) inserts into future_self_letters; checkAndDeliverLetters(db, notifyFn) selects rows where deliver_on <= CURRENT_DATE and delivered=false, calls notifyFn(userId, content) for each, then UPDATE future_self_letters SET delivered=true WHERE id=row.id; getLetters(db, userId) returns all rows for user. notifyFn is injected — no direct import of notification SDK.",
@@ -57,7 +57,10 @@
         "s01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "ba29f26c18e8b20aee9bb23d0e9924f54d1afd84",
+      "last_attempt_at": "2026-07-08T21:46:15.321Z",
+      "completed_at": "2026-07-08T21:47:02.174Z"
     },
     {
       "id": "s05",
