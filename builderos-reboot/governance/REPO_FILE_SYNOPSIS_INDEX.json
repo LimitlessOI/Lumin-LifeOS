@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T18:52:10.237Z",
+  "generated_at": "2026-07-08T18:56:27.743Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11289,
   "files": [
@@ -62608,9 +62608,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
-      "bytes": 4337,
-      "mtime": "2026-07-08T06:54:40.317Z",
-      "indexed_at": "2026-07-08T07:54:58.767Z",
+      "bytes": 5329,
+      "mtime": "2026-07-08T18:55:46.071Z",
+      "indexed_at": "2026-07-08T18:56:27.743Z",
       "synopsis_index_only": true
     },
     {
