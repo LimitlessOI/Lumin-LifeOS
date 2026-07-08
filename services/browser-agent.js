@@ -20,37 +20,87 @@ const DEFAULT_NAV_TIMEOUT = 60_000;
 
 try { fs.mkdirSync(SCREENSHOT_DIR, { recursive: true }); } catch (_) {}
 
-export function getChromiumLaunchOptions({ headless = true } = {}) {
+// Container-safe base args. Deliberately EXCLUDES the process-model flags
+// --single-process / --no-zygote / --renderer-process-limit=1: with Chrome's
+// "new" headless mode inside a slim Debian container those cause an immediate
+// crash ("Protocol error (Target.setDiscoverTargets): Target closed") before a
+// page can ever open. Websocket transport (pipe:false) is also more reliable
+// here than the fd pipe.
+const BASE_ARGS = [
+  "--no-sandbox",
+  "--disable-setuid-sandbox",
+  "--disable-dev-shm-usage",
+  "--disable-accelerated-2d-canvas",
+  "--disable-background-networking",
+  "--disable-background-timer-throttling",
+  "--disable-backgrounding-occluded-windows",
+  "--disable-breakpad",
+  "--disable-component-update",
+  "--disable-default-apps",
+  "--disable-extensions",
+  "--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process,Translate,BackForwardCache,AcceptCHFrame,MediaRouter",
+  "--disable-gpu",
+  "--disable-renderer-backgrounding",
+  "--disable-software-rasterizer",
+  "--metrics-recording-only",
+  "--mute-audio",
+  "--no-first-run",
+];
+
+export function getChromiumLaunchOptions({ headless = true, pipe = false, extraArgs = [] } = {}) {
   const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_BIN || undefined;
   return {
     headless: headless === true ? "new" : headless,
     executablePath,
-    pipe: true,
+    pipe,
     protocolTimeout: 120_000,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-accelerated-2d-canvas",
-      "--disable-background-networking",
-      "--disable-background-timer-throttling",
-      "--disable-backgrounding-occluded-windows",
-      "--disable-breakpad",
-      "--disable-component-update",
-      "--disable-default-apps",
-      "--disable-extensions",
-      "--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process,Translate,BackForwardCache,AcceptCHFrame,MediaRouter",
-      "--disable-gpu",
-      "--disable-renderer-backgrounding",
-      "--disable-software-rasterizer",
-      "--metrics-recording-only",
-      "--mute-audio",
-      "--no-first-run",
-      "--no-zygote",
-      "--renderer-process-limit=1",
-      "--single-process",
-    ],
+    args: [...BASE_ARGS, ...extraArgs],
   };
+}
+
+/**
+ * Ground-truth which launch configuration actually boots Chrome in THIS
+ * container. Tries a small matrix and, for each, opens a data: page to prove
+ * the browser is usable (not just spawned). Returns an array of
+ * { name, ok, version|error, ms } — one deploy tells us the working config
+ * instead of guessing and redeploying repeatedly.
+ */
+export async function probeLaunchConfigs() {
+  const executablePath =
+    process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_BIN || undefined;
+  const configs = [
+    { name: "new+ws", headless: "new", pipe: false, args: BASE_ARGS },
+    { name: "new+pipe", headless: "new", pipe: true, args: BASE_ARGS },
+    { name: "shell+ws", headless: "shell", pipe: false, args: BASE_ARGS },
+    {
+      name: "new+ws+single-process(control)",
+      headless: "new",
+      pipe: false,
+      args: [...BASE_ARGS, "--no-zygote", "--single-process", "--renderer-process-limit=1"],
+    },
+  ];
+  const results = [];
+  for (const c of configs) {
+    let browser = null;
+    const started = Date.now();
+    try {
+      browser = await puppeteer.launch({
+        executablePath,
+        headless: c.headless,
+        pipe: c.pipe,
+        protocolTimeout: 60_000,
+        args: c.args,
+      });
+      const page = await browser.newPage();
+      await page.goto("data:text/html,<h1>ok</h1>", { waitUntil: "load", timeout: 15_000 });
+      results.push({ name: c.name, ok: true, version: await browser.version(), ms: Date.now() - started });
+    } catch (err) {
+      results.push({ name: c.name, ok: false, error: String(err?.message || err).split("\n")[0], ms: Date.now() - started });
+    } finally {
+      try { await browser?.close(); } catch (_) {}
+    }
+  }
+  return results;
 }
 
 /**
