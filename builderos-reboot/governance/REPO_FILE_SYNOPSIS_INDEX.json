@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T19:42:00.186Z",
+  "generated_at": "2026-07-08T19:59:07.439Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11289,
+  "file_count": 11290,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37417,6 +37417,13 @@
       "bytes": 563,
       "mtime": "2026-07-03T13:23:32.221Z",
       "indexed_at": "2026-07-08T19:41:59.518Z"
+    },
+    {
+      "path": "docs/governance/CHAIR_CONSENSUS_LEDGER.md",
+      "synopsis": "Chair Consensus Ledger",
+      "bytes": 3242,
+      "mtime": "2026-07-08T19:59:07.187Z",
+      "indexed_at": "2026-07-08T19:59:07.439Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
