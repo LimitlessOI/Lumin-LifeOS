@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T20:58:24.475Z",
+  "generated_at": "2026-07-08T21:01:08.063Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11292,
+  "file_count": 11293,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33966,6 +33966,13 @@
       "bytes": 3505,
       "mtime": "2026-07-03T13:23:32.033Z",
       "indexed_at": "2026-07-08T20:32:52.818Z"
+    },
+    {
+      "path": "db/migrations/20260420_lifeos_phase2_schema.sql",
+      "synopsis": "Database migration — 20260420_lifeos_phase2_schema.sql.",
+      "bytes": 4870,
+      "mtime": "2026-07-08T21:01:08.063Z",
+      "indexed_at": "2026-07-08T21:01:08.063Z"
     },
     {
       "path": "db/migrations/20260421_lane_intel.sql",
