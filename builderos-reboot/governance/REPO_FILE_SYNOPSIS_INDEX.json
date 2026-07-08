@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T06:22:08.124Z",
+  "generated_at": "2026-07-08T06:48:12.290Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11283,
   "files": [
@@ -21293,9 +21293,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 20684,
-      "mtime": "2026-07-08T06:13:49.761Z",
-      "indexed_at": "2026-07-08T06:15:07.294Z",
+      "bytes": 20694,
+      "mtime": "2026-07-08T06:27:20.297Z",
+      "indexed_at": "2026-07-08T06:48:12.290Z",
       "synopsis_index_only": true
     },
     {
@@ -22881,9 +22881,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 11822,
-      "mtime": "2026-07-08T05:35:31.228Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 12010,
+      "mtime": "2026-07-08T06:27:20.297Z",
+      "indexed_at": "2026-07-08T06:48:12.290Z",
       "synopsis_index_only": true
     },
     {
@@ -23035,9 +23035,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 785,
-      "mtime": "2026-07-08T05:35:31.228Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 812,
+      "mtime": "2026-07-08T06:27:20.301Z",
+      "indexed_at": "2026-07-08T06:48:12.290Z",
       "synopsis_index_only": true
     },
     {
@@ -29293,9 +29293,9 @@
     {
       "path": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — PRODUCT READINESS REPORT.",
-      "bytes": 42078,
-      "mtime": "2026-07-08T05:35:31.282Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 43368,
+      "mtime": "2026-07-08T06:27:20.301Z",
+      "indexed_at": "2026-07-08T06:48:12.290Z",
       "synopsis_index_only": true
     },
     {
@@ -62112,9 +62112,9 @@
     {
       "path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — FOUNDER CHAT ALPHA BATTERY.",
-      "bytes": 10112,
-      "mtime": "2026-07-08T05:35:31.894Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 10428,
+      "mtime": "2026-07-08T06:27:20.301Z",
+      "indexed_at": "2026-07-08T06:48:12.290Z",
       "synopsis_index_only": true
     },
     {
