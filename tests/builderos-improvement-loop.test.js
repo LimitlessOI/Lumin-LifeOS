@@ -37,5 +37,25 @@ function testImprovementLoopBuildsConsensusQueue() {
   assert.ok(['AUTO_APPLY_MISSION_DELTA', 'RETURN_TO_ARC'].includes(report.blueprint_deltas[0].disposition));
 }
 
+function testImprovementLoopIngestsSentryFeeds() {
+  const report = buildBuilderOSImprovementLoopStatus({
+    readiness: { blockers: [], warnings: [], fake_green_risks: [] },
+    schedulerStatus: { scheduler: {} },
+  });
+
+  // SENTRY per-product feeds fold into the same queue (no secondary queue).
+  assert.equal(typeof report.departments.SNT.sentry_findings_count, 'number');
+  assert.ok(report.departments.SNT.sentry_findings_count >= 0);
+
+  const sentryProposals = report.proposals.filter((p) => p.source === 'sentry');
+  for (const p of sentryProposals) {
+    // SENTRY product defects are at least P1, and solution-mandatory: the proposed
+    // solution must ride along in why_now so the build has something to act on.
+    assert.ok(['P0', 'P1'].includes(p.priority));
+    assert.ok(/Proposed solution:/.test(p.why_now));
+  }
+}
+
 testImprovementLoopBuildsConsensusQueue();
+testImprovementLoopIngestsSentryFeeds();
 console.log('builderos-improvement-loop tests: PASS');
