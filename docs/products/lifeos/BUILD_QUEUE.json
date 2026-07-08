@@ -109,7 +109,7 @@
     },
     {
       "id": "s08",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/lifeos-phase2-scheduler.mjs",
       "task": "Scheduler tick for future-self letters, important-dates scans, and calendar protection conflict checks",
       "spec": "ESM script. On invocation (called by existing cron runner via import): imports checkAndDeliverLetters from s04, scanUpcomingDates from s05. Calls both with db and a lightweight notifyFn that inserts a row into a `notifications` table (INSERT INTO notifications(user_id,type,payload) VALUES($1,$2,$3) — uses IF NOT EXISTS assumption from existing schema). Also queries energy_logs for each active user to detect if an energy curve needs refresh (calls GET /api/v1/lifeos/energy/curve internally via fetch to localhost — skipped if env SKIP_INTERNAL_FETCH=true). No browser globals. Exports runPhase2Tick(db) as named export.",
@@ -118,7 +118,10 @@
         "s05"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "b4af129834b1fbf539e6c3da4d2575c141f9388c",
+      "last_attempt_at": "2026-07-08T22:15:09.196Z",
+      "completed_at": "2026-07-08T22:15:09.969Z"
     },
     {
       "id": "s09",
