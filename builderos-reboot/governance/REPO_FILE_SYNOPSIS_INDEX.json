@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T21:42:23.728Z",
+  "generated_at": "2026-07-08T21:44:01.804Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11298,
   "files": [
@@ -82711,9 +82711,9 @@
     {
       "path": "services/lifeos-future-self.js",
       "synopsis": "Exports createLetter — services/lifeos-future-self.js.",
-      "bytes": 1432,
-      "mtime": "2026-07-08T21:42:23.728Z",
-      "indexed_at": "2026-07-08T21:42:23.728Z"
+      "bytes": 1345,
+      "mtime": "2026-07-08T21:44:01.804Z",
+      "indexed_at": "2026-07-08T21:44:01.804Z"
     },
     {
       "path": "services/lifeos-gate-change-council-run.js",
