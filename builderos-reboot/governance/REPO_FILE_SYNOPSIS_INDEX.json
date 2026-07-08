@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T05:35:36.695Z",
+  "generated_at": "2026-07-08T05:36:46.117Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11281,
+  "file_count": 11282,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -58708,6 +58708,13 @@
       "bytes": 2256,
       "mtime": "2026-07-08T05:35:31.364Z",
       "indexed_at": "2026-07-08T05:35:36.695Z"
+    },
+    {
+      "path": "docs/SELF_FIX_CLOSER_SPEC.md",
+      "synopsis": "Build spec — SENTRY findings → improvement-loop self-fix closer (conductor-authored; system builds)",
+      "bytes": 4086,
+      "mtime": "2026-07-08T05:36:37.997Z",
+      "indexed_at": "2026-07-08T05:36:46.117Z"
     },
     {
       "path": "docs/SELF_PROGRAMMING_BUILD_REPORT.md",
