@@ -56,6 +56,7 @@ export async function initDatabase(pool, logger) {
 
   let ran = 0;
   let skipped = 0;
+  const failed = [];
 
   for (const filename of files) {
     if (applied.has(filename)) {
@@ -87,10 +88,20 @@ export async function initDatabase(pool, logger) {
         await markApplied(pool, filename).catch(() => {});
         logger.warn(`[DB] ⚠️ Migration ${filename} failed (idempotent, marked applied): ${msg}`);
       } else {
-        logger.error(`[DB] ❌ Migration ${filename} FAILED — will retry on next boot: ${msg}`);
-        throw err;
+        // Do NOT abort boot. A single bad migration must never take down every
+        // route (a throw here left the app serving only /health while all
+        // founder-lane routes 404'd). Log loudly, leave it unapplied so it
+        // retries next boot, and let the rest of boot (route registration)
+        // proceed. The daily loop can author a broken migration — that can
+        // degrade one feature, never the whole server.
+        failed.push(filename);
+        logger.error(`[DB] ❌ Migration ${filename} FAILED — left unapplied, will retry next boot (boot continues): ${msg}`);
       }
     }
+  }
+
+  if (failed.length) {
+    logger.error(`[DB] ⚠️ ${failed.length} migration(s) failed and were skipped (boot continued): ${failed.join(', ')}`);
   }
 
   if (ran > 0) {

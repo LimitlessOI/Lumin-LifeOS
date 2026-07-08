@@ -24,10 +24,13 @@ CREATE TABLE IF NOT EXISTS habits (
   updated_at timestamptz DEFAULT now()
 );
 
+-- NOTE: no FK to habits(id). A legacy habits table already exists in prod with
+-- an integer id, so a uuid FK "cannot be implemented" and would abort boot. Keep
+-- habit_id as a plain uuid column and enforce the link in application code.
 CREATE TABLE IF NOT EXISTS habit_logs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid,
-  habit_id uuid REFERENCES habits(id),
+  habit_id uuid,
   logged_at timestamptz DEFAULT now()
 );
 
