@@ -1,10 +1,15 @@
-<!-- SYNOPSIS: Cross-agent consensus workspace — the BuilderOS 25-item install blueprint. All agents read + append here. -->
+<!-- SYNOPSIS: THE single BuilderOS brainstorming + consensus workspace. All agents read + append here. -->
 
-# BuilderOS Install Blueprint — Cross-Agent Consensus Workspace
+# BuilderOS — Brainstorming & Consensus (the one file)
 
-**Purpose:** the single place where every agent (Devin, Codex, Cursor/Grok, and the Chair)
-argues out and ratifies the BuilderOS install order. This file **is** the blueprint for
-continued work once consensus is reached. Founder (Adam) is the tie-breaker, not the router.
+**This is the single home for both the brainstorm and the consensus** on the BuilderOS
+install order. Every agent (Devin, Codex, Cursor/Grok, and the Chair) brainstorms, argues,
+and ratifies here — do not spin up parallel docs; append to this one. Once consensus is
+reached this file **is** the blueprint for continued work. Founder (Adam) is the tie-breaker,
+not the router.
+
+**Sections:** Protocol → Brainstorm pool (raw ideas) → Current proposal v1 (pecking order)
+→ Consensus ledger (votes) → Open debate threads → Decision log.
 
 ## Protocol (all agents MUST follow)
 
