@@ -6,13 +6,16 @@
   "steps": [
     {
       "id": "s01",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260420_lifeos_phase2_schema.sql",
       "task": "Create all phase-2 tables with IF NOT EXISTS guards",
       "spec": "Migration emits CREATE TABLE IF NOT EXISTS for: sleep_logs(id uuid PK default gen_random_uuid(), user_id uuid, date date, bedtime timestamptz, wake_time timestamptz, quality smallint, dreams text, hrv_ms int, created_at timestamptz default now()), habits(id uuid PK default gen_random_uuid(), user_id uuid, title text, trigger text, cue text, reward text, streak int default 0, active boolean default true, created_at timestamptz default now(), updated_at timestamptz default now()), habit_logs(id uuid PK default gen_random_uuid(), user_id uuid, habit_id uuid references habits(id), logged_at timestamptz default now()), gratitude_logs(id uuid PK default gen_random_uuid(), user_id uuid, date date, entries jsonb, created_at timestamptz default now()), net_worth_snapshots(id uuid PK default gen_random_uuid(), user_id uuid, snapshot_date date, assets_cents bigint, liabilities_cents bigint, created_at timestamptz default now()), future_self_letters(id uuid PK default gen_random_uuid(), user_id uuid, content text, deliver_on date, delivered boolean default false, created_at timestamptz default now()), energy_logs(id uuid PK default gen_random_uuid(), user_id uuid, logged_at timestamptz, level smallint, notes text, created_at timestamptz default now()), important_dates(id uuid PK default gen_random_uuid(), user_id uuid, person_name text, date date, type text, notes text, created_at timestamptz default now()), learning_queue(id uuid PK default gen_random_uuid(), user_id uuid, title text, type text, url text, status text default 'queued', key_insight text, created_at timestamptz default now(), updated_at timestamptz default now()). No DROP, no ALTER, no uuid package import.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "7cc352149eaf3a3da998aece71ca0882029ccbf8",
+      "last_attempt_at": "2026-07-08T21:26:23.423Z",
+      "completed_at": "2026-07-08T21:26:24.472Z"
     },
     {
       "id": "s02",
