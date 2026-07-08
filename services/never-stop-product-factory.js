@@ -468,11 +468,31 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   // Stamp the findings signature so discoverSentryFixWork won't re-plan the same
   // findings next cycle (WASTE-SAFE) — only clears when the gate emits new findings.
   if (task.sentry_signature) planned.queue.sentry_signature = task.sentry_signature;
+  if (!planned.queue.product_id) planned.queue.product_id = task.product_id;
   const queuePath = queuePathForProduct(task.product_id);
   fs.mkdirSync(path.dirname(queuePath), { recursive: true });
   fs.writeFileSync(queuePath, `${JSON.stringify(planned.queue, null, 2)}\n`);
-  log({ event: 'build_queue_planned', product_id: task.product_id, extend: Boolean(task.extend), sentry: Boolean(task.sentry_signature), steps: planned.queue.steps.length, added: planned.added.length });
-  return { ok: true, detail: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length };
+  // DURABILITY (same fix build steps already have at commitQueueStatusToRepo):
+  // fs.writeFileSync only lands on the container's LOCAL filesystem. A redeploy
+  // (triggered by any build step's deploy-proof) restarts from a fresh git
+  // checkout, wiping this freshly-planned queue AND its sentry_signature — so the
+  // loop re-plans from scratch next boot (burning a paid planner call) and the
+  // SENTRY fixes never execute to completion. Commit the plan (with signature) to
+  // the repo now so it survives redeploys and the build cycles can run it.
+  // Fail-open/never-throw: a commit failure must not lose the local plan.
+  let planCommitted = null;
+  try {
+    const committed = await commitQueueStatusToRepo(planned.queue, `plan:${task.product_id}`);
+    planCommitted = committed.ok ? true : committed.error;
+    if (!committed.ok && committed.error !== 'no_change') {
+      logger?.warn?.({ product_id: task.product_id, error: committed.error }, '[never-stop] planned-queue commit failed (plan kept locally)');
+    }
+  } catch (e) {
+    planCommitted = e.message;
+    logger?.warn?.({ product_id: task.product_id, error: e.message }, '[never-stop] planned-queue commit threw (plan kept locally)');
+  }
+  log({ event: 'build_queue_planned', product_id: task.product_id, extend: Boolean(task.extend), sentry: Boolean(task.sentry_signature), steps: planned.queue.steps.length, added: planned.added.length, plan_committed: planCommitted });
+  return { ok: true, detail: 'build_queue_planned', product_id: task.product_id, steps: planned.queue.steps.length, added: planned.added.length, plan_committed: planCommitted };
 }
 
 const SENTRY_REGISTRY_PATH = path.join(ROOT, 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json');
