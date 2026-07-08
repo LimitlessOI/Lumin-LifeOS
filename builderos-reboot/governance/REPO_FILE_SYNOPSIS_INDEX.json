@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T21:36:20.538Z",
+  "generated_at": "2026-07-08T21:42:23.728Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11297,
+  "file_count": 11298,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82707,6 +82707,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-future-self.js",
+      "synopsis": "Exports createLetter — services/lifeos-future-self.js.",
+      "bytes": 1432,
+      "mtime": "2026-07-08T21:42:23.728Z",
+      "indexed_at": "2026-07-08T21:42:23.728Z"
     },
     {
       "path": "services/lifeos-gate-change-council-run.js",
