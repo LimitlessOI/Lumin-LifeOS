@@ -64,7 +64,7 @@
     },
     {
       "id": "s05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-important-dates.js",
       "task": "Implement important-dates service with 7-day and day-of scheduler scan",
       "spec": "ESM module. Exports: addDate(db, userId, payload) inserts into important_dates; scanUpcomingDates(db, notifyFn) selects rows where (date - CURRENT_DATE) IN (7,0) using date_part arithmetic ignoring year (anniversary recurrence), calls notifyFn(userId, row) for each match; listDates(db, userId) returns all rows. No browser globals. No uuid import.",
@@ -72,7 +72,10 @@
         "s01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "db19628fa43ec1c4a3131c0df299f61a87611880",
+      "last_attempt_at": "2026-07-08T21:55:38.784Z",
+      "completed_at": "2026-07-08T21:55:39.430Z"
     },
     {
       "id": "s06",
