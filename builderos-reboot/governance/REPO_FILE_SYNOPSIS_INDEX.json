@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T20:05:05.271Z",
+  "generated_at": "2026-07-08T20:16:29.599Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11290,
   "files": [
@@ -37421,9 +37421,9 @@
     {
       "path": "docs/governance/CHAIR_CONSENSUS_LEDGER.md",
       "synopsis": "Chair Consensus Ledger",
-      "bytes": 3869,
-      "mtime": "2026-07-08T20:04:44.915Z",
-      "indexed_at": "2026-07-08T20:05:04.622Z"
+      "bytes": 4525,
+      "mtime": "2026-07-08T20:16:18.155Z",
+      "indexed_at": "2026-07-08T20:16:29.599Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
@@ -38623,9 +38623,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 201973,
-      "mtime": "2026-07-08T20:04:22.691Z",
-      "indexed_at": "2026-07-08T20:05:04.622Z"
+      "bytes": 203453,
+      "mtime": "2026-07-08T20:15:52.807Z",
+      "indexed_at": "2026-07-08T20:16:29.599Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -84005,9 +84005,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 60024,
-      "mtime": "2026-07-08T20:04:02.395Z",
-      "indexed_at": "2026-07-08T20:05:04.622Z",
+      "bytes": 60445,
+      "mtime": "2026-07-08T20:15:27.295Z",
+      "indexed_at": "2026-07-08T20:16:29.599Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

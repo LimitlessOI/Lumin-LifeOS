@@ -95,4 +95,8 @@ products/
 !products/receipts/LIFERE_AGENT_ALPHA.json
 !products/receipts/OVERLAY_ALPHA_BATTERY.json
 !products/receipts/LIFEOS_ALPHA_BREAK_IT.json
+# never-stop loop reads per-product SENTRY feeds at boot (discoverSentryFixWork)
+# via SENTRY_PRODUCT_REGISTRY findingsFeed paths — they MUST ship in the image or
+# the loop silently finds no self-fix work and never builds the SENTRY defects.
+!products/receipts/SENTRY_FINDINGS_FEED*.json
 agent-transcripts/

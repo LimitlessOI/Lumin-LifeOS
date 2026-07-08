@@ -535,7 +535,12 @@ export function discoverSentryFixWork() {
     let feed;
     try {
       feed = JSON.parse(fs.readFileSync(path.join(ROOT, feedRel), 'utf8'));
-    } catch {
+    } catch (e) {
+      // VISIBILITY: a registry-listed feed that is missing/unreadable must never
+      // be a silent [] — that exact ghost (feed excluded from the Docker image)
+      // starved the loop for cycles with no signal. Emit an ops event so it
+      // surfaces in recent_events instead of vanishing.
+      log({ event: 'sentry_feed_unreadable', product_id: product?.id || queueDir, feed: feedRel, error: e.message });
       continue;
     }
     const raw = Array.isArray(feed?.findings) ? feed.findings : [];
