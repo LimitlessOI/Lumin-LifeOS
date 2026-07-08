@@ -90,9 +90,9 @@
         "s05"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "commit_sha": "50b94d0543f940dc1208e16ee29a09b4eda692c7",
-      "last_attempt_at": "2026-07-08T23:39:22.857Z",
+      "last_attempt_at": "2026-07-08T23:42:31.189Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "revive_count": 4
     },
