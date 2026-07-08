@@ -1253,3 +1253,39 @@ function readState() {
     return {};
   }
 }
+
+/**
+ * OBSERVABILITY: tail the cycle log so an operator can SEE which task each cycle
+ * selected and why it no-op'd (task id/kind, result.detail, plan_committed,
+ * skipped_defer_only_top), instead of guessing from an opaque run counter.
+ */
+export function readRecentFactoryLog(limit = 40) {
+  try {
+    const raw = fs.readFileSync(LOG_PATH, 'utf8').trim();
+    if (!raw) return [];
+    return raw
+      .split('\n')
+      .slice(-Math.max(1, Number(limit) || 40))
+      .map((line) => {
+        try { return JSON.parse(line); } catch { return { raw: line }; }
+      });
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * OBSERVABILITY: report whether the runtime env the loop depends on is present,
+ * as booleans only (never the values). `github_token`/`github_repo` gate
+ * commitQueueStatusToRepo (a missing one silently drops planned/queue-status
+ * commits, so builds reach main but the queue json never does);
+ * `planner_model` gates runPlanBuildQueue (missing → plan_skipped_no_model).
+ */
+export function factoryRuntimeEnvPresence() {
+  return {
+    github_token: Boolean((process.env.GITHUB_TOKEN || '').trim()),
+    github_repo: Boolean((process.env.GITHUB_REPO || '').trim()),
+    github_deploy_branch: process.env.GITHUB_DEPLOY_BRANCH || 'main',
+    planner_model: typeof defaultPlannerCallModel() === 'function',
+  };
+}
