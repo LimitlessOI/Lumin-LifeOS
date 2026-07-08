@@ -151,7 +151,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   try {
     const autoResults = await autoRegisterProductModules(app, {
       pool,
-      requireKey: requireUserOrKey,
+      requireKey,
       callCouncilMember,
       logger,
       baseUrl: siteBaseUrl,
