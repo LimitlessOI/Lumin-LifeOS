@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T22:11:54.473Z",
+  "generated_at": "2026-07-08T23:07:30.902Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11301,
+  "file_count": 11302,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37431,6 +37431,13 @@
       "bytes": 563,
       "mtime": "2026-07-08T21:36:15.228Z",
       "indexed_at": "2026-07-08T21:36:20.538Z"
+    },
+    {
+      "path": "docs/governance/BUILDEROS_INSTALL_CONSENSUS.md",
+      "synopsis": "Cross-agent consensus workspace — the BuilderOS 25-item install blueprint. All agents read + append here.",
+      "bytes": 9203,
+      "mtime": "2026-07-08T23:07:19.544Z",
+      "indexed_at": "2026-07-08T23:07:30.902Z"
     },
     {
       "path": "docs/governance/CHAIR_CONSENSUS_LEDGER.md",
