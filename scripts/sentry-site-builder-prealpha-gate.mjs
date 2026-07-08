@@ -28,6 +28,60 @@ const BASE = (process.env.PUBLIC_BASE_URL || process.env.SITE_BASE_URL || '').re
 const KEY = process.env.COMMAND_CENTER_KEY || '';
 const LAYER_A_RECEIPT = 'products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json';
 const FINDINGS_FEED = 'products/receipts/SENTRY_FINDINGS_FEED.json';
+// A real business site (NOT parked) used as the gate's fixture when prod has no
+// preview — previews live on ephemeral disk and are wiped on every redeploy, so
+// the completion gate must self-provision one or it fails closed forever and the
+// never-stop loop thrashes on the blocked step.
+const FIXTURE_URL = process.env.SENTRY_GATE_FIXTURE_URL || 'https://onlinewellroundedmama.com';
+
+// Ensure at least one editable preview exists on prod before the layers run.
+// Idempotent: reuses an existing preview; only builds when none is present.
+// Best-effort — never throws; the layers still fail closed if this can't provision.
+async function ensurePreview() {
+  if (!BASE || !KEY) return { ran: false, reason: 'no_prod_creds' };
+  const authed = { 'x-command-key': KEY };
+  try {
+    const list = await fetch(`${BASE}/api/v1/sites/previews`, { headers: authed });
+    const body = await list.json().catch(() => ({}));
+    const existing = (body.previews || []).find((p) => p && p.clientId && p.editToken);
+    if (existing) return { ran: true, built: false, clientId: existing.clientId };
+  } catch { /* fall through to build */ }
+  console.log(`▶ No preview on prod — self-provisioning a fixture from ${FIXTURE_URL}…`);
+  // Use the ASYNC prospect path (skipEmail): a synchronous /build exceeds Railway's
+  // ~75s edge timeout and 502s before persisting. /prospect returns 202 immediately
+  // and finishes the build server-side; we then poll its status until terminal.
+  try {
+    const res = await fetch(`${BASE}/api/v1/sites/prospect`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...authed },
+      body: JSON.stringify({ businessUrl: FIXTURE_URL, skipEmail: true }),
+      signal: AbortSignal.timeout(30000),
+    });
+    const job = await res.json().catch(() => ({}));
+    const clientId = job.clientId || null;
+    if (!clientId) {
+      console.log('  fixture enqueue failed:', JSON.stringify(job).slice(0, 160));
+      return { ran: true, built: true, ok: false, reason: 'enqueue_failed' };
+    }
+    console.log(`  fixture build enqueued: clientId=${clientId} — polling…`);
+    const deadline = Date.now() + 300000;
+    while (Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, 8000));
+      const st = await fetch(`${BASE}/api/v1/sites/prospects/${clientId}/status`, { headers: authed });
+      const sb = await st.json().catch(() => ({}));
+      if (sb && sb.done) {
+        const ok = ['sent', 'built', 'qa_hold'].includes(String(sb.status || '').toLowerCase());
+        console.log(`  fixture build ${sb.status} (ok=${ok})`);
+        return { ran: true, built: true, ok, clientId };
+      }
+    }
+    console.log('  fixture build timed out while polling');
+    return { ran: true, built: true, ok: false, reason: 'build_timeout', clientId };
+  } catch (err) {
+    console.log('  fixture build failed:', String(err.message || err).slice(0, 140));
+    return { ran: true, built: true, ok: false, reason: String(err.message || err).slice(0, 140) };
+  }
+}
 
 function runLayerA() {
   return new Promise((resolve) => {
@@ -95,6 +149,10 @@ function emitFindingsFeed(layerBRaw) {
 
 async function main() {
   console.log('── SENTRY Site Builder pre-alpha gate (SO-002: both layers required) ──');
+
+  console.log('\n▶ Ensure preview fixture exists…');
+  const prep = await ensurePreview();
+  console.log(`Preview: ${prep.ran ? (prep.built ? (prep.ok ? `built ${prep.clientId}` : `build-failed (${prep.reason || 'unknown'})`) : `reused ${prep.clientId}`) : `skipped (${prep.reason})`}`);
 
   console.log('\n▶ Layer A (structural, HTTP)…');
   const aOk = await runLayerA();

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T05:42:02.456Z",
+  "generated_at": "2026-07-08T06:04:06.158Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11283,
   "files": [
@@ -39432,9 +39432,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 75133,
-      "mtime": "2026-07-08T05:41:56.153Z",
-      "indexed_at": "2026-07-08T05:42:02.456Z"
+      "bytes": 76178,
+      "mtime": "2026-07-08T06:03:23.897Z",
+      "indexed_at": "2026-07-08T06:04:06.158Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -68203,9 +68203,9 @@
     {
       "path": "scripts/sentry-site-builder-prealpha-gate.mjs",
       "synopsis": "SENTRY Site Builder pre-alpha completion gate — runs BOTH doctrine",
-      "bytes": 6090,
-      "mtime": "2026-07-08T05:40:42.761Z",
-      "indexed_at": "2026-07-08T05:42:02.456Z",
+      "bytes": 9418,
+      "mtime": "2026-07-08T05:57:58.509Z",
+      "indexed_at": "2026-07-08T06:04:06.158Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
