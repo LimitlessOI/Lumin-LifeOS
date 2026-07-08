@@ -133,14 +133,27 @@ async function main() {
     `iframe src="${iframeSrc || '(none found)'}"`, { iframeSrc });
 
   // A05 — following the iframe src returns the REAL site (200 + HTML), not a 404.
+  let framedBody = '';
   if (iframeSrc && /^https?:\/\//i.test(iframeSrc)) {
     const framed = await fetchRaw(iframeSrc);
+    framedBody = framed.text || '';
     step('SBPA-A05_iframe_loads_real_site',
       framed.status === 200 && /<html/i.test(framed.text),
       `HTTP ${framed.status} at iframe src`);
   } else {
     step('SBPA-A05_iframe_loads_real_site', false, 'no absolute iframe src to follow');
   }
+
+  // A05b — the site was built from the REAL business, not a parked/for-sale
+  // placeholder (HugeDomains, "for sale", a Cloudflare "Just a moment…"
+  // challenge). Such a scrape yields a garbage site with no real logo/content
+  // to preserve — it must NOT be called "done". Fail closed.
+  const parkedMarkers = /hugedomains|godaddy|is for sale|buy this domain|domain (name )?(is )?for sale|this domain (is|may be)|parked (free|domain)|just a moment|checking your browser|namecheap|sedo/i;
+  const parkedHit = (framedBody.match(parkedMarkers) || [])[0] || '';
+  step('SBPA-A05b_scraped_real_business', !parkedHit,
+    parkedHit
+      ? `PARKED/PLACEHOLDER content detected ("${parkedHit}") — source is not a real business site`
+      : 'no parking/placeholder markers in the built site');
 
   // A06 — publish resolves to Stripe checkout (302 with a stripe Location, or a
   // followed page on checkout.stripe.com).

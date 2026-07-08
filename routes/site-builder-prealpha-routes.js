@@ -123,6 +123,18 @@ export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
         `src=${framedSrc || '(none)'} framed_text_len=${framedText.length} broken_markers=${brokeMarkers}`,
         { framedSrc });
 
+      // ── B02b: the site was built from the REAL business, not a parked/for-sale
+      // placeholder. A domain-parking page (HugeDomains, "for sale", a Cloudflare
+      // "Just a moment…" challenge) produces a garbage site the client would
+      // reject — and there is no real logo/content to preserve. Fail closed.
+      const parkedMarkers = /hugedomains|godaddy|is for sale|buy this domain|domain (name )?(is )?for sale|this domain (is|may be)|parked (free|domain)|just a moment|checking your browser|namecheap|sedo/i;
+      const parkedHit = (framedText.match(parkedMarkers) || [])[0] || '';
+      step('SBPB-B02b_scraped_real_business', !parkedHit,
+        parkedHit
+          ? `PARKED/PLACEHOLDER content detected ("${parkedHit}") — source domain is not a real business site; logo/content cannot be preserved`
+          : 'source content looks like a real business (no parking/placeholder markers)',
+        { parkedHit });
+
       // ── B03: template switch works (client changes the whole design) ──
       const chips = await page.$$('[data-lifeos-template-file]');
       if (chips.length >= 2) {
