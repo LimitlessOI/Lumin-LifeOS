@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T06:15:07.294Z",
+  "generated_at": "2026-07-08T06:18:05.578Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11283,
   "files": [
@@ -67235,9 +67235,9 @@
     {
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
-      "bytes": 6041,
-      "mtime": "2026-07-08T05:35:31.961Z",
-      "indexed_at": "2026-07-08T05:35:36.695Z",
+      "bytes": 6053,
+      "mtime": "2026-07-08T06:18:05.578Z",
+      "indexed_at": "2026-07-08T06:18:05.578Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
