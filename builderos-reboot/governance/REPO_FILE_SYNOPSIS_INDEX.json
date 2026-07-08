@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T21:03:29.754Z",
+  "generated_at": "2026-07-08T21:04:48.666Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11293,
   "files": [
@@ -30064,9 +30064,9 @@
     {
       "path": "CLAUDE.md",
       "synopsis": "CLAUDE.md — LifeOS/LimitlessOS Project Instructions",
-      "bytes": 11151,
-      "mtime": "2026-07-08T05:36:45.777Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z"
+      "bytes": 12344,
+      "mtime": "2026-07-08T21:04:41.088Z",
+      "indexed_at": "2026-07-08T21:04:48.666Z"
     },
     {
       "path": "client/orchestrator-app/main.js",
@@ -37428,9 +37428,9 @@
     {
       "path": "docs/governance/CHAIR_CONSENSUS_LEDGER.md",
       "synopsis": "Chair Consensus Ledger",
-      "bytes": 6277,
-      "mtime": "2026-07-08T20:49:06.172Z",
-      "indexed_at": "2026-07-08T20:51:31.858Z"
+      "bytes": 9525,
+      "mtime": "2026-07-08T21:04:23.324Z",
+      "indexed_at": "2026-07-08T21:04:48.666Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
