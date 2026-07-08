@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports renderCanvas — services/site-builder-editor-canvas.js.
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 function htmlEscape(value) {
   return String(value ?? "")
@@ -30,8 +31,16 @@ export function renderCanvas({
   const safeVariants = Array.isArray(variants) ? variants : [];
   const safePalettes = Array.isArray(palettes) ? palettes : [];
   const initialFile = String(siteFile ?? "");
+  // Preview files are served at ${baseUrl}/previews/${clientId}/<file>. The
+  // editor shell itself is served from /api/v1/sites/editor, so a relative
+  // iframe src (e.g. "index.html") would resolve to /api/v1/sites/index.html
+  // and 404. Always resolve preview files against this absolute base.
+  const trimmedBase = String(baseUrl ?? "").replace(/\/+$/, "");
+  const previewBase = `${trimmedBase}/previews/${String(clientId ?? "")}`;
+  const initialFileUrl = `${previewBase}/${initialFile.replace(/^\/+/, "")}`;
   const data = {
     siteFile: initialFile,
+    previewBase,
     variants: safeVariants.map((variant) => ({
       id: String(variant?.id ?? ""),
       name: String(variant?.name ?? ""),
@@ -243,7 +252,7 @@ export function renderCanvas({
 
   <div class="lifeos-canvas-stage" data-lifeos-stage>
     <div class="lifeos-canvas-frame-wrap" data-lifeos-frame-wrap>
-      <iframe class="lifeos-canvas-frame" data-lifeos-iframe src="${htmlEscape(initialFile)}"></iframe>
+      <iframe class="lifeos-canvas-frame" data-lifeos-iframe src="${htmlEscape(initialFileUrl)}"></iframe>
       <div class="lifeos-canvas-section-controls" data-lifeos-section-controls></div>
     </div>
   </div>
@@ -267,6 +276,11 @@ export function renderCanvas({
       function endpoint(path) {
         const base = String(config.baseUrl || "").replace(/\\/$/, "");
         return base + path;
+      }
+
+      function fileUrl(file) {
+        const base = String(config.previewBase || "").replace(/\\/$/, "");
+        return base + "/" + String(file || "").replace(/^\\/+/, "");
       }
 
       function setStatus(message, type) {
@@ -503,7 +517,7 @@ export function renderCanvas({
           });
           clearControls();
           try {
-            iframe.src = file;
+            iframe.src = fileUrl(file);
             setStatus("Template loaded.", "ok");
           } catch (error) {
             setStatus("Could not load template: " + error.message, "error");
