@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T21:29:29.178Z",
+  "generated_at": "2026-07-08T21:35:42.620Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11294,
+  "file_count": 11296,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21665,6 +21665,13 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/governance/SESSION_DECISIONS_2026-07-03.md",
+      "synopsis": "BuilderOS governance — decisions/laws ratified in the 2026-07-03 founder session",
+      "bytes": 5192,
+      "mtime": "2026-07-08T21:35:32.212Z",
+      "indexed_at": "2026-07-08T21:35:42.620Z"
+    },
+    {
       "path": "builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — GREENFIELD DETERMINISM RECEIPT.",
       "bytes": 847,
@@ -36538,9 +36545,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 36945,
-      "mtime": "2026-07-03T13:23:32.041Z",
-      "indexed_at": "2026-07-08T21:19:50.234Z"
+      "bytes": 39236,
+      "mtime": "2026-07-08T21:35:32.184Z",
+      "indexed_at": "2026-07-08T21:35:42.620Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38909,6 +38916,13 @@
       "bytes": 1780,
       "mtime": "2026-07-03T13:23:32.277Z",
       "indexed_at": "2026-07-08T21:19:50.234Z"
+    },
+    {
+      "path": "docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md",
+      "synopsis": "IdeaVault — 2026-07-03 founder brainstorm: twin competitive evolution + 1% lie integrity auditor",
+      "bytes": 4346,
+      "mtime": "2026-07-08T21:35:32.212Z",
+      "indexed_at": "2026-07-08T21:35:42.620Z"
     },
     {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",

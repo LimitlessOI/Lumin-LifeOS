@@ -8,6 +8,40 @@
 
 ---
 
+## [BUILD] Update 2026-07-03 — Loop self-build proof, prod outage + hardening, Chair debates, standing orders
+
+### What happened
+- **Planner unblocked (#304).** Raised the planner output cap (2000→8000), added
+  `salvageSteps()` for truncated JSON plans, and auto strong-model failover
+  (Anthropic→OpenAI→Gemini). The loop then **autonomously planned a lifeos queue and built
+  a DB migration** — real proof it builds itself.
+- **PROD OUTAGE (fixed #307).** The loop-authored `db/migrations/20260420_lifeos_phase2_schema.sql`
+  declared `habit_logs.habit_id uuid REFERENCES habits(id)`; a legacy `habits` table already
+  exists with `id integer`, so the uuid FK "cannot be implemented", the migration threw,
+  `initDatabase` re-threw, and founder-runtime boot aborted **before route registration** —
+  every route 404 (only `/health` up). Fix: drop the FK **and** make `startup/database.js`
+  log-and-continue on a bad migration instead of throwing. One bad migration can now degrade
+  a feature but never take down the whole server.
+- **Provider-key health (#305).** `GET /api/v1/lifeos/provider-key-health` enumerates Railway
+  keys, tests funding with a 1-token call, returns billing links.
+- **Chair debates + governance (#306, #300).** Consensus Ledger row 6 = round-2 debate on the
+  integrity auditor (ranked build order + Dead-Reckoning Audit). SO-003 ratified (never idle
+  on tokens; never cheap on the most-important function).
+- **Decisions/ideas captured:** `builderos-reboot/governance/SESSION_DECISIONS_2026-07-03.md`
+  (laws) and `docs/products/ideavault/conversations/2026-07-03_twin-evolution-and-integrity-auditor.md`
+  (brainstorm: dual-twin competitive evolution + AI incentives + the 1% lie auditor).
+
+### Verification
+- Live Railway deploy logs (`88116e40`) showed the migration FK failure + boot abort; DB
+  confirmed `habits.id` integer, `habit_logs` missing.
+- Post-#307 deploy (`5d7527b5`): routes 200, migration recorded applied, `habit_logs` exists,
+  loop re-enabled on a fresh container.
+
+### Next
+- Watch the loop resume and ship a real rank-8 lifeos defect (founder's proof).
+- Parked (design w/ Chair + Composer 2.5 as consensus partner): dual-twin competitive
+  evolution; the integrity-auditor build; the one-memory-group auto-load feature.
+
 ## [BUILD] Update 2026-06-27 — Founder continue-to-Point-B routing hardening
 
 ### What happened
