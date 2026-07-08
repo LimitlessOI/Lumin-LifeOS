@@ -1,6 +1,7 @@
 {
   "schema": "sentry_product_registry_v1",
   "doctrine": "SO-002",
+  "last_updated": "2026-07-08 — gate now synthesizes CONCRETE, localizable self-fix solutions (concreteSolution() in scripts/sentry-prealpha-gate.mjs): HTTP-error findings point at the owning route + auto-register mount; founder-chat quality/intent findings point at routes/lifeos-builderos-command-control-routes.js (/founder-interface/message) + intent services. Replaces the vague 'reproduce then fix' placeholder so discoverSentryFixWork's planner can author real target_file steps.",
   "description": "Single source of truth for which BP products are governed by the SENTRY pre-alpha completion gate and what their two doctrine layers are. The generic engine (scripts/sentry-prealpha-gate.mjs) runs any product defined here purely from this config: Layer A structural (no browser) + Layer B human-sim (real browser), both fail-closed, both emitting solution-mandatory findings into a per-product self-fix feed the improvement loop consumes. This generalizes SO-002 beyond Site Builder to every registered product.",
   "products": [
     {

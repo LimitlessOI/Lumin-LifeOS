@@ -52,6 +52,33 @@ function envSatisfied(requiresEnv) {
   return requiresEnv.every((name) => String(process.env[name] || '').trim().length > 0);
 }
 
+// Map a raw failure signature to a CONCRETE, localizable next action so the
+// self-fix planner can author a real target_file step instead of a "reproduce
+// then fix" placeholder (SO-002 amendment: every finding carries a real fix, no
+// "impossible"). Heuristic + honest fallback — never silent.
+function concreteSolution(id, detail, source) {
+  const text = String(detail || '');
+  const lc = text.toLowerCase();
+
+  // Broken plumbing: an endpoint returned an HTTP error (e.g. dashboard 404s).
+  const status = text.match(/\b(4\d\d|5\d\d)\b/);
+  const url = text.match(/\/api\/[\w/\-.:]+/);
+  if (status && (url || lc.includes('failed to load resource') || lc.includes('http'))) {
+    const path = url ? url[0] : 'the failing endpoint';
+    return `A request to ${path} returned HTTP ${status[1]}. Find the route module that owns ${path} and ensure it is mounted in the founder-builder runtime lane — prefer config/auto-registered-product-modules.json (auto-register, no composition-root edit). Then confirm the endpoint returns 200 and the dashboard call succeeds.`;
+  }
+
+  // Founder-chat quality/intent defects: the chat essays/recites instead of
+  // routing to the correct lane (workflow / build / commit-proof).
+  const chatSig = ['no workflow content', 'thin answer', 'no builder content', 'missing terminal pass', 'transport/commit proof', 'counsel_only', 'drawer_direct', 'smos_question']
+    .some((s) => lc.includes(s) || String(id).toLowerCase().includes(s));
+  if (chatSig) {
+    return `The founder chat returned counsel/essay text instead of the required response for "${id}". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.`;
+  }
+
+  return `Reproduce "${id}" in the ${source} walkthrough, read the failing assertion's output, and fix the first failing behavior in the module that produces it: ${text.slice(0, 160)}`;
+}
+
 // Convert a raw layer receipt (any known shape) into SENTRY findings.
 // Handles: a findings-feed object, the Layer-A/Layer-B shapes normalizeSentryFindings
 // already understands, and the E2E "results" map (id -> { ok, error/detail }).
@@ -69,7 +96,7 @@ function findingsFromReceipt(receipt, source) {
       findings.push({
         code: id,
         detail,
-        proposed_solution: `Reproduce "${id}" in the ${source} walkthrough, then fix the first failing behavior: ${detail.slice(0, 160)}`,
+        proposed_solution: concreteSolution(id, detail, source),
         proposed_solution_source: 'synthesized',
         severity: 'error',
         source,
