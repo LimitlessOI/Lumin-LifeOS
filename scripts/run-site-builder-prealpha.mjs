@@ -1,0 +1,201 @@
+#!/usr/bin/env node
+/**
+ * SYNOPSIS: Site Builder pre-alpha SENTRY gate — Layer A (structural walkthrough).
+ * Acts as a client's browser would at the HTTP level: preview loads, editor loads,
+ * the editor iframe resolves to the REAL site (catches the "Cannot GET" 404), and
+ * publish resolves to Stripe checkout. Fails closed. Writes a receipt.
+ *
+ * This is the structural half of the founder's completion doctrine: no Site Builder
+ * feature is "done" until it passes Layer A (this) AND Layer B (human-sim browser
+ * walkthrough with UX critique — see run-site-builder-prealpha-layerb.mjs).
+ *
+ * Usage:
+ *   node scripts/run-site-builder-prealpha.mjs            # reuse newest preview on prod
+ *   PREVIEW_CLIENT_ID=prev_x PREVIEW_EDIT_TOKEN=... node scripts/run-site-builder-prealpha.mjs
+ *
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { resolvePublicBaseUrl } from '../config/public-origin.js';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+function loadEnv() {
+  const fp = path.join(ROOT, '.env');
+  if (!fs.existsSync(fp)) return;
+  for (const line of fs.readFileSync(fp, 'utf8').split('\n')) {
+    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!m || process.env[m[1]]) continue;
+    process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  }
+}
+loadEnv();
+
+const BASE = resolvePublicBaseUrl(
+  process.env.PUBLIC_BASE_URL,
+  process.env.LIFEOS_BASE_URL,
+  process.env.BASE_URL,
+);
+const KEY = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
+const RECEIPT_PATH = path.join(ROOT, 'products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json');
+
+const steps = [];
+function step(id, ok, detail = '', data = {}) {
+  steps.push({ id, ok, detail, ...data });
+  console.log(`${ok ? '✅' : '❌'} ${id}${detail ? ` — ${detail}` : ''}`);
+  return ok;
+}
+
+async function fetchRaw(url, { method = 'GET', redirect = 'follow', timeout = 30000 } = {}) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const headers = {};
+    if (url.startsWith(BASE)) headers['x-command-key'] = KEY;
+    const res = await fetch(url, { method, headers, redirect, signal: ctrl.signal });
+    clearTimeout(timer);
+    const text = res.headers.get('content-type')?.includes('application/json')
+      ? JSON.stringify(await res.json().catch(() => ({})))
+      : await res.text().catch(() => '');
+    return { status: res.status, text, location: res.headers.get('location') || '', headers: res.headers };
+  } catch (err) {
+    clearTimeout(timer);
+    return { status: 0, text: '', location: '', error: err.message };
+  }
+}
+
+// Extract the canvas iframe src from the rendered editor HTML.
+function extractIframeSrc(html) {
+  const m = html.match(/data-lifeos-iframe[^>]*\bsrc="([^"]+)"/i)
+    || html.match(/<iframe[^>]*\bsrc="([^"]+)"[^>]*data-lifeos-iframe/i)
+    || html.match(/class="lifeos-canvas-frame"[^>]*\bsrc="([^"]+)"/i);
+  return m ? m[1].replace(/&amp;/g, '&') : '';
+}
+
+async function resolvePreview() {
+  if (process.env.PREVIEW_CLIENT_ID) {
+    const clientId = process.env.PREVIEW_CLIENT_ID;
+    const token = process.env.PREVIEW_EDIT_TOKEN || '';
+    return {
+      clientId,
+      editToken: token,
+      previewUrl: `${BASE}/previews/${clientId}`,
+      editorUrl: `${BASE}/api/v1/sites/editor?clientId=${clientId}&token=${token}`,
+      publishCheckoutUrl: `${BASE}/api/v1/sites/publish/checkout?clientId=${clientId}`,
+    };
+  }
+  const res = await fetchRaw(`${BASE}/api/v1/sites/previews`);
+  if (res.status !== 200) return null;
+  let list = [];
+  try { list = JSON.parse(res.text)?.previews || []; } catch { /* ignore */ }
+  const withToken = list.find((p) => p && p.editToken && p.clientId);
+  return withToken || null;
+}
+
+async function main() {
+  console.log(`\n🛡️  SENTRY Site Builder pre-alpha — Layer A (structural)`);
+  console.log(`   Base: ${BASE}`);
+  console.log(`   Key:  ${KEY ? '✅ present' : '❌ MISSING'}\n`);
+
+  if (!KEY) step('SBPA-A00_key', false, 'COMMAND_CENTER_KEY missing — cannot authenticate');
+
+  const preview = await resolvePreview();
+  if (!preview) {
+    step('SBPA-A01_preview_available', false,
+      'No preview found. Build one first: POST /api/v1/sites/build {"url":"https://…"}');
+    return finish();
+  }
+  step('SBPA-A01_preview_available', true,
+    `clientId=${preview.clientId} token=${preview.editToken ? 'present' : 'MISSING'}`);
+
+  // A02 — the preview page loads a real site (what a prospect first sees).
+  const previewIndex = `${preview.previewUrl.replace(/\/$/, '')}/index.html`;
+  const prev = await fetchRaw(previewIndex);
+  step('SBPA-A02_preview_loads',
+    prev.status === 200 && /<html/i.test(prev.text),
+    `HTTP ${prev.status} at ${previewIndex}`);
+
+  // A03 — the editor shell loads with the canvas iframe present.
+  const editor = await fetchRaw(preview.editorUrl);
+  const hasIframe = /data-lifeos-iframe/.test(editor.text);
+  step('SBPA-A03_editor_loads',
+    editor.status === 200 && hasIframe,
+    `HTTP ${editor.status}; iframe_marker=${hasIframe}`);
+
+  // A04 — the iframe src is ABSOLUTE and points at the preview (catches the
+  // relative-path bug that produced "Cannot GET /api/v1/sites/index.html").
+  const iframeSrc = extractIframeSrc(editor.text);
+  const absolute = /^https?:\/\//i.test(iframeSrc) && /\/previews\//.test(iframeSrc);
+  step('SBPA-A04_iframe_src_absolute',
+    absolute,
+    `iframe src="${iframeSrc || '(none found)'}"`, { iframeSrc });
+
+  // A05 — following the iframe src returns the REAL site (200 + HTML), not a 404.
+  if (iframeSrc && /^https?:\/\//i.test(iframeSrc)) {
+    const framed = await fetchRaw(iframeSrc);
+    step('SBPA-A05_iframe_loads_real_site',
+      framed.status === 200 && /<html/i.test(framed.text),
+      `HTTP ${framed.status} at iframe src`);
+  } else {
+    step('SBPA-A05_iframe_loads_real_site', false, 'no absolute iframe src to follow');
+  }
+
+  // A06 — publish resolves to Stripe checkout (302 with a stripe Location, or a
+  // followed page on checkout.stripe.com).
+  const noRedirect = await fetchRaw(preview.publishCheckoutUrl, { redirect: 'manual' });
+  const locIsStripe = /stripe\.com/i.test(noRedirect.location);
+  let checkoutOk = (noRedirect.status >= 300 && noRedirect.status < 400 && locIsStripe);
+  let checkoutDetail = `HTTP ${noRedirect.status}; location=${noRedirect.location || '(none)'}`;
+  if (!checkoutOk) {
+    const followed = await fetchRaw(preview.publishCheckoutUrl, { redirect: 'follow' });
+    checkoutOk = /checkout\.stripe\.com|js\.stripe\.com|stripe/i.test(followed.text) && followed.status === 200;
+    checkoutDetail += ` | followed HTTP ${followed.status} stripe_in_body=${/stripe/i.test(followed.text)}`;
+  }
+  step('SBPA-A06_checkout_resolves_stripe', checkoutOk, checkoutDetail);
+
+  finish(preview);
+}
+
+function finish(preview) {
+  const passed = steps.filter((s) => s.ok).map((s) => s.id);
+  const failed = steps.filter((s) => !s.ok).map((s) => s.id);
+  const allPass = failed.length === 0 && steps.length > 0;
+
+  const receipt = {
+    schema: 'site_builder_prealpha_layer_a_v1',
+    layer: 'A_structural',
+    at: new Date().toISOString(),
+    base: BASE,
+    preview: preview ? { clientId: preview.clientId } : null,
+    ok: allPass,
+    verdict: allPass ? 'PASS' : 'FAIL',
+    tests_passed: passed.length,
+    tests_failed: failed.length,
+    passed,
+    failed,
+    steps,
+    note: allPass
+      ? 'Layer A structural walkthrough passed. Proceed to Layer B (human-sim browser + UX critique).'
+      : `Layer A failed on: ${failed.join(', ')} — feature is NOT done; fix before founder handoff.`,
+  };
+
+  try {
+    fs.mkdirSync(path.dirname(RECEIPT_PATH), { recursive: true });
+    fs.writeFileSync(RECEIPT_PATH, JSON.stringify(receipt, null, 2));
+  } catch (err) {
+    console.error('Could not write receipt:', err.message);
+  }
+
+  console.log(`\n${'─'.repeat(60)}`);
+  console.log(`${allPass ? '✅ PASS' : '❌ FAIL'} — ${passed.length}/${steps.length} steps passed`);
+  if (failed.length) console.log(`Failed: ${failed.join(', ')}`);
+  console.log(`Receipt: products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json`);
+  process.exit(allPass ? 0 : 1);
+}
+
+main().catch((err) => {
+  console.error('Layer A walkthrough crashed:', err);
+  process.exit(1);
+});
