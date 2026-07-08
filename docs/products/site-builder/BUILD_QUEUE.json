@@ -150,6 +150,17 @@
       "founder_gated": false,
       "attempts": 1,
       "proof": "Built by Cursor agent session 2026-07-07; services/site-builder-service-catalog.js prices wired from config/site-builder-pricing.js"
+    },
+    {
+      "id": "sb-editor-onboarding-copy",
+      "status": "queued",
+      "target_file": "services/site-builder-editor-onboarding.js",
+      "task": "Create the guided-onboarding copy module the editor panes consume so a non-technical client is never staring at a bare editor. This directly answers the SENTRY Layer B UX critique of the live editor (verdict 'rough'): the chat wasn't self-explanatory, palettes weren't labeled in plain language, and there was no first-step guidance. Export CHAT_WELCOME (a short first message the AI chat panel shows on open, e.g. 'Hi! Tell me what to change — like \"make the header bigger\", \"use calmer colors\", or \"add a booking button\" — and I'll update your site.'), PALETTE_LABELS (a map from palette name/vibe to a plain-language label like Calm, Bright, Elegant, Clinical, Warm), labelPalette(palette) -> friendly string, and EDITOR_FIRST_STEPS (an ordered array of 3-4 short next-step hints, e.g. 'Pick a look up top', 'Click any text to edit it', 'Ask the assistant on the right for changes', 'Hit Publish when you love it').",
+      "spec": "Single self-contained ESM module, pure data + pure functions, ZERO import-time side effects, no network/DB/project imports. Named exports CHAT_WELCOME, PALETTE_LABELS, labelPalette, EDITOR_FIRST_STEPS + default export object. labelPalette must guard undefined/unknown input and fall back to the palette's own name (never throw). Copy is plain-language, encouraging, non-technical, and must not fabricate features that don't exist in the editor. Deterministic output. @ssot docs/products/site-builder/PRODUCT_HOME.md.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "source": "SENTRY Layer B pre-alpha UX critique (live run on onlinewellroundedmama.com, prev_1783488127928_tg15): friction_points = limited templates/palettes, unclear chat purpose, unguided editor."
     }
   ]
 }
