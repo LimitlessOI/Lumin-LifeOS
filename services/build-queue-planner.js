@@ -235,13 +235,53 @@ Rules:
 ${verifyScript ? `- The product's verify command is: ${verifyScript}` : ''}`;
 }
 
+// Recover every COMPLETE object from a "steps":[ ... ] array by scanning balanced
+// braces (string-aware), dropping any trailing partial object. This salvages a
+// plan whose JSON was cut off mid-array when the model hit its max_tokens cap —
+// the exact failure that produced `no parseable steps` and starved the loop.
+function salvageSteps(s) {
+  const key = s.search(/"steps"\s*:\s*\[/);
+  if (key === -1) return [];
+  const objs = [];
+  let depth = 0;
+  let objStart = -1;
+  let inStr = false;
+  let esc = false;
+  for (let i = s.indexOf('[', key) + 1; i < s.length; i++) {
+    const c = s[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') { inStr = true; continue; }
+    if (c === '{') { if (depth === 0) objStart = i; depth++; }
+    else if (c === '}') {
+      depth--;
+      if (depth === 0 && objStart !== -1) {
+        try { objs.push(JSON.parse(s.slice(objStart, i + 1))); } catch { /* skip corrupt object */ }
+        objStart = -1;
+      }
+    } else if (c === ']' && depth === 0) {
+      break;
+    }
+  }
+  return objs;
+}
+
 function parseModelJson(text) {
   if (typeof text !== 'string') return null;
-  let s = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+  const s = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
   const start = s.indexOf('{');
   const end = s.lastIndexOf('}');
-  if (start === -1 || end === -1 || end <= start) return null;
-  try { return JSON.parse(s.slice(start, end + 1)); } catch { return null; }
+  if (start !== -1 && end > start) {
+    try { return JSON.parse(s.slice(start, end + 1)); } catch { /* fall through to salvage */ }
+  }
+  // The whole-object parse failed (most often a truncated response). Salvage the
+  // complete step objects instead of throwing the entire plan away.
+  const salvaged = salvageSteps(s);
+  return salvaged.length ? { steps: salvaged } : null;
 }
 
 /**
@@ -295,7 +335,9 @@ export async function planBuildQueue({
   let raw;
   try {
     raw = await callModel(model, buildPrompt(productId, backlog, verifyScript, doneFiles), {
-      maxOutputTokens: 2000,
+      // A full 12-step plan with specs does not fit in 2000 output tokens — the
+      // JSON was being cut off mid-array (parse -> no steps -> loop starved).
+      maxOutputTokens: 8000,
       allowModelDowngrade: false,
     });
   } catch (e) {

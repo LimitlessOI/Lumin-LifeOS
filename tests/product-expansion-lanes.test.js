@@ -7,13 +7,23 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mapConcurrent, runProductExpansionLanes, defaultPlannerCallModel, dailyBuildBudget, productRankFraction, loadProductPriority } from '../services/never-stop-product-factory.js';
 
-test('defaultPlannerCallModel is fail-closed when no paid key is present', () => {
-  const saved = process.env.ANTHROPIC_API_KEY;
-  delete process.env.ANTHROPIC_API_KEY;
+test('defaultPlannerCallModel is fail-closed only when NO strong provider key is present', () => {
+  // Founder directive: never idle on token exhaustion — fail over across every
+  // present strong provider. So it returns a callable if ANY provider key exists,
+  // and null only when all are absent.
+  const keys = ['ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'GOOGLE_API_KEY', 'GEMINI_API_KEY'];
+  const saved = Object.fromEntries(keys.map((k) => [k, process.env[k]]));
   try {
-    assert.equal(defaultPlannerCallModel(), null);
+    for (const k of keys) delete process.env[k];
+    assert.equal(defaultPlannerCallModel(), null, 'null when no provider key at all');
+
+    process.env.OPENAI_API_KEY = 'test-openai';
+    assert.equal(typeof defaultPlannerCallModel(), 'function', 'callable via OpenAI failover even with no Anthropic key');
   } finally {
-    if (saved !== undefined) process.env.ANTHROPIC_API_KEY = saved;
+    for (const k of keys) {
+      if (saved[k] === undefined) delete process.env[k];
+      else process.env[k] = saved[k];
+    }
   }
 });
 

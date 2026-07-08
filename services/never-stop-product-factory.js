@@ -72,33 +72,83 @@ export function extractBuilderFailure(body) {
   return null;
 }
 
+// Strong-provider callers for the planner failover chain. Each throws on a
+// non-2xx so the chain can move to the next provider.
+async function callAnthropicModel(key, model, prompt, maxTokens) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'user', content: prompt }] }),
+  });
+  const j = await res.json();
+  if (!res.ok) throw new Error(`anthropic ${res.status}: ${JSON.stringify(j).slice(0, 200)}`);
+  return (j.content || []).map((c) => c.text || '').join('');
+}
+
+async function callOpenAiModel(key, model, prompt, maxTokens) {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
+    body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'user', content: prompt }] }),
+  });
+  const j = await res.json();
+  if (!res.ok) throw new Error(`openai ${res.status}: ${JSON.stringify(j).slice(0, 200)}`);
+  return (j.choices || []).map((c) => c?.message?.content || '').join('');
+}
+
+async function callGeminiModel(key, model, prompt, maxTokens) {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: maxTokens } }),
+  });
+  const j = await res.json();
+  if (!res.ok) throw new Error(`gemini ${res.status}: ${JSON.stringify(j).slice(0, 200)}`);
+  return (j.candidates || []).flatMap((c) => (c?.content?.parts || []).map((p) => p.text || '')).join('');
+}
+
 /**
  * Default planner model access for auto-enrolling products into build lanes.
- * Founder rule: only a strong PAID model may be hardwired — uses Anthropic
- * (claude sonnet) directly. Returns null (fail-closed) when no key is present,
- * so the plan lane simply skips rather than fabricating a queue.
+ * Founder rules honoured: only STRONG (paid-tier) models are hardwired — never a
+ * cheap downgrade for what the system ships. Founder directive (2026-07-03):
+ * "if one model runs out of tokens, switch to another — never sit idle; the only
+ * hard stop is the daily budget." So this builds an ordered failover chain across
+ * every present strong provider (Anthropic -> OpenAI -> Gemini) and tries the
+ * next one whenever a call errors or returns empty. Returns null (fail-closed)
+ * only when NO provider key is present at all.
  */
 export function defaultPlannerCallModel() {
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) return null;
-  const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+  const candidates = [];
+  if (process.env.ANTHROPIC_API_KEY) {
+    const m = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+    candidates.push({ name: `anthropic:${m}`, call: (p, t) => callAnthropicModel(process.env.ANTHROPIC_API_KEY, m, p, t) });
+  }
+  if (process.env.OPENAI_API_KEY) {
+    const m = process.env.OPENAI_PLANNER_MODEL || 'gpt-4o';
+    candidates.push({ name: `openai:${m}`, call: (p, t) => callOpenAiModel(process.env.OPENAI_API_KEY, m, p, t) });
+  }
+  const gKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+  if (gKey) {
+    const m = process.env.GEMINI_PLANNER_MODEL || 'gemini-1.5-pro';
+    candidates.push({ name: `gemini:${m}`, call: (p, t) => callGeminiModel(gKey, m, p, t) });
+  }
+  if (!candidates.length) return null;
+
   return async (_member, prompt, opts = {}) => {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: opts.maxOutputTokens || 2000,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-    });
-    const j = await res.json();
-    if (!res.ok) throw new Error(`anthropic ${res.status}: ${JSON.stringify(j).slice(0, 200)}`);
-    return (j.content || []).map((c) => c.text || '').join('');
+    const maxTokens = opts.maxOutputTokens || 8000;
+    const errors = [];
+    for (const c of candidates) {
+      try {
+        const out = await c.call(prompt, maxTokens);
+        if (out && out.trim()) return out;
+        errors.push(`${c.name}: empty`);
+      } catch (e) {
+        // AUTO-FAILOVER: a provider error/exhaustion must switch models, never
+        // idle the loop (founder directive). Try the next strong provider.
+        errors.push(`${c.name}: ${e.message}`);
+      }
+    }
+    throw new Error(`all planner models failed: ${errors.join(' | ')}`);
   };
 }
 
