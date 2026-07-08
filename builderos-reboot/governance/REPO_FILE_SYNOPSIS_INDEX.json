@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T00:38:25.884Z",
+  "generated_at": "2026-07-08T00:49:23.118Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11275,
   "files": [
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3404827,
-      "mtime": "2026-07-07T23:45:28.632Z",
-      "indexed_at": "2026-07-07T23:45:50.412Z"
+      "bytes": 3404906,
+      "mtime": "2026-07-08T00:49:04.464Z",
+      "indexed_at": "2026-07-08T00:49:23.118Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39432,9 +39432,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 67943,
-      "mtime": "2026-07-07T23:29:11.332Z",
-      "indexed_at": "2026-07-07T23:31:46.114Z"
+      "bytes": 68983,
+      "mtime": "2026-07-08T00:48:10.496Z",
+      "indexed_at": "2026-07-08T00:49:23.118Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -84567,9 +84567,12 @@
     {
       "path": "services/site-builder-editor-canvas.js",
       "synopsis": "Exports renderCanvas — services/site-builder-editor-canvas.js.",
-      "bytes": 19745,
-      "mtime": "2026-07-07T09:30:12.541Z",
-      "indexed_at": "2026-07-07T23:31:46.114Z"
+      "bytes": 20530,
+      "mtime": "2026-07-08T00:47:42.980Z",
+      "indexed_at": "2026-07-08T00:49:23.118Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/site-builder-editor-chat.js",
