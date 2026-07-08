@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-01 |
+| **Last Updated** | 2026-07-08 |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-01 — health/liveness truth hardened for founder-builder runtime: `/healthz` and `/ready` now bypass public/static interception, which keeps command surfaces and external monitors from grading stale or hung health off the wrong layer. Prior: 2026-06-29 — never-stop product factory status route wired into command center |
+| **Last Updated** | 2026-07-08 — `requireKey` account-JWT fallback is now operator-role-gated (`founder_admin`/`operator`/`admin`) so member JWTs cannot reach command/operator surfaces. Prior: 2026-07-01 — health/liveness truth hardened for founder-builder runtime: `/healthz` and `/ready` now bypass public/static interception, which keeps command surfaces and external monitors from grading stale or hung health off the wrong layer. Prior: 2026-06-29 — never-stop product factory status route wired into command center |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-07-08 | **Operator JWT privilege escalation fixed.** `src/server/auth/requireKey.js` still accepts configured command keys, but Bearer account JWT fallback now requires an operator-grade role (`founder_admin`, `operator`, or `admin`) before passing `requireKey` routes. Added `tests/require-key-operator-jwt.test.js` to prove member JWTs are denied and operator-grade JWTs/command keys still pass. | Recent founder/runtime route expansion put builder, factory, Railway, browser-agent, and auth-operator surfaces behind `requireKey`; accepting any signed-in member JWT turned that fallback into operator privilege escalation. | ✅ focused regression + syntax checks pending in PR | deploy after merge |
 | 2026-07-03 | **Command-center/operator live-origin cleanup** — `scripts/governed-autonomy-idle-analysis.mjs`, `scripts/governed-overnight-autonomy.mjs`, and related operator probes now resolve the live base URL through the shared public-origin helper instead of shipping with stale `robust-magic` defaults. | Overnight/operator diagnostics were capable of grading the wrong surface even when the underlying command-center logic was fine. The command layer must look at the active `lumin-web` path, not folklore. | ✅ local syntax | deploy + rerun operator probes |
 | 2026-06-29 | **`routes/lifeos-command-center-routes.js`** — `GET /api/v1/lifeos/command-center/never-stop-product-factory` surfaces live factory lane status (expansion mission, last heartbeat, enabled state). | Never-stop factory scheduler needed a command-center read path to confirm it's running. | AM12 | pending deploy |
 | 2026-06-28 | **`routes/canonical-execution-routes.js` + `services/env-registry-map.js`** — `GET /api/v1/lifeos/admin/operations/timeline|summary` for duration+token aligned ops view. | Adam: see how long everything takes with tokens lined up. | ✅ | deploy |
