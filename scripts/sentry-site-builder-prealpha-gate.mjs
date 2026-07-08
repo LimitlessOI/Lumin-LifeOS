@@ -10,12 +10,24 @@
  * as a real client and passes both layers. Conductor-authored SCRIPT (SO-001
  * allows scripts/CI); it authors no product code and no browser primitive — it
  * only orchestrates the already-proven Layer A script + Layer B endpoint.
+ *
+ * SELF-FIX WIRING (SO-002 solution-mandatory): after both layers run, this feeds
+ * the raw layer results through services/sentry-findings-to-improvement-feed.js
+ * (system-authored) and writes the readiness-shaped findings (each carrying a
+ * proposed_solution) to products/receipts/SENTRY_FINDINGS_FEED.json — the input
+ * the BuilderOS improvement loop consumes to self-fix. Best-effort: never breaks
+ * the gate verdict.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { normalizeSentryFindings, toReadinessFindings } from '../services/sentry-findings-to-improvement-feed.js';
 
 const BASE = (process.env.PUBLIC_BASE_URL || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || '';
+const LAYER_A_RECEIPT = 'products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json';
+const FINDINGS_FEED = 'products/receipts/SENTRY_FINDINGS_FEED.json';
 
 function runLayerA() {
   return new Promise((resolve) => {
@@ -46,9 +58,38 @@ async function runLayerB() {
       steps_failed: body.tests_failed,
       friction: ux.friction_points,
       improvements: ux.improvements,
+      raw: body,
     };
   } catch (err) {
     return { ran: true, ok: false, reason: String(err.message || err).slice(0, 200) };
+  }
+}
+
+// Feed both layers' raw results through the system-authored closer and persist the
+// readiness-shaped findings for the improvement loop. Best-effort, never throws.
+function emitFindingsFeed(layerBRaw) {
+  try {
+    let layerARaw = null;
+    try { layerARaw = JSON.parse(fs.readFileSync(LAYER_A_RECEIPT, 'utf8')); } catch { /* receipt may not exist */ }
+    const findings = [
+      ...normalizeSentryFindings(layerARaw),
+      ...normalizeSentryFindings(layerBRaw),
+    ];
+    const readiness = toReadinessFindings(findings);
+    const feed = {
+      schema: 'sentry_findings_feed_v1',
+      generated_at: new Date().toISOString(),
+      findings_count: findings.length,
+      without_solution: findings.filter((f) => !f || !f.proposed_solution).length,
+      findings,
+      readiness,
+    };
+    fs.mkdirSync(path.dirname(FINDINGS_FEED), { recursive: true });
+    fs.writeFileSync(FINDINGS_FEED, JSON.stringify(feed, null, 2));
+    console.log(`\n▶ Self-fix feed: ${findings.length} finding(s), ${feed.without_solution} without a solution → ${FINDINGS_FEED}`);
+    if (feed.without_solution > 0) console.log('  ⚠ solution-mandatory: some findings lack a proposed_solution (closer should synthesize one)');
+  } catch (err) {
+    console.log('  (self-fix feed skipped:', String(err.message || err).slice(0, 120), ')');
   }
 }
 
@@ -75,6 +116,8 @@ async function main() {
   // could run (prod). When Layer B could NOT run (no prod creds — local/CI), the
   // gate passes on Layer A alone but LOUDLY marks Layer B as not-yet-satisfied, so
   // "done" on prod still requires both. It never fakes a Layer B pass.
+  emitFindingsFeed(b.raw || null);
+
   const gateOk = aOk && (!b.ran ? true : b.ok);
   const bothSatisfied = aOk && b.ran && b.ok;
 
