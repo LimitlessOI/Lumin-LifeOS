@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T06:51:45.820Z",
+  "generated_at": "2026-07-08T06:58:25.510Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11288,
   "files": [
@@ -21588,9 +21588,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3407430,
-      "mtime": "2026-07-08T06:51:45.511Z",
-      "indexed_at": "2026-07-08T06:51:45.820Z"
+      "bytes": 3408999,
+      "mtime": "2026-07-08T06:58:10.197Z",
+      "indexed_at": "2026-07-08T06:58:25.510Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38616,9 +38616,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 195632,
-      "mtime": "2026-07-08T06:51:38.304Z",
-      "indexed_at": "2026-07-08T06:51:45.820Z"
+      "bytes": 196975,
+      "mtime": "2026-07-08T06:58:02.741Z",
+      "indexed_at": "2026-07-08T06:58:25.510Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -80499,9 +80499,9 @@
     {
       "path": "services/builderos-improvement-loop.js",
       "synopsis": "Deterministic BuilderOS improvement loop planner.",
-      "bytes": 6082,
-      "mtime": "2026-07-08T06:51:38.701Z",
-      "indexed_at": "2026-07-08T06:51:45.820Z",
+      "bytes": 8433,
+      "mtime": "2026-07-08T06:56:15.741Z",
+      "indexed_at": "2026-07-08T06:58:25.510Z",
       "ssot": [
         "builderos-reboot/BP_PRIORITY.json",
         "docs/products/AUTHORITY_BOUNDARIES.md"
@@ -86783,9 +86783,9 @@
     {
       "path": "tests/builderos-improvement-loop.test.js",
       "synopsis": "js — tests/builderos-improvement-loop.test.js.",
-      "bytes": 1633,
-      "mtime": "2026-07-08T06:51:38.759Z",
-      "indexed_at": "2026-07-08T06:51:45.820Z"
+      "bytes": 2510,
+      "mtime": "2026-07-08T06:55:49.937Z",
+      "indexed_at": "2026-07-08T06:58:25.510Z"
     },
     {
       "path": "tests/builderos-intake-regression-harness.test.js",

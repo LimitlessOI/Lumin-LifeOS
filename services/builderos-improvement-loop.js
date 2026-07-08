@@ -6,12 +6,57 @@
  * @ssot docs/products/AUTHORITY_BOUNDARIES.md
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { getCompoundImprovementSummary } from './builderos-compound-improvement.js';
 import { getBpPrioritySchedulerStatus } from './builderos-bp-priority-scheduler.js';
 import { buildImprovementDeltaContract } from './builderos-improvement-contract.js';
 
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const RECEIPTS_DIR = path.join(ROOT, 'products', 'receipts');
+
 function uniq(list = []) {
   return [...new Set(list.filter(Boolean))];
+}
+
+// Fold the per-product SENTRY self-fix feeds (written by scripts/sentry-prealpha-gate.mjs
+// via the system-authored closer) into the improvement queue. This is the last mile of
+// SO-002 self-fix: a SENTRY finding+solution becomes a governed improvement proposal —
+// no secondary queue. Best-effort: never throws, so a missing/malformed feed can't break
+// the loop status.
+function readSentryFindings() {
+  let files = [];
+  try {
+    files = fs.readdirSync(RECEIPTS_DIR).filter((f) => /^SENTRY_FINDINGS_FEED.*\.json$/.test(f));
+  } catch {
+    return [];
+  }
+  const findings = [];
+  for (const file of files) {
+    let feed;
+    try {
+      feed = JSON.parse(fs.readFileSync(path.join(RECEIPTS_DIR, file), 'utf8'));
+    } catch {
+      continue;
+    }
+    const product = String(feed?.product || 'unknown');
+    // Prefer the top-level findings array: it carries proposed_solution (solution-mandatory).
+    // readiness.blockers is a stripped code+detail view and loses the fix, so it's only a fallback.
+    const raw = Array.isArray(feed?.findings) && feed.findings.length
+      ? feed.findings
+      : (Array.isArray(feed?.readiness?.blockers) ? feed.readiness.blockers : []);
+    for (const f of raw) {
+      const baseCode = String(f?.code || f?.id || 'FINDING');
+      findings.push({
+        code: `SENTRY_${product}_${baseCode}`.toUpperCase().replace(/[^A-Z0-9_]/g, '_'),
+        detail: String(f?.detail || f?.note || 'SENTRY finding').slice(0, 400),
+        proposed_solution: f?.proposed_solution || null,
+        product,
+      });
+    }
+  }
+  return findings;
 }
 
 function classifyProposalOwner(code = '') {
@@ -34,15 +79,21 @@ function proposalPriority(code = '', blocker = true) {
 
 function buildProposalFromFinding(finding = {}, kind = 'blocker') {
   const code = String(finding.code || finding.id || 'UNKNOWN');
+  const isBlocker = kind === 'blocker' || kind === 'sentry';
+  const detail = String(finding.detail || finding.note || 'Repair runtime gap').slice(0, 120);
+  const whyBase = String(finding.detail || finding.note || 'Runtime gap detected').slice(0, 400);
+  const whyNow = finding.proposed_solution
+    ? `${whyBase} | Proposed solution: ${String(finding.proposed_solution).slice(0, 240)}`
+    : whyBase;
   const proposal = {
     proposal_id: `${kind}:${code}`,
     source: kind,
     source_code: code,
-    priority: proposalPriority(code, kind === 'blocker'),
+    priority: proposalPriority(code, isBlocker),
     owner: classifyProposalOwner(code),
     lane: classifyProposalLane(code),
-    title: `${code}: ${String(finding.detail || finding.note || 'Repair runtime gap').slice(0, 120)}`,
-    why_now: String(finding.detail || finding.note || 'Runtime gap detected').slice(0, 400),
+    title: `${code}: ${detail}`,
+    why_now: whyNow,
     consensus_path: ['SNT', 'CFO', 'Chair', 'ARC'],
     arc_handoff_required: true,
   };
@@ -96,6 +147,7 @@ export function buildBuilderOSImprovementLoopStatus({
   const compound = getCompoundImprovementSummary();
   const blockers = readiness?.blockers || [];
   const warnings = readiness?.warnings || [];
+  const sentryFindings = readSentryFindings();
   const fakeGreenRisks = (readiness?.fake_green_risks || []).map((detail, index) => ({
     code: `FAKE_GREEN_RISK_${index + 1}`,
     detail,
@@ -103,6 +155,7 @@ export function buildBuilderOSImprovementLoopStatus({
 
   const proposals = [
     ...blockers.map((b) => buildProposalFromFinding(b, 'blocker')),
+    ...sentryFindings.map((s) => buildProposalFromFinding(s, 'sentry')),
     ...warnings.slice(0, 5).map((w) => buildProposalFromFinding(w, 'warning')),
     ...fakeGreenRisks.slice(0, 3).map((r) => buildProposalFromFinding(r, 'fake_green')),
     ...(compound.levers || []).slice(0, 5).map((lever) => buildProposalFromLever(lever)),
@@ -112,8 +165,13 @@ export function buildBuilderOSImprovementLoopStatus({
 
   const departments = {
     SNT: {
-      findings_count: blockers.length + warnings.length + fakeGreenRisks.length,
-      top_findings: uniq(blockers.map((b) => b.code).concat(warnings.map((w) => w.code))).slice(0, 8),
+      findings_count: blockers.length + warnings.length + fakeGreenRisks.length + sentryFindings.length,
+      sentry_findings_count: sentryFindings.length,
+      top_findings: uniq(
+        blockers.map((b) => b.code)
+          .concat(sentryFindings.map((s) => s.code))
+          .concat(warnings.map((w) => w.code))
+      ).slice(0, 8),
     },
     Wisdom: {
       total_failures_logged: compound.total_failures_logged || 0,
