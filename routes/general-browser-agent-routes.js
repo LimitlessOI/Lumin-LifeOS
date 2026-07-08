@@ -13,7 +13,7 @@ import fs from 'fs';
 import { createAccountManager } from '../services/account-manager.js';
 import { createTCBrowserAgent } from '../services/tc-browser-agent.js';
 import { runGoalOnSession } from '../services/general-browser-agent-live.js';
-import { getChromiumLaunchOptions, createSession } from '../services/browser-agent.js';
+import { getChromiumLaunchOptions, createSession, probeLaunchConfigs } from '../services/browser-agent.js';
 
 export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
   const requireKey = deps.requireKey;
@@ -55,6 +55,15 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
       diag.launch = { ok: false, error: err.message };
     } finally {
       if (session?.close) await session.close().catch(() => {});
+    }
+    // Ground-truth matrix — one deploy reveals which launch config actually
+    // boots Chrome in this container (set ?matrix=0 to skip the extra launches).
+    if (String(req.query.matrix ?? '1') !== '0') {
+      try {
+        diag.launch_matrix = await probeLaunchConfigs();
+      } catch (err) {
+        diag.launch_matrix = { error: err.message };
+      }
     }
     return res.json(diag);
   });
