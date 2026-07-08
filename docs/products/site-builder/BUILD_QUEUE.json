@@ -1,9 +1,9 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "site-builder",
-  "verify_script": "scripts/verify-site-builder-lane.mjs",
-  "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue.",
-  "updated_at": "2026-07-07",
+  "verify_script": "scripts/sentry-site-builder-prealpha-gate.mjs",
+  "notes": "Structured, ordered build steps the autonomous product-build orchestrator executes one at a time via the /build primitive. Each step is a single-file, well-specified task with a concrete acceptance. Free-form prose build plans live in PRODUCT_HOME; THIS file is the machine-executable queue. COMPLETION GATE (SO-002): verify_script runs the SENTRY two-layer pre-alpha gate — Layer A (structural HTTP) always, Layer B (human-sim real browser + UX critique) whenever prod creds are present — and fails closed. No step is 'done' until SENTRY passes as a real client. Prior lane check (scripts/verify-site-builder-lane.mjs) still runnable via `npm run verify:site-builder`.",
+  "updated_at": "2026-07-08",
   "steps": [
     {
       "id": "sb-ab-subject-testing",

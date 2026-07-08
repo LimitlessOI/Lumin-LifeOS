@@ -115,6 +115,7 @@
     "lifeos:action-inbox:v1-acceptance": "node scripts/run-action-inbox-v1-acceptance.mjs",
     "lifeos:machine-alpha-walkthrough": "node scripts/run-machine-alpha-walkthrough.mjs",
     "sentry:site-builder:layer-a": "node scripts/run-site-builder-prealpha.mjs",
+    "sentry:site-builder:gate": "node scripts/sentry-site-builder-prealpha-gate.mjs",
     "lifeos:user-auth:v1-acceptance": "node scripts/run-lifeos-user-auth-v1-acceptance.mjs",
     "smos:session:acceptance": "node scripts/run-socialmediaos-session-acceptance.mjs",
     "lifere:sales-coaching:v1-acceptance": "node scripts/run-lifere-sales-coaching-acceptance.mjs",
