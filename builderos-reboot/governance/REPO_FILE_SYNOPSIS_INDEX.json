@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-08T20:32:53.483Z",
+  "generated_at": "2026-07-08T20:51:31.858Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11290,
   "files": [
@@ -21589,8 +21589,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3409553,
-      "mtime": "2026-07-08T20:32:53.119Z",
-      "indexed_at": "2026-07-08T20:32:53.483Z"
+      "mtime": "2026-07-08T20:51:18.460Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -32158,9 +32158,9 @@
     {
       "path": "data/never-stop-product-factory-state.json",
       "synopsis": "JSON data/config — data/never-stop-product-factory-state.json.",
-      "bytes": 279,
-      "mtime": "2026-07-08T20:32:52.711Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z",
+      "bytes": 153,
+      "mtime": "2026-07-08T20:49:39.632Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z",
       "synopsis_index_only": true
     },
     {
@@ -37421,9 +37421,9 @@
     {
       "path": "docs/governance/CHAIR_CONSENSUS_LEDGER.md",
       "synopsis": "Chair Consensus Ledger",
-      "bytes": 4525,
-      "mtime": "2026-07-08T20:32:18.187Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z"
+      "bytes": 6277,
+      "mtime": "2026-07-08T20:49:06.172Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z"
     },
     {
       "path": "docs/HANDOFF_IDEAS_TO_PRODUCTS_REVIEW.md",
@@ -38623,9 +38623,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 204629,
-      "mtime": "2026-07-08T20:32:31.931Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z"
+      "bytes": 206147,
+      "mtime": "2026-07-08T20:49:20.136Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -80195,9 +80195,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 17008,
-      "mtime": "2026-07-08T20:32:18.239Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z",
+      "bytes": 18571,
+      "mtime": "2026-07-08T20:49:06.172Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84005,9 +84005,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 61539,
-      "mtime": "2026-07-08T20:32:18.239Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z",
+      "bytes": 64331,
+      "mtime": "2026-07-08T20:49:06.172Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86605,9 +86605,9 @@
     {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
-      "bytes": 11675,
-      "mtime": "2026-07-08T18:54:26.007Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z"
+      "bytes": 12611,
+      "mtime": "2026-07-08T20:49:06.172Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z"
     },
     {
       "path": "tests/builder-agents.test.js",
@@ -87510,9 +87510,9 @@
     {
       "path": "tests/product-expansion-lanes.test.js",
       "synopsis": "Multiple-lane concurrency — the factory builds several products'",
-      "bytes": 5158,
-      "mtime": "2026-07-06T21:32:24.575Z",
-      "indexed_at": "2026-07-08T20:32:52.818Z",
+      "bytes": 5776,
+      "mtime": "2026-07-08T20:49:06.172Z",
+      "indexed_at": "2026-07-08T20:51:31.858Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

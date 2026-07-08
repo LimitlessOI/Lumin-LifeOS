@@ -1,11 +1,10 @@
 {
-  "status": "running",
-  "current_task": {
-    "id": "bp_priority_foundation",
-    "kind": "foundation_pipeline",
-    "priority": 1,
-    "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
-    "detail": "1 incomplete BP item(s)"
-  },
-  "updated_at": "2026-06-29T20:04:13.003Z"
+  "status": "idle",
+  "last_lanes": [
+    "p_ok",
+    "p_bad"
+  ],
+  "lanes_built": 1,
+  "lanes_live": 1,
+  "updated_at": "2026-07-08T20:48:56.144Z"
 }

@@ -213,6 +213,20 @@ test('planBuildQueue plans from extraBacklog even when the product home has no b
   assert.ok(/no_js_errors/.test(seenPrompt) && /Proposed fix/.test(seenPrompt));
 });
 
+test('planBuildQueue salvages a truncated plan (model hit its output cap mid-array)', async () => {
+  // Two complete step objects then a cut-off third + no closing brackets — the
+  // exact shape a maxOutputTokens cap produces. The complete steps must survive.
+  const truncated = '{"steps":[{"id":"a","target_file":"services/a.js","task":"do a","spec":"a done"},{"id":"b","target_file":"services/b.js","task":"do b","spec":"b done"},{"id":"c","target_file":"services/c.js","ta';
+  const res = await planBuildQueue({
+    productId: 'lifeos',
+    homeText: '# t\n## Backlog\n- something to build here',
+    callModel: async () => truncated,
+  });
+  assert.ok(res, 'recovers a queue from the complete objects instead of dropping the whole plan');
+  assert.equal(res.added.length, 2, 'both complete steps kept, the partial one dropped');
+  assert.deepEqual(res.added.map((s) => s.target_file), ['services/a.js', 'services/b.js']);
+});
+
 test('planBuildQueue de-duplicates extraBacklog against the documented backlog', async () => {
   let backlogCount = null;
   const callModel = async (_model, prompt) => {

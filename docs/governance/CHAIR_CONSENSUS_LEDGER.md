@@ -21,11 +21,12 @@
 
 | Metric | Count |
 |---|---|
-| Total consults | 4 |
+| Total consults | 5 |
 | Consensus reached | 4 |
-| Faster to right decision (YES) | 4 |
+| Faster to right decision (YES) | 5 |
 | Faster to right decision (NO) | 0 |
 | Rework prevented (caught a gap/risk before ship) | 4 |
+| Debate that improved a design (net-new idea/hardening) | 1 |
 
 ## Ledger
 
@@ -35,6 +36,8 @@
 | 2 | 2026-07-03 | Durable-commit-on-plan for `runPlanBuildQueue` — commit the planned queue (with `sentry_signature`) to the repo so it survives redeploys (PR #299) | YES; implement all three in one pass (durable-commit + signature-in-committed-queue + fail-open) | YES | ~1 exchange | **YES** | Confirmed the fix + judged the churn risk low with reasoning, and added the "stamp `sentry_signature` into the *committed* queue (not just local)" requirement I had not scoped — closing the re-plan-waste loop in the same pass instead of a follow-up PR. |
 | 3 | 2026-07-03 | Zero-commit cycles with no runtime visibility: build a read-only loop-observability endpoint vs. keep waiting/guessing (PR #301) | YES — observability-first; weights missing `GITHUB_TOKEN` (silent `commitQueueStatusToRepo` failure) highest; add env-presence booleans + last-N decisions | YES | ~1 exchange | **YES** | Confirmed observability-first over more blind waiting (which the founder explicitly warned against), ranked the 3 hypotheses so the endpoint targets the likely cause, and pushed to also surface per-cycle `selected_task/reason/result_detail` — a sharper spec than I'd have built solo. |
 | 4 | 2026-07-03 | Real root cause (found via the observability endpoint): SENTRY feed excluded from Docker image → `discoverSentryFixWork` silent `[]`. Fix `.dockerignore` glob + harden logging (PR #302) | YES on all three — bake-not-regenerate (runtime write is a failure surface), log-hardening non-negotiable, glob-audit receipt reads | YES | ~1 exchange | **YES** | Endorsed baking over runtime regeneration with a reason I hadn't fully weighed (cold-start planning must not depend on a runtime write), and confirmed the log-hardening + glob-audit belonged in the SAME pass — preventing a repeat silent-`[]` regression instead of a follow-up. |
+
+| 5 | 2026-07-03 | Founder-requested DEBATE (not consensus): dual-twin competitive-evolution + AI incentives, and the "1% lie" integrity auditor (separation of powers). Asked the Chair to critique, harden, and beat my ideas. | DEBATE (by design, not a ship gate) — pushed back hard and added net-new: auditor needs **veto/block power** not just flag; **two-tier verification** (event-driven for load-bearing claims + scheduled sweep for the rest); **Goodhart/referee-capture** is the critical flaw (twins optimize the visible score, not the outcome) → keep auditor OUT of scoring, only enforce the floor; **difficulty must be locked by a third party BEFORE assignment** (most-gameable incentive); fail-forward bounty must require a **novel** lesson that transfers to a defect the originator had **not** seen; two live mirrors is **post-revenue** architecture; net-new idea = **Dead-Reckoning stall detector** (3 identical defer cycles + budget drain → STALL_DETECTED, halt/skip, never a silent 3-day drain). | N/A (debate) | ~2 exchanges | **YES** | Two brains beat one here decisively: the Chair produced hardening I had not proposed (veto-power, third-party difficulty lock, novelty+transfer proof against bounty-gaming) and a genuinely new build (Dead-Reckoning stall detector) that directly attacks the silent-budget-drain class we keep hitting. Also disagreed with my `work[0]` fallback (prefers HALT+signal over silent re-select) — a real design correction, logged even though I lean toward a bounded fallback. Meta: the Chair's own reply truncated at the 2000-token cap — the exact bug currently blocking the planner — extra proof the token-cap/failover fix matters. |
 
 ## Notes
 
