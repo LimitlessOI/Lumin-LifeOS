@@ -431,10 +431,27 @@ export async function runLuminChairTurn(ctx, deps) {
   }
   _clog('loadHistory');
 
+  const doPrefix = stripChairDoPrefix(cleanedInput);
+  // Build/execute orders must use build_async (202 + job poll). The direct agent
+  // runs a sync builder inside the HTTP turn and hits Railway/proxy 502 + the
+  // 92s handler deadline — which is exactly how drawer_direct_build got
+  // "No response from system." Skip the front-door agent for those turns.
+  const skipDirectAgentForBuild = doPrefix.forcedExecute
+    || isBuildRequest(doPrefix.text || cleanedInput)
+    || isExplicitExecuteCommand(cleanedInput)
+    || /^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput);
+
   // ── DIRECT CHAIR AGENT (front door) ──
   // Adam talks straight to the Chair (the AI): it answers AND acts (real build tool), no keyword-router middle layer.
   const directAgentOn = process.env.CHAIR_DIRECT_AGENT !== '0';
-  if (directAgentOn && conversationalMode && !shouldDisplayOnly && !ctx.alphaProbe && explicitAction !== 'display') {
+  if (
+    directAgentOn
+    && conversationalMode
+    && !shouldDisplayOnly
+    && !ctx.alphaProbe
+    && explicitAction !== 'display'
+    && !skipDirectAgentForBuild
+  ) {
     try {
       _clog('direct_agent_start');
       const agentRes = await runChairDirectAgent({
@@ -463,8 +480,6 @@ export async function runLuminChairTurn(ctx, deps) {
       _clog(`direct_agent_error: ${agentErr.message} — falling back to legacy routing`);
     }
   }
-
-  const doPrefix = stripChairDoPrefix(cleanedInput);
   const actionSource = ctx.originalText || cleanedInput;
   let effectiveInput = bindContinuationUtterance(doPrefix.text || cleanedInput, mergedHistory);
   let forceExecute = doPrefix.forcedExecute || confirmIntent || isFounderFrustrationContinuation(cleanedInput);

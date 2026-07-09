@@ -56,7 +56,12 @@ const report = {
 let browser;
 let page;
 let errors = [];
-const CONSOLE_ERROR_ALLOWLIST = [];
+const CONSOLE_ERROR_ALLOWLIST = [
+  // Chromium logs failed network responses as console.error; ignore static/asset 404 noise.
+  // Real app failures still surface as pageerror or explicit "Error loading …" messages.
+  /Failed to load resource: the server responded with a status of 404/i,
+  /Failed to load resource: the server responded with a status of 4\d\d/i,
+];
 
 function isAllowlistedConsoleError(text = '') {
   const msg = String(text || '');

@@ -651,4 +651,4 @@ SENTRY_PROOF_1783548060196 — founder approved canonical memory auto-inject for
 SENTRY_PROOF_1783548077002 — founder approved canonical memory auto-inject for memory-system.
 
 ## 2026-07-09 — A→Z trust (founder-UI E2E)
-E2E off-by-one fixed (wait for new assistant bubble); Chair PASS/COMMITTED receipt surfaced; synopsis-index ref races retry; dashboard mounts live 200; gv-status-route done to stop queue thrash. Next: push + sentry-prealpha-gate lifeos-founder-ui --enforce-creds.
+E2E off-by-one fixed (wait for new assistant bubble); Chair PASS/COMMITTED receipt surfaced; synopsis-index ref races retry; dashboard mounts live 200; gv-status-route done to stop queue thrash. Gate re-run: SMOS+counsel PASS; drawer_direct_build still FAIL ("No response from system" — direct agent sync build → 502). Fix: skip direct agent for do:/build → build_async 202+poll; allowlist Chromium 404 console noise. Next: push + re-gate.
