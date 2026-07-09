@@ -56,6 +56,7 @@ import { startGovernedAutonomousShippingLoop } from "./services/governed-autonom
 import { initDatabase } from "./startup/database.js";
 import { requireKey } from "./src/server/auth/requireKey.js";
 import { NotificationService } from "./core/notification-service.js";
+import { buildStartupDegradedReport, formatStartupDegradedLog } from "./services/founder-runtime-boot-report.js";
 _bootLog('all_imports_done');
 import {
   COMMAND_CENTER_KEY,
@@ -100,14 +101,21 @@ const startupHealthState = {
   deferred_services: "pending",
   runtime_profile: "founder_builder",
   last_error: null,
+  degraded: false,
+  startup_report: null,
 };
 
 function serializeStartupHealth() {
+  const report = startupHealthState.startup_report;
+  const degraded = startupHealthState.degraded === true
+    || _unhandledRejectionCount > 0
+    || (report && report.degraded === true);
   return {
     ok: true,
     live: true,
     ready: startupHealthState.ready === true,
-    status: _unhandledRejectionCount > 0 ? 'degraded' : (startupHealthState.ready === true ? 'healthy' : 'starting'),
+    degraded,
+    status: degraded ? 'degraded' : (startupHealthState.ready === true ? 'healthy' : 'starting'),
     checks: {
       server: "ok",
       db: startupHealthState.db,
@@ -115,12 +123,14 @@ function serializeStartupHealth() {
       deferred_services: startupHealthState.deferred_services,
       runtime_profile: startupHealthState.runtime_profile,
       last_error: startupHealthState.last_error || null,
+      route_assert: report?.routes_missing?.length ? 'degraded' : 'ok',
     },
     startup: { ...startupHealthState },
+    startup_report: report,
     fault_receipts: {
       unhandled_rejections: _unhandledRejectionCount,
       last_fault: _lastUnhandledRejection,
-      health_degraded: _unhandledRejectionCount > 0,
+      health_degraded: degraded,
     },
     uptime: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
@@ -363,12 +373,12 @@ async function bootFounderRuntime() {
     _bootLog('db_ok');
 
     _bootLog('pre_migrations');
-    await initDatabase(pool, logger);
+    const migrationResult = await initDatabase(pool, logger);
     _bootLog('migrations_done');
 
     _bootLog('pre_registerRoutes');
     const notificationService = new NotificationService({ pool });
-    await registerFounderRuntimeRoutes(app, {
+    const routeRegistration = await registerFounderRuntimeRoutes(app, {
       pool,
       requireKey,
       logger,
@@ -382,11 +392,28 @@ async function bootFounderRuntime() {
       notificationService,
     });
     _bootLog('registerRoutes_done');
-    startupHealthState.runtime_routes = "ok";
+
+    const startupReport = buildStartupDegradedReport({
+      migrationFailed: migrationResult?.failed || [],
+      moduleHealth: routeRegistration?.moduleHealth || {},
+      routeAssert: routeRegistration?.routeAssert || null,
+      unhandledRejections: _unhandledRejectionCount,
+      lastError: startupHealthState.last_error,
+    });
+    startupHealthState.startup_report = startupReport;
+    startupHealthState.degraded = startupReport.degraded === true;
+    startupHealthState.runtime_routes = startupReport.degraded
+      && (startupReport.routes_missing?.length || routeRegistration?.routeAssert?.ok === false)
+      ? "degraded"
+      : "ok";
     startupHealthState.deferred_services = "ok";
     startupHealthState.phase = "ready";
     startupHealthState.ready = true;
-    logger.info("✅ Founder-builder runtime routes mounted");
+    if (startupReport.degraded) {
+      logger.error(formatStartupDegradedLog(startupReport), "[STARTUP_DEGRADED] founder-builder boot partial failure");
+    } else {
+      logger.info("✅ Founder-builder runtime routes mounted");
+    }
 
     // AUTONOMOUS BUILD LOOP: the founder-builder lane is the only runtime that
     // boots on Railway, and it already mounts the `/build` primitive — so the

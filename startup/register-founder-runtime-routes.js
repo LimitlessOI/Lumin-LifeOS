@@ -15,12 +15,15 @@ import { createSiteBuilderRoutes } from "../routes/site-builder-routes.js";
 import createSiteBuilderCheckoutRoutes from "../routes/site-builder-checkout-routes.js";
 import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
+import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import { getNeverStopProductFactoryStatus } from "../services/never-stop-product-factory-scheduler.js";
 import { checkAllProviders } from "../services/provider-key-health.js";
 import { autoRegisterProductModules, getModuleHealth } from "./auto-register-product-modules.js";
 import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
+import { assertFounderRuntimeRoutes } from "../services/founder-runtime-route-assert.js";
+import { registerFounderMemoryRoutes } from "../routes/founder-memory-routes.js";
 
 export async function registerFounderRuntimeRoutes(app, deps) {
   const {
@@ -137,6 +140,12 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   createCrmRoutes(app, { requireKey, logger });
   logger.info("✅ [CRM] Founder-builder routes mounted at /api/v1/crm (provider-agnostic)");
 
+  createGoVegasOutreachRoutes(app, { pool, requireKey, notificationService, logger });
+  logger.info("✅ [GO-VEGAS] Outreach routes mounted at /api/v1/go-vegas/*");
+
+  registerFounderMemoryRoutes(app, { pool, requireKey, logger });
+  logger.info("✅ [FOUNDER-MEMORY] Canonical founder↔AI memory mounted at /api/v1/founder-memory");
+
   app.get("/api/v1/lifeos/never-stop/status", requireKey, (_req, res) => {
     res.json(getNeverStopProductFactoryStatus());
   });
@@ -163,8 +172,9 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   // health. This is what lets the autonomous loop ship a NEW route/UI module and
   // have it go LIVE without editing this protected composition root — and the
   // health manifest is read by the functional-proof completion gate / self-repair.
+  let autoResults = [];
   try {
-    const autoResults = await autoRegisterProductModules(app, {
+    autoResults = await autoRegisterProductModules(app, {
       pool,
       requireKey: requireUserOrKey,
       callCouncilMember,
@@ -183,8 +193,31 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   });
   logger.info("✅ [MODULE-HEALTH] Route mounted at /api/v1/lifeos/builder/module-health");
 
+  let routeAssert = { ok: true, missing: [], missing_critical: [], mounted_count: 0, required_count: 0 };
+  try {
+    routeAssert = assertFounderRuntimeRoutes(app);
+    if (!routeAssert.ok) {
+      logger.error("[STARTUP_DEGRADED] founder route assert failed", {
+        missing_critical: routeAssert.missing_critical,
+        missing: routeAssert.missing,
+      });
+    }
+  } catch (assertErr) {
+    logger.warn("[ROUTE-ASSERT] failed", { error: assertErr.message });
+    routeAssert = {
+      ok: false,
+      missing: [],
+      missing_critical: [`assert_error:${assertErr.message}`],
+      mounted_count: 0,
+      required_count: 0,
+    };
+  }
+
   return {
     tcCoordinator: null,
     wkIntegrityEngine: null,
+    autoResults,
+    routeAssert,
+    moduleHealth: getModuleHealth(),
   };
 }

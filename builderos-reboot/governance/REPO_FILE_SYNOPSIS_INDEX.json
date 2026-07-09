@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T01:04:15.995Z",
+  "generated_at": "2026-07-09T01:08:20.439Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11310,
+  "file_count": 11315,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30432,6 +30432,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "config/founder-runtime-required-routes.json",
+      "synopsis": "Configuration — Founder Runtime Required Routes.",
+      "bytes": 1171,
+      "mtime": "2026-07-09T01:07:13.510Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "config/gate-change-presets.js",
       "synopsis": "Named bodies for POST /api/v1/lifeos/gate-change/run-preset",
       "bytes": 2462,
@@ -36567,9 +36575,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 40612,
-      "mtime": "2026-07-09T01:04:01.931Z",
-      "indexed_at": "2026-07-09T01:04:13.713Z"
+      "bytes": 41242,
+      "mtime": "2026-07-09T01:08:18.242Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39109,9 +39117,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 601546,
-      "mtime": "2026-07-09T01:03:41.931Z",
-      "indexed_at": "2026-07-09T01:04:13.713Z"
+      "bytes": 602254,
+      "mtime": "2026-07-09T01:08:05.849Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -79856,9 +79864,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 14927,
-      "mtime": "2026-07-07T22:08:22.079Z",
-      "indexed_at": "2026-07-09T01:04:13.713Z",
+      "bytes": 16177,
+      "mtime": "2026-07-09T01:07:42.871Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81759,6 +81767,16 @@
       "indexed_at": "2026-07-09T01:04:13.713Z"
     },
     {
+      "path": "services/express-route-snapshot.js",
+      "synopsis": "Collect mounted Express routes for boot assertions (no AI-guard side effects).",
+      "bytes": 2371,
+      "mtime": "2026-07-09T01:07:08.985Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/factory-arc-loader.js",
       "synopsis": "Lazy-load factory-staging arc modules (avoids boot crash if tree missing).",
       "bytes": 1123,
@@ -81992,6 +82010,26 @@
       "bytes": 18720,
       "mtime": "2026-07-01T12:39:15.731Z",
       "indexed_at": "2026-07-09T01:04:13.713Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/founder-runtime-boot-report.js",
+      "synopsis": "Aggregate founder-lane boot degraded-state report (Wave 0 item 4).",
+      "bytes": 2629,
+      "mtime": "2026-07-09T01:07:53.233Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/founder-runtime-route-assert.js",
+      "synopsis": "Assert founder-lane required routes are mounted on the Express app.",
+      "bytes": 2813,
+      "mtime": "2026-07-09T01:07:26.858Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86334,9 +86372,9 @@
     {
       "path": "startup/database.js",
       "synopsis": "startup/database.js",
-      "bytes": 4136,
-      "mtime": "2026-07-09T01:03:41.537Z",
-      "indexed_at": "2026-07-09T01:04:13.713Z",
+      "bytes": 4185,
+      "mtime": "2026-07-09T01:07:27.842Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z",
       "ssot": [
         "docs/products/financial-revenue/PRODUCT_HOME.md"
       ]
@@ -86382,9 +86420,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 7582,
-      "mtime": "2026-07-09T01:03:41.537Z",
-      "indexed_at": "2026-07-09T01:04:13.713Z",
+      "bytes": 8914,
+      "mtime": "2026-07-09T01:07:32.059Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87286,6 +87324,13 @@
       "bytes": 2177,
       "mtime": "2026-06-23T00:54:35.551Z",
       "indexed_at": "2026-07-09T01:04:13.713Z"
+    },
+    {
+      "path": "tests/founder-runtime-boot-report.test.js",
+      "synopsis": "Wave 0 item 4 — boot degraded report + founder route assert tests.",
+      "bytes": 3032,
+      "mtime": "2026-07-09T01:07:53.713Z",
+      "indexed_at": "2026-07-09T01:08:20.439Z"
     },
     {
       "path": "tests/founder-usability-confirm.test.js",

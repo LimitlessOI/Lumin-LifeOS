@@ -8,6 +8,21 @@
 
 ---
 
+## [BUILD] Update 2026-07-08 — Wave 0 item 4 boot degraded + route assert
+
+### What happened
+- Soft `runtime_routes: ok` hid unmounted founder-lane routes (finance 404 class).
+- Added required-routes manifest + Express route snapshot + boot degraded aggregator; `/healthz`/`/ready` now expose `degraded` + `startup_report` and log `[STARTUP_DEGRADED]` without killing liveness.
+- Item 3 already on main; continuing sequential Wave 0 (skip #2 for Devin).
+
+### Verification
+- `node --test tests/founder-runtime-boot-report.test.js` → 5/5
+
+### Next
+- Push/deploy #4; Grok continues to #5 (import-smoke + authoring canary).
+
+---
+
 ## [BUILD] Update 2026-07-08 — Wave 0 item 3 usability false-positive + Chair cert scrub
 
 ### What happened

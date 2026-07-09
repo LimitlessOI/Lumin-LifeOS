@@ -1,0 +1,15 @@
+{
+  "schema": "founder_runtime_required_routes_v1",
+  "notes": "Wave 0 item 4 — critical founder-lane routes that must be mounted at boot. Soft degrade + STARTUP_DEGRADED log if missing; CI may hard-fail later.",
+  "updated_at": "2026-07-08",
+  "routes": [
+    { "method": "GET", "path": "/healthz", "critical": true, "source": "explicit" },
+    { "method": "GET", "path": "/ready", "critical": true, "source": "explicit" },
+    { "method": "POST", "path": "/api/v1/lifeos/builderos/command-control/founder-interface/message", "critical": true, "source": "explicit" },
+    { "method": "GET", "path": "/api/v1/lifeos/builder/module-health", "critical": true, "source": "explicit" },
+    { "method": "GET", "path": "/factory/readiness", "critical": true, "source": "explicit" },
+    { "method": "GET", "path": "/api/v1/lifeos/finance/goals", "critical": true, "source": "auto-register", "note": "Finance 404 class that motivated this assert" },
+    { "method": "GET", "path": "/api/v1/lifeos/never-stop/status", "critical": true, "source": "explicit" },
+    { "method": "GET", "path": "/api/v1/lifeos/provider-key-health", "critical": false, "source": "explicit" }
+  ]
+}

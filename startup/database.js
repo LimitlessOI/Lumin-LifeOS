@@ -109,6 +109,8 @@ export async function initDatabase(pool, logger) {
   } else {
     logger.info(`[DB] Schema up to date — all ${skipped} migration(s) already applied`);
   }
+
+  return { ran, skipped, failed: [...failed] };
 }
 
 // Legacy export — kept so any code that imported this still works
