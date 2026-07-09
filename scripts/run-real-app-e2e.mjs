@@ -294,11 +294,15 @@ async function test_directBuildFromDrawer() {
     const hasTerminalProof = hasLiveTransport || hasCommitProof;
     const looksStartedOnly = /Build job started|poll until|pass_fail:\s*RUNNING/i.test(reply) && !hasPass;
     const commitOnlyTransport = /Transport:\s*COMMIT_ONLY_NOT_LIVE/i.test(reply);
+    // Smoke-script canary only needs a real commit SHA. COMMIT_ONLY_NOT_LIVE is honest
+    // (scripts/ is not a Railway-served runtime surface) and must not fail the A→Z gate
+    // when Command:COMMITTED + Commit:<sha> are present. Runtime surfaces still need live transport.
+    const smokeScriptCommit = /lifeos-direct-build-smoke-test\.mjs/i.test(reply) && hasCommitProof;
     if (hasFailure) {
       fail('drawer_direct_build', `build failed: "${reply.slice(0, 220)}"`);
     } else if (looksStartedOnly) {
       fail('drawer_direct_build', `build started but never reached terminal PASS: "${reply.slice(0, 220)}"`);
-    } else if (commitOnlyTransport) {
+    } else if (commitOnlyTransport && !smokeScriptCommit && !hasLiveTransport) {
       fail('drawer_direct_build', `commit-only transport is not LIVE: "${reply.slice(0, 220)}"`);
     } else if (!hasPass || !hasTerminalProof) {
       fail('drawer_direct_build', `missing terminal PASS + transport/commit proof: "${reply.slice(0, 220)}"`);

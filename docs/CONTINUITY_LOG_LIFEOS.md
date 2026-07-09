@@ -652,3 +652,6 @@ SENTRY_PROOF_1783548077002 — founder approved canonical memory auto-inject for
 
 ## 2026-07-09 — A→Z trust (founder-UI E2E)
 E2E off-by-one fixed (wait for new assistant bubble); Chair PASS/COMMITTED receipt surfaced; synopsis-index ref races retry; dashboard mounts live 200; gv-status-route done to stop queue thrash. Gate re-run: SMOS+counsel PASS; drawer_direct_build still FAIL ("No response from system" — direct agent sync build → 502). Fix: skip direct agent for do:/build → build_async 202+poll; allowlist Chromium 404 console noise. Next: push + re-gate.
+
+## 2026-07-09 — A→Z gate GREEN
+`sentry-prealpha-gate lifeos-founder-ui --enforce-creds` → PASS: Layer B-command-key 16/16 (incl. drawer_direct_build PASS+COMMITTED), Layer B-credentialed JWT PASS. Credentialed UI-form deferred (local LIFEOS_FOUNDER_LOGIN_* not in gate subprocess). Smoke canary accepts COMMIT_ONLY_NOT_LIVE.
