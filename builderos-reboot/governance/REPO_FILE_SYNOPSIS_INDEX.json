@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T03:18:26.251Z",
+  "generated_at": "2026-07-09T03:20:46.485Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11347,
   "files": [
@@ -82442,9 +82442,9 @@
     {
       "path": "services/go-vegas-outreach-scheduler.js",
       "synopsis": "Service module — Go Vegas Outreach Scheduler.",
-      "bytes": 5567,
-      "mtime": "2026-07-09T03:18:26.251Z",
-      "indexed_at": "2026-07-09T03:18:26.251Z"
+      "bytes": 6128,
+      "mtime": "2026-07-09T03:20:46.485Z",
+      "indexed_at": "2026-07-09T03:20:46.485Z"
     },
     {
       "path": "services/go-vegas-outreach.js",

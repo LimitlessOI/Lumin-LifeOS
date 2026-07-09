@@ -1,31 +1,27 @@
 /**
  * SYNOPSIS: Service module — Go Vegas Outreach Scheduler.
  */
+export { startGoVegasOutreachScheduler, getGoVegasOutreachSchedulerStatus };
+
 import { createUsefulWorkGuard } from '../services/useful-work-guard.js';
 import { createGoVegasOutreach } from '../services/go-vegas-outreach.js';
 
-let schedulerHandle = null;
-let bootTimerHandle = null;
+const DEFAULT_INTERVAL_MS = 21600000;
+const BOOT_DELAY_MS = 120000;
+
 let schedulerState = {
-  status: 'idle',
+  started: false,
+  running: false,
   lastRunAt: null,
-  lastResult: null,
+  lastRunStatus: 'idle',
   lastError: null,
   nextRunAt: null,
-  runs: 0,
+  intervalMs: DEFAULT_INTERVAL_MS,
+  timer: null,
+  bootTimer: null,
 };
 
-function getIntervalMs() {
-  const raw = process.env.GO_VEGAS_SCHEDULER_MS;
-  const parsed = Number(raw);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 21600000;
-}
-
-function getBootDelayMs() {
-  return 120000;
-}
-
-function canSendNotification(notificationService) {
+function hasSendCapability(notificationService) {
   return Boolean(
     notificationService &&
       (typeof notificationService.sendEmail === 'function' ||
@@ -34,146 +30,163 @@ function canSendNotification(notificationService) {
   );
 }
 
-function makeSendEmail(notificationService, logger) {
+function createSendEmail(notificationService, logger) {
   if (notificationService && typeof notificationService.sendEmail === 'function') {
     return async (payload) => notificationService.sendEmail(payload);
   }
-
   if (notificationService && typeof notificationService.send === 'function') {
     return async (payload) => notificationService.send(payload);
   }
-
   if (notificationService && typeof notificationService.notify === 'function') {
     return async (payload) => notificationService.notify(payload);
   }
-
-  throw new Error('No notification path available for Go Vegas outreach');
+  return async () => {
+    logger?.warn?.('go-vegas outreach scheduler started without a send-capable notification path');
+    return { skipped: true };
+  };
 }
 
-function countUsefulWorkRows(rows) {
-  const first = rows?.[0];
-  const value = first ? Number(first.cnt ?? first.count ?? first.total ?? 0) : 0;
-  return Number.isFinite(value) ? value : 0;
-}
-
-async function hasUsefulWork(pool) {
+async function countUsefulWork(pool) {
   const sql = `
-    WITH prospect_work AS (
-      SELECT COUNT(*)::int AS cnt
-      FROM go_vegas_prospects
-      WHERE (
-        status IN ('discovered', 'enriched')
-        AND contact_email IS NOT NULL
-        AND contact_email <> ''
-      )
-      OR (
-        status IN ('invited', 'follow_up_due', 'follow_up_ready')
-      )
-    )
-    SELECT cnt FROM prospect_work
+    SELECT
+      COALESCE((
+        SELECT COUNT(*)
+        FROM lifeos_outreach_tasks
+        WHERE recipient_email IS NOT NULL
+          AND recipient_email <> ''
+          AND (
+            (response IS NULL AND outcome IS NULL)
+            OR outcome IN ('discovered', 'enriched', 'contacted', 'follow_up_due')
+          )
+      ), 0)::int AS follow_up_or_pending_count
   `;
   const result = await pool.query(sql);
-  return countUsefulWorkRows(result.rows) > 0;
+  return Number(result.rows?.[0]?.follow_up_or_pending_count ?? 0);
 }
 
-async function getGoVegasOutreachSchedulerStatus() {
-  return {
-    ...schedulerState,
-    intervalMs: getIntervalMs(),
-    bootDelayMs: getBootDelayMs(),
-    active: Boolean(schedulerHandle || bootTimerHandle),
-  };
+async function canDiscoverIdle(pool) {
+  const sql = `
+    SELECT EXISTS (
+      SELECT 1
+      FROM lifeos_outreach_tasks
+      WHERE recipient_email IS NULL
+         OR recipient_email = ''
+         OR outcome IN ('new', 'discovered')
+    ) AS can_discover
+  `;
+  const result = await pool.query(sql);
+  return Boolean(result.rows?.[0]?.can_discover);
 }
 
-async function runOneTick({ pool, notificationService, logger }) {
-  schedulerState.status = 'running';
-  schedulerState.lastError = null;
+function scheduleNextRun(intervalMs) {
+  if (schedulerState.timer) clearTimeout(schedulerState.timer);
+  schedulerState.nextRunAt = Date.now() + intervalMs;
+  schedulerState.timer = setTimeout(() => {
+    void runSchedulerTick().catch(() => {});
+  }, intervalMs);
+}
+
+async function runSchedulerTick() {
+  const { pool, notificationService, logger, intervalMs } = schedulerState.context || {};
+  if (!pool) return;
+  if (schedulerState.running) return;
+
+  schedulerState.running = true;
   schedulerState.lastRunAt = new Date().toISOString();
+  schedulerState.lastRunStatus = 'running';
+  schedulerState.lastError = null;
 
-  const sendEmail = makeSendEmail(notificationService, logger);
-  const outreach = createGoVegasOutreach({ pool, sendEmail, logger });
+  try {
+    const usefulWorkGuard = createUsefulWorkGuard({
+      pool,
+      logger,
+      tableName: 'lifeos_outreach_tasks',
+    });
 
-  await outreach.discoverBusinesses({ count: 5 });
-  await outreach.enrichProspects({ limit: 10 });
-  await outreach.inviteBatch({ limit: 5 });
-  await outreach.runFollowUpCron({});
+    const workCount = await countUsefulWork(pool);
+    const allowDiscoverIdle = String(process.env.GO_VEGAS_ALLOW_DISCOVER_IDLE || '') === '1';
+    const canDiscover = allowDiscoverIdle ? await canDiscoverIdle(pool) : false;
 
-  schedulerState.status = 'idle';
-  schedulerState.lastResult = 'completed';
-  schedulerState.runs += 1;
-  return { ok: true };
-}
-
-async function startGoVegasOutreachScheduler({ pool, notificationService, logger }) {
-  if (!pool) {
-    throw new Error('Go Vegas outreach scheduler requires pool');
-  }
-
-  if (!canSendNotification(notificationService)) {
-    const msg = 'Go Vegas outreach scheduler disabled: no notification path available';
-    logger?.warn?.(msg);
-    schedulerState.status = 'disabled';
-    schedulerState.lastError = msg;
-    return { started: false, reason: msg };
-  }
-
-  if (schedulerHandle || bootTimerHandle) {
-    return { started: true, alreadyRunning: true };
-  }
-
-  const guard = createUsefulWorkGuard?.({
-    pool,
-    logger,
-    workCheck: async () => {
-      const work = await hasUsefulWork(pool);
-      if (work) return true;
-      return process.env.GO_VEGAS_ALLOW_DISCOVER_IDLE === '1';
-    },
-  });
-
-  const intervalMs = getIntervalMs();
-  const bootDelayMs = getBootDelayMs();
-
-  const tick = async () => {
-    try {
-      if (guard && typeof guard.shouldRun === 'function') {
-        const decision = await guard.shouldRun();
-        if (!decision?.run) {
-          schedulerState.status = 'idle';
-          schedulerState.lastResult = 'skipped_no_useful_work';
-          schedulerState.nextRunAt = new Date(Date.now() + intervalMs).toISOString();
-          return;
-        }
-      } else {
-        const work = await hasUsefulWork(pool);
-        if (!work && process.env.GO_VEGAS_ALLOW_DISCOVER_IDLE !== '1') {
-          schedulerState.status = 'idle';
-          schedulerState.lastResult = 'skipped_no_useful_work';
-          schedulerState.nextRunAt = new Date(Date.now() + intervalMs).toISOString();
-          return;
-        }
-      }
-
-      await runOneTick({ pool, notificationService, logger });
-      schedulerState.nextRunAt = new Date(Date.now() + intervalMs).toISOString();
-    } catch (err) {
-      schedulerState.status = 'error';
-      schedulerState.lastError = err?.message || String(err);
-      logger?.error?.({ err }, 'Go Vegas outreach scheduler tick failed');
+    if (workCount <= 0 && !allowDiscoverIdle) {
+      schedulerState.lastRunStatus = 'skipped_no_work';
+      return;
     }
-  };
 
-  bootTimerHandle = setTimeout(async () => {
-    bootTimerHandle = null;
-    await tick();
-    schedulerHandle = setInterval(tick, intervalMs);
-    schedulerState.nextRunAt = new Date(Date.now() + intervalMs).toISOString();
-  }, bootDelayMs);
+    if (workCount <= 0 && allowDiscoverIdle && !canDiscover) {
+      schedulerState.lastRunStatus = 'skipped_no_work';
+      return;
+    }
 
-  schedulerState.status = 'scheduled';
-  schedulerState.nextRunAt = new Date(Date.now() + bootDelayMs).toISOString();
+    if (typeof usefulWorkGuard === 'function') {
+      const guarded = await usefulWorkGuard({
+        purpose: 'go-vegas-outreach',
+        workCount: workCount > 0 ? workCount : canDiscover ? 1 : 0,
+      });
+      if (guarded === false) {
+        schedulerState.lastRunStatus = 'skipped_guarded';
+        return;
+      }
+    }
 
-  return { started: true, intervalMs, bootDelayMs };
+    const sendEmail = createSendEmail(notificationService, logger);
+    const outreach = createGoVegasOutreach({ pool, sendEmail, logger });
+
+    if (workCount > 0 || allowDiscoverIdle) {
+      await outreach.discoverBusinesses({ count: 5 });
+      await outreach.enrichProspects({ limit: 10 });
+      await outreach.inviteBatch({ limit: 5 });
+      await outreach.runFollowUpCron({});
+    }
+
+    schedulerState.lastRunStatus = 'completed';
+  } catch (error) {
+    schedulerState.lastRunStatus = 'error';
+    schedulerState.lastError = error instanceof Error ? error.message : String(error);
+    logger?.error?.({ err: error }, 'go-vegas outreach scheduler tick failed');
+  } finally {
+    schedulerState.running = false;
+    scheduleNextRun(intervalMs);
+  }
 }
 
-export { startGoVegasOutreachScheduler, getGoVegasOutreachSchedulerStatus };
+function startGoVegasOutreachScheduler({ pool, notificationService, logger }) {
+  if (!pool) {
+    logger?.warn?.('go-vegas outreach scheduler not started: missing pool');
+    return getGoVegasOutreachSchedulerStatus();
+  }
+
+  if (!hasSendCapability(notificationService)) {
+    logger?.warn?.('go-vegas outreach scheduler not started: no send-capable notification path');
+    return getGoVegasOutreachSchedulerStatus();
+  }
+
+  const intervalMs = Number(process.env.GO_VEGAS_SCHEDULER_MS || DEFAULT_INTERVAL_MS) || DEFAULT_INTERVAL_MS;
+
+  schedulerState.context = { pool, notificationService, logger, intervalMs };
+  schedulerState.intervalMs = intervalMs;
+  schedulerState.started = true;
+
+  if (!schedulerState.bootTimer) {
+    schedulerState.bootTimer = setTimeout(() => {
+      void runSchedulerTick().catch(() => {});
+    }, BOOT_DELAY_MS);
+  }
+
+  if (!schedulerState.timer && !schedulerState.running) {
+    scheduleNextRun(intervalMs);
+  }
+
+  return getGoVegasOutreachSchedulerStatus();
+}
+
+function getGoVegasOutreachSchedulerStatus() {
+  return {
+    started: schedulerState.started,
+    running: schedulerState.running,
+    lastRunAt: schedulerState.lastRunAt,
+    lastRunStatus: schedulerState.lastRunStatus,
+    lastError: schedulerState.lastError,
+    nextRunAt: schedulerState.nextRunAt,
+    intervalMs: schedulerState.intervalMs,
+  };
+}
