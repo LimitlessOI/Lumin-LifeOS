@@ -1,6 +1,8 @@
 {
   "schema": "product_build_queue_v1",
   "product_id": "lifeos",
+  "verify_script": "scripts/sentry-prealpha-gate.mjs",
+  "verify_args": ["lifeos-founder-ui"],
   "planned_at": "2026-07-08T20:57:28.573Z",
   "backlog_signature": "554bd608226b9a58",
   "steps": [

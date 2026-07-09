@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Prove founder chat path uses JWT only (no command key) — login → Lumin message.
+ * Prefers local LIFEOS_FOUNDER_LOGIN_*; falls back to POST /operator/credentialed-prealpha-proof
+ * (Railway vault) so enforce-creds can green without putting the password in local .env.
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import 'dotenv/config';
@@ -10,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = (process.env.PUBLIC_BASE_URL || 'https://lumin-web-production-e3a9.up.railway.app').replace(/\/$/, '');
+const KEY = process.env.COMMAND_CENTER_KEY || '';
 const RECEIPT = path.join(ROOT, 'products/receipts/FOUNDER_JWT_CHAT_PROOF.json');
 
 function resolveCreds() {
@@ -27,42 +30,50 @@ function resolveCreds() {
   return null;
 }
 
-async function main() {
+function writeReceipt(report) {
+  fs.mkdirSync(path.dirname(RECEIPT), { recursive: true });
+  fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
+  console.log(JSON.stringify(report, null, 2));
+}
+
+async function proveViaOperator() {
+  if (!KEY) return null;
+  const res = await fetch(`${BASE}/api/v1/lifeos/auth/operator/credentialed-prealpha-proof`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-command-key': KEY },
+    body: '{}',
+  });
+  const data = await res.json().catch(() => ({}));
+  return { http: res.status, data };
+}
+
+async function proveViaLocal(creds) {
   const report = {
     schema: 'founder_jwt_chat_proof_v1',
     at: new Date().toISOString(),
     base: BASE,
     ok: false,
     auth_mode: null,
+    source: 'local_env',
     steps: {},
   };
-
-  const creds = resolveCreds();
-  if (!creds) {
-    report.blocker = 'MISSING_FOUNDER_CREDS_LOCAL';
-    fs.mkdirSync(path.dirname(RECEIPT), { recursive: true });
-    fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
-    console.log(JSON.stringify(report, null, 2));
-    process.exit(1);
-  }
-
   const loginRes = await fetch(`${BASE}/api/v1/lifeos/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
     body: JSON.stringify({ email: creds.email, password: creds.password }),
   });
   const loginData = await loginRes.json().catch(() => ({}));
-  report.steps.login = { ok: loginRes.ok && loginData.ok, status: loginRes.status, user: loginData.user?.user_handle, role: loginData.user?.role };
+  report.steps.login = {
+    ok: loginRes.ok && loginData.ok,
+    status: loginRes.status,
+    user: loginData.user?.user_handle,
+    role: loginData.user?.role,
+  };
   if (!report.steps.login.ok) {
     report.blocker = 'LOGIN_FAILED';
     report.steps.login.error = loginData.error;
-    fs.mkdirSync(path.dirname(RECEIPT), { recursive: true });
-    fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
-    console.log(JSON.stringify(report, null, 2));
-    process.exit(1);
+    return report;
   }
-
   const token = loginData.access_token;
   const chatRes = await fetch(`${BASE}/api/v1/lifeos/builderos/command-control/founder-interface/message`, {
     method: 'POST',
@@ -89,10 +100,37 @@ async function main() {
   report.auth_mode = chatData.auth_mode || (chatRes.status === 401 ? 'auth_failed' : 'unknown');
   report.ok = report.steps.chat.ok && report.auth_mode === 'account_jwt';
   report.blocker = report.ok ? null : (report.auth_mode !== 'account_jwt' ? 'NOT_JWT_AUTH' : 'CHAT_FAILED');
+  report.cred_source = creds.source;
+  return report;
+}
 
-  fs.mkdirSync(path.dirname(RECEIPT), { recursive: true });
-  fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
-  console.log(JSON.stringify(report, null, 2));
+async function main() {
+  const creds = resolveCreds();
+  let report;
+  if (creds) {
+    report = await proveViaLocal(creds);
+  } else {
+    const op = await proveViaOperator();
+    if (!op) {
+      report = {
+        schema: 'founder_jwt_chat_proof_v1',
+        at: new Date().toISOString(),
+        base: BASE,
+        ok: false,
+        blocker: 'MISSING_FOUNDER_CREDS_LOCAL_AND_NO_COMMAND_KEY',
+      };
+    } else {
+      report = {
+        ...op.data,
+        schema: 'founder_jwt_chat_proof_v1',
+        at: new Date().toISOString(),
+        base: BASE,
+        source: op.data?.source || 'operator_vault',
+        operator_http: op.http,
+      };
+    }
+  }
+  writeReceipt(report);
   process.exit(report.ok ? 0 : 1);
 }
 

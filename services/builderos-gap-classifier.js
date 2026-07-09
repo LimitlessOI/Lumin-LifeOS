@@ -135,6 +135,18 @@ export function classifyRuntimeFailure({ error = '', log = '', code = '', stage 
       signal: signal.slice(0, 240),
     };
   }
+  // Compiles but wrong contract (gv-scheduler class: invented shouldRun on useful-work-guard).
+  if (
+    /is not a function|is not iterable|cannot read propert|createusefulworkguard|shouldrun|export_declaration_missing|missing_exports|artifact_proof|file_contains.*missing|step expectation/.test(signal)
+  ) {
+    return {
+      failure_family: 'RUNTIME_API_MISUSE',
+      repairable: true,
+      severity: 'P0',
+      self_repair_class: 'fix_api_contract_from_integration_context',
+      signal: signal.slice(0, 240),
+    };
+  }
   if (/syntaxerror|unexpected token|unexpected identifier/.test(signal)) {
     return {
       failure_family: 'BOOT_SYNTAX',

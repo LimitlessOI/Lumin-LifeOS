@@ -10,7 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, STEP_STATUS } from './product-build-orchestrator.js';
+import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
@@ -959,11 +959,21 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     // an uninstalled package) lives in the integration context fed to `/build`
     // (installed-package allowlist + DB-defaulted-ids rule), which stops the bad
     // code from being generated in the first place.
+    // Pre-existing artifact short-circuit — ONLY when step expectations already
+    // pass on that last-touching commit. Otherwise force a real /build repair
+    // (closes gv-boot-wire: unrelated SHA without required file_contains).
     if (targetFileExists(target_file)) {
       const builtSha = await lastCommitShaForFile(target_file);
       if (builtSha) {
-        logger?.warn?.({ target_file, built: builtSha.slice(0, 8) }, '[never-stop] pre-existing artifact — completing via last-touching commit (functional-proof gate arbitrates health)');
-        return { ok: true, commit_sha: builtSha, error: null, no_op: true, pre_existing: true };
+        const stepRow = (queue.steps || []).find((s) => s && s.target_file === target_file && s.status === STEP_STATUS.BUILDING)
+          || (queue.steps || []).find((s) => s && s.id === task.step_id)
+          || { target_file, expected_exports: null, file_contains: null, route: null };
+        const proof = await evaluateStepExpectations(stepRow, { commitSha: builtSha, root: ROOT });
+        if (proof.ok) {
+          logger?.warn?.({ target_file, built: builtSha.slice(0, 8), artifact: proof.reason }, '[never-stop] pre-existing artifact — expectations pass; completing via last-touching commit');
+          return { ok: true, commit_sha: builtSha, error: null, no_op: true, pre_existing: true };
+        }
+        logger?.warn?.({ target_file, built: builtSha.slice(0, 8), reason: proof.reason }, '[never-stop] pre-existing artifact FAILS step expectations — forcing /build repair (no false done)');
       }
     }
     // Verbatim error carry-forward: the builder's pre-commit gate RUNS the code
@@ -1042,12 +1052,21 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     return { ok: false, commit_sha: null, error: priorError || 'build_failed_after_repair_attempts' };
   };
 
-  const verifyFn = async ({ verify_script }) => {
+  const verifyFn = async ({ verify_script, product_id }) => {
     if (!verify_script) return { ok: true, detail: 'no_verify_script' };
-    const r = await spawnAsync(process.execPath, [verify_script], {
+    const q = queue || {};
+    let extraArgs = Array.isArray(q.verify_args) ? q.verify_args.map(String) : [];
+    // lifeos BUILD_QUEUE points at sentry-prealpha-gate — pass product id + enforce-creds on prod.
+    if (/sentry-prealpha-gate\.mjs$/.test(String(verify_script)) && !extraArgs.length) {
+      extraArgs = [product_id === 'lifeos' ? 'lifeos-founder-ui' : String(product_id || '')];
+    }
+    if (/sentry-prealpha-gate\.mjs$/.test(String(verify_script)) && process.env.SENTRY_ENFORCE_CREDS !== '0') {
+      if (!extraArgs.includes('--enforce-creds')) extraArgs.push('--enforce-creds');
+    }
+    const r = await spawnAsync(process.execPath, [verify_script, ...extraArgs.filter(Boolean)], {
       cwd: ROOT,
       env: { ...process.env, PUBLIC_BASE_URL: baseUrl, COMMAND_CENTER_KEY: commandKey },
-      timeout: 120_000,
+      timeout: 300_000,
     });
     return { ok: r.status === 0, detail: r.status === 0 ? 'verify_pass' : `verify_exit_${r.status}` };
   };

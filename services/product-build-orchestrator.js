@@ -9,6 +9,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
+import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
@@ -112,6 +114,90 @@ export function normalizeQueue(raw, sourcePath = null) {
 
 function isAutoRegisterConfigStep(step) {
   return String(step?.target_file || '').replace(/\\/g, '/') === 'config/auto-registered-product-modules.json';
+}
+
+/**
+ * ARTIFACT PROOF — kill false DONE when commit_sha exists but the file does not
+ * satisfy the step's declared expectations (file_contains / expected_exports / route).
+ * Pure enough for unit tests: inject readFile / http / importModule.
+ *
+ * Returns { ok, applicable, reason?, results? }.
+ * - applicable:false when the step declares nothing checkable (non-server docs etc.)
+ * - ok:false when declared expectations fail (blocks DONE)
+ */
+export async function evaluateStepExpectations(step, {
+  root = ROOT,
+  readFile,
+  http,
+  importModule,
+  commitSha = null,
+} = {}) {
+  const target = String(step?.target_file || '').replace(/\\/g, '/');
+  if (!target) return { ok: false, applicable: true, reason: 'missing_target_file' };
+
+  // Only enforce when the step DECLARED something checkable. Empty declarations
+  // stay applicable:false so legacy queues without expected_exports keep moving;
+  // the false-done class we kill is "declared file_contains but never checked."
+  const hasDeclared =
+    (Array.isArray(step?.expected_exports) && step.expected_exports.length > 0)
+    || (Array.isArray(step?.file_contains) && step.file_contains.length > 0)
+    || Boolean(step?.route)
+    || (step?.assertion_spec && typeof step.assertion_spec === 'object' && Object.keys(step.assertion_spec).length > 0)
+    || (Array.isArray(step?.behavior_assertions) && step.behavior_assertions.length > 0);
+  if (!hasDeclared) {
+    return { ok: true, applicable: false, reason: 'no_declared_expectations' };
+  }
+
+  const authored = authorAssertionsFromSpec(step);
+  if (!authored.ok || !authored.assertions.length) {
+    return { ok: false, applicable: true, reason: authored.reason || 'declared_expectations_unusable' };
+  }
+
+  const defaultRead = async (rel) => {
+    const relPath = String(rel || target).replace(/\\/g, '/');
+    // When proving a commit_sha, read THAT tree only — never fall through to a
+    // dirty workspace that already has a later repair (gv-boot-wire false-done class).
+    if (commitSha) {
+      const { execFileSync } = await import('node:child_process');
+      return execFileSync('git', ['show', `${commitSha}:${relPath}`], {
+        cwd: root,
+        encoding: 'utf8',
+        maxBuffer: 4 * 1024 * 1024,
+      });
+    }
+    return fs.readFileSync(path.join(root, relPath), 'utf8');
+  };
+
+  const runner = {
+    readFile: typeof readFile === 'function' ? readFile : defaultRead,
+    http: typeof http === 'function' ? http : undefined,
+    ...(typeof importModule === 'function' ? { importModule } : {}),
+  };
+
+  // Only run assertions we can prove here. HTTP/DB need live runners — those stay
+  // on verify_script / moduleHealthFn. Artifact proof owns file/export content.
+  const runnable = authored.assertions.filter((a) => {
+    if (a.type === 'file_contains' || a.type === 'exports_smoke') return true;
+    if ((a.type === 'http_status' || a.type === 'module_mounts') && typeof runner.http === 'function') return true;
+    if (a.type === 'db_row_exists' && typeof runner.db === 'function') return true;
+    return false;
+  });
+  if (!runnable.length) {
+    return { ok: true, applicable: false, reason: 'declared_expectations_need_live_runners' };
+  }
+
+  const results = await runBehaviorAssertions(runnable, runner);
+  const failed = results.filter((r) => !r.ok);
+  if (failed.length) {
+    const detail = failed.map((r) => r.reason || r.substring || r.assertion?.type).join('; ');
+    return {
+      ok: false,
+      applicable: true,
+      reason: `artifact_proof_failed: ${detail}`.slice(0, 800),
+      results,
+    };
+  }
+  return { ok: true, applicable: true, reason: 'artifact_proof_pass', results };
 }
 
 function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
@@ -238,7 +324,7 @@ export function persistQueue(queue, { root = ROOT } = {}) {
  *     verbatim mount error is carried into step.last_error so the next build
  *     attempt repairs the root cause (kills the "false done" class).
  */
-export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, moduleHealthFn, maxAttempts = 3, logger = console } = {}) {
+export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, moduleHealthFn, artifactProofFn, maxAttempts = 3, logger = console } = {}) {
   if (typeof buildFn !== 'function') throw new Error('runNextStep requires buildFn');
   const { step, gated } = selectNextStep(queue);
   if (!step) {
@@ -267,6 +353,24 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
     }, logger);
   }
   step.commit_sha = sha;
+
+  // ARTIFACT PROOF (trust gate): declared file_contains / expected_exports / route
+  // must hold on the built artifact before verify/deploy can mint DONE.
+  // Closes gv-boot-wire false-done (unrelated last-touch SHA without required substring).
+  let artifact = { ok: true, applicable: false, reason: 'no_artifact_proof_fn' };
+  if (typeof artifactProofFn === 'function') {
+    artifact = await artifactProofFn({ commit_sha: sha, product_id: queue.product_id, step });
+  } else {
+    artifact = await evaluateStepExpectations(step, { commitSha: sha });
+  }
+  if (!artifact.ok) {
+    return failStep(step, queue, maxAttempts, {
+      stage: 'artifact_proof',
+      reason: artifact.reason || 'artifact_proof_failed (commit exists but step expectations not met — no false done)',
+      commit_sha: sha,
+    }, logger);
+  }
+  if (artifact.applicable) step.artifact_proven = true;
 
   let verify = { ok: true, detail: 'no_verify_defined' };
   if (typeof verifyFn === 'function' && (queue.verify_script || step.verify_script)) {

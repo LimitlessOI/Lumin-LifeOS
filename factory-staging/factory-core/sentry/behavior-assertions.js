@@ -65,6 +65,37 @@ export async function runSingleAssertion(assertion, runner = {}) {
         const content = await runner.readFile(assertion.target || assertion.path);
         return { ...base, ok: typeof content === 'string' && content.includes(assertion.substring), substring: assertion.substring };
       }
+      case 'exports_smoke': {
+        // Stronger than file_contains: prove the module imports and named exports exist.
+        if (typeof runner.importModule === 'function') {
+          const mod = await runner.importModule(assertion.target || assertion.path);
+          const names = Array.isArray(assertion.exports) ? assertion.exports : (assertion.export ? [assertion.export] : []);
+          const missing = names.filter((n) => !(mod && Object.prototype.hasOwnProperty.call(mod, n)));
+          return {
+            ...base,
+            ok: missing.length === 0,
+            exports: names,
+            missing,
+            reason: missing.length ? `missing_exports:${missing.join(',')}` : undefined,
+          };
+        }
+        if (typeof runner.readFile !== 'function') return { ...base, ok: false, reason: 'no_import_or_file_runner' };
+        const content = await runner.readFile(assertion.target || assertion.path);
+        if (typeof content !== 'string') return { ...base, ok: false, reason: 'file_unreadable' };
+        const names = Array.isArray(assertion.exports) ? assertion.exports : (assertion.export ? [assertion.export] : []);
+        const missing = names.filter((n) => {
+          const re = new RegExp(`(?:export\\s+(?:async\\s+)?function\\s+${n}\\b|export\\s+(?:const|let|var|class)\\s+${n}\\b|export\\s*\\{[^}]*\\b${n}\\b)`);
+          return !re.test(content);
+        });
+        return {
+          ...base,
+          ok: missing.length === 0,
+          exports: names,
+          missing,
+          reason: missing.length ? `export_declaration_missing:${missing.join(',')}` : undefined,
+          mode: 'static_export_scan',
+        };
+      }
       default:
         return { ...base, ok: false, reason: `unknown_assertion_type:${assertion?.type}` };
     }

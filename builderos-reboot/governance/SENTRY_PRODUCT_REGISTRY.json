@@ -44,9 +44,19 @@
           "type": "command",
           "run": ["scripts/run-founder-jwt-chat-proof.mjs"],
           "receipt": "products/receipts/FOUNDER_JWT_CHAT_PROOF.json",
+          "requiresEnv": ["PUBLIC_BASE_URL", "COMMAND_CENTER_KEY"],
+          "deferrableWithoutEnv": true,
+          "note": "Founder maturity pre-alpha: real LIFEOS_FOUNDER_LOGIN_* login → JWT → founder chat. Local env OR operator vault proof via COMMAND_CENTER_KEY. Required for CLEARED_FOR_FOUNDER_ALPHA when gate runs with --enforce-creds."
+        },
+        {
+          "name": "B-credentialed-ui",
+          "kind": "human-sim-credentialed-ui",
+          "type": "command",
+          "run": ["scripts/run-founder-ui-login-e2e.mjs"],
+          "receipt": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
           "requiresEnv": ["PUBLIC_BASE_URL", "LIFEOS_FOUNDER_LOGIN_EMAIL", "LIFEOS_FOUNDER_LOGIN_PASSWORD"],
           "deferrableWithoutEnv": true,
-          "note": "Founder maturity pre-alpha: real LIFEOS_FOUNDER_LOGIN_* login → JWT → founder chat. Required for CLEARED_FOR_FOUNDER_ALPHA when gate runs with --enforce-creds."
+          "note": "True UI form login into lifeos-login.html. Deferrable until local LIFEOS_FOUNDER_LOGIN_* present; API credentialed layer is the enforce-creds hard gate."
         }
       ]
     }

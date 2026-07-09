@@ -8,6 +8,21 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Trust gates: kill false-done + credentialed A→Z path
+
+### What happened
+- Added `evaluateStepExpectations` to `runNextStep` so declared `file_contains`/`expected_exports` must hold on the claimed commit SHA before DONE (closes gv-boot-wire false-done).
+- Gated never-stop pre-existing short-circuit the same way; added `exports_smoke` + `RUNTIME_API_MISUSE` classifier.
+- Wired lifeos `verify_script` → sentry-prealpha-gate `--enforce-creds`; limitlessos → `verify-go-vegas-scheduler.mjs`.
+- Operator `credentialed-prealpha-proof` + JWT proof vault fallback; Playwright UI login script registered (needs local founder password for form E2E).
+- Fixed sync-founder-login email uniqueness conflict.
+
+### Next
+- Push → redeploy → run `npm run sentry:gate:enforce-creds` until FOUNDER_JWT_CHAT_PROOF green via operator vault.
+- For full UI form E2E: put `LIFEOS_FOUNDER_LOGIN_*` in local env (or Cursor secrets) and run `node scripts/run-founder-ui-login-e2e.mjs`.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Built while fixing: Go Vegas revenue loop + self-repair
 
 ### What happened

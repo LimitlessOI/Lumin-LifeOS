@@ -336,6 +336,84 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
           : 'Set LIFEOS_FOUNDER_LOGIN_EMAIL=adam@hopkinsgroup.org + LIFEOS_FOUNDER_LOGIN_PASSWORD in Railway, redeploy, POST /operator/sync-founder-login',
       });
     });
+
+    // Credentialed pre-alpha proof using Railway vault creds (never returns the password).
+    // Lets CI/conductor green B-credentialed without putting LIFEOS_FOUNDER_LOGIN_* in local .env.
+    router.post('/operator/credentialed-prealpha-proof', requireKey, async (req, res) => {
+      const started = Date.now();
+      const report = {
+        schema: 'founder_jwt_chat_proof_v1',
+        at: new Date().toISOString(),
+        ok: false,
+        auth_mode: null,
+        source: 'operator_vault',
+        steps: {},
+      };
+      try {
+        const creds = resolveFounderLoginCreds();
+        if (!creds) {
+          report.blocker = 'FOUNDER_CREDS_MISSING_ON_SERVER';
+          report.cred_diagnosis = diagnoseFounderLoginCreds();
+          return res.status(503).json(report);
+        }
+        report.cred_source = creds.source;
+        let loginResult;
+        try {
+          loginResult = await auth.login({
+            email: creds.email,
+            password: creds.password,
+            userAgent: 'operator-credentialed-prealpha-proof',
+            ip: req.ip,
+          });
+        } catch (e) {
+          report.steps.login = { ok: false, error: e.message };
+          report.blocker = 'LOGIN_FAILED';
+          return res.status(401).json(report);
+        }
+        report.steps.login = {
+          ok: true,
+          handle: loginResult.user?.user_handle,
+          role: loginResult.user?.role,
+          email: loginResult.user?.email,
+        };
+        const token = loginResult.accessToken || loginResult.access_token || loginResult.token;
+        if (!token) {
+          report.blocker = 'NO_ACCESS_TOKEN';
+          return res.status(500).json(report);
+        }
+        const origin = publicWebOrigin(req) || process.env.PUBLIC_BASE_URL || '';
+        const chatRes = await fetch(`${String(origin).replace(/\/$/, '')}/api/v1/lifeos/builderos/command-control/founder-interface/message`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            text: 'counsel only — reply in one short sentence: are you receiving me on JWT auth?',
+            action: 'auto',
+            conversational_mode: true,
+            async: false,
+          }),
+        });
+        const chatData = await chatRes.json().catch(() => ({}));
+        report.steps.chat = {
+          ok: chatRes.ok && chatData.ok !== false,
+          status: chatRes.status,
+          auth_mode: chatData.auth_mode,
+          pass_fail: chatData.pass_fail,
+          reply_preview: String(chatData.human_summary || chatData.reason || '').slice(0, 200),
+        };
+        report.auth_mode = chatData.auth_mode || (chatRes.status === 401 ? 'auth_failed' : 'unknown');
+        report.ok = report.steps.login.ok && report.steps.chat.ok && report.auth_mode === 'account_jwt';
+        report.blocker = report.ok ? null : (report.auth_mode !== 'account_jwt' ? 'NOT_JWT_AUTH' : 'CHAT_FAILED');
+        report.duration_ms = Date.now() - started;
+        return res.status(report.ok ? 200 : 422).json(report);
+      } catch (e) {
+        report.error = e.message;
+        report.duration_ms = Date.now() - started;
+        return res.status(500).json(report);
+      }
+    });
   }
 
   // ── Create invite (admin) ───────────────────────────────────────────────────
@@ -429,6 +507,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
           });
         }
         const handle = String(process.env.LIFEOS_FOUNDER_LOGIN_HANDLE || 'adam').trim().toLowerCase();
+        const email = creds.email.trim().toLowerCase();
         const { rows: existing } = await pool.query(
           `SELECT id, user_handle, email, role, tier, display_name FROM lifeos_users
            WHERE LOWER(user_handle) = LOWER($1)
@@ -438,13 +517,21 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         if (!existing.length) {
           return res.status(404).json({ ok: false, error: `founder handle not found: ${handle}` });
         }
+        // Email is unique — if another row already owns this address, clear it first
+        // so the founder handle can claim it (duplicate key was blocking sync).
+        await pool.query(
+          `UPDATE lifeos_users
+           SET email = NULL
+           WHERE LOWER(email) = LOWER($1) AND id <> $2`,
+          [email, existing[0].id]
+        );
         const phash = hashPassword(creds.password);
         const { rows: [user] } = await pool.query(
           `UPDATE lifeos_users
            SET password_hash = $1, email = LOWER($2), active = TRUE
            WHERE id = $3
            RETURNING id, user_handle, display_name, email, role, tier`,
-          [phash, creds.email.trim(), existing[0].id]
+          [phash, email, existing[0].id]
         );
         log.info({ handle: user.user_handle, email: user.email }, '[LIFEOS-AUTH] founder login synced from vault');
 

@@ -69,9 +69,13 @@ export function authorAssertionsFromSpec(step) {
   const assertions = [];
 
   const exports = Array.isArray(spec.expected_exports) ? spec.expected_exports : [];
-  for (const name of exports) {
-    if (typeof name === 'string' && name.trim()) {
-      assertions.push({ type: 'file_contains', target, substring: name.trim() });
+  const exportNames = exports.filter((n) => typeof n === 'string' && n.trim()).map((n) => n.trim());
+  if (exportNames.length) {
+    // Prefer exports_smoke (importable / declared export) over bare substring match —
+    // file_contains alone let broken modules pass when the name appeared in a comment.
+    assertions.push({ type: 'exports_smoke', target, exports: exportNames });
+    for (const name of exportNames) {
+      assertions.push({ type: 'file_contains', target, substring: name });
     }
   }
 

@@ -28,9 +28,14 @@ const cases = [
     expect: 'VERIFIER_DRIFT',
   },
   {
-    name: 'external_timeout',
-    fn: () => classifyRuntimeFailure({ error: 'fetch failed: ECONNRESET' }),
-    expect: 'EXTERNAL_FAILURE',
+    name: 'api_misuse_useful_work_guard',
+    fn: () => classifyRuntimeFailure({ error: 'TypeError: createUsefulWorkGuard(...).shouldRun is not a function' }),
+    expect: 'RUNTIME_API_MISUSE',
+  },
+  {
+    name: 'artifact_proof_failed',
+    fn: () => classifyRuntimeFailure({ error: 'artifact_proof_failed: export_declaration_missing:startGoVegasOutreachScheduler' }),
+    expect: 'RUNTIME_API_MISUSE',
   },
 ];
 

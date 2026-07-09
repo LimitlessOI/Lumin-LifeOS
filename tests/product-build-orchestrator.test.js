@@ -10,6 +10,7 @@ import {
   runNextStep,
   queueSummary,
   reviveStaleBlockedSteps,
+  evaluateStepExpectations,
   STEP_STATUS,
 } from '../services/product-build-orchestrator.js';
 
@@ -189,4 +190,64 @@ test('auto-register config step can run when route dep is blocked only for missi
     },
   ]);
   assert.equal(selectNextStep(q).step.id, 'reg', 'register step unblocks despite blocked route dep');
+});
+
+test('artifact proof blocks DONE when file_contains missing despite valid SHA + deploy (gv-boot-wire class)', async () => {
+  const q = makeQueue([{
+    id: 'wire',
+    target_file: 'startup/register-founder-runtime-routes.js',
+    task: 'wire scheduler',
+    file_contains: ['startGoVegasOutreachScheduler'],
+  }]);
+  const r = await runNextStep(q, {
+    buildFn: async () => ({ ok: true, commit_sha: 'deadbeef' }),
+    verifyFn: async () => ({ ok: true }),
+    deployProofFn: async () => ({ ok: true }),
+    artifactProofFn: async () => ({
+      ok: false,
+      applicable: true,
+      reason: 'artifact_proof_failed: startGoVegasOutreachScheduler',
+    }),
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.stage, 'artifact_proof');
+  assert.match(r.reason, /artifact_proof_failed/);
+  assert.equal(q.steps[0].status, STEP_STATUS.PENDING, 'retryable — not false done');
+});
+
+test('evaluateStepExpectations fails when declared substring absent from content', async () => {
+  const proof = await evaluateStepExpectations(
+    {
+      id: 'wire',
+      target_file: 'startup/x.js',
+      file_contains: ['startGoVegasOutreachScheduler'],
+    },
+    {
+      readFile: async () => 'export function unrelated() {}\n',
+    },
+  );
+  assert.equal(proof.ok, false);
+  assert.equal(proof.applicable, true);
+  assert.match(proof.reason, /artifact_proof_failed/);
+});
+
+test('evaluateStepExpectations passes when declared substring present', async () => {
+  const proof = await evaluateStepExpectations(
+    {
+      id: 'wire',
+      target_file: 'startup/x.js',
+      file_contains: ['startGoVegasOutreachScheduler'],
+    },
+    {
+      readFile: async () => 'import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";\n',
+    },
+  );
+  assert.equal(proof.ok, true);
+  assert.equal(proof.applicable, true);
+});
+
+test('evaluateStepExpectations skips when step declares nothing', async () => {
+  const proof = await evaluateStepExpectations({ id: 'a', target_file: 'docs/x.md' });
+  assert.equal(proof.ok, true);
+  assert.equal(proof.applicable, false);
 });

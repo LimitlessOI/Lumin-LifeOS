@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T03:21:44.877Z",
+  "generated_at": "2026-07-09T03:45:32.529Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11347,
+  "file_count": 11349,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21698,9 +21698,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
       "synopsis": "BuilderOS artifact — SENTRY PRODUCT REGISTRY.",
-      "bytes": 3194,
-      "mtime": "2026-07-09T02:32:57.599Z",
-      "indexed_at": "2026-07-09T02:35:57.245Z",
+      "bytes": 3796,
+      "mtime": "2026-07-09T03:44:51.386Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "synopsis_index_only": true
     },
     {
@@ -29852,9 +29852,9 @@
     {
       "path": "builderos-reboot/scripts/post-failure-classifier-proof.mjs",
       "synopsis": "Post-failure classifier proof — Wave 0 families including crash-loop / missing-module.",
-      "bytes": 1681,
-      "mtime": "2026-07-09T02:31:28.460Z",
-      "indexed_at": "2026-07-09T02:35:57.245Z",
+      "bytes": 1946,
+      "mtime": "2026-07-09T03:43:09.288Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -36674,9 +36674,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 46457,
-      "mtime": "2026-07-09T03:21:02.737Z",
-      "indexed_at": "2026-07-09T03:21:44.877Z"
+      "bytes": 47466,
+      "mtime": "2026-07-09T03:45:15.185Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38780,9 +38780,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 212134,
-      "mtime": "2026-07-09T03:21:02.738Z",
-      "indexed_at": "2026-07-09T03:21:44.877Z"
+      "bytes": 212808,
+      "mtime": "2026-07-09T03:45:10.746Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39223,9 +39223,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 603784,
-      "mtime": "2026-07-09T03:13:07.428Z",
-      "indexed_at": "2026-07-09T03:14:30.829Z"
+      "bytes": 604336,
+      "mtime": "2026-07-09T03:45:15.111Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39281,9 +39281,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 9208,
-      "mtime": "2026-07-09T03:21:33.016Z",
-      "indexed_at": "2026-07-09T03:21:44.877Z"
+      "bytes": 9442,
+      "mtime": "2026-07-09T03:45:15.110Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -59652,9 +59652,9 @@
     {
       "path": "factory-staging/factory-core/bpb/author-assertions.js",
       "synopsis": "STEP 5b — BPB authors behavior_assertions from the BLUEPRINT SPEC at",
-      "bytes": 6360,
-      "mtime": "2026-07-09T03:21:02.739Z",
-      "indexed_at": "2026-07-09T03:21:44.877Z",
+      "bytes": 6692,
+      "mtime": "2026-07-09T03:40:40.449Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -60021,9 +60021,9 @@
     {
       "path": "factory-staging/factory-core/sentry/behavior-assertions.js",
       "synopsis": "SENTRY behavioral proof. Classifies which steps require runtime",
-      "bytes": 5232,
-      "mtime": "2026-07-07T21:41:40.926Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 6908,
+      "mtime": "2026-07-09T03:40:40.432Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -65172,9 +65172,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 25737,
-      "mtime": "2026-07-03T00:17:45.083Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 29433,
+      "mtime": "2026-07-09T03:45:00.873Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68047,9 +68047,9 @@
     {
       "path": "scripts/run-founder-jwt-chat-proof.mjs",
       "synopsis": "Prove founder chat path uses JWT only (no command key) — login → Lumin message.",
-      "bytes": 3801,
-      "mtime": "2026-07-03T21:46:43.871Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 4717,
+      "mtime": "2026-07-09T03:44:51.375Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68062,6 +68062,16 @@
       "indexed_at": "2026-07-09T02:35:54.381Z",
       "ssot": [
         "docs/products/marketingos/socialmediaos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-founder-ui-login-e2e.mjs",
+      "synopsis": "Credentialed founder UI login E2E — Playwright types LIFEOS_FOUNDER_LOGIN_* into lifeos-login.html and proves lifeos-app.html chat.",
+      "bytes": 4760,
+      "mtime": "2026-07-09T03:42:36.079Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -69502,6 +69512,16 @@
       "indexed_at": "2026-07-09T02:35:54.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-go-vegas-scheduler.mjs",
+      "synopsis": "Verify Go Vegas revenue scheduler is live — exports + GET /api/v1/go-vegas/scheduler.",
+      "bytes": 2516,
+      "mtime": "2026-07-09T03:43:18.254Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -80737,9 +80757,9 @@
     {
       "path": "services/builderos-gap-classifier.js",
       "synopsis": "Unified builder gap failure-family classifier (gaps API + supervisor + verify).",
-      "bytes": 5894,
-      "mtime": "2026-07-09T02:31:28.583Z",
-      "indexed_at": "2026-07-09T02:35:57.245Z",
+      "bytes": 6426,
+      "mtime": "2026-07-09T03:40:40.540Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84431,9 +84451,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 64331,
-      "mtime": "2026-07-09T01:03:41.535Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 65866,
+      "mtime": "2026-07-09T03:45:07.787Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -84649,9 +84669,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 16354,
-      "mtime": "2026-07-09T03:11:00.190Z",
-      "indexed_at": "2026-07-09T03:14:30.829Z",
+      "bytes": 21108,
+      "mtime": "2026-07-09T03:42:36.050Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87987,9 +88007,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 8671,
-      "mtime": "2026-07-09T03:11:58.706Z",
-      "indexed_at": "2026-07-09T03:14:30.829Z",
+      "bytes": 10785,
+      "mtime": "2026-07-09T03:42:21.509Z",
+      "indexed_at": "2026-07-09T03:45:32.529Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
