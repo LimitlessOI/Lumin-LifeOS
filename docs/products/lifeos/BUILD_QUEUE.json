@@ -212,9 +212,9 @@
         "s1"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
-      "last_attempt_at": "2026-07-09T12:28:40.466Z",
+      "last_attempt_at": "2026-07-09T12:29:49.155Z",
       "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 — never-stop skips UI verify for services/routes (artifact+deploy still gate).",
       "last_error": "verify_exit_1",
       "revive_count": 4
