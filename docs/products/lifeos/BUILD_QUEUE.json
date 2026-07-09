@@ -96,7 +96,7 @@
     },
     {
       "id": "s06",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-phase2-routes.js",
       "task": "Prove phase-2 REST module mounts LIVE (file already exists — short-circuit via last commit + module-health)",
       "spec": "ESM module exporting registerLifeosPhase2Routes(app, deps) where deps={db, callCouncilMember, notifyFn}. File already on main; after s07 auto-register, functional-proof must show module mounted. Do not full-rewrite if file exists and exports registerLifeosPhase2Routes.",
@@ -108,11 +108,15 @@
         "s07"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "commit_sha": "50b94d0543f940dc1208e16ee29a09b4eda692c7",
       "last_error": null,
       "revive_count": 0,
-      "expected_exports": ["registerLifeosPhase2Routes"]
+      "expected_exports": [
+        "registerLifeosPhase2Routes"
+      ],
+      "last_attempt_at": "2026-07-09T03:17:48.221Z",
+      "completed_at": "2026-07-09T03:17:50.318Z"
     },
     {
       "id": "s08",
