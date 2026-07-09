@@ -195,8 +195,8 @@
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
-      "commit_sha": "3b8274af61bacd6316fbdc2ee867eeb991f01090",
-      "last_attempt_at": "2026-07-09T04:29:19.590Z",
+      "commit_sha": "6bbe192b036a81ff58da2941f5be3e7ba3094657",
+      "last_attempt_at": "2026-07-09T04:32:19.326Z",
       "last_error": "verify_exit_1"
     },
     {
