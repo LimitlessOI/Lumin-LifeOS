@@ -228,7 +228,10 @@
         "s1"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "ea0c92655c84a8ceb7f2270c53d0353fffc6eebe",
+      "last_attempt_at": "2026-07-09T10:19:52.360Z",
+      "last_error": "verify_exit_1"
     },
     {
       "id": "s4",
