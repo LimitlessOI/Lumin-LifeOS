@@ -26,6 +26,24 @@ const BUILD_REPAIR_ATTEMPTS = Number(process.env.NEVER_STOP_BUILD_REPAIR_ATTEMPT
 const PRODUCT_PRIORITY_PATH = path.join(ROOT, 'docs/products/PRODUCT_BUILD_PRIORITY.json');
 
 /**
+ * Product-level SENTRY UI gates (e.g. lifeos-founder-ui) must not block non-UI
+ * BUILD_QUEUE steps. Artifact proof + deploy-truth + module-health still gate.
+ * Pure — exported for unit tests.
+ */
+export function isNonUiBuildQueueTarget(targetFile) {
+  const target = String(targetFile || '').replace(/\\/g, '/');
+  if (!target) return false;
+  if (/^public\//.test(target)) return false;
+  if (/\.sql$/i.test(target) || /^db\/migrations\//.test(target)) return true;
+  if (/^(services|routes|middleware|startup|factory-staging\/factory-core)\//.test(target)) {
+    return true;
+  }
+  if (/^config\//.test(target) && /\.(js|mjs|cjs|ts)$/i.test(target)) return true;
+  if (/\.(js|mjs|cjs|ts)$/i.test(target)) return true;
+  return false;
+}
+
+/**
  * Founder-owned financial priority order for product builds. Returns an ordered
  * array of product_ids (highest financial priority first). Fail-open to [] so a
  * missing/malformed file never blocks the loop — it just falls back to
@@ -1055,14 +1073,10 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
   const verifyFn = async ({ verify_script, product_id, step }) => {
     if (!verify_script) return { ok: true, detail: 'no_verify_script' };
     const target = String(step?.target_file || '');
-    // Product-level SENTRY UI gate must NOT block non-UI steps (migrations/services).
-    // That was stranding lifeos s1 (phase3 schema) on verify_exit_1 while the gate
-    // re-ran founder-UI E2E. Artifact + deploy proof still gate those steps.
-    if (
-      step?.skip_verify === true
-      || /^db\/migrations\//.test(target)
-      || (/\.sql$/i.test(target))
-    ) {
+    // Product-level SENTRY UI gate must NOT block non-UI steps (migrations/services/routes).
+    // That was stranding lifeos s1–s3 on verify_exit_1 while the gate re-ran
+    // founder-UI E2E. Artifact + deploy proof (+ module-health for routes) still gate.
+    if (step?.skip_verify === true || isNonUiBuildQueueTarget(target)) {
       return { ok: true, detail: 'verify_skipped_non_ui_step' };
     }
     const q = queue || {};

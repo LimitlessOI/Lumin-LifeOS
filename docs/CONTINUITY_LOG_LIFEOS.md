@@ -8,6 +8,19 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Never-stop: skip UI SENTRY on service/route steps
+
+### What happened
+- s1 (phase3 schema) completed after migration verify-skip landed.
+- s2/s3 still stranded on `verify_exit_1` — product `verify_script` re-ran full founder-UI E2E on every service step.
+- Extended skip via `isNonUiBuildQueueTarget` (migrations + services/routes/middleware/startup; public UI still gated); revived s2 to pending.
+
+### Next
+- Deploy → never-stop completes lifeos s2→s7 (habits/energy/finance/learning/calendar/routes).
+- Founder-gated steps remain human-only.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Trust gates: kill false-done + credentialed A→Z path
 
 ### What happened
