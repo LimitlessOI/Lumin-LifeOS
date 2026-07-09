@@ -11,10 +11,11 @@
 - It serves as a fundamental check for the builder's health and readiness.
  */
 // ui-e2e-build-proof: 2026-07-09T18:24:57.337Z
+// adam-do-prefix-2026-07-09T18:58:27.404Z
+// adam-redeploy-trigger:2026-07-09T19:05:00.000Z
  // ui-switch-test-proof: boundary-check-3
 // raw-api-proof: duplicate-check
 // founder-live-chat-probe: 2026-07-09T18:40:28.223Z
-// adam-drawer-talk:2026-07-09T18:59:15.887Z
 // --- Constants ---
 /*
 - The version identifier for this specific smoke test script.
