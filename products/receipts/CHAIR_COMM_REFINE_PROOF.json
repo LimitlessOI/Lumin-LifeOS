@@ -1,0 +1,30 @@
+{
+  "schema": "chair_comm_refine_proof_v1",
+  "at": "2026-07-09T19:42:42.188Z",
+  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "build": {
+    "http": 202,
+    "channel": "build_async",
+    "truth": "BUILD_ATTEMPTED",
+    "pass_fail": "RUNNING",
+    "job_id": "18446099-7a57-4334-ac0e-f0164b261089",
+    "poll_url": "/api/v1/lifeos/builderos/command-control/founder-interface/build-job/18446099-7a57-4334-ac0e-f0164b261089",
+    "summary": "⏳ RUNNING\nBuild job started.\n• Job 18446099… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 18446099-7a57-4334-ac0e-f0164b261089",
+    "last_build_receipt": null,
+    "poll": {
+      "pass_fail": "PASS",
+      "sha": "99b816b1c5c15498a1e481e0803d64b070ddd077",
+      "summary": "Wrote scripts/lifeos-direct-build-smoke-test.mjs · commit 99b816b1c5c1. Deploy sync + live CSS verification required before PASS."
+    }
+  },
+  "followup": {
+    "http": 200,
+    "channel": "chair",
+    "truth": "NO_COMMAND_RAN",
+    "pass_fail": "NO_COMMAND_RAN",
+    "summary": "Landed. SHA: 99b816b1c5c15498a1e481e0803d64b070ddd077\n\ncommitted:true, target: scripts/lifeos-direct-build-smoke-test.mjs. Transport status is COMMIT_ONLY_NOT_LIVE — it's in the repo but not deployed to live yet.",
+    "last_build_receipt": null
+  },
+  "ok": true,
+  "verdict": "FOLLOWUP_CITED_REAL_SHA"
+}

@@ -15,7 +15,7 @@
 - Wired `last_build_receipt` into native facts (memory + DB), direct-agent honesty/OBSERVATIONS, sanitize recall exception, and thread append when async jobs finish.
 
 ### Next
-- Push → redeploy → natural build + "did it land?" must return the real SHA.
+- ✅ Live proved: follow-up cited SHA 99b816b1c5c1 (receipt CHAIR_COMM_REFINE_PROOF.json). Next: Adam talk in drawer.
 
 ---
 
