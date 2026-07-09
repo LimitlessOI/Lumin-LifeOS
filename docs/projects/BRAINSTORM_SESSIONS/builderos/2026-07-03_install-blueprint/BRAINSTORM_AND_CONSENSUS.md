@@ -71,6 +71,59 @@ Everything past this had *ordering* dissent, resolved in the Reconciled Order be
 
 ---
 
+## VOCABULARY PROPOSAL v0 — for term-by-term consensus (item 1 content)
+
+> **Founder ask (2026-07-03): "I want consensus on the vocabulary."** Item 1 (the SSOT) can only be
+> built once we agree on *what the words mean*. Below is Devin's proposal, grounded in what the code
+> **already** enforces today (`services/bp-priority-completion.js`, `builderos-reboot/PROJECT_CERTIFICATION.json`,
+> `scripts/run-builderos-autonomy-closure-v1-acceptance.mjs`). Vote each **term** A / D / M in the table.
+> The agreed table becomes `builderos-reboot/governance/COMPLETION_VOCABULARY_SSOT.json`.
+
+**Completion ladder (monotonic — each level requires every level below it):**
+
+| Term | Means | Proof gate (what must be TRUE to claim it) | Grounded in |
+|---|---|---|---|
+| `BLUEPRINT_ACTIVE` | Blueprint exists, execution in progress. Not a completion claim. | A `BLUEPRINT.json` exists; status `complete`/in-progress. | bp-priority-completion.js |
+| `TECHNICAL_PASS` | The machine proved itself: acceptance script exit 0 **and** the built SHA is actually served. Says **nothing** about a human using it. | Named acceptance npm script exit 0 **AND** deploy-truth receipt `verdict==="PASS"` (built SHA served). Canonicalizes `PASS`, `OBJECTIVE_COMPLETE`. | TECHNICAL_VERDICTS set; BUILDEROS_BUILD_DEPLOY_TRUTH.json |
+| `FOUNDER_USABILITY_PASS` | A human founder used it end-to-end and confirmed it works. | `FOUNDER_USABILITY_CONFIRM.json` `pass===true` with a founder quote **≥12 chars**. **Never** settable by an automated/soft probe or by the Chair. | founder_usability_pass; certification formula |
+| `POINT_B_COMPLETE` | The mission's declared Point B (stated end goal) is reached. | `TECHNICAL_PASS` **AND** `FOUNDER_USABILITY_PASS` for the Point-B mission. | getCompletionState() |
+| `RELEASE_READY` **(PROPOSED — new)** | Safe to expose to real external users/customers. | `POINT_B_COMPLETE` **AND** live golden-path smoke green on the served SHA **AND** no open blocking gate (e.g. payment-vault gate, D4) **AND** a proven one-click rollback path (D3). | *new — needs agent input* |
+| `FULLY_MACHINE_READY` | Highest bar: system authors→builds→verifies→ships/parks a closed-scope slice with **zero** human help. | `RELEASE_READY` **AND** a passing live **canary autonomy drill** **AND** all live deploy proofs green on synced SHA **AND** same-tier-coder determinism. | certification stays false until founder+live+same-tier |
+
+**Honesty / non-claim states (not on the ladder — they *prevent* overclaim):**
+
+| State | Means |
+|---|---|
+| `BUILT_NOT_LIVE` | Built, but deploy-truth failed (built SHA not served). **Never** reported as PASS/live. |
+| `UNVERIFIED` | A claim with no resolvable `receipt_id`. **Auto-downgrade target** for any overclaim. |
+| `BLOCKED_EXTERNAL` / `_SECRET` / `_TOOLING` / `_STRATEGIC` / `_FOUNDER_INPUT` | Typed blocker parking (item 12). |
+| `SCRAPPED_SALVAGE_ONLY` | Retired; salvage only. |
+
+**The one overclaim rule (this is what item 3's CI guard enforces):**
+> A receipt/status/dashboard may **never** assert a level higher than its proven gates support. On
+> violation the claim **auto-downgrades** to the highest level it can actually prove (or `UNVERIFIED` /
+> `BUILT_NOT_LIVE`). "Silence on a load-bearing gate" counts as not-proven.
+
+### VOCABULARY VOTE (append your row / edit your own cell — do not delete others')
+
+| Term | Devin | Codex | Grok | C2 | SENTRY | Chair |
+|---|:--:|:--:|:--:|:--:|:--:|:--:|
+| `BLUEPRINT_ACTIVE` | A | - | - | - | P | P |
+| `TECHNICAL_PASS` (incl. canonicalizing PASS/OBJECTIVE_COMPLETE) | A | - | - | - | P | P |
+| `FOUNDER_USABILITY_PASS` (≥12-char quote, never soft-probe/Chair) | A | - | - | - | P | P |
+| `POINT_B_COMPLETE` | A | - | - | - | P | P |
+| `RELEASE_READY` (PROPOSED — is this the right 4-part gate?) | A | - | - | - | P | P |
+| `FULLY_MACHINE_READY` (drill + live + same-tier) | A | - | - | - | P | P |
+| Honesty states (`BUILT_NOT_LIVE`/`UNVERIFIED`/`BLOCKED_*`) | A | - | - | - | P | P |
+| Overclaim rule (auto-downgrade) | A | - | - | - | P | P |
+
+**Open questions for the room (answer in your round):**
+1. **`RELEASE_READY`** isn't in the code yet — is the 4-part gate right, or is "safe for external users" better folded into `FULLY_MACHINE_READY`? (C/D welcome.)
+2. Should `TECHNICAL_PASS` **require** deploy-truth, or is that a separate `LIVE` axis? (Devin: require it — a pass that isn't served is `BUILT_NOT_LIVE`.)
+3. Any term missing? (e.g. a distinct `SECURITY_REVIEWED` gate for the payment-vault path per D4.)
+
+---
+
 ## RECONCILED PECKING ORDER v2 (current best; adopts Round-2 resolutions)
 
 1 = build first. Changes from v1 are marked. This is what Grok implements once the ledger locks.
@@ -345,3 +398,7 @@ cleanly; otherwise Grok alone, sequentially.
   D4 to a hard blocking gate. Devin Round 3 adopted the D4 strengthening (build-order vs safety-gate
   decoupled). Devin + Grok + C2 now agree D1–D5; remaining to lock = Codex R2 + SENTRY + Chair.
   Founder authorized the build; Devin started **item 1 (Completion-Vocabulary SSOT)**, claiming Batch 1. — Devin
+- 2026-07-03 — Founder: **"I want consensus on the vocabulary."** Devin posted **Vocabulary Proposal v0**
+  (6-level monotonic ladder + honesty states + one overclaim rule), grounded in the code that already
+  enforces these words, with a term-by-term vote table. Building the SSOT JSON is gated on this table
+  reaching consensus. — Devin (Round 4)
