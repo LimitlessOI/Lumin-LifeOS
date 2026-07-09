@@ -681,12 +681,56 @@ export function createDeploymentService(deps) {
     if (!commitRes.ok) throw new Error('index commit create failed');
     const commitSha = (await commitRes.json())?.sha || null;
 
-    const updateRefRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`, {
-      method: 'PATCH', headers, body: JSON.stringify({ sha: commitSha, force: false }),
-    });
-    if (!updateRefRes.ok) throw new Error('index ref update failed');
-    console.log(`✅ [DEPLOY] Synopsis index synced${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
-    return { ok: true, sha: commitSha };
+    // Ref update races with never-stop queue-status commits and sibling builds.
+    // Retry from a fresh HEAD so a lost race does not fail the primary file commit
+    // (callers treat index sync as best-effort, but a thrown "Reference cannot be
+    // updated" still polluted build receipts when callers awaited without catch).
+    const maxRefAttempts = 4;
+    for (let attempt = 1; attempt <= maxRefAttempts; attempt += 1) {
+      const headRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`, { headers });
+      if (!headRes.ok) throw new Error(`could not re-read ref heads/${targetBranch} for index update`);
+      const liveHead = (await headRes.json())?.object?.sha;
+      let shaToPush = commitSha;
+      if (liveHead && liveHead !== baseCommitSha) {
+        const liveCommitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits/${liveHead}`, { headers });
+        if (!liveCommitRes.ok) throw new Error('could not read live head for index rebase');
+        const liveTreeSha = (await liveCommitRes.json())?.tree?.sha;
+        if (!liveTreeSha) throw new Error('missing live tree sha for index rebase');
+        const rebaseTreeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
+          method: 'POST', headers,
+          body: JSON.stringify({
+            base_tree: liveTreeSha,
+            tree: [{ path: INDEX_REL, mode: '100644', type: 'blob', sha: blob.sha }],
+          }),
+        });
+        if (!rebaseTreeRes.ok) throw new Error('index rebase tree create failed');
+        const rebaseTreeSha = (await rebaseTreeRes.json())?.sha;
+        const rebaseCommitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits`, {
+          method: 'POST', headers,
+          body: JSON.stringify({
+            message: `chore(governance): sync File Synopsis index for ${indexable.map((f) => f.path).join(', ')}`.slice(0, 480),
+            tree: rebaseTreeSha,
+            parents: [liveHead],
+          }),
+        });
+        if (!rebaseCommitRes.ok) throw new Error('index rebase commit create failed');
+        shaToPush = (await rebaseCommitRes.json())?.sha || null;
+      }
+      const updateRefRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`, {
+        method: 'PATCH', headers, body: JSON.stringify({ sha: shaToPush, force: false }),
+      });
+      if (updateRefRes.ok) {
+        console.log(`✅ [DEPLOY] Synopsis index synced${shaToPush ? ` (${String(shaToPush).slice(0, 7)})` : ''}`);
+        return { ok: true, sha: shaToPush };
+      }
+      const err = await updateRefRes.json().catch(() => ({}));
+      const msg = err.message || 'index ref update failed';
+      const retryable = updateRefRes.status === 422
+        || /Reference cannot be updated|is at .* but expected|Update is not a fast forward/i.test(msg);
+      if (retryable && attempt < maxRefAttempts) continue;
+      throw new Error(msg);
+    }
+    throw new Error('index ref update failed after retries');
   }
 
   // ── triggerDeployment ──────────────────────────────────────────────────────

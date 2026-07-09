@@ -1,11 +1,21 @@
 /**
- * SYNOPSIS: js — public/shared/lifeos-system-reply.js.
+ * SYNOPSIS: Format founder-interface replies for the LifeOS drawer (PASS/COMMITTED receipts).
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 (function (global) {
   // founder-comms-test-2026-06-20
   'use strict';
   function formatLifeOSSystemReply(data) {
     if (!data || typeof data !== 'object') return 'No response from system.';
+    // Committed builds must keep PASS / Command / Transport / Commit lines visible in the drawer.
+    // Prefer structured receipt when the turn actually shipped code.
+    if (
+      data.pass_fail === 'PASS'
+      && (data.command_truth === 'COMMITTED' || data.command_truth === 'COMMAND_RAN')
+      && (data.sha || data.commit_sha || data.transport_status || data.build_receipt?.commit_sha)
+    ) {
+      return formatStructured(data);
+    }
     if ((data.lumin_chair || data.direct_connection) && String(data.human_summary || '').trim()) {
       return String(data.human_summary).trim();
     }
@@ -29,6 +39,7 @@
     if (passFail) lines.push(`${icon} ${passFail} · ${action}`);
     if (data.command_truth) lines.push(`Command: ${data.command_truth}`);
     if (data.receipt_truth) lines.push(`Receipt: ${data.receipt_truth}`);
+    if (data.transport_status) lines.push(`Transport: ${data.transport_status}`);
     if (data.failure_code && passFail === 'FAIL') lines.push(`Code: ${data.failure_code}`);
     if (data.execution_path) lines.push(`Path: ${data.execution_path}`);
     if (data.target_file) lines.push(`File: ${data.target_file}`);

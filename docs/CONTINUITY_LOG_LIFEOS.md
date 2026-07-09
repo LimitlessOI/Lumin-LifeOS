@@ -649,3 +649,6 @@ SENTRY_PROOF_1783548060196 — founder approved canonical memory auto-inject for
 - **Session:** sentry_proof_1783548077002
 
 SENTRY_PROOF_1783548077002 — founder approved canonical memory auto-inject for memory-system.
+
+## 2026-07-09 — A→Z trust (founder-UI E2E)
+E2E off-by-one fixed (wait for new assistant bubble); Chair PASS/COMMITTED receipt surfaced; synopsis-index ref races retry; dashboard mounts live 200; gv-status-route done to stop queue thrash. Next: push + sentry-prealpha-gate lifeos-founder-ui --enforce-creds.

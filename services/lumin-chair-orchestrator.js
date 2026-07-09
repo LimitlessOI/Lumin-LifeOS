@@ -26,6 +26,7 @@ import { wrapChairHumanSummary } from './founder-communication-format.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
 import { enforceDirectConnectionTruth } from './chair-direct-connection-truth.js';
 import { enforceTruthLockdown } from './truth-lockdown.js';
+import { formatExecutionTruthReply } from './lifeos-execution-truth.js';
 import { expandFounderBuildTask, isFounderShipOrUsabilityIntent, resolveExplicitChairChannel } from './founder-chair-intent.js';
 import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
 import {
@@ -315,20 +316,37 @@ function chairWorkExecutorResponse(ctx, result) {
 
 function chairDirectAgentResponse(ctx, agentRes) {
   const committed = agentRes.command_ran === true;
+  const build = agentRes.build || null;
+  let summary = agentRes.reply;
+  if (committed && build) {
+    const structured = formatExecutionTruthReply({
+      ...build,
+      action: 'build',
+      pass_fail: build.pass_fail || 'PASS',
+      command_truth: build.command_truth || 'COMMITTED',
+      sha: build.sha || build.commit_sha,
+      first_blocker: null,
+      human_summary: agentRes.reply,
+    });
+    if (/\bPASS\b/.test(structured)) summary = structured;
+  }
   const truth = finalizeTruth({
     ok: agentRes.ok !== false,
     pass_fail: committed ? 'PASS' : 'NO_COMMAND_RAN',
-    command_truth: committed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
-    action: 'chair',
+    command_truth: committed ? (build?.command_truth || 'COMMITTED') : 'NO_COMMAND_RAN',
+    action: committed ? 'build' : 'chair',
     chair_direct_agent: true,
     direct_connection: true,
-    build_receipt: agentRes.build || null,
-    human_summary_technical: agentRes.reply,
+    build_receipt: build,
+    target_file: build?.target_file || null,
+    sha: build?.sha || build?.commit_sha || null,
+    transport_status: build?.transport_status || null,
+    human_summary_technical: summary,
     conversational_mode: ctx.conversationalMode,
-  }, 'chair');
+  }, committed ? 'build_async' : 'chair');
   return {
     statusCode: 200,
-    body: chairEnvelope('chair', {
+    body: chairEnvelope(committed ? 'build_async' : 'chair', {
       ...truth,
       chair_direct_agent: true,
       direct_connection: true,

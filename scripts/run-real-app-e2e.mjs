@@ -113,37 +113,44 @@ async function appUrl(pageName) {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
+async function countAssistantReplies() {
+  return page.evaluate(() => document.querySelectorAll('.lumin-msg.assistant:not(.thinking)').length);
+}
+
+async function waitForNewAssistantReply(prevCount, timeoutMs = TIMEOUT) {
+  await page.waitForFunction(
+    (before) => {
+      const thinking = document.querySelector('.lumin-msg.thinking');
+      const msgs = document.querySelectorAll('.lumin-msg.assistant:not(.thinking)');
+      return !thinking && msgs.length > before;
+    },
+    prevCount,
+    { timeout: timeoutMs },
+  );
+  return page.evaluate(() => {
+    const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
+    return msgs[msgs.length - 1]?.innerText?.trim() || '';
+  });
+}
+
 async function sendLuminMessage(text, waitForReply = true) {
   const input = page.locator('#lumin-input');
   await input.click();
   await input.fill(text);
+  const prevCount = await countAssistantReplies();
   await page.locator('#lumin-send-btn').click();
   if (!waitForReply) return null;
-  // Wait until "Lumin is working…" thinking bubble disappears and a real reply appears
-  await page.waitForFunction(() => {
-    const msgs = document.querySelectorAll('.lumin-msg.assistant:not(.thinking)');
-    return msgs.length > 0 && !document.querySelector('.lumin-msg.thinking');
-  }, { timeout: TIMEOUT });
-  const lastReply = await page.evaluate(() => {
-    const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
-    return msgs[msgs.length - 1]?.innerText?.trim() || '';
-  });
-  return lastReply;
+  // Wait for a NEW assistant bubble after this send — prior replies must not pass the check.
+  return waitForNewAssistantReply(prevCount, TIMEOUT);
 }
 
 async function sendLuminBuildMessage(text) {
   const input = page.locator('#lumin-input');
   await input.click();
   await input.fill(text);
+  const prevCount = await countAssistantReplies();
   await page.locator('#lumin-send-btn').click();
-  await page.waitForFunction(() => {
-    const msgs = document.querySelectorAll('.lumin-msg.assistant:not(.thinking)');
-    return msgs.length > 0 && !document.querySelector('.lumin-msg.thinking');
-  }, { timeout: BUILD_JOB_TIMEOUT });
-  return page.evaluate(() => {
-    const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
-    return msgs[msgs.length - 1]?.innerText?.trim() || '';
-  });
+  return waitForNewAssistantReply(prevCount, BUILD_JOB_TIMEOUT);
 }
 
 // ── tests ────────────────────────────────────────────────────────────────────

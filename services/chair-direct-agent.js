@@ -6,10 +6,11 @@
 
 import { gatherChairNativeFacts } from './chair-native-facts.js';
 import { formatThreadForPrompt } from './lumin-thread-context.js';
+import { formatExecutionTruthReply } from './lifeos-execution-truth.js';
 
 const DEFAULT_MODEL = process.env.CHAIR_DIRECT_AGENT_MODEL || 'claude_sonnet';
 const MAX_STEPS = Math.max(1, Number(process.env.CHAIR_DIRECT_AGENT_MAX_STEPS || '3'));
-const BUILD_TIMEOUT_MS = Math.max(15000, Number(process.env.CHAIR_DIRECT_AGENT_BUILD_TIMEOUT_MS || '75000'));
+const BUILD_TIMEOUT_MS = Math.max(15000, Number(process.env.CHAIR_DIRECT_AGENT_BUILD_TIMEOUT_MS || '180000'));
 
 const SYSTEM_PROMPT = `You are Lumin — THE CHAIR of Adam Hopkins' LifeOS/BuilderOS system. You are not a chatbot, not a relay, not a layer in front of "the real system." You ARE the AI in the Chair's seat, talking directly to Adam, and you can ACT on this system, not just talk about it.
 
@@ -90,12 +91,36 @@ function summarizeBuildResult(result) {
     ok: result.ok === true,
     committed,
     commit_sha: sha,
+    sha,
     target_file: result.target_file || null,
     deployed: result.deployed === true || result.deploy?.ok === true || null,
     execution_path: result.execution_path || null,
+    pass_fail: result.pass_fail || (committed ? 'PASS' : (result.ok === false ? 'FAIL' : null)),
+    command_truth: result.command_truth || (committed ? 'COMMITTED' : null),
+    transport_status: result.transport_status || null,
     first_blocker: result.first_blocker || result.failure_code || (committed ? null : (result.error || 'build did not commit')),
     detail: result.human_summary || result.human_summary_technical || null,
+    human_summary: result.human_summary || null,
   };
+}
+
+function formatBuildReply(summary) {
+  if (!summary) return 'That build did not land: unknown reason. Nothing was committed. Tell me how you want to proceed.';
+  if (summary.committed) {
+    const structured = formatExecutionTruthReply({
+      ...summary,
+      action: 'build',
+      pass_fail: summary.pass_fail || 'PASS',
+      command_truth: summary.command_truth || 'COMMITTED',
+      sha: summary.sha || summary.commit_sha,
+      first_blocker: null,
+    });
+    if (/\bPASS\b/.test(structured) && (/Command:\s*COMMITTED/i.test(structured) || /Transport:/i.test(structured))) {
+      return structured;
+    }
+    return `Done — that change committed${summary.commit_sha ? ` (${String(summary.commit_sha).slice(0, 12)})` : ''}${summary.target_file ? ` to ${summary.target_file}` : ''}. Give it a moment to deploy, then hard-refresh.\n\n${structured}`;
+  }
+  return `That build did not land: ${summary.first_blocker || 'unknown reason'}. Nothing was committed. Tell me how you want to proceed.`;
 }
 
 /**
@@ -171,8 +196,12 @@ Respond with exactly one JSON object:`;
     }
 
     if (decision.action === 'reply') {
+      const prose = String(decision.message || '').trim() || 'What do you need?';
+      // After a real commit, always surface the structured PASS receipt — model prose alone
+      // fails founder-UI E2E (missing Command: COMMITTED / Transport lines).
+      const reply = (commandRan && lastBuild?.committed) ? formatBuildReply(lastBuild) : prose;
       return {
-        reply: String(decision.message || '').trim() || 'What do you need?',
+        reply,
         command_ran: commandRan,
         ok: true,
         build: lastBuild,
@@ -217,19 +246,11 @@ Respond with exactly one JSON object:`;
 
   // Loop exhausted — synthesize an honest final reply from what really happened.
   if (lastBuild) {
-    if (lastBuild.committed) {
-      return {
-        reply: `Done — that change committed${lastBuild.commit_sha ? ` (${String(lastBuild.commit_sha).slice(0, 12)})` : ''}${lastBuild.target_file ? ` to ${lastBuild.target_file}` : ''}. Give it a moment to deploy, then hard-refresh.`,
-        command_ran: true,
-        ok: true,
-        build: lastBuild,
-        steps: MAX_STEPS,
-      };
-    }
+    const reply = formatBuildReply(lastBuild);
     return {
-      reply: `That build did not land: ${lastBuild.first_blocker || 'unknown reason'}. Nothing was committed. Tell me how you want to proceed.`,
-      command_ran: false,
-      ok: false,
+      reply,
+      command_ran: lastBuild.committed === true,
+      ok: lastBuild.committed === true,
       build: lastBuild,
       steps: MAX_STEPS,
     };
