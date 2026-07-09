@@ -20,8 +20,8 @@
         "getGoVegasOutreachSchedulerStatus"
       ],
       "commit_sha": "beef2847611b1a2960eb3de4cd31853215041e21",
-      "last_attempt_at": "2026-07-09T03:27:00.000Z",
-      "completed_at": "2026-07-09T03:27:00.000Z",
+      "last_attempt_at": "2026-07-09T03:23:32.677Z",
+      "completed_at": "2026-07-09T03:23:33.289Z",
       "note": "GAP-FILL: never-stop authored broken createUsefulWorkGuard usage (invented shouldRun / export-before-import); conductor rewrote to real guard contract."
     },
     {
@@ -39,13 +39,14 @@
       "file_contains": [
         "startGoVegasOutreachScheduler"
       ],
-      "last_attempt_at": "2026-07-09T03:27:00.000Z",
-      "completed_at": "2026-07-09T03:27:00.000Z",
-      "note": "GAP-FILL: never-stop falsely marked done with unrelated SHA b6ec13c8 (Wave 0 boot report); conductor wired startGoVegasOutreachScheduler for real."
+      "last_attempt_at": "2026-07-09T03:26:18.021Z",
+      "completed_at": "2026-07-09T03:26:19.453Z",
+      "note": "GAP-FILL: never-stop falsely marked done with unrelated SHA b6ec13c8 (Wave 0 boot report); conductor wired startGoVegasOutreachScheduler for real.",
+      "commit_sha": "b6ec13c8e9fd187b77c5daec9c79f87a916547c3"
     },
     {
       "id": "gv-status-route",
-      "status": "done",
+      "status": "pending",
       "target_file": "routes/go-vegas-outreach-routes.js",
       "task": "Expose scheduler status on GET /api/v1/go-vegas/scheduler so ops can see if the revenue loop is alive.",
       "spec": "Additive edit. Import getGoVegasOutreachSchedulerStatus from ../services/go-vegas-outreach-scheduler.js. Add GET /api/v1/go-vegas/scheduler behind requireKey returning { ok:true, ...getGoVegasOutreachSchedulerStatus() }. Preserve existing routes. @ssot docs/products/limitlessos/PRODUCT_HOME.md.",
@@ -57,8 +58,10 @@
       "max_output_tokens": 4000,
       "route": "GET /api/v1/go-vegas/scheduler",
       "completed_at": "2026-07-09T03:27:00.000Z",
-      "last_attempt_at": "2026-07-09T03:27:00.000Z",
-      "note": "GAP-FILL: conductor added GET /api/v1/go-vegas/scheduler while never-stop was still building."
+      "last_attempt_at": "2026-07-09T03:29:01.360Z",
+      "note": "GAP-FILL: conductor added GET /api/v1/go-vegas/scheduler while never-stop was still building.",
+      "commit_sha": "6cf61119d6c569695a05525b8a1b920c671314fc",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/go-vegas-outreach-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     }
   ]
 }
