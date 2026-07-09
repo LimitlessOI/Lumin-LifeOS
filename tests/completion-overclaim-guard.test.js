@@ -12,6 +12,7 @@ import {
   cumulativeGates,
   evaluateClaim,
   validateVocabularyConsistency,
+  auditClaimSourceEvidence,
   scanClaimSources,
 } from '../services/completion-overclaim-guard.js';
 
@@ -104,6 +105,66 @@ test('validateVocabularyConsistency flags undefined gate + duplicate rank', () =
   assert.equal(res.ok, false);
   assert.ok(res.problems.some((p) => p.includes('ghost_gate')));
   assert.ok(res.problems.some((p) => p.includes('duplicate rank')));
+});
+
+test('validateVocabularyConsistency flags a claim_source proving an undefined gate', () => {
+  const bad = normalizeVocabulary({
+    ...FIXTURE,
+    claim_sources: [{
+      file: 'status/CERT.json',
+      claim: { path: 'levels' },
+      proven_gates: [
+        { gate: 'acceptance_exit_0', file: 'x.json', path: 'v', equals: true },
+        { gate: 'typoed_gate', file: 'x.json', path: 'v', equals: true },
+      ],
+    }],
+  });
+  const res = validateVocabularyConsistency(bad);
+  assert.equal(res.ok, false);
+  assert.ok(res.problems.some((p) => p.includes('typoed_gate')));
+});
+
+test('validateVocabularyConsistency flags a claim_source missing claim.path', () => {
+  const bad = normalizeVocabulary({
+    ...FIXTURE,
+    claim_sources: [{ file: 'status/CERT.json', proven_gates: [] }],
+  });
+  const res = validateVocabularyConsistency(bad);
+  assert.equal(res.ok, false);
+  assert.ok(res.problems.some((p) => p.includes('claim.path')));
+});
+
+test('auditClaimSourceEvidence flags collapsed evidence (many gates, one signal)', () => {
+  const v = normalizeVocabulary({
+    ...FIXTURE,
+    claim_sources: [{
+      file: 'status/CERT.json',
+      claim: { path: 'levels' },
+      proven_gates: [
+        { gate: 'acceptance_exit_0', file: 'D.json', path: 'staging', equals: true },
+        { gate: 'deploy_truth_pass', file: 'D.json', path: 'staging', equals: true },
+        { gate: 'live_smoke', file: 'D.json', path: 'live', equals: true },
+      ],
+    }],
+  });
+  const warnings = auditClaimSourceEvidence(v);
+  assert.equal(warnings.length, 1);
+  assert.deepEqual(warnings[0].gates.sort(), ['acceptance_exit_0', 'deploy_truth_pass']);
+});
+
+test('auditClaimSourceEvidence is quiet when each gate has an independent signal', () => {
+  const v = normalizeVocabulary({
+    ...FIXTURE,
+    claim_sources: [{
+      file: 'status/CERT.json',
+      claim: { path: 'levels' },
+      proven_gates: [
+        { gate: 'acceptance_exit_0', file: 'A.json', path: 'x', equals: true },
+        { gate: 'deploy_truth_pass', file: 'B.json', path: 'y', equals: true },
+      ],
+    }],
+  });
+  assert.equal(auditClaimSourceEvidence(v).length, 0);
 });
 
 test('scanClaimSources catches an overclaim in a boolean-map file', () => {
