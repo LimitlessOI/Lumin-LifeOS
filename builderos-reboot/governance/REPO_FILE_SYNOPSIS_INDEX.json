@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T14:44:14.667Z",
+  "generated_at": "2026-07-09T14:47:32.056Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11352,
   "files": [
@@ -65490,10 +65490,10 @@
     },
     {
       "path": "routes/lifeos-phase3-routes.js",
-      "synopsis": "Registers LifeosPhase3Routes routes/handlers (routes/lifeos-phase3-routes.js).",
-      "bytes": 1733,
-      "mtime": "2026-07-09T14:44:14.667Z",
-      "indexed_at": "2026-07-09T14:44:14.667Z"
+      "synopsis": "Exports registerLifeosPhase3Routes — routes/lifeos-phase3-routes.js.",
+      "bytes": 10707,
+      "mtime": "2026-07-09T14:47:32.056Z",
+      "indexed_at": "2026-07-09T14:47:32.056Z"
     },
     {
       "path": "routes/lifeos-purpose-routes.js",
