@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T04:26:03.395Z",
+  "generated_at": "2026-07-09T04:26:06.810Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11350,
+  "file_count": 11351,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34101,6 +34101,13 @@
       "indexed_at": "2026-07-09T04:14:31.685Z"
     },
     {
+      "path": "db/migrations/20260421_lifeos_phase3_schema.sql",
+      "synopsis": "Database migration — 20260421_lifeos_phase3_schema.sql.",
+      "bytes": 3515,
+      "mtime": "2026-07-09T04:26:06.810Z",
+      "indexed_at": "2026-07-09T04:26:06.810Z"
+    },
+    {
       "path": "db/migrations/20260422_gate_change_proposals.sql",
       "synopsis": "Database migration — 20260422_gate_change_proposals.sql.",
       "bytes": 1434,
@@ -67513,9 +67520,9 @@
     {
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
-      "bytes": 6086,
-      "mtime": "2026-07-09T04:26:03.395Z",
-      "indexed_at": "2026-07-09T04:26:03.395Z",
+      "bytes": 6053,
+      "mtime": "2026-07-09T04:25:48.933Z",
+      "indexed_at": "2026-07-09T04:25:48.933Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
