@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T14:41:39.259Z",
+  "generated_at": "2026-07-09T14:44:14.667Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11351,
+  "file_count": 11352,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65487,6 +65487,13 @@
       "bytes": 12181,
       "mtime": "2026-07-09T01:03:41.529Z",
       "indexed_at": "2026-07-09T14:05:57.769Z"
+    },
+    {
+      "path": "routes/lifeos-phase3-routes.js",
+      "synopsis": "Registers LifeosPhase3Routes routes/handlers (routes/lifeos-phase3-routes.js).",
+      "bytes": 1733,
+      "mtime": "2026-07-09T14:44:14.667Z",
+      "indexed_at": "2026-07-09T14:44:14.667Z"
     },
     {
       "path": "routes/lifeos-purpose-routes.js",
