@@ -3,67 +3,67 @@
  */
 export async function addItem(db, userId, data) {
   if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must expose query(sql, params)');
+    throw new TypeError('db.query is required');
   }
   if (!userId) {
     throw new TypeError('userId is required');
   }
 
-  const title = normalizeText(data?.title);
+  const title = typeof data?.title === 'string' ? data.title.trim() : '';
+  const type = typeof data?.type === 'string' ? data.type.trim() : '';
+  const url = typeof data?.url === 'string' ? data.url.trim() : '';
+  const status = normalizeStatus(data?.status) ?? 'queued';
+  const keyInsight = typeof data?.key_insight === 'string' ? data.key_insight.trim() : null;
+
   if (!title) {
     throw new TypeError('title is required');
   }
+  if (!type) {
+    throw new TypeError('type is required');
+  }
 
-  const type = normalizeText(data?.type) || 'reading';
-  const url = normalizeNullableText(data?.url);
-  const keyInsight = normalizeNullableText(data?.key_insight);
-  const status = normalizeStatus(data?.status) || 'queued';
-
-  const { rows } = await db.query(
+  const result = await db.query(
     `
       INSERT INTO learning_queue (user_id, title, type, url, status, key_insight)
       VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING *
+      RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at
     `,
-    [userId, title, type, url, status, keyInsight]
+    [userId, title, type, url || null, status, keyInsight]
   );
 
-  return rows[0] ?? null;
+  return result.rows[0] || null;
 }
 
 export async function listItems(db, userId, { status } = {}) {
   if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must expose query(sql, params)');
+    throw new TypeError('db.query is required');
   }
   if (!userId) {
     throw new TypeError('userId is required');
   }
 
   const params = [userId];
-  let where = 'WHERE user_id = $1';
+  let sql = `
+    SELECT id, user_id, title, type, url, status, key_insight, created_at, updated_at
+    FROM learning_queue
+    WHERE user_id = $1
+  `;
 
   const normalizedStatus = normalizeStatus(status);
   if (normalizedStatus) {
     params.push(normalizedStatus);
-    where += ` AND status = $${params.length}`;
+    sql += ` AND status = $2`;
   }
 
-  const { rows } = await db.query(
-    `
-      SELECT *
-      FROM learning_queue
-      ${where}
-      ORDER BY created_at DESC, id DESC
-    `,
-    params
-  );
+  sql += ` ORDER BY created_at DESC, id DESC`;
 
-  return rows;
+  const result = await db.query(sql, params);
+  return result.rows;
 }
 
-export async function updateItem(db, userId, id, patch) {
+export async function updateItem(db, userId, id, patch = {}) {
   if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must expose query(sql, params)');
+    throw new TypeError('db.query is required');
   }
   if (!userId) {
     throw new TypeError('userId is required');
@@ -71,82 +71,49 @@ export async function updateItem(db, userId, id, patch) {
   if (!id) {
     throw new TypeError('id is required');
   }
-  if (!patch || typeof patch !== 'object') {
-    throw new TypeError('patch must be an object');
-  }
 
   const sets = [];
-  const params = [userId, id];
-  let index = params.length;
+  const params = [];
+  let idx = 1;
 
   if (Object.prototype.hasOwnProperty.call(patch, 'status')) {
-    const status = normalizeStatus(patch.status);
-    if (!status) {
-      throw new TypeError('status must be one of queued, reading, done');
+    const normalizedStatus = normalizeStatus(patch.status);
+    if (!normalizedStatus) {
+      throw new TypeError('status must be queued, reading, or done');
     }
-    index += 1;
-    params.push(status);
-    sets.push(`status = $${index}`);
+    sets.push(`status = $${idx++}`);
+    params.push(normalizedStatus);
   }
 
   if (Object.prototype.hasOwnProperty.call(patch, 'key_insight')) {
-    index += 1;
-    params.push(normalizeNullableText(patch.key_insight));
-    sets.push(`key_insight = $${index}`);
-  }
-
-  if (Object.prototype.hasOwnProperty.call(patch, 'title')) {
-    const title = normalizeText(patch.title);
-    if (!title) {
-      throw new TypeError('title cannot be empty');
-    }
-    index += 1;
-    params.push(title);
-    sets.push(`title = $${index}`);
-  }
-
-  if (Object.prototype.hasOwnProperty.call(patch, 'type')) {
-    const type = normalizeText(patch.type);
-    if (!type) {
-      throw new TypeError('type cannot be empty');
-    }
-    index += 1;
-    params.push(type);
-    sets.push(`type = $${index}`);
-  }
-
-  if (Object.prototype.hasOwnProperty.call(patch, 'url')) {
-    index += 1;
-    params.push(normalizeNullableText(patch.url));
-    sets.push(`url = $${index}`);
+    const keyInsight = patch.key_insight == null ? null : String(patch.key_insight).trim();
+    sets.push(`key_insight = $${idx++}`);
+    params.push(keyInsight || null);
   }
 
   if (sets.length === 0) {
-    const existing = await db.query(
-      `SELECT * FROM learning_queue WHERE user_id = $1 AND id = $2`,
-      [userId, id]
-    );
-    return existing.rows[0] ?? null;
+    return null;
   }
 
-  sets.push('updated_at = NOW()');
+  sets.push(`updated_at = NOW()`);
+  params.push(userId, id);
 
-  const { rows } = await db.query(
+  const result = await db.query(
     `
       UPDATE learning_queue
       SET ${sets.join(', ')}
-      WHERE user_id = $1 AND id = $2
-      RETURNING *
+      WHERE user_id = $${idx++} AND id = $${idx}
+      RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at
     `,
     params
   );
 
-  return rows[0] ?? null;
+  return result.rows[0] || null;
 }
 
 export async function deleteItem(db, userId, id) {
   if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must expose query(sql, params)');
+    throw new TypeError('db.query is required');
   }
   if (!userId) {
     throw new TypeError('userId is required');
@@ -155,31 +122,22 @@ export async function deleteItem(db, userId, id) {
     throw new TypeError('id is required');
   }
 
-  const { rows } = await db.query(
+  const result = await db.query(
     `
       DELETE FROM learning_queue
       WHERE user_id = $1 AND id = $2
-      RETURNING *
+      RETURNING id
     `,
     [userId, id]
   );
 
-  return rows[0] ?? null;
+  return result.rows[0] || null;
 }
 
 function normalizeStatus(value) {
-  const s = normalizeText(value);
-  if (!s) return null;
-  if (s === 'queued' || s === 'reading' || s === 'done') return s;
-  return null;
-}
-
-function normalizeText(value) {
-  if (value === undefined || value === null) return '';
-  return String(value).trim();
-}
-
-function normalizeNullableText(value) {
-  const s = normalizeText(value);
-  return s ? s : null;
+  if (value == null || value === '') {
+    return null;
+  }
+  const status = String(value).trim().toLowerCase();
+  return status === 'queued' || status === 'reading' || status === 'done' ? status : null;
 }
