@@ -16,6 +16,7 @@ import {
   SSOT_PATH,
   loadVocabulary,
   validateVocabularyConsistency,
+  auditClaimSourceEvidence,
   scanClaimSources,
 } from '../services/completion-overclaim-guard.js';
 
@@ -41,6 +42,13 @@ function main() {
     console.error('❌ completion-overclaim: SSOT is internally inconsistent:');
     for (const p of consistency.problems) console.error(`   - ${p}`);
     process.exit(1);
+  }
+
+  const warnings = auditClaimSourceEvidence(vocab);
+  if (warnings.length > 0) {
+    console.warn(`⚠️  completion-overclaim: ${warnings.length} collapsed-evidence warning(s) (non-blocking):`);
+    for (const w of warnings) console.warn(`   - ${w.file}: gates [${w.gates.join(', ')}] all prove off ${w.collapsed_signal}`);
+    console.warn('   The vocabulary lane owns claim_source wiring; tighten these to independent proofs when able.');
   }
 
   const violations = scanClaimSources(ROOT, vocab);

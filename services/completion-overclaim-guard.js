@@ -121,7 +121,13 @@ export function getByPath(obj, dotPath) {
   return String(dotPath).split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), obj);
 }
 
-/** Structural check: every gate referenced by the ladder must be defined in `gates`; ranks unique. */
+/**
+ * Structural check: every gate referenced by the ladder must be defined in `gates`; ranks unique;
+ * and every declared claim_source is well-formed — it names a file, a claim path, and each of its
+ * `proven_gates` refers to a gate that actually exists in the vocabulary. An unknown gate name in a
+ * claim_source would otherwise be silently ignored (never counted), so a typo could let a claim pass
+ * unproven; catching it here fails the guard loudly instead.
+ */
 export function validateVocabularyConsistency(vocab) {
   const problems = [];
   const seenRanks = new Set();
@@ -132,7 +138,52 @@ export function validateVocabularyConsistency(vocab) {
       if (!(g in vocab.gates)) problems.push(`${entry.level} references undefined gate "${g}"`);
     }
   }
+
+  const sources = vocab.raw.claim_sources || [];
+  sources.forEach((src, i) => {
+    const label = src && src.file ? src.file : `claim_sources[${i}]`;
+    if (!src || typeof src !== 'object') { problems.push(`${label}: not an object`); return; }
+    if (!src.file) problems.push(`claim_sources[${i}]: missing "file"`);
+    if (!src.claim || !src.claim.path) problems.push(`${label}: missing "claim.path"`);
+    for (const pg of src.proven_gates || []) {
+      if (!pg || !pg.gate) { problems.push(`${label}: a proven_gates entry is missing "gate"`); continue; }
+      if (!(pg.gate in vocab.gates)) problems.push(`${label}: proven_gates references undefined gate "${pg.gate}"`);
+      if (!pg.file || !pg.path) problems.push(`${label}: proven gate "${pg.gate}" missing file/path`);
+    }
+  });
+
   return { ok: problems.length === 0, problems };
+}
+
+/**
+ * Non-blocking audit of evidence quality in the SSOT's claim_sources. Flags "collapsed evidence" —
+ * where two or more DISTINCT gates for a single claim are proven off the identical {file, path, equals}
+ * signal. That means one boolean is doing the work of several independent proofs, so the ladder rung it
+ * unlocks is weaker than it looks. This never fails CI (the vocabulary lane owns those wiring choices);
+ * it surfaces the risk so the room can decide to tighten it. Returns a list of warnings.
+ */
+export function auditClaimSourceEvidence(vocab) {
+  const warnings = [];
+  for (const src of vocab.raw.claim_sources || []) {
+    const bySignal = new Map();
+    for (const pg of src.proven_gates || []) {
+      if (!pg || !pg.gate) continue;
+      const signal = `${pg.file}::${pg.path}::${JSON.stringify(pg.equals)}`;
+      if (!bySignal.has(signal)) bySignal.set(signal, new Set());
+      bySignal.get(signal).add(pg.gate);
+    }
+    for (const [signal, gates] of bySignal) {
+      if (gates.size > 1) {
+        warnings.push({
+          file: src.file,
+          collapsed_signal: signal,
+          gates: [...gates],
+          note: `${gates.size} distinct gates prove off one signal — single point of truth for multiple gates`,
+        });
+      }
+    }
+  }
+  return warnings;
 }
 
 function readJson(root, rel) {

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T15:00:13.995Z",
+  "generated_at": "2026-07-09T18:17:17.329Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11352,
+  "file_count": 11353,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30339,6 +30339,13 @@
       "indexed_at": "2026-07-09T15:00:13.995Z"
     },
     {
+      "path": "COMPOSER_PROMPTS_ARCHIVE_MEMORY.md",
+      "synopsis": "Composer 2.5 Prompts — persist this session + build the \"one memory group\"",
+      "bytes": 6458,
+      "mtime": "2026-07-09T18:17:16.282Z",
+      "indexed_at": "2026-07-09T18:17:17.329Z"
+    },
+    {
       "path": "config/ahni-hardware.yaml",
       "synopsis": "Configuration — Ahni Hardware.",
       "bytes": 161,
@@ -38777,9 +38784,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 197841,
-      "mtime": "2026-07-09T14:05:57.609Z",
-      "indexed_at": "2026-07-09T15:00:13.995Z"
+      "bytes": 199117,
+      "mtime": "2026-07-09T18:17:07.242Z",
+      "indexed_at": "2026-07-09T18:17:17.329Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -69150,9 +69157,9 @@
     {
       "path": "scripts/verify-completion-overclaim.mjs",
       "synopsis": "CI overclaim guard — fail if any completion claim exceeds its proven gates.",
-      "bytes": 2219,
-      "mtime": "2026-07-09T01:03:41.531Z",
-      "indexed_at": "2026-07-09T15:00:13.995Z",
+      "bytes": 2695,
+      "mtime": "2026-07-09T18:16:14.734Z",
+      "indexed_at": "2026-07-09T18:17:17.329Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -81408,9 +81415,9 @@
     {
       "path": "services/completion-overclaim-guard.js",
       "synopsis": "Completion overclaim guard — a claim may never assert a level above its proven gates.",
-      "bytes": 7889,
-      "mtime": "2026-07-09T01:03:41.533Z",
-      "indexed_at": "2026-07-09T15:00:13.995Z",
+      "bytes": 10357,
+      "mtime": "2026-07-09T18:16:02.278Z",
+      "indexed_at": "2026-07-09T18:17:17.329Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87429,9 +87436,9 @@
     {
       "path": "tests/completion-overclaim-guard.test.js",
       "synopsis": "js — tests/completion-overclaim-guard.test.js.",
-      "bytes": 5204,
-      "mtime": "2026-07-09T01:03:41.539Z",
-      "indexed_at": "2026-07-09T15:00:13.995Z"
+      "bytes": 7372,
+      "mtime": "2026-07-09T18:16:39.534Z",
+      "indexed_at": "2026-07-09T18:17:17.329Z"
     },
     {
       "path": "tests/configLoader.test.js",
