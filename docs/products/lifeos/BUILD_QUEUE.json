@@ -196,10 +196,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "9d6049ff48851ca4b684625fd8ce5b1293a6e322",
-      "last_attempt_at": "2026-07-09T05:57:48.505Z",
+      "last_attempt_at": "2026-07-09T05:59:32.930Z",
       "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration — never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
       "last_error": "verify_exit_1",
-      "completed_at": "2026-07-09T05:57:49.688Z",
+      "completed_at": "2026-07-09T05:59:34.086Z",
       "revive_count": 1
     },
     {
@@ -214,7 +214,7 @@
       "founder_gated": false,
       "attempts": 2,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
-      "last_attempt_at": "2026-07-09T08:32:41.407Z",
+      "last_attempt_at": "2026-07-09T08:34:15.272Z",
       "last_error": "verify_exit_1",
       "revive_count": 1
     },
