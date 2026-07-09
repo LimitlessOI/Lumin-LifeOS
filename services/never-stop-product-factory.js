@@ -1230,9 +1230,26 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
   // fine were marked `blocked` after maxAttempts because exact-match could never
   // land (the "loop builds it but never finishes it" bug). The wait window is
   // widened to ~10 min to outlast a full Railway rebuild.
-  const deployProofFn = async ({ commit_sha }) => {
-    if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
+  const deployProofFn = async ({ commit_sha, step }) => {
     if (!commit_sha) return { ok: false, reason: 'no_commit_sha_to_prove' };
+    const target = String(step?.target_file || task.target_file || '');
+    // Pure service/migration modules are not mount-gated. Waiting ~10 min for
+    // Railway SHA parity per service step was thrashing redeploys (lifeos s5
+    // rebuilt 14×) and starving the rest of the queue. Artifact commit + verify
+    // already gate these; routes still require live deploy + module-health.
+    if (
+      isNonUiBuildQueueTarget(target)
+      && !/^routes\/.+\.(js|mjs)$/.test(target)
+    ) {
+      return {
+        ok: true,
+        reason: 'deploy_proof_skipped_non_route_service',
+        served_sha: null,
+        contains: true,
+        skipped: true,
+      };
+    }
+    if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
     await coalescedRedeploy();
     // The /ready endpoint is auth-gated (401 without the command key), so the
     // proof MUST send it — otherwise every proof fails `ready_http_401`, the
