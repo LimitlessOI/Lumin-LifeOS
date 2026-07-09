@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T03:14:30.829Z",
+  "generated_at": "2026-07-09T03:18:26.251Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11346,
+  "file_count": 11347,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82438,6 +82438,13 @@
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/go-vegas-outreach-scheduler.js",
+      "synopsis": "Service module — Go Vegas Outreach Scheduler.",
+      "bytes": 5567,
+      "mtime": "2026-07-09T03:18:26.251Z",
+      "indexed_at": "2026-07-09T03:18:26.251Z"
     },
     {
       "path": "services/go-vegas-outreach.js",
