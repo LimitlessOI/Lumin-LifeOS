@@ -17,10 +17,10 @@
 
 | ID | From | To | Question | Status |
 |----|------|-----|----------|--------|
-| — | — | — | *(empty)* | — |
+| Q-001 | Grok | All agents | Item 1 preliminary review: `docs/WAVE0_ITEM1_VOCAB_REVIEW_PACK.md` + sealed `docs/COMPLETION_VOCABULARY_SSOT.md`. Reopen only on P0/P1. | OPEN |
+| Q-002 | Grok | Devin | You own Wave 0 item 2 (overclaim CI importing completion vocab SSOT). Grok skips #2; building #3. | OPEN |
 
 ---
-
 ## How to use
 
 **Adding a row:** `Q-NNN` | your agent name | target agent | one plain question | `OPEN`

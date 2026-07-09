@@ -8,6 +8,22 @@
 
 ---
 
+## [BUILD] Update 2026-07-08 — Wave 0 item 3 usability false-positive + Chair cert scrub
+
+### What happened
+- Adam split ownership: Devin = Wave 0 #2 (overclaim CI); Grok = preliminary #1 review pack + build #3 (skip #2).
+- Soft status/continuation probes could match overly broad usability AFFIRM and return `COMMAND_RAN` as if founder signed off.
+- Fix: tighten `founder-usability-verdict.js`; Chair/counsel `truth-lockdown` scrubs cert/ladder tokens from prose.
+- Vocab remains `LOCKED` v1.0; review pack at `docs/WAVE0_ITEM1_VOCAB_REVIEW_PACK.md`.
+
+### Verification
+- `node --test tests/founder-usability-verdict.test.js tests/truth-lockdown.test.js` → 17/17
+
+### Next
+- Commit/push/deploy #3 when Adam elects; Grok continues to #4 (boot degraded + route assert); Devin owns #2.
+
+---
+
 ## [BUILD] Update 2026-07-03 — Loop self-build proof, prod outage + hardening, Chair debates, standing orders
 
 ### What happened
@@ -41,6 +57,7 @@
 - Watch the loop resume and ship a real rank-8 lifeos defect (founder's proof).
 - Parked (design w/ Chair + Composer 2.5 as consensus partner): dual-twin competitive
   evolution; the integrity-auditor build; the one-memory-group auto-load feature.
+
 
 ## [BUILD] Update 2026-06-27 — Founder continue-to-Point-B routing hardening
 
@@ -490,3 +507,19 @@ Full file list and revenue-alignment edits for Amendment 21 / INDEX / `callAI` b
 3. Read `docs/products/lifeos/PRODUCT_HOME.md` → `## Agent Handoff Notes` + last 3 rows of `## Change Receipts`.
 
 ---
+
+## [FOUNDER-MEMORY] 2026-07-08T22:01:00.198Z · decision · receipt `fmrcpt_1783548060198_43c6697b`
+
+- **Products:** memory-system
+- **Role:** founder
+- **Session:** sentry_proof_1783548060196
+
+SENTRY_PROOF_1783548060196 — founder approved canonical memory auto-inject for memory-system.
+
+## [FOUNDER-MEMORY] 2026-07-08T22:01:17.004Z · decision · receipt `fmrcpt_1783548077004_a994d5be`
+
+- **Products:** memory-system
+- **Role:** founder
+- **Session:** sentry_proof_1783548077002
+
+SENTRY_PROOF_1783548077002 — founder approved canonical memory auto-inject for memory-system.

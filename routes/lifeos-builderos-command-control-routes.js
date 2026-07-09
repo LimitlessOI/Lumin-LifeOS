@@ -121,6 +121,30 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
       if (!userId) return 'HISTORY_NOT_SAVED';
       const thread = await luminPersist.getOrCreateDefaultThread(userId);
       await luminPersist.recordExchange(thread.id, userId, userMessage, reply);
+      if (pool) {
+        try {
+          const { createFounderMemoryStore } = await import('../services/founder-memory-store.js');
+          const { inferProductIdsFromMessage } = await import('../services/founder-memory-product-resolver.js');
+          const memoryStore = createFounderMemoryStore(pool);
+          const sessionId = req.body?.session_id || `founder_thread_${thread.id}`;
+          const productIds = inferProductIdsFromMessage(userMessage, req.body?.product_id || req.body?.ui_context?.product_id);
+          const meta = { source: 'founder-interface', thread_id: thread.id };
+          await memoryStore.append({
+            sessionId,
+            productIds,
+            role: 'founder',
+            content: userMessage,
+            metadata: meta,
+          });
+          await memoryStore.append({
+            sessionId,
+            productIds,
+            role: 'assistant',
+            content: reply,
+            metadata: meta,
+          });
+        } catch { /* canonical memory is best-effort */ }
+      }
       if (luminLearner) {
         await luminLearner.recordTurnFeedback({
           userId,
@@ -1192,12 +1216,9 @@ HOW TO RESPOND:
         });
       }
 
-      // Founder usability verdict from plain chat.
-      // Only a human founder can clear the final Point B gate. When a mission is
-      // technically done and awaiting that verdict, and the founder plainly says
-      // it works (or doesn't), record the sign-off instead of just conversing.
-      // Conservative: fires only when a founder-gated mission exists and the
-      // verdict is unambiguous — never fakes a Point B pass.
+      // Founder usability verdict from plain chat (Wave 0 item 3).
+      // Soft status/continuation probes must NEVER record FOUNDER_USABILITY_PASS.
+      // parseFounderUsabilityVerdict is fail-closed; COMMAND_RAN only if confirm wrote.
       if (originalText) {
         try {
           const gated = loadFounderGatedMissions();
@@ -1224,7 +1245,8 @@ HOW TO RESPOND:
                 quote: originalText.trim(),
                 actor: req.lifeosUser?.email || req.lifeosUser?.id || 'founder',
               });
-              if (result.ok) {
+              const recorded = result.ok === true;
+              if (recorded) {
                 try {
                   await scorePredictionsForMissionUsability(target.mission_id, {
                     pass: verdict.pass,
@@ -1238,10 +1260,10 @@ HOW TO RESPOND:
                 interface: 'Lumin',
                 action: 'chair',
                 chair_direct_agent: true,
-                founder_usability_recorded: result.ok === true,
-                command_truth: result.ok ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
-                pass_fail: result.ok ? (verdict.pass ? 'PASS' : 'FAIL') : 'FAIL',
-                human_summary: result.ok
+                founder_usability_recorded: recorded,
+                command_truth: recorded ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+                pass_fail: recorded ? (verdict.pass ? 'PASS' : 'FAIL') : 'FAIL',
+                human_summary: recorded
                   ? (verdict.pass
                     ? `Recorded your sign-off on ${target.mission_id} — that's the founder verdict only you can give, so Point B is now clear on that gate. I logged your exact words as the proof.`
                     : `Recorded that ${target.mission_id} is NOT working for you yet. It stays blocked and goes back for a fix — tell me what was wrong and I'll route it.`)

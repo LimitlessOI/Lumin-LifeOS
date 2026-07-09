@@ -22,6 +22,13 @@
 
 When this file conflicts with an older doc, **this file wins for terminology** unless North Star explicitly defines the term differently.
 
+### Completion / status claim words (separate SSOT)
+
+This file does **not** define completion, readiness, or transport claim tokens (`TECHNICAL_PASS`, `BUILT_NOT_LIVE`, `FOUNDER_USABILITY_PASS`, `RELEASE_PASS`, `FULLY_MACHINE_READY`, etc.).
+
+→ **`docs/COMPLETION_VOCABULARY_SSOT.md`** (`LOCKED` v1.0) — sole authority for those claim words.  
+Do not invent synonyms; do not treat bare “done / live / ready / shipped” as claims.
+
 ---
 
 ## 0. Acronyms (machine channel)

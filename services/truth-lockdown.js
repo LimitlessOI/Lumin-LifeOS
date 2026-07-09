@@ -14,6 +14,26 @@ import { enforceDirectConnectionTruth } from './chair-direct-connection-truth.js
 
 export const TRUTH_LOCKDOWN_VERSION = 'truth_lockdown_v1';
 
+/** Chair/counsel prose must not mint completion-ladder / cert claim tokens (Wave 0 item 3). */
+const CERT_LADDER_CLAIM_TOKENS = [
+  /\bFULLY_MACHINE_READY\b/g,
+  /\bBOOTSTRAP_AND_STAGING_READY\b/g,
+  /\bSTAGING_READY\b/g,
+  /\bSENTRY_MECHANICAL_PASS\b/g,
+  /\bCLEARED_FOR_FOUNDER_ALPHA\b/g,
+  /\bFOUNDER_USABILITY_PASS\b/g,
+  /\bPOINT_B_COMPLETE\b/g,
+  /\bRELEASE_PASS\b/g,
+  /\bBUILT_NOT_LIVE\b/g,
+  /\bDEPLOYED_UNVERIFIED\b/g,
+  /\bTECHNICAL_PASS\b/g,
+  /\bPACK_COMPLETE\b/g,
+];
+
+const ADVISORY_CHANNELS = new Set([
+  'counsel', 'lumin', 'chair', 'life_admin', 'display', 'intent_clarify', 'point_b',
+]);
+
 const FALSE_SUCCESS_WHEN_FAIL = [
   /\b(successfully|completed|all done|all set|you're all set|task complete)\b/i,
   /\b(has been (shipped|deployed|committed|executed|completed))\b/i,
@@ -45,14 +65,29 @@ function textBlob(truth = {}) {
   ].filter(Boolean).join('\n');
 }
 
-function scrubField(text, commandTruth, passFail) {
+function scrubCertLadderClaims(text = '') {
   let out = String(text || '');
-  if (!out.trim()) return '';
+  let hit = false;
+  for (const re of CERT_LADDER_CLAIM_TOKENS) {
+    re.lastIndex = 0;
+    if (re.test(out)) {
+      hit = true;
+      re.lastIndex = 0;
+      out = out.replace(re, '[removed — cert/ladder claim; Chair advisory only]');
+    }
+  }
+  return { text: out, hit };
+}
+
+function scrubField(text, commandTruth, passFail, { scrubCertClaims = false } = {}) {
+  let out = String(text || '');
+  if (!out.trim()) return { text: '', certHit: false };
 
   if (out.includes('[removed —')) {
-    return out.replace(/\s{2,}/g, ' ').trim();
+    return { text: out.replace(/\s{2,}/g, ' ').trim(), certHit: false };
   }
 
+  let certHit = false;
   const lines = out.split('\n');
   const protectedLine = (line) => {
     const trimmed = line.trimStart();
@@ -74,6 +109,11 @@ function scrubField(text, commandTruth, passFail) {
   out = lines.map((line) => {
     if (protectedLine(line)) return line;
     let scrubbed = scrubCounselTheater(line, commandTruth);
+    if (scrubCertClaims) {
+      const cert = scrubCertLadderClaims(scrubbed);
+      scrubbed = cert.text;
+      if (cert.hit) certHit = true;
+    }
     if (passFail === 'FAIL') {
       for (const re of FALSE_SUCCESS_WHEN_FAIL) {
         if (re.test(scrubbed)) {
@@ -91,7 +131,10 @@ function scrubField(text, commandTruth, passFail) {
     return scrubbed;
   }).join('\n');
 
-  return out.replace(/[^\S\n]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+  return {
+    text: out.replace(/[^\S\n]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim(),
+    certHit,
+  };
 }
 
 function detectFalseSuccessOnFail(text = '') {
@@ -181,11 +224,12 @@ function reconcileMetadata(truth = {}, channel = '') {
   return out;
 }
 
-function scrubAllProse(truth = {}) {
+function scrubAllProse(truth = {}, channel = '') {
   const out = { ...truth };
   const commandTruth = out.command_truth || 'NO_COMMAND_RAN';
   const passFail = out.pass_fail || 'UNKNOWN';
   const blob = textBlob(out);
+  const scrubCertClaims = ADVISORY_CHANNELS.has(String(channel || out.chair_channel || ''));
 
   const theater = detectCounselTheater(blob, commandTruth);
   const falseSuccess = passFail === 'FAIL' ? detectFalseSuccessOnFail(blob) : { violation: false, hits: [] };
@@ -203,14 +247,25 @@ function scrubAllProse(truth = {}) {
       || (theater.violation ? 'COUNSEL_THEATER_BLOCKED' : falseSuccess.violation ? 'FALSE_SUCCESS_ON_FAIL' : 'EXECUTE_CLAIM_WITHOUT_COMMAND');
   }
 
+  let anyCertHit = false;
   if (out.human_summary_technical != null) {
-    out.human_summary_technical = scrubField(out.human_summary_technical, commandTruth, passFail);
+    const scrubbed = scrubField(out.human_summary_technical, commandTruth, passFail, { scrubCertClaims });
+    out.human_summary_technical = scrubbed.text;
+    if (scrubbed.certHit) anyCertHit = true;
   }
   if (out.human_summary != null && !out.founder_card_applied) {
-    out.human_summary = scrubField(out.human_summary, commandTruth, passFail);
+    const scrubbed = scrubField(out.human_summary, commandTruth, passFail, { scrubCertClaims });
+    out.human_summary = scrubbed.text;
+    if (scrubbed.certHit) anyCertHit = true;
   }
   if (out.done_synopsis != null) {
-    out.done_synopsis = scrubField(out.done_synopsis, commandTruth, passFail);
+    const scrubbed = scrubField(out.done_synopsis, commandTruth, passFail, { scrubCertClaims });
+    out.done_synopsis = scrubbed.text;
+    if (scrubbed.certHit) anyCertHit = true;
+  }
+  if (anyCertHit) {
+    out.chair_cert_claim_scrubbed = true;
+    out.truth_gate_violation = out.truth_gate_violation || 'CHAIR_CERT_CLAIM_SCRUBBED';
   }
 
   if (theater.violation && commandTruth === 'NO_COMMAND_RAN' && !out.human_summary_technical?.trim()) {
@@ -232,7 +287,7 @@ export function enforceTruthLockdown(truth = {}, channel = '') {
   out = enforceChairTruthExit(out, channel);
   out = enforceDirectConnectionTruth(out);
   out = reconcileMetadata(out, channel);
-  out = scrubAllProse(out);
+  out = scrubAllProse(out, channel);
   out = ensureFailCarriesLesson(out);
 
   out.truth_lockdown_applied = true;

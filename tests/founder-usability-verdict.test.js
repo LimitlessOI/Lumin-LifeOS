@@ -3,7 +3,10 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseFounderUsabilityVerdict } from '../services/founder-usability-verdict.js';
+import {
+  parseFounderUsabilityVerdict,
+  isSoftStatusOrContinuationProbe,
+} from '../services/founder-usability-verdict.js';
 
 test('clear affirmative usability verdicts record a PASS', () => {
   for (const t of [
@@ -51,6 +54,32 @@ test('ambiguous or mixed messages return null', () => {
     'it works but also fails sometimes',
     'hello',
     'the weather is nice',
+  ]) {
+    assert.equal(parseFounderUsabilityVerdict(t), null, t);
+  }
+});
+
+test('Wave 0 item 3: soft status/continuation probes never record usability', () => {
+  for (const t of [
+    'keep going until pass or exact blocker',
+    'status looks good on auth',
+    'what is next on point b',
+    'continue building until pass',
+    'queue status please',
+    'machine path progress',
+  ]) {
+    assert.equal(isSoftStatusOrContinuationProbe(t), true, `probe detect: ${t}`);
+    assert.equal(parseFounderUsabilityVerdict(t), null, `no verdict: ${t}`);
+  }
+});
+
+test('ops confirm / bare worked without usability context is not a sign-off', () => {
+  for (const t of [
+    'confirm the deploy worked',
+    'looks good',
+    'perfect',
+    'great job',
+    'it works',
   ]) {
     assert.equal(parseFounderUsabilityVerdict(t), null, t);
   }

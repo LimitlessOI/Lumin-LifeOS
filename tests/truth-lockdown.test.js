@@ -72,6 +72,19 @@ describe('truth-lockdown', () => {
     assert.ok(out.truth_gate_violation);
   });
 
+  it('Wave 0 item 3: Chair advisory channel scrubs cert/ladder claim tokens', () => {
+    const out = enforceTruthLockdown({
+      pass_fail: 'NO_COMMAND_RAN',
+      command_truth: 'NO_COMMAND_RAN',
+      human_summary: 'We are FULLY_MACHINE_READY and STAGING_READY now.',
+      human_summary_technical: 'TECHNICAL_PASS and RELEASE_PASS achieved.',
+    }, 'chair');
+    assert.equal(out.chair_cert_claim_scrubbed, true);
+    assert.doesNotMatch(out.human_summary || '', /FULLY_MACHINE_READY|STAGING_READY/);
+    assert.doesNotMatch(out.human_summary_technical || '', /TECHNICAL_PASS|RELEASE_PASS/);
+    assert.match(out.human_summary || '', /Chair advisory only/);
+  });
+
   it('assertTruthLockdownCompliance downgrades illegal PASS on build channel', () => {
     const locked = assertTruthLockdownCompliance({
       pass_fail: 'PASS',
