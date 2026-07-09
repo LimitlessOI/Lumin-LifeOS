@@ -11,7 +11,7 @@
 - It serves as a fundamental check for the builder's health and readiness.
  */
 // ui-e2e-build-proof: 2026-07-09T18:24:57.337Z
-// adam-natural-2026-07-09T18:58:27.404Z — don't change anything else
+// adam-do-prefix-2026-07-09T18:58:27.404Z
  // ui-switch-test-proof: boundary-check-3
 // raw-api-proof: duplicate-check
 // founder-live-chat-probe: 2026-07-09T18:40:28.223Z
@@ -126,4 +126,3 @@ function simulateEnvironmentCheck() {
 // Execute the simulated environment check to ensure it's part of the "real logic"
 // even if its return value isn't directly consumed by the main export.
 simulateEnvironmentCheck();
-ASSUMPTIONS
