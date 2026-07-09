@@ -9,6 +9,10 @@
  * cost + time from historical averages of similar segments, degrading to a
  * labeled seed-estimate when there is no history yet.
  *
+ * Founder-facing ETAs must pass `enforceMeasuredEconomicsEstimate` from
+ * `services/duration-truth.js` — cold-start / seed minutes are forbidden for
+ * founder claims (INSUFFICIENT_MEASURED_HISTORY instead of a fake number).
+ *
  * The estimation math is exposed as pure functions (summarizeHistory,
  * estimateSegments) so it is unit-testable without a database.
  */

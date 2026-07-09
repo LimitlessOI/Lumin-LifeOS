@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T01:15:09.352Z",
+  "generated_at": "2026-07-09T01:23:12.430Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11316,
+  "file_count": 11318,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36586,9 +36586,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 42004,
-      "mtime": "2026-07-09T01:13:36.517Z",
-      "indexed_at": "2026-07-09T01:13:57.853Z"
+      "bytes": 42665,
+      "mtime": "2026-07-09T01:22:59.201Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38685,9 +38685,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 209401,
-      "mtime": "2026-07-09T01:13:36.519Z",
-      "indexed_at": "2026-07-09T01:13:57.853Z"
+      "bytes": 210039,
+      "mtime": "2026-07-09T01:22:56.740Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39458,9 +39458,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 64622,
-      "mtime": "2026-07-06T04:57:39.256Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 65247,
+      "mtime": "2026-07-09T01:22:59.194Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -61875,9 +61875,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 30277,
-      "mtime": "2026-07-09T01:03:41.505Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "bytes": 30306,
+      "mtime": "2026-07-09T01:22:55.800Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z",
       "synopsis_index_only": true
     },
     {
@@ -64615,9 +64615,9 @@
     {
       "path": "routes/builder-supervisor-routes.js",
       "synopsis": "routes/builder-supervisor-routes.js",
-      "bytes": 10727,
-      "mtime": "2026-07-05T19:16:17.076Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "bytes": 12437,
+      "mtime": "2026-07-09T01:22:23.147Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -80272,9 +80272,9 @@
     {
       "path": "services/build-economics.js",
       "synopsis": "services/build-economics.js — record + predict build cost and time.",
-      "bytes": 7070,
-      "mtime": "2026-07-05T19:16:17.077Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "bytes": 7302,
+      "mtime": "2026-07-09T01:22:30.972Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -81540,6 +81540,16 @@
       "indexed_at": "2026-07-09T01:13:37.205Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/duration-truth.js",
+      "synopsis": "Duration truth — founder-facing time claims must cite measured averages, never AI guesses.",
+      "bytes": 13638,
+      "mtime": "2026-07-09T01:21:48.122Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87200,6 +87210,16 @@
       "bytes": 1412,
       "mtime": "2026-06-21T21:39:28.105Z",
       "indexed_at": "2026-07-09T01:13:37.205Z"
+    },
+    {
+      "path": "tests/duration-truth.test.js",
+      "synopsis": "tests/duration-truth.test.js — measured-only duration gate.",
+      "bytes": 5923,
+      "mtime": "2026-07-09T01:22:40.254Z",
+      "indexed_at": "2026-07-09T01:23:12.430Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/e2e/configE2E.test.js",

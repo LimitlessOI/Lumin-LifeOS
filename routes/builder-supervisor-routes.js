@@ -11,14 +11,22 @@
  *   GET  /api/v1/builder/queue        segments that are queued / in-progress
  *   POST /api/v1/builder/pause        set PAUSE_AUTONOMY-equivalent in memory
  *   POST /api/v1/builder/resume       clear the pause
- *   GET  /api/v1/builder/economics/estimate  predict a project's build cost + time
+ *   GET  /api/v1/builder/economics/estimate  predict a project's build cost + time (measured only)
  *   GET  /api/v1/builder/economics/history   recorded per-segment cost/time + averages
+ *   GET  /api/v1/builder/duration-truth      host clock + measured blueprint/install averages
  *
  * @ssot docs/products/project-governance/PRODUCT_HOME.md
  */
 
 import { Router } from 'express';
 import { estimateProjectBuild, getHistoryStats, estimateSegments } from '../services/build-economics.js';
+import {
+  buildDurationTruthSnapshot,
+  enforceMeasuredEconomicsEstimate,
+  estimateFromMeasuredHistory,
+  getSystemClock,
+  OPERATION_CLASSES,
+} from '../services/duration-truth.js';
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -180,14 +188,14 @@ export function createBuilderSupervisorRoutes({ requireKey, pool }) {
       const active   = rows.filter(r => r.status === 'in_progress');
       const blocked  = rows.filter(r => r.status === 'blocked');
 
-      // Projected cost + ETA for the pending queue, learned from past builds.
+      // Projected cost + ETA — measured history only (cold-start stripped / rejected).
       let projected = null;
       try {
         const summary = await getHistoryStats(pool);
         const pending = [...safe, ...review, ...highRisk];
         projected = {
-          safe: estimateSegments(safe, summary),
-          allPending: estimateSegments(pending, summary),
+          safe: enforceMeasuredEconomicsEstimate(estimateSegments(safe, summary)),
+          allPending: enforceMeasuredEconomicsEstimate(estimateSegments(pending, summary)),
         };
       } catch (_) { /* estimate is best-effort; queue still returns without it */ }
 
@@ -197,8 +205,20 @@ export function createBuilderSupervisorRoutes({ requireKey, pool }) {
     }
   });
 
+  // ── GET /api/v1/builder/duration-truth ─────────────────────────────────────
+  // Host clock + measured averages for blueprint / install. Never AI-guessed ETAs.
+  router.get('/duration-truth', requireKey, (req, res) => {
+    const stepCount = req.query.steps != null ? parseInt(req.query.steps, 10) : undefined;
+    const snap = buildDurationTruthSnapshot({
+      stepCount: Number.isFinite(stepCount) ? stepCount : undefined,
+      minSamples: req.query.minSamples != null ? parseInt(req.query.minSamples, 10) : undefined,
+    });
+    res.json({ ok: true, ...snap });
+  });
+
   // ── GET /api/v1/builder/economics/estimate ─────────────────────────────────
   // Predict cost + time for a project's remaining (or all) segments.
+  // Founder-facing: cold-start / seed ETAs are rejected (duration-truth hard gate).
   router.get('/economics/estimate', requireKey, async (req, res) => {
     try {
       const projectId = parseInt(req.query.projectId, 10);
@@ -206,8 +226,25 @@ export function createBuilderSupervisorRoutes({ requireKey, pool }) {
         return res.status(400).json({ ok: false, error: 'projectId query param required (integer)' });
       }
       const includeDone = String(req.query.includeDone || '') === 'true';
-      const estimate = await estimateProjectBuild(pool, { projectId, includeDone });
-      res.json({ ok: true, estimate });
+      const raw = await estimateProjectBuild(pool, { projectId, includeDone });
+      const gated = enforceMeasuredEconomicsEstimate(raw);
+      if (!gated.allowed) {
+        return res.status(422).json({
+          ok: false,
+          error: gated.reason,
+          message: gated.message,
+          clock: getSystemClock(),
+          estimate: gated,
+        });
+      }
+      res.json({
+        ok: true,
+        clock: getSystemClock(),
+        estimate: gated,
+        raw_confidence: raw.confidence,
+        blueprint_foundation: estimateFromMeasuredHistory(OPERATION_CLASSES.BLUEPRINT_FOUNDATION, { minSamples: 2 }),
+        install_step: estimateFromMeasuredHistory(OPERATION_CLASSES.INSTALL_STEP),
+      });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

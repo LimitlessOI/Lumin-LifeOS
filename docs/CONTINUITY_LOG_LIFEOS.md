@@ -8,6 +8,21 @@
 
 ---
 
+## [BUILD] Update 2026-07-08 — Duration truth hard gate (measured ETAs only)
+
+### What happened
+- Adam: AIs are bad at time; "how long will this take?" must be system facts, hard-gated.
+- Added `services/duration-truth.js` + `GET /api/v1/builder/duration-truth`; economics estimate/queue projections reject cold-start/seed ETAs.
+- Live measured install-step average from TSOS metrics (~7s/step); blueprint foundation still sparse (2 receipts) → honest INSUFFICIENT until more samples.
+
+### Verification
+- `node --test tests/duration-truth.test.js` → 10/10
+
+### Next
+- Push; continue Wave 0 #5; assign remaining items across Grok/Codex/Devin/Claude.
+
+---
+
 ## [BUILD] Update 2026-07-08 — Wave 0 item 1 JSON SSOT activates overclaim CI
 
 ### What happened
