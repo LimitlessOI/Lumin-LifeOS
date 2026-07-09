@@ -1,151 +1,147 @@
 /**
  * SYNOPSIS: Exports addItem — services/lifeos-learning.js.
  */
-const TABLE = 'learning_queue';
-
-function assertDb(db) {
+export async function addItem(db, userId, data) {
   if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must be a node-postgres client or pool with query()');
+    throw new TypeError('db must be a pg Pool/client with query()');
   }
-}
-
-function normalizeStatus(status) {
-  if (status == null || status === '') return null;
-  const value = String(status).trim().toLowerCase();
-  if (!['queued', 'reading', 'done'].includes(value)) {
-    throw new RangeError('status must be one of queued, reading, done');
+  if (!userId) {
+    throw new TypeError('userId is required');
   }
-  return value;
-}
 
-function normalizeString(value, fieldName, { required = false, maxLen = 2048 } = {}) {
-  if (value == null) {
-    if (required) throw new TypeError(`${fieldName} is required`);
-    return null;
+  const title = normalizeText(data?.title);
+  const url = normalizeUrl(data?.url);
+  const type = normalizeText(data?.type) || null;
+  const status = normalizeStatus(data?.status) || 'queued';
+  const keyInsight = normalizeText(data?.key_insight) || null;
+
+  if (!title) {
+    throw new TypeError('title is required');
   }
-  const s = String(value).trim();
-  if (!s) {
-    if (required) throw new TypeError(`${fieldName} is required`);
-    return null;
-  }
-  if (s.length > maxLen) {
-    throw new RangeError(`${fieldName} is too long`);
-  }
-  return s;
-}
 
-function normalizeUrl(value) {
-  const s = normalizeString(value, 'url', { required: false, maxLen: 2048 });
-  return s;
-}
-
-function buildSelectClause() {
-  return `SELECT id, user_id, title, type, url, status, key_insight, created_at, updated_at
-          FROM ${TABLE}`;
-}
-
-export async function addItem(db, userId, data = {}) {
-  assertDb(db);
-  if (userId == null || userId === '') throw new TypeError('userId is required');
-
-  const title = normalizeString(data.title, 'title', { required: true, maxLen: 500 });
-  const type = normalizeString(data.type, 'type', { required: false, maxLen: 100 });
-  const url = normalizeUrl(data.url);
-  const status = normalizeStatus(data.status) ?? 'queued';
-  const keyInsight = normalizeString(data.key_insight, 'key_insight', { required: false, maxLen: 4000 });
-
-  const result = await db.query(
-    `INSERT INTO ${TABLE} (user_id, title, type, url, status, key_insight)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
+  const { rows } = await db.query(
+    `insert into learning_queue (user_id, title, type, url, status, key_insight)
+     values ($1, $2, $3, $4, $5, $6)
+     returning id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
     [userId, title, type, url, status, keyInsight]
   );
 
-  return result.rows[0] ?? null;
+  return rows[0] ?? null;
 }
 
 export async function listItems(db, userId, { status } = {}) {
-  assertDb(db);
-  if (userId == null || userId === '') throw new TypeError('userId is required');
-
-  const params = [userId];
-  let sql = `${buildSelectClause()} WHERE user_id = $1`;
-  const normalizedStatus = status == null || status === '' ? null : normalizeStatus(status);
-  if (normalizedStatus) {
-    params.push(normalizedStatus);
-    sql += ` AND status = $2`;
+  if (!db || typeof db.query !== 'function') {
+    throw new TypeError('db must be a pg Pool/client with query()');
   }
-  sql += ` ORDER BY created_at DESC`;
+  if (!userId) {
+    throw new TypeError('userId is required');
+  }
 
-  const result = await db.query(sql, params);
-  return result.rows;
+  const values = [userId];
+  let where = 'where user_id = $1';
+
+  const normalizedStatus = normalizeStatus(status);
+  if (normalizedStatus) {
+    values.push(normalizedStatus);
+    where += ` and status = $${values.length}`;
+  }
+
+  const { rows } = await db.query(
+    `select id, user_id, title, type, url, status, key_insight, created_at, updated_at
+     from learning_queue
+     ${where}
+     order by created_at desc, id desc`,
+    values
+  );
+
+  return rows;
 }
 
-export async function updateItem(db, userId, id, patch = {}) {
-  assertDb(db);
-  if (userId == null || userId === '') throw new TypeError('userId is required');
-  if (id == null || id === '') throw new TypeError('id is required');
-
-  const sets = [];
-  const params = [];
-  let i = 1;
-
-  if (Object.prototype.hasOwnProperty.call(patch, 'status')) {
-    params.push(normalizeStatus(patch.status));
-    sets.push(`status = $${i++}`);
+export async function updateItem(db, userId, id, patch) {
+  if (!db || typeof db.query !== 'function') {
+    throw new TypeError('db must be a pg Pool/client with query()');
+  }
+  if (!userId) {
+    throw new TypeError('userId is required');
+  }
+  if (!id) {
+    throw new TypeError('id is required');
   }
 
-  if (Object.prototype.hasOwnProperty.call(patch, 'key_insight')) {
-    params.push(normalizeString(patch.key_insight, 'key_insight', { required: false, maxLen: 4000 }));
-    sets.push(`key_insight = $${i++}`);
+  const fields = [];
+  const values = [userId, id];
+
+  if (Object.prototype.hasOwnProperty.call(patch ?? {}, 'status')) {
+    const status = normalizeStatus(patch.status);
+    if (!status) {
+      throw new TypeError('status must be one of queued, reading, done');
+    }
+    fields.push(`status = $${values.length + 1}`);
+    values.push(status);
   }
 
-  if (Object.prototype.hasOwnProperty.call(patch, 'title')) {
-    params.push(normalizeString(patch.title, 'title', { required: false, maxLen: 500 }));
-    sets.push(`title = $${i++}`);
+  if (Object.prototype.hasOwnProperty.call(patch ?? {}, 'key_insight')) {
+    fields.push(`key_insight = $${values.length + 1}`);
+    values.push(normalizeText(patch.key_insight) || null);
   }
 
-  if (Object.prototype.hasOwnProperty.call(patch, 'type')) {
-    params.push(normalizeString(patch.type, 'type', { required: false, maxLen: 100 }));
-    sets.push(`type = $${i++}`);
-  }
-
-  if (Object.prototype.hasOwnProperty.call(patch, 'url')) {
-    params.push(normalizeUrl(patch.url));
-    sets.push(`url = $${i++}`);
-  }
-
-  if (sets.length === 0) {
-    const existing = await db.query(
-      `${buildSelectClause()} WHERE id = $1 AND user_id = $2`,
-      [id, userId]
+  if (fields.length === 0) {
+    const { rows } = await db.query(
+      `select id, user_id, title, type, url, status, key_insight, created_at, updated_at
+       from learning_queue
+       where user_id = $1 and id = $2`,
+      values
     );
-    return existing.rows[0] ?? null;
+    return rows[0] ?? null;
   }
 
-  params.push(id, userId);
-  const sql = `
-    UPDATE ${TABLE}
-    SET ${sets.join(', ')}, updated_at = NOW()
-    WHERE id = $${i++} AND user_id = $${i++}
-    RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at
-  `;
+  fields.push(`updated_at = now()`);
 
-  const result = await db.query(sql, params);
-  return result.rows[0] ?? null;
+  const { rows } = await db.query(
+    `update learning_queue
+     set ${fields.join(', ')}
+     where user_id = $1 and id = $2
+     returning id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
+    values
+  );
+
+  return rows[0] ?? null;
 }
 
 export async function deleteItem(db, userId, id) {
-  assertDb(db);
-  if (userId == null || userId === '') throw new TypeError('userId is required');
-  if (id == null || id === '') throw new TypeError('id is required');
+  if (!db || typeof db.query !== 'function') {
+    throw new TypeError('db must be a pg Pool/client with query()');
+  }
+  if (!userId) {
+    throw new TypeError('userId is required');
+  }
+  if (!id) {
+    throw new TypeError('id is required');
+  }
 
-  const result = await db.query(
-    `DELETE FROM ${TABLE}
-     WHERE id = $1 AND user_id = $2
-     RETURNING id`,
-    [id, userId]
+  const { rows } = await db.query(
+    `delete from learning_queue
+     where user_id = $1 and id = $2
+     returning id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
+    [userId, id]
   );
 
-  return result.rows[0] ?? null;
+  return rows[0] ?? null;
+}
+
+function normalizeText(value) {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function normalizeUrl(value) {
+  const text = normalizeText(value);
+  return text;
+}
+
+function normalizeStatus(value) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  return normalized === 'queued' || normalized === 'reading' || normalized === 'done' ? normalized : null;
 }
