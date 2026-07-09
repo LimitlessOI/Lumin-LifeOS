@@ -8,6 +8,17 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Display DNA: live collapsible worklog
+
+### What happened
+- Adam: chat should show Lumin working — reasoning, actions, progressive disclosure (not just final reply).
+- Added `docs/constitution/LUMIN_DISPLAY_DNA.md`; upgraded drawer think panel → persistent `.lumin-worklog` (thinking/action/observation/result, collapse/expand, stays after reply).
+
+### Next
+- Hard-refresh `/overlay/lifeos-app.html` after deploy; send a message and expand the worklog chapter.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Chair front door obeys Communication DNA
 
 ### What happened
