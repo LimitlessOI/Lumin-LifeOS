@@ -1126,9 +1126,10 @@ export async function runLuminChairTurn(ctx, deps) {
           buildFailureReceipt: deps.buildBuildFailureReceipt,
           enforceExecutionTruth: deps.enforceExecutionTruth,
           repoRoot: deps.repoRoot,
-          userId: ctx.userId,
+          userId: ctx.userId || resolvedUserId,
           callCouncilMember: deps.callCouncilMember,
           pool: deps.pool,
+          luminPersist: deps.luminPersist || null,
           confirmIntent: ctx.confirmIntent || forceExecute,
         });
         const truth = finalizeTruth({

@@ -19,6 +19,11 @@ import { gatherStrategicBriefForChair } from './lumin-strategic-intelligence.js'
 import { createLuminContextLoader } from './lumin-context-loader.js';
 import { gatherChairSystemKnowledge, needsSystemKnowledge } from './chair-system-knowledge.js';
 import { loadKnowledgeContext, getKnowledgeContext } from './knowledge-context.js';
+import { getLatestFounderBuildJobForUser } from './founder-build-job-store.js';
+import {
+  getLatestFounderInterfaceBuildReceipt,
+  summarizeFounderBuildReceipt,
+} from './builderos-command-control-service.js';
 
 function searchBlockIsUseful(searchResult) {
   if (!searchResult?.results?.length) return false;
@@ -122,6 +127,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     system_knowledge: null,
     program_context: null,
     builder_capability: null,
+    last_build_receipt: null,
   };
 
   if (!getKnowledgeContext()) {
@@ -144,11 +150,12 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     /* non-fatal */
   }
 
+  let numericUserId = deps.userId || null;
+  let userHandle = deps.userHandle || chairContext.user_handle || null;
+
   if (deps.pool) {
     try {
       const loader = createLuminContextLoader({ pool: deps.pool, callAI: deps.callAI });
-      let numericUserId = deps.userId || null;
-      let userHandle = deps.userHandle || chairContext.user_handle || null;
 
       if (numericUserId && !userHandle) {
         const { rows } = await deps.pool.query(
@@ -185,6 +192,30 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     } catch {
       /* non-fatal */
     }
+  }
+
+  try {
+    const memJob = getLatestFounderBuildJobForUser(numericUserId);
+    const memReceipt = memJob
+      ? summarizeFounderBuildReceipt({
+        id: memJob.id,
+        task: memJob.task,
+        result: memJob.result,
+        updated_at: memJob.updated_at || memJob.created_at,
+        created_at: memJob.created_at,
+      })
+      : null;
+    const dbReceipt = deps.pool
+      ? await getLatestFounderInterfaceBuildReceipt(deps.pool, { userId: numericUserId })
+      : null;
+    facts.last_build_receipt = pickFresherBuildReceipt(memReceipt, dbReceipt);
+    if (facts.last_build_receipt?.commit_sha) {
+      facts.chair_note = `${facts.chair_note} last_build_receipt is a REAL prior build receipt (job store/DB). When Adam asks if a build landed or for the SHA, cite commit_sha from it — do not deny a receipt that is present.`;
+    } else if (facts.last_build_receipt?.pass_fail === 'FAIL') {
+      facts.chair_note = `${facts.chair_note} last_build_receipt shows the latest build FAILED — say so plainly with first_blocker if present.`;
+    }
+  } catch {
+    /* non-fatal */
   }
 
   if ((!personalTurn || hasProductBuildContext(text)) && !isFounderIdentityIntent(text)
@@ -245,4 +276,20 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   }
 
   return JSON.parse(JSON.stringify(facts));
+}
+
+function receiptTimeMs(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function pickFresherBuildReceipt(a, b) {
+  if (!a) return b || null;
+  if (!b) return a;
+  const aPass = a.pass_fail === 'PASS' && a.commit_sha;
+  const bPass = b.pass_fail === 'PASS' && b.commit_sha;
+  if (aPass && !bPass) return a;
+  if (bPass && !aPass) return b;
+  return receiptTimeMs(a.updated_at) >= receiptTimeMs(b.updated_at) ? a : b;
 }

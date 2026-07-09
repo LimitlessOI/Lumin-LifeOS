@@ -664,8 +664,16 @@ const FALSE_EXECUTION_CLAIM = /\b(successfully executed|has been triggered|build
 
 /**
  * Strip LLM theater when no command ran — conversation path only.
+ * When last_build_receipt has a real SHA, allow citing that prior receipt (recall, not a new command).
  */
-export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RAN' } = {}) {
+export function sanitizeConversationReply(text, {
+  command_truth = 'NO_COMMAND_RAN',
+  last_build_receipt = null,
+} = {}) {
+  const receiptSha = String(last_build_receipt?.commit_sha || last_build_receipt?.sha || '').trim();
+  const receiptAllowsRecall = Boolean(receiptSha)
+    && (last_build_receipt?.committed === true || last_build_receipt?.pass_fail === 'PASS');
+
   const scrubbed = scrubCounselTheater(text, command_truth);
   const theater = detectCounselTheater(text, command_truth);
   if (theater.violation && !scrubbed.trim()) {
@@ -673,6 +681,7 @@ export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RA
   }
   if (scrubbed.trim()) {
     if (command_truth !== 'NO_COMMAND_RAN') return scrubbed;
+    if (receiptAllowsRecall && replyCitesKnownReceipt(scrubbed, receiptSha)) return scrubbed;
     if (!FALSE_EXECUTION_CLAIM.test(scrubbed) && !/\b(COMMITTED|deployed to production|build triggered)\b/i.test(scrubbed)) {
       return scrubbed;
     }
@@ -680,6 +689,7 @@ export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RA
 
   const reply = String(text || '').trim();
   if (!reply || command_truth !== 'NO_COMMAND_RAN') return reply;
+  if (receiptAllowsRecall && replyCitesKnownReceipt(reply, receiptSha)) return reply;
   if (!FALSE_EXECUTION_CLAIM.test(reply) && !/\b(COMMITTED|deployed to production)\b/i.test(reply)) {
     return reply;
   }
@@ -692,4 +702,12 @@ export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RA
     '',
     `(Blocked false claim in model reply: "${reply.slice(0, 120)}…")`,
   ].join('\n');
+}
+
+function replyCitesKnownReceipt(text, sha) {
+  const t = String(text || '');
+  const full = String(sha || '');
+  if (!full) return false;
+  const short = full.slice(0, 12);
+  return t.includes(full) || (short.length >= 8 && t.includes(short));
 }

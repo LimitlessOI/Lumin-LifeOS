@@ -73,6 +73,27 @@ export function getFounderBuildJob(id) {
   return jobs.get(id) || null;
 }
 
+/** Latest in-memory founder build for this user (same-instance recall before DB). */
+export function getLatestFounderBuildJobForUser(userId = null) {
+  prune();
+  let best = null;
+  for (const job of jobs.values()) {
+    if (!job?.result) continue;
+    if (userId != null && userId !== '' && job.user_id != null
+      && String(job.user_id) !== String(userId)) {
+      continue;
+    }
+    if (!best || (job.updated_at || 0) > (best.updated_at || 0)) best = job;
+  }
+  if (best) return best;
+  if (userId == null || userId === '') return null;
+  for (const job of jobs.values()) {
+    if (!job?.result) continue;
+    if (!best || (job.updated_at || 0) > (best.updated_at || 0)) best = job;
+  }
+  return best;
+}
+
 export function isFounderBuildProofPending(result = {}) {
   const founderRequired = result?.founder_verification_required === true
     || /^founder_(surgical_html_patch|css_patch)/.test(String(result?.execution_path || ''));

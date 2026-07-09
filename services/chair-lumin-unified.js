@@ -76,8 +76,12 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     voice = `${voice}\n\n${strategicSection}`;
   }
 
+  const priorReceipt = systemFacts.last_build_receipt || null;
   const safeReply = sanitizeConversationReply
-    ? sanitizeConversationReply(voice, { command_truth: 'NO_COMMAND_RAN' })
+    ? sanitizeConversationReply(voice, {
+      command_truth: 'NO_COMMAND_RAN',
+      last_build_receipt: priorReceipt,
+    })
     : voice;
 
   return {
@@ -92,6 +96,7 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     dual_intent: dual.dual ? { personal: true, build: true } : null,
     human_summary_technical: safeReply,
     chair_native_facts: systemFacts,
+    last_build_receipt: priorReceipt,
     conversation_sanitized: safeReply !== voice,
     done_synopsis: null,
     next_synopsis: null,

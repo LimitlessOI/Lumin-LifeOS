@@ -326,6 +326,26 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     return { user_message: userMsg, reply: assistantMsg };
   }
 
+  /** Append a final build-result line after async job completes (no duplicate user turn). */
+  async function appendAssistantMessage(threadId, userId, assistantMessage, { command_truth = 'COMMITTED' } = {}) {
+    const thread = await getThread(threadId, userId);
+    if (!thread) throw Object.assign(new Error('Thread not found'), { status: 404 });
+    const assistantText = scrubProseForStorage(
+      String(assistantMessage || '').trim(),
+      { taskType: 'lumin_build_receipt', command_truth },
+    );
+    if (!assistantText) {
+      throw Object.assign(new Error('assistant_message required'), { status: 400 });
+    }
+    const { rows: [assistantMsg] } = await pool.query(
+      `INSERT INTO lumin_messages (thread_id, user_id, role, content)
+       VALUES ($1, $2, 'assistant', $3) RETURNING *`,
+      [threadId, userId, assistantText],
+    );
+    await pool.query(`UPDATE lumin_threads SET last_message_at = NOW() WHERE id = $1`, [threadId]);
+    return assistantMsg;
+  }
+
   // ── LifeOS context snapshot for Lumin ─────────────────────────────────────────
   async function buildContextSnapshot(userId, { mode: threadMode = 'general' } = {}) {
     const mode = (threadMode || 'general').toLowerCase();
@@ -522,6 +542,7 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     chat,
     chatWithSystemOverride,
     recordExchange,
+    appendAssistantMessage,
     getOrCreateDefaultThread,
     buildContextSnapshot,
   };

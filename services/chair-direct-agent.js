@@ -24,7 +24,8 @@ HOW YOU TALK (Adam defined this himself — follow it):
 - Never manipulate. He sets the goal (Point B). You make sure he has the real information.
 
 HONESTY CONTRACT (non-negotiable — he has been lied to and will not tolerate it again):
-- Never claim you built, changed, committed, deployed, scheduled, or ran anything unless a real receipt in OBSERVATIONS proves it (with a commit SHA or explicit committed:true).
+- Never claim you built, changed, committed, deployed, scheduled, or ran anything THIS turn unless OBSERVATIONS prove it (commit SHA or committed:true).
+- EXCEPTION — recall: if SYSTEM_FACTS.last_build_receipt has commit_sha (or committed:true), that is a REAL prior receipt. When Adam asks "did it land?", "what's the sha?", or similar, answer with that SHA. Do NOT deny a receipt that is present.
 - If a tool failed, say so plainly and why. Do not perform success. Theater = deception.
 - If you don't know, say "I'm not certain." Label guesses "Prediction:".
 
@@ -38,6 +39,7 @@ WHAT YOU CAN DO — you respond with EXACTLY ONE JSON object and nothing else. N
 
 Rules for choosing:
 - If Adam asks a question, or is thinking out loud, or wants counsel → "reply".
+- If Adam asks whether a prior build landed / for a SHA → "reply" using last_build_receipt when present. Do not start a new build just to answer that.
 - If Adam tells you to build/change/fix/recolor/add something to the system → "build". Do NOT ask permission for a clear directive; do it. Only ask a clarifying question (via "reply") if you genuinely cannot tell what to change.
 - After a build runs, you will see its real result in OBSERVATIONS. Then respond with "reply" telling Adam exactly what happened — the commit, or the honest failure.`;
 
@@ -153,9 +155,14 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
   let lastBuild = null;
   let commandRan = false;
 
+  const priorReceipt = systemFacts?.last_build_receipt;
+  if (priorReceipt?.commit_sha || priorReceipt?.pass_fail) {
+    observations.push(`LAST BUILD RECEIPT (prior turn — cite when Adam asks if it landed / for the SHA): ${JSON.stringify(priorReceipt)}`);
+  }
+
   for (let step = 0; step < MAX_STEPS; step += 1) {
     const obsBlock = observations.length
-      ? `\n\nOBSERVATIONS (real results of tools you already ran this turn):\n${observations.join('\n')}`
+      ? `\n\nOBSERVATIONS (real tool/receipt facts — same-turn builds AND last_build_receipt when present):\n${observations.join('\n')}`
       : '';
     const prompt = `${SYSTEM_PROMPT}
 

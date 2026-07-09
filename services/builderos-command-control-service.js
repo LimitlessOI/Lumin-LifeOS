@@ -318,3 +318,69 @@ export async function persistFounderBuildJobResult(pool, jobId, result = {}) {
     },
   });
 }
+
+/** Compact receipt Chair can cite on the next turn (recall — not a new command). */
+export function summarizeFounderBuildReceipt(job) {
+  if (!job?.result) return null;
+  const r = job.result;
+  const sha = r.sha || r.commit_sha || null;
+  const committed = r.committed === true || (r.pass_fail === 'PASS' && Boolean(sha));
+  const rawAt = job.updated_at || job.created_at || null;
+  const updatedAt = typeof rawAt === 'number' && Number.isFinite(rawAt)
+    ? new Date(rawAt).toISOString()
+    : (rawAt || null);
+  return {
+    job_id: job.id || null,
+    pass_fail: r.pass_fail || null,
+    committed,
+    commit_sha: sha,
+    target_file: r.target_file || null,
+    transport_status: r.transport_status || null,
+    first_blocker: r.first_blocker || null,
+    task_preview: String(job.task || '').slice(0, 220) || null,
+    updated_at: updatedAt,
+  };
+}
+
+/**
+ * Latest founder-interface build job for Chair recall (DB).
+ * Prefer user-scoped rows; fall back to any recent founder_interface_build.
+ */
+export async function getLatestFounderInterfaceBuildReceipt(pool, { userId = null } = {}) {
+  if (!pool) return null;
+  try {
+    let row = null;
+    if (userId != null && userId !== '') {
+      const scoped = await pool.query(
+        `SELECT id, instruction, requested_by, status, blocker, metadata_json, result_json, receipts_json,
+                created_at, updated_at, cancelled_at
+           FROM builderos_command_control_jobs
+          WHERE metadata_json->>'kind' = $1
+            AND (
+              metadata_json->>'user_id' = $2
+              OR metadata_json->>'user_id' = $3
+            )
+          ORDER BY updated_at DESC NULLS LAST
+          LIMIT 1`,
+        [FOUNDER_INTERFACE_JOB_KIND, String(userId), String(Number(userId))],
+      );
+      row = scoped.rows[0] || null;
+    }
+    if (!row) {
+      const any = await pool.query(
+        `SELECT id, instruction, requested_by, status, blocker, metadata_json, result_json, receipts_json,
+                created_at, updated_at, cancelled_at
+           FROM builderos_command_control_jobs
+          WHERE metadata_json->>'kind' = $1
+          ORDER BY updated_at DESC NULLS LAST
+          LIMIT 1`,
+        [FOUNDER_INTERFACE_JOB_KIND],
+      );
+      row = any.rows[0] || null;
+    }
+    const job = mapDbRowToFounderBuildJob(row);
+    return summarizeFounderBuildReceipt(job);
+  } catch {
+    return null;
+  }
+}

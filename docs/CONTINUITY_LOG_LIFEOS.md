@@ -8,6 +8,17 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Chair communication: last-build receipt recall
+
+### What happened
+- Natural talk proved Chair can build (PASS + SHA) but follow-ups denied the SHA ("nothing in OBSERVATIONS").
+- Wired `last_build_receipt` into native facts (memory + DB), direct-agent honesty/OBSERVATIONS, sanitize recall exception, and thread append when async jobs finish.
+
+### Next
+- Push → redeploy → natural build + "did it land?" must return the real SHA.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Founder UI login proof from Railway vault (no local password)
 
 ### What happened

@@ -1289,6 +1289,48 @@ export async function runFounderBuildWithSelfRepair(options) {
   return baseFailure;
 }
 
+function formatFounderBuildThreadReceipt(jobId, result = {}) {
+  const sha = result.sha || result.commit_sha || null;
+  const pass = result.pass_fail === 'PASS';
+  const committed = result.committed === true || (pass && Boolean(sha));
+  const target = result.target_file ? String(result.target_file).slice(0, 160) : null;
+  if (committed && sha) {
+    return [
+      `Build finished — PASS.`,
+      `Commit: ${sha}`,
+      target ? `Files: ${target}` : null,
+      result.transport_status ? `Transport: ${result.transport_status}` : null,
+      `(job ${String(jobId).slice(0, 8)}…)`,
+    ].filter(Boolean).join(' ');
+  }
+  if (pass && !sha) {
+    return `Build reported PASS but no commit SHA was returned (job ${String(jobId).slice(0, 8)}…).`;
+  }
+  return [
+    `Build finished — FAIL.`,
+    result.first_blocker ? `Blocker: ${String(result.first_blocker).slice(0, 220)}` : null,
+    `(job ${String(jobId).slice(0, 8)}…)`,
+  ].filter(Boolean).join(' ');
+}
+
+async function persistFounderBuildReceiptToThread(options, jobId, result) {
+  const luminPersist = options.luminPersist;
+  const userId = options.userId;
+  if (!luminPersist || !userId) return;
+  if (typeof luminPersist.getOrCreateDefaultThread !== 'function') return;
+  if (typeof luminPersist.appendAssistantMessage !== 'function') return;
+  try {
+    const thread = await luminPersist.getOrCreateDefaultThread(userId);
+    const text = formatFounderBuildThreadReceipt(jobId, result);
+    const commandTruth = (result.pass_fail === 'PASS' && (result.committed === true || result.sha || result.commit_sha))
+      ? 'COMMITTED'
+      : (result.pass_fail === 'FAIL' ? 'BUILD_ATTEMPTED' : 'NO_COMMAND_RAN');
+    await luminPersist.appendAssistantMessage(thread.id, userId, text, { command_truth: commandTruth });
+  } catch (err) {
+    console.warn('[founder-build-job] thread receipt persist failed:', err.message);
+  }
+}
+
 export function startFounderBuildJob(options) {
   const jobId = createFounderBuildJob({ task: options.task, userId: options.userId || null });
   const jobOptions = {
@@ -1320,6 +1362,7 @@ export function startFounderBuildJob(options) {
           console.warn('[founder-build-job] db result persist failed:', err.message);
         });
       }
+      await persistFounderBuildReceiptToThread(options, jobId, result);
     } catch (err) {
       const failResult = {
         pass_fail: 'FAIL',
@@ -1330,6 +1373,7 @@ export function startFounderBuildJob(options) {
       if (options.pool) {
         await persistFounderBuildJobResult(options.pool, jobId, failResult).catch(() => {});
       }
+      await persistFounderBuildReceiptToThread(options, jobId, failResult);
     }
   });
   return jobId;
