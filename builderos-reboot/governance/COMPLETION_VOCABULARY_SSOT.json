@@ -10,7 +10,7 @@
     "deploy_sha_present": "Deploy SHA present; runtime probe missing/failed/not run",
     "sentry_mechanical_pass": "SENTRY_CHECK_RESULT.json mechanical verdict is SENTRY_MECHANICAL_PASS",
     "staging_ready_cert": "PROJECT_CERTIFICATION.json levels.STAGING_READY === true",
-    "cleared_for_founder_alpha": "Technical + staging evidence; machine cleared Adam to test (no usability grant)",
+    "cleared_for_founder_alpha": "Technical + staging evidence PLUS credentialed pre-alpha Layer B PASS (LIFEOS_FOUNDER_LOGIN_* on live Railway; receipt products/receipts/FOUNDER_JWT_CHAT_PROOF.json or equivalent). Soft/command-key E2E alone is insufficient.",
     "founder_usability_confirm": "Explicit founder confirmation artifact (not soft probe)",
     "point_b_target_reached": "FOUNDER_USABILITY_PASS === true plus technical gates for that Point B target",
     "release_transport_proof": "Transport proof: commit/origin/deploy SHA match + runtime probe OK",

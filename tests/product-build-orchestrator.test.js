@@ -41,16 +41,30 @@ test('selectNextStep skips founder-gated and respects depends_on', () => {
   assert.equal(selectNextStep(q).step.id, 'b', 'b unblocks once a is done');
 });
 
-test('runNextStep marks done only when build has SHA AND verify passes', async () => {
+test('runNextStep marks done only when build has SHA AND verify passes AND deploy-truth passes', async () => {
+  const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
+  const r = await runNextStep(q, {
+    buildFn: async () => ({ ok: true, commit_sha: 'abc123' }),
+    verifyFn: async () => ({ ok: true }),
+    deployProofFn: async () => ({ ok: true }),
+  });
+  assert.equal(r.ok, true);
+  assert.equal(r.verified, true);
+  assert.equal(r.deploy_proven, true);
+  assert.equal(q.steps[0].status, STEP_STATUS.DONE);
+  assert.equal(q.steps[0].commit_sha, 'abc123');
+});
+
+test('missing deployProofFn cannot mark done (BUILT_NOT_LIVE — Wave 0 #10)', async () => {
   const q = makeQueue([{ id: 'a', target_file: 'f', task: 't' }]);
   const r = await runNextStep(q, {
     buildFn: async () => ({ ok: true, commit_sha: 'abc123' }),
     verifyFn: async () => ({ ok: true }),
   });
-  assert.equal(r.ok, true);
-  assert.equal(r.verified, true);
-  assert.equal(q.steps[0].status, STEP_STATUS.DONE);
-  assert.equal(q.steps[0].commit_sha, 'abc123');
+  assert.equal(r.ok, false);
+  assert.equal(r.stage, 'deploy');
+  assert.equal(r.claim_level, 'BUILT_NOT_LIVE');
+  assert.equal(q.steps[0].status, STEP_STATUS.PENDING);
 });
 
 test('build that claims ok but returns no SHA is treated as failure (no false green)', async () => {

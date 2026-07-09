@@ -119,6 +119,76 @@ export function classifyBuilderGap({
   };
 }
 
+/**
+ * Classify runtime/boot/deploy log failures into BuilderOS self-repair families (Wave 0 #12).
+ * @param {{ error?: string, log?: string, code?: string, stage?: string }} input
+ */
+export function classifyRuntimeFailure({ error = '', log = '', code = '', stage = '' } = {}) {
+  const signal = joinSignals([error, log, code, stage]);
+
+  if (/err_module_not_found|cannot find module|module not found/.test(signal)) {
+    return {
+      failure_family: 'BOOT_IMPORT_MISSING',
+      repairable: true,
+      severity: 'P0',
+      self_repair_class: 'commit_missing_import_or_remove_import',
+      signal: signal.slice(0, 240),
+    };
+  }
+  if (/syntaxerror|unexpected token|unexpected identifier/.test(signal)) {
+    return {
+      failure_family: 'BOOT_SYNTAX',
+      repairable: true,
+      severity: 'P0',
+      self_repair_class: 'syntax_fix',
+      signal: signal.slice(0, 240),
+    };
+  }
+  if (/content.?pin|sha256 mismatch|exact_output_contract|pin drift/.test(signal)) {
+    return {
+      failure_family: 'VERIFIER_DRIFT',
+      repairable: true,
+      severity: 'P1',
+      self_repair_class: 're_pin_content_or_restore_bytes',
+      signal: signal.slice(0, 240),
+    };
+  }
+  if (/stale|deploy.*behind|proof.*stale|dr-003|deploy_does_not_serve/.test(signal)) {
+    return {
+      failure_family: 'DEPLOY_STALE',
+      repairable: true,
+      severity: 'P1',
+      self_repair_class: 'redeploy_and_prove_sha',
+      signal: signal.slice(0, 240),
+    };
+  }
+  if (/econnreset|enotfound|etimedout|502|503|504|rate.?limit|provider/.test(signal)) {
+    return {
+      failure_family: 'EXTERNAL_FAILURE',
+      repairable: true,
+      severity: 'P1',
+      self_repair_class: 'park_and_retry',
+      signal: signal.slice(0, 240),
+    };
+  }
+  if (/missing.*(key|token|secret|password)|unauthorized/.test(signal)) {
+    return {
+      failure_family: 'SECRET_MISSING',
+      repairable: false,
+      severity: 'P0',
+      self_repair_class: 'page_human_for_secret',
+      signal: signal.slice(0, 240),
+    };
+  }
+  return {
+    failure_family: 'UNKNOWN_RUNTIME',
+    repairable: false,
+    severity: 'P2',
+    self_repair_class: 'escalate',
+    signal: signal.slice(0, 240),
+  };
+}
+
 export function summarizeGapFamilies(rows = []) {
   const buckets = {};
   let other = 0;

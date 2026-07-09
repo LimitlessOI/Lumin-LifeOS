@@ -3,14 +3,14 @@
   "blueprint_id": "COMMITMENT-ROUTE-V2-2026-06-16",
   "blueprint_status": "complete",
   "scope": "lifeos_commitment_route_v2",
-  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "summary": "Mechanical ARC host \u2014 legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/FOUNDER_PACKET.md",
   "acceptance_command": "npm run lifeos:commitment-route:v2-acceptance",
   "allowed_action_types": [
     "write_file_exact"
   ],
   "non_goals": [
-    "No shell_command steps in Builder — acceptance at blueprint root only"
+    "No shell_command steps in Builder \u2014 acceptance at blueprint root only"
   ],
   "intent_sources": [
     "FOUNDER_PACKET.md",
@@ -33,7 +33,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e32b34f8c6000c2ef859482c9eea1d267bf752c3a365df0f16949c6558817757"
+        "sha256": "c92cb6dd746f85e52a2ae27a1d38763a631d18529f420a30024b492d17e446fe"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S01/lifeos-commitment-route.js"
@@ -43,7 +43,7 @@
       ],
       "dependencies": [],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCR2-S01-1"
@@ -67,7 +67,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "3104d5ff027928e7a6015a230840f151dc078589dc553d9b3f8a22231b5328c5"
+        "sha256": "5ccd2f7a4401db4c7c6ec62f1b359cebae3dfadc323b127e096d2dad76db0640"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S02/commitment-route-routes.js"
@@ -79,7 +79,7 @@
         "LCR2-S01"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCR2-S02-1"
@@ -103,7 +103,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+        "sha256": "996736b9761ac32417c1f1957ba9d2e4d1abf5b9580adfb688c343deac3d2461"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S03/register-runtime-routes.js"
@@ -115,7 +115,7 @@
         "LCR2-S02"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCR2-S03-1"
@@ -139,7 +139,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "5f3a43fe6839adedbf9e36ddb37a3584708f6d4a2794767e27ec1c76f4a8c2cf"
+        "sha256": "379bafe64b98b7fc67ae5e20dcdf45cba509a736a35324c33249bb9588dfe483"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S04/run-commitment-route-v2-acceptance.mjs"
@@ -151,7 +151,7 @@
         "LCR2-S03"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCR2-S04-1"

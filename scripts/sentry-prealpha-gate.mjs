@@ -17,6 +17,7 @@
  *   node scripts/sentry-prealpha-gate.mjs <product-id>
  *   node scripts/sentry-prealpha-gate.mjs --all
  *   node scripts/sentry-prealpha-gate.mjs --list
+ *   node scripts/sentry-prealpha-gate.mjs --all --enforce-creds
  * @ssot builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json
  */
 import { spawn } from 'node:child_process';
@@ -29,6 +30,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY_PATH = path.join(ROOT, 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json');
 const BASE = (process.env.PUBLIC_BASE_URL || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || '';
+const ENFORCE_CREDS = process.argv.includes('--enforce-creds');
 
 function readJson(absOrRel) {
   const abs = path.isAbsolute(absOrRel) ? absOrRel : path.join(ROOT, absOrRel);
@@ -131,8 +133,10 @@ async function runHttpLayer(layer) {
 }
 
 async function runLayer(layer) {
+  const needsFounderCreds = (layer.requiresEnv || []).some((e) => /LIFEOS_FOUNDER_LOGIN/.test(e));
+  const deferAllowed = layer.deferrableWithoutEnv && !(ENFORCE_CREDS && needsFounderCreds);
   const deferred = !envSatisfied(layer.requiresEnv);
-  if (deferred && layer.deferrableWithoutEnv) {
+  if (deferred && deferAllowed) {
     return { name: layer.name, ran: false, deferred: true, ok: true, findings: [], reason: `env not set: ${(layer.requiresEnv || []).join(', ')}` };
   }
   if (deferred) {
@@ -210,13 +214,19 @@ async function runProduct(product) {
   console.log(`\n▶ Self-fix feed: ${feed.findings_count} finding(s), ${feed.without_solution} without a solution → ${product.findingsFeed}`);
 
   // Fail-closed: every layer that RAN must pass. Deferred layers (env absent)
-  // pass here but the gate is only "both layers satisfied" when they actually ran.
+  // pass here unless --enforce-creds (founder maturity: credentialed Layer B required).
   const ranLayers = layerResults.filter((r) => r.ran);
-  const gateOk = layerResults.every((r) => r.ok);
-  const fullySatisfied = ranLayers.length === (product.layers || []).length && gateOk;
+  const deferredCredLayers = layerResults.filter(
+    (r) => r.deferred && /credential|founder.?login|LIFEOS_FOUNDER/i.test(String(r.reason || '')),
+  );
+  let gateOk = layerResults.every((r) => r.ok);
+  if (ENFORCE_CREDS && deferredCredLayers.length) {
+    gateOk = false;
+  }
+  const fullySatisfied = ranLayers.length === (product.layers || []).length && gateOk && !(ENFORCE_CREDS && deferredCredLayers.length);
   const anyDeferred = layerResults.some((r) => r.deferred);
 
-  console.log(`\n── GATE ${product.id}: ${gateOk ? 'PASS' : 'FAIL'}${anyDeferred ? ' (some layers deferred — run on prod with creds for full proof)' : fullySatisfied ? ' (all layers satisfied)' : ''} ──`);
+  console.log(`\n── GATE ${product.id}: ${gateOk ? 'PASS' : 'FAIL'}${ENFORCE_CREDS && deferredCredLayers.length ? ' (--enforce-creds: credentialed layer deferred)' : anyDeferred ? ' (some layers deferred — run on prod with creds for full proof)' : fullySatisfied ? ' (all layers satisfied)' : ''} ──`);
   return { id: product.id, ok: gateOk, fullySatisfied, findings_count: feed.findings_count, layers: layerResults.map((r) => ({ name: r.name, ok: r.ok, ran: r.ran, deferred: r.deferred })) };
 }
 

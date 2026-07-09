@@ -29,14 +29,24 @@
       "findingsFeed": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "layers": [
         {
-          "name": "B",
+          "name": "B-command-key",
           "kind": "human-sim",
           "type": "command",
           "run": ["scripts/run-real-app-e2e.mjs"],
           "receipt": "products/receipts/REAL_APP_E2E.json",
-          "requiresEnv": ["PUBLIC_BASE_URL"],
+          "requiresEnv": ["PUBLIC_BASE_URL", "COMMAND_CENTER_KEY"],
           "deferrableWithoutEnv": true,
-          "note": "Drives the real LifeOS app in a real browser as the founder would: loads app, opens the Lumin drawer, asks counsel questions, runs a direct build, checks for JS/plumbing errors. Failing checks become solution-mandatory findings."
+          "note": "Browser walk with command-key JWT mint — plumbing probe, not founder-credential proof."
+        },
+        {
+          "name": "B-credentialed",
+          "kind": "human-sim-credentialed",
+          "type": "command",
+          "run": ["scripts/run-founder-jwt-chat-proof.mjs"],
+          "receipt": "products/receipts/FOUNDER_JWT_CHAT_PROOF.json",
+          "requiresEnv": ["PUBLIC_BASE_URL", "LIFEOS_FOUNDER_LOGIN_EMAIL", "LIFEOS_FOUNDER_LOGIN_PASSWORD"],
+          "deferrableWithoutEnv": true,
+          "note": "Founder maturity pre-alpha: real LIFEOS_FOUNDER_LOGIN_* login → JWT → founder chat. Required for CLEARED_FOR_FOUNDER_ALPHA when gate runs with --enforce-creds."
         }
       ]
     }

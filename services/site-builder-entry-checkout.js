@@ -3,7 +3,7 @@
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import logger from './logger.js';
-import { getStripeClient } from '../startup/environment.js';
+import { getStripeClient } from './stripe-client.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 
 export async function createPublishCheckoutSession({ clientId, businessName, baseUrl, pool }) {

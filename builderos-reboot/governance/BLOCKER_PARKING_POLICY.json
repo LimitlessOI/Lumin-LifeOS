@@ -1,0 +1,42 @@
+{
+  "schema": "blocker_parking_policy_v1",
+  "status": "LOCKED",
+  "version": "1.0",
+  "sealed_at": "2026-07-08",
+  "authority": "BRAINSTORM_AND_CONSENSUS.md LOCKED_WAVE_0_1 item 9",
+  "typed_blocker_ssot": "builderos-reboot/governance/TYPED_BLOCKER_SSOT.json",
+  "park_log": "data/builderos-parked-blockers.jsonl",
+  "defaults": {
+    "max_attempts_before_park": 3,
+    "retry_ttl_minutes": 60,
+    "continue_queue_when_parked": true
+  },
+  "per_class": {
+    "BLOCKED_EXTERNAL": {
+      "action": "park_and_retry",
+      "retry_ttl_minutes": 30,
+      "max_attempts_before_park": 3
+    },
+    "BLOCKED_SECRET": {
+      "action": "park_until_owner",
+      "retry_ttl_minutes": null,
+      "owner": "founder_or_ops"
+    },
+    "BLOCKED_TOOLING": {
+      "action": "retry_then_self_repair",
+      "retry_ttl_minutes": 15,
+      "max_attempts_before_park": 3,
+      "self_repair_class": true
+    },
+    "BLOCKED_STRATEGIC": {
+      "action": "park_until_founder",
+      "retry_ttl_minutes": null,
+      "owner": "founder"
+    },
+    "BLOCKED_FOUNDER_INPUT": {
+      "action": "park_until_founder",
+      "retry_ttl_minutes": null,
+      "owner": "founder"
+    }
+  }
+}

@@ -3,14 +3,14 @@
   "blueprint_id": "CAPTURE-PIPELINE-V2-2026-06-16",
   "blueprint_status": "complete",
   "scope": "lifeos_capture_pipeline_v2",
-  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "summary": "Mechanical ARC host \u2014 legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/FOUNDER_PACKET.md",
   "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance",
   "allowed_action_types": [
     "write_file_exact"
   ],
   "non_goals": [
-    "No shell_command steps in Builder — acceptance at blueprint root only"
+    "No shell_command steps in Builder \u2014 acceptance at blueprint root only"
   ],
   "intent_sources": [
     "FOUNDER_PACKET.md",
@@ -33,7 +33,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "7c51875b37b7bbba1528cefe8634951db2dff38230c8b692e17f34d1bacadbd4"
+        "sha256": "91e4449ab7149f0d30654f73b85f3501e686526a89873e1cecc625dcca92907f"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S01/lifeos-capture-pipeline.js"
@@ -43,7 +43,7 @@
       ],
       "dependencies": [],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCP2-S01-1"
@@ -67,7 +67,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "80e82afb21ddabad5a536e39252dbfd670dccb9280611625f6342c6ff123f8ec"
+        "sha256": "118f1694d57de7d1a582f1265c5daa8e14648af80b6faca4297815deaa321041"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S02/capture-pipeline-routes.js"
@@ -79,7 +79,7 @@
         "LCP2-S01"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCP2-S02-1"
@@ -95,7 +95,7 @@
     {
       "step_id": "LCP2-S03",
       "phase_id": "P2",
-      "title": "Voice Rail hook — inbox_staging on message",
+      "title": "Voice Rail hook \u2014 inbox_staging on message",
       "target_file": "routes/lifeos-voice-rail-routes.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -103,7 +103,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "2c505fa86c2a38e97ceafdb2aa448f8d941f4407350ecf4efd5db1708c8c92ca"
+        "sha256": "0000afc8aa69b07f59593784ccaea57dc1ac8b93cca34b3d3aaf31be91713bd5"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S03/lifeos-voice-rail-routes.js"
@@ -115,7 +115,7 @@
         "LCP2-S01"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCP2-S03-1"
@@ -139,7 +139,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "be67e4ccf3778432bacebbdee4a87a917ee35d151bea1ef01d2530af3cdd8b00"
+        "sha256": "996736b9761ac32417c1f1957ba9d2e4d1abf5b9580adfb688c343deac3d2461"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S04/register-runtime-routes.js"
@@ -151,7 +151,7 @@
         "LCP2-S02"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCP2-S04-1"
@@ -175,7 +175,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "9c4f7f89a3ce73d090795a183d54eb1bcedb047b71339baffac9a52a55347d02"
+        "sha256": "d9a75618d2eda38b4a7dcc45a1c26a013f04a556b514f122c3c14176410f3d3c"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S05/run-capture-pipeline-v2-acceptance.mjs"
@@ -187,7 +187,7 @@
         "LCP2-S04"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-LCP2-S05-1"

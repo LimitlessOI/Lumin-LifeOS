@@ -59,7 +59,7 @@
 
 ### Gap to close (honest)
 
-Today some acceptances still run on localhost, and founder UI proof can FAIL while TECHNICAL_PASS is green. **Pre-alpha is not complete until Layer B + credentialed prod walkthrough PASS for that product.** That gap is work, not doctrine.
+**Enforcement path (Wave 0 close):** `scripts/sentry-prealpha-gate.mjs --enforce-creds` + registry Layer `B-credentialed` (`scripts/run-founder-jwt-chat-proof.mjs` with `LIFEOS_FOUNDER_LOGIN_*`). Soft/command-key E2E alone cannot grant `CLEARED_FOR_FOUNDER_ALPHA`. Remaining work: run credentialed gate on prod with founder login env present and keep the receipt green.
 
 ---
 

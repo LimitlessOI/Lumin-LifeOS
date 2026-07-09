@@ -26,6 +26,7 @@ const SPINE_ENTRIES = [
   'services/founder-build-self-repair.js',
   'services/point-b-navigator.js',
   'startup/register-runtime-routes.js',
+  'startup/register-founder-runtime-routes.js',
 ];
 
 const REQUIRED_FILES = [

@@ -1,0 +1,58 @@
+{
+  "schema": "typed_blocker_ssot_v1",
+  "status": "LOCKED",
+  "version": "1.0",
+  "sealed_at": "2026-07-08",
+  "authority": "BRAINSTORM_AND_CONSENSUS.md LOCKED_WAVE_0_1 item 8",
+  "classes": [
+    {
+      "id": "BLOCKED_EXTERNAL",
+      "means": "Third-party / network / provider outage outside BuilderOS control",
+      "retryable": true,
+      "park_default": true
+    },
+    {
+      "id": "BLOCKED_SECRET",
+      "means": "Missing or invalid credential / API key / vault secret",
+      "retryable": false,
+      "park_default": true,
+      "owner": "founder_or_ops"
+    },
+    {
+      "id": "BLOCKED_TOOLING",
+      "means": "Local/CI tooling, import resolution, syntax, harness pin drift",
+      "retryable": true,
+      "park_default": false
+    },
+    {
+      "id": "BLOCKED_STRATEGIC",
+      "means": "Product/strategy choice required before continuing",
+      "retryable": false,
+      "park_default": true,
+      "owner": "founder"
+    },
+    {
+      "id": "BLOCKED_FOUNDER_INPUT",
+      "means": "Waiting on explicit founder confirmation or packet",
+      "retryable": false,
+      "park_default": true,
+      "owner": "founder"
+    }
+  ],
+  "stage_map": {
+    "build": "BLOCKED_TOOLING",
+    "verify": "BLOCKED_TOOLING",
+    "deploy": "BLOCKED_EXTERNAL",
+    "functional_proof": "BLOCKED_TOOLING",
+    "auth": "BLOCKED_SECRET",
+    "founder_packet": "BLOCKED_FOUNDER_INPUT",
+    "strategy": "BLOCKED_STRATEGIC"
+  },
+  "signal_map": [
+    { "pattern": "missing.*(key|token|secret|password|credential)|unauthorized|401|403", "class": "BLOCKED_SECRET" },
+    { "pattern": "founder_packet|founder_gated|awaiting_founder|human_required", "class": "BLOCKED_FOUNDER_INPUT" },
+    { "pattern": "strategic|product.?decision|scope.?choice", "class": "BLOCKED_STRATEGIC" },
+    { "pattern": "ERR_MODULE_NOT_FOUND|cannot find module|syntax|import.?smoke|content.?pin|sha256", "class": "BLOCKED_TOOLING" },
+    { "pattern": "timeout|ECONNRESET|ENOTFOUND|provider|rate.?limit|502|503|504|deploy_does_not_serve", "class": "BLOCKED_EXTERNAL" }
+  ]
+}

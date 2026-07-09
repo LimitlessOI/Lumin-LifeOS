@@ -11,6 +11,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const TYPED_BLOCKERS_PATH = path.join(ROOT, 'builderos-reboot/governance/TYPED_BLOCKER_SSOT.json');
+const PARKING_POLICY_PATH = path.join(ROOT, 'builderos-reboot/governance/BLOCKER_PARKING_POLICY.json');
+const PARK_LOG = path.join(ROOT, 'data/builderos-parked-blockers.jsonl');
 
 export const STEP_STATUS = Object.freeze({
   PENDING: 'pending',
@@ -19,6 +22,58 @@ export const STEP_STATUS = Object.freeze({
   BLOCKED: 'blocked',
   FOUNDER_GATED: 'founder_gated',
 });
+
+function loadJsonSafe(p) {
+  try {
+    return JSON.parse(fs.readFileSync(p, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+export function resolveTypedBlockerClass({ stage = '', reason = '' } = {}) {
+  const ssot = loadJsonSafe(TYPED_BLOCKERS_PATH);
+  if (!ssot) return 'BLOCKED_TOOLING';
+  const signal = `${stage} ${reason}`.toLowerCase();
+  for (const row of ssot.signal_map || []) {
+    try {
+      if (new RegExp(row.pattern, 'i').test(signal)) return row.class;
+    } catch {
+      /* ignore bad pattern */
+    }
+  }
+  return ssot.stage_map?.[stage] || 'BLOCKED_TOOLING';
+}
+
+function parkBlockedStep(step, queue, info, blockerClass) {
+  const policy = loadJsonSafe(PARKING_POLICY_PATH);
+  const per = policy?.per_class?.[blockerClass] || {};
+  if (per.action === 'retry_then_self_repair' && !per.park_default) return null;
+  const parkUntilMs = per.retry_ttl_minutes
+    ? Date.now() + Number(per.retry_ttl_minutes) * 60_000
+    : null;
+  const entry = {
+    schema: 'builderos_parked_blocker_v1',
+    at: new Date().toISOString(),
+    product_id: queue.product_id,
+    step_id: step.id,
+    blocker_class: blockerClass,
+    stage: info.stage,
+    reason: info.reason,
+    park_until: parkUntilMs ? new Date(parkUntilMs).toISOString() : null,
+    owner: per.owner || null,
+    action: per.action || 'park',
+  };
+  try {
+    fs.mkdirSync(path.dirname(PARK_LOG), { recursive: true });
+    fs.appendFileSync(PARK_LOG, `${JSON.stringify(entry)}\n`);
+  } catch {
+    /* non-fatal on read-only fs */
+  }
+  step.blocker_class = blockerClass;
+  step.park_until = entry.park_until;
+  return entry;
+}
 
 const TERMINAL = new Set([STEP_STATUS.DONE, STEP_STATUS.BLOCKED, STEP_STATUS.FOUNDER_GATED]);
 
@@ -193,17 +248,24 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
     return failStep(step, queue, maxAttempts, { stage: 'verify', reason: verify.detail || 'verify_failed', commit_sha: sha }, logger);
   }
 
-  let deployProven = null;
-  if (typeof deployProofFn === 'function') {
-    const proof = await deployProofFn({ commit_sha: sha, product_id: queue.product_id, step });
-    deployProven = Boolean(proof && proof.ok);
-    if (!deployProven) {
-      return failStep(step, queue, maxAttempts, {
-        stage: 'deploy',
-        reason: (proof && proof.reason) || 'deploy_does_not_serve_built_sha (not live — no false live)',
-        commit_sha: sha,
-      }, logger);
-    }
+  // Wave 0 #10: deploy-truth required before DONE/live. Missing prover → BUILT_NOT_LIVE (not done).
+  if (typeof deployProofFn !== 'function') {
+    return failStep(step, queue, maxAttempts, {
+      stage: 'deploy',
+      reason: 'deploy_proof_required (BUILT_NOT_LIVE — no false live/done without deploy-truth)',
+      commit_sha: sha,
+      claim_level: 'BUILT_NOT_LIVE',
+    }, logger);
+  }
+  const proof = await deployProofFn({ commit_sha: sha, product_id: queue.product_id, step });
+  const deployProven = Boolean(proof && proof.ok);
+  if (!deployProven) {
+    return failStep(step, queue, maxAttempts, {
+      stage: 'deploy',
+      reason: (proof && proof.reason) || 'deploy_does_not_serve_built_sha (not live — no false live)',
+      commit_sha: sha,
+      claim_level: 'BUILT_NOT_LIVE',
+    }, logger);
   }
 
   let functionalProven = null;
@@ -221,10 +283,10 @@ export async function runNextStep(queue, { buildFn, verifyFn, deployProofFn, mod
 
   step.status = STEP_STATUS.DONE;
   step.completed_at = new Date().toISOString();
-  if (deployProven !== null) step.deploy_proven = deployProven;
+  step.deploy_proven = true;
   if (functionalProven !== null) step.functional_proven = functionalProven;
-  logger?.info?.({ step: step.id, commit_sha: sha, deploy_proven: deployProven, functional_proven: functionalProven }, '[PRODUCT-BUILD] step done');
-  return { ok: true, step_id: step.id, commit_sha: sha, verified: true, deploy_proven: deployProven, functional_proven: functionalProven, summary: queueSummary(queue) };
+  logger?.info?.({ step: step.id, commit_sha: sha, deploy_proven: true, functional_proven: functionalProven }, '[PRODUCT-BUILD] step done');
+  return { ok: true, step_id: step.id, commit_sha: sha, verified: true, deploy_proven: true, functional_proven: functionalProven, summary: queueSummary(queue) };
 }
 
 /**
@@ -264,9 +326,14 @@ export function evaluateModuleHealthForStep(healthBody, targetFile) {
 
 function failStep(step, queue, maxAttempts, info, logger) {
   step.last_error = info.reason;
+  const blockerClass = resolveTypedBlockerClass({ stage: info.stage, reason: info.reason });
+  step.blocker_class = blockerClass;
+  if (info.claim_level) step.claim_level = info.claim_level;
   const exhausted = step.attempts >= maxAttempts;
   step.status = exhausted ? STEP_STATUS.BLOCKED : STEP_STATUS.PENDING;
-  logger?.warn?.({ step: step.id, stage: info.stage, attempts: step.attempts, exhausted }, `[PRODUCT-BUILD] step ${info.stage} failed`);
+  let parked = null;
+  if (exhausted) parked = parkBlockedStep(step, queue, info, blockerClass);
+  logger?.warn?.({ step: step.id, stage: info.stage, attempts: step.attempts, exhausted, blocker_class: blockerClass }, `[PRODUCT-BUILD] step ${info.stage} failed`);
   return {
     ok: false,
     step_id: step.id,
@@ -274,6 +341,9 @@ function failStep(step, queue, maxAttempts, info, logger) {
     reason: info.reason,
     attempts: step.attempts,
     blocked: exhausted,
+    blocker_class: blockerClass,
+    claim_level: info.claim_level || null,
+    parked: Boolean(parked),
     summary: queueSummary(queue),
   };
 }

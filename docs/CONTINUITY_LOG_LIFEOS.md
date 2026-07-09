@@ -8,6 +8,18 @@
 
 ---
 
+## [BUILD] Update 2026-07-08 — Wave 0 control block (5–12) shipped
+
+### What happened
+- Closed Wave 0 items 5–12 as CI/governance + runtime gates: import-smoke/authoring canary, CONTENT re-pin truth, canonical spine, typed blockers + parking, mandatory deploy-truth before DONE, dual-path CI, runtime failure classifier (incl. BOOT_IMPORT_MISSING), credentialed pre-alpha Layer B + `--enforce-creds`.
+- Also fixed the crash class: spine import now covers `register-founder-runtime-routes` and ships missing `stripe-client.js`.
+
+### Next
+- Run `npm run sentry:gate:enforce-creds` on prod with founder login env; keep receipt green.
+- Full `factory:ci` on CI after push.
+
+---
+
 ## [BUILD] Update 2026-07-08 — Founder maturity phases sealed
 
 ### What happened

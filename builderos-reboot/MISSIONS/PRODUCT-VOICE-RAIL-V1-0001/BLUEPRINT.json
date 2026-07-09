@@ -3,14 +3,14 @@
   "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
   "blueprint_status": "complete",
   "scope": "voice_rail_v1_communication_layer",
-  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "summary": "Mechanical ARC host \u2014 legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "FOUNDER_PACKET.md",
   "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance",
   "allowed_action_types": [
     "write_file_exact"
   ],
   "non_goals": [
-    "No shell_command steps in Builder — acceptance at blueprint root only"
+    "No shell_command steps in Builder \u2014 acceptance at blueprint root only"
   ],
   "intent_sources": [
     "FOUNDER_PACKET.md",
@@ -33,7 +33,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d98add0893c8a7586ac69598958b3db84cf0fcfaefbefba12b6d24bb64ed77db"
+        "sha256": "bd42c1eff35bc5ada5ad8a333f105a3a7e25377ce0abcf2a58c4b416e09b3ec0"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S01/20260611_voice_rail_v1.sql"
@@ -43,7 +43,7 @@
       ],
       "dependencies": [],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-VRV1-S01-1"
@@ -59,7 +59,7 @@
     {
       "step_id": "VRV1-S02",
       "phase_id": "P1",
-      "title": "Voice Rail service — modes, intents, private, staging",
+      "title": "Voice Rail service \u2014 modes, intents, private, staging",
       "target_file": "services/voice-rail-v1.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
@@ -67,7 +67,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "92806b02630957df740e9a43f1f51238a57be4313280b1062219adef72f3f211"
+        "sha256": "f4379d35db0027f315d1c45837e94645ccf0a4077a6e2ea85f3b9c710c1a69ff"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S02/voice-rail-v1.js"
@@ -79,7 +79,7 @@
         "VRV1-S01"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-VRV1-S02-1"
@@ -103,7 +103,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "9e2baf945a0199cf12e54944bb5045d93d144e55aaa38a7e93baf2c16a0c53d7"
+        "sha256": "0000afc8aa69b07f59593784ccaea57dc1ac8b93cca34b3d3aaf31be91713bd5"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S03/lifeos-voice-rail-routes.js"
@@ -115,7 +115,7 @@
         "VRV1-S02"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-VRV1-S03-1"
@@ -139,7 +139,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "de3b575260411844d4068f2d20095caa13bb616bec0f39e819e47ec9ee159add"
+        "sha256": "e06e3a564b197fe52efef44d3c69e8f431d7f24eaa07cb1b993944ca3f0c986b"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S04/lifeos-voice-rail-v1.html"
@@ -151,7 +151,7 @@
         "VRV1-S03"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-VRV1-S04-1"
@@ -175,7 +175,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e634caea1985198a8d5726e3917b49b506f3b80adf93578ab12510525d3c7aab"
+        "sha256": "6233b80439ec066eb4cc680c844e8c45d4574c4e1603e61c90b50aad45625f98"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S05/run-voice-rail-v1-acceptance.mjs"
@@ -187,7 +187,7 @@
         "VRV1-S04"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-VRV1-S05-1"
@@ -211,7 +211,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "5c1caa8bd35dad63d20128ef7427f0c05389cca8939d41da89d787d265e8a3d3"
+        "sha256": "5c78a270b6f1f137d5a2ccd9610a5d7d43501d23d249406af7400ab5192066ea"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S07/run-founder-direct-provider-proof.mjs"
@@ -223,7 +223,7 @@
         "VRV1-S05"
       ],
       "non_goals": [
-        "No agent improvisation — byte contract only"
+        "No agent improvisation \u2014 byte contract only"
       ],
       "acceptance_test_ids": [
         "AT-VRV1-S07-1"

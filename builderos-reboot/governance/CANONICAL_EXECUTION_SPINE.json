@@ -1,0 +1,46 @@
+{
+  "schema": "canonical_execution_spine_v1",
+  "status": "LOCKED",
+  "version": "1.0",
+  "sealed_at": "2026-07-08",
+  "authority": "BRAINSTORM_AND_CONSENSUS.md LOCKED_WAVE_0_1 item 7",
+  "spine_id": "builderos_canonical_v1",
+  "primary_work_queue": "builderos-reboot/BP_PRIORITY.json",
+  "primary_entrypoints": [
+    "POST /factory/execute-step",
+    "POST /factory/ship-queue",
+    "POST /api/v1/lifeos/builder/build"
+  ],
+  "governed_shipping": {
+    "fence_env": "GOVERNED_FACTORY_ONLY",
+    "preferred_when_on": "POST /factory/ship-queue"
+  },
+  "deprecated_paths": [
+    {
+      "id": "system_build_auto",
+      "path": "POST /api/v1/system/build",
+      "note": "auto-builder — opt-in only"
+    },
+    {
+      "id": "continuous_queue",
+      "path": "lifeos-builder-continuous-queue",
+      "env": "BUILDER_QUEUE_ENABLED=1",
+      "note": "legacy continuous queue"
+    },
+    {
+      "id": "hist_mission_queue_product",
+      "path": "builderos-reboot/MISSION_QUEUE.json",
+      "note": "Hist-owned history index — not the live product work queue"
+    },
+    {
+      "id": "factory_staging_direct_commit",
+      "path": "factory-staging direct commit without cutover receipt",
+      "note": "bypass of cutover proof"
+    }
+  ],
+  "hist_demotion": {
+    "mission_queue": "builderos-reboot/MISSION_QUEUE.json",
+    "autopilot_env": "FACTORY_RECOVERY_OWNER_ENABLED",
+    "rule": "When BP_PRIORITY has incomplete product work, Hist autopilot must not run product shipping; recovery-only if explicitly enabled"
+  }
+}

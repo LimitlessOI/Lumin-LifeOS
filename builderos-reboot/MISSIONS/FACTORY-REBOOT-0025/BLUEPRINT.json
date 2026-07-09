@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "a7b260bf425a5e37e76d7064a077b0bdd3f8e3e1e8f8c9ba5b12bd7a35f71e5a"
+        "sha256": "10a44d42058eab2b1842d1bef372fbcef6a09669e9a76004329e341cc7ca29ab"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0025/CONTENT/OPERATOR_COMPLETE.md"
