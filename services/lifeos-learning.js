@@ -2,27 +2,18 @@
  * SYNOPSIS: Exports addItem — services/lifeos-learning.js.
  */
 export async function addItem(db, userId, data) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
+  const title = String(data?.title ?? '').trim();
+  if (!title) throw new Error('title is required');
 
-  const title = typeof data?.title === 'string' ? data.title.trim() : '';
-  if (!title) {
-    throw new TypeError('title is required');
-  }
-
-  const type = typeof data?.type === 'string' && data.type.trim() ? data.type.trim() : null;
-  const url = typeof data?.url === 'string' && data.url.trim() ? data.url.trim() : null;
-  const status = typeof data?.status === 'string' && data.status.trim() ? data.status.trim() : 'queued';
-  const keyInsight = typeof data?.key_insight === 'string' && data.key_insight.trim() ? data.key_insight.trim() : null;
+  const type = String(data?.type ?? 'reading').trim() || 'reading';
+  const url = data?.url == null ? null : String(data.url).trim() || null;
+  const keyInsight = data?.key_insight == null ? null : String(data.key_insight).trim() || null;
+  const status = normalizeStatus(data?.status ?? 'queued');
 
   const result = await db.query(
     `INSERT INTO learning_queue (user_id, title, type, url, status, key_insight)
      VALUES ($1, $2, $3, $4, $5, $6)
-     RETURNING *`,
+     RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
     [userId, title, type, url, status, keyInsight]
   );
 
@@ -30,23 +21,16 @@ export async function addItem(db, userId, data) {
 }
 
 export async function listItems(db, userId, { status } = {}) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-
   const params = [userId];
-  let where = 'user_id = $1';
+  let where = `user_id = $1`;
 
-  if (typeof status === 'string' && status.trim()) {
-    params.push(status.trim());
-    where += ` AND status = $${params.length}`;
+  if (status != null && String(status).trim() !== '') {
+    params.push(normalizeStatus(status));
+    where += ` AND status = $2`;
   }
 
   const result = await db.query(
-    `SELECT *
+    `SELECT id, user_id, title, type, url, status, key_insight, created_at, updated_at
      FROM learning_queue
      WHERE ${where}
      ORDER BY created_at DESC, id DESC`,
@@ -56,56 +40,38 @@ export async function listItems(db, userId, { status } = {}) {
   return result.rows;
 }
 
-export async function updateItem(db, userId, id, patch) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-  if (!id) {
-    throw new TypeError('id is required');
-  }
-
+export async function updateItem(db, userId, id, patch = {}) {
   const updates = [];
   const params = [];
-  let i = 1;
+  let idx = 1;
 
-  if (patch && Object.prototype.hasOwnProperty.call(patch, 'status')) {
-    const status = typeof patch.status === 'string' ? patch.status.trim() : '';
-    if (!['queued', 'reading', 'done'].includes(status)) {
-      throw new TypeError('status must be queued, reading, or done');
-    }
-    updates.push(`status = $${i++}`);
-    params.push(status);
+  if (patch.status !== undefined) {
+    updates.push(`status = $${idx++}`);
+    params.push(normalizeStatus(patch.status));
   }
 
-  if (patch && Object.prototype.hasOwnProperty.call(patch, 'key_insight')) {
-    const keyInsight =
-      typeof patch.key_insight === 'string' && patch.key_insight.trim() ? patch.key_insight.trim() : null;
-    updates.push(`key_insight = $${i++}`);
-    params.push(keyInsight);
+  if (patch.key_insight !== undefined) {
+    updates.push(`key_insight = $${idx++}`);
+    params.push(patch.key_insight == null ? null : String(patch.key_insight).trim() || null);
   }
 
-  if (!updates.length) {
+  if (updates.length === 0) {
     const current = await db.query(
-      `SELECT *
+      `SELECT id, user_id, title, type, url, status, key_insight, created_at, updated_at
        FROM learning_queue
-       WHERE id = $1 AND user_id = $2
-       LIMIT 1`,
+       WHERE id = $1 AND user_id = $2`,
       [id, userId]
     );
     return current.rows[0] ?? null;
   }
 
-  updates.push(`updated_at = now()`);
   params.push(id, userId);
 
   const result = await db.query(
     `UPDATE learning_queue
-     SET ${updates.join(', ')}
-     WHERE id = $${i++} AND user_id = $${i++}
-     RETURNING *`,
+     SET ${updates.join(', ')}, updated_at = NOW()
+     WHERE id = $${idx++} AND user_id = $${idx++}
+     RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
     params
   );
 
@@ -113,22 +79,18 @@ export async function updateItem(db, userId, id, patch) {
 }
 
 export async function deleteItem(db, userId, id) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-  if (!id) {
-    throw new TypeError('id is required');
-  }
-
   const result = await db.query(
     `DELETE FROM learning_queue
      WHERE id = $1 AND user_id = $2
-     RETURNING *`,
+     RETURNING id`,
     [id, userId]
   );
 
-  return result.rows[0] ?? null;
+  return result.rowCount > 0;
+}
+
+function normalizeStatus(status) {
+  const value = String(status ?? '').trim().toLowerCase();
+  if (value === 'queued' || value === 'reading' || value === 'done') return value;
+  throw new Error('invalid status');
 }
