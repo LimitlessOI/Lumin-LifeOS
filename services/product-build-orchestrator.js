@@ -110,6 +110,23 @@ export function normalizeQueue(raw, sourcePath = null) {
   return { ...raw, steps, _sourcePath: sourcePath };
 }
 
+function isAutoRegisterConfigStep(step) {
+  return String(step?.target_file || '').replace(/\\/g, '/') === 'config/auto-registered-product-modules.json';
+}
+
+function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
+  if (doneIds.has(depId)) return true;
+  // Chicken-egg break: a route step blocked ONLY for missing auto-registration
+  // must not strand the register-config step that unblocks it. Allow the
+  // auto-register config step to run when its dep is blocked with that error.
+  if (!isAutoRegisterConfigStep(consumingStep)) return false;
+  const dep = (queue.steps || []).find((s) => s.id === depId);
+  if (!dep || dep.status !== STEP_STATUS.BLOCKED) return false;
+  return /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
+    String(dep.last_error || ''),
+  );
+}
+
 /**
  * The next actionable step: first non-terminal, non-gated step whose declared
  * dependencies are all done. Founder-gated steps are surfaced separately so the
@@ -122,7 +139,7 @@ export function selectNextStep(queue) {
     if (TERMINAL.has(step.status)) continue;
     if (step.founder_gated) { gated.push(step); continue; }
     const deps = Array.isArray(step.depends_on) ? step.depends_on : [];
-    if (deps.every((d) => doneIds.has(d))) return { step, gated };
+    if (deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) return { step, gated };
   }
   return { step: null, gated };
 }
@@ -151,10 +168,25 @@ export function reviveStaleBlockedSteps(queue, {
     if (step.status !== STEP_STATUS.BLOCKED) continue;
     if (step.founder_gated) continue;
     const reviveCount = typeof step.revive_count === 'number' ? step.revive_count : 0;
-    if (reviveCount >= maxRevives) continue;
+    const autoRegBlock = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
+      String(step.last_error || ''),
+    );
+    // Auto-register chicken-egg: once the config step can run (or already did),
+    // allow one more revive past the normal cap so the route can prove mount.
+    // Cap auto-reg chicken-egg revives at maxRevives+3 so we don't spin forever.
+    const effectiveMax = autoRegBlock ? maxRevives + 3 : maxRevives;
+    if (reviveCount >= effectiveMax) continue;
     const lastAt = Date.parse(step.last_attempt_at || step.completed_at || '');
     const waited = Number.isFinite(lastAt) ? now - lastAt : Infinity;
-    if (waited < cooldownMs) continue;
+    if (waited < cooldownMs && !autoRegBlock) continue;
+    // For auto-reg blocks, still respect a short cooldown unless a sibling
+    // register-config step is pending/done (fix is in flight or landed).
+    if (autoRegBlock && waited < cooldownMs) {
+      const registerSibling = (queue.steps || []).find(
+        (s) => isAutoRegisterConfigStep(s) && s.status !== STEP_STATUS.BLOCKED,
+      );
+      if (!registerSibling) continue;
+    }
     step.status = STEP_STATUS.PENDING;
     step.attempts = 0;
     step.revive_count = reviveCount + 1;

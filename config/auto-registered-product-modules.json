@@ -26,7 +26,14 @@
       "path": "routes/general-browser-agent-routes.js",
       "register": "registerGeneralBrowserAgentRoutes",
       "enabled": true,
-      "note": "General goal-driven browser agent live surface (POST /api/v1/browser-agent/run). CONDUCTOR-GLUE wiring of the proven milestone-1 loop + runtime adapters (runGoalOnSession) to a live GLVAR session + cheapest-tier decider. Mounted in the founder lane so it goes live on prod, where GLVAR creds live, without editing the composition root."
+      "note": "General browser agent + consent-gated signup (POST /api/v1/browser-agent/run|signup|signup/approve). Paid checkout requires founder approved:true + consentToken; card from FOUNDER_PAYMENT_* env vault."
+    },
+    {
+      "path": "routes/account-manager-routes.js",
+      "register": "registerAccountManagerRoutes",
+      "mount_path": "/api/v1/accounts",
+      "enabled": true,
+      "note": "Managed accounts vault + recipe signups at /api/v1/accounts/* on founder lane."
     },
     {
       "path": "routes/marketing-session-routes.js",
@@ -57,6 +64,12 @@
       "register": "registerMarketingIntelRoutes",
       "enabled": true,
       "note": "SocialMediaOS Content Intelligence API (Priority Ideas subset). Built by the loop (queued smos-intel-routes); imports the four intel services (title-universe, script-scorer, publish-gate, repurpose) and exposes /api/v1/marketing/intel/*. Mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+    },
+    {
+      "path": "routes/lifeos-phase2-routes.js",
+      "register": "registerLifeosPhase2Routes",
+      "enabled": true,
+      "note": "LifeOS Phase 2 REST surface. Was blocked forever because s07 (auto-register) depended on s06 while s06 failed module-health for missing auto-register — chicken-egg. Mounted here so functional-proof can pass and the loop can finish Phase 2."
     }
   ]
 }

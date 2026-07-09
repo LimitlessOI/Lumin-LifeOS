@@ -1,0 +1,45 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "limitlessos",
+  "verify_script": null,
+  "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
+  "updated_at": "2026-07-09",
+  "steps": [
+    {
+      "id": "gv-scheduler",
+      "status": "pending",
+      "target_file": "services/go-vegas-outreach-scheduler.js",
+      "task": "Add a useful-work-guarded Go Vegas outreach scheduler that runs discover→enrich→invite→follow-up under daily caps without burning tokens when there is no work.",
+      "spec": "ESM module @ssot docs/products/limitlessos/PRODUCT_HOME.md. Export startGoVegasOutreachScheduler({ pool, notificationService, logger }) and getGoVegasOutreachSchedulerStatus(). Use createUsefulWorkGuard from services/useful-work-guard.js (and requireEnvVars/requireTableRows helpers if present). Prerequisites: pool present; skip hard if neither COMMAND_CENTER_KEY nor notification path can send (do not invent secrets). workCheck: COUNT go_vegas_prospects needing invite (status discovered/enriched with contact_email) OR follow-up eligible — if 0, still allow one discover tick when GO_VEGAS_ALLOW_DISCOVER_IDLE=1 else skip. execute: const outreach = createGoVegasOutreach({ pool, sendEmail, logger }); then in order outreach.discoverBusinesses({ count: 5 }), outreach.enrichProspects({ limit: 10 }), outreach.inviteBatch({ limit: 5 }), outreach.runFollowUpCron({}). Use EXACT method names inviteBatch + runFollowUpCron (not sendInvites). Honor getSendQuota / daily caps inside those methods. Interval from GO_VEGAS_SCHEDULER_MS default 21600000 (6h); boot delay 120000. Never log emails or secrets. Named exports only; no browser globals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 8000,
+      "expected_exports": ["startGoVegasOutreachScheduler", "getGoVegasOutreachSchedulerStatus"]
+    },
+    {
+      "id": "gv-boot-wire",
+      "status": "pending",
+      "target_file": "startup/register-founder-runtime-routes.js",
+      "task": "Start the Go Vegas outreach scheduler from the founder-builder runtime composition root after outreach routes mount.",
+      "spec": "Additive edit only (Zone 3). Import startGoVegasOutreachScheduler from ../services/go-vegas-outreach-scheduler.js. After createGoVegasOutreachRoutes(...), call startGoVegasOutreachScheduler({ pool, notificationService, logger }) inside try/catch (non-fatal warn on failure). Do not remove existing mounts. Keep @ssot docs/products/lifeos/PRODUCT_HOME.md on this file.",
+      "depends_on": ["gv-scheduler"],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 4000,
+      "file_contains": ["startGoVegasOutreachScheduler"]
+    },
+    {
+      "id": "gv-status-route",
+      "status": "pending",
+      "target_file": "routes/go-vegas-outreach-routes.js",
+      "task": "Expose scheduler status on GET /api/v1/go-vegas/scheduler so ops can see if the revenue loop is alive.",
+      "spec": "Additive edit. Import getGoVegasOutreachSchedulerStatus from ../services/go-vegas-outreach-scheduler.js. Add GET /api/v1/go-vegas/scheduler behind requireKey returning { ok:true, ...getGoVegasOutreachSchedulerStatus() }. Preserve existing routes. @ssot docs/products/limitlessos/PRODUCT_HOME.md.",
+      "depends_on": ["gv-scheduler"],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 4000,
+      "route": "GET /api/v1/go-vegas/scheduler"
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-07
+**Last Updated:** 2026-07-09 — Go Vegas BUILD_QUEUE enrolled (scheduler + boot wire + status route); financial priority #1.
 
 | Field | Value |
 |-------|-------|
@@ -197,6 +197,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 | Date | What | Why |
 |------|------|-----|
+| 2026-07-09 | **Go Vegas revenue queue enrolled** — `docs/products/limitlessos/BUILD_QUEUE.json` (gv-scheduler → boot wire → scheduler status route). Promoted `limitlessos` to #1 in `PRODUCT_BUILD_PRIORITY.json`. | Adam: take a revenue product end-to-end; nearest live money loop is Go Vegas outreach under daily caps. |
 | 2026-07-07 | **Go Vegas sender + reputation guard** — invites send **from `Adam Hopkins <adam@hopkinsgroup.org>`** (override: `GO_VEGAS_FROM_EMAIL`). Hard daily caps: **8 new invites**, **5 follow-ups**, **12 total/day** (`GO_VEGAS_MAX_*` env). Stops automatically when cap hit. | Founder: personal direct email for invites; do not burn inbox reputation with bulk volume. |
 | 2026-07-07 | **Go Vegas group URL locked** — default invite link `https://www.facebook.com/groups/govegas` in `config/go-vegas-campaign.js` (env override still supported). | Founder supplied canonical Facebook group for outreach CTAs. |
 | 2026-07-07 | **Go Vegas outreach pipeline v1** — `config/go-vegas-campaign.js`, `services/go-vegas-outreach.js`, `services/go-vegas-email-finder.js`, `routes/go-vegas-outreach-routes.js`, `scripts/go-vegas-outreach-pilot.mjs`, migration `20260707_go_vegas_outreach.sql`. Discover Las Vegas businesses (Google Places), scrape contact emails, send free-network invite with benefits copy, auto follow-up on days 3/7/14, pipeline CRM at `/api/v1/go-vegas/*`. | Adam: grow Go Vegas Facebook business network — free invite, sell benefits, persistent follow-up until they join. |

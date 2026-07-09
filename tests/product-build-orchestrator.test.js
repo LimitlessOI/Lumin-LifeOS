@@ -170,3 +170,23 @@ test('reviveStaleBlockedSteps makes a blocked step selectable again', () => {
   reviveStaleBlockedSteps(q);
   assert.equal(selectNextStep(q).step.id, 'a', 'revived a is selectable');
 });
+
+test('auto-register config step can run when route dep is blocked only for missing auto-register (chicken-egg)', () => {
+  const q = makeQueue([
+    {
+      id: 'route',
+      target_file: 'routes/lifeos-phase2-routes.js',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'route module not auto-registered — add to config/auto-registered-product-modules.json',
+      revive_count: 6,
+    },
+    {
+      id: 'reg',
+      target_file: 'config/auto-registered-product-modules.json',
+      task: 'register',
+      depends_on: ['route'],
+    },
+  ]);
+  assert.equal(selectNextStep(q).step.id, 'reg', 'register step unblocks despite blocked route dep');
+});

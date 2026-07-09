@@ -8,6 +8,19 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Self-repair chicken-egg + Go Vegas revenue queue
+
+### What happened
+- Never-stop was enabled but spinning `smos_intake_expansion` no-ops: LifeOS Phase 2 s06/s07 chicken-egg (route blocked for missing auto-register; register step depended on route) hit revive cap → `discoverBuildQueueWork()` returned 0.
+- Fix: orchestrator allows auto-register config steps when route dep is blocked only for missing auto-register; LifeOS queue reordered (s07 before s06) + phase2 auto-registered; Go Vegas revenue slice enrolled (`limitlessos` BUILD_QUEUE: gv-scheduler → boot wire → status route) and promoted to #1 financial priority.
+- Local: orchestrator tests 12/12; discovery selects `gv-scheduler` first.
+
+### Next
+- Push → Railway redeploy → watch never-stop for `product_build_limitlessos_gv-scheduler` (not intake spin).
+- After scheduler ships: prove `GET /api/v1/go-vegas/scheduler`.
+
+---
+
 ## [BUILD] Update 2026-07-08 — Wave 0 control block (5–12) shipped
 
 ### What happened

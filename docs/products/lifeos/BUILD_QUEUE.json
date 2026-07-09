@@ -78,11 +78,11 @@
       "completed_at": "2026-07-08T21:55:39.430Z"
     },
     {
-      "id": "s06",
-      "status": "blocked",
-      "target_file": "routes/lifeos-phase2-routes.js",
-      "task": "Register all phase-2 REST endpoints under /api/v1/lifeos",
-      "spec": "ESM module exporting registerLifeosPhase2Routes(app, deps) where deps={db, callCouncilMember, notifyFn}. Mounts: POST /api/v1/lifeos/sleep (logSleep), GET /api/v1/lifeos/sleep/summary, POST /api/v1/lifeos/habits (create habit), POST /api/v1/lifeos/habits/:id/log (log completion, increments streak), GET /api/v1/lifeos/habits, POST /api/v1/lifeos/journal/voice (accepts {transcript}, calls callCouncilMember('lumin', extractionPrompt), returns {commitments,patterns,emotionalSignals,suggestedActions}), POST /api/v1/lifeos/gratitude (logGratitude), GET /api/v1/lifeos/gratitude/themes, POST /api/v1/lifeos/finance/net-worth (insert snapshot), GET /api/v1/lifeos/finance/net-worth (list snapshots), POST /api/v1/lifeos/future-self/letter (createLetter), GET /api/v1/lifeos/future-self/letter, POST /api/v1/lifeos/energy (insert energy_log), GET /api/v1/lifeos/energy/curve (AI summary via callCouncilMember), POST /api/v1/lifeos/important-dates, GET /api/v1/lifeos/important-dates, POST /api/v1/lifeos/learning-queue (insert), GET /api/v1/lifeos/learning-queue, PATCH /api/v1/lifeos/learning-queue/:id (update status/key_insight). Imports services from s02,s03,s04,s05 plus inline db helpers for habits/energy/net-worth/learning-queue. All handlers validate req.user exists (401 if not). No browser globals.",
+      "id": "s07",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register phase-2 route module for auto-mount BEFORE proving s06 live (breaks chicken-egg)",
+      "spec": "Ensure entry {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"registerLifeosPhase2Routes\",\"enabled\":true} exists in modules[]. Preserve all existing entries. File must remain valid JSON. Do NOT depend on s06 being done — registration must land first so module-health can pass.",
       "depends_on": [
         "s02",
         "s03",
@@ -90,23 +90,29 @@
         "s05"
       ],
       "founder_gated": false,
-      "attempts": 3,
-      "commit_sha": "50b94d0543f940dc1208e16ee29a09b4eda692c7",
-      "last_attempt_at": "2026-07-09T00:30:48.784Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "revive_count": 6
+      "attempts": 1,
+      "completed_at": "2026-07-09T03:15:00.000Z",
+      "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register"
     },
     {
-      "id": "s07",
+      "id": "s06",
       "status": "pending",
-      "target_file": "config/auto-registered-product-modules.json",
-      "task": "Register phase-2 route module for auto-mount",
-      "spec": "Add entry {\"module\":\"routes/lifeos-phase2-routes.js\",\"register\":\"registerLifeosPhase2Routes\",\"deps\":[\"db\",\"callCouncilMember\",\"notifyFn\"]} to the JSON array. Preserve all existing entries. File must remain valid JSON.",
+      "target_file": "routes/lifeos-phase2-routes.js",
+      "task": "Prove phase-2 REST module mounts LIVE (file already exists — short-circuit via last commit + module-health)",
+      "spec": "ESM module exporting registerLifeosPhase2Routes(app, deps) where deps={db, callCouncilMember, notifyFn}. File already on main; after s07 auto-register, functional-proof must show module mounted. Do not full-rewrite if file exists and exports registerLifeosPhase2Routes.",
       "depends_on": [
-        "s06"
+        "s02",
+        "s03",
+        "s04",
+        "s05",
+        "s07"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "commit_sha": "50b94d0543f940dc1208e16ee29a09b4eda692c7",
+      "last_error": null,
+      "revive_count": 0,
+      "expected_exports": ["registerLifeosPhase2Routes"]
     },
     {
       "id": "s08",

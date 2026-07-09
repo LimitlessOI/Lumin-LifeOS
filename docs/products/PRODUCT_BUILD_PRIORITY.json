@@ -6,7 +6,7 @@
     "purpose": "Founder-owned financial priority order for the autonomous product-build loop. The never-stop factory builds eligible product work in this order (highest financial priority first). This is a BUSINESS decision — edit `priority` to change what the system builds first."
   },
   "schema": "product_build_priority_v1",
-  "updated_at": "2026-07-07",
+  "updated_at": "2026-07-09",
   "rules": {
     "financial_first": "`priority` is an ordered list of product_ids by financial priority, highest first. The loop builds listed products before unlisted ones.",
     "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity — a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
@@ -14,11 +14,13 @@
     "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
   },
   "priority": [
+    "limitlessos",
     "site-builder",
-    "marketingos"
+    "marketingos",
+    "lifeos"
   ],
   "notes": [
-    "Seeded 2026-07-06 with site-builder first per founder direction: it is the nearest revenue and the product being finished end-to-end first. Other products fall to maturity-based ordering until the founder sets their financial rank here.",
-    "2026-07-07: site-builder completed 11/11 autonomously. Founder direction: build MarketingOS next, starting with its first module SocialMediaOS (SMOS) Phase 1, then continue through the rest of MarketingOS as each phase's readiness gate opens. Added marketingos at rank 2 with a buildable Phase 1 BUILD_QUEUE.json (docs/products/marketingos/BUILD_QUEUE.json)."
+    "2026-07-09: limitlessos (Go Vegas outreach scheduler) promoted to #1 — nearest live revenue loop (invite LV businesses under daily caps). site-builder + marketingos queues are complete; lifeos Phase 2 unblocked after auto-register chicken-egg fix.",
+    "Seeded 2026-07-06 with site-builder first per founder direction. 2026-07-07: marketingos added at rank 2 for SMOS Phase 1."
   ]
 }
