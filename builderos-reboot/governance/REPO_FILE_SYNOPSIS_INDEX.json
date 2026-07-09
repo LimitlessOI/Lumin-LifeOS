@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T19:43:05.395Z",
+  "generated_at": "2026-07-09T19:46:58.611Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11360,
   "files": [
@@ -21579,9 +21579,9 @@
     {
       "path": "builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json",
       "synopsis": "BuilderOS artifact — LUMIN COMMUNICATION LAW.",
-      "bytes": 3768,
-      "mtime": "2026-06-26T19:30:59.080Z",
-      "indexed_at": "2026-07-09T19:43:05.395Z",
+      "bytes": 6019,
+      "mtime": "2026-07-09T19:46:18.522Z",
+      "indexed_at": "2026-07-09T19:46:58.611Z",
       "synopsis_index_only": true
     },
     {
@@ -36594,9 +36594,9 @@
     {
       "path": "docs/constitution/LUMIN_COMMUNICATION_DNA.md",
       "synopsis": "Lumin Communication DNA — translation not formula; twin-matched voice (constitutional)",
-      "bytes": 3214,
-      "mtime": "2026-06-29T17:21:07.963Z",
-      "indexed_at": "2026-07-09T19:43:05.395Z"
+      "bytes": 5548,
+      "mtime": "2026-07-09T19:45:53.670Z",
+      "indexed_at": "2026-07-09T19:46:58.611Z"
     },
     {
       "path": "docs/constitution/NORTH_STAR_SSOT.md",
@@ -38506,9 +38506,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 16065,
-      "mtime": "2026-06-25T22:11:39.150Z",
-      "indexed_at": "2026-07-09T19:43:05.395Z"
+      "bytes": 16434,
+      "mtime": "2026-07-09T19:46:25.298Z",
+      "indexed_at": "2026-07-09T19:46:58.611Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -39227,9 +39227,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 592295,
-      "mtime": "2026-07-09T19:38:08.201Z",
-      "indexed_at": "2026-07-09T19:43:05.395Z"
+      "bytes": 592336,
+      "mtime": "2026-07-09T19:46:44.842Z",
+      "indexed_at": "2026-07-09T19:46:58.611Z"
     },
     {
       "path": "docs/products/LIFERE.md",

@@ -85,6 +85,8 @@ For Adam, LifeOS is the cockpit and BuilderOS is the engine.
 | **Constitution** | `docs/constitution/LUMIN_COMMUNICATION_DNA.md` |
 | **Verify** | `npm run lifeos:lumin:communication:verify` (also `builder:preflight`, pre-build gate **PBG-05c**) |
 
+**How I speak (self):** `docs/constitution/LUMIN_COMMUNICATION_DNA.md#how-i-speak--self` — my own-voice intent above the floor set by the law (never manipulate, ask-before-assume/Socratic, mirror-not-gavel, name-the-price, be→do→have, conversational debrief, read-the-room, don't-cut-the-cocoon). Machine contract: `LUMIN_COMMUNICATION_LAW.json → self_voice`.
+
 **Amend only via gate-change** — not silent agent edits.
 
 **Enforcement:** `LUMIN_COMMUNICATION_LAW=1` (default) → every Chair translate turn runs variety injection + post-output formula gate with receipt.

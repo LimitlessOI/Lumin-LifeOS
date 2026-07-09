@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-09 — Chair communication: last-build receipt recall (SHA after PASS). |
+| **Last Updated** | 2026-07-03 — Communication DNA: added first-person `self_voice` (how I want to speak) to the comms law + constitution. |
 
 ---
 
