@@ -255,7 +255,7 @@
     },
     {
       "id": "s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-learning.js",
       "task": "Implement reading and learning queue service",
       "spec": "ES-module. Exports: addItem(db,userId,data), listItems(db,userId,{status}), updateItem(db,userId,id,patch), deleteItem(db,userId,id). patch may include status (queued|reading|done) and key_insight. Updates set updated_at=now(). No browser globals. No AI SDK.",
@@ -263,8 +263,11 @@
         "s1"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_error": null
+      "attempts": 1,
+      "last_error": null,
+      "commit_sha": "9a13ef795d0b353de0f4a4b1bde06d84eef89ed3",
+      "last_attempt_at": "2026-07-09T14:40:21.421Z",
+      "completed_at": "2026-07-09T14:40:21.701Z"
     },
     {
       "id": "s6",
