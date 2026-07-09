@@ -54,11 +54,11 @@
         "gv-scheduler"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 4000,
       "route": "GET /api/v1/go-vegas/scheduler",
       "completed_at": "2026-07-09T03:27:00.000Z",
-      "last_attempt_at": "2026-07-09T03:29:01.360Z",
+      "last_attempt_at": "2026-07-09T03:33:48.255Z",
       "note": "GAP-FILL: conductor added GET /api/v1/go-vegas/scheduler while never-stop was still building.",
       "commit_sha": "6cf61119d6c569695a05525b8a1b920c671314fc",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/go-vegas-outreach-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
