@@ -5,9 +5,28 @@ import { Router } from 'express';
 
 const router = Router();
 
-// Helper to extract owner_id
+const COMMAND_KEY_FALLBACK_SUB = 'emergency-key';
+
+// Helper to extract owner_id. Account JWTs are authoritative; client-supplied
+// owner_id is only accepted for explicit command-key/operator fallback calls.
+const getAuthenticatedOwnerId = (req) =>
+    req.user?.id ||
+    req.user?.user_id ||
+    req.user?.sub ||
+    req.lifeosUser?.id ||
+    req.lifeosUser?.user_id ||
+    req.lifeosUser?.sub ||
+    null;
+
 const getOwnerId = (req) => {
-    return req.user?.id || req.body.owner_id || req.query.owner_id;
+    const authenticatedOwnerId = getAuthenticatedOwnerId(req);
+    if (
+        authenticatedOwnerId &&
+        !(req.auth_mode === 'command_key_fallback' && authenticatedOwnerId === COMMAND_KEY_FALLBACK_SUB)
+    ) {
+        return authenticatedOwnerId;
+    }
+    return req.body?.owner_id || req.query?.owner_id || null;
 };
 
 // Helper to safely parse JSON from council member
@@ -44,7 +63,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { consent_type, consent_text } = req.body;
 
-            const validConsentTypes = ['initial', 'terms_update', 'data_sharing']; // Derived from typical consent types
+            const validConsentTypes = ['session_recording', 'voice_reuse', 'likeness_reuse', 'data_sharing'];
             if (!validConsentTypes.includes(consent_type)) {
                 return res.status(400).json({ ok: false, error: 'Invalid consent_type.' });
             }
@@ -181,7 +200,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const coachMessages = sessionResult.rows[0].coach_messages_json || [];
             const transcriptText = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
 
-            const extractionPrompt = `Given the following marketing coaching session transcript, extract key marketing content items. For each item, identify its type (e.g., "target_audience", "pain_point", "solution", "call_to_action", "benefit", "hook_idea"), the raw text from the transcript, and a confidence score (0-1). Return a JSON array of objects: [{ "extraction_type": "...", "raw_text": "...", "confidence_score": 0.X, "source_quote": "..." }].\n\nTranscript:\n${transcriptText}`;
+            const extractionPrompt = `Given the following marketing coaching session transcript, extract key marketing content items. For each item, identify its type using one of: hook, story, teaching, objection, offer, cta, emotional_truth; include the raw text from the transcript and a confidence score (0-1). Return a JSON array of objects: [{ "extraction_type": "hook", "raw_text": "...", "confidence_score": 0.X, "source_quote": "..." }].\n\nTranscript:\n${transcriptText}`;
 
             const aiResponseText = await callCouncilMember('marketing-extractor', extractionPrompt);
             const extractions = parseCouncilResponse(aiResponseText);
@@ -190,7 +209,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 throw new Error('AI extraction response was not a valid JSON array.');
             }
 
-            const validExtractionTypes = ['target_audience', 'pain_point', 'solution', 'call_to_action', 'benefit', 'hook_idea', 'testimonial', 'objection', 'value_proposition']; // Derived from typical content types
+            const validExtractionTypes = ['hook', 'story', 'teaching', 'objection', 'offer', 'cta', 'emotional_truth'];
             const insertedExtractions = [];
 
             for (const item of extractions) {
@@ -199,8 +218,8 @@ export async function registerMarketingSessionRoutes(app, deps) {
                     continue;
                 }
                 const insertResult = await pool.query(
-                    `INSERT INTO marketing_content_extractions (session_id, owner_id, extraction_type, raw_text, confidence_score, source_quote) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-                    [id, owner_id, item.extraction_type, item.raw_text, item.confidence_score, item.source_quote || item.raw_text]
+                    `INSERT INTO marketing_content_extractions (session_id, extraction_type, raw_text, confidence_score, source_quote) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+                    [id, item.extraction_type, item.raw_text, item.confidence_score, item.source_quote || item.raw_text]
                 );
                 insertedExtractions.push(insertResult.rows[0]);
             }
@@ -241,28 +260,32 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const brandVoice = channelProfileResult.rows[0]?.brand_voice_json || { tone: 'professional', style: 'direct' };
 
             const extractionsResult = await pool.query(
-                `SELECT * FROM marketing_content_extractions WHERE session_id = $1 AND owner_id = $2 ORDER BY id ASC`,
+                `SELECT e.*
+                   FROM marketing_content_extractions e
+                   JOIN marketing_sessions s ON s.id = e.session_id
+                  WHERE e.session_id = $1 AND s.owner_id = $2
+                  ORDER BY e.id ASC`,
                 [id, owner_id]
             );
             const extractions = extractionsResult.rows;
 
             const generatedPieces = [];
-            const validPlatforms = ['facebook', 'instagram', 'twitter', 'linkedin', 'blog', 'email']; // Derived from common platforms
-            const validFormats = ['text_post', 'short_video_script', 'long_form_article', 'email_newsletter']; // Derived from common formats
+            const validPlatforms = ['instagram', 'linkedin', 'x', 'facebook', 'email', 'general'];
+            const validFormats = ['post', 'caption', 'hook', 'subject_line', 'thread', 'short_script'];
 
             for (const extraction of extractions) {
-                const generationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, generate a marketing content piece based on the following extraction. The piece should be suitable for a social media post or a short article snippet. Extraction type: ${extraction.extraction_type}, Raw text: "${extraction.raw_text}". Focus on creating compelling copy. Return a JSON object: { "platform": "facebook", "format": "text_post", "content_text": "Generated content here" }. Choose a platform and format from: ${validPlatforms.join(', ')} and ${validFormats.join(', ')}.`;
+                const generationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, generate a marketing content piece based on the following extraction. The piece should be suitable for a social media post or a short article snippet. Extraction type: ${extraction.extraction_type}, Raw text: "${extraction.raw_text}". Focus on creating compelling copy. Return a JSON object: { "platform": "facebook", "format": "post", "content_text": "Generated content here" }. Choose a platform and format from: ${validPlatforms.join(', ')} and ${validFormats.join(', ')}.`;
 
                 const aiResponseText = await callCouncilMember('marketing-generator', generationPrompt);
                 const generatedContent = parseCouncilResponse(aiResponseText);
 
                 if (generatedContent && generatedContent.content_text) {
-                    const platform = validPlatforms.includes(generatedContent.platform) ? generatedContent.platform : 'blog';
-                    const format = validFormats.includes(generatedContent.format) ? generatedContent.format : 'text_post';
+                    const platform = validPlatforms.includes(generatedContent.platform) ? generatedContent.platform : 'general';
+                    const format = validFormats.includes(generatedContent.format) ? generatedContent.format : 'post';
 
                     const insertResult = await pool.query(
-                        `INSERT INTO marketing_content_pieces (session_id, owner_id, platform, format, content_text, status, generated_by_model, source_extraction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-                        [id, owner_id, platform, format, generatedContent.content_text, 'draft', 'marketing-generator', extraction.id]
+                        `INSERT INTO marketing_content_pieces (session_id, extraction_id, platform, format, content_text, status, generated_by_model) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+                        [id, extraction.id, platform, format, generatedContent.content_text, 'draft', 'marketing-generator']
                     );
                     generatedPieces.push(insertResult.rows[0]);
                 } else {
@@ -315,7 +338,11 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { id } = req.params;
             const contentResult = await pool.query(
-                `SELECT * FROM marketing_content_pieces WHERE session_id = $1 AND owner_id = $2 ORDER BY created_at ASC`,
+                `SELECT p.*
+                   FROM marketing_content_pieces p
+                   JOIN marketing_sessions s ON s.id = p.session_id
+                  WHERE p.session_id = $1 AND s.owner_id = $2
+                  ORDER BY p.created_at ASC`,
                 [id, owner_id]
             );
             res.status(200).json({ ok: true, pieces: contentResult.rows });
@@ -337,7 +364,10 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const { action, hint } = req.body;
 
             const pieceResult = await pool.query(
-                `SELECT * FROM marketing_content_pieces WHERE id = $1 AND owner_id = $2`,
+                `SELECT p.*
+                   FROM marketing_content_pieces p
+                   JOIN marketing_sessions s ON s.id = p.session_id
+                  WHERE p.id = $1 AND s.owner_id = $2`,
                 [id, owner_id]
             );
             if (pieceResult.rows.length === 0) {
@@ -353,13 +383,21 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             if (action === 'approve') {
                 const updateResult = await pool.query(
-                    `UPDATE marketing_content_pieces SET status = 'approved' WHERE id = $1 AND owner_id = $2 RETURNING *`,
+                    `UPDATE marketing_content_pieces p
+                        SET status = 'approved', updated_at = NOW()
+                       FROM marketing_sessions s
+                      WHERE p.id = $1 AND p.session_id = s.id AND s.owner_id = $2
+                      RETURNING p.*`,
                     [id, owner_id]
                 );
                 updatedPiece = updateResult.rows[0];
             } else if (action === 'reject') {
                 const updateResult = await pool.query(
-                    `UPDATE marketing_content_pieces SET status = 'rejected' WHERE id = $1 AND owner_id = $2 RETURNING *`,
+                    `UPDATE marketing_content_pieces p
+                        SET status = 'rejected', updated_at = NOW()
+                       FROM marketing_sessions s
+                      WHERE p.id = $1 AND p.session_id = s.id AND s.owner_id = $2
+                      RETURNING p.*`,
                     [id, owner_id]
                 );
                 updatedPiece = updateResult.rows[0];
@@ -371,8 +409,11 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 const brandVoice = channelProfileResult.rows[0]?.brand_voice_json || { tone: 'professional', style: 'direct' };
 
                 const extractionResult = await pool.query(
-                    `SELECT raw_text, extraction_type FROM marketing_content_extractions WHERE id = $1 AND owner_id = $2`,
-                    [currentPiece.source_extraction_id, owner_id]
+                    `SELECT e.raw_text, e.extraction_type
+                       FROM marketing_content_extractions e
+                       JOIN marketing_sessions s ON s.id = e.session_id
+                      WHERE e.id = $1 AND s.owner_id = $2`,
+                    [currentPiece.extraction_id, owner_id]
                 );
                 if (extractionResult.rows.length === 0) {
                     return res.status(400).json({ ok: false, error: 'Source extraction for regeneration not found.' });
@@ -389,7 +430,14 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 }
 
                 const updateResult = await pool.query(
-                    `UPDATE marketing_content_pieces SET content_text = $1, status = 'draft', regeneration_count = COALESCE(regeneration_count, 0) + 1, updated_at = NOW() WHERE id = $2 AND owner_id = $3 RETURNING *`,
+                    `UPDATE marketing_content_pieces p
+                        SET content_text = $1,
+                            status = 'draft',
+                            regeneration_count = COALESCE(regeneration_count, 0) + 1,
+                            updated_at = NOW()
+                       FROM marketing_sessions s
+                      WHERE p.id = $2 AND p.session_id = s.id AND s.owner_id = $3
+                      RETURNING p.*`,
                     [regeneratedContent.content_text, id, owner_id]
                 );
                 updatedPiece = updateResult.rows[0];
@@ -412,7 +460,11 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { id } = req.params;
             const approvedPiecesResult = await pool.query(
-                `SELECT platform, format, content_text FROM marketing_content_pieces WHERE session_id = $1 AND owner_id = $2 AND status = 'approved' ORDER BY created_at ASC`,
+                `SELECT p.platform, p.format, p.content_text
+                   FROM marketing_content_pieces p
+                   JOIN marketing_sessions s ON s.id = p.session_id
+                  WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved'
+                  ORDER BY p.created_at ASC`,
                 [id, owner_id]
             );
 
