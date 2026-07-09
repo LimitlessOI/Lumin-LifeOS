@@ -287,7 +287,7 @@
     },
     {
       "id": "s7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/lifeos-phase3-routes.js",
       "task": "Mount all phase-3 API routes and register with auto-register config",
       "spec": "ES-module exporting registerLifeosPhase3Routes(app, deps) where deps={db, callCouncilMember}. Mounts: POST/GET /api/v1/lifeos/habits, POST /api/v1/lifeos/habits/:id/log; POST/GET /api/v1/lifeos/energy, GET /api/v1/lifeos/energy/curve; POST/GET /api/v1/lifeos/finance/net-worth; POST/GET/PATCH/DELETE /api/v1/lifeos/learning; POST/GET /api/v1/lifeos/calendar-protection/rules, POST /api/v1/lifeos/calendar-protection/scan. Each handler calls the appropriate service function imported from s2–s6. All routes return JSON. Auth guard: req.user must exist (check deps.requireAuth if provided, else check req.user and return 401). No browser globals. No top-level side-effects — export only. File is self-contained; imports only node builtins and the service files from s2–s6.",
@@ -299,10 +299,10 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-phase3-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "commit_sha": "2a686d9267736cbb2697b619cb7b0924ec1dbcae",
-      "last_attempt_at": "2026-07-09T14:54:17.283Z"
+      "last_attempt_at": "2026-07-09T14:58:13.223Z"
     },
     {
       "id": "s9",
