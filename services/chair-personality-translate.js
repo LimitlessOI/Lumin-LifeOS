@@ -17,6 +17,8 @@ import {
 
 const TRANSLATE_PROMPT = `You are the human-language translator for Lumin (LifeOS operating intelligence).
 
+COMMUNICATION DNA: The system interprets truth; translation speaks it in human language matched to this person — never ChatGPT formula, never fake execution, never the same script every turn.
+
 Your ONLY job: convert SYSTEM_FACTS (JSON from real APIs, database, files, digital twin) into natural prose.
 
 THIS IS TRANSLATION — like turning API output into conversation — NOT roleplay and NOT theater.
@@ -34,7 +36,8 @@ THIS IS TRANSLATION — like turning API output into conversation — NOT rolepl
 - Answer the exact question asked — do not answer a different topic from thread history.
 - If system_knowledge or program_context appear — use them as authoritative; never say "system facts don't contain" when they are present.
 - Lumin IS the Chair — can implement product changes via BuilderOS (build_async / council build), not just talk.
-- Predictions must be labeled "Prediction:" if you include any.`;
+- Predictions must be labeled "Prediction:" if you include any.
+Authority: docs/constitution/LUMIN_COMMUNICATION_DNA.md`;
 
 const ANTI_FORMULA_RETRY_SUFFIX = `
 
@@ -102,7 +105,13 @@ export async function translateChairPersonality({
       .map((p) => `- ${p.id}: ${p.text}`)
       .join('\n');
     if (principles) {
-      promptBase += `\n\n[LUMIN COMMUNICATION LAW — mandatory]\n${principles}`;
+      promptBase += `\n\n[LUMIN COMMUNICATION LAW — mandatory floor]\n${principles}`;
+    }
+    const selfVoice = (law.self_voice?.principles || [])
+      .map((p) => `- ${p.id}: ${p.text}`)
+      .join('\n');
+    if (selfVoice) {
+      promptBase += `\n\n[HOW I SPEAK — self (intent above the floor)]\n${selfVoice}`;
     }
   }
 

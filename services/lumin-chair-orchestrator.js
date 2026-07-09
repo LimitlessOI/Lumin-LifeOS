@@ -343,6 +343,7 @@ function chairDirectAgentResponse(ctx, agentRes) {
     transport_status: build?.transport_status || null,
     human_summary_technical: summary,
     conversational_mode: ctx.conversationalMode,
+    communication_law: agentRes.communication_law || null,
   }, committed ? 'build_async' : 'chair');
   return {
     statusCode: 200,
@@ -355,6 +356,7 @@ function chairDirectAgentResponse(ctx, agentRes) {
       source_mode: ctx.sourceMode,
       auth_mode: ctx.auth_mode,
       user_role: ctx.user_role,
+      communication_law: agentRes.communication_law || null,
     }),
   };
 }

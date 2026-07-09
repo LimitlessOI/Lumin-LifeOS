@@ -36,4 +36,16 @@ test('auditLuminCommunicationWiring passes structural checks', () => {
   const audit = auditLuminCommunicationWiring();
   assert.equal(audit.ok, true);
   assert.ok(audit.score >= 8);
+  const byId = Object.fromEntries(audit.checks.map((c) => [c.id, c]));
+  assert.equal(byId['COMM-WIRE-10']?.ok, true, 'direct agent must enforce Communication Law');
+  assert.equal(byId['COMM-WIRE-11']?.ok, true, 'direct agent must carry COMMUNICATION DNA');
+});
+
+test('direct agent finalize path scrubs formula (module wiring)', async () => {
+  const src = await import('node:fs').then((fs) =>
+    fs.readFileSync(new URL('../services/chair-direct-agent.js', import.meta.url), 'utf8'),
+  );
+  assert.match(src, /finalizeHumanReply/);
+  assert.match(src, /enforceCommunicationLaw/);
+  assert.match(src, /COMMUNICATION DNA/);
 });

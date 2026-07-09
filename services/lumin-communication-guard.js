@@ -186,13 +186,48 @@ export function auditLuminCommunicationWiring() {
   );
   add(
     'COMM-WIRE-05',
-    /TRANSLATION.*NOT.*roleplay|NOT roleplay/i.test(translateSrc),
-    'translate prompt asserts translation-not-theater',
+    /TRANSLATION.*NOT.*roleplay|NOT roleplay/i.test(translateSrc)
+      && /COMMUNICATION DNA/i.test(translateSrc),
+    'translate prompt asserts DNA + translation-not-theater',
   );
 
   add('COMM-WIRE-06', fs.existsSync(path.join(ROOT, 'services/response-variety.js')), 'response-variety.js');
   add('COMM-WIRE-07', fs.existsSync(path.join(ROOT, 'services/communication-profile.js')), 'communication-profile.js');
   add('COMM-WIRE-08', fs.existsSync(path.join(ROOT, 'services/lumin-context-loader.js')), 'lumin-context-loader.js');
+
+  const directPath = path.join(ROOT, 'services/chair-direct-agent.js');
+  const directSrc = fs.existsSync(directPath) ? fs.readFileSync(directPath, 'utf8') : '';
+  add('COMM-WIRE-09', fs.existsSync(directPath), 'chair-direct-agent.js (founder front door)');
+  add(
+    'COMM-WIRE-10',
+    /enforceCommunicationLaw/.test(directSrc) && /lumin-communication-guard/.test(directSrc),
+    'direct agent enforces Communication Law on human replies',
+  );
+  add(
+    'COMM-WIRE-11',
+    /COMMUNICATION DNA/i.test(directSrc) && /never ChatGPT formula/i.test(directSrc),
+    'direct agent prompt carries Communication DNA',
+  );
+  add(
+    'COMM-WIRE-12',
+    /LUMIN_COMMUNICATION_DNA\.md/.test(directSrc),
+    'direct agent cites constitutional DNA authority',
+  );
+  add(
+    'COMM-WIRE-13',
+    /self_voice/.test(directSrc) && /HOW I SPEAK/.test(directSrc),
+    'direct agent injects self_voice principles',
+  );
+  add(
+    'COMM-WIRE-14',
+    Array.isArray(law.self_voice?.principles) && law.self_voice.principles.length >= 6,
+    'law JSON carries self_voice principles',
+  );
+  add(
+    'COMM-WIRE-15',
+    /self_voice/.test(translateSrc) && /HOW I SPEAK/.test(translateSrc),
+    'translate injects self_voice principles',
+  );
 
   const passed = checks.filter((c) => c.ok).length;
   return {

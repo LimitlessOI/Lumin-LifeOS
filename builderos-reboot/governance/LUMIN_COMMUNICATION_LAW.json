@@ -1,7 +1,7 @@
 {
   "schema": "lumin_communication_law_v1",
-  "updated_at": "2026-07-03",
-  "operator_lock": "Adam 2026-06-25 — translation is human language for API truth; formulaic ChatGPT voice erodes trust. Amend only via gate-change / Article VII.",
+  "updated_at": "2026-07-09",
+  "operator_lock": "Adam 2026-06-25 — translation is human language for API truth; formulaic ChatGPT voice erodes trust. Amend only via gate-change / Article VII. 2026-07-09 — founder front door (chair-direct-agent) must obey the same DNA + self_voice, not a parallel chatbot voice.",
   "supreme_authority": "docs/constitution/LUMIN_COMMUNICATION_DNA.md",
   "amendment_path": "npm run lifeos:gate-change-run — no silent IDE or agent edits to this law",
   "self_voice_added": "2026-07-03 — self_voice block added on operator direction (Adam): 'Put it in LifeOS communications how I want it to speak, label it as self.'",
@@ -21,6 +21,10 @@
     {
       "id": "APPS_ARE_DIGITAL_TOO",
       "text": "UI copy, toasts, panels, and install flows are communication — must respect twin prefs and anti-formula law (Adaptive Panel Runtime reads twin-backed directives)."
+    },
+    {
+      "id": "FRONT_DOOR_SAME_LAW",
+      "text": "The founder direct Chair agent (chair-direct-agent) is not exempt — same DNA voice, same anti-formula gate on human replies, same no-fake-execution honesty. Structured build receipts may skip formula scrub."
     }
   ],
   "self_voice": {
@@ -42,6 +46,7 @@
   },
   "canonical": {
     "translation_runtime": "services/chair-personality-translate.js",
+    "direct_chair_runtime": "services/chair-direct-agent.js",
     "variety_engine": "services/response-variety.js",
     "communication_profile": "services/communication-profile.js",
     "twin_context": "services/lumin-context-loader.js",
@@ -107,6 +112,9 @@
     "chair-personality-translate.js imports lumin-communication-guard and response-variety",
     "translateChairPersonality calls wrapPromptWithVariety when pool+userId present",
     "translateChairPersonality calls enforceCommunicationLaw on output before return",
-    "response variety logResponse after successful translate when styles available"
+    "response variety logResponse after successful translate when styles available",
+    "chair-direct-agent.js imports lumin-communication-guard and enforces Communication Law on reply prose",
+    "chair-direct-agent SYSTEM_PROMPT carries COMMUNICATION DNA one-sentence + anti-formula",
+    "chair-direct-agent and translate inject self_voice principles from the law JSON"
   ]
 }

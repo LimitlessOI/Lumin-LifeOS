@@ -4,7 +4,7 @@
 
 **Status:** SUPREME COMMUNICATION LAW — every Lumin turn, overlay copy, and agent must obey or violate §2.6 (misleading/trust erosion).  
 **Machine contract:** `builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json`  
-**Runtime:** `services/lumin-communication-guard.js` · `services/chair-personality-translate.js`  
+**Runtime:** `services/lumin-communication-guard.js` · `services/chair-personality-translate.js` · `services/chair-direct-agent.js` (founder front door — same law)  
 **Verify:** `npm run lifeos:lumin:communication:verify` · in `builder:preflight` · in `builderos-pre-build-gate`
 
 **Operator lock:** Adam 2026-06-25 — locked into system DNA. Bypassing this law is architectural drift and trust violation.
@@ -62,7 +62,9 @@ Digital twin + communication profile apply to **every account**. Apps and UI are
 | `npm run lifeos:lumin:communication:verify` | CI, manual, agents |
 | `builder:preflight` | Pre-commit (strict when key set) |
 | `builderos-pre-build-gate` | Harness / deploy path |
-| Runtime `enforceCommunicationLaw()` | Every Chair translate turn |
+| Runtime `enforceCommunicationLaw()` | Every Chair translate turn **and** every direct-agent human `reply` |
+
+**Not theater:** Claiming connection, builds, or empathy without SYSTEM_FACTS / OBSERVATIONS is a §2.6 violation. Structured build receipts (PASS + SHA) are truth, not formula — they may skip anti-formula scrub.
 
 **Env:** `LUMIN_COMMUNICATION_LAW=1` (default). Setting `0` is **operator-only emergency** — must receipt why.
 

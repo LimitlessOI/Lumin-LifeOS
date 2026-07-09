@@ -8,6 +8,17 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Chair front door obeys Communication DNA
+
+### What happened
+- Adam pointed at `docs/constitution/LUMIN_COMMUNICATION_DNA.md` — make live chat speak that way, not theater.
+- Direct agent prompt rewritten to DNA stack; `enforceCommunicationLaw` on human replies; law JSON + wiring audit cover front door.
+
+### Next
+- Redeploy → talk naturally in drawer; formula/theater should scrub; receipts still cite real SHAs.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Chair communication: last-build receipt recall
 
 ### What happened
