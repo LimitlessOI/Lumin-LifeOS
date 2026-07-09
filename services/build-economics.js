@@ -124,6 +124,7 @@ export function estimateSegments(segments = [], summary = { byClass: {}, overall
   const coldUsd = estimateCostUsd(DEFAULT_MODEL, DEFAULT_PROMPT_TOKENS, DEFAULT_COMPLETION_TOKENS, env);
   let usd = 0;
   let minutes = 0;
+  let tokens = 0;
   let historyBackedCount = 0;
   const perSegment = [];
 
@@ -134,31 +135,37 @@ export function estimateSegments(segments = [], summary = { byClass: {}, overall
     let source;
     let segUsd;
     let segMinutes;
+    let segTokens;
 
     if (classStat && classStat.samples > 0) {
       source = `class:${cls}`;
       segUsd = classStat.avgUsd;
       segMinutes = classStat.avgMinutes;
+      segTokens = classStat.avgTokens;
       historyBackedCount += 1;
     } else if (overall && overall.samples > 0) {
       source = 'overall';
       segUsd = overall.avgUsd;
       segMinutes = overall.avgMinutes;
+      segTokens = overall.avgTokens;
       historyBackedCount += 1;
     } else {
       source = 'cold-start';
       segUsd = coldUsd;
       segMinutes = (Number(seg.estimated_hours) || DEFAULT_SEGMENT_HOURS) * 60;
+      segTokens = DEFAULT_PROMPT_TOKENS + DEFAULT_COMPLETION_TOKENS;
     }
 
     usd += segUsd;
     minutes += segMinutes;
+    tokens += segTokens || 0;
     perSegment.push({
       segmentId: seg.id ?? null,
       title: seg.title ?? null,
       stabilityClass: cls,
       estimatedUsd: parseFloat(segUsd.toFixed(5)),
       estimatedMinutes: parseFloat(segMinutes.toFixed(2)),
+      estimatedTokens: Math.round(segTokens || 0),
       source,
     });
   }
@@ -168,6 +175,7 @@ export function estimateSegments(segments = [], summary = { byClass: {}, overall
     segmentCount: segments.length,
     estimatedUsd: parseFloat(usd.toFixed(4)),
     estimatedMinutes: parseFloat(minutes.toFixed(1)),
+    estimatedTokens: Math.round(tokens),
     confidence: segments.length === 0 ? 'none' : confidenceFor(historyBackedCount ? totalSamples : 0),
     historyBackedSegments: historyBackedCount,
     perSegment,

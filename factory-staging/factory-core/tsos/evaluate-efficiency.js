@@ -11,6 +11,7 @@ import { modelRoutingEvaluation } from './model-routing-evaluator.js';
 export function evaluateEfficiency({ stepMetrics, historical = [] } = {}) {
   const proposals = [];
   const tokenCost = Number(stepMetrics?.token_cost) || 0;
+  const estimatedUsd = Number(stepMetrics?.estimated_usd) || 0;
   const latency = Number(stepMetrics?.latency_ms) || 0;
   const waste = Boolean(stepMetrics?.waste);
 
@@ -37,8 +38,10 @@ export function evaluateEfficiency({ stepMetrics, historical = [] } = {}) {
   return {
     measured: {
       token_cost: tokenCost,
+      estimated_usd: estimatedUsd,
       latency_ms: latency,
       waste,
+      efficiency_complete: tokenCost > 0 && latency > 0,
     },
     proposals,
     authority_note: 'Proposals require human or SENTRY review — TSOS does not apply optimizations silently',

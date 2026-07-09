@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T01:23:12.430Z",
+  "generated_at": "2026-07-09T01:30:50.182Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11318,
   "files": [
@@ -36586,9 +36586,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 42665,
-      "mtime": "2026-07-09T01:22:59.201Z",
-      "indexed_at": "2026-07-09T01:23:12.430Z"
+      "bytes": 43291,
+      "mtime": "2026-07-09T01:30:35.688Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38685,9 +38685,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 210039,
-      "mtime": "2026-07-09T01:22:56.740Z",
-      "indexed_at": "2026-07-09T01:23:12.430Z"
+      "bytes": 210669,
+      "mtime": "2026-07-09T01:30:19.288Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39128,9 +39128,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 602254,
-      "mtime": "2026-07-09T01:08:05.849Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 602751,
+      "mtime": "2026-07-09T01:30:45.067Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39458,9 +39458,9 @@
     {
       "path": "docs/products/project-governance/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Project Governance",
-      "bytes": 65247,
-      "mtime": "2026-07-09T01:22:59.194Z",
-      "indexed_at": "2026-07-09T01:23:12.430Z"
+      "bytes": 65656,
+      "mtime": "2026-07-09T01:30:19.417Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "docs/products/project-governance/READINESS_CHECKLIST.md",
@@ -59601,9 +59601,9 @@
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
       "synopsis": "STEP 4 — codegen as an UNTRUSTED authoring sub-step (the \"dumb pipe\").",
-      "bytes": 4148,
-      "mtime": "2026-07-07T21:41:40.923Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "bytes": 4846,
+      "mtime": "2026-07-09T01:29:54.609Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -59632,9 +59632,9 @@
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 10968,
-      "mtime": "2026-07-08T23:19:14.948Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 11253,
+      "mtime": "2026-07-09T01:29:57.259Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
@@ -59999,9 +59999,9 @@
     {
       "path": "factory-staging/factory-core/tsos/evaluate-efficiency.js",
       "synopsis": "TSOS efficiency evaluation — proposals only; never mission authority.",
-      "bytes": 1644,
-      "mtime": "2026-06-21T21:38:43.798Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 1800,
+      "mtime": "2026-07-09T01:30:11.626Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/model-routing-evaluator.js",
@@ -60020,9 +60020,9 @@
     {
       "path": "factory-staging/factory-core/tsos/record-step-metrics.js",
       "synopsis": "Pure transform — no persistence. For tests and full-loop proof.",
-      "bytes": 1888,
-      "mtime": "2026-06-21T21:38:43.799Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 2049,
+      "mtime": "2026-07-09T01:30:05.761Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/TSOS_HOOK_BOUNDARY.md",
@@ -60034,9 +60034,9 @@
     {
       "path": "factory-staging/factory-core/tsos/tsos-guardrails.js",
       "synopsis": "TSOS guardrails — efficiency measurement only; never mission authority.",
-      "bytes": 2197,
-      "mtime": "2026-06-21T21:38:59.051Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 2258,
+      "mtime": "2026-07-09T01:29:52.210Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/tsos-summary.js",
@@ -64860,9 +64860,9 @@
     {
       "path": "routes/factory-mount-routes.js",
       "synopsis": "Mounts the governed factory hot path (BPB → Builder → SENTRY → TSOS → Historian)",
-      "bytes": 8010,
-      "mtime": "2026-07-07T21:41:40.928Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "bytes": 9204,
+      "mtime": "2026-07-09T01:29:57.284Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -80272,9 +80272,9 @@
     {
       "path": "services/build-economics.js",
       "synopsis": "services/build-economics.js — record + predict build cost and time.",
-      "bytes": 7302,
-      "mtime": "2026-07-09T01:22:30.972Z",
-      "indexed_at": "2026-07-09T01:23:12.430Z",
+      "bytes": 7606,
+      "mtime": "2026-07-09T01:29:50.333Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -81544,10 +81544,10 @@
     },
     {
       "path": "services/duration-truth.js",
-      "synopsis": "Duration truth — founder-facing time claims must cite measured averages, never AI guesses.",
-      "bytes": 13638,
-      "mtime": "2026-07-09T01:21:48.122Z",
-      "indexed_at": "2026-07-09T01:23:12.430Z",
+      "synopsis": "Duration + efficiency truth — founder-facing time/cost claims from measured averages only.",
+      "bytes": 17436,
+      "mtime": "2026-07-09T01:29:38.976Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86773,9 +86773,9 @@
     {
       "path": "tests/build-economics.test.js",
       "synopsis": "tests/build-economics.test.js — unit tests for build cost/time prediction.",
-      "bytes": 3300,
-      "mtime": "2026-07-05T19:16:17.077Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "bytes": 3455,
+      "mtime": "2026-07-09T01:30:16.607Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z",
       "ssot": [
         "docs/products/project-governance/PRODUCT_HOME.md"
       ]
@@ -87214,9 +87214,9 @@
     {
       "path": "tests/duration-truth.test.js",
       "synopsis": "tests/duration-truth.test.js — measured-only duration gate.",
-      "bytes": 5923,
-      "mtime": "2026-07-09T01:22:40.254Z",
-      "indexed_at": "2026-07-09T01:23:12.430Z",
+      "bytes": 6724,
+      "mtime": "2026-07-09T01:30:14.032Z",
+      "indexed_at": "2026-07-09T01:30:50.182Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

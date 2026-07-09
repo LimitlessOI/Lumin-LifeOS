@@ -79,6 +79,13 @@ export async function runAuthoring(step, codegenRunner) {
     return { ...base, ok: false, reason: 'codegen_empty', model_tier: result?.model_tier || null };
   }
 
+  const usage = result?.usage && typeof result.usage === 'object' ? result.usage : null;
+  const promptTokens = Number(usage?.prompt_tokens ?? usage?.promptTokens ?? result?.prompt_tokens) || 0;
+  const completionTokens = Number(usage?.completion_tokens ?? usage?.completionTokens ?? result?.completion_tokens) || 0;
+  const totalTokens = Number(usage?.total_tokens ?? usage?.totalTokens ?? result?.total_tokens)
+    || (promptTokens + completionTokens);
+  const estimatedUsd = Number(usage?.estimated_usd ?? usage?.estimatedUsd ?? result?.estimated_usd) || 0;
+
   return {
     ...base,
     ok: true,
@@ -86,6 +93,10 @@ export async function runAuthoring(step, codegenRunner) {
     content_sha256: crypto.createHash('sha256').update(Buffer.from(content, 'utf8')).digest('hex'),
     model_tier: result?.model_tier || null,
     escalated: Boolean(result?.escalated),
+    token_cost: totalTokens,
+    prompt_tokens: promptTokens,
+    completion_tokens: completionTokens,
+    estimated_usd: estimatedUsd,
     // Explicit provenance record: assertions are the blueprint's, not codegen's.
     assertion_provenance: 'blueprint',
   };

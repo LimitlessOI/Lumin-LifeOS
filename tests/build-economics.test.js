@@ -33,8 +33,11 @@ test('estimateSegments uses class average when available', () => {
   assert.equal(est.estimatedUsd, 0.65);
   // safe 1.5min + needs-review 5min = 6.5
   assert.equal(est.estimatedMinutes, 6.5);
+  // safe avgTokens 5000 + needs-review 12000 = 17000
+  assert.equal(est.estimatedTokens, 17000);
   assert.equal(est.historyBackedSegments, 2);
   assert.equal(est.perSegment[0].source, 'class:safe');
+  assert.equal(est.perSegment[0].estimatedTokens, 5000);
 });
 
 test('estimateSegments falls back to overall then cold-start', () => {

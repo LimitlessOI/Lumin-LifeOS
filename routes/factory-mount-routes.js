@@ -66,7 +66,28 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
               const raw = await callCouncilMember(member, prompt, { taskType: 'builder_lane' });
               const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
               if (content && content.trim()) {
-                return { content, model_tier: member, escalated: i > 0 };
+                // Prefer real usage when council returns an object; otherwise estimate from text length.
+                const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;
+                const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);
+                const completionTokens = Number(usage?.completion_tokens) || Math.ceil(content.length / 4);
+                const totalTokens = Number(usage?.total_tokens) || (promptTokens + completionTokens);
+                // Conservative USD estimate when provider usage lacks cost (free tiers → 0).
+                const estimatedUsd = Number(usage?.estimated_usd) || 0;
+                return {
+                  content,
+                  model_tier: member,
+                  escalated: i > 0,
+                  usage: {
+                    prompt_tokens: promptTokens,
+                    completion_tokens: completionTokens,
+                    total_tokens: totalTokens,
+                    estimated_usd: estimatedUsd,
+                  },
+                  prompt_tokens: promptTokens,
+                  completion_tokens: completionTokens,
+                  total_tokens: totalTokens,
+                  estimated_usd: estimatedUsd,
+                };
               }
               lastError = `empty_output_from:${member}`;
             } catch (err) {

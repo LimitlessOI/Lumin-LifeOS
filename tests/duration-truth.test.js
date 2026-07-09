@@ -96,9 +96,9 @@ test('estimateFromMeasuredHistory install_step uses fixture metrics and scales b
   fs.mkdirSync(metricsDir, { recursive: true });
   const lines = [
     { latency_ms: 10, step_id: 'fixture' },
-    { latency_ms: 6000, step_id: 's1', recorded_at: '2026-07-01T00:00:00Z' },
-    { latency_ms: 8000, step_id: 's2', recorded_at: '2026-07-01T00:01:00Z' },
-    { latency_ms: 7000, step_id: 's3', recorded_at: '2026-07-01T00:02:00Z' },
+    { latency_ms: 6000, token_cost: 1200, estimated_usd: 0.002, step_id: 's1', recorded_at: '2026-07-01T00:00:00Z' },
+    { latency_ms: 8000, token_cost: 1800, estimated_usd: 0.004, step_id: 's2', recorded_at: '2026-07-01T00:01:00Z' },
+    { latency_ms: 7000, token_cost: 1500, estimated_usd: 0.003, step_id: 's3', recorded_at: '2026-07-01T00:02:00Z' },
   ];
   fs.writeFileSync(path.join(metricsDir, 'tsos-step-metrics.jsonl'), lines.map((o) => JSON.stringify(o)).join('\n'));
 
@@ -106,6 +106,9 @@ test('estimateFromMeasuredHistory install_step uses fixture metrics and scales b
   assert.equal(one.ok, true);
   assert.equal(one.sample_count, 3);
   assert.equal(one.estimated_ms, 7000);
+  assert.equal(one.estimated_tokens, 1500);
+  assert.equal(one.estimated_usd, 0.003);
+  assert.equal(one.efficiency.complete, true);
 
   const n = estimateFromMeasuredHistory(OPERATION_CLASSES.INSTALL_STEP, {
     root: dir,
@@ -116,8 +119,22 @@ test('estimateFromMeasuredHistory install_step uses fixture metrics and scales b
   assert.equal(n.step_count, 4);
   assert.equal(n.estimated_ms, 28000);
   assert.equal(n.estimated_minutes, 0.47);
+  assert.equal(n.estimated_tokens, 6000);
+  assert.equal(n.estimated_usd, 0.012);
 
   fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('buildEfficiencyTriad reports missing token/money legs honestly', async () => {
+  const { buildEfficiencyTriad } = await import('../services/duration-truth.js');
+  const triad = buildEfficiencyTriad([
+    { duration_ms: 1000 },
+    { duration_ms: 2000 },
+  ]);
+  assert.equal(triad.complete, false);
+  assert.deepEqual(triad.missing, ['tokens', 'money']);
+  assert.equal(triad.time.avg_ms, 1500);
+  assert.equal(triad.tokens.reason, 'NO_MEASURED_TOKENS');
 });
 
 test('estimateFromMeasuredHistory blueprint fails closed when too few foundation receipts', () => {

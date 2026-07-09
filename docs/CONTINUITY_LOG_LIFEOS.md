@@ -8,6 +8,21 @@
 
 ---
 
+## [BUILD] Update 2026-07-08 — Efficiency triad (time + tokens + USD)
+
+### What happened
+- Adam: cannot judge efficiency without measuring tokens and money alongside time.
+- Extended duration-truth with `buildEfficiencyTriad`; estimates carry tokens/USD when measured; missing legs reported honestly (`NO_MEASURED_TOKENS` / `NO_MEASURED_USD`).
+- Fixed factory write path that always recorded `token_cost: 0` — codegen runner + authoring + TSOS metrics now persist token/USD.
+
+### Verification
+- `node --test tests/duration-truth.test.js tests/build-economics.test.js` → 17/17
+
+### Next
+- Push; continue Wave 0 #5.
+
+---
+
 ## [BUILD] Update 2026-07-08 — Duration truth hard gate (measured ETAs only)
 
 ### What happened

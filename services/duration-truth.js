@@ -1,12 +1,12 @@
 /**
- * SYNOPSIS: Duration truth — founder-facing time claims must cite measured averages, never AI guesses.
+ * SYNOPSIS: Duration + efficiency truth — founder-facing time/cost claims from measured averages only.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
- * Hard gate for "how long will this take?" / "what time is it?":
+ * Hard gate for "how long / how many tokens / how much money?":
  * - Clock answers come from the host clock (ISO + timezone), not the model.
- * - Duration estimates require measured samples (receipts / build_economics / filtered step metrics).
- * - Cold-start / seed / model-invented minutes are REJECTED for founder-facing claims.
- * - Insufficient history → INSUFFICIENT_MEASURED_HISTORY (honest), never a fabricated ETA.
+ * - Efficiency = measured time + tokens + USD. Missing any leg is reported honestly, never invented.
+ * - Cold-start / seed / model-invented minutes or dollars are REJECTED for founder-facing claims.
+ * - Insufficient history → INSUFFICIENT_MEASURED_HISTORY (honest), never a fabricated ETA/cost.
  */
 
 import fs from 'node:fs';
@@ -56,11 +56,64 @@ function percentile(nums, p) {
   return a[idx];
 }
 
+function positiveNums(samples, key) {
+  return samples
+    .map((s) => Number(s[key]))
+    .filter((n) => Number.isFinite(n) && n > 0);
+}
+
+/** Efficiency triad: time + tokens + money. Never invents missing legs. */
+export function buildEfficiencyTriad(samples = []) {
+  const durations = samples
+    .map((s) => Number(s.duration_ms))
+    .filter((n) => Number.isFinite(n) && n >= 0);
+  const tokens = positiveNums(samples, 'token_cost').length
+    ? positiveNums(samples, 'token_cost')
+    : positiveNums(samples, 'total_tokens');
+  const usd = positiveNums(samples, 'estimated_usd');
+  const timeOk = durations.length > 0;
+  const tokensOk = tokens.length > 0;
+  const moneyOk = usd.length > 0;
+  return {
+    time: timeOk
+      ? {
+        sample_count: durations.length,
+        avg_ms: Math.round(mean(durations)),
+        median_ms: Math.round(median(durations)),
+        p90_ms: Math.round(percentile(durations, 90)),
+      }
+      : { sample_count: 0, avg_ms: null, reason: 'NO_MEASURED_DURATION' },
+    tokens: tokensOk
+      ? {
+        sample_count: tokens.length,
+        avg_tokens: Math.round(mean(tokens)),
+        median_tokens: Math.round(median(tokens)),
+        total_tokens_observed: Math.round(tokens.reduce((s, n) => s + n, 0)),
+      }
+      : { sample_count: 0, avg_tokens: null, reason: 'NO_MEASURED_TOKENS' },
+    money: moneyOk
+      ? {
+        sample_count: usd.length,
+        avg_usd: Number(mean(usd).toFixed(5)),
+        median_usd: Number(median(usd).toFixed(5)),
+        total_usd_observed: Number(usd.reduce((s, n) => s + n, 0).toFixed(5)),
+      }
+      : { sample_count: 0, avg_usd: null, reason: 'NO_MEASURED_USD' },
+    complete: timeOk && tokensOk && moneyOk,
+    missing: [
+      !timeOk ? 'time' : null,
+      !tokensOk ? 'tokens' : null,
+      !moneyOk ? 'money' : null,
+    ].filter(Boolean),
+  };
+}
+
 function finalizeSamples(samples, { operation, minSamples = MIN_SAMPLES_DEFAULT } = {}) {
   const durations = samples
     .map((s) => Number(s.duration_ms))
     .filter((n) => Number.isFinite(n) && n >= 0);
   const n = durations.length;
+  const efficiency = buildEfficiencyTriad(samples);
   if (n < minSamples) {
     return {
       ok: false,
@@ -71,6 +124,9 @@ function finalizeSamples(samples, { operation, minSamples = MIN_SAMPLES_DEFAULT 
       measurement_source: 'clock',
       estimated_ms: null,
       estimated_minutes: null,
+      estimated_tokens: null,
+      estimated_usd: null,
+      efficiency,
       message:
         `Only ${n} measured sample(s) for ${operation}; need ≥${minSamples}. `
         + 'No founder-facing ETA until more real runs are recorded.',
@@ -86,10 +142,13 @@ function finalizeSamples(samples, { operation, minSamples = MIN_SAMPLES_DEFAULT 
     measurement_source: 'clock',
     estimated_ms: Math.round(avg),
     estimated_minutes: Number((avg / 60000).toFixed(2)),
+    estimated_tokens: efficiency.tokens.avg_tokens,
+    estimated_usd: efficiency.money.avg_usd,
     median_ms: Math.round(median(durations)),
     p90_ms: Math.round(percentile(durations, 90)),
     min_ms: Math.round(Math.min(...durations)),
     max_ms: Math.round(Math.max(...durations)),
+    efficiency,
     sources: samples.slice(0, 12).map((s) => s.source).filter(Boolean),
   };
 }
@@ -112,6 +171,8 @@ export function loadFoundationLoopSamples(root = ROOT) {
     if (!Number.isFinite(ms) || ms < 1000) continue;
     out.push({
       duration_ms: ms,
+      token_cost: Number(d.token_cost ?? d.total_tokens) || null,
+      estimated_usd: Number(d.estimated_usd ?? d.cost_usd) || null,
       source: `builderos-reboot/MISSIONS/${mission}/receipts/FOUNDATION_LOOP_RECEIPT.json`,
       started_at: d.started_at || null,
       finished_at: d.finished_at || null,
@@ -157,6 +218,8 @@ export function loadInstallStepSamples(root = ROOT, { maxLines = 20000 } = {}) {
       }
       out.push({
         duration_ms: ms,
+        token_cost: Number(o.token_cost) > 0 ? Number(o.token_cost) : null,
+        estimated_usd: Number(o.estimated_usd) > 0 ? Number(o.estimated_usd) : null,
         source: path.relative(root, file),
         step_id: o.step_id || null,
         mission_id: o.mission_id || null,
@@ -176,6 +239,8 @@ export function samplesFromBuildEconomicsRows(rows = []) {
       if (!Number.isFinite(ms) || ms < PROOF_FIXTURE_MAX_MS) return null;
       return {
         duration_ms: ms,
+        token_cost: Number(r.total_tokens) > 0 ? Number(r.total_tokens) : null,
+        estimated_usd: Number(r.estimated_usd) > 0 ? Number(r.estimated_usd) : null,
         source: r.id != null ? `build_economics#${r.id}` : 'build_economics',
         stability_class: r.stability_class || null,
       };
@@ -219,14 +284,20 @@ export function estimateFromMeasuredHistory(operation, opts = {}) {
   const stepCount = Number(opts.stepCount);
   if (operation === OPERATION_CLASSES.INSTALL_STEP && Number.isFinite(stepCount) && stepCount > 0) {
     const totalMs = Math.round(base.estimated_ms * stepCount);
+    const perTok = base.estimated_tokens;
+    const perUsd = base.estimated_usd;
     return {
       ...base,
       operation: 'install_n_steps',
       step_count: stepCount,
       per_step_ms: base.estimated_ms,
+      per_step_tokens: perTok,
+      per_step_usd: perUsd,
       estimated_ms: totalMs,
       estimated_minutes: Number((totalMs / 60000).toFixed(2)),
-      formula: `${stepCount} × avg_install_step_ms(${base.estimated_ms}) from ${base.sample_count} measured samples`,
+      estimated_tokens: perTok != null ? Math.round(perTok * stepCount) : null,
+      estimated_usd: perUsd != null ? Number((perUsd * stepCount).toFixed(5)) : null,
+      formula: `${stepCount} × avg_install_step (ms=${base.estimated_ms}, tokens=${perTok ?? 'n/a'}, usd=${perUsd ?? 'n/a'}) from ${base.sample_count} measured samples`,
     };
   }
   return base;
@@ -308,17 +379,19 @@ export function enforceMeasuredEconomicsEstimate(estimate = {}) {
       estimated_ms: null,
       estimated_minutes: null,
       estimated_usd: null,
+      estimated_tokens: null,
       sample_hint: estimate.historyBackedSegments || 0,
       cold_start_segments_rejected: cold.length,
       message:
         'No measured build_economics history for these segments. '
-        + 'Refusing seed/cold-start ETA. Run real builds so averages exist, then ask again.',
+        + 'Refusing seed/cold-start ETA/cost. Run real builds so averages exist, then ask again.',
     };
   }
 
   if (cold.length > 0) {
     const usd = measured.reduce((s, x) => s + (Number(x.estimatedUsd) || 0), 0);
     const minutes = measured.reduce((s, x) => s + (Number(x.estimatedMinutes) || 0), 0);
+    const tokens = measured.reduce((s, x) => s + (Number(x.estimatedTokens) || 0), 0);
     return {
       ok: true,
       allowed: true,
@@ -328,11 +401,19 @@ export function enforceMeasuredEconomicsEstimate(estimate = {}) {
       estimated_usd: Number(usd.toFixed(4)),
       estimated_minutes: Number(minutes.toFixed(1)),
       estimated_ms: Math.round(minutes * 60000),
+      estimated_tokens: tokens > 0 ? Math.round(tokens) : null,
       history_backed_segments: measured.length,
       cold_start_segments_rejected: cold.length,
       perSegment: measured,
+      efficiency: {
+        time: { avg_ms: Math.round(minutes * 60000), sample_count: measured.length },
+        tokens: tokens > 0 ? { avg_tokens: Math.round(tokens / measured.length), sample_count: measured.length } : { sample_count: 0, reason: 'NO_MEASURED_TOKENS' },
+        money: { avg_usd: Number((usd / measured.length).toFixed(5)), sample_count: measured.length },
+        complete: tokens > 0,
+        missing: tokens > 0 ? [] : ['tokens'],
+      },
       message:
-        `ETA covers ${measured.length} history-backed segment(s) only; `
+        `ETA/cost covers ${measured.length} history-backed segment(s) only; `
         + `${cold.length} cold-start segment(s) excluded (no measured average yet).`,
     };
   }
@@ -346,6 +427,7 @@ export function enforceMeasuredEconomicsEstimate(estimate = {}) {
     estimated_usd: estimate.estimatedUsd,
     estimated_minutes: estimate.estimatedMinutes,
     estimated_ms: Math.round((Number(estimate.estimatedMinutes) || 0) * 60000),
+    estimated_tokens: estimate.estimatedTokens ?? null,
     confidence: estimate.confidence,
     history_backed_segments: estimate.historyBackedSegments,
     cold_start_segments_rejected: 0,
@@ -385,9 +467,12 @@ export function buildDurationTruthSnapshot(opts = {}) {
     },
     law: {
       founder_facing_eta: 'measured_averages_only',
+      founder_facing_efficiency: 'time_plus_tokens_plus_usd',
       ai_guess_eta: 'forbidden',
+      ai_guess_cost: 'forbidden',
       cold_start_seed: 'forbidden_for_founder_claims',
       insufficient_history: 'say_INSUFFICIENT_MEASURED_HISTORY',
+      missing_leg: 'report_NO_MEASURED_TOKENS_or_NO_MEASURED_USD_honestly',
     },
   };
 }
