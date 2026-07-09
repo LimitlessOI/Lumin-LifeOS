@@ -274,7 +274,7 @@
     },
     {
       "id": "s9",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "scripts/lifeos-phase3-scheduler.mjs",
       "task": "Add scheduler ticks for cognitive distortion spotting, important-dates proximity check, and calendar-protection conflict scan",
       "spec": "ES-module script. Imports pg and the services from s6 (calendar-protection) using relative paths. On a daily tick (setInterval or cron-style loop with 86400000ms): 1) For each user with active calendar_protection_rules, fetch their next 7 days of calendar events from the DB (calendar_events table assumed to exist from prior calendar integration), call scanConflicts, and insert any new conflicts into a notifications queue table (insert IF NOT EXISTS equivalent using ON CONFLICT DO NOTHING keyed on user_id+event_id+rule_id). 2) Log tick completion to stdout. No browser globals. No AI SDK import. Uses DATABASE_URL env var for pg connection. Exports a startScheduler() function as default export and calls it when the module is run directly (import.meta.url check).",
@@ -282,6 +282,18 @@
         "s6"
       ],
       "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/lifeos-finance.html",
+      "task": "Add Net Worth Dashboard overlay section to finance UI",
+      "spec": "Founder-gated UI. Inside existing lifeos-finance.html add a <section id='net-worth-dashboard'> with: month/year selector, Assets input (cents displayed as formatted currency), Liabilities input, calculated Net Worth display, Save Snapshot button (POST /api/v1/lifeos/finance/net-worth), historical chart rendered via Chart.js (already available) fed by GET /api/v1/lifeos/finance/net-worth. All JS inline in <script> tag at bottom of section. No window-level globals leaked outside section scope. Graceful empty state when no snapshots exist. Mobile-responsive layout consistent with existing finance page styling.",
+      "depends_on": [
+        "s6"
+      ],
+      "founder_gated": true,
       "attempts": 0
     }
   ],
