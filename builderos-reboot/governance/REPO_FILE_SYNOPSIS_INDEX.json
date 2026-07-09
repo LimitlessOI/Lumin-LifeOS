@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T13:04:57.324Z",
+  "generated_at": "2026-07-09T13:35:14.620Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11353,
+  "file_count": 11354,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83197,6 +83197,13 @@
       "bytes": 1788,
       "mtime": "2026-07-09T01:03:41.534Z",
       "indexed_at": "2026-07-09T13:04:57.324Z"
+    },
+    {
+      "path": "services/lifeos-learning.js",
+      "synopsis": "Exports addItem — services/lifeos-learning.js.",
+      "bytes": 4034,
+      "mtime": "2026-07-09T13:35:14.620Z",
+      "indexed_at": "2026-07-09T13:35:14.620Z"
     },
     {
       "path": "services/lifeos-legacy-core.js",
