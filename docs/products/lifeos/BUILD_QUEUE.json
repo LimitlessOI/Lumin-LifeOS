@@ -2,7 +2,9 @@
   "schema": "product_build_queue_v1",
   "product_id": "lifeos",
   "verify_script": "scripts/sentry-prealpha-gate.mjs",
-  "verify_args": ["lifeos-founder-ui"],
+  "verify_args": [
+    "lifeos-founder-ui"
+  ],
   "planned_at": "2026-07-08T20:57:28.573Z",
   "backlog_signature": "554bd608226b9a58",
   "steps": [
@@ -182,6 +184,104 @@
         "s06"
       ],
       "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "s1",
+      "status": "pending",
+      "target_file": "db/migrations/20260421_lifeos_phase3_schema.sql",
+      "task": "Add all missing phase-3 tables",
+      "spec": "CREATE TABLE IF NOT EXISTS for: habits(id uuid PK default gen_random_uuid(), user_id uuid, title text, trigger text, cue text, reward text, streak int default 0, active bool default true, created_at timestamptz default now(), updated_at timestamptz default now()); habit_logs(id uuid PK default gen_random_uuid(), user_id uuid, habit_id uuid, logged_date date, created_at timestamptz default now()); energy_logs(id uuid PK default gen_random_uuid(), user_id uuid, datetime timestamptz, level int check(level between 1 and 10), notes text, created_at timestamptz default now()); nutrition_logs(id uuid PK default gen_random_uuid(), user_id uuid, logged_date date, meal_label text, items jsonb, mood_after int, created_at timestamptz default now()); body_logs(id uuid PK default gen_random_uuid(), user_id uuid, logged_date date, movement_minutes int, notes text, created_at timestamptz default now()); net_worth_snapshots(id uuid PK default gen_random_uuid(), user_id uuid, snapshot_month date, assets numeric, liabilities numeric, net_worth numeric generated always as (assets - liabilities) stored, created_at timestamptz default now()); learning_queue(id uuid PK default gen_random_uuid(), user_id uuid, title text, type text, url text, status text default 'queued', key_insight text, created_at timestamptz default now(), updated_at timestamptz default now()); calendar_protection_rules(id uuid PK default gen_random_uuid(), user_id uuid, label text, rrule text, start_time time, end_time time, days_of_week int[], active bool default true, created_at timestamptz default now()); All statements use CREATE TABLE IF NOT EXISTS. No DROP or ALTER. Migration is idempotent.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s2",
+      "status": "pending",
+      "target_file": "services/lifeos-habits.js",
+      "task": "Implement habit-tracker service with streak logic",
+      "spec": "ES-module. Exports: createHabit(db,userId,data), listHabits(db,userId), logHabit(db,userId,habitId,date), getStreaks(db,userId). logHabit inserts into habit_logs and updates habits.streak by counting consecutive days in habit_logs for that habit_id. No top-level browser globals. No AI SDK import. Does not import uuid — relies on DB default. Depends on s1 schema existing.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s3",
+      "status": "pending",
+      "target_file": "services/lifeos-energy.js",
+      "task": "Implement energy-map service with AI curve analysis",
+      "spec": "ES-module. Exports: logEnergy(db,userId,datetime,level,notes), getEnergyLogs(db,userId,{from,to}), analyzeEnergyCurve(db,userId,callCouncilMember). analyzeEnergyCurve fetches last 7 days of energy_logs for user, builds hour-by-hour summary string, calls callCouncilMember('analyst', prompt) and returns parsed insight object {peakHours, lowHours, recommendation}. No browser globals. No AI SDK.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s4",
+      "status": "pending",
+      "target_file": "services/lifeos-finance.js",
+      "task": "Implement net-worth snapshot service",
+      "spec": "ES-module. Exports: upsertSnapshot(db,userId,{snapshot_month,assets,liabilities}), listSnapshots(db,userId), getLatest(db,userId). upsertSnapshot does INSERT ... ON CONFLICT (user_id, snapshot_month) DO UPDATE SET assets=EXCLUDED.assets, liabilities=EXCLUDED.liabilities. snapshot_month is stored as first-of-month date string (YYYY-MM-01). No browser globals. No AI SDK.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s5",
+      "status": "pending",
+      "target_file": "services/lifeos-learning.js",
+      "task": "Implement reading and learning queue service",
+      "spec": "ES-module. Exports: addItem(db,userId,data), listItems(db,userId,{status}), updateItem(db,userId,id,patch), deleteItem(db,userId,id). patch may include status (queued|reading|done) and key_insight. Updates set updated_at=now(). No browser globals. No AI SDK.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s6",
+      "status": "pending",
+      "target_file": "services/lifeos-calendar-protection.js",
+      "task": "Implement calendar-protection rule engine",
+      "spec": "ES-module. Exports: upsertRule(db,userId,data), listRules(db,userId), deleteRule(db,userId,ruleId), scanConflicts(db,userId,calendarEvents). scanConflicts accepts an array of {start,end} ISO strings representing calendar events, loads active rules for user, and returns an array of conflict objects {event, rule, message} where the event overlaps the protected window on a matching day_of_week. Pure computation after DB load — no AI SDK, no browser globals.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s7",
+      "status": "pending",
+      "target_file": "routes/lifeos-phase3-routes.js",
+      "task": "Mount all phase-3 API routes and register with auto-register config",
+      "spec": "ES-module exporting registerLifeosPhase3Routes(app, deps) where deps={db, callCouncilMember}. Mounts: POST/GET /api/v1/lifeos/habits, POST /api/v1/lifeos/habits/:id/log; POST/GET /api/v1/lifeos/energy, GET /api/v1/lifeos/energy/curve; POST/GET /api/v1/lifeos/finance/net-worth; POST/GET/PATCH/DELETE /api/v1/lifeos/learning; POST/GET /api/v1/lifeos/calendar-protection/rules, POST /api/v1/lifeos/calendar-protection/scan. Each handler calls the appropriate service function imported from s2–s6. All routes return JSON. Auth guard: req.user must exist (check deps.requireAuth if provided, else check req.user and return 401). No browser globals. No top-level side-effects — export only. File is self-contained; imports only node builtins and the service files from s2–s6.",
+      "depends_on": [
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s9",
+      "status": "pending",
+      "target_file": "scripts/lifeos-phase3-scheduler.mjs",
+      "task": "Add scheduler ticks for cognitive distortion spotting, important-dates proximity check, and calendar-protection conflict scan",
+      "spec": "ES-module script. Imports pg and the services from s6 (calendar-protection) using relative paths. On a daily tick (setInterval or cron-style loop with 86400000ms): 1) For each user with active calendar_protection_rules, fetch their next 7 days of calendar events from the DB (calendar_events table assumed to exist from prior calendar integration), call scanConflicts, and insert any new conflicts into a notifications queue table (insert IF NOT EXISTS equivalent using ON CONFLICT DO NOTHING keyed on user_id+event_id+rule_id). 2) Log tick completion to stdout. No browser globals. No AI SDK import. Uses DATABASE_URL env var for pg connection. Exports a startScheduler() function as default export and calls it when the module is run directly (import.meta.url check).",
+      "depends_on": [
+        "s6"
+      ],
+      "founder_gated": false,
       "attempts": 0
     }
   ],
