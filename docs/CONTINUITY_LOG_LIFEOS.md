@@ -8,16 +8,15 @@
 
 ---
 
-## [BUILD] Update 2026-07-09 — Never-stop: stop looping done steps + skip UI verify on services
+## [BUILD] Update 2026-07-09 — LifeOS phase3 s1–s6 done; s7 auto-register GAP-FILL
 
 ### What happened
-- s1 done; UI-verify skip extended to services/routes → s2 DONE.
-- Loop then re-selected s2 forever: lagging container queue + merge downgraded repo `done`→`pending`.
-- Fix: status-monotonic merge + GitHub-fresh BUILD_QUEUE load on discover/run.
+- Never-stop finished s1–s6 after UI-verify skip + merge monotonicity + deploy-proof skip for services.
+- s7 blocked: phase3 routes imported fake `sN-*-service` modules and were not auto-registered.
+- GAP-FILL: rewired `routes/lifeos-phase3-routes.js` to real services + `config/auto-registered-product-modules.json` entry; s7 pending.
 
 ### Next
-- Deploy → never-stop advances lifeos s3→s7.
-- Founder-gated steps remain human-only.
+- Deploy → never-stop proves s7 mount → phase3 machine queue complete (founder_gated remain human).
 
 ---
 

@@ -1,295 +1,222 @@
 /**
- * SYNOPSIS: Exports registerLifeosPhase3Routes — routes/lifeos-phase3-routes.js.
+ * SYNOPSIS: LifeOS Phase 3 REST — habits / energy / learning / calendar-protection.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
-const DEFAULT_SERVICE_IMPORTS = {
-  habits: null,
-};
+import { createLifeOSHabits } from '../services/lifeos-habits.js';
+import {
+  logEnergy,
+  getEnergyLogs,
+  analyzeEnergyCurve,
+} from '../services/lifeos-energy.js';
+import {
+  addItem,
+  listItems,
+  updateItem,
+  deleteItem,
+} from '../services/lifeos-learning.js';
+import {
+  upsertRule,
+  listRules,
+  deleteRule,
+  scanConflicts,
+} from '../services/lifeos-calendar-protection.js';
 
-function authGuard(req, deps) {
+function resolveUserId(req) {
+  return req?.user?.id || req?.user?.user_id || req?.auth?.user_id || null;
+}
+
+function authFail(req, res, deps) {
   if (typeof deps?.requireAuth === 'function') {
-    return deps.requireAuth(req);
+    const out = deps.requireAuth(req);
+    if (out) {
+      res.status(out.status || 401).json(out.body || { error: 'Unauthorized' });
+      return true;
+    }
+    return false;
   }
-  if (req?.user) return null;
-  return { status: 401, body: { error: 'Unauthorized' } };
+  if (!resolveUserId(req)) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return true;
+  }
+  return false;
 }
 
-function sendJson(res, status, payload) {
-  return res.status(status).json(payload);
-}
-
-function getDb(deps) {
+function dbOf(deps) {
   return deps?.db || deps?.pool;
 }
 
-function safeErrorMessage(err) {
-  return err && typeof err.message === 'string' ? err.message : 'Internal Server Error';
-}
-
-async function callService(serviceFn, args, deps) {
-  if (typeof serviceFn !== 'function') {
-    throw new Error('Service function unavailable');
-  }
-  return await serviceFn(args, deps);
-}
-
-async function loadServices() {
-  const services = {};
-  try {
-    services.habits = await import('../services/s2-habits-service.js');
-  } catch {}
-  try {
-    services.energy = await import('../services/s3-energy-service.js');
-  } catch {}
-  try {
-    services.finance = await import('../services/s4-finance-service.js');
-  } catch {}
-  try {
-    services.learning = await import('../services/s5-learning-service.js');
-  } catch {}
-  try {
-    services.calendarProtection = await import('../services/s6-calendar-protection-service.js');
-  } catch {}
-  return services;
-}
-
+/**
+ * Mount Phase 3 APIs. Finance net-worth stays on the existing finance router
+ * (`registerLifeOSFinanceRoutes`) — this module owns habits/energy/learning/calendar.
+ */
 export async function registerLifeosPhase3Routes(app, deps = {}) {
-  const services = await loadServices();
-  const db = getDb(deps);
-
-  const requireAuth = (req, res) => {
-    const auth = authGuard(req, deps);
-    if (auth) {
-      sendJson(res, auth.status, auth.body);
-      return false;
-    }
-    return true;
-  };
+  const db = dbOf(deps);
+  const habitsApi = createLifeOSHabits({ pool: db });
 
   app.get('/api/v1/lifeos/habits', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.habits?.getHabits ||
-        services.habits?.listHabits ||
-        services.habits?.default?.getHabits ||
-        services.habits?.default?.listHabits;
-      const data = await callService(fn, { req, db, user: req.user }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const rows = await habitsApi.listHabits(resolveUserId(req));
+      return res.json({ ok: true, data: rows });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos habits get failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos habits list failed');
+      return res.status(err.status || 500).json({ ok: false, error: err.message });
     }
   });
 
   app.post('/api/v1/lifeos/habits', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.habits?.createHabit ||
-        services.habits?.default?.createHabit;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const row = await habitsApi.createHabit(resolveUserId(req), req.body || {});
+      return res.status(201).json({ ok: true, data: row });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos habits post failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos habits create failed');
+      return res.status(err.status || 500).json({ ok: false, error: err.message });
     }
   });
 
   app.post('/api/v1/lifeos/habits/:id/log', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.habits?.logHabit ||
-        services.habits?.default?.logHabit;
-      const data = await callService(fn, { req, db, user: req.user, habitId: req.params.id, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const row = await habitsApi.checkInHabit(resolveUserId(req), req.params.id, req.body || {});
+      return res.json({ ok: true, data: row });
     } catch (err) {
       deps.logger?.error?.({ err }, 'lifeos habits log failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      return res.status(err.status || 500).json({ ok: false, error: err.message });
     }
   });
 
   app.get('/api/v1/lifeos/energy', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.energy?.getEnergy ||
-        services.energy?.listEnergy ||
-        services.energy?.default?.getEnergy ||
-        services.energy?.default?.listEnergy;
-      const data = await callService(fn, { req, db, user: req.user }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const rows = await getEnergyLogs(db, resolveUserId(req), {
+        from: req.query?.from,
+        to: req.query?.to,
+      });
+      return res.json({ ok: true, data: rows });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos energy get failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos energy list failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
   app.post('/api/v1/lifeos/energy', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.energy?.createEnergy ||
-        services.energy?.default?.createEnergy;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const body = req.body || {};
+      const row = await logEnergy(
+        db,
+        resolveUserId(req),
+        body.datetime || new Date().toISOString(),
+        body.level,
+        body.notes,
+      );
+      return res.status(201).json({ ok: true, data: row });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos energy post failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos energy log failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
   app.get('/api/v1/lifeos/energy/curve', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.energy?.getEnergyCurve ||
-        services.energy?.default?.getEnergyCurve;
-      const data = await callService(fn, { req, db, user: req.user }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const data = await analyzeEnergyCurve(db, resolveUserId(req), deps.callCouncilMember);
+      return res.json({ ok: true, data });
     } catch (err) {
       deps.logger?.error?.({ err }, 'lifeos energy curve failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
-    }
-  });
-
-  app.get('/api/v1/lifeos/finance/net-worth', async (req, res) => {
-    if (!requireAuth(req, res)) return;
-    try {
-      const fn =
-        services.finance?.getNetWorth ||
-        services.finance?.default?.getNetWorth;
-      const data = await callService(fn, { req, db, user: req.user }, deps);
-      return sendJson(res, 200, { ok: true, data });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos finance net worth get failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
-    }
-  });
-
-  app.post('/api/v1/lifeos/finance/net-worth', async (req, res) => {
-    if (!requireAuth(req, res)) return;
-    try {
-      const fn =
-        services.finance?.updateNetWorth ||
-        services.finance?.createNetWorth ||
-        services.finance?.default?.updateNetWorth ||
-        services.finance?.default?.createNetWorth;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos finance net worth post failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
   app.get('/api/v1/lifeos/learning', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.learning?.listLearning ||
-        services.learning?.getLearning ||
-        services.learning?.default?.listLearning ||
-        services.learning?.default?.getLearning;
-      const data = await callService(fn, { req, db, user: req.user }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const rows = await listItems(db, resolveUserId(req), { status: req.query?.status });
+      return res.json({ ok: true, data: rows });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos learning get failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos learning list failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
   app.post('/api/v1/lifeos/learning', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.learning?.createLearning ||
-        services.learning?.default?.createLearning;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const row = await addItem(db, resolveUserId(req), req.body || {});
+      return res.status(201).json({ ok: true, data: row });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos learning post failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos learning add failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  app.patch('/api/v1/lifeos/learning', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+  app.patch('/api/v1/lifeos/learning/:id', async (req, res) => {
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.learning?.updateLearning ||
-        services.learning?.default?.updateLearning;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const row = await updateItem(db, resolveUserId(req), req.params.id, req.body || {});
+      return res.json({ ok: true, data: row });
     } catch (err) {
       deps.logger?.error?.({ err }, 'lifeos learning patch failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  app.delete('/api/v1/lifeos/learning', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+  app.delete('/api/v1/lifeos/learning/:id', async (req, res) => {
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.learning?.deleteLearning ||
-        services.learning?.default?.deleteLearning;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const ok = await deleteItem(db, resolveUserId(req), req.params.id);
+      return res.json({ ok: true, deleted: ok });
     } catch (err) {
       deps.logger?.error?.({ err }, 'lifeos learning delete failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
-    }
-  });
-
-  app.post('/api/v1/lifeos/calendar-protection/rules', async (req, res) => {
-    if (!requireAuth(req, res)) return;
-    try {
-      const fn =
-        services.calendarProtection?.createRule ||
-        services.calendarProtection?.addRule ||
-        services.calendarProtection?.default?.createRule ||
-        services.calendarProtection?.default?.addRule;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos calendar protection rules post failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
   app.get('/api/v1/lifeos/calendar-protection/rules', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.calendarProtection?.listRules ||
-        services.calendarProtection?.getRules ||
-        services.calendarProtection?.default?.listRules ||
-        services.calendarProtection?.default?.getRules;
-      const data = await callService(fn, { req, db, user: req.user }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const rows = await listRules(db, resolveUserId(req));
+      return res.json({ ok: true, data: rows });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos calendar protection rules get failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos calendar rules list failed');
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  app.post('/api/v1/lifeos/calendar-protection/rules', async (req, res) => {
+    if (authFail(req, res, deps)) return;
+    try {
+      const row = await upsertRule(db, resolveUserId(req), req.body || {});
+      return res.status(201).json({ ok: true, data: row });
+    } catch (err) {
+      deps.logger?.error?.({ err }, 'lifeos calendar rules upsert failed');
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  app.delete('/api/v1/lifeos/calendar-protection/rules/:id', async (req, res) => {
+    if (authFail(req, res, deps)) return;
+    try {
+      const ok = await deleteRule(db, resolveUserId(req), req.params.id);
+      return res.json({ ok: true, deleted: ok });
+    } catch (err) {
+      deps.logger?.error?.({ err }, 'lifeos calendar rules delete failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
   app.post('/api/v1/lifeos/calendar-protection/scan', async (req, res) => {
-    if (!requireAuth(req, res)) return;
+    if (authFail(req, res, deps)) return;
     try {
-      const fn =
-        services.calendarProtection?.scanCalendar ||
-        services.calendarProtection?.scanProtection ||
-        services.calendarProtection?.default?.scanCalendar ||
-        services.calendarProtection?.default?.scanProtection;
-      const data = await callService(fn, { req, db, user: req.user, body: req.body }, deps);
-      return sendJson(res, 200, { ok: true, data });
+      const events = Array.isArray(req.body?.events) ? req.body.events : req.body?.calendarEvents || [];
+      const conflicts = await scanConflicts(db, resolveUserId(req), events);
+      return res.json({ ok: true, data: conflicts });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos calendar protection scan failed');
-      return sendJson(res, 500, { ok: false, error: safeErrorMessage(err) });
+      deps.logger?.error?.({ err }, 'lifeos calendar scan failed');
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
-
-  return true;
 }
 
 export default registerLifeosPhase3Routes;
