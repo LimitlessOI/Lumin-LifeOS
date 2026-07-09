@@ -38,9 +38,34 @@ function isServerCodeTarget(target) {
  *   - db: { sql, params?, expect_min_rows? }    -> db_row_exists (read-only SELECT)
  *   - file_contains: string[]                   -> file_contains verbatim substrings
  */
+function collectTopLevelExpectation(step) {
+  const out = {};
+  if (Array.isArray(step?.expected_exports) && step.expected_exports.length > 0) {
+    const names = step.expected_exports.filter((n) => typeof n === 'string' && n.trim());
+    if (names.length) out.expected_exports = names;
+  }
+  if (Array.isArray(step?.file_contains) && step.file_contains.length > 0) {
+    const arr = step.file_contains.filter((s) => typeof s === 'string' && s.trim());
+    if (arr.length) out.file_contains = arr;
+  }
+  if (step?.route && typeof step.route === 'object' && typeof step.route.path === 'string' && step.route.path.trim()) {
+    out.route = step.route;
+  } else if (typeof step?.route === 'string' && step.route.trim()) {
+    const withMethod = step.route.trim().match(/^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(\/\S*)$/i);
+    if (withMethod) out.route = { method: withMethod[1].toUpperCase(), path: withMethod[2] };
+    else if (step.route.trim().startsWith('/') && !/\s/.test(step.route.trim())) out.route = { path: step.route.trim() };
+  }
+  return out;
+}
+
 export function authorAssertionsFromSpec(step) {
   const target = String(step?.target_file || '');
-  const spec = step?.assertion_spec || (step?.spec && typeof step.spec === 'object' ? step.spec.assertions : null) || {};
+  // Prefer explicit assertion_spec; also accept BUILD_QUEUE top-level expected_exports/route/file_contains
+  // (same shape toGovernedShipStep normalises) so raw ship-queue posts are not falsely unprovable.
+  const nested = (step?.spec && typeof step.spec === 'object' ? step.spec.assertions : null) || {};
+  const top = collectTopLevelExpectation(step);
+  const declared = (step?.assertion_spec && typeof step.assertion_spec === 'object') ? step.assertion_spec : {};
+  const spec = { ...nested, ...top, ...declared };
   const assertions = [];
 
   const exports = Array.isArray(spec.expected_exports) ? spec.expected_exports : [];

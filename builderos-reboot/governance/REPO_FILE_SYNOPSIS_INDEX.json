@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T03:20:46.485Z",
+  "generated_at": "2026-07-09T03:21:44.877Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11347,
   "files": [
@@ -36674,9 +36674,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 45567,
-      "mtime": "2026-07-09T03:13:38.493Z",
-      "indexed_at": "2026-07-09T03:14:30.829Z"
+      "bytes": 46457,
+      "mtime": "2026-07-09T03:21:02.737Z",
+      "indexed_at": "2026-07-09T03:21:44.877Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38780,9 +38780,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 211595,
-      "mtime": "2026-07-09T03:14:20.637Z",
-      "indexed_at": "2026-07-09T03:14:30.829Z"
+      "bytes": 212134,
+      "mtime": "2026-07-09T03:21:02.738Z",
+      "indexed_at": "2026-07-09T03:21:44.877Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39281,9 +39281,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 8686,
-      "mtime": "2026-07-09T03:12:56.304Z",
-      "indexed_at": "2026-07-09T03:14:30.829Z"
+      "bytes": 9208,
+      "mtime": "2026-07-09T03:21:33.016Z",
+      "indexed_at": "2026-07-09T03:21:44.877Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -59652,9 +59652,9 @@
     {
       "path": "factory-staging/factory-core/bpb/author-assertions.js",
       "synopsis": "STEP 5b — BPB authors behavior_assertions from the BLUEPRINT SPEC at",
-      "bytes": 4901,
-      "mtime": "2026-07-07T21:41:40.923Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 6360,
+      "mtime": "2026-07-09T03:21:02.739Z",
+      "indexed_at": "2026-07-09T03:21:44.877Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -65053,9 +65053,9 @@
     {
       "path": "routes/go-vegas-outreach-routes.js",
       "synopsis": "Go Vegas business network outreach API — discover, invite, follow up.",
-      "bytes": 4494,
-      "mtime": "2026-07-09T01:04:26.280Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 4740,
+      "mtime": "2026-07-09T03:21:02.739Z",
+      "indexed_at": "2026-07-09T03:21:44.877Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -82441,10 +82441,13 @@
     },
     {
       "path": "services/go-vegas-outreach-scheduler.js",
-      "synopsis": "Service module — Go Vegas Outreach Scheduler.",
-      "bytes": 6128,
-      "mtime": "2026-07-09T03:20:46.485Z",
-      "indexed_at": "2026-07-09T03:20:46.485Z"
+      "synopsis": "Useful-work-guarded Go Vegas outreach scheduler (discover→enrich→invite→follow-up under caps).",
+      "bytes": 5775,
+      "mtime": "2026-07-09T03:21:31.251Z",
+      "indexed_at": "2026-07-09T03:21:44.877Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/go-vegas-outreach.js",
@@ -86689,9 +86692,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 8914,
-      "mtime": "2026-07-09T01:07:32.059Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 9212,
+      "mtime": "2026-07-09T03:21:02.740Z",
+      "indexed_at": "2026-07-09T03:21:44.877Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

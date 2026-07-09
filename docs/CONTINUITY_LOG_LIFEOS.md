@@ -8,6 +8,19 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Built while fixing: Go Vegas revenue loop + self-repair
+
+### What happened
+- Unblocked never-stop (LifeOS auto-register chicken-egg + Go Vegas queue enroll) and pushed `fe3409442b`; Railway auto-deployed; loop immediately built LifeOS s06 + authored `go-vegas-outreach-scheduler.js`.
+- Authored scheduler misused `createUsefulWorkGuard` (invented `shouldRun`); conductor GAP-FILL rewrote it, wired boot start + `GET /api/v1/go-vegas/scheduler`, marked limitlessos queue done.
+- Also fixed governed ship false-unprovable: `authorAssertionsFromSpec` now reads top-level `expected_exports` (raw ship-queue was 422 `spec_declares_no_verifiable_behavior` despite exports on the step).
+
+### Next
+- Push repair → prove live `GET /api/v1/go-vegas/scheduler` after deploy SHA catches up.
+- Watch never-stop no longer spin intake when real queue work exists.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Self-repair chicken-egg + Go Vegas revenue queue
 
 ### What happened

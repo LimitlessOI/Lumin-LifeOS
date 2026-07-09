@@ -3,6 +3,7 @@
  * @ssot docs/products/limitlessos/PRODUCT_HOME.md
  */
 import { createGoVegasOutreach } from '../services/go-vegas-outreach.js';
+import { getGoVegasOutreachSchedulerStatus } from '../services/go-vegas-outreach-scheduler.js';
 
 function buildSendEmail(notificationService) {
   if (!notificationService) {
@@ -45,6 +46,10 @@ export function createGoVegasOutreachRoutes(app, deps = {}) {
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
+  });
+
+  app.get('/api/v1/go-vegas/scheduler', requireKey, async (_req, res) => {
+    res.json({ ok: true, ...getGoVegasOutreachSchedulerStatus() });
   });
 
   app.get('/api/v1/go-vegas/prospects', requireKey, async (req, res) => {

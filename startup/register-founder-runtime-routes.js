@@ -16,6 +16,7 @@ import createSiteBuilderCheckoutRoutes from "../routes/site-builder-checkout-rou
 import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.js";
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
+import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import { getNeverStopProductFactoryStatus } from "../services/never-stop-product-factory-scheduler.js";
@@ -142,6 +143,11 @@ export async function registerFounderRuntimeRoutes(app, deps) {
 
   createGoVegasOutreachRoutes(app, { pool, requireKey, notificationService, logger });
   logger.info("✅ [GO-VEGAS] Outreach routes mounted at /api/v1/go-vegas/*");
+  try {
+    startGoVegasOutreachScheduler({ pool, notificationService, logger });
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[GO-VEGAS] outreach scheduler failed to start (non-fatal)");
+  }
 
   registerFounderMemoryRoutes(app, { pool, requireKey, logger });
   logger.info("✅ [FOUNDER-MEMORY] Canonical founder↔AI memory mounted at /api/v1/founder-memory");
