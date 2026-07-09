@@ -1,6 +1,6 @@
 {
   "schema": "founder_jwt_chat_proof_v1",
-  "at": "2026-07-09T04:50:48.717Z",
+  "at": "2026-07-09T18:25:21.171Z",
   "ok": true,
   "auth_mode": "account_jwt",
   "source": "operator_vault",
@@ -16,12 +16,12 @@
       "status": 200,
       "auth_mode": "account_jwt",
       "pass_fail": "NO_COMMAND_RAN",
-      "reply_preview": "Yes — receiving you on JWT auth."
+      "reply_preview": "Yes — same thread, JWT auth, go ahead."
     }
   },
   "cred_source": "LIFEOS_FOUNDER_LOGIN_EMAIL+LIFEOS_FOUNDER_LOGIN_PASSWORD",
   "blocker": null,
-  "duration_ms": 2739,
+  "duration_ms": 2360,
   "truth_spine_applied": true,
   "truth_spine_version": "truth_enforcement_spine_v1",
   "point_b_dna_version": "point_b_dna_v1",

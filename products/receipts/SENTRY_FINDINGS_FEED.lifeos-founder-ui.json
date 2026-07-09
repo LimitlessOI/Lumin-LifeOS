@@ -1,38 +1,12 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-07-09T04:50:48.765Z",
-  "findings_count": 2,
+  "generated_at": "2026-07-09T18:25:25.331Z",
+  "findings_count": 0,
   "without_solution": 0,
-  "findings": [
-    {
-      "code": "smos_question",
-      "detail": "no workflow content: \"LifeOS Consumer Alpha — user signs up, logs in, Lumin greets by name with correct tier, daily cmdCtr runs as authenticat\"",
-      "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"smos_question\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
-      "proposed_solution_source": "synthesized",
-      "severity": "error",
-      "source": "layer-b-command-key"
-    },
-    {
-      "code": "drawer_direct_build",
-      "detail": "missing terminal PASS + transport/commit proof: \"Three stages, no magic:\n\n1. Instruction capture — your order hits the founder-interface endpoint as a structured job. Text becomes a machine-readable instruction with a target file and a change description. 2. build_asyn\"",
-      "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"drawer_direct_build\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
-      "proposed_solution_source": "synthesized",
-      "severity": "error",
-      "source": "layer-b-command-key"
-    }
-  ],
+  "findings": [],
   "readiness": {
-    "blockers": [
-      {
-        "code": "smos_question",
-        "detail": "no workflow content: \"LifeOS Consumer Alpha — user signs up, logs in, Lumin greets by name with correct tier, daily cmdCtr runs as authenticat\""
-      },
-      {
-        "code": "drawer_direct_build",
-        "detail": "missing terminal PASS + transport/commit proof: \"Three stages, no magic:\n\n1. Instruction capture — your order hits the founder-interface endpoint as a structured job. Text becomes a machine-readable instruction with a target file and a change description. 2. build_asyn\""
-      }
-    ],
+    "blockers": [],
     "warnings": []
   }
 }
