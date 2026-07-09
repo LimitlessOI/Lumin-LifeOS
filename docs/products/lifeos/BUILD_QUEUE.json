@@ -196,7 +196,7 @@
       "founder_gated": false,
       "attempts": 2,
       "commit_sha": "9d6049ff48851ca4b684625fd8ce5b1293a6e322",
-      "last_attempt_at": "2026-07-09T04:40:06.760Z",
+      "last_attempt_at": "2026-07-09T04:41:36.255Z",
       "last_error": "verify_exit_1"
     },
     {
@@ -277,7 +277,7 @@
     },
     {
       "id": "s9",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "scripts/lifeos-phase3-scheduler.mjs",
       "task": "Add scheduler ticks for cognitive distortion spotting, important-dates proximity check, and calendar-protection conflict scan",
       "spec": "ES-module script. Imports pg and the services from s6 (calendar-protection) using relative paths. On a daily tick (setInterval or cron-style loop with 86400000ms): 1) For each user with active calendar_protection_rules, fetch their next 7 days of calendar events from the DB (calendar_events table assumed to exist from prior calendar integration), call scanConflicts, and insert any new conflicts into a notifications queue table (insert IF NOT EXISTS equivalent using ON CONFLICT DO NOTHING keyed on user_id+event_id+rule_id). 2) Log tick completion to stdout. No browser globals. No AI SDK import. Uses DATABASE_URL env var for pg connection. Exports a startScheduler() function as default export and calls it when the module is run directly (import.meta.url check).",
