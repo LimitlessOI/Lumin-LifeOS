@@ -2,22 +2,11 @@
  * SYNOPSIS: Exports addItem — services/lifeos-learning.js.
  */
 export async function addItem(db, userId, data) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must be a pg Pool/client with query()');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-
-  const title = normalizeText(data?.title);
-  const url = normalizeUrl(data?.url);
-  const type = normalizeText(data?.type) || null;
-  const status = normalizeStatus(data?.status) || 'queued';
-  const keyInsight = normalizeText(data?.key_insight) || null;
-
-  if (!title) {
-    throw new TypeError('title is required');
-  }
+  const title = typeof data?.title === 'string' ? data.title.trim() : '';
+  const type = typeof data?.type === 'string' ? data.type.trim() : '';
+  const url = typeof data?.url === 'string' ? data.url.trim() : null;
+  const status = normalizeStatus(data?.status);
+  const keyInsight = typeof data?.key_insight === 'string' ? data.key_insight.trim() : null;
 
   const { rows } = await db.query(
     `insert into learning_queue (user_id, title, type, url, status, key_insight)
@@ -26,24 +15,17 @@ export async function addItem(db, userId, data) {
     [userId, title, type, url, status, keyInsight]
   );
 
-  return rows[0] ?? null;
+  return rows[0];
 }
 
 export async function listItems(db, userId, { status } = {}) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must be a pg Pool/client with query()');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
+  const params = [userId];
+  let where = `where user_id = $1`;
 
-  const values = [userId];
-  let where = 'where user_id = $1';
-
-  const normalizedStatus = normalizeStatus(status);
+  const normalizedStatus = status == null ? null : normalizeStatus(status);
   if (normalizedStatus) {
-    values.push(normalizedStatus);
-    where += ` and status = $${values.length}`;
+    params.push(normalizedStatus);
+    where += ` and status = $${params.length}`;
   }
 
   const { rows } = await db.query(
@@ -51,97 +33,68 @@ export async function listItems(db, userId, { status } = {}) {
      from learning_queue
      ${where}
      order by created_at desc, id desc`,
-    values
+    params
   );
 
   return rows;
 }
 
 export async function updateItem(db, userId, id, patch) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must be a pg Pool/client with query()');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-  if (!id) {
-    throw new TypeError('id is required');
-  }
-
   const fields = [];
-  const values = [userId, id];
+  const params = [userId, id];
+  let idx = 2;
 
-  if (Object.prototype.hasOwnProperty.call(patch ?? {}, 'status')) {
+  if (Object.prototype.hasOwnProperty.call(patch || {}, 'status')) {
     const status = normalizeStatus(patch.status);
-    if (!status) {
-      throw new TypeError('status must be one of queued, reading, done');
-    }
-    fields.push(`status = $${values.length + 1}`);
-    values.push(status);
+    idx += 1;
+    fields.push(`status = $${idx}`);
+    params.push(status);
   }
 
-  if (Object.prototype.hasOwnProperty.call(patch ?? {}, 'key_insight')) {
-    fields.push(`key_insight = $${values.length + 1}`);
-    values.push(normalizeText(patch.key_insight) || null);
+  if (Object.prototype.hasOwnProperty.call(patch || {}, 'key_insight')) {
+    idx += 1;
+    fields.push(`key_insight = $${idx}`);
+    params.push(typeof patch.key_insight === 'string' ? patch.key_insight.trim() : null);
   }
 
   if (fields.length === 0) {
-    const { rows } = await db.query(
+    const existing = await db.query(
       `select id, user_id, title, type, url, status, key_insight, created_at, updated_at
        from learning_queue
        where user_id = $1 and id = $2`,
-      values
+      [userId, id]
     );
-    return rows[0] ?? null;
+    return existing.rows[0] || null;
   }
 
-  fields.push(`updated_at = now()`);
+  params.push(id);
+  const setClause = `${fields.join(', ')}, updated_at = now()`;
 
   const { rows } = await db.query(
     `update learning_queue
-     set ${fields.join(', ')}
+     set ${setClause}
      where user_id = $1 and id = $2
      returning id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
-    values
+    params
   );
 
-  return rows[0] ?? null;
+  return rows[0] || null;
 }
 
 export async function deleteItem(db, userId, id) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db must be a pg Pool/client with query()');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-  if (!id) {
-    throw new TypeError('id is required');
-  }
-
   const { rows } = await db.query(
     `delete from learning_queue
      where user_id = $1 and id = $2
-     returning id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
+     returning id`,
     [userId, id]
   );
 
-  return rows[0] ?? null;
-}
-
-function normalizeText(value) {
-  if (typeof value !== 'string') return null;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
-}
-
-function normalizeUrl(value) {
-  const text = normalizeText(value);
-  return text;
+  return rows[0] || null;
 }
 
 function normalizeStatus(value) {
-  if (typeof value !== 'string') return null;
-  const normalized = value.trim().toLowerCase();
-  return normalized === 'queued' || normalized === 'reading' || normalized === 'done' ? normalized : null;
+  const status = String(value || '').trim().toLowerCase();
+  if (!status) return 'queued';
+  if (status === 'queued' || status === 'reading' || status === 'done') return status;
+  throw new Error('Invalid learning_queue status');
 }
