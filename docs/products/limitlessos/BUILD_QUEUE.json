@@ -25,7 +25,7 @@
     },
     {
       "id": "gv-boot-wire",
-      "status": "pending",
+      "status": "done",
       "target_file": "startup/register-founder-runtime-routes.js",
       "task": "Start the Go Vegas outreach scheduler from the founder-builder runtime composition root after outreach routes mount.",
       "spec": "Additive edit only (Zone 3). Import startGoVegasOutreachScheduler from ../services/go-vegas-outreach-scheduler.js. After createGoVegasOutreachRoutes(...), call startGoVegasOutreachScheduler({ pool, notificationService, logger }) inside try/catch (non-fatal warn on failure). Do not remove existing mounts. Keep @ssot docs/products/lifeos/PRODUCT_HOME.md on this file.",
@@ -33,11 +33,14 @@
         "gv-scheduler"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 4000,
       "file_contains": [
         "startGoVegasOutreachScheduler"
-      ]
+      ],
+      "commit_sha": "b6ec13c8e9fd187b77c5daec9c79f87a916547c3",
+      "last_attempt_at": "2026-07-09T03:26:18.021Z",
+      "completed_at": "2026-07-09T03:26:19.453Z"
     },
     {
       "id": "gv-status-route",
