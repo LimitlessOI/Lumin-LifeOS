@@ -194,12 +194,12 @@
       "spec": "CREATE TABLE IF NOT EXISTS for: habits(id uuid PK default gen_random_uuid(), user_id uuid, title text, trigger text, cue text, reward text, streak int default 0, active bool default true, created_at timestamptz default now(), updated_at timestamptz default now()); habit_logs(id uuid PK default gen_random_uuid(), user_id uuid, habit_id uuid, logged_date date, created_at timestamptz default now()); energy_logs(id uuid PK default gen_random_uuid(), user_id uuid, datetime timestamptz, level int check(level between 1 and 10), notes text, created_at timestamptz default now()); nutrition_logs(id uuid PK default gen_random_uuid(), user_id uuid, logged_date date, meal_label text, items jsonb, mood_after int, created_at timestamptz default now()); body_logs(id uuid PK default gen_random_uuid(), user_id uuid, logged_date date, movement_minutes int, notes text, created_at timestamptz default now()); net_worth_snapshots(id uuid PK default gen_random_uuid(), user_id uuid, snapshot_month date, assets numeric, liabilities numeric, net_worth numeric generated always as (assets - liabilities) stored, created_at timestamptz default now()); learning_queue(id uuid PK default gen_random_uuid(), user_id uuid, title text, type text, url text, status text default 'queued', key_insight text, created_at timestamptz default now(), updated_at timestamptz default now()); calendar_protection_rules(id uuid PK default gen_random_uuid(), user_id uuid, label text, rrule text, start_time time, end_time time, days_of_week int[], active bool default true, created_at timestamptz default now()); All statements use CREATE TABLE IF NOT EXISTS. No DROP or ALTER. Migration is idempotent.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 1,
       "commit_sha": "9d6049ff48851ca4b684625fd8ce5b1293a6e322",
-      "last_attempt_at": "2026-07-09T05:37:23.510Z",
+      "last_attempt_at": "2026-07-09T05:41:09.824Z",
       "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration — never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
       "last_error": "verify_exit_1",
-      "completed_at": "2026-07-09T05:37:25.025Z",
+      "completed_at": "2026-07-09T05:41:11.208Z",
       "revive_count": 1
     },
     {
@@ -214,7 +214,7 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
-      "last_attempt_at": "2026-07-09T10:55:04.831Z",
+      "last_attempt_at": "2026-07-09T10:56:34.461Z",
       "last_error": "verify_exit_1",
       "revive_count": 3
     },
@@ -287,7 +287,7 @@
     },
     {
       "id": "s9",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "scripts/lifeos-phase3-scheduler.mjs",
       "task": "Add scheduler ticks for cognitive distortion spotting, important-dates proximity check, and calendar-protection conflict scan",
       "spec": "ES-module script. Imports pg and the services from s6 (calendar-protection) using relative paths. On a daily tick (setInterval or cron-style loop with 86400000ms): 1) For each user with active calendar_protection_rules, fetch their next 7 days of calendar events from the DB (calendar_events table assumed to exist from prior calendar integration), call scanConflicts, and insert any new conflicts into a notifications queue table (insert IF NOT EXISTS equivalent using ON CONFLICT DO NOTHING keyed on user_id+event_id+rule_id). 2) Log tick completion to stdout. No browser globals. No AI SDK import. Uses DATABASE_URL env var for pg connection. Exports a startScheduler() function as default export and calls it when the module is run directly (import.meta.url check).",
