@@ -271,7 +271,7 @@
     },
     {
       "id": "s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-calendar-protection.js",
       "task": "Implement calendar-protection rule engine",
       "spec": "ES-module. Exports: upsertRule(db,userId,data), listRules(db,userId), deleteRule(db,userId,ruleId), scanConflicts(db,userId,calendarEvents). scanConflicts accepts an array of {start,end} ISO strings representing calendar events, loads active rules for user, and returns an array of conflict objects {event, rule, message} where the event overlaps the protected window on a matching day_of_week. Pure computation after DB load — no AI SDK, no browser globals.",
@@ -279,8 +279,11 @@
         "s1"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_error": null
+      "attempts": 1,
+      "last_error": null,
+      "commit_sha": "62b1bf786c6c1c1ca8899c373113e56d01e6ba6f",
+      "last_attempt_at": "2026-07-09T14:41:27.573Z",
+      "completed_at": "2026-07-09T14:41:44.120Z"
     },
     {
       "id": "s7",
