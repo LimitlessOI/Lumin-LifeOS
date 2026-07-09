@@ -10,8 +10,8 @@
 - and capable of deploying new `.mjs` files into the `scripts` directory.
 - It serves as a fundamental check for the builder's health and readiness.
  */
-// ui-e2e-build-proof: 2026-07-09T04:25:36.258Z — do not change any other line
-// ui-switch-test-proof: boundary-check-3
+// ui-e2e-build-proof: 2026-07-09T04:25:36.258Z — do not change any other line, do not modify runtime behavior, do not touch any other file.
+ // ui-switch-test-proof: boundary-check-3
 // raw-api-proof: duplicate-check
 // founder-chat-alpha-probe: 2026-07-08T06:22:49.374Z
 // --- Constants ---
