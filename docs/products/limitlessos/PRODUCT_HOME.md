@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-06-29
+**Last Updated:** 2026-07-07
 
 | Field | Value |
 |-------|-------|
@@ -187,7 +187,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 - [ ] Canonical product id for "BusinessOS" vs "LimitlessOS" in customer-facing UI  
 - [ ] Live audit data sources (Plaid? manual intake? OAuth per vendor?)  
-- [ ] CityOS / Go Vegas product home creation  
+- [ ] CityOS / Go Vegas product home creation *(outreach pipeline v1 shipped — see Change Receipts)*
 - [ ] Sticker / physical marketing SKUs under MarketingOS commerce layer  
 - [ ] Price book API for print partners (VistaPrint, Sticker Mule, …) in-app  
 
@@ -197,4 +197,7 @@ Together: AI handles repetitive, disconnected, administrative work — humans fo
 
 | Date | What | Why |
 |------|------|-----|
+| 2026-07-07 | **Go Vegas sender + reputation guard** — invites send **from `Adam Hopkins <adam@hopkinsgroup.org>`** (override: `GO_VEGAS_FROM_EMAIL`). Hard daily caps: **8 new invites**, **5 follow-ups**, **12 total/day** (`GO_VEGAS_MAX_*` env). Stops automatically when cap hit. | Founder: personal direct email for invites; do not burn inbox reputation with bulk volume. |
+| 2026-07-07 | **Go Vegas group URL locked** — default invite link `https://www.facebook.com/groups/govegas` in `config/go-vegas-campaign.js` (env override still supported). | Founder supplied canonical Facebook group for outreach CTAs. |
+| 2026-07-07 | **Go Vegas outreach pipeline v1** — `config/go-vegas-campaign.js`, `services/go-vegas-outreach.js`, `services/go-vegas-email-finder.js`, `routes/go-vegas-outreach-routes.js`, `scripts/go-vegas-outreach-pilot.mjs`, migration `20260707_go_vegas_outreach.sql`. Discover Las Vegas businesses (Google Places), scrape contact emails, send free-network invite with benefits copy, auto follow-up on days 3/7/14, pipeline CRM at `/api/v1/go-vegas/*`. | Adam: grow Go Vegas Facebook business network — free invite, sell benefits, persistent follow-up until they join. |
 | 2026-06-29 | Created LimitlessOS product home from ChatGPT founder session | Adam: preserve ecosystem business model as founder document; route multi-product conversation to correct folders |

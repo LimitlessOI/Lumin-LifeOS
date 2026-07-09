@@ -829,6 +829,19 @@ export async function runLuminChairTurn(ctx, deps) {
           return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, source_mode: sourceMode, auth_mode, user_role }) };
         }
 
+        try {
+          const { injectProductMemoryIntoContext } = await import('./founder-memory-product-resolver.js');
+          const injected = await injectProductMemoryIntoContext({
+            productId: detectedProductId,
+            productHomeText: amendmentText,
+            pool: deps.pool,
+          });
+          amendmentText = injected.full_context;
+          _clog(`productHome_memoryInject entries=${injected.entries?.length || 0}`);
+        } catch (memErr) {
+          _clog(`productHome_memoryInject_error=${memErr.message}`);
+        }
+
         const wantsExecuteBeforeBackfill = /\b(execute|build|run|deploy)\b/i.test(cleanedInput)
           && !/\b(create|generate|make|produce|write|draft)\b/i.test(cleanedInput);
         if (wantsExecuteBeforeBackfill) {

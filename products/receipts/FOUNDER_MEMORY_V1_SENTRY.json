@@ -1,0 +1,53 @@
+{
+  "schema": "founder_memory_sentry_v1",
+  "pass_fail": "PASS",
+  "product_id": "memory-system",
+  "proof_marker": "SENTRY_PROOF_1783548077002",
+  "session_id": "sentry_proof_1783548077002",
+  "citation_receipt_id": "fmrcpt_1783548077004_a994d5be",
+  "checks": [
+    {
+      "id": "append_entry",
+      "ok": true
+    },
+    {
+      "id": "context_has_memory_block",
+      "ok": true
+    },
+    {
+      "id": "context_has_product",
+      "ok": true
+    },
+    {
+      "id": "context_contains_proof_marker",
+      "ok": true
+    },
+    {
+      "id": "claim_without_receipt_unverified",
+      "ok": true
+    },
+    {
+      "id": "claim_with_receipt_verified",
+      "ok": true
+    },
+    {
+      "id": "index_jsonl_exists",
+      "ok": true
+    },
+    {
+      "id": "governance_decision_exists",
+      "ok": true
+    },
+    {
+      "id": "continuity_log_exists",
+      "ok": true
+    },
+    {
+      "id": "index_contains_receipt",
+      "ok": true
+    }
+  ],
+  "duration_ms": 7,
+  "verified_at": "2026-07-08T22:01:17.009Z",
+  "assertion": "load product X ⇒ tagged founder conversations are in context (not a link)"
+}

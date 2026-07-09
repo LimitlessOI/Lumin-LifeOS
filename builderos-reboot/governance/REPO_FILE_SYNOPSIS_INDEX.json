@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T01:44:57.478Z",
+  "generated_at": "2026-07-09T02:05:38.177Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11319,
+  "file_count": 11336,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21611,9 +21611,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3415784,
-      "mtime": "2026-07-09T01:13:38.658Z",
-      "indexed_at": "2026-07-09T01:13:57.853Z"
+      "bytes": 3422653,
+      "mtime": "2026-07-09T02:05:15.425Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -29596,6 +29596,16 @@
       "indexed_at": "2026-07-09T01:13:37.205Z"
     },
     {
+      "path": "builderos-reboot/scripts/founder-memory-sentry-proof.mjs",
+      "synopsis": "SENTRY proof — load product X ⇒ founder conversations are in context.",
+      "bytes": 4662,
+      "mtime": "2026-07-09T01:04:26.279Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "builderos-reboot/scripts/general-browser-agent-live-proof.mjs",
       "synopsis": "Behavioral proof for services/general-browser-agent-live.js.",
       "bytes": 3783,
@@ -30475,6 +30485,16 @@
       "mtime": "2025-12-22T18:15:07.129Z",
       "indexed_at": "2026-07-09T01:13:37.205Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "config/go-vegas-campaign.js",
+      "synopsis": "Go Vegas free business network — outreach copy, targeting, follow-up cadence.",
+      "bytes": 6855,
+      "mtime": "2026-07-09T01:04:26.279Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "config/hardware-profiles.json",
@@ -35318,6 +35338,13 @@
       "indexed_at": "2026-07-09T01:13:37.205Z"
     },
     {
+      "path": "db/migrations/20260707_go_vegas_outreach.sql",
+      "synopsis": "Go Vegas business network outreach pipeline — discover, invite, follow up.",
+      "bytes": 1233,
+      "mtime": "2026-07-09T01:04:26.280Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z"
+    },
+    {
       "path": "db/migrations/20260707_marketing_phase1_schema.sql",
       "synopsis": "Creates the initial MarketingOS database schema.",
       "bytes": 3944,
@@ -35330,6 +35357,13 @@
       "bytes": 1452,
       "mtime": "2026-07-07T22:08:22.537Z",
       "indexed_at": "2026-07-09T01:13:37.205Z"
+    },
+    {
+      "path": "db/migrations/20260708_founder_memory_canonical.sql",
+      "synopsis": "Canonical append-only founder↔AI memory entries (receipt-linked).",
+      "bytes": 1364,
+      "mtime": "2026-07-09T01:04:26.280Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z"
     },
     {
       "path": "db/migrations/20260708_marketing_phase1_schema_v2.sql",
@@ -39195,7 +39229,7 @@
       "synopsis": "Canonical product home — LimitlessOS business stack",
       "bytes": 8261,
       "mtime": "2026-07-09T01:04:26.250Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "indexed_at": "2026-07-09T02:05:38.177Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -39298,7 +39332,7 @@
       "synopsis": "Canonical product home — Memory System",
       "bytes": 20150,
       "mtime": "2026-07-09T01:04:26.250Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "indexed_at": "2026-07-09T02:05:38.177Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -60645,6 +60679,14 @@
       "indexed_at": "2026-07-09T01:13:37.205Z"
     },
     {
+      "path": "Lumin-Memory/01_INDEX/founder_memory_schema.json",
+      "synopsis": "JSON data/config — Lumin-Memory/01_INDEX/founder_memory_schema.json.",
+      "bytes": 1134,
+      "mtime": "2026-07-09T01:04:26.279Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "MAKE_MONEY_NOW_GUIDE.md",
       "synopsis": "💰 Make Money NOW - Complete Guide",
       "bytes": 5601,
@@ -62220,6 +62262,14 @@
       "bytes": 10428,
       "mtime": "2026-07-09T01:03:41.505Z",
       "indexed_at": "2026-07-09T01:13:37.205Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/FOUNDER_MEMORY_V1_SENTRY.json",
+      "synopsis": "Product receipt — FOUNDER MEMORY V1 SENTRY.",
+      "bytes": 1118,
+      "mtime": "2026-07-09T01:04:26.280Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
       "synopsis_index_only": true
     },
     {
@@ -64896,6 +64946,16 @@
       "indexed_at": "2026-07-09T01:13:37.205Z"
     },
     {
+      "path": "routes/founder-memory-routes.js",
+      "synopsis": "Founder memory API — append, product context inject, claim verification.",
+      "bytes": 4960,
+      "mtime": "2026-07-09T01:04:26.280Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "routes/future-self-simulator-routes.js",
       "synopsis": "Exports createFutureRoutes — routes/future-self-simulator-routes.js.",
       "bytes": 3607,
@@ -64934,6 +64994,16 @@
       "indexed_at": "2026-07-09T01:13:37.205Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/go-vegas-outreach-routes.js",
+      "synopsis": "Go Vegas business network outreach API — discover, invite, follow up.",
+      "bytes": 4494,
+      "mtime": "2026-07-09T01:04:26.280Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -67106,6 +67176,16 @@
       "indexed_at": "2026-07-09T01:13:37.205Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/go-vegas-outreach-pilot.mjs",
+      "synopsis": "Go Vegas outreach pilot — discover LV businesses, invite, follow up.",
+      "bytes": 2893,
+      "mtime": "2026-07-09T01:04:26.280Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -81331,7 +81411,7 @@
       "synopsis": "services/conversation-store.js — conversation persistence with truth scrub on assistant writes.",
       "bytes": 8313,
       "mtime": "2026-07-09T01:04:26.253Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]
@@ -82013,6 +82093,46 @@
       ]
     },
     {
+      "path": "services/founder-memory-claim-gate.js",
+      "synopsis": "Receipt-linked founder claim verification — no citation => UNVERIFIED.",
+      "bytes": 2350,
+      "mtime": "2026-07-09T01:04:26.281Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/founder-memory-fanout.js",
+      "synopsis": "Fan-out founder memory writes to governance, ideavault, continuity, index.",
+      "bytes": 3341,
+      "mtime": "2026-07-09T01:04:26.281Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/founder-memory-product-resolver.js",
+      "synopsis": "Product-scoped founder memory resolver + mandatory auto-inject at product load.",
+      "bytes": 5660,
+      "mtime": "2026-07-09T01:04:26.281Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/founder-memory-store.js",
+      "synopsis": "Canonical append-only founder↔AI memory store (DB + Lumin-Memory index).",
+      "bytes": 6658,
+      "mtime": "2026-07-09T01:04:26.281Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/founder-overlay-surgical-patch.js",
       "synopsis": "Mechanical overlay HTML patches — insert comments/markers without LLM whole-file rewrite.",
       "bytes": 4158,
@@ -82224,6 +82344,26 @@
       "bytes": 10573,
       "mtime": "2026-06-21T21:39:13.884Z",
       "indexed_at": "2026-07-09T01:13:37.205Z"
+    },
+    {
+      "path": "services/go-vegas-email-finder.js",
+      "synopsis": "Extract public contact emails from business websites for Go Vegas outreach.",
+      "bytes": 2701,
+      "mtime": "2026-07-09T01:04:26.281Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/go-vegas-outreach.js",
+      "synopsis": "Go Vegas outreach — discover LV businesses, invite to free network, follow up.",
+      "bytes": 20415,
+      "mtime": "2026-07-09T01:04:26.281Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/limitlessos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/google-calendar-service.js",
@@ -83598,7 +83738,7 @@
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
       "bytes": 59608,
       "mtime": "2026-07-09T01:04:26.255Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87357,6 +87497,16 @@
       "indexed_at": "2026-07-09T01:13:37.205Z"
     },
     {
+      "path": "tests/founder-memory.test.js",
+      "synopsis": "js — tests/founder-memory.test.js.",
+      "bytes": 2820,
+      "mtime": "2026-07-09T02:05:10.279Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z",
+      "ssot": [
+        "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "tests/founder-packet-v2-unified-gate.test.js",
       "synopsis": "js — tests/founder-packet-v2-unified-gate.test.js.",
       "bytes": 2177,
@@ -87400,6 +87550,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/go-vegas-outreach.test.js",
+      "synopsis": "js — tests/go-vegas-outreach.test.js.",
+      "bytes": 2444,
+      "mtime": "2026-07-09T02:05:10.298Z",
+      "indexed_at": "2026-07-09T02:05:38.177Z"
     },
     {
       "path": "tests/insurance-card-parse.test.js",

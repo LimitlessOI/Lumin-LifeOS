@@ -4,8 +4,10 @@
  */
 
 import { scrubProseForStorage } from './truth-enforcement-spine.js';
+import { createFounderMemoryStore } from './founder-memory-store.js';
 
 export function createConversationStore(pool) {
+  const founderMemory = createFounderMemoryStore(pool);
   // ── Save a full conversation ───────────────────────────────────────────────
   /**
    * @param {object} conv
@@ -200,5 +202,38 @@ export function createConversationStore(pool) {
     return result.rows;
   }
 
-  return { save, get, getAll, search, setSummary, stats };
+  async function appendFounderExchange({
+    sessionId,
+    productIds,
+    productId,
+    messages = [],
+    metadata = {},
+  }) {
+    const receipts = [];
+    for (const msg of messages) {
+      if (!msg?.content) continue;
+      const role = msg.role === 'user' || msg.role === 'founder' ? 'founder' : 'assistant';
+      let content = typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content);
+      if (role === 'assistant') {
+        content = scrubProseForStorage(content, {
+          taskType: 'founder_memory',
+          command_truth: msg.command_truth || 'NO_COMMAND_RAN',
+        });
+      }
+      const result = await founderMemory.append({
+        sessionId,
+        productIds,
+        productId,
+        classification: msg.classification,
+        role,
+        content,
+        metadata: { ...metadata, ...(msg.metadata || {}) },
+        occurredAt: msg.timestamp || null,
+      });
+      receipts.push(result.receipt);
+    }
+    return { ok: true, receipts };
+  }
+
+  return { save, get, getAll, search, setSummary, stats, appendFounderExchange, founderMemory };
 }

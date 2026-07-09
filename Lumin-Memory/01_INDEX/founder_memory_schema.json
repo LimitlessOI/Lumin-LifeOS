@@ -1,0 +1,24 @@
+{
+  "schema": "founder_memory_index_v1",
+  "description": "Append-only canonical index for founder↔AI memory entries. One JSON line per entry; DB table founder_memory_entries is authoritative when DATABASE_URL is set.",
+  "index_file": "Lumin-Memory/01_INDEX/founder_memory_index.jsonl",
+  "entry_fields": {
+    "receipt_id": "Typed receipt — required for integrity claims",
+    "session_id": "Conversation session identifier",
+    "product_ids": "Array of product slugs (docs/products/<slug>)",
+    "classification": "decision | idea | chore",
+    "role": "founder | assistant | system",
+    "occurred_at": "ISO timestamp",
+    "content_preview": "First 240 chars for index scan"
+  },
+  "fanout": {
+    "decision": "builderos-reboot/governance/decisions/",
+    "idea": "docs/products/ideavault/conversations/",
+    "chronology": "docs/CONTINUITY_LOG_LIFEOS.md"
+  },
+  "auto_inject": {
+    "hook": "services/product-ssot-context.js → loadProductHomeWithFounderMemory",
+    "chair_intake": "services/lumin-chair-orchestrator.js blueprint intake path",
+    "lazy_loader": "/api/v1/founder-memory/product/:productId/context"
+  }
+}

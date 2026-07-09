@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/memory-system/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-04T12:45 — Acceptance script rewritten: verify-memory-system.mjs checks 6 required files (existence + syntax) and probes /api/v1/memory/capsules/health. All 7 checks pass. Executor now skips regenerating this script when it exists + syntax OK. |
+| **Last Updated** | 2026-07-08 — Founder↔AI canonical memory v1: append-only store, product auto-inject, fan-out, receipt-linked claims, SENTRY PASS. |
 
 ---
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
@@ -78,6 +78,20 @@ Historian-style prediction/outcome calibration lives primarily in Amendment 39, 
 | `services/memory-health.js` | Stale/quarantined/contested counts + citation rate |
 | `services/memory-institutional.js` | Agent protocol violations + intent drift events |
 | `config/memory-truth-classes.js` | 10 truth class definitions; all can_auto_promote_to_canonical=false |
+| `services/conversation-store.js` | Session CRUD + `appendFounderExchange` → canonical founder memory |
+| `services/founder-memory-store.js` | Append-only canonical store (`founder_memory_entries` + index jsonl) |
+| `services/founder-memory-fanout.js` | One-write fan-out → governance / ideavault / continuity |
+| `services/founder-memory-product-resolver.js` | Product→memory resolver + mandatory inject block |
+| `services/product-ssot-context.js` | PRODUCT_HOME load wrapper with memory inject |
+| `services/founder-memory-claim-gate.js` | Receipt citation gate (UNVERIFIED without receipt) |
+| `routes/founder-memory-routes.js` | `/api/v1/founder-memory/*` |
+| `Lumin-Memory/01_INDEX/founder_memory_index.jsonl` | Append-only canonical index |
+| `db/migrations/20260708_founder_memory_canonical.sql` | `founder_memory_entries` table |
+
+### DB Tables (Founder memory — canonical)
+| Table | Purpose |
+|-------|---------|
+| `founder_memory_entries` | Append-only founder↔AI exchanges — receipt_id, session_id, product_ids[], classification |
 
 ### DB Tables (Alpha — Canonical)
 | Table | Purpose |
@@ -177,6 +191,8 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 ---
 
 ## Change Receipts
+
+| 2026-07-08 | **Founder↔AI canonical memory v1** — `founder_memory_entries` migration; `founder-memory-store` + fan-out to governance/ideavault/CONTINUITY_LOG; product auto-inject in chair blueprint intake + `loadProductHomeWithFounderMemory`; receipt-linked claim gate; routes at `/api/v1/founder-memory`; SENTRY proof PASS (`products/receipts/FOUNDER_MEMORY_V1_SENTRY.json`). | One durable memory group per product — conversations in context, not links | `node builderos-reboot/scripts/founder-memory-sentry-proof.mjs` PASS; `node --test tests/founder-memory.test.js` 7/7 |
 
 | 2026-06-24 | **`core/memory-system.js`**, **`services/memory-write-gate.js`**, **`services/conversation-store.js`**, **`startup/memory.js`** — AI prose gated on write; assistant conversation rows scrubbed; theater blocked | Point B DNA / truth stack: no falsehoods in memory corpus | ✅ truth-gap tests | deploy |
 | 2026-05-24 | **`routes/memory-routes.js`** — legacy memory router no longer applies `requireKey` to non-`/memories` paths under `/api` (unblocked LifeOS public login). | Auth regression: all `/api/v1/lifeos/auth/*` returned 401 without command key. | GAP-FILL | pending deploy |
