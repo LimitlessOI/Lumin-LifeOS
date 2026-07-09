@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T14:06:57.390Z",
+  "generated_at": "2026-07-09T14:41:39.259Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11350,
+  "file_count": 11351,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82909,6 +82909,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-calendar-protection.js",
+      "synopsis": "Exports upsertRule — services/lifeos-calendar-protection.js.",
+      "bytes": 5478,
+      "mtime": "2026-07-09T14:41:39.259Z",
+      "indexed_at": "2026-07-09T14:41:39.259Z"
     },
     {
       "path": "services/lifeos-calendar.js",
