@@ -1,143 +1,151 @@
 /**
  * SYNOPSIS: Exports addItem — services/lifeos-learning.js.
  */
-export async function addItem(db, userId, data) {
+const TABLE = 'learning_queue';
+
+function assertDb(db) {
   if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
+    throw new TypeError('db must be a node-postgres client or pool with query()');
   }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
+}
 
-  const title = typeof data?.title === 'string' ? data.title.trim() : '';
-  const type = typeof data?.type === 'string' ? data.type.trim() : '';
-  const url = typeof data?.url === 'string' ? data.url.trim() : '';
-  const status = normalizeStatus(data?.status) ?? 'queued';
-  const keyInsight = typeof data?.key_insight === 'string' ? data.key_insight.trim() : null;
+function normalizeStatus(status) {
+  if (status == null || status === '') return null;
+  const value = String(status).trim().toLowerCase();
+  if (!['queued', 'reading', 'done'].includes(value)) {
+    throw new RangeError('status must be one of queued, reading, done');
+  }
+  return value;
+}
 
-  if (!title) {
-    throw new TypeError('title is required');
+function normalizeString(value, fieldName, { required = false, maxLen = 2048 } = {}) {
+  if (value == null) {
+    if (required) throw new TypeError(`${fieldName} is required`);
+    return null;
   }
-  if (!type) {
-    throw new TypeError('type is required');
+  const s = String(value).trim();
+  if (!s) {
+    if (required) throw new TypeError(`${fieldName} is required`);
+    return null;
   }
+  if (s.length > maxLen) {
+    throw new RangeError(`${fieldName} is too long`);
+  }
+  return s;
+}
+
+function normalizeUrl(value) {
+  const s = normalizeString(value, 'url', { required: false, maxLen: 2048 });
+  return s;
+}
+
+function buildSelectClause() {
+  return `SELECT id, user_id, title, type, url, status, key_insight, created_at, updated_at
+          FROM ${TABLE}`;
+}
+
+export async function addItem(db, userId, data = {}) {
+  assertDb(db);
+  if (userId == null || userId === '') throw new TypeError('userId is required');
+
+  const title = normalizeString(data.title, 'title', { required: true, maxLen: 500 });
+  const type = normalizeString(data.type, 'type', { required: false, maxLen: 100 });
+  const url = normalizeUrl(data.url);
+  const status = normalizeStatus(data.status) ?? 'queued';
+  const keyInsight = normalizeString(data.key_insight, 'key_insight', { required: false, maxLen: 4000 });
 
   const result = await db.query(
-    `
-      INSERT INTO learning_queue (user_id, title, type, url, status, key_insight)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at
-    `,
-    [userId, title, type, url || null, status, keyInsight]
+    `INSERT INTO ${TABLE} (user_id, title, type, url, status, key_insight)
+     VALUES ($1, $2, $3, $4, $5, $6)
+     RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at`,
+    [userId, title, type, url, status, keyInsight]
   );
 
-  return result.rows[0] || null;
+  return result.rows[0] ?? null;
 }
 
 export async function listItems(db, userId, { status } = {}) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
+  assertDb(db);
+  if (userId == null || userId === '') throw new TypeError('userId is required');
 
   const params = [userId];
-  let sql = `
-    SELECT id, user_id, title, type, url, status, key_insight, created_at, updated_at
-    FROM learning_queue
-    WHERE user_id = $1
-  `;
-
-  const normalizedStatus = normalizeStatus(status);
+  let sql = `${buildSelectClause()} WHERE user_id = $1`;
+  const normalizedStatus = status == null || status === '' ? null : normalizeStatus(status);
   if (normalizedStatus) {
     params.push(normalizedStatus);
     sql += ` AND status = $2`;
   }
-
-  sql += ` ORDER BY created_at DESC, id DESC`;
+  sql += ` ORDER BY created_at DESC`;
 
   const result = await db.query(sql, params);
   return result.rows;
 }
 
 export async function updateItem(db, userId, id, patch = {}) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-  if (!id) {
-    throw new TypeError('id is required');
-  }
+  assertDb(db);
+  if (userId == null || userId === '') throw new TypeError('userId is required');
+  if (id == null || id === '') throw new TypeError('id is required');
 
   const sets = [];
   const params = [];
-  let idx = 1;
+  let i = 1;
 
   if (Object.prototype.hasOwnProperty.call(patch, 'status')) {
-    const normalizedStatus = normalizeStatus(patch.status);
-    if (!normalizedStatus) {
-      throw new TypeError('status must be queued, reading, or done');
-    }
-    sets.push(`status = $${idx++}`);
-    params.push(normalizedStatus);
+    params.push(normalizeStatus(patch.status));
+    sets.push(`status = $${i++}`);
   }
 
   if (Object.prototype.hasOwnProperty.call(patch, 'key_insight')) {
-    const keyInsight = patch.key_insight == null ? null : String(patch.key_insight).trim();
-    sets.push(`key_insight = $${idx++}`);
-    params.push(keyInsight || null);
+    params.push(normalizeString(patch.key_insight, 'key_insight', { required: false, maxLen: 4000 }));
+    sets.push(`key_insight = $${i++}`);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(patch, 'title')) {
+    params.push(normalizeString(patch.title, 'title', { required: false, maxLen: 500 }));
+    sets.push(`title = $${i++}`);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(patch, 'type')) {
+    params.push(normalizeString(patch.type, 'type', { required: false, maxLen: 100 }));
+    sets.push(`type = $${i++}`);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(patch, 'url')) {
+    params.push(normalizeUrl(patch.url));
+    sets.push(`url = $${i++}`);
   }
 
   if (sets.length === 0) {
-    return null;
+    const existing = await db.query(
+      `${buildSelectClause()} WHERE id = $1 AND user_id = $2`,
+      [id, userId]
+    );
+    return existing.rows[0] ?? null;
   }
 
-  sets.push(`updated_at = NOW()`);
-  params.push(userId, id);
+  params.push(id, userId);
+  const sql = `
+    UPDATE ${TABLE}
+    SET ${sets.join(', ')}, updated_at = NOW()
+    WHERE id = $${i++} AND user_id = $${i++}
+    RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at
+  `;
 
-  const result = await db.query(
-    `
-      UPDATE learning_queue
-      SET ${sets.join(', ')}
-      WHERE user_id = $${idx++} AND id = $${idx}
-      RETURNING id, user_id, title, type, url, status, key_insight, created_at, updated_at
-    `,
-    params
-  );
-
-  return result.rows[0] || null;
+  const result = await db.query(sql, params);
+  return result.rows[0] ?? null;
 }
 
 export async function deleteItem(db, userId, id) {
-  if (!db || typeof db.query !== 'function') {
-    throw new TypeError('db.query is required');
-  }
-  if (!userId) {
-    throw new TypeError('userId is required');
-  }
-  if (!id) {
-    throw new TypeError('id is required');
-  }
+  assertDb(db);
+  if (userId == null || userId === '') throw new TypeError('userId is required');
+  if (id == null || id === '') throw new TypeError('id is required');
 
   const result = await db.query(
-    `
-      DELETE FROM learning_queue
-      WHERE user_id = $1 AND id = $2
-      RETURNING id
-    `,
-    [userId, id]
+    `DELETE FROM ${TABLE}
+     WHERE id = $1 AND user_id = $2
+     RETURNING id`,
+    [id, userId]
   );
 
-  return result.rows[0] || null;
-}
-
-function normalizeStatus(value) {
-  if (value == null || value === '') {
-    return null;
-  }
-  const status = String(value).trim().toLowerCase();
-  return status === 'queued' || status === 'reading' || status === 'done' ? status : null;
+  return result.rows[0] ?? null;
 }
