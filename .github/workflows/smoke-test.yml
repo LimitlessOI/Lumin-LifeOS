@@ -46,6 +46,9 @@ jobs:
             node --check "$f"
           done
 
+      - name: Completion overclaim guard (Wave 0 item 2)
+        run: npm run completion:overclaim:verify
+
       - name: Run existing tests
         run: npm test --if-present
         env:

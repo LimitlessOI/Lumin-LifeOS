@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "COMPLETION_VOCABULARY_SSOT.schema.json",
+  "title": "Completion Vocabulary SSOT (contract for the overclaim guard)",
+  "description": "Shape the single source of truth for completion words must satisfy so scripts/verify-completion-overclaim.mjs can enforce 'claimed level <= proven gates'. The SSOT INSTANCE (COMPLETION_VOCABULARY_SSOT.json) is owned by the vocabulary lane; this schema is owned by the overclaim guard and defines the interface between them.",
+  "type": "object",
+  "required": ["schema", "version", "status", "ladder", "gates", "honesty_states"],
+  "properties": {
+    "schema": { "const": "completion_vocabulary_ssot_v1" },
+    "version": { "type": "string", "description": "e.g. 1.0" },
+    "status": { "enum": ["DRAFT", "LOCKED"] },
+    "ladder": {
+      "type": "array",
+      "description": "Monotonic completion levels, lowest rank first. A claim at rank R legitimately requires every gate for every level of rank <= R.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["level", "rank", "gates"],
+        "properties": {
+          "level": { "type": "string", "description": "canonical UPPER_SNAKE term" },
+          "rank": { "type": "integer", "minimum": 1 },
+          "means": { "type": "string" },
+          "gates": {
+            "type": "array",
+            "description": "gate ids (keys into .gates) that this level adds; cumulative down the ladder",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "description": "gate id -> human/proof definition (what receipt/command proves it)",
+      "additionalProperties": { "type": "string" }
+    },
+    "aliases": {
+      "type": "object",
+      "description": "non-canonical word -> canonical level (e.g. PASS -> TECHNICAL_PASS)",
+      "additionalProperties": { "type": "string" }
+    },
+    "honesty_states": {
+      "type": "array",
+      "description": "non-ladder states that PREVENT overclaim (BUILT_NOT_LIVE, UNVERIFIED, BLOCKED_*, SCRAPPED_SALVAGE_ONLY)",
+      "items": { "type": "string" }
+    },
+    "claim_sources": {
+      "type": "array",
+      "description": "OPTIONAL. Files whose completion claims the CI guard must enforce. When present the guard reads the claimed level and each gate's proof from these files and fails CI on any overclaim. When absent the guard only validates the SSOT's internal consistency.",
+      "items": {
+        "type": "object",
+        "required": ["file", "claim"],
+        "properties": {
+          "file": { "type": "string", "description": "repo-relative JSON file" },
+          "claim": {
+            "type": "object",
+            "description": "how to read the claimed level from the file",
+            "required": ["path"],
+            "properties": {
+              "path": { "type": "string", "description": "dot path, e.g. levels or autonomy_closure_v1.verdict" },
+              "true_means": { "type": "string", "description": "if `path` is a boolean map (level->bool), the level a true value claims; else omit and the value at path is the level string" }
+            }
+          },
+          "proven_gates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["gate", "file", "path", "equals"],
+              "properties": {
+                "gate": { "type": "string" },
+                "file": { "type": "string" },
+                "path": { "type": "string" },
+                "equals": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
