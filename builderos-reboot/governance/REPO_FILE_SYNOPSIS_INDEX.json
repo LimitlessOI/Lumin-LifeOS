@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T01:30:50.182Z",
+  "generated_at": "2026-07-09T01:44:57.478Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11318,
+  "file_count": 11319,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -20498,9 +20498,9 @@
     {
       "path": "BRAINSTORM_AND_CONSENSUS.md",
       "synopsis": "BRAINSTORM_AND_CONSENSUS",
-      "bytes": 50197,
-      "mtime": "2026-07-09T01:15:01.945Z",
-      "indexed_at": "2026-07-09T01:15:09.352Z"
+      "bytes": 51586,
+      "mtime": "2026-07-09T01:44:43.875Z",
+      "indexed_at": "2026-07-09T01:44:57.478Z"
     },
     {
       "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
@@ -36376,9 +36376,9 @@
     {
       "path": "docs/BUILDEROS_VOCABULARY.md",
       "synopsis": "BuilderOS Vocabulary — Canonical Definitions",
-      "bytes": 13380,
-      "mtime": "2026-07-09T01:03:41.929Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 13648,
+      "mtime": "2026-07-09T01:44:32.245Z",
+      "indexed_at": "2026-07-09T01:44:57.478Z"
     },
     {
       "path": "docs/C2_CANONICAL_DEFINITION.md",
@@ -36439,9 +36439,9 @@
     {
       "path": "docs/COMPLETION_VOCABULARY_SSOT.md",
       "synopsis": "Completion / status claim vocabulary SSOT (PROPOSED)",
-      "bytes": 9958,
-      "mtime": "2026-07-09T01:13:29.408Z",
-      "indexed_at": "2026-07-09T01:13:57.853Z"
+      "bytes": 10248,
+      "mtime": "2026-07-09T01:44:25.861Z",
+      "indexed_at": "2026-07-09T01:44:57.478Z"
     },
     {
       "path": "docs/CONCEPT_DICTIONARY.md",
@@ -36586,9 +36586,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 43291,
-      "mtime": "2026-07-09T01:30:35.688Z",
-      "indexed_at": "2026-07-09T01:30:50.182Z"
+      "bytes": 43956,
+      "mtime": "2026-07-09T01:44:43.250Z",
+      "indexed_at": "2026-07-09T01:44:57.478Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -37423,6 +37423,13 @@
       "bytes": 42122,
       "mtime": "2026-06-29T17:35:42.942Z",
       "indexed_at": "2026-07-09T01:13:37.205Z"
+    },
+    {
+      "path": "docs/FOUNDER_MATURITY_PHASES.md",
+      "synopsis": "Founder maturity phases — pre-alpha machine proof → founder refinement → human beta",
+      "bytes": 6733,
+      "mtime": "2026-07-09T01:44:16.420Z",
+      "indexed_at": "2026-07-09T01:44:57.478Z"
     },
     {
       "path": "docs/FOUNDER_SOVEREIGNTY_PRIORITY_AUDIT_V1.md",
@@ -38685,9 +38692,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 210669,
-      "mtime": "2026-07-09T01:30:19.288Z",
-      "indexed_at": "2026-07-09T01:30:50.182Z"
+      "bytes": 211043,
+      "mtime": "2026-07-09T01:44:36.488Z",
+      "indexed_at": "2026-07-09T01:44:57.478Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39128,9 +39135,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 602751,
-      "mtime": "2026-07-09T01:30:45.067Z",
-      "indexed_at": "2026-07-09T01:30:50.182Z"
+      "bytes": 603314,
+      "mtime": "2026-07-09T01:44:36.450Z",
+      "indexed_at": "2026-07-09T01:44:57.478Z"
     },
     {
       "path": "docs/products/LIFERE.md",

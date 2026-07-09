@@ -50,6 +50,8 @@ Use these as the **only** terminal / readiness claim words for BuilderOS / facto
 
 **Cross-ref for rank 8:** `CLEARED_FOR_FOUNDER_ALPHA` is the BuilderOS ladder name for the same underlying “machine cleared Adam to test / Alpha” milestone used in LifeOS Point A/B/C language. Same concept; this token is the claim word here.
 
+**Phase law (who tests what):** `docs/FOUNDER_MATURITY_PHASES.md` — pre-alpha = machine proves UI on live Railway with Adam’s credentials **before** he gets it; Adam’s phase after that = **refinement** (not first-pass “is it done?”); human beta = other people after Adam elects.
+
 ---
 
 ## 2. Proof / step words (not completion)

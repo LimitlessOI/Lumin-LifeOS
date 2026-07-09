@@ -8,6 +8,18 @@
 
 ---
 
+## [BUILD] Update 2026-07-08 — Founder maturity phases sealed
+
+### What happened
+- Adam locked the product maturity model: pre-alpha = machine tests UI on Railway with his credentials before he gets it; his phase = refinement via chat (feel/ideas/taste); beta = other humans + pattern feedback.
+- Sealed `docs/FOUNDER_MATURITY_PHASES.md`; pointed completion vocab + BuilderOS vocabulary at it.
+- Honest gap: credentialed Layer-B pre-alpha is not fully closed on all products yet — doctrine now forbids handing him broken cores as “ready.”
+
+### Next
+- Implement/enforce credentialed pre-alpha gate before CLEARED_FOR_FOUNDER_ALPHA; continue Wave 0 #5.
+
+---
+
 ## [BUILD] Update 2026-07-08 — Efficiency triad (time + tokens + USD)
 
 ### What happened
