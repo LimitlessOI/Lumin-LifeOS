@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-09 — Phase3 s7 GAP-FILL: rewire routes + auto-register. |
+| **Last Updated** | 2026-07-09 — UI login proof from Railway vault (operator Puppeteer). |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-09 | **Conductor: UI login proof uses Railway vault** — `POST /operator/credentialed-ui-login-proof` runs Puppeteer form login with `LIFEOS_FOUNDER_LOGIN_*` on the server (never returns password); `run-founder-ui-login-e2e.mjs` falls back to that path; SENTRY B-credentialed-ui no longer needs local password. | Adam: creds already in Railway — do not ask him. | ✅ JWT vault proof green; ⚠️ UI route needs deploy | push + run UI proof |
 | 2026-07-09 | **Conductor: s7 phase3 routes GAP-FILL** — builder wrote `routes/lifeos-phase3-routes.js` importing nonexistent `sN-*-service.js`; rewired to real `lifeos-*` services + auto-register `registerLifeosPhase3Routes`; s7 revived pending. | s7 blocked: route not auto-registered / false-done. | ✅ local syntax; s1–s6 done | never-stop prove mount |
 | 2026-07-09 | **Conductor: skip deploy-proof on service steps** — s1–s4 done; s5 (`lifeos-learning.js`) rebuilt 14× while stuck in ~10 min deploy SHA wait; never-stop now skips deploy-proof for non-route services (routes still prove live). | Adam: keep going. | ✅ learning.js on main; s4 done | never-stop s5→s7 |
 | 2026-07-09 | **Conductor: never-stop stop re-selecting done s2** — after s2 DONE, lagging container queue + merge clobbered repo `done`→`pending` and starved s3→s7; merge is now status-monotonic + discover/run refresh BUILD_QUEUE from GitHub. | Adam: keep going — system stuck looping s2. | ✅ merge unit test; s2 done on main | never-stop s3→s7 |

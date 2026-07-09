@@ -8,6 +8,18 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Founder UI login proof from Railway vault (no local password)
+
+### What happened
+- Adam: LIFEOS_FOUNDER_LOGIN_* already in Railway — conductor must not ask for them.
+- Added `POST /operator/credentialed-ui-login-proof` (vault + Puppeteer form login; never returns password).
+- `run-founder-ui-login-e2e.mjs` falls back to that path; SENTRY B-credentialed-ui requires COMMAND_CENTER_KEY only.
+
+### Next
+- Push → redeploy → run UI proof + `sentry:gate:enforce-creds` until B-credentialed-ui PASS.
+
+---
+
 ## [BUILD] Update 2026-07-09 — LifeOS phase3 s1–s6 done; s7 auto-register GAP-FILL
 
 ### What happened

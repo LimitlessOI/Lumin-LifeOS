@@ -414,6 +414,96 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         return res.status(500).json(report);
       }
     });
+
+    // True UI form login using Railway vault LIFEOS_FOUNDER_LOGIN_* (never returns password).
+    // Closes the "need local LIFEOS_FOUNDER_LOGIN_*" gap for B-credentialed-ui.
+    router.post('/operator/credentialed-ui-login-proof', requireKey, async (req, res) => {
+      const started = Date.now();
+      const report = {
+        schema: 'founder_ui_login_e2e_v1',
+        at: new Date().toISOString(),
+        ok: false,
+        auth_mode: 'ui_form_login',
+        source: 'operator_vault_puppeteer',
+        steps: {},
+      };
+      let browser;
+      try {
+        const creds = resolveFounderLoginCreds();
+        if (!creds) {
+          report.blocker = 'FOUNDER_CREDS_MISSING_ON_SERVER';
+          report.cred_diagnosis = diagnoseFounderLoginCreds();
+          return res.status(503).json(report);
+        }
+        report.cred_source = creds.source;
+        const origin = (publicWebOrigin(req) || process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
+        if (!origin) {
+          report.blocker = 'NO_PUBLIC_ORIGIN';
+          return res.status(503).json(report);
+        }
+        report.base = origin;
+
+        const puppeteer = (await import('puppeteer')).default;
+        const { getChromiumLaunchOptions } = await import('../services/browser-agent.js');
+        browser = await puppeteer.launch(getChromiumLaunchOptions({ headless: true }));
+        const page = await browser.newPage();
+        page.setDefaultTimeout(45_000);
+
+        const loginUrl = `${origin}/overlay/lifeos-login.html?next=${encodeURIComponent('/overlay/lifeos-app.html?direct_system=1')}`;
+        await page.goto(loginUrl, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+        report.steps.login_page = { ok: true, url: page.url() };
+
+        await page.waitForSelector('#login-email', { timeout: 45_000 });
+        await page.type('#login-email', creds.email, { delay: 10 });
+        await page.type('#login-password', creds.password, { delay: 10 });
+        await page.click('#login-btn');
+
+        await page.waitForFunction(
+          () => /lifeos-app\.html/i.test(location.href),
+          { timeout: 45_000 },
+        ).catch(() => null);
+
+        let landed = /lifeos-app\.html/i.test(page.url());
+        report.steps.form_login = { ok: landed, url: page.url() };
+        if (!landed) {
+          await page.goto(`${origin}/overlay/lifeos-app.html?direct_system=1`, {
+            waitUntil: 'domcontentloaded',
+            timeout: 45_000,
+          });
+          landed = /lifeos-app\.html/i.test(page.url());
+          report.steps.app_nav = { ok: landed, url: page.url() };
+        }
+        if (!landed) {
+          report.blocker = 'DID_NOT_REACH_APP';
+          report.error = `url=${page.url()}`;
+          report.duration_ms = Date.now() - started;
+          return res.status(422).json(report);
+        }
+
+        const chatSel = 'textarea, input[type="text"], [contenteditable="true"]';
+        await page.waitForSelector(chatSel, { timeout: 45_000 });
+        const probe = `trust-gate-ui-${Date.now()}`;
+        await page.focus(chatSel);
+        await page.keyboard.type(probe, { delay: 5 });
+        await page.keyboard.press('Enter');
+        report.steps.chat_send = { ok: true, probe };
+
+        await new Promise((r) => setTimeout(r, 2500));
+        const stillOnApp = /lifeos-app\.html/i.test(page.url());
+        report.steps.session_held = { ok: stillOnApp, url: page.url() };
+        report.ok = Boolean(report.steps.form_login?.ok || report.steps.app_nav?.ok) && stillOnApp;
+        report.blocker = report.ok ? null : 'SESSION_LOST';
+        report.duration_ms = Date.now() - started;
+        return res.status(report.ok ? 200 : 422).json(report);
+      } catch (e) {
+        report.error = e.message;
+        report.ok = false;
+        report.duration_ms = Date.now() - started;
+        return res.status(500).json(report);
+      } finally {
+        if (browser) await browser.close().catch(() => {});
+      }
+    });
   }
 
   // ── Create invite (admin) ───────────────────────────────────────────────────

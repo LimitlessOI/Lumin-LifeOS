@@ -54,10 +54,10 @@
           "type": "command",
           "run": ["scripts/run-founder-ui-login-e2e.mjs"],
           "receipt": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
-          "requiresEnv": ["PUBLIC_BASE_URL", "LIFEOS_FOUNDER_LOGIN_EMAIL", "LIFEOS_FOUNDER_LOGIN_PASSWORD"],
+          "requiresEnv": ["PUBLIC_BASE_URL", "COMMAND_CENTER_KEY"],
           "deferrableWithoutEnv": true,
-          "optionalUnderEnforceCreds": true,
-          "note": "True UI form login into lifeos-login.html. Optional under --enforce-creds until local LIFEOS_FOUNDER_LOGIN_* present; API B-credentialed (vault/operator) is the hard gate."
+          "optionalUnderEnforceCreds": false,
+          "note": "True UI form login into lifeos-login.html. Local LIFEOS_FOUNDER_LOGIN_* OR operator vault proof via POST /operator/credentialed-ui-login-proof (Railway Puppeteer — never returns password)."
         }
       ]
     }
