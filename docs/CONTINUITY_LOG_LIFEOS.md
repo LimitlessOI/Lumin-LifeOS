@@ -655,3 +655,6 @@ E2E off-by-one fixed (wait for new assistant bubble); Chair PASS/COMMITTED recei
 
 ## 2026-07-09 — A→Z gate GREEN
 `sentry-prealpha-gate lifeos-founder-ui --enforce-creds` → PASS: Layer B-command-key 16/16 (incl. drawer_direct_build PASS+COMMITTED), Layer B-credentialed JWT PASS. Credentialed UI-form deferred (local LIFEOS_FOUNDER_LOGIN_* not in gate subprocess). Smoke canary accepts COMMIT_ONLY_NOT_LIVE.
+
+## 2026-07-09 — Conductor: finish near-done
+BP_PRIORITY #8 founder-UI proof → TECHNICAL_PASS via system acceptance. LifeOS queue: skip UI sentry verify on db/migrations so never-stop can finish s1–s7 (was stranded on verify_exit_1). E2E think-panel wait hardened (16/16). Next: never-stop builds LifeOS pending; founder_usability still human for TECH_PASS ranks.

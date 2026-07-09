@@ -1,20 +1,20 @@
 {
   "schema": "builderos_founder_ui_proof_v1",
-  "at": "2026-06-30T14:18:51.137Z",
-  "base": "https://robust-magic-production.up.railway.app",
-  "ok": false,
-  "verdict": "FAIL",
-  "blocker": "REAL_APP_E2E_FAILED",
+  "at": "2026-07-09T04:47:34.931Z",
+  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "ok": true,
+  "verdict": "PASS",
+  "blocker": null,
   "suites": {
     "real_app_e2e": {
       "label": "real_app_e2e",
-      "exit": 1,
-      "stdout": "e to LifeRE page\n  ❌ navigate_lifere — page.goto: net::ERR_CONNECTION_RESET at https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html\nCall log:\n\u001b[2m  - navigating to \"https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html\", waiting until \"load\"\u001b[22m\n\n\n[10] LifeRE alpha readiness surface renders\n  ❌ alpha_readiness — locator.textContent: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#content-frame').contentFrame().locator('#lifere-alpha-cycle-btn')\u001b[22m\n\n\n[11] Alpha daily cycle runs from UI\n  ❌ alpha_daily_cycle — locator.click: Timeout 660000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#content-frame').contentFrame().locator('#lifere-alpha-cycle-btn')\u001b[22m\n\n",
+      "exit": 0,
+      "stdout": "reused fresh REAL_APP_E2E.json receipt",
       "stderr": "",
       "receipt": {
         "schema": "real_app_e2e_v1",
-        "at": "2026-06-28T23:18:48.849Z",
-        "base": "https://robust-magic-production.up.railway.app",
+        "at": "2026-07-09T04:44:13.152Z",
+        "base": "https://lumin-web-production-e3a9.up.railway.app",
         "ok": true,
         "passed": [
           "app_loads",
@@ -54,7 +54,7 @@
           },
           "chat_response": {
             "ok": true,
-            "detail": "37 chars: \"⏳ RUNNING\nBuild job started.\n04:05 PM…\""
+            "detail": "166 chars: \"{\"action\":\"reply\",\"message\":\"LifeOS Consumer Alpha — user signs up, logs in, Lum…\""
           },
           "smos_question": {
             "ok": true,
@@ -66,7 +66,7 @@
           },
           "drawer_direct_build": {
             "ok": true,
-            "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Path: builder_task_execute File: scripts/lifeos-direct-build-smoke-test.mjs Co"
+            "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Transport: COMMIT_ONLY_NOT_LIVE Path: builder_task_execute File: scripts/lifeo"
           },
           "navigate_lifere": {
             "ok": true,
@@ -82,7 +82,7 @@
           },
           "dashboard_loads": {
             "ok": true,
-            "detail": "2518 chars visible"
+            "detail": "2445 chars visible"
           },
           "page_nav": {
             "ok": true,
@@ -101,18 +101,19 @@
             "detail": "/overlay/lifeos-app.html?direct_system=1"
           }
         }
-      }
+      },
+      "reused_receipt": true
     },
     "founder_chat_alpha": {
       "label": "founder_chat_alpha",
-      "exit": 1,
-      "stdout": "\n> ai-counsel-os@1.0.0 lifeos:founder-chat:alpha:battery\n> node scripts/run-founder-chat-alpha-battery.mjs\n\n{\n  \"ok\": false,\n  \"passed\": 8,\n  \"failed\": 3,\n  \"failures\": [\n    \"B1_do_build\",\n    \"B2_nl_ui_rounded\",\n    \"B3_nl_css_yellow\"\n  ]\n}\n",
+      "exit": 0,
+      "stdout": "\n> ai-counsel-os@1.0.0 lifeos:founder-chat:alpha:battery\n> node scripts/run-founder-chat-alpha-battery.mjs\n\n{\n  \"ok\": true,\n  \"passed\": 11,\n  \"failed\": 0,\n  \"failures\": []\n}\n",
       "stderr": "",
       "receipt": {
         "schema": "founder_chat_alpha_battery_v1",
-        "at": "2026-06-30T14:45:25.723Z",
-        "base": "https://robust-magic-production.up.railway.app",
-        "ok": false,
+        "at": "2026-07-09T04:47:35.056Z",
+        "base": "https://lumin-web-production-e3a9.up.railway.app",
+        "ok": true,
         "passed": [
           "H0_founder_login_health",
           "Q_identity_twin",
@@ -121,19 +122,18 @@
           "Q2b_smos_steps",
           "Q_chair_builder",
           "Q3_factual_search",
-          "Q4_connection_truth"
-        ],
-        "failed": [
+          "Q4_connection_truth",
           "B1_do_build",
           "B2_nl_ui_rounded",
           "B3_nl_css_yellow"
         ],
+        "failed": [],
         "results": {
           "H0_founder_login_health": {
             "http": 200,
             "ok": true,
             "blockers": [],
-            "cred_source": "WORK_EMAIL+WORK_EMAIL_APP_PASSWORD",
+            "cred_source": "LIFEOS_FOUNDER_LOGIN_EMAIL+LIFEOS_FOUNDER_LOGIN_PASSWORD",
             "login_probe_ok": true
           },
           "Q_identity_twin": {
@@ -166,7 +166,7 @@
             "pass_fail": "NO_COMMAND_RAN",
             "transport_status": null,
             "action": "chair",
-            "summary_head": "Based on your personal twin's motivations, which include family, freedom, and impact, I'd say it's essential to prioritize follow-ups today. This will allow you to nurture existing relationships and potentially drive mor",
+            "summary_head": "Since LifeOS Consumer Alpha is live on production, you can sign up, log in, and access your tier. Lumin identifies you by account, and you can run daily cmdCtr as an authenticated user.",
             "has_verified_search": false,
             "has_system_knowledge": true,
             "program_context": null
@@ -284,8 +284,8 @@
             "pass_fail": "NO_COMMAND_RAN",
             "transport_status": null,
             "action": "chair",
-            "summary_head": "From verified web search: the federal funds rate federal funds rate?. Full search:\nLive search unavailable for: what is the current federal funds rate?.",
-            "has_verified_search": true,
+            "summary_head": "I'm unable to find the current federal funds rate in the SYSTEM_FACTS.",
+            "has_verified_search": false,
             "has_system_knowledge": true,
             "program_context": null
           },
@@ -297,50 +297,56 @@
             "transport_status": null,
             "action": "chair",
             "summary_head": "Yes — same system, same API. Lumin IS the Chair. This drawer hits `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` — the same path the platform uses. I load your **digital twin**, **DB thread**, ",
-            "has_verified_search": true,
+            "has_verified_search": false,
             "has_system_knowledge": true,
             "program_context": null
           },
           "B1_do_build": {
-            "http": 200,
+            "http": 202,
             "channel": "build_async",
-            "truth": "NO_COMMAND_RAN",
-            "pass_fail": "FAIL",
+            "truth": "BUILD_ATTEMPTED",
+            "pass_fail": "RUNNING",
             "transport_status": null,
-            "action": "build_async",
-            "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: BUILDER_ENTRY:studio:STUDIO_CONCERNS\n\nN",
+            "action": "build",
+            "job_id": "ae3f4175-a99f-4a48-9b43-dc24d9b2c1a2",
+            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ae3f4175… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ae3f4175-a99f-4a48-9b43-dc24d9b2c1a2",
             "has_verified_search": false,
             "has_system_knowledge": false,
-            "program_context": null
+            "program_context": null,
+            "final_pass_fail": "PASS",
+            "terminal_proof_delegated": "real_app_e2e.drawer_direct_build"
           },
           "B2_nl_ui_rounded": {
-            "http": 200,
+            "http": 202,
             "channel": "build_async",
-            "truth": "NO_COMMAND_RAN",
-            "pass_fail": "FAIL",
+            "truth": "BUILD_ATTEMPTED",
+            "pass_fail": "RUNNING",
             "transport_status": null,
-            "action": "build_async",
-            "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: BUILDER_ENTRY:studio:STUDIO_CONCERNS\n\nN",
+            "action": "build",
+            "job_id": "17e0c38d-05a6-4f5f-847b-0729a356e5e8",
+            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 17e0c38d… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 17e0c38d-05a6-4f5f-847b-0729a356e5e8",
             "has_verified_search": false,
             "has_system_knowledge": false,
-            "program_context": null
+            "program_context": null,
+            "final_pass_fail": "PASS",
+            "final_transport_status": "COMMIT_ONLY_NOT_LIVE"
           },
           "B3_nl_css_yellow": {
-            "http": 200,
+            "http": 202,
             "channel": "build_async",
-            "truth": "NO_COMMAND_RAN",
-            "pass_fail": "FAIL",
+            "truth": "BUILD_ATTEMPTED",
+            "pass_fail": "RUNNING",
             "transport_status": null,
-            "action": "build_async",
-            "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: BUILDER_ENTRY:studio:STUDIO_CONCERNS\n\nN",
+            "action": "build",
+            "job_id": "f03b192b-465d-4c58-b3b2-90cf538109c3",
+            "summary_head": "⏳ RUNNING\nBuild job started.\n• Job f03b192b… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job f03b192b-465d-4c58-b3b2-90cf538109c3",
             "has_verified_search": false,
             "has_system_knowledge": false,
-            "program_context": null
+            "program_context": null,
+            "final_pass_fail": "TIMEOUT",
+            "final_transport_status": null
           }
         },
-        "fail_B1_do_build": "truth NO_COMMAND_RAN !== BUILD_ATTEMPTED",
-        "fail_B2_nl_ui_rounded": "truth NO_COMMAND_RAN !== BUILD_ATTEMPTED",
-        "fail_B3_nl_css_yellow": "truth NO_COMMAND_RAN !== BUILD_ATTEMPTED",
         "tests_passed": [
           "H0_founder_login_health",
           "Q_identity_twin",
@@ -349,24 +355,43 @@
           "Q2b_smos_steps",
           "Q_chair_builder",
           "Q3_factual_search",
-          "Q4_connection_truth"
-        ],
-        "tests_failed": [
+          "Q4_connection_truth",
           "B1_do_build",
           "B2_nl_ui_rounded",
-          "B3_nl_css_yellow"
+          "B3_nl_css_yellow",
+          "bp_sync_mandatory"
         ],
+        "tests_failed": [],
         "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
-        "started_at": "2026-06-30T14:45:25.723Z",
+        "started_at": "2026-07-09T04:47:35.056Z",
         "founder_usability_pass": false,
-        "completed_at": "2026-06-30T14:45:30.898Z",
-        "git_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
-        "production_base": "https://robust-magic-production.up.railway.app",
-        "verdict": "FAIL"
+        "completed_at": "2026-07-09T04:49:56.422Z",
+        "git_sha": "185c10cf6106e80206bad04e6d938c79709f18f0",
+        "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+        "verdict": "PASS",
+        "bp_sync": {
+          "updated": [
+            "builderos-reboot/BP_PRIORITY.json",
+            "builderos-reboot/MISSIONS/FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001/BLUEPRINT.json"
+          ],
+          "skipped": []
+        },
+        "artifact_sync": {
+          "mode": "technical_acceptance",
+          "readiness_report": "builderos-reboot/PRODUCT_READINESS_REPORT.json",
+          "freshness_status": "CURRENT"
+        }
       }
     }
   },
-  "completed_at": "2026-06-30T14:18:51.137Z",
-  "git_sha": "d6a093de3af8aa8989443e996b350c51042d6f40",
-  "production_base": "https://robust-magic-production.up.railway.app"
+  "completed_at": "2026-07-09T04:47:34.931Z",
+  "git_sha": "185c10cf6106e80206bad04e6d938c79709f18f0",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
+  "bp_sync": {
+    "updated": [
+      "builderos-reboot/BP_PRIORITY.json",
+      "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json"
+    ],
+    "skipped": []
+  }
 }

@@ -1,6 +1,6 @@
 {
   "schema": "product_readiness_report_v1",
-  "updated_at": "2026-07-08T06:27:20.299Z",
+  "updated_at": "2026-07-09T04:49:56.422Z",
   "authority": {
     "product_registry": "docs/products/PRODUCT_REGISTRY.json",
     "bp_priority": "builderos-reboot/BP_PRIORITY.json",
@@ -611,7 +611,7 @@
           "founder_usability_pass": false,
           "completion_receipt_id": null,
           "artifact_sync": {
-            "at": "2026-07-08T06:27:20.299Z",
+            "at": "2026-07-09T04:49:56.422Z",
             "mode": "technical_acceptance",
             "status": "CURRENT"
           }
@@ -648,13 +648,13 @@
         "receipt": "products/receipts/UI_ALPHA_GATE.json",
         "ok": true,
         "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
-        "stale_against_objective": false
+        "stale_against_objective": true
       },
       "alpha_readiness": {
         "ok": true,
         "ready_for_alpha_testing": true,
         "ready_for_alpha_gate": false,
-        "stale_against_objective": false
+        "stale_against_objective": true
       },
       "point_b_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
       "point_b_locked": false,
@@ -1227,7 +1227,7 @@
   ],
   "freshness": {
     "status": "CURRENT",
-    "updated_at": "2026-07-08T06:27:20.299Z",
+    "updated_at": "2026-07-09T04:49:56.422Z",
     "authority_paths": [
       "docs/products/PRODUCT_REGISTRY.json",
       "builderos-reboot/BP_PRIORITY.json",

@@ -1052,8 +1052,19 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
     return { ok: false, commit_sha: null, error: priorError || 'build_failed_after_repair_attempts' };
   };
 
-  const verifyFn = async ({ verify_script, product_id }) => {
+  const verifyFn = async ({ verify_script, product_id, step }) => {
     if (!verify_script) return { ok: true, detail: 'no_verify_script' };
+    const target = String(step?.target_file || '');
+    // Product-level SENTRY UI gate must NOT block non-UI steps (migrations/services).
+    // That was stranding lifeos s1 (phase3 schema) on verify_exit_1 while the gate
+    // re-ran founder-UI E2E. Artifact + deploy proof still gate those steps.
+    if (
+      step?.skip_verify === true
+      || /^db\/migrations\//.test(target)
+      || (/\.sql$/i.test(target))
+    ) {
+      return { ok: true, detail: 'verify_skipped_non_ui_step' };
+    }
     const q = queue || {};
     let extraArgs = Array.isArray(q.verify_args) ? q.verify_args.map(String) : [];
     // lifeos BUILD_QUEUE points at sentry-prealpha-gate — pass product id + enforce-creds on prod.

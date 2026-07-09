@@ -1,6 +1,6 @@
 {
   "schema": "founder_chat_alpha_battery_v1",
-  "at": "2026-07-08T06:22:49.374Z",
+  "at": "2026-07-09T04:47:35.056Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
   "ok": true,
   "passed": [
@@ -173,7 +173,7 @@
       "pass_fail": "NO_COMMAND_RAN",
       "transport_status": null,
       "action": "chair",
-      "summary_head": "I'm unable to find the current federal funds rate in the available SYSTEM_FACTS.",
+      "summary_head": "I'm unable to find the current federal funds rate in the SYSTEM_FACTS.",
       "has_verified_search": false,
       "has_system_knowledge": true,
       "program_context": null
@@ -197,13 +197,13 @@
       "pass_fail": "RUNNING",
       "transport_status": null,
       "action": "build",
-      "job_id": "e5e4f208-d006-42bf-843c-defe6f36196b",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job e5e4f208… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job e5e4f208-d006-42bf-843c-defe6f36196b",
+      "job_id": "ae3f4175-a99f-4a48-9b43-dc24d9b2c1a2",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job ae3f4175… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job ae3f4175-a99f-4a48-9b43-dc24d9b2c1a2",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
       "final_pass_fail": "PASS",
-      "final_transport_status": "COMMIT_ONLY_NOT_LIVE"
+      "terminal_proof_delegated": "real_app_e2e.drawer_direct_build"
     },
     "B2_nl_ui_rounded": {
       "http": 202,
@@ -212,13 +212,13 @@
       "pass_fail": "RUNNING",
       "transport_status": null,
       "action": "build",
-      "job_id": "f9b424d0-1d82-41c7-b02f-326af582c7da",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job f9b424d0… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job f9b424d0-1d82-41c7-b02f-326af582c7da",
+      "job_id": "17e0c38d-05a6-4f5f-847b-0729a356e5e8",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 17e0c38d… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 17e0c38d-05a6-4f5f-847b-0729a356e5e8",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
-      "final_pass_fail": "TIMEOUT",
-      "final_transport_status": null
+      "final_pass_fail": "PASS",
+      "final_transport_status": "COMMIT_ONLY_NOT_LIVE"
     },
     "B3_nl_css_yellow": {
       "http": 202,
@@ -227,8 +227,8 @@
       "pass_fail": "RUNNING",
       "transport_status": null,
       "action": "build",
-      "job_id": "89e15759-946c-4c6a-9a44-5b1ca19e1fbc",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 89e15759… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 89e15759-946c-4c6a-9a44-5b1ca19e1fbc",
+      "job_id": "f03b192b-465d-4c58-b3b2-90cf538109c3",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job f03b192b… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job f03b192b-465d-4c58-b3b2-90cf538109c3",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
@@ -252,10 +252,10 @@
   ],
   "tests_failed": [],
   "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
-  "started_at": "2026-07-08T06:22:49.374Z",
+  "started_at": "2026-07-09T04:47:35.056Z",
   "founder_usability_pass": false,
-  "completed_at": "2026-07-08T06:27:20.299Z",
-  "git_sha": "d41b57c7dea0aa49cf2f70bfe153abb6632c0668",
+  "completed_at": "2026-07-09T04:49:56.422Z",
+  "git_sha": "185c10cf6106e80206bad04e6d938c79709f18f0",
   "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "verdict": "PASS",
   "bp_sync": {

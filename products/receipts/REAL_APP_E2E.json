@@ -1,13 +1,17 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-09T03:48:53.541Z",
+  "at": "2026-07-09T04:52:41.712Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
-  "ok": false,
+  "ok": true,
   "passed": [
     "app_loads",
+    "no_js_errors",
     "lumin_fab_visible",
     "lumin_drawer_opens",
     "chat_response",
+    "smos_question",
+    "counsel_only_bypass",
+    "drawer_direct_build",
     "navigate_lifere",
     "alpha_readiness",
     "alpha_daily_cycle",
@@ -17,20 +21,15 @@
     "logged_out_redirect_shape",
     "logged_out_overlay_redirect_shape"
   ],
-  "failed": [
-    "no_js_errors",
-    "smos_question",
-    "counsel_only_bypass",
-    "drawer_direct_build"
-  ],
+  "failed": [],
   "results": {
     "app_loads": {
       "ok": true,
       "detail": "HTTP 200, title=\"LifeOS\""
     },
     "no_js_errors": {
-      "ok": false,
-      "detail": "Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Error loading calendar: Error: HTTP 404\n    at loadCalendar (https://lumin-web-production-e3a9.up.railway.app/overlay/li; Failed to load resource: the server responded with a status of 404 (); Failed to load resource: the server responded with a status of 404 (); Error loading scores: Error: HTTP 404\n    at loadScores (https://lumin-web-production-e3a9.up.railway.app/overlay/lifeos; Error loading MITs: SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+      "ok": true,
+      "detail": "no unallowlisted pageerror/console.error signals"
     },
     "lumin_fab_visible": {
       "ok": true,
@@ -42,19 +41,19 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "229 chars: \"Yes — JWT auth is live in the system, user can register, log in, and receive a s…\""
+      "detail": "195 chars: \"LifeOS Consumer Alpha — user signs up, logs in, Lumin greets by name with correc…\""
     },
     "smos_question": {
-      "ok": false,
-      "detail": "no workflow content: \"Point B: LifeOS Consumer Alpha. User can sign up, log in, get their tier, and Lumin greets them by name — full consumer \""
+      "ok": true,
+      "detail": "workflow present, no bleed"
     },
     "counsel_only_bypass": {
-      "ok": false,
-      "detail": "thin answer, no builder content: \"The SMOS workflow is the same five-stage gate regardless of topic — but here's how it maps specifically to relocation co\""
+      "ok": true,
+      "detail": "counseled without running build"
     },
     "drawer_direct_build": {
-      "ok": false,
-      "detail": "missing terminal PASS + transport/commit proof: \"I don't claim success until I see that receipt.\\n\\nADVICE-ONLY (no execute path exists for these):\\n- Telling you what to do in external systems (Railway dashboard, GitHub UI, Stripe, DNS)\\n- Reading your live DB state m\""
+      "ok": true,
+      "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Transport: COMMIT_ONLY_NOT_LIVE Path: builder_task_execute File: scripts/lifeo"
     },
     "navigate_lifere": {
       "ok": true,
@@ -70,7 +69,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "2450 chars visible"
+      "detail": "2445 chars visible"
     },
     "page_nav": {
       "ok": true,

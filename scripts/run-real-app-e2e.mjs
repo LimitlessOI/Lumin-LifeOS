@@ -118,18 +118,27 @@ async function appUrl(pageName) {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
-async function countAssistantReplies() {
-  return page.evaluate(() => document.querySelectorAll('.lumin-msg.assistant:not(.thinking)').length);
+async function snapshotAssistantState() {
+  return page.evaluate(() => {
+    const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
+    const last = msgs[msgs.length - 1]?.innerText?.trim() || '';
+    return { count: msgs.length, last };
+  });
 }
 
-async function waitForNewAssistantReply(prevCount, timeoutMs = TIMEOUT) {
+async function waitForNewAssistantReply(before, timeoutMs = TIMEOUT) {
+  // Think panel uses `.lumin-think` (not `.lumin-msg.thinking`). Wait until it is gone
+  // AND the last assistant bubble is new (count up or text changed) — closes off-by-one flakes.
   await page.waitForFunction(
-    (before) => {
-      const thinking = document.querySelector('.lumin-msg.thinking');
-      const msgs = document.querySelectorAll('.lumin-msg.assistant:not(.thinking)');
-      return !thinking && msgs.length > before;
+    (prev) => {
+      const busy = document.querySelector('.lumin-think, .lumin-msg.thinking');
+      if (busy) return false;
+      const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
+      const last = msgs[msgs.length - 1]?.innerText?.trim() || '';
+      if (!last || last.length < 8) return false;
+      return msgs.length > prev.count || last !== prev.last;
     },
-    prevCount,
+    before,
     { timeout: timeoutMs },
   );
   return page.evaluate(() => {
@@ -142,20 +151,19 @@ async function sendLuminMessage(text, waitForReply = true) {
   const input = page.locator('#lumin-input');
   await input.click();
   await input.fill(text);
-  const prevCount = await countAssistantReplies();
+  const before = await snapshotAssistantState();
   await page.locator('#lumin-send-btn').click();
   if (!waitForReply) return null;
-  // Wait for a NEW assistant bubble after this send — prior replies must not pass the check.
-  return waitForNewAssistantReply(prevCount, TIMEOUT);
+  return waitForNewAssistantReply(before, TIMEOUT);
 }
 
 async function sendLuminBuildMessage(text) {
   const input = page.locator('#lumin-input');
   await input.click();
   await input.fill(text);
-  const prevCount = await countAssistantReplies();
+  const before = await snapshotAssistantState();
   await page.locator('#lumin-send-btn').click();
-  return waitForNewAssistantReply(prevCount, BUILD_JOB_TIMEOUT);
+  return waitForNewAssistantReply(before, BUILD_JOB_TIMEOUT);
 }
 
 // ── tests ────────────────────────────────────────────────────────────────────
