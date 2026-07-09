@@ -3,12 +3,30 @@
 
 import { buildBrandVoiceProfile, scoreContentAgainstVoice } from '../services/marketing-brand-voice.js';
 
+const COMMAND_KEY_FALLBACK_SUB = 'emergency-key';
+
 function jsonError(res, status, error) {
   return res.status(status).json({ ok: false, error });
 }
 
 function resolveOwnerId(req) {
-  return req.user?.id ?? req.body?.owner_id ?? req.query?.owner_id ?? null;
+  const authenticatedOwnerId =
+    req.user?.id ??
+    req.user?.user_id ??
+    req.user?.sub ??
+    req.lifeosUser?.id ??
+    req.lifeosUser?.user_id ??
+    req.lifeosUser?.sub ??
+    null;
+
+  if (
+    authenticatedOwnerId &&
+    !(req.auth_mode === 'command_key_fallback' && authenticatedOwnerId === COMMAND_KEY_FALLBACK_SUB)
+  ) {
+    return authenticatedOwnerId;
+  }
+
+  return req.body?.owner_id ?? req.query?.owner_id ?? null;
 }
 
 function parseLimitWindow(value) {
@@ -38,30 +56,15 @@ function normalizeTags(tags) {
 
 const ALLOWED_ATOM_TYPES = new Set([
   'hook',
-  'angle',
-  'claim',
-  'cta',
-  'bullet',
-  'caption',
-  'thread',
-  'post',
-  'email',
-  'script',
-  'headline',
-  'subheadline',
-  'value_prop',
-  'proof',
   'story',
-  'offer',
-  'faq',
-  'other'
+  'insight',
+  'cta'
 ]);
 
 const ALLOWED_REUSE_CONSENT_LEVELS = new Set([
-  'none',
-  'internal',
-  'limited',
-  'full'
+  'session_only',
+  '90d',
+  'perpetual'
 ]);
 
 export function registerMarketingCalendarRoutes(app, deps) {
@@ -82,13 +85,9 @@ export function registerMarketingCalendarRoutes(app, deps) {
         `
         SELECT
           s.*,
-          p.title AS content_piece_title,
-          p.body AS content_piece_body,
-          p.url AS content_piece_url,
-          p.author AS content_piece_author,
-          p.published_at AS content_piece_published_at,
-          p.metadata AS content_piece_metadata,
+          p.id AS content_piece_id,
           p.session_id AS content_piece_session_id,
+          p.extraction_id AS content_piece_extraction_id,
           p.platform AS content_piece_platform,
           p.format AS content_piece_format,
           p.content_text AS content_piece_content_text,
@@ -147,7 +146,7 @@ export function registerMarketingCalendarRoutes(app, deps) {
           atom_type,
           text,
           normalizedTags,
-          reuse_consent_level ?? null
+          reuse_consent_level ?? 'session_only'
         ]
       );
 
