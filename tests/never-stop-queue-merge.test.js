@@ -64,3 +64,23 @@ test('falls back to the in-memory queue when repo copy is unusable', () => {
   assert.equal(mergeQueueRuntimeStatus(null, mem), mem);
   assert.equal(mergeQueueRuntimeStatus({ notsteps: true }, mem), mem);
 });
+
+test('never downgrades a repo done step to stale mem pending', () => {
+  const repo = {
+    steps: [
+      { id: 's2', status: 'done', attempts: 1, commit_sha: 'abc', completed_at: '2026-07-09T12:00:00Z' },
+      { id: 's3', status: 'pending', attempts: 0 },
+    ],
+  };
+  const mem = {
+    steps: [
+      { id: 's2', status: 'pending', attempts: 0, last_error: 'verify_exit_1' },
+      { id: 's3', status: 'pending', attempts: 0 },
+    ],
+  };
+  const merged = mergeQueueRuntimeStatus(repo, mem);
+  const s2 = merged.steps.find((s) => s.id === 's2');
+  assert.equal(s2.status, 'done');
+  assert.equal(s2.commit_sha, 'abc');
+  assert.equal(s2.attempts, 1);
+});

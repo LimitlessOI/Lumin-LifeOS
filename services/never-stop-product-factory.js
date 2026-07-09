@@ -10,7 +10,7 @@ import { getActiveQueueItem, isQueueItemIncomplete } from './bp-priority-complet
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
-import { loadBuildQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS } from './product-build-orchestrator.js';
+import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
@@ -434,6 +434,48 @@ export function discoverBuildQueueWork() {
 }
 
 /**
+ * Async discover that refreshes each product's BUILD_QUEUE from GitHub first so
+ * a lagging container checkout cannot re-select an already-done step.
+ */
+export async function discoverBuildQueueWorkFresh() {
+  const productsDir = path.join(ROOT, 'docs/products');
+  const found = [];
+  let productIds = [];
+  try {
+    productIds = fs.readdirSync(productsDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
+  } catch {
+    return found;
+  }
+  const priorityList = loadProductPriority();
+  for (const productId of productIds) {
+    const queuePath = path.join(productsDir, productId, 'BUILD_QUEUE.json');
+    if (!fs.existsSync(queuePath)) continue;
+    try {
+      const queue = await loadBuildQueuePreferRemote(productId);
+      reviveStaleBlockedSteps(queue);
+      const { step } = selectNextStep(queue);
+      if (step) {
+        found.push({
+          id: `product_build_${productId}_${step.id}`,
+          kind: 'product_build_step',
+          priority: 2 + productRankFraction(productId, priorityList),
+          product: productId,
+          product_id: productId,
+          step_id: step.id,
+          target_file: step.target_file,
+          detail: `next buildable step: ${step.id}`,
+        });
+      }
+    } catch (e) {
+      log({ event: 'build_queue_parse_error', product_id: productId, error: e.message });
+    }
+  }
+  return found;
+}
+
+/**
  * Scale lever: find products that have a PRODUCT_HOME with a documented backlog
  * but NO BUILD_QUEUE.json yet, so the loop can auto-plan a queue for them (via
  * the injected planner model) and pull them into the autonomous build lane.
@@ -667,7 +709,7 @@ export async function discoverProductExpansionWork(options = {}) {
   const items = [];
   const pointB = loadPointBTarget();
 
-  items.push(...discoverBuildQueueWork());
+  items.push(...(await discoverBuildQueueWorkFresh()));
   items.push(...discoverPlanWork());
   items.push(...discoverSentryFixWork());
 
@@ -841,12 +883,29 @@ const QUEUE_RUNTIME_STEP_FIELDS = [
   'completed_at', 'no_op', 'pre_existing',
 ];
 
+const STATUS_RANK = Object.freeze({
+  pending: 0,
+  building: 1,
+  blocked: 2,
+  founder_gated: 3,
+  done: 4,
+  complete: 4,
+});
+
+function statusRank(status) {
+  return STATUS_RANK[String(status || '').toLowerCase()] ?? 0;
+}
+
 /**
  * Merge the loop's runtime step status onto the LATEST repo queue, so an
  * external edit to a step's spec/task (or any non-runtime field) is preserved.
  * Base = repo version; for each repo step overlay only the runtime fields from
  * the in-memory queue; append any in-memory-only steps; keep repo step order.
  * Falls back to the raw in-memory queue if the repo copy can't be parsed.
+ *
+ * MONOTONIC STATUS: a stale in-container snapshot must NEVER downgrade a repo
+ * `done`/`blocked` step back to `pending` (that was re-selecting lifeos s2
+ * forever after it completed, starving s3→s7).
  */
 export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
   if (!repoQueue || !Array.isArray(repoQueue.steps)) return memQueue;
@@ -859,6 +918,12 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     if (!memStep) return repoStep;
     seen.add(repoStep.id);
     const out = { ...repoStep };
+    const repoRank = statusRank(repoStep.status);
+    const memRank = statusRank(memStep.status);
+    // Stale mem pending/building must not clobber a more-advanced repo status.
+    if (repoRank > memRank) {
+      return out;
+    }
     for (const f of QUEUE_RUNTIME_STEP_FIELDS) {
       if (Object.prototype.hasOwnProperty.call(memStep, f)) out[f] = memStep[f];
     }
@@ -868,6 +933,48 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     if (!seen.has(memStep.id)) merged.steps.push(memStep);
   }
   return merged;
+}
+
+/**
+ * Prefer the GitHub Contents copy of BUILD_QUEUE.json over a lagging container
+ * checkout so discover/select sees already-done steps. Fail-open to local disk.
+ */
+export async function loadBuildQueuePreferRemote(productId) {
+  const token = (process.env.GITHUB_TOKEN || '').trim();
+  const repo = (process.env.GITHUB_REPO || '').trim();
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  const localPath = queuePathForProduct(productId);
+  const relPath = path.relative(ROOT, localPath).split(path.sep).join('/');
+  if (token && repo) {
+    const [owner, repoName] = repo.split('/');
+    if (owner && repoName) {
+      try {
+        const api = `https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}?ref=${branch}`;
+        const res = await fetch(api, {
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+        });
+        if (res.ok) {
+          const cur = await res.json();
+          if (cur.content) {
+            const text = Buffer.from(cur.content, 'base64').toString('utf8');
+            const raw = JSON.parse(text);
+            try {
+              fs.writeFileSync(localPath, `${JSON.stringify(raw, null, 2)}\n`);
+            } catch {
+              /* read-only fs — still return remote via normalize */
+            }
+            return normalizeQueue(raw, localPath);
+          }
+        }
+      } catch (e) {
+        log({ event: 'build_queue_remote_load_failed', product_id: productId, error: e.message });
+      }
+    }
+  }
+  return loadBuildQueue(productId);
 }
 
 async function commitQueueStatusToRepo(queue, stepId) {
@@ -930,9 +1037,27 @@ async function commitQueueStatusToRepo(queue, stepId) {
 async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
   let queue;
   try {
-    queue = loadBuildQueue(task.product_id);
+    queue = await loadBuildQueuePreferRemote(task.product_id);
   } catch (e) {
     return { ok: false, detail: 'build_queue_load_failed', error: e.message };
+  }
+  // If discovery raced a sibling that already finished this step, skip.
+  const already = (queue.steps || []).find((s) => s && s.id === task.step_id);
+  if (already && (already.status === STEP_STATUS.DONE || already.status === 'complete')) {
+    return {
+      ok: true,
+      detail: 'product_build_step_already_done',
+      outcome: {
+        ok: true,
+        step_id: task.step_id,
+        commit_sha: already.commit_sha || null,
+        verified: true,
+        deploy_proven: true,
+        functional_proven: true,
+        no_op: true,
+      },
+      summary: queueSummary(queue),
+    };
   }
 
   // Self-heal steps stranded as BLOCKED by a transient/since-fixed failure
@@ -1331,8 +1456,8 @@ export async function runProductExpansionLanes(options = {}) {
     }
   }
 
-  const discover = options.discoverFn || discoverBuildQueueWork;
-  const work = discover();
+  const discover = options.discoverFn || discoverBuildQueueWorkFresh;
+  const work = await Promise.resolve(discover());
   if (!work.length) {
     log({ event: 'expansion_lanes_empty' });
     return { ok: true, lanes: 0, built: 0, live: 0, detail: 'no_build_queue_work' };

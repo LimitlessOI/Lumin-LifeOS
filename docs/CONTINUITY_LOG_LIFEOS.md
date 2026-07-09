@@ -8,15 +8,15 @@
 
 ---
 
-## [BUILD] Update 2026-07-09 — Never-stop: skip UI SENTRY on service/route steps
+## [BUILD] Update 2026-07-09 — Never-stop: stop looping done steps + skip UI verify on services
 
 ### What happened
-- s1 (phase3 schema) completed after migration verify-skip landed.
-- s2/s3 still stranded on `verify_exit_1` — product `verify_script` re-ran full founder-UI E2E on every service step.
-- Extended skip via `isNonUiBuildQueueTarget` (migrations + services/routes/middleware/startup; public UI still gated); revived s2 to pending.
+- s1 done; UI-verify skip extended to services/routes → s2 DONE.
+- Loop then re-selected s2 forever: lagging container queue + merge downgraded repo `done`→`pending`.
+- Fix: status-monotonic merge + GitHub-fresh BUILD_QUEUE load on discover/run.
 
 ### Next
-- Deploy → never-stop completes lifeos s2→s7 (habits/energy/finance/learning/calendar/routes).
+- Deploy → never-stop advances lifeos s3→s7.
 - Founder-gated steps remain human-only.
 
 ---
