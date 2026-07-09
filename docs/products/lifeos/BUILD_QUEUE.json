@@ -299,10 +299,10 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-phase3-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "commit_sha": "2a686d9267736cbb2697b619cb7b0924ec1dbcae",
-      "last_attempt_at": "2026-07-09T14:50:45.259Z"
+      "last_attempt_at": "2026-07-09T14:54:17.283Z"
     },
     {
       "id": "s9",
