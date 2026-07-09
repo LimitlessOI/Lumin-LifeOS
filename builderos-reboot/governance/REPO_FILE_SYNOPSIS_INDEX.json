@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T13:51:12.263Z",
+  "generated_at": "2026-07-09T13:53:00.064Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11354,
   "files": [
@@ -83201,9 +83201,9 @@
     {
       "path": "services/lifeos-learning.js",
       "synopsis": "Exports addItem — services/lifeos-learning.js.",
-      "bytes": 3028,
-      "mtime": "2026-07-09T13:51:12.263Z",
-      "indexed_at": "2026-07-09T13:51:12.263Z"
+      "bytes": 3002,
+      "mtime": "2026-07-09T13:53:00.064Z",
+      "indexed_at": "2026-07-09T13:53:00.064Z"
     },
     {
       "path": "services/lifeos-legacy-core.js",
