@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T04:32:29.503Z",
+  "generated_at": "2026-07-09T04:33:55.318Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11351,
   "files": [
@@ -34103,9 +34103,9 @@
     {
       "path": "db/migrations/20260421_lifeos_phase3_schema.sql",
       "synopsis": "Database migration — 20260421_lifeos_phase3_schema.sql.",
-      "bytes": 3535,
-      "mtime": "2026-07-09T04:32:29.503Z",
-      "indexed_at": "2026-07-09T04:32:29.503Z"
+      "bytes": 3578,
+      "mtime": "2026-07-09T04:33:55.318Z",
+      "indexed_at": "2026-07-09T04:33:55.318Z"
     },
     {
       "path": "db/migrations/20260422_gate_change_proposals.sql",
