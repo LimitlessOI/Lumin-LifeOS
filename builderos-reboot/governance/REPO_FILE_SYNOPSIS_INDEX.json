@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T01:13:57.853Z",
+  "generated_at": "2026-07-09T01:15:09.352Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11316,
   "files": [
@@ -20498,9 +20498,9 @@
     {
       "path": "BRAINSTORM_AND_CONSENSUS.md",
       "synopsis": "BRAINSTORM_AND_CONSENSUS",
-      "bytes": 48326,
-      "mtime": "2026-07-09T01:08:33.318Z",
-      "indexed_at": "2026-07-09T01:13:37.205Z"
+      "bytes": 50197,
+      "mtime": "2026-07-09T01:15:01.945Z",
+      "indexed_at": "2026-07-09T01:15:09.352Z"
     },
     {
       "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
