@@ -11,6 +11,20 @@
       "note": "LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 — surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8)."
     },
     {
+      "path": "routes/lifeos-core-routes.js",
+      "register": "registerLifeOSCoreRoutes",
+      "mount_path": "/api/v1/lifeos",
+      "enabled": true,
+      "note": "LifeOS core APIs (commitments + dashboard/scoreboard). Dashboard loadMITs/loadScores 404'd in founder lane — SENTRY lifeos-founder-ui no_js_errors. Auto-register mounts without composition-root edit."
+    },
+    {
+      "path": "routes/lifeos-briefing-routes.js",
+      "register": "registerLifeOSBriefingRoutes",
+      "mount_path": "/api/v1/lifeos/briefing",
+      "enabled": true,
+      "note": "Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today — was 404 in founder lane."
+    },
+    {
       "path": "routes/site-builder-prealpha-routes.js",
       "register": "registerSiteBuilderPrealphaRoutes",
       "enabled": true,

@@ -1,7 +1,7 @@
 {
   "schema": "sentry_findings_feed_v1",
   "product": "lifeos-founder-ui",
-  "generated_at": "2026-07-08T18:55:46.075Z",
+  "generated_at": "2026-07-09T03:49:32.968Z",
   "findings_count": 4,
   "without_solution": 0,
   "findings": [
@@ -11,31 +11,31 @@
       "proposed_solution": "A request to the failing endpoint returned HTTP 404. Find the route module that owns the failing endpoint and ensure it is mounted in the founder-builder runtime lane — prefer config/auto-registered-product-modules.json (auto-register, no composition-root edit). Then confirm the endpoint returns 200 and the dashboard call succeeds.",
       "proposed_solution_source": "synthesized",
       "severity": "error",
-      "source": "layer-b"
+      "source": "layer-b-command-key"
     },
     {
       "code": "smos_question",
-      "detail": "no workflow content: \"Point B right now: LifeOS Consumer Alpha — a real user can sign up, log in, Lumin greets them by name with their correct\"",
+      "detail": "no workflow content: \"Point B: LifeOS Consumer Alpha. User can sign up, log in, get their tier, and Lumin greets them by name — full consumer \"",
       "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"smos_question\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
       "proposed_solution_source": "synthesized",
       "severity": "error",
-      "source": "layer-b"
+      "source": "layer-b-command-key"
     },
     {
       "code": "counsel_only_bypass",
-      "detail": "thin answer, no builder content: \"Short answer: the workflow is the same five-stage gate regardless of topic — content_brief → coach → record → post → pub\"",
+      "detail": "thin answer, no builder content: \"The SMOS workflow is the same five-stage gate regardless of topic — but here's how it maps specifically to relocation co\"",
       "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"counsel_only_bypass\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
       "proposed_solution_source": "synthesized",
       "severity": "error",
-      "source": "layer-b"
+      "source": "layer-b-command-key"
     },
     {
       "code": "drawer_direct_build",
-      "detail": "build failed: \"BuilderOS change implementation — how it actually works, counsel only:\n\nA founder message or a build directive hits the founder interface API. That routes to builderos-command-control-service.js, which creates a build_as\"",
+      "detail": "missing terminal PASS + transport/commit proof: \"I don't claim success until I see that receipt.\\n\\nADVICE-ONLY (no execute path exists for these):\\n- Telling you what to do in external systems (Railway dashboard, GitHub UI, Stripe, DNS)\\n- Reading your live DB state m\"",
       "proposed_solution": "The founder chat returned counsel/essay text instead of the required response for \"drawer_direct_build\". Fix intent routing in routes/lifeos-builderos-command-control-routes.js (POST /founder-interface/message) and the intent services (services/founder-chair-intent.js, services/founder-intent-clarify.js, services/chair-intent-signals.js): classify this prompt into the correct lane (workflow-content / direct-build / counsel) and compose the lane's real response — for build intents emit the build + terminal PASS + commit-proof receipt, not a description of the mechanics.",
       "proposed_solution_source": "synthesized",
       "severity": "error",
-      "source": "layer-b"
+      "source": "layer-b-command-key"
     }
   ],
   "readiness": {
@@ -46,15 +46,15 @@
       },
       {
         "code": "smos_question",
-        "detail": "no workflow content: \"Point B right now: LifeOS Consumer Alpha — a real user can sign up, log in, Lumin greets them by name with their correct\""
+        "detail": "no workflow content: \"Point B: LifeOS Consumer Alpha. User can sign up, log in, get their tier, and Lumin greets them by name — full consumer \""
       },
       {
         "code": "counsel_only_bypass",
-        "detail": "thin answer, no builder content: \"Short answer: the workflow is the same five-stage gate regardless of topic — content_brief → coach → record → post → pub\""
+        "detail": "thin answer, no builder content: \"The SMOS workflow is the same five-stage gate regardless of topic — but here's how it maps specifically to relocation co\""
       },
       {
         "code": "drawer_direct_build",
-        "detail": "build failed: \"BuilderOS change implementation — how it actually works, counsel only:\n\nA founder message or a build directive hits the founder interface API. That routes to builderos-command-control-service.js, which creates a build_as\""
+        "detail": "missing terminal PASS + transport/commit proof: \"I don't claim success until I see that receipt.\\n\\nADVICE-ONLY (no execute path exists for these):\\n- Telling you what to do in external systems (Railway dashboard, GitHub UI, Stripe, DNS)\\n- Reading your live DB state m\""
       }
     ],
     "warnings": []

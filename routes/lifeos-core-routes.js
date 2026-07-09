@@ -1526,3 +1526,25 @@ Maximum 2–3 sentences. No preamble. Start with the truth.`;
 
   return router;
 }
+
+/**
+ * Auto-register entry — mounts core LifeOS APIs (commitments, dashboard/scoreboard, …)
+ * in the founder-builder lane without editing the protected composition root.
+ * Closes SENTRY lifeos-founder-ui no_js_errors (calendar/MITs/scores 404 class).
+ */
+export function registerLifeOSCoreRoutes(app, deps = {}) {
+  const { pool, requireKey, logger, callCouncilMember, sendSMS, sendAlertCall, makePhoneCall } = deps;
+  app.use(
+    '/api/v1/lifeos',
+    createLifeOSCoreRoutes({
+      pool,
+      requireKey,
+      callCouncilMember,
+      logger,
+      sendSMS,
+      sendAlertCall,
+      makePhoneCall,
+    }),
+  );
+  logger?.info?.('✅ [LIFEOS-CORE] Founder-builder routes mounted at /api/v1/lifeos (commitments + scoreboard)');
+}

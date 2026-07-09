@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-09T03:50:05.514Z",
+  "generated_at": "2026-07-09T03:51:29.277Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11349,
+  "file_count": 11350,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21698,9 +21698,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
       "synopsis": "BuilderOS artifact — SENTRY PRODUCT REGISTRY.",
-      "bytes": 3796,
-      "mtime": "2026-07-09T03:44:51.386Z",
-      "indexed_at": "2026-07-09T03:45:32.529Z",
+      "bytes": 3860,
+      "mtime": "2026-07-09T03:48:46.243Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "synopsis_index_only": true
     },
     {
@@ -30367,9 +30367,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 5882,
-      "mtime": "2026-07-09T03:11:05.257Z",
-      "indexed_at": "2026-07-09T03:14:30.829Z",
+      "bytes": 6579,
+      "mtime": "2026-07-09T03:51:02.929Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "synopsis_index_only": true
     },
     {
@@ -30509,9 +30509,9 @@
     {
       "path": "config/founder-runtime-required-routes.json",
       "synopsis": "Configuration — Founder Runtime Required Routes.",
-      "bytes": 1171,
-      "mtime": "2026-07-09T01:07:13.510Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 1591,
+      "mtime": "2026-07-09T03:51:02.932Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "synopsis_index_only": true
     },
     {
@@ -39223,9 +39223,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 604336,
-      "mtime": "2026-07-09T03:45:15.111Z",
-      "indexed_at": "2026-07-09T03:45:32.529Z"
+      "bytes": 604749,
+      "mtime": "2026-07-09T03:51:24.832Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -62319,6 +62319,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/FOUNDER_JWT_CHAT_PROOF.json",
+      "synopsis": "Product receipt — FOUNDER JWT CHAT PROOF.",
+      "bytes": 986,
+      "mtime": "2026-07-09T03:49:32.922Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/FOUNDER_MEMORY_V1_SENTRY.json",
       "synopsis": "Product receipt — FOUNDER MEMORY V1 SENTRY.",
       "bytes": 1118,
@@ -62785,9 +62793,9 @@
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 3515,
-      "mtime": "2026-07-09T01:03:41.505Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 3531,
+      "mtime": "2026-07-09T03:49:29.891Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "synopsis_index_only": true
     },
     {
@@ -62809,9 +62817,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
-      "bytes": 5329,
-      "mtime": "2026-07-09T01:03:41.505Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 5429,
+      "mtime": "2026-07-09T03:49:32.969Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "synopsis_index_only": true
     },
     {
@@ -65192,9 +65200,9 @@
     {
       "path": "routes/lifeos-briefing-routes.js",
       "synopsis": "Daily briefing API — morning context assembled from calendar, MITs, habits.",
-      "bytes": 1867,
-      "mtime": "2026-06-29T17:21:08.512Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 2381,
+      "mtime": "2026-07-09T03:51:00.575Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -65282,9 +65290,9 @@
     {
       "path": "routes/lifeos-core-routes.js",
       "synopsis": "routes/lifeos-core-routes.js",
-      "bytes": 66089,
-      "mtime": "2026-06-29T17:21:08.524Z",
-      "indexed_at": "2026-07-09T02:35:54.381Z",
+      "bytes": 66831,
+      "mtime": "2026-07-09T03:50:53.373Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67505,9 +67513,9 @@
     {
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
-      "bytes": 6122,
-      "mtime": "2026-07-09T03:50:05.514Z",
-      "indexed_at": "2026-07-09T03:50:05.514Z",
+      "bytes": 6053,
+      "mtime": "2026-07-09T01:03:41.530Z",
+      "indexed_at": "2026-07-09T02:35:54.381Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -68490,9 +68498,9 @@
     {
       "path": "scripts/sentry-prealpha-gate.mjs",
       "synopsis": "Product-agnostic SENTRY pre-alpha completion gate — the generalized",
-      "bytes": 13168,
-      "mtime": "2026-07-09T02:33:13.714Z",
-      "indexed_at": "2026-07-09T02:35:57.245Z",
+      "bytes": 13872,
+      "mtime": "2026-07-09T03:48:46.975Z",
+      "indexed_at": "2026-07-09T03:51:29.277Z",
       "ssot": [
         "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json"
       ]

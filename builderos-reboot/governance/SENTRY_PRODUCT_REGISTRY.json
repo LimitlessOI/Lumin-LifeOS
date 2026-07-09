@@ -56,7 +56,8 @@
           "receipt": "products/receipts/FOUNDER_UI_LOGIN_E2E.json",
           "requiresEnv": ["PUBLIC_BASE_URL", "LIFEOS_FOUNDER_LOGIN_EMAIL", "LIFEOS_FOUNDER_LOGIN_PASSWORD"],
           "deferrableWithoutEnv": true,
-          "note": "True UI form login into lifeos-login.html. Deferrable until local LIFEOS_FOUNDER_LOGIN_* present; API credentialed layer is the enforce-creds hard gate."
+          "optionalUnderEnforceCreds": true,
+          "note": "True UI form login into lifeos-login.html. Optional under --enforce-creds until local LIFEOS_FOUNDER_LOGIN_* present; API B-credentialed (vault/operator) is the hard gate."
         }
       ]
     }

@@ -42,3 +42,16 @@ export function createLifeOSBriefingRoutes({ pool, requireKey, callCouncilMember
 
   return router;
 }
+
+/**
+ * Auto-register entry — mounts daily briefing in the founder-builder lane.
+ * Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today.
+ */
+export function registerLifeOSBriefingRoutes(app, deps = {}) {
+  const { pool, requireKey, logger, callCouncilMember } = deps;
+  app.use(
+    '/api/v1/lifeos/briefing',
+    createLifeOSBriefingRoutes({ pool, requireKey, callCouncilMember, logger }),
+  );
+  logger?.info?.('✅ [LIFEOS-BRIEFING] Founder-builder routes mounted at /api/v1/lifeos/briefing');
+}
