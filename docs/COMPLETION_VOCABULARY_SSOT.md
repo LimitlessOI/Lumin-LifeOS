@@ -3,10 +3,11 @@
 # Completion Vocabulary SSOT
 
 **Status:** `LOCKED` v1.0 — Wave 0 item 1 sealed 2026-07-08  
+**Machine instance (overclaim CI):** `builderos-reboot/governance/COMPLETION_VOCABULARY_SSOT.json` — LOCKED v1.0; schema contract `COMPLETION_VOCABULARY_SSOT.schema.json`.  
 **Does not replace:** `docs/BUILDEROS_VOCABULARY.md` (org / dept / acronym law)  
-**Relationship:** This file owns **status / completion / readiness claim words**. Org terms stay in `BUILDEROS_VOCABULARY.md`.  
+**Relationship:** This markdown owns the human-readable claim law; the JSON is the import surface for `scripts/verify-completion-overclaim.mjs`. Org terms stay in `BUILDEROS_VOCABULARY.md`.  
 **Authority:** Language law for receipts, cert JSON, readiness reports, Chair prose, CI overclaim guards.  
-**Change rule:** Edit only with signed consensus turn + receipt; SNT may reopen on proven drift. Codex (or any agent) may reopen on **P0/P1** only.
+**Change rule:** Edit only with signed consensus turn + receipt; SNT may reopen on proven drift. Codex (or any agent) may reopen on **P0/P1** only. Keep markdown + JSON in lockstep.
 
 **Revision:** `v1.0` — Claude Round 6 fixes + Round 6d rank-7 tidy absorbed; sealed under 3+ independent AGREE with no unresolved P0/P1.
 

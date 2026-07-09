@@ -8,6 +8,22 @@
 
 ---
 
+## [BUILD] Update 2026-07-08 — Wave 0 item 1 JSON SSOT activates overclaim CI
+
+### What happened
+- Devin's Wave 0 #2 overclaim guard (PR #313) was inert until the LOCKED JSON vocab landed.
+- Added `builderos-reboot/governance/COMPLETION_VOCABULARY_SSOT.json` (LOCKED v1.0) matching Devin's schema; `claim_sources` enforces `levels.FULLY_MACHINE_READY` against proven subordinate gates on `PROJECT_CERTIFICATION.json`.
+- Guard now active: `npm run completion:overclaim:verify` → consistent, 1 claim source, no overclaim.
+
+### Verification
+- `node scripts/verify-completion-overclaim.mjs` → exit 0
+- `node --test tests/completion-overclaim-guard.test.js` → 9/9
+
+### Next
+- Push vocab JSON; Grok continues Wave 0 #5 (import-smoke + authoring canary).
+
+---
+
 ## [BUILD] Update 2026-07-08 — Wave 0 item 4 boot degraded + route assert
 
 ### What happened

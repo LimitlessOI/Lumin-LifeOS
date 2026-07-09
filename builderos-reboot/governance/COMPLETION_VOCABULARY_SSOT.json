@@ -1,0 +1,196 @@
+{
+  "schema": "completion_vocabulary_ssot_v1",
+  "version": "1.0",
+  "status": "LOCKED",
+  "sealed_at": "2026-07-08",
+  "authority_md": "docs/COMPLETION_VOCABULARY_SSOT.md",
+  "gates": {
+    "technical_scope_pass": "Named verifier/SENTRY/acceptance receipt for this scope",
+    "commit_sha_present": "Commit SHA present without deploy+runtime probe",
+    "deploy_sha_present": "Deploy SHA present; runtime probe missing/failed/not run",
+    "sentry_mechanical_pass": "SENTRY_CHECK_RESULT.json mechanical verdict is SENTRY_MECHANICAL_PASS",
+    "staging_ready_cert": "PROJECT_CERTIFICATION.json levels.STAGING_READY === true",
+    "cleared_for_founder_alpha": "Technical + staging evidence; machine cleared Adam to test (no usability grant)",
+    "founder_usability_confirm": "Explicit founder confirmation artifact (not soft probe)",
+    "point_b_target_reached": "FOUNDER_USABILITY_PASS === true plus technical gates for that Point B target",
+    "release_transport_proof": "Transport proof: commit/origin/deploy SHA match + runtime probe OK",
+    "fully_machine_ready_closure": "Same-tier determinism + closure acceptance + live deploy/runtime truth + founder UI proof (all true)"
+  },
+  "ladder": [
+    {
+      "level": "NOT_STARTED",
+      "rank": 1,
+      "means": "No governed work yet (markdown ladder rank 0)",
+      "gates": []
+    },
+    {
+      "level": "IN_PROGRESS",
+      "rank": 2,
+      "means": "Governed work running (markdown ladder rank 1)",
+      "gates": []
+    },
+    {
+      "level": "BLOCKED",
+      "rank": 3,
+      "means": "Stopped on typed blocker (markdown ladder rank 2)",
+      "gates": []
+    },
+    {
+      "level": "TECHNICAL_PASS",
+      "rank": 4,
+      "means": "Machine checks for this scope passed (markdown ladder rank 3)",
+      "gates": ["technical_scope_pass"]
+    },
+    {
+      "level": "BUILT_NOT_LIVE",
+      "rank": 5,
+      "means": "Code exists / committed; not proven on served runtime (markdown ladder rank 4)",
+      "gates": ["commit_sha_present"]
+    },
+    {
+      "level": "DEPLOYED_UNVERIFIED",
+      "rank": 6,
+      "means": "Deployed somewhere; runtime behavior not yet verified (markdown ladder rank 5)",
+      "gates": ["deploy_sha_present"]
+    },
+    {
+      "level": "SENTRY_MECHANICAL_PASS",
+      "rank": 7,
+      "means": "Mechanical SENTRY suite green (markdown ladder rank 6)",
+      "gates": ["sentry_mechanical_pass"]
+    },
+    {
+      "level": "STAGING_READY",
+      "rank": 8,
+      "means": "Staging bar met per cert schema (markdown ladder rank 7)",
+      "gates": ["staging_ready_cert"]
+    },
+    {
+      "level": "CLEARED_FOR_FOUNDER_ALPHA",
+      "rank": 9,
+      "means": "Machine believes Adam can test; no usability grant yet (markdown ladder rank 8)",
+      "gates": ["cleared_for_founder_alpha"]
+    },
+    {
+      "level": "FOUNDER_USABILITY_PASS",
+      "rank": 10,
+      "means": "Adam confirmed usable for the scoped ask (markdown ladder rank 9)",
+      "gates": ["founder_usability_confirm"]
+    },
+    {
+      "level": "POINT_B_COMPLETE",
+      "rank": 11,
+      "means": "Scoped Point B target reached (markdown ladder rank 10)",
+      "gates": ["point_b_target_reached"]
+    },
+    {
+      "level": "RELEASE_PASS",
+      "rank": 12,
+      "means": "Deploy-truth + runtime behavior verified for the claim (markdown ladder rank 11)",
+      "gates": ["release_transport_proof"]
+    },
+    {
+      "level": "FULLY_MACHINE_READY",
+      "rank": 13,
+      "means": "Highest factory maturity claim (markdown ladder rank 12)",
+      "gates": ["fully_machine_ready_closure"]
+    }
+  ],
+  "aliases": {
+    "PASS": "TECHNICAL_PASS",
+    "OBJECTIVE_COMPLETE": "TECHNICAL_PASS",
+    "COMMIT_ONLY_NOT_LIVE": "BUILT_NOT_LIVE",
+    "SENTRY_MECHANICAL": "SENTRY_MECHANICAL_PASS",
+    "BOOTSTRAP_AND_STAGING_READY": "STAGING_READY",
+    "RELEASE_READY": "RELEASE_PASS",
+    "ALPHA_CLEARED": "CLEARED_FOR_FOUNDER_ALPHA"
+  },
+  "honesty_states": [
+    "UNVERIFIED",
+    "BLOCKED_EXTERNAL",
+    "FAIL",
+    "SCRAPPED_SALVAGE_ONLY"
+  ],
+  "cert_level_notes": {
+    "BOOTSTRAP_AND_STAGING_READY": "Compound cert flag (staging + bootstrap); not a second ladder rung. Alias maps readers to STAGING_READY for overclaim checks only.",
+    "BLUEPRINT_DUPLICABLE": "Cert boolean only — not a ladder claim word.",
+    "GREENFIELD_DETERMINISTIC_MECHANICAL": "Cert boolean only — not a ladder claim word.",
+    "MECHANICAL_DETERMINISM_PROXY": "Cert boolean only — not a ladder claim word.",
+    "FULL_LOOP_GOVERNED": "Cert boolean only — not a ladder claim word.",
+    "SAME_TIER_CODER_DETERMINISM": "Required subordinate proof for FULLY_MACHINE_READY; not a ladder rung.",
+    "LUMIN_FACTORY_GITHUB": "Optional org step; not a ladder claim word.",
+    "LIFEOS_PRODUCT_COMPLETE": "Product-complete cert flag; not a ladder claim word.",
+    "PACK_COMPLETE": "Mission-pack structural finish — not RELEASE_PASS or founder-done."
+  },
+  "claim_sources": [
+    {
+      "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+      "claim": {
+        "path": "levels.FULLY_MACHINE_READY",
+        "true_means": "FULLY_MACHINE_READY"
+      },
+      "proven_gates": [
+        {
+          "gate": "technical_scope_pass",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.FULL_LOOP_GOVERNED",
+          "equals": true
+        },
+        {
+          "gate": "commit_sha_present",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.STAGING_READY",
+          "equals": true
+        },
+        {
+          "gate": "deploy_sha_present",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.STAGING_READY",
+          "equals": true
+        },
+        {
+          "gate": "sentry_mechanical_pass",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.SENTRY_MECHANICAL",
+          "equals": true
+        },
+        {
+          "gate": "staging_ready_cert",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.STAGING_READY",
+          "equals": true
+        },
+        {
+          "gate": "cleared_for_founder_alpha",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.STAGING_READY",
+          "equals": true
+        },
+        {
+          "gate": "founder_usability_confirm",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "autonomy_closure_v1.founder_usability_pass",
+          "equals": true
+        },
+        {
+          "gate": "point_b_target_reached",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "autonomy_closure_v1.founder_usability_pass",
+          "equals": true
+        },
+        {
+          "gate": "release_transport_proof",
+          "file": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
+          "path": "pass",
+          "equals": true
+        },
+        {
+          "gate": "fully_machine_ready_closure",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.SAME_TIER_CODER_DETERMINISM",
+          "equals": true
+        }
+      ]
+    }
+  ]
+}
