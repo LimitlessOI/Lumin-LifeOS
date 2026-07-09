@@ -196,10 +196,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "9d6049ff48851ca4b684625fd8ce5b1293a6e322",
-      "last_attempt_at": "2026-07-09T05:42:41.357Z",
+      "last_attempt_at": "2026-07-09T05:46:13.277Z",
       "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration — never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
       "last_error": "verify_exit_1",
-      "completed_at": "2026-07-09T05:42:42.738Z",
+      "completed_at": "2026-07-09T05:46:14.813Z",
       "revive_count": 1
     },
     {
@@ -214,11 +214,11 @@
       "founder_gated": false,
       "attempts": 2,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
-      "last_attempt_at": "2026-07-09T12:42:39.369Z",
+      "last_attempt_at": "2026-07-09T12:45:03.331Z",
       "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 — never-stop skips UI verify for services/routes (artifact+deploy still gate).",
       "last_error": "verify_exit_1",
       "revive_count": 4,
-      "completed_at": "2026-07-09T12:42:41.394Z"
+      "completed_at": "2026-07-09T12:45:05.154Z"
     },
     {
       "id": "s3",
@@ -232,10 +232,10 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "ea0c92655c84a8ceb7f2270c53d0353fffc6eebe",
-      "last_attempt_at": "2026-07-09T13:11:58.570Z",
+      "last_attempt_at": "2026-07-09T13:13:22.782Z",
       "note": "GAP-FILL: same UI-verify skip as s2 — service step must not re-run founder-UI E2E.",
       "last_error": "verify_exit_1",
-      "completed_at": "2026-07-09T13:11:59.903Z"
+      "completed_at": "2026-07-09T13:13:24.125Z"
     },
     {
       "id": "s4",
