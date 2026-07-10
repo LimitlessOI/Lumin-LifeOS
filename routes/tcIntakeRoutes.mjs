@@ -1,136 +1,90 @@
 /**
- * SYNOPSIS: TC intake / document-QA / offer-prep / approvals / showing-feedback routes.
- * @ssot docs/products/tc-service/PRODUCT_HOME.md
+ * SYNOPSIS: Registers TcIntakeRoutes routes/handlers (routes/tcIntakeRoutes.mjs).
  */
-import { runIntakePipeline } from '../services/tcIntakePipeline.mjs';
-import { runDocumentQA } from '../services/tcDocumentQA.mjs';
-import { runOfferPrep } from '../services/tcOfferPrep.mjs';
-import { createApprovalRequest, processApproval } from '../services/tcMobileApproval.mjs';
-import {
-  sendShowingFeedbackRequest,
-  recordFeedbackWebhook,
-} from '../services/tcShowingFeedback.mjs';
-
-function getAuth(deps) {
-  return deps?.requireAuth || deps?.requireKey || null;
-}
+import { tcIntakePipeline } from '../services/tcIntakePipeline.mjs';
+import { tcDocumentQA } from '../services/tcDocumentQA.mjs';
+import { tcOfferPrep } from '../services/tcOfferPrep.mjs';
+import { tcMobileApproval } from '../services/tcMobileApproval.mjs';
+import { tcShowingFeedback } from '../services/tcShowingFeedback.mjs';
 
 function getAgentId(req) {
   return (
-    req?.body?.agentId ??
-    req?.body?.agent_id ??
-    req?.query?.agentId ??
-    req?.query?.agent_id ??
-    req?.params?.agentId ??
+    req.body?.agentId ??
+    req.body?.agent_id ??
+    req.query?.agentId ??
+    req.query?.agent_id ??
+    req.params?.agentId ??
+    req.params?.agent_id ??
     null
   );
 }
 
-export function registerTcIntakeRoutes(app, deps = {}) {
-  if (!app || typeof app.post !== 'function' || typeof app.patch !== 'function') {
-    throw new Error('registerTcIntakeRoutes requires an Express app');
+function ensureAgentId(req, res) {
+  const agentId = getAgentId(req);
+  if (!agentId) {
+    res.status(400).json({ ok: false, error: 'agentId is required' });
+    return null;
   }
+  return agentId;
+}
 
-  const requireAuth = getAuth(deps);
-  if (typeof requireAuth !== 'function') {
-    throw new Error('registerTcIntakeRoutes requires deps.requireAuth or deps.requireKey');
+async function runHandler(fn, req, res, deps) {
+  try {
+    const agentId = ensureAgentId(req, res);
+    if (!agentId) return;
+
+    const result = await fn(req, deps, agentId);
+    res.json(result ?? { ok: true });
+  } catch (error) {
+    deps?.logger?.error?.({ err: error }, 'tc intake route failed');
+    res.status(500).json({
+      ok: false,
+      error: error instanceof Error ? error.message : 'Internal Server Error',
+    });
   }
+}
 
-  app.post('/api/tc/intake/run', requireAuth, async (req, res) => {
-    try {
-      const agentId = getAgentId(req);
-      if (!agentId) return res.status(400).json({ error: 'agentId is required' });
-      const result = await runIntakePipeline({ ...deps, agentId, body: req.body });
-      return res.status(200).json({ ok: true, ...(result && typeof result === 'object' ? result : { result }) });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'tc intake run failed');
-      return res.status(500).json({ error: err?.message || 'tc_intake_run_failed' });
-    }
+export function registerTcIntakeRoutes(app, deps) {
+  app.post('/api/tc/intake/run', async (req, res) => {
+    await runHandler(async (request, injectedDeps, agentId) => {
+      return tcIntakePipeline.runIntakePipeline(request, injectedDeps, agentId);
+    }, req, res, deps);
   });
 
-  app.post('/api/tc/intake/document-qa', requireAuth, async (req, res) => {
-    try {
-      const agentId = getAgentId(req);
-      if (!agentId) return res.status(400).json({ error: 'agentId is required' });
-      const transactionId = req.body?.transactionId ?? req.body?.transaction_id;
-      const documentBuffer = req.body?.documentBuffer ?? req.body?.document_buffer ?? req.body?.document;
-      const result = await runDocumentQA(deps, { transactionId, documentBuffer });
-      return res.status(200).json({ ok: true, agentId, ...result });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'tc document qa failed');
-      return res.status(500).json({ error: err?.message || 'tc_document_qa_failed' });
-    }
+  app.post('/api/tc/intake/document-qa', async (req, res) => {
+    await runHandler(async (request, injectedDeps, agentId) => {
+      return tcDocumentQA.runDocumentQA(request, injectedDeps, agentId);
+    }, req, res, deps);
   });
 
-  app.post('/api/tc/offer-prep', requireAuth, async (req, res) => {
-    try {
-      const agentId = getAgentId(req);
-      if (!agentId) return res.status(400).json({ error: 'agentId is required' });
-      const propertyAddress = req.body?.propertyAddress ?? req.body?.property_address;
-      const clientProfileId = req.body?.clientProfileId ?? req.body?.client_profile_id;
-      const result = await runOfferPrep(deps, { agentId, propertyAddress, clientProfileId });
-      return res.status(200).json({ ok: true, ...(result && typeof result === 'object' ? result : { result }) });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'tc offer prep failed');
-      return res.status(500).json({ error: err?.message || 'tc_offer_prep_failed' });
-    }
+  app.post('/api/tc/offer-prep', async (req, res) => {
+    await runHandler(async (request, injectedDeps, agentId) => {
+      return tcOfferPrep.runOfferPrep(request, injectedDeps, agentId);
+    }, req, res, deps);
   });
 
-  app.post('/api/tc/approvals', requireAuth, async (req, res) => {
-    try {
-      const agentId = getAgentId(req);
-      if (!agentId) return res.status(400).json({ error: 'agentId is required' });
-      const transactionId = req.body?.transactionId ?? req.body?.transaction_id;
-      const documentUrl = req.body?.documentUrl ?? req.body?.document_url;
-      const action = req.body?.action;
-      const result = await createApprovalRequest(deps, { transactionId, agentId, documentUrl, action });
-      return res.status(200).json({ ok: true, ...(result && typeof result === 'object' ? result : { result }) });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'tc approval create failed');
-      return res.status(500).json({ error: err?.message || 'tc_approval_create_failed' });
-    }
+  app.post('/api/tc/approvals', deps.requireKey, async (req, res) => {
+    await runHandler(async (request, injectedDeps, agentId) => {
+      return tcMobileApproval.createApprovalRequest(request, injectedDeps, agentId);
+    }, req, res, deps);
   });
 
-  app.patch('/api/tc/approvals/:id', requireAuth, async (req, res) => {
-    try {
-      const agentId = getAgentId(req);
-      if (!agentId) return res.status(400).json({ error: 'agentId is required' });
-      const approvalId = req.params?.id;
-      const decision = req.body?.decision;
-      const signatureToken = req.body?.signatureToken ?? req.body?.signature_token;
-      const result = await processApproval(deps, { approvalId, decision, signatureToken });
-      return res.status(200).json({ ok: true, agentId, ...(result && typeof result === 'object' ? result : { result }) });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'tc approval process failed');
-      return res.status(500).json({ error: err?.message || 'tc_approval_process_failed' });
-    }
+  app.patch('/api/tc/approvals/:id', deps.requireKey, async (req, res) => {
+    await runHandler(async (request, injectedDeps, agentId) => {
+      return tcMobileApproval.processApproval(request, injectedDeps, agentId);
+    }, req, res, deps);
   });
 
-  app.post('/api/tc/showing-feedback', requireAuth, async (req, res) => {
-    try {
-      const agentId = getAgentId(req);
-      if (!agentId) return res.status(400).json({ error: 'agentId is required' });
-      const transactionId = req.body?.transactionId ?? req.body?.transaction_id;
-      const agentEmail = req.body?.agentEmail ?? req.body?.agent_email;
-      const showingDate = req.body?.showingDate ?? req.body?.showing_date;
-      const result = await sendShowingFeedbackRequest(deps, { transactionId, agentEmail, showingDate });
-      return res.status(200).json({ ok: true, agentId, ...(result && typeof result === 'object' ? result : { result }) });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'tc showing feedback request failed');
-      return res.status(500).json({ error: err?.message || 'tc_showing_feedback_failed' });
-    }
+  app.post('/api/tc/showing-feedback', async (req, res) => {
+    await runHandler(async (request, injectedDeps, agentId) => {
+      return tcShowingFeedback.sendShowingFeedbackRequest(request, injectedDeps, agentId);
+    }, req, res, deps);
   });
 
   app.post('/api/tc/showing-feedback/webhook', async (req, res) => {
-    try {
-      const requestId = req.body?.requestId ?? req.body?.request_id;
-      const feedbackPayload = req.body?.feedbackPayload ?? req.body?.feedback_payload ?? req.body;
-      const result = await recordFeedbackWebhook(deps, { requestId, feedbackPayload });
-      return res.status(200).json({ ok: true, ...(result && typeof result === 'object' ? result : { result }) });
-    } catch (err) {
-      deps.logger?.error?.({ err }, 'tc showing feedback webhook failed');
-      return res.status(500).json({ error: err?.message || 'tc_showing_feedback_webhook_failed' });
-    }
+    await runHandler(async (request, injectedDeps, agentId) => {
+      return tcShowingFeedback.recordFeedbackWebhook(request, injectedDeps, agentId);
+    }, req, res, deps);
   });
 }
 
