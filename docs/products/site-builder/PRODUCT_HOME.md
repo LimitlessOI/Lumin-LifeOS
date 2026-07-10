@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Lean prospect path: honor skipRepair/skipBlogs; default gen openai_gpt. |
+| **Last Updated** | 2026-07-10 — Persist built preview before email; protect from resume wipe. |
 
 ---
 
@@ -297,6 +297,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-10 | **GAP-FILL T02 lean build** — `buildFromUrl` honors `skipRepair`/`skipBlogs`; route passes enrich/skip flags; default gen model `openai_gpt` (tip OpenAI working); repair/blogs timeouts. | Prior lean job stuck at generate/blogs after enrich skip; `skipRepair` only wired on variants path. | ⚠️ tip proof pending |
 | 2026-07-10 | **GAP-FILL T02 hang + resend** — `resend-outreach` accepts `contactEmail` override; PATCH can set `contact_email`; reclaim honors `staleMs`; build heartbeats renew 3m claim; puppeteer launch + generateSiteHtml `withTimeout`; mid-build `onProgress` stages; persist `enrich`/`skipRepair` on resume; enrich timeout 60s. | Path-to-10 T02: builds stuck at `build`/enrich with no mid-stage heartbeat; built prospects couldn't get email without DB contact; reclaim ignored body; resume re-enriched despite `enrich:false`. | ⚠️ tip sync + resend proof pending |
 | 2026-07-10 | **GAP-FILL prospect orphan reclaim** — `failStaleProspectJobs` + heartbeats in `processProspect`; status poll auto-reclaims; `POST /prospects/reclaim-stale`. | Path-to-10 T02: many `building` rows never leave building (instance recycle / hung setImmediate). Sync 502s. | ✅ | tip + reclaim + re-enqueue |
 | 2026-07-08 | **`services/stripe-client.js` tracked** — checkout imports Stripe via dedicated helper; closes ERR_MODULE_NOT_FOUND class for publish checkout on Railway. | Wave 0 import-smoke caught untracked import from `site-builder-entry-checkout.js`. | ✅ spine import verify PASS |

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T12:12:48.160Z",
+  "generated_at": "2026-07-10T12:21:00.038Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11409,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 78581,
-      "mtime": "2026-07-10T12:12:44.791Z",
-      "indexed_at": "2026-07-10T12:12:48.160Z"
+      "bytes": 78900,
+      "mtime": "2026-07-10T12:20:58.731Z",
+      "indexed_at": "2026-07-10T12:21:00.038Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -85132,9 +85132,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 24023,
-      "mtime": "2026-07-10T12:12:29.149Z",
-      "indexed_at": "2026-07-10T12:12:48.160Z",
+      "bytes": 25297,
+      "mtime": "2026-07-10T12:20:58.728Z",
+      "indexed_at": "2026-07-10T12:21:00.038Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

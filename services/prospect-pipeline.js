@@ -216,36 +216,71 @@ export default class ProspectPipeline {
     const biz = buildResult.businessName || businessName || 'your business';
     const qualityReport = buildResult.qualityReport || buildResult.metadata?.qualityReport || null;
     const qaHold = qualityReport ? qualityReport.readyToSend === false : false;
+    const clientId = options.clientId || buildResult.clientId;
 
-    await this.touchProspectJob(clientIdEarly || buildResult.clientId, 'email_copy');
-    // Step 2: Generate personalized email copy (pain points from Step 0 make it specific)
-    const emailContent = await this.generateOutreachEmail({
+    // Persist preview BEFORE email so SMTP hangs / resume cannot lose the build.
+    await this.recordProspect({
+      businessUrl,
+      contactEmail,
       contactName: name,
       businessName: biz,
+      clientId,
       previewUrl,
-      industry: buildResult.metadata?.businessInfo?.industry,
-      posPartnerName: buildResult.posPartner,
-      painPoints: opportunityAnalysis?.painPoints?.slice(0, 3) || [],
+      emailSent: false,
+      status: qaHold ? 'qa_hold' : 'built',
+      metadata: {
+        ...(buildResult.metadata || {}),
+        qualityReport,
+        buildCompletedAt: new Date().toISOString(),
+      },
     });
 
-    await this.touchProspectJob(clientIdEarly || buildResult.clientId, skipEmail ? 'skip_email' : 'send_email');
-    // Step 3: Send email (if contact email provided and not skipped)
+    const emailHeartbeat = setInterval(() => {
+      this.touchProspectJob(clientId, 'email_heartbeat').catch(() => null);
+    }, 15_000);
     let emailSent = false;
     let emailSendError = null;
-    if (contactEmail && !skipEmail && !qaHold) {
+    let emailContent = { subject: '', html: '' };
+    try {
+      await this.touchProspectJob(clientId, 'email_copy');
       try {
-        const delivery = await this.sendEmail(contactEmail, emailContent.subject, emailContent.html);
-        emailSent = delivery?.success !== false;
-        if (emailSent) {
-          logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
-        } else {
-          emailSendError = delivery?.error || 'unknown';
-          logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: emailSendError });
-        }
+        emailContent = await this.generateOutreachEmail({
+          contactName: name,
+          businessName: biz,
+          previewUrl,
+          industry: buildResult.metadata?.businessInfo?.industry,
+          posPartnerName: buildResult.posPartner,
+          painPoints: opportunityAnalysis?.painPoints?.slice(0, 3) || [],
+        });
       } catch (err) {
-        emailSendError = err.message;
-        logger.warn('[PROSPECT] Email send failed', { error: err.message });
+        emailSendError = `email_copy_failed: ${err.message}`;
+        emailContent = {
+          subject: `${biz} — free website upgrade preview`,
+          html: this.fallbackEmailHtml(name, biz, previewUrl, opportunityAnalysis?.painPoints?.slice(0, 3) || []),
+        };
       }
+
+      await this.touchProspectJob(clientId, skipEmail ? 'skip_email' : 'send_email');
+      if (contactEmail && !skipEmail && !qaHold) {
+        try {
+          const delivery = await Promise.race([
+            this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
+          ]);
+          emailSent = delivery?.success !== false;
+          if (emailSent) {
+            logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
+          } else {
+            emailSendError = delivery?.error || emailSendError || 'unknown';
+            logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: emailSendError });
+          }
+        } catch (err) {
+          emailSendError = err.message;
+          logger.warn('[PROSPECT] Email send failed', { error: err.message });
+        }
+      }
+    } finally {
+      clearInterval(emailHeartbeat);
     }
     if (qaHold) {
       logger.warn('[PROSPECT] Prospect held by quality gate', {
@@ -256,8 +291,6 @@ export default class ProspectPipeline {
       });
     }
 
-    // Step 4: Record in DB
-    const clientId = options.clientId || buildResult.clientId;
     await this.recordProspect({
       businessUrl,
       contactEmail,
