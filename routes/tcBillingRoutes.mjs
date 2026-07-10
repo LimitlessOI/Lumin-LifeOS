@@ -2,91 +2,122 @@
  * SYNOPSIS: Registers TcBillingRoutes routes/handlers (routes/tcBillingRoutes.mjs).
  */
 export function registerTcBillingRoutes(app, deps) {
-  if (!app || !deps) return;
+  const pool = deps?.pool;
+  const requireKey = deps?.requireKey;
+  const callCouncilMember = deps?.callCouncilMember;
+  const logger = deps?.logger;
 
-  const { pool, requireKey, callCouncilMember, logger } = deps;
+  if (!app || typeof app.post !== 'function' || typeof app.get !== 'function') {
+    throw new Error('registerTcBillingRoutes requires an Express app');
+  }
+  if (!pool || typeof pool.query !== 'function') {
+    throw new Error('registerTcBillingRoutes requires deps.pool');
+  }
 
-  app.post('/api/tc/billing/subscribe', requireKey, async (req, res) => {
+  const jsonHandler = (fn) => async (req, res) => {
     try {
-      const prompt = JSON.stringify({
-        task: 'createSubscription',
-        body: req.body ?? null,
-        params: req.params ?? null,
-        query: req.query ?? null,
-      });
-
-      const result = await callCouncilMember('tcBilling', prompt, {
-        route: '/api/tc/billing/subscribe',
-        method: 'POST',
-      });
-
-      return res.status(200).json({ ok: true, result });
-    } catch (error) {
-      logger?.error?.({ err: error }, 'tc billing subscribe failed');
-      return res.status(500).json({ ok: false, error: 'internal_error' });
+      const result = await fn(req, res);
+      if (res.headersSent) return;
+      if (result === undefined) {
+        return res.status(200).json({ ok: true });
+      }
+      return res.status(200).json(result);
+    } catch (err) {
+      if (logger?.error) logger.error({ err }, 'tcBilling route failed');
+      if (res.headersSent) return;
+      return res.status(500).json({ ok: false, error: err?.message || 'Internal error' });
     }
-  });
+  };
+
+  app.post(
+    '/api/tc/billing/subscribe',
+    requireKey,
+    jsonHandler(async (req) => {
+      const prompt = JSON.stringify({
+        route: 'tcBilling.createSubscription',
+        body: req.body ?? null,
+        baseUrl: deps?.baseUrl ?? null,
+      });
+
+      const aiResult = callCouncilMember
+        ? await callCouncilMember('tcBilling', prompt, { baseUrl: deps?.baseUrl })
+        : null;
+
+      return {
+        ok: true,
+        action: 'createSubscription',
+        result: aiResult,
+      };
+    })
+  );
 
   app.post(
     '/api/tc/billing/webhook',
-    async (req, res, next) => {
-      try {
-        next();
-      } catch (error) {
-        next(error);
-      }
-    },
     async (req, res) => {
       try {
+        const rawBody =
+          typeof req.body === 'string'
+            ? req.body
+            : Buffer.isBuffer(req.body)
+              ? req.body.toString('utf8')
+              : req.rawBody?.toString?.('utf8') ?? JSON.stringify(req.body ?? {});
+
         const prompt = JSON.stringify({
-          task: 'handleStripeWebhook',
-          body: req.body ?? null,
-          headers: req.headers ?? null,
-          query: req.query ?? null,
+          route: 'tcBilling.handleStripeWebhook',
+          rawBody,
+          headers: {
+            'stripe-signature': req.headers['stripe-signature'] || null,
+            'content-type': req.headers['content-type'] || null,
+          },
         });
 
-        const result = await callCouncilMember('tcBilling', prompt, {
-          route: '/api/tc/billing/webhook',
-          method: 'POST',
-        });
+        const aiResult = callCouncilMember
+          ? await callCouncilMember('tcBilling', prompt, { baseUrl: deps?.baseUrl })
+          : null;
 
-        return res.status(200).json({ ok: true, result });
-      } catch (error) {
-        logger?.error?.({ err: error }, 'tc billing webhook failed');
-        return res.status(500).json({ ok: false, error: 'internal_error' });
+        return res.status(200).json({
+          ok: true,
+          action: 'handleStripeWebhook',
+          result: aiResult,
+        });
+      } catch (err) {
+        if (logger?.error) logger.error({ err }, 'tcBilling webhook failed');
+        return res.status(500).json({ ok: false, error: err?.message || 'Internal error' });
       }
     }
   );
 
-  app.get('/api/tc/billing/status/:agentId', async (req, res) => {
-    try {
-      const { agentId } = req.params || {};
+  app.get(
+    '/api/tc/billing/status/:agentId',
+    jsonHandler(async (req) => {
+      const agentId = req.params?.agentId;
       if (!agentId) {
-        return res.status(400).json({ ok: false, error: 'missing_agentId' });
+        return { ok: false, error: 'agentId is required' };
       }
 
-      const { rows } = await pool.query(
-        `select agent_id, status, payload, created_at, updated_at
-         from tc_billing_subscriptions
-         where agent_id = $1
-         order by updated_at desc nulls last, created_at desc nulls last
-         limit 1`,
+      const result = await pool.query(
+        'SELECT plan_tier, status, stripe_subscription_id, stripe_customer_id, created_at, updated_at FROM stripe_subscriptions WHERE agent_registry_id = $1 ORDER BY updated_at DESC NULLS LAST, created_at DESC NULLS LAST LIMIT 1',
         [agentId]
       );
 
-      const row = rows?.[0] || null;
-      return res.status(200).json({
+      const row = result.rows?.[0] || null;
+
+      return {
         ok: true,
         agentId,
-        currentPlan: row?.payload?.plan_tier ?? row?.payload?.plan ?? null,
-        status: row?.status ?? null,
-        subscription: row,
-      });
-    } catch (error) {
-      logger?.error?.({ err: error }, 'tc billing status failed');
-      return res.status(500).json({ ok: false, error: 'internal_error' });
-    }
-  });
+        subscription: row
+          ? {
+              plan_tier: row.plan_tier,
+              status: row.status,
+              stripe_subscription_id: row.stripe_subscription_id,
+              stripe_customer_id: row.stripe_customer_id,
+              created_at: row.created_at,
+              updated_at: row.updated_at,
+            }
+          : null,
+      };
+    })
+  );
 }
 
 export default registerTcBillingRoutes;
