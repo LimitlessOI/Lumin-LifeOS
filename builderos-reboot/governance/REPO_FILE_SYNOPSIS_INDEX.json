@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T01:58:23.167Z",
+  "generated_at": "2026-07-10T01:58:53.632Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11377,
   "files": [
@@ -69817,9 +69817,9 @@
     {
       "path": "scripts/verify-marketing-phase1-live.mjs",
       "synopsis": "Script — Verify Marketing Phase1 Live.",
-      "bytes": 6908,
-      "mtime": "2026-07-10T01:58:23.167Z",
-      "indexed_at": "2026-07-10T01:58:23.167Z"
+      "bytes": 7554,
+      "mtime": "2026-07-10T01:58:53.632Z",
+      "indexed_at": "2026-07-10T01:58:53.632Z"
     },
     {
       "path": "scripts/verify-marketing-phase1.mjs",
