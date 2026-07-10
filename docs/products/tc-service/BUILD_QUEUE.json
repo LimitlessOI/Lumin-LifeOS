@@ -47,7 +47,7 @@
     },
     {
       "id": "s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/stripe-billing.js",
       "task": "Wire Stripe billing to TC plan tiers and expose enrollAgent helper",
       "spec": "Export functions: createCheckoutSession(deps, {agentRegistryId, planTier}) that calls deps.stripe.checkout.sessions.create with price mapped from planTier ('starter'|'pro'|'enterprise'), and enrollAgent(deps, {agentRegistryId, stripeSubscriptionId, planTier}) that inserts into enrolled_agents and stripe_subscriptions via deps.db, returns enrolled agent record. Validate Postmark/Twilio webhook signatures via deps.validateWebhookSignature(secret, payload, sig). No top-level browser globals. Import only node builtins and deps-injected stripe client.",
@@ -55,9 +55,11 @@
         "s2"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-10T03:45:15.102Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "attempts": 2,
+      "last_attempt_at": "2026-07-10T03:46:40.066Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "commit_sha": "69ce3b6b7fbb1861bb84d221b6da1547865de82f",
+      "completed_at": "2026-07-10T03:46:52.524Z"
     },
     {
       "id": "s5",
