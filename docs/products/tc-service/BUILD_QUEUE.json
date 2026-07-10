@@ -335,7 +335,7 @@
     },
     {
       "id": "step-09",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tcBillingRoutes.mjs",
       "task": "Register Stripe billing and agent enrollment API routes (items 2, 38, 39)",
       "spec": "Export function registerTcBillingRoutes(app, deps). Mount: POST /api/tc/billing/subscribe → tcBilling.createSubscription; POST /api/tc/billing/webhook (raw body) → tcBilling.handleStripeWebhook; GET /api/tc/billing/status/:agentId → query tc_billing_subscriptions and return current plan+status. Return 200 JSON on success, 400/500 on error. No browser globals.",
@@ -343,16 +343,17 @@
         "step-07"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "commit_sha": "59cf3f777b54dc8115afd89379286beafc9164e8",
-      "last_attempt_at": "2026-07-10T09:29:58.650Z",
+      "attempts": 1,
+      "commit_sha": "77b52ab91a9bc379aed02cecb4eab1c080df53be",
+      "last_attempt_at": "2026-07-10T10:34:28.390Z",
       "expected_exports": [
         "registerTcBillingRoutes"
       ],
       "file_contains": [
         "registerTcBillingRoutes",
         "/api/tc/billing/subscribe"
-      ]
+      ],
+      "completed_at": "2026-07-10T10:34:31.462Z"
     },
     {
       "id": "step-10",
