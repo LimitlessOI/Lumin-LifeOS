@@ -232,14 +232,14 @@
     },
     {
       "id": "step-03",
-      "status": "founder_gated",
+      "status": "pending",
       "target_file": "services/tcDocumentQA.mjs",
       "task": "Implement missing-signature and missing-field detection for uploaded docs (item 35)",
       "spec": "Export async function runDocumentQA(deps, {transactionId, documentBuffer}) that calls deps.callCouncilMember('doc-qa', prompt) with base64 doc excerpt to return [{field, issue, page}]. Persists results to tc_document_qa_results table (created in step-01 migration — add IF NOT EXISTS block at top of THIS file using deps.db.query for the create). Returns {passed:bool, issues:[]}. Zero browser globals.",
       "depends_on": [
         "step-01"
       ],
-      "founder_gated": true,
+      "founder_gated": false,
       "attempts": 0
     },
     {
