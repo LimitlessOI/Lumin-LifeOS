@@ -19,7 +19,7 @@
     },
     {
       "id": "s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/builder-runtime-mode-service.js",
       "task": "Implement runtime mode read/write service backed by builder_runtime_config",
       "spec": "Export async functions: getCurrentMode(db) returns {mode,updated_at,updated_by}; setMode(db,mode,triggeredBy,receiptPayload) upserts builder_runtime_config (single-row pattern keyed on a fixed sentinel id or ON CONFLICT DO UPDATE) and inserts a builder_mode_receipts row; getReceipts(db,limit) returns recent receipts. Uses only pg pool passed as argument — no top-level imports beyond node builtins. Throws descriptive Error on invalid mode values (allowed: 'run','dry_run','paused').",
@@ -27,7 +27,10 @@
         "s1"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "e1bd898465998ac28ab3d274d279c0bea2ec47fd",
+      "last_attempt_at": "2026-07-10T19:27:22.334Z",
+      "completed_at": "2026-07-10T19:27:33.229Z"
     },
     {
       "id": "s3",
