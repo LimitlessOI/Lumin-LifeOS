@@ -107,9 +107,9 @@
         "s5"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "commit_sha": "9a4deaf72c2a6f3566fafa11d81f8ab9ef061bf7",
-      "last_attempt_at": "2026-07-10T06:54:30.987Z",
+      "attempts": 2,
+      "commit_sha": "12e14752ae17d6cb6c312b5514bfdef44610b664",
+      "last_attempt_at": "2026-07-10T06:55:20.460Z",
       "last_error": "artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw"
     },
     {
