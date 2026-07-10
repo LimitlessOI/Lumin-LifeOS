@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — s7 revive + artifact-proof git-show fallback; import fixed to `tc-intake-runner.js`. |
+| **Last Updated** | 2026-07-10 — ungated step-03 (tcDocumentQA service wrongly founder_gated); s7–s10 mounted. |
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T09:36:23.545Z",
+  "generated_at": "2026-07-10T09:36:47.759Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11406,
   "files": [
@@ -39729,9 +39729,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 104030,
-      "mtime": "2026-07-10T09:01:26.513Z",
-      "indexed_at": "2026-07-10T09:01:30.871Z"
+      "bytes": 104025,
+      "mtime": "2026-07-10T09:36:46.868Z",
+      "indexed_at": "2026-07-10T09:36:47.759Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
