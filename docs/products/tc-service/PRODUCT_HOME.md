@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — default-export shims on TC .mjs services so builder default-imports mount. |
+| **Last Updated** | 2026-07-10 — TC billing route security patch: status requires auth; Stripe webhook fails closed unless signature-verified. |
 
 ---
 
@@ -915,7 +915,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** Live secrets and first-file execution still need to be completed — both the workspace and the runtime IMAP resolver now prefer `adam@hopkinsgroup.org` for TC intake, honor the current Railway alias vars (`TC_IMAP_APP_Adam_PASSWORD`, `GLVAR_mls_*`, `exp_okta_*`), surface only actionable setup gaps, and show active files as red/yellow/green transaction cards with click-through action routing; **live** IMAP + GLVAR + eXp vault values are still required before first real intake and first real outbound package send run end-to-end.
+**Current blocker:** Live secrets and first-file execution still need to be completed — both the workspace and the runtime IMAP resolver now prefer `adam@hopkinsgroup.org` for TC intake, honor the current Railway alias vars (`TC_IMAP_APP_Adam_PASSWORD`, `GLVAR_mls_*`, `exp_okta_*`), surface only actionable setup gaps, and show active files as red/yellow/green transaction cards with click-through action routing; **live** IMAP + GLVAR + eXp vault values are still required before first real intake and first real outbound package send run end-to-end. TC billing webhook still requires a real Stripe signature verifier/raw-body wiring before live Stripe traffic should be pointed at `/api/tc/billing/webhook`.
 
 **Last decision:** TC access should use managed env for defaults and the credential vault for secrets; startup guards now check real readiness instead of stale hard-coded env names
 
@@ -975,6 +975,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ## Change Receipts
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
+| 2026-07-10 | **Critical billing security patch** — `routes/tcBillingRoutes.mjs` now requires auth on `GET /api/tc/billing/status/:agentId`; `POST /api/tc/billing/webhook` no longer accepts arbitrary JSON or calls AI before verification, and fails closed unless a Stripe signature verifier is injected. Added `tests/tc-billing-routes-security.test.js` and wired it into `npm test`. | The step-09 `.mjs` route was auto-registered live with unauthenticated subscription-status reads and an unauthenticated webhook path that could drive side effects and 500 on deployed schema variants. | ✅ | pending | `node --test tests/tc-billing-routes-security.test.js` PASS; `npm test` PASS; `builder:preflight` still blocked by pre-existing `lumin` vs `chair` routing assertion. |
 | 2026-07-10 | **GAP-FILL step-08/09 mount** — fixed `tcIntakeRoutes.mjs` named imports (builder used default imports of named-only services → load fail); auto-registered both `.mjs` routes; disabled kebab duplicates to avoid double-mount. | never-stop: Pre-commit syntax fail on intake; billing `route module not auto-registered`. | ✅ | never-stop marks step-08/09/10 done |
 | 2026-07-10 | **GAP-FILL s9 imap import** — `registerTcImapRoutes` now imports `verifyImapAndDryRun` (not nonexistent `imapRailwayBootstrap`). s7+s8 done after auto-register. | module_not_mounted SyntaxError on named export. | ✅ | push + mount proof |
 | 2026-07-10 | **GAP-FILL s10 false-done** — auto-register lacked TC routes; added tc-intake/billing/imap entries; revived s7–s9. | s10 marked done on unrelated LifeOS SHA; module-health still not auto-registered. | ✅ | push + redeploy |
