@@ -170,7 +170,7 @@ export async function evaluateStepExpectations(step, {
         // assertion_threw and the step blocks forever. Prefer GitHub Contents API
         // for that exact SHA; only then fall back to workspace when HEAD matches.
         const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
-        const repo = process.env.GITHUB_REPO || '';
+        const repo = (process.env.GITHUB_REPO || process.env.GITHUB_REPOSITORY || 'LimitlessOI/Lumin-LifeOS').trim();
         if (token && repo) {
           const url = `https://api.github.com/repos/${repo}/contents/${relPath}?ref=${encodeURIComponent(commitSha)}`;
           const res = await fetch(url, {
