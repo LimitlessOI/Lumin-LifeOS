@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:50:40.876Z",
+  "generated_at": "2026-07-10T03:53:38.042Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11391,
+  "file_count": 11392,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66169,6 +66169,13 @@
       "bytes": 2512,
       "mtime": "2026-06-21T21:39:04.952Z",
       "indexed_at": "2026-07-10T02:08:57.077Z"
+    },
+    {
+      "path": "routes/tc-intake-routes.js",
+      "synopsis": "ASSUMPTIONS:",
+      "bytes": 2444,
+      "mtime": "2026-07-10T03:53:38.042Z",
+      "indexed_at": "2026-07-10T03:53:38.042Z"
     },
     {
       "path": "routes/tc-r4r-routes.js",
