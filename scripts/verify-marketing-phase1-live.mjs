@@ -7,6 +7,7 @@ import path from 'node:path';
 
 const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL;
 const COMMAND_CENTER_KEY = process.env.COMMAND_CENTER_KEY;
+const COMMAND_KEY = process.env.COMMAND_KEY || COMMAND_CENTER_KEY;
 
 if (!PUBLIC_BASE_URL) {
   throw new Error('PUBLIC_BASE_URL is required');
@@ -42,6 +43,7 @@ async function requestJson(method, pathname, body, expectedStatus = null) {
     headers: {
       'content-type': 'application/json',
       'x-command-center-key': COMMAND_CENTER_KEY,
+      'x-command-key': COMMAND_KEY,
       accept: 'application/json',
     },
     body: body == null ? undefined : JSON.stringify(body),
@@ -80,58 +82,63 @@ async function main() {
     }
 
     const consentPayload = {
+      consent_type: 'session_recording',
+      consent_text: 'phase1-verify',
       owner_id,
-      session_recording: true,
     };
 
-    const consent = await requestJson('POST', '/api/v1/marketing/consent', consentPayload, 200);
+    const consent = await requestJson('POST', '/api/v1/marketing/consent', consentPayload);
+    if (![200, 201].includes(consent.res.status)) {
+      throw new Error(`POST /api/v1/marketing/consent expected 200 or 201, got ${consent.res.status}`);
+    }
     consentOwnerId = owner_id;
-    pushTest('POST /api/v1/marketing/consent with session_recording + UUID owner_id', true, {
+    pushTest('POST /api/v1/marketing/consent with consent_type + consent_text + UUID owner_id', true, {
       status: consent.res.status,
       owner_id: consentOwnerId,
     });
 
     const sessionWithoutConsentPayload = {
       owner_id,
-      session_recording: true,
     };
 
     try {
-      await requestJson('POST', '/api/v1/marketing/session', sessionWithoutConsentPayload, 400);
-      pushTest('POST session without consent expects 400', true);
+      await requestJson('POST', '/api/v1/marketing/sessions', sessionWithoutConsentPayload, 400);
+      pushTest('POST /api/v1/marketing/sessions without consent expects 400', true);
     } catch (err) {
-      pushTest('POST session without consent expects 400', false, err?.message || String(err));
+      pushTest('POST /api/v1/marketing/sessions without consent expects 400', false, err?.message || String(err));
       throw err;
     }
 
     const sessionWithConsentPayload = {
+      consent_record_id: consent.json?.id || consent.json?.consent_record_id || consent.json?.data?.id || null,
       owner_id,
-      session_recording: true,
-      consent: true,
     };
 
-    const session = await requestJson('POST', '/api/v1/marketing/session', sessionWithConsentPayload, 200);
+    const session = await requestJson('POST', '/api/v1/marketing/sessions', sessionWithConsentPayload);
+    if (![200, 201].includes(session.res.status)) {
+      throw new Error(`POST /api/v1/marketing/sessions expected 200 or 201, got ${session.res.status}`);
+    }
     sessionId = session.json?.id || session.json?.session_id || session.json?.data?.id || null;
     pushTest('POST session with consent', true, {
       status: session.res.status,
       id: sessionId,
     });
 
-    const coach = await requestJson('POST', '/api/v1/marketing/coach', { owner_id }, 200);
+    const coach = await requestJson('POST', `/api/v1/marketing/sessions/${encodeURIComponent(sessionId)}/coach`, { message: 'phase1-verify', owner_id }, 200);
     coachId = coach.json?.id || coach.json?.coach_id || coach.json?.data?.id || null;
-    pushTest('POST coach', true, {
+    pushTest('POST /api/v1/marketing/sessions/:id/coach', true, {
       status: coach.res.status,
       id: coachId,
     });
 
-    const extract = await requestJson('POST', '/api/v1/marketing/extract', { owner_id, session_id: sessionId }, 200);
-    pushTest('POST extract', true, {
+    const extract = await requestJson('POST', `/api/v1/marketing/sessions/${encodeURIComponent(sessionId)}/extract`, { owner_id }, 200);
+    pushTest('POST /api/v1/marketing/sessions/:id/extract', true, {
       status: extract.res.status,
     });
 
-    const generate = await requestJson('POST', '/api/v1/marketing/generate', { owner_id, session_id: sessionId, coach_id: coachId }, 200);
-    contentId = generate.json?.id || generate.json?.content_id || generate.json?.data?.id || null;
-    pushTest('POST generate', true, {
+    const generate = await requestJson('POST', `/api/v1/marketing/sessions/${encodeURIComponent(sessionId)}/generate`, { owner_id }, 200);
+    contentId = generate.json?.pieces?.[0]?.id || generate.json?.id || generate.json?.content_id || generate.json?.data?.id || null;
+    pushTest('POST /api/v1/marketing/sessions/:id/generate', true, {
       status: generate.res.status,
       id: contentId,
     });
@@ -140,20 +147,21 @@ async function main() {
       throw new Error('missing content id after generate');
     }
 
-    const approve = await requestJson('PATCH', `/api/v1/marketing/content/${encodeURIComponent(contentId)}/approve`, { owner_id }, 200);
-    pushTest('PATCH content approve', true, {
+    const approve = await requestJson('PATCH', `/api/v1/marketing/content/${encodeURIComponent(contentId)}`, { action: 'approve', owner_id }, 200);
+    pushTest('PATCH /api/v1/marketing/content/:id approve', true, {
       status: approve.res.status,
     });
 
-    const exportRes = await fetch(new URL(`/api/v1/marketing/content/${encodeURIComponent(contentId)}/export`, PUBLIC_BASE_URL), {
+    const exportRes = await fetch(new URL(`/api/v1/marketing/sessions/${encodeURIComponent(sessionId)}/export?owner_id=${encodeURIComponent(owner_id)}`, PUBLIC_BASE_URL), {
       method: 'GET',
       headers: {
         'x-command-center-key': COMMAND_CENTER_KEY,
+        'x-command-key': COMMAND_KEY,
         accept: '*/*',
       },
     });
 
-    exportHref = `/api/v1/marketing/content/${encodeURIComponent(contentId)}/export`;
+    exportHref = `/api/v1/marketing/sessions/${encodeURIComponent(sessionId)}/export?owner_id=${encodeURIComponent(owner_id)}`;
     const disposition = exportRes.headers.get('content-disposition') || '';
     const exportText = await exportRes.text();
     if (!exportRes.ok) {
