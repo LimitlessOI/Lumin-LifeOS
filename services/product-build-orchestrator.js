@@ -305,15 +305,16 @@ export function reviveStaleBlockedSteps(queue, {
     if (reviveCount >= effectiveMax) continue;
     const lastAt = Date.parse(step.last_attempt_at || step.completed_at || '');
     const waited = Number.isFinite(lastAt) ? now - lastAt : Infinity;
-    if (waited < cooldownMs && !autoRegBlock && !artifactToolingBlock) continue;
-    // For auto-reg blocks, still respect a short cooldown unless a sibling
-    // register-config step is pending/done (fix is in flight or landed).
-    if (autoRegBlock && waited < cooldownMs) {
-      const registerSibling = (queue.steps || []).find(
-        (s) => isAutoRegisterConfigStep(s) && s.status !== STEP_STATUS.BLOCKED,
+    // Auto-reg chicken-egg: stay BLOCKED until the register-config sibling is
+    // DONE. Reviving while s10 is only pending re-selects the route forever and
+    // starves s8/s9 (observed: s7 auto-reg block → revive → never reach s8).
+    if (autoRegBlock) {
+      const registerDone = (queue.steps || []).find(
+        (s) => isAutoRegisterConfigStep(s) && s.status === STEP_STATUS.DONE,
       );
-      if (!registerSibling) continue;
+      if (!registerDone) continue;
     }
+    if (waited < cooldownMs && !artifactToolingBlock) continue;
     // Tooling assertion_threw: short 60s cooldown then revive.
     if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;
     step.status = STEP_STATUS.PENDING;
