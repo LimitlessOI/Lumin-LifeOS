@@ -9,6 +9,8 @@ import logger from '../services/logger.js';
 import {
   createPublishCheckoutSession,
   verifyPublishCheckoutSession,
+  createUpsellCheckoutSession,
+  verifyUpsellCheckoutSession,
 } from '../services/site-builder-entry-checkout.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 
@@ -145,8 +147,76 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
     }
   });
 
+  router.get('/upsell/pricing', (_req, res) => {
+    res.json({
+      ok: true,
+      templates: SITE_BUILDER_PRICING.templates,
+      colors: SITE_BUILDER_PRICING.colors,
+    });
+  });
+
+  router.get('/upsell/checkout', async (req, res) => {
+    try {
+      const clientId = String(req.query.clientId || req.query.id || '').trim();
+      const kind = String(req.query.kind || '').trim();
+      if (!clientId || !/^[\w-]+$/.test(clientId)) {
+        return res.status(400).json({ ok: false, error: 'clientId required' });
+      }
+      if (!['template-additional', 'template-custom', 'color-custom'].includes(kind)) {
+        return res.status(400).json({ ok: false, error: 'kind must be template-additional, template-custom, or color-custom' });
+      }
+
+      const meta = await loadPreviewMeta(clientId, pool);
+      if (!meta) {
+        return res.status(404).json({ ok: false, error: 'Preview not found' });
+      }
+
+      const prospect = await loadProspectContext(pool, clientId);
+      const businessName = meta.businessInfo?.businessName || prospect.business_name || 'your business';
+
+      const checkout = await createUpsellCheckoutSession({
+        clientId,
+        businessName,
+        kind,
+        baseUrl,
+        pool,
+        note: String(req.query.note || '').slice(0, 400),
+      });
+
+      if (!checkout.ok) {
+        return res.status(checkout.error?.includes('Stripe') ? 503 : 400).json(checkout);
+      }
+
+      if (req.query.format === 'json' || req.headers.accept?.includes('application/json')) {
+        return res.json(checkout);
+      }
+
+      return res.redirect(302, checkout.url);
+    } catch (err) {
+      logger.error('[SITE-CHECKOUT] upsell checkout error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/upsell/verify', async (req, res) => {
+    try {
+      const clientId = String(req.query.clientId || '').trim();
+      const sessionId = String(req.query.upsell_session_id || req.query.session_id || '').trim();
+      const kind = String(req.query.upsell_kind || req.query.kind || '').trim();
+      if (!clientId || !sessionId) {
+        return res.status(400).json({ ok: false, error: 'clientId and session_id required' });
+      }
+
+      const result = await verifyUpsellCheckoutSession({ sessionId, clientId, kind, pool });
+      return res.status(result.ok ? 200 : 400).json(result);
+    } catch (err) {
+      logger.error('[SITE-CHECKOUT] upsell verify error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   app.use('/api/v1/sites', router);
-  logger.info('[SITE-CHECKOUT] Publish checkout routes mounted at /api/v1/sites/publish/*');
+  logger.info('[SITE-CHECKOUT] Publish + upsell checkout routes mounted at /api/v1/sites/publish/* and /api/v1/sites/upsell/*');
 }
 
 export default createSiteBuilderCheckoutRoutes;

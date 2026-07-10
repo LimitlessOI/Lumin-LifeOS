@@ -257,17 +257,31 @@ export default class ProspectPipeline {
     }, 20_000);
     let buildResult;
     try {
-      // Step 1: Build their mock site
-      buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
-        businessInfo: options.businessInfo || null,
-        clientId: options.clientId || null,
-        enrich: options.enrich,
-        skipRepair: options.skipRepair,
-        skipBlogs: options.skipBlogs,
-        skipAi: options.skipAi,
-        leanTemplate: options.leanTemplate,
-        onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
-      });
+      // Step 1: Build their site. Lean/no-AI fast paths (emergency reliability
+      // modes built for Railway's edge timeout) still use the single-site
+      // buildFromUrl; a normal build now generates the free template gallery
+      // (buildVariants) so the editor has real choices to toggle between,
+      // not just one design (founder direction 2026-07-10).
+      const useLeanSinglePath = options.leanTemplate || options.skipAi;
+      buildResult = useLeanSinglePath
+        ? await this.siteBuilder.buildFromUrl(businessUrl, {
+            businessInfo: options.businessInfo || null,
+            clientId: options.clientId || null,
+            enrich: options.enrich,
+            skipRepair: options.skipRepair,
+            skipBlogs: options.skipBlogs,
+            skipAi: options.skipAi,
+            leanTemplate: options.leanTemplate,
+            onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
+          })
+        : await this.siteBuilder.buildVariants(businessUrl, {
+            businessInfo: options.businessInfo || null,
+            clientId: options.clientId || null,
+            enrich: options.enrich,
+            skipRepair: options.skipRepair,
+            competitorUrls: options.competitorUrls || [],
+            onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
+          });
     } finally {
       clearInterval(heartbeat);
     }

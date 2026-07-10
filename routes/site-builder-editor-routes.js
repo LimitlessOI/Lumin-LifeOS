@@ -41,7 +41,7 @@ async function assertEditToken(clientId, token) {
   return { ok: true, meta };
 }
 
-function buildStrategyFromMeta(meta) {
+function buildStrategyFromMeta(meta, previewBase, clientId) {
   const competitors = [];
   const benchmark = meta?.benchmark;
   if (benchmark?.competitors && Array.isArray(benchmark.competitors)) {
@@ -52,6 +52,7 @@ function buildStrategyFromMeta(meta) {
         score: c.score,
         strengths: c.doesWell || c.strengths || [],
         weaknesses: c.doesPoorly || c.weaknesses || [],
+        url: c.url || null,
       });
     }
   }
@@ -60,7 +61,16 @@ function buildStrategyFromMeta(meta) {
     benchmark?.designBrief?.summary ||
     benchmark?.designBrief ||
     '';
-  return { synopsis: typeof synopsis === 'string' ? synopsis : '', competitors };
+  const firstVariantFile = Array.isArray(meta?.variants) && meta.variants[0]?.file
+    ? meta.variants[0].file
+    : 'index.html';
+  const trimmedPreviewBase = String(previewBase || '').replace(/\/+$/, '');
+  return {
+    synopsis: typeof synopsis === 'string' ? synopsis : '',
+    competitors,
+    oldSiteUrl: meta?.businessInfo?.sourceUrl || null,
+    newSiteUrl: trimmedPreviewBase ? `${trimmedPreviewBase}/${firstVariantFile.replace(/^\/+/, '')}` : null,
+  };
 }
 
 function buildEditorContext(meta, clientId, baseUrl) {
@@ -75,7 +85,8 @@ function buildEditorContext(meta, clientId, baseUrl) {
     { name: 'Warm', primary: '#B45309', accent: '#F59E0B' },
     { name: 'Clinical', primary: '#0F766E', accent: '#14B8A6' },
   ];
-  const strategy = buildStrategyFromMeta(meta);
+  const previewBase = `${String(baseUrl || '').replace(/\/+$/, '')}/previews/${clientId}`;
+  const strategy = buildStrategyFromMeta(meta, previewBase, clientId);
   const services = recommendServices(strategy);
   return {
     businessName,

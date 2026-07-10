@@ -1,41 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-10T20:53:21.883Z",
-  "findings_count": 5,
+  "generated_at": "2026-07-10T21:04:35.124Z",
+  "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only one template choice, so it feels like I’m not really choosing a design.",
-      "proposed_solution": "Show 3–5 clear starter templates so I can pick a look that fits my business.",
+      "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business.",
+      "proposed_solution": "Offer a few more template options so I can choose a style that feels like my business.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The editor gives me very little guidance on what to do first.",
-      "proposed_solution": "Add a simple first-step prompt like ‘Start here: choose a template, then edit your text.’",
+      "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand.",
+      "proposed_solution": "Add simple labels or helper text for the chat, save, and device toggle so I know what each one is for.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat is there, but it isn’t clear what I should ask it for.",
-      "proposed_solution": "Make the chat more obvious with example questions like ‘change colors’ or ‘rewrite my homepage headline.’",
+      "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site.",
+      "proposed_solution": "Provide a very short getting-started prompt like ‘Choose a template, then pick a color palette’ to reduce the blank-screen feeling.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_4",
-      "detail": "Save works, but I’d want more obvious confirmation that my changes are actually saved.",
-      "proposed_solution": "Show a stronger save confirmation, like ‘Saved’ with a timestamp or checkmark.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_5",
-      "detail": "The device toggle is useful, but it may add one more thing to figure out in an already unfamiliar editor.",
-      "proposed_solution": "Keep the device preview, but label it plainly as ‘Desktop / Tablet / Mobile’ so it feels less technical.",
+      "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does.",
+      "proposed_solution": "Show a clearer before/after preview when switching device views so I can tell what changed.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -45,23 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only one template choice, so it feels like I’m not really choosing a design."
+        "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The editor gives me very little guidance on what to do first."
+        "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat is there, but it isn’t clear what I should ask it for."
+        "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site."
       },
       {
         "code": "ux_friction_4",
-        "detail": "Save works, but I’d want more obvious confirmation that my changes are actually saved."
-      },
-      {
-        "code": "ux_friction_5",
-        "detail": "The device toggle is useful, but it may add one more thing to figure out in an already unfamiliar editor."
+        "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does."
       }
     ]
   }

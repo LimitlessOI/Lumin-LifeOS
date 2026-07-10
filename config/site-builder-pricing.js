@@ -27,6 +27,29 @@ export const SITE_BUILDER_PRICING = {
     'social-media-management': { display: '$297/mo', cadence: 'monthly' },
     'seo-content-care-plan': { display: '$97/mo', cadence: 'monthly' },
   },
+  /** Template gallery: 10 curated designs free to toggle/preview; extra variety
+   *  and a fully bespoke design are paid upsells (founder direction 2026-07-10). */
+  templates: {
+    freeCount: Number(process.env.SITE_BUILDER_FREE_TEMPLATE_COUNT || 10),
+    additional: {
+      oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_CENTS || 1000),
+      display: process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_DISPLAY || '$10',
+      description: 'One more design variant beyond the 10 free templates.',
+    },
+    custom: {
+      oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_CUSTOM_CENTS || 3000),
+      display: process.env.SITE_BUILDER_TEMPLATE_CUSTOM_DISPLAY || '$30',
+      description: 'A fully custom design built to your direction — unique to your business, not from the shared template library.',
+    },
+  },
+  /** Preset color palettes are free; a fully custom brand-color match is a paid upsell. */
+  colors: {
+    custom: {
+      oneTimeCents: Number(process.env.SITE_BUILDER_CUSTOM_COLOR_CENTS || 500),
+      display: process.env.SITE_BUILDER_CUSTOM_COLOR_DISPLAY || '$5',
+      description: 'Match your exact brand colors instead of choosing from the free presets.',
+    },
+  },
   legacyCloser: {
     starter: { display: '$997', note: 'Upsell tier after entry publish — not front-door pricing' },
     growth: { display: '$1,497', note: 'Upsell tier' },

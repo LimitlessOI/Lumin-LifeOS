@@ -145,4 +145,127 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
   };
 }
 
-export default { createPublishCheckoutSession, verifyPublishCheckoutSession };
+/** Template/color upsells: additional template ($10), fully custom template ($30),
+ *  custom brand-color match ($5). Shares the same session-create/verify shape as
+ *  the publish checkout above. `kind` selects the price + product metadata. */
+const UPSELL_CONFIG = {
+  'template-additional': () => ({ ...SITE_BUILDER_PRICING.templates.additional, label: 'One more site design' }),
+  'template-custom': () => ({ ...SITE_BUILDER_PRICING.templates.custom, label: 'Fully custom site design' }),
+  'color-custom': () => ({ ...SITE_BUILDER_PRICING.colors.custom, label: 'Custom brand colors' }),
+};
+
+export async function createUpsellCheckoutSession({ clientId, businessName, kind, baseUrl, pool, note }) {
+  if (!clientId || !/^[\w-]+$/.test(String(clientId))) {
+    return { ok: false, error: 'Invalid clientId' };
+  }
+  const build = UPSELL_CONFIG[kind];
+  if (!build) {
+    return { ok: false, error: `Unknown upsell kind: ${kind}` };
+  }
+
+  const stripe = await getStripeClient();
+  if (!stripe) {
+    return { ok: false, error: 'Stripe not configured (STRIPE_SECRET_KEY missing)' };
+  }
+
+  const priceInfo = build();
+  const amountCents = priceInfo.oneTimeCents;
+  if (!Number.isFinite(amountCents) || amountCents <= 0) {
+    return { ok: false, error: 'Invalid upsell price configuration' };
+  }
+
+  const safeBase = String(baseUrl || '').replace(/\/$/, '');
+  const label = businessName ? `${priceInfo.label} — ${businessName}` : priceInfo.label;
+
+  const session = await stripe.checkout.sessions.create({
+    mode: 'payment',
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: { name: label, description: priceInfo.description },
+          unit_amount: Math.round(amountCents),
+        },
+        quantity: 1,
+      },
+    ],
+    success_url: `${safeBase}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&upsell_session_id={CHECKOUT_SESSION_ID}&upsell_kind=${encodeURIComponent(kind)}`,
+    cancel_url: `${safeBase}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}`,
+    metadata: {
+      product: 'site-builder-upsell',
+      kind,
+      clientId: String(clientId),
+      note: String(note || '').slice(0, 400),
+    },
+  });
+
+  return { ok: true, url: session.url, sessionId: session.id, amountCents, kind };
+}
+
+export async function verifyUpsellCheckoutSession({ sessionId, clientId, kind, pool }) {
+  if (!sessionId || !clientId) {
+    return { ok: false, error: 'sessionId and clientId required' };
+  }
+
+  const stripe = await getStripeClient();
+  if (!stripe) {
+    return { ok: false, error: 'Stripe not configured' };
+  }
+
+  const session = await stripe.checkout.sessions.retrieve(String(sessionId));
+  const paid = session.payment_status === 'paid' || session.status === 'complete';
+  const metaClientId = session.metadata?.clientId;
+  const metaKind = session.metadata?.kind;
+
+  if (!paid) {
+    return { ok: false, error: 'Payment not completed', paymentStatus: session.payment_status };
+  }
+  if (metaClientId && metaClientId !== String(clientId)) {
+    return { ok: false, error: 'Checkout session does not match this preview' };
+  }
+  if (kind && metaKind && metaKind !== String(kind)) {
+    return { ok: false, error: 'Checkout session does not match the requested upsell' };
+  }
+
+  if (pool) {
+    const unlockField = metaKind === 'color-custom' ? 'customColorUnlocked' : 'unlockedTemplateSlots';
+    const increment = metaKind === 'color-custom' ? null : 1;
+    await pool.query(
+      `UPDATE prospect_sites
+          SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+              updated_at = NOW()
+        WHERE client_id = $1`,
+      [
+        clientId,
+        JSON.stringify(
+          increment === null
+            ? { [unlockField]: true, lastUpsellSessionId: session.id, lastUpsellKind: metaKind }
+            : { lastUpsellSessionId: session.id, lastUpsellKind: metaKind, upsellPurchasedAt: new Date().toISOString() },
+        ),
+      ],
+    );
+    if (increment !== null) {
+      // Increment additional-template count separately (can't do +1 inside the JSONB merge above).
+      await pool.query(
+        `UPDATE prospect_sites
+            SET metadata = jsonb_set(
+                  COALESCE(metadata, '{}'::jsonb),
+                  '{unlockedTemplateSlots}',
+                  to_jsonb(COALESCE((metadata->>'unlockedTemplateSlots')::int, 0) + $2)
+                ),
+                updated_at = NOW()
+          WHERE client_id = $1`,
+        [clientId, increment],
+      );
+    }
+  }
+
+  return { ok: true, clientId, kind: metaKind, sessionId: session.id };
+}
+
+export default {
+  createPublishCheckoutSession,
+  verifyPublishCheckoutSession,
+  createUpsellCheckoutSession,
+  verifyUpsellCheckoutSession,
+};

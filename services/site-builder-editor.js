@@ -17,6 +17,15 @@ function htmlEscape(value) {
     .replace(/'/g, '&#39;');
 }
 
+function scriptJson(value) {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+}
+
 export function renderEditorShell({
   businessName,
   clientId,
@@ -108,6 +117,23 @@ export function renderEditorShell({
             onboard.classList.add('is-dismissed');
           }
         } catch (_) {}
+      } catch (_) {}
+
+      try {
+        var upsellEditorBase = ${scriptJson(String(baseUrl || ''))};
+        var upsellClientId = ${scriptJson(String(clientId || ''))};
+        var params = new URLSearchParams(window.location.search);
+        var upsellSessionId = params.get('upsell_session_id');
+        var upsellKind = params.get('upsell_kind');
+        if (upsellSessionId) {
+          var verifyUrl = upsellEditorBase.replace(/\\/$/, '') + '/api/v1/sites/upsell/verify?clientId=' + encodeURIComponent(upsellClientId) + '&session_id=' + encodeURIComponent(upsellSessionId) + '&kind=' + encodeURIComponent(upsellKind || '');
+          fetch(verifyUrl).then(function (r) { return r.json(); }).then(function (result) {
+            var msg = result && result.ok ? 'Purchase confirmed — refresh to see it applied.' : 'Could not confirm purchase: ' + ((result && result.error) || 'unknown error');
+            window.alert(msg);
+            var cleanUrl = window.location.pathname + '?clientId=' + encodeURIComponent(upsellClientId);
+            window.history.replaceState({}, '', cleanUrl);
+          }).catch(function () {});
+        }
       } catch (_) {}
 
       try {

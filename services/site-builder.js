@@ -428,8 +428,8 @@ export default class SiteBuilder {
    * options: { variantCount, styleIds:[], enrich, skipRepair, ...buildFromUrl opts }
    */
   async buildVariants(targetUrl, options = {}) {
-    const clientId = `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
-    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || 3));
+    const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || SITE_BUILDER_PRICING.templates.freeCount || 10));
     const systems = pickDesignSystems(count, options.styleIds || []);
     logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id) });
 
@@ -447,13 +447,20 @@ export default class SiteBuilder {
       const posPartner = this.selectPosPartner(businessInfo.industry || businessInfo.keywords || []);
 
       let designBrief = null;
+      let benchmark = null;
+      let presence = null;
       const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
       if (this.callCouncil && competitorUrls.length > 0) {
         try {
-          const benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
+          benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
           designBrief = benchmark?.designBrief || null;
         } catch (err) {
           logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
+        }
+        try {
+          presence = await this.auditPresence(businessInfo, competitorUrls);
+        } catch (err) {
+          logger.warn('[SITE] presence audit failed (continuing)', { clientId, error: err.message });
         }
       }
 
@@ -504,9 +511,32 @@ export default class SiteBuilder {
 
       if (!variants.length) throw new Error('all variant generations failed');
 
+      // Top-level qualityReport = the BEST-scoring variant. Callers (the prospect
+      // pipeline's send-quality gate) need one canonical score to decide whether
+      // this build is ready to email, same contract buildFromUrl provides.
+      const bestVariant = variants.reduce((best, v) => (v.scorePct > (best?.scorePct ?? -1) ? v : best), null);
+      let qualityReport = null;
+      try {
+        const bestHtml = await fs.readFile(path.join(deployDir, bestVariant.file), 'utf8');
+        qualityReport = this.scoreSiteHtml(bestHtml, businessInfo);
+      } catch (err) {
+        logger.warn('[SITE] Could not re-score best variant (non-fatal)', { clientId, error: err.message });
+        qualityReport = { scorePct: bestVariant.scorePct, readyToSend: bestVariant.scorePct >= MIN_SEND_SCORE, grade: null, issues: [] };
+      }
+
       const editToken = createEditToken();
       const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken);
       await fs.writeFile(path.join(deployDir, 'index.html'), switcher);
+
+      if (businessInfo.existingSiteScore || (benchmark && benchmark.analyzedCount > 0) || presence) {
+        await fs.writeFile(
+          path.join(deployDir, 'scorecard.html'),
+          this.generateScorecardHtml(businessInfo, benchmark, presence, {
+            before: businessInfo.existingSiteScore,
+            after: qualityReport,
+          }),
+        );
+      }
 
       const metadata = {
         clientId,
@@ -514,6 +544,7 @@ export default class SiteBuilder {
         businessInfo,
         posPartner,
         variants,
+        qualityReport,
         blogPosts: blogPosts.map((p) => ({ slug: p.slug, title: p.title })),
         editToken,
         createdAt: new Date().toISOString(),
@@ -524,13 +555,14 @@ export default class SiteBuilder {
       };
       await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
 
-      logger.info('[SITE] Variants deployed', { clientId, count: variants.length, previewUrl: metadata.previewUrl });
+      logger.info('[SITE] Variants deployed', { clientId, count: variants.length, previewUrl: metadata.previewUrl, bestScore: qualityReport.scorePct });
       return {
         success: true,
         clientId,
         previewUrl: metadata.previewUrl,
         businessName: businessInfo.businessName,
         variants,
+        qualityReport,
         posPartner: posPartner.name,
         metadata,
       };

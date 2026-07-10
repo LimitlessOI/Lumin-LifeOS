@@ -166,13 +166,71 @@ function renderLane(category, competitors) {
   ].join('');
 }
 
+function renderCompareCard({ label, url, isPrimary }) {
+  const safeUrl = normalizeText(url);
+  if (!safeUrl) {
+    return [
+      `<div class="strategy-compare-card${isPrimary ? ' strategy-compare-card--primary' : ''}">`,
+      `<div class="strategy-compare-card__label">${htmlEscape(label)}</div>`,
+      '<div class="strategy-compare-card__empty">No URL available</div>',
+      '</div>',
+    ].join('');
+  }
+
+  const frameId = `sb-compare-${Math.random().toString(36).slice(2, 9)}`;
+  return [
+    `<div class="strategy-compare-card${isPrimary ? ' strategy-compare-card--primary' : ''}">`,
+    `<div class="strategy-compare-card__label">${htmlEscape(label)}</div>`,
+    `<div class="strategy-compare-card__frame-wrap" data-sb-compare-wrap>`,
+    `<iframe class="strategy-compare-card__frame" id="${frameId}" src="${htmlEscape(safeUrl)}" loading="lazy" referrerpolicy="no-referrer" title="${htmlEscape(label)}"></iframe>`,
+    `<a class="strategy-compare-card__fallback" href="${htmlEscape(safeUrl)}" target="_blank" rel="noopener">Open ${htmlEscape(label)} directly ↗</a>`,
+    '</div>',
+    '</div>',
+  ].join('');
+}
+
+function renderCompareCarousel(strategy) {
+  const cards = [];
+  if (strategy.oldSiteUrl) cards.push(renderCompareCard({ label: 'Your Old Site', url: strategy.oldSiteUrl }));
+  if (strategy.newSiteUrl) cards.push(renderCompareCard({ label: 'Your New Site', url: strategy.newSiteUrl, isPrimary: true }));
+  for (const c of strategy.competitors || []) {
+    if (c.url) cards.push(renderCompareCard({ label: normalizeText(c.name) || 'Competitor', url: c.url }));
+  }
+  if (!cards.length) return '';
+
+  return [
+    '<section class="strategy-compare" aria-label="Side-by-side site comparison">',
+    '<h3 class="strategy-compare__title">Compare — scroll to see more</h3>',
+    '<div class="strategy-compare__row" data-sb-compare-row>',
+    cards.join(''),
+    '</div>',
+    '</section>',
+  ].join('');
+}
+
+const COMPARE_STYLES = `
+<style>
+  .strategy-compare { margin-bottom: 16px; }
+  .strategy-compare__title { font-size: 13px; font-weight: 700; margin: 0 0 8px; color: inherit; }
+  .strategy-compare__row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; }
+  .strategy-compare-card { flex: 0 0 220px; scroll-snap-align: start; border: 1px solid rgba(148,163,184,0.35); border-radius: 10px; overflow: hidden; background: #0b1220; }
+  .strategy-compare-card--primary { border-color: #16a34a; box-shadow: 0 0 0 1px #16a34a; }
+  .strategy-compare-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 6px 8px; background: rgba(148,163,184,0.12); }
+  .strategy-compare-card__frame-wrap { position: relative; height: 260px; overflow: hidden; }
+  .strategy-compare-card__frame { width: 400%; height: 400%; border: 0; transform: scale(0.25); transform-origin: 0 0; pointer-events: none; background: #fff; }
+  .strategy-compare-card__fallback { position: absolute; bottom: 6px; left: 6px; right: 6px; font-size: 10px; text-align: center; background: rgba(15,23,42,0.85); color: #93c5fd; padding: 4px 6px; border-radius: 6px; text-decoration: none; }
+  .strategy-compare-card__empty { padding: 16px 8px; font-size: 12px; color: #94a3b8; text-align: center; }
+</style>`;
+
 export function renderStrategyPanel({ strategy } = {}) {
   const competitors = Array.isArray(strategy?.competitors)
     ? strategy.competitors.filter((competitor) => competitor && typeof competitor === 'object')
     : [];
 
+  const compareCarousel = strategy ? renderCompareCarousel(strategy) : '';
+
   if (!strategy || competitors.length === 0) {
-    return renderPlaceholder();
+    return compareCarousel ? COMPARE_STYLES + compareCarousel + renderPlaceholder() : renderPlaceholder();
   }
 
   const synopsis = normalizeText(strategy.synopsis);
@@ -182,6 +240,8 @@ export function renderStrategyPanel({ strategy } = {}) {
     .join('');
 
   return [
+    COMPARE_STYLES,
+    compareCarousel,
     '<section class="strategy-panel">',
     synopsis ? `<p class="strategy-panel__synopsis">${htmlEscape(synopsis)}</p>` : '',
     '<div class="strategy-panel__competitor-lanes">',

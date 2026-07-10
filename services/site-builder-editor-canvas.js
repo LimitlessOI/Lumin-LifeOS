@@ -2,6 +2,8 @@
  * SYNOPSIS: Exports renderCanvas — services/site-builder-editor-canvas.js.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
+import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+
 function htmlEscape(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -30,6 +32,10 @@ export function renderCanvas({
 } = {}) {
   const safeVariants = Array.isArray(variants) ? variants : [];
   const safePalettes = Array.isArray(palettes) ? palettes : [];
+  const upsellBase = `${String(baseUrl ?? "").replace(/\/+$/, "")}/api/v1/sites/upsell/checkout?clientId=${encodeURIComponent(String(clientId ?? ""))}`;
+  const additionalDisplay = htmlEscape(SITE_BUILDER_PRICING.templates?.additional?.display || "$10");
+  const customDisplay = htmlEscape(SITE_BUILDER_PRICING.templates?.custom?.display || "$30");
+  const colorCustomDisplay = htmlEscape(SITE_BUILDER_PRICING.colors?.custom?.display || "$5");
   const initialFile = String(siteFile ?? "");
   // Preview files are served at ${baseUrl}/previews/${clientId}/<file>. The
   // editor shell itself is served from /api/v1/sites/editor, so a relative
@@ -160,6 +166,15 @@ export function renderCanvas({
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .lifeos-canvas-upsell {
+      border: 1px dashed rgba(124, 58, 237, 0.5);
+      background: rgba(124, 58, 237, 0.06);
+      color: #6d28d9;
+      font-weight: 700;
+    }
+    .lifeos-canvas-upsell:hover {
+      background: rgba(124, 58, 237, 0.12);
+    }
     .lifeos-canvas-status {
       width: 100%;
       min-height: 18px;
@@ -236,10 +251,13 @@ export function renderCanvas({
     <div class="lifeos-canvas-group" aria-label="Templates" title="Click a look to swap your site's design instantly">
       <span class="lifeos-canvas-label">Template</span>
       ${variantChips}
+      <a class="lifeos-canvas-chip lifeos-canvas-upsell" href="${upsellBase}&kind=template-additional" title="Get one more design beyond your free templates">+1 more (${additionalDisplay})</a>
+      <a class="lifeos-canvas-chip lifeos-canvas-upsell" href="${upsellBase}&kind=template-custom" title="A fully bespoke design, unique to your business only">✨ Custom design (${customDisplay})</a>
     </div>
     <div class="lifeos-canvas-group" aria-label="Palettes" title="Click a color set to recolor your site">
       <span class="lifeos-canvas-label">Palette</span>
       ${paletteSwatches}
+      <a class="lifeos-canvas-swatch lifeos-canvas-upsell" href="${upsellBase}&kind=color-custom" title="Match your exact brand colors">Custom colors (${colorCustomDisplay})</a>
     </div>
     <div class="lifeos-canvas-group" aria-label="Device" title="Preview how your site looks on desktop vs. phone">
       <span class="lifeos-canvas-label">Device</span>
