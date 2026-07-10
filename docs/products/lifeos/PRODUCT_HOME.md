@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-10 | **SocialMediaOS in LifeOS shell** — nav item → `/marketing`; `?stack=socialmediaos` redirects to standalone SMOS app (not LifeRE-only). | Adam: SMOS as its own app + built into LifeOS. | ✅ local | tip-sync |
 | 2026-07-10 | **Chair setup_account action** — `parseLuminChairSystemAction` matches set up/sign up/create account; `tryLuminChairSystemAction` calls `POST /api/v1/browser-agent/signup` with `founder_authority:true` (URL or known service name from text). | Adam: when he says set up an account, system has full authority including payment. | ✅ parse smoke | tip-sync |
 | 2026-07-10 | **GAP-FILL never-stop run-once 202** — `POST /never-stop/run-once` returns 202 and runs cycle in background (was awaiting full cycle → Railway ~30s proxy 502 "Application failed to respond", looking dead). | Adam: system can't be building; run-once 502'd after mission-routes fix. | ✅ | tip-sync |
 | 2026-07-10 | **GAP-FILL: mint-browser-session + TC on founder lane** — `POST /auth/operator/mint-browser-session` returns founder JWT from Railway vault (no password); restored `services/tc-coordinator.js` (system-build had replaced it with a stub); mounted `createTCRoutes` on founder runtime so `/api/v1/tc/*` + portal/assistant work on prod; IMAP bootstrap uses TC credential aliases. | Adam: UI-test Site Builder / MarketingOS / TC as founder — tip had no JWT mint path and TC APIs 404'd on founder_builder. | ✅ local syntax | tip-sync + browser walk |

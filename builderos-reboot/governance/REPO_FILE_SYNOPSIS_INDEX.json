@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T20:57:42.038Z",
+  "generated_at": "2026-07-10T21:00:03.838Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11414,
   "files": [
@@ -39291,9 +39291,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 598233,
-      "mtime": "2026-07-10T19:16:28.822Z",
-      "indexed_at": "2026-07-10T20:42:13.228Z"
+      "bytes": 598462,
+      "mtime": "2026-07-10T20:59:40.484Z",
+      "indexed_at": "2026-07-10T21:00:03.838Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39327,9 +39327,9 @@
     {
       "path": "docs/products/lifere/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeRE",
-      "bytes": 28829,
-      "mtime": "2026-07-03T21:46:43.844Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z"
+      "bytes": 29039,
+      "mtime": "2026-07-10T20:59:39.434Z",
+      "indexed_at": "2026-07-10T21:00:03.838Z"
     },
     {
       "path": "docs/products/limitlessos/conversations/2026-06-29-founder-ecosystem-session.md",
@@ -39400,9 +39400,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 84852,
-      "mtime": "2026-07-10T18:07:12.254Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z"
+      "bytes": 85468,
+      "mtime": "2026-07-10T20:59:23.433Z",
+      "indexed_at": "2026-07-10T21:00:03.838Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -63853,9 +63853,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 180854,
-      "mtime": "2026-07-10T06:28:08.438Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z"
+      "bytes": 181224,
+      "mtime": "2026-07-10T20:58:16.108Z",
+      "indexed_at": "2026-07-10T21:00:03.838Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -64104,9 +64104,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 123372,
-      "mtime": "2026-07-10T19:10:30.448Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z"
+      "bytes": 123571,
+      "mtime": "2026-07-10T20:58:30.433Z",
+      "indexed_at": "2026-07-10T21:00:03.838Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -64323,10 +64323,10 @@
     },
     {
       "path": "public/overlay/socialmediaos-session.html",
-      "synopsis": "HTML page: SocialMediaOS — Content Session",
-      "bytes": 15481,
-      "mtime": "2026-06-30T04:09:51.112Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z"
+      "synopsis": "Legacy SocialMediaOS session overlay — redirects to canonical /marketing app",
+      "bytes": 503,
+      "mtime": "2026-07-10T20:58:30.455Z",
+      "indexed_at": "2026-07-10T21:00:03.838Z"
     },
     {
       "path": "public/overlay/sprint-offers.html",
@@ -65886,10 +65886,10 @@
     },
     {
       "path": "routes/marketing-session-ui-routes.js",
-      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 23572,
-      "mtime": "2026-07-10T18:06:25.906Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z",
+      "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
+      "bytes": 25662,
+      "mtime": "2026-07-10T20:58:07.712Z",
+      "indexed_at": "2026-07-10T21:00:03.838Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

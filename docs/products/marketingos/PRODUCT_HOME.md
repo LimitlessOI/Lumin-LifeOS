@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — UI catch uses console.error; owner UUID map; JWT session auth. |
+| **Last Updated** | 2026-07-10 — Founder-usable SMOS: extract/generate UI, LifeOS nav, `/marketing` standalone. |
 
 ---
 
@@ -1330,6 +1330,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **Founder-usable SMOS GAP-FILL** — fixed `/marketing` UI: Extract/Generate buttons; content list reads `{pieces}`; approve sends `action`; export uses auth+blob download; branded SocialMediaOS dashboard + calendar/atoms links. LifeOS nav → `/marketing`; `?stack=socialmediaos` redirects to `/marketing`; LifeRE Marketing tab links full app; legacy `socialmediaos-session.html` redirects (dead `/api/v1/socialmediaos/*`). | Adam: use SMOS ASAP as standalone app + inside LifeOS/RE; UI walk found Phase 1 API live but UI incomplete/broken. | ✅ | ⬜ | tip UI walk pending deploy |
 | 2026-07-10 | **GAP-FILL UI catch logger** — browser scripts used `logger.error` (undefined) so Proceed/coach errors were silent. Switched to `console.error` + visible message. |
 | 2026-07-10 | **GAP-FILL session UI auth + owner UUID** — SSR sends JWT/command-key; `getOwnerId` reads `lifeosUser.sub` and maps non-UUID ids to deterministic UUIDs (schema is UUID). | Founder UI: Proceed failed — owner_id "1" invalid for UUID column. | ✅ | ⬜ | tip UI |
 | 2026-07-10 | **SENTRY Layer B PASS** — Playwright human-sim + in-browser consent→export; receipt `products/receipts/SENTRY_MARKETINGOS_LAYER_B.json`; queue step done on `fd720e9c5b`. | Adam: keep building; never-stop selected this step after spin-break. | ✅ | ⬜ | ✅ Layer B 5/5 PASS live |

@@ -2016,6 +2016,10 @@
         <span class="nav-icon">🏠</span>
         <span class="nav-label">LifeRE</span>
       </a>
+      <a class="nav-item" id="nav-smos" data-label="SocialMediaOS" href="/marketing" role="button" title="Open SocialMediaOS (standalone app)">
+        <span class="nav-icon">📣</span>
+        <span class="nav-label">SocialMediaOS</span>
+      </a>
       <a class="nav-item" id="nav-chat" data-label="Lumin" onclick="openLuminFromQuickBar(); return false;" href="#">
         <span class="nav-icon">💬</span>
         <span class="nav-label">Chat</span>
@@ -2699,7 +2703,11 @@ function applyShellLayoutFromQuery() {
   let launchPage = new URLSearchParams(location.search).get('page');
   const stackParam = new URLSearchParams(location.search).get('stack');
   if (!launchPage && stackParam === 'lifere') launchPage = 'lifeos-lifere.html';
-  if (!launchPage && stackParam === 'socialmediaos') launchPage = 'lifeos-lifere.html';
+  // SocialMediaOS is a standalone app at /marketing (also linked from LifeRE Marketing tab)
+  if (!launchPage && stackParam === 'socialmediaos') {
+    window.location.replace('/marketing');
+    return;
+  }
   const directSystemLaunch = new URLSearchParams(location.search).get('direct_system');
   const luminVoiceLaunch = new URLSearchParams(location.search).get('lumin_voice');
   if (launchPage && PAGE_META[launchPage]) {
