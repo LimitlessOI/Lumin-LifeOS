@@ -3,7 +3,7 @@
     "domain": "System",
     "status": "CANONICAL",
     "owner": "Founder (Adam)",
-    "purpose": "Machine-readable ordered climb from current scorecard (~6.4) to definition-of-10. Never-stop and agents honor open items first. Scorecard narrative: docs/SYSTEM_SCORECARD_PATH_TO_10.md",
+    "purpose": "Machine-readable ordered climb from current scorecard to definition-of-10. Never-stop and agents honor open items first. Scorecard narrative: docs/SYSTEM_SCORECARD_PATH_TO_10.md",
     "updated_at": "2026-07-10"
   },
   "schema": "top_10_path_to_10_v1",
@@ -22,8 +22,8 @@
       "status": "in_progress",
       "scorecard_areas": ["Never-stop autonomy", "Deploy / Railway"],
       "done_when": "Scheduler burns pending BUILD_QUEUE steps; tip tracks main; no spin receipts",
-      "next_action": "POST /api/v1/lifeos/never-stop/run-once; watch tc-service pending steps",
-      "blocker": null
+      "next_action": "Tip=main (efce3a048c); burn remaining tc-service pending steps via scheduler",
+      "blocker": "run-once often 502s at proxy while long builds run — scheduler still enabled"
     },
     {
       "id": "T02",
@@ -32,8 +32,8 @@
       "status": "open",
       "scorecard_areas": ["Revenue / pilots", "Site Builder", "LimitlessOS / business"],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "Confirm EMAIL_* / Postmark on Railway; run prospect send OR Go Vegas discover under caps",
-      "blocker": "May need EMAIL_FROM/EMAIL_PROVIDER values if launch-readiness flips; GO_VEGAS_ALLOW_DISCOVER_IDLE for idle discover"
+      "next_action": "Site Builder launch-readiness ready + cold_email true — run real prospect send; OR set GOOGLE_PLACES_KEY for Go Vegas discover",
+      "blocker": "GOOGLE_PLACES_KEY absent (Go Vegas discover). Site Builder path unblocked for send if Postmark live."
     },
     {
       "id": "T03",
@@ -52,7 +52,7 @@
       "status": "in_progress",
       "scorecard_areas": ["SENTRY / pre-alpha", "MarketingOS / SMOS"],
       "done_when": "Marketing + LifeOS founder-ui + Site Builder Layer A+B PASS receipts",
-      "next_action": "Re-run REAL_APP_E2E + sentry:site-builder:gate; refresh receipts",
+      "next_action": "Marketing A+B PASS. REAL_APP_E2E smos_question PASS on tip; finish full E2E + site-builder gate receipts",
       "blocker": null
     },
     {
@@ -62,7 +62,7 @@
       "status": "in_progress",
       "scorecard_areas": ["Memory / Lumin"],
       "done_when": "loadChairMemoryContext injects FOUNDER MEMORY block on normal chair/lumin turns",
-      "next_action": "Deploy tip with inject; prove live Chair turn cites FOUNDER MEMORY / receipt",
+      "next_action": "Code on tip efce3a048c; prove live Chair turn includes FOUNDER MEMORY header",
       "blocker": null
     },
     {
@@ -79,20 +79,20 @@
       "id": "T07",
       "rank": 7,
       "title": "Buildable backlog only",
-      "status": "open",
+      "status": "in_progress",
       "scorecard_areas": ["Product vision & registry", "Never-stop autonomy"],
       "done_when": "Priority products have shippable BUILD_QUEUE steps or stamped unplannable SENTRY",
-      "next_action": "Document next phases as backlog bullets; planner commits or stamps",
+      "next_action": "tc-service queue live (6 done / 18 pending); keep documenting next phases as backlog",
       "blocker": null
     },
     {
       "id": "T08",
       "rank": 8,
       "title": "Deploy truth",
-      "status": "open",
+      "status": "in_progress",
       "scorecard_areas": ["Deploy / Railway", "Honesty / truth / overclaim"],
       "done_when": "Step done only when running tip serves built SHA; tip always = main",
-      "next_action": "Watch deploy-proof on never-stop steps; managed-env build-from-latest after ship",
+      "next_action": "Tip currently matches main (efce3a048c); keep managed-env build-from-latest after ships",
       "blocker": null
     },
     {
