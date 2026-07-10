@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:46:47.657Z",
+  "generated_at": "2026-07-10T03:49:05.165Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11389,
+  "file_count": 11390,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81976,6 +81976,13 @@
       "bytes": 137,
       "mtime": "2026-06-21T21:40:27.568Z",
       "indexed_at": "2026-07-10T02:08:57.077Z"
+    },
+    {
+      "path": "services/document-qa.js",
+      "synopsis": "Exports runDocumentQA — services/document-qa.js.",
+      "bytes": 1807,
+      "mtime": "2026-07-10T03:49:05.165Z",
+      "indexed_at": "2026-07-10T03:49:05.165Z"
     },
     {
       "path": "services/dream-builder-child.js",
