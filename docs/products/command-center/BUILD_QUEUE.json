@@ -132,7 +132,7 @@
     },
     {
       "id": "s12",
-      "status": "pending",
+      "status": "founder_gated",
       "target_file": "scripts/write-phase14-ledger.mjs",
       "task": "Update cert script to write phase_ledger into builder_findings table",
       "spec": "ESM script. Imports pg from 'pg' (already installed). Reads FINDINGS_JSON_PATH env (default: ./findings.json) with fs/promises readFile. Parses JSON, extracts or derives phase_ledger array (array of {phase,status:'pass'|'fail',note} objects from top-level phases key or constructs from findings array). Upserts one row into builder_findings: INSERT INTO builder_findings(findings_json) VALUES($1) — table created by phase14-cert-service guard so script does not need DDL. Logs {rows_affected, phase_ledger_length} to stdout. Exits 0 on success, 1 on error. No uuid package — DB generates id. Uses DATABASE_URL env for pg connection.",
