@@ -57,6 +57,17 @@ function main() {
     process.exit(1);
   }
 
+  if (!runNpm('completion:overclaim:verify')) {
+    console.error('\n[fail] completion:overclaim:verify — cert claim exceeds proven gates\n');
+    process.exit(1);
+  }
+
+  // Factory mechanical umbrella (Wave 0 #5–#12). Skip in CI if too heavy? No — honesty requires it.
+  if (!runNpm('factory:ci')) {
+    console.error('\n[fail] factory:ci — factory mechanical gate failed\n');
+    process.exit(1);
+  }
+
   const preflight = path.join(ROOT, 'scripts', 'council-builder-preflight.mjs');
   const canBuilderProbe =
     !inCi &&

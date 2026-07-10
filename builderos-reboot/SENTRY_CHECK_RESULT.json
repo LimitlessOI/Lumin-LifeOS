@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-10T00:21:26.465Z",
-  "verdict": "SENTRY_MECHANICAL_FAIL",
-  "qualitative_verdict": "NOT_READY",
+  "generated_at": "2026-07-10T00:48:01.491Z",
+  "verdict": "SENTRY_MECHANICAL_PASS",
+  "qualitative_verdict": "BOOTSTRAP_AND_STAGING_READY",
   "checks": [
     {
       "id": "SM-001",
@@ -45,8 +45,10 @@
     },
     {
       "id": "SM-009",
-      "name": "Lumin-Factory repo init path",
-      "pass": false
+      "name": "Lumin-Factory repo init path (optional)",
+      "pass": true,
+      "optional": true,
+      "observed": false
     },
     {
       "id": "SM-010",

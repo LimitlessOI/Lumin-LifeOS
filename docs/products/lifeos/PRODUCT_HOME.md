@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-09 — **Redeploy fallthrough** — `scripts/system-railway-redeploy.mjs` no longer exits on `/railway/deploy` or `build-from-latest` 404; continues to CLI/auth fallbacks. Prior: 2026-07-09 — Never-idle: boot clean + phase3 UI unlocked (net-worth + overlays). |
+| **Last Updated** | 2026-07-09 — **Audit fill:** founder-lane railway managed-env + voice-rail; habits /summary+/checkin; phase2/3 schedulers boot. Prior: 2026-07-09 — **Redeploy fallthrough** — `scripts/system-railway-redeploy.mjs` no longer exits on `/railway/deploy` or `build-from-latest` 404; continues to CLI/auth fallbacks. Prior: 2026-07-09 — Never-idle: boot clean + phase3 UI unlocked (net-worth + overlays). |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-09 | **System audit fill — founder lane gaps** — mount railway managed-env + voice-rail; habits summary/checkin; boot phase2/3 schedulers (phase2 imports fixed). | Self-audit: prod founder_builder omitted railway/voice; habits UI 404; schedulers never started. | ✅ syntax + factory:ci ALL PASS; SENTRY_MECHANICAL_PASS | Adam: refresh RAILWAY_TOKEN secret |
 | 2026-07-09 | **Redeploy fallthrough on missing railway routes** — `scripts/system-railway-redeploy.mjs` treats HTTP 404 on `/railway/deploy` and `build-from-latest` as fallthrough (not hard exit), so CLI/`RAILWAY_TOKEN` paths can run. Live tip still on older SHA until GH Deploy workflow or Railway token available. | Live deploy routes 404 on current runtime; push must not strand redeploy script. | ✅ fallthrough coded | GH workflow_dispatch Deploy to Railway |
 | 2026-07-09 | **Conductor: never-idle keep building** — unlocked founder_gated `s8`/`s09`–`s12`; net-worth API + finance tab; overlays `lifeos-finance-networth` / `future-self` / `learning-queue`. | Adam: system can never sit idle. | ✅ local | push + live UI spot-check |
 | 2026-07-09 | **Conductor: never-idle — clear STARTUP_DEGRADED** — phase3 migration no longer re-CREATEs phase2 tables (index on missing cols aborted apply); `express-route-snapshot` empty-`app.use(router)` fix so `/factory/readiness` assert sees the mount; `registerAccountManagerRoutes` + energy `logged_at` align. | Adam: system never sit idle — keep building. | ✅ boot-report tests 6/6 | push + `/ready` clean |

@@ -16,6 +16,14 @@ const readiness = loadJson('builderos-reboot/READINESS_REPORT.json');
 const fullLoop = loadJson('builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json');
 const salvage = loadJson('builderos-reboot/PRODUCT_SALVAGE_CANDIDATES.json');
 const queue = loadJson('builderos-reboot/MISSION_QUEUE.json');
+const sentry = loadJson('builderos-reboot/SENTRY_CHECK_RESULT.json');
+const duplication = loadJson('builderos-reboot/DUPLICATION_RECEIPT.json');
+const greenfield = loadJson('builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json');
+
+const readinessSaysStaging = readiness?.verdict?.includes('STAGING_READY') ?? false;
+const sentryMechanical = sentry?.verdict === 'SENTRY_MECHANICAL_PASS';
+// Honesty: STAGING_READY may never outrank a failed SENTRY mechanical gate.
+const stagingReady = readinessSaysStaging && sentryMechanical;
 
 const cert = {
   certification_id: 'FACTORY-REBOOT-CERT-002',
@@ -26,16 +34,14 @@ const cert = {
     phase_12_product_salvage: salvage?.candidate_count > 0,
   },
   levels: {
-    STAGING_READY: readiness?.verdict?.includes('STAGING_READY') ?? false,
-    BLUEPRINT_DUPLICABLE: loadJson('builderos-reboot/DUPLICATION_RECEIPT.json')?.pass === true,
-    GREENFIELD_DETERMINISTIC_MECHANICAL: loadJson('builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json')?.pass === true,
-    SENTRY_MECHANICAL: loadJson('builderos-reboot/SENTRY_CHECK_RESULT.json')?.verdict === 'SENTRY_MECHANICAL_PASS',
+    STAGING_READY: stagingReady,
+    BLUEPRINT_DUPLICABLE: duplication?.pass === true,
+    GREENFIELD_DETERMINISTIC_MECHANICAL: greenfield?.pass === true,
+    SENTRY_MECHANICAL: sentryMechanical,
     FULL_LOOP_GOVERNED: fullLoop?.pass === true,
     FULLY_MACHINE_READY: false,
-    BOOTSTRAP_AND_STAGING_READY:
-      (readiness?.verdict?.includes('STAGING_READY') ?? false) &&
-      loadJson('builderos-reboot/DUPLICATION_RECEIPT.json')?.pass === true,
-    MECHANICAL_DETERMINISM_PROXY: loadJson('builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json')?.pass === true,
+    BOOTSTRAP_AND_STAGING_READY: stagingReady && duplication?.pass === true,
+    MECHANICAL_DETERMINISM_PROXY: greenfield?.pass === true,
     SAME_TIER_CODER_DETERMINISM: false,
     LUMIN_FACTORY_GITHUB: false,
     LIFEOS_PRODUCT_COMPLETE: false,
@@ -55,12 +61,17 @@ const cert = {
       'NOT required for this hand-built blueprint pack. Applies only when the factory system generates a BP end-to-end; then run DETERMINISM_CODER_PROMPT.md before claiming FULLY_MACHINE_READY.',
     lumin_factory_github:
       'Optional org step — copy factory-staging to its own repo when you want a clean standalone factory repo; not a blocker for using the factory inside Lumin-LifeOS.',
+    staging_requires_sentry:
+      'STAGING_READY and BOOTSTRAP_AND_STAGING_READY require SENTRY_MECHANICAL_PASS. Readiness alone cannot claim staging.',
   },
 };
 
 fs.writeFileSync(path.join(REPO_ROOT, 'builderos-reboot/PROJECT_CERTIFICATION.json'), `${JSON.stringify(cert, null, 2)}\n`);
 console.log(JSON.stringify(cert, null, 2));
 
-if (!cert.levels.STAGING_READY || !cert.levels.BOOTSTRAP_AND_STAGING_READY) {
+// Exit on readiness/duplication structural failure only.
+// Do NOT exit solely because SENTRY is red — factory-ci is itself a SENTRY check (SM-010),
+// so requiring SENTRY_PASS here creates a permanent circular FAIL. Levels above stay honest.
+if (!readinessSaysStaging || duplication?.pass !== true) {
   process.exit(1);
 }

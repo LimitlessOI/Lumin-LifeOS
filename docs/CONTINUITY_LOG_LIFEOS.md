@@ -8,6 +8,24 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — System audit: fill founder-lane + honesty gaps
+
+### What happened
+Self-audit found P0 gaps and fixed them:
+1. Mount `/api/v1/railway/managed-env` + voice-rail in founder lane (prod never mounts full runtime).
+2. Habits API: `/summary` + `/checkin` aliases; UI uuid-safe check-in.
+3. Phase2/3 schedulers boot in founder runtime (phase2 imports fixed to real services).
+4. Cert honesty: STAGING_READY requires SENTRY_MECHANICAL; SM-009 optional; overclaim claim_source for STAGING; maturity runs `completion:overclaim:verify` + `factory:ci`.
+5. factory:ci ALL PASS; SENTRY_MECHANICAL_PASS.
+
+### Still needs Adam
+- Refresh GitHub secret `RAILWAY_TOKEN` (Deploy workflow: Not Authorized) so tip can advance past current SHA.
+
+### Next
+- After token refresh: redeploy → prove managed-env + habits + schedulers live. Then Wave 0 #16.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Wave 0 #15 spec→queue generator
 
 ### What happened

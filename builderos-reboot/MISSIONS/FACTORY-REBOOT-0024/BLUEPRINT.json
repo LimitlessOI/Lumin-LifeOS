@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "361ba2c1c88e41569e5578278a4bb0d62b6aa4f2db0e5e1b2e84d354ccee7df2"
+        "sha256": "3146314cd81736474a122035d7d0ca40927143d40579d283c2da5fe289002fa7"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/CONTENT/emit-project-certification.mjs"

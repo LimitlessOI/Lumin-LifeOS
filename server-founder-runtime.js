@@ -331,6 +331,8 @@ const callCouncilMember = platformKernel.wrapCouncilMember(rawCallCouncilMember)
 const {
   commitToGitHub,
   commitManyToGitHub,
+  getRailwayEnvVars,
+  setRailwayEnvVar,
 } = createDeploymentService({
   pool,
   systemMetrics,
@@ -390,6 +392,8 @@ async function bootFounderRuntime() {
       commitManyToGitHub,
       platformKernel,
       notificationService,
+      getRailwayEnvVars,
+      setRailwayEnvVar,
     });
     _bootLog('registerRoutes_done');
 

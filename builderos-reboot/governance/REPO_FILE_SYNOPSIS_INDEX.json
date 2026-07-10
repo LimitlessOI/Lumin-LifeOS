@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T00:38:42.257Z",
+  "generated_at": "2026-07-10T00:49:15.700Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11375,
   "files": [
@@ -21385,8 +21385,8 @@
       "path": "builderos-reboot/DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DETERMINISM RECEIPT.",
       "bytes": 831,
-      "mtime": "2026-07-10T00:26:49.939Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:00.373Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -21400,8 +21400,8 @@
       "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DUPLICATION RECEIPT.",
       "bytes": 1208,
-      "mtime": "2026-07-10T00:26:50.358Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:00.787Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -21436,8 +21436,8 @@
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
       "bytes": 3893,
-      "mtime": "2026-07-10T00:26:52.908Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:03.442Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -21515,9 +21515,9 @@
     {
       "path": "builderos-reboot/governance/COMPLETION_VOCABULARY_SSOT.json",
       "synopsis": "BuilderOS artifact — COMPLETION VOCABULARY SSOT.",
-      "bytes": 7324,
-      "mtime": "2026-07-09T02:33:13.764Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 8543,
+      "mtime": "2026-07-10T00:48:32.898Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -21722,8 +21722,8 @@
       "path": "builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — GREENFIELD DETERMINISM RECEIPT.",
       "bytes": 847,
-      "mtime": "2026-07-10T00:26:50.082Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:00.516Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -21797,8 +21797,8 @@
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
       "bytes": 11247,
-      "mtime": "2026-07-10T00:26:53.034Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:03.569Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -25286,8 +25286,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 496,
-      "mtime": "2026-07-10T00:25:36.122Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:48:56.674Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -25310,8 +25310,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 2319,
-      "mtime": "2026-07-10T00:16:36.396Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:47:39.191Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -25324,9 +25324,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs",
       "synopsis": "Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json",
-      "bytes": 3108,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 3307,
+      "mtime": "2026-07-10T00:48:56.507Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/FOUNDER_PACKET.json",
@@ -25503,8 +25503,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 263,
-      "mtime": "2026-07-10T00:25:36.309Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:48:56.734Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -25527,16 +25527,16 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1278,
-      "mtime": "2026-07-09T02:29:55.779Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:47:39.191Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/CONTENT/emit-project-certification.mjs",
       "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 3477,
-      "mtime": "2026-06-27T17:13:00.405Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 4020,
+      "mtime": "2026-07-10T00:48:56.503Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/FOUNDER_PACKET.json",
@@ -25797,8 +25797,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 263,
-      "mtime": "2026-07-10T00:25:36.559Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:48:56.792Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -25821,23 +25821,23 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1286,
-      "mtime": "2026-07-10T00:16:36.396Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:47:39.193Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028/CONTENT/emit-project-certification-v2.mjs",
       "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 3477,
-      "mtime": "2026-06-27T17:13:00.406Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 4020,
+      "mtime": "2026-07-10T00:48:56.506Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028/CONTENT/emit-project-certification.mjs",
       "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 3477,
-      "mtime": "2026-06-27T17:13:00.407Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 4020,
+      "mtime": "2026-07-10T00:48:56.504Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028/FOUNDER_PACKET.json",
@@ -29364,16 +29364,16 @@
       "path": "builderos-reboot/PRODUCT_SALVAGE_CANDIDATES.json",
       "synopsis": "BuilderOS artifact — PRODUCT SALVAGE CANDIDATES.",
       "bytes": 206,
-      "mtime": "2026-07-10T00:26:52.968Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:03.507Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 1754,
-      "mtime": "2026-07-10T00:26:53.099Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "bytes": 1903,
+      "mtime": "2026-07-10T00:49:03.631Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -29387,16 +29387,16 @@
       "path": "builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json",
       "synopsis": "BuilderOS artifact — QUEUE DRY RUN RECEIPT.",
       "bytes": 4969,
-      "mtime": "2026-07-10T00:26:50.426Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:00.856Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — READINESS REPORT.",
       "bytes": 567,
-      "mtime": "2026-07-10T00:26:52.837Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "mtime": "2026-07-10T00:49:03.312Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -29519,9 +29519,9 @@
     {
       "path": "builderos-reboot/scripts/emit-project-certification.mjs",
       "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 3477,
-      "mtime": "2026-06-27T17:13:00.412Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 4020,
+      "mtime": "2026-07-10T00:47:20.081Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "builderos-reboot/scripts/execute-mission-step.mjs",
@@ -29995,9 +29995,9 @@
     {
       "path": "builderos-reboot/scripts/run-sentry-checks.mjs",
       "synopsis": "Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json",
-      "bytes": 3108,
-      "mtime": "2026-07-10T00:18:41.406Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z"
+      "bytes": 3307,
+      "mtime": "2026-07-10T00:46:03.295Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "builderos-reboot/scripts/sentry-behavior-proof.mjs",
@@ -30089,9 +30089,9 @@
     {
       "path": "builderos-reboot/SENTRY_CHECK_RESULT.json",
       "synopsis": "BuilderOS artifact — SENTRY CHECK RESULT.",
-      "bytes": 1583,
-      "mtime": "2026-07-10T00:21:26.467Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "bytes": 1660,
+      "mtime": "2026-07-10T00:48:01.492Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "synopsis_index_only": true
     },
     {
@@ -35867,9 +35867,9 @@
     {
       "path": "docs/AGENT_INBOX.md",
       "synopsis": "Agent Inbox",
-      "bytes": 1107,
-      "mtime": "2026-07-10T00:31:45.839Z",
-      "indexed_at": "2026-07-10T00:32:03.749Z"
+      "bytes": 1271,
+      "mtime": "2026-07-10T00:48:48.655Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -36720,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 54424,
-      "mtime": "2026-07-10T00:38:41.317Z",
-      "indexed_at": "2026-07-10T00:38:42.257Z"
+      "bytes": 55293,
+      "mtime": "2026-07-10T00:48:48.654Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38819,9 +38819,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 204183,
-      "mtime": "2026-07-10T00:38:05.530Z",
-      "indexed_at": "2026-07-10T00:38:42.257Z"
+      "bytes": 204762,
+      "mtime": "2026-07-10T00:48:48.660Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39262,9 +39262,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 594293,
-      "mtime": "2026-07-10T00:31:45.744Z",
-      "indexed_at": "2026-07-10T00:32:03.749Z"
+      "bytes": 594803,
+      "mtime": "2026-07-10T00:48:48.658Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63933,9 +63933,9 @@
     {
       "path": "public/overlay/lifeos-habits.html",
       "synopsis": "HTML page: Habits — LifeOS",
-      "bytes": 19333,
-      "mtime": "2026-06-21T21:39:01.655Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 19446,
+      "mtime": "2026-07-10T00:44:55.772Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z"
     },
     {
       "path": "public/overlay/lifeos-healing.html",
@@ -65611,9 +65611,9 @@
     {
       "path": "routes/lifeos-phase3-routes.js",
       "synopsis": "LifeOS Phase 3 REST — habits / energy / learning / calendar-protection.",
-      "bytes": 7686,
-      "mtime": "2026-07-09T15:00:13.869Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 8469,
+      "mtime": "2026-07-10T00:44:49.151Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -67656,17 +67656,20 @@
     },
     {
       "path": "scripts/lifeos-phase2-scheduler.mjs",
-      "synopsis": "Exports runPhase2Tick — scripts/lifeos-phase2-scheduler.mjs.",
-      "bytes": 2027,
-      "mtime": "2026-07-09T01:03:41.530Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Phase2 daily ticks — future-self letter delivery + important-dates scan.",
+      "bytes": 3483,
+      "mtime": "2026-07-10T00:44:49.134Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/lifeos-phase3-scheduler.mjs",
       "synopsis": "Phase3 daily ticks — calendar-protection conflict scan for active rules.",
-      "bytes": 3962,
-      "mtime": "2026-07-10T00:10:08.363Z",
-      "indexed_at": "2026-07-10T00:10:17.481Z",
+      "bytes": 4318,
+      "mtime": "2026-07-10T00:45:09.882Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68846,9 +68849,9 @@
     {
       "path": "scripts/system-maturity-check.mjs",
       "synopsis": "One-shot: run the main repo quality gates in order. Exit 1 on first failure.",
-      "bytes": 4702,
-      "mtime": "2026-06-21T21:39:09.048Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 5114,
+      "mtime": "2026-07-10T00:46:03.319Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "ssot": [
         "docs/SYSTEM_MATURITY_PROGRAM.md"
       ]
@@ -80228,9 +80231,9 @@
     {
       "path": "server-founder-runtime.js",
       "synopsis": "Founder-builder minimal runtime entrypoint.",
-      "bytes": 16177,
-      "mtime": "2026-07-09T01:07:42.871Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 16267,
+      "mtime": "2026-07-10T00:45:21.155Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -86891,9 +86894,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 9212,
-      "mtime": "2026-07-09T03:33:13.920Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 11495,
+      "mtime": "2026-07-10T00:45:20.793Z",
+      "indexed_at": "2026-07-10T00:49:15.700Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

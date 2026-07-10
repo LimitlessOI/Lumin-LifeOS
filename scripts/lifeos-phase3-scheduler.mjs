@@ -80,13 +80,21 @@ export async function runPhase3Tick({ pool, logger = console } = {}) {
   return { scanned_users: users.length, conflicts_queued: conflictsQueued };
 }
 
-export function startScheduler({ intervalMs = DAY_MS, logger = console } = {}) {
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    logger.warn?.('[phase3-scheduler] DATABASE_URL missing — not starting');
-    return { stop: () => {} };
+export function startPhase3Scheduler({ pool: injectedPool, intervalMs = DAY_MS, logger = console } = {}) {
+  let ownsPool = false;
+  let pool = injectedPool;
+  if (!pool) {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+      logger.warn?.('[phase3-scheduler] DATABASE_URL missing — not starting');
+      return { stop: () => {} };
+    }
+    pool = new pg.Pool({
+      connectionString: databaseUrl,
+      ssl: databaseUrl.includes('localhost') ? false : { rejectUnauthorized: false },
+    });
+    ownsPool = true;
   }
-  const pool = new pg.Pool({ connectionString: databaseUrl, ssl: databaseUrl.includes('localhost') ? false : { rejectUnauthorized: false } });
 
   const tick = () => runPhase3Tick({ pool, logger }).catch((err) => {
     logger.error?.(`[phase3-scheduler] tick failed: ${err.message}`);
@@ -94,13 +102,18 @@ export function startScheduler({ intervalMs = DAY_MS, logger = console } = {}) {
 
   tick();
   const handle = setInterval(tick, intervalMs);
+  if (typeof handle.unref === 'function') handle.unref();
+  logger.info?.('[phase3-scheduler] started');
   return {
     stop: async () => {
       clearInterval(handle);
-      await pool.end().catch(() => {});
+      if (ownsPool) await pool.end().catch(() => {});
     },
   };
 }
+
+/** @deprecated use startPhase3Scheduler */
+export const startScheduler = startPhase3Scheduler;
 
 const isDirect = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'))
   || (process.argv[1] && import.meta.url.includes(process.argv[1].split('/').pop()));

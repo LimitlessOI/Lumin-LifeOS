@@ -126,6 +126,45 @@
     {
       "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "claim": {
+        "path": "levels.STAGING_READY",
+        "true_means": "STAGING_READY"
+      },
+      "proven_gates": [
+        {
+          "gate": "technical_scope_pass",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.FULL_LOOP_GOVERNED",
+          "equals": true
+        },
+        {
+          "gate": "commit_sha_present",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.BLUEPRINT_DUPLICABLE",
+          "equals": true
+        },
+        {
+          "gate": "deploy_sha_present",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.GREENFIELD_DETERMINISTIC_MECHANICAL",
+          "equals": true
+        },
+        {
+          "gate": "sentry_mechanical_pass",
+          "file": "builderos-reboot/SENTRY_CHECK_RESULT.json",
+          "path": "verdict",
+          "equals": "SENTRY_MECHANICAL_PASS"
+        },
+        {
+          "gate": "staging_ready_cert",
+          "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+          "path": "levels.STAGING_READY",
+          "equals": true
+        }
+      ]
+    },
+    {
+      "file": "builderos-reboot/PROJECT_CERTIFICATION.json",
+      "claim": {
         "path": "levels.FULLY_MACHINE_READY",
         "true_means": "FULLY_MACHINE_READY"
       },

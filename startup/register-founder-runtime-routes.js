@@ -25,6 +25,11 @@ import { autoRegisterProductModules, getModuleHealth } from "./auto-register-pro
 import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
 import { assertFounderRuntimeRoutes } from "../services/founder-runtime-route-assert.js";
 import { registerFounderMemoryRoutes } from "../routes/founder-memory-routes.js";
+import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
+import { createRailwayManagedEnvService } from "../services/railway-managed-env-service.js";
+import { createLifeOSVoiceRailRoutes } from "../routes/lifeos-voice-rail-routes.js";
+import { startPhase2Scheduler } from "../scripts/lifeos-phase2-scheduler.mjs";
+import { startPhase3Scheduler } from "../scripts/lifeos-phase3-scheduler.mjs";
 
 export async function registerFounderRuntimeRoutes(app, deps) {
   const {
@@ -37,6 +42,8 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     commitManyToGitHub,
     platformKernel,
     notificationService,
+    getRailwayEnvVars,
+    setRailwayEnvVar,
   } = deps;
 
   const councilChatAI = callCouncilMember
@@ -151,6 +158,58 @@ export async function registerFounderRuntimeRoutes(app, deps) {
 
   registerFounderMemoryRoutes(app, { pool, requireKey, logger });
   logger.info("✅ [FOUNDER-MEMORY] Canonical founder↔AI memory mounted at /api/v1/founder-memory");
+
+  // Railway managed-env must live in founder lane — production always boots founder_builder.
+  // self-redeploy / build-from-latest use vault RAILWAY_* IDs; vault sync needs get/set helpers.
+  try {
+    const railwayManagedEnvService = createRailwayManagedEnvService({
+      pool,
+      getRailwayEnvVars:
+        typeof getRailwayEnvVars === "function"
+          ? getRailwayEnvVars
+          : async () => {
+              throw new Error("getRailwayEnvVars unavailable in founder lane");
+            },
+      setRailwayEnvVar:
+        typeof setRailwayEnvVar === "function"
+          ? setRailwayEnvVar
+          : async () => {
+              throw new Error("setRailwayEnvVar unavailable in founder lane");
+            },
+      logger,
+      autosync: false,
+    });
+    app.use(
+      "/api/v1/railway/managed-env",
+      createRailwayManagedEnvRoutes({ requireKey, managedEnvService: railwayManagedEnvService }),
+    );
+    logger.info("✅ [RAILWAY-MANAGED-ENV] Founder-builder routes mounted at /api/v1/railway/managed-env");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[RAILWAY-MANAGED-ENV] mount failed (non-fatal)");
+  }
+
+  app.use(
+    "/api/v1/lifeos/voice-rail",
+    createLifeOSVoiceRailRoutes({
+      pool,
+      requireKey: requireUserOrKey,
+      callAI: councilChatAI,
+      callCouncilMember,
+      logger,
+    }),
+  );
+  logger.info("✅ [LIFEOS-VOICE-RAIL] Founder-builder routes mounted at /api/v1/lifeos/voice-rail");
+
+  try {
+    startPhase2Scheduler({ pool, logger, baseUrl: siteBaseUrl });
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[PHASE2-SCHEDULER] failed to start (non-fatal)");
+  }
+  try {
+    startPhase3Scheduler({ pool, logger });
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[PHASE3-SCHEDULER] failed to start (non-fatal)");
+  }
 
   app.get("/api/v1/lifeos/never-stop/status", requireKey, (_req, res) => {
     res.json(getNeverStopProductFactoryStatus());

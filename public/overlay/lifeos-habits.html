@@ -271,10 +271,11 @@ function renderToday(d) {
     const reflection = h.reflection_question;
     const isStruggling = missCount >= 3;
 
+    const habitId = String(habit.id);
     html += `
-      <div class="habit-item${isStruggling ? ' struggling' : ''}" id="habit-item-${habit.id}">
-        <button class="check-btn" id="check-${habit.id}" onclick="checkIn(${habit.id})" title="Mark complete today">
-          <span id="check-icon-${habit.id}"></span>
+      <div class="habit-item${isStruggling ? ' struggling' : ''}" id="habit-item-${escHtml(habitId)}">
+        <button class="check-btn" id="check-${escHtml(habitId)}" onclick="checkIn('${escHtml(habitId)}')" title="Mark complete today">
+          <span id="check-icon-${escHtml(habitId)}"></span>
         </button>
         <div class="habit-info">
           <div class="habit-title">${escHtml(habit.title)}</div>
@@ -333,12 +334,13 @@ async function loadManage() {
     document.getElementById('manage-loading').style.display = 'none';
     if (!d.ok) { document.getElementById('manage-content').innerHTML = `<div class="empty">${d.error}</div>`; return; }
 
-    if (!d.habits.length) {
+    const habits = d.habits || d.data || [];
+    if (!habits.length) {
       document.getElementById('manage-content').innerHTML = '<div class="empty">No habits yet. Create one above.</div>';
       return;
     }
 
-    document.getElementById('manage-content').innerHTML = d.habits.map(h => `
+    document.getElementById('manage-content').innerHTML = habits.map(h => `
       <div class="manage-item">
         <div class="mi-info">
           <div class="mi-title">${escHtml(h.title)}</div>

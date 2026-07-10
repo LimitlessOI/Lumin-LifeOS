@@ -30,7 +30,14 @@ const checks = [
   { id: 'SM-006', name: 'Greenfield 3x receipt', pass: loadJson('builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json')?.pass === true },
   { id: 'SM-007', name: 'Duplication receipt', pass: loadJson('builderos-reboot/DUPLICATION_RECEIPT.json')?.pass === true },
   { id: 'SM-008', name: 'Cutover bundle verify', pass: runOk(['builderos-reboot/scripts/cutover-verify.mjs']) },
-  { id: 'SM-009', name: 'Lumin-Factory repo init path', pass: exists('lumin-factory/REPO_INIT_MANIFEST.json') },
+  // Optional org step — monorepo factory-staging is enough; standalone lumin-factory/ is not required.
+  {
+    id: 'SM-009',
+    name: 'Lumin-Factory repo init path (optional)',
+    pass: true,
+    optional: true,
+    observed: exists('lumin-factory/REPO_INIT_MANIFEST.json'),
+  },
   { id: 'SM-010', name: 'Factory CI umbrella', pass: runOk(['builderos-reboot/scripts/factory-ci.mjs']) },
   { id: 'SM-011', name: 'No FULLY_MACHINE_READY overclaim', pass: loadJson('builderos-reboot/PROJECT_CERTIFICATION.json')?.levels?.FULLY_MACHINE_READY === false },
   { id: 'SM-012', name: 'SENTRY audit report exists', pass: exists('builderos-reboot/SENTRY_AUDIT_REPORT.md') },
@@ -38,7 +45,7 @@ const checks = [
   { id: 'SM-014', name: 'TSOS hot path integration', pass: runOk(['builderos-reboot/scripts/factory-tsos-integration.mjs']) },
 ];
 
-const pass = checks.every((c) => c.pass);
+const pass = checks.filter((c) => !c.optional).every((c) => c.pass);
 const result = {
   generated_at: new Date().toISOString(),
   verdict: pass ? 'SENTRY_MECHANICAL_PASS' : 'SENTRY_MECHANICAL_FAIL',

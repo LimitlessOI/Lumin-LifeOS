@@ -57,9 +57,21 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
     if (authFail(req, res, deps)) return;
     try {
       const rows = await habitsApi.listHabits(resolveUserId(req));
-      return res.json({ ok: true, data: rows });
+      return res.json({ ok: true, data: rows, habits: rows });
     } catch (err) {
       deps.logger?.error?.({ err }, 'lifeos habits list failed');
+      return res.status(err.status || 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  app.get('/api/v1/lifeos/habits/summary', async (req, res) => {
+    if (authFail(req, res, deps)) return;
+    try {
+      const days = Number(req.query?.days) || 7;
+      const summary = await habitsApi.getHabitSummary(resolveUserId(req), days);
+      return res.json({ ok: true, ...summary });
+    } catch (err) {
+      deps.logger?.error?.({ err }, 'lifeos habits summary failed');
       return res.status(err.status || 500).json({ ok: false, error: err.message });
     }
   });
@@ -67,24 +79,32 @@ export async function registerLifeosPhase3Routes(app, deps = {}) {
   app.post('/api/v1/lifeos/habits', async (req, res) => {
     if (authFail(req, res, deps)) return;
     try {
-      const row = await habitsApi.createHabit(resolveUserId(req), req.body || {});
-      return res.status(201).json({ ok: true, data: row });
+      const body = req.body || {};
+      const row = await habitsApi.createHabit(resolveUserId(req), {
+        title: body.title,
+        identity_statement: body.identity_statement ?? body.identity,
+        frequency: body.frequency || 'daily',
+      });
+      return res.status(201).json({ ok: true, data: row, habit: row });
     } catch (err) {
       deps.logger?.error?.({ err }, 'lifeos habits create failed');
       return res.status(err.status || 500).json({ ok: false, error: err.message });
     }
   });
 
-  app.post('/api/v1/lifeos/habits/:id/log', async (req, res) => {
+  async function habitCheckIn(req, res) {
     if (authFail(req, res, deps)) return;
     try {
       const row = await habitsApi.checkInHabit(resolveUserId(req), req.params.id, req.body || {});
       return res.json({ ok: true, data: row });
     } catch (err) {
-      deps.logger?.error?.({ err }, 'lifeos habits log failed');
+      deps.logger?.error?.({ err }, 'lifeos habits check-in failed');
       return res.status(err.status || 500).json({ ok: false, error: err.message });
     }
-  });
+  }
+
+  app.post('/api/v1/lifeos/habits/:id/log', habitCheckIn);
+  app.post('/api/v1/lifeos/habits/:id/checkin', habitCheckIn);
 
   app.get('/api/v1/lifeos/energy', async (req, res) => {
     if (authFail(req, res, deps)) return;
