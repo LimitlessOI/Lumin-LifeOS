@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T09:12:53.964Z",
+  "generated_at": "2026-07-10T09:13:04.570Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11405,
   "files": [
@@ -86230,9 +86230,9 @@
     {
       "path": "services/tcBilling.mjs",
       "synopsis": "Exports createSubscription — services/tcBilling.mjs.",
-      "bytes": 2661,
-      "mtime": "2026-07-10T09:12:53.964Z",
-      "indexed_at": "2026-07-10T09:12:53.964Z"
+      "bytes": 2665,
+      "mtime": "2026-07-10T09:13:04.570Z",
+      "indexed_at": "2026-07-10T09:13:04.570Z"
     },
     {
       "path": "services/tcIntakePipeline.mjs",

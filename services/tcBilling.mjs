@@ -64,7 +64,8 @@ export async function handleStripeWebhook(deps, event) {
     return { processed: false };
   }
 
-  const status = event.type === 'customer.subscription.deleted' ? 'canceled' : subscription.status || 'unknown';
+  const status =
+    event.type === 'customer.subscription.deleted' ? 'canceled' : subscription.status || 'unknown';
 
   await deps.pool.query(
     `update tc_billing_subscriptions
