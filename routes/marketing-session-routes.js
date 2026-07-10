@@ -44,7 +44,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { consent_type, consent_text } = req.body;
 
-            const validConsentTypes = ['initial', 'terms_update', 'data_sharing']; // Derived from typical consent types
+            const validConsentTypes = ["session_recording","voice_reuse","likeness_reuse","data_sharing"];
             if (!validConsentTypes.includes(consent_type)) {
                 return res.status(400).json({ ok: false, error: 'Invalid consent_type.' });
             }
