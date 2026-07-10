@@ -5,6 +5,7 @@
 import logger from './logger.js';
 
 const activeJobs = new Set();
+export const PROSPECT_STALE_MS = Number(process.env.SITE_BUILDER_PROSPECT_STALE_MS || 12 * 60 * 1000);
 
 export function createProspectClientId() {
   return `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
@@ -19,12 +20,52 @@ export function getActiveProspectJobCount() {
 }
 
 /**
+ * Mark orphaned `building` rows failed when the accepting instance died
+ * (setImmediate fire-and-forget + Railway recycle) or the pipeline hung
+ * without heartbeats past PROSPECT_STALE_MS.
+ */
+export async function failStaleProspectJobs(pool, { staleMs = PROSPECT_STALE_MS } = {}) {
+  if (!pool) return { ok: false, error: 'pool required', failed: [] };
+  const cutoff = new Date(Date.now() - Math.max(60_000, Number(staleMs) || PROSPECT_STALE_MS));
+  try {
+    const result = await pool.query(
+      `UPDATE prospect_sites
+          SET status = 'failed',
+              metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+              updated_at = NOW()
+        WHERE status = 'building'
+          AND updated_at < $1
+        RETURNING client_id`,
+      [
+        cutoff.toISOString(),
+        JSON.stringify({
+          jobError: `stale_building_reclaimed — no heartbeat for >${Math.round(staleMs / 1000)}s (instance recycle or hung pipeline)`,
+          jobFailedAt: new Date().toISOString(),
+          staleReclaim: true,
+        }),
+      ]
+    );
+    return {
+      ok: true,
+      failed: (result.rows || []).map((r) => r.client_id),
+      cutoff: cutoff.toISOString(),
+    };
+  } catch (err) {
+    return { ok: false, error: err.message, failed: [] };
+  }
+}
+
+/**
  * Reserve a prospect row and run build+email without blocking the HTTP request.
  * Returns immediately with clientId + poll URL.
  */
 export async function enqueueProspectJob(pipeline, options = {}) {
   if (!pipeline?.processProspect) {
     return { ok: false, error: 'Prospect pipeline unavailable' };
+  }
+
+  if (pipeline.pool) {
+    await failStaleProspectJobs(pipeline.pool).catch(() => null);
   }
 
   const clientId = options.clientId || createProspectClientId();
@@ -96,17 +137,39 @@ export async function getProspectJobStatus(pool, clientId) {
       return { ok: false, error: 'Prospect job not found', clientId };
     }
 
-    const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+    let status = row.status;
+    let metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+    const updatedAtMs = row.updated_at ? new Date(row.updated_at).getTime() : 0;
+    const staleBuilding = status === 'building'
+      && updatedAtMs > 0
+      && (Date.now() - updatedAtMs) > PROSPECT_STALE_MS
+      && !activeJobs.has(String(clientId));
+
+    if (staleBuilding) {
+      await failStaleProspectJobs(pool, { staleMs: PROSPECT_STALE_MS });
+      const refreshed = await pool.query(
+        `SELECT status, metadata, updated_at FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      if (refreshed.rows[0]) {
+        status = refreshed.rows[0].status;
+        metadata = refreshed.rows[0].metadata && typeof refreshed.rows[0].metadata === 'object'
+          ? refreshed.rows[0].metadata
+          : metadata;
+        row.updated_at = refreshed.rows[0].updated_at;
+      }
+    }
+
     const terminal = ['sent', 'built', 'qa_hold', 'failed', 'converted', 'lost', 'expired'].includes(
-      String(row.status || '').toLowerCase()
+      String(status || '').toLowerCase()
     );
 
     return {
       ok: true,
       clientId: row.client_id,
-      status: row.status,
-      done: row.status !== 'building' && terminal,
-      building: row.status === 'building',
+      status,
+      done: status !== 'building' && terminal,
+      building: status === 'building',
       previewUrl: row.preview_url,
       emailSent: row.email_sent,
       businessName: row.business_name,
@@ -114,6 +177,7 @@ export async function getProspectJobStatus(pool, clientId) {
       error: metadata.jobError || metadata.lastError || metadata.emailSendError || null,
       updatedAt: row.updated_at,
       createdAt: row.created_at,
+      stale_reclaimed: staleBuilding || undefined,
     };
   } catch (err) {
     return { ok: false, error: err.message, clientId };
@@ -168,7 +232,9 @@ export default {
   createProspectClientId,
   enqueueProspectJob,
   getProspectJobStatus,
+  failStaleProspectJobs,
   evaluateSiteBuilderEmailReadiness,
   isProspectJobActive,
   getActiveProspectJobCount,
+  PROSPECT_STALE_MS,
 };

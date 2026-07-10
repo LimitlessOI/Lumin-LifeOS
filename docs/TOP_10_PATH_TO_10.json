@@ -25,22 +25,22 @@
         "Deploy / Railway"
       ],
       "done_when": "Scheduler burns pending BUILD_QUEUE steps; tip tracks main; no spin receipts",
-      "next_action": "tc-service machine steps 20/24 done (4 founder_gated UI remain); tip sync + burn next product queues / plan lane needs provider keys locally",
+      "next_action": "tc-service machine 20/24 done; T05 PASS; tip sync after ships; plan lane needs provider keys in local shell",
       "blocker": "Local never-stop plan lane: plan_skipped_no_model (no ANTHROPIC/OPENAI/GEMINI in local shell). Railway scheduler may still plan if keys present on tip."
     },
     {
       "id": "T02",
       "rank": 2,
       "title": "First dollar",
-      "status": "open",
+      "status": "in_progress",
       "scorecard_areas": [
         "Revenue / pilots",
         "Site Builder",
         "LimitlessOS / business"
       ],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "Site Builder EMAIL/Postmark PRESENT on tip — run real prospect send for first dollar. OR set Railway var GOOGLE_PLACES_KEY (live probe 2026-07-10: ABSENT)",
-      "blocker": "GOOGLE_PLACES_KEY and GOOGLE_PLACES_API_KEY both ABSENT on live tip (npm run env:inventory). Not the same as GEMINI_API_KEY."
+      "next_action": "GAP-FILL stale reclaim + heartbeats shipped — tip deploy, POST reclaim-stale, re-enqueue Well Rounded Momma with email",
+      "blocker": "Prior: orphan building jobs + sync 502. Places key still ABSENT for Go Vegas alternate path."
     },
     {
       "id": "T03",
@@ -117,7 +117,7 @@
         "Honesty / truth / overclaim"
       ],
       "done_when": "Step done only when running tip serves built SHA; tip always = main",
-      "next_action": "Tip currently matches main (efce3a048c); keep managed-env build-from-latest after ships",
+      "next_action": "Keep managed-env build-from-latest after ships; tip was 1b59d7c9 for T05 proof",
       "blocker": null
     },
     {

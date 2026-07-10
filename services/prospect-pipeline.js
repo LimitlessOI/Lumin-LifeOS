@@ -125,6 +125,27 @@ export default class ProspectPipeline {
     }
   }
 
+  async touchProspectJob(clientId, stage = 'running') {
+    if (!this.pool || !clientId) return;
+    try {
+      await this.pool.query(
+        `UPDATE prospect_sites
+            SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+                updated_at = NOW()
+          WHERE client_id = $1 AND status = 'building'`,
+        [
+          clientId,
+          JSON.stringify({
+            jobStage: String(stage || 'running').slice(0, 80),
+            jobHeartbeatAt: new Date().toISOString(),
+          }),
+        ]
+      );
+    } catch (err) {
+      logger.warn('[PROSPECT] touchProspectJob failed', { clientId, error: err.message });
+    }
+  }
+
   /**
    * Full prospect pipeline: build mock site + send outreach email.
    */
@@ -139,7 +160,9 @@ export default class ProspectPipeline {
 
     if (!businessUrl) return { success: false, error: 'businessUrl required' };
 
-    logger.info('[PROSPECT] Processing prospect', { businessUrl, contactEmail });
+    const clientIdEarly = options.clientId || null;
+    logger.info('[PROSPECT] Processing prospect', { businessUrl, contactEmail, clientId: clientIdEarly });
+    await this.touchProspectJob(clientIdEarly, 'score');
 
     // Step 0: Score their existing site — pain points personalize the outreach email
     let opportunityAnalysis = null;
@@ -155,6 +178,7 @@ export default class ProspectPipeline {
       logger.warn('[PROSPECT] Opportunity score failed (non-fatal)', { error: err.message });
     }
 
+    await this.touchProspectJob(clientIdEarly, 'build');
     // Step 1: Build their mock site
     const buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
       businessInfo: options.businessInfo || null,
@@ -171,6 +195,7 @@ export default class ProspectPipeline {
     const qualityReport = buildResult.qualityReport || buildResult.metadata?.qualityReport || null;
     const qaHold = qualityReport ? qualityReport.readyToSend === false : false;
 
+    await this.touchProspectJob(clientIdEarly || buildResult.clientId, 'email_copy');
     // Step 2: Generate personalized email copy (pain points from Step 0 make it specific)
     const emailContent = await this.generateOutreachEmail({
       contactName: name,
@@ -181,6 +206,7 @@ export default class ProspectPipeline {
       painPoints: opportunityAnalysis?.painPoints?.slice(0, 3) || [],
     });
 
+    await this.touchProspectJob(clientIdEarly || buildResult.clientId, skipEmail ? 'skip_email' : 'send_email');
     // Step 3: Send email (if contact email provided and not skipped)
     let emailSent = false;
     let emailSendError = null;

@@ -29,6 +29,7 @@ import logger from '../services/logger.js';
 import {
   enqueueProspectJob,
   getProspectJobStatus,
+  failStaleProspectJobs,
   evaluateSiteBuilderEmailReadiness,
 } from '../services/site-builder-prospect-runner.js';
 
@@ -297,6 +298,19 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const status = await getProspectJobStatus(pool, clientId);
       if (!status.ok) return res.status(404).json(status);
       return res.json(status);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * POST /api/v1/sites/prospects/reclaim-stale
+   * Fail orphaned building jobs (no heartbeat / instance recycle).
+   */
+  router.post('/prospects/reclaim-stale', requireKey, async (_req, res) => {
+    try {
+      const result = await failStaleProspectJobs(pool);
+      return res.json(result);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

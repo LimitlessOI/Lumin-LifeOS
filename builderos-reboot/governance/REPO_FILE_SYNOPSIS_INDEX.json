@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T10:52:17.078Z",
+  "generated_at": "2026-07-10T11:03:41.283Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11409,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 77412,
-      "mtime": "2026-07-09T03:33:13.972Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 77669,
+      "mtime": "2026-07-10T11:03:36.720Z",
+      "indexed_at": "2026-07-10T11:03:41.283Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -59162,9 +59162,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5811,
-      "mtime": "2026-07-10T10:51:43.529Z",
-      "indexed_at": "2026-07-10T10:52:17.078Z",
+      "bytes": 5708,
+      "mtime": "2026-07-10T11:03:36.720Z",
+      "indexed_at": "2026-07-10T11:03:41.283Z",
       "synopsis_index_only": true
     },
     {
@@ -66163,9 +66163,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 27100,
-      "mtime": "2026-07-09T03:33:13.985Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 27523,
+      "mtime": "2026-07-10T11:03:32.866Z",
+      "indexed_at": "2026-07-10T11:03:41.283Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85132,9 +85132,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 21629,
-      "mtime": "2026-07-09T03:33:13.955Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 22680,
+      "mtime": "2026-07-10T11:02:48.718Z",
+      "indexed_at": "2026-07-10T11:03:41.283Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85639,9 +85639,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 5154,
-      "mtime": "2026-07-09T03:33:13.919Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 7553,
+      "mtime": "2026-07-10T11:03:10.551Z",
+      "indexed_at": "2026-07-10T11:03:41.283Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
