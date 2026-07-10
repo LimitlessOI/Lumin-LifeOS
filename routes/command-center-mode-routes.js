@@ -1,73 +1,69 @@
 /**
  * SYNOPSIS: Registers CommandCenterModeRoutes routes/handlers (routes/command-center-mode-routes.js).
  */
-import { setMode, getMode } from '../services/builder-runtime-mode-service.js';
+import { setMode, getMode } from "../services/builder-runtime-mode-service.js";
 
-const VALID_MODES = new Set(['live', 'safe', 'maintenance']);
-
-function getDb(deps) {
-  return deps?.db ?? deps?.pool;
-}
-
-function normalizeMode(value) {
-  return typeof value === 'string' ? value.trim().toLowerCase() : '';
-}
+const VALID_MODES = new Set(["idle", "active", "paused", "maintenance"]);
 
 function sendError(res, status, message) {
   return res.status(status).json({ error: message });
 }
 
-export function registerCommandCenterModeRoutes(app, deps = {}) {
-  const db = getDb(deps);
+function normalizeMode(value) {
+  return typeof value === "string" ? value.trim().toLowerCase() : "";
+}
+
+export function registerCommandCenterModeRoutes(app, deps) {
+  const db = deps?.db ?? deps?.pool;
   const callCouncilMember = deps?.callCouncilMember;
+  const logger = deps?.logger;
 
-  app.get('/api/v1/lifeos/command-center/mode', async (req, res) => {
+  app.get("/api/v1/lifeos/command-center/mode", async (req, res) => {
     try {
-      if (!db) return sendError(res, 500, 'Database unavailable');
+      if (!db) {
+        return sendError(res, 500, "Database dependency unavailable");
+      }
 
-      const current = await getMode({ db });
+      const mode = await getMode(db);
       return res.status(200).json({
-        mode: current.mode,
-        updated_at: current.updated_at,
-        updated_by: current.updated_by,
+        mode: mode?.mode ?? null,
+        updated_at: mode?.updated_at ?? null,
+        updated_by: mode?.updated_by ?? null,
       });
     } catch (error) {
-      deps?.logger?.error?.({ err: error }, 'Failed to read command center mode');
-      return sendError(res, 500, 'Failed to read command center mode');
+      logger?.error?.({ err: error }, "failed to fetch command center mode");
+      return sendError(res, 500, "Failed to fetch command center mode");
     }
   });
 
-  app.post('/api/v1/lifeos/command-center/mode', deps?.requireKey, async (req, res) => {
+  app.post("/api/v1/lifeos/command-center/mode", deps?.requireKey, async (req, res) => {
     try {
-      if (!db) return sendError(res, 500, 'Database unavailable');
-      if (typeof callCouncilMember !== 'function') {
-        return sendError(res, 500, 'Council member service unavailable');
+      if (!db) {
+        return sendError(res, 500, "Database dependency unavailable");
       }
 
       const mode = normalizeMode(req.body?.mode);
-      const triggered_by = typeof req.body?.triggered_by === 'string' ? req.body.triggered_by.trim() : '';
+      const triggered_by = typeof req.body?.triggered_by === "string" ? req.body.triggered_by.trim() : "";
 
       if (!VALID_MODES.has(mode)) {
-        return sendError(res, 400, 'Invalid mode');
+        return sendError(res, 400, `Invalid mode. Expected one of: ${Array.from(VALID_MODES).join(", ")}`);
       }
 
       if (!triggered_by) {
-        return sendError(res, 400, 'triggered_by is required');
+        return sendError(res, 400, "triggered_by is required");
       }
 
-      const receipt = await setMode({
-        db,
-        callCouncilMember,
+      const receipt = await setMode(db, {
         mode,
         triggered_by,
+        callCouncilMember,
+        logger,
       });
 
       return res.status(200).json(receipt);
     } catch (error) {
-      const status = typeof error?.statusCode === 'number' ? error.statusCode : 500;
-      const message = typeof error?.message === 'string' && error.message ? error.message : 'Failed to update command center mode';
-      deps?.logger?.error?.({ err: error }, 'Failed to update command center mode');
-      return sendError(res, status, message);
+      logger?.error?.({ err: error }, "failed to set command center mode");
+      return sendError(res, 500, "Failed to set command center mode");
     }
   });
 }

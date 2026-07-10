@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T19:31:07.858Z",
+  "generated_at": "2026-07-10T19:33:50.153Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11417,
   "files": [
@@ -65099,9 +65099,9 @@
     {
       "path": "routes/command-center-mode-routes.js",
       "synopsis": "Registers CommandCenterModeRoutes routes/handlers (routes/command-center-mode-routes.js).",
-      "bytes": 2459,
-      "mtime": "2026-07-10T19:31:07.858Z",
-      "indexed_at": "2026-07-10T19:31:07.858Z"
+      "bytes": 2242,
+      "mtime": "2026-07-10T19:33:50.153Z",
+      "indexed_at": "2026-07-10T19:33:50.153Z"
     },
     {
       "path": "routes/command-center-routes.js",
