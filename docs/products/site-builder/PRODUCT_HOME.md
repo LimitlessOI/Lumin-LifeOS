@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Beta offer $45 publish + 2 mo management; system From only (not founder personal). |
+| **Last Updated** | 2026-07-10 — Before/after site scoring (score existing site with same rubric as new site, rendered in client scorecard); editor UX fixes from live SENTRY findings (onboarding strip wired, save/chat confirmation made visible, control tooltips); opportunity-score qualifying gate now actually gates the build (was computed and logged only) with competitor-redirect scoring. See Change Receipts. Prior: 2026-07-10 — Beta offer $45 publish + 2 mo management; system From only (not founder personal). |
 
 ---
 
@@ -25,11 +25,13 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 
 ## Readiness state
 
-`PARTIAL_CODE_PRESENT`
+`LIVE — TECHNICAL_PASS, revenue path proven, real conversion unproven`
 
-Code is complete. DB tables confirmed live in Neon production. Blocked only on 4 Railway env var values. No BuilderOS mission pack exists yet; one is needed before this can re-enter the autonomous queue.
+Verified live 2026-07-10 via the real SENTRY pre-alpha gate (`node scripts/sentry-prealpha-gate.mjs site-builder`), not a stale note: preview build, editor, and **live Stripe checkout** (`cs_live_...`, not test mode) all resolve on production. Email sending (Postmark + Gmail SMTP fallback) has real fixes landed 2026-07-07. The env vars below are **historical** — they blocked this product from March through early July and are kept here only as a record; do not treat them as a current blocker without re-checking Railway directly.
 
-**Hard blocker:** Railway env vars not set:
+**Known real gap (not env vars):** no receipt anywhere of an actual prospect email converting to a paying customer. The pipeline is mechanically proven end-to-end; commercial proof is the next real milestone, not more code.
+
+**Historical hard blocker (resolved — kept for record only):** Railway env vars once unset:
 - `POSTMARK_SERVER_TOKEN` — email sending
 - `EMAIL_FROM` — sender address / `SITE_BASE_URL` — preview URL base
 - `EMAIL_PROVIDER` — provider selector
@@ -297,6 +299,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-10 | **Before/after site scoring + editor UX fixes + opportunity qualifying gate.** (1) `services/site-builder.js` — `scrapeBusinessInfo` now scores the prospect's existing site with the same rubric (`scoreSiteHtml`) as the generated site; `generateScorecardHtml`/new `generateBeforeAfterSectionHtml` render a real "before X% → after Y%" comparison with concrete reasons, not a marketing claim. (2) `services/site-builder-editor.js`, `-canvas.js`, `-chat.js` — wired the already-written but unused onboarding copy (`EDITOR_FIRST_STEPS`, `CHAT_WELCOME`) into the actual UI; added a visible "Updated ✓" badge after an AI chat edit reloads the canvas (chat said "reloading" but nothing confirmed the visible result); Save button flashes green "Saved ✓" instead of a thin status line; added tooltips to template/palette/device controls. (3) `services/prospect-pipeline.js` — the opportunity scorer (Step 0) was computed and logged but never gated anything; now if a prospect's existing site already scores above `SITE_BUILDER_MIN_OPPORTUNITY_SCORE` (default 40) the expensive AI build is skipped, and any supplied `competitorUrls` are scored the same cheap way to surface a better (worse-site) prospect to pursue instead. `scripts/sentry-site-builder-prealpha-gate.mjs` passes `skipQualify:true` so the SENTRY synthetic fixture is never blocked by this. **Deliberately not touched:** the "only 1 template chip" SENTRY finding traces to `buildFromUrl` always generating a single design variant for real prospects; did not swap to `buildVariants()` in the live revenue path since its return shape drops the `qualityReport` the QA send-gate depends on — flagged as a separate, reviewed decision, not bundled into this pass. | Founder: review Site Builder end to end (good/bad/improvements), then "add before/after scoring, add your ideas, fix the issues," then "score it first before we even make a website... find their competitors... see if any of those greatly lacking." | ✅ `node --check` all touched files; live SENTRY gate re-run post-change (Layer A 7/7, Layer B 8/8) — same friction still present because these changes were not yet deployed to Railway at re-run time; re-verify after deploy, do not claim UX fix live until that gate is re-run against the new SHA |
 | 2026-07-10 | **Beta money offer + system From** — publish default **$45**; includes first **2 months** care; outreach/checkout copy says beta discount; `resolveSystemEmailFrom` never sends as `adam@hopkinsgroup.org` (uses `LifeOS@hopkinsgroup.org` / WORK_EMAIL). | Founder: don't use personal email for outbound; beta participants get big discount + 2 months management. | ⚠️ tip-sync + checkout $45 proof |
 | 2026-07-10 | **GAP-FILL prospect-crm auth** — read `command_key`/`commandKey`/`lifeos_key` + Bearer JWT, not only `lifeos_command_key`. | UI walk: CRM 401 despite signed-in founder session. | ✅ | pending | tip UI |
 | 2026-07-10 | **GAP-FILL T02 preview durability** — store `previewHtml`/`previewMeta` on prospect row; `/previews/:id/index.html` DB fallback + checkout meta fallback. | Preview 200 then 404 across replicas (ephemeral disk); checkout Preview not found. | ⚠️ tip proof pending |

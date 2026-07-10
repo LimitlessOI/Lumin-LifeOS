@@ -355,9 +355,16 @@ export default class SiteBuilder {
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
       await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
 
-      // Client-facing competitor scorecard (only when we actually analyzed competitors)
-      if ((benchmark && benchmark.analyzedCount > 0) || presence) {
-        await fs.writeFile(path.join(deployDir, 'scorecard.html'), this.generateScorecardHtml(businessInfo, benchmark, presence));
+      // Client-facing scorecard — before/after site score always included when we have
+      // a real existing-site score; competitor/presence sections added when analyzed.
+      if (businessInfo.existingSiteScore || (benchmark && benchmark.analyzedCount > 0) || presence) {
+        await fs.writeFile(
+          path.join(deployDir, 'scorecard.html'),
+          this.generateScorecardHtml(businessInfo, benchmark, presence, {
+            before: businessInfo.existingSiteScore,
+            after: qualityReport,
+          }),
+        );
       }
 
       for (const post of blogPosts) {
@@ -674,11 +681,21 @@ export default class SiteBuilder {
         };
       });
 
+      // Score their existing site with the same objective rubric the new site
+      // is judged by, so the "before" and "after" numbers are directly comparable.
+      let existingSiteScore = null;
+      try {
+        const existingHtml = await page.content();
+        existingSiteScore = this.scoreSiteHtml(existingHtml, {});
+      } catch (err) {
+        logger.warn('[SITE] Existing-site scoring failed (non-fatal)', { url, error: err.message });
+      }
+
       await browser.close();
 
       // Use AI to extract structured business info from the raw scraped text
       const extracted = await this.extractBusinessInfoWithAI(scraped, url);
-      return { ...scraped, ...extracted, sourceUrl: url };
+      return { ...scraped, ...extracted, sourceUrl: url, existingSiteScore };
 
     } catch (err) {
       if (browser) await browser.close().catch(() => {});
@@ -1297,11 +1314,14 @@ Return ONLY valid JSON array:
    * Render a client-facing competitor scorecard page. Shows each competitor's
    * 1-10 score with what they do well / poorly, and how the new site beats them.
    */
-  generateScorecardHtml(info, benchmark, presence = null) {
+  generateScorecardHtml(info, benchmark, presence = null, beforeAfter = null) {
     const primary = info.primaryColor || '#7C3AED';
     const accent = info.accentColor || '#EC4899';
     const name = info.businessName || 'Your Business';
     const presenceSection = presence ? this.generatePresenceSectionHtml(presence) : '';
+    const beforeAfterSection = beforeAfter && beforeAfter.before && beforeAfter.after
+      ? this.generateBeforeAfterSectionHtml(beforeAfter.before, beforeAfter.after)
+      : '';
     const cards = (benchmark?.scorecards || [])
       .map(c => {
         const scoreLabel = c.score != null ? `${c.score}/10` : 'N/A';
@@ -1352,19 +1372,64 @@ Return ONLY valid JSON array:
   .b-ahead{background:#dcfce7;color:#166534}.b-behind{background:#fee2e2;color:#991b1b}
   .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:#f3f4f6;color:#6b7280}
   .gap{background:#fff;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:16px 0}
+  .ba-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:stretch;margin-bottom:8px}
+  .ba-col{background:#fff;border:1px solid #eee;border-radius:16px;padding:22px}
+  .ba-col.before{border-top:4px solid #dc2626}
+  .ba-col.after{border-top:4px solid #16a34a}
+  .ba-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:#555;margin-bottom:6px}
+  .ba-score{font-size:40px;font-weight:800;line-height:1}
+  .ba-col.before .ba-score{color:#dc2626}
+  .ba-col.after .ba-score{color:#16a34a}
+  .ba-grade{font-size:14px;color:#777;margin-bottom:12px}
+  .ba-arrow{display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--primary);font-weight:800}
+  .ba-issues{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#444}
+  @media(max-width:640px){.ba-wrap{grid-template-columns:1fr}.ba-arrow{transform:rotate(90deg);padding:4px 0}}
 </style></head>
 <body>
 <header>
-  <h1>Presence & Competitor Scorecard for ${this.escapeHtml(name)}</h1>
-  <p>An honest look at where you stand across every channel — and how we help you win.</p>
+  <h1>Your Site Scorecard for ${this.escapeHtml(name)}</h1>
+  <p>An honest look at where you stand today, what we changed, and how you compare.</p>
 </header>
 <main>
+  ${beforeAfterSection}
   ${presenceSection}
   ${cards ? `<h2 class="section-title">Competitor websites, scored</h2>${cards}` : ''}
   ${beat ? `<div class="beat"><h3>How your new site wins</h3><ul>${beat}</ul></div>` : ''}
-  ${!presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
+  ${!beforeAfterSection && !presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
 </main>
 </body></html>`;
+  }
+
+  /**
+   * Render the before/after site-score comparison — same objective rubric
+   * (scoreSiteHtml) applied to the prospect's existing site and the new one,
+   * so the improvement is a real, comparable number, not a marketing claim.
+   */
+  generateBeforeAfterSectionHtml(before, after) {
+    const beforeIssues = (before.summaryIssues || before.issues || []).slice(0, 5)
+      .map(x => `<li>${this.escapeHtml(x)}</li>`).join('') || '<li>—</li>';
+    const afterFixed = (before.summaryIssues || before.issues || [])
+      .filter(issue => !(after.issues || []).includes(issue))
+      .slice(0, 5)
+      .map(x => `<li>${this.escapeHtml(x)}</li>`).join('') || '<li>Every issue below was resolved.</li>';
+    return `<h2 class="section-title">Before &amp; After — Same Scoring, Real Numbers</h2>
+    <div class="ba-wrap">
+      <div class="ba-col before">
+        <div class="ba-label">Your current site</div>
+        <div class="ba-score">${before.scorePct}%</div>
+        <div class="ba-grade">Grade ${this.escapeHtml(before.grade || '—')}</div>
+        <div class="ba-label">Why it scores this way</div>
+        <ul class="ba-issues">${beforeIssues}</ul>
+      </div>
+      <div class="ba-arrow">&#8594;</div>
+      <div class="ba-col after">
+        <div class="ba-label">Your new site</div>
+        <div class="ba-score">${after.scorePct}%</div>
+        <div class="ba-grade">Grade ${this.escapeHtml(after.grade || '—')}</div>
+        <div class="ba-label">What we fixed</div>
+        <ul class="ba-issues">${afterFixed}</ul>
+      </div>
+    </div>`;
   }
 
   /**

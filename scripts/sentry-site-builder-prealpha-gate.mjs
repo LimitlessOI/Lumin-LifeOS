@@ -54,7 +54,7 @@ async function ensurePreview() {
     const res = await fetch(`${BASE}/api/v1/sites/prospect`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', ...authed },
-      body: JSON.stringify({ businessUrl: FIXTURE_URL, skipEmail: true }),
+      body: JSON.stringify({ businessUrl: FIXTURE_URL, skipEmail: true, skipQualify: true }),
       signal: AbortSignal.timeout(30000),
     });
     const job = await res.json().catch(() => ({}));

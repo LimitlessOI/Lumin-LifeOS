@@ -233,20 +233,20 @@ export function renderCanvas({
   </style>
 
   <div class="lifeos-canvas-toolbar">
-    <div class="lifeos-canvas-group" aria-label="Templates">
+    <div class="lifeos-canvas-group" aria-label="Templates" title="Click a look to swap your site's design instantly">
       <span class="lifeos-canvas-label">Template</span>
       ${variantChips}
     </div>
-    <div class="lifeos-canvas-group" aria-label="Palettes">
+    <div class="lifeos-canvas-group" aria-label="Palettes" title="Click a color set to recolor your site">
       <span class="lifeos-canvas-label">Palette</span>
       ${paletteSwatches}
     </div>
-    <div class="lifeos-canvas-group" aria-label="Device">
+    <div class="lifeos-canvas-group" aria-label="Device" title="Preview how your site looks on desktop vs. phone">
       <span class="lifeos-canvas-label">Device</span>
-      <button type="button" class="lifeos-canvas-device is-active" data-lifeos-device="desktop">Desktop</button>
-      <button type="button" class="lifeos-canvas-device" data-lifeos-device="mobile">Mobile</button>
+      <button type="button" class="lifeos-canvas-device is-active" data-lifeos-device="desktop" title="Preview on desktop">Desktop</button>
+      <button type="button" class="lifeos-canvas-device" data-lifeos-device="mobile" title="Preview on a phone screen">Mobile</button>
     </div>
-    <button type="button" class="lifeos-canvas-save" data-lifeos-save>Save</button>
+    <button type="button" class="lifeos-canvas-save" data-lifeos-save title="Save your text and layout edits">Save</button>
     <div class="lifeos-canvas-status" data-lifeos-status aria-live="polite"></div>
   </div>
 
@@ -572,6 +572,7 @@ export function renderCanvas({
 
       const saveButton = root.querySelector("[data-lifeos-save]");
       if (saveButton) {
+        const saveButtonDefaultText = saveButton.textContent;
         saveButton.addEventListener("click", async function () {
           setStatus("Saving…", "");
           try {
@@ -588,6 +589,14 @@ export function renderCanvas({
               html: html
             });
             setStatus("Saved.", "ok");
+            saveButton.textContent = "Saved ✓";
+            saveButton.style.background = "#16a34a";
+            saveButton.style.borderColor = "#16a34a";
+            window.setTimeout(function () {
+              saveButton.textContent = saveButtonDefaultText;
+              saveButton.style.background = "";
+              saveButton.style.borderColor = "";
+            }, 2200);
           } catch (error) {
             setStatus("Save failed: " + error.message, "error");
           }

@@ -1,6 +1,8 @@
 /**
  * SYNOPSIS: Exports renderChatPanel — services/site-builder-editor-chat.js.
  */
+import { CHAT_WELCOME } from './site-builder-editor-onboarding.js';
+
 function htmlEscape(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => {
     switch (character) {
@@ -48,6 +50,7 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
     token: String(editToken ?? ""),
     baseUrl: String(baseUrl ?? ""),
   };
+  const escapedWelcome = htmlEscape(CHAT_WELCOME);
 
   return `
 <section id="${escapedPanelId}" class="sb-chat-panel" data-sb-chat-panel aria-label="AI editor chat and voice panel">
@@ -212,7 +215,7 @@ export function renderChatPanel({ clientId, editToken, baseUrl } = {}) {
     <p class="sb-chat-panel__hint">Type or speak what you want changed, then send it to update the site.</p>
   </div>
 
-  <div class="sb-chat-panel__messages" data-sb-messages role="log" aria-live="polite" aria-relevant="additions"></div>
+  <div class="sb-chat-panel__messages" data-sb-messages role="log" aria-live="polite" aria-relevant="additions"><div class="sb-chat-bubble sb-chat-bubble--assistant">${escapedWelcome}</div></div>
 
   <form class="sb-chat-panel__composer" data-sb-form autocomplete="off">
     <input

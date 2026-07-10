@@ -1,11 +1,68 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-08T06:45:15.077Z",
-  "findings_count": 0,
+  "generated_at": "2026-07-10T20:53:21.883Z",
+  "findings_count": 5,
   "without_solution": 0,
-  "findings": [],
+  "findings": [
+    {
+      "code": "ux_friction_1",
+      "detail": "Only one template choice, so it feels like I’m not really choosing a design.",
+      "proposed_solution": "Show 3–5 clear starter templates so I can pick a look that fits my business.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_2",
+      "detail": "The editor gives me very little guidance on what to do first.",
+      "proposed_solution": "Add a simple first-step prompt like ‘Start here: choose a template, then edit your text.’",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_3",
+      "detail": "The chat is there, but it isn’t clear what I should ask it for.",
+      "proposed_solution": "Make the chat more obvious with example questions like ‘change colors’ or ‘rewrite my homepage headline.’",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_4",
+      "detail": "Save works, but I’d want more obvious confirmation that my changes are actually saved.",
+      "proposed_solution": "Show a stronger save confirmation, like ‘Saved’ with a timestamp or checkmark.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_5",
+      "detail": "The device toggle is useful, but it may add one more thing to figure out in an already unfamiliar editor.",
+      "proposed_solution": "Keep the device preview, but label it plainly as ‘Desktop / Tablet / Mobile’ so it feels less technical.",
+      "severity": "warning",
+      "source": "uxCritique"
+    }
+  ],
   "readiness": {
     "blockers": [],
-    "warnings": []
+    "warnings": [
+      {
+        "code": "ux_friction_1",
+        "detail": "Only one template choice, so it feels like I’m not really choosing a design."
+      },
+      {
+        "code": "ux_friction_2",
+        "detail": "The editor gives me very little guidance on what to do first."
+      },
+      {
+        "code": "ux_friction_3",
+        "detail": "The chat is there, but it isn’t clear what I should ask it for."
+      },
+      {
+        "code": "ux_friction_4",
+        "detail": "Save works, but I’d want more obvious confirmation that my changes are actually saved."
+      },
+      {
+        "code": "ux_friction_5",
+        "detail": "The device toggle is useful, but it may add one more thing to figure out in an already unfamiliar editor."
+      }
+    ]
   }
 }

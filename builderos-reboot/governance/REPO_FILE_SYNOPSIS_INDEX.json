@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T20:42:13.228Z",
+  "generated_at": "2026-07-10T20:57:42.038Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11414,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 80189,
-      "mtime": "2026-07-10T20:40:02.156Z",
-      "indexed_at": "2026-07-10T20:42:13.228Z"
+      "bytes": 83542,
+      "mtime": "2026-07-10T20:55:08.321Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -62952,9 +62952,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.",
-      "bytes": 2640,
-      "mtime": "2026-07-10T20:33:45.046Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z",
+      "bytes": 2608,
+      "mtime": "2026-07-10T20:53:21.884Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z",
       "synopsis_index_only": true
     },
     {
@@ -62976,9 +62976,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.site-builder.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Site Builder.",
-      "bytes": 2670,
-      "mtime": "2026-07-10T20:33:45.053Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z",
+      "bytes": 2638,
+      "mtime": "2026-07-10T20:53:21.888Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z",
       "synopsis_index_only": true
     },
     {
@@ -68837,9 +68837,9 @@
     {
       "path": "scripts/sentry-site-builder-prealpha-gate.mjs",
       "synopsis": "SENTRY Site Builder pre-alpha completion gate — runs BOTH doctrine",
-      "bytes": 9418,
-      "mtime": "2026-07-09T01:03:41.531Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z",
+      "bytes": 9437,
+      "mtime": "2026-07-10T20:52:14.935Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85173,9 +85173,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 26615,
-      "mtime": "2026-07-10T20:39:11.927Z",
-      "indexed_at": "2026-07-10T20:42:13.228Z",
+      "bytes": 29189,
+      "mtime": "2026-07-10T20:51:35.483Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85575,9 +85575,9 @@
     {
       "path": "services/site-builder-editor-canvas.js",
       "synopsis": "Exports renderCanvas — services/site-builder-editor-canvas.js.",
-      "bytes": 20530,
-      "mtime": "2026-07-09T01:03:41.536Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z",
+      "bytes": 21237,
+      "mtime": "2026-07-10T20:48:02.382Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85585,9 +85585,9 @@
     {
       "path": "services/site-builder-editor-chat.js",
       "synopsis": "Exports renderChatPanel — services/site-builder-editor-chat.js.",
-      "bytes": 12491,
-      "mtime": "2026-07-07T02:22:43.636Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z"
+      "bytes": 12688,
+      "mtime": "2026-07-10T20:48:28.451Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z"
     },
     {
       "path": "services/site-builder-editor-onboarding.js",
@@ -85613,9 +85613,9 @@
     {
       "path": "services/site-builder-editor.js",
       "synopsis": "Three-pane Site Builder editor workspace composition.",
-      "bytes": 4071,
-      "mtime": "2026-07-07T21:41:49.825Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z",
+      "bytes": 6861,
+      "mtime": "2026-07-10T20:47:37.532Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85724,9 +85724,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 74581,
-      "mtime": "2026-07-10T12:35:55.537Z",
-      "indexed_at": "2026-07-10T20:41:50.179Z",
+      "bytes": 78032,
+      "mtime": "2026-07-10T20:46:44.257Z",
+      "indexed_at": "2026-07-10T20:57:42.038Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

@@ -190,7 +190,11 @@ export default class ProspectPipeline {
     logger.info('[PROSPECT] Processing prospect', { businessUrl, contactEmail, clientId: clientIdEarly });
     await this.touchProspectJob(clientIdEarly, 'score');
 
-    // Step 0: Score their existing site — pain points personalize the outreach email
+    // Step 0: Score their existing site — pain points personalize the outreach email,
+    // AND gate whether we build at all. High opportunityScore = bad site = good prospect;
+    // a site that already scores well can't support a compelling before/after story, so
+    // we skip the expensive AI build entirely rather than spend generation cost on a
+    // business we can't dramatically improve.
     let opportunityAnalysis = null;
     try {
       opportunityAnalysis = await scoreProspectUrl(businessUrl, { timeout: 6000 });
@@ -202,6 +206,49 @@ export default class ProspectPipeline {
       });
     } catch (err) {
       logger.warn('[PROSPECT] Opportunity score failed (non-fatal)', { error: err.message });
+    }
+
+    const MIN_OPPORTUNITY_SCORE = Number(process.env.SITE_BUILDER_MIN_OPPORTUNITY_SCORE || 40);
+    if (!options.skipQualify && opportunityAnalysis && opportunityAnalysis.opportunityScore < MIN_OPPORTUNITY_SCORE) {
+      logger.info('[PROSPECT] Skipping — existing site already too strong to build a compelling before/after', {
+        businessUrl,
+        opportunityScore: opportunityAnalysis.opportunityScore,
+        grade: opportunityAnalysis.grade,
+        minRequired: MIN_OPPORTUNITY_SCORE,
+      });
+
+      // Score any supplied competitors the same cheap way — a competitor with a
+      // much worse site than this target is a better prospect for the same niche.
+      let competitorOpportunities = [];
+      const competitorUrls = Array.isArray(options.competitorUrls) ? options.competitorUrls : [];
+      if (competitorUrls.length) {
+        const scored = await Promise.all(
+          competitorUrls.map(async (url) => {
+            try {
+              const analysis = await scoreProspectUrl(url, { timeout: 6000 });
+              return { url, opportunityScore: analysis.opportunityScore, grade: analysis.grade, painPoints: analysis.painPoints };
+            } catch (err) {
+              return { url, opportunityScore: null, grade: null, error: err.message };
+            }
+          }),
+        );
+        competitorOpportunities = scored
+          .filter((c) => c.opportunityScore != null)
+          .sort((a, b) => b.opportunityScore - a.opportunityScore);
+      }
+
+      return {
+        success: false,
+        skipped: true,
+        reason: 'existing_site_already_strong',
+        opportunityScore: opportunityAnalysis.opportunityScore,
+        grade: opportunityAnalysis.grade,
+        minRequired: MIN_OPPORTUNITY_SCORE,
+        competitorOpportunities,
+        recommendation: competitorOpportunities.length && competitorOpportunities[0].opportunityScore >= MIN_OPPORTUNITY_SCORE
+          ? `Pursue ${competitorOpportunities[0].url} instead — opportunity score ${competitorOpportunities[0].opportunityScore} vs. ${opportunityAnalysis.opportunityScore} for the original target.`
+          : 'No qualifying competitor supplied — find contact info for a weaker competitor site, or move to the next prospect.',
+      };
     }
 
     await this.touchProspectJob(clientIdEarly, 'build');
