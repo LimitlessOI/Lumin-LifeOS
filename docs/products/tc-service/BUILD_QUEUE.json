@@ -119,7 +119,7 @@
     },
     {
       "id": "s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tc-billing-routes.js",
       "task": "Register billing and agent enrollment routes for first paying agent client",
       "spec": "Export registerTcBillingRoutes(app, deps). POST /api/tc/billing/checkout calls stripeBilling.createCheckoutSession and returns {url}. POST /api/tc/billing/enroll accepts {agentRegistryId, stripeSubscriptionId, planTier}, calls stripeBilling.enrollAgent, returns enrolled record. POST /api/tc/billing/webhook validates Stripe webhook signature via deps.validateWebhookSignature, updates stripe_subscriptions status. All routes require deps.requireAuth except webhook. No top-level browser globals.",
@@ -127,11 +127,12 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "commit_sha": "4bf7a8881124e02d1d45713d5edf2cacc6f287d1",
-      "last_attempt_at": "2026-07-10T08:26:51.528Z",
+      "last_attempt_at": "2026-07-10T08:56:18.988Z",
       "revive_count": 1,
-      "revived_at": "2026-07-10T08:53:56.704Z"
+      "revived_at": "2026-07-10T08:53:56.704Z",
+      "completed_at": "2026-07-10T08:58:15.617Z"
     },
     {
       "id": "s9",
