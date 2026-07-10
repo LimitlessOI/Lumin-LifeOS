@@ -204,13 +204,16 @@
     },
     {
       "id": "step-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240601_tc_intake_pipeline.sql",
       "task": "Add missing tables for intake pipeline, billing, and showing feedback",
       "spec": "CREATE TABLE IF NOT EXISTS tc_intake_runs, tc_billing_subscriptions, tc_showing_feedback_requests, tc_offer_prep_runs, tc_mobile_approvals each with uuid pk, agent_id, status, payload jsonb, created_at/updated_at defaulted by DB. No DROP/ALTER. Idempotent.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "edee89e0c3ef126d62415f78a6760f8fec6cf749",
+      "last_attempt_at": "2026-07-10T09:08:50.075Z",
+      "completed_at": "2026-07-10T09:09:09.636Z"
     },
     {
       "id": "step-02",
