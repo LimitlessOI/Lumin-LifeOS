@@ -3,7 +3,8 @@
     "domain": "Product",
     "status": "CANONICAL",
     "owner": "Founder (Adam)",
-    "purpose": "Founder-owned financial priority order for the autonomous product-build loop. The never-stop factory builds eligible product work in this order (highest financial priority first). This is a BUSINESS decision — edit `priority` to change what the system builds first."
+    "purpose": "Founder-owned financial priority order for the autonomous product-build loop. The never-stop factory builds eligible product work in this order (highest financial priority first). This is a BUSINESS decision — edit `priority` to change what the system builds first.",
+    "path_to_10": "docs/TOP_10_PATH_TO_10.json"
   },
   "schema": "product_build_priority_v1",
   "updated_at": "2026-07-10",

@@ -15,6 +15,11 @@
       "title": "Evidence-aware extraction in commitment-tracker",
       "target_file": "services/commitment-tracker.js",
       "action_type": "builder_build",
+      "assertion_spec": {
+        "expected_exports": [
+          "createCommitmentTracker"
+        ]
+      },
       "dependencies": [],
       "non_goals": [
         "split-brain lifeos_commitments",
@@ -32,6 +37,15 @@
       "title": "Conversation ingest + batch save API routes",
       "target_file": "routes/lifeos-core-routes.js",
       "action_type": "builder_build",
+      "assertion_spec": {
+        "expected_exports": [
+          "createLifeOSCoreRoutes",
+          "registerLifeOSCoreRoutes"
+        ],
+        "file_contains": [
+          "/commitments"
+        ]
+      },
       "dependencies": [
         "CCV1-S01"
       ],

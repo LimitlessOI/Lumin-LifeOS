@@ -1237,6 +1237,8 @@ export async function runLuminChairTurn(ctx, deps) {
           ? await deps.loadChairMemoryContext({
             userId: resolvedUserId,
             userHandle: ctx.userHandle || userHandle || null,
+            messageText: effectiveInput,
+            productId: ctx.productId || chairContext?.product_id || null,
           }).catch(() => null)
           : null);
       const listeningOnboarding = sourceMode === 'listening_setup' && deps.pool

@@ -8,6 +8,10 @@
 
 ---
 
+## [BUILD] Update 2026-07-10 — Path-to-10 climb (memory + factory gaps + checklist)
+
+Adam: build until all ten are ten. Shipped: `docs/TOP_10_PATH_TO_10.json` + `npm run path-to-10:status`; Chair every-turn founder-memory inject; BP assertion_spec closes 5 coverage gaps; managed-env allowlist EMAIL_*/GO_VEGAS_*; scorecard ~6.4→~6.8. Still NOT 10 — first dollar, Point B usability, SENTRY re-gate, FULLY_MACHINE_READY remain. Next: commit/push/redeploy → kick never-stop → re-run lifeos + site-builder SENTRY → first-dollar path.
+
 ## [FIX] Update 2026-07-10 — Never-stop keep-building (spin-break + Layer B work)
 
 Adam: get the system building/executing the vision; fix anything that stops it. Tip `ba0220` was live but never-stop still monopolized by `sentry_fix_plan_lifeos` → `plan_produced_no_queue`. Shipped: stamp `sentry_signature` when SENTRY findings are unplannable; clear findings feed; queue MarketingOS Layer B (`mos-sentry-layer-b` + `run-marketingos-layer-b.mjs` + registry); `POST /api/v1/lifeos/never-stop/run-once`. Next: redeploy → kick run-once → prove a build cycle selects MarketingOS Layer B (or next actionable step).

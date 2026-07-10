@@ -323,7 +323,23 @@ Input: ${rawText}`,
     return /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt|how many|what is|what are|list|count|tell me)\b/i.test(text);
   }
 
-  async function loadLuminMemory({ userId = null, userHandle = null } = {}) {
+  async function loadLuminMemory({ userId = null, userHandle = null, messageText = null, productId = null } = {}) {
+    let founderMemoryBlock = '';
+    if (pool) {
+      try {
+        const { inferProductIdsFromMessage, injectProductMemoryIntoContext } = await import(
+          '../services/founder-memory-product-resolver.js'
+        );
+        const productIds = inferProductIdsFromMessage(messageText, productId);
+        const injected = await injectProductMemoryIntoContext({
+          productId: productIds[0] || 'lifeos',
+          pool,
+          limit: 24,
+        });
+        founderMemoryBlock = String(injected?.memory_block || '').trim();
+      } catch { /* fail-open — twin/context still loads */ }
+    }
+
     if (luminContext && pool) {
       try {
         let resolvedUserId = userId;
@@ -339,7 +355,10 @@ Input: ${rawText}`,
           userId: resolvedUserId,
           userHandle: resolvedHandle,
         });
-        if (ctx) return ctx;
+        if (ctx) {
+          const base = typeof ctx === 'string' ? ctx : String(ctx);
+          return [founderMemoryBlock, base].filter(Boolean).join('\n\n');
+        }
       } catch { /* fall through */ }
     }
     try {
@@ -377,14 +396,17 @@ Input: ${rawText}`,
         parts.push(`Recent exchanges:\n${ht}`);
       }
 
-      return parts.filter(Boolean).join('\n\n');
-    } catch { return ''; }
+      const fallback = parts.filter(Boolean).join('\n\n');
+      return [founderMemoryBlock, fallback].filter(Boolean).join('\n\n');
+    } catch {
+      return founderMemoryBlock || '';
+    }
   }
 
   async function luminConverse(userMessage) {
     if (typeof callCouncilMember !== 'function') return null;
     try {
-      const memoryContext = await loadLuminMemory();
+      const memoryContext = await loadLuminMemory({ messageText: userMessage });
 
       // Detect role request — load role-specific authority context
       const roleMatch = userMessage.match(/\b(chair|cfo|cto|sentry|wisdom|architect|builder)\b/i);

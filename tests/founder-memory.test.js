@@ -70,3 +70,11 @@ test('createFounderMemoryStore append returns typed receipt', async () => {
 test('inferProductIdsFromMessage uses explicit product id', () => {
   assert.deepEqual(inferProductIdsFromMessage('hello', 'site-builder'), ['site-builder']);
 });
+
+test('chair memory inject path produces FOUNDER MEMORY block for lifeos', async () => {
+  const { injectProductMemoryIntoContext } = await import('../services/founder-memory-product-resolver.js');
+  const injected = await injectProductMemoryIntoContext({ productId: 'lifeos', pool: null, limit: 5 });
+  assert.match(injected.memory_block, /FOUNDER MEMORY \(auto-injected/);
+  assert.equal(injected.product_id, 'lifeos');
+  assert.ok(injected.inject_receipt?.mandatory);
+});

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T04:01:06.523Z",
+  "generated_at": "2026-07-10T04:01:29.360Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11392,
+  "file_count": 11394,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3439769,
-      "mtime": "2026-07-10T03:10:00.534Z",
-      "indexed_at": "2026-07-10T03:10:13.062Z"
+      "bytes": 3442779,
+      "mtime": "2026-07-10T04:01:17.773Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -26060,9 +26060,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 7599,
-      "mtime": "2026-06-28T02:03:08.401Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 7964,
+      "mtime": "2026-07-10T03:58:42.143Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "synopsis_index_only": true
     },
     {
@@ -26224,9 +26224,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 2880,
-      "mtime": "2026-06-27T23:29:26.526Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 3202,
+      "mtime": "2026-07-10T03:58:33.289Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "synopsis_index_only": true
     },
     {
@@ -36734,9 +36734,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 59687,
-      "mtime": "2026-07-10T03:16:23.894Z",
-      "indexed_at": "2026-07-10T03:16:46.685Z"
+      "bytes": 60231,
+      "mtime": "2026-07-10T04:00:43.888Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38833,9 +38833,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 204359,
-      "mtime": "2026-07-10T03:26:05.155Z",
-      "indexed_at": "2026-07-10T03:26:17.442Z"
+      "bytes": 169771,
+      "mtime": "2026-07-10T04:00:44.394Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39276,9 +39276,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 596536,
-      "mtime": "2026-07-10T03:16:32.258Z",
-      "indexed_at": "2026-07-10T03:16:46.685Z"
+      "bytes": 596724,
+      "mtime": "2026-07-10T04:00:29.701Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39437,9 +39437,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 20150,
-      "mtime": "2026-07-09T03:33:13.944Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 20574,
+      "mtime": "2026-07-10T04:00:08.166Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -39546,9 +39546,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 1890,
-      "mtime": "2026-07-10T03:20:15.500Z",
-      "indexed_at": "2026-07-10T03:20:18.911Z",
+      "bytes": 1939,
+      "mtime": "2026-07-10T03:59:28.788Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "synopsis_index_only": true
     },
     {
@@ -59076,9 +59076,9 @@
     {
       "path": "docs/SYSTEM_SCORECARD_PATH_TO_10.md",
       "synopsis": "System-wide honest scorecard + path to 10",
-      "bytes": 3367,
-      "mtime": "2026-07-10T02:08:34.935Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 4120,
+      "mtime": "2026-07-10T04:00:32.674Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z"
     },
     {
       "path": "docs/TCO_ANNEX.md",
@@ -59143,6 +59143,14 @@
       "bytes": 22321,
       "mtime": "2026-06-21T21:37:56.485Z",
       "indexed_at": "2026-07-10T02:08:57.077Z"
+    },
+    {
+      "path": "docs/TOP_10_PATH_TO_10.json",
+      "synopsis": "Documentation — TOP 10 PATH TO 10.",
+      "bytes": 5033,
+      "mtime": "2026-07-10T04:00:56.080Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
+      "synopsis_index_only": true
     },
     {
       "path": "docs/TRUE_VISION.md",
@@ -62034,9 +62042,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31246,
-      "mtime": "2026-07-10T00:37:20.363Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 31309,
+      "mtime": "2026-07-10T03:59:28.774Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "synopsis_index_only": true
     },
     {
@@ -65380,9 +65388,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.",
-      "bytes": 61137,
-      "mtime": "2026-07-10T00:19:23.646Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 62069,
+      "mtime": "2026-07-10T03:59:58.227Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -66173,9 +66181,9 @@
     {
       "path": "routes/tc-intake-routes.js",
       "synopsis": "Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).",
-      "bytes": 1812,
-      "mtime": "2026-07-10T04:01:06.523Z",
-      "indexed_at": "2026-07-10T04:01:06.523Z"
+      "bytes": 1700,
+      "mtime": "2026-07-10T03:56:09.288Z",
+      "indexed_at": "2026-07-10T03:56:09.288Z"
     },
     {
       "path": "routes/tc-r4r-routes.js",
@@ -67989,6 +67997,16 @@
       "indexed_at": "2026-07-10T02:08:57.077Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/path-to-10-status.mjs",
+      "synopsis": "Print TOP_10_PATH_TO_10 open items + scorecard pointer.",
+      "bytes": 1218,
+      "mtime": "2026-07-10T03:59:13.618Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
+      "ssot": [
+        "docs/SYSTEM_SCORECARD_PATH_TO_10.md"
       ]
     },
     {
@@ -84159,9 +84177,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 61164,
-      "mtime": "2026-07-09T20:01:07.645Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 61279,
+      "mtime": "2026-07-10T03:58:49.788Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85081,9 +85099,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 22222,
-      "mtime": "2026-07-07T22:27:11.425Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 22368,
+      "mtime": "2026-07-10T03:58:33.317Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87949,9 +87967,9 @@
     {
       "path": "tests/founder-memory.test.js",
       "synopsis": "js — tests/founder-memory.test.js.",
-      "bytes": 2820,
-      "mtime": "2026-07-09T02:05:10.279Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 3295,
+      "mtime": "2026-07-10T03:59:28.754Z",
+      "indexed_at": "2026-07-10T04:01:29.360Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
       ]

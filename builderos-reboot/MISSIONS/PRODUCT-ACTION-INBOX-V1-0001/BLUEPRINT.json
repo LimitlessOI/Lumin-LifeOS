@@ -62,6 +62,11 @@
       "title": "Action Inbox service — capture, classify, stage, route, receipts",
       "target_file": "services/action-inbox.js",
       "action_type": "write_file_exact",
+      "assertion_spec": {
+        "expected_exports": [
+          "createActionInbox"
+        ]
+      },
       "exact_inputs": {
         "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S02/action-inbox.js"
       },
@@ -98,6 +103,11 @@
       "title": "Action Inbox API routes",
       "target_file": "routes/action-inbox-routes.js",
       "action_type": "write_file_exact",
+      "assertion_spec": {
+        "expected_exports": [
+          "createActionInboxRoutes"
+        ]
+      },
       "exact_inputs": {
         "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S03/action-inbox-routes.js"
       },
@@ -134,6 +144,12 @@
       "title": "Startup wiring in register-runtime-routes.js",
       "target_file": "startup/register-runtime-routes.js",
       "action_type": "write_file_exact",
+      "assertion_spec": {
+        "file_contains": [
+          "createActionInboxRoutes",
+          "/api/v1/lifeos/action-inbox"
+        ]
+      },
       "exact_inputs": {
         "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S04/register-runtime-routes.js"
       },
