@@ -219,14 +219,14 @@
         "smos-intel-routes"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 12000,
       "file_contains": [
         "sentry_marketingos_layer_b_v1",
         "STORAGE_R2_UNVERIFIED",
         "chromium"
       ],
-      "last_attempt_at": "2026-07-10T03:18:45.858Z",
+      "last_attempt_at": "2026-07-10T03:20:27.827Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ]
