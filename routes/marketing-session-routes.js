@@ -315,8 +315,8 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { id } = req.params;
             const contentResult = await pool.query(
-                `SELECT * FROM marketing_content_pieces WHERE session_id = $1 ORDER BY created_at ASC`,
-                [id]
+                `SELECT p.* FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 ORDER BY p.created_at ASC`,
+                [id, owner_id]
             );
             res.status(200).json({ ok: true, pieces: contentResult.rows });
         } catch (error) {
@@ -337,7 +337,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const { action, hint } = req.body;
 
             const pieceResult = await pool.query(
-                `SELECT * FROM marketing_content_pieces WHERE id = $1 AND owner_id = $2`,
+                `SELECT p.* FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.id = $1 AND s.owner_id = $2`,
                 [id, owner_id]
             );
             if (pieceResult.rows.length === 0) {
@@ -412,7 +412,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { id } = req.params;
             const approvedPiecesResult = await pool.query(
-                `SELECT platform, format, content_text FROM marketing_content_pieces WHERE session_id = $1 AND owner_id = $2 AND status = 'approved' ORDER BY created_at ASC`,
+                `SELECT p.platform, p.format, p.content_text FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved' ORDER BY p.created_at ASC`,
                 [id, owner_id]
             );
 
