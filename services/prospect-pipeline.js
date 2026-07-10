@@ -482,26 +482,33 @@ export default class ProspectPipeline {
         ? `\n- SPECIFIC ISSUES WE FOUND on their current site (mention 1-2 naturally in the email body):\n${painPoints.map(p => `  • ${p}`).join('\n')}`
         : '';
 
-      const prompt = `Write a cold outreach email for a web agency that built a FREE mock website upgrade for a prospect.
+      const painPointLead = painPoints[0]
+        ? `Open with this specific, concrete observation about their current site (rephrase naturally, don't quote it): "${painPoints[0]}".`
+        : `Open with a specific, plausible observation about what's dated or underperforming on a typical ${industry || 'medical/professional'} practice site (booking friction, no mobile optimization, thin SEO, unclear services) — infer, don't fabricate specifics you don't have.`;
+
+      const prompt = `Write a cold outreach email. We are in BETA. We built a FREE, already-finished website upgrade for this specific business — unsolicited, no call booked, nothing purchased — and we want their honest reaction, not a hard sale.
 
 CONTEXT:
 - Their business: ${businessName}
-- Industry: ${industry || 'wellness/health'}
+- Industry: ${industry || 'medical/professional practice'} (psychiatry, therapy, medical, or dental — keep tone credible and professional, not "spa/wellness" breezy)
 - Contact name: ${contactName}
 - Preview URL: ${previewUrl}
-- We built them a free upgraded site with: SEO optimization, click funnel, blog posts, booking system, ${posPartnerName} integration${painPointSection}
+- What's already built and waiting for them to see: SEO-optimized click-funnel site, automated blog content, booking flow, ${posPartnerName ? posPartnerName + ' integration, ' : ''}10 design variations they can toggle between${painPointSection}
+
+DIRECT-RESPONSE PRINCIPLES (apply, don't state):
+- 50-125 words total body. Every sentence earns its place — cut anything generic.
+- ${painPointLead}
+- Frame as "we already did the work, here's the result" (dream outcome + zero effort + zero time delay on their end) — NOT "we'd like to help you." The finished preview IS the proof; don't sell what the email can just show.
+- Beta/feedback framing in Adam's own words: we're in beta, this is a look at what our system can build, we'd genuinely value their reaction — lowers pressure, invites a reply instead of a decision.
+- CTA is interest-based and reversible, never a scheduling ask: "worth 60 seconds to look?" / "curious what you think" — NOT "book a call" or "let's chat Tuesday."
+- No pressure close: they can ignore it, use it, or tell us it's not for them — all fine.
 
 EMAIL RULES:
-- Subject: Under 8 words, personalized with business name, no clickbait
-- Body: 3-4 short paragraphs maximum
-- Paragraph 1: Lead with the specific value — mention 1 real issue we found on their site, then say we built them a free upgrade that fixes it
-- Paragraph 2: What's included (1-2 sentences, bullet points ok)
-- Paragraph 3: Single clear CTA — view the preview at [URL]
-- Paragraph 4: No-pressure close — "No obligation, just wanted to share"
-- Tone: warm, direct, professional — NOT salesy, NOT generic
-- NO: "I hope this email finds you well", "synergies", corporate jargon
-- If pain points provided: reference 1-2 specific ones (not all of them)
-- Include actual preview URL as a clickable link
+- Subject: under 7 words, curiosity + their business name, no clickbait, no emoji
+- Body: 3 short paragraphs max — (1) the specific observation + we already built the fix, (2) 2-3 bullet highlights of what's included, (3) interest-based CTA + no-pressure close in one line
+- Tone: direct, warm, confident, professional — a peer sharing something useful, not a vendor pitching
+- NO: "I hope this email finds you well", "synergies", "reach out", "circle back", generic corporate filler
+- Include the actual preview URL as a clickable link
 
 Return ONLY valid JSON:
 {
@@ -536,8 +543,8 @@ Return ONLY valid JSON:
    */
   fallbackEmailHtml(contactName, businessName, previewUrl, painPoints = []) {
     const leadingPainPoint = painPoints[0]
-      ? `I noticed ${painPoints[0].toLowerCase()} — so I built a free upgraded version to show you what's possible.`
-      : `I took a look at ${businessName || 'your website'} and built a free upgraded version to show you what's possible.`;
+      ? `I noticed ${painPoints[0].toLowerCase()} — so we already built a fixed version to show you, no ask attached.`
+      : `We took a look at ${businessName || 'your site'} and already built an upgraded version — figured showing beats explaining.`;
     const offer = getBetaPublishOfferSummary();
     const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
     return `<!DOCTYPE html>
@@ -545,22 +552,18 @@ Return ONLY valid JSON:
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
   <p>Hi ${contactName || 'there'},</p>
-  <p>${leadingPainPoint} Fully optimized for SEO, with a modern booking flow and automated blog content for your industry.</p>
-  <p>We're in <strong>beta</strong> — that's why early participants get a big discount if they want to go live.</p>
-  <p>Here's what's included in the free preview:</p>
+  <p>${leadingPainPoint}</p>
   <ul>
-    <li>Modern click-funnel design (built to convert visitors to bookings)</li>
-    <li>SEO-optimized pages + industry blog posts</li>
-    <li>Integrated booking system setup</li>
-    <li>Mobile responsive + fast-loading</li>
-    <li>YouTube video sync (your videos auto-appear on the site)</li>
+    <li>10 design directions to flip through, not just one</li>
+    <li>SEO-ready pages, booking flow, and blog content already in place</li>
+    <li>Yours to look at, edit, or ignore — nothing's been charged</li>
   </ul>
   <p style="margin: 24px 0;">
     <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
-      View your free preview
+      Worth 60 seconds to look?
     </a>
   </p>
-  <p>No obligation — if you like it, beta publish is ${SITE_BUILDER_PRICING.publish.display} and includes the first ${months} months of site management. After that, care is ${SITE_BUILDER_PRICING.carePlan.display} if you want us to keep managing it.</p>
+  <p>We're in beta and genuinely want your honest reaction — good or bad. If you'd rather it go live, beta pricing is ${SITE_BUILDER_PRICING.publish.display} (includes the first ${months} months of upkeep), but there's zero obligation either way.</p>
   <p>Best,<br>The Lumin team</p>
   <hr style="margin-top: 40px; border: none; border-top: 1px solid #eee;">
   <p style="font-size: 11px; color: #999;">
