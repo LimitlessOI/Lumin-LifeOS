@@ -21,11 +21,30 @@ async function loadProspectContext(pool, clientId) {
   return result.rows[0] || { business_name: null, preview_url: null };
 }
 
-async function loadPreviewMeta(clientId) {
+async function loadPreviewMeta(clientId, pool = null) {
   const metaPath = path.join(process.cwd(), 'public/previews', String(clientId), 'meta.json');
   try {
     return JSON.parse(await fsp.readFile(metaPath, 'utf8'));
   } catch {
+    if (!pool) return null;
+    try {
+      const result = await pool.query(
+        `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      const meta = result.rows[0]?.metadata?.previewMeta;
+      if (meta && typeof meta === 'object') return meta;
+      const html = result.rows[0]?.metadata?.previewHtml;
+      if (html) {
+        return {
+          clientId,
+          businessInfo: result.rows[0]?.metadata?.businessInfo || { businessName: null },
+          previewUrl: result.rows[0]?.metadata?.previewUrl || null,
+        };
+      }
+    } catch {
+      return null;
+    }
     return null;
   }
 }
@@ -48,7 +67,7 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
         return res.status(400).json({ ok: false, error: 'clientId required' });
       }
 
-      const meta = await loadPreviewMeta(clientId);
+      const meta = await loadPreviewMeta(clientId, pool);
       if (!meta) {
         return res.status(404).json({ ok: false, error: 'Preview not found' });
       }

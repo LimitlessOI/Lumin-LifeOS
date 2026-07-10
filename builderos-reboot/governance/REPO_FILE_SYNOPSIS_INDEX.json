@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T12:31:54.890Z",
+  "generated_at": "2026-07-10T12:36:41.290Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11409,
+  "file_count": 11410,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 79182,
-      "mtime": "2026-07-10T12:31:21.521Z",
-      "indexed_at": "2026-07-10T12:31:54.890Z"
+      "bytes": 79478,
+      "mtime": "2026-07-10T12:36:39.636Z",
+      "indexed_at": "2026-07-10T12:36:41.290Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -62910,6 +62910,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/PATH_TO_10_T02_LEAN_BUILT.json",
+      "synopsis": "Product receipt — PATH TO 10 T02 LEAN BUILT.",
+      "bytes": 602,
+      "mtime": "2026-07-10T12:36:36.370Z",
+      "indexed_at": "2026-07-10T12:36:41.290Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/PATH_TO_10_T05_FOUNDER_MEMORY.json",
       "synopsis": "Product receipt — PATH TO 10 T05 FOUNDER MEMORY.",
       "bytes": 591,
@@ -66105,9 +66113,9 @@
     {
       "path": "routes/site-builder-checkout-routes.js",
       "synopsis": "Site Builder publish checkout routes ($49 entry product).",
-      "bytes": 4634,
-      "mtime": "2026-07-07T21:41:41.300Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 5278,
+      "mtime": "2026-07-10T12:36:13.513Z",
+      "indexed_at": "2026-07-10T12:36:41.290Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -66163,9 +66171,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 28514,
-      "mtime": "2026-07-10T12:30:28.192Z",
-      "indexed_at": "2026-07-10T12:31:54.890Z",
+      "bytes": 29906,
+      "mtime": "2026-07-10T12:36:28.390Z",
+      "indexed_at": "2026-07-10T12:36:41.290Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85132,9 +85140,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 25475,
-      "mtime": "2026-07-10T12:30:34.655Z",
-      "indexed_at": "2026-07-10T12:31:54.890Z",
+      "bytes": 25722,
+      "mtime": "2026-07-10T12:36:01.419Z",
+      "indexed_at": "2026-07-10T12:36:41.290Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85683,9 +85691,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 74563,
-      "mtime": "2026-07-10T12:31:13.432Z",
-      "indexed_at": "2026-07-10T12:31:54.890Z",
+      "bytes": 74581,
+      "mtime": "2026-07-10T12:35:55.537Z",
+      "indexed_at": "2026-07-10T12:36:41.290Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

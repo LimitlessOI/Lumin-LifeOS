@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Lean no-AI prospect template + SMTP 465/587 failover. |
+| **Last Updated** | 2026-07-10 — Persist previewHtml in DB; serve /previews from DB on disk miss. |
 
 ---
 

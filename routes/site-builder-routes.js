@@ -127,8 +127,42 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     express.static(path.join(process.cwd(), 'public', 'previews'), {
       dotfiles: 'ignore',
       index: 'index.html',
+      fallthrough: true,
     })
   );
+
+  // DB fallback when ephemeral disk miss (multi-instance / redeploy)
+  app.get('/previews/:clientId/index.html', async (req, res, next) => {
+    try {
+      if (!pool) return next();
+      const clientId = String(req.params.clientId || '');
+      if (!clientId || !/^[\w-]+$/.test(clientId)) return next();
+      const result = await pool.query(
+        `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      const html = result.rows[0]?.metadata?.previewHtml;
+      if (!html || typeof html !== 'string') return next();
+      const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
+      await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
+      await fsp.writeFile(path.join(deployDir, 'index.html'), html).catch(() => null);
+      if (result.rows[0]?.metadata?.previewMeta) {
+        await fsp.writeFile(
+          path.join(deployDir, 'meta.json'),
+          JSON.stringify(result.rows[0].metadata.previewMeta, null, 2)
+        ).catch(() => null);
+      }
+      res.set('Content-Type', 'text/html; charset=utf-8');
+      res.set('X-Preview-Source', 'db');
+      return res.send(html);
+    } catch {
+      return next();
+    }
+  });
+
+  app.get('/previews/:clientId', (req, res) => {
+    res.redirect(302, `/previews/${encodeURIComponent(req.params.clientId)}/index.html`);
+  });
 
   /**
    * POST /api/v1/sites/build

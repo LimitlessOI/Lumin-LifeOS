@@ -402,6 +402,7 @@ export default class SiteBuilder {
         qualityReport,
         benchmark,
         presence,
+        siteHtml,
         metadata,
       };
     } catch (err) {

@@ -240,6 +240,11 @@ export default class ProspectPipeline {
         ...(buildResult.metadata || {}),
         qualityReport,
         buildCompletedAt: new Date().toISOString(),
+        // Survive multi-instance / redeploy ephemeral disk wipe
+        previewHtml: typeof buildResult.siteHtml === 'string'
+          ? buildResult.siteHtml.slice(0, 400_000)
+          : null,
+        previewMeta: buildResult.metadata || null,
       },
     });
 
