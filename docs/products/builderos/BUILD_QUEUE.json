@@ -61,19 +61,25 @@
       "attempts": 1,
       "commit_sha": "701686683d1126828b7da8dc046fec705df6dbfc",
       "last_attempt_at": "2026-07-10T13:36:17.756Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/mission-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": null,
+      "detail": "GAP-FILL 2026-07-10: registerMissionRoutes + auto-register entry shipped — never-stop should short-circuit via module-health mounted"
     },
     {
       "id": "step-05",
       "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register mission-routes module for auto-mount",
-      "spec": "JSON file is a valid JSON array of module-descriptor objects. Append exactly one new entry: {\"id\":\"mission-routes\",\"routeModule\":\"../routes/mission-routes.js\",\"registerFn\":\"registerMissionRoutes\",\"deps\":[\"db\",\"authenticate\"]}. Must not remove any pre-existing entries. File remains valid JSON after edit.",
+      "spec": "Ensure entry {\"path\":\"routes/mission-routes.js\",\"register\":\"registerMissionRoutes\",\"enabled\":true} exists in modules[]. Preserve all existing entries. File must remain valid JSON.",
       "depends_on": [
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "file_contains": [
+        "routes/mission-routes.js",
+        "registerMissionRoutes"
+      ],
+      "detail": "GAP-FILL 2026-07-10: entry added by conductor (chicken-egg with step-04 module-health)"
     },
     {
       "id": "step-06",

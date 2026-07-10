@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Path-to-10 T05 PASS: direct Chair agent injects FOUNDER MEMORY (receipt PATH_TO_10_T05_FOUNDER_MEMORY). |
+| **Last Updated** | 2026-07-10 — GAP-FILL mission-routes: registerMissionRoutes + auto-register so never-stop can prove LIVE. |
 
 ### Related docs (this product)
 
@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-10 | **GAP-FILL mission-routes mount** — rewrote `routes/mission-routes.js` to export `registerMissionRoutes` (8 `/api/missions*` routes against live mission-ledger); added auto-register entry. Cleared step-04 auto-register last_error; step-05 file_contains for mission entry. | Never-stop spun on builderos step-04: file existed as `createMissionRoutes` but was never auto-registered → module-health false done forever; system appeared "building" with total_runs:0. | ✅ local mount smoke | tip-sync + never-stop run-once |
 | 2026-07-10 | **Auto-reg revive immediate after s10 DONE** — skip 15m cooldown once register-config sibling is done. | s10 done but s7/s8/s9 still waiting cooldown. | ✅ | push |
 | 2026-07-10 | **TC auto-register GAP-FILL** — s10 false-done on shared config file; conductor added real TC module entries + file_contains on s10. | Pre-existing short-circuit used wrong last-touch SHA. | ✅ | tip redeploy |
 | 2026-07-10 | **Auto-reg revive fix** — do not revive module-not-mounted route steps until register-config sibling is DONE (was reviving while s10 pending → starved s8/s9). | Local once kept re-picking s7 after honest auto-reg block. | ✅ selectNext→s8 | push |

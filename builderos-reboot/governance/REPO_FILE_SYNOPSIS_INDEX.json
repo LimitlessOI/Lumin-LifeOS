@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T18:59:11.824Z",
+  "generated_at": "2026-07-10T19:09:50.101Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11414,
   "files": [
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 8525,
-      "mtime": "2026-07-10T18:14:18.192Z",
-      "indexed_at": "2026-07-10T18:16:13.149Z",
+      "bytes": 8893,
+      "mtime": "2026-07-10T19:08:36.654Z",
+      "indexed_at": "2026-07-10T19:09:50.101Z",
       "synopsis_index_only": true
     },
     {
@@ -36741,9 +36741,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 62163,
-      "mtime": "2026-07-10T18:15:22.141Z",
-      "indexed_at": "2026-07-10T18:16:13.149Z"
+      "bytes": 62529,
+      "mtime": "2026-07-10T19:08:56.378Z",
+      "indexed_at": "2026-07-10T19:09:50.101Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38848,9 +38848,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 172501,
-      "mtime": "2026-07-10T10:52:16.212Z",
-      "indexed_at": "2026-07-10T10:52:17.078Z"
+      "bytes": 173030,
+      "mtime": "2026-07-10T19:09:01.718Z",
+      "indexed_at": "2026-07-10T19:09:50.101Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -65947,10 +65947,10 @@
     },
     {
       "path": "routes/mission-routes.js",
-      "synopsis": "routes/mission-routes.js",
-      "bytes": 5598,
-      "mtime": "2026-06-30T16:04:04.740Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "synopsis": "Mission Runtime Express routes — registerMissionRoutes for auto-mount.",
+      "bytes": 6846,
+      "mtime": "2026-07-10T19:08:14.826Z",
+      "indexed_at": "2026-07-10T19:09:50.101Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -67799,9 +67799,9 @@
     {
       "path": "scripts/lifeos-direct-build-smoke-test.mjs",
       "synopsis": "This script provides a direct build smoke test for the LifeOS platform.",
-      "bytes": 6295,
-      "mtime": "2026-07-10T18:59:11.824Z",
-      "indexed_at": "2026-07-10T18:59:11.824Z",
+      "bytes": 6246,
+      "mtime": "2026-07-10T06:28:08.439Z",
+      "indexed_at": "2026-07-10T08:50:09.908Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

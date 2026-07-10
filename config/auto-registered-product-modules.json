@@ -1,7 +1,7 @@
 {
   "schema": "auto_registered_product_modules_v1",
   "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file — no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
-  "updated_at": "2026-07-10T09:59:32.605Z",
+  "updated_at": "2026-07-10T19:10:00.000Z",
   "modules": [
     {
       "path": "routes/lifeos-finance-routes.js",
@@ -120,6 +120,12 @@
       "register": "registerTcBillingRoutes",
       "enabled": true,
       "note": "TC Service step-09 billing subscribe/webhook/status. Auto-register required for module-health (built but unreachable = false done)."
+    },
+    {
+      "path": "routes/mission-routes.js",
+      "register": "registerMissionRoutes",
+      "enabled": true,
+      "note": "BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) — never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance."
     }
   ]
 }

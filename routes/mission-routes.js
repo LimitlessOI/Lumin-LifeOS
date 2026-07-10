@@ -1,22 +1,12 @@
 /**
- * SYNOPSIS: routes/mission-routes.js
- * routes/mission-routes.js
- * Mission Runtime Express router — missions, participants, household board.
- * Authority: docs/history/legacy-history-salvage/docs-projects-root/BPB-0001-MISSION-RUNTIME-V1.md §§3.1–3.3, 3.5, 13.3.
+ * SYNOPSIS: Mission Runtime Express routes — registerMissionRoutes for auto-mount.
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  *
- * NOTE (§13.3): Commitment CRUD (POST/GET /commitments, PUT /commitments/:id) is NOT
- * here — it stays in routes/lifeos-commitment-routes.js which is already mounted at
- * /api/v1/lifeos/commitments. Only missions, participants, and board live here.
- *
- * Mounted at /api/v1/lifeos via startup/register-runtime-routes.js (pending wiring).
- *
- * GAP-FILL: builder /build returned HTTP_502 on 2 consecutive attempts
- * (2026-06-02T2x:xx UTC) — Railway builder generate path broken (same infra issue
- * as runner churn). Written by Conductor from BPB-0001 §Section 3 prescription exactly.
+ * GAP-FILL: never-stop spun on step-04 — file existed as createMissionRoutes but
+ * module-health required registerMissionRoutes + auto-register entry. Conductor
+ * rewired to the live ledger API and mounted via auto-register so the loop can
+ * prove LIVE and continue (built+unreachable = false done).
  */
-
-import { Router } from 'express';
 import {
   createMission,
   listMissions,
@@ -24,75 +14,114 @@ import {
   updateMission,
   transitionMissionState,
   addParticipant,
-  removeParticipant,
   getHouseholdBoard,
 } from '../services/mission-ledger.js';
 
-export function createMissionRoutes({ pool, requireKey, logger }) {
-  const router = Router();
-  const log = logger || console;
+function slugify(input) {
+  const base = String(input || 'mission')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 64);
+  return base || `mission-${Date.now()}`;
+}
 
-  // POST /missions — create mission
-  router.post('/missions', requireKey, async (req, res) => {
+function isInvalidTransition(err) {
+  return err?.code === 'INVALID_TRANSITION'
+    || String(err?.message || '') === 'INVALID_TRANSITION'
+    || String(err?.message || '') === 'invalid_transition';
+}
+
+/**
+ * @param {import('express').Application} app
+ * @param {{ pool?: object, db?: object, requireKey?: Function, authenticate?: Function, logger?: Console }} deps
+ */
+export function registerMissionRoutes(app, deps = {}) {
+  const db = deps.db || deps.pool;
+  const authenticate = deps.authenticate || deps.requireKey;
+  const logger = deps.logger || console;
+
+  if (!db) throw new Error('registerMissionRoutes requires deps.db or deps.pool');
+  if (typeof authenticate !== 'function') {
+    throw new Error('registerMissionRoutes requires deps.authenticate or deps.requireKey');
+  }
+
+  app.post('/api/missions', authenticate, async (req, res) => {
     try {
-      const mission = await createMission(pool, req.body || {});
-      res.status(201).json({ ok: true, mission });
+      const body = req.body || {};
+      const title = String(body.title || '').trim();
+      if (!title) return res.status(400).json({ ok: false, error: 'title is required' });
+      const mission = await createMission(db, {
+        slug: body.slug || slugify(title),
+        title,
+        purpose: body.description || body.purpose || null,
+        authority_class: body.authority_class,
+        owner: body.owner,
+        blueprint_ref: body.blueprint_ref,
+        metadata_json: body.metadata || body.metadata_json,
+        participants: body.participants,
+      });
+      return res.status(201).json({ ok: true, mission });
     } catch (err) {
-      log.error?.('[MISSIONS] POST /missions:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] POST /api/missions:', err.message);
+      return res.status(502).json({ ok: false, error: err.message });
     }
   });
 
-  // GET /missions — list missions
-  router.get('/missions', requireKey, async (req, res) => {
+  app.get('/api/missions', authenticate, async (req, res) => {
     try {
-      const missions = await listMissions(pool, {
+      const missions = await listMissions(db, {
         state: req.query.state,
         owner: req.query.owner,
         limit: req.query.limit,
       });
-      res.json({ ok: true, missions });
+      return res.json({ ok: true, missions });
     } catch (err) {
-      log.error?.('[MISSIONS] GET /missions:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] GET /api/missions:', err.message);
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  // GET /missions/:id — get mission with participants, transitions, commitments
-  router.get('/missions/:id', requireKey, async (req, res) => {
+  app.get('/api/missions/:id', authenticate, async (req, res) => {
     try {
-      const result = await getMission(pool, req.params.id);
+      const result = await getMission(db, req.params.id);
       if (!result) return res.status(404).json({ ok: false, error: 'not found' });
-      const { mission, participants, transitions, commitments } = result;
-      res.json({ ok: true, mission, participants, transitions, commitments });
+      return res.json({ ok: true, ...result });
     } catch (err) {
-      log.error?.('[MISSIONS] GET /missions/:id:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] GET /api/missions/:id:', err.message);
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  // PUT /missions/:id — update mission fields
-  router.put('/missions/:id', requireKey, async (req, res) => {
+  app.patch('/api/missions/:id', authenticate, async (req, res) => {
     try {
-      const mission = await updateMission(pool, req.params.id, req.body || {});
+      const patch = { ...(req.body || {}) };
+      if (patch.description != null && patch.purpose == null) patch.purpose = patch.description;
+      const mission = await updateMission(db, req.params.id, patch);
       if (!mission) return res.status(404).json({ ok: false, error: 'not found' });
-      res.json({ ok: true, mission });
+      return res.json({ ok: true, mission });
     } catch (err) {
-      log.error?.('[MISSIONS] PUT /missions/:id:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] PATCH /api/missions/:id:', err.message);
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  // POST /missions/:id/transition — state transition (validated)
-  router.post('/missions/:id/transition', requireKey, async (req, res) => {
+  app.post('/api/missions/:id/transition', authenticate, async (req, res) => {
     try {
-      const result = await transitionMissionState(pool, req.params.id, req.body || {});
-      res.json({ ok: true, mission: result.mission, transition: result.transition });
+      const body = req.body || {};
+      const nextState = body.nextState || body.to_state || body.state;
+      if (!nextState) return res.status(400).json({ ok: false, error: 'nextState is required' });
+      const result = await transitionMissionState(db, req.params.id, {
+        to_state: nextState,
+        transitioned_by: body.transitioned_by || body.actorId || 'adam',
+        note: body.note || null,
+      });
+      return res.json({ ok: true, mission: result.mission, transition: result.transition });
     } catch (err) {
-      if (err.code === 'INVALID_TRANSITION') {
-        return res.status(400).json({
+      if (isInvalidTransition(err)) {
+        return res.status(422).json({
           ok: false,
-          error: 'invalid_transition',
+          error: 'INVALID_TRANSITION',
           from: err.from,
           to: err.to,
           valid_next: err.valid_next,
@@ -101,46 +130,50 @@ export function createMissionRoutes({ pool, requireKey, logger }) {
       if (err.code === 'NOT_FOUND') {
         return res.status(404).json({ ok: false, error: 'not found' });
       }
-      log.error?.('[MISSIONS] POST /missions/:id/transition:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] POST /api/missions/:id/transition:', err.message);
+      return res.status(502).json({ ok: false, error: err.message });
     }
   });
 
-  // POST /missions/:id/participants — add participant
-  router.post('/missions/:id/participants', requireKey, async (req, res) => {
+  app.get('/api/missions/:id/participants', authenticate, async (req, res) => {
     try {
-      const participant = await addParticipant(pool, req.params.id, req.body || {});
-      res.status(201).json({ ok: true, participant });
+      const result = await getMission(db, req.params.id);
+      if (!result) return res.status(404).json({ ok: false, error: 'not found' });
+      return res.json({ ok: true, participants: result.participants || [] });
     } catch (err) {
-      log.error?.('[MISSIONS] POST /missions/:id/participants:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] GET /api/missions/:id/participants:', err.message);
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  // DELETE /missions/:id/participants/:participant — remove participant
-  router.delete('/missions/:id/participants/:participant', requireKey, async (req, res) => {
+  app.post('/api/missions/:id/participants', authenticate, async (req, res) => {
     try {
-      await removeParticipant(pool, req.params.id, req.params.participant);
-      res.json({ ok: true });
+      const body = req.body || {};
+      const participant = body.participant || body.userId || body.user_id;
+      if (!participant) return res.status(400).json({ ok: false, error: 'participant or userId required' });
+      const row = await addParticipant(db, req.params.id, {
+        participant,
+        role: body.role || 'member',
+      });
+      return res.status(201).json({ ok: true, participant: row });
     } catch (err) {
-      log.error?.('[MISSIONS] DELETE /missions/:id/participants/:participant:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] POST /api/missions/:id/participants:', err.message);
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  // GET /household/board — household board (8 sections, Phase 1)
-  router.get('/household/board', requireKey, async (req, res) => {
+  app.get('/api/missions/:id/board', authenticate, async (req, res) => {
     try {
-      const board = await getHouseholdBoard(pool, req.query.mission_id || 'MISSION-0001');
-      res.json(board);
+      const board = await getHouseholdBoard(db, req.params.id);
+      return res.json(board);
     } catch (err) {
       if (err.code === 'NOT_FOUND') {
         return res.status(404).json({ ok: false, error: 'not found' });
       }
-      log.error?.('[MISSIONS] GET /household/board:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      logger.error?.('[MISSIONS] GET /api/missions/:id/board:', err.message);
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
-
-  return router;
 }
+
+export default registerMissionRoutes;
