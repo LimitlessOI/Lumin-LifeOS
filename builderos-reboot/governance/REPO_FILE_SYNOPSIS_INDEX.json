@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:59:47.331Z",
+  "generated_at": "2026-07-10T04:01:06.523Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11392,
   "files": [
@@ -66173,9 +66173,9 @@
     {
       "path": "routes/tc-intake-routes.js",
       "synopsis": "Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).",
-      "bytes": 1976,
-      "mtime": "2026-07-10T03:59:47.331Z",
-      "indexed_at": "2026-07-10T03:59:47.331Z"
+      "bytes": 1812,
+      "mtime": "2026-07-10T04:01:06.523Z",
+      "indexed_at": "2026-07-10T04:01:06.523Z"
     },
     {
       "path": "routes/tc-r4r-routes.js",

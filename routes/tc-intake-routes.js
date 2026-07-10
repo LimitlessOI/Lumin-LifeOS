@@ -1,15 +1,12 @@
 /**
  * SYNOPSIS: Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).
  */
-import { tcIntakeRunner } from '../services/tc-intake-runner.js';
+import { runIntake } from '../services/tcIntakeRunner.js';
 
 export function registerTcIntakeRoutes(app, deps) {
-  const requireAuth = deps.requireAuth || deps.requireKey;
-  if (typeof requireAuth !== 'function') {
-    throw new Error('Tc intake routes require deps.requireAuth or deps.requireKey');
-  }
+  const authMiddleware = deps?.requireAuth || deps?.requireKey;
 
-  app.post('/api/tc/intake/run', requireAuth, async (req, res) => {
+  app.post('/api/tc/intake/run', authMiddleware, async (req, res) => {
     try {
       const { transactionId, emailMessageId } = req.body || {};
 
@@ -19,44 +16,44 @@ export function registerTcIntakeRoutes(app, deps) {
         });
       }
 
-      const result = await tcIntakeRunner.runIntake(deps, {
+      const result = await runIntake(deps, {
         transactionId,
         emailMessageId,
       });
 
       return res.status(200).json({
         intakeRunId: result?.intakeRunId ?? result?.id ?? null,
-        status: result?.status ?? 'unknown',
+        status: result?.status ?? null,
       });
     } catch (error) {
-      deps.logger?.error?.({ err: error }, 'tc intake run failed');
+      deps?.logger?.error?.({ err: error }, 'tc intake run failed');
       return res.status(500).json({
-        error: 'failed to run intake',
+        error: 'Failed to run intake',
       });
     }
   });
 
-  app.get('/api/tc/intake/runs', requireAuth, async (_req, res) => {
+  app.get('/api/tc/intake/runs', authMiddleware, async (req, res) => {
     try {
-      const db = deps.db || deps.pool;
+      const db = deps?.db || deps?.pool;
       if (!db?.query) {
-        throw new Error('Database dependency missing: expected deps.db or deps.pool');
+        return res.status(500).json({ error: 'Database unavailable' });
       }
 
-      const result = await db.query(
-        `SELECT id, transaction_id, email_message_id, skyslope_file_id, status, run_log, created_at, updated_at
-         FROM intake_runs
-         ORDER BY created_at DESC
-         LIMIT 20`
+      const { rows } = await db.query(
+        `
+          SELECT id, transaction_id, email_message_id, skyslope_file_id, status, run_log, created_at, updated_at
+          FROM intake_runs
+          ORDER BY created_at DESC
+          LIMIT 20
+        `
       );
 
-      return res.status(200).json({
-        runs: result.rows || [],
-      });
+      return res.status(200).json({ runs: rows });
     } catch (error) {
-      deps.logger?.error?.({ err: error }, 'tc intake runs fetch failed');
+      deps?.logger?.error?.({ err: error }, 'tc intake runs fetch failed');
       return res.status(500).json({
-        error: 'failed to fetch intake runs',
+        error: 'Failed to load intake runs',
       });
     }
   });
