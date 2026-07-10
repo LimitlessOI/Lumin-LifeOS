@@ -817,14 +817,23 @@ export async function discoverProductExpansionWork(options = {}) {
     });
   }
 
-  items.push({
-    id: 'smos_intake_expansion',
-    kind: 'intake_blueprint',
-    priority: 4,
-    product: 'SocialMediaOS',
-    session_id: SOCIALMEDIAOS_INTAKE_SESSION,
-    detail: 'Run intake blueprint idempotent or next expansion steps',
-  });
+  // FILLER ONLY (priority 7): MarketingOS Phase 1/2/intel + Layer B are already
+  // LIVE on /api/v1/marketing/*. This legacy intake must NEVER outrank
+  // plan_build_queue (priority ~5–6) or product_build_step (~2.x) — otherwise the
+  // loop "succeeds" every tick on a ~300ms no-op and never plans the next product.
+  const hasActionableBuildOrPlan = items.some(
+    (i) => i && (i.kind === 'product_build_step' || i.kind === 'plan_build_queue'),
+  );
+  if (!hasActionableBuildOrPlan) {
+    items.push({
+      id: 'smos_intake_expansion',
+      kind: 'intake_blueprint',
+      priority: 7,
+      product: 'SocialMediaOS',
+      session_id: SOCIALMEDIAOS_INTAKE_SESSION,
+      detail: 'Run intake blueprint idempotent or next expansion steps (filler — only when no build/plan work)',
+    });
+  }
 
   items.sort((a, b) => a.priority - b.priority);
   return items;
