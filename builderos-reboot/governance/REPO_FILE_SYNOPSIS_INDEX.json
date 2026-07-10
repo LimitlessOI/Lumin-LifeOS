@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T12:27:34.028Z",
+  "generated_at": "2026-07-10T12:31:54.890Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11409,
   "files": [
@@ -31310,9 +31310,9 @@
     {
       "path": "core/notification-service.js",
       "synopsis": "NotificationService",
-      "bytes": 12926,
-      "mtime": "2026-07-09T03:33:13.919Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 13624,
+      "mtime": "2026-07-10T12:30:57.316Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -36741,9 +36741,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 61332,
-      "mtime": "2026-07-10T11:50:17.215Z",
-      "indexed_at": "2026-07-10T11:50:47.055Z"
+      "bytes": 61656,
+      "mtime": "2026-07-10T12:31:44.742Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 78900,
-      "mtime": "2026-07-10T12:20:58.731Z",
-      "indexed_at": "2026-07-10T12:21:00.038Z"
+      "bytes": 79182,
+      "mtime": "2026-07-10T12:31:21.521Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -39729,9 +39729,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 104402,
-      "mtime": "2026-07-10T10:18:28.171Z",
-      "indexed_at": "2026-07-10T10:18:42.343Z"
+      "bytes": 104648,
+      "mtime": "2026-07-10T12:31:33.767Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66163,9 +66163,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 28462,
-      "mtime": "2026-07-10T12:12:40.862Z",
-      "indexed_at": "2026-07-10T12:12:48.160Z",
+      "bytes": 28514,
+      "mtime": "2026-07-10T12:30:28.192Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85132,9 +85132,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 25297,
-      "mtime": "2026-07-10T12:20:58.728Z",
-      "indexed_at": "2026-07-10T12:21:00.038Z",
+      "bytes": 25475,
+      "mtime": "2026-07-10T12:30:34.655Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85639,9 +85639,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 12115,
-      "mtime": "2026-07-10T12:12:24.315Z",
-      "indexed_at": "2026-07-10T12:12:48.160Z",
+      "bytes": 12203,
+      "mtime": "2026-07-10T12:30:27.004Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85683,9 +85683,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 69613,
-      "mtime": "2026-07-10T12:12:29.146Z",
-      "indexed_at": "2026-07-10T12:12:48.160Z",
+      "bytes": 74563,
+      "mtime": "2026-07-10T12:31:13.432Z",
+      "indexed_at": "2026-07-10T12:31:54.890Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

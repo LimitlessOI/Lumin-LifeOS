@@ -8,6 +8,10 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — Keep going: lean no-AI prospect + SMTP failover
+
+Adam: still not FULLY_MACHINE_READY — do not stop. Shipped `skipAi` lean deterministic preview (bypass hung AI generate/OOM) + SMTP 465↔587 failover. Next: tip sync → lean prospect → built/sent receipt; never-stop still 0 runs on tip.
+
 ## [FIX] Update 2026-07-10 — T02 hang + resend path (FULLY_MACHINE_READY still false)
 
 Adam: is A→Z autonomy true now? **No** — `FULLY_MACHINE_READY` still false. Keep going. Shipped Site Builder GAP-FILL: resend `contactEmail` override, PATCH contact_email, reclaim `staleMs`, 3m claim renew on heartbeat, puppeteer/generate timeouts, mid-build progress. Tip never-stop run-once 502'd; tip has planner keys but `total_runs:0`. Next: tip sync → resend built preview → first-dollar receipt; cold-coder still open.

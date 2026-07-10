@@ -72,24 +72,25 @@ export class NotificationService {
     return { hostname, host, port, secure: port === 465 };
   }
 
-  _getSmtpTransporter() {
-    if (this._smtpTransporter) return this._smtpTransporter;
-    const { hostname, host, port, secure } = this._resolveSmtpConnection();
-    this._smtpTransporter = nodemailer.createTransport({
+  _getSmtpTransporter({ portOverride = null } = {}) {
+    const { hostname, host, port: defaultPort, secure: defaultSecure } = this._resolveSmtpConnection();
+    const port = portOverride || defaultPort;
+    const secure = port === 465;
+    return nodemailer.createTransport({
       host,
       port,
       secure,
       family: 4,
-      connectionTimeout: 20000,
-      greetingTimeout: 20000,
+      connectionTimeout: 12000,
+      greetingTimeout: 12000,
       socketTimeout: 20000,
-      tls: { servername: hostname },
+      tls: { servername: hostname, minVersion: 'TLSv1.2' },
+      requireTLS: port === 587,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
-    return this._smtpTransporter;
   }
 
   /**
@@ -241,37 +242,51 @@ export class NotificationService {
         return { success: false, error: "SMTP_USER or SMTP_PASS not set" };
       }
 
-      try {
-        const transporter = this._getSmtpTransporter();
-        const info = await transporter.sendMail({
-          from: fromAddr,
-          to: recipient,
-          subject,
-          text: text || undefined,
-          html: html || undefined,
-        });
+      const portsToTry = [];
+      const preferred = Number(process.env.SMTP_PORT || 465);
+      portsToTry.push(preferred);
+      if (preferred !== 587) portsToTry.push(587);
+      if (preferred !== 465) portsToTry.push(465);
 
-        await this.logOutreach({
-          campaignId, channel: "email", recipient, subject,
-          body: text || html || "", status: "sent", externalId: info.messageId,
-        });
-        await this.logEmailEvent({
-          provider: "smtp", eventType: "sent", messageId: info.messageId,
-          recipient, payload: safeJson({ at: nowIso(), messageId: info.messageId }), severity: "info",
-        });
+      let lastError = null;
+      for (const port of portsToTry) {
+        try {
+          const transporter = this._getSmtpTransporter({ portOverride: port });
+          const info = await transporter.sendMail({
+            from: fromAddr,
+            to: recipient,
+            subject,
+            text: text || undefined,
+            html: html || undefined,
+          });
 
-        return { success: true, provider: "smtp", messageId: info.messageId };
-      } catch (e) {
-        await this.logOutreach({
-          campaignId, channel: "email", recipient, subject,
-          body: bodyText, status: "failed",
-        });
-        await this.logEmailEvent({
-          provider: "smtp", eventType: "send_failed", messageId: null,
-          recipient, payload: safeJson({ at: nowIso(), error: e.message }), severity: "error",
-        });
-        return { success: false, error: e.message };
+          await this.logOutreach({
+            campaignId, channel: "email", recipient, subject,
+            body: text || html || "", status: "sent", externalId: info.messageId,
+          });
+          await this.logEmailEvent({
+            provider: "smtp", eventType: "sent", messageId: info.messageId,
+            recipient, payload: safeJson({ at: nowIso(), messageId: info.messageId, port }), severity: "info",
+          });
+
+          return { success: true, provider: "smtp", messageId: info.messageId, port };
+        } catch (e) {
+          lastError = e;
+          const msg = String(e.message || e);
+          const retryable = /timeout|ETIMEDOUT|ECONNREFUSED|ECONNRESET|ESOCKET|Greeting never received/i.test(msg);
+          if (!retryable) break;
+        }
       }
+
+      await this.logOutreach({
+        campaignId, channel: "email", recipient, subject,
+        body: bodyText, status: "failed",
+      });
+      await this.logEmailEvent({
+        provider: "smtp", eventType: "send_failed", messageId: null,
+        recipient, payload: safeJson({ at: nowIso(), error: lastError?.message }), severity: "error",
+      });
+      return { success: false, error: lastError?.message || "SMTP send failed" };
     }
 
     if (provider !== "postmark") {

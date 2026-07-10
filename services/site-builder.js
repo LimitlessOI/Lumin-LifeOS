@@ -69,7 +69,7 @@ const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '1400
 // NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
 const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'openai_gpt';
 const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'claude_sonnet';
-const GENERATION_TIMEOUT_MS = Math.max(30_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '120000'));
+const GENERATION_TIMEOUT_MS = Math.max(15_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '60000'));
 const PUPPETEER_LAUNCH_TIMEOUT_MS = Math.max(5_000, Number(process.env.SITE_BUILDER_PUPPETEER_LAUNCH_TIMEOUT_MS || '25000'));
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
 // reviews, ratings, and facts. Fails closed (no data) when no search provider key is set —
@@ -80,8 +80,96 @@ function withTimeout(promise, ms, label) {
   let timer;
   const timeout = new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+    // Ensure timer can fire even if the event loop is busy with a long AI call.
+    if (typeof timer?.unref === 'function') timer.unref();
   });
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Deterministic lean preview — no AI. Used for first-dollar / hang-bypass probes. */
+export function renderLeanProspectHtml(info = {}, posPartner = null) {
+  const partnerObj = posPartner || { name: 'booking', url: '#book' };
+  const name = escapeHtml(info.businessName || 'Your Business');
+  const tagline = escapeHtml(info.tagline || 'A clearer website for the work you already do');
+  const industry = escapeHtml(info.industry || 'wellness');
+  const location = escapeHtml(info.location || '');
+  const primary = escapeHtml(info.primaryColor || '#0F766E');
+  const accent = escapeHtml(info.accentColor || '#F59E0B');
+  const services = (info.services || ['Consultation', 'Care', 'Follow-up']).slice(0, 6).map(escapeHtml);
+  const pains = (info.painPoints || ['Hard to book online', 'Site feels outdated']).slice(0, 3).map(escapeHtml);
+  const booking = escapeHtml(info.bookingUrl || partnerObj.url || '#book');
+  const partner = escapeHtml(partnerObj.name || 'booking');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>${name} | ${location || industry}</title>
+<meta name="description" content="${tagline}"/>
+<script src="${TAILWIND_CDN}"></script>
+<style>
+:root{--p:${primary};--a:${accent}}
+:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:40}
+</style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+<header class="sticky top-0 bg-white/95 border-b border-stone-200">
+  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+    <strong>${name}</strong>
+    <a href="${booking}" class="px-4 py-2 rounded-lg text-white font-semibold" style="background:var(--p)">Book free call</a>
+  </div>
+</header>
+<main>
+  <section class="max-w-5xl mx-auto px-4 py-16 md:py-24">
+    <p class="text-sm uppercase tracking-wide text-stone-500">${industry}${location ? ` · ${location}` : ''}</p>
+    <h1 class="mt-3 text-4xl md:text-5xl font-semibold leading-tight">${tagline}</h1>
+    <p class="mt-4 text-lg text-stone-600 max-w-2xl">This is a free preview upgrade for ${name}. No invented claims — just a clearer path to book.</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="${booking}" class="px-5 py-3 rounded-lg text-white font-semibold" style="background:var(--p)">Book your free consultation</a>
+      <a href="#services" class="px-5 py-3 rounded-lg border border-stone-300 font-semibold">See services</a>
+    </div>
+  </section>
+  <section class="bg-white border-y border-stone-200 py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl font-semibold">Does this sound familiar?</h2>
+      <div class="mt-6 grid md:grid-cols-3 gap-4">
+        ${pains.map((p) => `<div class="p-4 rounded-xl border border-stone-200 bg-stone-50"><p>${p}</p></div>`).join('')}
+      </div>
+    </div>
+  </section>
+  <section id="services" class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-2xl font-semibold">How we help</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4">
+      ${services.map((s) => `<div class="p-5 rounded-xl border border-stone-200"><h3 class="font-semibold">${s}</h3><p class="mt-2 text-stone-600">Request details or book a consult — pricing shared when confirmed.</p><a href="${booking}" class="inline-block mt-4 font-semibold" style="color:var(--p)">Book</a></div>`).join('')}
+    </div>
+  </section>
+  <section class="py-16 text-white" style="background:var(--p)">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-semibold">Ready to start?</h2>
+      <p class="mt-3 opacity-90">Book through ${partner} when you are ready.</p>
+      <a href="${booking}" class="inline-block mt-6 px-6 py-3 rounded-lg font-semibold bg-white text-stone-900">Book now</a>
+    </div>
+  </section>
+</main>
+<footer class="max-w-5xl mx-auto px-4 py-10 text-sm text-stone-500">
+  <p>${name}${location ? ` · ${location}` : ''}</p>
+  <p class="mt-2">Preview generated by Site Builder. Facts only from provided business profile.</p>
+</footer>
+<div class="sticky-cta md:hidden p-3 bg-white border-t border-stone-200">
+  <a href="${booking}" class="block text-center px-4 py-3 rounded-lg text-white font-semibold" style="background:var(--p)">Book free call</a>
+</div>
+</body>
+</html>`;
 }
 
 // POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
@@ -756,6 +844,11 @@ Return ONLY valid JSON:
    */
   async generateSiteHtml(info, options = {}) {
     const { clientId, posPartner, designBrief } = options;
+    const useLean = options.skipAi === true || options.leanTemplate === true;
+    if (useLean) {
+      logger.info('[SITE] lean template (no AI)', { clientId, businessName: info?.businessName });
+      return renderLeanProspectHtml(info, posPartner);
+    }
     const primary = info.primaryColor || '#7C3AED';
     const accent = info.accentColor || '#EC4899';
     const designIntel = await this.loadDesignIntel();

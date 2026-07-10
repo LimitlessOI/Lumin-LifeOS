@@ -260,16 +260,16 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     try {
       const {
         businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync,
-        enrich, skipRepair, skipBlogs,
+        enrich, skipRepair, skipBlogs, skipAi, leanTemplate,
       } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
 
-      logger.info('[SITE] Prospect request', { businessUrl, contactEmail, sync: !!sync, enrich, skipRepair, skipBlogs });
+      logger.info('[SITE] Prospect request', { businessUrl, contactEmail, sync: !!sync, enrich, skipRepair, skipBlogs, skipAi });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
 
       const options = {
         businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo,
-        enrich, skipRepair, skipBlogs,
+        enrich, skipRepair, skipBlogs, skipAi, leanTemplate,
       };
 
       if (sync === true || req.query.sync === '1') {

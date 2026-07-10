@@ -199,6 +199,8 @@ export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs
     enrich: metadata.enrich,
     skipRepair: metadata.skipRepair === true,
     skipBlogs: metadata.skipBlogs === true,
+    skipAi: metadata.skipAi === true,
+    leanTemplate: metadata.leanTemplate === true,
     businessInfo: metadata.businessInfo || null,
   };
   if (!options.businessUrl) {

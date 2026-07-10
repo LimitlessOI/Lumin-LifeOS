@@ -100,6 +100,8 @@ export default class ProspectPipeline {
             enrich: options.enrich,
             skipRepair: options.skipRepair === true,
             skipBlogs: options.skipBlogs === true,
+            skipAi: options.skipAi === true,
+            leanTemplate: options.leanTemplate === true,
             businessInfo: options.businessInfo || null,
           }),
         ]
@@ -114,9 +116,13 @@ export default class ProspectPipeline {
   async failProspectJob(clientId, errorMessage) {
     if (!this.pool || !clientId) return;
     try {
+      // Do not clobber a persisted preview with failed — email-stage errors keep status built.
       await this.pool.query(
         `UPDATE prospect_sites
-            SET status = 'failed',
+            SET status = CASE
+                  WHEN preview_url IS NOT NULL AND status IN ('built', 'sent', 'qa_hold') THEN status
+                  ELSE 'failed'
+                END,
                 metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
                 updated_at = NOW()
           WHERE client_id = $1`,
@@ -201,6 +207,8 @@ export default class ProspectPipeline {
         enrich: options.enrich,
         skipRepair: options.skipRepair,
         skipBlogs: options.skipBlogs,
+        skipAi: options.skipAi,
+        leanTemplate: options.leanTemplate,
         onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
       });
     } finally {

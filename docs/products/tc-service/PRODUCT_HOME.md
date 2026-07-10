@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — default-export shims on TC .mjs services so builder default-imports mount. |
+| **Last Updated** | 2026-07-10 — SMTP 465/587 failover on connection timeout (Site Builder T02). |
 
 ---
 
@@ -975,6 +975,8 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ## Change Receipts
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
+|---|---|---|---|---|---|
+| 2026-07-10 | **GAP-FILL SMTP failover** — `core/notification-service.js` tries preferred port then 587/465 on connection timeout (Site Builder T02). | Tip resend: Connection timeout on Gmail 465. | ✅ | pending | tip resend |
 | 2026-07-10 | **GAP-FILL step-08/09 mount** — fixed `tcIntakeRoutes.mjs` named imports (builder used default imports of named-only services → load fail); auto-registered both `.mjs` routes; disabled kebab duplicates to avoid double-mount. | never-stop: Pre-commit syntax fail on intake; billing `route module not auto-registered`. | ✅ | never-stop marks step-08/09/10 done |
 | 2026-07-10 | **GAP-FILL s9 imap import** — `registerTcImapRoutes` now imports `verifyImapAndDryRun` (not nonexistent `imapRailwayBootstrap`). s7+s8 done after auto-register. | module_not_mounted SyntaxError on named export. | ✅ | push + mount proof |
 | 2026-07-10 | **GAP-FILL s10 false-done** — auto-register lacked TC routes; added tc-intake/billing/imap entries; revived s7–s9. | s10 marked done on unrelated LifeOS SHA; module-health still not auto-registered. | ✅ | push + redeploy |
