@@ -244,7 +244,7 @@
     },
     {
       "id": "step-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcShowingFeedback.mjs",
       "task": "Implement automated showing-feedback request delivery and ledger tracking (item 7)",
       "spec": "Export async function sendShowingFeedbackRequest(deps, {transactionId, agentEmail, showingDate}) that: builds a feedback-request email body via deps.callCouncilMember('comms-writer', prompt), sends via deps.postmark(to, subject, body), inserts a row into tc_showing_feedback_requests with status=sent. Export async function recordFeedbackWebhook(deps, {requestId, feedbackPayload}) that updates the row to status=received and stores feedbackPayload. No browser globals.",
@@ -252,7 +252,10 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "5de9cf8b10e60866f9bb189c75105cda2107de67",
+      "last_attempt_at": "2026-07-10T09:11:09.768Z",
+      "completed_at": "2026-07-10T09:11:21.173Z"
     },
     {
       "id": "step-05",
