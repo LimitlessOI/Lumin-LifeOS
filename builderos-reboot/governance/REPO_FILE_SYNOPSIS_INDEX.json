@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T05:53:06.430Z",
+  "generated_at": "2026-07-10T06:02:43.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11396,
   "files": [
@@ -21301,8 +21301,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 20605,
-      "mtime": "2026-07-10T05:52:30.570Z",
-      "indexed_at": "2026-07-10T05:53:06.430Z",
+      "mtime": "2026-07-10T06:02:41.688Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "synopsis_index_only": true
     },
     {
@@ -22011,9 +22011,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 32185,
-      "mtime": "2026-07-10T05:52:30.571Z",
-      "indexed_at": "2026-07-10T05:53:06.430Z",
+      "bytes": 32194,
+      "mtime": "2026-07-10T06:02:41.689Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "synopsis_index_only": true
     },
     {
@@ -29371,9 +29371,9 @@
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 1903,
-      "mtime": "2026-07-10T00:49:03.631Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 2650,
+      "mtime": "2026-07-10T06:02:41.505Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "synopsis_index_only": true
     },
     {
@@ -29519,9 +29519,9 @@
     {
       "path": "builderos-reboot/scripts/emit-project-certification.mjs",
       "synopsis": "Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage.",
-      "bytes": 4020,
-      "mtime": "2026-07-10T00:47:20.081Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 6457,
+      "mtime": "2026-07-10T05:55:37.209Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z"
     },
     {
       "path": "builderos-reboot/scripts/execute-mission-step.mjs",
@@ -38841,9 +38841,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 170091,
-      "mtime": "2026-07-10T05:52:20.340Z",
-      "indexed_at": "2026-07-10T05:52:23.649Z"
+      "bytes": 170471,
+      "mtime": "2026-07-10T06:01:39.779Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -62209,17 +62209,17 @@
     {
       "path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — BUILDEROS AUTONOMY CLOSURE V1 ACCEPTANCE.",
-      "bytes": 12591,
-      "mtime": "2026-07-03T00:17:45.061Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 12258,
+      "mtime": "2026-07-10T06:02:41.690Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "synopsis": "Product receipt — BUILDEROS BUILD DEPLOY TRUTH.",
       "bytes": 1913,
-      "mtime": "2026-07-09T01:03:41.505Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "mtime": "2026-07-10T06:01:54.284Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "synopsis_index_only": true
     },
     {
@@ -62393,9 +62393,9 @@
     {
       "path": "products/receipts/FOUNDER_ALPHA_READINESS_AUDIT.json",
       "synopsis": "Product receipt — FOUNDER ALPHA READINESS AUDIT.",
-      "bytes": 5042,
-      "mtime": "2026-06-27T23:23:26.684Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 5130,
+      "mtime": "2026-07-10T06:01:25.294Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "synopsis_index_only": true
     },
     {
@@ -63025,9 +63025,9 @@
     {
       "path": "products/receipts/UI_ALPHA_GATE.json",
       "synopsis": "Product receipt — UI ALPHA GATE.",
-      "bytes": 478,
-      "mtime": "2026-06-28T23:37:30.212Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 515,
+      "mtime": "2026-07-10T06:01:25.227Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "synopsis_index_only": true
     },
     {
@@ -66549,9 +66549,9 @@
     {
       "path": "scripts/audit-founder-alpha-ready.mjs",
       "synopsis": "Founder alpha readiness audit — one receipt Adam/conductor trust before founder session.",
-      "bytes": 6921,
-      "mtime": "2026-07-03T18:58:23.781Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 6902,
+      "mtime": "2026-07-10T05:57:03.272Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -68398,9 +68398,9 @@
     {
       "path": "scripts/run-lifere-alpha-readiness.mjs",
       "synopsis": "LifeRE alpha readiness — machine gate for founder alpha testing.",
-      "bytes": 5269,
-      "mtime": "2026-07-03T18:58:23.787Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 5250,
+      "mtime": "2026-07-10T05:57:03.257Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "ssot": [
         "docs/products/lifere/PRODUCT_HOME.md"
       ]
@@ -68686,9 +68686,9 @@
     {
       "path": "scripts/run-ui-alpha-gate.mjs",
       "synopsis": "Canonical UI alpha gate — real UI probes + live founder-alpha audit rolled into one receipt.",
-      "bytes": 4224,
-      "mtime": "2026-07-03T00:17:45.089Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 4205,
+      "mtime": "2026-07-10T05:57:03.219Z",
+      "indexed_at": "2026-07-10T06:02:43.184Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

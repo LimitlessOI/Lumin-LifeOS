@@ -11,7 +11,8 @@
   "founder_usability_pass": false,
   "ready_for_founder_alpha": true,
   "technical_pass_only": true,
-  "founder_usability_contract": "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md",
+  "founder_usability_contract": "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md",
   "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
-  "reused_from_fresh_receipts": true
+  "reused_from_fresh_receipts": true,
+  "contract_path_fixed_at": "2026-07-10T06:01:25.225Z"
 }

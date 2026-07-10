@@ -188,8 +188,8 @@
       "receipt_path": "products/receipts/BUILDEROS_AUTONOMY_CLOSURE_V1_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-30T01:42:17.319Z",
-      "git_sha": "776a674410c435698219da923ed5d06db2bed458",
+      "technical_pass_at": "2026-07-10T06:02:41.677Z",
+      "git_sha": "5eec75aa526ebcf7170702aa56ddde1c06dd8aa2",
       "production_base": "https://lumin-web-production-e3a9.up.railway.app",
       "build_method": "system-build",
       "note": "Internal BuilderOS closure acceptance proof.",
@@ -210,13 +210,13 @@
       "receipt_path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "git_sha": "dc9e1cadb50ad682f0c13a0137f35756144a2c5a",
+      "git_sha": "5eec75aa526ebcf7170702aa56ddde1c06dd8aa2",
       "production_base": "https://lumin-web-production-e3a9.up.railway.app",
       "build_method": "system-build",
       "note": "Internal BuilderOS build/deploy/runtime proof.",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/OBJECTIVE_VERDICT.json",
-      "technical_pass_at": "2026-07-08T06:13:49.583Z"
+      "technical_pass_at": "2026-07-10T06:01:54.070Z"
     },
     {
       "rank": 8,

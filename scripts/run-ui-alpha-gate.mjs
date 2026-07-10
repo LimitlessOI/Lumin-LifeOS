@@ -122,7 +122,7 @@ const founderAudit = readJson('products/receipts/FOUNDER_ALPHA_READINESS_AUDIT.j
 report.ready_for_founder_alpha = founderAudit?.ready_for_adam_alpha === true;
 report.founder_usability_pass = founderAudit?.founder_usability_pass === true;
 report.technical_pass_only = report.ok && report.founder_usability_pass !== true;
-report.founder_usability_contract = 'docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md';
+report.founder_usability_contract = 'docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md';
 report.verdict = report.ok
   ? (report.founder_usability_pass ? 'ALPHA_GATE_CLOSED' : 'CLEARED_FOR_FOUNDER_ALPHA')
   : 'FAIL';

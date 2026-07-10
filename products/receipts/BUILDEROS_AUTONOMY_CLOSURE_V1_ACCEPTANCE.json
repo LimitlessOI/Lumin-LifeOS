@@ -1,7 +1,7 @@
 {
   "schema": "builderos_autonomy_closure_v1_acceptance",
   "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
-  "at": "2026-06-30T01:42:17.319Z",
+  "at": "2026-07-10T06:02:41.677Z",
   "mode": "full_suite",
   "requested_check": null,
   "ok": true,
@@ -76,12 +76,15 @@
           "already_present": false,
           "commit_sha": "abc123",
           "origin_contains_commit": true,
-          "deploy_required": true,
           "deploy_identifier": "railway",
           "deploy_sha_seen": "abc123",
           "expected_deploy_sha": "abc123",
+          "deploy_required": true,
           "deploy_matches_origin_main": true,
-          "runtime_behavior_verified": null
+          "runtime_behavior_verified": null,
+          "transport_status": "DEPLOY_SYNC_PASS",
+          "fail_code": null,
+          "ok": true
         },
         "waiting": {
           "job_id": "bp-wait",
@@ -89,12 +92,15 @@
           "already_present": false,
           "commit_sha": "abc123",
           "origin_contains_commit": true,
-          "deploy_required": true,
           "deploy_identifier": "railway",
           "deploy_sha_seen": "def456",
           "expected_deploy_sha": "abc123",
+          "deploy_required": true,
           "deploy_matches_origin_main": false,
-          "runtime_behavior_verified": null
+          "runtime_behavior_verified": null,
+          "transport_status": "DEPLOY_NOT_SYNCED",
+          "fail_code": "DEPLOY_NOT_SYNCED",
+          "ok": false
         },
         "fail": {
           "job_id": "bp-fail",
@@ -102,12 +108,15 @@
           "already_present": false,
           "commit_sha": null,
           "origin_contains_commit": false,
-          "deploy_required": false,
           "deploy_identifier": null,
           "deploy_sha_seen": null,
           "expected_deploy_sha": null,
-          "deploy_matches_origin_main": false,
-          "runtime_behavior_verified": null
+          "deploy_required": false,
+          "deploy_matches_origin_main": null,
+          "runtime_behavior_verified": null,
+          "transport_status": "COMMIT_NO_SHA",
+          "fail_code": "COMMIT_NO_SHA",
+          "ok": false
         }
       }
     },
@@ -241,31 +250,13 @@
           "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
           "founder_usability_pass": false,
           "technical_pass_only": true,
-          "founder_usability_contract": "docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md",
-          "required_receipts": "script_enforced_next_run",
-          "canonical_surface": "script_enforced_next_run",
-          "checked_routes": "script_enforced_next_run"
+          "founder_usability_contract": "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md"
         },
         "founder_alpha_audit": {
+          "verdict": "READY_FOR_ADAM_ALPHA_TECHNICAL_PASS_ONLY",
           "founder_usability_pass": false,
           "ready_for_adam_alpha": true,
-          "technical_pass_only": "script_enforced_next_run",
-          "founder_surface": "script_enforced_next_run"
-        },
-        "machine_alpha_walkthrough": {
-          "verdict": "FAIL",
-          "canonical_surface": "/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html",
-          "checked_routes": [
-            "COUNSEL",
-            "BUILD",
-            "STATUS"
-          ],
-          "required_controls": [
-            "text_input",
-            "send_button",
-            "mic_button_when_enabled",
-            "visible_result_panel"
-          ]
+          "technical_pass_only": true
         },
         "canonical_contract": "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md"
       }
@@ -341,9 +332,9 @@
     }
   },
   "verdict": "PASS",
-  "completed_at": "2026-06-30T01:42:17.319Z",
-  "git_sha": "776a674410c435698219da923ed5d06db2bed458",
-  "production_base": "https://robust-magic-production.up.railway.app",
+  "completed_at": "2026-07-10T06:02:41.677Z",
+  "git_sha": "5eec75aa526ebcf7170702aa56ddde1c06dd8aa2",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "bp_sync": {
     "updated": [
       "builderos-reboot/BP_PRIORITY.json",

@@ -1,6 +1,6 @@
 {
   "certification_id": "FACTORY-REBOOT-CERT-002",
-  "generated_at": "2026-07-10T00:49:03.630Z",
+  "generated_at": "2026-07-10T06:02:41.504Z",
   "build_spec_phases": {
     "segments_0_10_runtime": true,
     "phase_11_full_loop_proof": true,
@@ -19,18 +19,34 @@
     "LUMIN_FACTORY_GITHUB": false,
     "LIFEOS_PRODUCT_COMPLETE": false
   },
+  "autonomy_closure_v1": {
+    "founder_usability_pass": false,
+    "live_proofs_pass": true,
+    "same_tier_mechanical_pass": true,
+    "same_tier_cold_coder_pass": false,
+    "blockers": [
+      "point_b_founder_confirmation_required",
+      "same_tier_cold_coder_required_mechanical_proxy_only"
+    ],
+    "receipts": {
+      "same_tier": "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
+      "build_deploy": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
+      "founder_ui": "products/receipts/BUILDEROS_FOUNDER_UI_PROOF.json"
+    }
+  },
   "missions_complete": 37,
   "missions_total": 38,
   "product_salvage_candidates": 0,
   "next_human_actions": [
-    "Pick one revenue lane; allow AI spend only on milestones that move it to customer-visible outcome this week",
-    "Keep LIFEOS_DIRECTED_MODE=true until autonomous loops have income-linked useful-work contracts",
-    "Expand PRODUCT-MARKETINGOS-SALVAGE-0001 via BPB only if that lane is the income pick"
+    "Confirm Point B founder usability on lifeos-app (closes point_b_founder_confirmation_required)",
+    "Keep never-stop burning non-gated BUILD_QUEUE steps (tc-service + next priority products)",
+    "Cold-coder 3-session same-tier proof before claiming SAME_TIER_CODER_DETERMINISM / FULLY_MACHINE_READY"
   ],
   "certification_notes": {
-    "mechanical_determinism_proxy": "MECHANICAL_DETERMINISM_PROXY=true means greenfield 3-run executor proxy only (GREENFIELD_DETERMINISM_RECEIPT.json). SAME_TIER_CODER_DETERMINISM is false — no human cold-coder proof.",
+    "mechanical_determinism_proxy": "MECHANICAL_DETERMINISM_PROXY=true means greenfield 3-run executor proxy and/or BUILDEROS_SAME_TIER mechanical proxy. SAME_TIER_CODER_DETERMINISM stays false until cold-coder proof.",
     "cold_coder_3_session": "NOT required for this hand-built blueprint pack. Applies only when the factory system generates a BP end-to-end; then run DETERMINISM_CODER_PROMPT.md before claiming FULLY_MACHINE_READY.",
     "lumin_factory_github": "Optional org step — copy factory-staging to its own repo when you want a clean standalone factory repo; not a blocker for using the factory inside Lumin-LifeOS.",
-    "staging_requires_sentry": "STAGING_READY and BOOTSTRAP_AND_STAGING_READY require SENTRY_MECHANICAL_PASS. Readiness alone cannot claim staging."
+    "staging_requires_sentry": "STAGING_READY and BOOTSTRAP_AND_STAGING_READY require SENTRY_MECHANICAL_PASS. Readiness alone cannot claim staging.",
+    "fully_machine_ready_formula": "FULLY_MACHINE_READY = founder_usability_pass AND live build/deploy+founder-ui PASS AND same-tier cold-coder PASS. Mechanical proxy alone is not enough."
   }
 }

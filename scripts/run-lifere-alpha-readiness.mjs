@@ -11,7 +11,7 @@ import { spawnSync } from 'node:child_process';
 import { resolvePublicBaseUrl } from '../config/public-origin.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTRACT_PATH = path.join(ROOT, 'docs/products/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONTRACT.md');
+const CONTRACT_PATH = path.join(ROOT, 'docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md');
 function resolveBaseUrl() {
   return resolvePublicBaseUrl(process.env.LIFERE_ALPHA_BASE_URL, process.env.PUBLIC_BASE_URL);
 }
