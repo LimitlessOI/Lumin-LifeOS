@@ -166,6 +166,118 @@
       "last_error": "verify_exit_1",
       "revive_count": 1,
       "completed_at": "2026-07-08T06:07:18.318Z"
+    },
+    {
+      "id": "step-1",
+      "status": "pending",
+      "target_file": "db/migrations/20240801_site_builder_templates.sql",
+      "task": "Create starter templates table",
+      "spec": "CREATE TABLE IF NOT EXISTS site_builder_templates with columns id UUID PK default gen_random_uuid(), name TEXT NOT NULL, thumbnail_url TEXT, config JSONB NOT NULL, sort_order INT DEFAULT 0, created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now(). Seed 5 rows for distinct starter templates (e.g. 'Clean Business','Bold Agency','Minimal Portfolio','Warm Local','Tech Startup') using INSERT INTO ... ON CONFLICT DO NOTHING so re-runs are safe. Satisfies ux_friction_1 data layer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-2",
+      "status": "pending",
+      "target_file": "services/site-builder-templates.js",
+      "task": "Implement template listing and selection service",
+      "spec": "Export async functions listTemplates(db) returning all rows from site_builder_templates ordered by sort_order, and getTemplate(db, id) returning one row. No browser globals. No AI calls. Satisfies ux_friction_1 service layer. Import only 'pg' or the injected db dep.",
+      "depends_on": [
+        "step-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-3",
+      "status": "pending",
+      "target_file": "services/site-builder-save-confirmation.js",
+      "task": "Implement save-confirmation timestamp service",
+      "spec": "Export function buildSaveConfirmation() that returns a plain JS object {savedAt: new Date().toISOString(), label: 'Saved', icon: 'checkmark'}. Export function formatSaveConfirmationHTML(obj) that returns a safe HTML string '<span class=\"sb-save-confirm\">✓ Saved at HH:MM:SS</span>' computed from obj.savedAt. No browser globals, no imports beyond node builtins. Satisfies ux_friction_4 service layer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-4",
+      "status": "pending",
+      "target_file": "routes/site-builder-templates-routes.js",
+      "task": "Register REST routes for template listing and selection",
+      "spec": "Export registerSiteBuilderTemplatesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/templates → calls listTemplates(deps.db) and returns JSON array. Mount GET /api/site-builder/templates/:id → calls getTemplate(deps.db, req.params.id) and returns JSON object or 404. No mutations. No browser globals. Must be importable without side-effects. Satisfies ux_friction_1 API layer.",
+      "depends_on": [
+        "step-2"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-5",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register template routes module in auto-registration config",
+      "spec": "Add entry for site-builder-templates-routes to the JSON array so the boot system loads registerSiteBuilderTemplatesRoutes automatically. Preserve all existing entries. No other changes.",
+      "depends_on": [
+        "step-4"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-6",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-template-picker.html",
+      "task": "Build template picker UI overlay showing 3–5 starter templates",
+      "spec": "Self-contained HTML fragment rendered as an overlay panel. Fetches GET /api/site-builder/templates via client-side fetch and renders a card grid (thumbnail, name, 'Use this template' CTA button) for each template. Cards use CSS grid, minimum 3 columns on desktop. Selecting a card posts the chosen template id back to the editor state and closes the overlay. Includes clear heading 'Choose a starting design' and subtext 'Pick the look that fits your business — you can change everything later.' Satisfies ux_friction_1 UI. All JS inside inline <script> tags. No external CDN dependencies.",
+      "depends_on": [
+        "step-4"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-7",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-editor-onboarding-prompt.html",
+      "task": "Build first-step onboarding prompt UI for the editor",
+      "spec": "Self-contained HTML fragment shown at editor launch (dismissible). Contains a styled banner with the text 'Start here: choose a template, then edit your text.' and two CTA buttons: 'Pick a template' (opens the template picker overlay) and 'I'll explore on my own' (dismisses the banner and sets localStorage key sb_onboarding_dismissed=1 so it does not reappear). No backend calls required. All JS inline. Satisfies ux_friction_2.",
+      "depends_on": [
+        "step-6"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-8",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-chat-prompt.html",
+      "task": "Build chat prompt UI with example questions",
+      "spec": "Self-contained HTML fragment that enhances the chat panel. Renders a 'Not sure what to ask?' section above the chat input with 3 clickable example chips: 'Change my colors', 'Rewrite my homepage headline', 'Add a contact section'. Clicking a chip pre-fills the chat input with that text. Includes a visible heading 'Ask the AI assistant' and brief subtext 'Type a request or tap an example below.' Satisfies ux_friction_3. All JS inline, no external deps.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-save-confirmation.html",
+      "task": "Build save confirmation UI widget with timestamp and checkmark",
+      "spec": "Self-contained HTML fragment that mounts a save-status bar at the top of the editor. Listens for a custom DOM event 'sb:saved' dispatched by the editor on successful save. On event receipt renders '✓ Saved at HH:MM:SS' where time is derived from event.detail.savedAt, displayed for 4 seconds then fades out with CSS transition. Before any save the bar reads 'Unsaved changes' in muted style. Satisfies ux_friction_4 UI. All JS inline.",
+      "depends_on": [
+        "step-3"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-device-toggle.html",
+      "task": "Build plainly-labelled Desktop/Tablet/Mobile device toggle UI",
+      "spec": "Self-contained HTML fragment replacing or augmenting any unlabelled icon-only device toggle. Renders three clearly labelled buttons: 'Desktop', 'Tablet', 'Mobile'. Active button is highlighted. Clicking each dispatches custom DOM event 'sb:deviceChange' with detail {mode:'desktop'|'tablet'|'mobile'} so the canvas can react. Buttons include an accessible aria-label and a small intuitive icon (unicode or inline SVG) alongside the plain text label. Satisfies ux_friction_5. All JS inline.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
