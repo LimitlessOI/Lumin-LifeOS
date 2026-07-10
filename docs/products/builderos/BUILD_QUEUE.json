@@ -58,7 +58,10 @@
         "step-03"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "701686683d1126828b7da8dc046fec705df6dbfc",
+      "last_attempt_at": "2026-07-10T13:36:17.756Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/mission-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "step-05",
