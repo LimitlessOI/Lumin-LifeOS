@@ -179,8 +179,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     window.location.href = \`/marketing/session/\${sessionData.id}\`;
 
                 } catch (error) {
-                    logger.error('Error in new session setup:', error);
-                    messageDiv.innerText = 'Error: ' + error.message;
+                    console.error('Error in new session setup:', error);
+                    messageDiv.innerText = 'Error: ' + (error && error.message ? error.message : String(error));
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
                 }
@@ -223,7 +223,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     }
                     renderConversation(session.coach_messages_json || []);
                 } catch (error) {
-                    logger.error('Error fetching session details:', error);
+                    console.error('Error fetching session details:', error);
                     messageDiv.innerText = 'Error loading conversation: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
@@ -283,7 +283,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     fetchSessionDetails();
 
                 } catch (error) {
-                    logger.error('Error in coaching session:', error);
+                    console.error('Error in coaching session:', error);
                     messageDiv.innerText = 'Error: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
@@ -343,7 +343,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     \`).join('');
 
                 } catch (error) {
-                    logger.error('Error fetching content pieces:', error);
+                    console.error('Error fetching content pieces:', error);
                     contentListDiv.innerHTML = '<p class="message error">Error loading content: ' + escapeHtml(error.message) + '</p>';
                 }
             }
@@ -378,7 +378,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     }
 
                 } catch (error) {
-                    logger.error('Error updating content status:', error);
+                    console.error('Error updating content status:', error);
                     messageDiv.innerText = 'Error: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
@@ -416,7 +416,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     messageDiv.className = 'message success';
                     messageDiv.style.display = 'block';
                 } catch (error) {
-                    logger.error('Error initiating download:', error);
+                    console.error('Error initiating download:', error);
                     messageDiv.innerText = 'Error initiating download: ' + error.message;
                     messageDiv.className = 'message error';
                     messageDiv.style.display = 'block';
