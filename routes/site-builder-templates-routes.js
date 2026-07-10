@@ -1,60 +1,56 @@
 /**
  * SYNOPSIS: Registers SiteBuilderTemplatesRoutes routes/handlers (routes/site-builder-templates-routes.js).
  */
+export function listTemplates(db) {
+  return db.query(
+    `
+      select id, name, thumbnail_url, config, sort_order, created_at, updated_at
+      from site_builder_templates
+      order by sort_order asc nulls last, created_at asc, id asc
+    `
+  ).then(({ rows }) => rows);
+}
+
+export async function getTemplate(db, id) {
+  const { rows } = await db.query(
+    `
+      select id, name, thumbnail_url, config, sort_order, created_at, updated_at
+      from site_builder_templates
+      where id = $1
+      limit 1
+    `,
+    [id]
+  );
+
+  return rows[0] || null;
+}
+
 export function registerSiteBuilderTemplatesRoutes(app, deps) {
-  const db = deps?.pool ?? deps?.db;
+  const db = deps.db || deps.pool;
 
-  if (!app || typeof app.get !== 'function') {
-    throw new Error('registerSiteBuilderTemplatesRoutes requires an Express app');
-  }
-
-  if (!db || typeof db.query !== 'function') {
-    throw new Error('registerSiteBuilderTemplatesRoutes requires deps.pool or deps.db with query()');
-  }
-
-  app.get('/api/site-builder/templates', async (_req, res, next) => {
+  app.get('/api/site-builder/templates', async (req, res) => {
     try {
       const templates = await listTemplates(db);
       res.json(templates);
     } catch (error) {
-      next(error);
+      deps.logger?.error?.({ error }, 'failed to list site builder templates');
+      res.status(500).json({ error: 'internal_error' });
     }
   });
 
-  app.get('/api/site-builder/templates/:id', async (req, res, next) => {
+  app.get('/api/site-builder/templates/:id', async (req, res) => {
     try {
       const template = await getTemplate(db, req.params.id);
-
       if (!template) {
-        res.status(404).json({ error: 'Template not found' });
+        res.status(404).json({ error: 'not_found' });
         return;
       }
-
       res.json(template);
     } catch (error) {
-      next(error);
+      deps.logger?.error?.({ error }, 'failed to get site builder template');
+      res.status(500).json({ error: 'internal_error' });
     }
   });
-}
-
-export async function listTemplates(db) {
-  const result = await db.query(
-    `SELECT id, name, thumbnail_url, config, sort_order, created_at, updated_at
-     FROM site_builder_templates
-     ORDER BY sort_order ASC NULLS LAST, created_at ASC`
-  );
-  return result.rows;
-}
-
-export async function getTemplate(db, id) {
-  const result = await db.query(
-    `SELECT id, name, thumbnail_url, config, sort_order, created_at, updated_at
-     FROM site_builder_templates
-     WHERE id = $1
-     LIMIT 1`,
-    [id]
-  );
-  return result.rows[0] ?? null;
 }
 
 export default registerSiteBuilderTemplatesRoutes;
