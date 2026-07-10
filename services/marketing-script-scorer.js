@@ -203,7 +203,7 @@ export async function scoreEarnedAttention({ callCouncilMember, scriptText } = {
 
     let councilRaw = '';
     try {
-      councilRaw = await callCouncilMember('content-intelligence', councilPrompt, { temperature: 0.1 });
+      councilRaw = await callCouncilMember('gemini_flash', councilPrompt, { temperature: 0.1 });
     } catch (e) {
       councilRaw = '';
     }
