@@ -136,7 +136,7 @@
     },
     {
       "id": "s9",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tc-imap-routes.js",
       "task": "Register IMAP bootstrap verification and dry-run scan routes",
       "spec": "Export registerTcImapRoutes(app, deps). GET /api/tc/imap/status calls imapRailwayBootstrap.verifyImapAndDryRun(deps) returns {ready, missing?, scannedCount?, sample?}. POST /api/tc/imap/dry-run forces a fresh dry-run scan and returns results. Requires deps.requireAuth. No top-level browser globals.",
@@ -144,13 +144,14 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-10T09:03:35.487Z",
-      "commit_sha": "9be008cb11d13108c42d415fd0a661d03e83164a",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-10T09:07:14.222Z",
+      "commit_sha": "f1d8dcffd663eea6c30563e2a213ca61b80bc467",
       "revive_count": 1,
       "revived_at": "2026-07-10T08:53:56.704Z",
       "last_error": "module_not_mounted (routes/tc-imap-routes.js): import_failed: file:///usr/src/app/routes/tc-imap-routes.js:4\nimport { imapRailwayBootstrap } from '../services/imap-railway-bootstrap.js';\n         ^^^^^^^^^^^^^^^^^^^^\nSyntaxError: The requested module '../services/imap-railway-bootstrap.js' does not provide an export named 'imapRailwayBootstrap'\n    at ModuleJob._instantiate (node:internal/modules/esm/module_job:213:21)\n    at async ModuleJob.run (node:internal/modules/esm/module_job:320:5)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)\n    at async autoRegisterProductModules (file:///usr/src/app/startup/auto-register-product-modules.js:80:13)\n    at async registerFounderRuntimeRoutes (file:///usr/src/app/startup/register-founder-runtime-routes.js:254:19)\n    at async bootFounderRuntime (file:///usr/src/app/server-founder-runtime.js:383:31)\n    at async start (file:///usr/src/app/server-founder-runtime.js:464:3)",
-      "blocker_class": "BLOCKED_TOOLING"
+      "blocker_class": "BLOCKED_TOOLING",
+      "completed_at": "2026-07-10T09:07:16.982Z"
     },
     {
       "id": "s10",
