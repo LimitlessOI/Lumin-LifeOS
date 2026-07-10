@@ -259,7 +259,7 @@
     },
     {
       "id": "step-05",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcOfferPrep.mjs",
       "task": "Wire offer-prep command engine to real client profile + comp set + contingency logic (item 9)",
       "spec": "Export async function runOfferPrep(deps, {agentId, propertyAddress, clientProfileId}) that: fetches client profile from deps.db, fetches recent comps via deps.mlsClient(propertyAddress), calls deps.callCouncilMember('offer-strategist', prompt) with profile+comps to produce contingencyLogic+offerPrice+terms, inserts row into tc_offer_prep_runs with output jsonb. Returns {offerPrice, terms, contingencies, runId}. No browser globals.",
@@ -267,7 +267,10 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "4fe6260c79a327fabbcec6330786408ad4aa254c",
+      "last_attempt_at": "2026-07-10T09:11:29.347Z",
+      "completed_at": "2026-07-10T09:12:02.059Z"
     },
     {
       "id": "step-06",
