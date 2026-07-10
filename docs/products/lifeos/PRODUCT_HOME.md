@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Path-to-10 climb: Chair `loadLuminMemory` injects founder memory every turn; TOP_10 checklist pinned. Prior: never-stop keep-building + Display-DNA E2E wait fix. |
+| **Last Updated** | 2026-07-10 — T05 fix: direct Chair agent now loads FOUNDER MEMORY into SYSTEM_FACTS. |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-10 | **GAP-FILL T05 direct-agent memory** — `runChairDirectAgent` front door never called `loadChairMemoryContext`, so `SYSTEM_FACTS.memory_context` stayed null despite live `/api/v1/founder-memory` entries. Wired inject before direct agent. | Live probe: Chair said personal_twin/memory_context null. | ✅ | tip + re-probe |
 | 2026-07-10 | **Path-to-10 — Chair founder memory every turn** — `loadLuminMemory` injects FOUNDER MEMORY; orchestrator passes messageText. Checklist `docs/TOP_10_PATH_TO_10.json`. | Adam: build until all ten are ten. | ✅ founder-memory tests | push + redeploy + SENTRY re-gate |
 | 2026-07-10 | **Never-stop keep-building** — stamp unplannable SENTRY on lifeos queue; clear findings feed of Display-DNA flake; `POST /never-stop/run-once`; MarketingOS Layer B queued. | Adam: building must not stop — fix anything that stops it. | ✅ local stamp + tests | push + kick run-once |
 | 2026-07-10 | **Vision lock + never-stop unblock (smos_question / truth audit)** — E2E wait includes `.lumin-worklog` busy marker + longer SMOS counsel timeout; Chair SMOS canonical workflow = consent→session→coach→extract→generate→approve→export on `/api/v1/marketing/*`; `audit-truth-enforcement` allowlists `never-stop-product-factory.js` planner failover. | Adam: SSOTs should already hold the vision; builder must build it. Never-stop was looping `plan_produced_no_queue` on one SENTRY finding while API already returned workflow prose. | ✅ truth audit OK; chair tests 8/8; live API SMOS reply has workflow | push + re-run `run-real-app-e2e` / SENTRY lifeos-founder-ui |

@@ -188,7 +188,7 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
     systemFacts = await gatherChairNativeFacts(message, {
       callAI,
       pool: deps.pool || null,
-      memoryContext: deps.memoryContext || null,
+      memoryContext: deps.memoryContext ?? null,
       userId: ctx.userId || null,
       userHandle: ctx.userHandle || null,
     }, { domain: 'chair', user_handle: ctx.userHandle || null });

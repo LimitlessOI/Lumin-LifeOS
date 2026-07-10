@@ -456,6 +456,18 @@ export async function runLuminChairTurn(ctx, deps) {
   ) {
     try {
       _clog('direct_agent_start');
+      // T05: direct-agent front door must inject FOUNDER MEMORY into SYSTEM_FACTS.
+      // Legacy counsel path already called loadChairMemoryContext; this path skipped it,
+      // so memory_context stayed null even when /api/v1/founder-memory had entries.
+      let directMemoryContext = null;
+      if (typeof deps.loadChairMemoryContext === 'function') {
+        directMemoryContext = await deps.loadChairMemoryContext({
+          userId: resolvedUserId,
+          userHandle: ctx.userHandle || userHandle || null,
+          messageText: ctx.originalText || cleanedInput,
+          productId: ctx.productId || null,
+        }).catch(() => null);
+      }
       const agentRes = await runChairDirectAgent({
         message: ctx.originalText || cleanedInput,
         history: mergedHistory,
@@ -464,6 +476,7 @@ export async function runLuminChairTurn(ctx, deps) {
           routeToBuilder: deps.routeToBuilder,
           operatorKey: deps.operatorKey,
           pool: deps.pool,
+          memoryContext: directMemoryContext,
         },
         ctx: {
           userId: resolvedUserId,

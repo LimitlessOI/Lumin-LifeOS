@@ -121,7 +121,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     point_b_status: null,
     alpha_readiness: null,
     verified_search: null,
-    memory_context: chairContext.alpha_probe ? null : (deps.memoryContext || null),
+    memory_context: chairContext.alpha_probe ? null : (deps.memoryContext ?? null),
     strategic_brief: deps.strategicBrief || null,
     chair_note: 'Lumin is the operating intelligence — facts from system APIs/files/twin/SSOT, not roleplay. Lumin IS the Chair and can implement via BuilderOS build_async.',
     system_knowledge: null,

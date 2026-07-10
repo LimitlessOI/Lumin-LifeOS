@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T10:18:42.343Z",
+  "generated_at": "2026-07-10T10:42:29.569Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11408,
   "files": [
@@ -39291,9 +39291,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 596724,
-      "mtime": "2026-07-10T04:01:47.797Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 596973,
+      "mtime": "2026-07-10T10:42:14.839Z",
+      "indexed_at": "2026-07-10T10:42:29.569Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39452,9 +39452,9 @@
     {
       "path": "docs/products/memory-system/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Memory System",
-      "bytes": 20574,
-      "mtime": "2026-07-10T04:01:47.798Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 20799,
+      "mtime": "2026-07-10T10:42:14.840Z",
+      "indexed_at": "2026-07-10T10:42:29.569Z"
     },
     {
       "path": "docs/products/MEMORYINTELLIGENCE.md",
@@ -59162,9 +59162,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5350,
-      "mtime": "2026-07-10T06:28:08.582Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 5704,
+      "mtime": "2026-07-10T10:42:14.840Z",
+      "indexed_at": "2026-07-10T10:42:29.569Z",
       "synopsis_index_only": true
     },
     {
@@ -81349,8 +81349,8 @@
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
       "bytes": 14332,
-      "mtime": "2026-07-09T20:01:47.406Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "mtime": "2026-07-10T10:41:47.171Z",
+      "indexed_at": "2026-07-10T10:42:29.569Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81429,8 +81429,8 @@
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
       "bytes": 11782,
-      "mtime": "2026-07-10T00:19:23.654Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "mtime": "2026-07-10T10:41:46.795Z",
+      "indexed_at": "2026-07-10T10:42:29.569Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84239,9 +84239,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 61279,
-      "mtime": "2026-07-10T04:01:47.800Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 61984,
+      "mtime": "2026-07-10T10:42:13.387Z",
+      "indexed_at": "2026-07-10T10:42:29.569Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
