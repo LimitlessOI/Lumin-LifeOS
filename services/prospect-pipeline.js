@@ -546,7 +546,17 @@ Return ONLY valid JSON:
         `SELECT * FROM prospect_sites ORDER BY created_at DESC LIMIT $1`,
         [limit]
       );
-      return result.rows;
+      return result.rows.map((row) => {
+        const metadata = row.metadata && typeof row.metadata === 'object'
+          ? { ...row.metadata }
+          : row.metadata;
+        if (metadata && typeof metadata.previewHtml === 'string') {
+          metadata.hasPreviewHtml = true;
+          metadata.previewHtmlBytes = metadata.previewHtml.length;
+          delete metadata.previewHtml;
+        }
+        return { ...row, metadata };
+      });
     } catch {
       return [];
     }

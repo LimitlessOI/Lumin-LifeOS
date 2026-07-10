@@ -39,8 +39,8 @@
         "LimitlessOS / business"
       ],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "Tip 7c01c20: persist-before-email + lean skipBlogs. Prove built then resend. SMTP Connection timeout still blocks send receipt. Places key ABSENT.",
-      "blocker": "SMTP from Railway times out (Gmail). Preview disk wiped on redeploy. Places key ABSENT for Go Vegas."
+      "next_action": "Lean built+durable preview+live Stripe cs_live $49 (prev_1783687133026_hns2). Close via paid conversion OR fix SMTP/Postmark send.",
+      "blocker": "SMTP Connection timeout Railway→Gmail. Email send still failing. Payment not yet completed."
     },
     {
       "id": "T03",
