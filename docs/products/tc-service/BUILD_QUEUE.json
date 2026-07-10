@@ -93,6 +93,8 @@
       "target_file": "routes/tc-intake-routes.js",
       "task": "Register POST /api/tc/intake/run and GET /api/tc/intake/runs routes for end-to-end intake execution",
       "spec": "Export registerTcIntakeRoutes(app, deps). POST /api/tc/intake/run accepts {transactionId, emailMessageId}, calls tcIntakeRunner.runIntake(deps, ...), returns 200 with intakeRunId and status or 500 on error. GET /api/tc/intake/runs returns last 20 intake_runs ordered by created_at desc from deps.db. Validate req.body fields present. Mount auth middleware from deps.requireAuth. No top-level browser globals.",
+      "expected_exports": ["registerTcIntakeRoutes"],
+      "file_contains": ["runIntake", "tc-intake-runner.js", "/api/tc/intake/run", "/api/tc/intake/runs"],
       "depends_on": [
         "s3",
         "s5"

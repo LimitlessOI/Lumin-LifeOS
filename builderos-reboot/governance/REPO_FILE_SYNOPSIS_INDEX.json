@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T06:28:55.706Z",
+  "generated_at": "2026-07-10T06:51:52.720Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11397,
   "files": [
@@ -39722,9 +39722,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 103166,
-      "mtime": "2026-07-09T01:03:41.503Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z"
+      "bytes": 103291,
+      "mtime": "2026-07-10T06:51:52.133Z",
+      "indexed_at": "2026-07-10T06:51:52.720Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66188,10 +66188,13 @@
     },
     {
       "path": "routes/tc-intake-routes.js",
-      "synopsis": "Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).",
-      "bytes": 1812,
-      "mtime": "2026-07-10T04:01:47.663Z",
-      "indexed_at": "2026-07-10T06:28:55.706Z"
+      "synopsis": "TC intake HTTP routes — POST run + GET runs.",
+      "bytes": 1841,
+      "mtime": "2026-07-10T06:51:27.701Z",
+      "indexed_at": "2026-07-10T06:51:52.720Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/tc-r4r-routes.js",

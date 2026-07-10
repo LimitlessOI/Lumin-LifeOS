@@ -1,7 +1,8 @@
 /**
- * SYNOPSIS: Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).
+ * SYNOPSIS: TC intake HTTP routes — POST run + GET runs.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
-import { runIntake } from '../services/tcIntakeRunner.js';
+import { runIntake } from '../services/tc-intake-runner.js';
 
 export function registerTcIntakeRoutes(app, deps) {
   const authMiddleware = deps?.requireAuth || deps?.requireKey;

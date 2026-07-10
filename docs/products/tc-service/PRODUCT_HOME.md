@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-03 — Browser-agent runtime adapters (milestone 1b, `services/general-browser-agent-runtime.js`) built through the governed factory (cheap-hands codegen → SENTRY → conductor behavioral proof 22/22), not hand-written — SO-001 conductor discipline. Prior: 2026-07-03 — general goal-driven browser agent core (`services/general-browser-agent.js`), observe→decide→act loop, fail-closed guardrail, proof 8/8 (Chair LIFERE_COUNCIL_1783455558829). |
+| **Last Updated** | 2026-07-10 — GAP-FILL: `routes/tc-intake-routes.js` import fixed (`tc-intake-runner.js`); never-stop was spinning s7 on broken `tcIntakeRunner.js` path. |
 
 ---
 
