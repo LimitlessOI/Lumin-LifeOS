@@ -274,7 +274,7 @@
     },
     {
       "id": "step-06",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcMobileApproval.mjs",
       "task": "Implement one-tap mobile approval flow backend (item 6)",
       "spec": "Export async function createApprovalRequest(deps, {transactionId, agentId, documentUrl, action}) that inserts a tc_mobile_approvals row with status=pending and returns {approvalId, deepLink}. Export async function processApproval(deps, {approvalId, decision, signatureToken}) that updates status to approved|rejected, logs to TC communication ledger via deps.db insert into tc_comms_ledger, and resumes automation by calling deps.tcIntakePipeline.runIntakePipeline if decision=approved. No browser globals.",
@@ -283,7 +283,10 @@
         "step-02"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "bda64f891487e22fb7d1c2de232b698def0f285b",
+      "last_attempt_at": "2026-07-10T09:12:15.323Z",
+      "completed_at": "2026-07-10T09:12:43.628Z"
     },
     {
       "id": "step-07",
