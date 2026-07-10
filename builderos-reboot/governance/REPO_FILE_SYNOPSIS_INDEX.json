@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T00:32:03.749Z",
+  "generated_at": "2026-07-10T00:35:19.670Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11371,
+  "file_count": 11373,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -20498,9 +20498,9 @@
     {
       "path": "BRAINSTORM_AND_CONSENSUS.md",
       "synopsis": "BRAINSTORM_AND_CONSENSUS",
-      "bytes": 54842,
-      "mtime": "2026-07-10T00:31:45.867Z",
-      "indexed_at": "2026-07-10T00:32:03.749Z"
+      "bytes": 55895,
+      "mtime": "2026-07-10T00:34:48.998Z",
+      "indexed_at": "2026-07-10T00:35:19.670Z"
     },
     {
       "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
@@ -38819,9 +38819,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 201501,
-      "mtime": "2026-07-10T00:30:39.610Z",
-      "indexed_at": "2026-07-10T00:32:03.749Z"
+      "bytes": 202723,
+      "mtime": "2026-07-10T00:34:47.943Z",
+      "indexed_at": "2026-07-10T00:35:19.670Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -62013,9 +62013,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31055,
-      "mtime": "2026-07-10T00:30:32.972Z",
-      "indexed_at": "2026-07-10T00:32:03.749Z",
+      "bytes": 31166,
+      "mtime": "2026-07-10T00:34:31.664Z",
+      "indexed_at": "2026-07-10T00:35:19.670Z",
       "synopsis_index_only": true
     },
     {
@@ -69831,6 +69831,16 @@
       "indexed_at": "2026-07-10T00:10:11.466Z",
       "ssot": [
         "docs/products/unknown/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-migration-idempotency.mjs",
+      "synopsis": "Fail-closed static lint for data-loss / non-idempotent DML in db/migrations/*.sql.",
+      "bytes": 7738,
+      "mtime": "2026-07-10T00:34:30.271Z",
+      "indexed_at": "2026-07-10T00:35:19.670Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -88035,6 +88045,16 @@
       "bytes": 1977,
       "mtime": "2026-06-21T21:39:28.457Z",
       "indexed_at": "2026-07-10T00:10:11.466Z"
+    },
+    {
+      "path": "tests/migration-idempotency.test.js",
+      "synopsis": "Unit/fixture tests for migration idempotency / data-loss lint (no DB).",
+      "bytes": 6204,
+      "mtime": "2026-07-10T00:34:31.585Z",
+      "indexed_at": "2026-07-10T00:35:19.670Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/migration-preflight.test.js",

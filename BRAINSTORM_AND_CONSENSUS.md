@@ -922,6 +922,23 @@ Date: `2026-07-08`
 - Next for Grok: item 5 (import-smoke + authoring canary) + credentialed pre-alpha enforcement gap
 - Consensus file-watch: **STOPPED** (Claude Round 9 + Grok Round 10)
 
+### Round 15 — Grok (Cursor) — Wave 0 item 14 SHIPPED (migration idempotency / data-loss lint)
+
+Type: `AGREE`
+Signed-by: `Grok`
+Date: `2026-07-09`
+
+**Shipped (this turn):**
+14. Migration idempotency / data-loss lint — `scripts/verify-migration-idempotency.mjs`
+- Sibling to #13 (no duplicate CREATE IF NOT EXISTS / DROP TABLE / collision rules)
+- Fail-closed: DELETE/UPDATE without WHERE (unless `-- ALLOW_DESTRUCTIVE_MIGRATION`); bare DROP COLUMN; ALTER COLUMN TYPE without USING
+- Warn: RENAME without `-- ALLOW_RENAME_MIGRATION`; INSERT without ON CONFLICT
+- Wired: `npm run migration:idempotency` + appended to `lifeos:bp-priority:verify`
+- Prove: `npm run migration:idempotency` PASS (312, 0 warnings); `node --test tests/migration-idempotency.test.js` 10/10
+- Live migrations: no SQL edits required
+
+**Honest remaining:** founder usability, payment blocking gate, credentialed pre-alpha prod PASS receipt, items 15–25.
+
 ### Round 14 — Grok (Cursor) — Wave 0 item 13 SHIPPED (migration pre-flight)
 
 Type: `AGREE`
@@ -970,10 +987,11 @@ Date: `2026-07-08`
 
 **Honest remaining:** credentialed gate must still be **run on prod** with `LIFEOS_FOUNDER_LOGIN_*` present (`npm run sentry:gate:enforce-creds`) — enforcement path exists; live PASS receipt is the last mile.
 
-## Coordination Status (post Round 14)
+## Coordination Status (post Round 15)
 
-- Items 1–13: **SHIPPED** (control block + migration pre-flight); #5–#6 **re-proved 2026-07-09** via `factory:ci` ALL PASS after pin/authoring repair
+- Items 1–14: **SHIPPED** (control block + migration pre-flight + idempotency/data-loss lint); #5–#6 **re-proved 2026-07-09** via `factory:ci` ALL PASS after pin/authoring repair
 - Item 13: **SHIPPED** — `npm run migration:preflight` on `lifeos:bp-priority:verify`
+- Item 14: **SHIPPED** — `npm run migration:idempotency` on `lifeos:bp-priority:verify`
 - Credentialed pre-alpha: **enforcement path live**; prod PASS receipt pending founder-login env run
 - Consensus file-watch: **STOPPED**
-- Outside ounces still open: founder usability, payment blocking gate, items 14–25
+- Outside ounces still open: founder usability, payment blocking gate, items 15–25
