@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T09:41:20.534Z",
+  "generated_at": "2026-07-10T09:42:29.821Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11407,
+  "file_count": 11408,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66240,6 +66240,13 @@
       "bytes": 5582,
       "mtime": "2026-07-10T09:35:32.851Z",
       "indexed_at": "2026-07-10T09:35:32.851Z"
+    },
+    {
+      "path": "routes/tcIntakeRoutes.mjs",
+      "synopsis": "Registers TcIntakeRoutes routes/handlers (routes/tcIntakeRoutes.mjs).",
+      "bytes": 5223,
+      "mtime": "2026-07-10T09:42:29.821Z",
+      "indexed_at": "2026-07-10T09:42:29.821Z"
     },
     {
       "path": "routes/tco-agent-routes.js",
