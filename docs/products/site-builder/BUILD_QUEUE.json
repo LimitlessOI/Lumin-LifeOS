@@ -197,13 +197,16 @@
     },
     {
       "id": "step-3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-save-confirmation.js",
       "task": "Implement save-confirmation timestamp service",
       "spec": "Export function buildSaveConfirmation() that returns a plain JS object {savedAt: new Date().toISOString(), label: 'Saved', icon: 'checkmark'}. Export function formatSaveConfirmationHTML(obj) that returns a safe HTML string '<span class=\"sb-save-confirm\">✓ Saved at HH:MM:SS</span>' computed from obj.savedAt. No browser globals, no imports beyond node builtins. Satisfies ux_friction_4 service layer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "b6aaf4b796693f4a8ebd75c81fc109b5da75cc8b",
+      "last_attempt_at": "2026-07-10T21:14:50.477Z",
+      "completed_at": "2026-07-10T21:14:59.670Z"
     },
     {
       "id": "step-4",
