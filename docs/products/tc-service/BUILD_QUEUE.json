@@ -308,7 +308,7 @@
     },
     {
       "id": "step-08",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/tcIntakeRoutes.mjs",
       "task": "Register intake pipeline, document QA, offer-prep, and mobile approval API routes (items 1,6,9,35)",
       "spec": "Export function registerTcIntakeRoutes(app, deps). Mount: POST /api/tc/intake/run → tcIntakePipeline.runIntakePipeline; POST /api/tc/intake/document-qa → tcDocumentQA.runDocumentQA; POST /api/tc/offer-prep → tcOfferPrep.runOfferPrep; POST /api/tc/approvals → tcMobileApproval.createApprovalRequest; PATCH /api/tc/approvals/:id → tcMobileApproval.processApproval; POST /api/tc/showing-feedback → tcShowingFeedback.sendShowingFeedbackRequest; POST /api/tc/showing-feedback/webhook → tcShowingFeedback.recordFeedbackWebhook. All routes return JSON. Validate agentId present else 400. No browser globals.",
@@ -320,7 +320,7 @@
         "step-06"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerTcIntakeRoutes"
       ],
@@ -328,7 +328,10 @@
         "registerTcIntakeRoutes",
         "/api/tc/intake/run",
         "/api/tc/approvals"
-      ]
+      ],
+      "commit_sha": "e0a19c71145958b36f283e89ddd35feabbd36e23",
+      "last_attempt_at": "2026-07-10T10:29:37.119Z",
+      "completed_at": "2026-07-10T10:31:02.576Z"
     },
     {
       "id": "step-09",
