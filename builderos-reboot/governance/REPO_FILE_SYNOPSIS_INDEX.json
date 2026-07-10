@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T08:22:44.547Z",
+  "generated_at": "2026-07-10T08:29:32.419Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11398,
+  "file_count": 11399,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66192,6 +66192,13 @@
       "bytes": 4436,
       "mtime": "2026-07-10T07:03:38.324Z",
       "indexed_at": "2026-07-10T07:59:59.616Z"
+    },
+    {
+      "path": "routes/tc-imap-routes.js",
+      "synopsis": "Registers TcImapRoutes routes/handlers (routes/tc-imap-routes.js).",
+      "bytes": 1795,
+      "mtime": "2026-07-10T08:29:32.419Z",
+      "indexed_at": "2026-07-10T08:29:32.419Z"
     },
     {
       "path": "routes/tc-intake-routes.js",
