@@ -69,10 +69,20 @@ const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '1400
 // NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
 const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'claude_sonnet';
 const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'openai_gpt';
+const GENERATION_TIMEOUT_MS = Math.max(30_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '180000'));
+const PUPPETEER_LAUNCH_TIMEOUT_MS = Math.max(5_000, Number(process.env.SITE_BUILDER_PUPPETEER_LAUNCH_TIMEOUT_MS || '25000'));
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
 // reviews, ratings, and facts. Fails closed (no data) when no search provider key is set —
 // never fabricates. Disabled entirely with SITE_BUILDER_ENRICH=false.
 const ENRICHMENT_ENABLED = String(process.env.SITE_BUILDER_ENRICH || 'true') !== 'false';
+
+function withTimeout(promise, ms, label) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
 
 // POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
 export const POS_PARTNERS = {
@@ -134,16 +144,23 @@ export default class SiteBuilder {
    */
   async buildFromUrl(targetUrl, options = {}) {
     const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const onProgress = typeof options.onProgress === 'function' ? options.onProgress : null;
+    const progress = async (stage) => {
+      if (!onProgress) return;
+      try { await onProgress(stage); } catch { /* non-fatal */ }
+    };
     logger.info('[SITE] Building site from URL', { clientId, targetUrl });
 
     try {
       // Step 1: Scrape business info
+      await progress('scrape');
       const businessInfo = await this.scrapeBusinessInfo(targetUrl, options);
 
       // Step 1b: Enrich with REAL data from the business's live web presence
       // (Google/Yelp/Facebook reviews, rating, facts). Fails closed — never fabricates.
       if (ENRICHMENT_ENABLED && options.enrich !== false) {
         try {
+          await progress('enrich');
           businessInfo.verifiedData = await this.enrichWithRealData(businessInfo, options);
           if (businessInfo.verifiedData) {
             logger.info('[SITE] enrichment found real data', {
@@ -166,11 +183,13 @@ export default class SiteBuilder {
       const competitorUrls = options.competitorUrls || businessInfo.competitorUrls || [];
       if (this.callCouncil && competitorUrls.length > 0) {
         try {
+          await progress('benchmark');
           benchmark = await this.benchmarkCompetitors(businessInfo, competitorUrls);
         } catch (err) {
           logger.warn('[SITE] competitor benchmark failed (continuing)', { clientId, error: err.message });
         }
         try {
+          await progress('presence');
           presence = await this.auditPresence(businessInfo, competitorUrls);
         } catch (err) {
           logger.warn('[SITE] presence audit failed (continuing)', { clientId, error: err.message });
@@ -178,6 +197,7 @@ export default class SiteBuilder {
       }
 
       // Step 3: Generate main site HTML
+      await progress('generate');
       let siteHtml = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief: benchmark?.designBrief, ...options });
       let qualityReport = this.scoreSiteHtml(siteHtml, businessInfo);
 
@@ -503,7 +523,11 @@ export default class SiteBuilder {
     let browser;
     try {
       puppeteer = await import('puppeteer');
-      browser = await puppeteer.default.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+      browser = await withTimeout(
+        puppeteer.default.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] }),
+        PUPPETEER_LAUNCH_TIMEOUT_MS,
+        'puppeteer.launch'
+      );
       const page = await browser.newPage();
       await page.setUserAgent('Mozilla/5.0 (compatible; LuminBot/1.0; +https://lumin.ai)');
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
@@ -822,11 +846,19 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     // allowModelDowngrade:false prevents selectOptimalModel from overriding to groq_llama (4096 token limit)
     let response;
     try {
-      response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
+      response = await withTimeout(
+        this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false }),
+        GENERATION_TIMEOUT_MS,
+        `generateSiteHtml:${GENERATION_MODEL}`
+      );
     } catch (err) {
       if (GENERATION_MODEL !== GENERATION_FALLBACK_MODEL) {
         logger.warn('[SITE] primary generation model failed, falling back', { model: GENERATION_MODEL, error: err.message });
-        response = await this.callCouncil(GENERATION_FALLBACK_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
+        response = await withTimeout(
+          this.callCouncil(GENERATION_FALLBACK_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false }),
+          GENERATION_TIMEOUT_MS,
+          `generateSiteHtml:${GENERATION_FALLBACK_MODEL}`
+        );
       } else {
         throw err;
       }

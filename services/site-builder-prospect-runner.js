@@ -155,7 +155,7 @@ export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs
     return { ok: true, resumed: false, reason: 'too_fresh' };
   }
 
-  const claimExpires = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+  const claimExpires = new Date(Date.now() + 3 * 60 * 1000).toISOString();
   const claimToken = `claim_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   let claimed = false;
   try {

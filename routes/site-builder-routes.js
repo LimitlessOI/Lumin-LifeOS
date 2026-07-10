@@ -308,9 +308,10 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    * POST /api/v1/sites/prospects/reclaim-stale
    * Fail orphaned building jobs (no heartbeat / instance recycle).
    */
-  router.post('/prospects/reclaim-stale', requireKey, async (_req, res) => {
+  router.post('/prospects/reclaim-stale', requireKey, async (req, res) => {
     try {
-      const result = await failStaleProspectJobs(pool);
+      const staleMs = Number(req.body?.staleMs);
+      const result = await failStaleProspectJobs(pool, Number.isFinite(staleMs) && staleMs > 0 ? { staleMs } : {});
       return res.json(result);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -388,13 +389,21 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   router.patch('/prospects/:clientId/status', requireKey, async (req, res) => {
     try {
       const { clientId } = req.params;
-      const { status, dealValue } = req.body;
+      const { status, dealValue, contactEmail } = req.body;
+      if (!status && !contactEmail && dealValue == null) {
+        return res.status(400).json({ ok: false, error: 'status, contactEmail, or dealValue required' });
+      }
 
       await pool.query(
-        `UPDATE prospect_sites SET status = $1, deal_value = COALESCE($2, deal_value) WHERE client_id = $3`,
-        [status, dealValue || null, clientId]
+        `UPDATE prospect_sites
+            SET status = COALESCE($1, status),
+                deal_value = COALESCE($2, deal_value),
+                contact_email = COALESCE($3, contact_email),
+                updated_at = NOW()
+          WHERE client_id = $4`,
+        [status || null, dealValue ?? null, contactEmail || null, clientId]
       );
-      res.json({ ok: true, clientId, status });
+      res.json({ ok: true, clientId, status: status || undefined, contactEmail: contactEmail || undefined });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -425,8 +434,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   router.post('/prospects/:clientId/resend-outreach', requireKey, async (req, res) => {
     try {
       const { clientId } = req.params;
+      const contactEmail = req.body?.contactEmail || req.body?.contact_email || null;
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
-      const result = await pipeline.resendOutreachEmail(clientId);
+      const result = await pipeline.resendOutreachEmail(clientId, { contactEmail });
       if (!result.success) {
         return res.status(result.error === 'prospect not found' ? 404 : 400).json({ ok: false, ...result });
       }

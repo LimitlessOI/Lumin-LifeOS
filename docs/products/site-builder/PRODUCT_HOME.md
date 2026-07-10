@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Prospect resume DB claim lock (no duplicate multi-instance builds). |
+| **Last Updated** | 2026-07-10 — Prospect resend contactEmail override + build hang timeouts/heartbeats. |
 
 ---
 
@@ -297,6 +297,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-10 | **GAP-FILL T02 hang + resend** — `resend-outreach` accepts `contactEmail` override; PATCH can set `contact_email`; reclaim honors `staleMs`; build heartbeats renew 3m claim; puppeteer launch + generateSiteHtml `withTimeout`; mid-build `onProgress` stages. | Path-to-10 T02: builds stuck at `build` with no mid-stage heartbeat; built prospects couldn't get email without DB contact; reclaim ignored body. | ⚠️ tip sync + resend proof pending |
 | 2026-07-10 | **GAP-FILL prospect orphan reclaim** — `failStaleProspectJobs` + heartbeats in `processProspect`; status poll auto-reclaims; `POST /prospects/reclaim-stale`. | Path-to-10 T02: many `building` rows never leave building (instance recycle / hung setImmediate). Sync 502s. | ✅ | tip + reclaim + re-enqueue |
 | 2026-07-08 | **`services/stripe-client.js` tracked** — checkout imports Stripe via dedicated helper; closes ERR_MODULE_NOT_FOUND class for publish checkout on Railway. | Wave 0 import-smoke caught untracked import from `site-builder-entry-checkout.js`. | ✅ spine import verify PASS |
 | 2026-07-08 | **Self-fix wiring: gate runner now pipes both layers' results through `services/sentry-findings-to-improvement-feed.js` (system-authored via governed builder, commit `e66621ba6`) and writes `products/receipts/SENTRY_FINDINGS_FEED.json`.** Each SENTRY finding is normalized to `{ code, detail, proposed_solution, severity, source }` (solution-mandatory: never empty — synthesizes the smallest next step) and to the `{ blockers, warnings }` shape `services/builderos-improvement-loop.js` already consumes — so a failed/"rough" gate automatically produces governed improvement proposals. No secondary queue. | SO-002 solution-mandatory amendment (#286) + founder: "get the system to do your job, fix itself." Closes flag→propose→build→re-verify without a human. | Module `node --check` + PROVEN on the real Layer B result for `onlinewellroundedmama.com`: 4 findings, **0 without a solution**, correct improvement-loop shape, guards `null`/`{}`. Gate runner `node --check` + ran live (feed emits; 0 findings when no preview exists — fail-safe). |

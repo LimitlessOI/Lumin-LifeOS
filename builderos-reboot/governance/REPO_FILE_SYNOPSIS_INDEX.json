@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T11:33:22.687Z",
+  "generated_at": "2026-07-10T11:50:47.055Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11409,
   "files": [
@@ -36741,9 +36741,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 60808,
-      "mtime": "2026-07-10T06:28:08.581Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 61332,
+      "mtime": "2026-07-10T11:50:17.215Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38711,9 +38711,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 50586,
-      "mtime": "2026-07-05T19:10:02.178Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 50824,
+      "mtime": "2026-07-10T11:50:27.120Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 77668,
-      "mtime": "2026-07-10T11:32:50.093Z",
-      "indexed_at": "2026-07-10T11:32:51.576Z"
+      "bytes": 78136,
+      "mtime": "2026-07-10T11:48:41.876Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -59162,9 +59162,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5814,
-      "mtime": "2026-07-10T11:33:21.727Z",
-      "indexed_at": "2026-07-10T11:33:22.687Z",
+      "bytes": 5802,
+      "mtime": "2026-07-10T11:49:17.725Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z",
       "synopsis_index_only": true
     },
     {
@@ -66163,9 +66163,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 27660,
-      "mtime": "2026-07-10T11:17:31.322Z",
-      "indexed_at": "2026-07-10T11:17:37.594Z",
+      "bytes": 28304,
+      "mtime": "2026-07-10T11:48:01.780Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85132,9 +85132,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 22822,
-      "mtime": "2026-07-10T11:17:32.277Z",
-      "indexed_at": "2026-07-10T11:17:37.594Z",
+      "bytes": 23845,
+      "mtime": "2026-07-10T11:47:43.286Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85142,9 +85142,9 @@
     {
       "path": "services/provider-key-health.js",
       "synopsis": "Provider API-key health — enumerate the AI/LLM/tool keys Railway",
-      "bytes": 9184,
-      "mtime": "2026-07-09T01:03:41.535Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 9178,
+      "mtime": "2026-07-10T11:48:54.662Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85639,9 +85639,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 11997,
-      "mtime": "2026-07-10T11:32:35.119Z",
-      "indexed_at": "2026-07-10T11:32:51.576Z",
+      "bytes": 11996,
+      "mtime": "2026-07-10T11:47:55.575Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85683,9 +85683,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 67838,
-      "mtime": "2026-07-07T21:53:23.738Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 69094,
+      "mtime": "2026-07-10T11:48:20.266Z",
+      "indexed_at": "2026-07-10T11:50:47.055Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

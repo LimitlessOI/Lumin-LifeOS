@@ -8,6 +8,10 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — T02 hang + resend path (FULLY_MACHINE_READY still false)
+
+Adam: is A→Z autonomy true now? **No** — `FULLY_MACHINE_READY` still false. Keep going. Shipped Site Builder GAP-FILL: resend `contactEmail` override, PATCH contact_email, reclaim `staleMs`, 3m claim renew on heartbeat, puppeteer/generate timeouts, mid-build progress. Tip never-stop run-once 502'd; tip has planner keys but `total_runs:0`. Next: tip sync → resend built preview → first-dollar receipt; cold-coder still open.
+
 ## [FIX] Update 2026-07-10 — BuilderOS keep-building: smoke canary + E2E 16/16
 
 Adam: if more BuilderOS work remains, don't stop. Shipped mechanical `founder_smoke_canary_mjs_patch` (closes multi-instance `FOUNDER_BUILD_JOB_STALE_RUNNING`); tip `ed8fb2cfe`+; **REAL_APP_E2E 16/16** incl. `drawer_direct_build` PASS. Never-stop `cycle_start product_build_tc-service_s7` in progress. Founder-ui-proof PASS (E2E 16/16 + alpha battery). FULLY_MACHINE_READY still false (founder confirm + cold-coder). Next: keep burning tc-service queue → Site Builder Layer B / first dollar.

@@ -39,8 +39,8 @@
         "LimitlessOS / business"
       ],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "Resume-on-poll + claim lock on main (13115f7). Job prev_1783681554375_lonl still building after resume heartbeats — buildFromUrl slow/hung. Poll after tip 13115f7; Places key still ABSENT.",
-      "blocker": "Prior: orphan building jobs + sync 502. Places key still ABSENT for Go Vegas alternate path."
+      "next_action": "GAP-FILL: resend contactEmail + build timeouts/heartbeats shipping; after tip sync resend on built preview for Site Builder send receipt. Places key still ABSENT.",
+      "blocker": "Builds hang mid-generate (no mid-stage heartbeat until this ship). Places key ABSENT for Go Vegas alternate."
     },
     {
       "id": "T03",

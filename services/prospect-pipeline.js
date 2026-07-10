@@ -133,6 +133,7 @@ export default class ProspectPipeline {
   async touchProspectJob(clientId, stage = 'running') {
     if (!this.pool || !clientId) return;
     try {
+      const claimExpires = new Date(Date.now() + 3 * 60 * 1000).toISOString();
       await this.pool.query(
         `UPDATE prospect_sites
             SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
@@ -143,6 +144,7 @@ export default class ProspectPipeline {
           JSON.stringify({
             jobStage: String(stage || 'running').slice(0, 80),
             jobHeartbeatAt: new Date().toISOString(),
+            jobClaimExpiresAt: claimExpires,
           }),
         ]
       );
@@ -184,11 +186,22 @@ export default class ProspectPipeline {
     }
 
     await this.touchProspectJob(clientIdEarly, 'build');
-    // Step 1: Build their mock site
-    const buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
-      businessInfo: options.businessInfo || null,
-      clientId: options.clientId || null,
-    });
+    const heartbeat = setInterval(() => {
+      this.touchProspectJob(clientIdEarly, 'build_heartbeat').catch(() => null);
+    }, 20_000);
+    let buildResult;
+    try {
+      // Step 1: Build their mock site
+      buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
+        businessInfo: options.businessInfo || null,
+        clientId: options.clientId || null,
+        enrich: options.enrich,
+        skipRepair: options.skipRepair,
+        onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
+      });
+    } finally {
+      clearInterval(heartbeat);
+    }
 
     if (!buildResult.success) {
       return { success: false, error: `Site build failed: ${buildResult.error}` };
@@ -274,7 +287,7 @@ export default class ProspectPipeline {
   /**
    * Resend initial outreach email for an existing prospect (no rebuild).
    */
-  async resendOutreachEmail(clientId) {
+  async resendOutreachEmail(clientId, { contactEmail = null } = {}) {
     if (!this.pool || !this.sendEmail) return { success: false, error: 'pool and sendEmail are required' };
 
     let row;
@@ -286,6 +299,18 @@ export default class ProspectPipeline {
     }
 
     if (!row) return { success: false, error: 'prospect not found' };
+    const overrideEmail = String(contactEmail || '').trim();
+    if (overrideEmail && overrideEmail !== row.contact_email) {
+      try {
+        await this.pool.query(
+          `UPDATE prospect_sites SET contact_email = $2, updated_at = NOW() WHERE client_id = $1`,
+          [clientId, overrideEmail]
+        );
+        row.contact_email = overrideEmail;
+      } catch (err) {
+        return { success: false, error: `contact email update failed: ${err.message}` };
+      }
+    }
     if (!row.contact_email) return { success: false, error: 'contact email missing' };
     if (!row.preview_url) return { success: false, error: 'preview not built yet' };
     if (String(row.status || '').toLowerCase() === 'qa_hold') {
