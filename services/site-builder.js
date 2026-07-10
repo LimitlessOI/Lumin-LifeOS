@@ -161,7 +161,11 @@ export default class SiteBuilder {
       if (ENRICHMENT_ENABLED && options.enrich !== false) {
         try {
           await progress('enrich');
-          businessInfo.verifiedData = await this.enrichWithRealData(businessInfo, options);
+          businessInfo.verifiedData = await withTimeout(
+            this.enrichWithRealData(businessInfo, options),
+            Math.min(60_000, GENERATION_TIMEOUT_MS),
+            'enrichWithRealData'
+          );
           if (businessInfo.verifiedData) {
             logger.info('[SITE] enrichment found real data', {
               clientId,

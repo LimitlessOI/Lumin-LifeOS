@@ -196,6 +196,8 @@ export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs
     contactName: row.contact_name || '',
     businessName: row.business_name || '',
     skipEmail: metadata.skipEmail === true,
+    enrich: metadata.enrich,
+    skipRepair: metadata.skipRepair === true,
     businessInfo: metadata.businessInfo || null,
   };
   if (!options.businessUrl) {

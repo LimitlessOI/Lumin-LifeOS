@@ -97,6 +97,8 @@ export default class ProspectPipeline {
             jobStartedAt: new Date().toISOString(),
             async: true,
             skipEmail: options.skipEmail === true,
+            enrich: options.enrich,
+            skipRepair: options.skipRepair === true,
             businessInfo: options.businessInfo || null,
           }),
         ]
