@@ -332,7 +332,10 @@
         "step-07"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "59cf3f777b54dc8115afd89379286beafc9164e8",
+      "last_attempt_at": "2026-07-10T09:29:58.650Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/tcBillingRoutes.mjs\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "step-10",
