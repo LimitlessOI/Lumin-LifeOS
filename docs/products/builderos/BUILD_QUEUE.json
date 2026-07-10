@@ -34,7 +34,7 @@
     },
     {
       "id": "step-03",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/mission-ledger.js",
       "task": "Implement mission-ledger service with 11 exported functions and MISSION_STATE_TRANSITIONS",
       "spec": "Module exports exactly: MISSION_STATE_TRANSITIONS (object mapping each state to array of valid next states: draft->['active','cancelled'], active->['paused','completed','cancelled'], paused->['active','cancelled'], completed->[], cancelled->[]); createMission(db, data); getMission(db, id); listMissions(db, filters); updateMission(db, id, patch); transitionMission(db, id, nextState, actorId); addParticipant(db, missionId, userId, role); removeParticipant(db, missionId, userId); listParticipants(db, missionId); addBoardItem(db, missionId, data); updateBoardItem(db, itemId, patch); listBoardItems(db, missionId). All functions are async and use parameterised pg queries via the passed db pool. transitionMission validates against MISSION_STATE_TRANSITIONS and throws Error('INVALID_TRANSITION') if disallowed. Truncation guard: any text field written to DB is sliced to its column max (title 255, description 4000, role 64, rejection_reason 1000) before insert/update. No top-level browser globals. No AI SDK imports. No uuid imports — DB generates all ids.",
@@ -43,7 +43,10 @@
         "step-02"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "701686683d1126828b7da8dc046fec705df6dbfc",
+      "last_attempt_at": "2026-07-10T10:48:53.422Z",
+      "completed_at": "2026-07-10T10:48:53.763Z"
     },
     {
       "id": "step-04",
