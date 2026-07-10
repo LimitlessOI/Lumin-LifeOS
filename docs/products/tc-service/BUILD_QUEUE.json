@@ -134,7 +134,7 @@
     },
     {
       "id": "s9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/tc-imap-routes.js",
       "task": "Register IMAP bootstrap verification and dry-run scan routes",
       "spec": "Export registerTcImapRoutes(app, deps). GET /api/tc/imap/status calls imapRailwayBootstrap.verifyImapAndDryRun(deps) returns {ready, missing?, scannedCount?, sample?}. POST /api/tc/imap/dry-run forces a fresh dry-run scan and returns results. Requires deps.requireAuth. No top-level browser globals.",
@@ -142,10 +142,10 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-10T08:29:57.342Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-10T08:37:39.415Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/tc-imap-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "commit_sha": "43bc1fcf5cba94320053164bb191a6656c2f4ce8"
+      "commit_sha": "8057ba23eed5435c942771fd96f8a9bd25e3aa09"
     },
     {
       "id": "s10",
