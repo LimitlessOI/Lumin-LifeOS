@@ -39,8 +39,8 @@
         "LimitlessOS / business"
       ],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "GAP-FILL: resend contactEmail + build timeouts/heartbeats shipping; after tip sync resend on built preview for Site Builder send receipt. Places key still ABSENT.",
-      "blocker": "Builds hang mid-generate (no mid-stage heartbeat until this ship). Places key ABSENT for Go Vegas alternate."
+      "next_action": "Tip 7c01c20: persist-before-email + lean skipBlogs. Prove built then resend. SMTP Connection timeout still blocks send receipt. Places key ABSENT.",
+      "blocker": "SMTP from Railway times out (Gmail). Preview disk wiped on redeploy. Places key ABSENT for Go Vegas."
     },
     {
       "id": "T03",
