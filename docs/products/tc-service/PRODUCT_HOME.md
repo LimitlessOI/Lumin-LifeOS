@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — GAP-FILL tcIntakeRoutes named imports + auto-register mjs step-08/09. |
+| **Last Updated** | 2026-07-10 — default-export shims on TC .mjs services so builder default-imports mount. |
 
 ---
 

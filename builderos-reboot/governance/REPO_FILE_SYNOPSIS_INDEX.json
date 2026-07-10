@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T10:07:53.388Z",
+  "generated_at": "2026-07-10T10:18:42.343Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11408,
   "files": [
@@ -39729,9 +39729,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 104397,
-      "mtime": "2026-07-10T09:59:32.613Z",
-      "indexed_at": "2026-07-10T09:59:56.146Z"
+      "bytes": 104402,
+      "mtime": "2026-07-10T10:18:28.171Z",
+      "indexed_at": "2026-07-10T10:18:42.343Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66246,10 +66246,13 @@
     },
     {
       "path": "routes/tcIntakeRoutes.mjs",
-      "synopsis": "Registers TcIntakeRoutes routes/handlers (routes/tcIntakeRoutes.mjs).",
-      "bytes": 3128,
-      "mtime": "2026-07-10T10:07:53.388Z",
-      "indexed_at": "2026-07-10T10:07:53.388Z"
+      "synopsis": "TC intake / document-QA / offer-prep / approvals / showing-feedback routes.",
+      "bytes": 6419,
+      "mtime": "2026-07-10T10:18:28.169Z",
+      "indexed_at": "2026-07-10T10:18:42.343Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/tco-agent-routes.js",
@@ -86254,37 +86257,52 @@
     {
       "path": "services/tcDocumentQA.mjs",
       "synopsis": "Exports runDocumentQA — services/tcDocumentQA.mjs.",
-      "bytes": 2436,
-      "mtime": "2026-07-10T09:41:20.534Z",
-      "indexed_at": "2026-07-10T09:41:20.534Z"
+      "bytes": 2525,
+      "mtime": "2026-07-10T10:18:28.168Z",
+      "indexed_at": "2026-07-10T10:18:42.343Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/tcIntakePipeline.mjs",
       "synopsis": "Exports runIntakePipeline — services/tcIntakePipeline.mjs.",
-      "bytes": 7364,
-      "mtime": "2026-07-10T09:10:47.669Z",
-      "indexed_at": "2026-07-10T09:10:47.669Z"
+      "bytes": 7457,
+      "mtime": "2026-07-10T10:18:28.165Z",
+      "indexed_at": "2026-07-10T10:18:42.343Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/tcMobileApproval.mjs",
       "synopsis": "Exports createApprovalRequest — services/tcMobileApproval.mjs.",
-      "bytes": 4694,
-      "mtime": "2026-07-10T09:12:38.214Z",
-      "indexed_at": "2026-07-10T09:12:38.214Z"
+      "bytes": 4810,
+      "mtime": "2026-07-10T10:18:28.169Z",
+      "indexed_at": "2026-07-10T10:18:42.343Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/tcOfferPrep.mjs",
       "synopsis": "Exports runOfferPrep — services/tcOfferPrep.mjs.",
-      "bytes": 5031,
-      "mtime": "2026-07-10T09:11:55.245Z",
-      "indexed_at": "2026-07-10T09:11:55.245Z"
+      "bytes": 5119,
+      "mtime": "2026-07-10T10:18:28.168Z",
+      "indexed_at": "2026-07-10T10:18:42.343Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/tcShowingFeedback.mjs",
       "synopsis": "Exports sendShowingFeedbackRequest — services/tcShowingFeedback.mjs.",
-      "bytes": 2239,
-      "mtime": "2026-07-10T09:11:15.900Z",
-      "indexed_at": "2026-07-10T09:11:15.900Z"
+      "bytes": 2366,
+      "mtime": "2026-07-10T10:18:28.169Z",
+      "indexed_at": "2026-07-10T10:18:42.343Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/teacher-os-paperwork.js",

@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports runOfferPrep — services/tcOfferPrep.mjs.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 export async function runOfferPrep(deps, { agentId, propertyAddress, clientProfileId }) {
   if (!deps || typeof deps !== 'object') {
@@ -167,3 +168,7 @@ function stringifyForPrompt(value) {
     return String(value);
   }
 }
+
+export default {
+  runOfferPrep,
+};

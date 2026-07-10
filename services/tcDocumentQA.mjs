@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports runDocumentQA — services/tcDocumentQA.mjs.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 export async function runDocumentQA(deps, { transactionId, documentBuffer }) {
   const { pool, callCouncilMember, logger } = deps || {};
@@ -73,3 +74,7 @@ export async function runDocumentQA(deps, { transactionId, documentBuffer }) {
 
   return { passed, issues };
 }
+
+export default {
+  runDocumentQA,
+};

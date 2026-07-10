@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports sendShowingFeedbackRequest — services/tcShowingFeedback.mjs.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 export async function sendShowingFeedbackRequest(
   deps,
@@ -82,3 +83,8 @@ export async function recordFeedbackWebhook(deps, { requestId, feedbackPayload }
 
   return result.rows[0] ?? null;
 }
+
+export default {
+  sendShowingFeedbackRequest,
+  recordFeedbackWebhook,
+};

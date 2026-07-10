@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports runIntakePipeline — services/tcIntakePipeline.mjs.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 export async function runIntakePipeline(deps) {
   const processed = [];
@@ -230,3 +231,7 @@ export async function runIntakePipeline(deps) {
 
   return { processed, errors };
 }
+
+export default {
+  runIntakePipeline,
+};

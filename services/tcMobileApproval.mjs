@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createApprovalRequest — services/tcMobileApproval.mjs.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 export async function createApprovalRequest(deps, { transactionId, agentId, documentUrl, action }) {
   const { pool, baseUrl, logger } = deps;
@@ -143,3 +144,8 @@ export async function processApproval(deps, { approvalId, decision, signatureTok
     status: normalizedDecision
   };
 }
+
+export default {
+  createApprovalRequest,
+  processApproval,
+};

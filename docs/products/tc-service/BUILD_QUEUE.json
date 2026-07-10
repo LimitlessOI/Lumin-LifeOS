@@ -320,7 +320,15 @@
         "step-06"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "expected_exports": [
+        "registerTcIntakeRoutes"
+      ],
+      "file_contains": [
+        "registerTcIntakeRoutes",
+        "/api/tc/intake/run",
+        "/api/tc/approvals"
+      ]
     },
     {
       "id": "step-09",
@@ -334,7 +342,14 @@
       "founder_gated": false,
       "attempts": 0,
       "commit_sha": "59cf3f777b54dc8115afd89379286beafc9164e8",
-      "last_attempt_at": "2026-07-10T09:29:58.650Z"
+      "last_attempt_at": "2026-07-10T09:29:58.650Z",
+      "expected_exports": [
+        "registerTcBillingRoutes"
+      ],
+      "file_contains": [
+        "registerTcBillingRoutes",
+        "/api/tc/billing/subscribe"
+      ]
     },
     {
       "id": "step-10",
