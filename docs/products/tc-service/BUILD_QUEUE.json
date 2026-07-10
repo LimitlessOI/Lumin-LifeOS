@@ -107,11 +107,12 @@
         "s5"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "commit_sha": "e0693a778834dd9553dfd7087bc08943a517bb1b",
-      "last_attempt_at": "2026-07-10T06:58:49.995Z",
+      "attempts": 1,
+      "commit_sha": "0bc0856d24797e15dab0d6f5edd9bce6e34407b8",
+      "last_attempt_at": "2026-07-10T07:06:37.640Z",
       "revive_count": 1,
-      "revived_at": "2026-07-10T07:05:17.238Z"
+      "revived_at": "2026-07-10T07:05:17.238Z",
+      "last_error": "artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw"
     },
     {
       "id": "s8",
