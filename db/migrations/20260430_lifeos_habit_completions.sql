@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS lifeos_habit_completions (
   UNIQUE (habit_id, "user_id", completed_date)
 );
 
-CREATE INDEX idx_habit_completions_user_habit ON lifeos_habit_completions("user_id", habit_id, completed_date DESC);
+CREATE INDEX IF NOT EXISTS idx_habit_completions_user_habit ON lifeos_habit_completions("user_id", habit_id, completed_date DESC);

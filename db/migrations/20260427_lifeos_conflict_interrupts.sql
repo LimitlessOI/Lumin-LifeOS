@@ -18,16 +18,16 @@ CREATE TABLE IF NOT EXISTS conflict_interrupts (
 );
 
 -- Index for efficient user-based queries sorted by most recent
-CREATE INDEX idx_conflict_interrupts_user_triggered 
+CREATE INDEX IF NOT EXISTS idx_conflict_interrupts_user_triggered 
     ON conflict_interrupts(user_id, triggered_at DESC);
 
 -- Index for partner-based queries (when partner_id is not null)
-CREATE INDEX idx_conflict_interrupts_partner 
+CREATE INDEX IF NOT EXISTS idx_conflict_interrupts_partner 
     ON conflict_interrupts(partner_id, triggered_at DESC) 
     WHERE partner_id IS NOT NULL;
 
 -- Index for resolution status queries
-CREATE INDEX idx_conflict_interrupts_resolution 
+CREATE INDEX IF NOT EXISTS idx_conflict_interrupts_resolution 
     ON conflict_interrupts(resolution_status, triggered_at DESC);
 
 -- Add comment for documentation

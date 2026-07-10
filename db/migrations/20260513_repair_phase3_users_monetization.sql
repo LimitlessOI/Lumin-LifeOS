@@ -115,7 +115,7 @@ ALTER TABLE monetization_paths
 
 -- Re-create the index now that status exists
 DROP INDEX IF EXISTS idx_monetization_paths_user;
-CREATE INDEX idx_monetization_paths_user ON monetization_paths (user_id, status);
+CREATE INDEX IF NOT EXISTS idx_monetization_paths_user ON monetization_paths (user_id, status);
 
 -- monetization_outreach may not exist at all (transaction aborted before it was created)
 CREATE TABLE IF NOT EXISTS monetization_outreach (
@@ -140,6 +140,6 @@ ALTER TABLE monetization_outreach
   ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'draft';
 
 DROP INDEX IF EXISTS idx_monetization_outreach_user;
-CREATE INDEX idx_monetization_outreach_user ON monetization_outreach (user_id, status);
+CREATE INDEX IF NOT EXISTS idx_monetization_outreach_user ON monetization_outreach (user_id, status);
 
 CREATE INDEX IF NOT EXISTS idx_monetization_outreach_path ON monetization_outreach (path_id);

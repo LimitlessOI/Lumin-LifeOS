@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T00:27:12.757Z",
+  "generated_at": "2026-07-10T00:32:03.749Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11368,
+  "file_count": 11371,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -20498,9 +20498,9 @@
     {
       "path": "BRAINSTORM_AND_CONSENSUS.md",
       "synopsis": "BRAINSTORM_AND_CONSENSUS",
-      "bytes": 53898,
-      "mtime": "2026-07-10T00:25:51.678Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z"
+      "bytes": 54842,
+      "mtime": "2026-07-10T00:31:45.867Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
@@ -30688,6 +30688,14 @@
       ]
     },
     {
+      "path": "config/migration-preflight-collision-allowlist.json",
+      "synopsis": "Configuration — Migration Preflight Collision Allowlist.",
+      "bytes": 17389,
+      "mtime": "2026-07-10T00:29:52.955Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "config/neural.config.json",
       "synopsis": "Configuration — Neural.Config.",
       "bytes": 381,
@@ -33346,9 +33354,9 @@
     {
       "path": "db/migrations/001_create_energy_tables.sql",
       "synopsis": "Database migration — 001_create_energy_tables.sql.",
-      "bytes": 919,
-      "mtime": "2026-06-21T21:37:50.653Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 975,
+      "mtime": "2026-07-10T00:30:20.965Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/001_create_initial_schema.sql",
@@ -33360,9 +33368,9 @@
     {
       "path": "db/migrations/001_create_learning_profiles.sql",
       "synopsis": "Database migration — 001_create_learning_profiles.sql.",
-      "bytes": 294,
-      "mtime": "2026-06-21T21:37:50.687Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 308,
+      "mtime": "2026-07-10T00:30:23.077Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/001_orch_notify.sql",
@@ -33430,9 +33438,9 @@
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
       "synopsis": "Database migration — 20231105_create_bioprinting_tables.sql.",
-      "bytes": 862,
-      "mtime": "2026-06-21T21:37:50.723Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 918,
+      "mtime": "2026-07-10T00:30:24.606Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/20260313_core_schema.sql",
@@ -33773,9 +33781,9 @@
     {
       "path": "db/migrations/20260328_lifeos_repair.sql",
       "synopsis": "Database migration — 20260328_lifeos_repair.sql.",
-      "bytes": 11572,
-      "mtime": "2026-06-21T21:37:51.629Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 11603,
+      "mtime": "2026-07-10T00:30:27.253Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/20260328_lifeos_truth_delivery.sql",
@@ -34221,9 +34229,9 @@
     {
       "path": "db/migrations/20260427_lifeos_conflict_interrupts.sql",
       "synopsis": "Database migration — 20260427_lifeos_conflict_interrupts.sql.",
-      "bytes": 2283,
-      "mtime": "2026-06-21T21:37:52.705Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2325,
+      "mtime": "2026-07-10T00:30:25.066Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/20260427_lifeos_decision_review_queue.sql",
@@ -34256,9 +34264,9 @@
     {
       "path": "db/migrations/20260430_lifeos_habit_completions.sql",
       "synopsis": "Database migration — 20260430_lifeos_habit_completions.sql.",
-      "bytes": 565,
-      "mtime": "2026-06-29T17:21:07.770Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 579,
+      "mtime": "2026-07-10T00:30:25.549Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/20260513_repair_phase1_syntax.sql",
@@ -34277,9 +34285,9 @@
     {
       "path": "db/migrations/20260513_repair_phase3_users_monetization.sql",
       "synopsis": "Database migration — 20260513_repair_phase3_users_monetization.sql.",
-      "bytes": 9246,
-      "mtime": "2026-06-21T21:37:52.840Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 9274,
+      "mtime": "2026-07-10T00:30:26.598Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/20260519_builder_trust_spine.sql",
@@ -35453,9 +35461,9 @@
     {
       "path": "db/migrations/20260708_marketing_phase1_schema_v2.sql",
       "synopsis": "MarketingOS SocialMediaOS Phase 1 schema — CORRECT §6 founder-story spec.",
-      "bytes": 5622,
-      "mtime": "2026-07-07T21:41:40.912Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 5653,
+      "mtime": "2026-07-10T00:30:27.277Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "db/migrations/20260709_marketing_phase2_calendar.sql",
@@ -35852,16 +35860,16 @@
     {
       "path": "docs/AGENT_INBOX_ARCHIVE.md",
       "synopsis": "Agent Inbox — Archive",
-      "bytes": 392,
-      "mtime": "2026-06-21T21:37:54.047Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 874,
+      "mtime": "2026-07-10T00:31:45.841Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "docs/AGENT_INBOX.md",
       "synopsis": "Agent Inbox",
-      "bytes": 1376,
-      "mtime": "2026-07-09T01:03:41.928Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1107,
+      "mtime": "2026-07-10T00:31:45.839Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -36712,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 52947,
-      "mtime": "2026-07-10T00:22:21.034Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z"
+      "bytes": 53517,
+      "mtime": "2026-07-10T00:31:45.768Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38811,9 +38819,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 200334,
-      "mtime": "2026-07-10T00:23:32.209Z",
-      "indexed_at": "2026-07-10T00:27:02.946Z"
+      "bytes": 201501,
+      "mtime": "2026-07-10T00:30:39.610Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39254,9 +39262,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 593636,
-      "mtime": "2026-07-10T00:09:28.839Z",
-      "indexed_at": "2026-07-10T00:10:17.481Z"
+      "bytes": 594293,
+      "mtime": "2026-07-10T00:31:45.744Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -62005,9 +62013,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 30916,
-      "mtime": "2026-07-09T02:33:15.655Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 31055,
+      "mtime": "2026-07-10T00:30:32.972Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z",
       "synopsis_index_only": true
     },
     {
@@ -68838,9 +68846,9 @@
     {
       "path": "scripts/system-railway-redeploy.mjs",
       "synopsis": "Triggers Railway redeploy via the RUNNING app.",
-      "bytes": 11231,
-      "mtime": "2026-07-03T00:17:45.090Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 11458,
+      "mtime": "2026-07-10T00:28:55.425Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -69823,6 +69831,16 @@
       "indexed_at": "2026-07-10T00:10:11.466Z",
       "ssot": [
         "docs/products/unknown/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-migration-preflight.mjs",
+      "synopsis": "Fail-closed static pre-flight for db/migrations/*.sql (idempotency + collision risk).",
+      "bytes": 8710,
+      "mtime": "2026-07-10T00:30:07.615Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -88017,6 +88035,16 @@
       "bytes": 1977,
       "mtime": "2026-06-21T21:39:28.457Z",
       "indexed_at": "2026-07-10T00:10:11.466Z"
+    },
+    {
+      "path": "tests/migration-preflight.test.js",
+      "synopsis": "Unit/fixture tests for migration pre-flight validator (no DB).",
+      "bytes": 6127,
+      "mtime": "2026-07-10T00:30:20.379Z",
+      "indexed_at": "2026-07-10T00:32:03.749Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/migration-safety.test.js",

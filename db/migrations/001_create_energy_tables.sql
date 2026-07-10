@@ -1,19 +1,19 @@
 -- SYNOPSIS: Database migration — 001_create_energy_tables.sql.
-CREATE TABLE energy_grid_nodes (
+CREATE TABLE IF NOT EXISTS energy_grid_nodes (
   id SERIAL PRIMARY KEY,
   node_id VARCHAR(255) UNIQUE NOT NULL,
   status VARCHAR(50),
   last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE energy_forecasts (
+CREATE TABLE IF NOT EXISTS energy_forecasts (
   id SERIAL PRIMARY KEY,
   node_id VARCHAR(255) REFERENCES energy_grid_nodes(node_id),
   forecasted_value NUMERIC,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE maintenance_alerts (
+CREATE TABLE IF NOT EXISTS maintenance_alerts (
   id SERIAL PRIMARY KEY,
   node_id VARCHAR(255) REFERENCES energy_grid_nodes(node_id),
   alert_message TEXT,
@@ -21,7 +21,7 @@ CREATE TABLE maintenance_alerts (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE energy_transactions (
+CREATE TABLE IF NOT EXISTS energy_transactions (
   id SERIAL PRIMARY KEY,
   transaction_id VARCHAR(255) UNIQUE NOT NULL,
   node_id VARCHAR(255) REFERENCES energy_grid_nodes(node_id),

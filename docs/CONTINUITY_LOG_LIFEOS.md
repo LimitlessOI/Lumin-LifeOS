@@ -8,6 +8,18 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Wave 0 #13 + redeploy fallthrough
+
+### What happened
+- Closed Wave 0 #5–#6: factory:ci ALL PASS; pushed `4f00157ad9` / `2c542fc010`.
+- Wave 0 #13: migration pre-flight validator (`npm run migration:preflight` PASS, 312 migrations).
+- Redeploy script no longer hard-exits on missing `/railway/deploy` (404); live railway managed-env routes also 404 — deploy via GitHub `Deploy to Railway` workflow.
+
+### Next
+- Confirm live tip advances past `2c542fc010`; Wave 0 #14 migration idempotency lint; archive stale inbox Q-001/Q-002.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Wave 0 #5–#6: factory:ci ALL PASS
 
 ### What happened

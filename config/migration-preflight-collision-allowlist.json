@@ -1,0 +1,536 @@
+{
+  "note": "Historical CREATE TABLE collision pairs grandfathered at Wave 0 item 13 ship. New pairs FAIL. Do not add new pairs casually — prefer removing the duplicate CREATE.",
+  "generated_at": "2026-07-09",
+  "pairs": [
+    {
+      "table": "energy_transactions",
+      "first_file": "001_create_energy_tables.sql",
+      "second_file": "001_create_initial_schema.sql"
+    },
+    {
+      "table": "boldtrail_agents",
+      "first_file": "20230705_create_boldtrail_agents.sql",
+      "second_file": "20260313_core_schema.sql"
+    },
+    {
+      "table": "boldtrail_showings",
+      "first_file": "20230705_create_boldtrail_showings.sql",
+      "second_file": "20260313_core_schema.sql"
+    },
+    {
+      "table": "boldtrail_email_drafts",
+      "first_file": "20230705_create_boldtrail_email_drafts.sql",
+      "second_file": "20260313_core_schema.sql"
+    },
+    {
+      "table": "prospect_sites",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260313_site_builder_prospect_pipeline.sql"
+    },
+    {
+      "table": "email_suppressions",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260313_site_builder_prospect_pipeline.sql"
+    },
+    {
+      "table": "outreach_log",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260313_site_builder_prospect_pipeline.sql"
+    },
+    {
+      "table": "ai_response_cache",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260322_optimizer_cache.sql"
+    },
+    {
+      "table": "projects",
+      "first_file": "20230704_create_projects_table.sql",
+      "second_file": "20260326_project_governance.sql"
+    },
+    {
+      "table": "project_segments",
+      "first_file": "20230704_create_project_segments_table.sql",
+      "second_file": "20260326_project_governance.sql"
+    },
+    {
+      "table": "estimation_log",
+      "first_file": "20230704_create_estimation_log_table.sql",
+      "second_file": "20260326_project_governance.sql"
+    },
+    {
+      "table": "pending_adam",
+      "first_file": "20230704_create_pending_adam_table.sql",
+      "second_file": "20260326_project_governance.sql"
+    },
+    {
+      "table": "commitments",
+      "first_file": "20260321_word_keeper.sql",
+      "second_file": "20260328_lifeos_core.sql"
+    },
+    {
+      "table": "lifeos_users",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "commitments",
+      "first_file": "20260321_word_keeper.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "commitment_prods",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "integrity_score_log",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "joy_checkins",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "joy_score_log",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "daily_mirror_log",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "health_checkins",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "inner_work_log",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "lifeos_notification_queue",
+      "first_file": "20260328_lifeos_notifications.sql",
+      "second_file": "20260328_lifeos_repair.sql"
+    },
+    {
+      "table": "monetization_paths",
+      "first_file": "20260329_lifeos_community.sql",
+      "second_file": "20260418_lifeos_monetization.sql"
+    },
+    {
+      "table": "habits",
+      "first_file": "20260420_lifeos_phase2_schema.sql",
+      "second_file": "20260422_lifeos_habits.sql"
+    },
+    {
+      "table": "sleep_logs",
+      "first_file": "20260420_lifeos_phase2_schema.sql",
+      "second_file": "20260427_lifeos_sleep_logs.sql"
+    },
+    {
+      "table": "conflict_interrupts",
+      "first_file": "20260427_lifeos_conflict_interrupts.sql",
+      "second_file": "20260513_repair_phase1_syntax.sql"
+    },
+    {
+      "table": "sleep_logs",
+      "first_file": "20260420_lifeos_phase2_schema.sql",
+      "second_file": "20260513_repair_phase1_syntax.sql"
+    },
+    {
+      "table": "build_outcomes",
+      "first_file": "20260327_governance_spec.sql",
+      "second_file": "20260513_repair_phase2_model_performance_chain.sql"
+    },
+    {
+      "table": "model_verdict_log",
+      "first_file": "20260327_model_performance.sql",
+      "second_file": "20260513_repair_phase2_model_performance_chain.sql"
+    },
+    {
+      "table": "capability_map",
+      "first_file": "20260327_capability_map.sql",
+      "second_file": "20260513_repair_phase2_model_performance_chain.sql"
+    },
+    {
+      "table": "assessment_results",
+      "first_file": "20260427_lifeos_assessment_battery.sql",
+      "second_file": "20260513_repair_phase3_users_monetization.sql"
+    },
+    {
+      "table": "decision_review_queue",
+      "first_file": "20260427_lifeos_decision_review_queue.sql",
+      "second_file": "20260513_repair_phase3_users_monetization.sql"
+    },
+    {
+      "table": "monetization_outreach",
+      "first_file": "20260418_lifeos_monetization.sql",
+      "second_file": "20260513_repair_phase3_users_monetization.sql"
+    },
+    {
+      "table": "self_repair_memory_events",
+      "first_file": "20260524_self_repair_memory_events.sql",
+      "second_file": "20260524_self_repair_memory_events_fix.sql"
+    },
+    {
+      "table": "self_repair_memory_events",
+      "first_file": "20260524_self_repair_memory_events.sql",
+      "second_file": "20260526_self_repair_memory_recovery.sql"
+    },
+    {
+      "table": "ai_unmetered_exceptions",
+      "first_file": "20260531_operator_consumption_ledger.sql",
+      "second_file": "20260602_token_accounting_schema_repair.sql"
+    },
+    {
+      "table": "provider_free_tier_ledger",
+      "first_file": "20260531_operator_consumption_ledger.sql",
+      "second_file": "20260602_token_accounting_schema_repair.sql"
+    },
+    {
+      "table": "commitments",
+      "first_file": "20260321_word_keeper.sql",
+      "second_file": "20260604_mission_runtime_v1.sql"
+    },
+    {
+      "table": "lifeos_sessions",
+      "first_file": "20260418_lifeos_auth.sql",
+      "second_file": "20260629_lifeos_user_auth.sql"
+    },
+    {
+      "table": "lifeos_invites",
+      "first_file": "20260418_lifeos_auth.sql",
+      "second_file": "20260629_lifeos_user_auth.sql"
+    },
+    {
+      "table": "adam_decisions",
+      "first_file": "20260320_adam_twin.sql",
+      "second_file": "20260704_adam_decisions.sql"
+    },
+    {
+      "table": "adam_decisions",
+      "first_file": "20260320_adam_twin.sql",
+      "second_file": "20260704_create_adam_decisions.sql"
+    },
+    {
+      "table": "adam_profile",
+      "first_file": "20260320_adam_twin.sql",
+      "second_file": "20260704_create_adam_profile.sql"
+    },
+    {
+      "table": "agent_performance",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_agent_performance.sql"
+    },
+    {
+      "table": "agent_protocol_violations",
+      "first_file": "20260426_memory_protocol_enforcement.sql",
+      "second_file": "20260704_create_agent_protocol_violations.sql"
+    },
+    {
+      "table": "agent_task_authority",
+      "first_file": "20260426_memory_protocol_enforcement.sql",
+      "second_file": "20260704_create_agent_task_authority.sql"
+    },
+    {
+      "table": "ai_unmetered_exceptions",
+      "first_file": "20260531_operator_consumption_ledger.sql",
+      "second_file": "20260704_create_ai_unmetered_exceptions.sql"
+    },
+    {
+      "table": "call_logs",
+      "first_file": "20260704_call_logs.sql",
+      "second_file": "20260704_create_call_logs.sql"
+    },
+    {
+      "table": "coaching_sessions",
+      "first_file": "20260406_lifeos_conflict.sql",
+      "second_file": "20260704_create_coaching_sessions_table.sql"
+    },
+    {
+      "table": "conductor_session_savings",
+      "first_file": "20260423_tsos_savings_ledger.sql",
+      "second_file": "20260704_create_conductor_session_savings.sql"
+    },
+    {
+      "table": "conversation_messages",
+      "first_file": "20260320_conversations.sql",
+      "second_file": "20260704_create_conversation_messages.sql"
+    },
+    {
+      "table": "crm_contacts",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_crm_contacts.sql"
+    },
+    {
+      "table": "crm_messages",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_crm_messages.sql"
+    },
+    {
+      "table": "crm_replies",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_crm_replies.sql"
+    },
+    {
+      "table": "crm_sequence_enrollments",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_crm_sequence_enrollments.sql"
+    },
+    {
+      "table": "crm_sequences",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_crm_sequences.sql"
+    },
+    {
+      "table": "debate_records",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_debate_records.sql"
+    },
+    {
+      "table": "email_events",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_email_events.sql"
+    },
+    {
+      "table": "email_suppressions",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_email_suppressions.sql"
+    },
+    {
+      "table": "epistemic_facts",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_epistemic_facts.sql"
+    },
+    {
+      "table": "fact_evidence",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_fact_evidence.sql"
+    },
+    {
+      "table": "fact_level_history",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_fact_level_history.sql"
+    },
+    {
+      "table": "free_tier_usage",
+      "first_file": "20260322_free_tier_usage.sql",
+      "second_file": "20260704_create_free_tier_usage.sql"
+    },
+    {
+      "table": "intent_drift_events",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_intent_drift_events.sql"
+    },
+    {
+      "table": "knowledge_base_files",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_knowledge_base_files.sql"
+    },
+    {
+      "table": "lessons_learned",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_lessons_learned.sql"
+    },
+    {
+      "table": "memory_capsules",
+      "first_file": "20260521_memory_capsule_core.sql",
+      "second_file": "20260704_create_memory_capsules.sql"
+    },
+    {
+      "table": "operator_consumption_ledger",
+      "first_file": "20260531_operator_consumption_ledger.sql",
+      "second_file": "20260704_create_operator_consumption_ledger.sql"
+    },
+    {
+      "table": "outreach_log",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_outreach_log.sql"
+    },
+    {
+      "table": "prospect_sites",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_prospect_sites.sql"
+    },
+    {
+      "table": "provider_free_tier_ledger",
+      "first_file": "20260531_operator_consumption_ledger.sql",
+      "second_file": "20260704_create_provider_free_tier_ledger.sql"
+    },
+    {
+      "table": "retrieval_events",
+      "first_file": "20260426_memory_intelligence.sql",
+      "second_file": "20260704_create_retrieval_events.sql"
+    },
+    {
+      "table": "system_source_of_truth",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260704_create_system_source_of_truth.sql"
+    },
+    {
+      "table": "teacher_os_documents",
+      "first_file": "20260405_teacher_os.sql",
+      "second_file": "20260704_create_teacher_os_documents.sql"
+    },
+    {
+      "table": "teacher_os_students",
+      "first_file": "20260405_teacher_os.sql",
+      "second_file": "20260704_create_teacher_os_students.sql"
+    },
+    {
+      "table": "teacher_os_teachers",
+      "first_file": "20260405_teacher_os.sql",
+      "second_file": "20260704_create_teacher_os_teachers.sql"
+    },
+    {
+      "table": "token_optimizer_daily",
+      "first_file": "20260322_optimizer_cache.sql",
+      "second_file": "20260704_create_token_optimizer_daily.sql"
+    },
+    {
+      "table": "token_usage_log",
+      "first_file": "20260321_token_usage_log.sql",
+      "second_file": "20260704_create_token_usage_log.sql"
+    },
+    {
+      "table": "twin_ingest_control",
+      "first_file": "20260327_twin_ingest_control.sql",
+      "second_file": "20260704_create_twin_ingest_control.sql"
+    },
+    {
+      "table": "receptionist_configs",
+      "first_file": "20260704_create_receptionist_configs.sql",
+      "second_file": "20260704_receptionist_configs.sql"
+    },
+    {
+      "table": "ai_response_cache",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_ai_response_cache.sql"
+    },
+    {
+      "table": "billing_projects",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_billing_projects.sql"
+    },
+    {
+      "table": "capability_map",
+      "first_file": "20260327_capability_map.sql",
+      "second_file": "20260705_create_capability_map.sql"
+    },
+    {
+      "table": "commitments",
+      "first_file": "20260321_word_keeper.sql",
+      "second_file": "20260705_create_commitments_table.sql"
+    },
+    {
+      "table": "daily_spend",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_daily_spend.sql"
+    },
+    {
+      "table": "financial_ledger",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_financial_ledger.sql"
+    },
+    {
+      "table": "kingsman_audit_log",
+      "first_file": "20260420_handoff_governance.sql",
+      "second_file": "20260705_create_kingsman_audit_log.sql"
+    },
+    {
+      "table": "operator_consumption_ledger",
+      "first_file": "20260531_operator_consumption_ledger.sql",
+      "second_file": "20260705_create_operator_consumption_ledger.sql"
+    },
+    {
+      "table": "project_entitlements",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_project_entitlements.sql"
+    },
+    {
+      "table": "project_subscriptions",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_project_subscriptions.sql"
+    },
+    {
+      "table": "roi_tracker",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_roi_tracker.sql"
+    },
+    {
+      "table": "security_receipts",
+      "first_file": "20260524_oil_security_receipts.sql",
+      "second_file": "20260705_create_security_receipts.sql"
+    },
+    {
+      "table": "stripe_webhook_events",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_stripe_webhook_events.sql"
+    },
+    {
+      "table": "tco_customers",
+      "first_file": "20260422_tokenos_customers.sql",
+      "second_file": "20260705_create_tco_customers.sql"
+    },
+    {
+      "table": "user_trials",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_user_trials.sql"
+    },
+    {
+      "table": "white_label_configs",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_create_white_label_configs.sql"
+    },
+    {
+      "table": "lifeos_users",
+      "first_file": "20260328_lifeos_core.sql",
+      "second_file": "20260705_lifeos_users.sql"
+    },
+    {
+      "table": "prospect_sites",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_repair_prospect_sites_schema.sql"
+    },
+    {
+      "table": "email_suppressions",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_repair_prospect_sites_schema.sql"
+    },
+    {
+      "table": "outreach_log",
+      "first_file": "20260313_core_schema.sql",
+      "second_file": "20260705_repair_prospect_sites_schema.sql"
+    },
+    {
+      "table": "marketing_consent_records",
+      "first_file": "20260707_marketing_phase1_schema.sql",
+      "second_file": "20260708_marketing_phase1_schema_v2.sql"
+    },
+    {
+      "table": "marketing_sessions",
+      "first_file": "20260707_marketing_phase1_schema.sql",
+      "second_file": "20260708_marketing_phase1_schema_v2.sql"
+    },
+    {
+      "table": "marketing_content_extractions",
+      "first_file": "20260707_marketing_phase1_schema.sql",
+      "second_file": "20260708_marketing_phase1_schema_v2.sql"
+    },
+    {
+      "table": "marketing_content_pieces",
+      "first_file": "20260707_marketing_phase1_schema.sql",
+      "second_file": "20260708_marketing_phase1_schema_v2.sql"
+    },
+    {
+      "table": "marketing_channel_profiles",
+      "first_file": "20260707_marketing_phase1_schema.sql",
+      "second_file": "20260708_marketing_phase1_schema_v2.sql"
+    }
+  ]
+}

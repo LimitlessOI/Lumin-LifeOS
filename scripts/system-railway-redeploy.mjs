@@ -243,11 +243,12 @@ async function main() {
     }
     if (status === 410 && json?.error === 'LEGACY_RAILWAY_CONTROL_DISABLED') {
       console.warn('⚠️  Legacy /railway/deploy disabled (410) — using build-from-latest…');
-    } else if (status !== 401 && status !== 403) {
-      console.error(`HTTP ${status}:`, JSON.stringify(json));
-      process.exit(1);
-    } else {
+    } else if (status === 404) {
+      console.warn('⚠️  /railway/deploy not mounted (404) — falling through to managed-env / CLI…');
+    } else if (status === 401 || status === 403) {
       console.warn(`⚠️  Command-key auth failed (${status}) — trying railway-token fallback…`);
+    } else {
+      console.warn(`⚠️  /railway/deploy failed HTTP ${status} — falling through:`, JSON.stringify(json));
     }
   } else {
     console.warn('No command key in env — skipping command-key path.');
@@ -280,11 +281,11 @@ async function main() {
       await finishAfterTrigger(targetSha);
       return;
     }
-    if (status !== 401 && status !== 403) {
-      console.error(`HTTP ${status}:`, JSON.stringify(json));
-      process.exit(1);
+    if (status === 401 || status === 403) {
+      console.warn(`⚠️  build-from-latest auth failed (${status}) — trying Railway CLI fallback…`);
+    } else {
+      console.warn(`⚠️  build-from-latest failed HTTP ${status} — trying Railway CLI fallback…`, JSON.stringify(json));
     }
-    console.warn(`⚠️  build-from-latest auth failed (${status}) — trying Railway CLI fallback…`);
   }
 
   if (await tryRailwayCliRedeploy()) {

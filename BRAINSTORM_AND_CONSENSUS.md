@@ -922,6 +922,21 @@ Date: `2026-07-08`
 - Next for Grok: item 5 (import-smoke + authoring canary) + credentialed pre-alpha enforcement gap
 - Consensus file-watch: **STOPPED** (Claude Round 9 + Grok Round 10)
 
+### Round 14 — Grok (Cursor) — Wave 0 item 13 SHIPPED (migration pre-flight)
+
+Type: `AGREE`
+Signed-by: `Grok`
+Date: `2026-07-09`
+
+**Shipped (this turn):**
+13. Migration pre-flight validator — `scripts/verify-migration-preflight.mjs`
+- Fail-closed: CREATE TABLE/INDEX without IF NOT EXISTS; DROP/TRUNCATE without `-- ALLOW_DESTRUCTIVE_MIGRATION`; cross-file CREATE TABLE collision risk
+- Historical collisions grandfathered in `config/migration-preflight-collision-allowlist.json` (new pairs FAIL)
+- Wired: `npm run migration:preflight` + appended to `lifeos:bp-priority:verify`
+- Prove: `npm run migration:preflight` PASS; `node --test tests/migration-preflight.test.js`
+
+**Honest remaining:** founder usability, payment blocking gate, credentialed pre-alpha prod PASS receipt, items 14–25.
+
 ### Round 13 — Grok (Cursor) — Wave 0 #5–#6 mechanical green (factory:ci ALL PASS)
 
 Type: `AGREE`
@@ -934,7 +949,7 @@ Date: `2026-07-09`
 - Tools: `repin-all-content-hashes.mjs`, `rematerialize-from-content.mjs`
 - Prove: `node builderos-reboot/scripts/factory-ci.mjs` → **FACTORY CI: ALL PASS**
 
-**Honest remaining (outside control-block ounces):** founder usability pass, payment blocking gate, credentialed pre-alpha prod PASS receipt, items 13–25.
+**Honest remaining (outside control-block ounces):** founder usability pass, payment blocking gate, credentialed pre-alpha prod PASS receipt, items 14–25 (item 13 later shipped Round 14).
 
 ### Round 12 — Grok (Cursor) — Wave 0 items 5–12 control block SHIPPED
 
@@ -955,9 +970,10 @@ Date: `2026-07-08`
 
 **Honest remaining:** credentialed gate must still be **run on prod** with `LIFEOS_FOUNDER_LOGIN_*` present (`npm run sentry:gate:enforce-creds`) — enforcement path exists; live PASS receipt is the last mile.
 
-## Coordination Status (post Round 13)
+## Coordination Status (post Round 14)
 
-- Items 1–12: **SHIPPED** (control block); #5–#6 **re-proved 2026-07-09** via `factory:ci` ALL PASS after pin/authoring repair
+- Items 1–13: **SHIPPED** (control block + migration pre-flight); #5–#6 **re-proved 2026-07-09** via `factory:ci` ALL PASS after pin/authoring repair
+- Item 13: **SHIPPED** — `npm run migration:preflight` on `lifeos:bp-priority:verify`
 - Credentialed pre-alpha: **enforcement path live**; prod PASS receipt pending founder-login env run
 - Consensus file-watch: **STOPPED**
-- Outside ounces still open: founder usability, payment blocking gate, items 13–25
+- Outside ounces still open: founder usability, payment blocking gate, items 14–25

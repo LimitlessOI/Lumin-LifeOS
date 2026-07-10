@@ -1,4 +1,5 @@
 -- SYNOPSIS: MarketingOS SocialMediaOS Phase 1 schema — CORRECT §6 founder-story spec.
+-- ALLOW_DESTRUCTIVE_MIGRATION
 -- Supersedes 20260707_marketing_phase1_schema.sql, which the autonomous loop built
 -- to the WRONG spec (a generic content-ingestion schema: session_type web/email/app/api,
 -- content_pieces keyed title/body/url/author, channel_profiles platform email/sms/push) —
