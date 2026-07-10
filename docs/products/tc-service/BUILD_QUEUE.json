@@ -107,12 +107,14 @@
         "s5"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "commit_sha": "475109419a10ea549895fb45ef67406a1369b0b7",
-      "last_attempt_at": "2026-07-10T07:48:05.817Z",
-      "revive_count": 2,
-      "revived_at": "2026-07-10T07:23:28.153Z",
-      "last_error": "artifact_proof_failed: assertion_threw"
+      "attempts": 0,
+      "commit_sha": "e0693a778834dd9553dfd7087bc08943a517bb1b",
+      "last_attempt_at": "2026-07-10T07:31:55.274Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-10T08:00:01.242Z",
+      "artifact_proven": true,
+      "blocker_class": "BLOCKED_EXTERNAL",
+      "claim_level": "BUILT_NOT_LIVE"
     },
     {
       "id": "s8",

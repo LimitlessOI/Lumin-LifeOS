@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-10 | **Artifact proof disk fallback** — if git show + GitHub Contents fail, read workspace file (Railway deploy tree). Surface assertion error text in last_error. | Tip still assertion_threw after API fallback; local proof PASS. | ✅ | push |
 | 2026-07-10 | **Artifact proof revive for assertion_threw** — default `GITHUB_REPO` fallback + short revive cooldown for tooling `assertion_threw`; re-revive tc-service s7. | Tip re-blocked s7 before fix served; chicken-egg needs module-health error not tooling throw. | ✅ | push |
 | 2026-07-10 | **Artifact proof git-show fallback** — `evaluateStepExpectations` now falls back to GitHub Contents API (then HEAD-matched workspace) when `git show <sha>:file` fails on shallow Railway clones. Unblocks tc-service s7 `assertion_threw` loops. | Live never-stop: s7 blocked `artifact_proof_failed: assertion_threw`×6 despite file correct; local proof PASS. | ✅ local proof | push + revive s7 |
 | 2026-07-10 | **Drawer smoke canary mechanical path** — `isSmokeCanaryMjsCommentPatch` + apply/commit in `founder-overlay-surgical-patch.js`; wired in `founder-build-self-repair.js` before AI loop; FP_V2 direct-execute lock. Avoids multi-instance `FOUNDER_BUILD_JOB_STALE_RUNNING` on `lifeos-direct-build-smoke-test.mjs`. | REAL_APP_E2E 15/16 — only fail was STALE_RUNNING on AI path. | ✅ unit PASS | push + redeploy + re-run E2E |

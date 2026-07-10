@@ -191,7 +191,15 @@ export async function evaluateStepExpectations(step, {
         if (head && (head === commitSha || head.startsWith(commitSha) || commitSha.startsWith(head.slice(0, 12)))) {
           return fs.readFileSync(path.join(root, relPath), 'utf8');
         }
-        throw gitErr;
+        // Railway containers often have no usable .git and GitHub Contents can
+        // 404 on older SHAs. The deployed workspace IS the served tree — read
+        // disk as last resort so artifact proof is not permanently assertion_threw.
+        const abs = path.join(root, relPath);
+        if (fs.existsSync(abs)) {
+          return fs.readFileSync(abs, 'utf8');
+        }
+        const err = new Error(`git_show_failed:${String(gitErr?.message || gitErr).slice(0, 180)}`);
+        throw err;
       }
     }
     return fs.readFileSync(path.join(root, relPath), 'utf8');
@@ -286,14 +294,18 @@ export function reviveStaleBlockedSteps(queue, {
     const autoRegBlock = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
       String(step.last_error || ''),
     );
+    const artifactToolingBlock = /artifact_proof_failed:\s*assertion_threw/i.test(
+      String(step.last_error || ''),
+    );
     // Auto-register chicken-egg: once the config step can run (or already did),
     // allow one more revive past the normal cap so the route can prove mount.
     // Cap auto-reg chicken-egg revives at maxRevives+3 so we don't spin forever.
-    const effectiveMax = autoRegBlock ? maxRevives + 3 : maxRevives;
+    // assertion_threw on shallow clones is tooling — same revive budget as auto-reg.
+    const effectiveMax = (autoRegBlock || artifactToolingBlock) ? maxRevives + 3 : maxRevives;
     if (reviveCount >= effectiveMax) continue;
     const lastAt = Date.parse(step.last_attempt_at || step.completed_at || '');
     const waited = Number.isFinite(lastAt) ? now - lastAt : Infinity;
-    if (waited < cooldownMs && !autoRegBlock) continue;
+    if (waited < cooldownMs && !autoRegBlock && !artifactToolingBlock) continue;
     // For auto-reg blocks, still respect a short cooldown unless a sibling
     // register-config step is pending/done (fix is in flight or landed).
     if (autoRegBlock && waited < cooldownMs) {
@@ -302,6 +314,8 @@ export function reviveStaleBlockedSteps(queue, {
       );
       if (!registerSibling) continue;
     }
+    // Tooling assertion_threw: short 60s cooldown then revive.
+    if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;
     step.status = STEP_STATUS.PENDING;
     step.attempts = 0;
     step.revive_count = reviveCount + 1;
