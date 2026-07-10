@@ -24,6 +24,9 @@
  *   POST /api/v1/lifeos/auth/operator/provision-member — create member account + optional household link
  *   POST /api/v1/lifeos/auth/operator/provision-alpha-auditor — founder-level test account from Railway vault creds
  *   POST /api/v1/lifeos/auth/operator/sync-founder-login — sync adam founder email+password from LIFEOS_FOUNDER_LOGIN_* vault
+ *   POST /api/v1/lifeos/auth/operator/mint-browser-session — vault login → access/refresh tokens for UI walks (never returns password)
+ *   POST /api/v1/lifeos/auth/operator/credentialed-prealpha-proof — vault JWT + Chair chat proof
+ *   POST /api/v1/lifeos/auth/operator/credentialed-ui-login-proof — vault Puppeteer form-login proof
  *
  * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
@@ -412,6 +415,48 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         report.error = e.message;
         report.duration_ms = Date.now() - started;
         return res.status(500).json(report);
+      }
+    });
+
+    // Mint a short-lived founder browser session from Railway vault (never returns password).
+    // Used by Cursor/operator UI walks when local LIFEOS_FOUNDER_LOGIN_* is absent.
+    router.post('/operator/mint-browser-session', requireKey, async (req, res) => {
+      try {
+        const creds = resolveFounderLoginCreds();
+        if (!creds) {
+          return res.status(503).json({
+            ok: false,
+            blocker: 'FOUNDER_CREDS_MISSING_ON_SERVER',
+            cred_diagnosis: diagnoseFounderLoginCreds(),
+          });
+        }
+        const loginResult = await auth.login({
+          email: creds.email,
+          password: creds.password,
+          userAgent: 'operator-mint-browser-session',
+          ip: req.ip,
+        });
+        const accessToken = loginResult.accessToken || loginResult.access_token || loginResult.token;
+        const refreshToken = loginResult.refreshToken || loginResult.refresh_token || null;
+        if (!accessToken) {
+          return res.status(500).json({ ok: false, blocker: 'NO_ACCESS_TOKEN' });
+        }
+        setAccessCookie(res, accessToken);
+        return res.json({
+          ok: true,
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          user: {
+            handle: loginResult.user?.user_handle,
+            email: loginResult.user?.email,
+            role: loginResult.user?.role,
+            tier: loginResult.user?.tier,
+          },
+          cred_source: creds.source,
+          note: 'Inject access_token into localStorage lifeos_access_token for overlay UI walks. Password never returned.',
+        });
+      } catch (e) {
+        return res.status(401).json({ ok: false, error: e.message, blocker: 'LOGIN_FAILED' });
       }
     });
 

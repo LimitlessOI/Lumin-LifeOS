@@ -17,6 +17,9 @@ import createSiteBuilderEditorRoutes from "../routes/site-builder-editor-routes.
 import { createCrmRoutes } from "../routes/crm-routes.js";
 import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.js";
 import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
+import { createTCRoutes } from "../routes/tc-routes.js";
+import { createTCCoordinator } from "../services/tc-coordinator.js";
+import { createAccountManager } from "../services/account-manager.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 import {
@@ -159,6 +162,33 @@ export async function registerFounderRuntimeRoutes(app, deps) {
     logger.warn?.({ err: err.message }, "[GO-VEGAS] outreach scheduler failed to start (non-fatal)");
   }
 
+  // TC portal + assistant APIs must live on founder lane — production boots founder_builder,
+  // and public/tc/* UIs call /api/v1/tc/* (not the slim /api/tc/* auto-register shims).
+  let tcCoordinator = null;
+  try {
+    const accountManager = createAccountManager({ pool, logger });
+    tcCoordinator = createTCCoordinator({
+      pool,
+      accountManager,
+      notificationService,
+      callCouncilMember,
+      logger,
+    });
+    createTCRoutes(app, {
+      pool,
+      requireKey: requireUserOrKey,
+      coordinator: tcCoordinator,
+      logger,
+      accountManager,
+      notificationService,
+      callCouncilMember,
+      startAlertLoop: false,
+    });
+    logger.info("✅ [TC] Founder-builder routes mounted at /api/v1/tc");
+  } catch (err) {
+    logger.warn?.({ err: err.message }, "[TC] founder-lane mount failed (non-fatal)");
+  }
+
   registerFounderMemoryRoutes(app, { pool, requireKey, logger });
   logger.info("✅ [FOUNDER-MEMORY] Canonical founder↔AI memory mounted at /api/v1/founder-memory");
 
@@ -291,7 +321,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   }
 
   return {
-    tcCoordinator: null,
+    tcCoordinator,
     wkIntegrityEngine: null,
     autoResults,
     routeAssert,

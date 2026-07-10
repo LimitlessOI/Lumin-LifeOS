@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — SMTP 465/587 failover on connection timeout (Site Builder T02). |
+| **Last Updated** | 2026-07-10 — Restored tc-coordinator; mounted /api/v1/tc on founder lane; IMAP bootstrap uses TC aliases. |
 
 ---
 
@@ -976,11 +976,11 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **GAP-FILL founder-lane TC + coordinator restore** — restored `services/tc-coordinator.js` from pre-stub SHA (system-build had replaced `createTCCoordinator` with unrelated stub); mounted `createTCRoutes` in `register-founder-runtime-routes.js`; `imap-railway-bootstrap` now uses `tc-imap-config` / credential aliases instead of raw `IMAP_*` only. | Prod founder_builder: `/api/v1/tc/*` 404; portal/assistant dead; IMAP status false-missing despite TC_IMAP_* vault. | ✅ | pending | tip-sync + UI walk |
 | 2026-07-10 | **GAP-FILL SMTP failover** — `core/notification-service.js` tries preferred port then 587/465 on connection timeout (Site Builder T02). | Tip resend: Connection timeout on Gmail 465. | ✅ | pending | tip resend |
 | 2026-07-10 | **GAP-FILL step-08/09 mount** — fixed `tcIntakeRoutes.mjs` named imports (builder used default imports of named-only services → load fail); auto-registered both `.mjs` routes; disabled kebab duplicates to avoid double-mount. | never-stop: Pre-commit syntax fail on intake; billing `route module not auto-registered`. | ✅ | never-stop marks step-08/09/10 done |
 | 2026-07-10 | **GAP-FILL s9 imap import** — `registerTcImapRoutes` now imports `verifyImapAndDryRun` (not nonexistent `imapRailwayBootstrap`). s7+s8 done after auto-register. | module_not_mounted SyntaxError on named export. | ✅ | push + mount proof |
 | 2026-07-10 | **GAP-FILL s10 false-done** — auto-register lacked TC routes; added tc-intake/billing/imap entries; revived s7–s9. | s10 marked done on unrelated LifeOS SHA; module-health still not auto-registered. | ✅ | push + redeploy |
-|---|---|---|---|---|---|
 | 2026-07-10 | **s7 revive after artifact-proof fix** — queue reset pending; root cause was Railway `git show` → `assertion_threw`, not bad route code (import already fixed). | s7 blocked after 3 attempts despite correct `tc-intake-runner.js` import. | ✅ | pending | never-stop re-run |
 | 2026-07-10 | **GAP-FILL s7 import** — `routes/tc-intake-routes.js` imported nonexistent `../services/tcIntakeRunner.js`; fixed to `tc-intake-runner.js`. Queue got `expected_exports` + `file_contains` so never-stop short-circuit can prove. | Never-stop `cycle_start product_build_tc-service_s7` then instance reset; file existed but broken import blocked module-health / done. | ✅ | pending | push + never-stop marks s7 done |
 | 2026-07-07 | **`core/notification-service.js`:** use `dns.resolve4Sync` + Gmail IPv4 fallback (`142.250.80.109`) — `lookupSync` still routed IPv6 on Railway (`ENETUNREACH …:465`). | Port 465 fix landed but IPv6 persisted on Gmail SMTP connect. | ✅ | pending manifest | prod resend |

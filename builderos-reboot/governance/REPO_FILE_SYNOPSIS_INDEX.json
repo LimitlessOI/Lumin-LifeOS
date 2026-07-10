@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T12:40:19.466Z",
+  "generated_at": "2026-07-10T17:42:28.207Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11410,
   "files": [
@@ -30533,9 +30533,9 @@
     {
       "path": "config/founder-runtime-required-routes.json",
       "synopsis": "Configuration — Founder Runtime Required Routes.",
-      "bytes": 1591,
-      "mtime": "2026-07-09T03:51:45.666Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 1755,
+      "mtime": "2026-07-10T17:41:49.983Z",
+      "indexed_at": "2026-07-10T17:42:28.207Z",
       "synopsis_index_only": true
     },
     {
@@ -39291,9 +39291,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 596973,
-      "mtime": "2026-07-10T10:42:14.839Z",
-      "indexed_at": "2026-07-10T10:42:29.569Z"
+      "bytes": 597557,
+      "mtime": "2026-07-10T17:41:33.057Z",
+      "indexed_at": "2026-07-10T17:42:28.207Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39729,9 +39729,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 104648,
-      "mtime": "2026-07-10T12:31:33.767Z",
-      "indexed_at": "2026-07-10T12:31:54.890Z"
+      "bytes": 105173,
+      "mtime": "2026-07-10T17:41:53.748Z",
+      "indexed_at": "2026-07-10T17:42:28.207Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -65389,9 +65389,9 @@
     {
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
-      "bytes": 33389,
-      "mtime": "2026-07-10T00:19:23.644Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 35476,
+      "mtime": "2026-07-10T17:41:21.738Z",
+      "indexed_at": "2026-07-10T17:42:28.207Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83030,10 +83030,13 @@
     },
     {
       "path": "services/imap-railway-bootstrap.js",
-      "synopsis": "Exports verifyImapAndDryRun — services/imap-railway-bootstrap.js.",
-      "bytes": 1143,
-      "mtime": "2026-07-10T03:56:50.842Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "synopsis": "IMAP readiness + optional dry-run for Railway/TC bootstrap.",
+      "bytes": 2275,
+      "mtime": "2026-07-10T17:41:00.554Z",
+      "indexed_at": "2026-07-10T17:42:28.207Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/income-drones.js",
@@ -85970,10 +85973,14 @@
     },
     {
       "path": "services/tc-coordinator.js",
-      "synopsis": "Records a new transaction in the database. * @param {object} transactionData - The transaction details. * @param {string} transactionData.userId - The ID of the user initiating the transaction. * @param {number} transactionData.amount - The",
-      "bytes": 3810,
-      "mtime": "2026-07-05T19:10:02.204Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "synopsis": "tc-coordinator.js",
+      "bytes": 11611,
+      "mtime": "2026-07-10T17:40:44.783Z",
+      "indexed_at": "2026-07-10T17:42:28.207Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md",
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/tc-doc-intake.js",
@@ -87181,9 +87188,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 11998,
-      "mtime": "2026-07-10T03:15:56.327Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 13044,
+      "mtime": "2026-07-10T17:41:06.390Z",
+      "indexed_at": "2026-07-10T17:42:28.207Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
