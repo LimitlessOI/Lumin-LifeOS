@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T01:27:02.768Z",
+  "generated_at": "2026-07-10T01:27:15.040Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11375,
   "files": [
@@ -84220,9 +84220,9 @@
     {
       "path": "services/marketing-repurpose.js",
       "synopsis": "Repurpose one source piece into platform-specific content variants using the injected council member only.",
-      "bytes": 4625,
-      "mtime": "2026-07-07T21:41:40.941Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 4617,
+      "mtime": "2026-07-10T01:27:15.040Z",
+      "indexed_at": "2026-07-10T01:27:15.040Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

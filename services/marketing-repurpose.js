@@ -95,7 +95,7 @@ export async function repurposePiece({ callCouncilMember, piece, formats = ['lin
     for (const format of validFormats) {
       try {
         const prompt = buildPrompt(format, source);
-        const raw = await callCouncilMember('content_repurerposer', prompt, { format });
+        const raw = await callCouncilMember('gemini_flash', prompt, { format });
         const parsed = safeJsonParse(raw);
         const items = ensureArrayOutput(parsed, format);
         outputs[format] = items.length > 0 ? items : [toText(raw).trim()].filter(Boolean);
