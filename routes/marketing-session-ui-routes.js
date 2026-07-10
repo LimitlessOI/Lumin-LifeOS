@@ -124,6 +124,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <a href="/marketing/session/new"><button>Start New Session</button></a>
               <a href="/marketing/calendar"><button class="secondary">Content Calendar</button></a>
               <a href="/marketing/atoms"><button class="secondary">Atom Library</button></a>
+              <a href="/creative/studio"><button class="secondary">Creative Engine Studio</button></a>
             </div>
             <div class="nav-links">
               <a href="/overlay/lifeos-app.html?stack=socialmediaos">Open inside LifeOS</a>

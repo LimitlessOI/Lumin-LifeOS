@@ -1,0 +1,20 @@
+{
+  "product_id": "creative-engine",
+  "canonical_home": "docs/products/creative-engine/PRODUCT_HOME.md",
+  "owned_files": [
+    "docs/products/creative-engine/PRODUCT_HOME.md",
+    "docs/products/creative-engine/FILE_MANIFEST.json",
+    "docs/products/creative-engine/BUILD_QUEUE.json",
+    "db/migrations/20260710_creative_engine_v1.sql",
+    "services/creative-engine/index.js",
+    "services/creative-engine/media-storage.js",
+    "services/creative-engine/providers/ffmpeg-local.js",
+    "services/creative-engine/modes/footage-edit.js",
+    "services/creative-engine/modes/photo-polish.js",
+    "services/creative-engine/modes/script-compose.js",
+    "services/creative-engine/modes/generative-broll.js",
+    "routes/creative-engine-routes.js",
+    "routes/creative-engine-ui-routes.js",
+    "tests/creative-engine.test.js"
+  ]
+}

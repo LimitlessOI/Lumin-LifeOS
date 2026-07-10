@@ -126,6 +126,18 @@
       "register": "registerMissionRoutes",
       "enabled": true,
       "note": "BuilderOS mission runtime API at /api/missions*. GAP-FILL: step-04 was built but unreachable (createMissionRoutes, never auto-registered) — never-stop spun. Mounted here so module-health can prove LIVE and the queue can advance."
+    },
+    {
+      "path": "routes/creative-engine-routes.js",
+      "register": "registerCreativeEngineRoutes",
+      "enabled": true,
+      "note": "Creative Engine shared render API at /api/v1/creative/* — footage_edit, photo_polish, script_compose, generative_broll. Auto-registered so founder lane mounts without composition-root edit."
+    },
+    {
+      "path": "routes/creative-engine-ui-routes.js",
+      "register": "registerCreativeEngineUiRoutes",
+      "enabled": true,
+      "note": "Creative Engine SSR studio at /creative and /creative/studio."
     }
   ]
 }

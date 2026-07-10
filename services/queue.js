@@ -200,7 +200,7 @@ export async function getQueueStats(queueName) {
  * Get all queue stats at once.
  */
 export async function getAllQueueStats() {
-  const queues = ['idea-pipeline', 'video-generate', 'game-build', 'self-program', 'outreach'];
+  const queues = ['idea-pipeline', 'video-generate', 'game-build', 'self-program', 'outreach', 'creative-render'];
   const stats = await Promise.all(queues.map(getQueueStats));
   return stats;
 }
