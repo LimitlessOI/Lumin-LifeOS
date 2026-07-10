@@ -182,7 +182,7 @@
     },
     {
       "id": "step-2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-templates.js",
       "task": "Implement template listing and selection service",
       "spec": "Export async functions listTemplates(db) returning all rows from site_builder_templates ordered by sort_order, and getTemplate(db, id) returning one row. No browser globals. No AI calls. Satisfies ux_friction_1 service layer. Import only 'pg' or the injected db dep.",
@@ -190,7 +190,10 @@
         "step-1"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "aca57d28d31e28bbd979642a8e8578623159ad12",
+      "last_attempt_at": "2026-07-10T21:12:05.319Z",
+      "completed_at": "2026-07-10T21:12:15.674Z"
     },
     {
       "id": "step-3",
