@@ -1,15 +1,14 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-09T18:24:39.068Z",
+  "at": "2026-07-10T02:07:10.212Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
-  "ok": true,
+  "ok": false,
   "passed": [
     "app_loads",
     "no_js_errors",
     "lumin_fab_visible",
     "lumin_drawer_opens",
     "chat_response",
-    "smos_question",
     "counsel_only_bypass",
     "drawer_direct_build",
     "navigate_lifere",
@@ -21,7 +20,9 @@
     "logged_out_redirect_shape",
     "logged_out_overlay_redirect_shape"
   ],
-  "failed": [],
+  "failed": [
+    "smos_question"
+  ],
   "results": {
     "app_loads": {
       "ok": true,
@@ -41,11 +42,11 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "204 chars: \"Point B is LifeOS Consumer Alpha — user can sign up, log in, Lumin greets them b…\""
+      "detail": "178 chars: \"Still LifeOS Consumer Alpha. 55%. Blocked on machine:blueprint missing phases P4…\""
     },
     "smos_question": {
-      "ok": true,
-      "detail": "workflow present, no bleed"
+      "ok": false,
+      "detail": "no workflow content: \"No response from system.\n07:07 PM\""
     },
     "counsel_only_bypass": {
       "ok": true,

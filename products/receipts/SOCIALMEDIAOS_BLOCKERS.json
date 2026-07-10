@@ -1,9 +1,11 @@
 {
   "schema": "socialmediaos_blockers_v1",
-  "at": "2026-07-10T02:01:02.343Z",
+  "at": "2026-07-10T02:06:30.000Z",
   "ok": false,
   "note": "Named blockers — system must not fake PASS or stop silently",
   "runnable_verify_ok": true,
+  "sentry_layer_a": "PASS",
+  "sentry_layer_a_receipt": "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
   "blockers": [
     {
       "code": "STORAGE_R2_UNVERIFIED",
@@ -11,19 +13,28 @@
       "next_unblocking_action": "Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then enqueue audio upload"
     },
     {
-      "code": "LEGACY_SOCIALMEDIAOS_404",
-      "why_cant_fix_now": "Founder runtime serves canonical /api/v1/marketing/*; legacy /api/v1/socialmediaos/* not mounted",
-      "next_unblocking_action": "Mount legacy adapter or update all docs/scripts to /marketing only"
+      "code": "SENTRY_LAYER_B_NOT_RUN",
+      "why_cant_fix_now": "MarketingOS registered for Layer A only; browser walkthrough of /marketing/session/new not yet a SENTRY Layer B script",
+      "next_unblocking_action": "Author scripts/run-marketingos-layer-b.mjs (Puppeteer) and register in SENTRY_PRODUCT_REGISTRY.json"
     },
     {
-      "code": "SENTRY_LAYER_B_NOT_RUN",
-      "why_cant_fix_now": "Browser walkthrough of /marketing/session/new not executed this session",
-      "next_unblocking_action": "Run SENTRY Layer B against /marketing flow and store receipt"
+      "code": "SITE_BUILDER_EMAIL_ENV",
+      "why_cant_fix_now": "EMAIL_FROM, SITE_BASE_URL, EMAIL_PROVIDER not in managed-env allowlist (POSTMARK_SERVER_TOKEN is present)",
+      "next_unblocking_action": "Add missing email/site vars to Railway allowlist+vault, then prove first Site Builder send"
+    }
+  ],
+  "cleared": [
+    {
+      "code": "LEGACY_SOCIALMEDIAOS_404",
+      "cleared_how": "Canonical surface documented as /api/v1/marketing/*; legacy named as expected non-mount"
     },
     {
       "code": "STALE_VERIFY_MARKETING_PHASE1_MJS",
-      "why_cant_fix_now": "scripts/verify-marketing-phase1.mjs still probes hallucinated /marketingos paths",
-      "next_unblocking_action": "Point package scripts at verify-marketing-phase1-live.mjs or delete/replace stale file"
+      "cleared_how": "scripts/verify-marketing-phase1.mjs is now a shim to verify-marketing-phase1-live.mjs"
+    },
+    {
+      "code": "SENTRY_LAYER_A_NOT_RUN",
+      "cleared_how": "scripts/run-marketingos-layer-a.mjs + registry entry marketingos PASS 2026-07-10"
     }
   ]
 }

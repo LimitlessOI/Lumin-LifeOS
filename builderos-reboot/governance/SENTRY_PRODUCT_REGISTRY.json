@@ -23,6 +23,24 @@
       ]
     },
     {
+      "id": "marketingos",
+      "title": "MarketingOS / SocialMediaOS Phase 1",
+      "ssot": "docs/products/marketingos/PRODUCT_HOME.md",
+      "findingsFeed": "products/receipts/SENTRY_FINDINGS_FEED.marketingos.json",
+      "layers": [
+        {
+          "name": "A-structural",
+          "kind": "structural",
+          "type": "command",
+          "run": ["scripts/run-marketingos-layer-a.mjs"],
+          "receipt": "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
+          "requiresEnv": ["PUBLIC_BASE_URL", "COMMAND_CENTER_KEY"],
+          "deferrableWithoutEnv": true,
+          "note": "LIVE structural probes for /marketing UI + /api/v1/marketing/* consent→export + intel. Audio named BLOCKED (STORAGE_R2_UNVERIFIED). Layer B browser walkthrough still required for full SO-002 done."
+        }
+      ]
+    },
+    {
       "id": "lifeos-founder-ui",
       "title": "LifeOS Founder UI (chat + drawer + build)",
       "ssot": "docs/products/lifeos/PRODUCT_HOME.md",

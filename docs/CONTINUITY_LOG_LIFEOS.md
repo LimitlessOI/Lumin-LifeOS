@@ -8,6 +8,19 @@
 
 ---
 
+## [BUILD] Update 2026-07-10 — System scorecard → path to 10 (execution started)
+
+### What happened
+Adam asked for honest grading vs competitors and to raise every area to 10. Published `docs/SYSTEM_SCORECARD_PATH_TO_10.md` + canvas. Average ~6.1. Started execution: MarketingOS SENTRY Layer A PASS + registry; canonical surface scrubbed; Go Vegas LIVE ready/scheduled (runs=0); founder-ui SENTRY still FAIL on 3 chat findings — system directed `chair-intent-signals.js` PASS commit `6ce813b156ae` (re-gate pending).
+
+### Next
+- Re-prove `sentry:gate lifeos-founder-ui` green after tip
+- Marketing Layer B browser script
+- Site Builder EMAIL_* allowlist / first send
+- Point B Consumer Alpha close
+
+---
+
 ## [FIX] Update 2026-07-10 — Never-stop: fix or name SocialMediaOS blockers
 
 ### What happened
