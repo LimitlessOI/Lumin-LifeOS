@@ -72,13 +72,15 @@
       "id": "T05",
       "rank": 5,
       "title": "Founder memory every Chair turn",
-      "status": "in_progress",
+      "status": "done",
       "scorecard_areas": [
         "Memory / Lumin"
       ],
       "done_when": "loadChairMemoryContext injects FOUNDER MEMORY block on normal chair/lumin turns",
-      "next_action": "GAP-FILL direct-agent memory inject shipped — redeploy tip and re-probe Chair turn for FOUNDER MEMORY / non-null memory_context",
-      "blocker": null
+      "next_action": "PROVED live tip 1b59d7c9: Chair direct-agent replied MEMORY_LOADED fmrcpt_1783680245935_9f9fefa2 after GAP-FILL inject",
+      "blocker": null,
+      "done_at": "2026-07-10T10:45:00Z",
+      "proof": "products/receipts or live Chair MEMORY_LOADED on tip 1b59d7c9c08c"
     },
     {
       "id": "T06",

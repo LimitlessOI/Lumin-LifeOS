@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Artifact-proof git-show fallback for Railway shallow clones; REAL_APP_E2E 16/16; FULLY_MACHINE_READY still false. |
+| **Last Updated** | 2026-07-10 — Path-to-10 T05 PASS: direct Chair agent injects FOUNDER MEMORY (receipt PATH_TO_10_T05_FOUNDER_MEMORY). |
 
 ### Related docs (this product)
 

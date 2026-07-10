@@ -1,0 +1,14 @@
+{
+  "schema": "path_to_10_t05_founder_memory_proof_v1",
+  "ok": true,
+  "pass_fail": "PASS",
+  "tip_sha": "1b59d7c9c08c9fd7f73e834cf63b857af4a1e83c",
+  "proved_at": "2026-07-10T10:52:00.925Z",
+  "probe": {
+    "endpoint": "/api/v1/lifeos/builderos/command-control/founder-interface/message",
+    "chair_direct_agent": true,
+    "human_summary": "MEMORY_LOADED fmrcpt_1783680245935_9f9fefa2"
+  },
+  "gap_fill": "services/lumin-chair-orchestrator.js — loadChairMemoryContext before runChairDirectAgent",
+  "note": "Prior counsel-path inject existed; conversational front door skipped it."
+}

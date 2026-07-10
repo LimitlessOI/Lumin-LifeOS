@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T10:42:29.569Z",
+  "generated_at": "2026-07-10T10:52:17.078Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11408,
+  "file_count": 11409,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38848,9 +38848,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 172511,
-      "mtime": "2026-07-10T08:53:56.759Z",
-      "indexed_at": "2026-07-10T08:53:57.627Z"
+      "bytes": 172501,
+      "mtime": "2026-07-10T10:52:16.212Z",
+      "indexed_at": "2026-07-10T10:52:17.078Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -59162,9 +59162,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5704,
-      "mtime": "2026-07-10T10:42:14.840Z",
-      "indexed_at": "2026-07-10T10:42:29.569Z",
+      "bytes": 5811,
+      "mtime": "2026-07-10T10:51:43.529Z",
+      "indexed_at": "2026-07-10T10:52:17.078Z",
       "synopsis_index_only": true
     },
     {
@@ -62907,6 +62907,14 @@
       "bytes": 341,
       "mtime": "2026-06-28T23:37:30.211Z",
       "indexed_at": "2026-07-10T08:50:09.908Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/PATH_TO_10_T05_FOUNDER_MEMORY.json",
+      "synopsis": "Product receipt — PATH TO 10 T05 FOUNDER MEMORY.",
+      "bytes": 591,
+      "mtime": "2026-07-10T10:52:00.927Z",
+      "indexed_at": "2026-07-10T10:52:17.078Z",
       "synopsis_index_only": true
     },
     {
