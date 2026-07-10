@@ -103,7 +103,7 @@ export async function generateTitleUniverse({ callCouncilMember, topic, transcri
       .filter(Boolean)
       .join('\n');
 
-    const raw = await callCouncilMember('content_strategist', prompt);
+    const raw = await callCouncilMember('gemini_flash', prompt);
 
     const parsed = safeJsonParse(raw);
     let titlesSource = null;
