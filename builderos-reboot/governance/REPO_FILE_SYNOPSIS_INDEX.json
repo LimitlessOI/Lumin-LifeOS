@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T01:58:53.632Z",
+  "generated_at": "2026-07-10T02:01:03.228Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11377,
+  "file_count": 11379,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36720,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 56718,
-      "mtime": "2026-07-10T01:51:44.054Z",
-      "indexed_at": "2026-07-10T01:51:56.378Z"
+      "bytes": 57555,
+      "mtime": "2026-07-10T02:00:47.045Z",
+      "indexed_at": "2026-07-10T02:01:03.228Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39371,9 +39371,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 85878,
-      "mtime": "2026-07-10T01:51:47.986Z",
-      "indexed_at": "2026-07-10T01:51:56.378Z"
+      "bytes": 86288,
+      "mtime": "2026-07-10T02:00:52.605Z",
+      "indexed_at": "2026-07-10T02:01:03.228Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -62850,6 +62850,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/MARKETING_PHASE1_VERIFY.json",
+      "synopsis": "Product receipt — MARKETING PHASE1 VERIFY.",
+      "bytes": 3038,
+      "mtime": "2026-07-10T02:01:02.348Z",
+      "indexed_at": "2026-07-10T02:01:03.228Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/OVERLAY_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — OVERLAY ALPHA BATTERY.",
       "bytes": 341,
@@ -62903,6 +62911,14 @@
       "bytes": 244,
       "mtime": "2026-07-09T01:03:41.505Z",
       "indexed_at": "2026-07-10T00:10:11.466Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SOCIALMEDIAOS_BLOCKERS.json",
+      "synopsis": "Product receipt — SOCIALMEDIAOS BLOCKERS.",
+      "bytes": 1396,
+      "mtime": "2026-07-10T02:01:02.349Z",
+      "indexed_at": "2026-07-10T02:01:03.228Z",
       "synopsis_index_only": true
     },
     {
@@ -69816,19 +69832,22 @@
     },
     {
       "path": "scripts/verify-marketing-phase1-live.mjs",
-      "synopsis": "Script — Verify Marketing Phase1 Live.",
-      "bytes": 7554,
-      "mtime": "2026-07-10T01:58:53.632Z",
-      "indexed_at": "2026-07-10T01:58:53.632Z"
+      "synopsis": "LIVE §6 MarketingOS Phase 1 verifier — runnable tests PASS or named blockers.",
+      "bytes": 9089,
+      "mtime": "2026-07-10T02:00:14.767Z",
+      "indexed_at": "2026-07-10T02:01:03.228Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "scripts/verify-marketing-phase1.mjs",
-      "synopsis": "Zone 1 audit module for verifying MarketingOS Phase 1 readiness.",
-      "bytes": 5933,
-      "mtime": "2026-06-29T17:44:54.635Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "synopsis": "Shim — retired hallucinated MarketingOS probes; runs LIVE §6 verifier.",
+      "bytes": 754,
+      "mtime": "2026-07-10T02:00:45.725Z",
+      "indexed_at": "2026-07-10T02:01:03.228Z",
       "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
+        "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
     {

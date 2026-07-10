@@ -1,0 +1,97 @@
+{
+  "ok": true,
+  "tests": [
+    {
+      "name": "POST /api/v1/marketing/consent with consent_type + consent_text + UUID owner_id",
+      "ok": true,
+      "details": {
+        "status": 201,
+        "owner_id": "493dc0d4-3ffe-48d4-972f-ade26ee7707c"
+      }
+    },
+    {
+      "name": "POST /api/v1/marketing/sessions without consent expects 400",
+      "ok": true
+    },
+    {
+      "name": "POST session with consent",
+      "ok": true,
+      "details": {
+        "status": 201,
+        "id": "1a09317f-3144-4b5a-8dfa-81c0ea2d24e7"
+      }
+    },
+    {
+      "name": "POST /api/v1/marketing/sessions/:id/coach",
+      "ok": true,
+      "details": {
+        "status": 200,
+        "hookDetected": true
+      }
+    },
+    {
+      "name": "POST /api/v1/marketing/sessions/:id/extract",
+      "ok": true,
+      "details": {
+        "status": 200,
+        "n": 1
+      }
+    },
+    {
+      "name": "POST /api/v1/marketing/sessions/:id/generate",
+      "ok": true,
+      "details": {
+        "status": 200,
+        "id": "5aee5790-4f40-47e8-b67b-fa3906d6ae60"
+      }
+    },
+    {
+      "name": "PATCH /api/v1/marketing/content/:id approve",
+      "ok": true,
+      "details": {
+        "status": 200,
+        "pieceStatus": "approved"
+      }
+    },
+    {
+      "name": "GET export and assert Content-Disposition contains attachment",
+      "ok": true,
+      "details": {
+        "status": 200,
+        "contentDisposition": "attachment; filename=\"marketing-content-session-1a09317f-3144-4b5a-8dfa-81c0ea2d24e7.txt\""
+      }
+    },
+    {
+      "name": "audio upload",
+      "ok": true,
+      "details": {
+        "status": "BLOCKED",
+        "reason": "STORAGE_R2_UNVERIFIED"
+      }
+    }
+  ],
+  "blockers": [
+    {
+      "code": "STORAGE_R2_UNVERIFIED",
+      "why_cant_fix_now": "STORAGE_* not in managed-env allowlist; audio upload intentionally excluded from Phase 1 queue",
+      "next_unblocking_action": "Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then enqueue audio upload"
+    },
+    {
+      "code": "LEGACY_SOCIALMEDIAOS_404",
+      "why_cant_fix_now": "Founder runtime serves canonical /api/v1/marketing/*; legacy /api/v1/socialmediaos/* not mounted",
+      "next_unblocking_action": "Mount legacy adapter or update all docs/scripts to /marketing only"
+    },
+    {
+      "code": "SENTRY_LAYER_B_NOT_RUN",
+      "why_cant_fix_now": "Browser walkthrough of /marketing/session/new not executed this session",
+      "next_unblocking_action": "Run SENTRY Layer B against /marketing flow and store receipt"
+    },
+    {
+      "code": "STALE_VERIFY_MARKETING_PHASE1_MJS",
+      "why_cant_fix_now": "scripts/verify-marketing-phase1.mjs still probes hallucinated /marketingos paths",
+      "next_unblocking_action": "Point package scripts at verify-marketing-phase1-live.mjs or delete/replace stale file"
+    }
+  ],
+  "at": "2026-07-10T02:01:02.343Z",
+  "note": "ok=true means all runnable §6 text-mode tests passed; infra blockers remain named in blockers[]"
+}

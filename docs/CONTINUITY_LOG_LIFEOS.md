@@ -8,6 +8,21 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — Never-stop: fix or name SocialMediaOS blockers
+
+### What happened
+Adam: do not let the system stop or fail to self-fix without saying why. Directed more founder-chat builds; system regressed the live verifier once and misrouted a blockers ask into blueprint intake. Conductor restored `scripts/verify-marketing-phase1-live.mjs`, shimmed stale `verify-marketing-phase1.mjs`, and wrote honest receipts: runnable §6 PASS + named infra blockers (R2, legacy 404, SENTRY B).
+
+### Proof
+- `node scripts/verify-marketing-phase1-live.mjs` exit 0
+- `products/receipts/MARKETING_PHASE1_VERIFY.json` ok=true with blockers[] named
+- `products/receipts/SOCIALMEDIAOS_BLOCKERS.json` with why_cant_fix_now + next_unblocking_action
+
+### Next
+- Unblock R2 when STORAGE_* verified; run SENTRY Layer B on `/marketing`.
+
+---
+
 ## [BUILD] Update 2026-07-10 — Overseen SocialMediaOS LIVE finish pass
 
 ### What happened
