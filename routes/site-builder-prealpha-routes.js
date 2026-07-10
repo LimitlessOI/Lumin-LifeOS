@@ -18,7 +18,7 @@ import { createSession } from '../services/browser-agent.js';
 const PREVIEWS_ROOT = path.resolve(process.cwd(), 'public/previews');
 const CLIENT_ID_RE = /^[\w-]+$/;
 
-function readMeta(clientId) {
+function readMetaFromDisk(clientId) {
   try {
     return JSON.parse(fs.readFileSync(path.join(PREVIEWS_ROOT, clientId, 'meta.json'), 'utf8'));
   } catch {
@@ -26,18 +26,52 @@ function readMeta(clientId) {
   }
 }
 
-function newestPreviewWithToken() {
+// Previews live on ephemeral per-instance disk; a fixture built (or rehydrated)
+// on one Railway instance is invisible to a request landing on another. The
+// main preview route already rehydrates meta.json from prospect_sites.metadata
+// on a disk miss (routes/site-builder-routes.js) — mirror that here so Layer B
+// (which never itself calls that route) doesn't fail closed on a real preview.
+async function readMeta(clientId, pool) {
+  const fromDisk = readMetaFromDisk(clientId);
+  if (fromDisk && fromDisk.editToken) return fromDisk;
+  if (!pool) return fromDisk;
+  try {
+    const result = await pool.query(
+      `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+      [clientId]
+    );
+    const previewMeta = result.rows[0]?.metadata?.previewMeta;
+    return previewMeta && previewMeta.editToken ? previewMeta : fromDisk;
+  } catch {
+    return fromDisk;
+  }
+}
+
+async function newestPreviewWithToken(pool) {
   let entries = [];
   try {
     entries = fs.readdirSync(PREVIEWS_ROOT);
   } catch {
-    return null;
+    entries = [];
   }
   const metas = entries
-    .map((clientId) => ({ clientId, meta: readMeta(clientId) }))
+    .map((clientId) => ({ clientId, meta: readMetaFromDisk(clientId) }))
     .filter((x) => x.meta && x.meta.editToken)
     .sort((a, b) => new Date(b.meta.createdAt || 0) - new Date(a.meta.createdAt || 0));
-  return metas[0] || null;
+  if (metas[0]) return metas[0];
+  if (!pool) return null;
+  try {
+    const result = await pool.query(
+      `SELECT client_id, metadata FROM prospect_sites
+       WHERE metadata->'previewMeta'->>'editToken' IS NOT NULL
+       ORDER BY updated_at DESC LIMIT 1`
+    );
+    const row = result.rows[0];
+    if (!row) return null;
+    return { clientId: row.client_id, meta: row.metadata.previewMeta };
+  } catch {
+    return null;
+  }
 }
 
 export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
@@ -45,6 +79,7 @@ export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
   const callCouncilMember = deps.callCouncilMember;
   const baseUrl = String(deps.baseUrl || '').replace(/\/+$/, '');
   const logger = deps.logger ?? console;
+  const pool = deps.pool;
 
   if (typeof requireKey !== 'function') {
     throw new Error('registerSiteBuilderPrealphaRoutes requires deps.requireKey');
@@ -66,9 +101,9 @@ export function registerSiteBuilderPrealphaRoutes(app, deps = {}) {
     let clientId = String(bodyClientId || '').trim();
     let meta = null;
     if (clientId && CLIENT_ID_RE.test(clientId)) {
-      meta = readMeta(clientId);
+      meta = await readMeta(clientId, pool);
     } else {
-      const newest = newestPreviewWithToken();
+      const newest = await newestPreviewWithToken(pool);
       if (newest) { clientId = newest.clientId; meta = newest.meta; }
     }
     if (!meta || !meta.editToken) {

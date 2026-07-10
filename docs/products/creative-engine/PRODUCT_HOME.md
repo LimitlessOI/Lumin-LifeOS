@@ -9,7 +9,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/creative-engine/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/creative/*` + `/creative` studio UI |
-| **Last Updated** | 2026-07-10 — v1 ship: footage_edit, photo_polish, script_compose (gated), generative_broll scaffold |
+| **Last Updated** | 2026-07-10 — tip proof PASS: footage_edit live (`CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`) |
 
 ---
 

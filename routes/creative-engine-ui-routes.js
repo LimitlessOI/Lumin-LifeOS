@@ -130,10 +130,19 @@ export function registerCreativeEngineUiRoutes(app, deps = {}) {
           };
           const est=await fetch('/api/v1/creative/estimate',{method:'POST',headers:authHeaders(),body:JSON.stringify({mode,...request})});
           const ej=await est.json();
-          const ren=await fetch('/api/v1/creative/render',{method:'POST',headers:authHeaders(),body:JSON.stringify({owner_id:ownerId(),mode,request,sync:true})});
+          const ren=await fetch('/api/v1/creative/render',{method:'POST',headers:authHeaders(),body:JSON.stringify({owner_id:ownerId(),mode,request,sync: mode==='photo_polish'})});
           const rj=await ren.json();
           out.textContent=JSON.stringify({estimate:ej,render:rj},null,2);
-          const url=rj?.processed?.result?.publicUrl||rj?.job?.result_json?.publicUrl;
+          let url=rj?.processed?.result?.publicUrl||rj?.job?.result_json?.publicUrl;
+          if(!url && rj.job?.id && rj.job?.status!=='completed'){
+            for(let i=0;i<40;i++){
+              await new Promise(r=>setTimeout(r,1500));
+              const jr=await fetch('/api/v1/creative/jobs/'+rj.job.id,{headers:authHeaders()});
+              const jj=await jr.json();
+              if(jj.job?.status==='completed'){ url=jj.job.result_json?.publicUrl; rj.polled=jj.job; break; }
+              if(jj.job?.status==='failed'){ throw new Error(jj.job.error||'render failed'); }
+            }
+          }
           if(url) show('Done — '+url,true); else if(rj.ok===false||rj.processed?.ok===false) show(rj.error||rj.processed?.error||'failed',false); else show('Job '+ (rj.job?.status||'queued'), true);
         }catch(e){ show(e.message,false); out.textContent=String(e); }
       };

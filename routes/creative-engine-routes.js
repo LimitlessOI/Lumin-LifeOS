@@ -113,7 +113,7 @@ export function registerCreativeEngineRoutes(app, deps = {}) {
       const mode = req.body?.mode || 'footage_edit';
       const request = req.body?.request || req.body || {};
       const consentRecordId = req.body?.consent_record_id || req.body?.consentRecordId || null;
-      const sync = req.body?.sync === true || mode === 'photo_polish' || mode === 'footage_edit';
+      const sync = req.body?.sync === true || (mode === 'photo_polish' && req.body?.sync !== false);
 
       // Fail closed if ffmpeg missing for local modes
       if (mode === 'footage_edit' || mode === 'photo_polish') {
