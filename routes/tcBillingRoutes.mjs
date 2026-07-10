@@ -14,11 +14,96 @@ export function registerTcBillingRoutes(app, deps) {
   if (typeof callCouncilMember !== 'function') {
     throw new Error('registerTcBillingRoutes requires deps.callCouncilMember');
   }
+  if (typeof requireKey !== 'function') {
+    throw new Error('registerTcBillingRoutes requires deps.requireKey');
+  }
 
   const sendError = (res, statusCode, message, details) => {
     const payload = { ok: false, error: message };
     if (details !== undefined) payload.details = details;
     return res.status(statusCode).json(payload);
+  };
+
+  const getHeader = (req, name) => {
+    if (typeof req.get === 'function') return req.get(name);
+    return req.headers?.[String(name).toLowerCase()];
+  };
+
+  const failWithStatus = (statusCode, message) => {
+    const error = new Error(message);
+    error.statusCode = statusCode;
+    return error;
+  };
+
+  const validateStripeWebhook = async (req) => {
+    const signature = getHeader(req, 'stripe-signature');
+    if (!signature) {
+      throw failWithStatus(400, 'Missing Stripe signature');
+    }
+
+    if (typeof deps.validateWebhookSignature === 'function') {
+      return deps.validateWebhookSignature(req.rawBody ?? req.body, signature, req);
+    }
+
+    throw failWithStatus(503, 'Stripe webhook signature validation unavailable');
+  };
+
+  const loadStripeWebhookColumns = async () => {
+    const result = await pool.query(
+      `SELECT column_name, data_type
+       FROM information_schema.columns
+       WHERE table_name = $1`,
+      ['stripe_webhook_events']
+    );
+    const columns = new Map();
+    for (const row of result.rows || []) {
+      if (row?.column_name) columns.set(row.column_name, row.data_type || null);
+    }
+    return columns;
+  };
+
+  const recordStripeWebhookEvent = async (event) => {
+    const eventId = event?.id ?? event?.event_id ?? event?.eventId ?? null;
+    const eventType = event?.type ?? event?.event_type ?? event?.eventType ?? null;
+    if (!eventType) {
+      throw failWithStatus(400, 'Invalid Stripe webhook event');
+    }
+
+    const columns = await loadStripeWebhookColumns();
+    const payload = event && typeof event === 'object' ? event : { raw: event };
+    const eventIdType = columns.get('event_id');
+
+    if (columns.has('payload')) {
+      if (!eventId) throw failWithStatus(400, 'Stripe event id is required');
+      return pool.query(
+        `INSERT INTO stripe_webhook_events (event_id, event_type, payload)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (event_id) DO NOTHING
+         RETURNING event_id, event_type, created_at`,
+        [String(eventId), String(eventType), payload]
+      );
+    }
+
+    if (columns.has('raw_event')) {
+      if (eventId && eventIdType !== 'uuid') {
+        return pool.query(
+          `INSERT INTO stripe_webhook_events (event_id, event_type, raw_event)
+           VALUES ($1, $2, $3)
+           ON CONFLICT (event_id) DO NOTHING
+           RETURNING event_id, event_type, created_at`,
+          [String(eventId), String(eventType), payload]
+        );
+      }
+
+      return pool.query(
+        `INSERT INTO stripe_webhook_events (event_type, raw_event)
+         VALUES ($1, $2)
+         RETURNING event_id, event_type, created_at`,
+        [String(eventType), payload]
+      );
+    }
+
+    throw failWithStatus(500, 'stripe_webhook_events schema is unsupported');
   };
 
   app.post('/api/tc/billing/subscribe', requireKey, async (req, res) => {
@@ -83,43 +168,26 @@ export function registerTcBillingRoutes(app, deps) {
     '/api/tc/billing/webhook',
     async (req, res) => {
       try {
-        const body = req.body;
-        const prompt = [
-          'Handle a Stripe webhook for TC billing.',
-          `baseUrl: ${baseUrl || ''}`,
-          `payload: ${typeof body === 'string' ? body : JSON.stringify(body)}`,
-          'Return a concise JSON object with fields: handled, event_id, event_type, status, raw.'
-        ].join('\n');
+        const event = await validateStripeWebhook(req);
+        await recordStripeWebhookEvent(event);
 
-        const aiText = await callCouncilMember('tcBilling.handleStripeWebhook', prompt, {});
-        let aiResult = {};
-        try {
-          aiResult = aiText ? JSON.parse(aiText) : {};
-        } catch {
-          aiResult = { raw: aiText };
-        }
-
-        const eventId = aiResult.event_id ?? aiResult.eventId ?? null;
-        const eventType = aiResult.event_type ?? aiResult.eventType ?? null;
-
-        await pool.query(
-          `INSERT INTO stripe_webhook_events (event_id, event_type, payload, raw_event)
-           VALUES ($1, $2, $3, $4)
-           RETURNING id, event_id, event_type, created_at`,
-          [eventId, eventType, body ?? null, body ?? null]
-        );
-
-        return res.status(200).json({ ok: true, result: aiResult });
+        return res.status(200).json({
+          ok: true,
+          received: true,
+          event_id: event?.id ?? event?.event_id ?? event?.eventId ?? null,
+          event_type: event?.type ?? event?.event_type ?? event?.eventType ?? null
+        });
       } catch (error) {
         if (logger && typeof logger.error === 'function') {
           logger.error({ err: error }, 'tc billing webhook failed');
         }
-        return sendError(res, 500, 'Failed to handle webhook');
+        const statusCode = Number.isInteger(error?.statusCode) ? error.statusCode : 400;
+        return sendError(res, statusCode, error?.message || 'Failed to handle webhook');
       }
     }
   );
 
-  app.get('/api/tc/billing/status/:agentId', async (req, res) => {
+  app.get('/api/tc/billing/status/:agentId', requireKey, async (req, res) => {
     try {
       const { agentId } = req.params || {};
       if (!agentId) return sendError(res, 400, 'agentId is required');
