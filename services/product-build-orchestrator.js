@@ -159,11 +159,40 @@ export async function evaluateStepExpectations(step, {
     // dirty workspace that already has a later repair (gv-boot-wire false-done class).
     if (commitSha) {
       const { execFileSync } = await import('node:child_process');
-      return execFileSync('git', ['show', `${commitSha}:${relPath}`], {
-        cwd: root,
-        encoding: 'utf8',
-        maxBuffer: 4 * 1024 * 1024,
-      });
+      try {
+        return execFileSync('git', ['show', `${commitSha}:${relPath}`], {
+          cwd: root,
+          encoding: 'utf8',
+          maxBuffer: 4 * 1024 * 1024,
+        });
+      } catch (gitErr) {
+        // Railway shallow clones often lack the object → every assertion becomes
+        // assertion_threw and the step blocks forever. Prefer GitHub Contents API
+        // for that exact SHA; only then fall back to workspace when HEAD matches.
+        const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
+        const repo = process.env.GITHUB_REPO || '';
+        if (token && repo) {
+          const url = `https://api.github.com/repos/${repo}/contents/${relPath}?ref=${encodeURIComponent(commitSha)}`;
+          const res = await fetch(url, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/vnd.github.raw',
+              'User-Agent': 'lumin-artifact-proof',
+            },
+          });
+          if (res.ok) return await res.text();
+        }
+        let head = '';
+        try {
+          head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+        } catch {
+          head = '';
+        }
+        if (head && (head === commitSha || head.startsWith(commitSha) || commitSha.startsWith(head.slice(0, 12)))) {
+          return fs.readFileSync(path.join(root, relPath), 'utf8');
+        }
+        throw gitErr;
+      }
     }
     return fs.readFileSync(path.join(root, relPath), 'utf8');
   };

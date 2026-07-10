@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — GAP-FILL: `routes/tc-intake-routes.js` import fixed (`tc-intake-runner.js`); never-stop was spinning s7 on broken `tcIntakeRunner.js` path. |
+| **Last Updated** | 2026-07-10 — s7 revive + artifact-proof git-show fallback; import fixed to `tc-intake-runner.js`. |
 
 ---
 
@@ -976,6 +976,8 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **s7 revive after artifact-proof fix** — queue reset pending; root cause was Railway `git show` → `assertion_threw`, not bad route code (import already fixed). | s7 blocked after 3 attempts despite correct `tc-intake-runner.js` import. | ✅ | pending | never-stop re-run |
+| 2026-07-10 | **GAP-FILL s7 import** — `routes/tc-intake-routes.js` imported nonexistent `../services/tcIntakeRunner.js`; fixed to `tc-intake-runner.js`. Queue got `expected_exports` + `file_contains` so never-stop short-circuit can prove. | Never-stop `cycle_start product_build_tc-service_s7` then instance reset; file existed but broken import blocked module-health / done. | ✅ | pending | push + never-stop marks s7 done |
 | 2026-07-07 | **`core/notification-service.js`:** use `dns.resolve4Sync` + Gmail IPv4 fallback (`142.250.80.109`) — `lookupSync` still routed IPv6 on Railway (`ENETUNREACH …:465`). | Port 465 fix landed but IPv6 persisted on Gmail SMTP connect. | ✅ | pending manifest | prod resend |
 | 2026-07-03 | **Browser-agent diagnostic endpoint (ground-truth Chrome check):** added `GET /api/v1/browser-agent/diag` to `routes/general-browser-agent-routes.js` — reports the resolved Puppeteer executable path, whether that binary exists, which known Chrome/Chromium paths are present in the container, and the result (ok/error) of an actual `createSession()` launch. CONDUCTOR-GLUE diagnostic (no browser feature logic) so we can confirm whether the Chrome image fix (#269) is live without guessing from deploy timing. | The live run kept returning `Target closed`; we need to know for certain whether a launchable Chrome is in the running container before spending another exploratory pass. | ⏳ `node --check` PASS; live check pending deploy | pending manifest | pending prod deploy |
 | 2026-07-03 | **CORRECTION + fix — the browser engine never had a Chrome to launch in prod:** the first live GLVAR run returned `500 Protocol error (Target.setDiscoverTargets): Target closed`. Root cause: `Dockerfile` set `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true` and never installed any Chrome/Chromium, so every Puppeteer-driven feature (GLVAR/eXp/MLS) has been unable to launch a browser in production. This contradicts the earlier claim that "GLVAR login works today" — that claim was unverified and wrong. Fix: install system `chromium` (+ fonts) in the image and set `PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium`. | The general browser agent (and all browser features) cannot function without a real browser binary in the container. | ⏳ pending image rebuild + live GLVAR re-run | pending manifest | pending prod deploy |
