@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T09:48:37.234Z",
+  "generated_at": "2026-07-10T09:54:17.121Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11408,
   "files": [
@@ -66244,9 +66244,9 @@
     {
       "path": "routes/tcIntakeRoutes.mjs",
       "synopsis": "Registers TcIntakeRoutes routes/handlers (routes/tcIntakeRoutes.mjs).",
-      "bytes": 8845,
-      "mtime": "2026-07-10T09:48:37.234Z",
-      "indexed_at": "2026-07-10T09:48:37.234Z"
+      "bytes": 2936,
+      "mtime": "2026-07-10T09:54:17.121Z",
+      "indexed_at": "2026-07-10T09:54:17.121Z"
     },
     {
       "path": "routes/tco-agent-routes.js",
