@@ -265,8 +265,13 @@ Controls the autonomous multi-lane build engine (`scripts/autonomy/builder-super
 | `GOOGLE_CLIENT_ID` | ⚠️ NEEDED | OAuth2 client ID for Google Calendar integration | google-calendar-service.js |
 | `GOOGLE_CLIENT_SECRET` | ⚠️ NEEDED | OAuth2 client secret | google-calendar-service.js |
 | `GOOGLE_REDIRECT_URI` | ⚠️ NEEDED | OAuth2 callback URL (e.g. https://lifeos.up.railway.app/api/v1/word-keeper/calendar/callback) | google-calendar-service.js |
-| `GOOGLE_PLACES_API_KEY` | 🔲 OPTIONAL | Google Places — prospect address lookups | prospect-pipeline.js |
+| `GOOGLE_PLACES_KEY` | ⚠️ NEEDED | Google Places Text Search — **preferred** name for Go Vegas discover + site-builder prospect discovery | go-vegas-outreach.js, site-builder-prospect-discovery.mjs |
+| `GOOGLE_PLACES_API_KEY` | 🔲 OPTIONAL | Alias accepted by the same code paths — prefer `GOOGLE_PLACES_KEY` | go-vegas-outreach.js |
+| `GO_VEGAS_ALLOW_DISCOVER_IDLE` | 🔲 OPTIONAL | `1` = scheduler may discover when prospect queue empty | go-vegas-outreach-scheduler.js |
+| `GO_VEGAS_SCHEDULER_MS` | 🔲 OPTIONAL | Go Vegas outreach scheduler interval ms | go-vegas-outreach-scheduler.js |
 | `GOOGLE_CALENDAR_API_KEY` | ❌ DEPRECATED | Service account key — replaced by OAuth2 flow | — |
+
+> **Live probe 2026-07-10:** both `GOOGLE_PLACES_KEY` and `GOOGLE_PLACES_API_KEY` were **ABSENT** on the running tip (`POST /api/v1/go-vegas/discover` → `GOOGLE_PLACES_KEY not set`). `EMAIL_FROM` / `EMAIL_PROVIDER` / `POSTMARK_SERVER_TOKEN` were **PRESENT**. Machine mirror: `docs/ENV_LIVE_INVENTORY.json` (`npm run env:inventory`).
 
 ---
 
@@ -402,8 +407,13 @@ Controls the autonomous multi-lane build engine (`scripts/autonomy/builder-super
 ## 🧾 Deploy inventory — Lumin (Railway production, variable **names** only)
 
 **Service:** `lumin-web` · **Environment:** production · **Vault:** Railway → Lumin → Variables.  
-**Sources:** (1) operator screenshots **2026-04-22** + **2026-04-25** (names only; values masked). (2) Category tables above. (3) Authenticated `GET /api/v1/railway/env` (names + masked values) when available.  
+**Live machine mirror (re-run after every vault change):** `docs/ENV_LIVE_INVENTORY.json` via `npm run env:inventory` (hits `GET /api/v1/railway/managed-env/registry` — **names + present boolean only**, never secret values).  
+**Sources:** (1) live inventory JSON (preferred for “is it on the tip right now?”). (2) operator screenshots **2026-04-22** + **2026-04-25** (names only; values masked). (3) Category tables above.  
 **Railway UI note:** dashboard reports **~92** service variables; **9** may be “added by Railway” system entries — names can change with platform updates.
+
+**Update rule:** Any Railway variable **add / remove / rename** → same session run `npm run env:inventory`, refresh this section’s “last live capture” line, and add a **Changelog** row.
+
+**Last live capture:** 2026-07-10 — 53 present / registry healthy=false; `GOOGLE_PLACES_*` ABSENT; `EMAIL_FROM`+`EMAIL_PROVIDER`+`POSTMARK_SERVER_TOKEN` PRESENT. See `docs/ENV_LIVE_INVENTORY.json`.
 
 **Rule:** **Secret values never appear in this repo.** If a secret was ever exposed in a screenshot, chat, or export → **rotate** in provider + Railway.
 
@@ -451,6 +461,7 @@ Paste rows whenever a verifier or production flow **succeeds** under an explicit
 
 | Date | Change |
 |---|---|
+| 2026-07-10 | **Live inventory automation** — `npm run env:inventory` → `docs/ENV_LIVE_INVENTORY.json` (names + present only from `/railway/managed-env/registry`). Documented `GOOGLE_PLACES_KEY` (preferred) + `GO_VEGAS_*`. Live probe: Places ABSENT on tip; EMAIL/Postmark PRESENT. |
 | 2026-04-25 | **Legend + `/ready` clarification:** OPTIONAL = role (not “absent”); **vault presence** vs **runtime** `process.env` (e.g. `github_token`). **AI APIs:** `GROQ_API_KEY`, `MISTRAL_API_KEY`, `TOGETHER_API_KEY`, `OPENROUTER_API_KEY` → **✅ SET** with note “optional for core” — aligned with deploy inventory A→Z + operator screenshots. |
 | 2026-04-25 | **“For every Conductor session”** block — read registry + deploy inventory before “missing env”; `PUBLIC_BASE_URL` export; system `POST /railway/env/bulk` for non-secrets; **404** on builder routes = **deploy drift** (not an operator re-proof loop). |
 | 2026-04-22 | **Pointer to `docs/SYSTEM_CAPABILITIES.md`** — matrix of self-serve routes/scripts + env per capability + gaps; maintain with this registry. |

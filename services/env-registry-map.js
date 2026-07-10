@@ -112,8 +112,11 @@ export const ENV_REGISTRY = [
   { name: "GOOGLE_CLIENT_ID",    status: "NEEDED",     category: "google",   purpose: "OAuth2 client ID for Google Calendar" },
   { name: "GOOGLE_CLIENT_SECRET",status: "NEEDED",     category: "google",   purpose: "OAuth2 client secret" },
   { name: "GOOGLE_REDIRECT_URI", status: "NEEDED",     category: "google",   purpose: "OAuth2 callback URL" },
-  { name: "GOOGLE_PLACES_API_KEY",status: "OPTIONAL",  category: "google",   purpose: "Google Places — prospect address lookups" },
+  { name: "GOOGLE_PLACES_KEY",   status: "NEEDED",     category: "google",   purpose: "Google Places Text Search — Go Vegas discover + site-builder prospect discovery (preferred name)" },
+  { name: "GOOGLE_PLACES_API_KEY",status: "OPTIONAL",  category: "google",   purpose: "Alias accepted by Go Vegas / prospect scripts — prefer GOOGLE_PLACES_KEY" },
   { name: "GOOGLE_CALENDAR_API_KEY",status: "DEPRECATED",category: "google", purpose: "Service account key — replaced by OAuth2 flow" },
+  { name: "GO_VEGAS_ALLOW_DISCOVER_IDLE", status: "OPTIONAL", category: "google", purpose: "1 = scheduler may discover when prospect queue is empty" },
+  { name: "GO_VEGAS_SCHEDULER_MS", status: "OPTIONAL", category: "google", purpose: "Go Vegas outreach scheduler interval ms" },
 
   // ── BoldTrail CRM ─────────────────────────────────────────────────────────────
   { name: "BOLDTRAIL_API_KEY",   status: "SET",        category: "boldtrail", purpose: "BoldTrail/KVCore API access" },

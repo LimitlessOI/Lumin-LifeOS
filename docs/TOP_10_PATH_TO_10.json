@@ -32,8 +32,8 @@
       "status": "open",
       "scorecard_areas": ["Revenue / pilots", "Site Builder", "LimitlessOS / business"],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "Site Builder launch-readiness ready + cold_email true — run real prospect send; OR set GOOGLE_PLACES_KEY for Go Vegas discover",
-      "blocker": "GOOGLE_PLACES_KEY absent (Go Vegas discover). Site Builder path unblocked for send if Postmark live."
+      "next_action": "Site Builder EMAIL/Postmark PRESENT on tip — run real prospect send for first dollar. OR set Railway var GOOGLE_PLACES_KEY (live probe 2026-07-10: ABSENT)",
+      "blocker": "GOOGLE_PLACES_KEY and GOOGLE_PLACES_API_KEY both ABSENT on live tip (npm run env:inventory). Not the same as GEMINI_API_KEY."
     },
     {
       "id": "T03",

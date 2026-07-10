@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T04:26:21.737Z",
+  "generated_at": "2026-07-10T05:48:35.303Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11394,
+  "file_count": 11396,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -37510,11 +37510,19 @@
       "indexed_at": "2026-07-10T02:08:57.077Z"
     },
     {
+      "path": "docs/ENV_LIVE_INVENTORY.json",
+      "synopsis": "Documentation — ENV LIVE INVENTORY.",
+      "bytes": 5189,
+      "mtime": "2026-07-10T05:48:33.724Z",
+      "indexed_at": "2026-07-10T05:48:35.303Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/ENV_REGISTRY.md",
       "synopsis": "ENV_REGISTRY.md — Environment Variable Registry",
-      "bytes": 37410,
-      "mtime": "2026-07-06T04:57:39.255Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 39143,
+      "mtime": "2026-07-10T05:48:15.107Z",
+      "indexed_at": "2026-07-10T05:48:35.303Z"
     },
     {
       "path": "docs/ENVIRONMENT_SETUP.md",
@@ -38942,9 +38950,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 105708,
-      "mtime": "2026-07-09T01:03:41.492Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 105850,
+      "mtime": "2026-07-10T05:48:30.839Z",
+      "indexed_at": "2026-07-10T05:48:35.303Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -59147,9 +59155,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5211,
-      "mtime": "2026-07-10T04:24:05.379Z",
-      "indexed_at": "2026-07-10T04:25:48.820Z",
+      "bytes": 5263,
+      "mtime": "2026-07-10T05:48:08.046Z",
+      "indexed_at": "2026-07-10T05:48:35.303Z",
       "synopsis_index_only": true
     },
     {
@@ -62042,9 +62050,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31309,
-      "mtime": "2026-07-10T03:59:28.774Z",
-      "indexed_at": "2026-07-10T04:01:29.360Z",
+      "bytes": 31369,
+      "mtime": "2026-07-10T05:48:07.763Z",
+      "indexed_at": "2026-07-10T05:48:35.303Z",
       "synopsis_index_only": true
     },
     {
@@ -67315,6 +67323,16 @@
       "indexed_at": "2026-07-10T02:08:57.077Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/env-live-inventory.mjs",
+      "synopsis": "Snapshot live Railway process.env presence (names only) into docs/ENV_LIVE_INVENTORY.json.",
+      "bytes": 3119,
+      "mtime": "2026-07-10T05:47:48.844Z",
+      "indexed_at": "2026-07-10T05:48:35.303Z",
+      "ssot": [
+        "docs/ENV_REGISTRY.md"
       ]
     },
     {
@@ -82245,9 +82263,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 25888,
-      "mtime": "2026-06-29T17:21:08.871Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 26391,
+      "mtime": "2026-07-10T05:47:48.879Z",
+      "indexed_at": "2026-07-10T05:48:35.303Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
