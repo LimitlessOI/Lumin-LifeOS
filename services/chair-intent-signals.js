@@ -22,7 +22,7 @@ export function stripChairDoPrefix(text = '') {
 export function isExplicitExecuteCommand(text = '') {
   const t = String(text || '').trim();
   if (!t) return false;
-  if (/^\s*(execute|run|go|ship)\s*[.!]?\s*$/i.test(t)) return true;
+  if (/^\s*(execute|run|go|ship)\s*[.!]?\s$/i.test(t)) return true;
   return /\b(execute it|do it now|run it now|ship it|go ahead|make it happen|just do it|execute that|run that|do that now|get it done|execute this)\b/i.test(t);
 }
 
@@ -40,7 +40,7 @@ export function isBlueprintExecuteIntent(text = '') {
 
 export function isPureCounselQuestion(text = '') {
   const t = String(text || '').trim();
-  if (!/\?\s*$/.test(t)) return false;
+  if (!/\?\s$/.test(t)) return false;
   if (/\b(status|keep going|point b|continue|progress|execute|build|fix|change|lifere|mission|blueprint)\b/i.test(t)) {
     return false;
   }
@@ -88,16 +88,17 @@ export function isCounselOnlyBypass(text = '') {
     return false;
   }
   return /\b(explain|describe|tell me how|walk me through|how do you|how you|how would you)\b/i.test(t)
-    || /\?\s*$/.test(t);
+    || /\?\s$/.test(t);
 }
 
 export function isBuildRequest(text) {
-  if (isFounderPersonalLifeIntent(text)) return false;
-  if (isBlueprintExecuteIntent(text)) return false;
-  if (isCounselOnlyBypass(text)) return false;
-  const t = String(text || '');
+  const stripped = stripChairDoPrefix(text);
+  const t = String(stripped.text || '');
+  if (isFounderPersonalLifeIntent(t)) return false;
+  if (isBlueprintExecuteIntent(t)) return false;
+  if (isCounselOnlyBypass(t)) return false;
   if (/\b(intake blueprint|intake_blueprint|mos-p1)\b/i.test(t)) return false;
-  if (/\b(social\s*media\s*os|socialmediaos|smos)\b/i.test(t) && /\b(intake|blueprint|a to z|a-to-z)\b/i.test(t)) return false;
+  if (/\b(social\smedia\sos|socialmediaos|smos)\b/i.test(t) && /\b(intake|blueprint|a to z|a-to-z)\b/i.test(t)) return false;
   if (/\b(counsel only|do not run|don't run|without building|without running|explain how you|walk me through)\b/i.test(t)) {
     return false;
   }
@@ -111,5 +112,6 @@ export function isBuildRequest(text) {
   }
   return /\b(fix|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t)
     || isProductBuildChangeVerb(t)
-    || isFounderShipOrUsabilityIntent(t);
+    || isFounderShipOrUsabilityIntent(t)
+    || /\b(drawer_direct_build|smos_question)\b/i.test(t);
 }

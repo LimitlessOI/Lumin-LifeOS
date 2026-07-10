@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T02:05:18.968Z",
+  "generated_at": "2026-07-10T02:06:50.842Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11379,
   "files": [
@@ -81236,9 +81236,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 5759,
-      "mtime": "2026-07-03T00:17:46.218Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 5856,
+      "mtime": "2026-07-10T02:06:50.842Z",
+      "indexed_at": "2026-07-10T02:06:50.842Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
