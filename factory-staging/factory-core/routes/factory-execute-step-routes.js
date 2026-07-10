@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Factory staging — Factory Execute Step Routes.
+ * SYNOPSIS: BuilderOS artifact — Factory Execute Step Routes.
  */
 export const factoryExecuteStepRoute = {
   method: 'POST',

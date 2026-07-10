@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "abab5f3166c554f422bbb02dc30aff4add79381c4cca34ba24da87d54bca89cf"
+        "sha256": "b7573753ddbc2bad13692e49bc8feb3bdbc6d2adb6d41ed5ea071f95be8d1a2e"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009/CONTENT/autopilot-runner.mjs"

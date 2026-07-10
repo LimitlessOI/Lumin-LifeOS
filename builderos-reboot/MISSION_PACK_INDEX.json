@@ -7,9 +7,9 @@
     "role": "Mission pack index — generated from MISSION_QUEUE.json",
     "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
   },
-  "generated_at": "2026-06-26T23:00:06.529Z",
+  "generated_at": "2026-07-10T00:26:53.032Z",
   "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
-  "mission_count": 48,
+  "mission_count": 56,
   "missions_complete": 37,
   "missions": [
     {
@@ -295,6 +295,20 @@
       "error": "no_blueprint"
     },
     {
+      "mission_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001",
+      "blueprint_id": "FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001-v1",
+      "scope": "builderos_autonomy_closure",
+      "steps": 14,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "FACTORY-LUMIN-FOUNDER-ALPHA-GAPFILL-0001",
+      "blueprint_id": "LUMIN-FOUNDER-ALPHA-GAPFILL-2026-06-28",
+      "scope": "lumin_founder_alpha_gapfill",
+      "steps": 7,
+      "status": "unknown"
+    },
+    {
       "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
       "blueprint_id": "ACTION-INBOX-V1-2026-06-12",
       "scope": "action_inbox_v1_middle_layer",
@@ -316,6 +330,13 @@
       "status": "unknown"
     },
     {
+      "mission_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001",
+      "blueprint_id": "PRODUCT-LIFEOS-USER-AUTH-V1-0001-ARC-HOST",
+      "scope": "product_host",
+      "steps": 7,
+      "status": "unknown"
+    },
+    {
       "mission_id": "PRODUCT-LIFERE-MASTER-BLUEPRINT-0001",
       "steps": 0,
       "status": "unknown",
@@ -329,6 +350,20 @@
       "status": "unknown"
     },
     {
+      "mission_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001",
+      "blueprint_id": "PRODUCT-LIFERE-SALES-COACHING-V1-0001-v1",
+      "scope": "lifere_sales_coaching_phase1",
+      "steps": 6,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001",
+      "blueprint_id": "PRODUCT-SOCIALMEDIAOS-SESSION-MVP-0001-v1",
+      "scope": "socialmediaos_session_mvp",
+      "steps": 7,
+      "status": "unknown"
+    },
+    {
       "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
       "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
       "scope": "voice_rail_v1_communication_layer",
@@ -337,6 +372,24 @@
     },
     {
       "mission_id": "SENTRY-ASPECT-A08",
+      "steps": 0,
+      "status": "unknown",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "liferepair-FVTGDL",
+      "steps": 0,
+      "status": "unknown",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "liferepair-RFEfI1",
+      "steps": 0,
+      "status": "unknown",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "liferepair-r0IPqg",
       "steps": 0,
       "status": "unknown",
       "error": "no_blueprint"

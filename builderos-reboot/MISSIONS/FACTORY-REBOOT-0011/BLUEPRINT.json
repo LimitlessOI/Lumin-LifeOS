@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "4c9678b8cada016c8bc2791af682dd111598202b71f9ce426328b1244635dc6f"
+        "sha256": "b475720911b15e9207a28708a851c27a9c707f8bd910552dd1c62a6e0ae3c6f3"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/build-lumin-factory-bundle.mjs"
@@ -48,7 +48,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "c085d5444dba36ebb0ab9b998c46266e3c484467490c8933575d3f0fd390c92e"
+        "sha256": "7d8370d18c05fd73eb2ec1dd9ff34551e62b997666f7919b50686d90cd0b8aec"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/lumin-factory-README.md"
@@ -81,7 +81,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "f676ff3535b953a2a97e08c026a94067f3b4e360e8198483342116c5ba3c3072"
+        "sha256": "ade57875828eba59db651e04e2ba3e325b2ec02a9bdeb8bc824570b5f71b7001"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/cutover-verify.mjs"

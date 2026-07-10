@@ -1,11 +1,10 @@
 /**
- * SYNOPSIS: Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0010/CONTENT/register-routes.js).
+ * SYNOPSIS: Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).
  */
 import { factoryExecuteStepRoute } from '../factory-core/routes/factory-execute-step-routes.js';
 import { factoryExecuteMissionRoute } from '../factory-core/routes/factory-execute-mission-routes.js';
 import { dispatchExecuteStep } from '../factory-core/builder/run-step.js';
 import { dispatchExecuteMission } from '../factory-core/builder/run-mission.js';
-import { runVerification, appendStepReceipt } from '../factory-core/sentry/run-verification.js';
 import { getCouncilAdapterStatus, assertCouncilQuarantine } from '../factory-core/canon/services/council-adapter.js';
 import { summarizeHistory } from '../factory-core/historian/mission-history.js';
 import { summarizeHistorian } from '../factory-core/historian/append-record.js';
@@ -15,13 +14,16 @@ import { reconcileRemoteTruth } from '../factory-core/readiness/remote-truth-rec
 import { getC2SurfaceStatus, formatC2MissionBrief } from '../factory-core/lifeos/c2-surface.js';
 import fs from 'node:fs';
 import path from 'node:path';
-import { REPO_ROOT } from '../factory-core/builder/run-step.js';
+import { detectLayout, FACTORY_ROOT, REPO_ROOT, machinePath } from '../factory-core/layout/repo-layout.js';
 
 export function registerFactoryRoutes(app) {
+  const layout = detectLayout();
+
   app.get('/health', (_req, res) => {
     res.json({
       ok: true,
       service: 'factory-staging',
+      layout: layout.mode,
       execute_step: 'live',
       execute_mission: 'live',
       greenfield: 'live',
@@ -92,21 +94,19 @@ export function registerFactoryRoutes(app) {
   });
 
   app.get('/factory/canon/status', (_req, res) => {
-    const canonDir = path.join(REPO_ROOT, 'factory-staging/factory-core/canon');
+    const canonDir = path.join(FACTORY_ROOT, 'factory-core/canon');
     const files = ['MISSION_STATE_MACHINE.json', 'MATURITY_CLASSIFICATION.json', 'PROOF_SOURCE_REGISTRY.json'];
-    const loaded = Object.fromEntries(
-      files.map((f) => [f, fs.existsSync(path.join(canonDir, f))]),
-    );
+    const loaded = Object.fromEntries(files.map((f) => [f, fs.existsSync(path.join(canonDir, f))]));
     res.json({ ok: true, canon: loaded, maturity_rule: 'docs_alone_earn_zero_runtime_maturity' });
   });
 
   app.get('/factory/readiness', (_req, res) => {
-    const reportPath = path.join(REPO_ROOT, 'builderos-reboot/READINESS_REPORT.json');
+    const reportPath = machinePath(REPO_ROOT, layout, 'READINESS_REPORT.json');
     if (!fs.existsSync(reportPath)) {
       return res.status(503).json({ ok: false, error: 'READINESS_REPORT.json not generated yet' });
     }
     const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-    const detPath = path.join(REPO_ROOT, 'builderos-reboot/DETERMINISM_RECEIPT.json');
+    const detPath = machinePath(REPO_ROOT, layout, 'DETERMINISM_RECEIPT.json');
     if (fs.existsSync(detPath)) {
       report.determinism = JSON.parse(fs.readFileSync(detPath, 'utf8'));
     }
@@ -130,27 +130,6 @@ export function registerFactoryRoutes(app) {
 
   app.post(factoryExecuteStepRoute.path, (req, res) => {
     const { httpStatus, body } = dispatchExecuteStep(req.body || {});
-    const step = req.body?.step;
-    const mission_id = req.body?.mission_id;
-
-    if (step && (body.status === 'DONE' || body.builder?.status === 'DONE')) {
-      const builderResult = body.builder || body;
-      const sentry = runVerification(step, builderResult, { mission_id });
-      appendStepReceipt({
-        mission_id,
-        blueprint_id: req.body?.blueprint_id,
-        step_id: step.step_id,
-        builder_status: builderResult.status,
-        sentry_status: sentry.implementation_status,
-        input_mode: builderResult.input_mode,
-        target_file: builderResult.target_file,
-        sha256: builderResult.sha256,
-      });
-      if (httpStatus === 200) {
-        return res.status(200).json({ ...body, sentry_legacy: sentry });
-      }
-    }
-
     res.status(httpStatus).json(body);
   });
 }

@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports readMissionHistory — factory-staging/factory-core/historian/mission-history.js.
+ * SYNOPSIS: Exports readMissionHistory — builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/mission-history.js.
  */
 import fs from 'node:fs';
 import path from 'node:path';

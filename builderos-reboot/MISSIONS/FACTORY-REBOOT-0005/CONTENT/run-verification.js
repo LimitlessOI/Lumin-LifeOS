@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports runVerification — builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js.
+ * SYNOPSIS: Exports runVerification — builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/CONTENT/run-verification.js.
  */
 import fs from 'node:fs';
 import path from 'node:path';

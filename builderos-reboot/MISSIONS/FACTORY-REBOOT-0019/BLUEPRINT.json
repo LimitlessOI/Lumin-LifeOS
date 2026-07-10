@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "94c0b4c94ee140b80ee45d93f8003c73b7be8edaf6aaa0281033efd71b52a369"
+        "sha256": "176137ede2c8991b9692c0e77072912c02ddca867258f6b47b72f332436e228c"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/init-lumin-factory-repo.mjs"
@@ -81,7 +81,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "dbb9aa1c56d58b3b6955b84af4a3968b52bd465248bbf3dc9a51dc861efa0a47"
+        "sha256": "57ac307568a26a26dc256891a5e7a36329a66aa8896c4ad2793bdf86dde2b895"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-README.md"

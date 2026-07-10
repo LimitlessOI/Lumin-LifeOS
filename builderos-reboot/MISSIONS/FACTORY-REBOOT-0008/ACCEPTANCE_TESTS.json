@@ -4,13 +4,13 @@
     "step_id": "S801",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/verify-step-contract.js",
-    "expected_sha256": "80e3f0a5867df96306e183c9c2675c3a34526252aaa72b366743e868227558f5"
+    "expected_sha256": "1afce341cbc647bb98c79cc335889aecf200931959b91b92b3bfda5767631d55"
   },
   {
     "test_id": "AT-S802-1",
     "step_id": "S802",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/run-verification.js",
-    "expected_sha256": "70fada8b3ad89e21d1e66eb4799071698dd2478db770a87d2725583320b0dd10"
+    "expected_sha256": "c11bebd5d4da1e50bbdbcf534c1def34d903c8b131a7265dc7f4a9dd180a747f"
   }
 ]

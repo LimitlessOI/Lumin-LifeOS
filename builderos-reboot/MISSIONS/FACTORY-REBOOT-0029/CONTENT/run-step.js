@@ -1,10 +1,9 @@
 /**
- * SYNOPSIS: Exports resolveRepoPath — builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js.
+ * SYNOPSIS: Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { fileURLToPath } from 'node:url';
 import { getSandboxBoundary } from './sandbox.js';
 import { buildBlockedReturn } from './blocked-return.js';
 import { verifyStepContract } from '../sentry/verify-step-contract.js';
@@ -14,17 +13,14 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
+import { runBehaviorAssertions } from '../sentry/behavior-assertions.js';
+import { stepRequiresAuthoring, runAuthoring } from './authoring.js';
+import { REPO_ROOT, FACTORY_ROOT, resolveRepoPath } from '../repo-paths.js';
 
-const BUILDER_DIR = path.dirname(fileURLToPath(import.meta.url));
-export const REPO_ROOT = path.resolve(BUILDER_DIR, '../../..');
-export const FACTORY_ROOT = path.resolve(BUILDER_DIR, '../..');
+export { REPO_ROOT, FACTORY_ROOT, resolveRepoPath };
 
 function sha256Buffer(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex');
-}
-
-export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath.replace(/\\/g, '/'));
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
@@ -132,11 +128,13 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
   };
 }
 
-export function dispatchExecuteStep(body) {
+export async function dispatchExecuteStep(body, options = {}) {
   const mission_id = body?.mission_id || 'unknown';
   const blueprint_id = body?.blueprint_id || 'unknown';
-  const step = body?.step;
+  let step = body?.step;
   const skipIntake = body?.skip_intake_gate === true;
+  const assertionRunner = options?.assertionRunner || null;
+  const codegenRunner = options?.codegenRunner || null;
 
   if (!step?.step_id || !step?.sandbox_boundary) {
     return {
@@ -170,6 +168,39 @@ export function dispatchExecuteStep(body) {
   }
 
   const t0 = Date.now();
+
+  // STEP 4 — untrusted codegen authoring sub-step ("dumb pipe"). If the step
+  // declares author_then_write, a model produces candidate CONTENT ONLY; that
+  // content becomes exact_content and flows through the SAME write_file_exact +
+  // SENTRY behavior gate as any other step. Assertions stay blueprint-authored
+  // (provenance lock). Fail-closed: authoring failure blocks the step.
+  let authoringResult = null;
+  if (stepRequiresAuthoring(step)) {
+    authoringResult = await runAuthoring(step, codegenRunner);
+    if (!authoringResult.ok) {
+      return {
+        httpStatus: 422,
+        body: buildBlockedReturn({
+          mission_id,
+          blueprint_id,
+          step_id: step.step_id,
+          gap_type: 'codegen_authoring_failed',
+          summary: `Authoring sub-step failed: ${authoringResult.reason}`,
+          attempted_action: 'runAuthoring',
+          missing_information: [],
+          evidence: { reason: authoringResult.reason, model_tier: authoringResult.model_tier || null },
+        }),
+      };
+    }
+    // The authored content is untrusted input to a normal write_file_exact step.
+    // behavior_assertions are preserved from the blueprint step, never taken from codegen.
+    step = {
+      ...step,
+      action_type: 'write_file_exact',
+      exact_inputs: { ...(step.exact_inputs || {}), exact_content: authoringResult.content },
+    };
+  }
+
   const builderResult = runWriteFileExact({ mission_id, blueprint_id, step });
   const status = builderResult.status;
 
@@ -180,8 +211,18 @@ export function dispatchExecuteStep(body) {
     return { httpStatus: 409, body: builderResult };
   }
 
+  const declaredAssertions = Array.isArray(step.behavior_assertions) ? step.behavior_assertions : [];
+  const runnerAvailable = Boolean(assertionRunner);
+  const behaviorResults = declaredAssertions.length && runnerAvailable
+    ? await runBehaviorAssertions(declaredAssertions, assertionRunner)
+    : [];
+
   const sentryContract = verifyStepContract({ mission_id, step, builderResult });
-  const sentryVerify = verifyStepResult(step, builderResult, { mission_id, contract: sentryContract });
+  const sentryVerify = verifyStepResult(step, builderResult, {
+    mission_id,
+    contract: sentryContract,
+    behavior: { runnerAvailable, results: behaviorResults },
+  });
   const sentryReview = buildSentryReview({
     mission_id,
     step,
@@ -247,6 +288,8 @@ export function dispatchExecuteStep(body) {
     builderResult,
     sentryReview,
     tsosResult,
+    behaviorResults,
+    authoringResult,
   });
 
   return {
@@ -260,10 +303,19 @@ export function dispatchExecuteStep(body) {
         contract: sentryContract,
         verify: sentryVerify,
         review: sentryReview,
-        verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check', 'future_lookback', 'proof_freshness'],
+        verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check', 'future_lookback', 'proof_freshness', 'behavior_proof'],
+        behavior_proof: { runner_available: runnerAvailable, results: behaviorResults },
       },
       tsos: { ...tsosResult, evaluation: tsosEval },
-      historian: { recorded: true, mission_state: 'Verification' },
+      historian: { recorded: true, mission_state: 'Verification', behavior_assertions: behaviorResults },
+      codegen: authoringResult
+        ? {
+            model_tier: authoringResult.model_tier,
+            escalated: authoringResult.escalated,
+            content_sha256: authoringResult.content_sha256,
+            assertion_provenance: authoringResult.assertion_provenance,
+          }
+        : null,
     },
   };
 }

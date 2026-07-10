@@ -4,13 +4,13 @@
     "step_id": "S2701",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/generate-product-salvage.mjs",
-    "expected_sha256": "b91350fe757c12fa0b9f3649723f465b965a2b08dc70f21345b5511ef67c1ce2"
+    "expected_sha256": "d355aa8b2ca1155277639d15c47bfd08a3d40b97db743d455fdce44ed8790afa"
   },
   {
     "test_id": "AT-S2702-1",
     "step_id": "S2702",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/generate-marketingos-salvage-0001.mjs",
-    "expected_sha256": "64967f9cd3db2502b47e57661157bb5bb7577ddef461fc89cf57689beea0e5be"
+    "expected_sha256": "81df919cd5cdb2217ca1ec7d664784c68c31724da1fc15499501053bde042942"
   }
 ]

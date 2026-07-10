@@ -4,6 +4,6 @@
     "step_id": "S2301",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/readiness-report.mjs",
-    "expected_sha256": "39945377af122a92858aebf7109f5b7c2252e199ae7c0742dacf0a1286cbdc0e"
+    "expected_sha256": "570511fbab3262dc9ca6a404b44767ba48d372efe659ffbf98c4a875810ad525"
   }
 ]

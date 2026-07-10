@@ -4,20 +4,20 @@
     "step_id": "S1001",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/export-factory-staging.mjs",
-    "expected_sha256": "0eeada4ceea9f6597bee4653cf1c6bd7ff4d7897349ef3bafe10182a5eced13d"
+    "expected_sha256": "2aae5ebbdeb6bd7884c808fe412c3831aa29c9cd4b8b5474a8b7f44b2c4d5350"
   },
   {
     "test_id": "AT-S1002-1",
     "step_id": "S1002",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/readiness-report.mjs",
-    "expected_sha256": "39945377af122a92858aebf7109f5b7c2252e199ae7c0742dacf0a1286cbdc0e"
+    "expected_sha256": "570511fbab3262dc9ca6a404b44767ba48d372efe659ffbf98c4a875810ad525"
   },
   {
     "test_id": "AT-S1003-1",
     "step_id": "S1003",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
+    "expected_sha256": "a69cf3084f28a8832cbbf88da6239a5ff925da41bcdd929edf06044e72863004"
   }
 ]

@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d0c7d89b0354da0f7ee9a69e91d519054eca34ad89280dd43607f94dc3a9c7a4"
+        "sha256": "5f4ccc96209bfc3e0bd11d09ca188238d6061e364e6fb89b3f27adc899db1dd2"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md"
@@ -81,7 +81,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "80025502e5d2ab1170b1007df041f764d8c52bf492efad6252dc2cfe8a6927d3"
+        "sha256": "614ed0a88733ec40da56e383cabac880fbc8fb066784b9524e9c14c4b51366ef"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md"
@@ -114,7 +114,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e49e312be4d8560b2b5eb144382da30c89f730a529c0fbf5115cc2c6a054a1dd"
+        "sha256": "f196a58bdcc62b8e3478e4e28b9ba050d613a88e0d4cbc2214448d97b51cdbc9"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md"
@@ -147,7 +147,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "1e426c82a2f1262936d5c5543c9516deba2ea64434fec6d7b4dffb258cef640f"
+        "sha256": "c0c3efe06eadc924fdd263cfbfc712bffbf1650e827ed63a9fe981d1f16dfd09"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md"
@@ -180,7 +180,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e1397825e4a0612525b525a2ea7e8f1d2d652cf7d17b6c7a171f7dc8df1a15f5"
+        "sha256": "a6e24d5498663e156375d5bccde4d926908cd36b57a773557829001011532310"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md"
@@ -279,7 +279,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "393de17b12cd9fc0d35779956e9fe73cdb0d56ed8108e3b2c422f9c9a4767030"
+        "sha256": "49c7e49aa73faaaf4c02074e186b8913feb45fe6e0b42d20227d15f150de10d4"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md"
@@ -510,7 +510,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "49626a811a421066ebb42394e911a460c0f3edcceca0191ac127ab3acfc1a813"
+        "sha256": "4aacd827b22f7c12ab7763fd51116befec15150d533067821365ad5e95a49fe5"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md"

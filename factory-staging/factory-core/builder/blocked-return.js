@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports buildBlockedReturn — factory-staging/factory-core/builder/blocked-return.js.
+ * SYNOPSIS: Exports buildBlockedReturn — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js.
  */
 export function buildBlockedReturn(input) {
   return {

@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports getSandboxBoundary — factory-staging/factory-core/builder/sandbox.js.
+ * SYNOPSIS: Exports getSandboxBoundary — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js.
  */
 export function getSandboxBoundary(step) {
   return {

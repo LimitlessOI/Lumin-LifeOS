@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T00:10:17.481Z",
+  "generated_at": "2026-07-10T00:27:02.946Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11365,
+  "file_count": 11368,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -20498,9 +20498,9 @@
     {
       "path": "BRAINSTORM_AND_CONSENSUS.md",
       "synopsis": "BRAINSTORM_AND_CONSENSUS",
-      "bytes": 52963,
-      "mtime": "2026-07-09T02:34:53.225Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 53898,
+      "mtime": "2026-07-10T00:25:51.678Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
@@ -21385,8 +21385,8 @@
       "path": "builderos-reboot/DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DETERMINISM RECEIPT.",
       "bytes": 831,
-      "mtime": "2026-07-09T03:27:25.496Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:26:49.939Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -21400,16 +21400,16 @@
       "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DUPLICATION RECEIPT.",
       "bytes": 1208,
-      "mtime": "2026-07-09T03:27:25.495Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:26:50.358Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/EVALUATION_PACKET.md",
       "synopsis": "Evaluation Packet — Factory Reboot",
-      "bytes": 1611,
-      "mtime": "2026-06-21T21:37:38.314Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1656,
+      "mtime": "2026-07-10T00:18:41.407Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/FACTORY_AUDIT_PROMPT_SIMPLE.md",
@@ -21435,9 +21435,9 @@
     {
       "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — FULL LOOP PROOF RECEIPT.",
-      "bytes": 3655,
-      "mtime": "2026-07-09T03:27:25.495Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 3893,
+      "mtime": "2026-07-10T00:26:52.908Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -21722,8 +21722,8 @@
       "path": "builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — GREENFIELD DETERMINISM RECEIPT.",
       "bytes": 847,
-      "mtime": "2026-07-09T03:27:25.495Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:26:50.082Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -21796,9 +21796,9 @@
     {
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
-      "bytes": 9723,
-      "mtime": "2026-07-09T03:27:25.485Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 11247,
+      "mtime": "2026-07-10T00:26:53.034Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23350,9 +23350,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
-      "bytes": 4826,
-      "mtime": "2026-07-09T03:27:25.495Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 5024,
+      "mtime": "2026-07-10T00:25:34.849Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23375,8 +23375,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 14399,
-      "mtime": "2026-07-09T03:27:25.495Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.387Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23414,8 +23414,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 6870,
-      "mtime": "2026-07-09T03:27:25.494Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:34.911Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23566,8 +23566,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 20295,
-      "mtime": "2026-07-09T03:27:25.494Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.388Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23605,8 +23605,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 10526,
-      "mtime": "2026-07-09T03:27:25.494Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:34.974Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23773,9 +23773,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js",
       "synopsis": "Full SENTRY review artifact shape for receipts and C2 surfaces.",
-      "bytes": 2638,
-      "mtime": "2026-07-09T03:27:25.492Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2877,
+      "mtime": "2026-07-10T00:25:23.991Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js",
@@ -23870,8 +23870,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 40960,
-      "mtime": "2026-07-09T03:27:25.492Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:24.086Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23917,8 +23917,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 11119,
-      "mtime": "2026-07-09T03:27:25.492Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.036Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23941,8 +23941,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 45552,
-      "mtime": "2026-07-09T03:27:25.492Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:24.089Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -23970,10 +23970,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js).",
-      "bytes": 6112,
-      "mtime": "2026-06-27T17:13:00.397Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:25:23.980Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-self-check.mjs",
@@ -24031,8 +24031,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 1006,
-      "mtime": "2026-06-27T17:13:00.397Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.102Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24055,30 +24055,30 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 4528,
-      "mtime": "2026-07-09T02:29:55.766Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:31.775Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/register-routes.js).",
-      "bytes": 6096,
-      "mtime": "2026-06-27T17:13:00.397Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:25:23.982Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-step.js",
-      "synopsis": "Exports resolveRepoPath — builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-step.js.",
-      "bytes": 8670,
-      "mtime": "2026-06-27T17:13:00.397Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
+      "bytes": 10968,
+      "mtime": "2026-07-10T00:25:23.974Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js",
-      "synopsis": "Exports runVerification — builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js.",
+      "synopsis": "Exports runVerification — builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/CONTENT/run-verification.js.",
       "bytes": 1774,
-      "mtime": "2026-06-27T17:13:00.397Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "mtime": "2026-07-10T00:20:31.605Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/DELIBERATION_GATE.json",
@@ -24123,8 +24123,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 774,
-      "mtime": "2026-07-09T03:27:25.492Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.165Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24147,8 +24147,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3432,
-      "mtime": "2026-07-09T03:27:25.492Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:31.775Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24160,10 +24160,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/register-routes.js).",
-      "bytes": 6096,
-      "mtime": "2026-06-27T17:13:00.398Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:25:23.983Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js",
@@ -24207,8 +24207,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 787,
-      "mtime": "2026-07-09T03:27:25.491Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.230Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24231,8 +24231,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3440,
-      "mtime": "2026-07-09T03:27:25.491Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:31.776Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24251,10 +24251,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/register-routes.js).",
-      "bytes": 6096,
-      "mtime": "2026-06-27T17:13:00.398Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:25:23.984Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/FOUNDER_PACKET.json",
@@ -24291,8 +24291,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 523,
-      "mtime": "2026-07-09T03:27:25.491Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.295Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24315,8 +24315,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 2342,
-      "mtime": "2026-07-09T03:27:25.491Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.394Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24368,8 +24368,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 251,
-      "mtime": "2026-07-09T03:27:25.491Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.359Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24392,16 +24392,16 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1247,
-      "mtime": "2026-07-09T03:27:25.491Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:21:22.456Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009/CONTENT/autopilot-runner.mjs",
-      "synopsis": "Auto-pilot: run the next pending mission from MISSION_QUEUE.json (dry-run by default).",
-      "bytes": 1864,
-      "mtime": "2026-07-09T03:27:25.491Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "HIST DOMAIN — Historian owns this artifact (read/salvage only).",
+      "bytes": 3142,
+      "mtime": "2026-07-10T00:21:22.421Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009/FOUNDER_PACKET.json",
@@ -24438,8 +24438,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0010/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 756,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.426Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24462,8 +24462,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0010/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3408,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:31.776Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24482,10 +24482,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0010/CONTENT/register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0010/CONTENT/register-routes.js).",
-      "bytes": 6096,
-      "mtime": "2026-06-27T17:13:00.400Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:25:23.986Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0010/FOUNDER_PACKET.json",
@@ -24522,8 +24522,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 757,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.488Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24546,8 +24546,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3419,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.394Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24606,8 +24606,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 512,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.552Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24630,8 +24630,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 2383,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:56.347Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24644,9 +24644,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/CONTENT/run-determinism-mechanical.mjs",
       "synopsis": "Mechanical determinism check: run dispatch 3x, compare outputs.",
-      "bytes": 1685,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1691,
+      "mtime": "2026-07-10T00:20:56.297Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/FOUNDER_PACKET.json",
@@ -24683,8 +24683,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 770,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.614Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24707,8 +24707,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3436,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:56.348Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24721,16 +24721,16 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/greenfield-integration.mjs",
       "synopsis": "Integration test: greenfield exact_content step via dispatchExecuteStep. Integration test: greenfield exact_content step via dispatchExecuteStep.",
-      "bytes": 1446,
-      "mtime": "2026-07-09T03:27:25.490Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1452,
+      "mtime": "2026-07-10T00:20:56.294Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/run-step.js",
-      "synopsis": "Exports resolveRepoPath — builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/run-step.js.",
-      "bytes": 8670,
-      "mtime": "2026-06-27T17:13:00.401Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
+      "bytes": 10968,
+      "mtime": "2026-07-10T00:25:23.976Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/FOUNDER_PACKET.json",
@@ -24767,8 +24767,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0014/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 256,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.676Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24791,8 +24791,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0014/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1251,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24837,8 +24837,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 762,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.741Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24861,8 +24861,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3401,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:31.778Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24881,10 +24881,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/register-routes.js).",
-      "bytes": 6096,
-      "mtime": "2026-06-27T17:13:00.402Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:25:23.987Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/FOUNDER_PACKET.json",
@@ -24921,8 +24921,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0016/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 266,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.805Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -24945,16 +24945,16 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0016/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1294,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:56.348Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0016/CONTENT/run-greenfield-determinism-3x.mjs",
       "synopsis": "Mechanical greenfield determinism: execute GF001 step 3x into run-a/b/c, compare.",
-      "bytes": 2574,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2580,
+      "mtime": "2026-07-10T00:20:56.299Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0016/FOUNDER_PACKET.json",
@@ -24991,8 +24991,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0017/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 261,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.871Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25015,8 +25015,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0017/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1278,
-      "mtime": "2026-07-09T03:27:25.489Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25061,8 +25061,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 256,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.935Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25085,16 +25085,16 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1250,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:56.349Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018/CONTENT/autopilot-run-queue.mjs",
-      "synopsis": "Dry-run entire mission queue to prove blueprints are parseable and ordered. Dry-run entire mission queue to prove blueprints are parseable and ordered.",
-      "bytes": 1459,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "HIST DOMAIN — Historian owns this artifact (read/salvage only).",
+      "bytes": 1920,
+      "mtime": "2026-07-10T00:20:56.307Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018/FOUNDER_PACKET.json",
@@ -25131,8 +25131,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 1031,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:35.997Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25155,8 +25155,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3527,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25216,8 +25216,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0020/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 247,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.059Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25240,16 +25240,16 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0020/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1216,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:19:51.116Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0020/CONTENT/factory-ci.mjs",
       "synopsis": "Single CI entry: run all factory verification scripts. Single CI entry: run all factory verification scripts.",
-      "bytes": 2085,
-      "mtime": "2026-06-21T21:37:40.516Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2842,
+      "mtime": "2026-07-10T00:19:50.927Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0020/FOUNDER_PACKET.json",
@@ -25286,8 +25286,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 496,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.122Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25310,8 +25310,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 2319,
-      "mtime": "2026-07-09T03:27:25.488Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25363,8 +25363,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0022/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 264,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:26:46.162Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25387,16 +25387,16 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0022/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1277,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:26:46.094Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0022/CONTENT/generate-mission-pack-index.mjs",
-      "synopsis": "Emit MISSION_PACK_INDEX.json from builderos-reboot/MISSIONS/ (canonical — sync with MISSION_QUEUE.json). Emit MISSION_PACK_INDEX.json from builderos-reboot/MISSIONS/ (canonical — sync with MISSION_QUEUE.json).",
-      "bytes": 1970,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "HIST DOMAIN — Historian owns this artifact (read/salvage only).",
+      "bytes": 2278,
+      "mtime": "2026-07-10T00:26:45.932Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0022/FOUNDER_PACKET.json",
@@ -25433,8 +25433,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0023/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 253,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.246Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25457,8 +25457,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0023/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1236,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25503,8 +25503,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 263,
-      "mtime": "2026-06-27T17:13:00.405Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.309Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25573,8 +25573,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0025/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 245,
-      "mtime": "2026-06-27T17:13:00.406Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.373Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25643,8 +25643,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0026/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 514,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.434Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25667,8 +25667,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0026/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 2356,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:56.350Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25681,9 +25681,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0026/CONTENT/run-full-loop-proof.mjs",
       "synopsis": "Phase 11 full governed loop proof: PD → Founder Packet → BPB → Coder → SENTRY → Historian → TSOS → C2.",
-      "bytes": 4512,
-      "mtime": "2026-07-09T03:27:25.487Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 4518,
+      "mtime": "2026-07-10T00:20:56.301Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0026/FOUNDER_PACKET.json",
@@ -25720,8 +25720,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0027/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 528,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.496Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25744,8 +25744,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0027/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 2414,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25797,8 +25797,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 263,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.559Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25821,8 +25821,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 1286,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:16:36.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25874,8 +25874,8 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 1782,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:25:36.619Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -25898,16 +25898,16 @@
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 7788,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:20:56.352Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/factory-tsos-integration.mjs",
       "synopsis": "Integration: TSOS append on execute-step + guardrail rejection. Integration: TSOS append on execute-step + guardrail rejection.",
-      "bytes": 2819,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2825,
+      "mtime": "2026-07-10T00:20:56.304Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/record-step-metrics.js",
@@ -25925,10 +25925,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js",
-      "synopsis": "Exports resolveRepoPath — builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js.",
-      "bytes": 8670,
-      "mtime": "2026-07-09T03:27:25.486Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
+      "bytes": 10968,
+      "mtime": "2026-07-10T00:25:23.977Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/TSOS_FACTORY_INTEGRATION.md",
@@ -25991,10 +25991,10 @@
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0030/CONTENT/register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0030/CONTENT/register-routes.js).",
-      "bytes": 5232,
-      "mtime": "2026-07-09T03:27:25.485Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:20:31.575Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0030/README.md",
@@ -29363,17 +29363,17 @@
     {
       "path": "builderos-reboot/PRODUCT_SALVAGE_CANDIDATES.json",
       "synopsis": "BuilderOS artifact — PRODUCT SALVAGE CANDIDATES.",
-      "bytes": 14551,
-      "mtime": "2026-07-09T03:27:25.485Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 206,
+      "mtime": "2026-07-10T00:26:52.968Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/PROJECT_CERTIFICATION.json",
       "synopsis": "BuilderOS artifact — PROJECT CERTIFICATION.",
-      "bytes": 2568,
-      "mtime": "2026-07-09T03:27:25.485Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 1754,
+      "mtime": "2026-07-10T00:26:53.099Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -29387,16 +29387,16 @@
       "path": "builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json",
       "synopsis": "BuilderOS artifact — QUEUE DRY RUN RECEIPT.",
       "bytes": 4969,
-      "mtime": "2026-07-09T03:27:25.485Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "mtime": "2026-07-10T00:26:50.426Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/READINESS_REPORT.json",
       "synopsis": "BuilderOS artifact — READINESS REPORT.",
-      "bytes": 579,
-      "mtime": "2026-07-09T03:27:25.485Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 567,
+      "mtime": "2026-07-10T00:26:52.837Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -29457,9 +29457,9 @@
     {
       "path": "builderos-reboot/scripts/build-lumin-factory-bundle.mjs",
       "synopsis": "Build lumin-factory-bundle/ for clean-repo cutover (portable export). Build lumin-factory-bundle/ for clean-repo cutover (portable export).",
-      "bytes": 7906,
-      "mtime": "2026-06-21T21:37:43.774Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 3361,
+      "mtime": "2026-07-10T00:18:41.400Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/scripts/build-queue-adapter-proof.mjs",
@@ -29798,9 +29798,9 @@
     {
       "path": "builderos-reboot/scripts/init-lumin-factory-repo.mjs",
       "synopsis": "Initialize lumin-factory/ as git-ready standalone repo from bundle. Initialize lumin-factory/ as git-ready standalone repo from bundle.",
-      "bytes": 2138,
-      "mtime": "2026-06-21T21:37:44.337Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2117,
+      "mtime": "2026-07-10T00:18:41.404Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/scripts/loop-escalation-check.mjs",
@@ -29879,6 +29879,26 @@
       "bytes": 1576,
       "mtime": "2026-06-21T21:37:44.505Z",
       "indexed_at": "2026-07-10T00:10:11.466Z"
+    },
+    {
+      "path": "builderos-reboot/scripts/rematerialize-from-content.mjs",
+      "synopsis": "Copy mission CONTENT → target_file for every byte_exact_copy step (truth alignment after re-pin).",
+      "bytes": 3116,
+      "mtime": "2026-07-10T00:18:56.738Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "builderos-reboot/scripts/repin-all-content-hashes.mjs",
+      "synopsis": "Wave 0 #6 — re-pin all mission exact_output_contract.sha256 to current CONTENT/disk bytes.",
+      "bytes": 2406,
+      "mtime": "2026-07-10T00:16:34.174Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "builderos-reboot/scripts/run-all-mission-acceptance.mjs",
@@ -29975,9 +29995,9 @@
     {
       "path": "builderos-reboot/scripts/run-sentry-checks.mjs",
       "synopsis": "Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json",
-      "bytes": 3521,
-      "mtime": "2026-07-09T03:27:25.483Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 3108,
+      "mtime": "2026-07-10T00:18:41.406Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/scripts/sentry-behavior-proof.mjs",
@@ -30069,9 +30089,9 @@
     {
       "path": "builderos-reboot/SENTRY_CHECK_RESULT.json",
       "synopsis": "BuilderOS artifact — SENTRY CHECK RESULT.",
-      "bytes": 1584,
-      "mtime": "2026-07-09T03:27:25.484Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 1583,
+      "mtime": "2026-07-10T00:21:26.467Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "synopsis_index_only": true
     },
     {
@@ -30120,9 +30140,9 @@
     {
       "path": "builderos-reboot/TSOS_FACTORY_INTEGRATION.md",
       "synopsis": "TSOS Factory Integration",
-      "bytes": 1863,
-      "mtime": "2026-06-21T21:37:42.098Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1420,
+      "mtime": "2026-07-10T00:18:41.413Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "builderos-reboot/WORKSPACE_STATUS.md",
@@ -36692,9 +36712,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 52388,
-      "mtime": "2026-07-10T00:09:28.860Z",
-      "indexed_at": "2026-07-10T00:10:17.481Z"
+      "bytes": 52947,
+      "mtime": "2026-07-10T00:22:21.034Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38791,9 +38811,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 199457,
-      "mtime": "2026-07-09T19:38:08.200Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 200334,
+      "mtime": "2026-07-10T00:23:32.209Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -59325,6 +59345,13 @@
       "indexed_at": "2026-07-10T00:10:11.466Z"
     },
     {
+      "path": "factory-staging/factory-core/_step4_proof_scratch.js",
+      "synopsis": "Factory staging —  Step4 Proof Scratch.",
+      "bytes": 93,
+      "mtime": "2026-07-10T00:26:59.797Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
+    },
+    {
       "path": "factory-staging/factory-core/arc/ARC_JOB.json",
       "synopsis": "Factory staging — ARC JOB.",
       "bytes": 2946,
@@ -59691,10 +59718,10 @@
     },
     {
       "path": "factory-staging/factory-core/builder/action-handlers/write-file-exact.js",
-      "synopsis": "Exports writeFileExactContract — factory-staging/factory-core/builder/action-handlers/write-file-exact.js.",
-      "bytes": 353,
-      "mtime": "2026-06-21T21:38:43.782Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports writeFileExactContract — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js.",
+      "bytes": 393,
+      "mtime": "2026-07-10T00:25:04.392Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/builder/authoring.js",
@@ -59708,38 +59735,38 @@
     },
     {
       "path": "factory-staging/factory-core/builder/blocked-return.js",
-      "synopsis": "Exports buildBlockedReturn — factory-staging/factory-core/builder/blocked-return.js.",
-      "bytes": 492,
-      "mtime": "2026-06-21T21:38:43.782Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports buildBlockedReturn — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js.",
+      "bytes": 532,
+      "mtime": "2026-07-10T00:25:04.392Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/builder/execute-step.js",
-      "synopsis": "Exports executeStep — factory-staging/factory-core/builder/execute-step.js.",
-      "bytes": 565,
-      "mtime": "2026-06-21T21:38:43.782Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports executeStep — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js.",
+      "bytes": 605,
+      "mtime": "2026-07-10T00:25:04.392Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/builder/run-mission.js",
-      "synopsis": "Exports loadBlueprintFromRepo — factory-staging/factory-core/builder/run-mission.js.",
-      "bytes": 2954,
-      "mtime": "2026-07-08T23:19:14.948Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.",
+      "bytes": 2936,
+      "mtime": "2026-07-10T00:26:50.283Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
       "synopsis": "Exports resolveRepoPath — factory-staging/factory-core/builder/run-step.js.",
-      "bytes": 11253,
-      "mtime": "2026-07-09T01:29:57.259Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 10968,
+      "mtime": "2026-07-10T00:26:50.218Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/builder/sandbox.js",
-      "synopsis": "Exports getSandboxBoundary — factory-staging/factory-core/builder/sandbox.js.",
-      "bytes": 276,
-      "mtime": "2026-06-21T21:38:43.783Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports getSandboxBoundary — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js.",
+      "bytes": 316,
+      "mtime": "2026-07-10T00:25:04.392Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/canon/deliberation-governance.js",
@@ -59800,9 +59827,9 @@
     {
       "path": "factory-staging/factory-core/canon/services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 75726,
-      "mtime": "2026-07-03T16:30:52.643Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 77389,
+      "mtime": "2026-07-10T00:25:04.399Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md"
       ]
@@ -59874,48 +59901,45 @@
     },
     {
       "path": "factory-staging/factory-core/historian/mission-history.js",
-      "synopsis": "Exports readMissionHistory — factory-staging/factory-core/historian/mission-history.js.",
-      "bytes": 1067,
-      "mtime": "2026-06-21T21:38:43.791Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports readMissionHistory — builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/mission-history.js.",
+      "bytes": 1082,
+      "mtime": "2026-07-10T00:25:04.408Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/historian/record-consensus-session.js",
-      "synopsis": "Persist consensus session to Historian jsonl + deliberation gate ledger.",
-      "bytes": 2223,
-      "mtime": "2026-06-29T17:21:08.084Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
-      "ssot": [
-        "docs/products/builderos/PRODUCT_HOME.md"
-      ]
+      "synopsis": "Exports recordConsensusSession — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js.",
+      "bytes": 392,
+      "mtime": "2026-07-10T00:25:04.393Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/historian/record-decision.js",
-      "synopsis": "Exports recordDecision — factory-staging/factory-core/historian/record-decision.js.",
-      "bytes": 316,
-      "mtime": "2026-06-21T21:38:43.791Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports recordDecision — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js.",
+      "bytes": 356,
+      "mtime": "2026-07-10T00:25:04.393Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/historian/record-lesson.js",
-      "synopsis": "Exports recordLesson — factory-staging/factory-core/historian/record-lesson.js.",
-      "bytes": 270,
-      "mtime": "2026-06-21T21:38:43.791Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports recordLesson — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js.",
+      "bytes": 310,
+      "mtime": "2026-07-10T00:25:04.393Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/historian/record-outcome.js",
-      "synopsis": "Exports recordOutcome — factory-staging/factory-core/historian/record-outcome.js.",
-      "bytes": 294,
-      "mtime": "2026-06-21T21:38:43.791Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports recordOutcome — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js.",
+      "bytes": 334,
+      "mtime": "2026-07-10T00:25:04.394Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/historian/record-prediction.js",
-      "synopsis": "Exports recordPrediction — factory-staging/factory-core/historian/record-prediction.js.",
-      "bytes": 288,
-      "mtime": "2026-06-21T21:38:43.791Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports recordPrediction — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js.",
+      "bytes": 328,
+      "mtime": "2026-07-10T00:25:04.394Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/layout/legacy-write-quarantine.js",
@@ -59950,17 +59974,17 @@
     },
     {
       "path": "factory-staging/factory-core/readiness/legacy-quarantine.js",
-      "synopsis": "Exports legacyQuarantine — factory-staging/factory-core/readiness/legacy-quarantine.js.",
-      "bytes": 262,
-      "mtime": "2026-06-21T21:38:43.793Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports legacyQuarantine — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js.",
+      "bytes": 302,
+      "mtime": "2026-07-10T00:25:04.394Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/readiness/proof-freshness.js",
-      "synopsis": "Exports readinessProofFreshness — factory-staging/factory-core/readiness/proof-freshness.js.",
-      "bytes": 257,
-      "mtime": "2026-06-21T21:38:43.793Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports readinessProofFreshness — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js.",
+      "bytes": 297,
+      "mtime": "2026-07-10T00:25:04.394Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/readiness/remote-truth-reconciler.js",
@@ -59971,24 +59995,24 @@
     },
     {
       "path": "factory-staging/factory-core/readiness/runtime-proof-snapshot.js",
-      "synopsis": "Exports runtimeProofSnapshot — factory-staging/factory-core/readiness/runtime-proof-snapshot.js.",
-      "bytes": 286,
-      "mtime": "2026-06-21T21:38:43.794Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports runtimeProofSnapshot — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js.",
+      "bytes": 326,
+      "mtime": "2026-07-10T00:25:04.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/readiness/structural-proof-freshness.js",
-      "synopsis": "Exports structuralProofFreshness — factory-staging/factory-core/readiness/structural-proof-freshness.js.",
-      "bytes": 314,
-      "mtime": "2026-06-21T21:38:43.794Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports structuralProofFreshness — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js.",
+      "bytes": 354,
+      "mtime": "2026-07-10T00:25:04.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/readiness/system-alpha-readiness.js",
-      "synopsis": "Exports systemAlphaReadiness — factory-staging/factory-core/readiness/system-alpha-readiness.js.",
-      "bytes": 514,
-      "mtime": "2026-06-21T21:38:43.794Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports systemAlphaReadiness — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js.",
+      "bytes": 554,
+      "mtime": "2026-07-10T00:25:04.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/repo-paths.js",
@@ -60002,24 +60026,24 @@
     },
     {
       "path": "factory-staging/factory-core/routes/factory-execute-mission-routes.js",
-      "synopsis": "Factory staging — Factory Execute Mission Routes.",
-      "bytes": 314,
-      "mtime": "2026-06-21T21:38:43.795Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "BuilderOS artifact — Factory Execute Mission Routes.",
+      "bytes": 317,
+      "mtime": "2026-07-10T00:25:04.402Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/routes/factory-execute-step-routes.js",
-      "synopsis": "Factory staging — Factory Execute Step Routes.",
-      "bytes": 283,
-      "mtime": "2026-06-21T21:38:43.795Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "BuilderOS artifact — Factory Execute Step Routes.",
+      "bytes": 286,
+      "mtime": "2026-07-10T00:25:04.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/anti-pattern-check.js",
-      "synopsis": "Exports antiPatternCheck — factory-staging/factory-core/sentry/anti-pattern-check.js.",
-      "bytes": 1461,
-      "mtime": "2026-07-03T00:17:46.212Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports antiPatternCheck — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js.",
+      "bytes": 1507,
+      "mtime": "2026-07-10T00:25:04.395Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/behavior-assertions.js",
@@ -60034,44 +60058,44 @@
     {
       "path": "factory-staging/factory-core/sentry/blueprint-freeze-check.js",
       "synopsis": "Blueprint freeze check — required fields on every step before build.",
-      "bytes": 1383,
-      "mtime": "2026-06-23T05:15:54.596Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1457,
+      "mtime": "2026-07-10T00:25:04.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/future-lookback.js",
       "synopsis": "SENTRY future-lookback — structural questions (no council call on hot path).",
-      "bytes": 1257,
-      "mtime": "2026-06-21T21:38:59.051Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1339,
+      "mtime": "2026-07-10T00:25:04.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/proof-freshness.js",
-      "synopsis": "Exports checkProofFreshness — factory-staging/factory-core/sentry/proof-freshness.js.",
+      "synopsis": "Exports checkProofFreshness — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js.",
       "bytes": 2375,
-      "mtime": "2026-06-21T21:38:43.796Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "mtime": "2026-07-10T00:25:04.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/run-verification.js",
-      "synopsis": "Exports runVerification — factory-staging/factory-core/sentry/run-verification.js.",
-      "bytes": 1756,
-      "mtime": "2026-06-27T17:13:00.421Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports runVerification — builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/CONTENT/run-verification.js.",
+      "bytes": 1774,
+      "mtime": "2026-07-10T00:25:04.401Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/unintended-consequence-check.js",
-      "synopsis": "Exports unintendedConsequenceCheck — factory-staging/factory-core/sentry/unintended-consequence-check.js.",
-      "bytes": 1045,
-      "mtime": "2026-06-21T21:38:43.797Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports unintendedConsequenceCheck — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js.",
+      "bytes": 1085,
+      "mtime": "2026-07-10T00:25:04.396Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/verify-step-contract.js",
-      "synopsis": "Exports loadAcceptanceTestsForMission — factory-staging/factory-core/sentry/verify-step-contract.js.",
-      "bytes": 1658,
-      "mtime": "2026-07-03T00:17:46.213Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports loadAcceptanceTestsForMission — builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/CONTENT/verify-step-contract.js.",
+      "bytes": 1682,
+      "mtime": "2026-07-10T00:25:04.404Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/verify-step-result.js",
@@ -60082,10 +60106,10 @@
     },
     {
       "path": "factory-staging/factory-core/tsos/cache-value-evaluator.js",
-      "synopsis": "Exports cacheValueEvaluation — factory-staging/factory-core/tsos/cache-value-evaluator.js.",
-      "bytes": 319,
-      "mtime": "2026-06-21T21:38:43.798Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports cacheValueEvaluation — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js.",
+      "bytes": 359,
+      "mtime": "2026-07-10T00:25:04.397Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/CACHING_GOVERNANCE.md",
@@ -60103,24 +60127,24 @@
     },
     {
       "path": "factory-staging/factory-core/tsos/model-routing-evaluator.js",
-      "synopsis": "Exports modelRoutingEvaluation — factory-staging/factory-core/tsos/model-routing-evaluator.js.",
-      "bytes": 332,
-      "mtime": "2026-06-21T21:38:43.798Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports modelRoutingEvaluation — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js.",
+      "bytes": 372,
+      "mtime": "2026-07-10T00:25:04.397Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/prompt-optimization.js",
-      "synopsis": "Exports promptOptimizationProposal — factory-staging/factory-core/tsos/prompt-optimization.js.",
-      "bytes": 334,
-      "mtime": "2026-06-21T21:38:43.798Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports promptOptimizationProposal — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js.",
+      "bytes": 374,
+      "mtime": "2026-07-10T00:25:04.397Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/record-step-metrics.js",
       "synopsis": "Pure transform — no persistence. For tests and full-loop proof.",
-      "bytes": 2049,
-      "mtime": "2026-07-09T01:30:05.761Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 1888,
+      "mtime": "2026-07-10T00:25:04.397Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/TSOS_HOOK_BOUNDARY.md",
@@ -60132,16 +60156,16 @@
     {
       "path": "factory-staging/factory-core/tsos/tsos-guardrails.js",
       "synopsis": "TSOS guardrails — efficiency measurement only; never mission authority.",
-      "bytes": 2258,
-      "mtime": "2026-07-09T01:29:52.210Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2274,
+      "mtime": "2026-07-10T00:25:04.414Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/factory-core/tsos/tsos-summary.js",
-      "synopsis": "Exports readTsosMetrics — factory-staging/factory-core/tsos/tsos-summary.js.",
-      "bytes": 1268,
-      "mtime": "2026-06-21T21:38:43.800Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Exports readTsosMetrics — builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/tsos-summary.js.",
+      "bytes": 1288,
+      "mtime": "2026-07-10T00:25:04.414Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json",
@@ -60206,17 +60230,17 @@
     },
     {
       "path": "factory-staging/server.js",
-      "synopsis": "Factory staging — Server.",
-      "bytes": 425,
-      "mtime": "2026-06-21T21:38:50.647Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "BuilderOS artifact — Factory Staging Server.",
+      "bytes": 444,
+      "mtime": "2026-07-10T00:25:04.400Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-staging/startup/register-routes.js",
-      "synopsis": "Registers FactoryRoutes routes/handlers (factory-staging/startup/register-routes.js).",
-      "bytes": 5290,
-      "mtime": "2026-07-08T23:19:14.948Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).",
+      "bytes": 5296,
+      "mtime": "2026-07-10T00:26:50.354Z",
+      "indexed_at": "2026-07-10T00:27:02.946Z"
     },
     {
       "path": "factory-v1/bpb-test/BLUEPRINT-existing-bpb-output.json",

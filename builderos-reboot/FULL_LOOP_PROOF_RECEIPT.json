@@ -1,6 +1,6 @@
 {
   "proof_id": "FULL-LOOP-PROOF-0001",
-  "run_at": "2026-06-11T07:53:05.641Z",
+  "run_at": "2026-07-10T00:26:52.908Z",
   "mission_id": "FACTORY-PROOF-LOOP-0001",
   "pass": true,
   "c2_pass": true,
@@ -43,7 +43,8 @@
           "exact_output_contract",
           "anti_pattern_check",
           "future_lookback",
-          "proof_freshness"
+          "proof_freshness",
+          "behavior_proof"
         ],
         "contract": {
           "pass": true,
@@ -98,6 +99,14 @@
           ],
           "stale": [],
           "authority_note": "Stale receipts must not raise maturity — adapted from oil-proof-freshness doctrine"
+        },
+        "behavior_proof": {
+          "pass": true,
+          "required": false,
+          "declared_count": 0,
+          "runner_available": false,
+          "findings": [],
+          "results": []
         },
         "blocking_findings": [],
         "pass": true

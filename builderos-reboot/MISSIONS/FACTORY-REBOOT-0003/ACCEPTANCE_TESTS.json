@@ -4,175 +4,175 @@
     "step_id": "S301",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js",
-    "expected_sha256": "2d48def91caef745fcfecf3646b7c4f7db497894bf1b4b158735a8570dc16eb4"
+    "expected_sha256": "18b4f3fe63fd0318a7d15e7479affa7deca59c6ca64d0e91522d5e0b4313ee58"
   },
   {
     "test_id": "AT-S302-1",
     "step_id": "S302",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js",
-    "expected_sha256": "62bf879f0b0f4f4445af115354f2d475f6771509a6b01cb8db9fae07f1dd194b"
+    "expected_sha256": "15235888e40798de7c480eb87d4ec6c1ba05137b186c746395211fc03aa6b836"
   },
   {
     "test_id": "AT-S303-1",
     "step_id": "S303",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js",
-    "expected_sha256": "86a2e9ec26bf3a3c0262a943bcae9f76a65b31d415cc41c4e25fca7cdc3f214a"
+    "expected_sha256": "463f8116a732362493556e39019641ca834e39286a507b546d46d409ffbb42af"
   },
   {
     "test_id": "AT-S304-1",
     "step_id": "S304",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js",
-    "expected_sha256": "fb8519fa2224893c7570b09c490291b299f8bbb46e2513bf2e9bb007e55884be"
+    "expected_sha256": "73d2201dabba55cf596248281c42bb6c3472d2e1338c24c7dd82dc5b22117256"
   },
   {
     "test_id": "AT-S305-1",
     "step_id": "S305",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/routes/factory-execute-step-routes.js",
-    "expected_sha256": "c4ade26771b4449b61e15373869b308eb8d94222a0cc40e67501155c47bfaf3d"
+    "expected_sha256": "2e6047d3be79930832da83bbf9ac167a5f3cf45ca80dcc3b46163f4ce043de2e"
   },
   {
     "test_id": "AT-S306-1",
     "step_id": "S306",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/blueprint-freeze-check.js",
-    "expected_sha256": "9435d887c10db895b13bb8fd64ae6ee453e5235f84ee6b2071f0a23950483472"
+    "expected_sha256": "68a8d1f63161bc0510d6a052ae7f87cb6ecd3c043ffd5e406e0f2f69e6a7c191"
   },
   {
     "test_id": "AT-S307-1",
     "step_id": "S307",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js",
-    "expected_sha256": "b0db6704d65fab88aa8adc1ddb055c9561ac32ad0c25ba1b1e7b9bad36796d9a"
+    "expected_sha256": "81e0c032232440d5ed77135ecc150c7af7f997691ce0bdc6a035c5257ddd308c"
   },
   {
     "test_id": "AT-S308-1",
     "step_id": "S308",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/future-lookback.js",
-    "expected_sha256": "f77751c321339fe9e572c3aecba6a4f39cfe764bbdc534ca952aca9b56ecc9c7"
+    "expected_sha256": "87a3e57a3973bc60371e65a3e227a9a38f84b152ac1a5f017626e706ef2c58d4"
   },
   {
     "test_id": "AT-S309-1",
     "step_id": "S309",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js",
-    "expected_sha256": "e9508a023fd56ab868ce012508571b2fda7066cd8d8c0e98d1fd891d2df1097d"
+    "expected_sha256": "58fe64feb60dc10a145c3d6078616cf055c1223b6cbd81c0552266b21030f856"
   },
   {
     "test_id": "AT-S310-1",
     "step_id": "S310",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js",
-    "expected_sha256": "7606fc348fa3cac8d47138563f102a08529503e0555d9d38bc9f63ec55fd5c00"
+    "expected_sha256": "73cbcc12ebac34a3285eff1093847b2dfe2087be81c292da61c4953254c60fec"
   },
   {
     "test_id": "AT-S311-1",
     "step_id": "S311",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js",
-    "expected_sha256": "51c5afd3678d5376b2977b8ca4123050c6683ce59f4ecd8441196b4448cb955f"
+    "expected_sha256": "b5aa8412ac63cb309ce3cb8cfb6ed39f503042854427d9864c4fa49e96f78954"
   },
   {
     "test_id": "AT-S312-1",
     "step_id": "S312",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js",
-    "expected_sha256": "370d7cff1ffb916883a6a755ae18f8fb25289dd41e29f2967e031f6e7065151f"
+    "expected_sha256": "e6c0836408db3866a2b37c309133fe902b89f8abb3b101bfb7d8573be9973393"
   },
   {
     "test_id": "AT-S313-1",
     "step_id": "S313",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js",
-    "expected_sha256": "ec801bbb1d57c0e121851adb2c1128d932d9476d5d4fec87907d159217239af7"
+    "expected_sha256": "dc00f357cedf72b1e6528e84c6be88b8e79cefb899348bec5c6d071a46ab5ecd"
   },
   {
     "test_id": "AT-S314-1",
     "step_id": "S314",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js",
-    "expected_sha256": "6556af565916c1bd50ac844ac5fe0e939f0588f3899a5df74d6b1696318ae8e3"
+    "expected_sha256": "46980f01c36ede9c60784457297e41f1ff0c10ca927b59c878cd0559cfc89abf"
   },
   {
     "test_id": "AT-S315-1",
     "step_id": "S315",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js",
-    "expected_sha256": "cbfd19f87c2f926d64118bbe39b8513148f46bd96cc661feef9b7fdcfcc98d54"
+    "expected_sha256": "43405b7c2bc306a24a4021f1bc4354e6763e403babc2992a143aeef9145d00b1"
   },
   {
     "test_id": "AT-S316-1",
     "step_id": "S316",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js",
-    "expected_sha256": "6782421205bac5cb1e4a4257b6fe7f65c983f751743bbe549253a289500c417e"
+    "expected_sha256": "240d15dd9fd4bf50d91acbe22496fbce35dacebc82f04fc5e7aa2febf48ae93e"
   },
   {
     "test_id": "AT-S317-1",
     "step_id": "S317",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/memory-trust-levels.md",
-    "expected_sha256": "7dd0d31f070850632a07d77bb161cdbb4d4768c050301502aa855b5e6aea520b"
+    "expected_sha256": "d245e66b4bae99b9a587edd050ed5b898e6317bedfe23ddcd37e627532c49985"
   },
   {
     "test_id": "AT-S318-1",
     "step_id": "S318",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/MEMORY_AUTHORITY_MAP.md",
-    "expected_sha256": "fe7bed72f380eb0cdd99f1e5534181b3ba4a291c67828d10219ef3c5b5ec20f2"
+    "expected_sha256": "abf1736593efabc94ec8fd21582905ba5661fcf2bff4500bc75ffc893f460bb2"
   },
   {
     "test_id": "AT-S319-1",
     "step_id": "S319",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js",
-    "expected_sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
+    "expected_sha256": "4ce1175fe969f1a6ec7c1cc810dbc3dd4353f47fb8781153b23c7e6ca6ee11da"
   },
   {
     "test_id": "AT-S320-1",
     "step_id": "S320",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js",
-    "expected_sha256": "c23846cd46a72c30ea0b9cebd7e7bd845b8bc22eebfa7d23250a25d62f0c120d"
+    "expected_sha256": "524f0bb6571c5236d287158442c8b4bf7bcf2fb76c3f851abcd64cfad993ac29"
   },
   {
     "test_id": "AT-S321-1",
     "step_id": "S321",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js",
-    "expected_sha256": "5e3602357b70b0c29019f1d6ed7bd24bf7f6eda5cf180959e5bd5c200fec37f9"
+    "expected_sha256": "5eb7e628d8dbd35f4b36b869c925edace2142fe3d8617d741a17165f2026cee0"
   },
   {
     "test_id": "AT-S322-1",
     "step_id": "S322",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js",
-    "expected_sha256": "edf6a1cd9d0cf25b6ce4d8e90b7ef140784ac624decd911855e4585527f2127d"
+    "expected_sha256": "fe71a1f866449fba88a104b956bdfc25cfa272602e84ad2f8750cc3e6167e54f"
   },
   {
     "test_id": "AT-S323-1",
     "step_id": "S323",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/TSOS_HOOK_BOUNDARY.md",
-    "expected_sha256": "15aa8e211eb4d8ff6adb450d52aae2629d00dc3882020ba7363274448e331181"
+    "expected_sha256": "72ac2927cc394c3f13497a7611f71fd7bdf7d93c731f7801bf5f6c14e8010442"
   },
   {
     "test_id": "AT-S324-1",
     "step_id": "S324",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/CACHING_GOVERNANCE.md",
-    "expected_sha256": "9fda5bd85fe72cbb7bb1977082506eb77a5784cd93f75804199c646140ff36c4"
+    "expected_sha256": "89bfafab0af3abd3cf2e33ad1089edb7982c652bac7c07269085c549430dab5f"
   },
   {
     "test_id": "AT-S325-1",
     "step_id": "S325",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md",
-    "expected_sha256": "c42682389a4b2b3a0ceedf99647e8a46cebbfc560e535f3a1ff40dcf5b4b3008"
+    "expected_sha256": "2e4c744fe14b063dd6eec8ab5d3b894cbde6243e6729548f8f47cc7e0363c5ea"
   },
   {
     "test_id": "AT-S326-1",
@@ -218,34 +218,34 @@
     "step_id": "S329",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js",
-    "expected_sha256": "2abb02d4808b9a3aab2a2d34686e30f242d283239e516fa897354847bc83af82"
+    "expected_sha256": "243b09ae8a58df7d18c21b5c916bef1d4f5fde3725b056c54b856decb53be4aa"
   },
   {
     "test_id": "AT-S330-1",
     "step_id": "S330",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js",
-    "expected_sha256": "6c0c4acb6876cf04187f2b8fef3072d8aeaee6f5a70e583ad4b92ecd78e149a1"
+    "expected_sha256": "e0ec2bd77f43dc9288d8852a502faa120d4abb810c7cf6e053377ee279a68234"
   },
   {
     "test_id": "AT-S331-1",
     "step_id": "S331",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js",
-    "expected_sha256": "d08b4b4059962c83e20b0c78d0be556017635ef66dade458f1a2f10a5ab1c004"
+    "expected_sha256": "6184032cdec0fa6c62a98c83c7726534b9e423bad1a7f940ab099de58aa353ba"
   },
   {
     "test_id": "AT-S332-1",
     "step_id": "S332",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js",
-    "expected_sha256": "6e1aacaab0cdad852b0090d85de539a015cdbd89d2cb7fbe7d52c831ec42a632"
+    "expected_sha256": "8c6f9fe42dd0f18f7f9e2dce7d853ad4303c33936a737bb02114fc94a1d8c53e"
   },
   {
     "test_id": "AT-S333-1",
     "step_id": "S333",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js",
-    "expected_sha256": "d448a782d703885ddac740e2f8317b22504420de581fb8f083e8b42a6f5ae8f2"
+    "expected_sha256": "1f026419ff5a646ae6f583b8ac2f953dbcde8d3d2b9e264621108c848210d14a"
   }
 ]

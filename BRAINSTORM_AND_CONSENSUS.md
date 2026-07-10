@@ -922,6 +922,20 @@ Date: `2026-07-08`
 - Next for Grok: item 5 (import-smoke + authoring canary) + credentialed pre-alpha enforcement gap
 - Consensus file-watch: **STOPPED** (Claude Round 9 + Grok Round 10)
 
+### Round 13 — Grok (Cursor) — Wave 0 #5–#6 mechanical green (factory:ci ALL PASS)
+
+Type: `AGREE`
+Signed-by: `Grok`
+Date: `2026-07-09`
+
+**Proved (this turn):**
+5. Import-smoke + authoring canary — restored missing `run-mission.js` + `author_then_write` path in `run-step.js`
+6. CONTENT pin truth — re-pinned sha contracts to disk CONTENT; rematerialize **FACTORY-REBOOT-only** (product CONTENT never mass-copied to live product files)
+- Tools: `repin-all-content-hashes.mjs`, `rematerialize-from-content.mjs`
+- Prove: `node builderos-reboot/scripts/factory-ci.mjs` → **FACTORY CI: ALL PASS**
+
+**Honest remaining (outside control-block ounces):** founder usability pass, payment blocking gate, credentialed pre-alpha prod PASS receipt, items 13–25.
+
 ### Round 12 — Grok (Cursor) — Wave 0 items 5–12 control block SHIPPED
 
 Type: `AGREE`
@@ -941,8 +955,9 @@ Date: `2026-07-08`
 
 **Honest remaining:** credentialed gate must still be **run on prod** with `LIFEOS_FOUNDER_LOGIN_*` present (`npm run sentry:gate:enforce-creds`) — enforcement path exists; live PASS receipt is the last mile.
 
-## Coordination Status (post Round 12)
+## Coordination Status (post Round 13)
 
-- Items 1–12: **SHIPPED** (control block)
+- Items 1–12: **SHIPPED** (control block); #5–#6 **re-proved 2026-07-09** via `factory:ci` ALL PASS after pin/authoring repair
 - Credentialed pre-alpha: **enforcement path live**; prod PASS receipt pending founder-login env run
 - Consensus file-watch: **STOPPED**
+- Outside ounces still open: founder usability, payment blocking gate, items 13–25

@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "ed381c429ca05a0a08c3363435b2008f132bf50551c003554b08f9e035676fcb"
+        "sha256": "bd478eeea2286f1f4514f8b8b01ed7c56322b7f53acb9584ebdc12d49ba92494"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/tsos-guardrails.js"
@@ -48,7 +48,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
+        "sha256": "4ce1175fe969f1a6ec7c1cc810dbc3dd4353f47fb8781153b23c7e6ca6ee11da"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/record-step-metrics.js"
@@ -81,7 +81,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "82ef3313fd81e2f8ca486086c506f4bd6140007e08d65931f15150c1e9c48556"
+        "sha256": "7b765a2d87c113cabfb54346c7055ef820c0dc8d2b78c8255bec79f2e7909bca"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/tsos-summary.js"
@@ -114,7 +114,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
+        "sha256": "0f087d8f05fd77c9ad40cd8cb793d348d7f37806be223a4b5e9020a751a629e1"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js"
@@ -147,7 +147,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
+        "sha256": "a69cf3084f28a8832cbbf88da6239a5ff925da41bcdd929edf06044e72863004"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js"
@@ -180,7 +180,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "296d032ccc4edb0b50f6dc46d70ac3570ef70f9a76b2b752e2f5bd6112d6d120"
+        "sha256": "1d3e092f67eaeb815a7dbec62855e4a2110ad6aba399b5a3ac2fc26753ca0ac7"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/factory-tsos-integration.mjs"
@@ -213,7 +213,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "b67725a12a7bd7962a0ee4bc6ff65824788ab4848802fae7acb61373cb20e7fa"
+        "sha256": "54815f84ea4222049f02b4b33d8ebd3484d0684978d4e0559a693a75671c2f40"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/TSOS_FACTORY_INTEGRATION.md"

@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports checkProofFreshness — factory-staging/factory-core/sentry/proof-freshness.js.
+ * SYNOPSIS: Exports checkProofFreshness — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,7 +29,7 @@ export function checkProofFreshness(missionId) {
     const abs = machinePath(REPO_ROOT, layout, fileName);
     checked.push(rel);
     if (!fs.existsSync(abs)) {
-      if (fileName === 'FULL_LOOP_PROOF_RECEIPT.json' || fileName === 'READINESS_REPORT.json') continue;
+      if (fileName === 'FULL_LOOP_PROOF_RECEIPT.json') continue;
       stale.push({ file: rel, reason: 'missing' });
       continue;
     }

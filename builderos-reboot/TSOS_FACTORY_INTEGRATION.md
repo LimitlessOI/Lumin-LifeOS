@@ -44,19 +44,9 @@ npm run factory:tsos
 npm run factory:ci
 ```
 
-## Relation to platform TSOS (token money)
+## Relation to platform TSOS
 
-**Productive spend > caps.** Caps stop runaway bills; they do not stop garbage loops.
-
-| Layer | Role |
-|-------|------|
-| **Income filter** | AI only on milestones that move a chosen revenue lane to customer-visible outcome |
-| **Useful-work guard** | Scheduled AI skips when no real work exists |
-| **Directed mode** | Autonomous loops off until income-linked contracts exist |
-| **Production ledger** | `token_usage_log` + `/api/v1/tokens/unified/today` — see *what* burned, kill non-revenue capabilities |
-| **Factory TSOS** | Local step metrics; not the income priority |
-
-Full operator write-up: `builderos-reboot/CURRENT_BP_GAPS_V1.md` § Token use.
+Factory TSOS is the **measurement hook** inside the governed loop. Production token accounting (`token_usage_log`, Amendment 10/44) on Railway is the **platform ledger** — future bridge: export factory JSONL → unified ledger.
 
 ## Canonical boundary
 

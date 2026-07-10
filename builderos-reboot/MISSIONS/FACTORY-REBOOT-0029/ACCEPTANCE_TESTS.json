@@ -4,48 +4,48 @@
     "step_id": "S2901",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/tsos/tsos-guardrails.js",
-    "expected_sha256": "ed381c429ca05a0a08c3363435b2008f132bf50551c003554b08f9e035676fcb"
+    "expected_sha256": "bd478eeea2286f1f4514f8b8b01ed7c56322b7f53acb9584ebdc12d49ba92494"
   },
   {
     "test_id": "AT-S2902-1",
     "step_id": "S2902",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/tsos/record-step-metrics.js",
-    "expected_sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
+    "expected_sha256": "4ce1175fe969f1a6ec7c1cc810dbc3dd4353f47fb8781153b23c7e6ca6ee11da"
   },
   {
     "test_id": "AT-S2903-1",
     "step_id": "S2903",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/tsos/tsos-summary.js",
-    "expected_sha256": "82ef3313fd81e2f8ca486086c506f4bd6140007e08d65931f15150c1e9c48556"
+    "expected_sha256": "7b765a2d87c113cabfb54346c7055ef820c0dc8d2b78c8255bec79f2e7909bca"
   },
   {
     "test_id": "AT-S2904-1",
     "step_id": "S2904",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/builder/run-step.js",
-    "expected_sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
+    "expected_sha256": "0f087d8f05fd77c9ad40cd8cb793d348d7f37806be223a4b5e9020a751a629e1"
   },
   {
     "test_id": "AT-S2905-1",
     "step_id": "S2905",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
+    "expected_sha256": "a69cf3084f28a8832cbbf88da6239a5ff925da41bcdd929edf06044e72863004"
   },
   {
     "test_id": "AT-S2906-1",
     "step_id": "S2906",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/factory-tsos-integration.mjs",
-    "expected_sha256": "c7a0fa223cf240bf90a1ad210fdb963caae29cf6af65b9f18c75dfb63a95557a"
+    "expected_sha256": "1d3e092f67eaeb815a7dbec62855e4a2110ad6aba399b5a3ac2fc26753ca0ac7"
   },
   {
     "test_id": "AT-S2907-1",
     "step_id": "S2907",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/TSOS_FACTORY_INTEGRATION.md",
-    "expected_sha256": "88994e2ef5bf4d19c4625dd10541379e6ec293d96f9a435b0124019fa901cbe2"
+    "expected_sha256": "54815f84ea4222049f02b4b33d8ebd3484d0684978d4e0559a693a75671c2f40"
   }
 ]

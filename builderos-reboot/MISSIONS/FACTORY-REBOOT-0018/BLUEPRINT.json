@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "8189c0122cc42762c8ebb6afcc164006110a8438be4ffacf12eb8e1b85213e76"
+        "sha256": "e6f8334a8ae38f1aec71cf45dda83e3397ddebbe0a03f53682497109d21dafff"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018/CONTENT/autopilot-run-queue.mjs"

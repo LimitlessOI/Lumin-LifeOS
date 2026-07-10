@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-11T07:53:05.566Z",
+  "generated_at": "2026-07-10T00:26:52.836Z",
   "version": 3,
   "layout": "monorepo_legacy",
   "verdict": "STAGING_READY_EXTENDED",
@@ -15,8 +15,8 @@
     "queue_dry_run": true,
     "cutover_verify": true
   },
-  "queue_complete": 34,
+  "queue_complete": 37,
   "queue_total": 38,
   "active_mission": null,
-  "lumin_factory_path": "lumin-factory/"
+  "lumin_factory_path": null
 }

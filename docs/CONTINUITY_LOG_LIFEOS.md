@@ -8,6 +8,18 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Wave 0 #5–#6: factory:ci ALL PASS
+
+### What happened
+- Adam: keep working the locked twelve — #5/#6 were the remaining ounces.
+- Restored `run-mission.js` + author_then_write path in `run-step.js`; re-pinned CONTENT hashes; rematerialized FACTORY-REBOOT only; rebuilt cutover bundle.
+- `node builderos-reboot/scripts/factory-ci.mjs` → **ALL PASS**.
+
+### Next
+- Push; update BRAINSTORM_AND_CONSENSUS / handoff that Wave 0 1–12 control block is mechanically green (founder usability + payment gate still outside).
+
+---
+
 ## [BUILD] Update 2026-07-09 — Never-idle: phase3 UI + net-worth
 
 ### What happened

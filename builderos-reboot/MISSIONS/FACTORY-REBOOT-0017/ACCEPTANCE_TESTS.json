@@ -4,6 +4,6 @@
     "step_id": "S1701",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/factory-duplication-test.mjs",
-    "expected_sha256": "d1bd8b137a9bb6cebc568da97dd1a8a411db7442daff8d4824b432ae06439802"
+    "expected_sha256": "3fd315bce8e8adeeb64da74d44f9f512297b6f8a6524ef98927a69b5742e92e2"
   }
 ]

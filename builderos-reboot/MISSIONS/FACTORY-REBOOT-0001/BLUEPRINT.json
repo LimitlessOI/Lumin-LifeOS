@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "6f40c0c06ab186dac86a3d7de2efb21b4fdff0187c8d289f320f4eb76867e337"
+        "sha256": "c5758bdc77b6373ca435b9b020c6425f47fe2b7ec384da8ba97e3adcb55551d4"
       },
       "allowed_context_files": [
         "builderos-reboot/README.md"
@@ -49,7 +49,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "8c86cc98748ff3fced4ca766b1002e9e75c4aba1bf4857f309af6080ff495091"
+        "sha256": "b29b2cbc079384d2a03ebdf3c979ab027b73d6e649112d2adb4f05241768ce84"
       },
       "allowed_context_files": [
         "builderos-reboot/INDEX.md"
@@ -82,7 +82,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "859a63553d8d2f0d62c7abfb42550036173489fef26ab3b09e26db79ad5b78a0"
+        "sha256": "2d72b48adc338aade687da6c85e2a726620ca186105338a7fed33b66ccdd0f5a"
       },
       "allowed_context_files": [
         "builderos-reboot/WORKSPACE_STATUS.md"
@@ -115,7 +115,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "435238c71eb78fe0c4dc535ce3b688a1e7a9f9b3be936cfb0a1ec86e6d54482c"
+        "sha256": "e3aadda178fb736e3f8141c8b7bbf97f719d1487eb9bd3647f8513dc035938f1"
       },
       "allowed_context_files": [
         "builderos-reboot/HANDOFF.md"
@@ -181,7 +181,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "943aeb962b5f725e4cb9e60e0eea00f7d9cb4a0b9b602696287dc5f648415088"
+        "sha256": "0080e11a5ec829b565305a6c91444422faeda3548ccbb85f2b7ab6afd6ac7d4d"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/README.md"

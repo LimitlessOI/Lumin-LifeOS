@@ -257,16 +257,13 @@ export async function dispatchExecuteStep(body, options = {}) {
     blueprint_id,
     step_id: step.step_id,
     target_file: builderResult.target_file,
-    token_cost: Number(authoringResult?.token_cost ?? body?.token_cost) || 0,
-    prompt_tokens: Number(authoringResult?.prompt_tokens) || 0,
-    completion_tokens: Number(authoringResult?.completion_tokens) || 0,
-    estimated_usd: Number(authoringResult?.estimated_usd ?? body?.estimated_usd) || 0,
+    token_cost: Number(body?.token_cost) || 0,
     latency_ms: Date.now() - t0,
     retries: Number(body?.retries) || 0,
     waste: Boolean(body?.waste),
     bytes_written: builderResult.bytes,
     input_mode: builderResult.input_mode,
-    model_tier: authoringResult?.model_tier || body?.model_tier || 'unspecified',
+    model_tier: body?.model_tier || 'unspecified',
   });
 
   if (!tsosResult.ok) {

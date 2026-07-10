@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
+        "sha256": "0f087d8f05fd77c9ad40cd8cb793d348d7f37806be223a4b5e9020a751a629e1"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/run-step.js"
@@ -48,7 +48,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "b642c4b84bae872fa11fc00ef5570a4e5b573c27013c7f7f190ca90aee04e3f1"
+        "sha256": "0cff4000c59e1909c3f1557885fdd4de7a8bccdcccc9432027ca272cb83afa36"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/generate-greenfield-0001.mjs"
@@ -81,7 +81,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "1be17a61c3c47e666d1489bf4b094a75ee5935cfd5ce4c11c4a4223f8cf99664"
+        "sha256": "cb6d2bc260e173cf338a330548a89039305bcb9e636f7b303ba21ad171c05cf2"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/greenfield-integration.mjs"

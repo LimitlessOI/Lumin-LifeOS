@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports modelRoutingEvaluation — factory-staging/factory-core/tsos/model-routing-evaluator.js.
+ * SYNOPSIS: Exports modelRoutingEvaluation — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js.
  */
 export function modelRoutingEvaluation(entry) {
   return {

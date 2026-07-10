@@ -17,9 +17,7 @@ fs.cpSync(path.join(REPO_ROOT, 'lumin-factory-bundle'), TARGET, { recursive: tru
 const rootPkg = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-package.json');
 const rootReadme = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-README.md');
 if (fs.existsSync(rootPkg)) fs.copyFileSync(rootPkg, path.join(TARGET, 'package.json'));
-if (fs.existsSync(rootReadme)) {
-  fs.writeFileSync(path.join(TARGET, 'LUMIN_FACTORY_CUTOVER.md'), fs.readFileSync(rootReadme, 'utf8'));
-}
+if (fs.existsSync(rootReadme)) fs.writeFileSync(path.join(TARGET, 'README.md'), fs.readFileSync(rootReadme, 'utf8'));
 
 fs.writeFileSync(path.join(TARGET, '.gitignore'), 'node_modules/\nfactory-staging/node_modules/\nfactory-staging/data/\n.DS_Store\n', 'utf8');
 

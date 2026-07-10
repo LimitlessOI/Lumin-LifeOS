@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "195bdb990aa74c378cac43b660086bf470f2843fb302bdf082b960368db63e2f"
+        "sha256": "dd71a57c269ca6bf719be915b9199533a2413a065b5bcf69e06dce31818bae8a"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"
@@ -48,7 +48,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "7e288bd5c7f587aa9a1a1db71242294ed5f3c66893157f7969b11631b15caefd"
+        "sha256": "fe104aa50502cc30c58cdd0a8538d46e2f2fc3222d594f8ca7f19b0790856e10"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/EVALUATION_PACKET.md"

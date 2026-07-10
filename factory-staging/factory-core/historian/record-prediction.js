@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports recordPrediction — factory-staging/factory-core/historian/record-prediction.js.
+ * SYNOPSIS: Exports recordPrediction — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js.
  */
 export function recordPrediction(entry) {
   return {

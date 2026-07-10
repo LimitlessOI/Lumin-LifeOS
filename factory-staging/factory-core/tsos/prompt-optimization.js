@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports promptOptimizationProposal — factory-staging/factory-core/tsos/prompt-optimization.js.
+ * SYNOPSIS: Exports promptOptimizationProposal — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js.
  */
 export function promptOptimizationProposal(entry) {
   return {

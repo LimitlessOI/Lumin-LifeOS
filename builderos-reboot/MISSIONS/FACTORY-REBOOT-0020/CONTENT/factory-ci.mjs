@@ -11,6 +11,10 @@ const layout = detectFactoryLayout(REPO_ROOT);
 console.log(`factory:ci layout=${layout.mode} repo=${REPO_ROOT}`);
 
 const steps = [
+  ['import_smoke', ['factory-import-smoke.mjs']],
+  ['authoring_canary', ['codegen-dumbpipe-proof.mjs']],
+  ['content_pin_truth', ['verify-content-pin-truth.mjs']],
+  ['post_failure_classifier', ['post-failure-classifier-proof.mjs']],
   ['acceptance', ['run-all-mission-acceptance.mjs']],
   ['integration_step', ['factory-execute-step-integration.mjs']],
   ['integration_mission', ['factory-execute-mission-integration.mjs']],
@@ -30,12 +34,26 @@ const steps = [
   ['tier1_telemetry_enforced', ['verify-tier1-telemetry.mjs', '--active', '--enforce', '--factory-scope']],
 ];
 
+const repoScripts = {
+  canonical_spine: 'scripts/verify-canonical-execution-spine.mjs',
+  typed_blockers: 'scripts/verify-typed-blockers.mjs',
+  dual_path: 'scripts/verify-dual-path-spine.mjs',
+};
+
 const results = {};
 let failed = 0;
 
 for (const [name, args] of steps) {
   const script = scriptPath(layout, args[0]);
   const r = spawnSync(process.execPath, [script, ...args.slice(1)], { cwd: REPO_ROOT, encoding: 'utf8' });
+  results[name] = r.status === 0;
+  console.log(results[name] ? `PASS ${name}` : `FAIL ${name}`);
+  if (!results[name]) failed++;
+}
+
+for (const [name, rel] of Object.entries(repoScripts)) {
+  const script = path.join(REPO_ROOT, rel);
+  const r = spawnSync(process.execPath, [script], { cwd: REPO_ROOT, encoding: 'utf8' });
   results[name] = r.status === 0;
   console.log(results[name] ? `PASS ${name}` : `FAIL ${name}`);
   if (!results[name]) failed++;

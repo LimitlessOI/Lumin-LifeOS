@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: TSOS guardrails — efficiency measurement only; never mission authority.
+ * TSOS guardrails — efficiency measurement only; never mission authority.
  * @see factory-core/tsos/TSOS_HOOK_BOUNDARY.md
  * @see docs/C2_CANONICAL_DEFINITION.md (TSOS ≠ truth/strategy)
  */
@@ -12,9 +13,6 @@ export const ALLOWED_METRIC_FIELDS = new Set([
   'step_id',
   'target_file',
   'token_cost',
-  'estimated_usd',
-  'prompt_tokens',
-  'completion_tokens',
   'latency_ms',
   'retries',
   'waste',

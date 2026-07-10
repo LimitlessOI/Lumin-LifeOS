@@ -33,9 +33,6 @@ export function recordStepMetrics(entry) {
     metrics: {
       step_id: sanitized.step_id,
       token_cost: sanitized.token_cost ?? 0,
-      estimated_usd: sanitized.estimated_usd ?? 0,
-      prompt_tokens: sanitized.prompt_tokens ?? 0,
-      completion_tokens: sanitized.completion_tokens ?? 0,
       latency_ms: sanitized.latency_ms ?? 0,
       retries: sanitized.retries ?? 0,
       waste: sanitized.waste ?? false,

@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "87d0dd558ece0a7267acb20f7e3427834c5733f4069125ad4562600e3ef01a2a"
+        "sha256": "37d88480546631e0e12f0ea42cd350f77aa7f62c48c6e223bf38bc8efadc9a27"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0026/CONTENT/generate-proof-loop-0001.mjs"
@@ -48,7 +48,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "1121236d7641ceb3c6948d87ef03d3efc076128d85c61045d7df187e790c4ab8"
+        "sha256": "4a330cb1d3d7ba6cc5bf72c71391b5e5222d0019b548075ce40547b546fb06ca"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0026/CONTENT/run-full-loop-proof.mjs"

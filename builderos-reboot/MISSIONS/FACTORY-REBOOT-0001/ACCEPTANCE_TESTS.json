@@ -4,26 +4,28 @@
     "step_id": "S001",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/README.md",
-    "expected_sha256": "6f40c0c06ab186dac86a3d7de2efb21b4fdff0187c8d289f320f4eb76867e337"
+    "expected_sha256": "c5758bdc77b6373ca435b9b020c6425f47fe2b7ec384da8ba97e3adcb55551d4"
   },
   {
     "test_id": "AT-S002-1",
     "step_id": "S002",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/INDEX.md",
-    "expected_sha256": "b5cfbb575ea053ed2989ae585eebc0eb7abe2cda577d842cfa1f1e59bc1e418a"
+    "expected_sha256": "b29b2cbc079384d2a03ebdf3c979ab027b73d6e649112d2adb4f05241768ce84"
   },
   {
     "test_id": "AT-S003-1",
     "step_id": "S003",
-    "type": "file_exists",
-    "target": "builderos-reboot/WORKSPACE_STATUS.md"
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/WORKSPACE_STATUS.md",
+    "expected_sha256": "2d72b48adc338aade687da6c85e2a726620ca186105338a7fed33b66ccdd0f5a"
   },
   {
     "test_id": "AT-S004-1",
     "step_id": "S004",
-    "type": "file_exists",
-    "target": "builderos-reboot/HANDOFF.md"
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/HANDOFF.md",
+    "expected_sha256": "e3aadda178fb736e3f8141c8b7bbf97f719d1487eb9bd3647f8513dc035938f1"
   },
   {
     "test_id": "AT-S005-1",
@@ -43,7 +45,7 @@
     "step_id": "S006",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/README.md",
-    "expected_sha256": "943aeb962b5f725e4cb9e60e0eea00f7d9cb4a0b9b602696287dc5f648415088"
+    "expected_sha256": "0080e11a5ec829b565305a6c91444422faeda3548ccbb85f2b7ab6afd6ac7d4d"
   },
   {
     "test_id": "AT-S007-1",

@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports loadBlueprintFromRepo — factory-staging/factory-core/builder/run-mission.js.
+ * SYNOPSIS: Exports loadBlueprintFromRepo — builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,7 +37,7 @@ export function loadBlueprintFromRepo(missionId) {
   return JSON.parse(fs.readFileSync(blueprintPath, 'utf8'));
 }
 
-export async function dispatchExecuteMission(body, options = {}) {
+export function dispatchExecuteMission(body) {
   const mission_id = body?.mission_id;
   const dry_run = Boolean(body?.dry_run);
 
@@ -67,12 +67,12 @@ export async function dispatchExecuteMission(body, options = {}) {
       continue;
     }
 
-    const { httpStatus, body: stepBody } = await dispatchExecuteStep({
+    const { httpStatus, body: stepBody } = dispatchExecuteStep({
       mission_id,
       blueprint_id: blueprint.blueprint_id,
       step,
       skip_intake_gate: body?.skip_intake_gate === true,
-    }, options);
+    });
 
     results.push({
       step_id: step.step_id,

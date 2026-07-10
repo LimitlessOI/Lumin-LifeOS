@@ -4,20 +4,20 @@
     "step_id": "S601",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/builder/run-mission.js",
-    "expected_sha256": "bebd008734814e42a3788656a4efbc55605fb20a76d5257db925a1dba41ff257"
+    "expected_sha256": "25eb2aec76aa0eb8de9b29143d508fc8ffc2957518c559f0232021ffccfa814f"
   },
   {
     "test_id": "AT-S602-1",
     "step_id": "S602",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/routes/factory-execute-mission-routes.js",
-    "expected_sha256": "7ae5ecd107432e9c3d510719cae59887c07413912edaf2a47f9a00f541e94203"
+    "expected_sha256": "f88731c1ed82c76d048a29d4a1812e63a47d586647852a32ef9042fee30ffcf4"
   },
   {
     "test_id": "AT-S603-1",
     "step_id": "S603",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
+    "expected_sha256": "a69cf3084f28a8832cbbf88da6239a5ff925da41bcdd929edf06044e72863004"
   }
 ]

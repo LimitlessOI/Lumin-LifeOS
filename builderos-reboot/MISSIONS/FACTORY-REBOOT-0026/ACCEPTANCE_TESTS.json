@@ -4,13 +4,13 @@
     "step_id": "S2601",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/generate-proof-loop-0001.mjs",
-    "expected_sha256": "87d0dd558ece0a7267acb20f7e3427834c5733f4069125ad4562600e3ef01a2a"
+    "expected_sha256": "37d88480546631e0e12f0ea42cd350f77aa7f62c48c6e223bf38bc8efadc9a27"
   },
   {
     "test_id": "AT-S2602-1",
     "step_id": "S2602",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/run-full-loop-proof.mjs",
-    "expected_sha256": "1121236d7641ceb3c6948d87ef03d3efc076128d85c61045d7df187e790c4ab8"
+    "expected_sha256": "4a330cb1d3d7ba6cc5bf72c71391b5e5222d0019b548075ce40547b546fb06ca"
   }
 ]

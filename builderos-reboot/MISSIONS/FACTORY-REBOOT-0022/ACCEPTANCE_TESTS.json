@@ -4,6 +4,6 @@
     "step_id": "S2201",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/generate-mission-pack-index.mjs",
-    "expected_sha256": "e36757c6a939b7c707dba789b3b89e85fa76656e5a6f02b2a7fc32f8229ac2f7"
+    "expected_sha256": "50e22a9d0c7004beeaf67bd37920b57dc0f31a56533c76e4a48d84db64875f4d"
   }
 ]

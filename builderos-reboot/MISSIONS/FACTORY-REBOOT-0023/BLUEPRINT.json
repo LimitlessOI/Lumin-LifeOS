@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "39945377af122a92858aebf7109f5b7c2252e199ae7c0742dacf0a1286cbdc0e"
+        "sha256": "570511fbab3262dc9ca6a404b44767ba48d372efe659ffbf98c4a875810ad525"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0023/CONTENT/readiness-report.mjs"

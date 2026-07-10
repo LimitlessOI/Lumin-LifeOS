@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports writeFileExactContract — factory-staging/factory-core/builder/action-handlers/write-file-exact.js.
+ * SYNOPSIS: Exports writeFileExactContract — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js.
  */
 export function writeFileExactContract(step) {
   return {

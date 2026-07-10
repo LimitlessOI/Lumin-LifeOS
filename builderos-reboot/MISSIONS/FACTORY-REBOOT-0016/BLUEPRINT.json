@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "cc0083a2e99c1164a6d68d6e88aaac6becd19568400e299037cc4384d403d679"
+        "sha256": "b259586c724bc06c9864ddc6b0e6d35b48572b24b0f5d9ec7883ef9fe1ec7a83"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0016/CONTENT/run-greenfield-determinism-3x.mjs"

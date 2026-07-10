@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09T18:56:12.302Z",
+  "generated_at": "2026-07-10T00:21:26.465Z",
   "verdict": "SENTRY_MECHANICAL_FAIL",
   "qualitative_verdict": "NOT_READY",
   "checks": [
@@ -11,7 +11,7 @@
     {
       "id": "SM-002",
       "name": "Acceptance tests pass",
-      "pass": false
+      "pass": true
     },
     {
       "id": "SM-003",
@@ -46,12 +46,12 @@
     {
       "id": "SM-009",
       "name": "Lumin-Factory repo init path",
-      "pass": true
+      "pass": false
     },
     {
       "id": "SM-010",
       "name": "Factory CI umbrella",
-      "pass": false
+      "pass": true
     },
     {
       "id": "SM-011",

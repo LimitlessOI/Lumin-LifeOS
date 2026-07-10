@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0030/CONTENT/register-routes.js).
+ * SYNOPSIS: Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).
  */
 import { factoryExecuteStepRoute } from '../factory-core/routes/factory-execute-step-routes.js';
 import { factoryExecuteMissionRoute } from '../factory-core/routes/factory-execute-mission-routes.js';
@@ -14,13 +14,16 @@ import { reconcileRemoteTruth } from '../factory-core/readiness/remote-truth-rec
 import { getC2SurfaceStatus, formatC2MissionBrief } from '../factory-core/lifeos/c2-surface.js';
 import fs from 'node:fs';
 import path from 'node:path';
-import { REPO_ROOT } from '../factory-core/builder/run-step.js';
+import { detectLayout, FACTORY_ROOT, REPO_ROOT, machinePath } from '../factory-core/layout/repo-layout.js';
 
 export function registerFactoryRoutes(app) {
+  const layout = detectLayout();
+
   app.get('/health', (_req, res) => {
     res.json({
       ok: true,
       service: 'factory-staging',
+      layout: layout.mode,
       execute_step: 'live',
       execute_mission: 'live',
       greenfield: 'live',
@@ -91,21 +94,19 @@ export function registerFactoryRoutes(app) {
   });
 
   app.get('/factory/canon/status', (_req, res) => {
-    const canonDir = path.join(REPO_ROOT, 'factory-staging/factory-core/canon');
+    const canonDir = path.join(FACTORY_ROOT, 'factory-core/canon');
     const files = ['MISSION_STATE_MACHINE.json', 'MATURITY_CLASSIFICATION.json', 'PROOF_SOURCE_REGISTRY.json'];
-    const loaded = Object.fromEntries(
-      files.map((f) => [f, fs.existsSync(path.join(canonDir, f))]),
-    );
+    const loaded = Object.fromEntries(files.map((f) => [f, fs.existsSync(path.join(canonDir, f))]));
     res.json({ ok: true, canon: loaded, maturity_rule: 'docs_alone_earn_zero_runtime_maturity' });
   });
 
   app.get('/factory/readiness', (_req, res) => {
-    const reportPath = path.join(REPO_ROOT, 'builderos-reboot/READINESS_REPORT.json');
+    const reportPath = machinePath(REPO_ROOT, layout, 'READINESS_REPORT.json');
     if (!fs.existsSync(reportPath)) {
       return res.status(503).json({ ok: false, error: 'READINESS_REPORT.json not generated yet' });
     }
     const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-    const detPath = path.join(REPO_ROOT, 'builderos-reboot/DETERMINISM_RECEIPT.json');
+    const detPath = machinePath(REPO_ROOT, layout, 'DETERMINISM_RECEIPT.json');
     if (fs.existsSync(detPath)) {
       report.determinism = JSON.parse(fs.readFileSync(detPath, 'utf8'));
     }

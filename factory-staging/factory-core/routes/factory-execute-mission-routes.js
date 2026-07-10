@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Factory staging — Factory Execute Mission Routes.
+ * SYNOPSIS: BuilderOS artifact — Factory Execute Mission Routes.
  */
 export const factoryExecuteMissionRoute = {
   method: 'POST',

@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Registers FactoryRoutes routes/handlers (factory-staging/startup/register-routes.js).
+ * SYNOPSIS: Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js).
  */
 import { factoryExecuteStepRoute } from '../factory-core/routes/factory-execute-step-routes.js';
 import { factoryExecuteMissionRoute } from '../factory-core/routes/factory-execute-mission-routes.js';
@@ -123,13 +123,13 @@ export function registerFactoryRoutes(app) {
     }
   });
 
-  app.post(factoryExecuteMissionRoute.path, async (req, res) => {
-    const { httpStatus, body } = await dispatchExecuteMission(req.body || {});
+  app.post(factoryExecuteMissionRoute.path, (req, res) => {
+    const { httpStatus, body } = dispatchExecuteMission(req.body || {});
     res.status(httpStatus).json(body);
   });
 
-  app.post(factoryExecuteStepRoute.path, async (req, res) => {
-    const { httpStatus, body } = await dispatchExecuteStep(req.body || {});
+  app.post(factoryExecuteStepRoute.path, (req, res) => {
+    const { httpStatus, body } = dispatchExecuteStep(req.body || {});
     res.status(httpStatus).json(body);
   });
 }

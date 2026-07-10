@@ -4,6 +4,6 @@
     "step_id": "S901",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/autopilot-runner.mjs",
-    "expected_sha256": "abab5f3166c554f422bbb02dc30aff4add79381c4cca34ba24da87d54bca89cf"
+    "expected_sha256": "b7573753ddbc2bad13692e49bc8feb3bdbc6d2adb6d41ed5ea071f95be8d1a2e"
   }
 ]

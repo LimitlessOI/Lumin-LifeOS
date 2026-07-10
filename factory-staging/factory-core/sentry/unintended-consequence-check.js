@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports unintendedConsequenceCheck — factory-staging/factory-core/sentry/unintended-consequence-check.js.
+ * SYNOPSIS: Exports unintendedConsequenceCheck — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js.
  */
 export function unintendedConsequenceCheck({ step, builderResult } = {}) {
   const findings = [];

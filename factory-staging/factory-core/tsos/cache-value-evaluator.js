@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports cacheValueEvaluation — factory-staging/factory-core/tsos/cache-value-evaluator.js.
+ * SYNOPSIS: Exports cacheValueEvaluation — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js.
  */
 export function cacheValueEvaluation(entry) {
   return {

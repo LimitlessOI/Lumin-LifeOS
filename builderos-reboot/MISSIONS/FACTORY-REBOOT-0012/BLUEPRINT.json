@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "8be0a5e87951f56349d4e466ffdabb260ca05c49182a03aad77bdbb7d3f5df9b"
+        "sha256": "98446c1048a0cfb6249ce8d97c934cbbfe6a4d6dbbfccba973bcab97954103ec"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/CONTENT/run-determinism-mechanical.mjs"
@@ -48,7 +48,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "beb8cd0a12c3d9a4181c8b47160b727e36b105d6293dfc52ca2b48cbd4e4c33e"
+        "sha256": "1c3191efd006723683e5a87ca8b62e8ee1e21b01d3f7ec5a1f819264b53022f8"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/CONTENT/DETERMINISM_CODER_PROMPT.md"

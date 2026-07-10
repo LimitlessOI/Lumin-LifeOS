@@ -4,6 +4,6 @@
     "step_id": "S1601",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/run-greenfield-determinism-3x.mjs",
-    "expected_sha256": "cc0083a2e99c1164a6d68d6e88aaac6becd19568400e299037cc4384d403d679"
+    "expected_sha256": "b259586c724bc06c9864ddc6b0e6d35b48572b24b0f5d9ec7883ef9fe1ec7a83"
   }
 ]

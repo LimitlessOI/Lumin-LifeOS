@@ -4,20 +4,20 @@
     "step_id": "S701",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/canon/services/council-adapter.js",
-    "expected_sha256": "dead63ba037fe38074418b4ab91abc177d3aef8c0255033b70834f8e84fe4999"
+    "expected_sha256": "1492380103fa414bc87100284b66bc588ec285493f85a0128460a7eb7a0dc882"
   },
   {
     "test_id": "AT-S702-1",
     "step_id": "S702",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/canon/services/COUNCIL_ADAPTER_BOUNDARY.md",
-    "expected_sha256": "98b2e6b71e11e1b7aed8916a1948af9a9951454512f5c5d7c4ab98d8f20f81f3"
+    "expected_sha256": "495b0bf34e24e4be0b7230588ea8dadface51c086cc17e85e51929f25311c037"
   },
   {
     "test_id": "AT-S703-1",
     "step_id": "S703",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
+    "expected_sha256": "a69cf3084f28a8832cbbf88da6239a5ff925da41bcdd929edf06044e72863004"
   }
 ]

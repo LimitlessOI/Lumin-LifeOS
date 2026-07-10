@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Exports readinessProofFreshness — factory-staging/factory-core/readiness/proof-freshness.js.
+ * SYNOPSIS: Exports readinessProofFreshness — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js.
  */
 export function readinessProofFreshness(entry) {
   return {

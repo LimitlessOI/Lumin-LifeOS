@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "a888a61d1bde3120fecbae399913cc2aa35c653b5586d6bb4850b99295a4e7a9"
+        "sha256": "90e7226aad109fab9bea4b69c99880a8495cc477cbfe3920b924a8c2e479c940"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0014/CONTENT/factory-http-client.mjs"

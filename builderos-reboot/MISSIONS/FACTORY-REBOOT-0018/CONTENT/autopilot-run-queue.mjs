@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 /**
- * SYNOPSIS: Dry-run entire mission queue to prove blueprints are parseable and ordered. Dry-run entire mission queue to prove blueprints are parseable and ordered. */
+ * SYNOPSIS: HIST DOMAIN — Historian owns this artifact (read/salvage only).
+ * HIST DOMAIN — Historian owns this artifact (read/salvage only).
+ * hist_id: HIST-AUTO-004
+ * Law: prompts/00-HIST-LEGACY-BOUNDARY.md
+ * Product queue: builderos-reboot/BP_PRIORITY.json
+ *
+ * Dry-run entire mission queue to prove blueprints are parseable and ordered.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +26,7 @@ for (const m of queue.missions) {
     results.push({ mission_id: m.mission_id, status: 'no_blueprint' });
     continue;
   }
-  const { httpStatus, body } = dispatchExecuteMission({ mission_id: m.mission_id, dry_run: true });
+  const { httpStatus, body } = await dispatchExecuteMission({ mission_id: m.mission_id, dry_run: true });
   results.push({
     mission_id: m.mission_id,
     httpStatus,
@@ -29,7 +36,19 @@ for (const m of queue.missions) {
 }
 
 const pass = results.filter((r) => r.httpStatus).every((r) => r.ok);
-const receipt = { run_at: new Date().toISOString(), pass, results };
+const receipt = {
+  _authority: {
+    domain: 'Hist',
+    hist_id: 'HIST-AUTO-003',
+    owner_department: 'Historian',
+    status: 'HIST_OWNED',
+    role: 'Queue dry-run receipt — autopilot queue validation',
+    canonical_work_queue: 'builderos-reboot/BP_PRIORITY.json',
+  },
+  run_at: new Date().toISOString(),
+  pass,
+  results,
+};
 fs.writeFileSync(path.join(REPO_ROOT, 'builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json'), `${JSON.stringify(receipt, null, 2)}\n`);
 console.log(JSON.stringify(receipt, null, 2));
 process.exit(pass ? 0 : 1);

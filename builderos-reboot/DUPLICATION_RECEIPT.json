@@ -1,6 +1,6 @@
 {
   "test_id": "BLUEPRINT-DUPLICATION-REMATERIALIZE",
-  "run_at": "2026-06-11T07:53:02.960Z",
+  "run_at": "2026-07-10T00:26:50.356Z",
   "layout": "monorepo_legacy",
   "pass": true,
   "steps_rerun": [
@@ -20,20 +20,20 @@
   "probes": [
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
-      "before": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae",
-      "after": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae",
+      "before": "0f087d8f05fd77c9ad40cd8cb793d348d7f37806be223a4b5e9020a751a629e1",
+      "after": "0f087d8f05fd77c9ad40cd8cb793d348d7f37806be223a4b5e9020a751a629e1",
       "match": true
     },
     {
       "path": "factory-staging/factory-core/builder/run-mission.js",
-      "before": "bebd008734814e42a3788656a4efbc55605fb20a76d5257db925a1dba41ff257",
-      "after": "bebd008734814e42a3788656a4efbc55605fb20a76d5257db925a1dba41ff257",
+      "before": "25eb2aec76aa0eb8de9b29143d508fc8ffc2957518c559f0232021ffccfa814f",
+      "after": "25eb2aec76aa0eb8de9b29143d508fc8ffc2957518c559f0232021ffccfa814f",
       "match": true
     },
     {
       "path": "factory-staging/startup/register-routes.js",
-      "before": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b",
-      "after": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b",
+      "before": "a69cf3084f28a8832cbbf88da6239a5ff925da41bcdd929edf06044e72863004",
+      "after": "a69cf3084f28a8832cbbf88da6239a5ff925da41bcdd929edf06044e72863004",
       "match": true
     }
   ]
