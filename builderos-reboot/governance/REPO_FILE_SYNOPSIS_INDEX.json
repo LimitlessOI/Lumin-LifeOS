@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T06:21:11.861Z",
+  "generated_at": "2026-07-10T06:24:07.483Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11397,
   "files": [
@@ -63830,9 +63830,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 180854,
-      "mtime": "2026-07-10T06:21:11.861Z",
-      "indexed_at": "2026-07-10T06:21:11.861Z"
+      "bytes": 180853,
+      "mtime": "2026-07-10T06:24:07.483Z",
+      "indexed_at": "2026-07-10T06:24:07.483Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -63927,9 +63927,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 41198,
-      "mtime": "2026-07-10T06:21:11.861Z",
-      "indexed_at": "2026-07-10T06:21:11.861Z"
+      "bytes": 41197,
+      "mtime": "2026-07-10T06:24:07.483Z",
+      "indexed_at": "2026-07-10T06:24:07.483Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -64159,8 +64159,8 @@
       "path": "public/overlay/lifeos-theme-overrides.css",
       "synopsis": "LifeOS overlay UI — Lifeos Theme Overrides.",
       "bytes": 6797,
-      "mtime": "2026-07-10T06:21:11.861Z",
-      "indexed_at": "2026-07-10T06:21:11.861Z"
+      "mtime": "2026-07-10T06:24:07.483Z",
+      "indexed_at": "2026-07-10T06:24:07.483Z"
     },
     {
       "path": "public/overlay/lifeos-theme.js",
@@ -64337,8 +64337,8 @@
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
       "bytes": 7256,
-      "mtime": "2026-07-10T06:21:11.861Z",
-      "indexed_at": "2026-07-10T06:21:11.861Z",
+      "mtime": "2026-07-10T06:24:07.483Z",
+      "indexed_at": "2026-07-10T06:24:07.483Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
