@@ -63,13 +63,16 @@
     },
     {
       "id": "s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/document-qa.js",
       "task": "Implement missing-signature and missing-field detection for uploaded transaction documents",
       "spec": "Export async function runDocumentQA(deps, {documentBuffers, transactionId}) that for each document calls deps.callCouncilMember('document-qa', JSON.stringify({document: buf.toString('base64'), transactionId})) expecting JSON response {issues:[{type:'missing-signature'|'missing-field', location:string}], passed:boolean}. Aggregates results array. Returns {allPassed:bool, results:[{documentName, issues, passed}]}. No top-level browser globals, no AI SDK import.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "92d02efc47bce0a2d904023a1cb2b8faf8df1620",
+      "last_attempt_at": "2026-07-10T03:48:59.924Z",
+      "completed_at": "2026-07-10T03:49:09.692Z"
     },
     {
       "id": "s6",
