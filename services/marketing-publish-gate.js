@@ -179,7 +179,7 @@ export async function publishOrKill({ callCouncilMember, piece } = {}) {
       `Body: ${body || '(missing)'}`,
     ].join('\n');
 
-    const noveltyDecision = await askCouncil(callCouncilMember, 'SocialMediaOS competitor edge judge', noveltyPrompt);
+    const noveltyDecision = await askCouncil(callCouncilMember, 'gemini_flash', noveltyPrompt);
     checks.push({
       name: CHECK_NAMES.novelty,
       pass: noveltyDecision.pass,
