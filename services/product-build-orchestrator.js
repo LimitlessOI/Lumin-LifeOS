@@ -313,8 +313,10 @@ export function reviveStaleBlockedSteps(queue, {
         (s) => isAutoRegisterConfigStep(s) && s.status === STEP_STATUS.DONE,
       );
       if (!registerDone) continue;
+      // Register landed — revive immediately (no 15m cooldown).
+    } else if (waited < cooldownMs && !artifactToolingBlock) {
+      continue;
     }
-    if (waited < cooldownMs && !artifactToolingBlock) continue;
     // Tooling assertion_threw: short 60s cooldown then revive.
     if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;
     step.status = STEP_STATUS.PENDING;
