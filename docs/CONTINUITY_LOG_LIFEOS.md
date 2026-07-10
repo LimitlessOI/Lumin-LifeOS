@@ -8,6 +8,19 @@
 
 ---
 
+## [BUILD] Update 2026-07-10 — Overseen SocialMediaOS LIVE finish pass
+
+### What happened
+Directed the system via founder chat (not hand-authoring product modules). Observed queue 12/12 done but LIVE false-green. System commits repaired consent/UI/council roles/SQL drift. **LIVE tip `fe56c03dd85e`:** consent→session→coach→extract→generate→approve→export PASS; intel titles PASS. Receipt: `products/receipts/SOCIALMEDIAOS_OVERSEE_LIVE_PROOF.json`.
+
+### Remaining
+- R2 audio, SENTRY Layer B browser walkthrough, rewrite `verify-marketing-phase1.mjs`, Phase 3+ infra gates.
+
+### Next
+- Optional: browser SENTRY on `/marketing/session/new`, or enqueue verify-script rewrite.
+
+---
+
 ## [FIX] Update 2026-07-10 — Railway GH Deploy: lumin-web path (not token folklore)
 
 ### What happened

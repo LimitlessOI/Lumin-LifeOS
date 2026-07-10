@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T01:49:12.628Z",
+  "generated_at": "2026-07-10T01:51:56.378Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11375,
+  "file_count": 11376,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36720,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 56025,
-      "mtime": "2026-07-10T01:14:26.344Z",
-      "indexed_at": "2026-07-10T01:15:12.008Z"
+      "bytes": 56718,
+      "mtime": "2026-07-10T01:51:44.054Z",
+      "indexed_at": "2026-07-10T01:51:56.378Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39371,9 +39371,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 84878,
-      "mtime": "2026-07-07T21:41:40.919Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 85878,
+      "mtime": "2026-07-10T01:51:47.986Z",
+      "indexed_at": "2026-07-10T01:51:56.378Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -62911,6 +62911,14 @@
       "bytes": 1087,
       "mtime": "2026-06-29T04:00:50.976Z",
       "indexed_at": "2026-07-10T00:10:11.466Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SOCIALMEDIAOS_OVERSEE_LIVE_PROOF.json",
+      "synopsis": "Product receipt — SOCIALMEDIAOS OVERSEE LIVE PROOF.",
+      "bytes": 1332,
+      "mtime": "2026-07-10T01:51:43.437Z",
+      "indexed_at": "2026-07-10T01:51:56.378Z",
       "synopsis_index_only": true
     },
     {

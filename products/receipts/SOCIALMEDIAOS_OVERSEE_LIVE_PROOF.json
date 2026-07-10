@@ -1,0 +1,38 @@
+{
+  "schema": "socialmediaos_oversee_live_proof_v1",
+  "at": "2026-07-10T01:51:40.000Z",
+  "tip": "fe56c03dd85e",
+  "ok": true,
+  "loop": {
+    "consent": "PASS",
+    "session": "PASS",
+    "coach": "PASS",
+    "extract": "PASS",
+    "generate": "PASS",
+    "approve": "PASS",
+    "export": "PASS",
+    "intel_titles": "PASS"
+  },
+  "session_id": "4f47215e-5dba-4de3-8e55-5aaf51fd01b2",
+  "content_piece_id": "5b5ed2bf-49e5-4db7-8640-54853e729acb",
+  "system_builds_directed": [
+    "66206693b9 consent enum first pass",
+    "c2d9d1b936 gemini_flash session routes",
+    "ee31836249 title-universe gemini_flash",
+    "21c994dbc1 script-scorer gemini_flash",
+    "50c8b1be8e repurpose gemini_flash",
+    "ea979960d3 publish-gate gemini_flash",
+    "12f96cb23d consent enum restored",
+    "3f4b82841c UI consent_type session_recording",
+    "3a075d7149 extract/generate SQL §6 align",
+    "1bdf5ee568 content/export join sessions",
+    "fe56c03dd8 PATCH UPDATE drop pieces.owner_id"
+  ],
+  "remaining": [
+    "R2 audio path still excluded (STORAGE_* unverified)",
+    "legacy /api/v1/socialmediaos/* 404 on founder runtime — canonical surface is /api/v1/marketing/*",
+    "SENTRY Layer B browser walkthrough not yet run",
+    "verify-marketing-phase1.mjs still stale vs §6",
+    "Phase 3+ blocked on FFmpeg/social API keys"
+  ]
+}
