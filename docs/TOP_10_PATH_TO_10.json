@@ -52,8 +52,8 @@
       "status": "in_progress",
       "scorecard_areas": ["SENTRY / pre-alpha", "MarketingOS / SMOS"],
       "done_when": "Marketing + LifeOS founder-ui + Site Builder Layer A+B PASS receipts",
-      "next_action": "Smoke-canary mechanical path shipped; redeploy then re-run REAL_APP_E2E for drawer_direct_build; Site Builder Layer B still open",
-      "blocker": "drawer_direct_build was FOUNDER_BUILD_JOB_STALE_RUNNING on AI path — fix pending tip deploy"
+      "next_action": "REAL_APP_E2E 16/16 PASS on tip; finish founder-chat alpha B3 (git FF race) + Site Builder Layer B",
+      "blocker": null
     },
     {
       "id": "T05",

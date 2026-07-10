@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Smoke-canary mechanical mjs patch (drawer E2E STALE_RUNNING fix); never-stop burning tc-service s7; FULLY_MACHINE_READY still false. |
+| **Last Updated** | 2026-07-10 — REAL_APP_E2E 16/16 (drawer smoke canary); never-stop on tc-service s7; FULLY_MACHINE_READY still false. |
 
 ### Related docs (this product)
 
@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-10 | **REAL_APP_E2E 16/16** — `drawer_direct_build` PASS via `founder_smoke_canary_mjs_patch` (COMMITTED + COMMIT_ONLY_NOT_LIVE). Closes STALE_RUNNING gate fail. | Prove smoke-canary fix live on tip `ed8fb2cfe`. | ✅ 16/16 | founder-ui-proof (alpha B3 retry after git FF race) |
 | 2026-07-10 | **Drawer smoke canary mechanical path** — `isSmokeCanaryMjsCommentPatch` + apply/commit in `founder-overlay-surgical-patch.js`; wired in `founder-build-self-repair.js` before AI loop; FP_V2 direct-execute lock. Avoids multi-instance `FOUNDER_BUILD_JOB_STALE_RUNNING` on `lifeos-direct-build-smoke-test.mjs`. | REAL_APP_E2E 15/16 — only fail was STALE_RUNNING on AI path. | ✅ unit PASS | push + redeploy + re-run E2E |
 | 2026-07-10 | **Autonomy closure keep-building** — cert emitter reads receipts + `autonomy_closure_v1.blockers`; LifeRE FOUNDER_USABILITY_CONTRACT path → `docs/products/lifere/`; `builderos:autonomy-closure:v1-acceptance` PASS. FULLY_MACHINE_READY still false (honest). | Adam: do not stop on BuilderOS. | ✅ acceptance PASS | tip sync + never-stop burn tc-service |
 | 2026-07-10 | **Never-stop receipt observability** — in-memory `lastReceipt`; write `phase:started` before cycle; increment `totalRuns` only after finish; log disk write failures. Closes `runs>0` + `last_receipt:null` blind spot. | Adam: BuilderOS not done — why stop fixing? Loop looked idle/opaque. | ✅ local | push + redeploy + kick |

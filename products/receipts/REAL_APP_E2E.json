@@ -1,8 +1,8 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-07-10T04:15:20.939Z",
+  "at": "2026-07-10T06:16:10.004Z",
   "base": "https://lumin-web-production-e3a9.up.railway.app",
-  "ok": false,
+  "ok": true,
   "passed": [
     "app_loads",
     "no_js_errors",
@@ -11,6 +11,7 @@
     "chat_response",
     "smos_question",
     "counsel_only_bypass",
+    "drawer_direct_build",
     "navigate_lifere",
     "alpha_readiness",
     "alpha_daily_cycle",
@@ -20,9 +21,7 @@
     "logged_out_redirect_shape",
     "logged_out_overlay_redirect_shape"
   ],
-  "failed": [
-    "drawer_direct_build"
-  ],
+  "failed": [],
   "results": {
     "app_loads": {
       "ok": true,
@@ -42,7 +41,7 @@
     },
     "chat_response": {
       "ok": true,
-      "detail": "889 chars: \"Content brief → Coach → Extract → Generate → Approve → Export — same six-stage p…\""
+      "detail": "281 chars: \"LifeOS Consumer Alpha. 55%. Blocked: machine:blueprint missing phases P4. Fix: n…\""
     },
     "smos_question": {
       "ok": true,
@@ -53,8 +52,8 @@
       "detail": "counseled without running build"
     },
     "drawer_direct_build": {
-      "ok": false,
-      "detail": "build failed: \"❌ FAIL · response\nCommand: BUILD_ATTEMPTED\nCode: FOUNDER_BUILD_JOB_STALE_RUNNING\nBlocker: Build job exceeded maximum runtime without terminal result.\nLesson: FAIL signal: Build job exceeded maximum runtime without termin\""
+      "ok": true,
+      "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Transport: COMMIT_ONLY_NOT_LIVE Path: founder_smoke_canary_mjs_patch File: scr"
     },
     "navigate_lifere": {
       "ok": true,

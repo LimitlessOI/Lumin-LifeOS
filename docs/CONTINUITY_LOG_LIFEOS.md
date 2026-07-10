@@ -8,6 +8,10 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — BuilderOS keep-building: smoke canary + E2E 16/16
+
+Adam: if more BuilderOS work remains, don't stop. Shipped mechanical `founder_smoke_canary_mjs_patch` (closes multi-instance `FOUNDER_BUILD_JOB_STALE_RUNNING`); tip `ed8fb2cfe`+; **REAL_APP_E2E 16/16** incl. `drawer_direct_build` PASS. Never-stop `cycle_start product_build_tc-service_s7` in progress. Founder-ui-proof PASS (E2E 16/16 + alpha battery). FULLY_MACHINE_READY still false (founder confirm + cold-coder). Next: keep burning tc-service queue → Site Builder Layer B / first dollar.
+
 ## [BUILD] Update 2026-07-10 — Path-to-10 climb (memory + factory gaps + checklist)
 
 Adam: build until all ten are ten. Shipped: `docs/TOP_10_PATH_TO_10.json` + `npm run path-to-10:status`; Chair every-turn founder-memory inject; BP assertion_spec closes 5 coverage gaps; managed-env allowlist EMAIL_*/GO_VEGAS_*; scorecard ~6.4→~6.8. Still NOT 10 — first dollar, Point B usability, SENTRY re-gate, FULLY_MACHINE_READY remain. Next: commit/push/redeploy → kick never-stop → re-run lifeos + site-builder SENTRY → first-dollar path.
