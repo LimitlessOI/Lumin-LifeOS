@@ -1,10 +1,10 @@
 /**
- * SYNOPSIS: Site Builder $49 publish checkout — Stripe session create + verify.
+ * SYNOPSIS: Site Builder beta publish checkout — Stripe session create + verify.
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import logger from './logger.js';
 import { getStripeClient } from './stripe-client.js';
-import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary } from '../config/site-builder-pricing.js';
 
 export async function createPublishCheckoutSession({ clientId, businessName, baseUrl, pool }) {
   if (!clientId || !/^[\w-]+$/.test(String(clientId))) {
@@ -22,7 +22,9 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
   }
 
   const safeBase = String(baseUrl || '').replace(/\/$/, '');
-  const label = businessName ? `Publish ${businessName}` : 'Publish your site';
+  const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
+  const label = businessName ? `Beta publish — ${businessName}` : 'Beta publish your site';
+  const description = `${SITE_BUILDER_PRICING.publish.description} (${getBetaPublishOfferSummary()})`;
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -32,7 +34,7 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
           currency: 'usd',
           product_data: {
             name: label,
-            description: SITE_BUILDER_PRICING.publish.description,
+            description,
           },
           unit_amount: Math.round(amountCents),
         },
@@ -44,6 +46,9 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
     metadata: {
       product: 'site-builder-publish',
       clientId: String(clientId),
+      beta: 'true',
+      careIncludedMonths: String(months),
+      offerSummary: getBetaPublishOfferSummary(),
     },
   });
 
@@ -59,6 +64,8 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
           JSON.stringify({
             lastCheckoutSessionId: session.id,
             lastCheckoutAt: new Date().toISOString(),
+            betaOffer: getBetaPublishOfferSummary(),
+            careIncludedMonths: months,
           }),
         ]
       );
@@ -67,7 +74,14 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
     }
   }
 
-  return { ok: true, url: session.url, sessionId: session.id, amountCents };
+  return {
+    ok: true,
+    url: session.url,
+    sessionId: session.id,
+    amountCents,
+    offer: getBetaPublishOfferSummary(),
+    careIncludedMonths: months,
+  };
 }
 
 export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }) {
@@ -93,6 +107,9 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
   }
 
   const dealValue = (session.amount_total || SITE_BUILDER_PRICING.publish.oneTimeCents) / 100;
+  const careMonths = Number(session.metadata?.careIncludedMonths || SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2);
+  const careUntil = new Date();
+  careUntil.setMonth(careUntil.getMonth() + careMonths);
 
   if (pool) {
     await pool.query(
@@ -108,7 +125,11 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
         JSON.stringify({
           publishPaidAt: new Date().toISOString(),
           stripeSessionId: session.id,
-          publishTier: 'entry',
+          publishTier: 'beta_entry',
+          beta: true,
+          careIncludedMonths: careMonths,
+          careIncludedUntil: careUntil.toISOString(),
+          offerSummary: session.metadata?.offerSummary || getBetaPublishOfferSummary(),
         }),
       ]
     );
@@ -119,6 +140,8 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
     clientId,
     dealValue,
     sessionId: session.id,
+    careIncludedMonths: careMonths,
+    careIncludedUntil: careUntil.toISOString(),
   };
 }
 

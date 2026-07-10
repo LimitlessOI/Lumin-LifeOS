@@ -34,6 +34,36 @@ function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
 }
 
+/** Founder personal inbox — never use as system outbound From. */
+const FOUNDER_PERSONAL_FROM = /^(adam@hopkinsgroup\.org)$/i;
+
+function extractEmailAddress(from) {
+  const raw = String(from || "").trim();
+  const angle = raw.match(/<([^>]+)>/);
+  return normalizeEmail(angle ? angle[1] : raw);
+}
+
+/**
+ * System outbound From only — never Adam's personal email.
+ * Prefer EMAIL_FROM when it is a system address; else WORK_EMAIL / LifeOS@.
+ */
+export function resolveSystemEmailFrom(env = process.env) {
+  const work = String(env.WORK_EMAIL || "LifeOS@hopkinsgroup.org").trim();
+  const configured = String(env.EMAIL_FROM || "").trim();
+  const configuredAddr = extractEmailAddress(configured);
+  if (configured && !FOUNDER_PERSONAL_FROM.test(configuredAddr)) {
+    return configured;
+  }
+  if (work && !FOUNDER_PERSONAL_FROM.test(extractEmailAddress(work))) {
+    return configured && FOUNDER_PERSONAL_FROM.test(configuredAddr)
+      ? `LifeOS <${extractEmailAddress(work)}>`
+      : (work.includes("<") ? work : `LifeOS <${work}>`);
+  }
+  const signup = String(env.GMAIL_SIGNUP_EMAIL || "").trim();
+  if (signup) return `LifeOS <${signup}>`;
+  return configured || null;
+}
+
 function safeJson(value) {
   try {
     return JSON.stringify(value ?? null);
@@ -46,7 +76,7 @@ export class NotificationService {
   constructor({ pool }) {
     this.pool = pool;
     this.provider = (process.env.EMAIL_PROVIDER || "postmark").toLowerCase();
-    this.fromDefault = process.env.EMAIL_FROM || null;
+    this.fromDefault = resolveSystemEmailFrom(process.env);
     this.postmarkToken = process.env.POSTMARK_SERVER_TOKEN || null;
     // SMTP transporter (lazy-created on first send)
     this._smtpTransporter = null;
@@ -193,7 +223,10 @@ export class NotificationService {
     metadata = null,
   }) {
     const recipient = normalizeEmail(to);
-    const fromAddr = from || this.fromDefault;
+    const fromAddr = resolveSystemEmailFrom({
+      ...process.env,
+      EMAIL_FROM: from || this.fromDefault || process.env.EMAIL_FROM,
+    });
 
     if (!recipient) {
       return { success: false, error: "Missing recipient (to)" };

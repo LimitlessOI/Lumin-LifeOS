@@ -35,9 +35,19 @@ import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
 import { createProspectClientId } from './site-builder-prospect-runner.js';
 
 // Entry-product pricing (foot-in-door → care plan + add-ons)
+import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary } from '../config/site-builder-pricing.js';
+
 const PRICING = {
-  publish: { name: 'Publish', price: '$49', description: 'Go live with your upgraded site' },
-  care: { name: 'Care plan', price: '$97/mo', description: 'Site + SEO + content maintenance' },
+  publish: {
+    name: 'Beta publish',
+    price: SITE_BUILDER_PRICING.publish.display,
+    description: SITE_BUILDER_PRICING.publish.description,
+  },
+  care: {
+    name: 'Care plan',
+    price: SITE_BUILDER_PRICING.carePlan.display,
+    description: SITE_BUILDER_PRICING.carePlan.description,
+  },
   pos: { name: 'POS referral', price: 'Commission', description: 'Jane / Mindbody / Square setup' },
 };
 
@@ -467,31 +477,34 @@ Return ONLY valid JSON:
     const leadingPainPoint = painPoints[0]
       ? `I noticed ${painPoints[0].toLowerCase()} — so I built a free upgraded version to show you what's possible.`
       : `I took a look at ${businessName || 'your website'} and built a free upgraded version to show you what's possible.`;
+    const offer = getBetaPublishOfferSummary();
+    const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
     return `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
   <p>Hi ${contactName || 'there'},</p>
   <p>${leadingPainPoint} Fully optimized for SEO, with a modern booking flow and automated blog content for your industry.</p>
+  <p>We're in <strong>beta</strong> — that's why early participants get a big discount if they want to go live.</p>
   <p>Here's what's included in the free preview:</p>
   <ul>
-    <li>✅ Modern click-funnel design (built to convert visitors to bookings)</li>
-    <li>✅ SEO-optimized pages + 3 industry blog posts</li>
-    <li>✅ Integrated booking system setup</li>
-    <li>✅ Mobile responsive + fast-loading</li>
-    <li>✅ YouTube video sync (your videos auto-appear on the site)</li>
+    <li>Modern click-funnel design (built to convert visitors to bookings)</li>
+    <li>SEO-optimized pages + industry blog posts</li>
+    <li>Integrated booking system setup</li>
+    <li>Mobile responsive + fast-loading</li>
+    <li>YouTube video sync (your videos auto-appear on the site)</li>
   </ul>
   <p style="margin: 24px 0;">
-    <a href="${previewUrl}" style="background: #7C3AED; color: white; padding: 12px 24px; border-radius: 24px; text-decoration: none; font-weight: bold; display: inline-block;">
-      👀 View Your Free Preview
+    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
+      View your free preview
     </a>
   </p>
-  <p>No obligation at all — I just wanted to show you what's possible. If you like it and want to go live with it, we can talk. If not, keep the preview as inspiration.</p>
-  <p>Best,<br>The Lumin AI Team</p>
+  <p>No obligation — if you like it, beta publish is ${SITE_BUILDER_PRICING.publish.display} and includes the first ${months} months of site management. After that, care is ${SITE_BUILDER_PRICING.carePlan.display} if you want us to keep managing it.</p>
+  <p>Best,<br>The Lumin team</p>
   <hr style="margin-top: 40px; border: none; border-top: 1px solid #eee;">
   <p style="font-size: 11px; color: #999;">
-    Publish your preview from $49 | Care plan from $97/mo<br>
-    <a href="${previewUrl}" style="color: #7C3AED;">${previewUrl}</a>
+    Beta offer: ${offer}<br>
+    <a href="${previewUrl}" style="color: #0F766E;">${previewUrl}</a>
   </p>
 </body>
 </html>`;

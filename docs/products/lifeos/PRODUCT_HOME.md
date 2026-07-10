@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Chair “set up an account” → founder-authorized browser signup (system email + Railway card). |
+| **Last Updated** | 2026-07-10 — never-stop run-once returns 202 (proxy timeout fix); mission-routes LIVE. |
 
 ---
 

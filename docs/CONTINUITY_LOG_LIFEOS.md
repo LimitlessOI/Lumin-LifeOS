@@ -8,6 +8,10 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — Site Builder beta $45 + system From
+
+Adam: outbound must not use his personal email; beta offer is $45 publish because it's beta, and includes first 2 months of site management. Shipped pricing/copy + `resolveSystemEmailFrom` guard. Next: tip-sync → prove checkout amountCents=4500 + resend From=LifeOS@.
+
 ## [FIX] Update 2026-07-10 — Unblock BuilderOS never-stop (mission-routes)
 
 Adam: system can't be building — fix it. Root cause: builderos step-04 had `mission-routes.js` as unreachable `createMissionRoutes` (not auto-registered). Shipped `registerMissionRoutes` + auto-register entry. Next: tip-sync → never-stop short-circuit step-04/05 → continue queue.

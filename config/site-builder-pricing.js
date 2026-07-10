@@ -1,18 +1,23 @@
 /**
- * SYNOPSIS: Site Builder entry + upsell pricing (founder-approved entry product model).
+ * SYNOPSIS: Site Builder entry + upsell pricing (beta publish offer).
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 
 export const SITE_BUILDER_PRICING = {
+  beta: true,
   publish: {
-    oneTimeCents: Number(process.env.SITE_BUILDER_PUBLISH_CENTS || 4900),
-    display: process.env.SITE_BUILDER_PUBLISH_DISPLAY || '$49',
-    description: 'Publish your upgraded site — go live on your domain',
+    oneTimeCents: Number(process.env.SITE_BUILDER_PUBLISH_CENTS || 4500),
+    display: process.env.SITE_BUILDER_PUBLISH_DISPLAY || '$45',
+    description:
+      process.env.SITE_BUILDER_PUBLISH_DESCRIPTION
+      || 'Beta publish — go live on your domain. Includes first 2 months of site management.',
   },
   carePlan: {
     monthlyCents: Number(process.env.SITE_BUILDER_CARE_PLAN_CENTS || 9700),
     display: process.env.SITE_BUILDER_CARE_PLAN_DISPLAY || '$97/mo',
     description: 'Site + SEO + content maintenance',
+    /** Free months included with beta publish checkout */
+    includedMonthsOnPublish: Number(process.env.SITE_BUILDER_CARE_INCLUDED_MONTHS || 2),
   },
   upsells: {
     'logo-brand-kit': { display: '$297', cadence: 'one-time' },
@@ -28,5 +33,10 @@ export const SITE_BUILDER_PRICING = {
     fullService: { display: '$297/mo', note: 'Legacy full-service tier' },
   },
 };
+
+export function getBetaPublishOfferSummary(pricing = SITE_BUILDER_PRICING) {
+  const months = pricing.carePlan?.includedMonthsOnPublish || 2;
+  return `${pricing.publish.display} beta publish (includes first ${months} months of site management)`;
+}
 
 export default SITE_BUILDER_PRICING;

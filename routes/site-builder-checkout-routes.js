@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Site Builder publish checkout routes ($49 entry product).
+ * SYNOPSIS: Site Builder beta publish checkout routes ($45 entry + 2 mo management).
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { Router } from 'express';
@@ -55,8 +55,10 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
   router.get('/publish/pricing', (_req, res) => {
     res.json({
       ok: true,
+      beta: SITE_BUILDER_PRICING.beta === true,
       publish: SITE_BUILDER_PRICING.publish,
       carePlan: SITE_BUILDER_PRICING.carePlan,
+      offer: `${SITE_BUILDER_PRICING.publish.display} beta publish includes first ${SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2} months of site management`,
     });
   });
 
@@ -112,26 +114,28 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
       }
 
       const previewUrl = `${String(baseUrl || '').replace(/\/$/, '')}/previews/${encodeURIComponent(clientId)}/`;
+      const months = result.careIncludedMonths || SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
       res.set('Content-Type', 'text/html; charset=utf-8');
       res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>You're live — Site Builder</title>
+  <title>You're in beta — Site Builder</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 520px; margin: 48px auto; padding: 0 20px; color: #111; }
-    h1 { font-size: 1.5rem; }
-    a { color: #6d28d9; }
-    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-top: 16px; }
+    body { font-family: Georgia, 'Times New Roman', serif; max-width: 520px; margin: 48px auto; padding: 0 20px; color: #111; background: linear-gradient(180deg, #ecfeff 0%, #fff 40%); min-height: 100vh; }
+    h1 { font-size: 1.6rem; }
+    a { color: #0f766e; }
+    .card { border: 1px solid #99f6e4; border-radius: 12px; padding: 20px; margin-top: 16px; background: #fff; }
   </style>
 </head>
 <body>
-  <h1>Payment received — thank you</h1>
-  <p>Your publish order (${SITE_BUILDER_PRICING.publish.display}) is confirmed. We'll finish domain setup and handoff next.</p>
+  <h1>Payment received — welcome to the beta</h1>
+  <p>Your ${SITE_BUILDER_PRICING.publish.display} beta publish is confirmed. The discount is because we're in beta — and your first ${months} months of site management are included.</p>
   <div class="card">
     <p><strong>Preview:</strong> <a href="${previewUrl}">Open your site</a></p>
-    <p><strong>Next:</strong> Reply to our email if you want the care plan (${SITE_BUILDER_PRICING.carePlan.display}) or add-ons from your editor sidebar.</p>
+    <p><strong>Included:</strong> ${months} months of site management (then ${SITE_BUILDER_PRICING.carePlan.display} if you continue).</p>
+    <p><strong>Next:</strong> We'll finish domain setup and handoff. Reply to our email anytime for add-ons from your editor sidebar.</p>
   </div>
 </body>
 </html>`);

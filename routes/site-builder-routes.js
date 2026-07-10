@@ -698,7 +698,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       EMAIL_FROM: { required: true, purpose: 'Sender email address for outreach' },
       EMAIL_PROVIDER: { required: true, purpose: 'Email provider: smtp (Gmail) or postmark' },
       SITE_BASE_URL: { required: false, purpose: 'Public preview URL base (falls back to RAILWAY_PUBLIC_DOMAIN)' },
-      STRIPE_SECRET_KEY: { required: true, purpose: 'Entry publish checkout ($49 default)' },
+      STRIPE_SECRET_KEY: { required: true, purpose: 'Entry publish checkout ($45 beta default)' },
       SLACK_WEBHOOK_URL: { required: false, purpose: 'Warm lead notifications (optional)' },
     };
 

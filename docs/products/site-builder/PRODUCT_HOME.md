@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — T02 lean built + durable preview + live Stripe checkout; strip previewHtml from list. |
+| **Last Updated** | 2026-07-10 — Beta offer $45 publish + 2 mo management; system From only (not founder personal). |
 
 ---
 
@@ -102,8 +102,8 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 ## REVENUE MODEL
 | Revenue Stream | Amount | Notes |
 |---------------|--------|-------|
-| **Entry publish (front door)** | **$49 one-time** (env: `SITE_BUILDER_PUBLISH_CENTS`) | Free preview → low-friction checkout → second sales |
-| Monthly care plan (site + SEO + content) | **$97/mo** entry → scale to $297–$597/mo | Recurring MRR after publish |
+| **Entry publish (beta front door)** | **$45 one-time** (env: `SITE_BUILDER_PUBLISH_CENTS`) | Beta discount for early participants; includes first **2 months** site management |
+| Monthly care plan (site + SEO + content) | **$97/mo** after included months → scale to $297–$597/mo | Recurring MRR after beta care window |
 | À-la-carte sidebar upsells | $97–$1,497 + management | Logo, GBP/SEO, ads/funnels, social — competitor-aware |
 | Legacy closer tiers | $997–$1,997 one-time | Upsell after entry publish — not cold-email front door |
 | POS referral commission | $50–$2,500 | Per signup via our affiliate link |
@@ -297,6 +297,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-10 | **Beta money offer + system From** — publish default **$45**; includes first **2 months** care; outreach/checkout copy says beta discount; `resolveSystemEmailFrom` never sends as `adam@hopkinsgroup.org` (uses `LifeOS@hopkinsgroup.org` / WORK_EMAIL). | Founder: don't use personal email for outbound; beta participants get big discount + 2 months management. | ⚠️ tip-sync + checkout $45 proof |
 | 2026-07-10 | **GAP-FILL prospect-crm auth** — read `command_key`/`commandKey`/`lifeos_key` + Bearer JWT, not only `lifeos_command_key`. | UI walk: CRM 401 despite signed-in founder session. | ✅ | pending | tip UI |
 | 2026-07-10 | **GAP-FILL T02 preview durability** — store `previewHtml`/`previewMeta` on prospect row; `/previews/:id/index.html` DB fallback + checkout meta fallback. | Preview 200 then 404 across replicas (ephemeral disk); checkout Preview not found. | ⚠️ tip proof pending |
 | 2026-07-10 | **GAP-FILL T02 lean no-AI template** — `renderLeanProspectHtml` + `skipAi`/`leanTemplate` flags through route→pipeline→build; SMTP tries 465 then 587 on timeout. | AI generate hung/OOM'd past timeouts; Gmail SMTP connection timeout on tip. | ⚠️ tip proof pending |
