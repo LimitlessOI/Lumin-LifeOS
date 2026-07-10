@@ -169,13 +169,16 @@
     },
     {
       "id": "step-1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240801_site_builder_templates.sql",
       "task": "Create starter templates table",
       "spec": "CREATE TABLE IF NOT EXISTS site_builder_templates with columns id UUID PK default gen_random_uuid(), name TEXT NOT NULL, thumbnail_url TEXT, config JSONB NOT NULL, sort_order INT DEFAULT 0, created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now(). Seed 5 rows for distinct starter templates (e.g. 'Clean Business','Bold Agency','Minimal Portfolio','Warm Local','Tech Startup') using INSERT INTO ... ON CONFLICT DO NOTHING so re-runs are safe. Satisfies ux_friction_1 data layer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "5b1c400053580235a6db1e8d97cc2f5feb1f8954",
+      "last_attempt_at": "2026-07-10T21:08:39.413Z",
+      "completed_at": "2026-07-10T21:08:56.342Z"
     },
     {
       "id": "step-2",
