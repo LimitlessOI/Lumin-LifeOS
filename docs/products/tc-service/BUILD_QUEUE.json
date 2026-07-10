@@ -1,0 +1,147 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "tc-service",
+  "planned_at": "2026-07-10T03:29:12.026Z",
+  "backlog_signature": "c21c6c94ac1b59b4",
+  "steps": [
+    {
+      "id": "s1",
+      "status": "pending",
+      "target_file": "db/migrations/20240601_tc_intake_e2e.sql",
+      "task": "Add intake_runs and document_qa_results tables for end-to-end transaction intake tracking",
+      "spec": "CREATE TABLE IF NOT EXISTS intake_runs with columns id uuid PK default gen_random_uuid(), transaction_id uuid, email_message_id text, skyslope_file_id text, status text, run_log jsonb, created_at timestamptz default now(), updated_at timestamptz default now(). CREATE TABLE IF NOT EXISTS document_qa_results with id uuid PK default gen_random_uuid(), intake_run_id uuid, document_name text, issues jsonb, passed boolean, created_at timestamptz default now(). No DROP/ALTER on any existing table.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s2",
+      "status": "pending",
+      "target_file": "db/migrations/20240602_tc_billing_and_agents.sql",
+      "task": "Add stripe_subscriptions and enrolled_agents tables for billing and first paying agent enrollment",
+      "spec": "CREATE TABLE IF NOT EXISTS stripe_subscriptions with id uuid PK default gen_random_uuid(), agent_registry_id uuid, stripe_customer_id text, stripe_subscription_id text, plan_tier text, status text, created_at timestamptz default now(), updated_at timestamptz default now(). CREATE TABLE IF NOT EXISTS enrolled_agents with id uuid PK default gen_random_uuid(), agent_registry_id uuid, enrolled_at timestamptz default now(), onboarding_complete boolean default false. No DROP/ALTER.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s3",
+      "status": "pending",
+      "target_file": "services/tc-intake-runner.js",
+      "task": "Implement end-to-end transaction intake service: email scan → document QA → SkySlope upload",
+      "spec": "Export async function runIntake(deps, {transactionId, emailMessageId}) that (1) uses deps.db to load transaction and linked email, (2) runs document QA via deps.callCouncilMember('document-qa', prompt) checking for missing signatures and missing fields, writes results to document_qa_results, (3) if QA passes invokes the existing SkySlope browser-agent upload path via deps.skySlopeAgent.uploadDocs(), (4) writes an intake_runs row with final status 'completed' or 'failed' + full run_log, (5) returns {intakeRunId, status, qaResults, skySlopeFileId}. No top-level browser globals. Import only pg (already installed) via deps.db, no AI SDK import.",
+      "depends_on": [
+        "s1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s4",
+      "status": "pending",
+      "target_file": "services/stripe-billing.js",
+      "task": "Wire Stripe billing to TC plan tiers and expose enrollAgent helper",
+      "spec": "Export functions: createCheckoutSession(deps, {agentRegistryId, planTier}) that calls deps.stripe.checkout.sessions.create with price mapped from planTier ('starter'|'pro'|'enterprise'), and enrollAgent(deps, {agentRegistryId, stripeSubscriptionId, planTier}) that inserts into enrolled_agents and stripe_subscriptions via deps.db, returns enrolled agent record. Validate Postmark/Twilio webhook signatures via deps.validateWebhookSignature(secret, payload, sig). No top-level browser globals. Import only node builtins and deps-injected stripe client.",
+      "depends_on": [
+        "s2"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s5",
+      "status": "pending",
+      "target_file": "services/document-qa.js",
+      "task": "Implement missing-signature and missing-field detection for uploaded transaction documents",
+      "spec": "Export async function runDocumentQA(deps, {documentBuffers, transactionId}) that for each document calls deps.callCouncilMember('document-qa', JSON.stringify({document: buf.toString('base64'), transactionId})) expecting JSON response {issues:[{type:'missing-signature'|'missing-field', location:string}], passed:boolean}. Aggregates results array. Returns {allPassed:bool, results:[{documentName, issues, passed}]}. No top-level browser globals, no AI SDK import.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s6",
+      "status": "pending",
+      "target_file": "services/imap-railway-bootstrap.js",
+      "task": "Verify IMAP env vars are set in Railway and run dry-run email scan",
+      "spec": "Export async function verifyImapAndDryRun(deps) that checks process.env for IMAP_HOST, IMAP_USER, IMAP_PASS; if any missing returns {ready:false, missing:[...]}. If all present calls deps.imapClient.scan({dryRun:true}) and returns {ready:true, scannedCount:number, sample:[...first 3 subjects]}. No top-level browser globals.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s7",
+      "status": "pending",
+      "target_file": "routes/tc-intake-routes.js",
+      "task": "Register POST /api/tc/intake/run and GET /api/tc/intake/runs routes for end-to-end intake execution",
+      "spec": "Export registerTcIntakeRoutes(app, deps). POST /api/tc/intake/run accepts {transactionId, emailMessageId}, calls tcIntakeRunner.runIntake(deps, ...), returns 200 with intakeRunId and status or 500 on error. GET /api/tc/intake/runs returns last 20 intake_runs ordered by created_at desc from deps.db. Validate req.body fields present. Mount auth middleware from deps.requireAuth. No top-level browser globals.",
+      "depends_on": [
+        "s3",
+        "s5"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s8",
+      "status": "pending",
+      "target_file": "routes/tc-billing-routes.js",
+      "task": "Register billing and agent enrollment routes for first paying agent client",
+      "spec": "Export registerTcBillingRoutes(app, deps). POST /api/tc/billing/checkout calls stripeBilling.createCheckoutSession and returns {url}. POST /api/tc/billing/enroll accepts {agentRegistryId, stripeSubscriptionId, planTier}, calls stripeBilling.enrollAgent, returns enrolled record. POST /api/tc/billing/webhook validates Stripe webhook signature via deps.validateWebhookSignature, updates stripe_subscriptions status. All routes require deps.requireAuth except webhook. No top-level browser globals.",
+      "depends_on": [
+        "s4"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s9",
+      "status": "pending",
+      "target_file": "routes/tc-imap-routes.js",
+      "task": "Register IMAP bootstrap verification and dry-run scan routes",
+      "spec": "Export registerTcImapRoutes(app, deps). GET /api/tc/imap/status calls imapRailwayBootstrap.verifyImapAndDryRun(deps) returns {ready, missing?, scannedCount?, sample?}. POST /api/tc/imap/dry-run forces a fresh dry-run scan and returns results. Requires deps.requireAuth. No top-level browser globals.",
+      "depends_on": [
+        "s6"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s10",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register all three new route modules so they mount at boot without editing server.js",
+      "spec": "Add entries for 'routes/tc-intake-routes.js' with registerFn 'registerTcIntakeRoutes', 'routes/tc-billing-routes.js' with registerFn 'registerTcBillingRoutes', and 'routes/tc-imap-routes.js' with registerFn 'registerTcImapRoutes' to the existing JSON array. Preserve all pre-existing entries exactly.",
+      "depends_on": [
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "s11",
+      "status": "founder_gated",
+      "target_file": "public/overlay/tc-intake-dashboard.html",
+      "task": "Build agent-facing real-time file status card and one-tap mobile approval UI for intake runs",
+      "spec": "Self-contained HTML page with inline CSS and vanilla JS (no framework imports). Fetches GET /api/tc/intake/runs on load and renders each run as a status card showing transactionId, status badge (completed=green/failed=red/pending=yellow), qaResults summary, and skySlopeFileId. Includes one-tap 'Approve & Continue' button per pending run that POSTs to /api/tc/intake/run with the run's transactionId and emailMessageId then refreshes. Mobile-responsive with viewport meta. All JS inside <script> tags only, no window/document at module top level.",
+      "depends_on": [
+        "s7"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "s12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/tc-billing-enroll.html",
+      "task": "Build founder-gated agent enrollment and Stripe checkout UI for first paying agent client",
+      "spec": "Self-contained HTML page with inline CSS and vanilla JS. Shows plan tier selector (starter/pro/enterprise), on submit POSTs to /api/tc/billing/checkout and redirects to returned Stripe checkout URL. After return shows enrollment confirmation by calling /api/tc/billing/enroll with query params stripeSubscriptionId and planTier. Mobile-responsive. All JS inside <script> tags only. No window/document at module top level in any script that could run server-side.",
+      "depends_on": [
+        "s8"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    }
+  ]
+}
