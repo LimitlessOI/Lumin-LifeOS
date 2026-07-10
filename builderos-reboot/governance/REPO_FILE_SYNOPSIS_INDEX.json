@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:39:53.432Z",
+  "generated_at": "2026-07-10T03:41:16.591Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11387,
+  "file_count": 11388,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85934,6 +85934,13 @@
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/tc-intake-runner.js",
+      "synopsis": "Exports runIntake — services/tc-intake-runner.js.",
+      "bytes": 5814,
+      "mtime": "2026-07-10T03:41:16.591Z",
+      "indexed_at": "2026-07-10T03:41:16.591Z"
     },
     {
       "path": "services/tc-intake-workspace-service.js",
