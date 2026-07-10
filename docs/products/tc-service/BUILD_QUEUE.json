@@ -217,7 +217,7 @@
     },
     {
       "id": "step-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcIntakePipeline.mjs",
       "task": "Implement end-to-end transaction intake orchestrator (item 1, item 32)",
       "spec": "Export async function runIntakePipeline(deps) that: (1) calls deps.imapScan() to fetch unread contract emails, (2) scores each via deps.callCouncilMember('tc-triage', prompt) to extract address/parties/dates, (3) upserts a placeholder transaction row into tc_transactions via deps.db, (4) records a row in tc_intake_runs with status=completed|failed, (5) triggers SkySlope doc upload stub via deps.skySlopeAgent(txId, docs). No browser globals. Returns {processed, errors}.",
@@ -225,7 +225,10 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "b0e850fb859ccbfec8a0d963ea5293759766e6db",
+      "last_attempt_at": "2026-07-10T09:10:12.853Z",
+      "completed_at": "2026-07-10T09:10:53.786Z"
     },
     {
       "id": "step-03",
