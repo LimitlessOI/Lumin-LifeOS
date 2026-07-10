@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Prospect resume-on-poll (multi-instance orphan fix). |
+| **Last Updated** | 2026-07-10 — Prospect resume DB claim lock (no duplicate multi-instance builds). |
 
 ---
 

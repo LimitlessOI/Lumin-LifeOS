@@ -155,6 +155,39 @@ export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs
     return { ok: true, resumed: false, reason: 'too_fresh' };
   }
 
+  const claimExpires = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+  const claimToken = `claim_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  let claimed = false;
+  try {
+    const claim = await pipeline.pool.query(
+      `UPDATE prospect_sites
+          SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+              updated_at = NOW()
+        WHERE client_id = $1
+          AND status = 'building'
+          AND (
+            metadata->>'jobClaimExpiresAt' IS NULL
+            OR (metadata->>'jobClaimExpiresAt')::timestamptz < NOW()
+          )
+        RETURNING client_id`,
+      [
+        clientId,
+        JSON.stringify({
+          jobClaimToken: claimToken,
+          jobClaimExpiresAt: claimExpires,
+          jobStage: 'claimed_for_resume',
+          jobHeartbeatAt: new Date().toISOString(),
+        }),
+      ]
+    );
+    claimed = (claim.rows || []).length > 0;
+  } catch (err) {
+    return { ok: false, resumed: false, reason: `claim_failed:${err.message}` };
+  }
+  if (!claimed) {
+    return { ok: true, resumed: false, reason: 'claimed_elsewhere' };
+  }
+
   const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
   const options = {
     clientId: row.client_id,
@@ -171,7 +204,7 @@ export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs
   }
 
   activeJobs.add(String(clientId));
-  logger.info('[PROSPECT-JOB] Resuming orphaned building job on this instance', { clientId });
+  logger.info('[PROSPECT-JOB] Resuming orphaned building job on this instance', { clientId, claimToken });
   if (typeof pipeline.touchProspectJob === 'function') {
     await pipeline.touchProspectJob(clientId, 'resumed').catch(() => null);
   }
