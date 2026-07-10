@@ -69,4 +69,4 @@ Studio: `/creative`, `/creative/studio`
 | Date | What | Why | State |
 |------|------|-----|-------|
 | 2026-07-10 | **Tip footage_edit PASS** — health `ffmpeg:true`; upload sample MP4; async render completed; output 1.3MB 9:16 at `/previews/creative/outputs/...`. Receipt `products/receipts/CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`. Default render for footage_edit is async (sync was Railway 502). | Plan proof criteria. | ✅ tip `069f8a4d25` |
-| 2026-07-10 | **v1 Creative Engine shipped** — schema, FFmpeg in Docker, media-storage, footage_edit + photo_polish + script_compose gate + generative_broll scaffold, routes/UI auto-registered, studio SSR. | Adam: build Creative Engine; video editing in v1; do all modes; decide for him. | ✅ local; tip-sync pending |
+| 2026-07-10 | **v1 Creative Engine shipped** — schema, FFmpeg in Docker, media-storage, footage_edit + photo_polish + script_compose gate + generative_broll scaffold, routes/UI auto-registered, studio SSR. | Adam: build Creative Engine; video editing in v1; do all modes; decide for him. | ✅ tip `069f8a4d25` + async fix on `main` |

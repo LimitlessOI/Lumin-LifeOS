@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T21:43:43.321Z",
+  "generated_at": "2026-07-10T21:45:25.901Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11437,
   "files": [
@@ -39029,9 +39029,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 3285,
-      "mtime": "2026-07-10T21:39:44.149Z",
-      "indexed_at": "2026-07-10T21:43:43.321Z"
+      "bytes": 3300,
+      "mtime": "2026-07-10T21:45:04.995Z",
+      "indexed_at": "2026-07-10T21:45:25.901Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -39443,9 +39443,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 85688,
-      "mtime": "2026-07-10T21:33:45.136Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z"
+      "bytes": 85792,
+      "mtime": "2026-07-10T21:45:04.932Z",
+      "indexed_at": "2026-07-10T21:45:25.901Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",

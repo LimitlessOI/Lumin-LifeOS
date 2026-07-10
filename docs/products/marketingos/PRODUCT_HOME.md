@@ -1330,7 +1330,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
-| 2026-07-10 | **Creative Engine consumer link** — Marketing dashboard links `/creative/studio` for footage/photo render via shared Creative Engine. | Adam: SMOS + Creative Engine together. | ✅ | ⬜ | tip pending |
+| 2026-07-10 | **Creative Engine consumer link** — Marketing dashboard links `/creative/studio` for footage/photo render via shared Creative Engine (video edit via Creative Engine, not MarketingOS-owned FFmpeg). | Adam: SMOS + Creative Engine together. | ✅ | ⬜ | ✅ tip proof `CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json` |
 | 2026-07-10 | **Founder-usable SMOS GAP-FILL** — fixed `/marketing` UI: Extract/Generate buttons; content list reads `{pieces}`; approve sends `action`; export uses auth+blob download; branded SocialMediaOS dashboard + calendar/atoms links. LifeOS nav → `/marketing`; `?stack=socialmediaos` redirects to `/marketing`; LifeRE Marketing tab links full app; legacy `socialmediaos-session.html` redirects (dead `/api/v1/socialmediaos/*`). | Adam: use SMOS ASAP as standalone app + inside LifeOS/RE; UI walk found Phase 1 API live but UI incomplete/broken. | ✅ | ⬜ | tip UI walk pending deploy |
 | 2026-07-10 | **GAP-FILL UI catch logger** — browser scripts used `logger.error` (undefined) so Proceed/coach errors were silent. Switched to `console.error` + visible message. |
 | 2026-07-10 | **GAP-FILL session UI auth + owner UUID** — SSR sends JWT/command-key; `getOwnerId` reads `lifeosUser.sub` and maps non-UUID ids to deterministic UUIDs (schema is UUID). | Founder UI: Proceed failed — owner_id "1" invalid for UUID column. | ✅ | ⬜ | tip UI |
