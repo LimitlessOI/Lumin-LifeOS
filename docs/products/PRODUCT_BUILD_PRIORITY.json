@@ -6,7 +6,7 @@
     "purpose": "Founder-owned financial priority order for the autonomous product-build loop. The never-stop factory builds eligible product work in this order (highest financial priority first). This is a BUSINESS decision — edit `priority` to change what the system builds first."
   },
   "schema": "product_build_priority_v1",
-  "updated_at": "2026-07-09",
+  "updated_at": "2026-07-10",
   "rules": {
     "financial_first": "`priority` is an ordered list of product_ids by financial priority, highest first. The loop builds listed products before unlisted ones.",
     "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity — a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
@@ -14,13 +14,19 @@
     "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
   },
   "priority": [
+    "marketingos",
+    "lifeos",
     "limitlessos",
     "site-builder",
-    "marketingos",
-    "lifeos"
+    "tc-service",
+    "builderos",
+    "command-center",
+    "ai-council",
+    "project-governance"
   ],
   "notes": [
-    "2026-07-09: limitlessos (Go Vegas outreach scheduler) promoted to #1 — nearest live revenue loop (invite LV businesses under daily caps). site-builder + marketingos queues are complete; lifeos Phase 2 unblocked after auto-register chicken-egg fix.",
-    "Seeded 2026-07-06 with site-builder first per founder direction. 2026-07-07: marketingos added at rank 2 for SMOS Phase 1."
+    "2026-07-10: Founder — keep building vision in any order; do not stop. Expanded priority so never-stop plans queues for products with documented backlog (tc-service, builderos, …) after MarketingOS Layer B closed. marketingos/lifeos first for vision continuity.",
+    "2026-07-09: limitlessos (Go Vegas) was #1 — nearest live revenue loop. site-builder + marketingos Phase1/2/intel queues complete.",
+    "Seeded 2026-07-06 with site-builder first per founder direction."
   ]
 }

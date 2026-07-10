@@ -1,0 +1,48 @@
+{
+  "schema": "sentry_marketingos_layer_b_v1",
+  "at": "2026-07-10T03:19:40.455Z",
+  "base": "https://lumin-web-production-e3a9.up.railway.app",
+  "ok": true,
+  "layer": "B",
+  "product": "marketingos",
+  "passed": [
+    "ui_landing",
+    "ui_session_new",
+    "ui_calendar",
+    "browser_api_loop",
+    "audio_named_blocked"
+  ],
+  "failed": [],
+  "results": {
+    "ui_landing": {
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    "ui_session_new": {
+      "ok": true,
+      "detail": ""
+    },
+    "ui_calendar": {
+      "ok": true,
+      "detail": ""
+    },
+    "browser_api_loop": {
+      "ok": true,
+      "detail": "session 5a3818bc-f455-4550-8e9a-d75ce8885fb2"
+    },
+    "audio_upload": {
+      "ok": true,
+      "blocked": true,
+      "code": "STORAGE_R2_UNVERIFIED",
+      "detail": "Audio path excluded until STORAGE_* verified on Railway"
+    },
+    "audio_named_blocked": {
+      "ok": true,
+      "detail": "STORAGE_R2_UNVERIFIED"
+    }
+  },
+  "named_blockers": [
+    "STORAGE_R2_UNVERIFIED"
+  ],
+  "findings": []
+}

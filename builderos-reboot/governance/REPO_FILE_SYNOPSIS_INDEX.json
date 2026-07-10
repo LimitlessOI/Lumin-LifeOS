@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:16:46.685Z",
+  "generated_at": "2026-07-10T03:20:18.911Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11384,
+  "file_count": 11385,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39371,9 +39371,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 86208,
-      "mtime": "2026-07-10T03:16:16.586Z",
-      "indexed_at": "2026-07-10T03:16:46.685Z"
+      "bytes": 84600,
+      "mtime": "2026-07-10T03:20:15.488Z",
+      "indexed_at": "2026-07-10T03:20:18.911Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -39532,9 +39532,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 1693,
-      "mtime": "2026-07-09T03:11:48.446Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 1890,
+      "mtime": "2026-07-10T03:20:15.500Z",
+      "indexed_at": "2026-07-10T03:20:18.911Z",
       "synopsis_index_only": true
     },
     {
@@ -62934,6 +62934,14 @@
       "bytes": 1081,
       "mtime": "2026-07-10T02:08:34.937Z",
       "indexed_at": "2026-07-10T02:08:57.077Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json",
+      "synopsis": "Product receipt — SENTRY MARKETINGOS LAYER B.",
+      "bytes": 1036,
+      "mtime": "2026-07-10T03:19:47.270Z",
+      "indexed_at": "2026-07-10T03:20:18.911Z",
       "synopsis_index_only": true
     },
     {
