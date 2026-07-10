@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T01:51:56.378Z",
+  "generated_at": "2026-07-10T01:54:07.448Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11376,
+  "file_count": 11377,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -69813,6 +69813,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/verify-marketing-phase1-live.mjs",
+      "synopsis": "Script — Verify Marketing Phase1 Live.",
+      "bytes": 5994,
+      "mtime": "2026-07-10T01:54:07.448Z",
+      "indexed_at": "2026-07-10T01:54:07.448Z"
     },
     {
       "path": "scripts/verify-marketing-phase1.mjs",
