@@ -250,8 +250,17 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   });
   app.post("/api/v1/lifeos/never-stop/run-once", requireKey, async (_req, res) => {
     try {
-      const result = await runNeverStopProductFactoryOnce({ logger });
-      res.status(result?.ok === false && result?.halted ? 503 : 200).json({ ok: result?.ok !== false, ...result });
+      // Return immediately — a full cycle often exceeds Railway's ~30s proxy
+      // timeout ("Application failed to respond"), which made the system look
+      // dead while work was still running. Scheduler ticks already run async.
+      const status = getNeverStopProductFactoryStatus({ events: 5 });
+      if (status?.never_stop?.running) {
+        return res.status(202).json({ ok: true, accepted: true, skipped: true, reason: "already_running" });
+      }
+      res.status(202).json({ ok: true, accepted: true, message: "never-stop cycle started in background" });
+      runNeverStopProductFactoryOnce({ logger }).catch((err) => {
+        logger.warn?.({ err: err.message }, "[NEVER-STOP] background run-once failed");
+      });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

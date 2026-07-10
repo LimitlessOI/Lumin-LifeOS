@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-10 | **GAP-FILL mission-routes DONE + never-stop 202** — tip proved `module-health` mounted + `GET /api/missions` 200; marked builderos step-04/05 done; run-once no longer blocks on Railway proxy timeout. | Never-stop spun unreachable; run-once 502 made building look dead. | ✅ tip proof | tip-sync + kick |
 | 2026-07-10 | **GAP-FILL mission-routes mount** — rewrote `routes/mission-routes.js` to export `registerMissionRoutes` (8 `/api/missions*` routes against live mission-ledger); added auto-register entry. Cleared step-04 auto-register last_error; step-05 file_contains for mission entry. | Never-stop spun on builderos step-04: file existed as `createMissionRoutes` but was never auto-registered → module-health false done forever; system appeared "building" with total_runs:0. | ✅ local mount smoke | tip-sync + never-stop run-once |
 | 2026-07-10 | **Auto-reg revive immediate after s10 DONE** — skip 15m cooldown once register-config sibling is done. | s10 done but s7/s8/s9 still waiting cooldown. | ✅ | push |
 | 2026-07-10 | **TC auto-register GAP-FILL** — s10 false-done on shared config file; conductor added real TC module entries + file_contains on s10. | Pre-existing short-circuit used wrong last-touch SHA. | ✅ | tip redeploy |

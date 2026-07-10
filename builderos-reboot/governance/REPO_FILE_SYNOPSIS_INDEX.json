@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T19:09:50.101Z",
+  "generated_at": "2026-07-10T19:16:26.112Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11414,
   "files": [
@@ -38848,9 +38848,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 173030,
-      "mtime": "2026-07-10T19:09:01.718Z",
-      "indexed_at": "2026-07-10T19:09:50.101Z"
+      "bytes": 173352,
+      "mtime": "2026-07-10T19:16:23.399Z",
+      "indexed_at": "2026-07-10T19:16:26.112Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39291,9 +39291,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 597939,
-      "mtime": "2026-07-10T18:15:34.896Z",
-      "indexed_at": "2026-07-10T18:16:13.149Z"
+      "bytes": 598258,
+      "mtime": "2026-07-10T19:16:23.146Z",
+      "indexed_at": "2026-07-10T19:16:26.112Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -87218,9 +87218,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 13044,
-      "mtime": "2026-07-10T17:41:06.390Z",
-      "indexed_at": "2026-07-10T17:42:28.207Z",
+      "bytes": 13596,
+      "mtime": "2026-07-10T19:16:00.049Z",
+      "indexed_at": "2026-07-10T19:16:26.112Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
