@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T09:18:01.228Z",
+  "generated_at": "2026-07-10T09:19:22.449Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11406,
   "files": [
@@ -66237,9 +66237,9 @@
     {
       "path": "routes/tcBillingRoutes.mjs",
       "synopsis": "Registers TcBillingRoutes routes/handlers (routes/tcBillingRoutes.mjs).",
-      "bytes": 3758,
-      "mtime": "2026-07-10T09:18:01.228Z",
-      "indexed_at": "2026-07-10T09:18:01.228Z"
+      "bytes": 5114,
+      "mtime": "2026-07-10T09:19:22.449Z",
+      "indexed_at": "2026-07-10T09:19:22.449Z"
     },
     {
       "path": "routes/tco-agent-routes.js",
