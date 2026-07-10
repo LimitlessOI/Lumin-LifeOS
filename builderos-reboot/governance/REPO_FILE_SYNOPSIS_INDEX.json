@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T21:12:10.898Z",
+  "generated_at": "2026-07-10T21:14:54.832Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11416,
+  "file_count": 11417,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85710,6 +85710,13 @@
       "bytes": 3684,
       "mtime": "2026-06-21T21:39:17.839Z",
       "indexed_at": "2026-07-10T20:41:50.179Z"
+    },
+    {
+      "path": "services/site-builder-save-confirmation.js",
+      "synopsis": "Exports buildSaveConfirmation — services/site-builder-save-confirmation.js.",
+      "bytes": 574,
+      "mtime": "2026-07-10T21:14:54.832Z",
+      "indexed_at": "2026-07-10T21:14:54.832Z"
     },
     {
       "path": "services/site-builder-service-catalog.js",
