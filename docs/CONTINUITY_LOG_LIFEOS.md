@@ -16,7 +16,7 @@
 - Fixed migration content, snapshot sanitize, `registerAccountManagerRoutes`, energy `logged_at`.
 
 ### Next
-- Push → redeploy → `/ready` migrations_failed/modules_errored/routes_missing_critical clear → keep queue moving (founder UIs or dashboard).
+- ✅ Live proved tip `4e1063c616` — `/ready` degraded=false (no mig/mod/route flags). Next: founder-gated phase3 overlays or dashboard queue — keep building.
 
 ---
 
