@@ -1,15 +1,13 @@
 /**
- * SYNOPSIS: HTTP route module — Tc Intake Routes.
+ * SYNOPSIS: Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).
  */
-import tcIntakeRunner from '../services/tc-intake-runner.js';
+import { tcIntakeRunner } from '../services/tc-intake-runner.js';
 
-function getDb(deps) {
-  return deps?.pool || deps?.db;
-}
-
-function registerTcIntakeRoutes(app, deps) {
-  const db = getDb(deps);
-  const requireAuth = deps?.requireAuth || ((req, res, next) => next());
+export function registerTcIntakeRoutes(app, deps) {
+  const requireAuth = deps.requireAuth || deps.requireKey;
+  if (typeof requireAuth !== 'function') {
+    throw new Error('Tc intake routes require deps.requireAuth or deps.requireKey');
+  }
 
   app.post('/api/tc/intake/run', requireAuth, async (req, res) => {
     try {
@@ -21,63 +19,47 @@ function registerTcIntakeRoutes(app, deps) {
         });
       }
 
-      if (!db) {
-        return res.status(500).json({ error: 'Database dependency unavailable' });
-      }
-
-      const runResult = await tcIntakeRunner.runIntake(deps, {
+      const result = await tcIntakeRunner.runIntake(deps, {
         transactionId,
         emailMessageId,
       });
 
-      const intakeRunId =
-        runResult?.intakeRunId ||
-        runResult?.id ||
-        runResult?.runId ||
-        null;
-      const status = runResult?.status || 'unknown';
-
       return res.status(200).json({
-        intakeRunId,
-        status,
+        intakeRunId: result?.intakeRunId ?? result?.id ?? null,
+        status: result?.status ?? 'unknown',
       });
     } catch (error) {
-      deps?.logger?.error?.(
-        { err: error, transactionId: req.body?.transactionId, emailMessageId: req.body?.emailMessageId },
-        'tc intake run failed',
-      );
+      deps.logger?.error?.({ err: error }, 'tc intake run failed');
       return res.status(500).json({
-        error: 'Failed to run tc intake',
+        error: 'failed to run intake',
       });
     }
   });
 
-  app.get('/api/tc/intake/runs', requireAuth, async (req, res) => {
+  app.get('/api/tc/intake/runs', requireAuth, async (_req, res) => {
     try {
-      if (!db) {
-        return res.status(500).json({ error: 'Database dependency unavailable' });
+      const db = deps.db || deps.pool;
+      if (!db?.query) {
+        throw new Error('Database dependency missing: expected deps.db or deps.pool');
       }
 
       const result = await db.query(
-        `
-          SELECT id, transaction_id, email_message_id, skyslope_file_id, status, run_log, created_at, updated_at
-          FROM intake_runs
-          ORDER BY created_at DESC
-          LIMIT 20
-        `,
+        `SELECT id, transaction_id, email_message_id, skyslope_file_id, status, run_log, created_at, updated_at
+         FROM intake_runs
+         ORDER BY created_at DESC
+         LIMIT 20`
       );
 
       return res.status(200).json({
         runs: result.rows || [],
       });
     } catch (error) {
-      deps?.logger?.error?.({ err: error }, 'failed to list tc intake runs');
+      deps.logger?.error?.({ err: error }, 'tc intake runs fetch failed');
       return res.status(500).json({
-        error: 'Failed to load intake runs',
+        error: 'failed to fetch intake runs',
       });
     }
   });
 }
 
-export { registerTcIntakeRoutes };
 export default registerTcIntakeRoutes;
