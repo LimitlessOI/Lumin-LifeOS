@@ -975,6 +975,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ## Change Receipts
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
+| 2026-07-10 | **GAP-FILL s9 imap import** — `registerTcImapRoutes` now imports `verifyImapAndDryRun` (not nonexistent `imapRailwayBootstrap`). s7+s8 done after auto-register. | module_not_mounted SyntaxError on named export. | ✅ | push + mount proof |
 | 2026-07-10 | **GAP-FILL s10 false-done** — auto-register lacked TC routes; added tc-intake/billing/imap entries; revived s7–s9. | s10 marked done on unrelated LifeOS SHA; module-health still not auto-registered. | ✅ | push + redeploy |
 |---|---|---|---|---|---|
 | 2026-07-10 | **s7 revive after artifact-proof fix** — queue reset pending; root cause was Railway `git show` → `assertion_threw`, not bad route code (import already fixed). | s7 blocked after 3 attempts despite correct `tc-intake-runner.js` import. | ✅ | pending | never-stop re-run |
