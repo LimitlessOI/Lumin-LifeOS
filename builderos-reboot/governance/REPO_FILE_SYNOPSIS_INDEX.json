@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T01:38:02.911Z",
+  "generated_at": "2026-07-10T01:40:09.743Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11375,
   "files": [
@@ -65779,9 +65779,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 22090,
-      "mtime": "2026-07-07T21:41:40.930Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z",
+      "bytes": 22091,
+      "mtime": "2026-07-10T01:40:09.743Z",
+      "indexed_at": "2026-07-10T01:40:09.743Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

@@ -119,7 +119,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            consent_type: 'marketing_session',
+                            consent_type: 'session_recording',
                             consent_text: 'I agree to allow MarketingOS to process my input and generate marketing content based on the provided information. I understand that I am responsible for reviewing and approving all generated content before publication.',
                             consented_at: new Date().toISOString(),
                             data: { session_type: sessionType }
