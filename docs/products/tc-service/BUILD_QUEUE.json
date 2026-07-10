@@ -19,13 +19,16 @@
     },
     {
       "id": "s2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240602_tc_billing_and_agents.sql",
       "task": "Add stripe_subscriptions and enrolled_agents tables for billing and first paying agent enrollment",
       "spec": "CREATE TABLE IF NOT EXISTS stripe_subscriptions with id uuid PK default gen_random_uuid(), agent_registry_id uuid, stripe_customer_id text, stripe_subscription_id text, plan_tier text, status text, created_at timestamptz default now(), updated_at timestamptz default now(). CREATE TABLE IF NOT EXISTS enrolled_agents with id uuid PK default gen_random_uuid(), agent_registry_id uuid, enrolled_at timestamptz default now(), onboarding_complete boolean default false. No DROP/ALTER.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "de263b32d858a3c5128e819c74357b24a768fbc5",
+      "last_attempt_at": "2026-07-10T03:39:45.908Z",
+      "completed_at": "2026-07-10T03:39:58.502Z"
     },
     {
       "id": "s3",
