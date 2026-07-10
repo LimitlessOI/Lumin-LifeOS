@@ -34,6 +34,13 @@
       "operator_lock": "Internal transport/deploy proof receipt — not an active product queue item.",
       "receipt_path": "products/receipts/BUILDEROS_BUILD_DEPLOY_TRUTH.json",
       "note": "Canonical build/deploy/runtime proof receipt for the BuilderOS autonomy-closure mission."
+    },
+    {
+      "mission_id": "PRODUCT-SITE-BUILDER-PREALPHA-LAYER-A",
+      "status": "INTERNAL_PROOF_ONLY",
+      "operator_lock": "Internal Layer A structural walkthrough receipt — not an active product queue item.",
+      "receipt_path": "products/receipts/SITE_BUILDER_PREALPHA_LAYER_A.json",
+      "note": "Site Builder pre-alpha Layer A tip proof; registered to satisfy §2.18 orphan-PASS guard."
     }
   ],
   "items": [
