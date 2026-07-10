@@ -290,7 +290,7 @@
     },
     {
       "id": "step-07",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tcBilling.mjs",
       "task": "Wire Stripe billing to TC plan tiers (item 39, item 2)",
       "spec": "Export async function createSubscription(deps, {agentId, planTier, stripePaymentMethodId}) that calls deps.stripe.subscriptions.create with price mapped from deps.db tc_pricing_tiers, inserts into tc_billing_subscriptions, returns {subscriptionId, status}. Export async function handleStripeWebhook(deps, event) that processes customer.subscription.updated/deleted and syncs status in tc_billing_subscriptions. No browser globals. No direct stripe SDK import — call via deps.stripe passed in.",
@@ -298,7 +298,10 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "5ab4fee9b20307a0d7601d1e3d2eaba8e14c1d99",
+      "last_attempt_at": "2026-07-10T09:12:48.158Z",
+      "completed_at": "2026-07-10T09:12:59.293Z"
     },
     {
       "id": "step-08",
