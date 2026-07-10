@@ -36,7 +36,17 @@
           "receipt": "products/receipts/SENTRY_MARKETINGOS_LAYER_A.json",
           "requiresEnv": ["PUBLIC_BASE_URL", "COMMAND_CENTER_KEY"],
           "deferrableWithoutEnv": true,
-          "note": "LIVE structural probes for /marketing UI + /api/v1/marketing/* consent→export + intel. Audio named BLOCKED (STORAGE_R2_UNVERIFIED). Layer B browser walkthrough still required for full SO-002 done."
+          "note": "LIVE structural probes for /marketing UI + /api/v1/marketing/* consent→export + intel. Audio named BLOCKED (STORAGE_R2_UNVERIFIED)."
+        },
+        {
+          "name": "B-browser",
+          "kind": "human-sim",
+          "type": "command",
+          "run": ["scripts/run-marketingos-layer-b.mjs"],
+          "receipt": "products/receipts/SENTRY_MARKETINGOS_LAYER_B.json",
+          "requiresEnv": ["PUBLIC_BASE_URL", "COMMAND_CENTER_KEY"],
+          "deferrableWithoutEnv": true,
+          "note": "Playwright human-sim of /marketing UI + in-browser consent→export loop. Audio named BLOCKED (STORAGE_R2_UNVERIFIED)."
         }
       ]
     },

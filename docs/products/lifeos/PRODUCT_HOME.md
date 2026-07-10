@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — **Vision lock + never-stop unblock:** founder dumps re-audited against SSOTs (Communication DNA / Display DNA / Point B / North Star already encode the vision — not a surprise). Cleared never-stop spin: E2E `smos_question` waited on stale `.lumin-think` while Display DNA uses `.lumin-worklog`; SMOS workflow facts aligned to MarketingOS Phase 1 (`/api/v1/marketing/*`); truth audit allowlists never-stop planner LLM failover. Prior: 2026-07-09 — Audit fill / redeploy fallthrough / never-idle. |
+| **Last Updated** | 2026-07-10 — **Never-stop keep-building:** lifeos BUILD_QUEUE stamped `sentry_signature` (unplannable smos_question flake); findings feed cleared pending honest E2E re-run; MarketingOS Layer B queued so the loop has real work. Prior: vision lock + Display-DNA E2E wait fix. |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-10 | **Never-stop keep-building** — stamp unplannable SENTRY on lifeos queue; clear findings feed of Display-DNA flake; `POST /never-stop/run-once`; MarketingOS Layer B queued. | Adam: building must not stop — fix anything that stops it. | ✅ local stamp + tests | push + kick run-once |
 | 2026-07-10 | **Vision lock + never-stop unblock (smos_question / truth audit)** — E2E wait includes `.lumin-worklog` busy marker + longer SMOS counsel timeout; Chair SMOS canonical workflow = consent→session→coach→extract→generate→approve→export on `/api/v1/marketing/*`; `audit-truth-enforcement` allowlists `never-stop-product-factory.js` planner failover. | Adam: SSOTs should already hold the vision; builder must build it. Never-stop was looping `plan_produced_no_queue` on one SENTRY finding while API already returned workflow prose. | ✅ truth audit OK; chair tests 8/8; live API SMOS reply has workflow | push + re-run `run-real-app-e2e` / SENTRY lifeos-founder-ui |
 | 2026-07-10 | **Railway GH Deploy → lumin-web managed-env** — workflow prefers live `build-from-latest` (APP_URL + COMMAND_CENTER_KEY); pins service/env IDs; stale GH `RAILWAY_TOKEN` no longer blocks tip. Q-003 archived (not a founder token refresh). | Post-cutover: vars already lumin-web; March GH token → Not Authorized; live vault deploy already worked. | ✅ live tip d6d44d6c + managed-env 200 | prove GH workflow green |
 | 2026-07-09 | **System audit fill — founder lane gaps** — mount railway managed-env + voice-rail; habits summary/checkin; boot phase2/3 schedulers (phase2 imports fixed). | Self-audit: prod founder_builder omitted railway/voice; habits UI 404; schedulers never started. | ✅ syntax + factory:ci ALL PASS; SENTRY_MECHANICAL_PASS | GH Deploy path fixed 2026-07-10 |

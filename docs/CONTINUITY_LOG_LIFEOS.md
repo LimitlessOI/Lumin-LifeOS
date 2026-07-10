@@ -8,6 +8,10 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — Never-stop keep-building (spin-break + Layer B work)
+
+Adam: get the system building/executing the vision; fix anything that stops it. Tip `ba0220` was live but never-stop still monopolized by `sentry_fix_plan_lifeos` → `plan_produced_no_queue`. Shipped: stamp `sentry_signature` when SENTRY findings are unplannable; clear findings feed; queue MarketingOS Layer B (`mos-sentry-layer-b` + `run-marketingos-layer-b.mjs` + registry); `POST /api/v1/lifeos/never-stop/run-once`. Next: redeploy → kick run-once → prove a build cycle selects MarketingOS Layer B (or next actionable step).
+
 ## [FIX] Update 2026-07-10 — Vision lock: SSOTs already hold it; unblock builder spin
 
 Adam re-attached deep vision dumps (comms protocols, Devin depth, LifeOS.rtf). Audit: **not a surprise** — `LUMIN_COMMUNICATION_DNA`, `LUMIN_DISPLAY_DNA`, `POINT_B_DNA`, North Star healing/education already encode seek-first / Socratic / never-manipulate / show-the-work / Point B. Gap was **execution**: never-stop looping on `smos_question` ("No response from system") while the live API already returned MarketingOS workflow prose — E2E still waited on `.lumin-think` after Display DNA moved to `.lumin-worklog`. Fixed E2E wait + SMOS canonical Phase-1 facts + truth-audit allowlist for never-stop planner. Next: push/redeploy → clear SENTRY feed → loop builds next documented backlog toward Point B.

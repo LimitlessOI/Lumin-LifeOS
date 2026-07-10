@@ -585,6 +585,47 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   };
   const planned = await planBuildQueue({ productId: task.product_id, homeText, existingQueue, extraBacklog, callModel, logger: capturingLogger });
   if (!planned || !planned.queue) {
+    // SPIN BREAK: when SENTRY findings are already covered by done files (planner
+    // filters every proposed step), stamp sentry_signature on the EXISTING queue
+    // and commit it — otherwise discoverSentryFixWork re-selects the same task
+    // every cycle, burns planner tokens, and starves real BUILD_QUEUE work.
+    if (task.sentry_signature && existingQueue) {
+      try {
+        const stamped = {
+          ...existingQueue,
+          product_id: existingQueue.product_id || task.product_id,
+          sentry_signature: task.sentry_signature,
+          sentry_unplannable_at: new Date().toISOString(),
+          sentry_unplannable_reason: planReason?.msg || 'plan_produced_no_queue',
+        };
+        const queuePath = queuePathForProduct(task.product_id);
+        fs.mkdirSync(path.dirname(queuePath), { recursive: true });
+        fs.writeFileSync(queuePath, `${JSON.stringify(stamped, null, 2)}\n`);
+        let stampCommitted = null;
+        try {
+          const committed = await commitQueueStatusToRepo(stamped, `sentry-stamp:${task.product_id}`);
+          stampCommitted = committed.ok ? true : committed.error;
+        } catch (e) {
+          stampCommitted = e.message;
+        }
+        log({
+          event: 'sentry_signature_stamped_unplannable',
+          product_id: task.product_id,
+          sentry_signature: task.sentry_signature,
+          reason: planReason,
+          stamp_committed: stampCommitted,
+        });
+        return {
+          ok: true,
+          detail: 'sentry_unplannable_stamped',
+          product_id: task.product_id,
+          reason: planReason,
+          stamp_committed: stampCommitted,
+        };
+      } catch (e) {
+        logger?.warn?.({ product_id: task.product_id, error: e.message }, '[never-stop] sentry stamp failed');
+      }
+    }
     log({ event: 'plan_produced_no_queue', product_id: task.product_id, reason: planReason });
     return { ok: false, detail: 'plan_produced_no_queue', reason: planReason };
   }

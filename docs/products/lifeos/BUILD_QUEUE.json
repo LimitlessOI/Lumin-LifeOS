@@ -7,6 +7,9 @@
   ],
   "planned_at": "2026-07-08T20:57:28.573Z",
   "backlog_signature": "554bd608226b9a58",
+  "sentry_signature": "86e9fcb246d1e4dc",
+  "sentry_unplannable_at": "2026-07-10T03:20:00.000Z",
+  "sentry_unplannable_reason": "all proposed steps filtered (dedupe/already-done/no target_file) — spin-break stamp so never-stop builds real queues",
   "steps": [
     {
       "id": "s01",

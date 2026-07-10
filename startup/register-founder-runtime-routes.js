@@ -19,7 +19,10 @@ import { createGoVegasOutreachRoutes } from "../routes/go-vegas-outreach-routes.
 import { startGoVegasOutreachScheduler } from "../services/go-vegas-outreach-scheduler.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
-import { getNeverStopProductFactoryStatus } from "../services/never-stop-product-factory-scheduler.js";
+import {
+  getNeverStopProductFactoryStatus,
+  runNeverStopProductFactoryOnce,
+} from "../services/never-stop-product-factory-scheduler.js";
 import { checkAllProviders } from "../services/provider-key-health.js";
 import { autoRegisterProductModules, getModuleHealth } from "./auto-register-product-modules.js";
 import { createFactoryMountRoutes } from "../routes/factory-mount-routes.js";
@@ -212,9 +215,18 @@ export async function registerFounderRuntimeRoutes(app, deps) {
   }
 
   app.get("/api/v1/lifeos/never-stop/status", requireKey, (_req, res) => {
-    res.json(getNeverStopProductFactoryStatus());
+    const events = Math.min(200, Math.max(1, Number(_req.query.events) || 25));
+    res.json(getNeverStopProductFactoryStatus({ events }));
   });
-  logger.info("✅ [NEVER-STOP] Status route mounted at /api/v1/lifeos/never-stop/status");
+  app.post("/api/v1/lifeos/never-stop/run-once", requireKey, async (_req, res) => {
+    try {
+      const result = await runNeverStopProductFactoryOnce({ logger });
+      res.status(result?.ok === false && result?.halted ? 503 : 200).json({ ok: result?.ok !== false, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+  logger.info("✅ [NEVER-STOP] Status + run-once mounted at /api/v1/lifeos/never-stop/*");
 
   // Reports which provider API keys Railway actually has and tests each one live
   // (funded / needs_payment / invalid / absent) with a per-provider billing link.

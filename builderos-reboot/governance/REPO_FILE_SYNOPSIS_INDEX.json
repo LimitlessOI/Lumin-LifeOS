@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:10:13.062Z",
+  "generated_at": "2026-07-10T03:16:46.685Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11383,
+  "file_count": 11384,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21698,9 +21698,9 @@
     {
       "path": "builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json",
       "synopsis": "BuilderOS artifact — SENTRY PRODUCT REGISTRY.",
-      "bytes": 4673,
-      "mtime": "2026-07-10T02:08:34.930Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 5099,
+      "mtime": "2026-07-10T03:15:33.122Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z",
       "synopsis_index_only": true
     },
     {
@@ -36720,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 59067,
-      "mtime": "2026-07-10T03:09:14.542Z",
-      "indexed_at": "2026-07-10T03:10:13.062Z"
+      "bytes": 59687,
+      "mtime": "2026-07-10T03:16:23.894Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38819,9 +38819,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 203547,
-      "mtime": "2026-07-10T03:09:31.372Z",
-      "indexed_at": "2026-07-10T03:10:13.062Z"
+      "bytes": 203946,
+      "mtime": "2026-07-10T03:16:22.981Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39262,9 +39262,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 596471,
-      "mtime": "2026-07-10T03:09:31.306Z",
-      "indexed_at": "2026-07-10T03:10:13.062Z"
+      "bytes": 596536,
+      "mtime": "2026-07-10T03:16:32.258Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39371,9 +39371,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 86648,
-      "mtime": "2026-07-10T02:08:34.936Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 86208,
+      "mtime": "2026-07-10T03:16:16.586Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -62907,9 +62907,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.lifeos-founder-ui.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.Lifeos Founder Ui.",
-      "bytes": 1226,
-      "mtime": "2026-07-10T02:08:34.937Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 535,
+      "mtime": "2026-07-10T03:15:36.597Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z",
       "synopsis_index_only": true
     },
     {
@@ -68493,6 +68493,16 @@
       "bytes": 7257,
       "mtime": "2026-07-10T02:08:34.938Z",
       "indexed_at": "2026-07-10T02:08:57.077Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/run-marketingos-layer-b.mjs",
+      "synopsis": "MarketingOS SENTRY Layer B — Playwright human-sim of /marketing UI (browser).",
+      "bytes": 8591,
+      "mtime": "2026-07-10T03:15:32.488Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -84707,9 +84717,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 72093,
-      "mtime": "2026-07-09T14:05:57.613Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 73900,
+      "mtime": "2026-07-10T03:15:00.094Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -86961,9 +86971,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 11495,
-      "mtime": "2026-07-10T00:45:20.793Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 11998,
+      "mtime": "2026-07-10T03:15:56.327Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88206,9 +88216,9 @@
     {
       "path": "tests/never-stop-sentry-fix.test.js",
       "synopsis": "js — tests/never-stop-sentry-fix.test.js.",
-      "bytes": 1648,
-      "mtime": "2026-07-09T01:03:41.539Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 2116,
+      "mtime": "2026-07-10T03:15:55.851Z",
+      "indexed_at": "2026-07-10T03:16:46.685Z"
     },
     {
       "path": "tests/nlpProcessor.test.js",
