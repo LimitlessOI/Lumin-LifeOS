@@ -89,7 +89,7 @@
     },
     {
       "id": "s7",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/tc-intake-routes.js",
       "task": "Register POST /api/tc/intake/run and GET /api/tc/intake/runs routes for end-to-end intake execution",
       "spec": "Export registerTcIntakeRoutes(app, deps). POST /api/tc/intake/run accepts {transactionId, emailMessageId}, calls tcIntakeRunner.runIntake(deps, ...), returns 200 with intakeRunId and status or 500 on error. GET /api/tc/intake/runs returns last 20 intake_runs ordered by created_at desc from deps.db. Validate req.body fields present. Mount auth middleware from deps.requireAuth. No top-level browser globals.",
@@ -107,9 +107,9 @@
         "s5"
       ],
       "founder_gated": false,
-      "attempts": 2,
-      "commit_sha": "3d2429acf99b4472f85d6c45feb9e2428ab9c789",
-      "last_attempt_at": "2026-07-10T07:08:56.481Z",
+      "attempts": 3,
+      "commit_sha": "cda9d81e01c4f597708aa4c1cf82d843187d8b58",
+      "last_attempt_at": "2026-07-10T07:10:56.992Z",
       "revive_count": 1,
       "revived_at": "2026-07-10T07:05:17.238Z",
       "last_error": "artifact_proof_failed: assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw; assertion_threw"
