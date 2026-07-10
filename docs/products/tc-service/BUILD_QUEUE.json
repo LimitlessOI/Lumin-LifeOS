@@ -32,7 +32,7 @@
     },
     {
       "id": "s3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/tc-intake-runner.js",
       "task": "Implement end-to-end transaction intake service: email scan → document QA → SkySlope upload",
       "spec": "Export async function runIntake(deps, {transactionId, emailMessageId}) that (1) uses deps.db to load transaction and linked email, (2) runs document QA via deps.callCouncilMember('document-qa', prompt) checking for missing signatures and missing fields, writes results to document_qa_results, (3) if QA passes invokes the existing SkySlope browser-agent upload path via deps.skySlopeAgent.uploadDocs(), (4) writes an intake_runs row with final status 'completed' or 'failed' + full run_log, (5) returns {intakeRunId, status, qaResults, skySlopeFileId}. No top-level browser globals. Import only pg (already installed) via deps.db, no AI SDK import.",
@@ -40,7 +40,10 @@
         "s1"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "1760594166c8b40df3d9a1c4ddfbaf171c8e1d03",
+      "last_attempt_at": "2026-07-10T03:41:06.574Z",
+      "completed_at": "2026-07-10T03:41:21.359Z"
     },
     {
       "id": "s4",
