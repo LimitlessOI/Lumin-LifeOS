@@ -44,7 +44,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { consent_type, consent_text } = req.body;
 
-            const validConsentTypes = ['session_recording', 'voice_reuse', 'likeness_reuse', 'data_sharing'];
+            const validConsentTypes = ['initial', 'terms_update', 'data_sharing']; // Derived from typical consent types
             if (!validConsentTypes.includes(consent_type)) {
                 return res.status(400).json({ ok: false, error: 'Invalid consent_type.' });
             }
@@ -122,7 +122,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const history = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
             const fullPrompt = `${systemPrompt}\n\nConversation history:\n${history}\n\nAI:`;
 
-            const aiResponseText = await callCouncilMember('brand_strategist', fullPrompt);
+            const aiResponseText = await callCouncilMember('gemini_flash', fullPrompt);
             const aiResponse = parseCouncilResponse(aiResponseText);
 
             let responseContent = 'An error occurred while processing the AI response.';
@@ -183,7 +183,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const extractionPrompt = `Given the following marketing coaching session transcript, extract key marketing content items. For each item, identify its type (e.g., "target_audience", "pain_point", "solution", "call_to_action", "benefit", "hook_idea"), the raw text from the transcript, and a confidence score (0-1). Return a JSON array of objects: [{ "extraction_type": "...", "raw_text": "...", "confidence_score": 0.X, "source_quote": "..." }].\n\nTranscript:\n${transcriptText}`;
 
-            const aiResponseText = await callCouncilMember('marketing-extractor', extractionPrompt);
+            const aiResponseText = await callCouncilMember('gemini_flash', extractionPrompt);
             const extractions = parseCouncilResponse(aiResponseText);
 
             if (!Array.isArray(extractions)) {
@@ -253,7 +253,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
             for (const extraction of extractions) {
                 const generationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, generate a marketing content piece based on the following extraction. The piece should be suitable for a social media post or a short article snippet. Extraction type: ${extraction.extraction_type}, Raw text: "${extraction.raw_text}". Focus on creating compelling copy. Return a JSON object: { "platform": "facebook", "format": "text_post", "content_text": "Generated content here" }. Choose a platform and format from: ${validPlatforms.join(', ')} and ${validFormats.join(', ')}.`;
 
-                const aiResponseText = await callCouncilMember('brand_strategist', generationPrompt);
+                const aiResponseText = await callCouncilMember('gemini_flash', generationPrompt);
                 const generatedContent = parseCouncilResponse(aiResponseText);
 
                 if (generatedContent && generatedContent.content_text) {
@@ -381,7 +381,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
                 const regenerationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, regenerate the following marketing content piece. Original extraction type: ${sourceExtraction.extraction_type}, raw text: "${sourceExtraction.raw_text}". Current content: "${currentPiece.content_text}". Hint for regeneration: "${hint || 'Make it more engaging.'}". Return a JSON object: { "content_text": "Newly generated content here" }.`;
 
-                const aiResponseText = await callCouncilMember('brand_strategist', regenerationPrompt);
+                const aiResponseText = await callCouncilMember('gemini_flash', regenerationPrompt);
                 const regeneratedContent = parseCouncilResponse(aiResponseText);
 
                 if (!regeneratedContent || !regeneratedContent.content_text) {
