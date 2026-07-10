@@ -198,5 +198,5 @@ html[data-theme="light"] [data-lifere="daily-command-center"] .deal-pick.active 
 /* founder-assistant-bubble-style:end */
 
 /* founder-visual-ui:start */
-#lumin-send-btn, .lumin-send-btn { border-radius: 14px !important; }
+#lumin-send-btn, .lumin-send-btn { border-radius: 10px !important; }
 /* founder-visual-ui:end */
