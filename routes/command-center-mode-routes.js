@@ -1,40 +1,59 @@
 /**
- * SYNOPSIS: HTTP route module — Command Center Mode Routes.
+ * SYNOPSIS: Registers CommandCenterModeRoutes routes/handlers (routes/command-center-mode-routes.js).
  */
 import { setMode, getMode } from '../services/builder-runtime-mode-service.js';
 
-function registerCommandCenterModeRoutes(app, deps = {}) {
-  const db = deps.db || deps.pool;
-  const callCouncilMember = deps.callCouncilMember;
+const VALID_MODES = new Set(['live', 'safe', 'maintenance']);
 
-  if (!app || typeof app.get !== 'function' || typeof app.post !== 'function') {
-    throw new Error('registerCommandCenterModeRoutes requires an Express app with get/post methods');
-  }
-  if (!db || typeof db.query !== 'function') {
-    throw new Error('registerCommandCenterModeRoutes requires deps.db or deps.pool with query()');
-  }
-  if (typeof callCouncilMember !== 'function') {
-    throw new Error('registerCommandCenterModeRoutes requires deps.callCouncilMember');
-  }
+function getDb(deps) {
+  return deps?.db ?? deps?.pool;
+}
 
-  app.get('/api/v1/lifeos/command-center/mode', async (_req, res) => {
+function normalizeMode(value) {
+  return typeof value === 'string' ? value.trim().toLowerCase() : '';
+}
+
+function sendError(res, status, message) {
+  return res.status(status).json({ error: message });
+}
+
+export function registerCommandCenterModeRoutes(app, deps = {}) {
+  const db = getDb(deps);
+  const callCouncilMember = deps?.callCouncilMember;
+
+  app.get('/api/v1/lifeos/command-center/mode', async (req, res) => {
     try {
+      if (!db) return sendError(res, 500, 'Database unavailable');
+
       const current = await getMode({ db });
-      res.status(200).json({
+      return res.status(200).json({
         mode: current.mode,
         updated_at: current.updated_at,
         updated_by: current.updated_by,
       });
     } catch (error) {
-      const status = Number.isInteger(error?.status) ? error.status : 500;
-      res.status(status).json({ error: error?.message || 'Failed to get command center mode' });
+      deps?.logger?.error?.({ err: error }, 'Failed to read command center mode');
+      return sendError(res, 500, 'Failed to read command center mode');
     }
   });
 
-  app.post('/api/v1/lifeos/command-center/mode', deps.requireKey, async (req, res) => {
+  app.post('/api/v1/lifeos/command-center/mode', deps?.requireKey, async (req, res) => {
     try {
-      const body = req.body || {};
-      const { mode, triggered_by } = body;
+      if (!db) return sendError(res, 500, 'Database unavailable');
+      if (typeof callCouncilMember !== 'function') {
+        return sendError(res, 500, 'Council member service unavailable');
+      }
+
+      const mode = normalizeMode(req.body?.mode);
+      const triggered_by = typeof req.body?.triggered_by === 'string' ? req.body.triggered_by.trim() : '';
+
+      if (!VALID_MODES.has(mode)) {
+        return sendError(res, 400, 'Invalid mode');
+      }
+
+      if (!triggered_by) {
+        return sendError(res, 400, 'triggered_by is required');
+      }
 
       const receipt = await setMode({
         db,
@@ -43,13 +62,14 @@ function registerCommandCenterModeRoutes(app, deps = {}) {
         triggered_by,
       });
 
-      res.status(200).json(receipt);
+      return res.status(200).json(receipt);
     } catch (error) {
-      const status = Number.isInteger(error?.status) ? error.status : 500;
-      res.status(status).json({ error: error?.message || 'Failed to set command center mode' });
+      const status = typeof error?.statusCode === 'number' ? error.statusCode : 500;
+      const message = typeof error?.message === 'string' && error.message ? error.message : 'Failed to update command center mode';
+      deps?.logger?.error?.({ err: error }, 'Failed to update command center mode');
+      return sendError(res, status, message);
     }
   });
 }
 
-export { registerCommandCenterModeRoutes };
 export default registerCommandCenterModeRoutes;
