@@ -144,8 +144,8 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-10T08:58:22.478Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-07-10T09:03:35.487Z",
       "commit_sha": "9be008cb11d13108c42d415fd0a661d03e83164a",
       "revive_count": 1,
       "revived_at": "2026-07-10T08:53:56.704Z",
