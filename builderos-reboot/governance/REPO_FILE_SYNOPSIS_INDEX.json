@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T06:58:55.293Z",
+  "generated_at": "2026-07-10T07:01:40.316Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11397,
+  "file_count": 11398,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66185,6 +66185,13 @@
       "bytes": 2512,
       "mtime": "2026-06-21T21:39:04.952Z",
       "indexed_at": "2026-07-10T06:28:55.706Z"
+    },
+    {
+      "path": "routes/tc-billing-routes.js",
+      "synopsis": "Registers TcBillingRoutes routes/handlers (routes/tc-billing-routes.js).",
+      "bytes": 4436,
+      "mtime": "2026-07-10T07:01:40.316Z",
+      "indexed_at": "2026-07-10T07:01:40.316Z"
     },
     {
       "path": "routes/tc-intake-routes.js",
