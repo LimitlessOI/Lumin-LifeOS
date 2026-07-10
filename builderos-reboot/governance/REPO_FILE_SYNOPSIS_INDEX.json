@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T21:14:54.832Z",
+  "generated_at": "2026-07-10T21:16:43.131Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11417,
+  "file_count": 11418,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66184,6 +66184,13 @@
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/site-builder-templates-routes.js",
+      "synopsis": "Registers SiteBuilderTemplatesRoutes routes/handlers (routes/site-builder-templates-routes.js).",
+      "bytes": 1905,
+      "mtime": "2026-07-10T21:16:43.131Z",
+      "indexed_at": "2026-07-10T21:16:43.131Z"
     },
     {
       "path": "routes/socialmediaos-coaching-routes.js",
