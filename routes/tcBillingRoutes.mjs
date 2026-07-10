@@ -2,150 +2,177 @@
  * SYNOPSIS: Registers TcBillingRoutes routes/handlers (routes/tcBillingRoutes.mjs).
  */
 export function registerTcBillingRoutes(app, deps) {
-  const { pool, requireKey, callCouncilMember, logger, baseUrl } = deps || {};
+  const logger = deps?.logger ?? console;
+  const pool = deps?.pool;
+  const requireKey = deps?.requireKey;
+  const callCouncilMember = deps?.callCouncilMember;
+  const baseUrl = deps?.baseUrl;
 
-  if (!app || typeof app.post !== 'function' || typeof app.get !== 'function') {
-    throw new Error('registerTcBillingRoutes requires an Express app instance');
+  if (!app || typeof app.post !== "function" || typeof app.get !== "function") {
+    throw new Error("registerTcBillingRoutes requires an Express app");
   }
-  if (!pool || typeof pool.query !== 'function') {
-    throw new Error('registerTcBillingRoutes requires deps.pool');
+  if (!pool || typeof pool.query !== "function") {
+    throw new Error("registerTcBillingRoutes requires deps.pool");
   }
 
-  const safeJson = (res, status, body) => {
-    if (!res || typeof res.status !== 'function' || typeof res.json !== 'function') return;
-    return res.status(status).json(body);
-  };
+  const jsonBodyParser = typeof app.json === "function" ? app.json({ type: ["application/json", "application/*+json"] }) : undefined;
 
-  const parseMaybeJson = (value) => {
-    if (value == null) return null;
-    if (typeof value === 'object') return value;
-    if (typeof value !== 'string') return value;
+  function sendError(res, status, message, details) {
+    const payload = { ok: false, error: message };
+    if (details !== undefined) payload.details = details;
+    return res.status(status).json(payload);
+  }
+
+  function safeJsonParse(value, fallback = null) {
+    if (value == null) return fallback;
+    if (typeof value === "object") return value;
+    if (typeof value !== "string") return fallback;
     try {
       return JSON.parse(value);
     } catch {
-      return value;
+      return fallback;
     }
-  };
+  }
 
-  app.post('/api/tc/billing/subscribe', requireKey, async (req, res) => {
+  async function createSubscription(req, res) {
     try {
-      const prompt = [
-        'Create a Stripe billing subscription for TC billing.',
-        'Return a concise JSON object with keys: action, agentId, customerId, subscriptionId, planTier, status, payload.',
-        'Use only information available from the request body.',
-        `Request body: ${JSON.stringify(req.body ?? {})}`,
-      ].join('\n');
+      const body = req.body ?? {};
+      const agentRegistryId = body.agentRegistryId ?? body.agent_registry_id ?? body.agentId ?? body.agent_id;
+      const stripeCustomerId = body.stripeCustomerId ?? body.stripe_customer_id;
+      const planTier = body.planTier ?? body.plan_tier ?? body.tier;
+      const status = body.status ?? "active";
 
-      const aiResult = callCouncilMember
-        ? await callCouncilMember('tcBilling.createSubscription', prompt, { baseUrl })
-        : null;
-
-      const payload = {
-        request: req.body ?? {},
-        ai: aiResult,
-      };
-
-      const agentId = req.body?.agentId ?? req.body?.agent_id ?? null;
-      if (!agentId) {
-        return safeJson(res, 400, { error: 'agentId is required' });
+      if (!agentRegistryId || !stripeCustomerId || !planTier) {
+        return sendError(res, 400, "Missing agentRegistryId, stripeCustomerId, or planTier");
       }
 
-      const status = req.body?.status ?? 'pending';
-      const query = `
-        INSERT INTO tc_billing_subscriptions (agent_id, status, payload)
-        VALUES ($1, $2, $3)
-        RETURNING id, agent_id, status, payload, created_at, updated_at
-      `;
-      const result = await pool.query(query, [agentId, status, JSON.stringify(payload)]);
+      const existing = await pool.query(
+        "SELECT id, agent_registry_id, stripe_customer_id, stripe_subscription_id, plan_tier, status, created_at, updated_at FROM stripe_subscriptions WHERE agent_registry_id = $1 LIMIT 1",
+        [agentRegistryId]
+      );
 
-      logger?.info?.({ agentId, subscriptionId: result.rows?.[0]?.id }, 'tc billing subscription created');
-      return safeJson(res, 200, {
+      const inserted = existing.rows[0]
+        ? await pool.query(
+            "UPDATE stripe_subscriptions SET stripe_customer_id = $1, plan_tier = $2, status = $3, updated_at = NOW() WHERE id = $4 RETURNING id, agent_registry_id, stripe_customer_id, stripe_subscription_id, plan_tier, status, created_at, updated_at",
+            [stripeCustomerId, planTier, status, existing.rows[0].id]
+          )
+        : await pool.query(
+            "INSERT INTO stripe_subscriptions (agent_registry_id, stripe_customer_id, plan_tier, status) VALUES ($1, $2, $3, $4) RETURNING id, agent_registry_id, stripe_customer_id, stripe_subscription_id, plan_tier, status, created_at, updated_at",
+            [agentRegistryId, stripeCustomerId, planTier, status]
+          );
+
+      const row = inserted.rows[0];
+
+      if (body.enroll !== false) {
+        await pool.query(
+          `INSERT INTO enrolled_agents (agent_registry_id, onboarding_complete)
+           VALUES ($1, $2)
+           ON CONFLICT DO NOTHING`,
+          [agentRegistryId, false]
+        ).catch(() => {});
+      }
+
+      return res.status(200).json({
         ok: true,
-        subscription: {
-          ...result.rows[0],
-          payload: parseMaybeJson(result.rows[0]?.payload),
-        },
+        subscription: row,
       });
     } catch (error) {
-      logger?.error?.({ err: error }, 'tc billing subscribe failed');
-      return safeJson(res, 500, { error: 'failed_to_create_subscription' });
+      logger.error?.({ err: error }, "tcBilling.createSubscription failed");
+      return sendError(res, 500, "Failed to create subscription");
     }
-  });
+  }
 
-  app.post(
-    '/api/tc/billing/webhook',
-    async (req, res, next) => {
-      try {
-        const rawEvent = req.body;
-        const eventId = rawEvent?.id ?? rawEvent?.event_id ?? null;
-        const eventType = rawEvent?.type ?? rawEvent?.event_type ?? 'unknown';
-
-        if (eventId) {
-          await pool.query(
-            `
-              INSERT INTO stripe_webhook_events (event_id, event_type, payload, raw_event)
-              VALUES ($1, $2, $3, $4)
-              ON CONFLICT DO NOTHING
-            `,
-            [eventId, eventType, JSON.stringify(rawEvent ?? {}), typeof req.body === 'string' ? req.body : JSON.stringify(rawEvent ?? {})]
-          );
-        }
-
-        if (callCouncilMember) {
-          await callCouncilMember(
-            'tcBilling.handleStripeWebhook',
-            `Process this Stripe webhook event for billing state updates:\n${JSON.stringify(rawEvent ?? {})}`,
-            { baseUrl }
-          );
-        }
-
-        return safeJson(res, 200, { ok: true });
-      } catch (error) {
-        logger?.error?.({ err: error }, 'tc billing webhook failed');
-        return safeJson(res, 500, { error: 'failed_to_process_webhook' });
-      }
-    }
-  );
-
-  app.get('/api/tc/billing/status/:agentId', async (req, res) => {
+  async function handleStripeWebhook(req, res) {
     try {
-      const { agentId } = req.params || {};
-      if (!agentId) {
-        return safeJson(res, 400, { error: 'agentId is required' });
+      const rawEvent = req.body;
+      const event = safeJsonParse(rawEvent, null);
+
+      if (!event || typeof event !== "object") {
+        return sendError(res, 400, "Invalid Stripe webhook payload");
       }
+
+      const eventId = event.id ?? null;
+      const eventType = event.type ?? null;
+      if (!eventId || !eventType) {
+        return sendError(res, 400, "Missing Stripe event id or type");
+      }
+
+      await pool.query(
+        `INSERT INTO stripe_webhook_events (event_id, event_type, payload, raw_event)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (event_id) DO NOTHING`,
+        [eventId, eventType, event, typeof rawEvent === "string" ? rawEvent : JSON.stringify(event)]
+      ).catch(async () => {
+        await pool.query(
+          `INSERT INTO stripe_webhook_events (event_id, event_type, payload, raw_event)
+           VALUES ($1, $2, $3, $4)`,
+          [eventId, eventType, event, typeof rawEvent === "string" ? rawEvent : JSON.stringify(event)]
+        );
+      });
+
+      const customerId = event.data?.object?.customer ?? null;
+      const subscriptionId = event.data?.object?.subscription ?? event.data?.object?.id ?? null;
+      const subscriptionStatus = event.data?.object?.status ?? null;
+      const planTier = event.data?.object?.plan?.nickname ?? event.data?.object?.items?.data?.[0]?.price?.nickname ?? null;
+
+      if (customerId) {
+        await pool.query(
+          `UPDATE stripe_subscriptions
+           SET stripe_subscription_id = COALESCE($1, stripe_subscription_id),
+               status = COALESCE($2, status),
+               plan_tier = COALESCE($3, plan_tier),
+               updated_at = NOW()
+           WHERE stripe_customer_id = $4`,
+          [subscriptionId, subscriptionStatus, planTier, customerId]
+        );
+      }
+
+      return res.status(200).json({ ok: true });
+    } catch (error) {
+      logger.error?.({ err: error }, "tcBilling.handleStripeWebhook failed");
+      return sendError(res, 500, "Failed to handle webhook");
+    }
+  }
+
+  async function getStatus(req, res) {
+    try {
+      const agentId = req.params?.agentId;
+      if (!agentId) return sendError(res, 400, "Missing agentId");
 
       const result = await pool.query(
-        `
-          SELECT id, agent_id, status, payload, created_at, updated_at
-          FROM tc_billing_subscriptions
-          WHERE agent_id = $1
-          ORDER BY updated_at DESC NULLS LAST, created_at DESC NULLS LAST
-          LIMIT 1
-        `,
+        "SELECT agent_registry_id, plan_tier, status, stripe_customer_id, stripe_subscription_id, created_at, updated_at FROM stripe_subscriptions WHERE agent_registry_id = $1 ORDER BY updated_at DESC, created_at DESC LIMIT 1",
         [agentId]
       );
 
-      const row = result.rows?.[0] || null;
-      if (!row) {
-        return safeJson(res, 200, { ok: true, subscription: null });
-      }
+      const row = result.rows[0] ?? null;
 
-      return safeJson(res, 200, {
+      return res.status(200).json({
         ok: true,
-        subscription: {
-          id: row.id,
-          agentId: row.agent_id,
-          status: row.status,
-          payload: parseMaybeJson(row.payload),
-          createdAt: row.created_at,
-          updatedAt: row.updated_at,
-        },
+        agentId,
+        billing: row
+          ? {
+              plan: row.plan_tier,
+              status: row.status,
+              stripeCustomerId: row.stripe_customer_id,
+              stripeSubscriptionId: row.stripe_subscription_id,
+              createdAt: row.created_at,
+              updatedAt: row.updated_at,
+            }
+          : null,
       });
     } catch (error) {
-      logger?.error?.({ err: error }, 'tc billing status failed');
-      return safeJson(res, 500, { error: 'failed_to_fetch_status' });
+      logger.error?.({ err: error }, "tcBilling.getStatus failed");
+      return sendError(res, 500, "Failed to load billing status");
     }
-  });
+  }
+
+  app.post("/api/tc/billing/subscribe", typeof requireKey === "function" ? requireKey : (req, res, next) => next(), jsonBodyParser ?? ((req, res, next) => next()), createSubscription);
+  app.post("/api/tc/billing/webhook", jsonBodyParser ?? ((req, res, next) => next()), handleStripeWebhook);
+  app.get("/api/tc/billing/status/:agentId", getStatus);
+
+  if (baseUrl) {
+    logger.info?.({ baseUrl }, "tcBilling routes registered");
+  }
 }
 
 export default registerTcBillingRoutes;
