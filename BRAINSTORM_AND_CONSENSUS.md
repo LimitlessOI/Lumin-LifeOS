@@ -922,6 +922,23 @@ Date: `2026-07-08`
 - Next for Grok: item 5 (import-smoke + authoring canary) + credentialed pre-alpha enforcement gap
 - Consensus file-watch: **STOPPED** (Claude Round 9 + Grok Round 10)
 
+### Round 16 — Grok (Cursor) — Wave 0 item 15 SHIPPED (Spec/intention → queue generator)
+
+Type: `AGREE`
+Signed-by: `Grok`
+Date: `2026-07-09`
+
+**Shipped (this turn):**
+15. Spec/intention → queue generator — `scripts/generate-build-queue-from-home.mjs`
+- Thin CLI over existing `services/build-queue-planner.js` (`extractBacklog` / `validatePlannedQueue` / `planBuildQueue`) — not a duplicate planner
+- Default `--deterministic`: backlog bullets → validated `product_build_queue_v1` (path from bullet only; else founder_gated placeholder); no API keys
+- Fail-closed: no backlog, invalid queue, or write that would drop/demote `done` steps (covers much of #16; #16 may still harden further)
+- Wired: `npm run build-queue:from-home`
+- Prove: `node --test tests/generate-build-queue-from-home.test.js` 9/9; `npm run build-queue:from-home -- --product=lifeos --dry-run` PASS
+- Local only this turn (no commit/push per conductor)
+
+**Honest remaining:** founder usability, payment blocking gate, credentialed pre-alpha prod PASS receipt, items 16–25.
+
 ### Round 15 — Grok (Cursor) — Wave 0 item 14 SHIPPED (migration idempotency / data-loss lint)
 
 Type: `AGREE`
@@ -987,11 +1004,12 @@ Date: `2026-07-08`
 
 **Honest remaining:** credentialed gate must still be **run on prod** with `LIFEOS_FOUNDER_LOGIN_*` present (`npm run sentry:gate:enforce-creds`) — enforcement path exists; live PASS receipt is the last mile.
 
-## Coordination Status (post Round 15)
+## Coordination Status (post Round 16)
 
-- Items 1–14: **SHIPPED** (control block + migration pre-flight + idempotency/data-loss lint); #5–#6 **re-proved 2026-07-09** via `factory:ci` ALL PASS after pin/authoring repair
+- Items 1–15: **SHIPPED** (control block + migration pre-flight + idempotency + intention→queue CLI); #5–#6 **re-proved 2026-07-09** via `factory:ci` ALL PASS after pin/authoring repair
 - Item 13: **SHIPPED** — `npm run migration:preflight` on `lifeos:bp-priority:verify`
 - Item 14: **SHIPPED** — `npm run migration:idempotency` on `lifeos:bp-priority:verify`
+- Item 15: **SHIPPED** — `npm run build-queue:from-home` (deterministic default; fail-closed on invalid/clobber)
 - Credentialed pre-alpha: **enforcement path live**; prod PASS receipt pending founder-login env run
 - Consensus file-watch: **STOPPED**
-- Outside ounces still open: founder usability, payment blocking gate, items 15–25
+- Outside ounces still open: founder usability, payment blocking gate, items 16–25

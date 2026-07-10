@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T00:35:41.603Z",
+  "generated_at": "2026-07-10T00:38:42.257Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11373,
+  "file_count": 11375,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -20498,9 +20498,9 @@
     {
       "path": "BRAINSTORM_AND_CONSENSUS.md",
       "synopsis": "BRAINSTORM_AND_CONSENSUS",
-      "bytes": 55895,
-      "mtime": "2026-07-10T00:34:48.998Z",
-      "indexed_at": "2026-07-10T00:35:19.670Z"
+      "bytes": 57079,
+      "mtime": "2026-07-10T00:38:08.214Z",
+      "indexed_at": "2026-07-10T00:38:42.257Z"
     },
     {
       "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z/MANIFEST.json",
@@ -36720,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 53984,
-      "mtime": "2026-07-10T00:35:40.807Z",
-      "indexed_at": "2026-07-10T00:35:41.603Z"
+      "bytes": 54424,
+      "mtime": "2026-07-10T00:38:41.317Z",
+      "indexed_at": "2026-07-10T00:38:42.257Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38819,9 +38819,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 202723,
-      "mtime": "2026-07-10T00:34:47.943Z",
-      "indexed_at": "2026-07-10T00:35:19.670Z"
+      "bytes": 204183,
+      "mtime": "2026-07-10T00:38:05.530Z",
+      "indexed_at": "2026-07-10T00:38:42.257Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -62013,9 +62013,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31166,
-      "mtime": "2026-07-10T00:34:31.664Z",
-      "indexed_at": "2026-07-10T00:35:19.670Z",
+      "bytes": 31246,
+      "mtime": "2026-07-10T00:37:20.363Z",
+      "indexed_at": "2026-07-10T00:38:42.257Z",
       "synopsis_index_only": true
     },
     {
@@ -67285,6 +67285,16 @@
       "indexed_at": "2026-07-10T00:10:11.466Z",
       "ssot": [
         "docs/products/zero-drift-handoff-protocol/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/generate-build-queue-from-home.mjs",
+      "synopsis": "Spec/intention → queue generator — PRODUCT_HOME backlog → validated",
+      "bytes": 12811,
+      "mtime": "2026-07-10T00:37:33.726Z",
+      "indexed_at": "2026-07-10T00:38:42.257Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87850,6 +87860,16 @@
       "bytes": 5073,
       "mtime": "2026-07-07T21:41:40.948Z",
       "indexed_at": "2026-07-10T00:10:11.466Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "tests/generate-build-queue-from-home.test.js",
+      "synopsis": "Fixture tests for Spec/intention → queue generator (Wave 0 item 15).",
+      "bytes": 8632,
+      "mtime": "2026-07-10T00:37:50.738Z",
+      "indexed_at": "2026-07-10T00:38:42.257Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

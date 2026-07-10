@@ -8,6 +8,17 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Wave 0 #15 spec→queue generator
+
+### What happened
+- Item 15: `npm run build-queue:from-home -- --product=<id>` — deterministic PRODUCT_HOME → validated `BUILD_QUEUE.json` (fail-closed). Tests 9/9.
+- Deploy still blocked on Railway token (`Not Authorized` in GH Actions).
+
+### Next
+- Adam: refresh `RAILWAY_TOKEN` GitHub secret. Then #16 fail-closed queue hardening (thin) or #17 intent packet.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Wave 0 #14 + deploy auth blocker
 
 ### What happened
