@@ -357,7 +357,7 @@
     },
     {
       "id": "step-10",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register new route modules so server boot auto-mounts them",
       "spec": "Add entries for tcIntakeRoutes (registerTcIntakeRoutes, routes/tcIntakeRoutes.mjs) and tcBillingRoutes (registerTcBillingRoutes, routes/tcBillingRoutes.mjs) to the existing array in this JSON file. Preserve all existing entries. No prose, valid JSON only.",
@@ -366,7 +366,10 @@
         "step-09"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "77b52ab91a9bc379aed02cecb4eab1c080df53be",
+      "last_attempt_at": "2026-07-10T10:34:42.300Z",
+      "completed_at": "2026-07-10T10:36:48.237Z"
     },
     {
       "id": "step-11",
