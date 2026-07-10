@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T19:27:28.494Z",
+  "generated_at": "2026-07-10T19:29:43.064Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11416,
+  "file_count": 11417,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65095,6 +65095,13 @@
       "bytes": 3223,
       "mtime": "2026-07-05T19:10:02.191Z",
       "indexed_at": "2026-07-10T08:50:09.908Z"
+    },
+    {
+      "path": "routes/command-center-mode-routes.js",
+      "synopsis": "HTTP route module — Command Center Mode Routes.",
+      "bytes": 1896,
+      "mtime": "2026-07-10T19:29:43.064Z",
+      "indexed_at": "2026-07-10T19:29:43.064Z"
     },
     {
       "path": "routes/command-center-routes.js",
