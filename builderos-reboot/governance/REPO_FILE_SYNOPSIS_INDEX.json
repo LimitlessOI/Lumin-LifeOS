@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T01:45:31.930Z",
+  "generated_at": "2026-07-10T01:49:12.628Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11375,
   "files": [
@@ -65769,9 +65769,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 25505,
-      "mtime": "2026-07-10T01:45:31.930Z",
-      "indexed_at": "2026-07-10T01:45:31.930Z",
+      "bytes": 25386,
+      "mtime": "2026-07-10T01:49:12.628Z",
+      "indexed_at": "2026-07-10T01:49:12.628Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

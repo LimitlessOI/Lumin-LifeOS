@@ -353,14 +353,14 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             if (action === 'approve') {
                 const updateResult = await pool.query(
-                    `UPDATE marketing_content_pieces SET status = 'approved' WHERE id = $1 AND owner_id = $2 RETURNING *`,
-                    [id, owner_id]
+                    `UPDATE marketing_content_pieces SET status = 'approved' WHERE id = $1 RETURNING *`,
+                    [id]
                 );
                 updatedPiece = updateResult.rows[0];
             } else if (action === 'reject') {
                 const updateResult = await pool.query(
-                    `UPDATE marketing_content_pieces SET status = 'rejected' WHERE id = $1 AND owner_id = $2 RETURNING *`,
-                    [id, owner_id]
+                    `UPDATE marketing_content_pieces SET status = 'rejected' WHERE id = $1 RETURNING *`,
+                    [id]
                 );
                 updatedPiece = updateResult.rows[0];
             } else if (action === 'regenerate') {
@@ -371,8 +371,8 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 const brandVoice = channelProfileResult.rows[0]?.brand_voice_json || { tone: 'professional', style: 'direct' };
 
                 const extractionResult = await pool.query(
-                    `SELECT raw_text, extraction_type FROM marketing_content_extractions WHERE id = $1 AND owner_id = $2`,
-                    [currentPiece.source_extraction_id, owner_id]
+                    `SELECT raw_text, extraction_type FROM marketing_content_extractions WHERE id = $1`,
+                    [currentPiece.extraction_id]
                 );
                 if (extractionResult.rows.length === 0) {
                     return res.status(400).json({ ok: false, error: 'Source extraction for regeneration not found.' });
@@ -389,8 +389,8 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 }
 
                 const updateResult = await pool.query(
-                    `UPDATE marketing_content_pieces SET content_text = $1, status = 'draft', regeneration_count = COALESCE(regeneration_count, 0) + 1, updated_at = NOW() WHERE id = $2 AND owner_id = $3 RETURNING *`,
-                    [regeneratedContent.content_text, id, owner_id]
+                    `UPDATE marketing_content_pieces SET content_text = $1, status = 'draft', regeneration_count = COALESCE(regeneration_count, 0) + 1, updated_at = NOW() WHERE id = $2 RETURNING *`,
+                    [regeneratedContent.content_text, id]
                 );
                 updatedPiece = updateResult.rows[0];
             }
