@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — **SENTRY Layer B PASS** (`scripts/run-marketingos-layer-b.mjs`, receipt `SENTRY_MARKETINGOS_LAYER_B.json`, queue step `mos-sentry-layer-b` done). Layer A+B registered. R2 audio still named BLOCKED. Never-stop unblocked and selecting MarketingOS work. Prior: Layer B queued. |
+| **Last Updated** | 2026-07-10 — Session UI sends JWT/command-key + owner_id; getOwnerId reads lifeosUser.sub. |
 
 ---
 
@@ -1330,6 +1330,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **GAP-FILL session UI auth + owner_id** — Marketing SSR pages send JWT/`x-command-key` + `owner_id`; API `getOwnerId` reads `req.lifeosUser.sub`. | Founder UI walk: Proceed to Session no-op / owner_id required. | ✅ | ⬜ | tip UI |
 | 2026-07-10 | **SENTRY Layer B PASS** — Playwright human-sim + in-browser consent→export; receipt `products/receipts/SENTRY_MARKETINGOS_LAYER_B.json`; queue step done on `fd720e9c5b`. | Adam: keep building; never-stop selected this step after spin-break. | ✅ | ⬜ | ✅ Layer B 5/5 PASS live |
 | 2026-07-10 | **SENTRY Layer B queued** — `scripts/run-marketingos-layer-b.mjs` + BUILD_QUEUE `mos-sentry-layer-b` + registry B-browser so never-stop has real work after Phase 1/2/intel done. | Adam: keep building vision; do not stop. | ✅ | ⬜ | superseded by Layer B PASS |
 | 2026-07-10 | **SENTRY Layer A + path-to-10** — `scripts/run-marketingos-layer-a.mjs` + registry product `marketingos` PASS; primary surface scrubbed to `/api/v1/marketing/*`; blockers receipt updated (R2 + Layer B remain). | Adam: grade system → get every area to 10. | ✅ | ⬜ | ✅ `node scripts/sentry-prealpha-gate.mjs marketingos` PASS |

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Restored tc-coordinator; mounted /api/v1/tc on founder lane; IMAP bootstrap uses TC aliases. |
+| **Last Updated** | 2026-07-10 — Restored truncated agent-portal; tc-portal.js accepts standard command_key aliases + JWT. |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **GAP-FILL agent-portal restore + auth aliases** — restored truncated `public/tc/agent-portal.html` to shell + `tc-portal.js`; portal now reads `command_key`/`lifeos_command_key` and sends `x-command-key` + Bearer. | UI walk: portal stuck on Loading — HTML file truncated mid-template; Save header had no effect. | ✅ | pending | tip UI |
 | 2026-07-10 | **GAP-FILL founder-lane TC + coordinator restore** — restored `services/tc-coordinator.js` from pre-stub SHA (system-build had replaced `createTCCoordinator` with unrelated stub); mounted `createTCRoutes` in `register-founder-runtime-routes.js`; `imap-railway-bootstrap` now uses `tc-imap-config` / credential aliases instead of raw `IMAP_*` only. | Prod founder_builder: `/api/v1/tc/*` 404; portal/assistant dead; IMAP status false-missing despite TC_IMAP_* vault. | ✅ | pending | tip-sync + UI walk |
 | 2026-07-10 | **GAP-FILL SMTP failover** — `core/notification-service.js` tries preferred port then 587/465 on connection timeout (Site Builder T02). | Tip resend: Connection timeout on Gmail 465. | ✅ | pending | tip resend |
 | 2026-07-10 | **GAP-FILL step-08/09 mount** — fixed `tcIntakeRoutes.mjs` named imports (builder used default imports of named-only services → load fail); auto-registered both `.mjs` routes; disabled kebab duplicates to avoid double-mount. | never-stop: Pre-commit syntax fail on intake; billing `route module not auto-registered`. | ✅ | never-stop marks step-08/09/10 done |

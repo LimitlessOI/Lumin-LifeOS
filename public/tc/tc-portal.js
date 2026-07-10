@@ -12,6 +12,10 @@
       localStorage.getItem('COMMAND_CENTER_KEY') ||
       localStorage.getItem('lifeos_cmd_key') ||
       localStorage.getItem('x_api_key') ||
+      localStorage.getItem('command_key') ||
+      localStorage.getItem('commandKey') ||
+      localStorage.getItem('lifeos_command_key') ||
+      localStorage.getItem('lifeos_key') ||
       ''
     );
   }
@@ -20,6 +24,9 @@
     localStorage.setItem('COMMAND_CENTER_KEY', value);
     localStorage.setItem('lifeos_cmd_key', value);
     localStorage.setItem('x_api_key', value);
+    localStorage.setItem('command_key', value);
+    localStorage.setItem('commandKey', value);
+    localStorage.setItem('lifeos_command_key', value);
   }
 
   function qs(name) {
@@ -43,14 +50,18 @@
   }
 
   async function api(url, options) {
-    const res = await fetch(url, {
-      ...options,
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': getApiKey(),
-        ...(options && options.headers ? options.headers : {}),
-      },
-    });
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          'content-type': 'application/json',
+          'x-api-key': getApiKey(),
+          'x-command-key': getApiKey(),
+          ...(localStorage.getItem('lifeos_access_token')
+            ? { Authorization: `Bearer ${localStorage.getItem('lifeos_access_token')}` }
+            : {}),
+          ...(options && options.headers ? options.headers : {}),
+        },
+      });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || data.ok === false) {
       const err = new Error(data.error || `Request failed (${res.status})`);
@@ -101,6 +112,10 @@
       body: formData,
       headers: {
         'x-api-key': getApiKey(),
+        'x-command-key': getApiKey(),
+        ...(localStorage.getItem('lifeos_access_token')
+          ? { Authorization: `Bearer ${localStorage.getItem('lifeos_access_token')}` }
+          : {}),
       },
     });
     const data = await res.json().catch(() => ({}));

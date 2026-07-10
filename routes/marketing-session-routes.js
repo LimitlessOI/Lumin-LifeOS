@@ -7,7 +7,12 @@ const router = Router();
 
 // Helper to extract owner_id
 const getOwnerId = (req) => {
-    return req.user?.id || req.body.owner_id || req.query.owner_id;
+    return req.lifeosUser?.sub
+      || req.user?.id
+      || req.user?.sub
+      || req.body?.owner_id
+      || req.query?.owner_id
+      || null;
 };
 
 // Helper to safely parse JSON from council member

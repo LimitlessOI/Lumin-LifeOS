@@ -297,6 +297,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-07-10 | **GAP-FILL prospect-crm auth** — read `command_key`/`commandKey`/`lifeos_key` + Bearer JWT, not only `lifeos_command_key`. | UI walk: CRM 401 despite signed-in founder session. | ✅ | pending | tip UI |
 | 2026-07-10 | **GAP-FILL T02 preview durability** — store `previewHtml`/`previewMeta` on prospect row; `/previews/:id/index.html` DB fallback + checkout meta fallback. | Preview 200 then 404 across replicas (ephemeral disk); checkout Preview not found. | ⚠️ tip proof pending |
 | 2026-07-10 | **GAP-FILL T02 lean no-AI template** — `renderLeanProspectHtml` + `skipAi`/`leanTemplate` flags through route→pipeline→build; SMTP tries 465 then 587 on timeout. | AI generate hung/OOM'd past timeouts; Gmail SMTP connection timeout on tip. | ⚠️ tip proof pending |
 | 2026-07-10 | **GAP-FILL T02 persist-before-email** — record `built`+`preview_url` immediately after `buildFromUrl`; email heartbeats + 25s send timeout; `failProspectJob` won't clobber built/sent. | Lean job reached `send_email` then resume rebuilt from scratch (preview never in DB; SMTP hang). | ⚠️ tip proof pending |

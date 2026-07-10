@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T17:42:28.207Z",
+  "generated_at": "2026-07-10T17:58:16.846Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11410,
   "files": [
@@ -39400,9 +39400,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 84600,
-      "mtime": "2026-07-10T03:21:09.139Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 84655,
+      "mtime": "2026-07-10T17:58:01.820Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 79499,
-      "mtime": "2026-07-10T12:40:17.728Z",
-      "indexed_at": "2026-07-10T12:40:19.466Z"
+      "bytes": 79720,
+      "mtime": "2026-07-10T17:56:43.259Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -39729,9 +39729,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 105173,
-      "mtime": "2026-07-10T17:41:53.748Z",
-      "indexed_at": "2026-07-10T17:42:28.207Z"
+      "bytes": 105529,
+      "mtime": "2026-07-10T17:57:48.832Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -64282,9 +64282,9 @@
     {
       "path": "public/overlay/prospect-crm.html",
       "synopsis": "HTML page: Prospect CRM — Site Builder",
-      "bytes": 11548,
-      "mtime": "2026-06-29T17:21:08.475Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 11859,
+      "mtime": "2026-07-10T17:49:00.895Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z"
     },
     {
       "path": "public/overlay/recovery_support.html",
@@ -64609,9 +64609,9 @@
     {
       "path": "public/tc/agent-portal.html",
       "synopsis": "HTML page: TC Agent Portal",
-      "bytes": 98737,
-      "mtime": "2026-06-21T21:39:02.802Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 25803,
+      "mtime": "2026-07-10T17:58:11.673Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z"
     },
     {
       "path": "public/tc/client-portal.html",
@@ -64630,9 +64630,9 @@
     {
       "path": "public/tc/tc-portal.js",
       "synopsis": "js — public/tc/tc-portal.js.",
-      "bytes": 97102,
-      "mtime": "2026-06-21T21:39:02.860Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 97857,
+      "mtime": "2026-07-10T17:57:18.263Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z"
     },
     {
       "path": "public/tco/analyzer.html",
@@ -65877,9 +65877,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 25386,
-      "mtime": "2026-07-10T01:49:32.211Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 25466,
+      "mtime": "2026-07-10T17:54:09.846Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -65887,9 +65887,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 22091,
-      "mtime": "2026-07-10T01:40:22.328Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 23523,
+      "mtime": "2026-07-10T17:57:48.734Z",
+      "indexed_at": "2026-07-10T17:58:16.846Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

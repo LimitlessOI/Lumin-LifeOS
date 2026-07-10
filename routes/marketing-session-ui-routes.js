@@ -13,6 +13,31 @@ function escapeHtml(unsafe) {
 }
 
 function renderPage(title, bodyHtml, clientScript = '') {
+    const authBootstrap = `
+      function marketingAuthHeaders(extra = {}) {
+        const h = { 'Content-Type': 'application/json', ...extra };
+        const token = localStorage.getItem('lifeos_access_token') || '';
+        const key = localStorage.getItem('command_key')
+          || localStorage.getItem('commandKey')
+          || localStorage.getItem('lifeos_command_key')
+          || localStorage.getItem('COMMAND_CENTER_KEY')
+          || localStorage.getItem('lifeos_key')
+          || '';
+        if (token) h['Authorization'] = 'Bearer ' + token;
+        else if (key) { h['x-command-key'] = key; h['x-api-key'] = key; }
+        return h;
+      }
+      function marketingOwnerId() {
+        try {
+          const token = localStorage.getItem('lifeos_access_token') || '';
+          if (!token) return localStorage.getItem('lifeos_user') || 'adam';
+          const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+          return payload.sub || payload.handle || localStorage.getItem('lifeos_user') || 'adam';
+        } catch {
+          return localStorage.getItem('lifeos_user') || 'adam';
+        }
+      }
+    `;
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +78,8 @@ function renderPage(title, bodyHtml, clientScript = '') {
         ${bodyHtml}
     </div>
     <script>
-        ${clientScript}
+    ${authBootstrap}
+    ${clientScript}
     </script>
 </body>
 </html>`;
@@ -117,8 +143,9 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     // Step 1: Post consent
                     const consentResponse = await fetch('/api/v1/marketing/consent', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: marketingAuthHeaders(),
                         body: JSON.stringify({
+                            owner_id: marketingOwnerId(),
                             consent_type: 'session_recording',
                             consent_text: 'I agree to allow MarketingOS to process my input and generate marketing content based on the provided information. I understand that I am responsible for reviewing and approving all generated content before publication.',
                             consented_at: new Date().toISOString(),
@@ -134,9 +161,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     // Step 2: Create session
                     const sessionResponse = await fetch('/api/v1/marketing/sessions', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: marketingAuthHeaders(),
                         body: JSON.stringify({
-                            consent_record_id: consentData.id,
+                            owner_id: marketingOwnerId(),
+                            consent_record_id: consentData.id || consentData.consent?.id,
                             session_type: sessionType,
                             input_mode: 'text', // Assuming text input for now
                             status: 'initialized'
@@ -188,7 +216,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function fetchSessionDetails() {
                 try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`);
+                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`, { headers: marketingAuthHeaders() });
                     const session = await response.json();
                     if (!response.ok) {
                         throw new Error(session.error || 'Failed to fetch session details.');
@@ -236,14 +264,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
 
                 // Add user message to UI immediately
-                renderConversation([...(await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`).then(r => r.json())).coach_messages_json || [], { role: 'user', content: userInput }]);
+                renderConversation([...(await fetch(\`/api/v1/marketing/sessions/\${sessionId}\`, { headers: marketingAuthHeaders() }).then(r => r.json())).coach_messages_json || [], { role: 'user', content: userInput }]);
                 document.getElementById('userInput').value = ''; // Clear input
 
                 try {
                     const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/coach\`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: userInput })
+                        headers: marketingAuthHeaders(),
+                        body: JSON.stringify({ message: userInput, owner_id: marketingOwnerId() })
                     });
                     const data = await response.json();
 
@@ -287,7 +315,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function fetchContentPieces() {
                 try {
-                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/content\`);
+                    const response = await fetch(\`/api/v1/marketing/sessions/\${sessionId}/content\`, { headers: marketingAuthHeaders() });
                     const contentPieces = await response.json();
 
                     if (!response.ok) {
@@ -326,8 +354,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 try {
                     const response = await fetch(\`/api/v1/marketing/content/\${contentId}\`, {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: newStatus })
+                        headers: marketingAuthHeaders(),
+                        body: JSON.stringify({ status: newStatus, owner_id: marketingOwnerId() })
                     });
                     const data = await response.json();
 
