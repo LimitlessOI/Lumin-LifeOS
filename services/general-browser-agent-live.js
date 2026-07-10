@@ -16,7 +16,8 @@ export async function runGoalOnSession({
     expectSiteHost = null, 
     expectAccountText = null, 
     maxSteps = 20, 
-    onScreenshot = null, 
+    onScreenshot = null,
+    onAfterStep = null,
     logger = console 
 }) {
     const observe = async () => observePage(session);
@@ -48,7 +49,8 @@ export async function runGoalOnSession({
         act, 
         verifyGoal, 
         confirmContext, 
-        onStep, 
+        onStep,
+        onAfterStep,
         maxSteps 
     });
 }

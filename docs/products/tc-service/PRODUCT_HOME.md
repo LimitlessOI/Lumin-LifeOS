@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — System outbound From guard (no founder personal email); beta Site Builder offer support. |
+| **Last Updated** | 2026-07-10 — Browser signup: allow navigate-to-host from blank + wire onAfterStep payment handoff. |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **GAP-FILL signup context + payment handoff** — `makeAccountConfirmer` allows `navigate` TO expected host from `about:blank`; `runBrowserGoal`/`runGoalOnSession` wire `onAfterStep` so payment-boundary stop actually fires. | Founder-authority Replicate signup died immediately with `context_unconfirmed:context_mismatch` before leaving blank page; payment detection was passed but never called. | ✅ | tip signup retry |
 | 2026-07-10 | **GAP-FILL system From guard** — `resolveSystemEmailFrom` in `core/notification-service.js` refuses founder personal `adam@hopkinsgroup.org` as outbound From; prefers WORK_EMAIL / LifeOS@. | Site Builder outreach was failing Postmark sender signature when From was personal inbox. | ✅ | tip resend |
 | 2026-07-10 | **Founder-authorized account signup** — restored `founder-payment-vault`, `browser-payment-boundary`, `browser-signup-orchestrator`; wired `/api/v1/browser-agent/signup|sync|approve|capabilities`; `founder_authority:true` fills card from `FOUNDER_PAYMENT_*` and completes checkout (no second approve). Chair parses “set up/sign up/create an account” → signup with full authority. Env registry + managed allowlist for payment vault. | Adam: system must sign up like a human (email + card from Railway) with full authority when he orders account setup. | ✅ | pending | local tests + tip-sync |
 | 2026-07-10 | **GAP-FILL agent-portal restore + auth aliases** — restored truncated `public/tc/agent-portal.html` to shell + `tc-portal.js`; portal now reads `command_key`/`lifeos_command_key` and sends `x-command-key` + Bearer. | UI walk: portal stuck on Loading — HTML file truncated mid-template; Save header had no effect. | ✅ | pending | tip UI |

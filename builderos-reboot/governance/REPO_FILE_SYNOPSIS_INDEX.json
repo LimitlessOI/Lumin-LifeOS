@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T22:01:38.738Z",
+  "generated_at": "2026-07-10T22:03:30.836Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11437,
+  "file_count": 11438,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3455998,
-      "mtime": "2026-07-10T21:33:57.272Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z"
+      "bytes": 3456561,
+      "mtime": "2026-07-10T22:03:16.888Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38869,9 +38869,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 173352,
-      "mtime": "2026-07-10T19:16:23.399Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z"
+      "bytes": 173565,
+      "mtime": "2026-07-10T22:03:18.583Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39772,9 +39772,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 106464,
-      "mtime": "2026-07-10T20:42:48.708Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z"
+      "bytes": 106899,
+      "mtime": "2026-07-10T22:02:24.441Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -82988,9 +82988,9 @@
     {
       "path": "services/general-browser-agent-live.js",
       "synopsis": "@ssot docs/products/tc-service/PRODUCT_HOME.md",
-      "bytes": 1896,
-      "mtime": "2026-07-09T03:27:25.478Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z",
+      "bytes": 1939,
+      "mtime": "2026-07-10T22:02:00.694Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md",
         "docs/products/tc-service/PRODUCT_HOME.md"
@@ -82999,9 +82999,9 @@
     {
       "path": "services/general-browser-agent-runtime.js",
       "synopsis": "Exports observePage — services/general-browser-agent-runtime.js.",
-      "bytes": 4695,
-      "mtime": "2026-07-07T21:41:40.940Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z",
+      "bytes": 5084,
+      "mtime": "2026-07-10T22:01:52.966Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -83009,9 +83009,9 @@
     {
       "path": "services/general-browser-agent.js",
       "synopsis": "General goal-driven browser agent — the loop that lets the system",
-      "bytes": 8434,
-      "mtime": "2026-07-09T03:27:25.478Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z",
+      "bytes": 9181,
+      "mtime": "2026-07-10T22:02:00.600Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -85380,9 +85380,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 22788,
-      "mtime": "2026-07-10T20:42:48.710Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z",
+      "bytes": 22812,
+      "mtime": "2026-07-10T22:02:01.138Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88401,6 +88401,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/general-browser-agent-context.test.js",
+      "synopsis": "Context guard allows navigate-to-host from blank page.",
+      "bytes": 2702,
+      "mtime": "2026-07-10T22:02:20.119Z",
+      "indexed_at": "2026-07-10T22:03:30.836Z"
     },
     {
       "path": "tests/generate-build-queue-from-home.test.js",

@@ -69,8 +69,19 @@ export function makeEvidenceVerifier({ mustContain = [], mustHaveSelector = [] }
 }
 
 export function makeAccountConfirmer({ expectSiteHost = null, expectAccountText = null }) {
-    return async function confirmContext({ observation }) {
-        const ok = (expectSiteHost === null || observation.url.includes(expectSiteHost)) && (expectAccountText === null || observation.text.includes(expectAccountText));
+    return async function confirmContext({ observation, action = null }) {
+        // Allow first navigate TO the expected host from about:blank / other pages.
+        if (
+            action?.type === 'navigate' &&
+            expectSiteHost &&
+            typeof action.url === 'string' &&
+            action.url.includes(expectSiteHost)
+        ) {
+            return { ok: true };
+        }
+        const ok =
+            (expectSiteHost === null || String(observation?.url || '').includes(expectSiteHost)) &&
+            (expectAccountText === null || String(observation?.text || '').includes(expectAccountText));
         return { ok, reason: ok ? undefined : 'context_mismatch' };
     };
 }

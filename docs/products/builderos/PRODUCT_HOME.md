@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — GAP-FILL mission-routes: registerMissionRoutes + auto-register so never-stop can prove LIVE. |
+| **Last Updated** | 2026-07-10 — Allowlist `ELEVENLABS_API_KEY` for Creative Engine TTS; signup context fix co-shipped. |
 
 ### Related docs (this product)
 
