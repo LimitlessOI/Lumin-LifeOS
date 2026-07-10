@@ -118,12 +118,100 @@ export async function enqueueProspectJob(pipeline, options = {}) {
   };
 }
 
-export async function getProspectJobStatus(pool, clientId) {
+/**
+ * If a building job is not running on this instance, resume it here.
+ * Closes multi-instance orphan: accepting replica dies after 202, poller on
+ * another replica can continue processProspect.
+ */
+export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs = 15_000 } = {}) {
+  if (!pipeline?.processProspect || !pipeline?.pool || !clientId) {
+    return { ok: false, resumed: false, reason: 'missing_pipeline_or_id' };
+  }
+  if (activeJobs.has(String(clientId))) {
+    return { ok: true, resumed: false, reason: 'already_active_here' };
+  }
+
+  let row;
+  try {
+    const result = await pipeline.pool.query(
+      `SELECT client_id, business_url, contact_email, contact_name, business_name,
+              status, metadata, updated_at, created_at
+         FROM prospect_sites
+        WHERE client_id = $1
+        LIMIT 1`,
+      [clientId]
+    );
+    row = result.rows[0];
+  } catch (err) {
+    return { ok: false, resumed: false, reason: err.message };
+  }
+
+  if (!row || row.status !== 'building') {
+    return { ok: true, resumed: false, reason: 'not_building' };
+  }
+
+  const updatedAtMs = row.updated_at ? new Date(row.updated_at).getTime() : 0;
+  if (updatedAtMs && Date.now() - updatedAtMs < minAgeMs) {
+    return { ok: true, resumed: false, reason: 'too_fresh' };
+  }
+
+  const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+  const options = {
+    clientId: row.client_id,
+    businessUrl: row.business_url,
+    contactEmail: row.contact_email,
+    contactName: row.contact_name || '',
+    businessName: row.business_name || '',
+    skipEmail: metadata.skipEmail === true,
+    businessInfo: metadata.businessInfo || null,
+  };
+  if (!options.businessUrl) {
+    await pipeline.failProspectJob(clientId, 'resume_failed — missing businessUrl on building row');
+    return { ok: false, resumed: false, reason: 'missing_business_url' };
+  }
+
+  activeJobs.add(String(clientId));
+  logger.info('[PROSPECT-JOB] Resuming orphaned building job on this instance', { clientId });
+  if (typeof pipeline.touchProspectJob === 'function') {
+    await pipeline.touchProspectJob(clientId, 'resumed').catch(() => null);
+  }
+
+  setImmediate(() => {
+    pipeline
+      .processProspect(options)
+      .then(async (result) => {
+        if (!result.success) {
+          await pipeline.failProspectJob(clientId, result.error || 'Prospect pipeline failed after resume');
+        } else {
+          logger.info('[PROSPECT-JOB] Resume completed', {
+            clientId,
+            emailSent: result.emailSent,
+            previewUrl: result.previewUrl,
+          });
+        }
+      })
+      .catch(async (err) => {
+        logger.error('[PROSPECT-JOB] Resume failure', { clientId, error: err.message });
+        await pipeline.failProspectJob(clientId, err.message);
+      })
+      .finally(() => {
+        activeJobs.delete(String(clientId));
+      });
+  });
+
+  return { ok: true, resumed: true, clientId };
+}
+
+export async function getProspectJobStatus(pool, clientId, { pipeline = null } = {}) {
   if (!pool || !clientId) {
     return { ok: false, error: 'pool and clientId required' };
   }
 
   try {
+    if (pipeline) {
+      await resumeProspectJobIfOrphaned(pipeline, clientId).catch(() => null);
+    }
+
     const result = await pool.query(
       `SELECT client_id, business_url, contact_email, contact_name, business_name,
               preview_url, email_sent, status, metadata, updated_at, created_at
@@ -148,7 +236,7 @@ export async function getProspectJobStatus(pool, clientId) {
     if (staleBuilding) {
       await failStaleProspectJobs(pool, { staleMs: PROSPECT_STALE_MS });
       const refreshed = await pool.query(
-        `SELECT status, metadata, updated_at FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        `SELECT status, metadata, updated_at, preview_url, email_sent FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
         [clientId]
       );
       if (refreshed.rows[0]) {
@@ -157,6 +245,8 @@ export async function getProspectJobStatus(pool, clientId) {
           ? refreshed.rows[0].metadata
           : metadata;
         row.updated_at = refreshed.rows[0].updated_at;
+        row.preview_url = refreshed.rows[0].preview_url;
+        row.email_sent = refreshed.rows[0].email_sent;
       }
     }
 
@@ -178,6 +268,7 @@ export async function getProspectJobStatus(pool, clientId) {
       updatedAt: row.updated_at,
       createdAt: row.created_at,
       stale_reclaimed: staleBuilding || undefined,
+      resumed_here: activeJobs.has(String(clientId)) || undefined,
     };
   } catch (err) {
     return { ok: false, error: err.message, clientId };
@@ -233,6 +324,7 @@ export default {
   enqueueProspectJob,
   getProspectJobStatus,
   failStaleProspectJobs,
+  resumeProspectJobIfOrphaned,
   evaluateSiteBuilderEmailReadiness,
   isProspectJobActive,
   getActiveProspectJobCount,

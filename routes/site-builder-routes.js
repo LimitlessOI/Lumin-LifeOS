@@ -295,7 +295,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!clientId || !/^[\w-]+$/.test(clientId)) {
         return res.status(400).json({ ok: false, error: 'Invalid clientId' });
       }
-      const status = await getProspectJobStatus(pool, clientId);
+      const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
+      const status = await getProspectJobStatus(pool, clientId, { pipeline });
       if (!status.ok) return res.status(404).json(status);
       return res.json(status);
     } catch (err) {

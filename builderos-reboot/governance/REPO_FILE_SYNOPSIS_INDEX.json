@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T11:03:41.283Z",
+  "generated_at": "2026-07-10T11:17:37.594Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11409,
   "files": [
@@ -39671,9 +39671,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 77669,
-      "mtime": "2026-07-10T11:03:36.720Z",
-      "indexed_at": "2026-07-10T11:03:41.283Z"
+      "bytes": 77653,
+      "mtime": "2026-07-10T11:17:32.676Z",
+      "indexed_at": "2026-07-10T11:17:37.594Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66163,9 +66163,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 27523,
-      "mtime": "2026-07-10T11:03:32.866Z",
-      "indexed_at": "2026-07-10T11:03:41.283Z",
+      "bytes": 27660,
+      "mtime": "2026-07-10T11:17:31.322Z",
+      "indexed_at": "2026-07-10T11:17:37.594Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85132,9 +85132,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 22680,
-      "mtime": "2026-07-10T11:02:48.718Z",
-      "indexed_at": "2026-07-10T11:03:41.283Z",
+      "bytes": 22822,
+      "mtime": "2026-07-10T11:17:32.277Z",
+      "indexed_at": "2026-07-10T11:17:37.594Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85639,9 +85639,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 7553,
-      "mtime": "2026-07-10T11:03:10.551Z",
-      "indexed_at": "2026-07-10T11:03:41.283Z",
+      "bytes": 10880,
+      "mtime": "2026-07-10T11:17:17.625Z",
+      "indexed_at": "2026-07-10T11:17:37.594Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

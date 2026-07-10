@@ -93,7 +93,12 @@ export default class ProspectPipeline {
           contactEmail || null,
           contactName || null,
           businessName || null,
-          JSON.stringify({ jobStartedAt: new Date().toISOString(), async: true }),
+          JSON.stringify({
+            jobStartedAt: new Date().toISOString(),
+            async: true,
+            skipEmail: options.skipEmail === true,
+            businessInfo: options.businessInfo || null,
+          }),
         ]
       );
       return { ok: true, clientId, status: 'building', reserved: true };
