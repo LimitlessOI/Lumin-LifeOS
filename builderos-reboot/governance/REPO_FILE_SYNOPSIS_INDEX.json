@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T08:50:09.908Z",
+  "generated_at": "2026-07-10T08:53:57.627Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11399,
   "files": [
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 7013,
-      "mtime": "2026-07-09T15:00:03.741Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 7796,
+      "mtime": "2026-07-10T08:53:52.800Z",
+      "indexed_at": "2026-07-10T08:53:57.627Z",
       "synopsis_index_only": true
     },
     {
@@ -38841,9 +38841,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 172282,
-      "mtime": "2026-07-10T08:49:32.509Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 172511,
+      "mtime": "2026-07-10T08:53:56.759Z",
+      "indexed_at": "2026-07-10T08:53:57.627Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39722,9 +39722,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 103529,
-      "mtime": "2026-07-10T07:05:33.764Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 103773,
+      "mtime": "2026-07-10T08:53:56.758Z",
+      "indexed_at": "2026-07-10T08:53:57.627Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",

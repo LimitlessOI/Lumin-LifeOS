@@ -90,6 +90,24 @@
       "register": "registerLifeosPhase3Routes",
       "enabled": true,
       "note": "LifeOS Phase 3 REST (habits/energy/learning/calendar-protection). s7 blocked on missing auto-register after builder wrote broken sN-*-service imports \u2014 conductor GAP-FILL rewired to real lifeos-* services + mounted here."
+    },
+    {
+      "path": "routes/tc-intake-routes.js",
+      "register": "registerTcIntakeRoutes",
+      "enabled": true,
+      "note": "TC Service intake run + runs list. s10 false-done had reused an unrelated LifeOS auto-register commit; conductor GAP-FILL adds the real entries so module-health can pass."
+    },
+    {
+      "path": "routes/tc-billing-routes.js",
+      "register": "registerTcBillingRoutes",
+      "enabled": true,
+      "note": "TC Service billing checkout/enroll/webhook. Mounted via auto-register for founder-lane module-health."
+    },
+    {
+      "path": "routes/tc-imap-routes.js",
+      "register": "registerTcImapRoutes",
+      "enabled": true,
+      "note": "TC Service IMAP status + dry-run. Mounted via auto-register for founder-lane module-health."
     }
   ]
 }

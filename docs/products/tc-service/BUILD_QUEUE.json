@@ -89,7 +89,7 @@
     },
     {
       "id": "s7",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/tc-intake-routes.js",
       "task": "Register POST /api/tc/intake/run and GET /api/tc/intake/runs routes for end-to-end intake execution",
       "spec": "Export registerTcIntakeRoutes(app, deps). POST /api/tc/intake/run accepts {transactionId, emailMessageId}, calls tcIntakeRunner.runIntake(deps, ...), returns 200 with intakeRunId and status or 500 on error. GET /api/tc/intake/runs returns last 20 intake_runs ordered by created_at desc from deps.db. Validate req.body fields present. Mount auth middleware from deps.requireAuth. No top-level browser globals.",
@@ -107,19 +107,18 @@
         "s5"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "commit_sha": "475109419a10ea549895fb45ef67406a1369b0b7",
       "last_attempt_at": "2026-07-10T08:22:42.755Z",
-      "revive_count": 4,
-      "revived_at": "2026-07-10T08:00:01.242Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-10T08:53:56.704Z",
       "artifact_proven": true,
       "blocker_class": "BLOCKED_EXTERNAL",
-      "claim_level": "BUILT_NOT_LIVE",
-      "last_error": "route module not auto-registered — add to config/auto-registered-product-modules.json"
+      "claim_level": "BUILT_NOT_LIVE"
     },
     {
       "id": "s8",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/tc-billing-routes.js",
       "task": "Register billing and agent enrollment routes for first paying agent client",
       "spec": "Export registerTcBillingRoutes(app, deps). POST /api/tc/billing/checkout calls stripeBilling.createCheckoutSession and returns {url}. POST /api/tc/billing/enroll accepts {agentRegistryId, stripeSubscriptionId, planTier}, calls stripeBilling.enrollAgent, returns enrolled record. POST /api/tc/billing/webhook validates Stripe webhook signature via deps.validateWebhookSignature, updates stripe_subscriptions status. All routes require deps.requireAuth except webhook. No top-level browser globals.",
@@ -127,14 +126,15 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "commit_sha": "4bf7a8881124e02d1d45713d5edf2cacc6f287d1",
       "last_attempt_at": "2026-07-10T08:26:51.528Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/tc-billing-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "revive_count": 1,
+      "revived_at": "2026-07-10T08:53:56.704Z"
     },
     {
       "id": "s9",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/tc-imap-routes.js",
       "task": "Register IMAP bootstrap verification and dry-run scan routes",
       "spec": "Export registerTcImapRoutes(app, deps). GET /api/tc/imap/status calls imapRailwayBootstrap.verifyImapAndDryRun(deps) returns {ready, missing?, scannedCount?, sample?}. POST /api/tc/imap/dry-run forces a fresh dry-run scan and returns results. Requires deps.requireAuth. No top-level browser globals.",
@@ -142,10 +142,11 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 0,
       "last_attempt_at": "2026-07-10T08:37:39.415Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/tc-imap-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "commit_sha": "8057ba23eed5435c942771fd96f8a9bd25e3aa09"
+      "commit_sha": "8057ba23eed5435c942771fd96f8a9bd25e3aa09",
+      "revive_count": 1,
+      "revived_at": "2026-07-10T08:53:56.704Z"
     },
     {
       "id": "s10",
@@ -162,7 +163,15 @@
       "attempts": 1,
       "commit_sha": "07c9d93c648210ef6c6312e15aa0e05a9e9ed1ee",
       "last_attempt_at": "2026-07-10T08:45:32.776Z",
-      "completed_at": "2026-07-10T08:48:10.761Z"
+      "completed_at": "2026-07-10T08:53:56.704Z",
+      "file_contains": [
+        "routes/tc-intake-routes.js",
+        "registerTcIntakeRoutes",
+        "routes/tc-billing-routes.js",
+        "registerTcBillingRoutes",
+        "routes/tc-imap-routes.js",
+        "registerTcImapRoutes"
+      ]
     },
     {
       "id": "s11",

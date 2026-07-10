@@ -302,6 +302,7 @@ One model may fill more than one role only when no safer alternative exists, and
 ## Change Receipts
 
 | 2026-07-10 | **Auto-reg revive immediate after s10 DONE** — skip 15m cooldown once register-config sibling is done. | s10 done but s7/s8/s9 still waiting cooldown. | ✅ | push |
+| 2026-07-10 | **TC auto-register GAP-FILL** — s10 false-done on shared config file; conductor added real TC module entries + file_contains on s10. | Pre-existing short-circuit used wrong last-touch SHA. | ✅ | tip redeploy |
 | 2026-07-10 | **Auto-reg revive fix** — do not revive module-not-mounted route steps until register-config sibling is DONE (was reviving while s10 pending → starved s8/s9). | Local once kept re-picking s7 after honest auto-reg block. | ✅ selectNext→s8 | push |
 | 2026-07-10 | **Artifact proof disk fallback** — if git show + GitHub Contents fail, read workspace file (Railway deploy tree). Surface assertion error text in last_error. | Tip still assertion_threw after API fallback; local proof PASS. | ✅ | push |
 | 2026-07-10 | **Artifact proof revive for assertion_threw** — default `GITHUB_REPO` fallback + short revive cooldown for tooling `assertion_threw`; re-revive tc-service s7. | Tip re-blocked s7 before fix served; chicken-egg needs module-health error not tooling throw. | ✅ | push |

@@ -975,6 +975,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ## Change Receipts
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
+| 2026-07-10 | **GAP-FILL s10 false-done** — auto-register lacked TC routes; added tc-intake/billing/imap entries; revived s7–s9. | s10 marked done on unrelated LifeOS SHA; module-health still not auto-registered. | ✅ | push + redeploy |
 |---|---|---|---|---|---|
 | 2026-07-10 | **s7 revive after artifact-proof fix** — queue reset pending; root cause was Railway `git show` → `assertion_threw`, not bad route code (import already fixed). | s7 blocked after 3 attempts despite correct `tc-intake-runner.js` import. | ✅ | pending | never-stop re-run |
 | 2026-07-10 | **GAP-FILL s7 import** — `routes/tc-intake-routes.js` imported nonexistent `../services/tcIntakeRunner.js`; fixed to `tc-intake-runner.js`. Queue got `expected_exports` + `file_contains` so never-stop short-circuit can prove. | Never-stop `cycle_start product_build_tc-service_s7` then instance reset; file existed but broken import blocked module-health / done. | ✅ | pending | push + never-stop marks s7 done |
