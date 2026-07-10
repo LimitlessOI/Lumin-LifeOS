@@ -1,116 +1,116 @@
 /**
  * SYNOPSIS: Registers TcIntakeRoutes routes/handlers (routes/tcIntakeRoutes.mjs).
  */
-import { tcIntakePipeline } from '../services/tcIntakePipeline.js';
-import { tcDocumentQA } from '../services/tcDocumentQA.js';
-import { tcOfferPrep } from '../services/tcOfferPrep.js';
-import { tcMobileApproval } from '../services/tcMobileApproval.js';
-import { tcShowingFeedback } from '../services/tcShowingFeedback.js';
+import tcIntakePipeline from "../services/tcIntakePipeline.mjs";
+import tcDocumentQA from "../services/tcDocumentQA.mjs";
+import tcOfferPrep from "../services/tcOfferPrep.mjs";
+import tcMobileApproval from "../services/tcMobileApproval.mjs";
+import tcShowingFeedback from "../services/tcShowingFeedback.mjs";
 
-function getAgentId(req) {
-  return req.body?.agentId ?? req.query?.agentId ?? req.params?.agentId ?? null;
+function normalizeAgentId(body) {
+  return body?.agentId ?? body?.agent_id ?? body?.agentID ?? null;
 }
 
-function jsonError(res, status, message, details) {
-  const payload = { ok: false, error: message };
-  if (details !== undefined) payload.details = details;
-  return res.status(status).json(payload);
+function asJsonMessage(err) {
+  if (err instanceof Error) return err.message;
+  return typeof err === "string" ? err : "Unexpected error";
 }
 
-function withHandler(handler) {
+function withAsyncRoute(handler) {
   return async (req, res) => {
     try {
       await handler(req, res);
     } catch (err) {
-      req.app?.get?.('logger')?.error?.({ err }, 'tc intake route failed');
-      return jsonError(res, 500, 'Internal server error');
+      const status = Number.isInteger(err?.statusCode) ? err.statusCode : 500;
+      res.status(status).json({ ok: false, error: asJsonMessage(err) });
     }
   };
 }
 
-export function registerTcIntakeRoutes(app, deps) {
-  const requireKey = deps?.requireKey;
-  const logger = deps?.logger;
-  const db = deps?.pool;
-  const baseUrl = deps?.baseUrl;
+async function requireAgentId(req, res, next) {
+  const agentId = normalizeAgentId(req.body);
+  if (!agentId) {
+    res.status(400).json({ ok: false, error: "agentId is required" });
+    return;
+  }
+  req.body = req.body || {};
+  req.body.agentId = agentId;
+  next();
+}
 
-  if (logger) {
-    app.set?.('logger', logger);
+export function registerTcIntakeRoutes(app, deps) {
+  if (!app || !deps) {
+    throw new Error("registerTcIntakeRoutes requires app and deps");
   }
 
   app.post(
-    '/api/tc/intake/run',
-    requireKey,
-    withHandler(async (req, res) => {
-      const agentId = getAgentId(req);
-      if (!agentId) return jsonError(res, 400, 'agentId is required');
-      const result = await tcIntakePipeline.runIntakePipeline({ req, res, deps: { ...deps, db, baseUrl }, agentId });
-      return res.json(result ?? { ok: true });
-    })
+    "/api/tc/intake/run",
+    requireAgentId,
+    withAsyncRoute(async (req, res) => {
+      const result = await tcIntakePipeline.runIntakePipeline(req.body, deps);
+      res.json({ ok: true, result });
+    }),
   );
 
   app.post(
-    '/api/tc/intake/document-qa',
-    requireKey,
-    withHandler(async (req, res) => {
-      const agentId = getAgentId(req);
-      if (!agentId) return jsonError(res, 400, 'agentId is required');
-      const result = await tcDocumentQA.runDocumentQA({ req, res, deps: { ...deps, db, baseUrl }, agentId });
-      return res.json(result ?? { ok: true });
-    })
+    "/api/tc/intake/document-qa",
+    requireAgentId,
+    withAsyncRoute(async (req, res) => {
+      const result = await tcDocumentQA.runDocumentQA(req.body, deps);
+      res.json({ ok: true, result });
+    }),
   );
 
   app.post(
-    '/api/tc/offer-prep',
-    requireKey,
-    withHandler(async (req, res) => {
-      const agentId = getAgentId(req);
-      if (!agentId) return jsonError(res, 400, 'agentId is required');
-      const result = await tcOfferPrep.runOfferPrep({ req, res, deps: { ...deps, db, baseUrl }, agentId });
-      return res.json(result ?? { ok: true });
-    })
+    "/api/tc/offer-prep",
+    requireAgentId,
+    withAsyncRoute(async (req, res) => {
+      const result = await tcOfferPrep.runOfferPrep(req.body, deps);
+      res.json({ ok: true, result });
+    }),
   );
 
   app.post(
-    '/api/tc/approvals',
-    requireKey,
-    withHandler(async (req, res) => {
-      const agentId = getAgentId(req);
-      if (!agentId) return jsonError(res, 400, 'agentId is required');
-      const result = await tcMobileApproval.createApprovalRequest({ req, res, deps: { ...deps, db, baseUrl }, agentId });
-      return res.json(result ?? { ok: true });
-    })
+    "/api/tc/approvals",
+    deps.requireKey,
+    requireAgentId,
+    withAsyncRoute(async (req, res) => {
+      const result = await tcMobileApproval.createApprovalRequest(req.body, deps);
+      res.json({ ok: true, result });
+    }),
   );
 
   app.patch(
-    '/api/tc/approvals/:id',
-    requireKey,
-    withHandler(async (req, res) => {
-      const agentId = getAgentId(req);
-      if (!agentId) return jsonError(res, 400, 'agentId is required');
-      const result = await tcMobileApproval.processApproval({ req, res, deps: { ...deps, db, baseUrl }, agentId });
-      return res.json(result ?? { ok: true });
-    })
+    "/api/tc/approvals/:id",
+    deps.requireKey,
+    requireAgentId,
+    withAsyncRoute(async (req, res) => {
+      const result = await tcMobileApproval.processApproval(
+        { ...req.body, id: req.params.id },
+        deps,
+      );
+      res.json({ ok: true, result });
+    }),
   );
 
   app.post(
-    '/api/tc/showing-feedback',
-    requireKey,
-    withHandler(async (req, res) => {
-      const agentId = getAgentId(req);
-      if (!agentId) return jsonError(res, 400, 'agentId is required');
-      const result = await tcShowingFeedback.sendShowingFeedbackRequest({ req, res, deps: { ...deps, db, baseUrl }, agentId });
-      return res.json(result ?? { ok: true });
-    })
+    "/api/tc/showing-feedback",
+    requireAgentId,
+    withAsyncRoute(async (req, res) => {
+      const result = await tcShowingFeedback.sendShowingFeedbackRequest(req.body, deps);
+      res.json({ ok: true, result });
+    }),
   );
 
   app.post(
-    '/api/tc/showing-feedback/webhook',
-    withHandler(async (req, res) => {
-      const result = await tcShowingFeedback.recordFeedbackWebhook({ req, res, deps: { ...deps, db, baseUrl } });
-      return res.json(result ?? { ok: true });
-    })
+    "/api/tc/showing-feedback/webhook",
+    withAsyncRoute(async (req, res) => {
+      const result = await tcShowingFeedback.recordFeedbackWebhook(req.body, deps);
+      res.json({ ok: true, result });
+    }),
   );
+
+  return app;
 }
 
 export default registerTcIntakeRoutes;
