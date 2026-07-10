@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T04:25:48.820Z",
+  "generated_at": "2026-07-10T04:26:21.737Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11394,
   "files": [
@@ -62905,9 +62905,9 @@
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 2463,
-      "mtime": "2026-07-10T02:08:34.937Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 2544,
+      "mtime": "2026-07-10T04:26:20.803Z",
+      "indexed_at": "2026-07-10T04:26:21.737Z",
       "synopsis_index_only": true
     },
     {
