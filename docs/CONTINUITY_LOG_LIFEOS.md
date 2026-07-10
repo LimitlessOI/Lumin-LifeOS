@@ -8,6 +8,17 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Wave 0 #14 + deploy auth blocker
+
+### What happened
+- Item 14 shipped: `npm run migration:idempotency` PASS (312 migrations); tests 10/10; on `lifeos:bp-priority:verify`.
+- GitHub `Deploy to Railway` fails: `Railway deploy failed: Not Authorized` (Actions `RAILWAY_TOKEN`). Live tip still `2c542fc010`; main tip `3ec2a293a3`.
+
+### Next
+- Adam: refresh Railway token in GitHub secrets (or local `railway link`). Then Wave 0 #15.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Wave 0 #13 + redeploy fallthrough
 
 ### What happened
