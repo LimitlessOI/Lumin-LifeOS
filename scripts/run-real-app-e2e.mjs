@@ -127,15 +127,18 @@ async function snapshotAssistantState() {
 }
 
 async function waitForNewAssistantReply(before, timeoutMs = TIMEOUT) {
-  // Think panel uses `.lumin-think` (not `.lumin-msg.thinking`). Wait until it is gone
-  // AND the last assistant bubble is new (count up or text changed) — closes off-by-one flakes.
+  // Display DNA worklog (`.lumin-worklog`) replaced `.lumin-think` as the busy marker.
+  // Wait until in-progress worklog/think is gone AND the last assistant bubble is new.
   await page.waitForFunction(
     (prev) => {
-      const busy = document.querySelector('.lumin-think, .lumin-msg.thinking');
+      const busy = document.querySelector(
+        '.lumin-think, .lumin-msg.thinking, .lumin-worklog:not(.is-done):not(.is-failed)',
+      );
       if (busy) return false;
       const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
       const last = msgs[msgs.length - 1]?.innerText?.trim() || '';
       if (!last || last.length < 8) return false;
+      if (/^No response from system\.?/i.test(last)) return false;
       return msgs.length > prev.count || last !== prev.last;
     },
     before,
@@ -253,9 +256,15 @@ async function test_chatResponse() {
 async function test_smosQuestion() {
   console.log('\n[6] Chat: SMOS question returns workflow content (not search bleed)');
   try {
-    const reply = await sendLuminMessage('what does our Social Media OS workflow look like for relocation content?');
+    // Counsel SMOS answers can take longer than a short status ask (Chair + DNA).
+    const input = page.locator('#lumin-input');
+    await input.click();
+    await input.fill('what does our Social Media OS workflow look like for relocation content?');
+    const before = await snapshotAssistantState();
+    await page.locator('#lumin-send-btn').click();
+    const reply = await waitForNewAssistantReply(before, 90_000);
     await shot('04-smos-reply');
-    const hasWorkflow = /brief|coach|record|post|publish/i.test(reply);
+    const hasWorkflow = /brief|coach|extract|generate|approve|export|record|post|publish/i.test(reply);
     const hasBleed = /live search unavailable|verified web search.*should i prioritize/i.test(reply);
     if (hasBleed) {
       fail('smos_question', `search bleed: "${reply.slice(0, 120)}"`);

@@ -14,7 +14,7 @@ const SMOS_FACTS = {
   lumin_is_chair: true,
   personal_turn: false,
   program_context: [{ id: 'smos', amendment: 'docs/products/marketingos/PRODUCT_HOME.md' }],
-  system_knowledge: 'Lumin IS the Chair — SMOS workflow brief → coach → record → post → publish',
+  system_knowledge: 'Lumin IS the Chair — SMOS workflow consent → session → coach → extract → generate → approve → export',
   builder_capability: { build_async: true },
 };
 
@@ -22,9 +22,9 @@ test('SMOS workflow question uses direct answer', () => {
   const q = 'what does our Social Media OS workflow look like for relocation content?';
   assert.equal(shouldUseDirectProgramAnswer(q, SMOS_FACTS), true);
   const ans = formatDirectProgramAnswer(q, SMOS_FACTS);
-  assert.match(ans, /brief/i);
+  assert.match(ans, /consent|session/i);
   assert.match(ans, /coach/i);
-  assert.match(ans, /publish/i);
+  assert.match(ans, /extract|generate|approve|export/i);
   assert.match(ans, /relocation/i);
 });
 

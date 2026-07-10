@@ -95,20 +95,20 @@ export function formatDirectProgramAnswer(input = '', systemFacts = {}) {
   const smos = programs.find((p) => p.id === 'smos');
   if ((smos || SMOS_TOPIC.test(t)) && SMOS_WORKFLOW.test(t)) {
     const lines = [
-      'Our Social Media OS workflow (LifeRE, from your SSOT and `lifere-socialmediaos-bridge.js`):',
+      'Our Social Media OS workflow (MarketingOS Phase 1 — LIVE on `/api/v1/marketing/*`):',
       '',
-      '1. **Content brief** — topic/market locked; founder approves brief before scripts.',
-      '2. **Coach** — council session on the approved brief (hooks, angles).',
-      '3. **Record** — you record from the brief + coach output.',
-      '4. **Post** — draft copy from the pack.',
-      '5. **Publish** — approval queue only; nothing publishes without approved status.',
+      '1. **Consent** — timestamped consent before any session.',
+      '2. **Session** — founder speaks / types; coach interviews for real stories.',
+      '3. **Coach** — pulls hooks, angles, and authentic voice from that session.',
+      '4. **Extract** — typed pulls: hook, story, teaching, objection, offer, CTA, emotional truth.',
+      '5. **Generate** — content pack (posts, captions, scripts) from those extracts — not blank-brief AI.',
+      '6. **Approve** — you review; nothing ships without approval.',
+      '7. **Export** — download the pack (publishing automation is a later phase).',
       '',
-      'Founder chat can run this via the SMOS content executor (brief → coach → scripts from your hooks, not template videos).',
-      'LifeRE UI: Social Media OS tab + `/api/v1/lifere/marketing/socialmediaos/*`.',
-      'Authority: `docs/products/marketingos/socialmediaos/PRODUCT_HOME.md`.',
+      'Authority: `docs/products/marketingos/PRODUCT_HOME.md`. Video/image generation and clip editing are later phases — not Phase 1.',
     ];
     if (/relocation/i.test(input)) {
-      lines.splice(2, 0, 'For **relocation content**: brief topic = relocation market you serve; hooks come from brief + research pack, then scripts per video type.');
+      lines.splice(2, 0, 'For **relocation content**: the coach stage is where you narrate the market angle (seller hesitation, buyer education, etc.); extract then pulls story + objection heaviest.');
     }
     return lines.join('\n');
   }

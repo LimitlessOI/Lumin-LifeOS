@@ -31,6 +31,9 @@ const ALLOW_DIRECT_LLM = new Set([
   'services/word-keeper-transcriber.js',
   'services/builder-audit-before-done.js',
   'services/capability-map.js',
+  // Never-stop planner failover chain (Anthropic → OpenAI → Gemini) — strong models only;
+  // not a user-facing chat bypass. Required so product-queue planning never sits idle.
+  'services/never-stop-product-factory.js',
   'core/tier0-council.js',
   'routes/tco-routes.js',
   'routes/gemini-proof-routes.js',

@@ -12,24 +12,25 @@ const INDEX_PATH = path.join(ROOT, 'builderos-reboot/governance/REPO_FILE_SYNOPS
 const AMENDMENTS_DIR = path.join(ROOT, 'docs/projects');
 
 const SMOS_CANONICAL = {
-  program: 'Social Media OS (LifeRE)',
-  authority: 'docs/products/marketingos/socialmediaos/PRODUCT_HOME.md',
-  workflow_order: ['content_brief', 'coach', 'record', 'post', 'publish'],
-  brief_gate: 'Approved content brief required before coach/scripts/record',
-  founder_chat_executor: 'founder-smos-content-executor.js → lifere-socialmediaos-bridge.js',
-  api_prefix: '/api/v1/lifere/marketing/socialmediaos/',
-  overlay: 'public/overlay/lifeos-lifere.html',
+  program: 'Social Media OS (MarketingOS)',
+  authority: 'docs/products/marketingos/PRODUCT_HOME.md',
+  // Phase 1 LIVE: /api/v1/marketing/* (legacy /api/v1/socialmediaos/* not mounted)
+  workflow_order: ['consent', 'session', 'coach', 'extract', 'generate', 'approve', 'export'],
+  brief_gate: 'Consent + coaching session required before extract/generate (authenticity principle)',
+  founder_chat_executor: 'chair-direct-agent + /api/v1/marketing/* session pipeline',
+  api_prefix: '/api/v1/marketing/',
+  overlay: 'public/overlay/lifeos-app.html',
 };
 
 const PROGRAM_REGISTRY = [
   {
     id: 'smos',
     match: /\b(smos|social media os|socialmediaos|content brief|relocation content|marketing os)\b/i,
-    amendment: 'docs/products/marketingos/socialmediaos/PRODUCT_HOME.md',
+    amendment: 'docs/products/marketingos/PRODUCT_HOME.md',
     services: [
-      'services/lifere-socialmediaos-bridge.js',
-      'services/lifere-content-brief-engine.js',
-      'services/founder-smos-content-executor.js',
+      'routes/marketing-session-routes.js',
+      'services/chair-program-direct-answer.js',
+      'services/chair-direct-agent.js',
     ],
     canonical: SMOS_CANONICAL,
   },

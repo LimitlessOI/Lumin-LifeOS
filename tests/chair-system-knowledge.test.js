@@ -21,5 +21,5 @@ test('searchRepoSynopsis — finds smos bridge', () => {
 test('gatherChairSystemKnowledge — SMOS workflow in formatted block', async () => {
   const know = await gatherChairSystemKnowledge('explain our SMOS workflow for relocation content');
   assert.ok(know.programs.some((p) => p.id === 'smos'));
-  assert.match(know.formatted, /content_brief|coach|record|publish/i);
+  assert.match(know.formatted, /consent|session|coach|extract|generate|approve|export/i);
 });

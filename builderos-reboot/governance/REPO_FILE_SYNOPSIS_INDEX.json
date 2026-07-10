@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T02:08:59.133Z",
+  "generated_at": "2026-07-10T03:10:13.062Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11383,
   "files": [
@@ -21628,8 +21628,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3439769,
-      "mtime": "2026-07-10T02:08:58.516Z",
-      "indexed_at": "2026-07-10T02:08:59.133Z"
+      "mtime": "2026-07-10T03:10:00.534Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36720,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 58265,
-      "mtime": "2026-07-10T02:08:34.934Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 59067,
+      "mtime": "2026-07-10T03:09:14.542Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38819,9 +38819,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 204762,
-      "mtime": "2026-07-10T00:48:48.660Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 203547,
+      "mtime": "2026-07-10T03:09:31.372Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39262,9 +39262,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 595452,
-      "mtime": "2026-07-10T01:14:57.744Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 596471,
+      "mtime": "2026-07-10T03:09:31.306Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -62971,9 +62971,9 @@
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
-      "bytes": 736,
-      "mtime": "2026-07-09T03:27:41.528Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 782,
+      "mtime": "2026-07-10T03:08:28.908Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z",
       "synopsis_index_only": true
     },
     {
@@ -66514,9 +66514,9 @@
     {
       "path": "scripts/audit-truth-enforcement.mjs",
       "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
-      "bytes": 4667,
-      "mtime": "2026-07-03T00:17:46.215Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 4896,
+      "mtime": "2026-07-10T03:08:02.631Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -68564,9 +68564,9 @@
     {
       "path": "scripts/run-real-app-e2e.mjs",
       "synopsis": "Real-app E2E — Playwright drives the actual Railway UI like a founder would.",
-      "bytes": 23971,
-      "mtime": "2026-07-09T04:54:02.701Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 24426,
+      "mtime": "2026-07-10T03:08:07.436Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81339,9 +81339,9 @@
     {
       "path": "services/chair-program-direct-answer.js",
       "synopsis": "Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.",
-      "bytes": 7050,
-      "mtime": "2026-06-29T17:22:06.867Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 7149,
+      "mtime": "2026-07-10T03:08:03.145Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -81349,9 +81349,9 @@
     {
       "path": "services/chair-system-knowledge.js",
       "synopsis": "Chair system knowledge — SSOT, repo synopsis, program context for Lumin counsel.",
-      "bytes": 8661,
-      "mtime": "2026-06-29T17:44:54.502Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 8717,
+      "mtime": "2026-07-10T03:08:24.225Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87641,16 +87641,16 @@
     {
       "path": "tests/chair-program-direct-answer.test.js",
       "synopsis": "Direct program answers — SMOS/connection from SSOT, no counsel drift.",
-      "bytes": 3079,
-      "mtime": "2026-06-29T17:21:09.081Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 3143,
+      "mtime": "2026-07-10T03:08:47.951Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z"
     },
     {
       "path": "tests/chair-system-knowledge.test.js",
       "synopsis": "js — tests/chair-system-knowledge.test.js.",
-      "bytes": 965,
-      "mtime": "2026-06-26T19:48:05.149Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z"
+      "bytes": 984,
+      "mtime": "2026-07-10T03:08:48.165Z",
+      "indexed_at": "2026-07-10T03:10:13.062Z"
     },
     {
       "path": "tests/chair-truth-gate.test.js",
