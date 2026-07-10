@@ -22,8 +22,8 @@
       "status": "in_progress",
       "scorecard_areas": ["Never-stop autonomy", "Deploy / Railway"],
       "done_when": "Scheduler burns pending BUILD_QUEUE steps; tip tracks main; no spin receipts",
-      "next_action": "Tip=main (efce3a048c); burn remaining tc-service pending steps via scheduler",
-      "blocker": "run-once often 502s at proxy while long builds run — scheduler still enabled"
+      "next_action": "Tip tracking main; never-stop cycle_start product_build_tc-service_s7 in progress — poll until s7 done then s8+",
+      "blocker": "run-once often 502s at proxy while long builds run — scheduler still enabled; trust last_receipt/events not total_runs after redeploy"
     },
     {
       "id": "T02",
@@ -52,8 +52,8 @@
       "status": "in_progress",
       "scorecard_areas": ["SENTRY / pre-alpha", "MarketingOS / SMOS"],
       "done_when": "Marketing + LifeOS founder-ui + Site Builder Layer A+B PASS receipts",
-      "next_action": "Marketing A+B PASS. REAL_APP_E2E smos_question PASS on tip; finish full E2E + site-builder gate receipts",
-      "blocker": null
+      "next_action": "Smoke-canary mechanical path shipped; redeploy then re-run REAL_APP_E2E for drawer_direct_build; Site Builder Layer B still open",
+      "blocker": "drawer_direct_build was FOUNDER_BUILD_JOB_STALE_RUNNING on AI path — fix pending tip deploy"
     },
     {
       "id": "T05",

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T06:02:43.184Z",
+  "generated_at": "2026-07-10T06:12:17.614Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11396,
+  "file_count": 11397,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -38841,9 +38841,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 170471,
-      "mtime": "2026-07-10T06:01:39.779Z",
-      "indexed_at": "2026-07-10T06:02:43.184Z"
+      "bytes": 170893,
+      "mtime": "2026-07-10T06:12:05.780Z",
+      "indexed_at": "2026-07-10T06:12:17.614Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -59155,9 +59155,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5263,
-      "mtime": "2026-07-10T05:48:08.046Z",
-      "indexed_at": "2026-07-10T05:48:35.303Z",
+      "bytes": 5472,
+      "mtime": "2026-07-10T06:12:05.673Z",
+      "indexed_at": "2026-07-10T06:12:17.614Z",
       "synopsis_index_only": true
     },
     {
@@ -81324,9 +81324,9 @@
     {
       "path": "services/chair-founder-packet-v2-enforcement.js",
       "synopsis": "Founder Packet V2 — hard enforcement on live Lumin Chair turns.",
-      "bytes": 11717,
-      "mtime": "2026-07-03T16:30:52.644Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 11797,
+      "mtime": "2026-07-10T06:12:05.505Z",
+      "indexed_at": "2026-07-10T06:12:17.614Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -82382,9 +82382,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 47797,
-      "mtime": "2026-07-09T19:38:08.222Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 50574,
+      "mtime": "2026-07-10T06:11:23.279Z",
+      "indexed_at": "2026-07-10T06:12:17.614Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -82553,9 +82553,9 @@
     {
       "path": "services/founder-overlay-surgical-patch.js",
       "synopsis": "Mechanical overlay HTML patches — insert comments/markers without LLM whole-file rewrite.",
-      "bytes": 4158,
-      "mtime": "2026-06-29T17:44:54.524Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 6259,
+      "mtime": "2026-07-10T06:11:35.151Z",
+      "indexed_at": "2026-07-10T06:12:17.614Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88005,6 +88005,16 @@
       "bytes": 3732,
       "mtime": "2026-07-09T23:58:50.442Z",
       "indexed_at": "2026-07-10T02:08:57.077Z"
+    },
+    {
+      "path": "tests/founder-smoke-canary-patch.test.js",
+      "synopsis": "Mechanical smoke-canary mjs comment patch for drawer E2E.",
+      "bytes": 1716,
+      "mtime": "2026-07-10T06:11:23.371Z",
+      "indexed_at": "2026-07-10T06:12:17.614Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "tests/founder-usability-confirm.test.js",

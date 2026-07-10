@@ -12,7 +12,7 @@ import {
   buildLocalStrategicNotes,
 } from './lumin-strategic-intelligence.js';
 import { resolveFounderBuildTarget } from './builder-instruction-target.js';
-import { isSurgicalHtmlCommentPatch } from './founder-overlay-surgical-patch.js';
+import { isSmokeCanaryMjsCommentPatch, isSurgicalHtmlCommentPatch } from './founder-overlay-surgical-patch.js';
 import { isVoiceSendWireOrder } from './founder-voice-send-patch.js';
 import { isDirectExecuteOrder } from './founder-intent-clarify.js';
 
@@ -236,6 +236,7 @@ export async function enforceFounderPacketV2ChairTurn({
     isDirectExecuteOrder(cleanedInput)
     || Boolean(executableTarget)
     || isSurgicalHtmlCommentPatch(cleanedInput)
+    || isSmokeCanaryMjsCommentPatch(cleanedInput)
     || isVoiceSendWireOrder(cleanedInput)
   );
   const intentOk = (understanding ? understanding.intent_understood === true : false)

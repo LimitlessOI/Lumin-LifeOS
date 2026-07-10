@@ -11,11 +11,66 @@ import {
 
 const COMMENT_RE = /<!--\s*([^>]+?)\s*-->/;
 
+const SMOKE_CANARY_FILE = 'scripts/lifeos-direct-build-smoke-test.mjs';
+const SMOKE_PROOF_RE = /\/\/\s*ui-e2e-build-proof:\s*(\S+)/i;
+
 export function isSurgicalHtmlCommentPatch(task = '') {
   const t = String(task || '');
   if (!/\bhtml comment\b/i.test(t) && !COMMENT_RE.test(t)) return false;
   if (!/\b(add|insert|place|put)\b/i.test(t)) return false;
   return Boolean(extractTargetFileFromInstruction(t) || /\.html\b/i.test(t));
+}
+
+/** E2E drawer canary: mechanical comment stamp — no AI / no multi-instance orphan risk. */
+export function isSmokeCanaryMjsCommentPatch(task = '') {
+  const t = String(task || '');
+  return /lifeos-direct-build-smoke-test\.mjs/i.test(t) && /ui-e2e-build-proof:/i.test(t);
+}
+
+export function parseSmokeCanaryMjsCommentPatch(task = '') {
+  const t = String(task || '').trim();
+  if (!isSmokeCanaryMjsCommentPatch(t)) return null;
+  const m = t.match(SMOKE_PROOF_RE) || t.match(/ui-e2e-build-proof:\s*(\S+)/i);
+  if (!m) return null;
+  const stamp = String(m[1] || '').trim().replace(/^["'`]+|["'`]+$/g, '');
+  if (!stamp) return null;
+  return {
+    targetFile: SMOKE_CANARY_FILE,
+    comment: `// ui-e2e-build-proof: ${stamp}`,
+  };
+}
+
+export function applySmokeCanaryMjsCommentPatch({ root, task }) {
+  const spec = parseSmokeCanaryMjsCommentPatch(task);
+  if (!spec?.comment) return { ok: false, reason: 'not_smoke_canary_mjs_comment' };
+
+  const abs = path.join(root, spec.targetFile);
+  if (!fs.existsSync(abs)) return { ok: false, reason: 'target_missing' };
+  const existing = fs.readFileSync(abs, 'utf8');
+  let output;
+  let already_present = false;
+  if (existing.includes(spec.comment)) {
+    output = existing;
+    already_present = true;
+  } else if (SMOKE_PROOF_RE.test(existing)) {
+    output = existing.replace(SMOKE_PROOF_RE, spec.comment);
+  } else {
+    const lines = existing.split('\n');
+    const insertAt = lines.findIndex((line, i) => i > 0 && !line.startsWith('/*') && !line.startsWith(' *') && !line.startsWith('*/') && line.trim() !== '');
+    const idx = insertAt === -1 ? 0 : insertAt;
+    lines.splice(idx, 0, spec.comment);
+    output = lines.join('\n');
+  }
+  if (output === existing && !already_present) {
+    return { ok: false, reason: 'no_change' };
+  }
+  return {
+    ok: true,
+    patch: 'smoke_canary_mjs_comment',
+    files: [{ target_file: spec.targetFile, output }],
+    comment: spec.comment,
+    already_present,
+  };
 }
 
 export function parseSurgicalHtmlCommentPatch(task = '') {

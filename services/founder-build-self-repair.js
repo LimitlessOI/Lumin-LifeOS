@@ -19,8 +19,10 @@ import {
   isVisualUiPatchRequest,
 } from './founder-visual-ui-patch.js';
 import {
+  applySmokeCanaryMjsCommentPatch,
   applySurgicalHtmlCommentPatch,
   commitSurgicalPatchViaBuilder,
+  isSmokeCanaryMjsCommentPatch,
   isSurgicalHtmlCommentPatch,
   parseSurgicalHtmlCommentPatch,
 } from './founder-overlay-surgical-patch.js';
@@ -723,6 +725,82 @@ async function runSurgicalHtmlPatchWithVerification({
   }, { action: 'build', task });
 }
 
+async function runSmokeCanaryMjsPatchWithVerification({
+  task,
+  commandKey,
+  baseUrl,
+  repoRoot,
+  buildFailureReceipt,
+  enforceExecutionTruth,
+}) {
+  const baseCheck = assertFounderBuildBaseUrl(baseUrl);
+  if (!baseCheck.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: baseCheck.blocker,
+      failure_code: baseCheck.code,
+      execution_path: 'founder_smoke_canary_mjs_patch',
+    }, { action: 'build', task });
+  }
+
+  const patchResult = applySmokeCanaryMjsCommentPatch({ root: repoRoot, task });
+  if (!patchResult.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: patchResult.reason || 'smoke_canary_patch_failed',
+      failure_code: 'SMOKE_CANARY_PATCH_FAILED',
+      execution_path: 'founder_smoke_canary_mjs_patch',
+    }, { action: 'build', task });
+  }
+
+  let execRes;
+  try {
+    execRes = await commitSurgicalPatchViaBuilder({
+      baseUrl: baseCheck.baseUrl,
+      commandKey,
+      patchResult,
+    });
+  } catch (err) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: err.message,
+      execution_path: 'founder_smoke_canary_mjs_patch',
+    }, { action: 'build', task });
+  }
+
+  const execJson = execRes.json || {};
+  const committedFiles = execRes.committed_files || patchResult.files?.map((f) => f.target_file) || [];
+  if (!execJson.ok || !execJson.committed) {
+    const receipt = buildFailureReceipt(task, {}, execJson);
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: receipt.blocker,
+      execution_receipt: receipt,
+      execution_path: 'founder_smoke_canary_mjs_patch',
+    }, { action: 'build', task });
+  }
+
+  const commitSha = execJson.sha || execJson.commit_sha || null;
+  return enforceExecutionTruth({
+    ok: true,
+    committed: true,
+    pass_fail: 'PASS',
+    target_file: committedFiles.join(', ') || patchResult.files?.[0]?.target_file,
+    sha: commitSha,
+    human_summary: patchResult.already_present
+      ? `Smoke canary marker already present in ${patchResult.files?.[0]?.target_file}`
+      : `Smoke canary marker applied to ${patchResult.files?.[0]?.target_file}`,
+    execution_path: 'founder_smoke_canary_mjs_patch',
+    founder_verification_required: false,
+    task_meta: { patch: patchResult.patch, comment: patchResult.comment },
+    exec_meta: execJson,
+  }, { action: 'build', task });
+}
+
 async function runVoiceSendPatchWithVerification({
   task,
   commandKey,
@@ -964,6 +1042,17 @@ export async function runFounderBuildWithSelfRepair(options) {
 
   if (isSurgicalHtmlCommentPatch(currentTask)) {
     return runSurgicalHtmlPatchWithVerification({
+      task: currentTask,
+      commandKey,
+      baseUrl: base,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+    });
+  }
+
+  if (isSmokeCanaryMjsCommentPatch(currentTask)) {
+    return runSmokeCanaryMjsPatchWithVerification({
       task: currentTask,
       commandKey,
       baseUrl: base,

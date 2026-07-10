@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Cert emitter honesty + LifeRE contract path fix; autonomy-closure v1 acceptance PASS; FULLY_MACHINE_READY still false (founder confirm + cold-coder). |
+| **Last Updated** | 2026-07-10 — Smoke-canary mechanical mjs patch (drawer E2E STALE_RUNNING fix); never-stop burning tc-service s7; FULLY_MACHINE_READY still false. |
 
 ### Related docs (this product)
 
@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-10 | **Drawer smoke canary mechanical path** — `isSmokeCanaryMjsCommentPatch` + apply/commit in `founder-overlay-surgical-patch.js`; wired in `founder-build-self-repair.js` before AI loop; FP_V2 direct-execute lock. Avoids multi-instance `FOUNDER_BUILD_JOB_STALE_RUNNING` on `lifeos-direct-build-smoke-test.mjs`. | REAL_APP_E2E 15/16 — only fail was STALE_RUNNING on AI path. | ✅ unit PASS | push + redeploy + re-run E2E |
 | 2026-07-10 | **Autonomy closure keep-building** — cert emitter reads receipts + `autonomy_closure_v1.blockers`; LifeRE FOUNDER_USABILITY_CONTRACT path → `docs/products/lifere/`; `builderos:autonomy-closure:v1-acceptance` PASS. FULLY_MACHINE_READY still false (honest). | Adam: do not stop on BuilderOS. | ✅ acceptance PASS | tip sync + never-stop burn tc-service |
 | 2026-07-10 | **Never-stop receipt observability** — in-memory `lastReceipt`; write `phase:started` before cycle; increment `totalRuns` only after finish; log disk write failures. Closes `runs>0` + `last_receipt:null` blind spot. | Adam: BuilderOS not done — why stop fixing? Loop looked idle/opaque. | ✅ local | push + redeploy + kick |
 | 2026-07-10 | **Path-to-10 climb** — mission `assertion_spec` closes 5 coverage gaps (CCV1 + AIV1); managed-env allowlist adds `EMAIL_FROM`/`EMAIL_PROVIDER`/`SITE_BASE_URL`/`SMTP_*`/`GO_VEGAS_*`/`GOOGLE_PLACES_KEY`; `docs/TOP_10_PATH_TO_10.json` + `npm run path-to-10:status`. | Adam: build until all ten are ten. | ✅ coverage audit gaps=0 | tip deploy + SENTRY re-gate + Places key for Go Vegas |
