@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:49:05.165Z",
+  "generated_at": "2026-07-10T03:50:40.876Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11390,
+  "file_count": 11391,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82924,6 +82924,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/imap-railway-bootstrap.js",
+      "synopsis": "Exports verifyImapAndDryRun — services/imap-railway-bootstrap.js.",
+      "bytes": 1143,
+      "mtime": "2026-07-10T03:50:40.876Z",
+      "indexed_at": "2026-07-10T03:50:40.876Z"
     },
     {
       "path": "services/income-drones.js",
