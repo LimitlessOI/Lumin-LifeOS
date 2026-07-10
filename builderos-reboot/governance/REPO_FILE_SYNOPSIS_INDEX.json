@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T09:11:55.245Z",
+  "generated_at": "2026-07-10T09:12:38.214Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11403,
+  "file_count": 11404,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -86233,6 +86233,13 @@
       "bytes": 7364,
       "mtime": "2026-07-10T09:10:47.669Z",
       "indexed_at": "2026-07-10T09:10:47.669Z"
+    },
+    {
+      "path": "services/tcMobileApproval.mjs",
+      "synopsis": "Exports createApprovalRequest — services/tcMobileApproval.mjs.",
+      "bytes": 4694,
+      "mtime": "2026-07-10T09:12:38.214Z",
+      "indexed_at": "2026-07-10T09:12:38.214Z"
     },
     {
       "path": "services/tcOfferPrep.mjs",
