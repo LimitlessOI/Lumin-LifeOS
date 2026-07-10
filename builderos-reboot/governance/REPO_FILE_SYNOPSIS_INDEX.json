@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T08:30:03.626Z",
+  "generated_at": "2026-07-10T08:32:17.993Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11399,
   "files": [
@@ -66195,10 +66195,10 @@
     },
     {
       "path": "routes/tc-imap-routes.js",
-      "synopsis": "Registers TcImapRoutes routes/handlers (routes/tc-imap-routes.js).",
-      "bytes": 1639,
-      "mtime": "2026-07-10T08:30:03.626Z",
-      "indexed_at": "2026-07-10T08:30:03.626Z"
+      "synopsis": "Exports registerTcImapRoutes — routes/tc-imap-routes.js.",
+      "bytes": 1305,
+      "mtime": "2026-07-10T08:32:17.993Z",
+      "indexed_at": "2026-07-10T08:32:17.993Z"
     },
     {
       "path": "routes/tc-intake-routes.js",
