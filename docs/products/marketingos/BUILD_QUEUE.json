@@ -215,11 +215,19 @@
       "target_file": "scripts/run-marketingos-layer-b.mjs",
       "task": "MarketingOS SENTRY Layer B — Playwright human-sim of /marketing UI + in-browser consent→session→coach→extract→generate→approve→export. Write receipt products/receipts/SENTRY_MARKETINGOS_LAYER_B.json. Audio remains named BLOCKED (STORAGE_R2_UNVERIFIED).",
       "spec": "ESM Playwright script (same stack as scripts/run-real-app-e2e.mjs / run-marketingos-layer-a.mjs). Requires PUBLIC_BASE_URL + COMMAND_CENTER_KEY. Fail-closed. Exit 0 only when landing, session/new, calendar, and browser API loop all pass. Named blocker STORAGE_R2_UNVERIFIED must appear in receipt (never fake audio PASS). Register in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json under marketingos layers as B-browser. @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "depends_on": ["smos-intel-routes"],
+      "depends_on": [
+        "smos-intel-routes"
+      ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "max_output_tokens": 12000,
-      "file_contains": ["sentry_marketingos_layer_b_v1", "STORAGE_R2_UNVERIFIED", "chromium"]
+      "file_contains": [
+        "sentry_marketingos_layer_b_v1",
+        "STORAGE_R2_UNVERIFIED",
+        "chromium"
+      ],
+      "last_attempt_at": "2026-07-10T03:18:45.858Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ]
 }
