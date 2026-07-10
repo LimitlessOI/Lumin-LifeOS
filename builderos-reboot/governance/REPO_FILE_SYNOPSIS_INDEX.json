@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T00:49:15.700Z",
+  "generated_at": "2026-07-10T01:15:12.008Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11375,
   "files": [
@@ -91,9 +91,9 @@
     {
       "path": ".github/workflows/railway-deploy.yml",
       "synopsis": "yml — .github/workflows/railway-deploy.yml.",
-      "bytes": 1463,
-      "mtime": "2026-07-03T21:47:14.344Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "bytes": 2003,
+      "mtime": "2026-07-10T01:14:05.466Z",
+      "indexed_at": "2026-07-10T01:15:12.008Z"
     },
     {
       "path": ".github/workflows/self-build.yml",
@@ -35860,16 +35860,16 @@
     {
       "path": "docs/AGENT_INBOX_ARCHIVE.md",
       "synopsis": "Agent Inbox — Archive",
-      "bytes": 874,
-      "mtime": "2026-07-10T00:31:45.841Z",
-      "indexed_at": "2026-07-10T00:32:03.749Z"
+      "bytes": 1581,
+      "mtime": "2026-07-10T01:14:24.786Z",
+      "indexed_at": "2026-07-10T01:15:12.008Z"
     },
     {
       "path": "docs/AGENT_INBOX.md",
       "synopsis": "Agent Inbox",
-      "bytes": 1271,
-      "mtime": "2026-07-10T00:48:48.655Z",
-      "indexed_at": "2026-07-10T00:49:15.700Z"
+      "bytes": 1069,
+      "mtime": "2026-07-10T01:14:19.288Z",
+      "indexed_at": "2026-07-10T01:15:12.008Z"
     },
     {
       "path": "docs/AGENT_RULES.compact.md",
@@ -36720,9 +36720,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 55293,
-      "mtime": "2026-07-10T00:48:48.654Z",
-      "indexed_at": "2026-07-10T00:49:15.700Z"
+      "bytes": 56025,
+      "mtime": "2026-07-10T01:14:26.344Z",
+      "indexed_at": "2026-07-10T01:15:12.008Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39262,9 +39262,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 594803,
-      "mtime": "2026-07-10T00:48:48.658Z",
-      "indexed_at": "2026-07-10T00:49:15.700Z"
+      "bytes": 595452,
+      "mtime": "2026-07-10T01:14:57.744Z",
+      "indexed_at": "2026-07-10T01:15:12.008Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -67965,10 +67965,10 @@
     },
     {
       "path": "scripts/railway-github-deploy.mjs",
-      "synopsis": "Deploy the repo to Railway from GitHub Actions without relying on the Railway CLI.",
-      "bytes": 6137,
-      "mtime": "2026-07-03T21:47:14.353Z",
-      "indexed_at": "2026-07-10T00:10:11.466Z"
+      "synopsis": "Deploy the repo to Railway from GitHub Actions.",
+      "bytes": 8647,
+      "mtime": "2026-07-10T01:14:05.374Z",
+      "indexed_at": "2026-07-10T01:15:12.008Z"
     },
     {
       "path": "scripts/record-ci-evidence.mjs",

@@ -17,7 +17,6 @@
 
 | ID | From | To | Question | Status |
 |----|------|-----|----------|--------|
-| Q-003 | Grok | Adam | GitHub Actions `RAILWAY_TOKEN` returns Not Authorized — please create a fresh Railway account API token and update the repo secret so Deploy to Railway can ship main. | OPEN |
 
 ---
 ## How to use

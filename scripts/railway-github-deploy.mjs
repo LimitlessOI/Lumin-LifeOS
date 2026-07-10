@@ -1,13 +1,22 @@
 #!/usr/bin/env node
 /**
- * SYNOPSIS: Deploy the repo to Railway from GitHub Actions without relying on the Railway CLI.
+ * SYNOPSIS: Deploy the repo to Railway from GitHub Actions.
  * @authority Legacy production spine — deploy path repair only.
  *
- * Why this exists:
- * - Railway CLI auth in CI has been brittle across token types.
- * - This script talks to Railway GraphQL directly using the same token secret.
+ * Preferred path (post lumin-web cutover):
+ *   Call the live service's managed-env build-from-latest endpoint.
+ *   Production already holds a working RAILWAY_TOKEN + correct
+ *   RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID for lumin-web.
+ *   This avoids the stale GitHub RAILWAY_TOKEN secret (pre-cutover).
  *
- * Required env:
+ * Fallback path:
+ *   Direct Railway GraphQL using RAILWAY_TOKEN + project topology.
+ *
+ * Required env (preferred):
+ *   APP_URL or PUBLIC_BASE_URL
+ *   COMMAND_CENTER_KEY (or LIFEOS_KEY / API_KEY)
+ *
+ * Required env (fallback):
  *   RAILWAY_TOKEN or RAILWAY_API_TOKEN
  *   RAILWAY_PROJECT_ID
  *   RAILWAY_SERVICE_NAME or RAILWAY_SERVICE_ID
@@ -39,6 +48,18 @@ function normalizeConnection(value) {
   }
   if (Array.isArray(value.nodes)) return value.nodes.filter(Boolean);
   return [];
+}
+
+function getCommandKey() {
+  return (
+    getEnv("COMMAND_CENTER_KEY") ||
+    getEnv("LIFEOS_KEY") ||
+    getEnv("API_KEY")
+  );
+}
+
+function getLiveBaseUrl() {
+  return (getEnv("APP_URL") || getEnv("PUBLIC_BASE_URL")).replace(/\/$/, "");
 }
 
 async function railwayGql(query, variables = {}) {
@@ -148,13 +169,53 @@ async function fetchLatestDeployment({ serviceId, environmentId }) {
   return normalizeConnection(data?.deployments)[0] || null;
 }
 
-async function main() {
+async function deployViaLiveManagedEnv({ baseUrl, commandKey, commitSha }) {
+  const url = `${baseUrl}/api/v1/railway/managed-env/build-from-latest`;
+  console.log(`Deploy path: live managed-env → ${baseUrl}`);
+  if (commitSha) console.log(`Deploying commit: ${commitSha}`);
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-command-key": commandKey,
+    },
+    body: JSON.stringify(commitSha ? { commit_sha: commitSha } : {}),
+  });
+
+  const text = await res.text();
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error(`managed-env deploy returned non-JSON (${res.status}): ${text.slice(0, 500)}`);
+  }
+
+  if (!res.ok || json?.ok === false) {
+    throw new Error(json?.error || `managed-env deploy HTTP ${res.status}: ${text.slice(0, 500)}`);
+  }
+
+  console.log("Live managed-env deploy accepted:");
+  console.log(JSON.stringify({
+    ok: json.ok,
+    message: json.message,
+    commit_sha: json.commit_sha,
+    data: json.data,
+  }, null, 2));
+  return json;
+}
+
+async function deployViaDirectRailwayGraphql({ commitSha }) {
   const projectId = requireEnv("RAILWAY_PROJECT_ID");
   const requestedServiceId = getEnv("RAILWAY_SERVICE_ID");
   const requestedServiceName = getEnv("RAILWAY_SERVICE_NAME", "lumin-web");
   const requestedEnvironmentId = getEnv("RAILWAY_ENVIRONMENT_ID");
   const requestedEnvironmentName = getEnv("RAILWAY_ENVIRONMENT_NAME", "production");
-  const commitSha = getEnv("GITHUB_SHA");
+
+  console.log("Deploy path: direct Railway GraphQL (fallback)");
+  console.log(`Target project: ${projectId}`);
+  console.log(`Target service: ${requestedServiceId || requestedServiceName}`);
+  console.log(`Target environment: ${requestedEnvironmentId || requestedEnvironmentName}`);
 
   const topology = await resolveProjectTopology(projectId);
   const project = topology?.project;
@@ -195,6 +256,25 @@ async function main() {
     console.log("Latest deployment after trigger:");
     console.log(JSON.stringify(latest, null, 2));
   }
+}
+
+async function main() {
+  const commitSha = getEnv("GITHUB_SHA");
+  const baseUrl = getLiveBaseUrl();
+  const commandKey = getCommandKey();
+
+  if (baseUrl && commandKey) {
+    try {
+      await deployViaLiveManagedEnv({ baseUrl, commandKey, commitSha });
+      return;
+    } catch (error) {
+      const hasDirectToken = Boolean(getEnv("RAILWAY_API_TOKEN") || getEnv("RAILWAY_TOKEN"));
+      if (!hasDirectToken) throw error;
+      console.warn(`Live managed-env deploy failed (${error.message}); falling back to direct GraphQL`);
+    }
+  }
+
+  await deployViaDirectRailwayGraphql({ commitSha });
 }
 
 main().catch((error) => {

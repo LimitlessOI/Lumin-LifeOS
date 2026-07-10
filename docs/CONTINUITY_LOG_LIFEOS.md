@@ -8,6 +8,19 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — Railway GH Deploy: lumin-web path (not token folklore)
+
+### What happened
+Adam corrected Q-003: failure is post-Devin cutover (`robust-magic` → `lumin-web`), not “our tokens are bad.”
+- **KNOW:** GH vars already `lumin-web` / project `d3a8029f…` (updated 2026-07-03). Secret `RAILWAY_TOKEN` last set 2026-03-18 → GraphQL `Not Authorized`.
+- **KNOW:** Live tip already on audit SHA via vault/`build-from-latest` (service IDs match local link: `7bb6ec9d…` / env `a2cdebc3…`).
+- **Fix:** `scripts/railway-github-deploy.mjs` + workflow prefer live managed-env deploy (`APP_URL` + `COMMAND_CENTER_KEY`); direct GraphQL is fallback. Pinned `RAILWAY_SERVICE_ID` / `RAILWAY_ENVIRONMENT_ID` GH vars. Archived Q-003.
+
+### Next
+- Prove GH `Deploy to Railway` green on next push. Wave 0 #16.
+
+---
+
 ## [BUILD] Update 2026-07-09 — System audit: fill founder-lane + honesty gaps
 
 ### What happened
@@ -19,10 +32,10 @@ Self-audit found P0 gaps and fixed them:
 5. factory:ci ALL PASS; SENTRY_MECHANICAL_PASS.
 
 ### Still needs Adam
-- Refresh GitHub secret `RAILWAY_TOKEN` (Deploy workflow: Not Authorized) so tip can advance past current SHA.
+- None for deploy token folklore — see 2026-07-10 fix above.
 
 ### Next
-- After token refresh: redeploy → prove managed-env + habits + schedulers live. Then Wave 0 #16.
+- Wave 0 #16 after GH Deploy path proves green.
 
 ---
 
