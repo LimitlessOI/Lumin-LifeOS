@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T18:07:17.319Z",
+  "generated_at": "2026-07-10T18:16:13.149Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11410,
+  "file_count": 11414,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3444236,
-      "mtime": "2026-07-10T08:50:09.814Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z"
+      "bytes": 3448971,
+      "mtime": "2026-07-10T18:15:53.038Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 8493,
-      "mtime": "2026-07-10T09:59:32.607Z",
-      "indexed_at": "2026-07-10T09:59:56.146Z",
+      "bytes": 8525,
+      "mtime": "2026-07-10T18:14:18.192Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
       "synopsis_index_only": true
     },
     {
@@ -36741,9 +36741,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 61656,
-      "mtime": "2026-07-10T12:31:44.742Z",
-      "indexed_at": "2026-07-10T12:31:54.890Z"
+      "bytes": 62163,
+      "mtime": "2026-07-10T18:15:22.141Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39291,9 +39291,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 597557,
-      "mtime": "2026-07-10T17:41:33.057Z",
-      "indexed_at": "2026-07-10T17:42:28.207Z"
+      "bytes": 597939,
+      "mtime": "2026-07-10T18:15:34.896Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39729,9 +39729,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 105529,
-      "mtime": "2026-07-10T17:57:48.832Z",
-      "indexed_at": "2026-07-10T17:58:16.846Z"
+      "bytes": 106176,
+      "mtime": "2026-07-10T18:15:04.416Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -65259,10 +65259,10 @@
     },
     {
       "path": "routes/general-browser-agent-routes.js",
-      "synopsis": "CONDUCTOR-GLUE founder-lane route module for the general goal-driven",
-      "bytes": 6067,
-      "mtime": "2026-07-09T03:33:13.925Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "synopsis": "Founder-lane browser agent — any-site goals + founder-authorized account signup.",
+      "bytes": 10540,
+      "mtime": "2026-07-10T18:13:55.661Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -80814,6 +80814,26 @@
       ]
     },
     {
+      "path": "services/browser-payment-boundary.js",
+      "synopsis": "Detect checkout/payment screens and extract plan/cost proposals.",
+      "bytes": 2515,
+      "mtime": "2026-07-10T18:12:08.947Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/browser-signup-orchestrator.js",
+      "synopsis": "Autonomous account signup — founder authority may complete paid checkout from vault.",
+      "bytes": 19155,
+      "mtime": "2026-07-10T18:13:18.364Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/budgetService.js",
       "synopsis": "Exports createBudgetService — services/budgetService.js.",
       "bytes": 2610,
@@ -82323,9 +82343,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 26391,
-      "mtime": "2026-07-10T05:47:48.879Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 27098,
+      "mtime": "2026-07-10T18:14:18.182Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -82628,6 +82648,16 @@
       "indexed_at": "2026-07-10T08:50:09.908Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/founder-payment-vault.js",
+      "synopsis": "Founder payment vault — card from env only, never logged or stored in DB.",
+      "bytes": 4164,
+      "mtime": "2026-07-10T18:13:18.210Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
       ]
     },
     {
@@ -84268,9 +84298,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 7972,
-      "mtime": "2026-07-03T00:17:46.222Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 11317,
+      "mtime": "2026-07-10T18:14:30.893Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -85180,9 +85210,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 22418,
-      "mtime": "2026-07-10T04:07:47.397Z",
-      "indexed_at": "2026-07-10T08:50:09.908Z",
+      "bytes": 22575,
+      "mtime": "2026-07-10T18:14:18.192Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -88122,6 +88152,13 @@
       "bytes": 2177,
       "mtime": "2026-06-23T00:54:35.551Z",
       "indexed_at": "2026-07-10T08:50:09.908Z"
+    },
+    {
+      "path": "tests/founder-payment-vault.test.js",
+      "synopsis": "js — tests/founder-payment-vault.test.js.",
+      "bytes": 1716,
+      "mtime": "2026-07-10T18:15:47.525Z",
+      "indexed_at": "2026-07-10T18:16:13.149Z"
     },
     {
       "path": "tests/founder-runtime-boot-report.test.js",

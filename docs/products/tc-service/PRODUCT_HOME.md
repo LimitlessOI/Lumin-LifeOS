@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Restored truncated agent-portal; tc-portal.js accepts standard command_key aliases + JWT. |
+| **Last Updated** | 2026-07-10 — Founder-authorized browser signup: system email + Railway card vault; Chair “set up an account” → full authority. |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **Founder-authorized account signup** — restored `founder-payment-vault`, `browser-payment-boundary`, `browser-signup-orchestrator`; wired `/api/v1/browser-agent/signup|sync|approve|capabilities`; `founder_authority:true` fills card from `FOUNDER_PAYMENT_*` and completes checkout (no second approve). Chair parses “set up/sign up/create an account” → signup with full authority. Env registry + managed allowlist for payment vault. | Adam: system must sign up like a human (email + card from Railway) with full authority when he orders account setup. | ✅ | pending | local tests + tip-sync |
 | 2026-07-10 | **GAP-FILL agent-portal restore + auth aliases** — restored truncated `public/tc/agent-portal.html` to shell + `tc-portal.js`; portal now reads `command_key`/`lifeos_command_key` and sends `x-command-key` + Bearer. | UI walk: portal stuck on Loading — HTML file truncated mid-template; Save header had no effect. | ✅ | pending | tip UI |
 | 2026-07-10 | **GAP-FILL founder-lane TC + coordinator restore** — restored `services/tc-coordinator.js` from pre-stub SHA (system-build had replaced `createTCCoordinator` with unrelated stub); mounted `createTCRoutes` in `register-founder-runtime-routes.js`; `imap-railway-bootstrap` now uses `tc-imap-config` / credential aliases instead of raw `IMAP_*` only. | Prod founder_builder: `/api/v1/tc/*` 404; portal/assistant dead; IMAP status false-missing despite TC_IMAP_* vault. | ✅ | pending | tip-sync + UI walk |
 | 2026-07-10 | **GAP-FILL SMTP failover** — `core/notification-service.js` tries preferred port then 587/465 on connection timeout (Site Builder T02). | Tip resend: Connection timeout on Gmail 465. | ✅ | pending | tip resend |

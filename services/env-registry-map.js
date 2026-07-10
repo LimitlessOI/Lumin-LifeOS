@@ -198,6 +198,11 @@ export const ENV_REGISTRY = [
   // ── Signup Agent ──────────────────────────────────────────────────────────────
   { name: "GMAIL_SIGNUP_EMAIL",       status: "SET",      category: "signup",   purpose: "System signup email — lumea.lifeos@gmail.com (not founder UI login)" },
   { name: "GMAIL_SIGNUP_APP_PASSWORD",status: "NEEDED",   category: "signup",   purpose: "Gmail App Password for IMAP email verification reads" },
+  { name: "FOUNDER_PAYMENT_CARD_NUMBER", status: "NEEDED", category: "signup", purpose: "Founder card number for autonomous paid signups (Railway vault only — never log)" },
+  { name: "FOUNDER_PAYMENT_CARD_EXP", status: "NEEDED", category: "signup", purpose: "Card expiry MM/YY for founder payment vault" },
+  { name: "FOUNDER_PAYMENT_CARD_CVC", status: "NEEDED", category: "signup", purpose: "Card CVC for founder payment vault" },
+  { name: "FOUNDER_PAYMENT_CARD_NAME", status: "NEEDED", category: "signup", purpose: "Name on card for founder payment vault" },
+  { name: "FOUNDER_PAYMENT_BILLING_ZIP", status: "OPTIONAL", category: "signup", purpose: "Billing ZIP when checkout requires postal code" },
   { name: "LIFEOS_FOUNDER_LOGIN_EMAIL", status: "NEEDED", category: "auth",     purpose: "Founder LifeOS sign-in email (e.g. adam@hopkinsgroup.org) — sync via operator/sync-founder-login" },
   { name: "LIFEOS_FOUNDER_LOGIN_PASSWORD", status: "NEEDED", category: "auth", purpose: "Founder LifeOS sign-in password — never commit; Railway vault only" },
   { name: "TWOCAPTCHA_API_KEY",       status: "OPTIONAL", category: "signup",   purpose: "2captcha key for captcha solving during signups ($1/1000)" },

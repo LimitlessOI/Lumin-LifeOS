@@ -40,7 +40,7 @@
       "path": "routes/general-browser-agent-routes.js",
       "register": "registerGeneralBrowserAgentRoutes",
       "enabled": true,
-      "note": "General browser agent + consent-gated signup (POST /api/v1/browser-agent/run|signup|signup/approve). Paid checkout requires founder approved:true + consentToken; card from FOUNDER_PAYMENT_* env vault."
+      "note": "General browser agent + founder-authorized signup (POST /api/v1/browser-agent/run|signup|signup/sync|signup/approve). founder_authority:true completes paid checkout from FOUNDER_PAYMENT_* Railway vault; without it, stops at consent."
     },
     {
       "path": "routes/account-manager-routes.js",

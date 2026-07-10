@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Operator `mint-browser-session` for Cursor UI walks (vault→JWT, never returns password). |
+| **Last Updated** | 2026-07-10 — Chair “set up an account” → founder-authorized browser signup (system email + Railway card). |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-10 | **Chair setup_account action** — `parseLuminChairSystemAction` matches set up/sign up/create account; `tryLuminChairSystemAction` calls `POST /api/v1/browser-agent/signup` with `founder_authority:true` (URL or known service name from text). | Adam: when he says set up an account, system has full authority including payment. | ✅ parse smoke | tip-sync |
 | 2026-07-10 | **GAP-FILL: mint-browser-session + TC on founder lane** — `POST /auth/operator/mint-browser-session` returns founder JWT from Railway vault (no password); restored `services/tc-coordinator.js` (system-build had replaced it with a stub); mounted `createTCRoutes` on founder runtime so `/api/v1/tc/*` + portal/assistant work on prod; IMAP bootstrap uses TC credential aliases. | Adam: UI-test Site Builder / MarketingOS / TC as founder — tip had no JWT mint path and TC APIs 404'd on founder_builder. | ✅ local syntax | tip-sync + browser walk |
 | 2026-07-10 | **GAP-FILL T05 direct-agent memory** — `runChairDirectAgent` front door never called `loadChairMemoryContext`, so `SYSTEM_FACTS.memory_context` stayed null despite live `/api/v1/founder-memory` entries. Wired inject before direct agent. | Live probe: Chair said personal_twin/memory_context null. | ✅ | tip + re-probe |
 | 2026-07-10 | **Path-to-10 — Chair founder memory every turn** — `loadLuminMemory` injects FOUNDER MEMORY; orchestrator passes messageText. Checklist `docs/TOP_10_PATH_TO_10.json`. | Adam: build until all ten are ten. | ✅ founder-memory tests | push + redeploy + SENTRY re-gate |

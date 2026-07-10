@@ -8,6 +8,10 @@
 
 ---
 
+## [BUILD] Update 2026-07-10 — Founder-authorized account signup
+
+Adam: system must sign up for accounts like a human (buttons, system email, card from Railway) with full authority when he says set up an account. Shipped payment vault + payment boundary + signup orchestrator; browser-agent `/signup` with `founder_authority:true` completes paid checkout; Chair wires the phrase to that path. Named blockers until tip has `FOUNDER_PAYMENT_*` + Chrome + `GMAIL_SIGNUP_*`. FULLY_MACHINE_READY still false.
+
 ## [FIX] Update 2026-07-10 — Keep going: lean no-AI prospect + SMTP failover
 
 Adam: still not FULLY_MACHINE_READY — do not stop. Shipped `skipAi` lean deterministic preview (bypass hung AI generate/OOM) + SMTP 465↔587 failover. Next: tip sync → lean prospect → built/sent receipt; never-stop still 0 runs on tip.
