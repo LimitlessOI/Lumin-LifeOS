@@ -76,3 +76,17 @@ test('assertFounderRuntimeRoutes passes when finance mount present', () => {
   assert.equal(result.ok, true);
   assert.deepEqual(result.missing_critical, []);
 });
+
+test('listAppRoutes + assert see app.use(router) factory mount paths', async () => {
+  const { createFactoryMountRoutes } = await import('../routes/factory-mount-routes.js');
+  const app = express();
+  const requireKey = (_req, _res, next) => next();
+  app.use(createFactoryMountRoutes({ requireKey, logger: console }));
+  const listed = listAppRoutes(app);
+  assert.ok(listed.includes('GET /factory/readiness'), `got: ${listed.filter((r) => r.includes('factory')).join(',')}`);
+  const result = assertFounderRuntimeRoutes(app, {
+    routes: [{ method: 'GET', path: '/factory/readiness', critical: true }],
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.missing_critical, []);
+});

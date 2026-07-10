@@ -4,7 +4,19 @@
  */
 
 function sanitizeLayerPath(source = "") {
-  const cleaned = String(source || "")
+  const src = String(source || "");
+  // Express mounts from app.use(router) with no path → ^\/?(?=\/|$) — treat as "".
+  // Without this, the broken residue polluted every nested route (e.g. "/(=/|$/factory/...").
+  if (
+    src === "^\\/?(?=\\/|$)"
+    || src === "^(?=\\/|$)"
+    || /^\^\\\/\?\(\?=\\\/\|\$\)$/.test(src)
+    || /^\^\(\?=\\\/\|\$\)$/.test(src)
+  ) {
+    return "";
+  }
+
+  const cleaned = src
     .replace(/^\^\\\//, "/")
     .replace(/\\\/\?\(\?\=\\\/\|\$\)/, "")
     .replace(/\(\?:\(\[\^\\\/]\+\?\)\)/g, ":param")
@@ -19,7 +31,7 @@ function sanitizeLayerPath(source = "") {
     .replace(/\(\?:/g, "")
     .replace(/\)/g, "");
 
-  if (!cleaned || cleaned === "/") {
+  if (!cleaned || cleaned === "/" || cleaned === "(=/|$") {
     return "";
   }
 

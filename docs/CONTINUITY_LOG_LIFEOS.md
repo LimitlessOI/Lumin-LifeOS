@@ -8,6 +8,18 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Never-idle: clear three STARTUP_DEGRADED causes
+
+### What happened
+- Adam: system must not sit idle — keep building.
+- LifeOS machine queue already done except 6 founder_gated UIs; live `/ready` degraded on (1) phase3 migration colliding with phase2 tables, (2) false-missing `/factory/readiness` from route-snapshot bug on `app.use(router)`, (3) account-manager auto-register calling create*() wrong shape.
+- Fixed migration content, snapshot sanitize, `registerAccountManagerRoutes`, energy `logged_at`.
+
+### Next
+- Push → redeploy → `/ready` migrations_failed/modules_errored/routes_missing_critical clear → keep queue moving (founder UIs or dashboard).
+
+---
+
 ## [BUILD] Update 2026-07-09 — Display DNA: live collapsible worklog
 
 ### What happened

@@ -14,12 +14,21 @@
  *   POST /signup/batch        — trigger signups for multiple services
  *   PATCH /:service           — manually update account (status, notes, etc.)
  *   GET  /recipes             — list all available signup recipes
+ *
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from "express";
 import { createSignupAgent, SIGNUP_RECIPES } from "../core/signup-agent.js";
+import { createAccountManager } from "../services/account-manager.js";
 
-export function createAccountManagerRoutes({ requireKey, accountManager, pool, logger = console }) {
+export function createAccountManagerRoutes({ requireKey, accountManager, pool, logger = console } = {}) {
+  if (typeof requireKey !== "function") {
+    throw new Error("createAccountManagerRoutes requires requireKey middleware");
+  }
+  if (!accountManager || typeof accountManager.listAccounts !== "function") {
+    throw new Error("createAccountManagerRoutes requires accountManager");
+  }
   const router = express.Router();
   const signupAgent = createSignupAgent({ pool, accountManager, logger });
 
@@ -178,6 +187,30 @@ export function createAccountManagerRoutes({ requireKey, accountManager, pool, l
   });
 
   return router;
+}
+
+/**
+ * Auto-register entry for founder lane (config/auto-registered-product-modules.json).
+ * Factory shape: (app, deps) — not the create*() router factory.
+ */
+export function registerAccountManagerRoutes(app, deps = {}) {
+  const { requireKey, pool, logger = console, accountManager } = deps;
+  if (typeof requireKey !== "function") {
+    throw new Error("registerAccountManagerRoutes requires requireKey");
+  }
+  const mgr =
+    accountManager && typeof accountManager.listAccounts === "function"
+      ? accountManager
+      : pool
+        ? createAccountManager({ pool, logger })
+        : null;
+  if (!mgr) {
+    throw new Error("registerAccountManagerRoutes requires accountManager or pool");
+  }
+  app.use(
+    "/api/v1/accounts",
+    createAccountManagerRoutes({ requireKey, accountManager: mgr, pool, logger }),
+  );
 }
 
 export default createAccountManagerRoutes;

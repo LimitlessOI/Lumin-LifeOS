@@ -1,9 +1,11 @@
 /**
  * SYNOPSIS: Exports logEnergy — services/lifeos-energy.js.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 export async function logEnergy(db, userId, datetime, level, notes) {
+  // phase2 schema uses logged_at (not datetime) — keep API arg name for callers
   const text = `
-    INSERT INTO energy_logs (user_id, datetime, level, notes)
+    INSERT INTO energy_logs (user_id, logged_at, level, notes)
     VALUES ($1, $2, $3, $4)
     RETURNING *
   `;
@@ -18,18 +20,18 @@ export async function getEnergyLogs(db, userId, { from, to } = {}) {
 
   if (from) {
     values.push(from);
-    conditions.push(`datetime >= $${values.length}`);
+    conditions.push(`logged_at >= $${values.length}`);
   }
   if (to) {
     values.push(to);
-    conditions.push(`datetime <= $${values.length}`);
+    conditions.push(`logged_at <= $${values.length}`);
   }
 
   const text = `
-    SELECT *
+    SELECT id, user_id, logged_at AS datetime, level, notes, created_at
     FROM energy_logs
     WHERE ${conditions.join(' AND ')}
-    ORDER BY datetime ASC, id ASC
+    ORDER BY logged_at ASC, id ASC
   `;
   const { rows } = await db.query(text, values);
   return rows;
