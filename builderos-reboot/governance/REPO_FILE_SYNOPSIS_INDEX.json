@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T05:48:35.303Z",
+  "generated_at": "2026-07-10T05:52:23.649Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11396,
   "files": [
@@ -38841,9 +38841,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 169709,
-      "mtime": "2026-07-10T04:08:11.085Z",
-      "indexed_at": "2026-07-10T04:08:12.757Z"
+      "bytes": 170091,
+      "mtime": "2026-07-10T05:52:20.340Z",
+      "indexed_at": "2026-07-10T05:52:23.649Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -84786,9 +84786,9 @@
     {
       "path": "services/never-stop-product-factory-scheduler.js",
       "synopsis": "Railway + local scheduler — never-stop product factory (only halts on token exhaustion).",
-      "bytes": 6841,
-      "mtime": "2026-07-09T01:03:41.534Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 7281,
+      "mtime": "2026-07-10T05:52:10.478Z",
+      "indexed_at": "2026-07-10T05:52:23.649Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

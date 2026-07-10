@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Path-to-10: assertion gaps=0; EMAIL_*/GO_VEGAS_*/GOOGLE_PLACES_* managed-env allowlist; TOP_10 checklist. |
+| **Last Updated** | 2026-07-10 — Never-stop receipt observability: in-memory lastReceipt + started-phase receipt so status never shows runs>0 with null last_receipt mid-cycle. |
 
 ### Related docs (this product)
 
@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-10 | **Never-stop receipt observability** — in-memory `lastReceipt`; write `phase:started` before cycle; increment `totalRuns` only after finish; log disk write failures. Closes `runs>0` + `last_receipt:null` blind spot. | Adam: BuilderOS not done — why stop fixing? Loop looked idle/opaque. | ✅ local | push + redeploy + kick |
 | 2026-07-10 | **Path-to-10 climb** — mission `assertion_spec` closes 5 coverage gaps (CCV1 + AIV1); managed-env allowlist adds `EMAIL_FROM`/`EMAIL_PROVIDER`/`SITE_BASE_URL`/`SMTP_*`/`GO_VEGAS_*`/`GOOGLE_PLACES_KEY`; `docs/TOP_10_PATH_TO_10.json` + `npm run path-to-10:status`. | Adam: build until all ten are ten. | ✅ coverage audit gaps=0 | tip deploy + SENTRY re-gate + Places key for Go Vegas |
 | 2026-07-10 | **Never-stop: demote smos_intake filler** — only enqueue `smos_intake_expansion` when no `product_build_step` / `plan_build_queue` exists (was priority 4 starving plan work at 5–6). Layer B PASS live; priority list expanded. | After spin-break, tip kept "succeeding" on ~300ms intake no-op instead of planning tc-service/lifeos/etc. | ✅ local discover prefers plan | push + kick plan cycle |
 | 2026-07-10 | **Never-stop keep-building** — `runPlanBuildQueue` stamps `sentry_signature` when planner filters all steps (unplannable); `POST /never-stop/run-once`; MarketingOS `mos-sentry-layer-b` pending; lifeos queue stamped + findings feed cleared of Display-DNA flake. | Adam: get builder executing vision; fix anything that stops it. Loop was monopolized by `sentry_fix_plan_lifeos` → `plan_produced_no_queue`. | ✅ unit tests; pending live run-once | push + redeploy + kick |

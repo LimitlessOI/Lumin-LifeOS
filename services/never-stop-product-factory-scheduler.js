@@ -29,17 +29,22 @@ const state = {
   lastExitCode: null,
   totalRuns: 0,
   tokenHaltSince: null,
+  lastReceipt: null,
 };
 
 function writeReceipt(payload) {
+  const receipt = {
+    schema: 'never_stop_product_factory_receipt_v1',
+    ...payload,
+    written_at: new Date().toISOString(),
+  };
+  state.lastReceipt = receipt;
   try {
     fs.mkdirSync(path.dirname(RECEIPT_PATH), { recursive: true });
-    fs.writeFileSync(
-      RECEIPT_PATH,
-      `${JSON.stringify({ schema: 'never_stop_product_factory_receipt_v1', ...payload, written_at: new Date().toISOString() }, null, 2)}\n`,
-    );
-  } catch {
-    // non-fatal
+    fs.writeFileSync(RECEIPT_PATH, `${JSON.stringify(receipt, null, 2)}\n`);
+  } catch (err) {
+    // Keep in-memory receipt even if disk write fails (ephemeral container / dockerignored data/).
+    console.warn(`[NEVER-STOP-FACTORY] receipt write failed: ${err?.message || err}`);
   }
 }
 
@@ -75,7 +80,7 @@ export function getNeverStopProductFactoryStatus({ events = 25 } = {}) {
       // runtime env it needs to commit/plan is present (booleans only). This is
       // the blind spot — total_runs alone can't explain zero-commit cycles.
       env_present: factoryRuntimeEnvPresence(),
-      last_receipt: readLastReceipt(),
+      last_receipt: state.lastReceipt || readLastReceipt(),
       recent_events: readRecentFactoryLog(events),
     },
   };
@@ -100,7 +105,13 @@ export async function runNeverStopProductFactoryOnce({ logger } = {}) {
   state.tokenHaltSince = null;
   state.running = true;
   state.lastRunAt = new Date().toISOString();
-  state.totalRuns += 1;
+  writeReceipt({
+    ok: true,
+    running: true,
+    phase: 'started',
+    ran_at: state.lastRunAt,
+    detail: 'cycle_in_progress',
+  });
   try {
     // MULTIPLE LANES: when 2+ products have actionable build-queue steps, build
     // them in parallel (bounded) instead of one task per tick. Fall back to the
@@ -113,10 +124,12 @@ export async function runNeverStopProductFactoryOnce({ logger } = {}) {
     const attempts = Array.isArray(result?.results) ? result.results.length : (result?.halted ? 0 : 1);
     recordDailyBuildAttempts(attempts);
     state.lastExitCode = result.ok ? 0 : 1;
+    state.totalRuns += 1;
     writeReceipt({ ok: result.ok !== false, ...result, attempts, budget: dailyBuildBudget(), ran_at: state.lastRunAt });
     return result;
   } catch (err) {
     state.lastExitCode = 1;
+    state.totalRuns += 1;
     writeReceipt({ ok: false, error: err.message, ran_at: state.lastRunAt });
     logger?.warn?.({ err: err.message }, '[NEVER-STOP-FACTORY] cycle threw');
     return { ok: false, error: err.message };
