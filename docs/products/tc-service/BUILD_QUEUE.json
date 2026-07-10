@@ -76,13 +76,16 @@
     },
     {
       "id": "s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/imap-railway-bootstrap.js",
       "task": "Verify IMAP env vars are set in Railway and run dry-run email scan",
       "spec": "Export async function verifyImapAndDryRun(deps) that checks process.env for IMAP_HOST, IMAP_USER, IMAP_PASS; if any missing returns {ready:false, missing:[...]}. If all present calls deps.imapClient.scan({dryRun:true}) and returns {ready:true, scannedCount:number, sample:[...first 3 subjects]}. No top-level browser globals.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "50d78b7a1fa885bba67709713bc97d9e093b085e",
+      "last_attempt_at": "2026-07-10T03:50:35.749Z",
+      "completed_at": "2026-07-10T03:50:45.802Z"
     },
     {
       "id": "s7",
