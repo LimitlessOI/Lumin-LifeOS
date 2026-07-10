@@ -253,19 +253,23 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   /**
    * POST /api/v1/sites/prospect
    * Async by default: returns 202 immediately, builds + emails in background.
-   * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo?, sync? }
+   * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo?, enrich?, skipRepair?, skipBlogs?, sync? }
    * sync=true waits for full pipeline (may hit Railway HTTP timeout on long builds).
    */
   router.post('/prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
-      const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync } = req.body;
+      const {
+        businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync,
+        enrich, skipRepair, skipBlogs,
+      } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
 
-      logger.info('[SITE] Prospect request', { businessUrl, contactEmail, sync: !!sync });
+      logger.info('[SITE] Prospect request', { businessUrl, contactEmail, sync: !!sync, enrich, skipRepair, skipBlogs });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
 
       const options = {
         businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo,
+        enrich, skipRepair, skipBlogs,
       };
 
       if (sync === true || req.query.sync === '1') {

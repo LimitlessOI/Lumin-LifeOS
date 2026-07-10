@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Prospect resend contactEmail override + build hang timeouts/heartbeats. |
+| **Last Updated** | 2026-07-10 — Lean prospect path: honor skipRepair/skipBlogs; default gen openai_gpt. |
 
 ---
 

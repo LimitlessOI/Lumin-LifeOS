@@ -67,9 +67,9 @@ const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '1400
 // free-tier model — only strong, paid models are hardwired into what the system ships.
 // Env-overridable; on any provider error we fall back to another STRONG model (gpt-4o),
 // NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
-const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'claude_sonnet';
-const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'openai_gpt';
-const GENERATION_TIMEOUT_MS = Math.max(30_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '180000'));
+const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'openai_gpt';
+const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'claude_sonnet';
+const GENERATION_TIMEOUT_MS = Math.max(30_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '120000'));
 const PUPPETEER_LAUNCH_TIMEOUT_MS = Math.max(5_000, Number(process.env.SITE_BUILDER_PUPPETEER_LAUNCH_TIMEOUT_MS || '25000'));
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
 // reviews, ratings, and facts. Fails closed (no data) when no search provider key is set —
@@ -210,13 +210,18 @@ export default class SiteBuilder {
       qualityReport = this.scoreSiteHtml(siteHtml, businessInfo);
 
       // Step 3c: AI repair passes for remaining quality gaps
-      if (this.callCouncil && qualityReport.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
+      if (!options.skipRepair && this.callCouncil && qualityReport.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
         for (let pass = 1; pass <= MAX_REPAIR_PASSES; pass++) {
-          const repairedHtml = await this.improveSiteHtml(siteHtml, businessInfo, qualityReport, {
-            clientId,
-            posPartner,
-            pass,
-          });
+          await progress(`repair_${pass}`);
+          const repairedHtml = await withTimeout(
+            this.improveSiteHtml(siteHtml, businessInfo, qualityReport, {
+              clientId,
+              posPartner,
+              pass,
+            }),
+            GENERATION_TIMEOUT_MS,
+            `improveSiteHtml:pass${pass}`
+          );
           // Patch again after repair (AI may have dropped injected elements)
           const patchedRepair = this.patchSiteHtml(repairedHtml, businessInfo);
           const repairedScore = this.scoreSiteHtml(patchedRepair, businessInfo);
@@ -227,8 +232,11 @@ export default class SiteBuilder {
         }
       }
 
-      // Step 4: Generate 3 SEO blog posts
-      const blogPosts = await this.generateBlogPosts(businessInfo, 3);
+      // Step 4: Generate 3 SEO blog posts (skippable for lean/first-dollar probes)
+      await progress(options.skipBlogs ? 'skip_blogs' : 'blogs');
+      const blogPosts = options.skipBlogs
+        ? []
+        : await withTimeout(this.generateBlogPosts(businessInfo, 3), GENERATION_TIMEOUT_MS, 'generateBlogPosts');
 
       // Step 5: Fetch YouTube videos (RSS, no API key)
       const videos = businessInfo.youtubeChannelId

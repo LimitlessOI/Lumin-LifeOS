@@ -99,6 +99,7 @@ export default class ProspectPipeline {
             skipEmail: options.skipEmail === true,
             enrich: options.enrich,
             skipRepair: options.skipRepair === true,
+            skipBlogs: options.skipBlogs === true,
             businessInfo: options.businessInfo || null,
           }),
         ]
@@ -199,6 +200,7 @@ export default class ProspectPipeline {
         clientId: options.clientId || null,
         enrich: options.enrich,
         skipRepair: options.skipRepair,
+        skipBlogs: options.skipBlogs,
         onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
       });
     } finally {
