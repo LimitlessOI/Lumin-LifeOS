@@ -23,7 +23,7 @@ function resolvePreviewFile(clientId, relativeFile) {
   return resolved;
 }
 
-async function readMeta(clientId) {
+async function readMetaFromDisk(clientId) {
   const metaPath = path.join(PREVIEWS_ROOT, clientId, 'meta.json');
   try {
     return JSON.parse(await fsp.readFile(metaPath, 'utf8'));
@@ -32,8 +32,28 @@ async function readMeta(clientId) {
   }
 }
 
-async function assertEditToken(clientId, token) {
-  const meta = await readMeta(clientId);
+// Previews live on ephemeral per-instance disk; a client's own preview can be
+// invisible to whichever instance serves this request (multi-instance / after
+// a redeploy). Fall back to prospect_sites.metadata.previewMeta — the same
+// durable copy /previews/:clientId/index.html already falls back to.
+async function readMeta(clientId, pool) {
+  const fromDisk = await readMetaFromDisk(clientId);
+  if (fromDisk && fromDisk.editToken) return fromDisk;
+  if (!pool) return fromDisk;
+  try {
+    const result = await pool.query(
+      `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+      [clientId]
+    );
+    const previewMeta = result.rows[0]?.metadata?.previewMeta;
+    return previewMeta && previewMeta.editToken ? previewMeta : fromDisk;
+  } catch {
+    return fromDisk;
+  }
+}
+
+async function assertEditToken(clientId, token, pool) {
+  const meta = await readMeta(clientId, pool);
   if (!meta?.editToken) return { ok: false, status: 403, error: 'Editor token unavailable' };
   if (String(token || '') !== String(meta.editToken)) {
     return { ok: false, status: 403, error: 'Invalid editor token' };
@@ -139,7 +159,7 @@ export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl,
         return res.status(400).send('Invalid preview id.');
       }
 
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).send(auth.error);
 
       const ctx = buildEditorContext(auth.meta, clientId, baseUrl);
@@ -157,7 +177,7 @@ export function createSiteBuilderEditorRoutes(app, { callCouncilMember, baseUrl,
       if (!CLIENT_ID_RE.test(String(clientId || ''))) {
         return res.status(400).json({ ok: false, error: 'clientId required' });
       }
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
 
       const targetFile = file || 'index.html';
@@ -211,7 +231,7 @@ Return ONLY the full modified HTML document.`;
       if (!CLIENT_ID_RE.test(String(clientId || ''))) {
         return res.status(400).json({ ok: false, error: 'clientId required' });
       }
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
 
       const targetFile = file || 'index.html';
@@ -236,7 +256,7 @@ Return ONLY the full modified HTML document.`;
       if (!CLIENT_ID_RE.test(String(clientId || ''))) {
         return res.status(400).json({ ok: false, error: 'clientId required' });
       }
-      const auth = await assertEditToken(clientId, token);
+      const auth = await assertEditToken(clientId, token, pool);
       if (!auth.ok) return res.status(auth.status).json({ ok: false, error: auth.error });
 
       const targetFile = file || 'index.html';
