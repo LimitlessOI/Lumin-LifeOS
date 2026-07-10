@@ -1,6 +1,6 @@
 {
   "schema": "builderos_same_tier_determinism_v1",
-  "at": "2026-06-28T23:21:53.850Z",
+  "at": "2026-07-10T05:52:30.480Z",
   "ok": true,
   "verdict": "PASS",
   "blocker": null,
@@ -14,9 +14,9 @@
     "note": "Structural proxy. Full same-tier coder determinism still requires 3 fresh sessions per DETERMINISM_TEST_RUNBOOK.md"
   },
   "note": "Full cold-coder same-tier proof is distinct from mechanical determinism proxy.",
-  "completed_at": "2026-06-28T23:21:53.850Z",
-  "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
-  "production_base": "https://robust-magic-production.up.railway.app",
+  "completed_at": "2026-07-10T05:52:30.480Z",
+  "git_sha": "a4c042295128d0498fd56fc8cef76310e55291d1",
+  "production_base": "https://lumin-web-production-e3a9.up.railway.app",
   "bp_sync": {
     "updated": [
       "builderos-reboot/BP_PRIORITY.json",

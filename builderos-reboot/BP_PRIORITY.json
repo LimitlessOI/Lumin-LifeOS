@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-07-09",
+  "updated_at": "2026-07-10",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BP_PRIORITY is the scheduler queue; each mission's founder packet and blueprint remain the execution authority.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
@@ -254,8 +254,8 @@
       "receipt_path": "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-28T23:21:53.850Z",
-      "git_sha": "ef4cf1a0c8ecaf2915f6ee4b5672d332ceeaf474",
+      "technical_pass_at": "2026-07-10T05:52:30.480Z",
+      "git_sha": "a4c042295128d0498fd56fc8cef76310e55291d1",
       "production_base": "https://lumin-web-production-e3a9.up.railway.app",
       "build_method": "system-build",
       "note": "Internal BuilderOS same-tier determinism mechanical proxy.",

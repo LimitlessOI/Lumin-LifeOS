@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T05:52:23.649Z",
+  "generated_at": "2026-07-10T05:53:06.430Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11396,
   "files": [
@@ -21301,8 +21301,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 20605,
-      "mtime": "2026-07-09T04:54:02.688Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "mtime": "2026-07-10T05:52:30.570Z",
+      "indexed_at": "2026-07-10T05:53:06.430Z",
       "synopsis_index_only": true
     },
     {
@@ -21385,8 +21385,8 @@
       "path": "builderos-reboot/DETERMINISM_RECEIPT.json",
       "synopsis": "BuilderOS artifact — DETERMINISM RECEIPT.",
       "bytes": 831,
-      "mtime": "2026-07-10T00:49:00.373Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "mtime": "2026-07-10T05:52:30.555Z",
+      "indexed_at": "2026-07-10T05:53:06.430Z",
       "synopsis_index_only": true
     },
     {
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3442779,
-      "mtime": "2026-07-10T04:01:17.773Z",
-      "indexed_at": "2026-07-10T04:01:29.360Z"
+      "bytes": 3443383,
+      "mtime": "2026-07-10T05:52:54.176Z",
+      "indexed_at": "2026-07-10T05:53:06.430Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -22011,9 +22011,9 @@
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-BUILDEROS-AUTONOMY-CLOSURE-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
-      "bytes": 32180,
-      "mtime": "2026-07-09T04:54:02.689Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 32185,
+      "mtime": "2026-07-10T05:52:30.571Z",
+      "indexed_at": "2026-07-10T05:53:06.430Z",
       "synopsis_index_only": true
     },
     {
@@ -62249,9 +62249,9 @@
     {
       "path": "products/receipts/BUILDEROS_SAME_TIER_DETERMINISM.json",
       "synopsis": "Product receipt — BUILDEROS SAME TIER DETERMINISM.",
-      "bytes": 946,
-      "mtime": "2026-07-03T00:17:45.061Z",
-      "indexed_at": "2026-07-10T02:08:57.077Z",
+      "bytes": 948,
+      "mtime": "2026-07-10T05:52:30.572Z",
+      "indexed_at": "2026-07-10T05:53:06.430Z",
       "synopsis_index_only": true
     },
     {
