@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T03:34:55.042Z",
+  "generated_at": "2026-07-10T03:39:53.432Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11386,
+  "file_count": 11387,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33448,6 +33448,13 @@
       "bytes": 1216,
       "mtime": "2026-07-10T03:34:55.042Z",
       "indexed_at": "2026-07-10T03:34:55.042Z"
+    },
+    {
+      "path": "db/migrations/20240602_tc_billing_and_agents.sql",
+      "synopsis": "Database migration — 20240602_tc_billing_and_agents.sql.",
+      "bytes": 1360,
+      "mtime": "2026-07-10T03:39:53.432Z",
+      "indexed_at": "2026-07-10T03:39:53.432Z"
     },
     {
       "path": "db/migrations/20260313_core_schema.sql",
