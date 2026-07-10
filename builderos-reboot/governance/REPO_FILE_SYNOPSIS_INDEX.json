@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T17:58:16.846Z",
+  "generated_at": "2026-07-10T18:01:40.444Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11410,
   "files": [
@@ -39400,9 +39400,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 84655,
-      "mtime": "2026-07-10T17:58:01.820Z",
-      "indexed_at": "2026-07-10T17:58:16.846Z"
+      "bytes": 84685,
+      "mtime": "2026-07-10T18:01:34.880Z",
+      "indexed_at": "2026-07-10T18:01:40.444Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -65877,9 +65877,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 25466,
-      "mtime": "2026-07-10T17:54:09.846Z",
-      "indexed_at": "2026-07-10T17:58:16.846Z",
+      "bytes": 25971,
+      "mtime": "2026-07-10T18:01:31.558Z",
+      "indexed_at": "2026-07-10T18:01:40.444Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
