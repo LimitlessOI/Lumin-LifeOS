@@ -8,6 +8,17 @@
 
 ---
 
+## [BUILD] Update 2026-07-09 — Never-idle: phase3 UI + net-worth
+
+### What happened
+- Adam: never sit idle — keep building.
+- Boot proved clean (`4e1063c616`). Unlocked founder_gated LifeOS queue UIs; shipped net-worth API/tab + three missing overlays; marks s8/s09–s12 done. Scheduler s9 still pending.
+
+### Next
+- Push → redeploy → open Net worth tab + new overlays. Then build phase3 scheduler or dashboard queue.
+
+---
+
 ## [BUILD] Update 2026-07-09 — Never-idle: clear three STARTUP_DEGRADED causes
 
 ### What happened

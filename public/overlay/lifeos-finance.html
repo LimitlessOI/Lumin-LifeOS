@@ -103,6 +103,7 @@
   <div class="tab" data-tab="txns" onclick="switchTab('txns')">Transactions</div>
   <div class="tab" data-tab="budget" onclick="switchTab('budget')">Budget</div>
   <div class="tab" data-tab="goals" onclick="switchTab('goals')">Goals</div>
+  <div class="tab" data-tab="networth" onclick="switchTab('networth')">Net worth</div>
   <div class="tab" data-tab="ips" onclick="switchTab('ips')">IPS</div>
 </div>
 
@@ -308,6 +309,53 @@
   </div>
 </div>
 
+<!-- ── NET WORTH ─────────────────────────────────────────── -->
+<div class="panel" id="panel-networth">
+  <section id="net-worth-dashboard">
+    <div class="hero">
+      <div class="label">Net worth · latest snapshot</div>
+      <div class="big" id="nw-net">—</div>
+      <div class="meta" id="nw-asof" style="font-size:11px;color:#7a7ab0;margin-top:6px;"></div>
+    </div>
+    <div class="grid2" style="margin-bottom:14px;">
+      <div class="card">
+        <div class="section-title">Assets</div>
+        <div class="amount-pos" id="nw-assets">—</div>
+      </div>
+      <div class="card">
+        <div class="section-title">Liabilities</div>
+        <div class="amount-neg" id="nw-liabilities">—</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">History</div>
+      <canvas id="nw-chart" height="160" style="width:100%;max-height:200px;"></canvas>
+      <div class="empty" id="nw-empty" style="display:none;">No snapshots yet — add one below.</div>
+    </div>
+    <div class="card" style="margin-top:10px;">
+      <div class="section-title">Save snapshot</div>
+      <div class="form-field">
+        <label>Date</label>
+        <input id="nw-date" type="date" />
+      </div>
+      <div class="grid2">
+        <div class="form-field">
+          <label>Assets ($)</label>
+          <input id="nw-assets-in" type="number" step="0.01" min="0" inputmode="decimal" placeholder="0.00" />
+        </div>
+        <div class="form-field">
+          <label>Liabilities ($)</label>
+          <input id="nw-liab-in" type="number" step="0.01" min="0" inputmode="decimal" placeholder="0.00" />
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" type="button" onclick="saveNetWorth()">Save Snapshot</button>
+      </div>
+      <div class="meta" style="font-size:11px;color:#666;margin-top:8px;">Mirror layer only — not advice.</div>
+    </div>
+  </section>
+</div>
+
 <!-- ── IPS ────────────────────────────────────────────────── -->
 <div class="panel" id="panel-ips">
   <div class="card">
@@ -358,6 +406,7 @@ const fmtDate = (d) => {
 function switchTab(id) {
   document.querySelectorAll('.tab').forEach((el) => el.classList.toggle('active', el.dataset.tab === id));
   document.querySelectorAll('.panel').forEach((el) => el.classList.toggle('active', el.id === `panel-${id}`));
+  if (id === 'networth') loadNetWorth();
 }
 
 /* ───────────────────────────── header ───────────────────────────── */
@@ -714,6 +763,81 @@ async function saveGoal() {
   }
 }
 
+/* ───────────────────────────── Net worth ───────────────────────────── */
+function centsToUsd(c) {
+  const n = Number(c);
+  if (!Number.isFinite(n)) return '—';
+  return (n / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+}
+
+function drawNetWorthChart(snapshots) {
+  const canvas = document.getElementById('nw-chart');
+  const empty = document.getElementById('nw-empty');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
+  const h = canvas.height = 160 * (window.devicePixelRatio || 1);
+  ctx.clearRect(0, 0, w, h);
+  const rows = [...(snapshots || [])].reverse();
+  if (!rows.length) {
+    canvas.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  canvas.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+  const vals = rows.map((r) => Number(r.net_cents) || 0);
+  const min = Math.min(...vals, 0);
+  const max = Math.max(...vals, 0);
+  const span = Math.max(max - min, 1);
+  const pad = 12 * (window.devicePixelRatio || 1);
+  ctx.strokeStyle = '#5b6af5';
+  ctx.lineWidth = 2 * (window.devicePixelRatio || 1);
+  ctx.beginPath();
+  rows.forEach((r, i) => {
+    const x = pad + (i / Math.max(rows.length - 1, 1)) * (w - pad * 2);
+    const y = h - pad - ((Number(r.net_cents) - min) / span) * (h - pad * 2);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+
+async function loadNetWorth() {
+  try {
+    const data = await apiGet('/api/v1/lifeos/finance/net-worth');
+    const latest = data.latest;
+    document.getElementById('nw-net').textContent = latest ? centsToUsd(latest.net_cents) : '—';
+    document.getElementById('nw-assets').textContent = latest ? centsToUsd(latest.assets_cents) : '—';
+    document.getElementById('nw-liabilities').textContent = latest ? centsToUsd(latest.liabilities_cents) : '—';
+    document.getElementById('nw-asof').textContent = latest
+      ? `As of ${fmtDate(latest.snapshot_date)}`
+      : 'No snapshots yet';
+    drawNetWorthChart(data.snapshots || []);
+    const dEl = document.getElementById('nw-date');
+    if (dEl && !dEl.value) dEl.value = new Date().toISOString().slice(0, 10);
+  } catch (err) {
+    document.getElementById('nw-asof').textContent = err.message;
+  }
+}
+
+async function saveNetWorth() {
+  try {
+    const assets = Number(document.getElementById('nw-assets-in').value);
+    const liabilities = Number(document.getElementById('nw-liab-in').value);
+    await apiSend('POST', '/api/v1/lifeos/finance/net-worth', {
+      snapshot_date: document.getElementById('nw-date').value || undefined,
+      assets,
+      liabilities,
+    });
+    document.getElementById('nw-assets-in').value = '';
+    document.getElementById('nw-liab-in').value = '';
+    await loadNetWorth();
+  } catch (err) {
+    alert(`Could not save net worth: ${err.message}`);
+  }
+}
+
 /* ───────────────────────────── IPS ───────────────────────────── */
 async function loadIps() {
   try {
@@ -848,7 +972,9 @@ async function revokeShare(scopeId) {
   const today = new Date().toISOString().slice(0, 10);
   const dEl = document.getElementById('txn-date');
   if (dEl) dEl.value = today;
-  Promise.all([loadSummary(), loadAccounts(), loadCategories(), loadTxns(), loadGoals(), loadIps()])
+  const nwDate = document.getElementById('nw-date');
+  if (nwDate) nwDate.value = today;
+  Promise.all([loadSummary(), loadAccounts(), loadCategories(), loadTxns(), loadGoals(), loadIps(), loadNetWorth()])
     .then(() => loadShares());
 })();
 </script>

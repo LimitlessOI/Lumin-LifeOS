@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers LifeosPhase2Routes routes/handlers (routes/lifeos-phase2-routes.js).
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 export function registerLifeosPhase2Routes(app, deps = {}) {
   const pool = deps.pool || deps.db;
@@ -184,30 +185,8 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     return json(res, 200, { themes: result.rows });
   }));
 
-  postProtected('/api/v1/lifeos/finance/net-worth', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
-    if (!userId) return;
-
-    const { total_assets, total_liabilities, net_worth, as_of, notes } = req.body || {};
-    const result = await pool.query(
-      `insert into ${netWorthTable} (user_id, total_assets, total_liabilities, net_worth, as_of, notes)
-       values ($1, $2, $3, $4, $5, $6)
-       returning *`,
-      [userId, total_assets ?? null, total_liabilities ?? null, net_worth ?? null, as_of ?? null, notes ?? null]
-    );
-    return json(res, 201, { snapshot: result.rows[0] });
-  }));
-
-  app.get('/api/v1/lifeos/finance/net-worth', wrap(async (req, res) => {
-    const userId = ensureUser(req, res);
-    if (!userId) return;
-
-    const result = await pool.query(
-      `select * from ${netWorthTable} where user_id = $1 order by as_of desc nulls last, created_at desc`,
-      [userId]
-    );
-    return json(res, 200, { snapshots: result.rows });
-  }));
+  // Net-worth GET/POST owned by registerLifeOSFinanceRoutes → /api/v1/lifeos/finance/net-worth
+  // (phase2 phantom lifeos_net_worth_snapshots removed — use net_worth_snapshots via finance service).
 
   postProtected('/api/v1/lifeos/future-self/letter', wrap(async (req, res) => {
     const userId = ensureUser(req, res);
@@ -228,10 +207,10 @@ export function registerLifeosPhase2Routes(app, deps = {}) {
     if (!userId) return;
 
     const result = await pool.query(
-      `select * from ${futureLettersTable} where user_id = $1 order by created_at desc limit 1`,
+      `select * from ${futureLettersTable} where user_id = $1 order by created_at desc limit 50`,
       [userId]
     );
-    return json(res, 200, { letter: result.rows[0] || null });
+    return json(res, 200, { letters: result.rows, letter: result.rows[0] || null });
   }));
 
   postProtected('/api/v1/lifeos/energy', wrap(async (req, res) => {

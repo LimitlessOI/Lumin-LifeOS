@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: Letter to Future Self — LifeOS overlay -->
+<!-- @ssot docs/products/lifeos/PRODUCT_HOME.md -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>LifeOS · Letter to Future Self</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; padding: 20px 18px 80px; }
+    h1 { font-size: 17px; margin-bottom: 4px; }
+    .sub { font-size: 11px; color: #666; margin-bottom: 18px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 14px; }
+    .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #555; margin-bottom: 10px; }
+    label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    textarea, input { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 12px; font-size: 13.5px; font-family: inherit; margin-bottom: 12px; }
+    textarea { min-height: 140px; resize: vertical; }
+    .btn { background: #4050e6; border: none; color: #fff; padding: 9px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12.5px; }
+    .letter { border-bottom: 1px solid #181828; padding: 10px 0; }
+    .letter:last-child { border-bottom: none; }
+    .meta { font-size: 11px; color: #777; margin-top: 4px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #1a1a2e; color: #9a9ac8; font-size: 10.5px; }
+    .empty { color: #555; font-size: 12.5px; font-style: italic; padding: 12px 0; }
+    .error { color: #ff7070; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Letter to Future Self</h1>
+  <div class="sub">Seal a note. It opens on the day you choose.</div>
+  <div class="grid">
+    <div class="card">
+      <div class="section-title">Compose</div>
+      <label>Letter</label>
+      <textarea id="fs-content" placeholder="What do you want future-you to remember?"></textarea>
+      <label>Deliver on</label>
+      <input id="fs-deliver" type="date" />
+      <button class="btn" type="button" id="fs-submit">Seal letter</button>
+      <div id="fs-msg" class="meta"></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Sent</div>
+      <div id="fs-list" class="empty">Loading…</div>
+    </div>
+  </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const API = '';
+  const USER = localStorage.getItem('lifeos_user') || 'adam';
+  const H = () => ({
+    'Content-Type': 'application/json',
+    ...(localStorage.getItem('lifeos_token') ? { Authorization: `Bearer ${localStorage.getItem('lifeos_token')}` } : {}),
+    ...(window.__LIFEOS_COMMAND_KEY ? { 'x-command-key': window.__LIFEOS_COMMAND_KEY } : {}),
+  });
+  const esc = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  async function load() {
+    const list = document.getElementById('fs-list');
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/future-self/letter?user=${encodeURIComponent(USER)}`, { headers: H() });
+      if (!res.ok) throw new Error(await res.text() || 'load failed');
+      const data = await res.json();
+      const letters = data.letters || (data.letter ? [data.letter] : data.items) || [];
+      const rows = Array.isArray(letters) ? letters.filter(Boolean) : [];
+      if (!rows.length) { list.innerHTML = '<div class="empty">No letters yet.</div>'; return; }
+      list.innerHTML = rows.map((l) => {
+        const body = l.content || l.body || '';
+        const delivered = l.delivered === true || l.delivered === 't';
+        const openDate = l.deliver_on || l.open_on || '';
+        const preview = delivered || !openDate
+          ? esc(String(body).slice(0, 120))
+          : `sealed — opens ${esc(openDate)}`;
+        return `<div class="letter"><div>${preview}${String(body).length > 120 && (delivered || !openDate) ? '…' : ''}</div>
+          <div class="meta"><span class="badge">${delivered ? 'delivered' : (openDate ? 'sealed' : 'saved')}</span> · ${esc(openDate || l.created_at || '')}</div></div>`;
+      }).join('');
+    } catch (err) {
+      list.innerHTML = `<div class="error">${esc(err.message)}</div>`;
+    }
+  }
+  document.getElementById('fs-submit').addEventListener('click', async () => {
+    const msg = document.getElementById('fs-msg');
+    try {
+      const content = document.getElementById('fs-content').value.trim();
+      const deliver_on = document.getElementById('fs-deliver').value;
+      if (!content || !deliver_on) throw new Error('content and deliver date required');
+      const res = await fetch(`${API}/api/v1/lifeos/future-self/letter`, {
+        method: 'POST', headers: H(),
+        body: JSON.stringify({
+          user: USER,
+          content,
+          body: content,
+          title: content.slice(0, 80),
+          deliver_on,
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text() || 'save failed');
+      document.getElementById('fs-content').value = '';
+      msg.textContent = 'Sealed.';
+      await load();
+    } catch (err) {
+      msg.textContent = err.message;
+    }
+  });
+  const d = document.getElementById('fs-deliver');
+  const nextYear = new Date(); nextYear.setFullYear(nextYear.getFullYear() + 1);
+  d.value = nextYear.toISOString().slice(0, 10);
+  load();
+});
+</script>
+</body>
+</html>

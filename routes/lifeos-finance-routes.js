@@ -380,6 +380,31 @@ export function createLifeOSFinanceRoutes({ pool, requireKey, logger, callCounci
     }
   });
 
+  router.get('/net-worth', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const snapshots = await finance.listNetWorthSnapshots(userId, { limit: req.query.limit });
+      const latest = snapshots[0] || null;
+      res.json({ ok: true, snapshots, latest });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/net-worth', requireKey, async (req, res) => {
+    try {
+      const body = req.body || {};
+      const userId = await resolveUserId(body.user || req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const row = await finance.createNetWorthSnapshot(userId, body);
+      res.status(201).json({ ok: true, snapshot: row });
+    } catch (err) {
+      const status = err.status || (/required/.test(err.message) ? 400 : 500);
+      res.status(status).json({ ok: false, error: err.message });
+    }
+  });
+
   return router;
 }
 

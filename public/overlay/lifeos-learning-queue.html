@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: Learning queue overlay — LifeOS -->
+<!-- Wired to GET/POST/PATCH /api/v1/lifeos/learning (phase3 routes). -->
+<!-- @ssot docs/products/lifeos/PRODUCT_HOME.md -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>LifeOS · Learning queue</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; padding: 20px 18px 80px; }
+    h1 { font-size: 17px; margin-bottom: 4px; }
+    .sub { font-size: 11px; color: #666; margin-bottom: 18px; }
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #555; margin: 16px 0 10px; }
+    .item { border-bottom: 1px solid #181828; padding: 12px 0; }
+    .item:last-child { border-bottom: none; }
+    .title { font-size: 14px; font-weight: 600; color: #e4e4f0; }
+    .meta { font-size: 11px; color: #777; margin-top: 4px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #1a1a2e; color: #9a9ac8; font-size: 10.5px; margin-right: 6px; }
+    label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    input, select, textarea { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 12px; font-size: 13.5px; font-family: inherit; margin-bottom: 10px; }
+    textarea { min-height: 56px; }
+    .btn { background: #2a2a44; border: 1px solid #3a3a5a; color: #e8e8f0; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 6px; margin-top: 6px; }
+    .btn-primary { background: #4050e6; border-color: #4050e6; }
+    .empty { color: #555; font-size: 12.5px; font-style: italic; padding: 8px 0; }
+    .error { color: #ff7070; font-size: 12px; }
+    a { color: #a0aaff; }
+  </style>
+</head>
+<body>
+  <h1>Learning queue</h1>
+  <div class="sub">Books, articles, courses — capture what you're learning.</div>
+
+  <div class="card">
+    <div class="section-title" style="margin-top:0;">Add item</div>
+    <label>Title</label>
+    <input id="lq-title" maxlength="200" placeholder="What are you learning?" />
+    <label>Type</label>
+    <select id="lq-type">
+      <option value="book">Book</option>
+      <option value="article">Article</option>
+      <option value="course">Course</option>
+      <option value="other">Other</option>
+    </select>
+    <label>URL (optional)</label>
+    <input id="lq-url" type="url" placeholder="https://" />
+    <button class="btn btn-primary" type="button" id="lq-add">Add</button>
+  </div>
+
+  <div id="lq-groups"></div>
+  <div id="lq-error" class="error"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const API = '';
+  const USER = localStorage.getItem('lifeos_user') || 'adam';
+  const STATUSES = ['queued', 'in-progress', 'done'];
+  const H = () => ({
+    'Content-Type': 'application/json',
+    ...(localStorage.getItem('lifeos_token') ? { Authorization: `Bearer ${localStorage.getItem('lifeos_token')}` } : {}),
+    ...(window.__LIFEOS_COMMAND_KEY ? { 'x-command-key': window.__LIFEOS_COMMAND_KEY } : {}),
+  });
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  async function api(method, path, body) {
+    const url = method === 'GET'
+      ? `${API}${path}${path.includes('?') ? '&' : '?'}user=${encodeURIComponent(USER)}`
+      : `${API}${path}`;
+    const res = await fetch(url, {
+      method,
+      headers: H(),
+      body: body ? JSON.stringify({ user: USER, ...body }) : undefined,
+    });
+    if (!res.ok) throw new Error(await res.text() || `${method} failed`);
+    return res.json();
+  }
+
+  async function load() {
+    const root = document.getElementById('lq-groups');
+    const err = document.getElementById('lq-error');
+    err.textContent = '';
+    try {
+      // phase3 mount: /api/v1/lifeos/learning
+      const data = await api('GET', '/api/v1/lifeos/learning');
+      const items = data.items || data.rows || data.learning || data || [];
+      const list = Array.isArray(items) ? items : [];
+      root.innerHTML = STATUSES.map((st) => {
+        const group = list.filter((x) => String(x.status || 'queued') === st);
+        const body = group.length
+          ? group.map((it) => itemHtml(it)).join('')
+          : '<div class="empty">Nothing here.</div>';
+        return `<div class="section-title">${st}</div><div class="card">${body}</div>`;
+      }).join('');
+      root.querySelectorAll('[data-cycle]').forEach((btn) => {
+        btn.addEventListener('click', () => cycle(btn.dataset.cycle, btn.dataset.status));
+      });
+      root.querySelectorAll('textarea[data-insight]').forEach((ta) => {
+        ta.addEventListener('blur', () => patchInsight(ta.dataset.insight, ta.value));
+      });
+    } catch (e) {
+      err.textContent = e.message;
+      root.innerHTML = '';
+    }
+  }
+
+  function itemHtml(it) {
+    const id = it.id;
+    const url = it.url ? `<div class="meta"><a href="${esc(it.url)}" target="_blank" rel="noopener">open</a></div>` : '';
+    const insight = String(it.status) === 'done'
+      ? `<label>Key insight</label><textarea data-insight="${esc(id)}">${esc(it.key_insight || '')}</textarea>`
+      : (it.key_insight ? `<div class="meta">${esc(it.key_insight)}</div>` : '');
+    return `<div class="item">
+      <div class="title"><span class="badge">${esc(it.type || 'item')}</span>${esc(it.title || '')}</div>
+      ${url}
+      ${insight}
+      <button class="btn" type="button" data-cycle="${esc(id)}" data-status="${esc(it.status || 'queued')}">Advance status</button>
+    </div>`;
+  }
+
+  function nextStatus(cur) {
+    const i = STATUSES.indexOf(cur);
+    return STATUSES[Math.min(STATUSES.length - 1, Math.max(0, i) + 1)] || 'done';
+  }
+
+  async function cycle(id, status) {
+    try {
+      const next = nextStatus(status);
+      await api('PATCH', `/api/v1/lifeos/learning/${id}`, { status: next });
+      await load();
+    } catch (e) {
+      document.getElementById('lq-error').textContent = e.message;
+    }
+  }
+
+  async function patchInsight(id, key_insight) {
+    try {
+      await api('PATCH', `/api/v1/lifeos/learning/${id}`, { key_insight });
+    } catch (e) {
+      document.getElementById('lq-error').textContent = e.message;
+    }
+  }
+
+  document.getElementById('lq-add').addEventListener('click', async () => {
+    try {
+      const title = document.getElementById('lq-title').value.trim();
+      if (!title) throw new Error('title required');
+      await api('POST', '/api/v1/lifeos/learning', {
+        title,
+        type: document.getElementById('lq-type').value,
+        url: document.getElementById('lq-url').value.trim() || null,
+        status: 'queued',
+      });
+      document.getElementById('lq-title').value = '';
+      document.getElementById('lq-url').value = '';
+      await load();
+    } catch (e) {
+      document.getElementById('lq-error').textContent = e.message;
+    }
+  });
+
+  load();
+});
+</script>
+</body>
+</html>

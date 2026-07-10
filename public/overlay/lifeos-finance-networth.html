@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: Net worth partial/standalone — LifeOS finance mirror layer -->
+<!--
+  Standalone surface for the net-worth block (same API as lifeos-finance Net worth tab).
+  Prefer the tab inside /overlay/lifeos-finance.html for day-to-day use.
+  @ssot docs/products/lifeos/PRODUCT_HOME.md
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>LifeOS · Net worth</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; padding: 20px 18px 80px; }
+    h1 { font-size: 17px; margin-bottom: 4px; }
+    .sub { font-size: 11px; color: #666; margin-bottom: 18px; }
+    .hero { background: linear-gradient(180deg,#111128 0%, #0d0d18 100%); border: 1px solid #2a2a44; border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+    .hero .big { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 6px; }
+    .hero .label { font-size: 11px; color: #7a7ab0; text-transform: uppercase; letter-spacing: 1.4px; }
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+    .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #555; margin: 0 0 10px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .amount-pos { color: #6bd98a; font-weight: 600; font-size: 16px; }
+    .amount-neg { color: #ff8088; font-weight: 600; font-size: 16px; }
+    .form-field { margin-bottom: 12px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 12px; font-size: 13.5px; }
+    .btn { background: #4050e6; border: none; color: #fff; padding: 9px 14px; border-radius: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600; }
+    .empty { color: #555; font-size: 12.5px; padding: 12px 0; text-align: center; font-style: italic; }
+    a.link { color: #a0aaff; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Net worth</h1>
+  <div class="sub">Mirror layer · <a class="link" href="/overlay/lifeos-finance.html">Full finance →</a></div>
+  <section id="net-worth-dashboard">
+    <div class="hero">
+      <div class="label">Latest snapshot</div>
+      <div class="big" id="nw-net">—</div>
+      <div id="nw-asof" style="font-size:11px;color:#7a7ab0;margin-top:6px;"></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><div class="section-title">Assets</div><div class="amount-pos" id="nw-assets">—</div></div>
+      <div class="card"><div class="section-title">Liabilities</div><div class="amount-neg" id="nw-liabilities">—</div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">History</div>
+      <canvas id="nw-chart" height="160" style="width:100%;"></canvas>
+      <div class="empty" id="nw-empty" style="display:none;">No snapshots yet.</div>
+    </div>
+    <div class="card">
+      <div class="section-title">Save snapshot</div>
+      <div class="form-field"><label>Date</label><input id="nw-date" type="date" /></div>
+      <div class="grid2">
+        <div class="form-field"><label>Assets ($)</label><input id="nw-assets-in" type="number" step="0.01" min="0" /></div>
+        <div class="form-field"><label>Liabilities ($)</label><input id="nw-liab-in" type="number" step="0.01" min="0" /></div>
+      </div>
+      <button class="btn" type="button" onclick="saveNetWorth()">Save Snapshot</button>
+    </div>
+  </section>
+<script>
+(function () {
+  const API = '';
+  const USER = localStorage.getItem('lifeos_user') || 'adam';
+  const H = () => ({
+    'Content-Type': 'application/json',
+    ...(localStorage.getItem('lifeos_token') ? { Authorization: `Bearer ${localStorage.getItem('lifeos_token')}` } : {}),
+    ...(window.__LIFEOS_COMMAND_KEY ? { 'x-command-key': window.__LIFEOS_COMMAND_KEY } : {}),
+  });
+  const centsToUsd = (c) => {
+    const n = Number(c);
+    if (!Number.isFinite(n)) return '—';
+    return (n / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  };
+  async function apiGet(path) {
+    const res = await fetch(`${API}${path}?user=${encodeURIComponent(USER)}`, { headers: H() });
+    if (!res.ok) throw new Error(await res.text() || 'GET failed');
+    return res.json();
+  }
+  async function apiSend(path, body) {
+    const res = await fetch(`${API}${path}`, {
+      method: 'POST', headers: H(),
+      body: JSON.stringify({ user: USER, ...body }),
+    });
+    if (!res.ok) throw new Error(await res.text() || 'POST failed');
+    return res.json();
+  }
+  function draw(snapshots) {
+    const canvas = document.getElementById('nw-chart');
+    const empty = document.getElementById('nw-empty');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.width = canvas.clientWidth * dpr;
+    const h = canvas.height = 160 * dpr;
+    ctx.clearRect(0, 0, w, h);
+    const rows = [...(snapshots || [])].reverse();
+    if (!rows.length) { canvas.style.display = 'none'; empty.style.display = 'block'; return; }
+    canvas.style.display = 'block'; empty.style.display = 'none';
+    const vals = rows.map((r) => Number(r.net_cents) || 0);
+    const min = Math.min(...vals, 0);
+    const max = Math.max(...vals, 0);
+    const span = Math.max(max - min, 1);
+    const pad = 12 * dpr;
+    ctx.strokeStyle = '#5b6af5';
+    ctx.lineWidth = 2 * dpr;
+    ctx.beginPath();
+    rows.forEach((r, i) => {
+      const x = pad + (i / Math.max(rows.length - 1, 1)) * (w - pad * 2);
+      const y = h - pad - ((Number(r.net_cents) - min) / span) * (h - pad * 2);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+  async function load() {
+    const data = await apiGet('/api/v1/lifeos/finance/net-worth');
+    const latest = data.latest;
+    document.getElementById('nw-net').textContent = latest ? centsToUsd(latest.net_cents) : '—';
+    document.getElementById('nw-assets').textContent = latest ? centsToUsd(latest.assets_cents) : '—';
+    document.getElementById('nw-liabilities').textContent = latest ? centsToUsd(latest.liabilities_cents) : '—';
+    document.getElementById('nw-asof').textContent = latest ? `As of ${latest.snapshot_date}` : 'No snapshots yet';
+    draw(data.snapshots || []);
+  }
+  window.saveNetWorth = async function saveNetWorth() {
+    try {
+      await apiSend('/api/v1/lifeos/finance/net-worth', {
+        snapshot_date: document.getElementById('nw-date').value || undefined,
+        assets: Number(document.getElementById('nw-assets-in').value),
+        liabilities: Number(document.getElementById('nw-liab-in').value),
+      });
+      document.getElementById('nw-assets-in').value = '';
+      document.getElementById('nw-liab-in').value = '';
+      await load();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('nw-date').value = new Date().toISOString().slice(0, 10);
+    load().catch((e) => { document.getElementById('nw-asof').textContent = e.message; });
+  });
+})();
+</script>
+</body>
+</html>

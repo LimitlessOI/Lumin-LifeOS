@@ -140,51 +140,63 @@
     },
     {
       "id": "s09",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-habits.html",
       "task": "Habit tracker UI section for lifeos-today overlay",
       "spec": "Standalone HTML partial (no full html/head/body wrappers needed — rendered into today overlay). Contains: habit list rendered from GET /api/v1/lifeos/habits; each row shows title, streak badge, trigger cue chip, log-today button (POST /api/v1/lifeos/habits/:id/log); add-habit form (title, trigger, cue, reward fields); streak resets visually at 0. All JS inline in <script> tags using fetch(). No window.onload race — use DOMContentLoaded. No external CDN imports beyond what host page already provides (assumes Bootstrap and vanilla JS). Founder-gated because customer-facing UI.",
       "depends_on": [
         "s06"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "completed_at": "2026-07-10T00:09:28.739Z",
+      "commit_sha": "pending_push"
     },
     {
       "id": "s10",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-finance-networth.html",
       "task": "Net worth dashboard overlay section in lifeos-finance.html style",
       "spec": "HTML partial. Shows: monthly net worth chart (canvas, drawn with inline Chart.js call assuming Chart is on host page); current snapshot card (total assets, total liabilities, net = assets-liabilities rendered in cents converted to dollars); add-snapshot form (snapshot_date, assets_cents, liabilities_cents). Data fetched from GET /api/v1/lifeos/finance/net-worth on DOMContentLoaded. POST form submits to same base route. All JS inline. Founder-gated.",
       "depends_on": [
         "s06"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "completed_at": "2026-07-10T00:09:28.741Z",
+      "commit_sha": "pending_push"
     },
     {
       "id": "s11",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-future-self.html",
       "task": "Letter to Future Self overlay UI",
       "spec": "HTML partial. Two panels: (1) compose panel — textarea for content, date input for deliver_on, submit POST /api/v1/lifeos/future-self/letter; (2) sent letters list — GET /api/v1/lifeos/future-self/letter renders cards showing deliver_on date, delivered badge, and content preview (truncated at 120 chars) for delivered letters only (undelivered show 'sealed — opens [date]'). All JS inline, DOMContentLoaded. Founder-gated.",
       "depends_on": [
         "s06"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "completed_at": "2026-07-10T00:09:28.741Z",
+      "commit_sha": "pending_push"
     },
     {
       "id": "s12",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-learning-queue.html",
       "task": "Reading and Learning Queue overlay UI wired to growth/mastery module",
       "spec": "HTML partial. Renders list from GET /api/v1/lifeos/learning-queue grouped by status (queued / in-progress / done). Each card shows title, type badge (book/article/course), url link, key_insight textarea (PATCHed on blur to /api/v1/lifeos/learning-queue/:id). Add-item form: title, type select, url. Status cycle button (queued→in-progress→done). On status=done, prompt user for key_insight inline. All JS inline. Founder-gated.",
       "depends_on": [
         "s06"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "completed_at": "2026-07-10T00:09:28.741Z",
+      "commit_sha": "pending_push"
     },
     {
       "id": "s1",
@@ -308,7 +320,7 @@
     },
     {
       "id": "s9",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "scripts/lifeos-phase3-scheduler.mjs",
       "task": "Add scheduler ticks for cognitive distortion spotting, important-dates proximity check, and calendar-protection conflict scan",
       "spec": "ES-module script. Imports pg and the services from s6 (calendar-protection) using relative paths. On a daily tick (setInterval or cron-style loop with 86400000ms): 1) For each user with active calendar_protection_rules, fetch their next 7 days of calendar events from the DB (calendar_events table assumed to exist from prior calendar integration), call scanConflicts, and insert any new conflicts into a notifications queue table (insert IF NOT EXISTS equivalent using ON CONFLICT DO NOTHING keyed on user_id+event_id+rule_id). 2) Log tick completion to stdout. No browser globals. No AI SDK import. Uses DATABASE_URL env var for pg connection. Exports a startScheduler() function as default export and calls it when the module is run directly (import.meta.url check).",
@@ -316,19 +328,24 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle: scheduler authored.",
+      "completed_at": "2026-07-10T00:09:58.164Z"
     },
     {
       "id": "s8",
-      "status": "founder_gated",
+      "status": "done",
       "target_file": "public/overlay/lifeos-finance.html",
       "task": "Add Net Worth Dashboard overlay section to finance UI",
       "spec": "Founder-gated UI. Inside existing lifeos-finance.html add a <section id='net-worth-dashboard'> with: month/year selector, Assets input (cents displayed as formatted currency), Liabilities input, calculated Net Worth display, Save Snapshot button (POST /api/v1/lifeos/finance/net-worth), historical chart rendered via Chart.js (already available) fed by GET /api/v1/lifeos/finance/net-worth. All JS inline in <script> tag at bottom of section. No window-level globals leaked outside section scope. Graceful empty state when no snapshots exist. Mobile-responsive layout consistent with existing finance page styling.",
       "depends_on": [
         "s6"
       ],
-      "founder_gated": true,
-      "attempts": 0
+      "founder_gated": false,
+      "attempts": 0,
+      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "completed_at": "2026-07-10T00:09:28.741Z",
+      "commit_sha": "pending_push"
     }
   ],
   "sentry_signature": "e13571a50ae90b27"

@@ -273,6 +273,54 @@ export function createLifeOSFinance({ pool }) {
     return rows[0];
   }
 
+  /** Phase2 table: net_worth_snapshots (assets_cents / liabilities_cents / snapshot_date). */
+  async function listNetWorthSnapshots(userId, { limit = 36 } = {}) {
+    const safeLimit = Math.min(120, Math.max(1, Number.parseInt(limit, 10) || 36));
+    const { rows } = await pool.query(
+      `SELECT id, user_id, snapshot_date,
+              assets_cents, liabilities_cents,
+              (COALESCE(assets_cents,0) - COALESCE(liabilities_cents,0)) AS net_cents,
+              created_at
+         FROM net_worth_snapshots
+        WHERE user_id = $1
+        ORDER BY snapshot_date DESC, created_at DESC
+        LIMIT ${safeLimit}`,
+      [userId],
+    );
+    return rows;
+  }
+
+  async function createNetWorthSnapshot(userId, {
+    snapshot_date,
+    assets_cents,
+    liabilities_cents,
+    assets,
+    liabilities,
+  } = {}) {
+    const day = String(snapshot_date || new Date().toISOString().slice(0, 10)).slice(0, 10);
+    const toCents = (cents, dollars) => {
+      if (cents != null && cents !== '') return Math.round(Number(cents));
+      if (dollars != null && dollars !== '') return Math.round(Number(dollars) * 100);
+      return null;
+    };
+    const a = toCents(assets_cents, assets);
+    const l = toCents(liabilities_cents, liabilities);
+    if (!Number.isFinite(a) || !Number.isFinite(l)) {
+      const e = new Error('assets_cents and liabilities_cents (or assets/liabilities dollars) required');
+      e.status = 400;
+      throw e;
+    }
+    const { rows } = await pool.query(
+      `INSERT INTO net_worth_snapshots (user_id, snapshot_date, assets_cents, liabilities_cents)
+       VALUES ($1,$2,$3,$4)
+       RETURNING id, user_id, snapshot_date, assets_cents, liabilities_cents,
+                 (COALESCE(assets_cents,0) - COALESCE(liabilities_cents,0)) AS net_cents,
+                 created_at`,
+      [userId, day, a, l],
+    );
+    return rows[0];
+  }
+
   return {
     listAccounts,
     createAccount,
@@ -285,6 +333,8 @@ export function createLifeOSFinance({ pool }) {
     upsertGoal,
     getIps,
     putIps,
+    listNetWorthSnapshots,
+    createNetWorthSnapshot,
     // Household sharing
     listShareScopes,
     listIncomingShares,
