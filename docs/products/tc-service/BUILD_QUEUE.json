@@ -6,13 +6,16 @@
   "steps": [
     {
       "id": "s1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240601_tc_intake_e2e.sql",
       "task": "Add intake_runs and document_qa_results tables for end-to-end transaction intake tracking",
       "spec": "CREATE TABLE IF NOT EXISTS intake_runs with columns id uuid PK default gen_random_uuid(), transaction_id uuid, email_message_id text, skyslope_file_id text, status text, run_log jsonb, created_at timestamptz default now(), updated_at timestamptz default now(). CREATE TABLE IF NOT EXISTS document_qa_results with id uuid PK default gen_random_uuid(), intake_run_id uuid, document_name text, issues jsonb, passed boolean, created_at timestamptz default now(). No DROP/ALTER on any existing table.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "6961fad2b4ad03c458b99f44453473a0bb95dd8a",
+      "last_attempt_at": "2026-07-10T03:34:45.449Z",
+      "completed_at": "2026-07-10T03:35:00.526Z"
     },
     {
       "id": "s2",
