@@ -1,6 +1,5 @@
 /**
- * SYNOPSIS: TC intake HTTP routes — POST run + GET runs.
- * @ssot docs/products/tc-service/PRODUCT_HOME.md
+ * SYNOPSIS: Registers TcIntakeRoutes routes/handlers (routes/tc-intake-routes.js).
  */
 import { runIntake } from '../services/tc-intake-runner.js';
 
@@ -41,14 +40,12 @@ export function registerTcIntakeRoutes(app, deps) {
         return res.status(500).json({ error: 'Database unavailable' });
       }
 
-      const { rows } = await db.query(
-        `
-          SELECT id, transaction_id, email_message_id, skyslope_file_id, status, run_log, created_at, updated_at
-          FROM intake_runs
-          ORDER BY created_at DESC
-          LIMIT 20
-        `
-      );
+      const { rows } = await db.query(`
+        SELECT id, transaction_id, email_message_id, skyslope_file_id, status, run_log, created_at, updated_at
+        FROM intake_runs
+        ORDER BY created_at DESC
+        LIMIT 20
+      `);
 
       return res.status(200).json({ runs: rows });
     } catch (error) {
