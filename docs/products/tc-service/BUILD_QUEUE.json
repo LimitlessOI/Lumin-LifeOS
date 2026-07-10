@@ -127,9 +127,9 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "commit_sha": "4bf7a8881124e02d1d45713d5edf2cacc6f287d1",
-      "last_attempt_at": "2026-07-10T08:23:20.218Z",
+      "last_attempt_at": "2026-07-10T08:25:28.837Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/tc-billing-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
