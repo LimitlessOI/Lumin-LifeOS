@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T09:59:23.658Z",
+  "generated_at": "2026-07-10T09:59:56.146Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11408,
   "files": [
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 7796,
-      "mtime": "2026-07-10T08:53:52.800Z",
-      "indexed_at": "2026-07-10T08:53:57.627Z",
+      "bytes": 8493,
+      "mtime": "2026-07-10T09:59:32.607Z",
+      "indexed_at": "2026-07-10T09:59:56.146Z",
       "synopsis_index_only": true
     },
     {
@@ -39729,9 +39729,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 104025,
-      "mtime": "2026-07-10T09:36:46.868Z",
-      "indexed_at": "2026-07-10T09:36:47.759Z"
+      "bytes": 104397,
+      "mtime": "2026-07-10T09:59:32.613Z",
+      "indexed_at": "2026-07-10T09:59:56.146Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66237,16 +66237,22 @@
     {
       "path": "routes/tcBillingRoutes.mjs",
       "synopsis": "Registers TcBillingRoutes routes/handlers (routes/tcBillingRoutes.mjs).",
-      "bytes": 5582,
-      "mtime": "2026-07-10T09:35:32.851Z",
-      "indexed_at": "2026-07-10T09:35:32.851Z"
+      "bytes": 5632,
+      "mtime": "2026-07-10T09:59:32.604Z",
+      "indexed_at": "2026-07-10T09:59:56.146Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/tcIntakeRoutes.mjs",
-      "synopsis": "Registers TcIntakeRoutes routes/handlers (routes/tcIntakeRoutes.mjs).",
-      "bytes": 5698,
-      "mtime": "2026-07-10T09:59:23.658Z",
-      "indexed_at": "2026-07-10T09:59:23.658Z"
+      "synopsis": "TC intake / document-QA / offer-prep / approvals / showing-feedback routes.",
+      "bytes": 6419,
+      "mtime": "2026-07-10T09:59:31.217Z",
+      "indexed_at": "2026-07-10T09:59:56.146Z",
+      "ssot": [
+        "docs/products/tc-service/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/tco-agent-routes.js",

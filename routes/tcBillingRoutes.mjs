@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers TcBillingRoutes routes/handlers (routes/tcBillingRoutes.mjs).
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 export function registerTcBillingRoutes(app, deps) {
   const { pool, requireKey, callCouncilMember, logger, baseUrl } = deps || {};
