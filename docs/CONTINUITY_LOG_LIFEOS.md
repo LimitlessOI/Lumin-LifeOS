@@ -8,6 +8,10 @@
 
 ---
 
+## [BUILD] Update 2026-07-10 — Creative Engine v1 tip-proof complete
+
+Adam: implement Creative Engine plan (video editing first). All plan todos done. Tip `0958e8593d` — `GET /api/v1/creative/health` → ffmpeg true, workerStarted true; studio + Marketing `/creative/studio` link live; footage_edit proof receipt `CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`. Footage renders default async (sync 502 fixed). Next: photo polish tip walk / script_compose when Replicate is tip-configured.
+
 ## [FIX] Update 2026-07-10 — Site Builder beta $45 + system From
 
 Adam: outbound must not use his personal email; beta offer is $45 publish because it's beta, and includes first 2 months of site management. Shipped pricing/copy + `resolveSystemEmailFrom` guard. Next: tip-sync → prove checkout amountCents=4500 + resend From=LifeOS@.
