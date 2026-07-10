@@ -1,40 +1,51 @@
 /**
- * SYNOPSIS: Exports registerTcImapRoutes — routes/tc-imap-routes.js.
+ * SYNOPSIS: Registers TcImapRoutes routes/handlers (routes/tc-imap-routes.js).
  */
-import imapRailwayBootstrap from '../services/imap-railway-bootstrap.js';
+import { imapRailwayBootstrap } from '../services/imap-railway-bootstrap.js';
 
 function getAuthMiddleware(deps) {
-  return deps?.requireAuth || deps?.requireKey;
+  return deps?.requireAuth || deps?.requireKey || null;
 }
 
-function sendError(res, statusCode, message, details) {
-  const payload = { error: message };
-  if (details !== undefined) payload.details = details;
-  return res.status(statusCode).json(payload);
-}
+export function registerTcImapRoutes(app, deps = {}) {
+  if (!app || typeof app.get !== 'function' || typeof app.post !== 'function') {
+    throw new Error('registerTcImapRoutes requires an Express app');
+  }
 
-export async function registerTcImapRoutes(app, deps = {}) {
   const requireAuth = getAuthMiddleware(deps);
+  if (typeof requireAuth !== 'function') {
+    throw new Error('registerTcImapRoutes requires deps.requireAuth or deps.requireKey');
+  }
 
-  app.get('/api/tc/imap/status', requireAuth, async (req, res) => {
+  app.get('/api/tc/imap/status', requireAuth, async (_req, res) => {
     try {
       const result = await imapRailwayBootstrap.verifyImapAndDryRun(deps);
-      return res.json(result);
+      res.status(200).json(result);
     } catch (error) {
-      deps?.logger?.error?.({ err: error }, 'tc-imap status failed');
-      return sendError(res, 500, 'imap_status_failed');
+      deps?.logger?.error?.({ err: error }, 'tc imap status failed');
+      res.status(500).json({
+        ready: false,
+        missing: ['imap_bootstrap_verification_failed'],
+        error: 'imap_bootstrap_verification_failed'
+      });
     }
   });
 
-  app.post('/api/tc/imap/dry-run', requireAuth, async (req, res) => {
+  app.post('/api/tc/imap/dry-run', requireAuth, async (_req, res) => {
     try {
       const result = await imapRailwayBootstrap.verifyImapAndDryRun(deps, { forceDryRun: true });
-      return res.json(result);
+      res.status(200).json(result);
     } catch (error) {
-      deps?.logger?.error?.({ err: error }, 'tc-imap dry-run failed');
-      return sendError(res, 500, 'imap_dry_run_failed');
+      deps?.logger?.error?.({ err: error }, 'tc imap dry-run failed');
+      res.status(500).json({
+        ready: false,
+        missing: ['imap_dry_run_failed'],
+        error: 'imap_dry_run_failed'
+      });
     }
   });
+
+  return app;
 }
 
-export default registerTcImapRoutes;
+export default { registerTcImapRoutes };
