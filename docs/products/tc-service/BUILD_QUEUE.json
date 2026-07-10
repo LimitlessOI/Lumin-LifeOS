@@ -149,7 +149,7 @@
     },
     {
       "id": "s10",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register all three new route modules so they mount at boot without editing server.js",
       "spec": "Add entries for 'routes/tc-intake-routes.js' with registerFn 'registerTcIntakeRoutes', 'routes/tc-billing-routes.js' with registerFn 'registerTcBillingRoutes', and 'routes/tc-imap-routes.js' with registerFn 'registerTcImapRoutes' to the existing JSON array. Preserve all pre-existing entries exactly.",
@@ -159,7 +159,10 @@
         "s9"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "07c9d93c648210ef6c6312e15aa0e05a9e9ed1ee",
+      "last_attempt_at": "2026-07-10T08:45:32.776Z",
+      "completed_at": "2026-07-10T08:48:10.761Z"
     },
     {
       "id": "s11",
