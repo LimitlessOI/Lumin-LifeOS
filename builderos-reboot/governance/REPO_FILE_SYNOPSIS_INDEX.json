@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T11:32:51.576Z",
+  "generated_at": "2026-07-10T11:33:22.687Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11409,
   "files": [
@@ -59162,9 +59162,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5708,
-      "mtime": "2026-07-10T11:03:36.720Z",
-      "indexed_at": "2026-07-10T11:03:41.283Z",
+      "bytes": 5814,
+      "mtime": "2026-07-10T11:33:21.727Z",
+      "indexed_at": "2026-07-10T11:33:22.687Z",
       "synopsis_index_only": true
     },
     {
