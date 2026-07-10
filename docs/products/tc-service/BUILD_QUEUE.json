@@ -142,9 +142,10 @@
         "s6"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-10T08:29:21.341Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "attempts": 2,
+      "last_attempt_at": "2026-07-10T08:29:57.342Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/tc-imap-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "commit_sha": "43bc1fcf5cba94320053164bb191a6656c2f4ce8"
     },
     {
       "id": "s10",
