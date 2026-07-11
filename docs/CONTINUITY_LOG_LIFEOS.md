@@ -8,6 +8,10 @@
 
 ---
 
+## [MONEY] Update 2026-07-11 — Family urgency: call/forward path while email blocked
+
+Adam: family needs money; full support. KNOW: cold email still Postmark-pending/captcha. Shipped same-domain money packs to adam@ + SMS with Flores call script (702) 242-3373 + live $45 Stripe checkout. Next human: call OR forward email OR clear Resend captcha — then system scales cold email.
+
 ## [MONEY] Update 2026-07-11 — Adam authorized pay/open; buy Twilio From + email fallbacks
 
 Adam: pay for / open whatever is needed (legal) to make money. KNOW: Twilio From invalid `(702) 935-1169`; shipping provision-number to purchase SMS From. Email: Postmark pending + captcha on Resend/SendGrid/Postmark signups — Connect is the human gate. SendGrid wired as Postmark-pending fallback. Next: push → provision → SMS Connect + Flores $45 link; Adam clears one captcha or Postmark approval → cold email Flores.

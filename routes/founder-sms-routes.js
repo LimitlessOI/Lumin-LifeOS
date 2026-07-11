@@ -189,6 +189,68 @@ export function registerFounderSmsRoutes(app, deps = {}) {
       return res.status(500).json({ ok: false, error: err.message });
     }
   });
+
+  /**
+   * Outbound voice to a published business line (B2B money path).
+   * Body: { to, say?, businessName?, previewUrl? }
+   */
+  app.post('/api/v1/lifeos/founder/voice/call', requireKey, async (req, res) => {
+    try {
+      const auth = twilioAuth();
+      if (!auth) return res.status(503).json({ ok: false, error: 'Twilio not configured on tip' });
+      const to = String(req.body?.to || '').replace(/[^\d+]/g, '');
+      if (!to || to.replace(/\D/g, '').length < 10) {
+        return res.status(400).json({ ok: false, error: 'to phone required' });
+      }
+      let from = String(process.env.TWILIO_PHONE_NUMBER || '').trim() || (await resolveOwnedFrom()) || '';
+      if (!from) {
+        return res.status(503).json({ ok: false, error: 'No Twilio From — provision-number first' });
+      }
+      const businessName = String(req.body?.businessName || 'your office').slice(0, 80);
+      const previewUrl = String(req.body?.previewUrl || '').slice(0, 200);
+      const callback = process.env.ADAM_SMS_NUMBER || process.env.ALERT_PHONE || '';
+      const say =
+        String(req.body?.say || '').trim() ||
+        [
+          `Hello, this is a quick business message from Adam Hopkins with Limitless O S Site Builder.`,
+          `I built a complimentary modern website preview for ${businessName}.`,
+          previewUrl ? `You can view it online, and publishing is forty five dollars including two months of management.` : '',
+          callback
+            ? `Please call or text Adam at ${callback.replace(/\D/g, '').replace(/^1/, '')} if you are interested. Thank you.`
+            : `Please email adam at hopkins group dot org if you are interested. Thank you.`,
+        ]
+          .filter(Boolean)
+          .join(' ');
+      const twiml = `<?xml version="1.0" encoding="UTF-8"?><Response><Pause length="1"/><Say voice="alice">${say
+        .replace(/&/g, 'and')
+        .replace(/</g, '')
+        .replace(/>/g, '')}</Say><Pause length="1"/></Response>`;
+      const params = new URLSearchParams({
+        To: to.startsWith('+') ? to : `+1${to.replace(/\D/g, '').slice(-10)}`,
+        From: from,
+        Twiml: twiml,
+      });
+      const resp = await fetch(
+        `https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(auth.sid)}/Calls.json`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: auth.header,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params,
+        }
+      );
+      const json = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        return res.status(502).json({ ok: false, error: json.message || `Twilio HTTP ${resp.status}`, from });
+      }
+      logger.info?.({ to, sid: json.sid }, '[FOUNDER-VOICE] outbound call queued');
+      return res.json({ ok: true, sid: json.sid, status: json.status, to: params.get('To'), from });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
 }
 
 export default registerFounderSmsRoutes;
