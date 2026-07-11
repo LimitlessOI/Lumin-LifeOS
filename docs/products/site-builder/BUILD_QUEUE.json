@@ -297,13 +297,16 @@
     },
     {
       "id": "step-01",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20240915_site_builder_ab_subject.sql",
       "task": "Create AB subject-line test tables",
       "spec": "CREATE TABLE IF NOT EXISTS site_builder_ab_subject_tests with columns: id uuid PK default gen_random_uuid(), site_id uuid NOT NULL, variant_a text NOT NULL, variant_b text NOT NULL, winner text, sends_a int default 0, sends_b int default 0, opens_a int default 0, opens_b int default 0, status text default 'active', created_at timestamptz default now(), updated_at timestamptz default now(). CREATE TABLE IF NOT EXISTS site_builder_ab_subject_events with id uuid PK gen_random_uuid(), test_id uuid NOT NULL REFERENCES site_builder_ab_subject_tests(id), variant text NOT NULL, event_type text NOT NULL, occurred_at timestamptz default now(). Both CREATE TABLE IF NOT EXISTS only, no drops or alters.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "2c3dea34d82f5f0482c4189e9825b68b0583103b",
+      "last_attempt_at": "2026-07-11T09:05:05.742Z",
+      "completed_at": "2026-07-11T09:05:19.931Z"
     },
     {
       "id": "step-02",
