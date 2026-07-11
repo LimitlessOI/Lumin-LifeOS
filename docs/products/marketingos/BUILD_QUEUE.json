@@ -323,6 +323,43 @@
       "founder_gated": false,
       "attempts": 0,
       "max_output_tokens": 10000
+    },
+    {
+      "id": "mos-youtube-oauth-service",
+      "status": "pending",
+      "target_file": "services/marketing-youtube.js",
+      "task": "MarketingOS Phase 6 YouTube connection — ONE shared OAuth app, per-client one-time consent (real Google login page, never our own form). SELF-CONTAINED ESM module, modeled DIRECTLY on the existing, working services/google-calendar-service.js (same OAuth2Client pattern, same user_integrations table — do NOT create a new token-storage table; reuse the exact one Calendar already uses).",
+      "spec": "Import google-auth-library's OAuth2Client and googleapis exactly as services/google-calendar-service.js does (both already npm dependencies — do not add new packages). Export createYouTubeService(pool) returning { getAuthUrl, handleCallback, getAuthedClient, getStatus }. Use process.env.GOOGLE_CLIENT_ID / process.env.GOOGLE_CLIENT_SECRET (the SAME shared app credentials Calendar already uses — one Google Cloud project can serve multiple APIs/scopes) but build the redirect URI as `${process.env.RAILWAY_PUBLIC_DOMAIN || 'http://localhost:8080'}/api/v1/marketing/youtube/callback` (a DIFFERENT path from Calendar's callback — each feature has its own callback route under the one shared app). Scopes: ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube.readonly']. Store tokens in the EXISTING user_integrations table with provider = 'youtube_channel' (INSERT ... ON CONFLICT (user_id, provider) DO UPDATE, exactly like google-calendar-service.js's handleCallback) — ownerId is whatever string/UUID the caller passes (do not invent a new identity scheme; the route layer resolves it the same way other marketing-*.js routes already do). getAuthedClient(ownerId): load tokens (already the same unencrypted JSONB shape Calendar uses per existing precedent), auth.setCredentials(tokens), wire the same auth.on('tokens', ...) auto-refresh-and-persist handler as Calendar does. getStatus(ownerId): { connected: boolean, connectedSince }. getAuthUrl must return { error: '...' } (never throw) if GOOGLE_CLIENT_ID is unset, mirroring google-calendar-service.js's existing guard. Named export createYouTubeService (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 8000
+    },
+    {
+      "id": "mos-youtube-connect-routes",
+      "status": "pending",
+      "target_file": "routes/marketing-youtube-routes.js",
+      "task": "Thin Express surface for the per-client YouTube connect flow. Pre-registered in config/auto-registered-product-modules.json (path routes/marketing-youtube-routes.js, register registerMarketingYoutubeRoutes) — do NOT edit server.js or any boot file.",
+      "spec": "Export registerMarketingYoutubeRoutes(app, deps) (+ default). deps = { pool, requireKey, logger }. Import createYouTubeService from services/marketing-youtube.js. GET /api/v1/marketing/youtube/connect (requireKey; resolve ownerId the same way other marketing-*.js routes already do — req.user?.id/req.lifeosUser?.sub else req.query.owner_id, 400 if absent) → call getAuthUrl(ownerId); if it returns { error }, respond 503 with that error (never a silent redirect to nowhere); else 302-redirect the browser to the returned authUrl — THIS is the real Google login page; nothing in this route ever collects a password. GET /api/v1/marketing/youtube/callback (NOT behind requireKey — Google redirects the user's browser here directly with no header control; read `code` and `state` [state carries the ownerId, set by getAuthUrl] from req.query; 400 if code missing) → call handleCallback(code, ownerId-from-state); on success redirect to a friendly `/marketing?youtube=connected` page (reuse the existing SSR landing, do not build a new page); on failure redirect to `/marketing?youtube=error`. GET /api/v1/marketing/youtube/status (requireKey; same ownerId resolution) → calls getStatus(ownerId), returns { ok:true, connected, connectedSince }. Wrap every handler in try/catch → JSON { ok:false, error } (except the two redirect routes, which redirect to an error page instead of raw JSON, since a real browser lands there mid-flow). ZERO top-level browser globals (server module). Named export registerMarketingYoutubeRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
+      "depends_on": [
+        "mos-youtube-oauth-service"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 10000
+    },
+    {
+      "id": "mos-youtube-sentry-layer-a",
+      "status": "pending",
+      "target_file": "scripts/run-marketingos-youtube-verify.mjs",
+      "task": "Structural Layer A verifier proving the YouTube connect surface's gates are real, without requiring a real Google login to already exist.",
+      "spec": "ESM script, same stack/shape as scripts/run-marketingos-layer-a.mjs. Requires PUBLIC_BASE_URL + COMMAND_CENTER_KEY. Assertions, fail-closed: (1) GET /api/v1/marketing/youtube/status (for an owner with no connection) returns 200 { ok:true, connected:false }. (2) GET /api/v1/marketing/youtube/connect either 302-redirects to a URL whose host is accounts.google.com (if GOOGLE_CLIENT_ID is set) OR returns a clear 503 named-blocker (if GOOGLE_CLIENT_ID is unset) — NEVER a silent 200/404. (3) GET /api/v1/marketing/youtube/callback with no `code` query param returns 400, never a crash or a fake-success redirect. Named blocker GOOGLE_YOUTUBE_OAUTH_UNVERIFIED must appear in the receipt whenever GOOGLE_CLIENT_ID is unset or the redirect URI has not yet been added in Google Cloud Console — never fake a connected-account PASS. Write receipt products/receipts/SENTRY_MARKETINGOS_YOUTUBE_LAYER_A.json. Register in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json under marketingos as an additional A-check. @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "depends_on": [
+        "mos-youtube-connect-routes"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "max_output_tokens": 8000
     }
   ]
 }
