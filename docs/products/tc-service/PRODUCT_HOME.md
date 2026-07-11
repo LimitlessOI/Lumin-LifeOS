@@ -1060,7 +1060,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 **Status:** BUILD_READY (TC coordination core — gates 1-5 complete)
 **Adaptability Score:** 82/100
 **Council Persona:** edison (iterate fast, test every assumption, protect the core deadline logic)
-**Last Updated:** 2026-07-11 — Google YouTube OAuth setup probe (`/api/v1/browser-agent/setup/google-youtube-oauth`). Prior: 2026-07-03 — live-origin cleanup for TC upload tooling.
+**Last Updated:** 2026-07-11 — Google OAuth setup probe async + tip click-wall evidence. Prior: Google YouTube OAuth setup probe endpoint.
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions
