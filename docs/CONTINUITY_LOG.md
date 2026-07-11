@@ -5,6 +5,12 @@
 
 ---
 
+## [MONEY] 2026-07-11 — Pay/open authorized; Twilio From buy + email fallbacks
+
+Adam authorized paying/opening whatever is legal for first dollar. Shipping Twilio `provision-number` (current From invalid) + SendGrid as Postmark-pending fallback. Human gate: LifeOS Connect captcha (Resend/SendGrid) or Postmark approval. Flores $45 Stripe preview ready.
+
+---
+
 ## [FIX] 2026-07-10 — Lumin chat drawer usable
 
 Adam: chat window not functioning. Backend already OK; UX fix in `lifeos-app.html` — expand-on-open if minimized (hid input), close Settings when chatting, Escape closes overlays. Hard-refresh after tip deploy.

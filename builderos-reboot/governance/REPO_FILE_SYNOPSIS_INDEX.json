@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T16:00:48.965Z",
+  "generated_at": "2026-07-11T16:13:52.537Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -31310,9 +31310,9 @@
     {
       "path": "core/notification-service.js",
       "synopsis": "NotificationService",
-      "bytes": 18892,
-      "mtime": "2026-07-11T16:00:15.279Z",
-      "indexed_at": "2026-07-11T16:00:48.965Z",
+      "bytes": 21471,
+      "mtime": "2026-07-11T16:06:46.319Z",
+      "indexed_at": "2026-07-11T16:13:52.537Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 65915,
-      "mtime": "2026-07-11T16:00:41.581Z",
-      "indexed_at": "2026-07-11T16:00:48.965Z"
+      "bytes": 66439,
+      "mtime": "2026-07-11T16:12:18.578Z",
+      "indexed_at": "2026-07-11T16:13:52.537Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -36797,9 +36797,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 501783,
-      "mtime": "2026-07-11T00:28:48.231Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 502145,
+      "mtime": "2026-07-11T16:13:05.907Z",
+      "indexed_at": "2026-07-11T16:13:52.537Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39348,9 +39348,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 600766,
-      "mtime": "2026-07-11T16:00:41.530Z",
-      "indexed_at": "2026-07-11T16:00:48.965Z"
+      "bytes": 601609,
+      "mtime": "2026-07-11T16:12:35.876Z",
+      "indexed_at": "2026-07-11T16:13:52.537Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39408,7 +39408,7 @@
       "synopsis": "Canonical product home — LimitlessOS business stack",
       "bytes": 10107,
       "mtime": "2026-07-11T15:42:49.730Z",
-      "indexed_at": "2026-07-11T15:42:51.033Z"
+      "indexed_at": "2026-07-11T16:13:52.537Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -39786,9 +39786,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 107531,
-      "mtime": "2026-07-11T16:00:41.533Z",
-      "indexed_at": "2026-07-11T16:00:48.965Z"
+      "bytes": 108054,
+      "mtime": "2026-07-11T16:13:39.767Z",
+      "indexed_at": "2026-07-11T16:13:52.537Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -65343,9 +65343,9 @@
     {
       "path": "routes/founder-sms-routes.js",
       "synopsis": "Founder SMS helper — tip can text ADAM_SMS_NUMBER (Twilio) without full phone stack.",
-      "bytes": 2177,
-      "mtime": "2026-07-11T15:59:32.747Z",
-      "indexed_at": "2026-07-11T16:00:48.965Z",
+      "bytes": 5871,
+      "mtime": "2026-07-11T16:07:32.423Z",
+      "indexed_at": "2026-07-11T16:13:52.537Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -87524,9 +87524,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 13596,
-      "mtime": "2026-07-10T19:16:00.049Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 13620,
+      "mtime": "2026-07-11T16:08:00.603Z",
+      "indexed_at": "2026-07-11T16:13:52.537Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

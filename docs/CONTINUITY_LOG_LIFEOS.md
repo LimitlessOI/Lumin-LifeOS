@@ -8,6 +8,10 @@
 
 ---
 
+## [MONEY] Update 2026-07-11 — Adam authorized pay/open; buy Twilio From + email fallbacks
+
+Adam: pay for / open whatever is needed (legal) to make money. KNOW: Twilio From invalid `(702) 935-1169`; shipping provision-number to purchase SMS From. Email: Postmark pending + captcha on Resend/SendGrid/Postmark signups — Connect is the human gate. SendGrid wired as Postmark-pending fallback. Next: push → provision → SMS Connect + Flores $45 link; Adam clears one captcha or Postmark approval → cold email Flores.
+
 ## [MONEY] Update 2026-07-11 — Resend signup + founder SMS + keep shipping
 
 Adam: do whatever legal. Started Resend founder-authority signup (blocked on captcha — Connect). Wired Resend email provider + founder SMS route. Postmark still pending; Railway SMTP still times out. Factory kept running; Flores preview+$45 ready to share.

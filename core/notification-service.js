@@ -130,6 +130,60 @@ export class NotificationService {
     });
   }
 
+  async _sendViaSendgrid({
+    to,
+    subject,
+    text,
+    html,
+    fromAddr,
+    campaignId,
+    bodyText,
+  }) {
+    const apiKey = String(process.env.SENDGRID_API_KEY || '').trim();
+    if (!apiKey) {
+      return { success: false, error: 'SENDGRID_API_KEY not set' };
+    }
+    try {
+      const resp = await fetch('https://api.sendgrid.com/v3/mail/send', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          personalizations: [{ to: [{ email: to }] }],
+          from: { email: extractEmailAddress(fromAddr), name: fromAddr.includes('<') ? fromAddr.split('<')[0].trim() : undefined },
+          subject,
+          content: [
+            ...(text ? [{ type: 'text/plain', value: text }] : []),
+            ...(html ? [{ type: 'text/html', value: html }] : []),
+            ...(!text && !html ? [{ type: 'text/plain', value: subject }] : []),
+          ],
+        }),
+      });
+      if (!resp.ok) {
+        const errText = await resp.text();
+        throw new Error(errText.slice(0, 300) || `SendGrid HTTP ${resp.status}`);
+      }
+      const messageId = resp.headers.get('x-message-id') || null;
+      await this.logOutreach({
+        campaignId, channel: 'email', recipient: to, subject,
+        body: text || html || '', status: 'sent', externalId: messageId,
+      });
+      await this.logEmailEvent({
+        provider: 'sendgrid', eventType: 'sent', messageId,
+        recipient: to, payload: safeJson({ at: nowIso() }), severity: 'info',
+      });
+      return { success: true, provider: 'sendgrid', messageId };
+    } catch (e) {
+      await this.logOutreach({
+        campaignId, channel: 'email', recipient: to, subject,
+        body: bodyText, status: 'failed',
+      });
+      return { success: false, error: e.message || 'SendGrid send failed' };
+    }
+  }
+
   async _sendViaResend({
     to,
     subject,
@@ -418,6 +472,18 @@ export class NotificationService {
       });
     }
 
+    if (provider === "sendgrid") {
+      return this._sendViaSendgrid({
+        to: recipient,
+        subject,
+        text,
+        html,
+        fromAddr,
+        campaignId,
+        bodyText,
+      });
+    }
+
     if (provider !== "postmark") {
       await this.logOutreach({
         campaignId,
@@ -537,6 +603,22 @@ export class NotificationService {
       });
       if (resendResult.success) {
         return { ...resendResult, fallback_from: "postmark_pending_approval" };
+      }
+    }
+
+    if (pendingApproval && String(process.env.SENDGRID_API_KEY || '').trim()) {
+      console.warn(`[EMAIL] Postmark blocked — falling back to SendGrid HTTP`);
+      const sg = await this._sendViaSendgrid({
+        to: recipient,
+        subject,
+        text,
+        html,
+        fromAddr,
+        campaignId,
+        bodyText,
+      });
+      if (sg.success) {
+        return { ...sg, fallback_from: "postmark_pending_approval" };
       }
     }
 

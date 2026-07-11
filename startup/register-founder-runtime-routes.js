@@ -298,6 +298,7 @@ export async function registerFounderRuntimeRoutes(app, deps) {
       baseUrl: siteBaseUrl,
       commitToGitHub,
       commitManyToGitHub,
+      setRailwayEnvVar,
     }, { logger });
     logger.info(`✅ [AUTO-REGISTER] ${autoResults.filter((r) => r.status === "mounted").length}/${autoResults.length} product module(s) mounted`);
   } catch (autoErr) {

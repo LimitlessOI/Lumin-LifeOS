@@ -976,6 +976,8 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-11 | **SendGrid + Resend HTTP fallbacks** — NotificationService Postmark-pending → Resend → SendGrid → SMTP. Twilio From provision lives under LifeOS SMS routes. | Adam: pay/open whatever for first dollar; captcha still human. | ✅ | | ⚠️ tip + API keys |
+| 2026-07-11 | **Resend HTTP provider** — NotificationService `EMAIL_PROVIDER=resend` + Postmark-pending falls through to Resend before SMTP. | Railway SMTP times out; need HTTP email for first dollar. | ✅ | | ⚠️ tip + RESEND_API_KEY |
 | 2026-07-11 | **Email: Postmark pending → SMTP fallback** — `core/notification-service.js` uses `WORK_EMAIL`/`WORK_EMAIL_APP_PASSWORD` when Postmark returns pending-approval / same-domain-only; SMTP auth also accepts those env vars. | Adam: keep money path moving while Postmark approval waits. | ✅ | | ⚠️ tip-sync + resend Flores external |
 | 2026-07-10 | **WORK_EMAIL IMAP for magic-link verify** — `verifyEmailAfterSignup` uses `imapCredsForEmail` so LifeOS@hopkinsgroup.org signups poll the work mailbox, not only GMAIL_SIGNUP. | SmartLead rejects Gmail; magic link went to WORK_EMAIL. | ✅ | tip resume-verify |
 | 2026-07-10 | **GAP-FILL signup context + payment handoff** — `makeAccountConfirmer` allows `navigate` TO expected host from `about:blank`; `runBrowserGoal`/`runGoalOnSession` wire `onAfterStep` so payment-boundary stop actually fires. | Founder-authority Replicate signup died immediately with `context_unconfirmed:context_mismatch` before leaving blank page; payment detection was passed but never called. | ✅ | tip signup retry |
