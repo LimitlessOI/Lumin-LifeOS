@@ -356,7 +356,7 @@
     },
     {
       "id": "mos-youtube-sentry-layer-a",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/run-marketingos-youtube-verify.mjs",
       "task": "Structural Layer A verifier proving the YouTube connect surface's gates are real, without requiring a real Google login to already exist.",
       "spec": "ESM script, same stack/shape as scripts/run-marketingos-layer-a.mjs. Requires PUBLIC_BASE_URL + COMMAND_CENTER_KEY. Assertions, fail-closed: (1) GET /api/v1/marketing/youtube/status (for an owner with no connection) returns 200 { ok:true, connected:false }. (2) GET /api/v1/marketing/youtube/connect either 302-redirects to a URL whose host is accounts.google.com (if GOOGLE_CLIENT_ID is set) OR returns a clear 503 named-blocker (if GOOGLE_CLIENT_ID is unset) — NEVER a silent 200/404. (3) GET /api/v1/marketing/youtube/callback with no `code` query param returns 400, never a crash or a fake-success redirect. Named blocker GOOGLE_YOUTUBE_OAUTH_UNVERIFIED must appear in the receipt whenever GOOGLE_CLIENT_ID is unset or the redirect URI has not yet been added in Google Cloud Console — never fake a connected-account PASS. Write receipt products/receipts/SENTRY_MARKETINGOS_YOUTUBE_LAYER_A.json. Register in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json under marketingos as an additional A-check. @ssot docs/products/marketingos/PRODUCT_HOME.md",
@@ -364,10 +364,12 @@
         "mos-youtube-connect-routes"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 8000,
-      "last_attempt_at": "2026-07-11T06:10:31.840Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "last_attempt_at": "2026-07-11T06:20:05.876Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "commit_sha": "0f5e4fbcac08e739d8d8e2f5eb92dd9f16f46b63",
+      "completed_at": "2026-07-11T06:20:54.923Z"
     }
   ]
 }
