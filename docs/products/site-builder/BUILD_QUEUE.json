@@ -218,7 +218,10 @@
         "step-2"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "aab32f8c41e4cf015c650bd4de1ebd06cbfbb7a0",
+      "last_attempt_at": "2026-07-11T05:56:20.657Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/site-builder-templates-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "step-5",
