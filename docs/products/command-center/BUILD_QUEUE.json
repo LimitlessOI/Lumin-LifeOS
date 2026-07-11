@@ -42,7 +42,10 @@
         "s2"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "22279982ca5d079aed823a1c558f64b76f6e86ca",
+      "last_attempt_at": "2026-07-11T05:56:24.801Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/command-center-mode-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "s4",
