@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Founder-usable SMOS: extract/generate UI, LifeOS nav, `/marketing` standalone. |
+| **Last Updated** | 2026-07-10 — Phase 5 publishing architecture decided (browser-agent template replay, not Buffer/Publer) + queued; founder-usable SMOS: extract/generate UI, LifeOS nav, `/marketing` standalone. |
 
 ---
 
@@ -99,6 +99,7 @@ Shared Infrastructure (read-only dependencies)
 ├── Outreach CRM — Outreach CRM (lead management)
 ├── Creator Media OS — Creator Media OS (avatar/likeness video — separate product)
 ├── Productized Sprint — Productized Sprint (Phase 0 manual revenue)
+├── General Browser Agent — TC-service (`services/general-browser-agent.js` + `-live.js` + `-runtime.js`, @ssot `docs/products/tc-service/PRODUCT_HOME.md`) — the goal-driven observe→decide→act→verify loop MarketingOS Phase 5 publishing reuses for social-account posting. Do not rebuild it; MarketingOS only adds platform goal configs + thin wiring on top.
 └── LifeOS — LifeOS Core (personal data wall — constitutional boundary)
 
 LifeOS (personal lane) ← hard wall — no MarketingOS access without explicit consent
@@ -452,23 +453,25 @@ Listed in logical build order. Phase assignments are in Section 5.
 
 **Features excluded:** Analytics ingestion (Phase 7), campaign automation (Phase 8).
 
-**Architecture decision:** Use Buffer API or Publer API as the first publishing layer rather than building native platform integrations. Direct platform APIs (Meta Graph API, LinkedIn API) are complex, rate-limited, and require app review processes. Buffer/Publer already handle this. Revisit direct integrations only if Buffer/Publer pricing becomes a problem at scale.
+**Architecture decision — REVISED 2026-07-10 (supersedes the original Buffer/Publer-first note below the strikethrough):** Publish via replay-first browser-agent template automation, not a native OAuth publishing API and not a Buffer/Publer subscription. This repo already has a proven, Chair-approved (`LIFERE_COUNCIL_1783455558829`) goal-driven browser agent — `services/general-browser-agent.js` (observe→decide→act→verify loop) + `services/general-browser-agent-live.js` (live Puppeteer wiring) — in production use for TC-service (eXp/GLVAR/SkySlope) and founder-authorized account signups. It explores a site once (expensive, AI-driven), captures a reusable `{site, goal, steps}` template on independently-evidenced success, and replays that template directly on every later run (cheap, near-instant) — only falling back to a fresh explore pass, which automatically recaptures an updated template, if replay's evidence check fails (i.e. the platform's UI changed). MarketingOS adds nothing to that core; it only adds per-platform goal configs (`services/marketing-social-goals.js`) and thin orchestration (`services/marketing-publisher.js`) on top. Chosen over Buffer/Publer/native OAuth because it needs no per-platform developer app review, no per-seat scheduler subscription, and self-heals when a platform changes its UI instead of needing a code fix. **External dependency — Grok:** Adam has a separate effort (Grok) building the per-platform sign-in window (the human login moment, one-time, stays connected). The ONLY seam between that effort and this one is `services/marketing-social-connections.js` — whichever process completes a platform login must persist the resulting authenticated browser session there. **Honesty flag for Adam (business-risk decision, not an engineering blocker):** automating posting outside a platform's official API can conflict with that platform's Terms of Service on non-API automation — the real risk is account friction or suspension on the founder's or a client's own account, not a technical risk. A global kill switch (`LIVE_SOCIAL_PUBLISH_ENABLED` Railway env var, default unset/off) gates any real platform action until this is knowingly turned on. Queued as 6 composing steps in `docs/products/marketingos/BUILD_QUEUE.json` (`mos-social-schema` → `mos-social-connections-service` + `mos-social-goal-library` → `mos-social-publisher` → `mos-social-publish-route` → `mos-social-sentry-layer-a`) — see that file's `phase5_social_publish_notes` for full detail. Per SO-001 no browser-driving or publishing logic was hand-authored here; only this spec + the queue's task/spec fields (blueprint-level) were.
 
-**New database tables:** `marketing_publish_records`, `marketing_platform_connections`.
+~~Original 2026-05-30 note (superseded): "Use Buffer API or Publer API as the first publishing layer rather than building native platform integrations... Revisit direct integrations only if Buffer/Publer pricing becomes a problem at scale."~~
 
-**New services:** `services/marketing-publisher.js` (Buffer/Publer adapter pattern — swap-ready).
+**New database tables:** `marketing_publish_records`, `marketing_social_connections` (session-based — encrypted cookies/storage-state, not OAuth tokens), `marketing_social_posting_templates` (the reusable browser-agent templates).
 
-**New routes:** `POST /api/v1/marketing/publish`, `GET /api/v1/marketing/publish/:id/status`, `POST /api/v1/marketing/platform-connections`.
+**New services:** `services/marketing-social-connections.js` (encrypted connection store — the seam with Grok's sign-in flow), `services/marketing-social-goals.js` (per-platform goal config, no browser logic), `services/marketing-publisher.js` (replay-first orchestration on top of the proven browser-agent core).
 
-**External APIs:**
-- Buffer API — UNVERIFIED (evaluate: bufferapp.com/developers)
-- Publer API — UNVERIFIED (evaluate: publer.io/api)
-- Meta Graph API — BLOCKED (requires app review; use Buffer as proxy instead)
-- LinkedIn API — UNVERIFIED (less restrictive than Meta; evaluate for direct)
+**New routes:** `GET /api/v1/marketing/social-connections`, `POST /api/v1/marketing/publish`.
 
-**Readiness gate:** Phase 4 exit criteria met. Buffer or Publer account created. API key in Railway env. Approval workflow verified live (no piece published without `status = approved`).
+**External APIs / dependencies:**
+- `services/general-browser-agent.js` + `-live.js` + `-runtime.js` — VERIFIED (SENTRY PASS + behavioral proofs, live in TC-service; shared dependency, not owned by MarketingOS)
+- `core/tco-encryption.js` (AES-256-GCM) — VERIFIED, reused for `session_state_encrypted` — do not reimplement crypto
+- Grok's per-platform sign-in window — EXTERNAL, in progress; contract is `marketing-social-connections.js` `saveConnection(...)`
+- Buffer API / Publer API / native Meta or LinkedIn OAuth — NOT USED (superseded by the browser-agent decision above)
 
-**Exit criteria:** ≥1 post successfully published to ≥2 platforms without manual copy-paste. Publish audit log populated.
+**Readiness gate:** Phase 4 exit criteria met. At least one platform connection exists via the Grok sign-in flow (or the browser agent driving a login directly). `LIVE_SOCIAL_PUBLISH_ENABLED` set only when Adam has accepted the ToS/account-risk flag above.
+
+**Exit criteria:** ≥1 post successfully published to ≥1 platform via template replay or explore-fallback, with a real independently-evidenced success (never self-reported). Publish audit log (`marketing_publish_records`) populated. A second post to the same platform takes the cheap replay path (proves the templatize-once/replay-cheap economics).
 
 ---
 
@@ -919,16 +922,26 @@ See Section 6 for exact DDL.
 -- description, tags_json, consent_level, created_at
 ```
 
-### Phase 5 Tables (Publishing)
+### Phase 5 Tables (Publishing) — REVISED 2026-07-10, see §5 Phase 5 architecture decision
 ```sql
--- marketing_platform_connections
--- id, owner_id, platform, access_token_encrypted, refresh_token_encrypted,
--- platform_account_id, connected_at, expires_at, revoked_at
+-- marketing_social_connections  (supersedes the original marketing_platform_connections —
+-- session-based, not OAuth-token-based, because publishing drives the platform's real UI
+-- as the founder's own logged-in browser session, not each platform's developer API)
+-- id, owner_id, platform (instagram|linkedin|x|facebook), auth_mode (browser_session|oauth),
+-- session_state_encrypted, status (pending|connected|expired|revoked|needs_human),
+-- connected_at, last_verified_at, last_error, created_at, updated_at
+-- UNIQUE(owner_id, platform). Encrypted via core/tco-encryption.js (AES-256-GCM, existing helper).
+-- Written by services/marketing-social-connections.js — the seam Grok's sign-in flow calls into.
+
+-- marketing_social_posting_templates
+-- id, platform, goal_key, steps_json (the {site,goal,steps} shape services/general-browser-agent.js
+-- already emits on a verified-successful run), captured_at, last_used_at, last_verified_ok_at,
+-- site_version_hint, created_at
+-- UNIQUE(platform, goal_key) — a fresh successful explore REPLACES the row, never duplicates it.
 
 -- marketing_publish_records
--- id, piece_id, platform, platform_post_id, published_at, status,
--- publisher_service (buffer|publer|direct), created_at
--- Note: access_token_encrypted uses AES-256; key stored in Railway env only
+-- id, piece_id, platform, platform_post_id, published_at, status (pending|published|failed|needs_human),
+-- publisher_service (default 'browser_agent'), error_detail, created_at
 ```
 
 ### Phase 6 Tables (YouTubeOS)
@@ -1178,8 +1191,8 @@ $49/session is easier to buy. $199/month creates recurring commitment. Which do 
 **3. First vertical to target: real estate agents, wellness coaches, or SaaS founders?**
 Each needs different coaching prompts, different content format emphasis (video-heavy vs. LinkedIn-heavy vs. Twitter-heavy), and different case study positioning. Picking one vertical first enables sharper coaching prompts and a better first case study.
 
-**4. Phase 5 publishing: Buffer API or Publer API?**
-Buffer is more established; Publer is cheaper and newer. Both require a paid plan. Adam must evaluate and decide before Phase 5 development begins. This does not block Phase 1–4.
+**4. ~~Phase 5 publishing: Buffer API or Publer API?~~ RESOLVED 2026-07-10 — neither.**
+Decided instead: replay-first browser-agent template automation, reusing the already-proven `services/general-browser-agent.js` core (see §5 Phase 5). No subscription, no per-platform app review. Adam's open item now is the ToS/account-risk acceptance flagged in §5, and confirming with Grok that the sign-in window's captured session lands in `marketing_social_connections` via `services/marketing-social-connections.js`.
 
 **5. Phase 0 intake: Google Form or Typeform?**
 Either works. Google Form is free. Typeform is prettier. Must pick before Phase 0 launches. Recommended: Google Form — free, instant, no extra account needed.
@@ -1297,7 +1310,12 @@ services/marketing-video-processor.js       (Phase 3)
 services/marketing-caption-engine.js        (Phase 3)
 services/marketing-recording-quality.js     (Phase 4)
 services/marketing-audio-enhancer.js        (Phase 4)
-services/marketing-publisher.js             (Phase 5)
+services/marketing-publisher.js             (Phase 5 — replay-first, on top of shared general-browser-agent core)
+services/marketing-social-connections.js    (Phase 5 — encrypted connection store, seam with Grok sign-in flow)
+services/marketing-social-goals.js          (Phase 5 — per-platform goal config, no browser logic)
+routes/marketing-publish-routes.js          (Phase 5)
+db/migrations/20260710_marketing_social_publishing.sql (Phase 5)
+scripts/run-marketingos-social-publish-verify.mjs (Phase 5 Layer A)
 services/marketing-youtube.js               (Phase 6)
 services/marketing-thumbnail-engine.js      (Phase 6)
 services/marketing-performance-engine.js    (Phase 7)
@@ -1330,6 +1348,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **Phase 5 publishing architecture decided + queued** — superseded the Buffer/Publer-first note with replay-first browser-agent template automation, reusing the already-proven `services/general-browser-agent.js`/`-live.js`/`-runtime.js` core (Chair receipt `LIFERE_COUNCIL_1783455558829`, live in TC-service) instead of a native OAuth publishing API or a scheduler subscription. Updated §2 Relationship Map (new shared-infra dependency), §5 Phase 5 (full rewrite), §7 Phase 5 Tables (`marketing_platform_connections` → `marketing_social_connections` + `marketing_social_posting_templates`, session-based not OAuth-token-based), §12 Q4 (resolved), Owned Files. Queued 6 composing steps in `BUILD_QUEUE.json` (schema → connections service + goal library → publisher → route → Layer A verifier) — no browser-driving or publishing code hand-authored, per SO-001; only this spec + the queue's task/spec fields. | Adam: while Grok builds the per-platform sign-in window, build everything downstream — storing the connection and actually posting an approved piece. The seam between the two efforts is `services/marketing-social-connections.js`. Flagged as an open item for Adam: automating outside a platform's official API can conflict with that platform's ToS on non-API automation (account-risk, not engineering-risk) — gated behind `LIVE_SOCIAL_PUBLISH_ENABLED`, default off. | ✅ | ⬜ | pending (queue authored, not yet built/deployed) |
 | 2026-07-10 | **Creative Engine consumer link** — Marketing dashboard links `/creative/studio` for footage/photo render via shared Creative Engine (video edit via Creative Engine, not MarketingOS-owned FFmpeg). | Adam: SMOS + Creative Engine together. | ✅ | ⬜ | ✅ tip proof `CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json` |
 | 2026-07-10 | **Founder-usable SMOS GAP-FILL** — fixed `/marketing` UI: Extract/Generate buttons; content list reads `{pieces}`; approve sends `action`; export uses auth+blob download; branded SocialMediaOS dashboard + calendar/atoms links. LifeOS nav → `/marketing`; `?stack=socialmediaos` redirects to `/marketing`; LifeRE Marketing tab links full app; legacy `socialmediaos-session.html` redirects (dead `/api/v1/socialmediaos/*`). | Adam: use SMOS ASAP as standalone app + inside LifeOS/RE; UI walk found Phase 1 API live but UI incomplete/broken. | ✅ | ⬜ | tip UI walk pending deploy |
 | 2026-07-10 | **GAP-FILL UI catch logger** — browser scripts used `logger.error` (undefined) so Proceed/coach errors were silent. Switched to `console.error` + visible message. |

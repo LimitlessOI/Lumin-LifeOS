@@ -1,7 +1,7 @@
 {
   "schema": "auto_registered_product_modules_v1",
   "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file — no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
-  "updated_at": "2026-07-10T19:10:00.000Z",
+  "updated_at": "2026-07-10T21:40:00.000Z",
   "modules": [
     {
       "path": "routes/lifeos-finance-routes.js",
@@ -138,6 +138,12 @@
       "register": "registerCreativeEngineUiRoutes",
       "enabled": true,
       "note": "Creative Engine SSR studio at /creative and /creative/studio."
+    },
+    {
+      "path": "routes/marketing-publish-routes.js",
+      "register": "registerMarketingPublishRoutes",
+      "enabled": true,
+      "note": "MarketingOS Phase 5 publishing surface (§5 Phase 5, revised architecture: browser-agent template replay, not Buffer/Publer). Exposes GET /api/v1/marketing/social-connections (per-platform connect status for the UI) and POST /api/v1/marketing/publish (piece_id -> publish via services/marketing-publisher.js). Hard-rejects any piece not status:approved (constitutional Principle 6 / §9 Rule 4). Built by the loop (queued mos-social-publish-route); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
     }
   ]
 }
