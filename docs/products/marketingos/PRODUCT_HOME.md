@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — YouTube connect + top video suggestions (thumbnails + Start making); Google OAuth keys still required from Adam. |
+| **Last Updated** | 2026-07-11 — Video suggestion cards live; YouTube analytics blocked until Adam pastes GOOGLE_CLIENT_ID/SECRET + Google login. |
 
 ---
 
@@ -1348,6 +1348,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-11 | **YouTube suggestions AI call fix + UI reload** — `callCouncilMember` now uses positional `(gemini_flash, prompt)` like Phase 1 routes so tip can return `ai_research_defaults`; home UI retries suggestion load. Still blocked: tip `oauthConfigured:false` — no GOOGLE_CLIENT_ID/SECRET in Railway or local `.env`; Google Cloud Console requires Adam’s login (agent hit sign-in wall). | Adam: suggestions + thumbnails + connect channel/analytics + set Google keys / login as me. | ✅ | ⬜ | suggestions LIVE; OAuth HALT on Adam credentials |
 | 2026-07-11 | **YouTube connect + top video ideas** — fixed broken `marketing-youtube` contract (pool/authUrl/tokens), added channel + analytics pull, `/youtube/suggestions` with researched cards + SVG thumbnails + Start making → coaching seed. UI on `/marketing`. Honest blocker: tip still missing `GOOGLE_CLIENT_ID`/`SECRET` — Adam must create/paste OAuth client and click Google login himself (cannot “login as Adam”). | Adam: top video suggestions, thumbnails ready, connect channel + analytics, set up Google API keys / login as me. | ✅ | ⬜ | code shipped; OAuth connect blocked until keys |
 | 2026-07-11 | **Standalone SMOS app proved** — tip `/marketing` as its own top-level app (not LifeOS iframe): consent→coach→extract→generate→approve→export PASS session `498db989-…`, receipt `products/receipts/SMOS_STANDALONE_UI_LOOP.json`. Hardened standalone UX: real `a.btn` nav (no nested button-in-link), “Standalone app” chrome, cleaner titles. | Adam: test it as a separate app too, not just in LifeOS. | ✅ | ⬜ | ✅ standalone UI loop PASS |
 | 2026-07-11 | **LifeOS-ready SMOS** — `#nav-smos` loads `/marketing?shell=1` inside `lifeos-app` content-frame (no full-page leave). UI auth bootstraps commandKey + parent shell tokens; `marketingFetch` merges auth headers + 401→login; in-shell links preserve `shell=1`. Disabled missing `marketing-publish-routes` auto-register noise. Tip API loop re-proved consent→coach→extract→generate→approve→export (session `547032e1-…`). LifeOS UI loop PASS session `f9afe8e5-…` receipt `products/receipts/SMOS_LIFEOS_UI_LOOP.json`. | Adam: get SMOS ready, test through LifeOS UI, program what's needed. | ✅ | ⬜ | ✅ tip API + LifeOS iframe UI loop PASS on `2c811a0285` |

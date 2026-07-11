@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T22:37:47.665Z",
+  "generated_at": "2026-07-11T22:44:57.998Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11455,
   "files": [
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 70747,
-      "mtime": "2026-07-11T22:37:24.706Z",
-      "indexed_at": "2026-07-11T22:37:47.665Z"
+      "bytes": 71177,
+      "mtime": "2026-07-11T22:44:50.520Z",
+      "indexed_at": "2026-07-11T22:44:57.998Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39457,9 +39457,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 97467,
-      "mtime": "2026-07-11T22:37:24.234Z",
-      "indexed_at": "2026-07-11T22:37:47.665Z"
+      "bytes": 98026,
+      "mtime": "2026-07-11T22:44:49.004Z",
+      "indexed_at": "2026-07-11T22:44:57.998Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66027,9 +66027,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 39114,
-      "mtime": "2026-07-11T22:37:14.829Z",
-      "indexed_at": "2026-07-11T22:37:47.665Z",
+      "bytes": 39218,
+      "mtime": "2026-07-11T22:44:01.788Z",
+      "indexed_at": "2026-07-11T22:44:57.998Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -84800,9 +84800,9 @@
     {
       "path": "services/marketing-youtube.js",
       "synopsis": "MarketingOS YouTube OAuth + channel analytics + video suggestion packs",
-      "bytes": 13535,
-      "mtime": "2026-07-11T22:35:22.764Z",
-      "indexed_at": "2026-07-11T22:37:47.665Z",
+      "bytes": 13580,
+      "mtime": "2026-07-11T22:44:01.045Z",
+      "indexed_at": "2026-07-11T22:44:57.998Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -85511,9 +85511,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 22812,
-      "mtime": "2026-07-10T22:02:01.138Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 22885,
+      "mtime": "2026-07-11T22:38:17.995Z",
+      "indexed_at": "2026-07-11T22:44:57.998Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

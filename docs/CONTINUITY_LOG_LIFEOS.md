@@ -14,6 +14,12 @@ Adam wants top researched videos with thumbnails + click-to-make, channel analyt
 
 ---
 
+## [SMOS] Update 2026-07-11 — Video ideas live; YouTube OAuth needs Adam
+
+Adam wants top researched videos + thumbnails + channel analytics + Google login-as-me. KNOW: `/marketing` shows Top videos to make with Start making; tip suggestions API returns 5 cards. HALT: `GOOGLE_CLIENT_ID`/`SECRET` missing on Railway and not in local env; Google Cloud Console requires Adam’s Google sign-in — agent cannot login as him.
+
+---
+
 ## [SMOS] Update 2026-07-11 — Standalone SocialMediaOS app proved
 
 Adam: test SMOS as its own separate app. KNOW: `/marketing` standalone (not iframe) consent→export PASS session `498db989-…` (`SMOS_STANDALONE_UI_LOOP.json`). Hardened standalone chrome + `a.btn` nav. Also still works inside LifeOS (`SMOS_LIFEOS_UI_LOOP.json`).

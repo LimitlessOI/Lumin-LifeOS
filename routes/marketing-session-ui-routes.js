@@ -331,7 +331,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             });
             document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions(); });
             loadYoutubeStatus();
-            loadSuggestions();
+            loadSuggestions().catch(function(){});
+            setTimeout(function() { loadSuggestions().catch(function(){}); }, 800);
         `;
     res.send(renderPage('SocialMediaOS', body, clientScript));
   });

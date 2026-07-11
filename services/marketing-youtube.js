@@ -323,20 +323,16 @@ Return ONLY a JSON array of exactly 5 objects with keys: title, why, angle, hook
 Channel: ${channelTitle || 'not connected yet'}
 Recent titles: ${recentTitles.join(' | ') || 'none'}
 Prefer specific, filmable ideas. No hashtags. English only.`;
-        const raw = await callCouncilMember({
-          role: 'gemini_flash',
-          task: prompt,
-          maxTokens: 900,
-        });
+        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 900 });
         const text = typeof raw === 'string' ? raw : (raw?.text || raw?.content || '');
         const match = String(text).match(/\[[\s\S]*\]/);
         const parsed = match ? JSON.parse(match[0]) : null;
         if (Array.isArray(parsed) && parsed.length) {
           ideas = parsed.slice(0, 5).map((item, i) => ({
-            title: item.title || item.text || FALLBACK_IDEAS[i].title,
-            why: item.why || item.rationale || FALLBACK_IDEAS[i].why,
-            angle: item.angle || FALLBACK_IDEAS[i].angle,
-            hook: item.hook || FALLBACK_IDEAS[i].hook,
+            title: item.title || item.text || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].title,
+            why: item.why || item.rationale || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].why,
+            angle: item.angle || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].angle,
+            hook: item.hook || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].hook,
           }));
           if (!status.connected) source = 'ai_research_defaults';
         }
