@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Google YouTube OAuth setup probe endpoint (Railway email/app-password attempt). |
+| **Last Updated** | 2026-07-11 — Google OAuth setup probe: tip hit Google UI click wall (app password / challenge). |
 
 ---
 
@@ -1060,7 +1060,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 **Status:** BUILD_READY (TC coordination core — gates 1-5 complete)
 **Adaptability Score:** 82/100
 **Council Persona:** edison (iterate fast, test every assumption, protect the core deadline logic)
-**Last Updated:** 2026-07-03 — live-origin cleanup for TC upload tooling. Prior: 2026-05-24 — batch push receipt
+**Last Updated:** 2026-07-11 — Google YouTube OAuth setup probe (`/api/v1/browser-agent/setup/google-youtube-oauth`). Prior: 2026-07-03 — live-origin cleanup for TC upload tooling.
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions

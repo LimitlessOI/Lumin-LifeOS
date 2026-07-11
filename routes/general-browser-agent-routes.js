@@ -266,9 +266,28 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
   app.post('/api/v1/browser-agent/setup/google-youtube-oauth', requireKey, async (req, res) => {
     try {
       const orchestrator = await getOrchestrator();
-      const result = await orchestrator.setupGoogleYoutubeOauth({
-        redirectUri: req.body?.redirectUri || null,
-      });
+      const redirectUri = req.body?.redirectUri || null;
+      const sync = req.body?.sync === true;
+
+      if (!sync) {
+        res.status(202).json({
+          ok: true,
+          status: 'started',
+          message: 'Google YouTube OAuth setup started on tip browser (uses Railway email/app password in-process; never returned).',
+        });
+        orchestrator.setupGoogleYoutubeOauth({ redirectUri }).then((result) => {
+          logger.info?.('[BROWSER-AGENT] google youtube oauth setup finished', {
+            status: result.status,
+            blocker: result.blocker || null,
+            ok: !!result.ok,
+          });
+        }).catch((err) => {
+          logger.error?.({ err: err.message }, '[BROWSER-AGENT] google youtube oauth setup failed');
+        });
+        return;
+      }
+
+      const result = await orchestrator.setupGoogleYoutubeOauth({ redirectUri });
       const code = result.ok ? 200 : (result.status === 'needs_human' || result.status === 'blocked' ? 409 : 500);
       return res.status(code).json({
         ok: !!result.ok,
