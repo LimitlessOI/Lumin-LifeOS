@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T00:06:19.794Z",
+  "generated_at": "2026-07-11T00:09:26.358Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11441,
   "files": [
@@ -36762,9 +36762,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 63353,
-      "mtime": "2026-07-10T21:48:49.941Z",
-      "indexed_at": "2026-07-10T21:48:57.671Z"
+      "bytes": 63801,
+      "mtime": "2026-07-11T00:09:14.393Z",
+      "indexed_at": "2026-07-11T00:09:26.358Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",

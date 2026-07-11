@@ -8,6 +8,10 @@
 
 ---
 
+## [BUILD] Update 2026-07-10 — LifeOS Connect (guided account handoff)
+
+Adam: system must do account setup; when human click needed, LifeOS opens site + email + return (calendar-style), secrets hidden-by-default with reveal. Shipped `lifeos-connect.html` + `/api/v1/accounts/connect|attention|guide|reveal|resume-verify`; Chair setup_account opens Connect. SmartLead mid-flight (magic link to LifeOS@) — finish from Connect. Tip `726ff6c596`.
+
 ## [BUILD] Update 2026-07-10 — Creative Engine v1 tip-proof complete
 
 Adam: implement Creative Engine plan (video editing first). All plan todos done. Tip `0958e8593d` — `GET /api/v1/creative/health` → ffmpeg true, workerStarted true; studio + Marketing `/creative/studio` link live; footage_edit proof receipt `CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`. Footage renders default async (sync 502 fixed). Next: photo polish tip walk / script_compose when Replicate is tip-configured.
