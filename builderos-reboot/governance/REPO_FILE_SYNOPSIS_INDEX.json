@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T20:09:41.806Z",
+  "generated_at": "2026-07-11T22:18:09.347Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11455,
   "files": [
@@ -39457,9 +39457,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 96852,
-      "mtime": "2026-07-11T20:08:34.777Z",
-      "indexed_at": "2026-07-11T20:09:41.806Z"
+      "bytes": 96817,
+      "mtime": "2026-07-11T22:18:07.569Z",
+      "indexed_at": "2026-07-11T22:18:09.347Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
