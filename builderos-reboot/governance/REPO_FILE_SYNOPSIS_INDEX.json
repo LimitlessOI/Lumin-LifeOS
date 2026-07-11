@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T15:42:51.033Z",
+  "generated_at": "2026-07-11T15:51:10.763Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11452,
   "files": [
@@ -31310,9 +31310,9 @@
     {
       "path": "core/notification-service.js",
       "synopsis": "NotificationService",
-      "bytes": 14908,
-      "mtime": "2026-07-10T20:42:48.703Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 16282,
+      "mtime": "2026-07-11T15:50:30.617Z",
+      "indexed_at": "2026-07-11T15:51:10.763Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -39786,9 +39786,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 107190,
-      "mtime": "2026-07-11T00:05:57.727Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 107184,
+      "mtime": "2026-07-11T15:51:06.251Z",
+      "indexed_at": "2026-07-11T15:51:10.763Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -59219,9 +59219,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5956,
-      "mtime": "2026-07-11T15:41:02.913Z",
-      "indexed_at": "2026-07-11T15:42:51.033Z",
+      "bytes": 5853,
+      "mtime": "2026-07-11T15:51:06.280Z",
+      "indexed_at": "2026-07-11T15:51:10.763Z",
       "synopsis_index_only": true
     },
     {

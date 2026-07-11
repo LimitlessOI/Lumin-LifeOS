@@ -102,14 +102,20 @@ export class NotificationService {
     return { hostname, host, port, secure: port === 465 };
   }
 
+  _getSmtpAuth() {
+    const user = String(process.env.SMTP_USER || process.env.WORK_EMAIL || '').trim();
+    const pass = String(process.env.SMTP_PASS || process.env.WORK_EMAIL_APP_PASSWORD || '').trim();
+    return { user, pass, ok: Boolean(user && pass) };
+  }
+
   _getSmtpTransporter({ portOverride = null } = {}) {
-    const { hostname, host, port: defaultPort, secure: defaultSecure } = this._resolveSmtpConnection();
+    const { hostname, host, port: defaultPort } = this._resolveSmtpConnection();
     const port = portOverride || defaultPort;
-    const secure = port === 465;
+    const auth = this._getSmtpAuth();
     return nodemailer.createTransport({
       host,
       port,
-      secure,
+      secure: port === 465,
       family: 4,
       connectionTimeout: 12000,
       greetingTimeout: 12000,
@@ -117,10 +123,71 @@ export class NotificationService {
       tls: { servername: hostname, minVersion: 'TLSv1.2' },
       requireTLS: port === 587,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: auth.user,
+        pass: auth.pass,
       },
     });
+  }
+
+  async _sendViaSmtp({
+    to,
+    subject,
+    text,
+    html,
+    fromAddr,
+    campaignId,
+    bodyText,
+  }) {
+    const auth = this._getSmtpAuth();
+    if (!auth.ok) {
+      return { success: false, error: 'SMTP_USER/SMTP_PASS (or WORK_EMAIL/WORK_EMAIL_APP_PASSWORD) not set' };
+    }
+
+    const portsToTry = [];
+    const preferred = Number(process.env.SMTP_PORT || 465);
+    portsToTry.push(preferred);
+    if (preferred !== 587) portsToTry.push(587);
+    if (preferred !== 465) portsToTry.push(465);
+
+    let lastError = null;
+    for (const port of portsToTry) {
+      try {
+        const transporter = this._getSmtpTransporter({ portOverride: port });
+        const info = await transporter.sendMail({
+          from: fromAddr,
+          to,
+          subject,
+          text: text || undefined,
+          html: html || undefined,
+        });
+
+        await this.logOutreach({
+          campaignId, channel: 'email', recipient: to, subject,
+          body: text || html || '', status: 'sent', externalId: info.messageId,
+        });
+        await this.logEmailEvent({
+          provider: 'smtp', eventType: 'sent', messageId: info.messageId,
+          recipient: to, payload: safeJson({ at: nowIso(), messageId: info.messageId, port }), severity: 'info',
+        });
+
+        return { success: true, provider: 'smtp', messageId: info.messageId, port };
+      } catch (e) {
+        lastError = e;
+        const msg = String(e.message || e);
+        const retryable = /timeout|ETIMEDOUT|ECONNREFUSED|ECONNRESET|ESOCKET|Greeting never received/i.test(msg);
+        if (!retryable) break;
+      }
+    }
+
+    await this.logOutreach({
+      campaignId, channel: 'email', recipient: to, subject,
+      body: bodyText, status: 'failed',
+    });
+    await this.logEmailEvent({
+      provider: 'smtp', eventType: 'send_failed', messageId: null,
+      recipient: to, payload: safeJson({ at: nowIso(), error: lastError?.message }), severity: 'error',
+    });
+    return { success: false, error: lastError?.message || 'SMTP send failed' };
   }
 
   /**
@@ -271,55 +338,15 @@ export class NotificationService {
 
     // ── SMTP (Gmail / Google Workspace / any SMTP) ─────────────────────────
     if (provider === "smtp") {
-      if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-        return { success: false, error: "SMTP_USER or SMTP_PASS not set" };
-      }
-
-      const portsToTry = [];
-      const preferred = Number(process.env.SMTP_PORT || 465);
-      portsToTry.push(preferred);
-      if (preferred !== 587) portsToTry.push(587);
-      if (preferred !== 465) portsToTry.push(465);
-
-      let lastError = null;
-      for (const port of portsToTry) {
-        try {
-          const transporter = this._getSmtpTransporter({ portOverride: port });
-          const info = await transporter.sendMail({
-            from: fromAddr,
-            to: recipient,
-            subject,
-            text: text || undefined,
-            html: html || undefined,
-          });
-
-          await this.logOutreach({
-            campaignId, channel: "email", recipient, subject,
-            body: text || html || "", status: "sent", externalId: info.messageId,
-          });
-          await this.logEmailEvent({
-            provider: "smtp", eventType: "sent", messageId: info.messageId,
-            recipient, payload: safeJson({ at: nowIso(), messageId: info.messageId, port }), severity: "info",
-          });
-
-          return { success: true, provider: "smtp", messageId: info.messageId, port };
-        } catch (e) {
-          lastError = e;
-          const msg = String(e.message || e);
-          const retryable = /timeout|ETIMEDOUT|ECONNREFUSED|ECONNRESET|ESOCKET|Greeting never received/i.test(msg);
-          if (!retryable) break;
-        }
-      }
-
-      await this.logOutreach({
-        campaignId, channel: "email", recipient, subject,
-        body: bodyText, status: "failed",
+      return this._sendViaSmtp({
+        to: recipient,
+        subject,
+        text,
+        html,
+        fromAddr,
+        campaignId,
+        bodyText,
       });
-      await this.logEmailEvent({
-        provider: "smtp", eventType: "send_failed", messageId: null,
-        recipient, payload: safeJson({ at: nowIso(), error: lastError?.message }), severity: "error",
-      });
-      return { success: false, error: lastError?.message || "SMTP send failed" };
     }
 
     if (provider !== "postmark") {
@@ -425,6 +452,30 @@ export class NotificationService {
       }
     }
 
+    const postmarkError = lastError?.message || "Email send failed";
+    const pendingApproval = /pending approval|same domain as the 'From' address/i.test(postmarkError);
+    if (pendingApproval && this._getSmtpAuth().ok) {
+      console.warn(`[EMAIL] Postmark blocked (${postmarkError.slice(0, 120)}) — falling back to SMTP/Workspace`);
+      const smtpFrom = String(process.env.WORK_EMAIL || fromAddr).trim() || fromAddr;
+      const smtpResult = await this._sendViaSmtp({
+        to: recipient,
+        subject,
+        text,
+        html,
+        fromAddr: smtpFrom,
+        campaignId,
+        bodyText,
+      });
+      if (smtpResult.success) {
+        return { ...smtpResult, fallback_from: "postmark_pending_approval" };
+      }
+      return {
+        success: false,
+        error: `Postmark pending approval; SMTP fallback also failed: ${smtpResult.error}`,
+        postmark_error: postmarkError,
+      };
+    }
+
     await this.logOutreach({
       campaignId,
       channel: "email",
@@ -434,7 +485,7 @@ export class NotificationService {
       status: "failed",
     });
 
-    return { success: false, error: lastError?.message || "Email send failed" };
+    return { success: false, error: postmarkError };
   }
 
   /**
