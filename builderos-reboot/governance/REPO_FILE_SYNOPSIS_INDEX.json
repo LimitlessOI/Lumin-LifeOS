@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T00:21:25.009Z",
+  "generated_at": "2026-07-11T00:25:15.474Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11443,
+  "file_count": 11444,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84683,6 +84683,16 @@
       "bytes": 8348,
       "mtime": "2026-07-10T01:30:04.731Z",
       "indexed_at": "2026-07-10T21:42:36.698Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-social-connections.js",
+      "synopsis": "social account connection seam for MarketingOS publisher",
+      "bytes": 3948,
+      "mtime": "2026-07-11T00:25:15.474Z",
+      "indexed_at": "2026-07-11T00:25:15.474Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
