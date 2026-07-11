@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T00:25:15.474Z",
+  "generated_at": "2026-07-11T00:27:45.423Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11444,
+  "file_count": 11445,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84696,6 +84696,13 @@
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/marketing-social-goals.js",
+      "synopsis": "https://github.com/openai/ssot/blob/main/docs/products/marketingos/PRODUCT_HOME.md",
+      "bytes": 1671,
+      "mtime": "2026-07-11T00:27:45.423Z",
+      "indexed_at": "2026-07-11T00:27:45.423Z"
     },
     {
       "path": "services/marketing-title-universe.js",
