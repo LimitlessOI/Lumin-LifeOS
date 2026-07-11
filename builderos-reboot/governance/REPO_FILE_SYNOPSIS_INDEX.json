@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T00:09:26.358Z",
+  "generated_at": "2026-07-11T00:13:34.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11441,
+  "file_count": 11442,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -64194,6 +64194,13 @@
       "bytes": 38774,
       "mtime": "2026-06-21T21:39:01.815Z",
       "indexed_at": "2026-07-10T21:42:36.698Z"
+    },
+    {
+      "path": "public/overlay/lifeos-mic-handler.mjs",
+      "synopsis": "ASSUMPTIONS: The mic button is marked with [data-lifeos-mic-button] or can be wired by calling createLifeosMicHandler().attach(document) from existing page JS.",
+      "bytes": 10024,
+      "mtime": "2026-07-11T00:13:34.184Z",
+      "indexed_at": "2026-07-11T00:13:34.184Z"
     },
     {
       "path": "public/overlay/lifeos-mirror.html",
