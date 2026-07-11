@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T19:03:22.827Z",
+  "generated_at": "2026-07-11T19:53:11.047Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3459288,
-      "mtime": "2026-07-11T08:56:44.799Z",
-      "indexed_at": "2026-07-11T08:56:53.807Z"
+      "bytes": 3461191,
+      "mtime": "2026-07-11T19:52:47.218Z",
+      "indexed_at": "2026-07-11T19:53:11.047Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 12117,
-      "mtime": "2026-07-11T16:00:00.627Z",
-      "indexed_at": "2026-07-11T16:00:48.965Z",
+      "bytes": 11641,
+      "mtime": "2026-07-11T19:49:34.379Z",
+      "indexed_at": "2026-07-11T19:53:11.047Z",
       "synopsis_index_only": true
     },
     {
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 69447,
-      "mtime": "2026-07-11T19:03:16.486Z",
-      "indexed_at": "2026-07-11T19:03:22.827Z"
+      "bytes": 69817,
+      "mtime": "2026-07-11T19:51:34.069Z",
+      "indexed_at": "2026-07-11T19:53:11.047Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39457,9 +39457,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 95762,
-      "mtime": "2026-07-11T00:34:55.032Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 96269,
+      "mtime": "2026-07-11T19:51:41.439Z",
+      "indexed_at": "2026-07-11T19:53:11.047Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -63926,9 +63926,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 184403,
-      "mtime": "2026-07-11T16:42:44.449Z",
-      "indexed_at": "2026-07-11T16:44:18.057Z"
+      "bytes": 184704,
+      "mtime": "2026-07-11T19:49:55.759Z",
+      "indexed_at": "2026-07-11T19:53:11.047Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -66011,9 +66011,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 25765,
-      "mtime": "2026-07-10T21:33:45.138Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 30223,
+      "mtime": "2026-07-11T19:49:42.826Z",
+      "indexed_at": "2026-07-11T19:53:11.047Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

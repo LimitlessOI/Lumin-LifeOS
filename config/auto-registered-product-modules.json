@@ -160,8 +160,8 @@
     {
       "path": "routes/marketing-publish-routes.js",
       "register": "registerMarketingPublishRoutes",
-      "enabled": true,
-      "note": "MarketingOS Phase 5 publishing surface (§5 Phase 5, revised architecture: browser-agent template replay, not Buffer/Publer). Exposes GET /api/v1/marketing/social-connections (per-platform connect status for the UI) and POST /api/v1/marketing/publish (piece_id -> publish via services/marketing-publisher.js). Hard-rejects any piece not status:approved (constitutional Principle 6 / §9 Rule 4). Built by the loop (queued mos-social-publish-route); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+      "enabled": false,
+      "note": "DISABLED until routes/marketing-publish-routes.js ships (Phase 5 queue). Was fail-open 'module not found' noise on boot. Re-enable when the file exists + Layer B publish gate proves LIVE."
     },
     {
       "path": "routes/marketing-youtube-routes.js",

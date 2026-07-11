@@ -12,6 +12,54 @@ function escapeHtml(unsafe) {
 
 function renderPage(title, bodyHtml, clientScript = '') {
   const authBootstrap = `
+      (function bootstrapMarketingAuth() {
+        try {
+          const q = new URLSearchParams(location.search);
+          const ck = q.get('commandKey') || q.get('command_key') || q.get('key');
+          if (ck) {
+            localStorage.setItem('command_key', ck);
+            localStorage.setItem('commandKey', ck);
+          }
+          if (q.get('shell') === '1') {
+            document.documentElement.classList.add('in-lifeos-shell');
+            try {
+              if (window.parent && window.parent !== window) {
+                const pKey = window.parent.localStorage?.getItem?.('command_key')
+                  || window.parent.localStorage?.getItem?.('lifeos_command_key')
+                  || window.parent.localStorage?.getItem?.('COMMAND_CENTER_KEY')
+                  || '';
+                if (pKey && !localStorage.getItem('command_key')) {
+                  localStorage.setItem('command_key', pKey);
+                  localStorage.setItem('commandKey', pKey);
+                }
+                const pTok = window.parent.localStorage?.getItem?.('lifeos_access_token') || '';
+                if (pTok && !localStorage.getItem('lifeos_access_token')) {
+                  localStorage.setItem('lifeos_access_token', pTok);
+                }
+                const pUser = window.parent.localStorage?.getItem?.('lifeos_user') || '';
+                if (pUser && !localStorage.getItem('lifeos_user')) {
+                  localStorage.setItem('lifeos_user', pUser);
+                }
+              }
+            } catch (_) {}
+          }
+        } catch (_) {}
+      })();
+      function marketingInShell() {
+        return document.documentElement.classList.contains('in-lifeos-shell');
+      }
+      function marketingHref(path) {
+        if (!path || !marketingInShell()) return path;
+        try {
+          const u = new URL(path, location.origin);
+          if (u.origin !== location.origin) return path;
+          if (!u.pathname.startsWith('/marketing')) return path;
+          u.searchParams.set('shell', '1');
+          return u.pathname + u.search + u.hash;
+        } catch {
+          return path;
+        }
+      }
       function marketingAuthHeaders(extra = {}) {
         const h = { 'Content-Type': 'application/json', ...extra };
         const token = localStorage.getItem('lifeos_access_token') || '';
@@ -28,13 +76,50 @@ function renderPage(title, bodyHtml, clientScript = '') {
       function marketingOwnerId() {
         try {
           const token = localStorage.getItem('lifeos_access_token') || '';
-          if (!token) return localStorage.getItem('lifeos_user') || 'adam';
+          if (!token) return localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
           const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
           return payload.sub || payload.handle || localStorage.getItem('lifeos_user') || 'adam';
         } catch {
-          return localStorage.getItem('lifeos_user') || 'adam';
+          return localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
         }
       }
+      function marketingHasAuth() {
+        return !!(localStorage.getItem('lifeos_access_token')
+          || localStorage.getItem('command_key')
+          || localStorage.getItem('commandKey')
+          || localStorage.getItem('lifeos_command_key')
+          || localStorage.getItem('COMMAND_CENTER_KEY')
+          || localStorage.getItem('lifeos_key'));
+      }
+      async function marketingFetch(url, opts = {}) {
+        if (!marketingHasAuth()) {
+          const next = encodeURIComponent(location.pathname + location.search);
+          location.href = '/overlay/lifeos-login.html?next=' + next;
+          throw new Error('Sign in to LifeOS to use SocialMediaOS.');
+        }
+        const headers = marketingAuthHeaders(opts.headers || {});
+        const res = await fetch(url, { ...opts, headers });
+        if (res.status === 401) {
+          const next = encodeURIComponent(location.pathname + location.search);
+          location.href = '/overlay/lifeos-login.html?next=' + next;
+          throw new Error('Session expired — sign in again.');
+        }
+        return res;
+      }
+      document.addEventListener('click', function(e) {
+        const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a || !marketingInShell()) return;
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('http')) return;
+        if (!href.startsWith('/marketing')) return;
+        e.preventDefault();
+        location.href = marketingHref(href);
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+        if (!marketingInShell()) return;
+        const back = document.querySelector('.lifeos-back');
+        if (back) back.style.display = 'none';
+      });
       function escapeHtml(unsafe) {
         return String(unsafe ?? '')
           .replace(/&/g, '&amp;')
@@ -98,10 +183,14 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .status-badge.approved { background: rgba(16,185,129,0.2); color: #6ee7b7; }
         .status-badge.rejected { background: rgba(239,68,68,0.2); color: #fca5a5; }
         .nav-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
-    </style>
+        .lifeos-back { font-size: 13px; margin-bottom: 12px; }
+        html.in-lifeos-shell body { padding: 12px; background: var(--bg); }
+        html.in-lifeos-shell .container { margin: 0 auto; box-shadow: none; max-width: 880px; }
+      </style>
 </head>
 <body>
     <div class="container">
+        <div class="lifeos-back"><a href="/overlay/lifeos-app.html?page=lifeos-dashboard.html">← Back to LifeOS</a></div>
         <div class="brand">SocialMediaOS</div>
         ${bodyHtml}
     </div>
@@ -170,7 +259,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
 
                 try {
-                    const consentResponse = await fetch('/api/v1/marketing/consent', {
+                    const consentResponse = await marketingFetch('/api/v1/marketing/consent', {
                         method: 'POST',
                         headers: marketingAuthHeaders(),
                         body: JSON.stringify({
@@ -184,7 +273,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     const consentData = await consentResponse.json();
                     if (!consentResponse.ok) throw new Error(consentData.error || 'Failed to record consent.');
 
-                    const sessionResponse = await fetch('/api/v1/marketing/sessions', {
+                    const sessionResponse = await marketingFetch('/api/v1/marketing/sessions', {
                         method: 'POST',
                         headers: marketingAuthHeaders(),
                         body: JSON.stringify({
@@ -198,7 +287,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     const sessionData = await sessionResponse.json();
                     if (!sessionResponse.ok) throw new Error(sessionData.error || 'Failed to start session.');
 
-                    window.location.href = '/marketing/session/' + (sessionData.id || sessionData.session?.id);
+                    window.location.href = marketingHref('/marketing/session/' + (sessionData.id || sessionData.session?.id));
                 } catch (error) {
                     console.error('Error in new session setup:', error);
                     showMsg(messageDiv, 'Error: ' + (error && error.message ? error.message : String(error)), 'error');
@@ -238,7 +327,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             const messageDiv = document.getElementById('message');
 
             async function loadSession() {
-                const response = await fetch('/api/v1/marketing/sessions/' + sessionId, { headers: marketingAuthHeaders() });
+                const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId, { headers: marketingAuthHeaders() });
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Failed to fetch session.');
                 const session = data.session || data;
@@ -278,7 +367,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 }
                 document.getElementById('userInput').value = '';
                 try {
-                    const response = await fetch('/api/v1/marketing/sessions/' + sessionId + '/coach', {
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/coach', {
                         method: 'POST',
                         headers: marketingAuthHeaders(),
                         body: JSON.stringify({ message: userInput, owner_id: marketingOwnerId() })
@@ -297,7 +386,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 messageDiv.style.display = 'none';
                 this.disabled = true;
                 try {
-                    const response = await fetch('/api/v1/marketing/sessions/' + sessionId + '/extract', {
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/extract', {
                         method: 'POST',
                         headers: marketingAuthHeaders(),
                         body: JSON.stringify({ owner_id: marketingOwnerId() })
@@ -318,7 +407,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 messageDiv.style.display = 'none';
                 this.disabled = true;
                 try {
-                    const response = await fetch('/api/v1/marketing/sessions/' + sessionId + '/generate', {
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/generate', {
                         method: 'POST',
                         headers: marketingAuthHeaders(),
                         body: JSON.stringify({ owner_id: marketingOwnerId() })
@@ -327,7 +416,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     if (!response.ok) throw new Error(data.error || 'Generate failed.');
                     const n = (data.pieces || data.content || []).length;
                     showMsg(messageDiv, 'Generated ' + n + ' pieces. Opening review…', 'success');
-                    setTimeout(function() { window.location.href = '/marketing/session/' + sessionId + '/content'; }, 600);
+                    setTimeout(function() { window.location.href = marketingHref('/marketing/session/' + sessionId + '/content'); }, 600);
                 } catch (error) {
                     console.error('Generate error:', error);
                     showMsg(messageDiv, 'Error: ' + error.message, 'error');
@@ -363,7 +452,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function fetchContentPieces() {
                 try {
-                    const response = await fetch('/api/v1/marketing/sessions/' + sessionId + '/content', { headers: marketingAuthHeaders() });
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/content', { headers: marketingAuthHeaders() });
                     const data = await response.json();
                     if (!response.ok) throw new Error(data.error || 'Failed to fetch content pieces.');
                     const contentPieces = Array.isArray(data) ? data : (data.pieces || data.content || []);
@@ -398,7 +487,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             async function updateContentStatus(contentId, action) {
                 messageDiv.style.display = 'none';
                 try {
-                    const response = await fetch('/api/v1/marketing/content/' + contentId, {
+                    const response = await marketingFetch('/api/v1/marketing/content/' + contentId, {
                         method: 'PATCH',
                         headers: marketingAuthHeaders(),
                         body: JSON.stringify({ action: action, owner_id: marketingOwnerId() })
@@ -436,7 +525,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             document.getElementById('downloadButton').addEventListener('click', async function() {
                 messageDiv.style.display = 'none';
                 try {
-                    const response = await fetch('/api/v1/marketing/sessions/' + sessionId + '/export', { headers: marketingAuthHeaders() });
+                    const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/export', { headers: marketingAuthHeaders() });
                     if (!response.ok) {
                       const data = await response.json().catch(function(){ return {}; });
                       throw new Error(data.error || ('Export failed (' + response.status + ')'));

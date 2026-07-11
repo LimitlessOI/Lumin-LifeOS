@@ -8,6 +8,12 @@
 
 ---
 
+## [SMOS] Update 2026-07-11 — SocialMediaOS inside LifeOS UI
+
+Adam: get SMOS ready + test through UI. Programmed LifeOS nav embed (`PAGE_META.marketing` → `/marketing?shell=1` in content-frame), marketing UI auth/shell hardening, disabled missing publish-route auto-register. Tip Phase 1 API loop PASS (consent→export). Browser UI proof pending post-deploy.
+
+---
+
 ## [SCALE] Update 2026-07-11 — First client then many
 
 Adam: first client, then hopefully a lot more. Shipped bulk deferred + retry-invites so warm LV queue blasts the moment Postmark/Resend clears. Still blocked on external email; SMS/call packs live for Flores $45.

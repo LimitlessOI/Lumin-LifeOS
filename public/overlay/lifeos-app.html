@@ -2017,7 +2017,7 @@
         <span class="nav-icon">🏠</span>
         <span class="nav-label">LifeRE</span>
       </a>
-      <a class="nav-item" id="nav-smos" data-label="SocialMediaOS" href="/marketing" role="button" title="Open SocialMediaOS (standalone app)">
+      <a class="nav-item" id="nav-smos" data-page="marketing" data-label="SocialMediaOS" href="#" role="button" title="Open SocialMediaOS inside LifeOS">
         <span class="nav-icon">📣</span>
         <span class="nav-label">SocialMediaOS</span>
       </a>
@@ -2653,6 +2653,7 @@ const PAGE_META = {
   'lifeos-victory-vault.html': { title: 'Victory Vault', icon: '🏆', color: '--c-victory' },
   'lifeos-backtest.html': { title: 'Backtest',     icon: '📊', color: '--c-finance' },
   'lifeos-weekly-review.html': { title: 'Weekly Review', icon: '📋', color: '--c-mirror' },
+  'marketing': { title: 'SocialMediaOS', icon: '📣', color: '--c-purpose', externalPath: '/marketing' },
 };
 const FEATURE_GUIDES = window.LIFEOS_FEATURE_GUIDES || {};
 let helpHideTimer = null;
@@ -2713,10 +2714,9 @@ function applyShellLayoutFromQuery() {
   let launchPage = new URLSearchParams(location.search).get('page');
   const stackParam = new URLSearchParams(location.search).get('stack');
   if (!launchPage && stackParam === 'lifere') launchPage = 'lifeos-lifere.html';
-  // SocialMediaOS is a standalone app at /marketing (also linked from LifeRE Marketing tab)
+  // SocialMediaOS loads inside the LifeOS content frame (shell=1)
   if (!launchPage && stackParam === 'socialmediaos') {
-    window.location.replace('/marketing');
-    return;
+    launchPage = 'marketing';
   }
   const directSystemLaunch = new URLSearchParams(location.search).get('direct_system');
   const luminVoiceLaunch = new URLSearchParams(location.search).get('lumin_voice');
@@ -2831,7 +2831,14 @@ function loadPage(page) {
   closeSettings();
 
   const frame = document.getElementById('content-frame');
-  const nextUrl = `${overlayUrl(page)}?shell=1&_=${Date.now()}`;
+  let nextUrl;
+  if (meta.externalPath) {
+    const params = new URLSearchParams({ shell: '1', _: String(Date.now()) });
+    if (KEY) params.set('commandKey', KEY);
+    nextUrl = `${meta.externalPath}?${params.toString()}`;
+  } else {
+    nextUrl = `${overlayUrl(page)}?shell=1&_=${Date.now()}`;
+  }
   if (frame) frame.src = nextUrl;
   currentPage  = page;
   currentTitle = meta.title;
