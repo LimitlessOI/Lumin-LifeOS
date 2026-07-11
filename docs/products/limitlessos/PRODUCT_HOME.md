@@ -6,7 +6,7 @@
 **Parent platform:** Lumin / LifeOS ecosystem  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/limitlessos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-07-09 — Go Vegas gv-status-route marked done (live `/scheduler`); stop never-stop queue-status thrash.
+**Last Updated:** 2026-07-11 — Go Vegas manual `POST /api/v1/go-vegas/prospects/seed` (no Places key required to enqueue leads).
 
 | Field | Value |
 |-------|-------|

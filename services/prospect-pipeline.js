@@ -387,6 +387,12 @@ export default class ProspectPipeline {
       metadata: {
         ...(buildResult.metadata || {}),
         qualityReport,
+        // Keep durable preview HTML across the post-email write (was wiped by
+        // metadata = EXCLUDED.metadata before merge fix).
+        previewHtml: typeof buildResult.siteHtml === 'string'
+          ? buildResult.siteHtml.slice(0, 400_000)
+          : undefined,
+        previewMeta: buildResult.metadata || null,
         ...(emailSendError ? { emailSendError, emailSendAttemptAt: new Date().toISOString() } : {}),
       },
     });
@@ -592,7 +598,7 @@ Return ONLY valid JSON:
            preview_url = EXCLUDED.preview_url,
            email_sent = EXCLUDED.email_sent,
            status = EXCLUDED.status,
-           metadata = EXCLUDED.metadata,
+           metadata = COALESCE(prospect_sites.metadata, '{}'::jsonb) || EXCLUDED.metadata,
            updated_at = NOW(),
            last_contacted_at = CASE WHEN EXCLUDED.email_sent THEN NOW() ELSE prospect_sites.last_contacted_at END`,
         [

@@ -122,16 +122,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     legacyHeaders: false,
   });
 
-  app.use(
-    '/previews',
-    express.static(path.join(process.cwd(), 'public', 'previews'), {
-      dotfiles: 'ignore',
-      index: 'index.html',
-      fallthrough: true,
-    })
-  );
-
-  // DB fallback when ephemeral disk miss (multi-instance / redeploy)
+  // DB fallback FIRST — Railway multi-instance / ephemeral disk often miss files.
+  // Static is secondary so durable previewHtml in Postgres always wins.
   app.get('/previews/:clientId/index.html', async (req, res, next) => {
     try {
       if (!pool) return next();
@@ -159,6 +151,15 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       return next();
     }
   });
+
+  app.use(
+    '/previews',
+    express.static(path.join(process.cwd(), 'public', 'previews'), {
+      dotfiles: 'ignore',
+      index: 'index.html',
+      fallthrough: true,
+    })
+  );
 
   app.get('/previews/:clientId', (req, res) => {
     res.redirect(302, `/previews/${encodeURIComponent(req.params.clientId)}/index.html`);

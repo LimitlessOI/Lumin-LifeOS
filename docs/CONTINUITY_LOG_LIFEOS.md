@@ -8,6 +8,12 @@
 
 ---
 
+## [MONEY] Update 2026-07-11 — Path to first dollar locked
+
+Adam: build money path; family relying. KNOW blockers: Postmark pending approval blocks all external cold email; 2nd prospect save wiped previewHtml (fixed). Stripe $45 live. Next human: approve Postmark → resend Flores Dental → checkout. Optional: GOOGLE_PLACES_KEY + Go Vegas seed.
+
+---
+
 ## [FIX] Update 2026-07-11 — Tip route-less after Neon timeout; boot retry
 
 Tip `/ready` showed `db:error` + `runtime_routes:pending` — never-stop and managed-env 404. Boot was one-shot. Shipped boot retry + longer Neon timeout + AB subject auto-register. Blocker to live: Railway redeploy (GH token Not Authorized; tip cannot self-redeploy until routes mount).

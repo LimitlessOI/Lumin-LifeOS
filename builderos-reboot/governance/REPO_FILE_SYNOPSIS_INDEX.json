@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T13:24:31.250Z",
+  "generated_at": "2026-07-11T15:42:51.033Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11452,
   "files": [
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 65216,
-      "mtime": "2026-07-11T12:54:48.571Z",
-      "indexed_at": "2026-07-11T12:55:18.571Z"
+      "bytes": 65572,
+      "mtime": "2026-07-11T15:42:41.443Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39406,9 +39406,9 @@
     {
       "path": "docs/products/limitlessos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LimitlessOS business stack",
-      "bytes": 9797,
-      "mtime": "2026-07-09T04:13:52.410Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 10107,
+      "mtime": "2026-07-11T15:42:49.730Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z"
     },
     {
       "path": "docs/products/lumin-university/FILE_MANIFEST.json",
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 94883,
-      "mtime": "2026-07-11T12:53:39.715Z",
-      "indexed_at": "2026-07-11T12:55:18.571Z"
+      "bytes": 95342,
+      "mtime": "2026-07-11T15:41:46.744Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -59219,9 +59219,9 @@
     {
       "path": "docs/TOP_10_PATH_TO_10.json",
       "synopsis": "Documentation — TOP 10 PATH TO 10.",
-      "bytes": 5755,
-      "mtime": "2026-07-10T12:39:49.494Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 5956,
+      "mtime": "2026-07-11T15:41:02.913Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z",
       "synopsis_index_only": true
     },
     {
@@ -65384,9 +65384,9 @@
     {
       "path": "routes/go-vegas-outreach-routes.js",
       "synopsis": "Go Vegas business network outreach API — discover, invite, follow up.",
-      "bytes": 4740,
-      "mtime": "2026-07-09T03:33:13.945Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 5892,
+      "mtime": "2026-07-11T15:41:37.435Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -66312,9 +66312,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 29911,
-      "mtime": "2026-07-10T20:42:48.709Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 29999,
+      "mtime": "2026-07-11T15:40:29.096Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -83114,9 +83114,9 @@
     {
       "path": "services/go-vegas-outreach.js",
       "synopsis": "Go Vegas outreach — discover LV businesses, invite to free network, follow up.",
-      "bytes": 20415,
-      "mtime": "2026-07-09T01:04:26.281Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 20435,
+      "mtime": "2026-07-11T15:41:37.377Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z",
       "ssot": [
         "docs/products/limitlessos/PRODUCT_HOME.md"
       ]
@@ -85448,9 +85448,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 31206,
-      "mtime": "2026-07-10T22:11:45.563Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 31581,
+      "mtime": "2026-07-11T15:40:38.920Z",
+      "indexed_at": "2026-07-11T15:42:51.033Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

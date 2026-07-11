@@ -39,8 +39,8 @@
         "LimitlessOS / business"
       ],
       "done_when": "Validated dollar receipt (Site Builder send or Go Vegas conversion)",
-      "next_action": "Lean built+durable preview+live Stripe cs_live $49 (prev_1783687133026_hns2). Close via paid conversion OR fix SMTP/Postmark send.",
-      "blocker": "SMTP Connection timeout Railway→Gmail. Email send still failing. Payment not yet completed."
+      "next_action": "Adam: (1) Approve Postmark account so cold email can leave hopkinsgroup.org. (2) Optional: add GOOGLE_PLACES_KEY for Go Vegas discover. Live $45 Stripe checkout ready for Flores Family Dental after preview durability fix deploys.",
+      "blocker": "Postmark account PENDING APPROVAL — can only email @hopkinsgroup.org, not prospects (proved 2026-07-11 on tip). Preview durability bug (2nd recordProspect wiped previewHtml) fixed in same ship."
     },
     {
       "id": "T03",
