@@ -6,13 +6,14 @@
  * - Intended as the single abstraction for outbound comms
  *
  * Env:
- * - EMAIL_PROVIDER: "smtp" | "postmark" | "disabled"
+ * - EMAIL_PROVIDER: "smtp" | "postmark" | "resend" | "disabled"
  * - EMAIL_FROM: default From address (required for sending)
  * - SMTP_HOST: SMTP server (e.g. smtp.gmail.com)
  * - SMTP_PORT: SMTP port (e.g. 587)
  * - SMTP_USER: SMTP username (usually the sending email address)
  * - SMTP_PASS: SMTP password or Google App Password
  * - POSTMARK_SERVER_TOKEN: Postmark server token (required if provider=postmark)
+ * - RESEND_API_KEY: Resend HTTP API key (provider=resend or Postmark pending fallback)
  * - EMAIL_WEBHOOK_SECRET: shared secret for webhook endpoints
  */
 
@@ -127,6 +128,62 @@ export class NotificationService {
         pass: auth.pass,
       },
     });
+  }
+
+  async _sendViaResend({
+    to,
+    subject,
+    text,
+    html,
+    fromAddr,
+    campaignId,
+    bodyText,
+  }) {
+    const apiKey = String(process.env.RESEND_API_KEY || '').trim();
+    if (!apiKey) {
+      return { success: false, error: 'RESEND_API_KEY not set' };
+    }
+    try {
+      const resp = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: fromAddr,
+          to: [to],
+          subject,
+          html: html || undefined,
+          text: text || undefined,
+        }),
+      });
+      const json = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        const errMsg = json?.message || json?.error || `Resend HTTP ${resp.status}`;
+        throw new Error(errMsg);
+      }
+      const messageId = json?.id || null;
+      await this.logOutreach({
+        campaignId, channel: 'email', recipient: to, subject,
+        body: text || html || '', status: 'sent', externalId: messageId,
+      });
+      await this.logEmailEvent({
+        provider: 'resend', eventType: 'sent', messageId,
+        recipient: to, payload: safeJson({ at: nowIso(), response: json }), severity: 'info',
+      });
+      return { success: true, provider: 'resend', messageId };
+    } catch (e) {
+      await this.logOutreach({
+        campaignId, channel: 'email', recipient: to, subject,
+        body: bodyText, status: 'failed',
+      });
+      await this.logEmailEvent({
+        provider: 'resend', eventType: 'send_failed', messageId: null,
+        recipient: to, payload: safeJson({ at: nowIso(), error: e.message }), severity: 'error',
+      });
+      return { success: false, error: e.message || 'Resend send failed' };
+    }
   }
 
   async _sendViaSmtp({
@@ -349,6 +406,18 @@ export class NotificationService {
       });
     }
 
+    if (provider === "resend") {
+      return this._sendViaResend({
+        to: recipient,
+        subject,
+        text,
+        html,
+        fromAddr,
+        campaignId,
+        bodyText,
+      });
+    }
+
     if (provider !== "postmark") {
       await this.logOutreach({
         campaignId,
@@ -454,6 +523,23 @@ export class NotificationService {
 
     const postmarkError = lastError?.message || "Email send failed";
     const pendingApproval = /pending approval|same domain as the 'From' address/i.test(postmarkError);
+
+    if (pendingApproval && String(process.env.RESEND_API_KEY || '').trim()) {
+      console.warn(`[EMAIL] Postmark blocked — falling back to Resend HTTP`);
+      const resendResult = await this._sendViaResend({
+        to: recipient,
+        subject,
+        text,
+        html,
+        fromAddr,
+        campaignId,
+        bodyText,
+      });
+      if (resendResult.success) {
+        return { ...resendResult, fallback_from: "postmark_pending_approval" };
+      }
+    }
+
     if (pendingApproval && this._getSmtpAuth().ok) {
       console.warn(`[EMAIL] Postmark blocked (${postmarkError.slice(0, 120)}) — falling back to SMTP/Workspace`);
       const smtpFrom = String(process.env.WORK_EMAIL || fromAddr).trim() || fromAddr;

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Postmark pending-approval → SMTP/Workspace fallback in NotificationService (first-dollar). |
+| **Last Updated** | 2026-07-11 — Resend HTTP provider + Postmark→Resend→SMTP fallback chain in NotificationService. |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-11 | **Email: Postmark pending → SMTP fallback** — `core/notification-service.js` uses `WORK_EMAIL`/`WORK_EMAIL_APP_PASSWORD` when Postmark returns pending-approval / same-domain-only; SMTP auth also accepts those env vars. | Adam: keep money path moving while Postmark approval waits. | ✅ | | ⚠️ tip-sync + resend Flores external |
 | 2026-07-10 | **WORK_EMAIL IMAP for magic-link verify** — `verifyEmailAfterSignup` uses `imapCredsForEmail` so LifeOS@hopkinsgroup.org signups poll the work mailbox, not only GMAIL_SIGNUP. | SmartLead rejects Gmail; magic link went to WORK_EMAIL. | ✅ | tip resume-verify |
 | 2026-07-10 | **GAP-FILL signup context + payment handoff** — `makeAccountConfirmer` allows `navigate` TO expected host from `about:blank`; `runBrowserGoal`/`runGoalOnSession` wire `onAfterStep` so payment-boundary stop actually fires. | Founder-authority Replicate signup died immediately with `context_unconfirmed:context_mismatch` before leaving blank page; payment detection was passed but never called. | ✅ | tip signup retry |
 | 2026-07-10 | **GAP-FILL system From guard** — `resolveSystemEmailFrom` in `core/notification-service.js` refuses founder personal `adam@hopkinsgroup.org` as outbound From; prefers WORK_EMAIL / LifeOS@. | Site Builder outreach was failing Postmark sender signature when From was personal inbox. | ✅ | tip resend |

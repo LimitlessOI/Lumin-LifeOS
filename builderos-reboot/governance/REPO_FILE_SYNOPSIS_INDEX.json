@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T15:51:10.763Z",
+  "generated_at": "2026-07-11T16:00:48.965Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11452,
+  "file_count": 11453,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 11811,
-      "mtime": "2026-07-11T12:52:54.966Z",
-      "indexed_at": "2026-07-11T12:55:18.571Z",
+      "bytes": 12117,
+      "mtime": "2026-07-11T16:00:00.627Z",
+      "indexed_at": "2026-07-11T16:00:48.965Z",
       "synopsis_index_only": true
     },
     {
@@ -31310,9 +31310,9 @@
     {
       "path": "core/notification-service.js",
       "synopsis": "NotificationService",
-      "bytes": 16282,
-      "mtime": "2026-07-11T15:50:30.617Z",
-      "indexed_at": "2026-07-11T15:51:10.763Z",
+      "bytes": 18892,
+      "mtime": "2026-07-11T16:00:15.279Z",
+      "indexed_at": "2026-07-11T16:00:48.965Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 65572,
-      "mtime": "2026-07-11T15:42:41.443Z",
-      "indexed_at": "2026-07-11T15:42:51.033Z"
+      "bytes": 65915,
+      "mtime": "2026-07-11T16:00:41.581Z",
+      "indexed_at": "2026-07-11T16:00:48.965Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39348,9 +39348,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 600786,
-      "mtime": "2026-07-11T12:54:55.940Z",
-      "indexed_at": "2026-07-11T12:56:24.875Z"
+      "bytes": 600766,
+      "mtime": "2026-07-11T16:00:41.530Z",
+      "indexed_at": "2026-07-11T16:00:48.965Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39786,9 +39786,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 107184,
-      "mtime": "2026-07-11T15:51:06.251Z",
-      "indexed_at": "2026-07-11T15:51:10.763Z"
+      "bytes": 107531,
+      "mtime": "2026-07-11T16:00:41.533Z",
+      "indexed_at": "2026-07-11T16:00:48.965Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -65338,6 +65338,16 @@
       "indexed_at": "2026-07-11T02:57:52.492Z",
       "ssot": [
         "docs/products/memory-system/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "routes/founder-sms-routes.js",
+      "synopsis": "Founder SMS helper — tip can text ADAM_SMS_NUMBER (Twilio) without full phone stack.",
+      "bytes": 2177,
+      "mtime": "2026-07-11T15:59:32.747Z",
+      "indexed_at": "2026-07-11T16:00:48.965Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {

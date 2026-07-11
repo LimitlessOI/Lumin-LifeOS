@@ -8,6 +8,12 @@
 
 ---
 
+## [MONEY] Update 2026-07-11 — Resend signup + founder SMS + keep shipping
+
+Adam: do whatever legal. Started Resend founder-authority signup (blocked on captcha — Connect). Wired Resend email provider + founder SMS route. Postmark still pending; Railway SMTP still times out. Factory kept running; Flores preview+$45 ready to share.
+
+---
+
 ## [MONEY] Update 2026-07-11 — Path to first dollar locked
 
 Adam: build money path; family relying. KNOW blockers: Postmark pending approval blocks all external cold email; 2nd prospect save wiped previewHtml (fixed). Stripe $45 live. Next human: approve Postmark → resend Flores Dental → checkout. Optional: GOOGLE_PLACES_KEY + Go Vegas seed.
