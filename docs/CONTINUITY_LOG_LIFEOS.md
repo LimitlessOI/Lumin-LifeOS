@@ -8,6 +8,12 @@
 
 ---
 
+## [BUILD] Update 2026-07-11 — Product corpus → BUILD_QUEUE blueprint → build
+
+Adam: system must read all product folders + conversations, make blueprints, keep building (~40 products). Planner now loads PRODUCT_HOME + conversations + sibling docs; enrolls ~35 products without queues; expands PRODUCT_BUILD_PRIORITY. Tip kick after deploy.
+
+---
+
 ## [FIX] Update 2026-07-10 — Lumin chat drawer usable
 
 Adam: chat window not functioning. KNOW: founder-interface API returns 200; drawer can reply. Fix: open always expands if minimized (hid input), close Settings when chatting, Escape closes overlays, clearer Ask Lumin entry. Hard-refresh tip after deploy.

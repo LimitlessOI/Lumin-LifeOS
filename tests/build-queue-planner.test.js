@@ -35,9 +35,35 @@ test('extractBacklog pulls only real backlog bullets, skips done + other section
   assert.ok(!items.some((i) => /shipped X/i.test(i)), 'change-receipt bullets excluded (not under backlog heading)');
 });
 
+test('extractBacklog skips [x] checked items and harvests [ ] + Next lines', () => {
+  const text = `# P
+## Build Plan
+- [x] Already shipped router
+- [ ] Wire new memory retrieve route
+## Agent Handoff Notes
+**Next:** Prove tip deploy serves founder-memory inject
+| Field | Value |
+| **Next** | Run acceptance for LifeRE alpha |
+`;
+  const items = extractBacklog(text);
+  assert.ok(items.some((i) => /Wire new memory retrieve route/i.test(i)));
+  assert.ok(items.some((i) => /Prove tip deploy/i.test(i)));
+  assert.ok(items.some((i) => /LifeRE alpha/i.test(i)));
+  assert.ok(!items.some((i) => /Already shipped router/i.test(i)));
+});
+
 test('extractBacklog returns [] with no backlog heading (never fabricates)', () => {
   assert.deepEqual(extractBacklog('# Title\n## Current State\n- just status'), []);
   assert.deepEqual(extractBacklog(''), []);
+});
+
+test('loadProductCorpus + extractCorpusBacklog reads conversations', async () => {
+  const { loadProductCorpus, extractCorpusBacklog } = await import('../services/build-queue-planner.js');
+  const corpus = loadProductCorpus('ideavault');
+  assert.ok(corpus.sources.some((s) => s.label === 'product_home'));
+  assert.ok(corpus.sources.some((s) => s.label === 'conversation'), 'ideavault has conversations/');
+  const { items } = extractCorpusBacklog('ideavault');
+  assert.ok(items.length >= 1, 'corpus yields at least one documented item');
 });
 
 test('shouldFounderGate flags UI/brand surfaces, not backend files', () => {
@@ -105,7 +131,8 @@ test('planBuildQueue stamps the backlog_signature onto the queue (self-extend ma
   const callModel = async () => JSON.stringify({
     steps: [{ id: 'expiry-sweep', target_file: 'scripts/preview-expiry-cron.mjs', task: 'Nightly preview-expiry sweep', spec: 'cron' }],
   });
-  const res = await planBuildQueue({ productId: 'site-builder', homeText: HOME, callModel });
+  // Use a non-existent product id so corpus falls back to the injected homeText.
+  const res = await planBuildQueue({ productId: 'no-such-product-xyz', homeText: HOME, callModel });
   assert.equal(res.queue.backlog_signature, backlogSignature(extractBacklog(HOME)));
 });
 

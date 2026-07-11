@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T02:23:24.627Z",
+  "generated_at": "2026-07-11T02:35:10.504Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11447,
   "files": [
@@ -36769,9 +36769,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 64119,
-      "mtime": "2026-07-11T00:28:48.233Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z"
+      "bytes": 64472,
+      "mtime": "2026-07-11T02:35:02.402Z",
+      "indexed_at": "2026-07-11T02:35:10.504Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -38876,9 +38876,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 173987,
-      "mtime": "2026-07-11T02:23:13.875Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z"
+      "bytes": 174494,
+      "mtime": "2026-07-11T02:34:57.487Z",
+      "indexed_at": "2026-07-11T02:35:10.504Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39611,9 +39611,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 1939,
-      "mtime": "2026-07-10T04:01:47.794Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z",
+      "bytes": 2772,
+      "mtime": "2026-07-11T02:34:31.791Z",
+      "indexed_at": "2026-07-11T02:35:10.504Z",
       "synopsis_index_only": true
     },
     {
@@ -81004,9 +81004,9 @@
     {
       "path": "services/build-queue-planner.js",
       "synopsis": "Build-queue planner — turns a product's PRODUCT_HOME backlog into a",
-      "bytes": 18571,
-      "mtime": "2026-07-09T01:03:41.533Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z",
+      "bytes": 23947,
+      "mtime": "2026-07-11T02:34:40.679Z",
+      "indexed_at": "2026-07-11T02:35:10.504Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85127,9 +85127,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 74457,
-      "mtime": "2026-07-10T03:26:04.937Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z",
+      "bytes": 74594,
+      "mtime": "2026-07-11T02:34:31.785Z",
+      "indexed_at": "2026-07-11T02:35:10.504Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87829,9 +87829,9 @@
     {
       "path": "tests/build-queue-planner.test.js",
       "synopsis": "js — tests/build-queue-planner.test.js.",
-      "bytes": 12611,
-      "mtime": "2026-07-09T01:03:41.538Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z"
+      "bytes": 13882,
+      "mtime": "2026-07-11T02:34:52.256Z",
+      "indexed_at": "2026-07-11T02:35:10.504Z"
     },
     {
       "path": "tests/builder-agents.test.js",

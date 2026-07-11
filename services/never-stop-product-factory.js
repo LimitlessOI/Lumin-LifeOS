@@ -13,7 +13,7 @@ import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor
 import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS } from './product-build-orchestrator.js';
 import { waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
-import { extractBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
+import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
 import { buildIntegrationContext } from './build-integration-context.js';
 import { assertUngovernedShippingAllowed } from './governed-factory-guard.js';
 
@@ -476,10 +476,10 @@ export async function discoverBuildQueueWorkFresh() {
 }
 
 /**
- * Scale lever: find products that have a PRODUCT_HOME with a documented backlog
- * but NO BUILD_QUEUE.json yet, so the loop can auto-plan a queue for them (via
- * the injected planner model) and pull them into the autonomous build lane.
- * Grounded in real documented work only — never fabricated.
+ * Scale lever: find products that have documented work in their product folder
+ * (PRODUCT_HOME + conversations + sibling docs) but NO BUILD_QUEUE.json yet, so
+ * the loop can auto-plan a queue (blueprint of build steps) and pull them into
+ * the autonomous build lane. Grounded in real documented work only — never fabricated.
  */
 export function discoverPlanWork() {
   const productsDir = path.join(ROOT, 'docs/products');
@@ -497,12 +497,15 @@ export function discoverPlanWork() {
     const homePath = path.join(productsDir, productId, 'PRODUCT_HOME.md');
     if (!fs.existsSync(homePath)) continue;
     let backlog = [];
+    let sources = [];
     try {
-      backlog = extractBacklog(fs.readFileSync(homePath, 'utf8'));
+      const extracted = extractCorpusBacklog(productId);
+      backlog = extracted.items || [];
+      sources = extracted.sources || [];
     } catch { backlog = []; }
     if (backlog.length === 0) continue;
 
-    // NEW-PRODUCT ENROLL: home has documented backlog but no queue yet.
+    // NEW-PRODUCT ENROLL: folder has documented work but no queue yet.
     if (!fs.existsSync(queuePathForProduct(productId))) {
       found.push({
         id: `plan_build_queue_${productId}`,
@@ -511,20 +514,14 @@ export function discoverPlanWork() {
         product: productId,
         product_id: productId,
         home_path: homePath,
-        detail: `${backlog.length} documented backlog item(s), no BUILD_QUEUE yet`,
+        corpus_sources: sources.map((s) => s.path),
+        detail: `${backlog.length} documented item(s) across ${sources.length || 1} source(s), no BUILD_QUEUE yet`,
       });
       continue;
     }
 
-    // SELF-EXTEND: a product whose queue is FULLY DONE re-plans from its own
-    // PRODUCT_HOME when new work has been documented since the last plan — this
-    // is how the loop "adds more to itself" once a phase ships, without a human
-    // hand-authoring the next phase. Gated hard to avoid churn/waste:
-    //   (1) EVERY step must be `done` — never extend on top of a still-building
-    //       or blocked phase (the build path revives/finishes those first);
-    //   (2) the documented backlog signature must have CHANGED since the queue
-    //       was last planned — otherwise re-planning the same backlog burns a
-    //       planner model call every idle cycle for zero new steps.
+    // SELF-EXTEND: a product whose queue is FULLY DONE re-plans from its corpus
+    // when new work has been documented since the last plan.
     let queue;
     try { queue = loadBuildQueue(productId); } catch { continue; }
     const steps = Array.isArray(queue.steps) ? queue.steps : [];
@@ -539,7 +536,8 @@ export function discoverPlanWork() {
       product_id: productId,
       home_path: homePath,
       extend: true,
-      detail: `queue complete (${steps.length} done) + ${backlog.length} documented backlog item(s) — re-plan next phase`,
+      corpus_sources: sources.map((s) => s.path),
+      detail: `queue complete (${steps.length} done) + ${backlog.length} documented item(s) — re-plan next phase`,
     });
   }
   return found;
@@ -753,6 +751,17 @@ export async function discoverProductExpansionWork(options = {}) {
   items.push(...(await discoverBuildQueueWorkFresh()));
   items.push(...discoverPlanWork());
   items.push(...discoverSentryFixWork());
+
+  // When no concrete build steps are ready, promote plan enrollment so the loop
+  // turns product folders into BUILD_QUEUE blueprints instead of idling.
+  const hasBuildStep = items.some((i) => i?.kind === 'product_build_step');
+  if (!hasBuildStep) {
+    for (const item of items) {
+      if (item?.kind === 'plan_build_queue' && !item.extend) {
+        item.priority = Math.min(item.priority, 2.5 + (item.priority % 1));
+      }
+    }
+  }
 
   const bpIncomplete = loadBpItems().filter((i) => isQueueItemIncomplete(i, { pointBTarget: pointB }));
   if (bpIncomplete.length && !process.env.BUILDEROS_AUTOPILOT) {

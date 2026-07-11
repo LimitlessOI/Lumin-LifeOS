@@ -6,7 +6,12 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { STEP_STATUS } from './product-build-orchestrator.js';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 // Only strong, paid models are hardwired into what the system ships (founder rule).
 export const PLANNER_MODEL = process.env.BUILD_QUEUE_PLANNER_MODEL || 'claude_sonnet';
@@ -14,9 +19,20 @@ const MAX_STEPS = 12;
 
 // Backlog lives under headings that describe remaining/next work. Deterministic,
 // no model call — we only feed the model REAL documented work, never invent it.
-const BACKLOG_HEADING = /^#{1,6}\s*(build plan|remaining|not (yet )?done|to ?do|next|backlog|missing|roadmap)\b/i;
+const BACKLOG_HEADING = /^#{1,6}\s*(?:\d+\.\s*)?(?:current\s+bp|approved\s+product\s+backlog|build plan|remaining(?:\s+work)?|not (yet )?done|to ?do|next(?:\s+build)?|backlog|missing|roadmap|known\s+gaps|agent\s+handoff(?:\s+notes)?|open\s+work|incomplete|pre-build\s+readiness)\b/i;
 const HEADING = /^#{1,6}\s+/;
 const BULLET = /^\s*(?:[-*+]|\d+[.)])\s+(.*\S)\s*$/;
+const OPEN_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[\s*\]\s+(.*\S)\s*$/;
+const DONE_CHECKBOX = /^\s*(?:[-*+]|\d+[.)])?\s*\[[xX]\]\s+/;
+const NEXT_LINE = /^\*\*Next(?:\s+priority)?:\*\*\s*(.+)$/i;
+const NEXT_TABLE = /^\|\s*\*?\*?Next(?:\s+build|\s+priority)?\*?\*?\s*\|\s*(.+?)\s*\|/i;
+const SKIP_DOC_NAMES = new Set([
+  'product_home.md',
+  'file_manifest.json',
+  'twin.md',
+  'readme.md',
+]);
+const MAX_CORPUS_CHARS = 120_000;
 
 // The section that holds the real phased roadmap. Phases are only extracted while
 // inside it, so unrelated "### Phase N Tables" subsections in a technical-spec
@@ -39,39 +55,144 @@ const PHASE_DONE = /(✅|~~|\bdone\b|\bshipped\b|\bcomplete[d]?\b)/i;
  * bullets that sit under a backlog-style heading until the next heading. Returns
  * de-duplicated, trimmed strings (never fabricated — purely extracted).
  */
+function isDoneItem(text) {
+  const t = String(text || '').trim();
+  if (!t) return true;
+  if (DONE_CHECKBOX.test(t)) return true;
+  if (/^\[x\]/i.test(t)) return true;
+  if (/^(done|shipped|complete|✅|~~)/i.test(t)) return true;
+  if (/^\[[xX]\]/.test(t)) return true;
+  // Common PRODUCT_HOME checklist form: "[x] **Thing** …"
+  if (/^\[[xX]\]\s+/.test(t)) return true;
+  return false;
+}
+
+function pushUnique(out, seen, text) {
+  const cleaned = String(text || '').replace(/^\**|\**$/g, '').trim();
+  if (cleaned.length < 6 || isDoneItem(cleaned)) return;
+  const key = cleaned.toLowerCase();
+  if (seen.has(key)) return;
+  seen.add(key);
+  out.push(cleaned);
+}
+
+/**
+ * Pull candidate remaining-work lines from PRODUCT_HOME / conversation corpus.
+ * Deterministic + extractive only — never fabricates work.
+ */
 export function extractBacklog(homeText) {
   if (typeof homeText !== 'string' || !homeText.trim()) return [];
   const lines = homeText.split(/\r?\n/);
   const out = [];
   const seen = new Set();
   let inBacklog = false;
+  let inChangeReceipts = false;
   for (const line of lines) {
     if (HEADING.test(line)) {
       inBacklog = BACKLOG_HEADING.test(line);
+      inChangeReceipts = /^#{1,6}\s*change\s+receipts\b/i.test(line);
+      // Always harvest **Next:** lines even outside backlog headings.
+      continue;
+    }
+    const next = line.match(NEXT_LINE) || line.match(NEXT_TABLE);
+    if (next) {
+      pushUnique(out, seen, next[1]);
+      continue;
+    }
+    if (inChangeReceipts) continue;
+    const open = line.match(OPEN_CHECKBOX);
+    if (open) {
+      pushUnique(out, seen, open[1]);
       continue;
     }
     if (!inBacklog) continue;
+    if (DONE_CHECKBOX.test(line) || /^\s*(?:[-*+]|\d+[.)])?\s*\[[xX]\]/.test(line)) continue;
     const m = line.match(BULLET);
     if (!m) continue;
-    const text = m[1].replace(/^\**|\**$/g, '').trim();
-    // skip items already marked done/shipped
-    if (/^(done|shipped|complete|✅|~~)/i.test(text)) continue;
-    const key = text.toLowerCase();
-    if (text.length < 6 || seen.has(key)) continue;
-    seen.add(key);
-    out.push(text);
+    pushUnique(out, seen, m[1]);
   }
   // Also fold in any documented, buildable PHASE specs (sub-headings + prose),
   // de-duplicated against bullet backlog. This is what lets the loop plan the
   // NEXT documented phase of a product (e.g. a "### Phase 2 — …" spec), not just
   // flat backlog bullets — the core "adds more to itself" lever.
   for (const item of extractPhaseSpecs(homeText)) {
-    const key = item.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(item);
+    pushUnique(out, seen, item);
   }
   return out;
+}
+
+/**
+ * Load everything the factory may lawfully read for a product folder:
+ * PRODUCT_HOME.md + conversations/*.md + sibling product docs (not dumps).
+ * Returns combined text for planning + source list for receipts.
+ */
+export function loadProductCorpus(productId, { root = ROOT } = {}) {
+  const productDir = path.join(root, 'docs/products', String(productId || ''));
+  const sources = [];
+  const chunks = [];
+  let total = 0;
+
+  const pushFile = (relOrAbs, label) => {
+    const abs = path.isAbsolute(relOrAbs) ? relOrAbs : path.join(root, relOrAbs);
+    if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) return;
+    let text = '';
+    try { text = fs.readFileSync(abs, 'utf8'); } catch { return; }
+    if (!text.trim()) return;
+    const room = MAX_CORPUS_CHARS - total;
+    if (room <= 0) return;
+    const slice = text.length > room ? text.slice(0, room) : text;
+    total += slice.length;
+    sources.push({ path: path.relative(root, abs), label, chars: slice.length });
+    chunks.push(`\n\n---\n# CORPUS SOURCE: ${label} (${path.relative(root, abs)})\n---\n${slice}`);
+  };
+
+  pushFile(path.join(productDir, 'PRODUCT_HOME.md'), 'product_home');
+
+  const convDir = path.join(productDir, 'conversations');
+  if (fs.existsSync(convDir) && fs.statSync(convDir).isDirectory()) {
+    const files = fs.readdirSync(convDir)
+      .filter((f) => /\.(md|txt)$/i.test(f))
+      .sort();
+    for (const f of files) pushFile(path.join(convDir, f), 'conversation');
+  }
+
+  // Sibling markdown in the product folder (specs, twin notes) — skip huge/noise names.
+  try {
+    for (const f of fs.readdirSync(productDir)) {
+      if (!/\.md$/i.test(f)) continue;
+      if (SKIP_DOC_NAMES.has(f.toLowerCase())) continue;
+      if (/conversation|dump|archive|history/i.test(f)) continue;
+      pushFile(path.join(productDir, f), 'product_doc');
+    }
+  } catch { /* missing dir */ }
+
+  // Nested module homes (e.g. marketingos/socialmediaos)
+  try {
+    for (const d of fs.readdirSync(productDir, { withFileTypes: true })) {
+      if (!d.isDirectory() || d.name === 'conversations') continue;
+      const nestedHome = path.join(productDir, d.name, 'PRODUCT_HOME.md');
+      if (fs.existsSync(nestedHome)) pushFile(nestedHome, `nested_home:${d.name}`);
+    }
+  } catch { /* ignore */ }
+
+  return {
+    product_id: productId,
+    sources,
+    combinedText: chunks.join('\n').trim(),
+    homePath: path.join(productDir, 'PRODUCT_HOME.md'),
+  };
+}
+
+/**
+ * Extract buildable work from the full product corpus (home + conversations + docs).
+ */
+export function extractCorpusBacklog(productId, { root = ROOT, homeText = null } = {}) {
+  const corpus = homeText != null
+    ? { combinedText: homeText, sources: [{ path: 'inline', label: 'inline' }] }
+    : loadProductCorpus(productId, { root });
+  const text = corpus.combinedText || '';
+  if (!text.trim()) return { items: [], sources: corpus.sources || [] };
+  return { items: extractBacklog(text), sources: corpus.sources || [], corpus };
 }
 
 /**
@@ -311,13 +432,26 @@ export async function planBuildQueue({
   // extraBacklog carries non-doc-sourced work (e.g. SENTRY self-fix findings)
   // that must also be planned into concrete target_file steps. It is merged with
   // the documented backlog and de-duplicated; still purely additive, never fabricated.
-  const documented = extractBacklog(homeText);
+  // Prefer full product corpus (home + conversations + sibling docs) so the
+  // planner sees founder conversations and folder law — not just PRODUCT_HOME.
+  let corpusText = homeText;
+  let corpusSources = [];
+  if (productId) {
+    try {
+      const corpus = loadProductCorpus(productId);
+      if (corpus.combinedText) {
+        corpusText = corpus.combinedText;
+        corpusSources = corpus.sources;
+      }
+    } catch { /* fall back to homeText */ }
+  }
+  const documented = extractBacklog(corpusText || homeText || '');
   const extra = (Array.isArray(extraBacklog) ? extraBacklog : [])
     .map((s) => String(s || '').trim())
     .filter((s) => s.length >= 6);
   const backlog = [...new Set([...documented, ...extra])];
   if (!backlog.length) {
-    logger?.info?.({ productId }, '[BUILD-QUEUE-PLANNER] no documented backlog — nothing to plan');
+    logger?.info?.({ productId, sources: corpusSources.length }, '[BUILD-QUEUE-PLANNER] no documented backlog — nothing to plan');
     return null;
   }
   if (typeof callModel !== 'function') {
@@ -388,6 +522,7 @@ export async function planBuildQueue({
     ...(verifyScript ? { verify_script: verifyScript } : (existingQueue?.verify_script ? { verify_script: existingQueue.verify_script } : {})),
     planned_at: new Date().toISOString(),
     backlog_signature: backlogSignature(backlog),
+    corpus_sources: corpusSources.map((s) => s.path),
     steps: [...existingSteps, ...added],
   };
 
