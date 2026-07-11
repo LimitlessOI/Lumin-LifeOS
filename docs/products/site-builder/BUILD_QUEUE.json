@@ -403,6 +403,18 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "step-09",
+      "status": "founder_gated",
+      "target_file": "routes/site-builder-customization-ui-routes.js",
+      "task": "Register customization UI API and HTML routes",
+      "spec": "Exports registerCustomizationUiRoutes(app, deps). Mounts GET /site-builder/customization (returns HTML page embedding template/palette pickers populated from getCustomizationOptions); POST /api/site-builder/customization (calls saveCustomizationOptions, returns 200 JSON). HTML is an inline string with client JS that fetches /api/site-builder/colour-palettes and /api/site-builder/templates to populate selectors dynamically. No top-level browser globals. Founder-gated route must check deps.isFounder or equivalent flag before serving. Addresses ux_friction_1 and ux_friction_2.",
+      "depends_on": [
+        "step-08"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
