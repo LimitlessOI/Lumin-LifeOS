@@ -27,10 +27,14 @@ function readMetaFromDisk(clientId) {
 }
 
 // Previews live on ephemeral per-instance disk; a fixture built (or rehydrated)
-// on one Railway instance is invisible to a request landing on another. The
-// main preview route already rehydrates meta.json from prospect_sites.metadata
-// on a disk miss (routes/site-builder-routes.js) — mirror that here so Layer B
-// (which never itself calls that route) doesn't fail closed on a real preview.
+// on one Railway instance is invisible to a request landing on another. Fall
+// back to prospect_sites.metadata itself — recordProspect() already spreads the
+// full build metadata (editToken, variants, businessInfo, etc.) directly onto
+// the row's metadata column, so the row IS the durable equivalent of meta.json.
+// (A nested `previewMeta` copy is also written alongside it, but proved
+// unreliable in practice — likely dropped by JSON.stringify whenever a sibling
+// `previewHtml: undefined` key sits in the same object literal — so read the
+// reliable top-level fields instead.)
 async function readMeta(clientId, pool) {
   const fromDisk = readMetaFromDisk(clientId);
   if (fromDisk && fromDisk.editToken) return fromDisk;
@@ -40,8 +44,8 @@ async function readMeta(clientId, pool) {
       `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
       [clientId]
     );
-    const previewMeta = result.rows[0]?.metadata?.previewMeta;
-    return previewMeta && previewMeta.editToken ? previewMeta : fromDisk;
+    const dbMeta = result.rows[0]?.metadata;
+    return dbMeta && dbMeta.editToken ? dbMeta : fromDisk;
   } catch {
     return fromDisk;
   }
@@ -63,12 +67,12 @@ async function newestPreviewWithToken(pool) {
   try {
     const result = await pool.query(
       `SELECT client_id, metadata FROM prospect_sites
-       WHERE metadata->'previewMeta'->>'editToken' IS NOT NULL
+       WHERE metadata->>'editToken' IS NOT NULL
        ORDER BY updated_at DESC LIMIT 1`
     );
     const row = result.rows[0];
     if (!row) return null;
-    return { clientId: row.client_id, meta: row.metadata.previewMeta };
+    return { clientId: row.client_id, meta: row.metadata };
   } catch {
     return null;
   }

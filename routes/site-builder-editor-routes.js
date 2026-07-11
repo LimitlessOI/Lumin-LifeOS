@@ -34,8 +34,13 @@ async function readMetaFromDisk(clientId) {
 
 // Previews live on ephemeral per-instance disk; a client's own preview can be
 // invisible to whichever instance serves this request (multi-instance / after
-// a redeploy). Fall back to prospect_sites.metadata.previewMeta — the same
-// durable copy /previews/:clientId/index.html already falls back to.
+// a redeploy). Fall back to prospect_sites.metadata itself — buildFromUrl/
+// buildVariants' full metadata object (editToken, variants, businessInfo, etc.)
+// is already spread directly onto the row's metadata column by recordProspect(),
+// so the row IS the durable equivalent of meta.json. (A nested `previewMeta`
+// copy was also written alongside it, but proved unreliable in practice — likely
+// dropped by JSON.stringify whenever a sibling `previewHtml: undefined` key sits
+// in the same object literal — so read the reliable top-level fields instead.)
 async function readMeta(clientId, pool) {
   const fromDisk = await readMetaFromDisk(clientId);
   if (fromDisk && fromDisk.editToken) return fromDisk;
@@ -45,8 +50,8 @@ async function readMeta(clientId, pool) {
       `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
       [clientId]
     );
-    const previewMeta = result.rows[0]?.metadata?.previewMeta;
-    return previewMeta && previewMeta.editToken ? previewMeta : fromDisk;
+    const dbMeta = result.rows[0]?.metadata;
+    return dbMeta && dbMeta.editToken ? dbMeta : fromDisk;
   } catch {
     return fromDisk;
   }

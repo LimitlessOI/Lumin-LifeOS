@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T19:59:16.134Z",
+  "generated_at": "2026-07-11T20:00:31.354Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11454,
   "files": [
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 94444,
-      "mtime": "2026-07-11T19:03:16.484Z",
-      "indexed_at": "2026-07-11T19:03:22.827Z"
+      "bytes": 97025,
+      "mtime": "2026-07-11T20:00:09.776Z",
+      "indexed_at": "2026-07-11T20:00:31.354Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66289,9 +66289,9 @@
     {
       "path": "routes/site-builder-editor-routes.js",
       "synopsis": "Site Builder live preview editor API (edit / save / revert / shell).",
-      "bytes": 12003,
-      "mtime": "2026-07-10T21:52:55.120Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 12389,
+      "mtime": "2026-07-11T19:58:19.620Z",
+      "indexed_at": "2026-07-11T20:00:31.354Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -66320,9 +66320,9 @@
     {
       "path": "routes/site-builder-prealpha-routes.js",
       "synopsis": "CONDUCTOR-GLUE SENTRY pre-alpha Layer B (human-sim) route for Site",
-      "bytes": 15178,
-      "mtime": "2026-07-10T21:42:15.094Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 15394,
+      "mtime": "2026-07-11T19:58:40.349Z",
+      "indexed_at": "2026-07-11T20:00:31.354Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -66330,9 +66330,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 41056,
-      "mtime": "2026-07-11T19:02:41.191Z",
-      "indexed_at": "2026-07-11T19:03:22.827Z",
+      "bytes": 41042,
+      "mtime": "2026-07-11T19:59:22.018Z",
+      "indexed_at": "2026-07-11T20:00:31.354Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

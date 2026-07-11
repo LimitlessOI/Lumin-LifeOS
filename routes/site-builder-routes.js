@@ -287,10 +287,10 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
         await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
         await fsp.writeFile(path.join(deployDir, 'index.html'), html).catch(() => null);
-        if (row?.metadata?.previewMeta) {
+        if (row?.metadata?.editToken) {
           await fsp.writeFile(
             path.join(deployDir, 'meta.json'),
-            JSON.stringify(row.metadata.previewMeta, null, 2)
+            JSON.stringify(row.metadata, null, 2)
           ).catch(() => null);
         }
         res.set('Content-Type', 'text/html; charset=utf-8');
