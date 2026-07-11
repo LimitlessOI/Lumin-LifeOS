@@ -254,7 +254,7 @@
     },
     {
       "id": "mos-social-connections-service",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-social-connections.js",
       "task": "The single seam between any social-account sign-in flow (Grok's login window, or this codebase's own browser agent driving the login) and MarketingOS's publisher: store, read, list, and revoke a per-owner-per-platform connection. SELF-CONTAINED ESM module — no route/UI logic here.",
       "spec": "Reuse the EXISTING encryption helper — import { encrypt, decrypt } from '../core/tco-encryption.js' (do NOT reimplement AES-256-GCM). Exports (all async, take pool as first arg): saveConnection(pool, { ownerId, platform, sessionState, status = 'connected' }) — JSON.stringify(sessionState) then encrypt() into session_state_encrypted; UPSERT into marketing_social_connections ON CONFLICT (owner_id, platform) DO UPDATE, setting connected_at = NOW() when status is 'connected'; return the row minus the encrypted field. getConnection(pool, { ownerId, platform }) — SELECT the row; if found, decrypt() + JSON.parse() session_state_encrypted into a `sessionState` field on the returned object; return null if no row. Never let a caller outside this module see the raw ciphertext. listConnections(pool, { ownerId }) — SELECT platform, status, connected_at, last_verified_at, last_error for all of this owner's rows WITHOUT decrypting anything (this is the status list the UI shows — it must never touch session material). revokeConnection(pool, { ownerId, platform }) — UPDATE status='revoked', session_state_encrypted=NULL, updated_at=NOW(). Parameterised SQL only ($1,$2…). Guard everything in try/catch, return structured { ok:false, error } rather than throwing raw. Named exports saveConnection, getConnection, listConnections, revokeConnection (+ default object of all four). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -262,8 +262,11 @@
         "mos-social-schema"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 8000
+      "attempts": 1,
+      "max_output_tokens": 8000,
+      "commit_sha": "47f923ea00d0005059e54ada308ca22c5f86ab1a",
+      "last_attempt_at": "2026-07-11T00:25:07.328Z",
+      "completed_at": "2026-07-11T00:25:20.195Z"
     },
     {
       "id": "mos-social-goal-library",
