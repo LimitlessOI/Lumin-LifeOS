@@ -71,6 +71,11 @@ export default class ProspectPipeline {
     return createProspectClientId();
   }
 
+  resolvePreviewUrl(clientId) {
+    const base = String(this.baseUrl || process.env.SITE_BASE_URL || '').replace(/\/+$/, '');
+    return base ? `${base}/previews/${clientId}` : `/previews/${clientId}`;
+  }
+
   async reserveProspectJob(options = {}) {
     const {
       businessUrl,
@@ -78,15 +83,20 @@ export default class ProspectPipeline {
       contactName = '',
       businessName = '',
       clientId = this.generateClientId(),
+      deferredBuild = false,
     } = options;
 
     if (!businessUrl) return { ok: false, error: 'businessUrl required' };
+
+    const status = deferredBuild ? 'queued' : 'building';
+    const previewUrl = deferredBuild ? this.resolvePreviewUrl(clientId) : null;
 
     if (!this.pool) {
       return {
         ok: true,
         clientId,
-        status: 'building',
+        status,
+        previewUrl,
         reserved: false,
         warning: 'No database pool — job tracking in-memory only',
       };
@@ -96,16 +106,19 @@ export default class ProspectPipeline {
       await this.pool.query(
         `INSERT INTO prospect_sites
           (client_id, business_url, contact_email, contact_name, business_name, preview_url, email_sent, status, metadata, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, NULL, false, 'building', $6::jsonb, NOW(), NOW())`,
+         VALUES ($1, $2, $3, $4, $5, $6, false, $7, $8::jsonb, NOW(), NOW())`,
         [
           clientId,
           businessUrl,
           contactEmail || null,
           contactName || null,
           businessName || null,
+          previewUrl,
+          status,
           JSON.stringify({
             jobStartedAt: new Date().toISOString(),
             async: true,
+            deferredBuild: deferredBuild === true,
             skipEmail: options.skipEmail === true,
             enrich: options.enrich,
             skipRepair: options.skipRepair === true,
@@ -116,11 +129,103 @@ export default class ProspectPipeline {
           }),
         ]
       );
-      return { ok: true, clientId, status: 'building', reserved: true };
+      return { ok: true, clientId, status, previewUrl, reserved: true };
     } catch (err) {
       logger.error('[PROSPECT] reserveProspectJob failed', { clientId, error: err.message });
       return { ok: false, error: err.message };
     }
+  }
+
+  /**
+   * Email first, build later — saves AI spend until the prospect clicks the preview link.
+   */
+  async sendDeferredInvite({
+    clientId,
+    contactEmail,
+    contactName = '',
+    businessName = '',
+    businessUrl = '',
+    previewUrl = null,
+  } = {}) {
+    if (!contactEmail) return { success: false, error: 'contactEmail required' };
+    const url = previewUrl || this.resolvePreviewUrl(clientId);
+    const name = contactName || 'there';
+    const biz = businessName || 'your business';
+    const emailContent = {
+      subject: `${biz} — open your free site preview`,
+      html: this.deferredInviteEmailHtml(name, biz, url, businessUrl),
+    };
+
+    let emailSent = false;
+    let emailSendError = null;
+    try {
+      const delivery = await Promise.race([
+        this.sendEmail(contactEmail, emailContent.subject, emailContent.html),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('sendEmail timed out after 25000ms')), 25_000)),
+      ]);
+      emailSent = delivery?.success !== false;
+      if (!emailSent) emailSendError = delivery?.error || 'unknown';
+    } catch (err) {
+      emailSendError = err.message;
+    }
+
+    if (this.pool && clientId) {
+      try {
+        await this.pool.query(
+          `UPDATE prospect_sites
+              SET email_sent = $2,
+                  status = CASE WHEN $2 THEN 'invited' ELSE status END,
+                  metadata = COALESCE(metadata, '{}'::jsonb) || $3::jsonb,
+                  updated_at = NOW()
+            WHERE client_id = $1`,
+          [
+            clientId,
+            emailSent,
+            JSON.stringify({
+              deferredInviteAt: new Date().toISOString(),
+              ...(emailSendError ? { emailSendError, emailSendAttemptAt: new Date().toISOString() } : {}),
+            }),
+          ]
+        );
+      } catch (err) {
+        logger.warn('[PROSPECT] deferred invite status update failed', { clientId, error: err.message });
+      }
+    }
+
+    return {
+      success: emailSent,
+      clientId,
+      previewUrl: url,
+      emailSent,
+      emailSubject: emailContent.subject,
+      error: emailSent ? null : emailSendError,
+    };
+  }
+
+  deferredInviteEmailHtml(contactName, businessName, previewUrl, businessUrl = '') {
+    const offer = getBetaPublishOfferSummary();
+    const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
+    const source = businessUrl
+      ? `<p style="font-size:13px;color:#666;">We looked at <a href="${businessUrl}" style="color:#0F766E;">${businessUrl}</a> and prepared a free upgrade preview for you.</p>`
+      : '';
+    return `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <p>Hi ${contactName || 'there'},</p>
+  ${source}
+  <p>We started a free website upgrade preview for <strong>${businessName || 'your business'}</strong>. Click the link and it finishes building for you in about a minute — no call, no charge to look.</p>
+  <p style="margin: 24px 0;">
+    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
+      Open my free preview
+    </a>
+  </p>
+  <p>We're in beta and want your honest reaction. If you like it, beta publish is ${SITE_BUILDER_PRICING.publish.display} (includes ${months} months of upkeep at ${SITE_BUILDER_PRICING.carePlan.display} after). Zero obligation either way.</p>
+  <p>Best,<br>The Lumin team</p>
+  <hr style="margin-top: 40px; border: none; border-top: 1px solid #eee;">
+  <p style="font-size: 11px; color: #999;">Beta offer: ${offer}<br><a href="${previewUrl}" style="color: #0F766E;">${previewUrl}</a></p>
+</body>
+</html>`;
   }
 
   async failProspectJob(clientId, errorMessage) {
@@ -157,7 +262,7 @@ export default class ProspectPipeline {
         `UPDATE prospect_sites
             SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
                 updated_at = NOW()
-          WHERE client_id = $1 AND status = 'building'`,
+          WHERE client_id = $1 AND status IN ('building', 'queued', 'invited')`,
         [
           clientId,
           JSON.stringify({
@@ -169,6 +274,35 @@ export default class ProspectPipeline {
       );
     } catch (err) {
       logger.warn('[PROSPECT] touchProspectJob failed', { clientId, error: err.message });
+    }
+  }
+
+  async markProspectBuilding(clientId, extraMeta = {}) {
+    if (!this.pool || !clientId) return { ok: false };
+    try {
+      const result = await this.pool.query(
+        `UPDATE prospect_sites
+            SET status = 'building',
+                metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+                updated_at = NOW()
+          WHERE client_id = $1
+            AND status IN ('queued', 'invited', 'sent', 'failed')
+            AND COALESCE(metadata->>'deferredBuild', 'false') = 'true'
+            AND (metadata->>'previewHtml' IS NULL OR metadata->>'previewHtml' = '')
+          RETURNING client_id, business_url, contact_email, contact_name, business_name, preview_url, metadata`,
+        [
+          clientId,
+          JSON.stringify({
+            deferredBuildStartedAt: new Date().toISOString(),
+            jobStage: 'build_on_view',
+            jobHeartbeatAt: new Date().toISOString(),
+            ...extraMeta,
+          }),
+        ]
+      );
+      return { ok: (result.rows || []).length > 0, row: result.rows?.[0] || null };
+    } catch (err) {
+      return { ok: false, error: err.message };
     }
   }
 
@@ -257,12 +391,9 @@ export default class ProspectPipeline {
     }, 20_000);
     let buildResult;
     try {
-      // Step 1: Build their site. Lean/no-AI fast paths (emergency reliability
-      // modes built for Railway's edge timeout) still use the single-site
-      // buildFromUrl; a normal build now generates the free template gallery
-      // (buildVariants) so the editor has real choices to toggle between,
-      // not just one design (founder direction 2026-07-10).
-      const useLeanSinglePath = options.leanTemplate || options.skipAi;
+      // Lean/no-AI fast path for deferred click builds and public-lead reliability.
+      // Full cold builds still use buildVariants unless lean/skipAi is set.
+      const useLeanSinglePath = options.leanTemplate || options.skipAi || options.deferredBuild === true;
       buildResult = useLeanSinglePath
         ? await this.siteBuilder.buildFromUrl(businessUrl, {
             businessInfo: options.businessInfo || null,
@@ -270,8 +401,8 @@ export default class ProspectPipeline {
             enrich: options.enrich,
             skipRepair: options.skipRepair,
             skipBlogs: options.skipBlogs,
-            skipAi: options.skipAi,
-            leanTemplate: options.leanTemplate,
+            skipAi: options.skipAi || options.deferredBuild === true,
+            leanTemplate: options.leanTemplate || options.deferredBuild === true,
             onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
           })
         : await this.siteBuilder.buildVariants(businessUrl, {

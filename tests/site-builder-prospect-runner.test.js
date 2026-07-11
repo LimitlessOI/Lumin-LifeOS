@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import {
   createProspectClientId,
   evaluateSiteBuilderEmailReadiness,
+  enqueueDeferredProspectJob,
 } from '../services/site-builder-prospect-runner.js';
 
 describe('site-builder-prospect-runner', () => {
@@ -32,6 +33,52 @@ describe('site-builder-prospect-runner', () => {
       EMAIL_FROM: 'hello@example.com',
     });
     assert.equal(result.ready, false);
-    assert.ok(result.blockers.some((b) => b.name === 'POSTMARK_SERVER_TOKEN'));
+    assert.ok(result.blockers.some((b) => b.name === 'POSTMARK_SERVER_KEY' || b.name === 'POSTMARK_SERVER_TOKEN'));
+  });
+
+  it('enqueueDeferredProspectJob reserves + invites without calling processProspect', async () => {
+    let reserved = null;
+    let invited = null;
+    let processCalls = 0;
+    const pipeline = {
+      reserveProspectJob: async (opts) => {
+        reserved = opts;
+        return {
+          ok: true,
+          clientId: opts.clientId,
+          status: 'queued',
+          previewUrl: `https://example.test/previews/${opts.clientId}`,
+        };
+      },
+      sendDeferredInvite: async (opts) => {
+        invited = opts;
+        return {
+          success: true,
+          clientId: opts.clientId,
+          previewUrl: opts.previewUrl,
+          emailSent: true,
+        };
+      },
+      processProspect: async () => {
+        processCalls += 1;
+        return { success: true };
+      },
+      resolvePreviewUrl: (id) => `https://example.test/previews/${id}`,
+    };
+
+    const job = await enqueueDeferredProspectJob(pipeline, {
+      businessUrl: 'https://demo.example',
+      contactEmail: 'owner@demo.example',
+      businessName: 'Demo Clinic',
+    });
+
+    assert.equal(job.ok, true);
+    assert.equal(job.deferred, true);
+    assert.equal(job.emailSent, true);
+    assert.equal(reserved.deferredBuild, true);
+    assert.equal(reserved.leanTemplate, true);
+    assert.equal(reserved.skipAi, true);
+    assert.equal(invited.contactEmail, 'owner@demo.example');
+    assert.equal(processCalls, 0);
   });
 });

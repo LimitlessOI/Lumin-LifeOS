@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Ongoing care capped at $35/mo (under $45 publish). |
+| **Last Updated** | 2026-07-11 — Deferred lean preview: email link first, build on click (~30–90s). |
 
 ---
 
@@ -300,6 +300,7 @@ Failed sends do **not** increment follow-up counters.
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
 | 2026-07-11 | **GAP-FILL tip boot stuck route-less + AB mount.** Tip `/ready` showed `db:error` / `runtime_routes:pending` after Neon timeout — boot was one-shot so never-stop APIs 404'd forever. `server-founder-runtime.js` now retries boot with backoff + `POST /api/v1/lifeos/boot/retry`; Neon pool timeout 10s→30s. Auto-registered `site-builder-ab-subject-routes` (queue step-03). | Adam: keep the system building. Tip DB timeout bricked all routes; factory could not run. | ⚠️ needs Railway redeploy (GH RAILWAY_TOKEN Not Authorized; tip managed-env dead until DB routes mount) |
+| 2026-07-11 | **Deferred preview (build on click).** Cold `/prospect` + `/public-lead` email the preview link immediately; lean build starts on first GET `/previews/:id` so non-engagers cost ~$0 AI. Placeholder polls public status. Full 10-variant path still available via `deferred:false`. | Adam: only spend when they engage; how fast can preview be. | ✅ unit + tip prove |
 | 2026-07-11 | **Care plan $35/mo** — founder: ongoing care must not exceed publish ($45); set default `SITE_BUILDER_CARE_PLAN_CENTS=3500` + landing/SSOT. | Adam: $35 at the most. | ✅ tip managed-env + push |
 | 2026-07-11 | **LAUNCH: public Site Builder sales front door.** `/site-builder` → landing with live Flores demo + $45 Stripe CTA; `POST /api/v1/sites/public-lead` rate-limited inbound builds; LifeOS nav link. Offer page rewritten from internal ladder copy to buyable beta. | Adam: launch Site Builder and get others to buy. | ⚠️ tip-sync + public-lead prove |
 | 2026-07-11 | **First-dollar path: preview durability + Postmark truth.** `recordProspect` now merges metadata (JSONB `||`) and re-writes `previewHtml` after email; preview DB route mounts before static. Root cause of tip 404 previews: 2nd save wiped durable HTML. Proved Postmark works same-domain; external sends blocked by Postmark **pending approval**. Go Vegas: `POST /prospects/seed` for manual leads without Places key. | Adam: family money path — approve Postmark; Stripe $45 live for Flores Dental once preview durable. | ⚠️ tip-sync + rebuild dental + Postmark approval |

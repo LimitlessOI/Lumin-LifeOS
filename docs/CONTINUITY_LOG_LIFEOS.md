@@ -8,6 +8,12 @@
 
 ---
 
+## [COST] Update 2026-07-11 — Deferred lean preview on click
+
+Adam: try different approaches; only build when they click to save money. KNOW: cold `/prospect` defaults to deferred lean — email link first, ~30–90s build on first preview GET. Full AI variants still via deferred:false. External cold email still Postmark-blocked; same-domain invites work.
+
+---
+
 ## [PRICE] Update 2026-07-11 — Ongoing care capped at $35/mo
 
 Adam: ongoing care should not be more than $45; $35 at most. KNOW: `config/site-builder-pricing.js` default care plan → $35/mo (3500¢); landing + SSOT updated; tip managed-env set. Publish stays $45.

@@ -56,6 +56,151 @@ export async function failStaleProspectJobs(pool, { staleMs = PROSPECT_STALE_MS 
 }
 
 /**
+ * Email the preview link immediately; build only when they click (saves AI spend).
+ * Defaults to lean template so first click is ~30–90s, not a 10-variant AI run.
+ */
+export async function enqueueDeferredProspectJob(pipeline, options = {}) {
+  if (!pipeline?.reserveProspectJob || !pipeline?.sendDeferredInvite) {
+    return { ok: false, error: 'Prospect pipeline unavailable for deferred mode' };
+  }
+
+  const clientId = options.clientId || createProspectClientId();
+  const leanOptions = {
+    ...options,
+    clientId,
+    deferredBuild: true,
+    enrich: options.enrich === true ? true : false,
+    skipRepair: options.skipRepair !== false,
+    skipBlogs: options.skipBlogs !== false,
+    skipAi: options.skipAi !== false,
+    leanTemplate: options.leanTemplate !== false,
+    skipEmail: true,
+  };
+
+  const reserved = await pipeline.reserveProspectJob(leanOptions);
+  if (!reserved.ok) return reserved;
+
+  const invite = await pipeline.sendDeferredInvite({
+    clientId,
+    contactEmail: options.contactEmail,
+    contactName: options.contactName || '',
+    businessName: options.businessName || '',
+    businessUrl: options.businessUrl,
+    previewUrl: reserved.previewUrl || pipeline.resolvePreviewUrl?.(clientId),
+  });
+
+  return {
+    ok: true,
+    accepted: true,
+    async: true,
+    deferred: true,
+    clientId,
+    status: invite.emailSent ? 'invited' : 'queued',
+    previewUrl: invite.previewUrl || reserved.previewUrl,
+    emailSent: invite.emailSent === true,
+    emailError: invite.error || null,
+    pollUrl: `/api/v1/sites/prospects/${clientId}/status`,
+    message: 'Invite sent — preview builds on first link click (lean, ~30–90s)',
+  };
+}
+
+/**
+ * Start a deferred lean build when the prospect opens /previews/:id.
+ * Idempotent across instances via DB claim.
+ */
+export async function triggerBuildOnView(pipeline, clientId) {
+  if (!pipeline?.processProspect || !pipeline?.pool || !clientId) {
+    return { ok: false, started: false, reason: 'missing_pipeline_or_id' };
+  }
+  if (activeJobs.has(String(clientId))) {
+    return { ok: true, started: false, reason: 'already_active_here', building: true };
+  }
+
+  let row;
+  try {
+    const result = await pipeline.pool.query(
+      `SELECT client_id, business_url, contact_email, contact_name, business_name,
+              status, preview_url, metadata
+         FROM prospect_sites
+        WHERE client_id = $1
+        LIMIT 1`,
+      [clientId]
+    );
+    row = result.rows[0];
+  } catch (err) {
+    return { ok: false, started: false, reason: err.message };
+  }
+
+  if (!row) return { ok: false, started: false, reason: 'not_found' };
+  const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+  if (typeof metadata.previewHtml === 'string' && metadata.previewHtml.length > 100) {
+    return { ok: true, started: false, reason: 'already_built', ready: true };
+  }
+  if (row.status === 'building' && activeJobs.has(String(clientId))) {
+    return { ok: true, started: false, reason: 'building', building: true };
+  }
+  if (metadata.deferredBuild !== true && !['queued', 'invited'].includes(String(row.status))) {
+    return { ok: true, started: false, reason: 'not_deferred' };
+  }
+
+  const claimed = await pipeline.markProspectBuilding(clientId, {
+    jobClaimToken: `view_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    jobClaimExpiresAt: new Date(Date.now() + 3 * 60 * 1000).toISOString(),
+  });
+  if (!claimed.ok) {
+    return { ok: true, started: false, reason: 'claimed_elsewhere_or_ready', building: row.status === 'building' };
+  }
+
+  const options = {
+    clientId: row.client_id,
+    businessUrl: row.business_url,
+    contactEmail: row.contact_email,
+    contactName: row.contact_name || '',
+    businessName: row.business_name || '',
+    skipEmail: true,
+    deferredBuild: true,
+    enrich: metadata.enrich === true,
+    skipRepair: metadata.skipRepair !== false,
+    skipBlogs: metadata.skipBlogs !== false,
+    skipAi: metadata.skipAi !== false,
+    leanTemplate: metadata.leanTemplate !== false,
+    businessInfo: metadata.businessInfo || null,
+    skipQualify: metadata.skipQualify === true,
+  };
+  if (!options.businessUrl) {
+    await pipeline.failProspectJob(clientId, 'build_on_view failed — missing businessUrl');
+    return { ok: false, started: false, reason: 'missing_business_url' };
+  }
+
+  activeJobs.add(String(clientId));
+  logger.info('[PROSPECT-JOB] Build-on-view started', { clientId });
+
+  setImmediate(() => {
+    pipeline
+      .processProspect(options)
+      .then(async (result) => {
+        if (!result.success) {
+          await pipeline.failProspectJob(clientId, result.error || 'Build-on-view failed');
+        } else {
+          logger.info('[PROSPECT-JOB] Build-on-view completed', {
+            clientId,
+            previewUrl: result.previewUrl,
+          });
+        }
+      })
+      .catch(async (err) => {
+        logger.error('[PROSPECT-JOB] Build-on-view failure', { clientId, error: err.message });
+        await pipeline.failProspectJob(clientId, err.message);
+      })
+      .finally(() => {
+        activeJobs.delete(String(clientId));
+      });
+  });
+
+  return { ok: true, started: true, building: true, clientId };
+}
+
+/**
  * Reserve a prospect row and run build+email without blocking the HTTP request.
  * Returns immediately with clientId + poll URL.
  */
@@ -201,6 +346,7 @@ export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs
     skipBlogs: metadata.skipBlogs === true,
     skipAi: metadata.skipAi === true,
     leanTemplate: metadata.leanTemplate === true,
+    deferredBuild: metadata.deferredBuild === true,
     businessInfo: metadata.businessInfo || null,
   };
   if (!options.businessUrl) {
@@ -288,16 +434,22 @@ export async function getProspectJobStatus(pool, clientId, { pipeline = null } =
       }
     }
 
-    const terminal = ['sent', 'built', 'qa_hold', 'failed', 'converted', 'lost', 'expired'].includes(
+    const terminal = ['sent', 'built', 'qa_hold', 'failed', 'converted', 'lost', 'expired', 'viewed', 'invited'].includes(
       String(status || '').toLowerCase()
     );
+
+    const metadataReady = metadata && typeof metadata.previewHtml === 'string' && metadata.previewHtml.length > 100;
+    const deferredPending = metadata.deferredBuild === true && !metadataReady
+      && ['queued', 'invited', 'building'].includes(String(status || '').toLowerCase());
 
     return {
       ok: true,
       clientId: row.client_id,
       status,
-      done: status !== 'building' && terminal,
-      building: status === 'building',
+      done: (status !== 'building' && status !== 'queued' && terminal && !deferredPending) || metadataReady,
+      building: status === 'building' || (deferredPending && status === 'building'),
+      deferred: metadata.deferredBuild === true || undefined,
+      waitingForClick: status === 'queued' || status === 'invited' || undefined,
       previewUrl: row.preview_url,
       emailSent: row.email_sent,
       businessName: row.business_name,
@@ -360,6 +512,8 @@ export function evaluateSiteBuilderEmailReadiness(env = process.env) {
 export default {
   createProspectClientId,
   enqueueProspectJob,
+  enqueueDeferredProspectJob,
+  triggerBuildOnView,
   getProspectJobStatus,
   failStaleProspectJobs,
   resumeProspectJobIfOrphaned,

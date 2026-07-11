@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T18:06:53.775Z",
+  "generated_at": "2026-07-11T18:33:23.358Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 68348,
-      "mtime": "2026-07-11T18:06:25.010Z",
-      "indexed_at": "2026-07-11T18:06:53.775Z"
+      "bytes": 68714,
+      "mtime": "2026-07-11T18:33:03.251Z",
+      "indexed_at": "2026-07-11T18:33:23.358Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 93506,
-      "mtime": "2026-07-11T18:06:25.033Z",
-      "indexed_at": "2026-07-11T18:06:53.775Z"
+      "bytes": 93903,
+      "mtime": "2026-07-11T18:33:03.250Z",
+      "indexed_at": "2026-07-11T18:33:23.358Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66322,9 +66322,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 33668,
-      "mtime": "2026-07-11T16:42:27.070Z",
-      "indexed_at": "2026-07-11T16:44:18.057Z",
+      "bytes": 38583,
+      "mtime": "2026-07-11T18:32:12.162Z",
+      "indexed_at": "2026-07-11T18:33:23.358Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85458,9 +85458,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 31581,
-      "mtime": "2026-07-11T15:40:38.920Z",
-      "indexed_at": "2026-07-11T15:42:51.033Z",
+      "bytes": 36960,
+      "mtime": "2026-07-11T18:31:13.620Z",
+      "indexed_at": "2026-07-11T18:33:23.358Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85972,9 +85972,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 12203,
-      "mtime": "2026-07-10T12:30:27.004Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 18070,
+      "mtime": "2026-07-11T18:32:34.410Z",
+      "indexed_at": "2026-07-11T18:33:23.358Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -89017,9 +89017,9 @@
     {
       "path": "tests/site-builder-prospect-runner.test.js",
       "synopsis": "js — tests/site-builder-prospect-runner.test.js.",
-      "bytes": 1288,
-      "mtime": "2026-07-07T21:53:23.738Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 2769,
+      "mtime": "2026-07-11T18:32:34.651Z",
+      "indexed_at": "2026-07-11T18:33:23.358Z"
     },
     {
       "path": "tests/site-builder-quality-scorer.test.js",

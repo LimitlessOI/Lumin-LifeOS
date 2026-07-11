@@ -30,10 +30,64 @@ import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
 import {
   enqueueProspectJob,
+  enqueueDeferredProspectJob,
+  triggerBuildOnView,
   getProspectJobStatus,
   failStaleProspectJobs,
   evaluateSiteBuilderEmailReadiness,
 } from '../services/site-builder-prospect-runner.js';
+
+function buildingPlaceholderHtml(clientId, businessName = '') {
+  const safeName = String(businessName || 'your site').replace(/[<>&"]/g, '');
+  const safeId = String(clientId || '').replace(/[^\w-]/g, '');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Building your preview…</title>
+  <style>
+    :root { color-scheme: light; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:Georgia, "Times New Roman", serif;
+      background: radial-gradient(circle at top, #ecfeff, #f8fafc 55%); color:#0f172a; }
+    .card { max-width:28rem; padding:2rem; text-align:center; }
+    h1 { font-size:1.75rem; margin:0 0 .75rem; }
+    p { color:#475569; line-height:1.5; }
+    .bar { height:4px; width:100%; background:#e2e8f0; border-radius:999px; overflow:hidden; margin:1.5rem 0; }
+    .bar > span { display:block; height:100%; width:35%; background:#0f766e; animation:slide 1.2s ease-in-out infinite; }
+    @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(280%)} }
+    .meta { font-size:.8rem; color:#94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Building ${safeName}</h1>
+    <p>We only spend build time when someone opens the link. Your lean preview usually lands in under 90 seconds.</p>
+    <div class="bar" aria-hidden="true"><span></span></div>
+    <p class="meta" id="status">Starting…</p>
+  </div>
+  <script>
+    const id = ${JSON.stringify(safeId)};
+    async function poll() {
+      try {
+        const r = await fetch('/api/v1/sites/public-preview-status/' + encodeURIComponent(id), { cache: 'no-store' });
+        const j = await r.json();
+        const el = document.getElementById('status');
+        if (j.ready) {
+          el.textContent = 'Ready — loading…';
+          location.reload();
+          return;
+        }
+        if (j.error) el.textContent = 'Still working…';
+        else el.textContent = j.building ? 'Building now…' : 'Queued…';
+      } catch (_) {}
+      setTimeout(poll, 2500);
+    }
+    poll();
+  </script>
+</body>
+</html>`;
+}
 
 
 let _siteBuilder = null;
@@ -168,15 +222,15 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         contactEmail,
         contactName,
         businessName,
-        skipEmail: false,
         enrich: false,
         skipRepair: true,
         skipBlogs: true,
         skipAi: true,
         leanTemplate: true,
+        deferred: true,
       };
 
-      const job = await enqueueProspectJob(pipeline, options);
+      const job = await enqueueDeferredProspectJob(pipeline, options);
       if (!job.ok) {
         return res.status(job.error?.includes('already running') ? 409 : 400).json(job);
       }
@@ -187,22 +241,24 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
           .sendEmail({
             to: founderNotify,
             subject: `Site Builder lead — ${businessName || businessUrl}`,
-            html: `<p>New public lead from Site Builder launch page.</p>
+            html: `<p>New public lead from Site Builder launch page (deferred preview).</p>
               <p><b>Business:</b> ${businessName || '(none)'}<br>
               <b>URL:</b> ${businessUrl}<br>
               <b>Email:</b> ${contactEmail}<br>
-              <b>clientId:</b> ${job.clientId || job.client_id || ''}</p>
-              <p><a href="${baseUrl || ''}/overlay/site-builder-command-center.html">Open command center</a></p>`,
+              <b>clientId:</b> ${job.clientId || ''}<br>
+              <b>Preview:</b> <a href="${job.previewUrl || ''}">${job.previewUrl || ''}</a></p>`,
             text: `Site Builder lead: ${businessUrl} / ${contactEmail}`,
           })
           .catch((err) => logger.warn?.('[SITE] founder lead notify failed', { error: err.message }));
       }
 
-      logger.info('[SITE] Public lead accepted', { businessUrl, contactEmail, clientId: job.clientId });
+      logger.info('[SITE] Public lead accepted (deferred)', { businessUrl, contactEmail, clientId: job.clientId });
       return res.status(202).json({
         ok: true,
-        message: 'Preview started. We will email you when it is ready.',
-        clientId: job.clientId || job.client_id || null,
+        message: 'Preview link ready. We build when you open it — usually under 90 seconds.',
+        clientId: job.clientId || null,
+        previewUrl: job.previewUrl || null,
+        deferred: true,
         statusUrl: job.clientId
           ? `/api/v1/sites/prospects/${job.clientId}/status`
           : null,
@@ -215,31 +271,87 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   // DB fallback FIRST — Railway multi-instance / ephemeral disk often miss files.
   // Static is secondary so durable previewHtml in Postgres always wins.
+  // Deferred prospects: first click triggers lean build + building placeholder.
   app.get('/previews/:clientId/index.html', async (req, res, next) => {
     try {
       if (!pool) return next();
       const clientId = String(req.params.clientId || '');
       if (!clientId || !/^[\w-]+$/.test(clientId)) return next();
       const result = await pool.query(
-        `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        `SELECT business_name, status, metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
         [clientId]
       );
-      const html = result.rows[0]?.metadata?.previewHtml;
-      if (!html || typeof html !== 'string') return next();
-      const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
-      await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
-      await fsp.writeFile(path.join(deployDir, 'index.html'), html).catch(() => null);
-      if (result.rows[0]?.metadata?.previewMeta) {
-        await fsp.writeFile(
-          path.join(deployDir, 'meta.json'),
-          JSON.stringify(result.rows[0].metadata.previewMeta, null, 2)
-        ).catch(() => null);
+      const row = result.rows[0];
+      const html = row?.metadata?.previewHtml;
+      if (html && typeof html === 'string') {
+        const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
+        await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
+        await fsp.writeFile(path.join(deployDir, 'index.html'), html).catch(() => null);
+        if (row?.metadata?.previewMeta) {
+          await fsp.writeFile(
+            path.join(deployDir, 'meta.json'),
+            JSON.stringify(row.metadata.previewMeta, null, 2)
+          ).catch(() => null);
+        }
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('X-Preview-Source', 'db');
+        return res.send(html);
       }
-      res.set('Content-Type', 'text/html; charset=utf-8');
-      res.set('X-Preview-Source', 'db');
-      return res.send(html);
+
+      if (row) {
+        const pipeline = getProspectPipeline({
+          callCouncilMember,
+          pool,
+          outreachAutomation,
+          notificationService,
+          baseUrl,
+        });
+        const kick = await triggerBuildOnView(pipeline, clientId).catch((err) => ({
+          ok: false,
+          reason: err.message,
+        }));
+        logger.info('[SITE] Preview click — deferred build', {
+          clientId,
+          started: kick?.started,
+          reason: kick?.reason,
+        });
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('Cache-Control', 'no-store');
+        res.set('X-Preview-Source', 'building-placeholder');
+        return res.status(200).send(buildingPlaceholderHtml(clientId, row.business_name || ''));
+      }
+
+      return next();
     } catch {
       return next();
+    }
+  });
+
+  /** Public poll for deferred preview placeholder (no PII). */
+  app.get('/api/v1/sites/public-preview-status/:clientId', async (req, res) => {
+    try {
+      const clientId = String(req.params.clientId || '');
+      if (!clientId || !/^[\w-]+$/.test(clientId) || !pool) {
+        return res.status(400).json({ ok: false, error: 'Invalid clientId' });
+      }
+      const result = await pool.query(
+        `SELECT status, metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      const row = result.rows[0];
+      if (!row) return res.status(404).json({ ok: false, error: 'not found' });
+      const meta = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+      const ready = typeof meta.previewHtml === 'string' && meta.previewHtml.length > 100;
+      return res.json({
+        ok: true,
+        clientId,
+        status: row.status,
+        ready,
+        building: row.status === 'building' || (!ready && ['queued', 'invited'].includes(row.status)),
+        error: ready ? null : (meta.jobError || null),
+      });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 
@@ -378,19 +490,28 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   /**
    * POST /api/v1/sites/prospect
-   * Async by default: returns 202 immediately, builds + emails in background.
-   * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo?, enrich?, skipRepair?, skipBlogs?, sync? }
-   * sync=true waits for full pipeline (may hit Railway HTTP timeout on long builds).
+   * Async by default. With a contactEmail, deferred=true (default): email the link now,
+   * lean-build only when they click — saves AI spend on non-engagers.
+   * Body: { businessUrl, contactEmail?, deferred?, skipEmail?, sync?, leanTemplate?, ... }
+   * deferred=false or skipEmail=true → build immediately (legacy / SENTRY path).
    */
   router.post('/prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
       const {
         businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync,
-        enrich, skipRepair, skipBlogs, skipAi, leanTemplate,
+        enrich, skipRepair, skipBlogs, skipAi, leanTemplate, deferred,
       } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
 
-      logger.info('[SITE] Prospect request', { businessUrl, contactEmail, sync: !!sync, enrich, skipRepair, skipBlogs, skipAi });
+      const useDeferred = deferred !== false
+        && !!contactEmail
+        && skipEmail !== true
+        && sync !== true
+        && req.query.sync !== '1';
+
+      logger.info('[SITE] Prospect request', {
+        businessUrl, contactEmail, sync: !!sync, deferred: useDeferred, enrich, skipRepair, skipBlogs, skipAi,
+      });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
 
       const options = {
@@ -401,6 +522,14 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (sync === true || req.query.sync === '1') {
         const result = await pipeline.processProspect(options);
         return res.json({ ok: result.success, async: false, ...result });
+      }
+
+      if (useDeferred) {
+        const job = await enqueueDeferredProspectJob(pipeline, options);
+        if (!job.ok) {
+          return res.status(job.error?.includes('already running') ? 409 : 400).json(job);
+        }
+        return res.status(202).json(job);
       }
 
       const job = await enqueueProspectJob(pipeline, options);
