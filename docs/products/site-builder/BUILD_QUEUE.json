@@ -381,6 +381,28 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "step-11",
+      "status": "founder_gated",
+      "target_file": "services/site-builder-preview-expiry-ui.js",
+      "task": "Add UI-layer helpers for preview-expiry sweep feature",
+      "spec": "Export formatExpirySweepReport(swept) where swept is array of {previewId, expiredAt}; returns HTML string summarising count and listing ids. Export getExpirySweepStatusBadge(lastRanAt) returning a string badge like 'Last ran: 5 min ago' or 'Never run'. Depends only on already-built scripts/site-builder-preview-expiry-sweep.mjs conceptually; imports nothing from it (sweep runs as cron). No browser globals.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-12",
+      "status": "founder_gated",
+      "target_file": "public/overlay/site-builder-editor-hints-overlay.html",
+      "task": "Build founder-gated editor hints overlay embedding onboarding banner, chat hints, control tooltips, and device preview diff UI",
+      "spec": "Self-contained HTML page. On load fetches GET /api/site-builder/ux-hints and renders: (1) onboarding banner at top with step-by-step copy, (2) chat placeholder hint displayed above a mock chat input, (3) tooltip labels for chat/save/deviceToggle controls shown as styled badges, (4) a before/after device preview diff section that lets user paste two HTML snippets and click Compare to POST /api/site-builder/device-preview-diff and display the summary. All controls have visible labels. No server-side code.",
+      "depends_on": [
+        "step-08"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
