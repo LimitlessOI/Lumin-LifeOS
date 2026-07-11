@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T00:19:11.070Z",
+  "generated_at": "2026-07-11T00:21:25.009Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11442,
+  "file_count": 11443,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35513,6 +35513,13 @@
       "bytes": 1634,
       "mtime": "2026-07-10T21:33:45.134Z",
       "indexed_at": "2026-07-10T21:42:36.698Z"
+    },
+    {
+      "path": "db/migrations/20260710_marketing_social_publishing.sql",
+      "synopsis": "-- @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "bytes": 2184,
+      "mtime": "2026-07-11T00:21:25.009Z",
+      "indexed_at": "2026-07-11T00:21:25.009Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
