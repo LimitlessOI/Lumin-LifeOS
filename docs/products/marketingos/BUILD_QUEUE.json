@@ -364,8 +364,10 @@
         "mos-youtube-connect-routes"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 8000
+      "attempts": 1,
+      "max_output_tokens": 8000,
+      "last_attempt_at": "2026-07-11T06:10:31.840Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ]
 }
