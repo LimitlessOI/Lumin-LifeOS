@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Allowlist `ELEVENLABS_API_KEY` for Creative Engine TTS; signup context fix co-shipped. |
+| **Last Updated** | 2026-07-10 — Never-stop: done BUILD_QUEUE steps no longer require `task` (creative-engine was poisoning discover). |
 
 ### Related docs (this product)
 
@@ -301,6 +301,8 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-10 | **Never-stop: done steps don't need `task`** — `normalizeQueue` only requires `task` on non-terminal steps. Creative Engine conductor-done queue (no task fields) was throwing `ce-schema needs a task` on every discover, spamming the loop. | Adam: how is never-stop "enabled idle" / not building — status was misleading + parse poison. | ✅ orchestrator 16/16 | tip-sync + kick run-once |
+| 2026-07-10 | **Allowlist ELEVENLABS_API_KEY** in managed-env defaults so Creative Engine / video-pipeline TTS keys can be pushed after signup. | Founder: set up AI accounts for the stack. | ✅ | tip after key push |
 | 2026-07-10 | **GAP-FILL mission-routes DONE + never-stop 202** — tip proved `module-health` mounted + `GET /api/missions` 200; marked builderos step-04/05 done; run-once no longer blocks on Railway proxy timeout. | Never-stop spun unreachable; run-once 502 made building look dead. | ✅ tip proof | tip-sync + kick |
 | 2026-07-10 | **GAP-FILL mission-routes mount** — rewrote `routes/mission-routes.js` to export `registerMissionRoutes` (8 `/api/missions*` routes against live mission-ledger); added auto-register entry. Cleared step-04 auto-register last_error; step-05 file_contains for mission entry. | Never-stop spun on builderos step-04: file existed as `createMissionRoutes` but was never auto-registered → module-health false done forever; system appeared "building" with total_runs:0. | ✅ local mount smoke | tip-sync + never-stop run-once |
 | 2026-07-10 | **Auto-reg revive immediate after s10 DONE** — skip 15m cooldown once register-config sibling is done. | s10 done but s7/s8/s9 still waiting cooldown. | ✅ | push |

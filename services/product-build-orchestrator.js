@@ -105,7 +105,11 @@ export function normalizeQueue(raw, sourcePath = null) {
     if (ids.has(s.id)) throw new Error(`duplicate build-queue step id: ${s.id}`);
     ids.add(s.id);
     if (!s.target_file) throw new Error(`step ${s.id} needs a target_file`);
-    if (!s.task) throw new Error(`step ${s.id} needs a task`);
+    // Done/cancelled/skipped steps are history — do not require a rebuild task
+    // (conductor-completed queues were poisoning never-stop discover with parse errors).
+    const status = String(s.status || STEP_STATUS.PENDING).toLowerCase();
+    const terminal = status === 'done' || status === 'cancelled' || status === 'skipped';
+    if (!s.task && !terminal) throw new Error(`step ${s.id} needs a task`);
     if (!s.status) s.status = STEP_STATUS.PENDING;
     if (typeof s.attempts !== 'number') s.attempts = 0;
   }
