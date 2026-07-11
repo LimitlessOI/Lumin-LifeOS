@@ -582,10 +582,20 @@ export default class ProspectPipeline {
     }
 
     const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
-    const emailContent = {
-      subject: `${row.business_name || 'Your business'} — free website upgrade preview`,
-      html: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url, []),
-    };
+    const emailContent = metadata.deferredBuild === true
+      ? {
+          subject: `${row.business_name || 'Your business'} — beta preview (tester rate)`,
+          html: this.deferredInviteEmailHtml(
+            row.contact_name,
+            row.business_name,
+            row.preview_url,
+            row.business_url
+          ),
+        }
+      : {
+          subject: `${row.business_name || 'Your business'} — beta preview (tester rate)`,
+          html: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url, []),
+        };
 
     const delivery = await this.sendEmail(row.contact_email, emailContent.subject, emailContent.html);
     const emailSent = delivery?.success !== false;

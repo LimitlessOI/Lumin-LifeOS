@@ -8,6 +8,12 @@
 
 ---
 
+## [SCALE] Update 2026-07-11 — First client then many
+
+Adam: first client, then hopefully a lot more. Shipped bulk deferred + retry-invites so warm LV queue blasts the moment Postmark/Resend clears. Still blocked on external email; SMS/call packs live for Flores $45.
+
+---
+
 ## [MONEY] Update 2026-07-11 — First-client push ongoing
 
 Adam: keep it up, get first client. KNOW: external cold email still Postmark-pending (SMTP timeout). Queued deferred invites for Flores/Advanced/Thrive/Summit/Desert Springs (preview builds on click). Same-domain packs + SMS call scripts to Adam. Tip browser contact forms giving up. Brevo/Resend still captcha. Fastest $ still: Adam calls Flores (702) 242-3373 or clears one email captcha.

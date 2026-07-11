@@ -579,21 +579,26 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   /**
    * POST /api/v1/sites/bulk-prospect
-   * Process multiple prospects in batch.
-   * Body: { prospects: [{ businessUrl, contactEmail, contactName, businessName }] }
+   * Batch deferred invites by default (email link now, lean build on click).
+   * Body: { prospects: [...], deferred?: boolean }
    */
   router.post('/bulk-prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
-      const { prospects = [] } = req.body;
+      const { prospects = [], deferred } = req.body;
       if (!prospects.length) return res.status(400).json({ ok: false, error: 'prospects array required' });
       if (prospects.length > 20) return res.status(400).json({ ok: false, error: 'Max 20 prospects per batch' });
 
-      logger.info('[SITE] Bulk prospect request', { count: prospects.length });
+      logger.info('[SITE] Bulk prospect request', { count: prospects.length, deferred: deferred !== false });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
 
       const results = [];
       for (const prospect of prospects) {
-        const job = await enqueueProspectJob(pipeline, prospect);
+        const useDeferred = deferred !== false
+          && !!prospect.contactEmail
+          && prospect.skipEmail !== true;
+        const job = useDeferred
+          ? await enqueueDeferredProspectJob(pipeline, prospect)
+          : await enqueueProspectJob(pipeline, prospect);
         results.push(job);
       }
 
@@ -601,6 +606,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       res.status(202).json({
         ok: true,
         async: true,
+        deferred: deferred !== false,
         total: prospects.length,
         accepted,
         failed: prospects.length - accepted,
@@ -609,6 +615,55 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     } catch (err) {
       logger.error('[SITE] Bulk prospect error', { error: err.message });
       res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * POST /api/v1/sites/prospects/retry-invites
+   * Re-fire deferred/outreach email for built prospects that never got external delivery.
+   * Body: { limit?: number, onlyExternal?: boolean }
+   * Used the moment Postmark/Resend unblocks so the warm queue converts to sends.
+   */
+  router.post('/prospects/retry-invites', requireKey, async (req, res) => {
+    try {
+      if (!pool) return res.status(503).json({ ok: false, error: 'pool required' });
+      const limit = Math.min(Number(req.body?.limit) || 20, 50);
+      const onlyExternal = req.body?.onlyExternal !== false;
+      const result = await pool.query(
+        `SELECT client_id, business_url, contact_email, contact_name, business_name, preview_url, status, metadata
+           FROM prospect_sites
+          WHERE contact_email IS NOT NULL
+            AND preview_url IS NOT NULL
+            AND status IN ('built', 'queued', 'invited', 'failed', 'sent')
+            AND (
+              email_sent = false
+              OR COALESCE(metadata->>'emailSendError','') <> ''
+            )
+          ORDER BY updated_at DESC
+          LIMIT $1`,
+        [limit]
+      );
+      const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
+      const outcomes = [];
+      for (const row of result.rows || []) {
+        const email = String(row.contact_email || '');
+        if (onlyExternal && /(hopkinsgroup|limitlessoi|web-library|adam\+)/i.test(email)) {
+          outcomes.push({ clientId: row.client_id, skipped: true, reason: 'internal_test_inbox' });
+          continue;
+        }
+        const resent = await pipeline.resendOutreachEmail(row.client_id, { contactEmail: email });
+        outcomes.push({
+          clientId: row.client_id,
+          email,
+          ok: resent.success === true,
+          emailSent: resent.emailSent === true,
+          error: resent.error || null,
+        });
+      }
+      const sent = outcomes.filter((o) => o.emailSent).length;
+      return res.json({ ok: true, attempted: outcomes.length, sent, outcomes });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
     }
   });
 

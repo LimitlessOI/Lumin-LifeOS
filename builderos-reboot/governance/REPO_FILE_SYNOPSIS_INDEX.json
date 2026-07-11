@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T18:59:52.054Z",
+  "generated_at": "2026-07-11T19:03:22.827Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 69171,
-      "mtime": "2026-07-11T18:59:35.980Z",
-      "indexed_at": "2026-07-11T18:59:52.054Z"
+      "bytes": 69447,
+      "mtime": "2026-07-11T19:03:16.486Z",
+      "indexed_at": "2026-07-11T19:03:22.827Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 94207,
-      "mtime": "2026-07-11T18:40:03.438Z",
-      "indexed_at": "2026-07-11T18:40:29.138Z"
+      "bytes": 94444,
+      "mtime": "2026-07-11T19:03:16.484Z",
+      "indexed_at": "2026-07-11T19:03:22.827Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66322,9 +66322,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 38583,
-      "mtime": "2026-07-11T18:32:12.162Z",
-      "indexed_at": "2026-07-11T18:33:23.358Z",
+      "bytes": 41056,
+      "mtime": "2026-07-11T19:02:41.191Z",
+      "indexed_at": "2026-07-11T19:03:22.827Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85458,9 +85458,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 37420,
-      "mtime": "2026-07-11T18:38:43.667Z",
-      "indexed_at": "2026-07-11T18:40:29.138Z",
+      "bytes": 37761,
+      "mtime": "2026-07-11T19:03:15.369Z",
+      "indexed_at": "2026-07-11T19:03:22.827Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

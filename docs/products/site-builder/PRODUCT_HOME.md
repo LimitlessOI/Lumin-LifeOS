@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Beta-tester reason-why sales copy (Hopkins-style: why $45 is the deal). |
+| **Last Updated** | 2026-07-11 — Scale path: bulk deferred + retry-invites for post-first-client blast. |
 
 ---
 
@@ -300,6 +300,7 @@ Failed sends do **not** increment follow-up counters.
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
 | 2026-07-11 | **GAP-FILL tip boot stuck route-less + AB mount.** Tip `/ready` showed `db:error` / `runtime_routes:pending` after Neon timeout — boot was one-shot so never-stop APIs 404'd forever. `server-founder-runtime.js` now retries boot with backoff + `POST /api/v1/lifeos/boot/retry`; Neon pool timeout 10s→30s. Auto-registered `site-builder-ab-subject-routes` (queue step-03). | Adam: keep the system building. Tip DB timeout bricked all routes; factory could not run. | ⚠️ needs Railway redeploy (GH RAILWAY_TOKEN Not Authorized; tip managed-env dead until DB routes mount) |
+| 2026-07-11 | **Scale after first dollar.** `POST /bulk-prospect` defaults to deferred lean; `POST /prospects/retry-invites` re-fires warm queue the moment external email unblocks. | Adam: first client then hopefully a lot more. | ✅ |
 | 2026-07-11 | **Beta-tester reason-why copy.** Landing + deferred/fallback emails + checkout use print DR craft: free preview first, honest beta-for-feedback explanation for $45/$35, risk reversal, no fake urgency. | Adam: say testing beta = good deal; look at best sales practices in print. | ✅ |
 | 2026-07-11 | **Deferred preview (build on click).** Cold `/prospect` + `/public-lead` email the preview link immediately; lean build starts on first GET `/previews/:id` so non-engagers cost ~$0 AI. Placeholder polls public status. Full 10-variant path still available via `deferred:false`. | Adam: only spend when they engage; how fast can preview be. | ✅ unit + tip prove |
 | 2026-07-11 | **Care plan $35/mo** — founder: ongoing care must not exceed publish ($45); set default `SITE_BUILDER_CARE_PLAN_CENTS=3500` + landing/SSOT. | Adam: $35 at the most. | ✅ tip managed-env + push |
