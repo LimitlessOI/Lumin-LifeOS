@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T02:44:35.549Z",
+  "generated_at": "2026-07-11T02:48:39.665Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11447,
   "files": [
@@ -39341,9 +39341,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 600064,
-      "mtime": "2026-07-11T02:43:58.611Z",
-      "indexed_at": "2026-07-11T02:44:32.809Z"
+      "bytes": 600026,
+      "mtime": "2026-07-11T02:48:35.882Z",
+      "indexed_at": "2026-07-11T02:48:39.665Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63919,9 +63919,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 184173,
-      "mtime": "2026-07-11T02:42:34.112Z",
-      "indexed_at": "2026-07-11T02:44:32.809Z"
+      "bytes": 184146,
+      "mtime": "2026-07-11T02:47:54.937Z",
+      "indexed_at": "2026-07-11T02:48:39.665Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -81515,9 +81515,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 15066,
-      "mtime": "2026-07-11T02:42:33.611Z",
-      "indexed_at": "2026-07-11T02:44:32.809Z",
+      "bytes": 15141,
+      "mtime": "2026-07-11T02:47:55.004Z",
+      "indexed_at": "2026-07-11T02:48:39.665Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84519,9 +84519,9 @@
     {
       "path": "services/lumin-communication-guard.js",
       "synopsis": "Lumin Communication Law — anti-formula enforcement + wiring audit for human translation layer.",
-      "bytes": 7665,
-      "mtime": "2026-07-09T20:01:47.406Z",
-      "indexed_at": "2026-07-11T02:44:32.809Z",
+      "bytes": 8216,
+      "mtime": "2026-07-11T02:48:13.345Z",
+      "indexed_at": "2026-07-11T02:48:39.665Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88647,9 +88647,9 @@
     {
       "path": "tests/lumin-communication-law.test.js",
       "synopsis": "Lumin Communication Law — anti-formula + wiring audit tests.",
-      "bytes": 2715,
-      "mtime": "2026-07-11T02:42:59.881Z",
-      "indexed_at": "2026-07-11T02:44:32.809Z"
+      "bytes": 2805,
+      "mtime": "2026-07-11T02:47:32.456Z",
+      "indexed_at": "2026-07-11T02:48:39.665Z"
     },
     {
       "path": "tests/lumin-connection-guard.test.js",

@@ -59,7 +59,16 @@ export function scrubFormulaViolations(text = '', law = loadLuminCommunicationLa
   let out = String(text || '');
   const { phrases, openingRes } = compilePatterns(law);
 
+  // Preserve honest identity: strip go-between denials cleanly (bare scrub left "Not a .")
+  out = out
+    .replace(/\bnot a go-between\.?\s*/gi, '')
+    .replace(/\bnever a go-between\.?\s*/gi, '')
+    .replace(/\bnot a translation layer(?: between[^.!?]*)?\.?\s*/gi, '')
+    .replace(/\bI am not a (?:go-between|middleman|translation layer)\b\.?\s*/gi, 'I am the system. ');
+
   for (const phrase of phrases) {
+    // Skip scrubbing bare "go-between" after negation rewrite above; still detect it.
+    if (phrase === 'go-between' || phrase === 'translation layer between') continue;
     const re = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
     out = out.replace(re, '').replace(/\s{2,}/g, ' ').trim();
   }

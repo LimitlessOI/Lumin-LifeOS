@@ -47,11 +47,13 @@ test('enforceCommunicationLaw does not gut normal sentences containing want', ()
   assert.ok(!/What do to move/i.test(result.text));
 });
 
-test('go-between self-description is forbidden formula', () => {
-  const hits = detectFormulaViolations(
-    'I am a translation layer between the real system and you — a go-between.',
+test('scrub preserves not-a-go-between as system identity', () => {
+  const result = enforceCommunicationLaw(
+    'I am the system — Lumin. Not a go-between. I see your memory and builds.',
   );
-  assert.ok(hits.some((h) => /translation layer between|go-between/i.test(h.match)));
+  assert.match(result.text, /I am the system/i);
+  assert.ok(!/Not a \./.test(result.text));
+  assert.ok(!/go-between/i.test(result.text) || /system/i.test(result.text));
 });
 
 test('direct agent identity is the system, not a go-between (module wiring)', async () => {
