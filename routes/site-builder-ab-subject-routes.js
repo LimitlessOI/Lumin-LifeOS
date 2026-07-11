@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers SiteBuilderAbSubjectRoutes routes/handlers (routes/site-builder-ab-subject-routes.js).
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 export function registerSiteBuilderAbSubjectRoutes(app, deps) {
   const pool = deps?.pool;

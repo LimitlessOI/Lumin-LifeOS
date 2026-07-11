@@ -325,7 +325,7 @@
     },
     {
       "id": "step-03",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-ab-subject-routes.js",
       "task": "Mount REST routes for A/B subject-line testing",
       "spec": "Export registerAbSubjectRoutes(app,deps) where deps provides db. Mount POST /api/site-builder/ab-subject/tests (create), POST /api/site-builder/ab-subject/tests/:testId/events (record), GET /api/site-builder/ab-subject/tests/:testId (fetch with stats), POST /api/site-builder/ab-subject/tests/:testId/conclude. All routes validate required fields and return JSON. Import service from step-02 only. Do NOT touch server.js.",
@@ -333,17 +333,21 @@
         "step-02"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "proof": "GAP-FILL 2026-07-11: routes file already [system-build]; auto-registered registerSiteBuilderAbSubjectRoutes so tip mounts LIVE.",
+      "completed_at": "2026-07-11T12:55:00.000Z"
     },
     {
       "id": "step-05",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
       "task": "Implement preview-expiry sweep script",
       "spec": "ESM script (.mjs). Connects to the database using DATABASE_URL from process.env. Queries for site_builder_previews rows where expires_at < now() and deleted_at IS NULL. Marks them deleted by setting deleted_at=now(). Logs count of swept rows. Accepts optional --dry-run flag that logs but does not write. Imports only node builtins (url, process) and pg (already installed). No browser globals. Exits with code 0 on success, 1 on error. Does NOT conflict with or duplicate services/site-builder-save-confirmation.js or scripts/site-builder-preview-expiry-cron.mjs; the cron file calls this sweep logic.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "proof": "Already satisfied by sb-preview-expiry-sweep → scripts/site-builder-preview-expiry-cron.mjs (done). Planner duplicate closed without second file.",
+      "completed_at": "2026-07-11T12:55:00.000Z"
     },
     {
       "id": "step-06",

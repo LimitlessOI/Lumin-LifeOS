@@ -25,6 +25,12 @@
       "note": "Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today — was 404 in founder lane."
     },
     {
+      "path": "routes/site-builder-ab-subject-routes.js",
+      "register": "registerSiteBuilderAbSubjectRoutes",
+      "enabled": true,
+      "note": "GAP-FILL: never-stop authored AB subject routes (step-03) but tip would stay unreachable without auto-register. Mounts /api/site-builder/ab-subject/* for first-dollar subject testing."
+    },
+    {
       "path": "routes/site-builder-templates-routes.js",
       "register": "registerSiteBuilderTemplatesRoutes",
       "enabled": true,

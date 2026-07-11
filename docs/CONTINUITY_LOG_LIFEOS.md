@@ -8,6 +8,12 @@
 
 ---
 
+## [FIX] Update 2026-07-11 — Tip route-less after Neon timeout; boot retry
+
+Tip `/ready` showed `db:error` + `runtime_routes:pending` — never-stop and managed-env 404. Boot was one-shot. Shipped boot retry + longer Neon timeout + AB subject auto-register. Blocker to live: Railway redeploy (GH token Not Authorized; tip cannot self-redeploy until routes mount).
+
+---
+
 ## [STEER] Update 2026-07-11 — Keep building what matters (money first)
 
 Adam: keep the system building but what matters. Reordered `PRODUCT_BUILD_PRIORITY` → site-builder → limitlessos → lifeos → marketingos. GAP-FILL auto-register for `site-builder-templates-routes` (queue step-4/5). Never-stop stays on; prefer first dollar over YouTube SENTRY thrash.

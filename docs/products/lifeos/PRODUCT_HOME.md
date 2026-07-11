@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Operator purge for conductor probe messages; Chair = system not go-between. |
+| **Last Updated** | 2026-07-11 — Tip boot retry after Neon timeout (route-less tip); AB subject auto-register. |
 
 ---
 
