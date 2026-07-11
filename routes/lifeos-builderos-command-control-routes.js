@@ -1354,7 +1354,7 @@ HOW TO RESPOND:
         _log('post_inboxGate');
         if (inboxGate?.private) {
           const privateReply = 'Private — not saved. Session only.';
-          await persistFounderTurn(req, cleanedInput, privateReply);
+          clearTimeout(handlerDeadline);
           return res.status(200).json(lockFounderResponse({
             ok: true,
             interface: 'LifeOS Founder Interface',
@@ -1363,6 +1363,7 @@ HOW TO RESPOND:
             pass_fail: 'NO_COMMAND_RAN',
             human_summary: privateReply,
             classification: inboxGate.classification,
+            persisted: false,
             auth_mode: req.auth_mode || 'unknown',
           }, 'private'));
         }
