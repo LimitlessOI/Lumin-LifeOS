@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T20:02:37.378Z",
+  "generated_at": "2026-07-11T20:09:41.806Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11454,
+  "file_count": 11455,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 69992,
-      "mtime": "2026-07-11T19:59:12.741Z",
-      "indexed_at": "2026-07-11T19:59:16.134Z"
+      "bytes": 70333,
+      "mtime": "2026-07-11T20:08:34.871Z",
+      "indexed_at": "2026-07-11T20:09:41.806Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39457,9 +39457,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 96379,
-      "mtime": "2026-07-11T19:59:12.201Z",
-      "indexed_at": "2026-07-11T19:59:16.134Z"
+      "bytes": 96852,
+      "mtime": "2026-07-11T20:08:34.777Z",
+      "indexed_at": "2026-07-11T20:09:41.806Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -63079,6 +63079,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/SMOS_STANDALONE_UI_LOOP.json",
+      "synopsis": "Product receipt — SMOS STANDALONE UI LOOP.",
+      "bytes": 784,
+      "mtime": "2026-07-11T20:08:34.440Z",
+      "indexed_at": "2026-07-11T20:09:41.806Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/SOCIALMEDIAOS_BLOCKERS.json",
       "synopsis": "Product receipt — SOCIALMEDIAOS BLOCKERS.",
       "bytes": 1842,
@@ -66019,9 +66027,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 30223,
-      "mtime": "2026-07-11T19:49:42.826Z",
-      "indexed_at": "2026-07-11T19:53:11.047Z",
+      "bytes": 30604,
+      "mtime": "2026-07-11T20:07:53.262Z",
+      "indexed_at": "2026-07-11T20:09:41.806Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

@@ -139,7 +139,7 @@ function renderPage(title, bodyHtml, clientScript = '') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(title)} | SocialMediaOS</title>
+    <title>${escapeHtml(title === 'SocialMediaOS' ? 'SocialMediaOS' : `${title} · SocialMediaOS`)}</title>
     <style>
         :root {
           --bg: #0a0a0f;
@@ -154,14 +154,16 @@ function renderPage(title, bodyHtml, clientScript = '') {
         }
         body { font-family: "Manrope", "Avenir Next", system-ui, sans-serif; margin: 0; padding: 20px; background: radial-gradient(1200px 600px at 10% -10%, rgba(124,58,237,0.22), transparent), var(--bg); color: var(--text); line-height: 1.6; }
         .container { max-width: 720px; margin: 32px auto; background: var(--surface); padding: 28px 32px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 24px 80px rgba(0,0,0,0.35); }
-        .brand { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+        .brand { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+        .app-mode { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
         h1, h2 { color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin: 0 0 18px; font-family: "Space Grotesk", "Trebuchet MS", sans-serif; }
         p, li { color: var(--muted); }
         a { color: #a78bfa; text-decoration: none; }
         a:hover { text-decoration: underline; }
         .actions-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
-        button, input[type="submit"] { background: var(--accent); color: white; padding: 11px 16px; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; }
-        button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        button, input[type="submit"], a.btn { background: var(--accent); color: white; padding: 11px 16px; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; display: inline-block; text-decoration: none; }
+        a.btn:hover { text-decoration: none; filter: brightness(1.08); }
+        button.secondary, a.btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
         button:hover:not(:disabled) { filter: brightness(1.08); }
         input[type="text"], textarea, select { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: #0d0d15; color: var(--text); box-sizing: border-box; }
@@ -186,12 +188,15 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .lifeos-back { font-size: 13px; margin-bottom: 12px; }
         html.in-lifeos-shell body { padding: 12px; background: var(--bg); }
         html.in-lifeos-shell .container { margin: 0 auto; box-shadow: none; max-width: 880px; }
+        html.in-lifeos-shell .app-mode,
+        html.in-lifeos-shell .lifeos-back { display: none; }
       </style>
 </head>
 <body>
     <div class="container">
-        <div class="lifeos-back"><a href="/overlay/lifeos-app.html?page=lifeos-dashboard.html">← Back to LifeOS</a></div>
+        <div class="lifeos-back"><a href="/overlay/lifeos-app.html?page=lifeos-dashboard.html">← Open LifeOS</a></div>
         <div class="brand">SocialMediaOS</div>
+        <div class="app-mode">Standalone app · also available inside LifeOS</div>
         ${bodyHtml}
     </div>
     <script>
@@ -207,16 +212,16 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
   app.get('/marketing', (req, res) => {
     const body = `
-            <h1>SocialMediaOS</h1>
+            <h1>Home</h1>
             <p>Turn a real conversation into a content pack — coach → extract → generate → approve → export.</p>
             <div class="actions-row">
-              <a href="/marketing/session/new"><button>Start New Session</button></a>
-              <a href="/marketing/calendar"><button class="secondary">Content Calendar</button></a>
-              <a href="/marketing/atoms"><button class="secondary">Atom Library</button></a>
-              <a href="/creative/studio"><button class="secondary">Creative Engine Studio</button></a>
+              <a class="btn" href="/marketing/session/new">Start New Session</a>
+              <a class="btn secondary" href="/marketing/calendar">Content Calendar</a>
+              <a class="btn secondary" href="/marketing/atoms">Atom Library</a>
+              <a class="btn secondary" href="/creative/studio">Creative Engine Studio</a>
             </div>
             <div class="nav-links">
-              <a href="/overlay/lifeos-app.html?stack=socialmediaos">Open inside LifeOS</a>
+              <a href="/overlay/lifeos-app.html?page=marketing">Open inside LifeOS</a>
               <a href="/overlay/lifeos-app.html?page=lifeos-lifere.html">LifeRE Marketing panel</a>
             </div>
         `;
@@ -441,8 +446,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             <div id="contentList"><p>Loading content…</p></div>
             <div id="message" class="message" style="display:none;"></div>
             <div class="actions-row">
-              <a href="/marketing/session/${escapeHtml(sessionId)}/export"><button>Proceed to Export</button></a>
-              <a href="/marketing/session/${escapeHtml(sessionId)}"><button class="secondary">Back to Coaching</button></a>
+              <a class="btn" href="/marketing/session/${escapeHtml(sessionId)}/export">Proceed to Export</a>
+              <a class="btn secondary" href="/marketing/session/${escapeHtml(sessionId)}">Back to Coaching</a>
             </div>
         `;
     const clientScript = `
