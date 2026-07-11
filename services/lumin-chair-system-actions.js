@@ -262,6 +262,7 @@ export async function tryLuminChairSystemAction(text, deps = {}) {
           logger,
         });
         const targetLabel = signup.target?.url || signup.target?.service || 'account';
+        const siteUrl = signup.target?.url || null;
         return {
           matched: true,
           executed: signup.ok === true,
@@ -269,9 +270,15 @@ export async function tryLuminChairSystemAction(text, deps = {}) {
           ok: signup.ok === true,
           command_truth: signup.ok ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
           human_summary: signup.ok
-            ? `Account setup started for ${targetLabel} with full founder authority (system email + Railway card vault). I'll complete signup like a human — including payment if the site requires it.`
+            ? `Account setup started for ${targetLabel}. Opening Connect in LifeOS — if a captcha or email verify is needed, use the guided Open site / Open email buttons there (secrets stay hidden until you reveal them).`
             : `Account setup blocked: ${signup.error || signup.data?.error || signup.message || 'unknown'}`,
           receipt: signup.data || signup,
+          shell_action: {
+            type: 'connect_guide',
+            page: 'lifeos-connect.html',
+            url: siteUrl,
+            inboxUrl: 'https://mail.google.com/mail/u/0/#search/newer_than:1d',
+          },
         };
       }
       case 'point_b_status': {

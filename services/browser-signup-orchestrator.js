@@ -69,7 +69,11 @@ function buildPaymentCompletionGoal({ planHint, expectedCost }) {
 }
 
 async function verifyEmailAfterSignup({ host, startedAt, service, email, accountManager, accountId, logger }) {
+  const { imapCredsForEmail } = await import('./lifeos-connect-guide.js');
+  const imap = imapCredsForEmail(email);
   const emailResult = await waitForVerificationEmail({
+    email: imap.email,
+    appPassword: imap.appPassword,
     fromDomain: host,
     since: startedAt,
     timeoutMs: 120_000,

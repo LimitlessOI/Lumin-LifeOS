@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Browser signup: allow navigate-to-host from blank + wire onAfterStep payment handoff. |
+| **Last Updated** | 2026-07-10 — Signup verify uses WORK_EMAIL IMAP when account email is LifeOS@; LifeOS Connect guide co-shipped. |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-10 | **WORK_EMAIL IMAP for magic-link verify** — `verifyEmailAfterSignup` uses `imapCredsForEmail` so LifeOS@hopkinsgroup.org signups poll the work mailbox, not only GMAIL_SIGNUP. | SmartLead rejects Gmail; magic link went to WORK_EMAIL. | ✅ | tip resume-verify |
 | 2026-07-10 | **GAP-FILL signup context + payment handoff** — `makeAccountConfirmer` allows `navigate` TO expected host from `about:blank`; `runBrowserGoal`/`runGoalOnSession` wire `onAfterStep` so payment-boundary stop actually fires. | Founder-authority Replicate signup died immediately with `context_unconfirmed:context_mismatch` before leaving blank page; payment detection was passed but never called. | ✅ | tip signup retry |
 | 2026-07-10 | **GAP-FILL system From guard** — `resolveSystemEmailFrom` in `core/notification-service.js` refuses founder personal `adam@hopkinsgroup.org` as outbound From; prefers WORK_EMAIL / LifeOS@. | Site Builder outreach was failing Postmark sender signature when From was personal inbox. | ✅ | tip resend |
 | 2026-07-10 | **Founder-authorized account signup** — restored `founder-payment-vault`, `browser-payment-boundary`, `browser-signup-orchestrator`; wired `/api/v1/browser-agent/signup|sync|approve|capabilities`; `founder_authority:true` fills card from `FOUNDER_PAYMENT_*` and completes checkout (no second approve). Chair parses “set up/sign up/create an account” → signup with full authority. Env registry + managed allowlist for payment vault. | Adam: system must sign up like a human (email + card from Railway) with full authority when he orders account setup. | ✅ | pending | local tests + tip-sync |

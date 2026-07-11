@@ -2032,6 +2032,10 @@
         <span class="nav-icon">⚡</span>
         <span class="nav-label">Engine</span>
       </a>
+      <a class="nav-item" id="nav-connect" data-page="lifeos-connect.html" data-label="Connect" href="#" role="button" title="Connect services — guided signup + secure credentials">
+        <span class="nav-icon">🔗</span>
+        <span class="nav-label">Connect</span>
+      </a>
 
       <div class="nav-divider"></div>
       <div class="nav-group-label" data-studio-nav-group="life">Life &amp; Relationships</div>
@@ -2614,6 +2618,7 @@ const PAGE_META = {
   'lifeos-dashboard.html': { title: 'Dashboard', icon: '📊',  color: '--c-dashboard' },
   'lifeos-mirror.html':    { title: 'Mirror',     icon: '🔮',  color: '--c-mirror'    },
   'lifeos-engine.html':    { title: 'Engine',     icon: '⚡',  color: '--c-engine'    },
+  'lifeos-connect.html':   { title: 'Connect',    icon: '🔗',  color: '--c-engine'    },
   'lifeos-health.html':    { title: 'Health',     icon: '🌿',  color: '--c-health'    },
   'lifeos-inner.html':     { title: 'Inner Work', icon: '🌊',  color: '--c-inner'     },
   'lifeos-family.html':    { title: 'Family',     icon: '🏡',  color: '--c-family'    },
@@ -3607,7 +3612,25 @@ function applyLuminShellAction(data) {
       try { sessionStorage.setItem('lifeos_stack', 'lifere'); } catch {}
     }
   }
+  if ((sa.type === 'open_external' || sa.type === 'open_url') && sa.url) {
+    window.open(sa.url, '_blank', 'noopener,noreferrer');
+  }
+  if (sa.type === 'connect_guide') {
+    loadPage('lifeos-connect.html');
+    document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
+    document.getElementById('nav-connect')?.classList.add('active');
+    if (sa.url) window.open(sa.url, '_blank', 'noopener,noreferrer');
+    if (sa.inboxUrl) setTimeout(() => window.open(sa.inboxUrl, '_blank', 'noopener,noreferrer'), 400);
+  }
 }
+
+window.addEventListener('message', (ev) => {
+  const d = ev?.data;
+  if (!d || typeof d !== 'object') return;
+  if (d.type === 'lifeos_open_external' && d.url) {
+    window.open(d.url, '_blank', 'noopener,noreferrer');
+  }
+});
 
 async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');

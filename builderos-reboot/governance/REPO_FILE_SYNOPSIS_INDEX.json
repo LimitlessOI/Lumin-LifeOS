@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-10T22:12:38.905Z",
+  "generated_at": "2026-07-11T00:06:19.794Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11438,
+  "file_count": 11441,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39334,9 +39334,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 598462,
-      "mtime": "2026-07-10T20:59:40.484Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z"
+      "bytes": 599031,
+      "mtime": "2026-07-11T00:05:24.252Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39772,9 +39772,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 106899,
-      "mtime": "2026-07-10T22:02:24.441Z",
-      "indexed_at": "2026-07-10T22:03:30.836Z"
+      "bytes": 107190,
+      "mtime": "2026-07-11T00:05:57.727Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -63912,9 +63912,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 181224,
-      "mtime": "2026-07-10T20:58:16.108Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z"
+      "bytes": 182374,
+      "mtime": "2026-07-11T00:04:38.405Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -63991,6 +63991,13 @@
       "bytes": 26063,
       "mtime": "2026-06-21T21:39:01.372Z",
       "indexed_at": "2026-07-10T21:42:36.698Z"
+    },
+    {
+      "path": "public/overlay/lifeos-connect.html",
+      "synopsis": "LifeOS Connect — guided service signup + secure credential vault",
+      "bytes": 12494,
+      "mtime": "2026-07-11T00:04:05.986Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z"
     },
     {
       "path": "public/overlay/lifeos-control-help.js",
@@ -64834,10 +64841,10 @@
     },
     {
       "path": "routes/account-manager-routes.js",
-      "synopsis": "account-manager-routes.js",
-      "bytes": 8351,
-      "mtime": "2026-07-09T23:58:45.385Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z",
+      "synopsis": "account-manager-routes.js — managed accounts + LifeOS connect guide APIs.",
+      "bytes": 15494,
+      "mtime": "2026-07-11T00:03:35.452Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -80919,9 +80926,9 @@
     {
       "path": "services/browser-signup-orchestrator.js",
       "synopsis": "Autonomous account signup — founder authority may complete paid checkout from vault.",
-      "bytes": 19155,
-      "mtime": "2026-07-10T18:13:18.364Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z",
+      "bytes": 19329,
+      "mtime": "2026-07-11T00:02:43.791Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -83570,6 +83577,16 @@
       ]
     },
     {
+      "path": "services/lifeos-connect-guide.js",
+      "synopsis": "LifeOS guided service-connect steps — site → email → return → secrets.",
+      "bytes": 4351,
+      "mtime": "2026-07-11T00:02:19.403Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/lifeos-context-router.js",
       "synopsis": "LifeOS context router v1 — suggest active stack from utterance or page.",
       "bytes": 4973,
@@ -84468,9 +84485,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 11317,
-      "mtime": "2026-07-10T18:14:30.893Z",
-      "indexed_at": "2026-07-10T21:42:36.698Z",
+      "bytes": 11612,
+      "mtime": "2026-07-11T00:04:53.276Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88473,6 +88490,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "tests/lifeos-connect-guide.test.js",
+      "synopsis": "LifeOS connect guide unit tests.",
+      "bytes": 874,
+      "mtime": "2026-07-11T00:05:19.078Z",
+      "indexed_at": "2026-07-11T00:06:19.794Z"
     },
     {
       "path": "tests/lifeos-context-router.test.js",
