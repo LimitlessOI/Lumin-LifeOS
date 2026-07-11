@@ -294,6 +294,83 @@
       "depends_on": [],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "step-01",
+      "status": "pending",
+      "target_file": "db/migrations/20240915_site_builder_ab_subject.sql",
+      "task": "Create AB subject-line test tables",
+      "spec": "CREATE TABLE IF NOT EXISTS site_builder_ab_subject_tests with columns: id uuid PK default gen_random_uuid(), site_id uuid NOT NULL, variant_a text NOT NULL, variant_b text NOT NULL, winner text, sends_a int default 0, sends_b int default 0, opens_a int default 0, opens_b int default 0, status text default 'active', created_at timestamptz default now(), updated_at timestamptz default now(). CREATE TABLE IF NOT EXISTS site_builder_ab_subject_events with id uuid PK gen_random_uuid(), test_id uuid NOT NULL REFERENCES site_builder_ab_subject_tests(id), variant text NOT NULL, event_type text NOT NULL, occurred_at timestamptz default now(). Both CREATE TABLE IF NOT EXISTS only, no drops or alters.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-02",
+      "status": "pending",
+      "target_file": "services/site-builder-ab-subject-testing.js",
+      "task": "Implement A/B subject-line testing service",
+      "spec": "Export createTest(db,siteId,variantA,variantB), recordEvent(db,testId,variant,eventType), pickVariant(db,testId) (returns 'a' or 'b' via simple open-rate comparison, defaults to 'a' when tied or insufficient data), concludeTest(db,testId) (sets winner and status='concluded' based on open rate). No AI, no browser globals, uses only pg or the db client passed as argument. All SQL uses parameterised queries. Module must work standalone after step-01 migration is applied.",
+      "depends_on": [
+        "step-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-03",
+      "status": "pending",
+      "target_file": "routes/site-builder-ab-subject-routes.js",
+      "task": "Mount REST routes for A/B subject-line testing",
+      "spec": "Export registerAbSubjectRoutes(app,deps) where deps provides db. Mount POST /api/site-builder/ab-subject/tests (create), POST /api/site-builder/ab-subject/tests/:testId/events (record), GET /api/site-builder/ab-subject/tests/:testId (fetch with stats), POST /api/site-builder/ab-subject/tests/:testId/conclude. All routes validate required fields and return JSON. Import service from step-02 only. Do NOT touch server.js.",
+      "depends_on": [
+        "step-02"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-05",
+      "status": "pending",
+      "target_file": "scripts/site-builder-preview-expiry-sweep.mjs",
+      "task": "Implement preview-expiry sweep script",
+      "spec": "ESM script (.mjs). Connects to the database using DATABASE_URL from process.env. Queries for site_builder_previews rows where expires_at < now() and deleted_at IS NULL. Marks them deleted by setting deleted_at=now(). Logs count of swept rows. Accepts optional --dry-run flag that logs but does not write. Imports only node builtins (url, process) and pg (already installed). No browser globals. Exits with code 0 on success, 1 on error. Does NOT conflict with or duplicate services/site-builder-save-confirmation.js or scripts/site-builder-preview-expiry-cron.mjs; the cron file calls this sweep logic.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-06",
+      "status": "founder_gated",
+      "target_file": "services/site-builder-template-options.js",
+      "task": "Expand template options service to address ux_friction_1",
+      "spec": "Export getTemplateOptions() returning an array of at least 5 distinct template descriptors each with {id, name, description, thumbnailUrl, tags:[]}. Tags must include style keywords (e.g. 'minimal','bold','classic','modern','playful') so the UI can filter. Export getTemplateById(id). No DB required — data is module-level const. No browser globals. This file is new and does not alter the existing services/site-builder-templates.js behaviour.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-07",
+      "status": "founder_gated",
+      "target_file": "services/site-builder-color-palettes.js",
+      "task": "Expand color palette options to address ux_friction_2",
+      "spec": "Export getColorPalettes() returning an array of at least 8 palettes each with {id, label, description, primary, secondary, accent, background, text}. Labels are human-readable brand-style names (e.g. 'Ocean Calm', 'Bold Contrast'). Export getPaletteById(id). No DB, no browser globals, module-level const data only.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-08",
+      "status": "founder_gated",
+      "target_file": "routes/site-builder-customization-routes.js",
+      "task": "Mount customization UI routes serving template and palette choices",
+      "spec": "Export registerCustomizationRoutes(app,deps). Mount GET /api/site-builder/customization/templates (returns JSON array from step-06), GET /api/site-builder/customization/templates/:id, GET /api/site-builder/customization/palettes (returns JSON from step-07), GET /api/site-builder/customization/palettes/:id. Mount GET /site-builder/customization which returns a self-contained HTML page (inline in the returned string) with: a template picker grid showing all templates with thumbnails and style tags (addresses ux_friction_1); a colour palette picker showing all palettes with swatches and human-readable labels (addresses ux_friction_2); icon-button tooltips/labels for chat, save, and device-toggle controls (addresses ux_friction_2 label helper-text fix); a getting-started prompt banner 'Choose a template, then pick a colour palette' visible until the user makes both selections (addresses ux_friction_3); a device-view toggle that shows a side-by-side before/after preview panel when switching between mobile and desktop (addresses ux_friction_4). All interactive JS lives inside the returned HTML string. No browser globals at module level. Import services from step-06 and step-07 only.",
+      "depends_on": [
+        "step-06",
+        "step-07"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
