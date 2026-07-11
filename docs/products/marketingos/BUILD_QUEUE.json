@@ -340,7 +340,7 @@
     },
     {
       "id": "mos-youtube-connect-routes",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-youtube-routes.js",
       "task": "Thin Express surface for the per-client YouTube connect flow. Pre-registered in config/auto-registered-product-modules.json (path routes/marketing-youtube-routes.js, register registerMarketingYoutubeRoutes) — do NOT edit server.js or any boot file.",
       "spec": "Export registerMarketingYoutubeRoutes(app, deps) (+ default). deps = { pool, requireKey, logger }. Import createYouTubeService from services/marketing-youtube.js. GET /api/v1/marketing/youtube/connect (requireKey; resolve ownerId the same way other marketing-*.js routes already do — req.user?.id/req.lifeosUser?.sub else req.query.owner_id, 400 if absent) → call getAuthUrl(ownerId); if it returns { error }, respond 503 with that error (never a silent redirect to nowhere); else 302-redirect the browser to the returned authUrl — THIS is the real Google login page; nothing in this route ever collects a password. GET /api/v1/marketing/youtube/callback (NOT behind requireKey — Google redirects the user's browser here directly with no header control; read `code` and `state` [state carries the ownerId, set by getAuthUrl] from req.query; 400 if code missing) → call handleCallback(code, ownerId-from-state); on success redirect to a friendly `/marketing?youtube=connected` page (reuse the existing SSR landing, do not build a new page); on failure redirect to `/marketing?youtube=error`. GET /api/v1/marketing/youtube/status (requireKey; same ownerId resolution) → calls getStatus(ownerId), returns { ok:true, connected, connectedSince }. Wrap every handler in try/catch → JSON { ok:false, error } (except the two redirect routes, which redirect to an error page instead of raw JSON, since a real browser lands there mid-flow). ZERO top-level browser globals (server module). Named export registerMarketingYoutubeRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -348,8 +348,11 @@
         "mos-youtube-oauth-service"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 10000
+      "attempts": 1,
+      "max_output_tokens": 10000,
+      "commit_sha": "bac029d82d68dccd6f1dfeb041319cd7cd67d6c2",
+      "last_attempt_at": "2026-07-11T05:56:20.689Z",
+      "completed_at": "2026-07-11T06:06:25.897Z"
     },
     {
       "id": "mos-youtube-sentry-layer-a",
