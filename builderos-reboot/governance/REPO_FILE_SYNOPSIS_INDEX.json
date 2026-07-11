@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T09:05:14.935Z",
+  "generated_at": "2026-07-11T09:07:12.318Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11449,
+  "file_count": 11450,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85809,6 +85809,13 @@
       "bytes": 3064,
       "mtime": "2026-07-05T19:10:02.203Z",
       "indexed_at": "2026-07-11T02:57:52.492Z"
+    },
+    {
+      "path": "services/site-builder-ab-subject-testing.js",
+      "synopsis": "Exports createTest — services/site-builder-ab-subject-testing.js.",
+      "bytes": 3330,
+      "mtime": "2026-07-11T09:07:12.318Z",
+      "indexed_at": "2026-07-11T09:07:12.318Z"
     },
     {
       "path": "services/site-builder-competitor-categories.js",
