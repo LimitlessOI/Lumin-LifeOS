@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T16:13:52.537Z",
+  "generated_at": "2026-07-11T16:18:13.199Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -39348,9 +39348,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 601609,
-      "mtime": "2026-07-11T16:12:35.876Z",
-      "indexed_at": "2026-07-11T16:13:52.537Z"
+      "bytes": 601444,
+      "mtime": "2026-07-11T16:18:06.779Z",
+      "indexed_at": "2026-07-11T16:18:13.199Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65343,9 +65343,9 @@
     {
       "path": "routes/founder-sms-routes.js",
       "synopsis": "Founder SMS helper — tip can text ADAM_SMS_NUMBER (Twilio) without full phone stack.",
-      "bytes": 5871,
-      "mtime": "2026-07-11T16:07:32.423Z",
-      "indexed_at": "2026-07-11T16:13:52.537Z",
+      "bytes": 7196,
+      "mtime": "2026-07-11T16:17:19.813Z",
+      "indexed_at": "2026-07-11T16:18:13.199Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

@@ -106,10 +106,36 @@ export function registerFounderSmsRoutes(app, deps = {}) {
     }
   });
 
+  async function resolveOwnedFrom() {
+    const listed = await twilioFetch('/IncomingPhoneNumbers.json?PageSize=20');
+    if (!listed.ok) return null;
+    const owned = (listed.json.incoming_phone_numbers || [])
+      .map((n) => n.phone_number)
+      .filter(Boolean);
+    return owned[0] || null;
+  }
+
+  async function sendTwilioSms({ to, from, body }) {
+    const auth = twilioAuth();
+    const params = new URLSearchParams({ To: to, From: from, Body: body.slice(0, 1500) });
+    const resp = await fetch(
+      `https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(auth.sid)}/Messages.json`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: auth.header,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params,
+      }
+    );
+    const json = await resp.json().catch(() => ({}));
+    return { ok: resp.ok, status: resp.status, json };
+  }
+
   app.post('/api/v1/lifeos/founder/sms', requireKey, async (req, res) => {
     try {
       const auth = twilioAuth();
-      let from = process.env.TWILIO_PHONE_NUMBER;
       const defaultTo = process.env.ADAM_SMS_NUMBER || process.env.ALERT_PHONE;
       const to = String(req.body?.to || defaultTo || '').trim();
       const body = String(req.body?.body || req.body?.message || '').trim();
@@ -119,30 +145,46 @@ export function registerFounderSmsRoutes(app, deps = {}) {
       if (!to || !body) {
         return res.status(400).json({ ok: false, error: 'to and body required (or set ADAM_SMS_NUMBER)' });
       }
+
+      let from = String(req.body?.from || process.env.TWILIO_PHONE_NUMBER || '').trim();
+      if (!from) {
+        from = (await resolveOwnedFrom()) || '';
+        if (from) process.env.TWILIO_PHONE_NUMBER = from;
+      }
       if (!from) {
         return res.status(503).json({
           ok: false,
           error: 'TWILIO_PHONE_NUMBER not set — POST /api/v1/lifeos/founder/sms/provision-number first',
         });
       }
-      const params = new URLSearchParams({ To: to, From: from, Body: body.slice(0, 1500) });
-      const resp = await fetch(
-        `https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(auth.sid)}/Messages.json`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: auth.header,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: params,
+
+      let result = await sendTwilioSms({ to, from, body });
+      const invalidFrom = !result.ok && /invalid from|caller id/i.test(String(result.json.message || ''));
+      if (invalidFrom) {
+        const owned = await resolveOwnedFrom();
+        if (owned && owned !== from) {
+          from = owned;
+          process.env.TWILIO_PHONE_NUMBER = owned;
+          if (typeof setRailwayEnvVar === 'function') {
+            try {
+              await setRailwayEnvVar('TWILIO_PHONE_NUMBER', owned);
+            } catch {
+              /* best-effort */
+            }
+          }
+          result = await sendTwilioSms({ to, from, body });
         }
-      );
-      const json = await resp.json().catch(() => ({}));
-      if (!resp.ok) {
-        logger.warn?.({ status: resp.status, error: json.message }, '[FOUNDER-SMS] twilio failed');
-        return res.status(502).json({ ok: false, error: json.message || `Twilio HTTP ${resp.status}`, from });
       }
-      return res.json({ ok: true, sid: json.sid, status: json.status, to, from });
+
+      if (!result.ok) {
+        logger.warn?.({ status: result.status, error: result.json.message }, '[FOUNDER-SMS] twilio failed');
+        return res.status(502).json({
+          ok: false,
+          error: result.json.message || `Twilio HTTP ${result.status}`,
+          from,
+        });
+      }
+      return res.json({ ok: true, sid: result.json.sid, status: result.json.status, to, from });
     } catch (err) {
       return res.status(500).json({ ok: false, error: err.message });
     }
