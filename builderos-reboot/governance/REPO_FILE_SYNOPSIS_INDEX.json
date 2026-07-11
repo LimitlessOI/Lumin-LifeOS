@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T09:07:12.318Z",
+  "generated_at": "2026-07-11T09:14:55.282Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11450,
+  "file_count": 11451,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66233,6 +66233,13 @@
         "docs/products/command-center/PRODUCT_HOME.md",
         "docs/constitution/NORTH_STAR_SSOT.md Article II §2.16"
       ]
+    },
+    {
+      "path": "routes/site-builder-ab-subject-routes.js",
+      "synopsis": "Registers SiteBuilderAbSubjectRoutes routes/handlers (routes/site-builder-ab-subject-routes.js).",
+      "bytes": 7902,
+      "mtime": "2026-07-11T09:14:55.282Z",
+      "indexed_at": "2026-07-11T09:14:55.282Z"
     },
     {
       "path": "routes/site-builder-checkout-routes.js",
