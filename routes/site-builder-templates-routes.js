@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Registers SiteBuilderTemplatesRoutes routes/handlers (routes/site-builder-templates-routes.js).
+ * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 export function listTemplates(db) {
   return db

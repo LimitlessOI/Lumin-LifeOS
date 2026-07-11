@@ -25,6 +25,12 @@
       "note": "Daily briefing API. Dashboard loadCalendar() calls GET /api/v1/lifeos/briefing/today — was 404 in founder lane."
     },
     {
+      "path": "routes/site-builder-templates-routes.js",
+      "register": "registerSiteBuilderTemplatesRoutes",
+      "enabled": true,
+      "note": "GAP-FILL first-dollar: Site Builder BUILD_QUEUE step-4 was blocked forever (route module not auto-registered). Mounts GET /api/site-builder/templates* so template picker is live on founder lane."
+    },
+    {
       "path": "routes/site-builder-prealpha-routes.js",
       "register": "registerSiteBuilderPrealphaRoutes",
       "enabled": true,

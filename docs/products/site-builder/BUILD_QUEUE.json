@@ -210,7 +210,7 @@
     },
     {
       "id": "step-4",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/site-builder-templates-routes.js",
       "task": "Register REST routes for template listing and selection",
       "spec": "Export registerSiteBuilderTemplatesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/templates → calls listTemplates(deps.db) and returns JSON array. Mount GET /api/site-builder/templates/:id → calls getTemplate(deps.db, req.params.id) and returns JSON object or 404. No mutations. No browser globals. Must be importable without side-effects. Satisfies ux_friction_1 API layer.",
@@ -220,12 +220,14 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": "aab32f8c41e4cf015c650bd4de1ebd06cbfbb7a0",
-      "last_attempt_at": "2026-07-11T05:56:20.657Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/site-builder-templates-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "proof": "Module already exported registerSiteBuilderTemplatesRoutes + list/get; GAP-FILL closed step-5 mount so tip can serve GET /api/site-builder/templates.",
+      "completed_at": "2026-07-11T08:55:00.000Z",
+      "last_attempt_at": "2026-07-11T08:55:00.000Z",
+      "last_error": null
     },
     {
       "id": "step-5",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register template routes module in auto-registration config",
       "spec": "Add entry for site-builder-templates-routes to the JSON array so the boot system loads registerSiteBuilderTemplatesRoutes automatically. Preserve all existing entries. No other changes.",
@@ -233,7 +235,9 @@
         "step-4"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "proof": "GAP-FILL 2026-07-11: added routes/site-builder-templates-routes.js → registerSiteBuilderTemplatesRoutes to auto-registered-product-modules.json (first-dollar unblock).",
+      "completed_at": "2026-07-11T08:55:00.000Z"
     },
     {
       "id": "step-6",

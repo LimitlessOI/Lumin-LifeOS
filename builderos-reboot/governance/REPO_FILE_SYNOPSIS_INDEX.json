@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T06:20:49.850Z",
+  "generated_at": "2026-07-11T08:56:53.807Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11448,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3459210,
-      "mtime": "2026-07-11T02:57:53.805Z",
-      "indexed_at": "2026-07-11T02:57:54.456Z"
+      "bytes": 3459288,
+      "mtime": "2026-07-11T08:56:44.799Z",
+      "indexed_at": "2026-07-11T08:56:53.807Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 11101,
-      "mtime": "2026-07-11T00:33:48.875Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 11461,
+      "mtime": "2026-07-11T08:55:59.727Z",
+      "indexed_at": "2026-07-11T08:56:53.807Z",
       "synopsis_index_only": true
     },
     {
@@ -36769,9 +36769,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 64472,
-      "mtime": "2026-07-11T02:35:02.402Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 64844,
+      "mtime": "2026-07-11T08:56:29.983Z",
+      "indexed_at": "2026-07-11T08:56:53.807Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39611,9 +39611,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 2772,
-      "mtime": "2026-07-11T02:34:31.791Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 3167,
+      "mtime": "2026-07-11T08:56:00.027Z",
+      "indexed_at": "2026-07-11T08:56:53.807Z",
       "synopsis_index_only": true
     },
     {
@@ -39721,9 +39721,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 93581,
-      "mtime": "2026-07-10T22:12:25.903Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 94291,
+      "mtime": "2026-07-11T08:56:30.242Z",
+      "indexed_at": "2026-07-11T08:56:53.807Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66298,9 +66298,12 @@
     {
       "path": "routes/site-builder-templates-routes.js",
       "synopsis": "Registers SiteBuilderTemplatesRoutes routes/handlers (routes/site-builder-templates-routes.js).",
-      "bytes": 1510,
-      "mtime": "2026-07-10T21:33:29.935Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 1562,
+      "mtime": "2026-07-11T08:56:15.505Z",
+      "indexed_at": "2026-07-11T08:56:53.807Z",
+      "ssot": [
+        "docs/products/site-builder/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/socialmediaos-coaching-routes.js",

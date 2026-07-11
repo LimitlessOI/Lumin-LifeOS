@@ -8,6 +8,12 @@
 
 ---
 
+## [STEER] Update 2026-07-11 — Keep building what matters (money first)
+
+Adam: keep the system building but what matters. Reordered `PRODUCT_BUILD_PRIORITY` → site-builder → limitlessos → lifeos → marketingos. GAP-FILL auto-register for `site-builder-templates-routes` (queue step-4/5). Never-stop stays on; prefer first dollar over YouTube SENTRY thrash.
+
+---
+
 ## [BUILD] Update 2026-07-11 — Product corpus → BUILD_QUEUE blueprint → build
 
 Adam: system must read all product folders + conversations, make blueprints, keep building (~40 products). Planner now loads PRODUCT_HOME + conversations + sibling docs; enrolls ~35 products without queues; expands PRODUCT_BUILD_PRIORITY. Tip kick after deploy.
