@@ -415,6 +415,18 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "step-04",
+      "status": "pending",
+      "target_file": "routes/site-builder-color-palettes-routes.js",
+      "task": "Register REST routes for color palettes and mount via auto-registration",
+      "spec": "Export registerSiteBuilderColorPalettesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/color-palettes (returns all palettes) and GET /api/site-builder/color-palettes/:id. Import site-builder-color-palettes.js from step-03. After verifying tests pass, add an entry for this module to config/auto-registered-product-modules.json so the framework mounts it automatically — do NOT edit server.js.",
+      "depends_on": [
+        "step-03"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
