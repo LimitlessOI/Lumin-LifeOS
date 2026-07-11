@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Resend HTTP provider + Postmark→Resend→SMTP fallback chain in NotificationService. |
+| **Last Updated** | 2026-07-11 — Google YouTube OAuth setup probe endpoint (Railway email/app-password attempt). |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-11 | **Google YouTube OAuth setup probe** — `POST /api/v1/browser-agent/setup/google-youtube-oauth` uses tip `WORK_EMAIL`/`GMAIL_SIGNUP_*` app password in-process (never returned). Names blocker when Google web login rejects app password / 2FA. | Adam: use Railway email + permission to login and set Google API keys. | ✅ | | tip prove after deploy |
 | 2026-07-11 | **SendGrid + Resend HTTP fallbacks** — NotificationService Postmark-pending → Resend → SendGrid → SMTP. Twilio From provision lives under LifeOS SMS routes. | Adam: pay/open whatever for first dollar; captcha still human. | ✅ | | ⚠️ tip + API keys |
 | 2026-07-11 | **Resend HTTP provider** — NotificationService `EMAIL_PROVIDER=resend` + Postmark-pending falls through to Resend before SMTP. | Railway SMTP times out; need HTTP email for first dollar. | ✅ | | ⚠️ tip + RESEND_API_KEY |
 | 2026-07-11 | **Email: Postmark pending → SMTP fallback** — `core/notification-service.js` uses `WORK_EMAIL`/`WORK_EMAIL_APP_PASSWORD` when Postmark returns pending-approval / same-domain-only; SMTP auth also accepts those env vars. | Adam: keep money path moving while Postmark approval waits. | ✅ | | ⚠️ tip-sync + resend Flores external |

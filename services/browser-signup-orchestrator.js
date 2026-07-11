@@ -590,11 +590,118 @@ export function createBrowserSignupOrchestrator({ pool, accountManager, callCoun
     return startSignup(opts);
   }
 
+  async function setupGoogleYoutubeOauth({ redirectUri } = {}) {
+    const email = process.env.WORK_EMAIL || process.env.GMAIL_SIGNUP_EMAIL || SIGNUP_EMAIL;
+    const password = process.env.WORK_EMAIL_APP_PASSWORD || process.env.GMAIL_SIGNUP_APP_PASSWORD || '';
+    const callback = redirectUri
+      || `${String(process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '')}/api/v1/marketing/youtube/callback`;
+
+    if (!email || !password) {
+      return {
+        ok: false,
+        status: 'blocked',
+        blocker: 'GOOGLE_LOGIN_CREDS_MISSING',
+        message: 'WORK_EMAIL/GMAIL_SIGNUP_EMAIL + app password required on tip',
+      };
+    }
+    if (!callback.includes('/api/v1/marketing/youtube/callback')) {
+      return { ok: false, status: 'blocked', blocker: 'REDIRECT_URI_INVALID', message: 'callback URI missing' };
+    }
+
+    const session = await createSession({ logger });
+    const page = session.page;
+    try {
+      await session.navigate(`https://accounts.google.com/signin/v2/identifier?continue=${encodeURIComponent('https://console.cloud.google.com/apis/credentials')}`);
+      await page.waitForTimeout(1500);
+
+      const emailSel = 'input[type="email"], input[name="identifier"]';
+      await page.waitForSelector(emailSel, { timeout: 20000 });
+      await page.click(emailSel, { clickCount: 3 });
+      await page.type(emailSel, email, { delay: 25 });
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null),
+        page.keyboard.press('Enter'),
+      ]);
+      await page.waitForTimeout(2000);
+
+      const bodyText = await page.evaluate(() => (document.body?.innerText || '').slice(0, 2000));
+      const passwordSel = 'input[type="password"], input[name="Passwd"]';
+      const hasPassword = await page.$(passwordSel);
+      if (!hasPassword) {
+        const shot = await session.screenshot('google-oauth-no-password');
+        return {
+          ok: false,
+          status: 'needs_human',
+          blocker: 'GOOGLE_LOGIN_CHALLENGE',
+          message: 'Google did not show a password field (captcha, account chooser, or block).',
+          evidence: bodyText.slice(0, 400),
+          screenshot: shot,
+          emailUsed: email,
+        };
+      }
+
+      await page.click(passwordSel, { clickCount: 3 });
+      await page.type(passwordSel, password, { delay: 25 });
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 45000 }).catch(() => null),
+        page.keyboard.press('Enter'),
+      ]);
+      await page.waitForTimeout(3000);
+
+      const after = await page.evaluate(() => ({
+        url: location.href,
+        text: (document.body?.innerText || '').slice(0, 1200),
+      }));
+      const denied = /wrong password|couldn't sign you in|2-step|verify it.s you|account recovery|unusual activity|app password/i.test(after.text)
+        || /challenge|signin\/rejected|v3\/signin\/challenge/i.test(after.url);
+
+      if (denied || !/console\.cloud\.google\.com/i.test(after.url)) {
+        const shot = await session.screenshot('google-oauth-login-blocked');
+        return {
+          ok: false,
+          status: 'needs_human',
+          blocker: 'GOOGLE_WEB_LOGIN_REQUIRES_REAL_PASSWORD_OR_2FA',
+          message: 'Railway only has Google App Passwords (IMAP). Google Cloud Console web login rejects app passwords and/or requires your 2FA. Paste GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET, or complete one Google login yourself.',
+          evidence: { url: after.url, text: after.text.slice(0, 500) },
+          screenshot: shot,
+          emailUsed: email,
+          redirectUri: callback,
+          next: [
+            'Open Google Cloud Console as the account that should own the OAuth app',
+            `Create Web OAuth client and add redirect: ${callback}`,
+            'Enable YouTube Data API v3 + YouTube Analytics API',
+            'Paste Client ID/Secret into Railway (managed-env allowlisted)',
+            'Then click Connect YouTube on /marketing and sign in as your YouTube channel Google account',
+          ],
+        };
+      }
+
+      return {
+        ok: false,
+        status: 'needs_human',
+        blocker: 'GOOGLE_CONSOLE_AUTOMATION_INCOMPLETE',
+        message: 'Logged into Google Cloud, but creating OAuth client still needs a guided console click-path or pasted keys.',
+        emailUsed: email,
+        redirectUri: callback,
+      };
+    } catch (err) {
+      return {
+        ok: false,
+        status: 'failed',
+        error: err.message,
+        blocker: 'GOOGLE_OAUTH_SETUP_EXCEPTION',
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   return {
     startSignup,
     approveSignup,
     runSignup,
     runKnownRecipe,
+    setupGoogleYoutubeOauth,
     SIGNUP_RECIPES,
   };
 }

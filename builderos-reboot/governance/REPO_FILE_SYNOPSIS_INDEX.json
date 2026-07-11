@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T22:44:57.998Z",
+  "generated_at": "2026-07-11T22:56:02.414Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11455,
   "files": [
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 71177,
-      "mtime": "2026-07-11T22:44:50.520Z",
-      "indexed_at": "2026-07-11T22:44:57.998Z"
+      "bytes": 71752,
+      "mtime": "2026-07-11T22:55:34.167Z",
+      "indexed_at": "2026-07-11T22:56:02.414Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39786,9 +39786,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 108054,
-      "mtime": "2026-07-11T16:13:39.767Z",
-      "indexed_at": "2026-07-11T16:13:52.537Z"
+      "bytes": 108480,
+      "mtime": "2026-07-11T22:55:57.991Z",
+      "indexed_at": "2026-07-11T22:56:02.414Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -65400,9 +65400,9 @@
     {
       "path": "routes/general-browser-agent-routes.js",
       "synopsis": "Founder-lane browser agent — any-site goals + founder-authorized account signup.",
-      "bytes": 10540,
-      "mtime": "2026-07-10T18:13:55.661Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 11364,
+      "mtime": "2026-07-11T22:55:20.708Z",
+      "indexed_at": "2026-07-11T22:56:02.414Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -81010,9 +81010,9 @@
     {
       "path": "services/browser-signup-orchestrator.js",
       "synopsis": "Autonomous account signup — founder authority may complete paid checkout from vault.",
-      "bytes": 19329,
-      "mtime": "2026-07-11T00:02:43.791Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 24009,
+      "mtime": "2026-07-11T22:55:10.070Z",
+      "indexed_at": "2026-07-11T22:56:02.414Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]

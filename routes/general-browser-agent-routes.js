@@ -263,7 +263,25 @@ export function registerGeneralBrowserAgentRoutes(app, deps = {}) {
     }
   });
 
-  logger.info?.('✅ [BROWSER-AGENT] Routes: /run, /signup, /signup/sync, /signup/approve, /capabilities, /diag');
+  app.post('/api/v1/browser-agent/setup/google-youtube-oauth', requireKey, async (req, res) => {
+    try {
+      const orchestrator = await getOrchestrator();
+      const result = await orchestrator.setupGoogleYoutubeOauth({
+        redirectUri: req.body?.redirectUri || null,
+      });
+      const code = result.ok ? 200 : (result.status === 'needs_human' || result.status === 'blocked' ? 409 : 500);
+      return res.status(code).json({
+        ok: !!result.ok,
+        ...result,
+        note: 'Passwords are read from Railway env on tip only and never returned in this response.',
+      });
+    } catch (err) {
+      logger.error?.({ err: err.message }, '[BROWSER-AGENT] google youtube oauth setup failed');
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  logger.info?.('✅ [BROWSER-AGENT] Routes: /run, /signup, /signup/sync, /signup/approve, /setup/google-youtube-oauth, /capabilities, /diag');
 }
 
 export default registerGeneralBrowserAgentRoutes;

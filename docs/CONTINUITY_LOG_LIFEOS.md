@@ -14,6 +14,12 @@ Adam wants top researched videos with thumbnails + click-to-make, channel analyt
 
 ---
 
+## [SMOS] Update 2026-07-11 — Tried Railway email/card for Google + video stack
+
+Adam: login as me using Railway email + card; set up video stack. KNOW: tip has signup email `lumea.lifeos@gmail.com`, work email app password, payment vault ready (****0736). Attempted founder-authorized Replicate signup → needs_human/error. Tip Google Cloud agent exhausted steps. Added tip `/api/v1/browser-agent/setup/google-youtube-oauth` to try WORK_EMAIL + app password in-process. Expected wall: Google web login rejects App Passwords / needs 2FA — not inventable by agent.
+
+---
+
 ## [SMOS] Update 2026-07-11 — Video ideas live; YouTube OAuth needs Adam
 
 Adam wants top researched videos + thumbnails + channel analytics + Google login-as-me. KNOW: `/marketing` shows Top videos to make with Start making; tip suggestions API returns 5 cards. HALT: `GOOGLE_CLIENT_ID`/`SECRET` missing on Railway and not in local env; Google Cloud Console requires Adam’s Google sign-in — agent cannot login as him.
