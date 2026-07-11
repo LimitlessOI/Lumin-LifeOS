@@ -191,6 +191,42 @@ export function registerFounderSmsRoutes(app, deps = {}) {
   });
 
   /**
+   * Start Twilio Outgoing Caller ID verification (works on trial).
+   * Twilio calls the number and asks them to enter the validation code.
+   * Body: { to }
+   */
+  app.post('/api/v1/lifeos/founder/voice/verify-caller-id', requireKey, async (req, res) => {
+    try {
+      const toRaw = String(req.body?.to || '').replace(/[^\d+]/g, '');
+      if (!toRaw || toRaw.replace(/\D/g, '').length < 10) {
+        return res.status(400).json({ ok: false, error: 'to phone required' });
+      }
+      const to = toRaw.startsWith('+') ? toRaw : `+1${toRaw.replace(/\D/g, '').slice(-10)}`;
+      const result = await twilioFetch('/OutgoingCallerIds.json', {
+        method: 'POST',
+        body: new URLSearchParams({ PhoneNumber: to }).toString(),
+      });
+      if (!result.ok) {
+        return res.status(502).json({
+          ok: false,
+          error: result.json.message || `Twilio HTTP ${result.status}`,
+          code: result.json.code,
+        });
+      }
+      return res.json({
+        ok: true,
+        phone: to,
+        validation_code: result.json.validation_code,
+        call_sid: result.json.call_sid,
+        status: result.json.status || 'validation_started',
+        note: 'Twilio is calling the number now — recipient must enter validation_code on keypad',
+      });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * Outbound voice to a published business line (B2B money path).
    * Body: { to, say?, businessName?, previewUrl? }
    */
