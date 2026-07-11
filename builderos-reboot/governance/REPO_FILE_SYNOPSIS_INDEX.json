@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T00:42:26.535Z",
+  "generated_at": "2026-07-11T00:43:40.985Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11447,
   "files": [
@@ -66003,10 +66003,10 @@
     },
     {
       "path": "routes/marketing-youtube-routes.js",
-      "synopsis": "Thin Express surface for the per-client YouTube connect flow.",
-      "bytes": 3093,
-      "mtime": "2026-07-11T00:42:26.535Z",
-      "indexed_at": "2026-07-11T00:42:26.535Z",
+      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "bytes": 3268,
+      "mtime": "2026-07-11T00:43:40.985Z",
+      "indexed_at": "2026-07-11T00:43:40.985Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

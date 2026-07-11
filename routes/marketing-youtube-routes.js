@@ -1,4 +1,4 @@
-// SYNOPSIS: Thin Express surface for the per-client YouTube connect flow.
+// SYNOPSIS:
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
 import { createYouTubeService } from '../services/marketing-youtube.js';
@@ -7,59 +7,66 @@ function resolveOwnerId(req) {
   return req?.user?.id ?? req?.lifeosUser?.sub ?? req?.query?.owner_id ?? null;
 }
 
-function safeErrorMessage(err) {
-  if (!err) return 'Unknown error';
-  if (typeof err === 'string') return err;
-  return err.message || err.error || 'Unknown error';
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
 }
 
-function registerMarketingYoutubeRoutes(app, deps = {}) {
-  const { requireKey, logger, pool } = deps;
-  const youtubeService = createYouTubeService({ pool, logger, baseUrl: deps.baseUrl, callCouncilMember: deps.callCouncilMember });
+function getErrorMessage(error) {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'Unknown error';
+}
+
+export function registerMarketingYoutubeRoutes(app, deps = {}) {
+  const { pool, requireKey, logger } = deps;
+  const youtube = createYouTubeService({ pool, logger });
 
   app.get('/api/v1/marketing/youtube/connect', requireKey, async (req, res) => {
     try {
       const ownerId = resolveOwnerId(req);
-      if (!ownerId) {
+      if (!isNonEmptyString(ownerId)) {
         return res.status(400).json({ ok: false, error: 'owner_id is required' });
       }
 
-      const result = await youtubeService.getAuthUrl(ownerId);
+      const result = await youtube.getAuthUrl(ownerId);
       if (result?.error) {
         return res.status(503).json({ ok: false, error: result.error });
       }
 
       if (!result?.authUrl) {
-        return res.status(503).json({ ok: false, error: 'Unable to generate YouTube auth URL' });
+        return res.status(503).json({ ok: false, error: 'Unable to create YouTube authorization URL' });
       }
 
       return res.redirect(302, result.authUrl);
-    } catch (err) {
-      logger?.error?.({ err }, 'marketing youtube connect failed');
-      return res.status(500).json({ ok: false, error: safeErrorMessage(err) });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing youtube connect failed');
+      return res.status(500).json({ ok: false, error: getErrorMessage(error) });
     }
   });
 
   app.get('/api/v1/marketing/youtube/callback', async (req, res) => {
     try {
-      const { code, state } = req.query || {};
-      if (!code) {
-        return res.redirect(302, '/marketing?youtube=error');
+      const code = req?.query?.code;
+      const state = req?.query?.state;
+      const ownerId = Array.isArray(state) ? state[0] : state;
+
+      if (!isNonEmptyString(code)) {
+        return res.status(400).redirect('/marketing?youtube=error');
       }
 
-      const ownerId = state || null;
-      if (!ownerId) {
-        return res.redirect(302, '/marketing?youtube=error');
+      if (!isNonEmptyString(ownerId)) {
+        return res.status(400).redirect('/marketing?youtube=error');
       }
 
-      const result = await youtubeService.handleCallback(code, ownerId);
+      const result = await youtube.handleCallback(code, ownerId);
       if (result?.error) {
+        logger?.warn?.({ error: result.error, ownerId }, 'marketing youtube callback failed');
         return res.redirect(302, '/marketing?youtube=error');
       }
 
       return res.redirect(302, '/marketing?youtube=connected');
-    } catch (err) {
-      logger?.error?.({ err }, 'marketing youtube callback failed');
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing youtube callback failed');
       return res.redirect(302, '/marketing?youtube=error');
     }
   });
@@ -67,11 +74,11 @@ function registerMarketingYoutubeRoutes(app, deps = {}) {
   app.get('/api/v1/marketing/youtube/status', requireKey, async (req, res) => {
     try {
       const ownerId = resolveOwnerId(req);
-      if (!ownerId) {
+      if (!isNonEmptyString(ownerId)) {
         return res.status(400).json({ ok: false, error: 'owner_id is required' });
       }
 
-      const result = await youtubeService.getStatus(ownerId);
+      const result = await youtube.getStatus(ownerId);
       if (result?.error) {
         return res.status(503).json({ ok: false, error: result.error });
       }
@@ -81,12 +88,11 @@ function registerMarketingYoutubeRoutes(app, deps = {}) {
         connected: Boolean(result?.connected),
         connectedSince: result?.connectedSince ?? null,
       });
-    } catch (err) {
-      logger?.error?.({ err }, 'marketing youtube status failed');
-      return res.status(500).json({ ok: false, error: safeErrorMessage(err) });
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing youtube status failed');
+      return res.status(500).json({ ok: false, error: getErrorMessage(error) });
     }
   });
 }
 
-export { registerMarketingYoutubeRoutes };
 export default registerMarketingYoutubeRoutes;
