@@ -1,338 +1,279 @@
 /**
- * SYNOPSIS: ASSUMPTIONS: The mic button is marked with [data-lifeos-mic-button] or can be wired by calling createLifeosMicHandler().attach(document) from existing page JS.
+ * SYNOPSIS: LifeOS overlay UI — Lifeos Mic Handler.
  */
-export function createLifeosMicHandler(options = {}) {
-  const {
-    buttonSelector = '[data-lifeos-mic-button]',
-    modalId = 'lifeos-mic-access-blocked-modal',
-  } = options;
+const MIC_SETTINGS_URLS = [
+  'chrome://settings/content/microphone',
+  'edge://settings/content/microphone',
+  'brave://settings/content/microphone',
+  'opera://settings/content/microphone',
+  'about:preferences#privacy',
+];
 
-  const getNavigator = () => (typeof window !== 'undefined' ? window.navigator : undefined);
+function getMicrophoneStatus() {
+  if (typeof navigator === 'undefined' || !navigator.permissions?.query) return null;
 
-  const getPermissionState = async () => {
-    const nav = getNavigator();
-    if (!nav?.permissions?.query) return null;
-
-    try {
-      const status = await nav.permissions.query({ name: 'microphone' });
-      return status?.state ?? null;
-    } catch {
-      return null;
-    }
-  };
-
-  const ensureStyles = () => {
-    if (typeof document === 'undefined') return;
-    if (document.getElementById('lifeos-mic-access-blocked-styles')) return;
-
-    const style = document.createElement('style');
-    style.id = 'lifeos-mic-access-blocked-styles';
-    style.textContent = `
-      .lifeos-mic-access-blocked-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 2147483647;
-        background: rgba(15, 23, 42, 0.72);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-      }
-
-      .lifeos-mic-access-blocked-modal {
-        width: min(100%, 640px);
-        max-height: min(100%, 90vh);
-        overflow: auto;
-        background: #ffffff;
-        color: #0f172a;
-        border-radius: 16px;
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        padding: 24px;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
-      .lifeos-mic-access-blocked-modal h2 {
-        margin: 0 0 12px;
-        font-size: 20px;
-        line-height: 1.25;
-      }
-
-      .lifeos-mic-access-blocked-modal p,
-      .lifeos-mic-access-blocked-modal li {
-        font-size: 14px;
-        line-height: 1.55;
-      }
-
-      .lifeos-mic-access-blocked-modal .lifeos-mic-access-blocked-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 18px;
-      }
-
-      .lifeos-mic-access-blocked-modal a,
-      .lifeos-mic-access-blocked-modal button {
-        appearance: none;
-        border: 0;
-        border-radius: 10px;
-        padding: 10px 14px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-      }
-
-      .lifeos-mic-access-blocked-modal a {
-        background: #2563eb;
-        color: white;
-      }
-
-      .lifeos-mic-access-blocked-modal button {
-        background: #e2e8f0;
-        color: #0f172a;
-      }
-
-      .lifeos-mic-access-blocked-modal code {
-        background: #f1f5f9;
-        padding: 1px 6px;
-        border-radius: 6px;
-      }
-    `;
-    document.head.appendChild(style);
-  };
-
-  const browserHelp = () => {
-    const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-    const isSafari = /Safari/i.test(ua) && !/Chrome|Chromium|Edg/i.test(ua);
-    const isFirefox = /Firefox/i.test(ua);
-
-    if (isSafari) {
-      return {
-        title: 'Safari',
-        steps: [
-          'Open Safari Settings/Preferences.',
-          'Go to Websites → Microphone.',
-          'Allow microphone access for this site.',
-          'If needed, reload the page and try again.',
-        ],
-      };
-    }
-
-    if (isFirefox) {
-      return {
-        title: 'Firefox',
-        steps: [
-          'Click the lock icon in the address bar.',
-          'Find Microphone permissions for this site.',
-          'Set it to Allow.',
-          'Reload the page and try again.',
-        ],
-      };
-    }
-
-    return {
-      title: 'Chrome',
-      steps: [
-        'Click the lock icon in the address bar.',
-        'Open Site settings.',
-        'Set Microphone to Allow.',
-        'Reload the page and try again.',
-      ],
-    };
-  };
-
-  const closeModal = () => {
-    if (typeof document === 'undefined') return;
-    const existing = document.getElementById(modalId);
-    existing?.remove();
-  };
-
-  const openBlockedMicModal = () => {
-    if (typeof document === 'undefined') return;
-
-    ensureStyles();
-    closeModal();
-
-    const help = browserHelp();
-    const backdrop = document.createElement('div');
-    backdrop.id = modalId;
-    backdrop.className = 'lifeos-mic-access-blocked-backdrop';
-    backdrop.setAttribute('role', 'presentation');
-
-    const modal = document.createElement('div');
-    modal.className = 'lifeos-mic-access-blocked-modal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-labelledby', `${modalId}-title`);
-
-    const title = document.createElement('h2');
-    title.id = `${modalId}-title`;
-    title.textContent = 'Microphone access is blocked';
-
-    const message = document.createElement('p');
-    message.textContent =
-      'LifeRE could not access your microphone because the browser blocked permission. Enable microphone access in your browser settings, then try again.';
-
-    const listTitle = document.createElement('p');
-    listTitle.style.fontWeight = '600';
-    listTitle.style.marginTop = '16px';
-    listTitle.textContent = `Quick steps for ${help.title}:`;
-
-    const list = document.createElement('ol');
-    list.style.margin = '8px 0 0 20px';
-    list.style.padding = '0';
-
-    for (const step of help.steps) {
-      const li = document.createElement('li');
-      li.textContent = step;
-      list.appendChild(li);
-    }
-
-    const fallback = document.createElement('p');
-    fallback.style.marginTop = '14px';
-    fallback.innerHTML =
-      'If you do not see a microphone prompt, check the site permissions in your browser and make sure the microphone is not blocked for this page.';
-
-    const actions = document.createElement('div');
-    actions.className = 'lifeos-mic-access-blocked-actions';
-
-    const dismiss = document.createElement('button');
-    dismiss.type = 'button';
-    dismiss.textContent = 'Close';
-    dismiss.addEventListener('click', closeModal);
-
-    const docsLink = document.createElement('a');
-    docsLink.href = 'https://support.google.com/chrome/answer/2693767';
-    docsLink.target = '_blank';
-    docsLink.rel = 'noreferrer noopener';
-    docsLink.textContent = 'Chrome permission help';
-
-    actions.appendChild(docsLink);
-    actions.appendChild(dismiss);
-
-    modal.appendChild(title);
-    modal.appendChild(message);
-    modal.appendChild(listTitle);
-    modal.appendChild(list);
-    modal.appendChild(fallback);
-    modal.appendChild(actions);
-    backdrop.appendChild(modal);
-
-    backdrop.addEventListener('click', (event) => {
-      if (event.target === backdrop) closeModal();
-    });
-
-    document.body.appendChild(backdrop);
-    dismiss.focus();
-  };
-
-  const requestNativeMicPrompt = async () => {
-    const nav = getNavigator();
-    if (!nav?.mediaDevices?.getUserMedia) {
-      openBlockedMicModal();
-      return null;
-    }
-
-    try {
-      const stream = await nav.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((track) => track.stop());
-      closeModal();
-      return stream;
-    } catch (error) {
-      const name = error?.name || '';
-      const permissionState = await getPermissionState();
-      if (name === 'NotAllowedError' || permissionState === 'denied') {
-        openBlockedMicModal();
-      }
-      return null;
-    }
-  };
-
-  const handleMicClick = async (event, originalHandler) => {
-    const permissionState = await getPermissionState();
-
-    if (permissionState === 'denied' || permissionState === 'prompt' || permissionState == null) {
-      const stream = await requestNativeMicPrompt();
-      if (!stream) return;
-    }
-
-    if (typeof originalHandler === 'function') {
-      return originalHandler(event);
-    }
-
-    const nav = getNavigator();
-    if (!nav?.mediaDevices?.getUserMedia) {
-      openBlockedMicModal();
-      return null;
-    }
-
-    try {
-      const stream = await nav.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((track) => track.stop());
-      closeModal();
-      return stream;
-    } catch (error) {
-      const name = error?.name || '';
-      const permissionStateAfter = await getPermissionState();
-      if (name === 'NotAllowedError' || permissionStateAfter === 'denied') {
-        openBlockedMicModal();
-      }
-      return null;
-    }
-  };
-
-  const attach = (root = typeof document !== 'undefined' ? document : null) => {
-    if (!root?.querySelectorAll) return () => {};
-
-    const buttons = root.querySelectorAll(buttonSelector);
-    const listeners = [];
-
-    buttons.forEach((button) => {
-      if (button.dataset.lifeosMicBound === 'true') return;
-      button.dataset.lifeosMicBound = 'true';
-
-      const originalHandler = typeof button.__lifeosOriginalMicHandler === 'function' ? button.__lifeosOriginalMicHandler : null;
-      const listener = async (event) => {
-        event.preventDefault?.();
-        event.stopPropagation?.();
-        await handleMicClick(event, originalHandler);
-      };
-
-      button.addEventListener('click', listener);
-      listeners.push({ button, listener });
-    });
-
-    return () => {
-      for (const { button, listener } of listeners) {
-        button.removeEventListener('click', listener);
-        delete button.dataset.lifeosMicBound;
-      }
-    };
-  };
-
-  return {
-    attach,
-    handleMicClick,
-    openBlockedMicModal,
-    closeModal,
-    requestNativeMicPrompt,
-  };
-}
-
-const lifeosMicHandler = createLifeosMicHandler();
-
-if (typeof document !== 'undefined') {
-  const boot = () => {
-    lifeosMicHandler.attach(document);
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot, { once: true });
-  } else {
-    boot();
+  try {
+    return navigator.permissions.query({ name: 'microphone' });
+  } catch {
+    return null;
   }
 }
 
-export default lifeosMicHandler;
+async function getMicrophonePermissionState() {
+  const status = getMicrophoneStatus();
+  if (!status) return 'unknown';
 
-// ASSUMPTIONS: The mic button is marked with [data-lifeos-mic-button] or can be wired by calling createLifeosMicHandler().attach(document) from existing page JS.
+  try {
+    return status.state;
+  } catch {
+    return 'unknown';
+  }
+}
+
+function tryOpenSettingsUrl(url) {
+  if (typeof window === 'undefined') return false;
+
+  try {
+    const opened = window.open(url, '_blank', 'noopener,noreferrer');
+    if (opened && typeof opened.focus === 'function') {
+      opened.focus();
+      return true;
+    }
+  } catch {
+    // fall through
+  }
+
+  try {
+    const currentHref = window.location?.href || '';
+    if (currentHref && !currentHref.startsWith('chrome://') && !currentHref.startsWith('edge://') && !currentHref.startsWith('brave://') && !currentHref.startsWith('opera://')) {
+      window.location.href = url;
+      return true;
+    }
+  } catch {
+    // fall through
+  }
+
+  return false;
+}
+
+function resolveMicSettingsLink() {
+  return MIC_SETTINGS_URLS[0];
+}
+
+function ensureStyleOnce() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('lifeos-mic-permission-style')) return;
+
+  const style = document.createElement('style');
+  style.id = 'lifeos-mic-permission-style';
+  style.textContent = `
+    .lifeos-mic-permission-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.58);
+      backdrop-filter: blur(2px);
+      padding: 24px;
+    }
+
+    .lifeos-mic-permission-modal {
+      width: min(100%, 520px);
+      background: #111827;
+      color: #f9fafb;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      padding: 20px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .lifeos-mic-permission-title {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .lifeos-mic-permission-copy {
+      margin: 0 0 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(249, 250, 251, 0.88);
+    }
+
+    .lifeos-mic-permission-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .lifeos-mic-permission-btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 120ms ease, opacity 120ms ease, background 120ms ease;
+    }
+
+    .lifeos-mic-permission-btn:hover { transform: translateY(-1px); }
+    .lifeos-mic-permission-btn:active { transform: translateY(0); opacity: 0.92; }
+
+    .lifeos-mic-permission-btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .lifeos-mic-permission-btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f9fafb;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .lifeos-mic-permission-fallback {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(251, 191, 36, 0.12);
+      color: #fcd34d;
+      font-size: 13px;
+      line-height: 1.45;
+      display: none;
+    }
+
+    .lifeos-mic-permission-fallback.is-visible {
+      display: block;
+    }
+
+    .lifeos-mic-permission-link {
+      color: #93c5fd;
+      word-break: break-all;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function removeExistingOverlay() {
+  if (typeof document === 'undefined') return;
+  document.getElementById('lifeos-mic-permission-overlay')?.remove();
+}
+
+function showMicPermissionOverlay(message) {
+  if (typeof document === 'undefined') return;
+
+  ensureStyleOnce();
+  removeExistingOverlay();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'lifeos-mic-permission-overlay';
+  overlay.className = 'lifeos-mic-permission-overlay';
+
+  const modal = document.createElement('div');
+  modal.className = 'lifeos-mic-permission-modal';
+
+  const title = document.createElement('h2');
+  title.className = 'lifeos-mic-permission-title';
+  title.textContent = 'Microphone access is blocked';
+
+  const copy = document.createElement('p');
+  copy.className = 'lifeos-mic-permission-copy';
+  copy.textContent =
+    message ||
+    'Microphone access is blocked. Click here to open browser settings and allow mic access.';
+
+  const actions = document.createElement('div');
+  actions.className = 'lifeos-mic-permission-actions';
+
+  const openBtn = document.createElement('button');
+  openBtn.type = 'button';
+  openBtn.className = 'lifeos-mic-permission-btn lifeos-mic-permission-btn-primary';
+  openBtn.textContent = 'Open browser settings';
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'lifeos-mic-permission-btn lifeos-mic-permission-btn-secondary';
+  closeBtn.textContent = 'Close';
+
+  const fallback = document.createElement('div');
+  fallback.className = 'lifeos-mic-permission-fallback';
+  fallback.innerHTML = `If settings do not open automatically, copy and paste this address into your browser: <span class="lifeos-mic-permission-link">${resolveMicSettingsLink()}</span>`;
+
+  openBtn.addEventListener('click', () => {
+    const opened = MIC_SETTINGS_URLS.some((url) => tryOpenSettingsUrl(url));
+    if (!opened) {
+      fallback.classList.add('is-visible');
+    }
+  });
+
+  closeBtn.addEventListener('click', () => {
+    overlay.remove();
+  });
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) overlay.remove();
+  });
+
+  actions.append(openBtn, closeBtn);
+  modal.append(title, copy, actions, fallback);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+async function requestMicAccess() {
+  const permissionState = await getMicrophonePermissionState();
+
+  if (permissionState === 'denied') {
+    showMicPermissionOverlay();
+    return false;
+  }
+
+  if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+    showMicPermissionOverlay(
+      'Microphone access is blocked or unavailable in this browser. Click here to open browser settings and allow mic access.'
+    );
+    return false;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach((track) => track.stop());
+    return true;
+  } catch (error) {
+    const name = error?.name || '';
+    if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError') {
+      showMicPermissionOverlay();
+      return false;
+    }
+
+    showMicPermissionOverlay(
+      'Microphone access could not be enabled. Click here to open browser settings and allow mic access.'
+    );
+    return false;
+  }
+}
+
+function attachMicPermissionHandlers() {
+  if (typeof document === 'undefined') return;
+
+  document.addEventListener(
+    'click',
+    async (event) => {
+      const target = event.target?.closest?.('[data-lifeos-mic-button="true"]');
+      if (!target) return;
+
+      event.preventDefault();
+      await requestMicAccess();
+    },
+    true
+  );
+}
+
+attachMicPermissionHandlers();
+
+export { requestMicAccess, showMicPermissionOverlay };
