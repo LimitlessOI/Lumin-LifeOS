@@ -310,7 +310,7 @@
     },
     {
       "id": "step-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/site-builder-ab-subject-testing.js",
       "task": "Implement A/B subject-line testing service",
       "spec": "Export createTest(db,siteId,variantA,variantB), recordEvent(db,testId,variant,eventType), pickVariant(db,testId) (returns 'a' or 'b' via simple open-rate comparison, defaults to 'a' when tied or insufficient data), concludeTest(db,testId) (sets winner and status='concluded' based on open rate). No AI, no browser globals, uses only pg or the db client passed as argument. All SQL uses parameterised queries. Module must work standalone after step-01 migration is applied.",
@@ -318,7 +318,10 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "62ea2eed60790cee8833758c6dc12261a890390a",
+      "last_attempt_at": "2026-07-11T09:07:04.555Z",
+      "completed_at": "2026-07-11T09:07:16.932Z"
     },
     {
       "id": "step-03",
