@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T02:35:10.504Z",
+  "generated_at": "2026-07-11T02:43:53.514Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11447,
   "files": [
@@ -21579,9 +21579,9 @@
     {
       "path": "builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json",
       "synopsis": "BuilderOS artifact — LUMIN COMMUNICATION LAW.",
-      "bytes": 6766,
-      "mtime": "2026-07-09T20:01:47.058Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z",
+      "bytes": 6903,
+      "mtime": "2026-07-11T02:42:33.570Z",
+      "indexed_at": "2026-07-11T02:43:53.514Z",
       "synopsis_index_only": true
     },
     {
@@ -38876,9 +38876,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 174494,
-      "mtime": "2026-07-11T02:34:57.487Z",
-      "indexed_at": "2026-07-11T02:35:10.504Z"
+      "bytes": 174845,
+      "mtime": "2026-07-11T02:43:49.282Z",
+      "indexed_at": "2026-07-11T02:43:53.514Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39341,9 +39341,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 599546,
-      "mtime": "2026-07-11T00:28:48.237Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z"
+      "bytes": 599550,
+      "mtime": "2026-07-11T02:43:48.711Z",
+      "indexed_at": "2026-07-11T02:43:53.514Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -63919,9 +63919,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 184141,
-      "mtime": "2026-07-11T00:28:48.239Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z"
+      "bytes": 184173,
+      "mtime": "2026-07-11T02:42:34.112Z",
+      "indexed_at": "2026-07-11T02:43:53.514Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -81515,9 +81515,9 @@
     {
       "path": "services/chair-direct-agent.js",
       "synopsis": "Direct Chair agent — talks + acts; human prose obeys Lumin Communication DNA (not theater).",
-      "bytes": 14332,
-      "mtime": "2026-07-10T10:42:59.246Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z",
+      "bytes": 15066,
+      "mtime": "2026-07-11T02:42:33.611Z",
+      "indexed_at": "2026-07-11T02:43:53.514Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88647,9 +88647,9 @@
     {
       "path": "tests/lumin-communication-law.test.js",
       "synopsis": "Lumin Communication Law — anti-formula + wiring audit tests.",
-      "bytes": 2133,
-      "mtime": "2026-07-09T20:01:07.646Z",
-      "indexed_at": "2026-07-11T02:23:24.627Z"
+      "bytes": 2715,
+      "mtime": "2026-07-11T02:42:59.881Z",
+      "indexed_at": "2026-07-11T02:43:53.514Z"
     },
     {
       "path": "tests/lumin-connection-guard.test.js",

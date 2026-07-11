@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Lumin chat UX: expand-on-open (minimized hid input), close Settings when chatting, Escape closes overlays. |
+| **Last Updated** | 2026-07-11 — Chair is the system (not go-between); scrub no longer guts "you want"; drawer empty copy = talk to the system. |
 
 ---
 

@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-11 | **Communication Law: no go-between scrub damage** — drop bare `you want` / `you'd like` forbidden phrases (gutted English); add forbid for "translation layer between" / "go-between". Chair prompt identity fix co-shipped in LifeOS home. | Adam: chat must be the system, not a middleman. | ✅ lifeos:lumin:communication:verify | tip |
 | 2026-07-11 | **Product corpus → blueprint → build** — planner loads PRODUCT_HOME + `conversations/*.md` + sibling docs; extracts open checkboxes / Next lines / backlog headings (skips `[x]`); never-stop enrolls ~35 products without queues; promotes plan lane when no build steps ready; expanded `PRODUCT_BUILD_PRIORITY.json`. | Adam: system must read all product folders + conversations, make blueprints, keep building (~40 products). | ✅ planner tests | tip-sync + kick never-stop |
 | 2026-07-10 | **Never-stop: done steps don't need `task`** — `normalizeQueue` only requires `task` on non-terminal steps. Creative Engine conductor-done queue (no task fields) was throwing `ce-schema needs a task` on every discover, spamming the loop. | Adam: how is never-stop "enabled idle" / not building — status was misleading + parse poison. | ✅ orchestrator 16/16 | tip-sync + kick run-once |
 | 2026-07-10 | **Allowlist ELEVENLABS_API_KEY** in managed-env defaults so Creative Engine / video-pipeline TTS keys can be pushed after signup. | Founder: set up AI accounts for the stack. | ✅ | tip after key push |
