@@ -8,6 +8,12 @@
 
 ---
 
+## [SMOS] Update 2026-07-11 — YouTube ideas + connect path
+
+Adam wants top researched videos with thumbnails + click-to-make, channel analytics, Google API keys, login as him. Shipped suggestions UI + fixed YouTube OAuth service. KNOW: cannot login to Google as Adam; tip still missing GOOGLE_CLIENT_ID/SECRET. Next: Adam pastes OAuth client + adds redirect URI, then clicks Connect YouTube on /marketing.
+
+---
+
 ## [SMOS] Update 2026-07-11 — Standalone SocialMediaOS app proved
 
 Adam: test SMOS as its own separate app. KNOW: `/marketing` standalone (not iframe) consent→export PASS session `498db989-…` (`SMOS_STANDALONE_UI_LOOP.json`). Hardened standalone chrome + `a.btn` nav. Also still works inside LifeOS (`SMOS_LIFEOS_UI_LOOP.json`).

@@ -186,6 +186,20 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .status-badge.rejected { background: rgba(239,68,68,0.2); color: #fca5a5; }
         .nav-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
         .lifeos-back { font-size: 13px; margin-bottom: 12px; }
+        .yt-panel { margin: 22px 0; padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: #0d0d15; }
+        .yt-panel h2 { border: none; margin: 0 0 8px; padding: 0; font-size: 1.15rem; }
+        .suggest-grid { display: grid; gap: 14px; margin-top: 14px; }
+        .suggest-card { display: grid; grid-template-columns: 160px 1fr; gap: 12px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #12121a; }
+        .suggest-card img { width: 160px; height: 90px; object-fit: cover; background: #000; }
+        .suggest-body { padding: 10px 12px 12px 0; }
+        .suggest-body h3 { margin: 0 0 6px; font-size: 1rem; border: none; padding: 0; }
+        .suggest-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+        .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(124,58,237,0.2); color: #c4b5fd; font-size: 11px; margin-right: 6px; }
+        @media (max-width: 640px) {
+          .suggest-card { grid-template-columns: 1fr; }
+          .suggest-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
+          .suggest-body { padding: 0 12px 12px; }
+        }
         html.in-lifeos-shell body { padding: 12px; background: var(--bg); }
         html.in-lifeos-shell .container { margin: 0 auto; box-shadow: none; max-width: 880px; }
         html.in-lifeos-shell .app-mode,
@@ -211,27 +225,124 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   const { logger } = deps;
 
   app.get('/marketing', (req, res) => {
+    const ytFlag = String(req.query.youtube || '');
     const body = `
             <h1>Home</h1>
             <p>Turn a real conversation into a content pack — coach → extract → generate → approve → export.</p>
+            <div id="ytBanner" class="message" style="display:none;"></div>
             <div class="actions-row">
               <a class="btn" href="/marketing/session/new">Start New Session</a>
               <a class="btn secondary" href="/marketing/calendar">Content Calendar</a>
               <a class="btn secondary" href="/marketing/atoms">Atom Library</a>
               <a class="btn secondary" href="/creative/studio">Creative Engine Studio</a>
             </div>
+
+            <div class="yt-panel">
+              <h2>YouTube channel</h2>
+              <p id="ytStatus">Checking connection…</p>
+              <div class="actions-row">
+                <a class="btn" id="ytConnectBtn" href="#">Connect YouTube (Google login)</a>
+                <button type="button" class="secondary" id="ytRefreshBtn">Refresh ideas</button>
+              </div>
+              <p class="suggest-meta">Google must use <strong>your</strong> login on Google’s page. SocialMediaOS never collects your Google password.</p>
+            </div>
+
+            <div class="yt-panel">
+              <h2>Top videos to make</h2>
+              <p id="suggestMeta">Loading researched ideas + ready thumbnails…</p>
+              <div id="suggestGrid" class="suggest-grid"></div>
+            </div>
+
             <div class="nav-links">
               <a href="/overlay/lifeos-app.html?page=marketing">Open inside LifeOS</a>
               <a href="/overlay/lifeos-app.html?page=lifeos-lifere.html">LifeRE Marketing panel</a>
             </div>
         `;
-    res.send(renderPage('SocialMediaOS', body));
+    const clientScript = `
+            const ytFlag = ${JSON.stringify(ytFlag)};
+            const banner = document.getElementById('ytBanner');
+            if (ytFlag === 'connected') showMsg(banner, 'YouTube connected. Pulling channel ideas…', 'success');
+            if (ytFlag === 'error') showMsg(banner, 'YouTube connect failed. Check Google OAuth keys + redirect URI, then retry.', 'error');
+
+            async function loadYoutubeStatus() {
+              const el = document.getElementById('ytStatus');
+              try {
+                const res = await marketingFetch('/api/v1/marketing/youtube/status?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'status failed');
+                if (!data.oauthConfigured) {
+                  el.innerHTML = 'Google OAuth is <strong>not configured</strong> on tip yet (GOOGLE_CLIENT_ID / SECRET missing). Paste those into Railway, add redirect <code>' + escapeHtml(data.redirectUri || '') + '</code> in Google Cloud Console, then connect.';
+                } else if (data.connected) {
+                  el.textContent = 'Connected' + (data.connectedSince ? (' since ' + new Date(data.connectedSince).toLocaleString()) : '') + '.';
+                } else {
+                  el.textContent = 'Not connected yet. Click Connect YouTube and sign in as yourself on Google.';
+                }
+              } catch (err) {
+                el.textContent = 'Status error: ' + err.message;
+              }
+            }
+
+            async function loadSuggestions() {
+              const meta = document.getElementById('suggestMeta');
+              const grid = document.getElementById('suggestGrid');
+              meta.textContent = 'Loading researched ideas…';
+              grid.innerHTML = '';
+              try {
+                const res = await marketingFetch('/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'suggestions failed');
+                meta.textContent = (data.connected ? 'Based on your channel + research · ' : 'Research defaults until channel connects · ') + 'source: ' + (data.source || 'unknown');
+                (data.suggestions || []).forEach(function(s) {
+                  const card = document.createElement('div');
+                  card.className = 'suggest-card';
+                  card.innerHTML = '<img alt="" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
+                    '<div class="suggest-body">' +
+                    '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span><span class="pill">' + escapeHtml(s.angle || 'idea') + '</span></div>' +
+                    '<h3>' + escapeHtml(s.title) + '</h3>' +
+                    '<p class="suggest-meta">' + escapeHtml(s.why || '') + '</p>' +
+                    '<div class="actions-row">' +
+                    '<a class="btn" href="' + escapeHtml(marketingHref(s.startUrl)) + '">Start making</a>' +
+                    '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Open Studio</a>' +
+                    '</div></div>';
+                  grid.appendChild(card);
+                });
+                if (!(data.suggestions || []).length) meta.textContent = 'No suggestions returned.';
+              } catch (err) {
+                meta.textContent = 'Could not load ideas: ' + err.message;
+              }
+            }
+
+            document.getElementById('ytConnectBtn').addEventListener('click', async function(e) {
+              e.preventDefault();
+              try {
+                const res = await marketingFetch('/api/v1/marketing/youtube/connect?format=json&owner_id=' + encodeURIComponent(marketingOwnerId()), {
+                  headers: marketingAuthHeaders({ 'Accept': 'application/json' })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                  showMsg(banner, (data.error || 'Connect failed') + (data.next ? (' — ' + data.next) : '') + (data.redirectUri ? (' Redirect URI: ' + data.redirectUri) : ''), 'error');
+                  return;
+                }
+                if (!data.authUrl) throw new Error('No Google auth URL returned');
+                location.href = data.authUrl;
+              } catch (err) {
+                showMsg(banner, 'Connect error: ' + err.message, 'error');
+              }
+            });
+            document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions(); });
+            loadYoutubeStatus();
+            loadSuggestions();
+        `;
+    res.send(renderPage('SocialMediaOS', body, clientScript));
   });
 
   app.get('/marketing/session/new', (req, res) => {
+    const seedTitle = String(req.query.seed_title || '');
+    const seedAngle = String(req.query.seed_angle || '');
     const body = `
             <h1>New Session</h1>
             <p>Consent is required before coaching starts. You review and approve every piece before export.</p>
+            ${seedTitle ? `<div class="message success" style="display:block;">Starting from researched idea: <strong>${escapeHtml(seedTitle)}</strong></div>` : ''}
             <form id="consentForm">
                 <div class="form-group">
                     <label for="consentAccepted">I agree to let SocialMediaOS process my input and generate marketing content. I am responsible for reviewing and approving all content before publication.</label>
@@ -251,6 +362,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             <div id="message" class="message" style="display:none;"></div>
         `;
     const clientScript = `
+            const seedTitle = ${JSON.stringify(seedTitle)};
+            const seedAngle = ${JSON.stringify(seedAngle)};
+            if (seedTitle) {
+              try {
+                sessionStorage.setItem('smos_seed_title', seedTitle);
+                sessionStorage.setItem('smos_seed_angle', seedAngle || '');
+              } catch (_) {}
+            }
             document.getElementById('consentForm').addEventListener('submit', async function(event) {
                 event.preventDefault();
                 const messageDiv = document.getElementById('message');
@@ -272,7 +391,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                             consent_type: 'session_recording',
                             consent_text: 'I agree to allow SocialMediaOS to process my input and generate marketing content. I am responsible for reviewing and approving all generated content before publication.',
                             consented_at: new Date().toISOString(),
-                            data: { session_type: sessionType }
+                            data: { session_type: sessionType, seed_title: seedTitle || null }
                         })
                     });
                     const consentData = await consentResponse.json();
@@ -292,7 +411,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     const sessionData = await sessionResponse.json();
                     if (!sessionResponse.ok) throw new Error(sessionData.error || 'Failed to start session.');
 
-                    window.location.href = marketingHref('/marketing/session/' + (sessionData.id || sessionData.session?.id));
+                    const sid = sessionData.id || sessionData.session?.id;
+                    let next = '/marketing/session/' + sid;
+                    if (seedTitle) next += '?seed_title=' + encodeURIComponent(seedTitle) + '&seed_angle=' + encodeURIComponent(seedAngle || '');
+                    window.location.href = marketingHref(next);
                 } catch (error) {
                     console.error('Error in new session setup:', error);
                     showMsg(messageDiv, 'Error: ' + (error && error.message ? error.message : String(error)), 'error');
@@ -304,6 +426,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
   app.get('/marketing/session/:id', (req, res) => {
     const sessionId = req.params.id;
+    const seedTitle = String(req.query.seed_title || '');
     const body = `
             <h1>Coaching Session</h1>
             <p>Talk about your business, stories, and goals. When you have enough material, extract stories then generate the content pack.</p>
@@ -328,8 +451,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
         `;
     const clientScript = `
             const sessionId = ${JSON.stringify(sessionId)};
+            const seedTitleFromQuery = ${JSON.stringify(seedTitle)};
             const conversationDiv = document.getElementById('conversation');
             const messageDiv = document.getElementById('message');
+            const seedTitle = seedTitleFromQuery || (function(){ try { return sessionStorage.getItem('smos_seed_title') || ''; } catch(_) { return ''; } })();
+            if (seedTitle && document.getElementById('userInput')) {
+              document.getElementById('userInput').value = 'I want to make this video next: "' + seedTitle + '". Help me lock the hook, outline, and thumbnail promise.';
+              try { sessionStorage.removeItem('smos_seed_title'); sessionStorage.removeItem('smos_seed_angle'); } catch(_) {}
+            }
 
             async function loadSession() {
                 const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId, { headers: marketingAuthHeaders() });
