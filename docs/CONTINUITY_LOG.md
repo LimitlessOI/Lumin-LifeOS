@@ -5,6 +5,12 @@
 
 ---
 
+## [FIX] 2026-07-11 — Founder private/no-save persistence leak closed
+
+Bug sweep found a high-severity privacy bug in the live founder-interface path: `private` / `off record` messages were classified by Action Inbox as `private_no_save` (`persisted:false`) but `routes/lifeos-builderos-command-control-routes.js` still called `persistFounderTurn()`, writing the sensitive turn into Lumin thread history and founder memory while replying "Private — not saved. Session only." Fixed the private early return to skip persistence and return `persisted:false`; added `tests/founder-interface-private.test.js` and wired it into `npm test`. Targeted validation passed; full `builder:preflight` remains red on unrelated pre-existing failures: `tests/lumin-conversation-routing.test.js` still expects `chair` instead of the redesigned `lumin` channel, and `tests/spine-import-resolution.test.js` catches `routes/command-center-mode-routes.js` importing missing `getMode` from `services/builder-runtime-mode-service.js`. Next: resolve those two preflight blockers in their own scoped slice.
+
+---
+
 ## [FIX] 2026-07-10 — Lumin chat drawer usable
 
 Adam: chat window not functioning. Backend already OK; UX fix in `lifeos-app.html` — expand-on-open if minimized (hid input), close Settings when chatting, Escape closes overlays. Hard-refresh after tip deploy.
