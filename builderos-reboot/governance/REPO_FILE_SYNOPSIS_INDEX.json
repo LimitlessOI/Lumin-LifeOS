@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T02:48:55.290Z",
+  "generated_at": "2026-07-11T02:57:52.175Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11447,
   "files": [
@@ -39341,9 +39341,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 600026,
-      "mtime": "2026-07-11T02:48:35.882Z",
-      "indexed_at": "2026-07-11T02:48:40.274Z"
+      "bytes": 600334,
+      "mtime": "2026-07-11T02:57:11.833Z",
+      "indexed_at": "2026-07-11T02:57:52.175Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65536,9 +65536,9 @@
     {
       "path": "routes/lifeos-chat-routes.js",
       "synopsis": "routes/lifeos-chat-routes.js",
-      "bytes": 19308,
-      "mtime": "2026-06-29T17:21:08.513Z",
-      "indexed_at": "2026-07-11T02:48:40.274Z",
+      "bytes": 19903,
+      "mtime": "2026-07-11T02:57:02.458Z",
+      "indexed_at": "2026-07-11T02:57:52.175Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -83858,9 +83858,9 @@
     {
       "path": "services/lifeos-lumin.js",
       "synopsis": "Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).",
-      "bytes": 23760,
-      "mtime": "2026-07-09T19:38:08.222Z",
-      "indexed_at": "2026-07-11T02:48:40.274Z",
+      "bytes": 24413,
+      "mtime": "2026-07-11T02:57:02.406Z",
+      "indexed_at": "2026-07-11T02:57:52.175Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

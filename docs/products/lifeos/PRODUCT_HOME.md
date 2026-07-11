@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Chair is the system (not go-between); scrub no longer guts "you want"; drawer empty copy = talk to the system. |
+| **Last Updated** | 2026-07-11 — Operator purge for conductor probe messages; Chair = system not go-between. |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-11 | **Operator purge-messages** — `POST /api/v1/lifeos/chat/operator/purge-messages` deletes founder-thread rows by id (command key). Conductor must not use Adam's LifeOS UI for probes — those chats are visible to him. | Adam: if you use my UI I see the conversations — do it right. | ✅ local | tip-sync + purge probe ids |
 | 2026-07-11 | **Chair = the system, not a go-between** — `chair-direct-agent` SYSTEM_PROMPT: YOU ARE the system; never self-describe as translation layer. Law: drop bare `you want` scrub; forbid go-between phrases; scrub strips "Not a go-between" cleanly (no "Not a ."). Drawer/settings copy: talk to the system. | Adam: direct communication to the system; keep talking until chat is right. | ✅ communication tests 7/7; tip prove "I am the system" | tip-sync + browser |
 | 2026-07-10 | **Lumin chat UX — drawer usable again** — opening chat always expands if minimized (localStorage `lifeos_lumin_dock_minimized` was hiding input/messages); closes Settings when opening chat / navigating; Escape closes Settings then drawer; clearer Ask Lumin copy; auth expiry message before login redirect; `?chat=1` opens drawer. | Adam: chat window not functioning / can't use it. Backend already 200; UX blocker was minimized + Settings competing. | ✅ local | tip-sync + hard refresh |
 | 2026-07-10 | **LifeOS Connect (guided human handoff)** — new `lifeos-connect.html` nav; `POST /api/v1/accounts/connect`, `/attention`, `/:service/guide`, `/:service/reveal` (audited, hidden-by-default), `/:service/resume-verify`; Chair `setup_account` opens Connect + site/email windows; WORK_EMAIL IMAP used for magic-link when signup email is LifeOS@. | Adam: system must do signups; when human click needed, LifeOS pulls up site + email + return — same pattern for calendar/etc; secrets hidden until reveal. | ✅ local | tip-sync |
