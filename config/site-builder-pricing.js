@@ -59,7 +59,13 @@ export const SITE_BUILDER_PRICING = {
 
 export function getBetaPublishOfferSummary(pricing = SITE_BUILDER_PRICING) {
   const months = pricing.carePlan?.includedMonthsOnPublish || 2;
-  return `${pricing.publish.display} beta publish (includes first ${months} months of site management)`;
+  return `${pricing.publish.display} beta-tester publish (includes first ${months} months of care) — priced for feedback while we learn, not full retail`;
+}
+
+/** One-line reason-why for print/email (Claude Hopkins: always explain the deal). */
+export function getBetaDealReasonWhy(pricing = SITE_BUILDER_PRICING) {
+  const months = pricing.carePlan?.includedMonthsOnPublish || 2;
+  return `We're in beta testing. That's why publish is only ${pricing.publish.display} (with ${months} months of care included) instead of a full agency build — your honest reaction helps us finish the product.`;
 }
 
 export default SITE_BUILDER_PRICING;

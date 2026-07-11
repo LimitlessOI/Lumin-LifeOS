@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T18:33:23.358Z",
+  "generated_at": "2026-07-11T18:40:29.138Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -30739,9 +30739,9 @@
     {
       "path": "config/site-builder-pricing.js",
       "synopsis": "Site Builder entry + upsell pricing (beta publish offer).",
-      "bytes": 3175,
-      "mtime": "2026-07-11T18:04:27.996Z",
-      "indexed_at": "2026-07-11T18:06:53.775Z",
+      "bytes": 3667,
+      "mtime": "2026-07-11T18:37:46.976Z",
+      "indexed_at": "2026-07-11T18:40:29.138Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 93903,
-      "mtime": "2026-07-11T18:33:03.250Z",
-      "indexed_at": "2026-07-11T18:33:23.358Z"
+      "bytes": 94207,
+      "mtime": "2026-07-11T18:40:03.438Z",
+      "indexed_at": "2026-07-11T18:40:29.138Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64404,9 +64404,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 13581,
-      "mtime": "2026-07-11T18:04:28.038Z",
-      "indexed_at": "2026-07-11T18:06:53.775Z"
+      "bytes": 13807,
+      "mtime": "2026-07-11T18:39:04.029Z",
+      "indexed_at": "2026-07-11T18:40:29.138Z"
     },
     {
       "path": "public/overlay/socialmediaos-session.html",
@@ -66257,9 +66257,9 @@
     {
       "path": "routes/site-builder-checkout-routes.js",
       "synopsis": "Site Builder beta publish checkout routes ($45 entry + 2 mo management).",
-      "bytes": 8609,
-      "mtime": "2026-07-10T21:33:30.056Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 8597,
+      "mtime": "2026-07-11T18:40:02.620Z",
+      "indexed_at": "2026-07-11T18:40:29.138Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85458,9 +85458,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 36960,
-      "mtime": "2026-07-11T18:31:13.620Z",
-      "indexed_at": "2026-07-11T18:33:23.358Z",
+      "bytes": 37420,
+      "mtime": "2026-07-11T18:38:43.667Z",
+      "indexed_at": "2026-07-11T18:40:29.138Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

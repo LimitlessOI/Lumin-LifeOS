@@ -12,7 +12,7 @@ import {
   createUpsellCheckoutSession,
   verifyUpsellCheckoutSession,
 } from '../services/site-builder-entry-checkout.js';
-import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary } from '../config/site-builder-pricing.js';
 
 async function loadProspectContext(pool, clientId) {
   if (!pool) return { businessName: null };
@@ -60,7 +60,7 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
       beta: SITE_BUILDER_PRICING.beta === true,
       publish: SITE_BUILDER_PRICING.publish,
       carePlan: SITE_BUILDER_PRICING.carePlan,
-      offer: `${SITE_BUILDER_PRICING.publish.display} beta publish includes first ${SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2} months of site management`,
+      offer: getBetaPublishOfferSummary(),
     });
   });
 
@@ -133,11 +133,11 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
 </head>
 <body>
   <h1>Payment received — welcome to the beta</h1>
-  <p>Your ${SITE_BUILDER_PRICING.publish.display} beta publish is confirmed. The discount is because we're in beta — and your first ${months} months of site management are included.</p>
+  <p>Your ${SITE_BUILDER_PRICING.publish.display} beta-tester publish is confirmed. You got this rate because we're still testing with real practices — your feedback helps us finish the product. Your first ${months} months of site management are included.</p>
   <div class="card">
     <p><strong>Preview:</strong> <a href="${previewUrl}">Open your site</a></p>
     <p><strong>Included:</strong> ${months} months of site management (then ${SITE_BUILDER_PRICING.carePlan.display} if you continue).</p>
-    <p><strong>Next:</strong> We'll finish domain setup and handoff. Reply to our email anytime for add-ons from your editor sidebar.</p>
+    <p><strong>Next:</strong> We'll finish domain setup and handoff. Reply anytime with what you like or don't — honest notes beat polite silence.</p>
   </div>
 </body>
 </html>`);

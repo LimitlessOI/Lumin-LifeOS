@@ -35,7 +35,7 @@ import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
 import { createProspectClientId } from './site-builder-prospect-runner.js';
 
 // Entry-product pricing (foot-in-door → care plan + add-ons)
-import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary } from '../config/site-builder-pricing.js';
+import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary, getBetaDealReasonWhy } from '../config/site-builder-pricing.js';
 
 const PRICING = {
   publish: {
@@ -152,7 +152,7 @@ export default class ProspectPipeline {
     const name = contactName || 'there';
     const biz = businessName || 'your business';
     const emailContent = {
-      subject: `${biz} — open your free site preview`,
+      subject: `${biz} — beta preview (tester rate)`,
       html: this.deferredInviteEmailHtml(name, biz, url, businessUrl),
     };
 
@@ -204,26 +204,32 @@ export default class ProspectPipeline {
 
   deferredInviteEmailHtml(contactName, businessName, previewUrl, businessUrl = '') {
     const offer = getBetaPublishOfferSummary();
+    const reasonWhy = getBetaDealReasonWhy();
     const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
     const source = businessUrl
-      ? `<p style="font-size:13px;color:#666;">We looked at <a href="${businessUrl}" style="color:#0F766E;">${businessUrl}</a> and prepared a free upgrade preview for you.</p>`
-      : '';
+      ? `<p>We looked at <a href="${businessUrl}" style="color:#0F766E;">${businessUrl}</a> and started a free upgrade preview for <strong>${businessName || 'your business'}</strong>.</p>`
+      : `<p>We started a free website upgrade preview for <strong>${businessName || 'your business'}</strong>.</p>`;
     return `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+<body style="font-family: Georgia, 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #1a1a1a; line-height: 1.55;">
   <p>Hi ${contactName || 'there'},</p>
   ${source}
-  <p>We started a free website upgrade preview for <strong>${businessName || 'your business'}</strong>. Click the link and it finishes building for you in about a minute — no call, no charge to look.</p>
-  <p style="margin: 24px 0;">
-    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
-      Open my free preview
+  <p>Click the link — the preview finishes for you in about a minute. Looking is free. No call. No card.</p>
+  <p style="margin: 28px 0;">
+    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 14px 26px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-block; font-family: Arial, sans-serif;">
+      Open my free beta preview
     </a>
   </p>
-  <p>We're in beta and want your honest reaction. If you like it, beta publish is ${SITE_BUILDER_PRICING.publish.display} (includes ${months} months of upkeep at ${SITE_BUILDER_PRICING.carePlan.display} after). Zero obligation either way.</p>
+  <p><strong>Why the price is this low:</strong> ${reasonWhy}</p>
+  <p>If you like what you see and want it live: <strong>${SITE_BUILDER_PRICING.publish.display}</strong> to publish, includes the first ${months} months of care, then ${SITE_BUILDER_PRICING.carePlan.display}. After beta, this rate goes away.</p>
+  <p>Ignore it, use it, or tell us what’s off — all welcome. We need real feedback more than we need a hard close.</p>
   <p>Best,<br>The Lumin team</p>
-  <hr style="margin-top: 40px; border: none; border-top: 1px solid #eee;">
-  <p style="font-size: 11px; color: #999;">Beta offer: ${offer}<br><a href="${previewUrl}" style="color: #0F766E;">${previewUrl}</a></p>
+  <hr style="margin-top: 36px; border: none; border-top: 1px solid #e5e5e5;">
+  <p style="font-size: 12px; color: #777; font-family: Arial, sans-serif;">
+    Beta-tester offer: ${offer}<br>
+    <a href="${previewUrl}" style="color: #0F766E;">${previewUrl}</a>
+  </p>
 </body>
 </html>`;
   }
@@ -623,29 +629,34 @@ export default class ProspectPipeline {
         ? `Open with this specific, concrete observation about their current site (rephrase naturally, don't quote it): "${painPoints[0]}".`
         : `Open with a specific, plausible observation about what's dated or underperforming on a typical ${industry || 'medical/professional'} practice site (booking friction, no mobile optimization, thin SEO, unclear services) — infer, don't fabricate specifics you don't have.`;
 
-      const prompt = `Write a cold outreach email. We are in BETA. We built a FREE, already-finished website upgrade for this specific business — unsolicited, no call booked, nothing purchased — and we want their honest reaction, not a hard sale.
+      const prompt = `Write a cold outreach email using classic direct-response print sales craft (Claude Hopkins reason-why, Ogilvy clarity, risk reversal).
+
+We are in BETA TESTING. That is the honest reason the price is unusually good — we need real feedback from real practices, so beta testers get ${SITE_BUILDER_PRICING.publish.display} to publish (includes first ${SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2} months of care), then ${SITE_BUILDER_PRICING.carePlan.display}. After beta, this rate goes away. Do NOT invent fake scarcity ("only 3 left today"). Do say it is a beta-tester rate in exchange for their honest reaction.
+
+We built (or started) a FREE preview for this business — unsolicited. Looking is free. No call required.
 
 CONTEXT:
 - Their business: ${businessName}
-- Industry: ${industry || 'medical/professional practice'} (psychiatry, therapy, medical, or dental — keep tone credible and professional, not "spa/wellness" breezy)
+- Industry: ${industry || 'medical/professional practice'} (credible, professional tone — not spa-breezy)
 - Contact name: ${contactName}
 - Preview URL: ${previewUrl}
-- What's already built and waiting for them to see: SEO-optimized click-funnel site, automated blog content, booking flow, ${posPartnerName ? posPartnerName + ' integration, ' : ''}10 design variations they can toggle between${painPointSection}
+- Included in the preview story: SEO-ready homepage, booking path, content support, design options${posPartnerName ? `, ${posPartnerName} ready` : ''}${painPointSection}
 
-DIRECT-RESPONSE PRINCIPLES (apply, don't state):
-- 50-125 words total body. Every sentence earns its place — cut anything generic.
+PRINT / DIRECT-RESPONSE RULES:
+- 60–140 words. Short paragraphs. One idea per sentence.
 - ${painPointLead}
-- Frame as "we already did the work, here's the result" (dream outcome + zero effort + zero time delay on their end) — NOT "we'd like to help you." The finished preview IS the proof; don't sell what the email can just show.
-- Beta/feedback framing in Adam's own words: we're in beta, this is a look at what our system can build, we'd genuinely value their reaction — lowers pressure, invites a reply instead of a decision.
-- CTA is interest-based and reversible, never a scheduling ask: "worth 60 seconds to look?" / "curious what you think" — NOT "book a call" or "let's chat Tuesday."
-- No pressure close: they can ignore it, use it, or tell us it's not for them — all fine.
+- Lead with the free proof (the preview), not a pitch.
+- Include a clear reason-why for the deal: beta testing → low price for feedback.
+- Risk reversal: look free; publish only if they want it; ignore is fine.
+- One CTA only: open the preview. Interest-based ("worth a look?"), never "book a call."
+- Specific numbers beat adjectives. Name ${SITE_BUILDER_PRICING.publish.display} and ${SITE_BUILDER_PRICING.carePlan.display}.
+- Tone: peer, warm, confident — a letter, not a brochure.
+- NO: "I hope this finds you well", synergies, guaranteed #1, fake urgency, emoji spam.
 
 EMAIL RULES:
-- Subject: under 7 words, curiosity + their business name, no clickbait, no emoji
-- Body: 3 short paragraphs max — (1) the specific observation + we already built the fix, (2) 2-3 bullet highlights of what's included, (3) interest-based CTA + no-pressure close in one line
-- Tone: direct, warm, confident, professional — a peer sharing something useful, not a vendor pitching
-- NO: "I hope this email finds you well", "synergies", "reach out", "circle back", generic corporate filler
-- Include the actual preview URL as a clickable link
+- Subject: under 8 words, business name + curiosity or beta preview, no clickbait
+- Body HTML with the real preview URL as a clickable link
+- End with invitation for honest feedback (good or bad)
 
 Return ONLY valid JSON:
 {
@@ -680,31 +691,33 @@ Return ONLY valid JSON:
    */
   fallbackEmailHtml(contactName, businessName, previewUrl, painPoints = []) {
     const leadingPainPoint = painPoints[0]
-      ? `I noticed ${painPoints[0].toLowerCase()} — so we already built a fixed version to show you, no ask attached.`
-      : `We took a look at ${businessName || 'your site'} and already built an upgraded version — figured showing beats explaining.`;
+      ? `I noticed ${painPoints[0].toLowerCase()} — so we built a cleaner version to show you, no ask attached.`
+      : `We looked at ${businessName || 'your site'} and built an upgraded preview — showing beats explaining.`;
     const offer = getBetaPublishOfferSummary();
+    const reasonWhy = getBetaDealReasonWhy();
     const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
     return `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+<body style="font-family: Georgia, 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #1a1a1a; line-height: 1.55;">
   <p>Hi ${contactName || 'there'},</p>
   <p>${leadingPainPoint}</p>
-  <ul>
-    <li>10 design directions to flip through, not just one</li>
-    <li>SEO-ready pages, booking flow, and blog content already in place</li>
-    <li>Yours to look at, edit, or ignore — nothing's been charged</li>
+  <ul style="padding-left: 1.2rem;">
+    <li>Free preview first — judge the work before anything is paid</li>
+    <li>SEO-ready pages, booking path, and content support included</li>
+    <li>Beta-tester publish: ${SITE_BUILDER_PRICING.publish.display} + ${months} months care, then ${SITE_BUILDER_PRICING.carePlan.display}</li>
   </ul>
-  <p style="margin: 24px 0;">
-    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
+  <p style="margin: 28px 0;">
+    <a href="${previewUrl}" style="background: #0F766E; color: white; padding: 14px 26px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-block; font-family: Arial, sans-serif;">
       Worth 60 seconds to look?
     </a>
   </p>
-  <p>We're in beta and genuinely want your honest reaction — good or bad. If you'd rather it go live, beta pricing is ${SITE_BUILDER_PRICING.publish.display} (includes the first ${months} months of upkeep), but there's zero obligation either way.</p>
+  <p><strong>Why such a good deal:</strong> ${reasonWhy}</p>
+  <p>Ignore it, use it, or tell us it’s not for you — all fine. We need honest beta feedback more than a hard close.</p>
   <p>Best,<br>The Lumin team</p>
-  <hr style="margin-top: 40px; border: none; border-top: 1px solid #eee;">
-  <p style="font-size: 11px; color: #999;">
-    Beta offer: ${offer}<br>
+  <hr style="margin-top: 36px; border: none; border-top: 1px solid #e5e5e5;">
+  <p style="font-size: 12px; color: #777; font-family: Arial, sans-serif;">
+    Beta-tester offer: ${offer}<br>
     <a href="${previewUrl}" style="color: #0F766E;">${previewUrl}</a>
   </p>
 </body>
