@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T20:00:31.354Z",
+  "generated_at": "2026-07-11T20:02:37.378Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11454,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3461191,
-      "mtime": "2026-07-11T19:52:47.218Z",
-      "indexed_at": "2026-07-11T19:53:11.047Z"
+      "bytes": 3461471,
+      "mtime": "2026-07-11T20:02:21.125Z",
+      "indexed_at": "2026-07-11T20:02:37.378Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 97025,
-      "mtime": "2026-07-11T20:00:09.776Z",
-      "indexed_at": "2026-07-11T20:00:31.354Z"
+      "bytes": 98961,
+      "mtime": "2026-07-11T20:02:06.970Z",
+      "indexed_at": "2026-07-11T20:02:37.378Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64412,9 +64412,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 13807,
-      "mtime": "2026-07-11T18:39:04.029Z",
-      "indexed_at": "2026-07-11T18:40:29.138Z"
+      "bytes": 14029,
+      "mtime": "2026-07-11T20:00:39.246Z",
+      "indexed_at": "2026-07-11T20:02:37.378Z"
     },
     {
       "path": "public/overlay/socialmediaos-session.html",
@@ -66330,9 +66330,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 41042,
-      "mtime": "2026-07-11T19:59:22.018Z",
-      "indexed_at": "2026-07-11T20:00:31.354Z",
+      "bytes": 41312,
+      "mtime": "2026-07-11T20:00:55.161Z",
+      "indexed_at": "2026-07-11T20:02:37.378Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

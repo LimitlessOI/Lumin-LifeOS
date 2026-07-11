@@ -197,13 +197,17 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    */
   router.post('/public-lead', publicLeadLimiter, async (req, res) => {
     try {
-      const businessUrl = String(req.body?.businessUrl || req.body?.url || '').trim();
+      let businessUrl = String(req.body?.businessUrl || req.body?.url || '').trim();
       const contactEmail = String(req.body?.contactEmail || req.body?.email || '').trim().toLowerCase();
       const businessName = String(req.body?.businessName || req.body?.name || '').trim() || undefined;
       const contactName = String(req.body?.contactName || '').trim() || undefined;
 
-      if (!/^https?:\/\//i.test(businessUrl)) {
-        return res.status(400).json({ ok: false, error: 'businessUrl must start with http:// or https://' });
+      // Real users type "yourbusiness.com", not "https://yourbusiness.com" — normalize instead of rejecting.
+      if (businessUrl && !/^https?:\/\//i.test(businessUrl)) {
+        businessUrl = `https://${businessUrl.replace(/^\/+/, '')}`;
+      }
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(businessUrl)) {
+        return res.status(400).json({ ok: false, error: 'Enter a valid business website (e.g. yourbusiness.com)' });
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
         return res.status(400).json({ ok: false, error: 'A valid contactEmail is required' });
