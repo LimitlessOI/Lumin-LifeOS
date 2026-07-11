@@ -270,7 +270,7 @@
     },
     {
       "id": "mos-social-goal-library",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-social-goals.js",
       "task": "Pure per-platform goal configuration for the ALREADY-PROVEN browser agent (services/general-browser-agent.js runBrowserGoal + services/general-browser-agent-live.js runGoalOnSession). This module authors ZERO browser-driving logic of its own — it only describes, for each platform, what 'publish this text as a post' means as a goal string + evidence check the existing loop already knows how to execute.",
       "spec": "NO DB, NO browser calls, NO AI calls, NO network in this file — pure data + one pure function. Export const SOCIAL_PLATFORMS = ['instagram','linkedin','x','facebook'] — this MUST exactly match the existing marketing_content_pieces.platform CHECK values from §6 (do not add youtube/tiktok; those are Phase 6 / out of scope here). Export function buildPublishGoal({ platform, contentText }): throw a clear Error if platform is not in SOCIAL_PLATFORMS (fail closed — never guess a goal for an unknown platform). Otherwise return { goalKey: 'publish_post', goal: <a plain-language instruction string that tells the agent to compose a new post on this platform using contentText EXACTLY as given, quoting it verbatim inside the instruction, and explicitly telling the agent never to alter, shorten, or embellish the wording>, startUrl: <the platform's real compose/home URL>, expectSiteHost: <the platform's real domain, e.g. 'instagram.com' / 'linkedin.com' / 'x.com' / 'facebook.com'>, mustContain: [<one or two phrases that only appear on that platform's page after a post genuinely succeeds, e.g. a confirmation toast string — used by makeEvidenceVerifier in services/general-browser-agent-runtime.js so success is independently evidenced, never self-reported> ] }. Named export buildPublishGoal + SOCIAL_PLATFORMS (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -278,8 +278,11 @@
         "mos-social-schema"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 6000
+      "attempts": 1,
+      "max_output_tokens": 6000,
+      "commit_sha": "d0686b9c9518135cfd286306ecec75978903e627",
+      "last_attempt_at": "2026-07-11T00:27:39.017Z",
+      "completed_at": "2026-07-11T00:27:49.942Z"
     },
     {
       "id": "mos-social-publisher",
