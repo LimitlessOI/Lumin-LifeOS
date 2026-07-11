@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T00:35:15.472Z",
+  "generated_at": "2026-07-11T00:40:34.975Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11445,
+  "file_count": 11446,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84722,6 +84722,16 @@
       "indexed_at": "2026-07-11T00:29:08.164Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-youtube.js",
+      "synopsis": "MarketingOS YouTube OAuth service",
+      "bytes": 4721,
+      "mtime": "2026-07-11T00:40:34.975Z",
+      "indexed_at": "2026-07-11T00:40:34.975Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
       ]
     },
     {
