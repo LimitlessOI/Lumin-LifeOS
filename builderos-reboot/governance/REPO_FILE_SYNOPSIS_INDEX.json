@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T02:57:54.456Z",
+  "generated_at": "2026-07-11T06:20:49.850Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11447,
+  "file_count": 11448,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68755,6 +68755,13 @@
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/run-marketingos-youtube-verify.mjs",
+      "synopsis": "Script — Run Marketingos Youtube Verify.",
+      "bytes": 6663,
+      "mtime": "2026-07-11T06:20:49.850Z",
+      "indexed_at": "2026-07-11T06:20:49.850Z"
     },
     {
       "path": "scripts/run-memory-import.mjs",
