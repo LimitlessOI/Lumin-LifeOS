@@ -326,14 +326,17 @@
     },
     {
       "id": "mos-youtube-oauth-service",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-youtube.js",
       "task": "MarketingOS Phase 6 YouTube connection — ONE shared OAuth app, per-client one-time consent (real Google login page, never our own form). SELF-CONTAINED ESM module, modeled DIRECTLY on the existing, working services/google-calendar-service.js (same OAuth2Client pattern, same user_integrations table — do NOT create a new token-storage table; reuse the exact one Calendar already uses).",
       "spec": "Import google-auth-library's OAuth2Client and googleapis exactly as services/google-calendar-service.js does (both already npm dependencies — do not add new packages). Export createYouTubeService(pool) returning { getAuthUrl, handleCallback, getAuthedClient, getStatus }. Use process.env.GOOGLE_CLIENT_ID / process.env.GOOGLE_CLIENT_SECRET (the SAME shared app credentials Calendar already uses — one Google Cloud project can serve multiple APIs/scopes) but build the redirect URI as `${process.env.RAILWAY_PUBLIC_DOMAIN || 'http://localhost:8080'}/api/v1/marketing/youtube/callback` (a DIFFERENT path from Calendar's callback — each feature has its own callback route under the one shared app). Scopes: ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube.readonly']. Store tokens in the EXISTING user_integrations table with provider = 'youtube_channel' (INSERT ... ON CONFLICT (user_id, provider) DO UPDATE, exactly like google-calendar-service.js's handleCallback) — ownerId is whatever string/UUID the caller passes (do not invent a new identity scheme; the route layer resolves it the same way other marketing-*.js routes already do). getAuthedClient(ownerId): load tokens (already the same unencrypted JSONB shape Calendar uses per existing precedent), auth.setCredentials(tokens), wire the same auth.on('tokens', ...) auto-refresh-and-persist handler as Calendar does. getStatus(ownerId): { connected: boolean, connectedSince }. getAuthUrl must return { error: '...' } (never throw) if GOOGLE_CLIENT_ID is unset, mirroring google-calendar-service.js's existing guard. Named export createYouTubeService (+ default). Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 8000
+      "attempts": 1,
+      "max_output_tokens": 8000,
+      "commit_sha": "165a9d719d2462f669b888558c09dc40c52ee311",
+      "last_attempt_at": "2026-07-11T00:40:26.447Z",
+      "completed_at": "2026-07-11T00:40:39.927Z"
     },
     {
       "id": "mos-youtube-connect-routes",
