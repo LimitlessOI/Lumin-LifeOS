@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — LAUNCHED public `/site-builder` sales door + public-lead + $45 CTAs. |
+| **Last Updated** | 2026-07-11 — Ongoing care capped at $35/mo (under $45 publish). |
 
 ---
 
@@ -105,7 +105,7 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 | Revenue Stream | Amount | Notes |
 |---------------|--------|-------|
 | **Entry publish (beta front door)** | **$45 one-time** (env: `SITE_BUILDER_PUBLISH_CENTS`) | Beta discount for early participants; includes first **2 months** site management |
-| Monthly care plan (site + SEO + content) | **$97/mo** after included months → scale to $297–$597/mo | Recurring MRR after beta care window |
+| Monthly care plan (site + SEO + content) | **$35/mo** after included months (founder cap: must stay ≤ publish price) | Recurring MRR after beta care window |
 | À-la-carte sidebar upsells | $97–$1,497 + management | Logo, GBP/SEO, ads/funnels, social — competitor-aware |
 | Legacy closer tiers | $997–$1,997 one-time | Upsell after entry publish — not cold-email front door |
 | POS referral commission | $50–$2,500 | Per signup via our affiliate link |
@@ -300,6 +300,7 @@ Failed sends do **not** increment follow-up counters.
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
 | 2026-07-11 | **GAP-FILL tip boot stuck route-less + AB mount.** Tip `/ready` showed `db:error` / `runtime_routes:pending` after Neon timeout — boot was one-shot so never-stop APIs 404'd forever. `server-founder-runtime.js` now retries boot with backoff + `POST /api/v1/lifeos/boot/retry`; Neon pool timeout 10s→30s. Auto-registered `site-builder-ab-subject-routes` (queue step-03). | Adam: keep the system building. Tip DB timeout bricked all routes; factory could not run. | ⚠️ needs Railway redeploy (GH RAILWAY_TOKEN Not Authorized; tip managed-env dead until DB routes mount) |
+| 2026-07-11 | **Care plan $35/mo** — founder: ongoing care must not exceed publish ($45); set default `SITE_BUILDER_CARE_PLAN_CENTS=3500` + landing/SSOT. | Adam: $35 at the most. | ✅ tip managed-env + push |
 | 2026-07-11 | **LAUNCH: public Site Builder sales front door.** `/site-builder` → landing with live Flores demo + $45 Stripe CTA; `POST /api/v1/sites/public-lead` rate-limited inbound builds; LifeOS nav link. Offer page rewritten from internal ladder copy to buyable beta. | Adam: launch Site Builder and get others to buy. | ⚠️ tip-sync + public-lead prove |
 | 2026-07-11 | **First-dollar path: preview durability + Postmark truth.** `recordProspect` now merges metadata (JSONB `||`) and re-writes `previewHtml` after email; preview DB route mounts before static. Root cause of tip 404 previews: 2nd save wiped durable HTML. Proved Postmark works same-domain; external sends blocked by Postmark **pending approval**. Go Vegas: `POST /prospects/seed` for manual leads without Places key. | Adam: family money path — approve Postmark; Stripe $45 live for Flores Dental once preview durable. | ⚠️ tip-sync + rebuild dental + Postmark approval |
 | 2026-07-11 | **GAP-FILL first-dollar: mount template routes.** Added `routes/site-builder-templates-routes.js` → `registerSiteBuilderTemplatesRoutes` to `config/auto-registered-product-modules.json`; marked BUILD_QUEUE step-4/5 done. Module already existed — never-stop was stuck on step-4 because boot never loaded it. | Adam: keep building but what matters — unblock Site Builder money path ahead of Marketing YouTube thrash. | ✅ local entry present; tip prove after redeploy (`GET /api/site-builder/templates`) |

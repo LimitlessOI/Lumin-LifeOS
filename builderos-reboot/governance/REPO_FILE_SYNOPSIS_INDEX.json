@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T16:44:18.057Z",
+  "generated_at": "2026-07-11T18:06:53.775Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -30739,9 +30739,9 @@
     {
       "path": "config/site-builder-pricing.js",
       "synopsis": "Site Builder entry + upsell pricing (beta publish offer).",
-      "bytes": 3143,
-      "mtime": "2026-07-10T21:33:30.053Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 3175,
+      "mtime": "2026-07-11T18:04:27.996Z",
+      "indexed_at": "2026-07-11T18:06:53.775Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 67603,
-      "mtime": "2026-07-11T16:43:25.497Z",
-      "indexed_at": "2026-07-11T16:44:18.057Z"
+      "bytes": 68348,
+      "mtime": "2026-07-11T18:06:25.010Z",
+      "indexed_at": "2026-07-11T18:06:53.775Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 93296,
-      "mtime": "2026-07-11T16:44:12.249Z",
-      "indexed_at": "2026-07-11T16:44:18.057Z"
+      "bytes": 93506,
+      "mtime": "2026-07-11T18:06:25.033Z",
+      "indexed_at": "2026-07-11T18:06:53.775Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64404,9 +64404,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 13561,
-      "mtime": "2026-07-11T16:42:11.350Z",
-      "indexed_at": "2026-07-11T16:44:18.057Z"
+      "bytes": 13581,
+      "mtime": "2026-07-11T18:04:28.038Z",
+      "indexed_at": "2026-07-11T18:06:53.775Z"
     },
     {
       "path": "public/overlay/socialmediaos-session.html",

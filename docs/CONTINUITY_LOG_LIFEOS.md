@@ -8,6 +8,16 @@
 
 ---
 
+## [PRICE] Update 2026-07-11 — Ongoing care capped at $35/mo
+
+Adam: ongoing care should not be more than $45; $35 at most. KNOW: `config/site-builder-pricing.js` default care plan → $35/mo (3500¢); landing + SSOT updated; tip managed-env set. Publish stays $45.
+
+---
+
+## [DISTRO] Update 2026-07-11 — Push Site Builder out without relying on Adam
+
+Adam: get it out there, don't rely on me. KNOW: Bing IndexNow accepted site-builder URL (HTTP 202). Keep Vegas Local form backend timed out (MagnetMessenger 522). Tip browser contact-form + Gmail + BetaList blocked (not signed in / captcha / give_up). External cold email still Postmark pending. Built more LV dental/wellness previews into pipeline. Sales door remains live: /site-builder.
+
 ## [LAUNCH] Update 2026-07-11 — Site Builder public sales front door live
 
 Adam: launch Site Builder and get others to buy. Shipped `/site-builder` landing with Flores live demo + $45 Stripe CTA + `POST /api/v1/sites/public-lead` inbound form + LifeOS nav. Next: tip redeploy, share URL, clear email captcha so lead emails go external.

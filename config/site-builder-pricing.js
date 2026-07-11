@@ -13,9 +13,9 @@ export const SITE_BUILDER_PRICING = {
       || 'Beta publish — go live on your domain. Includes first 2 months of site management.',
   },
   carePlan: {
-    monthlyCents: Number(process.env.SITE_BUILDER_CARE_PLAN_CENTS || 9700),
-    display: process.env.SITE_BUILDER_CARE_PLAN_DISPLAY || '$97/mo',
-    description: 'Site + SEO + content maintenance',
+    monthlyCents: Number(process.env.SITE_BUILDER_CARE_PLAN_CENTS || 3500),
+    display: process.env.SITE_BUILDER_CARE_PLAN_DISPLAY || '$35/mo',
+    description: 'Site + SEO + content maintenance (must stay under publish price)',
     /** Free months included with beta publish checkout */
     includedMonthsOnPublish: Number(process.env.SITE_BUILDER_CARE_INCLUDED_MONTHS || 2),
   },
@@ -25,7 +25,7 @@ export const SITE_BUILDER_PRICING = {
     'clickfunnels-build-ad-placement-management': { display: '$1,497 + $497/mo', cadence: 'build + monthly management' },
     'google-business-profile-local-seo': { display: '$197/mo', cadence: 'monthly' },
     'social-media-management': { display: '$297/mo', cadence: 'monthly' },
-    'seo-content-care-plan': { display: '$97/mo', cadence: 'monthly' },
+    'seo-content-care-plan': { display: '$35/mo', cadence: 'monthly' },
   },
   /** Template gallery: 10 curated designs free to toggle/preview; extra variety
    *  and a fully bespoke design are paid upsells (founder direction 2026-07-10). */
