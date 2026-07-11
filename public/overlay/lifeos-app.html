@@ -1536,6 +1536,7 @@
     .lumin-drawer.minimized .lumin-interim,
     .lumin-drawer.minimized .lumin-messages,
     .lumin-drawer.minimized .lumin-input-bar { display: none !important; }
+    .lumin-drawer.minimized .lumin-drawer-header { cursor: pointer; }
     html[data-shell-layout="desktop"] .lumin-drawer.minimized.dock-right {
       height: auto; bottom: 16px; top: auto; width: 320px;
     }
@@ -2174,8 +2175,8 @@
         aria-label="Open Lumin — speak or type">
         <span class="lumin-quick-icon" aria-hidden="true">◎</span>
         <span class="lumin-quick-copy">
-          <span class="lumin-quick-title" id="lumin-quick-title">Lumin — speak or type</span>
-          <span class="lumin-quick-sub" id="lumin-quick-sub">Real execution — say "open LifeRE", "run alpha cycle", or "do: fix X". Receipts only, no theater.</span>
+          <span class="lumin-quick-title" id="lumin-quick-title">Ask Lumin — tap to chat</span>
+          <span class="lumin-quick-sub" id="lumin-quick-sub">Opens the chat drawer. Type here after it opens — or say "open LifeRE" / "do: fix X".</span>
         </span>
         <span class="lumin-quick-chev" aria-hidden="true">›</span>
       </button>
@@ -2511,7 +2512,7 @@
 <!-- lumin parity probe -->
 <!-- point-b-direct-exec-probe -->
 <div class="lumin-drawer dock-right" id="lumin-drawer">
-  <div class="lumin-drawer-header">
+  <div class="lumin-drawer-header" onclick="onLuminHeaderClick(event)">
     <div class="lumin-drawer-avatar">◎</div>
     <div class="lumin-drawer-title">
       <strong>Lumin</strong>
@@ -2731,8 +2732,13 @@ function applyShellLayoutFromQuery() {
     }
   }
   if (directSystemLaunch === '1') {
-    setTimeout(() => openLuminDrawer(), 150);
+    setTimeout(() => openLuminDrawer({ expand: true }), 150);
   }
+  const chatLaunch = new URLSearchParams(location.search).get('chat');
+  if (chatLaunch === '1') {
+    setTimeout(() => openLuminDrawer({ expand: true }), 200);
+  }
+  closeSettings();
   if (luminVoiceLaunch !== '0' && (directSystemLaunch === '1' || luminVoiceLaunch === '1')) {
     setTimeout(() => initLuminWakeWordListen(), 800);
   }
@@ -2817,6 +2823,8 @@ function loadPage(page) {
     toast('That page is not available yet.');
     return;
   }
+
+  closeSettings();
 
   const frame = document.getElementById('content-frame');
   const nextUrl = `${overlayUrl(page)}?shell=1&_=${Date.now()}`;
@@ -3114,6 +3122,7 @@ document.addEventListener('click', (e) => {
 function openSettings(e) {
   if (e) e.stopPropagation();
   document.getElementById('user-dropdown').classList.remove('open');
+  if (luminState.open && !luminState.pinned) closeLuminDrawer();
   document.getElementById('settings-panel').classList.add('open');
   document.getElementById('settings-backdrop').classList.add('open');
   const amb = document.getElementById('st-ambient');
@@ -3393,6 +3402,23 @@ function toggleLuminMinimize() {
   luminState.minimized = !luminState.minimized;
   localStorage.setItem(LUMIN_MIN_KEY, luminState.minimized ? 'true' : 'false');
   applyLuminDockUi();
+  if (!luminState.minimized) {
+    setTimeout(() => document.getElementById('lumin-input')?.focus(), 60);
+  }
+}
+
+function expandLuminIfMinimized() {
+  if (!luminState.minimized) return;
+  luminState.minimized = false;
+  localStorage.setItem(LUMIN_MIN_KEY, 'false');
+  applyLuminDockUi();
+  setTimeout(() => document.getElementById('lumin-input')?.focus(), 60);
+}
+
+function onLuminHeaderClick(e) {
+  if (!luminState.minimized) return;
+  if (e.target.closest('button, a, .lumin-dock-controls, .lumin-voice-ctrl, .lumin-history-link')) return;
+  expandLuminIfMinimized();
 }
 
 function toggleLuminDrawer() {
@@ -3401,7 +3427,7 @@ function toggleLuminDrawer() {
 }
 
 function openLuminFromQuickBar() {
-  openLuminDrawer();
+  openLuminDrawer({ expand: true });
 }
 
 function safePromptText(value) {
@@ -3411,7 +3437,7 @@ function safePromptText(value) {
 }
 
 function seedLuminPrompt(prompt, { send = false } = {}) {
-  openLuminDrawer();
+  openLuminDrawer({ expand: true });
   const input = document.getElementById('lumin-input');
   if (!input) return;
   const text = safePromptText(prompt);
@@ -3427,8 +3453,15 @@ window.lifeosStudioRunAction = function lifeosStudioRunAction(prompt, opts = {})
   seedLuminPrompt(prompt, opts);
 };
 
-function openLuminDrawer() {
+function openLuminDrawer(opts = {}) {
+  const expand = opts.expand !== false;
+  closeSettings();
+  if (expand && luminState.minimized) {
+    luminState.minimized = false;
+    localStorage.setItem(LUMIN_MIN_KEY, 'false');
+  }
   luminState.open = true;
+  document.body.classList.add('lumin-open');
   document.getElementById('lumin-drawer').classList.add('open');
   if (!luminState.pinned) document.getElementById('lumin-backdrop').classList.add('open');
   document.getElementById('lumin-fab').classList.add('drawer-open');
@@ -3442,6 +3475,7 @@ function openLuminDrawer() {
 function closeLuminDrawer() {
   if (luminState.pinned) return;
   luminState.open = false;
+  document.body.classList.remove('lumin-open');
   document.getElementById('lumin-drawer').classList.remove('open');
   document.getElementById('lumin-backdrop').classList.remove('open');
   document.getElementById('lumin-fab').classList.remove('drawer-open');
@@ -3449,7 +3483,7 @@ function closeLuminDrawer() {
 }
 
 function openFullChat() {
-  openLuminDrawer();
+  openLuminDrawer({ expand: true });
   document.getElementById('lumin-input')?.focus();
 }
 
@@ -3741,7 +3775,10 @@ async function luminSend(opts = {}) {
         }
       }
       luminFinalizeWorklog(worklogId, { pass_fail: 'FAIL', first_blocker: 'auth_redirect' });
-      location.href = (data && data.redirect) ? data.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';
+      _appendLuminMsgRaw(null, 'assistant', 'Session expired — sign in again to keep chatting.');
+      setTimeout(() => {
+        location.href = (data && data.redirect) ? data.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';
+      }, 900);
       return;
     }
 
@@ -3867,15 +3904,28 @@ function luminHandleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); luminSend(); }
 }
 
-/** Shell-wide: Cmd/Ctrl+L opens the Lumin drawer and focuses input (not when typing in other fields). */
+/** Escape closes Settings first, then Lumin. Cmd/Ctrl+L opens chat. */
 document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const settingsOpen = document.getElementById('settings-panel')?.classList.contains('open');
+    if (settingsOpen) {
+      e.preventDefault();
+      closeSettings();
+      return;
+    }
+    if (luminState.open && !luminState.pinned) {
+      e.preventDefault();
+      closeLuminDrawer();
+    }
+    return;
+  }
   const isMac = navigator.platform && navigator.platform.toUpperCase().indexOf('MAC') >= 0;
   const mod = isMac ? e.metaKey : e.ctrlKey;
   if (!mod || e.key.toLowerCase() !== 'l') return;
   const t = e.target;
   if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
   e.preventDefault();
-  openLuminDrawer();
+  openLuminDrawer({ expand: true });
   setTimeout(() => document.getElementById('lumin-input')?.focus(), 0);
 });
 
@@ -3885,7 +3935,7 @@ window.addEventListener('message', (e) => {
   if (!e.data || e.data.type !== 'lifeos-shell' || e.data.action !== 'open-lumin-drawer') return;
   const frame = document.getElementById('content-frame');
   if (frame && frame.contentWindow && e.source !== frame.contentWindow) return;
-  openLuminDrawer();
+  openLuminDrawer({ expand: true });
   setTimeout(() => document.getElementById('lumin-input')?.focus(), 0);
 });
 

@@ -8,6 +8,12 @@
 
 ---
 
+## [FIX] Update 2026-07-10 — Lumin chat drawer usable
+
+Adam: chat window not functioning. KNOW: founder-interface API returns 200; drawer can reply. Fix: open always expands if minimized (hid input), close Settings when chatting, Escape closes overlays, clearer Ask Lumin entry. Hard-refresh tip after deploy.
+
+---
+
 ## [BUILD] Update 2026-07-10 — LifeOS Connect (guided account handoff)
 
 Adam: system must do account setup; when human click needed, LifeOS opens site + email + return (calendar-style), secrets hidden-by-default with reveal. Shipped `lifeos-connect.html` + `/api/v1/accounts/connect|attention|guide|reveal|resume-verify`; Chair setup_account opens Connect. SmartLead mid-flight (magic link to LifeOS@) — finish from Connect. Tip `726ff6c596`.

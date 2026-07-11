@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — LifeOS Connect: guided site→email→back for service signup + hidden-by-default credential reveal. |
+| **Last Updated** | 2026-07-10 — Lumin chat UX: expand-on-open (minimized hid input), close Settings when chatting, Escape closes overlays. |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-10 | **Lumin chat UX — drawer usable again** — opening chat always expands if minimized (localStorage `lifeos_lumin_dock_minimized` was hiding input/messages); closes Settings when opening chat / navigating; Escape closes Settings then drawer; clearer Ask Lumin copy; auth expiry message before login redirect; `?chat=1` opens drawer. | Adam: chat window not functioning / can't use it. Backend already 200; UX blocker was minimized + Settings competing. | ✅ local | tip-sync + hard refresh |
 | 2026-07-10 | **LifeOS Connect (guided human handoff)** — new `lifeos-connect.html` nav; `POST /api/v1/accounts/connect`, `/attention`, `/:service/guide`, `/:service/reveal` (audited, hidden-by-default), `/:service/resume-verify`; Chair `setup_account` opens Connect + site/email windows; WORK_EMAIL IMAP used for magic-link when signup email is LifeOS@. | Adam: system must do signups; when human click needed, LifeOS pulls up site + email + return — same pattern for calendar/etc; secrets hidden until reveal. | ✅ local | tip-sync |
 | 2026-07-10 | **SocialMediaOS in LifeOS shell** — nav item → `/marketing`; `?stack=socialmediaos` redirects to standalone SMOS app (not LifeRE-only). | Adam: SMOS as its own app + built into LifeOS. | ✅ local | tip-sync |
 | 2026-07-10 | **Chair setup_account action** — `parseLuminChairSystemAction` matches set up/sign up/create account; `tryLuminChairSystemAction` calls `POST /api/v1/browser-agent/signup` with `founder_authority:true` (URL or known service name from text). | Adam: when he says set up an account, system has full authority including payment. | ✅ parse smoke | tip-sync |
