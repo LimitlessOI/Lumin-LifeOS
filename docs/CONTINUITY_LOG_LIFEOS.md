@@ -8,6 +8,12 @@
 
 ---
 
+## [MONEY] Update 2026-07-11 — First-client push ongoing
+
+Adam: keep it up, get first client. KNOW: external cold email still Postmark-pending (SMTP timeout). Queued deferred invites for Flores/Advanced/Thrive/Summit/Desert Springs (preview builds on click). Same-domain packs + SMS call scripts to Adam. Tip browser contact forms giving up. Brevo/Resend still captcha. Fastest $ still: Adam calls Flores (702) 242-3373 or clears one email captcha.
+
+---
+
 ## [COST] Update 2026-07-11 — Deferred lean preview on click
 
 Adam: try different approaches; only build when they click to save money. KNOW: cold `/prospect` defaults to deferred lean — email link first, ~30–90s build on first preview GET. Full AI variants still via deferred:false. External cold email still Postmark-blocked; same-domain invites work.
