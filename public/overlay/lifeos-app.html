@@ -2834,7 +2834,6 @@ function loadPage(page) {
   let nextUrl;
   if (meta.externalPath) {
     const params = new URLSearchParams({ shell: '1', _: String(Date.now()) });
-    if (KEY) params.set('commandKey', KEY);
     nextUrl = `${meta.externalPath}?${params.toString()}`;
   } else {
     nextUrl = `${overlayUrl(page)}?shell=1&_=${Date.now()}`;

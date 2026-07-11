@@ -10,7 +10,7 @@
 
 ## [SMOS] Update 2026-07-11 — SocialMediaOS inside LifeOS UI
 
-Adam: get SMOS ready + test through UI. Programmed LifeOS nav embed (`PAGE_META.marketing` → `/marketing?shell=1` in content-frame), marketing UI auth/shell hardening, disabled missing publish-route auto-register. Tip Phase 1 API loop PASS (consent→export). Browser UI proof pending post-deploy.
+Adam: get SMOS ready + test through UI. Programmed LifeOS nav embed (`PAGE_META.marketing` → `/marketing?shell=1` in content-frame), marketing UI auth/shell hardening, disabled missing publish-route auto-register. KNOW: tip Phase 1 API loop PASS + LifeOS iframe UI loop PASS (consent→export session `f9afe8e5-…`, receipt `products/receipts/SMOS_LIFEOS_UI_LOOP.json`, deploy `2c811a0285`). Still not broad-market ready (no paying customer / R2 audio / Phase 5 publish).
 
 ---
 
