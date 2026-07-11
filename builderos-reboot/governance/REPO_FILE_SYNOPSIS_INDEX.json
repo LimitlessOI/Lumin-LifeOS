@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T16:35:40.399Z",
+  "generated_at": "2026-07-11T16:44:18.057Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11453,
   "files": [
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 66824,
-      "mtime": "2026-07-11T16:23:31.133Z",
-      "indexed_at": "2026-07-11T16:27:58.767Z"
+      "bytes": 67603,
+      "mtime": "2026-07-11T16:43:25.497Z",
+      "indexed_at": "2026-07-11T16:44:18.057Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -39348,9 +39348,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 601777,
-      "mtime": "2026-07-11T16:35:34.692Z",
-      "indexed_at": "2026-07-11T16:35:40.399Z"
+      "bytes": 601950,
+      "mtime": "2026-07-11T16:43:34.643Z",
+      "indexed_at": "2026-07-11T16:44:18.057Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39728,9 +39728,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 95342,
-      "mtime": "2026-07-11T15:41:46.744Z",
-      "indexed_at": "2026-07-11T15:42:51.033Z"
+      "bytes": 93296,
+      "mtime": "2026-07-11T16:44:12.249Z",
+      "indexed_at": "2026-07-11T16:44:18.057Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -63926,9 +63926,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 184146,
-      "mtime": "2026-07-11T02:47:54.937Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 184403,
+      "mtime": "2026-07-11T16:42:44.449Z",
+      "indexed_at": "2026-07-11T16:44:18.057Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -64403,10 +64403,10 @@
     },
     {
       "path": "public/overlay/site-builder-landing.html",
-      "synopsis": "HTML page: Site Builder — We Rebuild Your Front Door First",
-      "bytes": 14477,
-      "mtime": "2026-06-21T21:39:02.314Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
+      "bytes": 13561,
+      "mtime": "2026-07-11T16:42:11.350Z",
+      "indexed_at": "2026-07-11T16:44:18.057Z"
     },
     {
       "path": "public/overlay/socialmediaos-session.html",
@@ -66322,9 +66322,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 29999,
-      "mtime": "2026-07-11T15:40:29.096Z",
-      "indexed_at": "2026-07-11T15:42:51.033Z",
+      "bytes": 33668,
+      "mtime": "2026-07-11T16:42:27.070Z",
+      "indexed_at": "2026-07-11T16:44:18.057Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

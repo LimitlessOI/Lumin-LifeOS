@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Twilio From provision + SendGrid fallback; Adam authorized pay/open for money path. |
+| **Last Updated** | 2026-07-11 — Site Builder nav launch link + money-path voice/SMS. |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-11 | **Site Builder launched in LifeOS nav** — nav item → `/site-builder` public sales page ($45 beta). | Adam: launch Site Builder so others can buy. | ✅ with site-builder landing ship |
 | 2026-07-11 | **Twilio trial unblock** — voice to Adam works; business calls blocked (trial). Added `POST …/voice/verify-caller-id` so Twilio can validate Flores line on-trial, then pitch-call. Console upgrade login stalled on Auth0. | Adam: do what you can financially. | ⚠️ push + verify Flores |
 | 2026-07-11 | **Founder voice outreach** — `POST /api/v1/lifeos/founder/voice/call` places Twilio B2B call with spoken Site Builder pitch + Adam callback. Used when prospect sites have no contact form and cold email is provider-blocked. | Adam: do what you can to take care of me financially. | ⚠️ push + call Flores |
 | 2026-07-11 | **Founder SMS + Resend fallback** — `routes/founder-sms-routes.js` auto-registered (`POST /api/v1/lifeos/founder/sms`); NotificationService gains `resend` provider + Postmark-pending→Resend then SMTP chain. Resend signup started (captcha needs human in Connect). | Adam: do whatever legal to make money. | ⚠️ tip-sync + captcha + SMS prove |

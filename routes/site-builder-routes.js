@@ -11,6 +11,8 @@
  *   POST /api/v1/sites/follow-up          — Send follow-up email to a prospect
  *   GET  /api/v1/sites/pos-partners       — List POS commission partners
  *   GET  /api/v1/sites/launch-readiness   — Revenue readiness check (env vars + blockers)
+ *   POST /api/v1/sites/public-lead        — Public beta lead intake (no key; rate-limited)
+ *   GET  /site-builder                    — Public sales landing redirect
  *
  * Usage (register in server.js):
  *   import { createSiteBuilderRoutes } from './routes/site-builder-routes.js';
@@ -120,6 +122,95 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     message: { error: 'Too many prospect requests — try again in an hour' },
     standardHeaders: true,
     legacyHeaders: false,
+  });
+
+  const publicLeadLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 8,
+    message: { ok: false, error: 'Too many preview requests — try again in an hour' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  // Public launch URL — sales front door
+  app.get(['/site-builder', '/sitebuilder', '/sites'], (_req, res) => {
+    res.redirect(302, '/overlay/site-builder-landing.html');
+  });
+
+  /**
+   * POST /api/v1/sites/public-lead
+   * Public beta intake — no command key. Builds a lean preview and emails the lead when possible.
+   */
+  router.post('/public-lead', publicLeadLimiter, async (req, res) => {
+    try {
+      const businessUrl = String(req.body?.businessUrl || req.body?.url || '').trim();
+      const contactEmail = String(req.body?.contactEmail || req.body?.email || '').trim().toLowerCase();
+      const businessName = String(req.body?.businessName || req.body?.name || '').trim() || undefined;
+      const contactName = String(req.body?.contactName || '').trim() || undefined;
+
+      if (!/^https?:\/\//i.test(businessUrl)) {
+        return res.status(400).json({ ok: false, error: 'businessUrl must start with http:// or https://' });
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+        return res.status(400).json({ ok: false, error: 'A valid contactEmail is required' });
+      }
+
+      const pipeline = getProspectPipeline({
+        callCouncilMember,
+        pool,
+        outreachAutomation,
+        notificationService,
+        baseUrl,
+      });
+
+      const options = {
+        businessUrl,
+        contactEmail,
+        contactName,
+        businessName,
+        skipEmail: false,
+        enrich: false,
+        skipRepair: true,
+        skipBlogs: true,
+        skipAi: true,
+        leanTemplate: true,
+      };
+
+      const job = await enqueueProspectJob(pipeline, options);
+      if (!job.ok) {
+        return res.status(job.error?.includes('already running') ? 409 : 400).json(job);
+      }
+
+      const founderNotify = process.env.ADAM_NOTIFY_EMAIL || process.env.WORK_EMAIL || 'adam@hopkinsgroup.org';
+      if (notificationService?.sendEmail) {
+        notificationService
+          .sendEmail({
+            to: founderNotify,
+            subject: `Site Builder lead — ${businessName || businessUrl}`,
+            html: `<p>New public lead from Site Builder launch page.</p>
+              <p><b>Business:</b> ${businessName || '(none)'}<br>
+              <b>URL:</b> ${businessUrl}<br>
+              <b>Email:</b> ${contactEmail}<br>
+              <b>clientId:</b> ${job.clientId || job.client_id || ''}</p>
+              <p><a href="${baseUrl || ''}/overlay/site-builder-command-center.html">Open command center</a></p>`,
+            text: `Site Builder lead: ${businessUrl} / ${contactEmail}`,
+          })
+          .catch((err) => logger.warn?.('[SITE] founder lead notify failed', { error: err.message }));
+      }
+
+      logger.info('[SITE] Public lead accepted', { businessUrl, contactEmail, clientId: job.clientId });
+      return res.status(202).json({
+        ok: true,
+        message: 'Preview started. We will email you when it is ready.',
+        clientId: job.clientId || job.client_id || null,
+        statusUrl: job.clientId
+          ? `/api/v1/sites/prospects/${job.clientId}/status`
+          : null,
+      });
+    } catch (err) {
+      logger.error('[SITE] Public lead error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
   });
 
   // DB fallback FIRST — Railway multi-instance / ephemeral disk often miss files.

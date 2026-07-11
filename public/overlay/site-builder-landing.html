@@ -1,37 +1,41 @@
 <!DOCTYPE html>
-<!-- SYNOPSIS: HTML page: Site Builder — We Rebuild Your Front Door First -->
+<!-- SYNOPSIS: HTML page: Site Builder — public $45 beta sales front door -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Site Builder — We Rebuild Your Front Door First</title>
+  <title>Site Builder — $45 beta site publish | LimitlessOS</title>
+  <meta name="description" content="We rebuild your business website first. See a live preview, then publish for $45 including 2 months of management." />
   <style>
     :root {
-      --bg: #f5f1e8;
-      --paper: #fffdf8;
-      --ink: #1f2a24;
-      --muted: #5f6e65;
-      --line: #d8d0c2;
-      --accent: #154734;
-      --accent-soft: #dcecdf;
-      --warm: #c66b3d;
-      --shadow: 0 18px 48px rgba(31, 42, 36, 0.08);
+      --bg: #0f1412;
+      --paper: #171d1a;
+      --ink: #f3f6f2;
+      --muted: #a7b5ab;
+      --line: #2a3530;
+      --accent: #5ecf8e;
+      --accent-deep: #1f6b45;
+      --shadow: 0 24px 60px rgba(0,0,0,0.35);
       --radius: 18px;
       --radius-sm: 12px;
+      --font: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+      --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: var(--font);
       color: var(--ink);
       background:
-        radial-gradient(circle at top left, rgba(198,107,61,0.10), transparent 34%),
-        linear-gradient(180deg, #f8f4eb 0%, var(--bg) 100%);
+        radial-gradient(circle at 12% 8%, rgba(94,207,142,0.18), transparent 36%),
+        radial-gradient(circle at 88% 0%, rgba(70,120,255,0.12), transparent 28%),
+        linear-gradient(180deg, #121816 0%, var(--bg) 55%, #0c100e 100%);
       line-height: 1.55;
+      min-height: 100vh;
     }
     a { color: inherit; }
     .shell {
-      width: min(1180px, calc(100vw - 2rem));
+      width: min(1120px, calc(100vw - 2rem));
       margin: 0 auto;
       padding: 1.25rem 0 4rem;
     }
@@ -40,274 +44,221 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      padding: 0.5rem 0 1.25rem;
+      padding: 0.5rem 0 1.5rem;
     }
     .brand {
-      font-size: 1rem;
-      letter-spacing: 0.16em;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
     }
     .nav-links {
       display: flex;
-      gap: 1rem;
-      align-items: center;
+      gap: 0.75rem;
       flex-wrap: wrap;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.92rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
     }
     .pill {
       border: 1px solid var(--line);
       border-radius: 999px;
-      padding: 0.65rem 1rem;
-      background: rgba(255,255,255,0.72);
+      padding: 0.55rem 0.95rem;
+      background: rgba(255,255,255,0.03);
       text-decoration: none;
     }
     .hero {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 1.5rem;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.25rem;
       align-items: stretch;
-      margin-top: 1rem;
     }
     .card {
-      background: rgba(255,253,248,0.92);
-      border: 1px solid rgba(216,208,194,0.9);
+      background: rgba(23,29,26,0.88);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
-    .hero-copy {
-      padding: 2.4rem;
-    }
+    .hero-copy { padding: 2.2rem; }
     .eyebrow {
       display: inline-flex;
-      gap: 0.5rem;
-      align-items: center;
       border-radius: 999px;
-      padding: 0.35rem 0.7rem;
-      background: var(--accent-soft);
+      padding: 0.35rem 0.75rem;
+      background: rgba(94,207,142,0.12);
       color: var(--accent);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.82rem;
+      font-family: var(--sans);
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
     h1 {
-      margin: 1rem 0 1rem;
-      font-size: clamp(2.7rem, 6vw, 5.2rem);
-      line-height: 0.96;
+      margin: 1rem 0 0.9rem;
+      font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+      line-height: 0.98;
       font-weight: 700;
-      max-width: 12ch;
+      max-width: 11ch;
     }
     .lede {
-      max-width: 54ch;
+      max-width: 48ch;
       color: var(--muted);
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
+      font-size: 1.08rem;
+      margin-bottom: 1.35rem;
+      font-family: var(--sans);
     }
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.85rem;
-      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+      margin-bottom: 1.1rem;
     }
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.45rem;
-      padding: 0.95rem 1.25rem;
+      gap: 0.4rem;
+      padding: 0.9rem 1.2rem;
       border-radius: 999px;
       text-decoration: none;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--sans);
       font-size: 0.95rem;
       font-weight: 700;
+      border: 0;
+      cursor: pointer;
     }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
+    .btn-primary { background: var(--accent); color: #082214; }
     .btn-secondary {
       border: 1px solid var(--line);
-      background: var(--paper);
+      background: transparent;
       color: var(--ink);
     }
-    .proof-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin-top: 1.5rem;
+    .price-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.45rem;
+      margin: 0.4rem 0 1rem;
+      font-family: var(--sans);
     }
-    .proof {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-sm);
-      padding: 0.9rem 1rem;
-      background: rgba(255,255,255,0.65);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    .proof strong {
-      display: block;
-      font-size: 1.15rem;
-    }
-    .proof span {
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-    .hero-spec {
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .spec-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      align-items: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-    .preview-shot {
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      padding: 1rem;
-      background: linear-gradient(180deg, #113224 0%, #183f2c 100%);
-      color: #f7f4ee;
-      min-height: 220px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 0.75rem;
-    }
-    .preview-shot h2 {
-      margin: 0;
+    .price-chip strong {
       font-size: 2rem;
-      line-height: 1.02;
-      max-width: 10ch;
+      color: var(--accent);
     }
-    .preview-shot p {
-      margin: 0;
-      color: rgba(247,244,238,0.82);
-      max-width: 38ch;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    .mini-cards {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.75rem;
-    }
-    .mini {
+    .price-chip span { color: var(--muted); font-size: 0.92rem; }
+    .hero-panel { padding: 1.2rem; display: grid; gap: 0.9rem; }
+    .demo {
+      border-radius: 16px;
+      overflow: hidden;
       border: 1px solid var(--line);
-      border-radius: var(--radius-sm);
-      background: rgba(255,255,255,0.7);
-      padding: 0.85rem;
-      min-height: 92px;
+      background: #0b100e;
+      min-height: 240px;
     }
-    .mini strong,
-    .step strong,
-    .offer strong {
-      display: block;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.96rem;
-      margin-bottom: 0.35rem;
+    .demo iframe {
+      width: 100%;
+      height: 260px;
+      border: 0;
+      background: #fff;
     }
-    .mini span,
-    .step span,
-    .offer span {
+    .demo-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
       color: var(--muted);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.9rem;
+      padding: 0 0.15rem;
     }
-    .section {
-      margin-top: 1.5rem;
-      padding: 1.5rem;
-    }
-    .section h3 {
-      margin: 0 0 0.75rem;
-      font-size: 1.55rem;
-    }
+    .section { margin-top: 1.25rem; padding: 1.5rem; }
+    .section h3 { margin: 0 0 0.6rem; font-size: 1.5rem; }
     .section > p {
       margin: 0 0 1rem;
       color: var(--muted);
-      max-width: 62ch;
+      max-width: 60ch;
+      font-family: var(--sans);
     }
     .three-up {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.9rem;
+      gap: 0.85rem;
     }
     .step, .offer {
       border: 1px solid var(--line);
       border-radius: var(--radius-sm);
-      background: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.03);
       padding: 1rem;
     }
-    .offer-price {
-      font-size: 1.35rem;
-      color: var(--accent);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-weight: 800;
-      margin-bottom: 0.4rem;
+    .step strong, .offer strong {
+      display: block;
+      font-family: var(--sans);
+      margin-bottom: 0.35rem;
     }
-    .grid-two {
+    .step span, .offer span {
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 0.92rem;
+    }
+    .offer-price {
+      font-family: var(--sans);
+      font-weight: 800;
+      color: var(--accent);
+      font-size: 1.25rem;
+      margin-bottom: 0.35rem;
+    }
+    .lead-form {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .lead-form label {
+      display: grid;
+      gap: 0.35rem;
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .lead-form input {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #0f1512;
+      color: var(--ink);
+      padding: 0.85rem 0.95rem;
+      font-size: 1rem;
+      font-family: var(--sans);
+    }
+    .lead-form .row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1rem;
+      gap: 0.75rem;
     }
-    .checklist {
-      display: grid;
-      gap: 0.7rem;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    .status {
+      min-height: 1.3rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--accent);
     }
-    .checklist div {
-      display: flex;
-      gap: 0.6rem;
-      align-items: flex-start;
-      color: var(--muted);
-    }
-    .checklist div::before {
-      content: "•";
-      color: var(--warm);
-      font-size: 1.2rem;
-      line-height: 1;
-    }
+    .status.error { color: #ff8f8f; }
     .cta {
-      margin-top: 1.5rem;
-      padding: 1.7rem;
+      margin-top: 1.25rem;
+      padding: 1.6rem;
       text-align: center;
-      border: 1px solid rgba(21,71,52,0.16);
-      background: linear-gradient(180deg, rgba(220,236,223,0.72), rgba(255,253,248,0.95));
+      border: 1px solid rgba(94,207,142,0.25);
+      background: linear-gradient(180deg, rgba(31,107,69,0.28), rgba(23,29,26,0.95));
       border-radius: var(--radius);
     }
-    .cta h3 {
-      margin: 0 0 0.6rem;
-      font-size: 1.8rem;
-    }
+    .cta h3 { margin: 0 0 0.5rem; font-size: 1.7rem; }
     .cta p {
       margin: 0 auto 1rem;
-      max-width: 54ch;
+      max-width: 52ch;
       color: var(--muted);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--sans);
     }
     .small-note {
-      margin-top: 0.8rem;
+      margin-top: 0.75rem;
       color: var(--muted);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.86rem;
+      font-family: var(--sans);
+      font-size: 0.84rem;
     }
-    @media (max-width: 980px) {
-      .hero,
-      .three-up,
-      .grid-two {
-        grid-template-columns: 1fr;
-      }
-      .proof-row,
-      .mini-cards {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 900px) {
+      .hero, .three-up, .lead-form .row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -316,136 +267,157 @@
     <div class="nav">
       <div class="brand">LimitlessOS · Site Builder</div>
       <div class="nav-links">
-        <a class="pill" href="#how">How it works</a>
-        <a class="pill" href="#offers">Pricing</a>
-        <a class="pill" href="#next">Next step</a>
+        <a class="pill" href="#demo">Live demo</a>
+        <a class="pill" href="#pricing">Pricing</a>
+        <a class="pill" href="#request">Get yours</a>
       </div>
     </div>
 
     <section class="hero">
       <div class="hero-copy card">
-        <div class="eyebrow">See the work first</div>
-        <h1>We rebuild your front door before asking you to buy.</h1>
+        <div class="eyebrow">Beta launch · Las Vegas local businesses</div>
+        <h1>See a better site before you pay.</h1>
+        <div class="price-chip">
+          <strong>$45</strong>
+          <span>publish · includes 2 months management</span>
+        </div>
         <p class="lede">
-          We take an outdated business website, rebuild a cleaner conversion-first version, and show it to the owner as a live preview. If they like it, they claim it and we launch it. If they do not, they walk away.
+          We rebuild your current website into a cleaner, mobile-ready front door.
+          You see the live preview first. If you like it, publish for $45.
+          If not, walk away.
         </p>
         <div class="actions">
-          <a class="btn btn-primary" href="mailto:adam@hopkinsgroup.org?subject=Site%20Builder%20Preview%20Request">Request a preview build</a>
-          <a class="btn btn-secondary" href="#offers">See the offer ladder</a>
-        </div>
-        <div class="proof-row">
-          <div class="proof">
-            <strong>Low trust barrier</strong>
-            <span>The prospect sees the improvement before paying.</span>
-          </div>
-          <div class="proof">
-            <strong>Low buyer risk</strong>
-            <span>No production integration needed to say yes.</span>
-          </div>
-          <div class="proof">
-            <strong>Expansion path</strong>
-            <span>Site -> SEO -> Google Business -> LimitlessOS.</span>
-          </div>
+          <a class="btn btn-primary" href="#request">Request your preview</a>
+          <a class="btn btn-secondary" href="#demo">View a live dental demo</a>
         </div>
       </div>
 
-      <div class="hero-spec card">
-        <div class="spec-top">
-          <span>Preview pattern</span>
-          <span>Homepage -> launch -> growth</span>
+      <div class="hero-panel card" id="demo">
+        <div class="demo-meta">
+          <span>Live demo · Flores Family Dental</span>
+          <a href="/previews/prev_1783784688744_nw7c/index.html" target="_blank" rel="noopener">Open full preview</a>
         </div>
-        <div class="preview-shot">
-          <div>
-            <h2>Modern trust. Clear CTA. Better first impression.</h2>
-            <p>Homepage rebuilds are the entry wedge. The preview proves taste, speed, and business understanding before the owner has to trust a broader AI system.</p>
-          </div>
-          <div class="btn btn-secondary" style="align-self:flex-start;">Preview before purchase</div>
+        <div class="demo">
+          <iframe
+            title="Flores Family Dental preview"
+            loading="lazy"
+            src="/previews/prev_1783784688744_nw7c/index.html"
+          ></iframe>
         </div>
-        <div class="mini-cards">
-          <div class="mini">
-            <strong>Base rebuild</strong>
-            <span>Headline, mobile layout, CTA structure, trust signals, booking flow.</span>
-          </div>
-          <div class="mini">
-            <strong>Growth add-ons</strong>
-            <span>GBP, reviews, SEO pages, content, follow-up, receptionist, overlay.</span>
-          </div>
+        <div class="actions" style="margin:0">
+          <a class="btn btn-primary" href="/api/v1/sites/publish/checkout?clientId=prev_1783784688744_nw7c" target="_blank" rel="noopener">Buy this demo for $45</a>
+          <a class="btn btn-secondary" href="#request">Build mine instead</a>
         </div>
       </div>
     </section>
 
     <section class="section card" id="how">
-      <h3>How the lane should work</h3>
-      <p>The goal is not to sell a giant site project first. The goal is to make the first yes easy, visible, and low risk.</p>
+      <h3>How buying works</h3>
+      <p>Simple path. No giant website project. No risk before you see the work.</p>
       <div class="three-up">
         <div class="step">
-          <strong>1. Build the preview</strong>
-          <span>Scrape the current site, extract services and positioning, then generate a cleaner conversion-first homepage preview.</span>
+          <strong>1. Send your current site</strong>
+          <span>Paste your business URL. We rebuild a conversion-first homepage preview.</span>
         </div>
         <div class="step">
-          <strong>2. Show the contrast</strong>
-          <span>Short outreach: “We rebuilt your front door first. If you like it, we can make it yours.” The preview does most of the selling.</span>
+          <strong>2. Review the live preview</strong>
+          <span>Open it on your phone. Share it with your team. Decide with evidence.</span>
         </div>
         <div class="step">
-          <strong>3. Climb the trust ladder</strong>
-          <span>Launch the site, then expand into GBP, SEO, reviews, intake, follow-up, receptionist, and full business operations.</span>
+          <strong>3. Publish for $45</strong>
+          <span>Stripe checkout. Includes the first 2 months of site management.</span>
         </div>
       </div>
     </section>
 
-    <section class="section card" id="offers">
-      <h3>Offer ladder</h3>
-      <p>The entry offer should feel easy to say yes to, without looking desperate. We are not competing by being cheap. We are competing by making the first decision obvious.</p>
+    <section class="section card" id="pricing">
+      <h3>Beta pricing</h3>
+      <p>Early participants get the launch price. After beta, claim-and-launch and care plans move up.</p>
       <div class="three-up">
         <div class="offer">
-          <div class="offer-price">Free preview</div>
-          <strong>Homepage concept</strong>
-          <span>We rebuild the front page and show the difference. This is the trust-acquisition step.</span>
+          <div class="offer-price">Free</div>
+          <strong>Preview rebuild</strong>
+          <span>We build the front door first so you can judge quality before paying.</span>
         </div>
         <div class="offer">
-          <div class="offer-price">$250–$500</div>
-          <strong>Claim and launch</strong>
-          <span>Make the preview theirs, complete the final pass, swap assets, and launch with capped revision scope.</span>
+          <div class="offer-price">$45</div>
+          <strong>Publish + 2 months care</strong>
+          <span>Beta front door. Launch the preview and get two months of management included.</span>
         </div>
         <div class="offer">
-          <div class="offer-price">$200+/mo</div>
-          <strong>Growth layer</strong>
-          <span>SEO, Google Business, reviews, content, lead follow-up, and eventually the broader LimitlessOS business stack.</span>
+          <div class="offer-price">$97/mo</div>
+          <strong>Ongoing care</strong>
+          <span>After the included months: updates, SEO help, and content support.</span>
         </div>
       </div>
     </section>
 
-    <section class="section card">
-      <h3>What this unlocks next</h3>
-      <div class="grid-two">
-        <div>
-          <p>This lane is the proof wedge for the broader business OS:</p>
-          <div class="checklist">
-            <div>Web presence and booking flow</div>
-            <div>Google Business cleanup and review systems</div>
-            <div>Lead capture, receptionist, and follow-up automation</div>
-            <div>Billing, POS, dashboards, workflows, and overlay-assisted operations</div>
-            <div>Content, social media, and video production over time</div>
-          </div>
+    <section class="section card" id="request">
+      <h3>Request your preview</h3>
+      <p>Paste your website. We’ll build a preview and email you when it’s ready.</p>
+      <form class="lead-form" id="lead-form">
+        <label>
+          Business website URL
+          <input id="businessUrl" name="businessUrl" type="url" required placeholder="https://yourbusiness.com" autocomplete="url" />
+        </label>
+        <div class="row">
+          <label>
+            Your email
+            <input id="contactEmail" name="contactEmail" type="email" required placeholder="you@business.com" autocomplete="email" />
+          </label>
+          <label>
+            Business name (optional)
+            <input id="businessName" name="businessName" type="text" placeholder="Flores Family Dental" autocomplete="organization" />
+          </label>
         </div>
-        <div>
-          <p>This is also the lowest-risk proving ground for the builder system itself:</p>
-          <div class="checklist">
-            <div>Visible output quality is easy to judge</div>
-            <div>Low operational risk if a preview is imperfect</div>
-            <div>Good place to harden prompts, QA, revisions, and delivery loops</div>
-            <div>Produces case studies and proof before higher-trust lanes like TC and TokenOS</div>
-          </div>
-        </div>
-      </div>
+        <button class="btn btn-primary" type="submit" id="lead-submit">Build my preview</button>
+        <div class="status" id="lead-status" aria-live="polite"></div>
+      </form>
+      <div class="small-note">Prefer to talk? Call or text Adam at (702) 860-2007 · or email adam@hopkinsgroup.org</div>
     </section>
 
-    <section class="cta card" id="next">
-      <h3>What to do now</h3>
-      <p>Pick one narrow niche, build controlled previews only for obviously weak sites, and use this lane to produce first external revenue plus proof that the builder can create real business value.</p>
-      <a class="btn btn-primary" href="mailto:adam@hopkinsgroup.org?subject=Launch%20Site%20Builder%20Lane">Start the Site Builder lane</a>
-      <div class="small-note">Recommended sequence: Site Builder -> TC Service -> broader LimitlessOS business stack.</div>
+    <section class="cta card">
+      <h3>Ready now?</h3>
+      <p>See the dental demo, then request your own. First dollar starts with one yes.</p>
+      <a class="btn btn-primary" href="#request">Get my $45 beta preview</a>
     </section>
   </div>
+  <script>
+    (function () {
+      const form = document.getElementById('lead-form');
+      const status = document.getElementById('lead-status');
+      const submit = document.getElementById('lead-submit');
+      if (!form) return;
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        status.className = 'status';
+        status.textContent = 'Starting your preview build…';
+        submit.disabled = true;
+        const body = {
+          businessUrl: document.getElementById('businessUrl').value.trim(),
+          contactEmail: document.getElementById('contactEmail').value.trim(),
+          businessName: document.getElementById('businessName').value.trim() || undefined,
+        };
+        try {
+          const resp = await fetch('/api/v1/sites/public-lead', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok || data.ok === false) {
+            throw new Error(data.error || ('Request failed (' + resp.status + ')'));
+          }
+          status.textContent = data.message || 'Preview started. Check your email shortly.';
+          form.reset();
+        } catch (err) {
+          status.className = 'status error';
+          status.textContent = err.message || 'Could not start preview';
+        } finally {
+          submit.disabled = false;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

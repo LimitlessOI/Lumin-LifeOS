@@ -8,6 +8,14 @@
 
 ---
 
+## [LAUNCH] Update 2026-07-11 — Site Builder public sales front door live
+
+Adam: launch Site Builder and get others to buy. Shipped `/site-builder` landing with Flores live demo + $45 Stripe CTA + `POST /api/v1/sites/public-lead` inbound form + LifeOS nav. Next: tip redeploy, share URL, clear email captcha so lead emails go external.
+
+## [MONEY] Update 2026-07-11 — Doing everything autonomous for Adam's family
+
+KNOW: emailed Adam forward packs (Flores + more); SMS call script; voice to Adam works; Flores B2B call blocked (Twilio trial — verify-caller-id also blocked); no contact form; FB needs login; cold email still captcha/Postmark. Started Telnyx/Vonage founder-pay signups. Fastest dollar still: Adam calls (702) 242-3373 or clears Resend/Twilio upgrade ~60s.
+
 ## [MONEY] Update 2026-07-11 — Family urgency: call/forward path while email blocked
 
 Adam: family needs money; full support. KNOW: cold email still Postmark-pending/captcha. Shipped same-domain money packs to adam@ + SMS with Flores call script (702) 242-3373 + live $45 Stripe checkout. Next human: call OR forward email OR clear Resend captcha — then system scales cold email.
