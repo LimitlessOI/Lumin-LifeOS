@@ -77,13 +77,16 @@
     },
     {
       "id": "s6",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/pending-adam-service.js",
       "task": "Implement pending Adam query service with priority sort and type badges",
       "spec": "Export async function getPendingAdam(db,opts={}) that queries pending_adam table (SELECT id,title,type,priority,status,created_at FROM pending_adam WHERE status NOT IN ('resolved','dismissed') ORDER BY priority ASC, created_at ASC LIMIT coalesce(opts.limit,50)). Export async function resolveAdamItem(db,id,resolvedBy) that UPDATE pending_adam SET status='resolved', resolved_at=now(), resolved_by=$2 WHERE id=$1 RETURNING *. Uses CREATE TABLE IF NOT EXISTS pending_adam guard. No browser globals. No AI imports.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "164a6da3603d687096fc9ade428523b6d88925d4",
+      "last_attempt_at": "2026-07-12T03:25:33.983Z",
+      "completed_at": "2026-07-12T03:25:45.503Z"
     },
     {
       "id": "s7",
