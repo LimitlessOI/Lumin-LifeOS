@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Video suggestion cards live; YouTube analytics blocked until Adam pastes GOOGLE_CLIENT_ID/SECRET + Google login. |
+| **Last Updated** | 2026-07-12 — Adam money ASAP: ungated Phase 5 social publish; MarketingOS #1 in PRODUCT_BUILD_PRIORITY; community value-draft queue seeded. |
 
 ---
 
