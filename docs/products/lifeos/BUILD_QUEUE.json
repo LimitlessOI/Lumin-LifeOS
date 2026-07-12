@@ -468,10 +468,13 @@
         "lo-twin-reaction-simulator"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLifeosUiDirectivesRoutes"
-      ]
+      ],
+      "commit_sha": "21786d7d67ac8527bbaff20a480b1e4331bbdc03",
+      "last_attempt_at": "2026-07-12T18:26:11.869Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "lo-ui-directives-auto-register",
