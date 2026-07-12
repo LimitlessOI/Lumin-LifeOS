@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T21:11:37.212Z",
+  "generated_at": "2026-07-12T21:12:10.170Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11478,
   "files": [
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 11878,
-      "mtime": "2026-07-12T20:59:58.985Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "bytes": 11831,
+      "mtime": "2026-07-12T21:11:30.158Z",
+      "indexed_at": "2026-07-12T21:12:10.170Z",
       "synopsis_index_only": true
     },
     {
@@ -39486,9 +39486,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 100323,
-      "mtime": "2026-07-12T20:59:58.992Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z"
+      "bytes": 100543,
+      "mtime": "2026-07-12T21:11:57.881Z",
+      "indexed_at": "2026-07-12T21:12:10.170Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -39647,9 +39647,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 3519,
-      "mtime": "2026-07-12T19:49:04.875Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "bytes": 3470,
+      "mtime": "2026-07-12T21:11:31.370Z",
+      "indexed_at": "2026-07-12T21:12:10.170Z",
       "synopsis_index_only": true
     },
     {
@@ -39757,9 +39757,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 100645,
-      "mtime": "2026-07-12T21:09:08.942Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z"
+      "bytes": 100601,
+      "mtime": "2026-07-12T21:12:00.966Z",
+      "indexed_at": "2026-07-12T21:12:10.170Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -66050,10 +66050,13 @@
     },
     {
       "path": "routes/marketing-community-value-routes.js",
-      "synopsis": "Registers MarketingCommunityValueRoutes routes/handlers (routes/marketing-community-value-routes.js).",
-      "bytes": 3776,
-      "mtime": "2026-07-12T20:59:58.994Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z"
+      "synopsis": "Value-first community draft API for MarketingOS outreach.",
+      "bytes": 2277,
+      "mtime": "2026-07-12T21:11:39.381Z",
+      "indexed_at": "2026-07-12T21:12:10.170Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/marketing-intel-routes.js",
@@ -66067,10 +66070,10 @@
     },
     {
       "path": "routes/marketing-publish-routes.js",
-      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 2543,
-      "mtime": "2026-07-12T20:02:25.103Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "synopsis": "MarketingOS social publish + connections HTTP surface.",
+      "bytes": 2599,
+      "mtime": "2026-07-12T21:11:45.580Z",
+      "indexed_at": "2026-07-12T21:12:10.170Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -84831,10 +84834,13 @@
     },
     {
       "path": "services/marketing-community-value.js",
-      "synopsis": "Exports createCommunityValueDrafter — services/marketing-community-value.js.",
-      "bytes": 6584,
-      "mtime": "2026-07-12T20:59:58.996Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z"
+      "synopsis": "Exports createCommunityValueDrafter — value-first community reply drafts.",
+      "bytes": 6632,
+      "mtime": "2026-07-12T21:11:39.381Z",
+      "indexed_at": "2026-07-12T21:12:10.170Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "services/marketing-content-engine.js",

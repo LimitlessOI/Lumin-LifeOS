@@ -304,7 +304,7 @@
     },
     {
       "id": "mos-social-publish-route",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/marketing-publish-routes.js",
       "task": "Thin Express surface for social-connection status + publishing an approved piece. Pre-registered in config/auto-registered-product-modules.json (path routes/marketing-publish-routes.js, register registerMarketingPublishRoutes) — do NOT edit server.js or any boot file.",
       "spec": "Export registerMarketingPublishRoutes(app, deps) (+ default). deps = { pool, requireKey, logger, createBrowserSession, callModel } (createBrowserSession is an injected async () => session factory — if absent, /publish must return { ok:false, reason:'browser_session_unavailable' } rather than throwing). GET /api/v1/marketing/social-connections (requireKey; owner_id from req.user?.id else req.query.owner_id, 400 if absent) → calls listConnections from services/marketing-social-connections.js, returns { ok:true, connections }. POST /api/v1/marketing/publish (requireKey; body { piece_id }, 400 if missing) → SELECT the marketing_content_pieces row by id, 404 if not found; if row.status !== 'approved', return 400 { ok:false, error:'not_approved' } (a SECOND, independent check on top of the one inside services/marketing-publisher.js — never rely on only one gate for a live-posting action); else await createBrowserSession(), call publishApprovedPiece({ pool, piece: row, session, callModel }) from services/marketing-publisher.js, return its result as JSON. Never accept or construct raw session_state/credentials/cookies in this route — those only ever flow through services/marketing-social-connections.js. ZERO top-level browser globals (server module). Wrap every handler in try/catch → JSON { ok:false, error } with sensible status, never leak stacks/secrets. Named export registerMarketingPublishRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -314,10 +314,10 @@
       "founder_gated": false,
       "attempts": 3,
       "max_output_tokens": 10000,
-      "note": "Adam 2026-07-12: ungated — make MarketingOS publish path for paying customers ASAP. LIVE_SOCIAL_PUBLISH_ENABLED still defaults OFF until Adam flips Railway.",
+      "note": "Adam 2026-07-12 PM: money ASAP — enabled auto-register + fixed listConnections(pool,{ownerId}). Functional proof should pass after tip redeploy.",
       "commit_sha": "14939bc867b7e619c80efd562b10d10281fa87d6",
       "last_attempt_at": "2026-07-12T20:10:59.026Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-publish-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": null
     },
     {
       "id": "mos-social-sentry-layer-a",

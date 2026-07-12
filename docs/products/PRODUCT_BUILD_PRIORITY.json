@@ -13,12 +13,12 @@
     "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity \u2014 a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
     "skip_undefined": "Products with no documented work in PRODUCT_HOME/conversations AND no BUILD_QUEUE.json are skipped until the founder adds ideas (never fabricated).",
     "corpus": "Planner reads PRODUCT_HOME.md + conversations/*.md + sibling product docs, then writes BUILD_QUEUE.json (executable blueprint) and builds.",
-    "what_matters": "Adam 2026-07-12 PM: Get MarketingOS working \u2014 Reddit/FB groups/Instagram/LinkedIn value outreach + social publish \u2014 making money ASAP. Prior: LifeOS whole kit; Site Builder money parallel.",
+    "what_matters": "Adam 2026-07-12: making money ASAP — do not stop. Site Builder $45 checkout first (live Stripe); MarketingOS value-first outreach + publish second.",
     "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
   },
   "priority": [
-    "marketingos",
     "site-builder",
+    "marketingos",
     "lifeos",
     "limitlessos",
     "creative-engine",

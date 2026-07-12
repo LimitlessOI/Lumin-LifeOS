@@ -157,8 +157,8 @@
     {
       "path": "routes/marketing-publish-routes.js",
       "register": "registerMarketingPublishRoutes",
-      "enabled": false,
-      "note": "DISABLED until routes/marketing-publish-routes.js ships (Phase 5 queue). Was fail-open 'module not found' noise on boot. Re-enable when the file exists + Layer B publish gate proves LIVE."
+      "enabled": true,
+      "note": "Phase 5 social publish API — enabled 2026-07-12 for money path (LIVE_SOCIAL_PUBLISH_ENABLED + approval gate still required for live posts)."
     },
     {
       "path": "routes/marketing-youtube-routes.js",
