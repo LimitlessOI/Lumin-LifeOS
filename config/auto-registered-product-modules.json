@@ -176,6 +176,11 @@
       "register": "registerLifeosConsentRoutes",
       "enabled": true,
       "note": "LifeOS consent grant/revoke/status. GAP-FILL: builder route was unreachable without auto-register; chicken-egg with functional-proof gate."
+    },
+    {
+      "path": "routes/lifeos-ui-directives-routes.js",
+      "register": "registerLifeosUiDirectivesRoutes",
+      "enabled": true
     }
   ]
 }
