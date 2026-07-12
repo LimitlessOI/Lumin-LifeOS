@@ -1,7 +1,4 @@
 {
-  "schema": "auto_registered_product_modules_v1",
-  "notes": "Opt-in registry: the autonomous loop makes a NEW route/UI module LIVE by adding an entry here (path + exported register fn name) alongside the module file — no boot-file edit. Only listed modules are imported+mounted; each reports load/mount health at startup/auto-register-product-modules.js. Legacy/broken files are never touched. Set enabled:false to disable without removing.",
-  "updated_at": "2026-07-11T00:35:00.000Z",
   "modules": [
     {
       "path": "routes/founder-sms-routes.js",
@@ -168,6 +165,11 @@
       "register": "registerMarketingYoutubeRoutes",
       "enabled": true,
       "note": "MarketingOS Phase 6 YouTube connect flow — ONE shared Google OAuth app (reuses GOOGLE_CLIENT_ID/SECRET already live for Calendar), per-client one-time consent via Google's own real login page. Exposes GET /api/v1/marketing/youtube/connect (redirect to Google), GET /.../callback (token exchange, stored in the existing user_integrations table under provider 'youtube_channel'), GET /.../status. Built by the loop (queued mos-youtube-connect-routes); mounted here so the functional-proof gate verifies the endpoints are LIVE before the step can be done. Records a benign 'module not found' health error until the loop ships the file — fail-open, never blocks boot."
+    },
+    {
+      "path": "routes/wellness-therapist-routes.js",
+      "register": "registerWellnessTherapistRoutes",
+      "enabled": true
     }
   ]
 }
