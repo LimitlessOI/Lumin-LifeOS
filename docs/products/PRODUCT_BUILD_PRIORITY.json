@@ -13,7 +13,7 @@
     "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity — a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
     "skip_undefined": "Products with no documented work in PRODUCT_HOME/conversations AND no BUILD_QUEUE.json are skipped until the founder adds ideas (never fabricated).",
     "corpus": "Planner reads PRODUCT_HOME.md + conversations/*.md + sibling product docs, then writes BUILD_QUEUE.json (executable blueprint) and builds.",
-    "what_matters": "Adam 2026-07-11: keep building but what matters — first dollar (Site Builder / LimitlessOS), LifeOS Chair usable, then Marketing publish. Do not thrash YouTube SENTRY ahead of money.",
+    "what_matters": "Adam 2026-07-11: keep building but what matters — first dollar (Site Builder / LimitlessOS), LifeOS Chair usable, then Marketing publish. Do not thrash YouTube SENTRY ahead of money. NEVER STOP unless out of credits; if blocked skip to next buildable product/step and report founder unblockers.",
     "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
   },
   "priority": [

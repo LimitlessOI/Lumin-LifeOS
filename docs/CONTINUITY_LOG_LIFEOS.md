@@ -8,6 +8,12 @@
 
 ---
 
+## [STEER] Update 2026-07-11 — Never stop building; skip blockers
+
+Adam standing order: never stop unless out of credits; if blocked go to next project; report why stopped + how to fix. KNOW: tip never-stop was enabled but idle (`total_runs:0`) until kicked — now running. Managed-env set faster interval + AUTOPILOT=1. Report: `docs/FOUNDER_NEVER_STOP_REPORT.md`. Next: allowlist `NEVER_STOP_DAILY_STEP_CAP=0` so 60/day soft cap can't idle factory.
+
+---
+
 ## [SMOS] Update 2026-07-11 — YouTube ideas + connect path
 
 Adam wants top researched videos with thumbnails + click-to-make, channel analytics, Google API keys, login as him. Shipped suggestions UI + fixed YouTube OAuth service. KNOW: cannot login to Google as Adam; tip still missing GOOGLE_CLIENT_ID/SECRET. Next: Adam pastes OAuth client + adds redirect URI, then clicks Connect YouTube on /marketing.

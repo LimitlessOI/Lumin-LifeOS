@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-11T23:16:14.201Z",
+  "generated_at": "2026-07-12T02:40:24.883Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11455,
+  "file_count": 11456,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3461471,
-      "mtime": "2026-07-11T20:02:21.125Z",
-      "indexed_at": "2026-07-11T20:02:37.378Z"
+      "bytes": 3461817,
+      "mtime": "2026-07-11T23:38:15.820Z",
+      "indexed_at": "2026-07-12T02:40:24.883Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 71752,
-      "mtime": "2026-07-11T22:55:34.167Z",
-      "indexed_at": "2026-07-11T22:56:02.414Z"
+      "bytes": 72212,
+      "mtime": "2026-07-12T02:37:42.856Z",
+      "indexed_at": "2026-07-12T02:40:24.883Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -37628,6 +37628,13 @@
       "bytes": 6864,
       "mtime": "2026-07-09T02:33:13.770Z",
       "indexed_at": "2026-07-11T02:57:52.492Z"
+    },
+    {
+      "path": "docs/FOUNDER_NEVER_STOP_REPORT.md",
+      "synopsis": "Founder Never-Stop Report — 2026-07-11",
+      "bytes": 3953,
+      "mtime": "2026-07-12T02:40:23.447Z",
+      "indexed_at": "2026-07-12T02:40:24.883Z"
     },
     {
       "path": "docs/FOUNDER_SOVEREIGNTY_PRIORITY_AUDIT_V1.md",
@@ -38883,9 +38890,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 174845,
-      "mtime": "2026-07-11T02:43:49.282Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z"
+      "bytes": 175259,
+      "mtime": "2026-07-12T02:40:23.089Z",
+      "indexed_at": "2026-07-12T02:40:24.883Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39618,9 +39625,9 @@
     {
       "path": "docs/products/PRODUCT_BUILD_PRIORITY.json",
       "synopsis": "Documentation — PRODUCT BUILD PRIORITY.",
-      "bytes": 3167,
-      "mtime": "2026-07-11T08:56:00.027Z",
-      "indexed_at": "2026-07-11T08:56:53.807Z",
+      "bytes": 3279,
+      "mtime": "2026-07-12T02:40:21.499Z",
+      "indexed_at": "2026-07-12T02:40:24.883Z",
       "synopsis_index_only": true
     },
     {
@@ -85511,9 +85518,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 22885,
-      "mtime": "2026-07-11T22:38:17.995Z",
-      "indexed_at": "2026-07-11T22:44:57.998Z",
+      "bytes": 22968,
+      "mtime": "2026-07-12T02:37:40.074Z",
+      "indexed_at": "2026-07-12T02:40:24.883Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
