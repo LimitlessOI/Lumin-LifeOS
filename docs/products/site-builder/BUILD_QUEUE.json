@@ -426,9 +426,9 @@
         "step-03"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "commit_sha": "a84c6abd68e548990f223dd15f095ebcecfde68b",
-      "last_attempt_at": "2026-07-12T02:54:20.013Z",
+      "last_attempt_at": "2026-07-12T02:55:25.495Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     }
   ]
