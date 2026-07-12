@@ -41,9 +41,8 @@ function createEditToken() {
 
 function injectPreviewChrome(html, { clientId, baseUrl, editToken }) {
   if (!html || !clientId || !baseUrl) return html;
-  const safeBase = String(baseUrl).replace(/\/$/, '');
-  const publishUrl = `${safeBase}/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
-  const editorUrl = `${safeBase}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken || '')}`;
+  const publishUrl = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+  const editorUrl = `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken || '')}`;
   const bar = `
 <div id="sb-preview-chrome" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:rgba(17,24,39,.96);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:14px;box-shadow:0 -8px 30px rgba(0,0,0,.25)">
   <span>Your free preview — customize it or publish when ready.</span>
@@ -346,7 +345,7 @@ export default class SiteBuilder {
 
       // Inject view tracking pixel — when prospect opens preview we auto-mark them as 'viewed'
       if (this.baseUrl) {
-        const pixel = `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`;
+        const pixel = `<img src="/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`;
         siteHtml = siteHtml.includes('</body>') ? siteHtml.replace('</body>', `${pixel}\n</body>`) : siteHtml;
         siteHtml = injectPreviewChrome(siteHtml, { clientId, baseUrl: this.baseUrl, editToken });
       }
@@ -482,7 +481,7 @@ export default class SiteBuilder {
       }
 
       const pixel = this.baseUrl
-        ? `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`
+        ? `<img src="/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`
         : '';
 
       const variants = [];
@@ -579,10 +578,10 @@ export default class SiteBuilder {
    */
   generateVariantSwitcher(info, clientId, variants, editToken = '') {
     const name = (info.businessName || 'Your Website').replace(/</g, '&lt;');
-    const selectBase = this.baseUrl ? `${this.baseUrl}/api/v1/sites/select-design` : '';
-    const publishUrl = this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}` : '';
+    const selectBase = this.baseUrl ? '/api/v1/sites/select-design' : '';
+    const publishUrl = this.baseUrl ? `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}` : '';
     const editorUrl = this.baseUrl && editToken
-      ? `${this.baseUrl}/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken)}`
+      ? `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken)}`
       : '';
     const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, blurb: v.blurb, file: v.file })));
     return `<!DOCTYPE html>

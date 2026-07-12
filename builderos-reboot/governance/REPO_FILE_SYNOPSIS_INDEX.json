@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T20:02:23.642Z",
+  "generated_at": "2026-07-12T20:27:33.912Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11474,
+  "file_count": 11475,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3464548,
-      "mtime": "2026-07-12T16:35:02.282Z",
-      "indexed_at": "2026-07-12T16:35:09.114Z"
+      "bytes": 3467335,
+      "mtime": "2026-07-12T20:27:25.637Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39377,9 +39377,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 605110,
-      "mtime": "2026-07-12T18:06:07.789Z",
-      "indexed_at": "2026-07-12T18:06:19.319Z"
+      "bytes": 606310,
+      "mtime": "2026-07-12T20:26:26.781Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -39486,9 +39486,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 99644,
-      "mtime": "2026-07-12T20:02:22.051Z",
-      "indexed_at": "2026-07-12T20:02:23.642Z"
+      "bytes": 100323,
+      "mtime": "2026-07-12T20:26:20.449Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -39757,9 +39757,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 98961,
-      "mtime": "2026-07-11T20:02:06.970Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z"
+      "bytes": 100395,
+      "mtime": "2026-07-12T20:25:57.273Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64450,9 +64450,9 @@
     {
       "path": "public/overlay/site-builder-command-center.html",
       "synopsis": "HTML page: Site Builder Command Center",
-      "bytes": 11721,
-      "mtime": "2026-06-27T23:26:24.059Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z"
+      "bytes": 22442,
+      "mtime": "2026-07-12T20:25:09.349Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z"
     },
     {
       "path": "public/overlay/site-builder-landing.html",
@@ -66399,9 +66399,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 41312,
-      "mtime": "2026-07-12T02:02:14.141Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 41317,
+      "mtime": "2026-07-12T20:22:35.693Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -81640,9 +81640,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 11385,
-      "mtime": "2026-07-01T13:52:45.328Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 11415,
+      "mtime": "2026-07-12T20:22:31.253Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -84830,6 +84830,16 @@
       ]
     },
     {
+      "path": "services/marketing-publisher.js",
+      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "bytes": 5711,
+      "mtime": "2026-07-12T20:22:24.493Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
       "path": "services/marketing-repurpose.js",
       "synopsis": "Repurpose one source piece into platform-specific content variants using the injected council member only.",
       "bytes": 4617,
@@ -86149,9 +86159,9 @@
     {
       "path": "services/site-builder.js",
       "synopsis": "Site Builder — Scrape existing site → AI-generates complete click-funnel website",
-      "bytes": 79663,
-      "mtime": "2026-07-10T21:33:30.058Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 79511,
+      "mtime": "2026-07-12T20:22:51.489Z",
+      "indexed_at": "2026-07-12T20:27:33.912Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
