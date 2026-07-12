@@ -70,7 +70,10 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "f5e77c0bad35248cdae1d602664aeaf0542ca875",
+      "last_attempt_at": "2026-07-12T03:14:49.996Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/phase14-cert-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "s6",
