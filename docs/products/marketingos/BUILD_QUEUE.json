@@ -312,11 +312,11 @@
         "mos-social-publisher"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "max_output_tokens": 10000,
       "note": "Adam 2026-07-12: ungated — make MarketingOS publish path for paying customers ASAP. LIVE_SOCIAL_PUBLISH_ENABLED still defaults OFF until Adam flips Railway.",
       "commit_sha": "14939bc867b7e619c80efd562b10d10281fa87d6",
-      "last_attempt_at": "2026-07-12T20:08:08.188Z",
+      "last_attempt_at": "2026-07-12T20:09:00.582Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-publish-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
