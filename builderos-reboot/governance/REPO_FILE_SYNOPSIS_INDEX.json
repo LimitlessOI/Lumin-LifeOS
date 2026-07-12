@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T21:16:41.147Z",
+  "generated_at": "2026-07-12T21:22:54.138Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11478,
+  "file_count": 11479,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -68903,6 +68903,13 @@
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "scripts/run-marketingos-social-publish-verify.mjs",
+      "synopsis": "Script — Run Marketingos Social Publish Verify.",
+      "bytes": 7888,
+      "mtime": "2026-07-12T21:22:54.138Z",
+      "indexed_at": "2026-07-12T21:22:54.138Z"
     },
     {
       "path": "scripts/run-marketingos-youtube-verify.mjs",
