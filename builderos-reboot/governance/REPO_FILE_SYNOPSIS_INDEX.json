@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T19:49:24.710Z",
+  "generated_at": "2026-07-12T19:49:54.248Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11474,
+  "file_count": 11475,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84825,6 +84825,16 @@
       "bytes": 6228,
       "mtime": "2026-07-10T01:30:04.731Z",
       "indexed_at": "2026-07-12T03:55:11.681Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "services/marketing-publisher.js",
+      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "bytes": 5747,
+      "mtime": "2026-07-12T19:49:54.248Z",
+      "indexed_at": "2026-07-12T19:49:54.248Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
