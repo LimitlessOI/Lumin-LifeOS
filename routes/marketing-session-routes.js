@@ -524,4 +524,5 @@ export async function registerMarketingSessionRoutes(app, deps) {
     app.use('/api/v1/marketing', router);
 }
 
+export { getOwnerId };
 export default registerMarketingSessionRoutes;

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T21:09:33.129Z",
+  "generated_at": "2026-07-12T23:15:43.994Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11478,
   "files": [
@@ -36819,9 +36819,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 503632,
-      "mtime": "2026-07-12T20:02:25.221Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z"
+      "bytes": 504924,
+      "mtime": "2026-07-12T23:14:45.388Z",
+      "indexed_at": "2026-07-12T23:15:43.994Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39486,9 +39486,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 100323,
-      "mtime": "2026-07-12T20:59:58.992Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z"
+      "bytes": 103027,
+      "mtime": "2026-07-12T23:15:03.216Z",
+      "indexed_at": "2026-07-12T23:15:43.994Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66031,9 +66031,9 @@
     {
       "path": "routes/marketing-calendar-routes.js",
       "synopsis": "MarketingOS Phase 2 calendar/atoms JSON API routes.",
-      "bytes": 7641,
-      "mtime": "2026-07-07T21:41:40.930Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "bytes": 10640,
+      "mtime": "2026-07-12T22:59:20.204Z",
+      "indexed_at": "2026-07-12T23:15:43.994Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -66041,9 +66041,9 @@
     {
       "path": "routes/marketing-calendar-ui-routes.js",
       "synopsis": "MarketingOS Phase 2 UI routes for content calendar and atom library browser.",
-      "bytes": 18396,
-      "mtime": "2026-07-07T21:41:40.930Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "bytes": 18451,
+      "mtime": "2026-07-12T22:58:08.268Z",
+      "indexed_at": "2026-07-12T23:15:43.994Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -66088,9 +66088,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 25971,
-      "mtime": "2026-07-10T18:01:31.558Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "bytes": 25994,
+      "mtime": "2026-07-12T22:57:02.428Z",
+      "indexed_at": "2026-07-12T23:15:43.994Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -66098,9 +66098,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 39218,
-      "mtime": "2026-07-11T22:44:01.788Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "bytes": 39195,
+      "mtime": "2026-07-12T22:57:42.748Z",
+      "indexed_at": "2026-07-12T23:15:43.994Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -84812,9 +84812,9 @@
     {
       "path": "services/marketing-brand-voice.js",
       "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 11418,
-      "mtime": "2026-07-07T21:41:40.941Z",
-      "indexed_at": "2026-07-12T21:09:17.008Z",
+      "bytes": 11092,
+      "mtime": "2026-07-12T22:59:24.728Z",
+      "indexed_at": "2026-07-12T23:15:43.994Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
