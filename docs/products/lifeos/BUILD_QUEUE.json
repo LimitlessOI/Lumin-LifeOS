@@ -367,18 +367,18 @@
     },
     {
       "id": "lo-consent-therapist-share",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/consent-registry.js",
       "task": "Add therapist_share and clinical_brief_export to consent FEATURES allowlist so pattern sharing with a therapist is fail-closed without explicit grant.",
       "spec": "ESM. Extend FEATURES array with 'therapist_share' and 'clinical_brief_export'. Keep append-only grant/revoke. Export getConsentFeatures() returning a copy of FEATURES. hasConsent must refuse unknown features. No schema change. @ssot docs/products/lifeos/PRODUCT_HOME.md",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "file_contains": [
         "therapist_share",
         "clinical_brief_export"
       ],
-      "last_attempt_at": "2026-07-12T03:47:55.892Z",
+      "last_attempt_at": "2026-07-12T04:03:26.561Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
