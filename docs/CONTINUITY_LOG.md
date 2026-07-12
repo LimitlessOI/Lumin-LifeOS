@@ -5,6 +5,12 @@
 
 ---
 
+## [FIX] 2026-07-12 — Never-stop is Railway-only; halt only on FOUNDER_STOP / tokens
+
+Adam: building must not depend on the laptop; never stop unless he says so or token budget is out. Clarified + hardened Railway never-stop scheduler (`hard_halt` only FOUNDER_STOP / PAUSE_AUTONOMY / token_capacity / daily_budget). Fixed consent routes quality (use real consent-registry) + auto-register chicken-egg so the queue advances. Truth of throughput = `origin/main` commits + `GET /api/v1/lifeos/never-stop/status` — not local pm2.
+
+---
+
 ## [MONEY] 2026-07-11 — Pay/open authorized; Twilio From buy + email fallbacks
 
 Adam authorized paying/opening whatever is legal for first dollar. Shipping Twilio `provision-number` (current From invalid) + SendGrid as Postmark-pending fallback. Human gate: LifeOS Connect captcha (Resend/SendGrid) or Postmark approval. Flores $45 Stripe preview ready.

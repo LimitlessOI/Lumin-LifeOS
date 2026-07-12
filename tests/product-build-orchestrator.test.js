@@ -192,6 +192,27 @@ test('auto-register config step can run when route dep is blocked only for missi
   assert.equal(selectNextStep(q).step.id, 'reg', 'register step unblocks despite blocked route dep');
 });
 
+test('auto-register config step can run when route dep is PENDING with commit_sha + auto-reg error', () => {
+  const q = makeQueue([
+    {
+      id: 'route',
+      target_file: 'routes/lifeos-consent-routes.js',
+      task: 't',
+      status: STEP_STATUS.PENDING,
+      commit_sha: 'abc123',
+      last_error: 'route module not auto-registered — add to config/auto-registered-product-modules.json',
+      attempts: 1,
+    },
+    {
+      id: 'reg',
+      target_file: 'config/auto-registered-product-modules.json',
+      task: 'register',
+      depends_on: ['route'],
+    },
+  ]);
+  assert.equal(selectNextStep(q).step.id, 'reg', 'register step unblocks before maxAttempts BLOCKED');
+});
+
 test('artifact proof blocks DONE when file_contains missing despite valid SHA + deploy (gv-boot-wire class)', async () => {
   const q = makeQueue([{
     id: 'wire',

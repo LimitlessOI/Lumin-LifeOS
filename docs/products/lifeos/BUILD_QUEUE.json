@@ -57,7 +57,7 @@
       "status": "done",
       "target_file": "services/lifeos-future-self.js",
       "task": "Implement future-self letter service with scheduler delivery check",
-      "spec": "ESM module. Exports: createLetter(db, userId, content, deliverOn) inserts into future_self_letters; checkAndDeliverLetters(db, notifyFn) selects rows where deliver_on <= CURRENT_DATE and delivered=false, calls notifyFn(userId, content) for each, then UPDATE future_self_letters SET delivered=true WHERE id=row.id; getLetters(db, userId) returns all rows for user. notifyFn is injected — no direct import of notification SDK.",
+      "spec": "ESM module. Exports: createLetter(db, userId, content, deliverOn) inserts into future_self_letters; checkAndDeliverLetters(db, notifyFn) selects rows where deliver_on <= CURRENT_DATE and delivered=false, calls notifyFn(userId, content) for each, then UPDATE future_self_letters SET delivered=true WHERE id=row.id; getLetters(db, userId) returns all rows for user. notifyFn is injected \u2014 no direct import of notification SDK.",
       "depends_on": [
         "s01"
       ],
@@ -87,7 +87,7 @@
       "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register phase-2 route module for auto-mount BEFORE proving s06 live (breaks chicken-egg)",
-      "spec": "Ensure entry {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"registerLifeosPhase2Routes\",\"enabled\":true} exists in modules[]. Preserve all existing entries. File must remain valid JSON. Do NOT depend on s06 being done — registration must land first so module-health can pass.",
+      "spec": "Ensure entry {\"path\":\"routes/lifeos-phase2-routes.js\",\"register\":\"registerLifeosPhase2Routes\",\"enabled\":true} exists in modules[]. Preserve all existing entries. File must remain valid JSON. Do NOT depend on s06 being done \u2014 registration must land first so module-health can pass.",
       "depends_on": [
         "s02",
         "s03",
@@ -97,13 +97,13 @@
       "founder_gated": false,
       "attempts": 1,
       "completed_at": "2026-07-09T03:15:00.000Z",
-      "detail": "GAP-FILL: conductor added auto-register entry — s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register"
+      "detail": "GAP-FILL: conductor added auto-register entry \u2014 s06 was blocked forever because s07 depended on s06 while s06 failed module-health for missing auto-register"
     },
     {
       "id": "s06",
       "status": "done",
       "target_file": "routes/lifeos-phase2-routes.js",
-      "task": "Prove phase-2 REST module mounts LIVE (file already exists — short-circuit via last commit + module-health)",
+      "task": "Prove phase-2 REST module mounts LIVE (file already exists \u2014 short-circuit via last commit + module-health)",
       "spec": "ESM module exporting registerLifeosPhase2Routes(app, deps) where deps={db, callCouncilMember, notifyFn}. File already on main; after s07 auto-register, functional-proof must show module mounted. Do not full-rewrite if file exists and exports registerLifeosPhase2Routes.",
       "depends_on": [
         "s02",
@@ -128,7 +128,7 @@
       "status": "done",
       "target_file": "scripts/lifeos-phase2-scheduler.mjs",
       "task": "Scheduler tick for future-self letters, important-dates scans, and calendar protection conflict checks",
-      "spec": "ESM script. On invocation (called by existing cron runner via import): imports checkAndDeliverLetters from s04, scanUpcomingDates from s05. Calls both with db and a lightweight notifyFn that inserts a row into a `notifications` table (INSERT INTO notifications(user_id,type,payload) VALUES($1,$2,$3) — uses IF NOT EXISTS assumption from existing schema). Also queries energy_logs for each active user to detect if an energy curve needs refresh (calls GET /api/v1/lifeos/energy/curve internally via fetch to localhost — skipped if env SKIP_INTERNAL_FETCH=true). No browser globals. Exports runPhase2Tick(db) as named export.",
+      "spec": "ESM script. On invocation (called by existing cron runner via import): imports checkAndDeliverLetters from s04, scanUpcomingDates from s05. Calls both with db and a lightweight notifyFn that inserts a row into a `notifications` table (INSERT INTO notifications(user_id,type,payload) VALUES($1,$2,$3) \u2014 uses IF NOT EXISTS assumption from existing schema). Also queries energy_logs for each active user to detect if an energy curve needs refresh (calls GET /api/v1/lifeos/energy/curve internally via fetch to localhost \u2014 skipped if env SKIP_INTERNAL_FETCH=true). No browser globals. Exports runPhase2Tick(db) as named export.",
       "depends_on": [
         "s04",
         "s05"
@@ -144,13 +144,13 @@
       "status": "done",
       "target_file": "public/overlay/lifeos-habits.html",
       "task": "Habit tracker UI section for lifeos-today overlay",
-      "spec": "Standalone HTML partial (no full html/head/body wrappers needed — rendered into today overlay). Contains: habit list rendered from GET /api/v1/lifeos/habits; each row shows title, streak badge, trigger cue chip, log-today button (POST /api/v1/lifeos/habits/:id/log); add-habit form (title, trigger, cue, reward fields); streak resets visually at 0. All JS inline in <script> tags using fetch(). No window.onload race — use DOMContentLoaded. No external CDN imports beyond what host page already provides (assumes Bootstrap and vanilla JS). Founder-gated because customer-facing UI.",
+      "spec": "Standalone HTML partial (no full html/head/body wrappers needed \u2014 rendered into today overlay). Contains: habit list rendered from GET /api/v1/lifeos/habits; each row shows title, streak badge, trigger cue chip, log-today button (POST /api/v1/lifeos/habits/:id/log); add-habit form (title, trigger, cue, reward fields); streak resets visually at 0. All JS inline in <script> tags using fetch(). No window.onload race \u2014 use DOMContentLoaded. No external CDN imports beyond what host page already provides (assumes Bootstrap and vanilla JS). Founder-gated because customer-facing UI.",
       "depends_on": [
         "s06"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.739Z",
       "commit_sha": "pending_push"
     },
@@ -165,7 +165,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -174,13 +174,13 @@
       "status": "done",
       "target_file": "public/overlay/lifeos-future-self.html",
       "task": "Letter to Future Self overlay UI",
-      "spec": "HTML partial. Two panels: (1) compose panel — textarea for content, date input for deliver_on, submit POST /api/v1/lifeos/future-self/letter; (2) sent letters list — GET /api/v1/lifeos/future-self/letter renders cards showing deliver_on date, delivered badge, and content preview (truncated at 120 chars) for delivered letters only (undelivered show 'sealed — opens [date]'). All JS inline, DOMContentLoaded. Founder-gated.",
+      "spec": "HTML partial. Two panels: (1) compose panel \u2014 textarea for content, date input for deliver_on, submit POST /api/v1/lifeos/future-self/letter; (2) sent letters list \u2014 GET /api/v1/lifeos/future-self/letter renders cards showing deliver_on date, delivered badge, and content preview (truncated at 120 chars) for delivered letters only (undelivered show 'sealed \u2014 opens [date]'). All JS inline, DOMContentLoaded. Founder-gated.",
       "depends_on": [
         "s06"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -189,13 +189,13 @@
       "status": "done",
       "target_file": "public/overlay/lifeos-learning-queue.html",
       "task": "Reading and Learning Queue overlay UI wired to growth/mastery module",
-      "spec": "HTML partial. Renders list from GET /api/v1/lifeos/learning-queue grouped by status (queued / in-progress / done). Each card shows title, type badge (book/article/course), url link, key_insight textarea (PATCHed on blur to /api/v1/lifeos/learning-queue/:id). Add-item form: title, type select, url. Status cycle button (queued→in-progress→done). On status=done, prompt user for key_insight inline. All JS inline. Founder-gated.",
+      "spec": "HTML partial. Renders list from GET /api/v1/lifeos/learning-queue grouped by status (queued / in-progress / done). Each card shows title, type badge (book/article/course), url link, key_insight textarea (PATCHed on blur to /api/v1/lifeos/learning-queue/:id). Add-item form: title, type select, url. Status cycle button (queued\u2192in-progress\u2192done). On status=done, prompt user for key_insight inline. All JS inline. Founder-gated.",
       "depends_on": [
         "s06"
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -210,7 +210,7 @@
       "attempts": 1,
       "commit_sha": "9d6049ff48851ca4b684625fd8ce5b1293a6e322",
       "last_attempt_at": "2026-07-09T05:34:39.852Z",
-      "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration — never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
+      "note": "GAP-FILL: verify_exit_1 was product-level sentry UI gate on a DB migration \u2014 never-stop now skips UI verify for db/migrations; artifact+deploy still gate.",
       "last_error": "verify_exit_1",
       "completed_at": "2026-07-09T05:34:41.590Z",
       "revive_count": 1
@@ -220,7 +220,7 @@
       "status": "done",
       "target_file": "services/lifeos-habits.js",
       "task": "Implement habit-tracker service with streak logic",
-      "spec": "ES-module. Exports: createHabit(db,userId,data), listHabits(db,userId), logHabit(db,userId,habitId,date), getStreaks(db,userId). logHabit inserts into habit_logs and updates habits.streak by counting consecutive days in habit_logs for that habit_id. No top-level browser globals. No AI SDK import. Does not import uuid — relies on DB default. Depends on s1 schema existing.",
+      "spec": "ES-module. Exports: createHabit(db,userId,data), listHabits(db,userId), logHabit(db,userId,habitId,date), getStreaks(db,userId). logHabit inserts into habit_logs and updates habits.streak by counting consecutive days in habit_logs for that habit_id. No top-level browser globals. No AI SDK import. Does not import uuid \u2014 relies on DB default. Depends on s1 schema existing.",
       "depends_on": [
         "s1"
       ],
@@ -228,7 +228,7 @@
       "attempts": 2,
       "commit_sha": "566258383cfd4fac7be54c1af6e39ca0038484a1",
       "last_attempt_at": "2026-07-09T12:34:37.801Z",
-      "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 — never-stop skips UI verify for services/routes (artifact+deploy still gate).",
+      "note": "GAP-FILL: product-level sentry UI gate was stranding service steps on verify_exit_1 \u2014 never-stop skips UI verify for services/routes (artifact+deploy still gate).",
       "last_error": "verify_exit_1",
       "revive_count": 4,
       "completed_at": "2026-07-09T12:34:39.523Z"
@@ -246,7 +246,7 @@
       "attempts": 1,
       "commit_sha": "ea0c92655c84a8ceb7f2270c53d0353fffc6eebe",
       "last_attempt_at": "2026-07-09T13:04:02.843Z",
-      "note": "GAP-FILL: same UI-verify skip as s2 — service step must not re-run founder-UI E2E.",
+      "note": "GAP-FILL: same UI-verify skip as s2 \u2014 service step must not re-run founder-UI E2E.",
       "last_error": "verify_exit_1",
       "completed_at": "2026-07-09T13:04:04.317Z"
     },
@@ -287,7 +287,7 @@
       "status": "done",
       "target_file": "services/lifeos-calendar-protection.js",
       "task": "Implement calendar-protection rule engine",
-      "spec": "ES-module. Exports: upsertRule(db,userId,data), listRules(db,userId), deleteRule(db,userId,ruleId), scanConflicts(db,userId,calendarEvents). scanConflicts accepts an array of {start,end} ISO strings representing calendar events, loads active rules for user, and returns an array of conflict objects {event, rule, message} where the event overlaps the protected window on a matching day_of_week. Pure computation after DB load — no AI SDK, no browser globals.",
+      "spec": "ES-module. Exports: upsertRule(db,userId,data), listRules(db,userId), deleteRule(db,userId,ruleId), scanConflicts(db,userId,calendarEvents). scanConflicts accepts an array of {start,end} ISO strings representing calendar events, loads active rules for user, and returns an array of conflict objects {event, rule, message} where the event overlaps the protected window on a matching day_of_week. Pure computation after DB load \u2014 no AI SDK, no browser globals.",
       "depends_on": [
         "s1"
       ],
@@ -303,7 +303,7 @@
       "status": "done",
       "target_file": "routes/lifeos-phase3-routes.js",
       "task": "Mount all phase-3 API routes and register with auto-register config",
-      "spec": "ES-module exporting registerLifeosPhase3Routes(app, deps) where deps={db, callCouncilMember}. Mounts: POST/GET /api/v1/lifeos/habits, POST /api/v1/lifeos/habits/:id/log; POST/GET /api/v1/lifeos/energy, GET /api/v1/lifeos/energy/curve; POST/GET /api/v1/lifeos/finance/net-worth; POST/GET/PATCH/DELETE /api/v1/lifeos/learning; POST/GET /api/v1/lifeos/calendar-protection/rules, POST /api/v1/lifeos/calendar-protection/scan. Each handler calls the appropriate service function imported from s2–s6. All routes return JSON. Auth guard: req.user must exist (check deps.requireAuth if provided, else check req.user and return 401). No browser globals. No top-level side-effects — export only. File is self-contained; imports only node builtins and the service files from s2–s6.",
+      "spec": "ES-module exporting registerLifeosPhase3Routes(app, deps) where deps={db, callCouncilMember}. Mounts: POST/GET /api/v1/lifeos/habits, POST /api/v1/lifeos/habits/:id/log; POST/GET /api/v1/lifeos/energy, GET /api/v1/lifeos/energy/curve; POST/GET /api/v1/lifeos/finance/net-worth; POST/GET/PATCH/DELETE /api/v1/lifeos/learning; POST/GET /api/v1/lifeos/calendar-protection/rules, POST /api/v1/lifeos/calendar-protection/scan. Each handler calls the appropriate service function imported from s2\u2013s6. All routes return JSON. Auth guard: req.user must exist (check deps.requireAuth if provided, else check req.user and return 401). No browser globals. No top-level side-effects \u2014 export only. File is self-contained; imports only node builtins and the service files from s2\u2013s6.",
       "depends_on": [
         "s2",
         "s3",
@@ -330,7 +330,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle: scheduler authored.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle: scheduler authored.",
       "completed_at": "2026-07-10T00:09:58.164Z"
     },
     {
@@ -344,7 +344,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
+      "note": "Unlocked 2026-07-09: Adam never-idle order \u2014 customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
     },
@@ -379,7 +379,7 @@
         "clinical_brief_export"
       ],
       "last_attempt_at": "2026-07-12T16:22:14.454Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "last_error": "no_commit_sha (claimed pass without proof \u2014 treated as failure)",
       "commit_sha": "39d54138b923a6cc4f33f1e1d625b12ca9b52fa3",
       "revive_count": 1,
       "completed_at": "2026-07-12T16:22:27.190Z"
@@ -394,17 +394,26 @@
         "lo-consent-therapist-share"
       ],
       "founder_gated": false,
+<<<<<<< HEAD
       "attempts": 2,
+=======
+      "attempts": 0,
+>>>>>>> 10dae066cd (GAP-FILL: never-stop stalled on consent auto-reg chicken-egg + broken routes mount; Railway must keep building until FOUNDER_STOP or tokens — rewrite consent routes to consent-registry, auto-register, hard-halt contract, prefer register sibling)
       "expected_exports": [
         "registerLifeosConsentRoutes"
       ],
       "commit_sha": "ea72d7403681840ea010ad12981cdc9aaed26264",
+<<<<<<< HEAD
       "last_attempt_at": "2026-07-12T16:33:38.161Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-consent-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+=======
+      "last_attempt_at": "2026-07-12T16:32:21.907Z",
+      "last_error": "awaiting_redeploy_functional_proof_after_quality_rewrite"
+>>>>>>> 10dae066cd (GAP-FILL: never-stop stalled on consent auto-reg chicken-egg + broken routes mount; Railway must keep building until FOUNDER_STOP or tokens — rewrite consent routes to consent-registry, auto-register, hard-halt contract, prefer register sibling)
     },
     {
       "id": "lo-consent-auto-register",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register lifeos-consent-routes so therapist consent API mounts at boot without editing server.js.",
       "spec": "Ensure modules[] contains {\"path\":\"routes/lifeos-consent-routes.js\",\"register\":\"registerLifeosConsentRoutes\",\"enabled\":true}. Preserve all existing entries. Valid JSON only.",
@@ -412,13 +421,16 @@
         "lo-consent-api"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "lifeos-consent-routes.js",
         "registerLifeosConsentRoutes"
-      ]
+      ],
+      "completed_at": "2026-07-12T16:34:23.506Z",
+      "last_error": null,
+      "note": "GAP-FILL: auto-register entry + quality rewrite of consent routes using services/consent-registry.js"
     }
   ],
   "updated_at": "2026-07-12",
-  "notes": "Adam 2026-07-12: LifeOS whole kit — chat ship gate landed; therapist role + consent-gated clinical share foundation. Clinical dashboard continues in wellness-studio BUILD_QUEUE."
+  "notes": "Adam 2026-07-12: LifeOS whole kit \u2014 chat ship gate landed; therapist role + consent-gated clinical share foundation. Clinical dashboard continues in wellness-studio BUILD_QUEUE."
 }

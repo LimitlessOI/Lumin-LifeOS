@@ -170,6 +170,12 @@
       "path": "routes/wellness-therapist-routes.js",
       "register": "registerWellnessTherapistRoutes",
       "enabled": true
+    },
+    {
+      "path": "routes/lifeos-consent-routes.js",
+      "register": "registerLifeosConsentRoutes",
+      "enabled": true,
+      "note": "LifeOS consent grant/revoke/status. GAP-FILL: builder route was unreachable without auto-register; chicken-egg with functional-proof gate."
     }
   ]
 }

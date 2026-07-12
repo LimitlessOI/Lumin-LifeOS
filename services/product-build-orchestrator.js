@@ -245,19 +245,29 @@ function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
   if (doneIds.has(depId)) return true;
   // Chicken-egg break: a route step blocked ONLY for missing auto-registration
   // must not strand the register-config step that unblocks it. Allow the
-  // auto-register config step to run when its dep is blocked with that error.
+  // auto-register config step to run when its dep failed functional proof for
+  // that reason — even while still PENDING (before maxAttempts → BLOCKED).
   if (!isAutoRegisterConfigStep(consumingStep)) return false;
   const dep = (queue.steps || []).find((s) => s.id === depId);
-  if (!dep || dep.status !== STEP_STATUS.BLOCKED) return false;
-  return /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
+  if (!dep) return false;
+  const autoRegErr = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
     String(dep.last_error || ''),
   );
+  if (!autoRegErr) return false;
+  if (dep.status === STEP_STATUS.BLOCKED) return true;
+  // Built file exists (commit_sha) but mount proof failed → let register step run now.
+  if (dep.status === STEP_STATUS.PENDING && dep.commit_sha) return true;
+  return false;
 }
 
 /**
  * The next actionable step: first non-terminal, non-gated step whose declared
  * dependencies are all done. Founder-gated steps are surfaced separately so the
  * loop stops re-building work only Adam can clear (the "attempt 35" waste fix).
+ *
+ * Chicken-egg: if the next candidate is a route that already committed but only
+ * failed functional proof for missing auto-registration, prefer the pending
+ * auto-register config sibling instead of rebuilding the route forever.
  */
 export function selectNextStep(queue) {
   const doneIds = new Set(queue.steps.filter((s) => s.status === STEP_STATUS.DONE).map((s) => s.id));
@@ -266,7 +276,27 @@ export function selectNextStep(queue) {
     if (TERMINAL.has(step.status)) continue;
     if (step.founder_gated) { gated.push(step); continue; }
     const deps = Array.isArray(step.depends_on) ? step.depends_on : [];
-    if (deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) return { step, gated };
+    if (!deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) continue;
+
+    const autoRegErr = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
+      String(step.last_error || ''),
+    );
+    if (
+      autoRegErr
+      && step.commit_sha
+      && /^routes\/.+\.(js|mjs)$/.test(String(step.target_file || '').replace(/\\/g, '/'))
+    ) {
+      const registerSibling = (queue.steps || []).find((s) => {
+        if (!isAutoRegisterConfigStep(s)) return false;
+        if (TERMINAL.has(s.status) || s.founder_gated) return false;
+        const rDeps = Array.isArray(s.depends_on) ? s.depends_on : [];
+        if (!rDeps.includes(step.id)) return false;
+        return rDeps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
+      });
+      if (registerSibling) return { step: registerSibling, gated };
+    }
+
+    return { step, gated };
   }
   return { step: null, gated };
 }

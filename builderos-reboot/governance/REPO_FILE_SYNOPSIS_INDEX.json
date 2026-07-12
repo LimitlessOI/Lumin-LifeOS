@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T16:23:04.381Z",
+  "generated_at": "2026-07-12T16:35:09.114Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11465,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3463968,
-      "mtime": "2026-07-12T03:55:13.133Z",
-      "indexed_at": "2026-07-12T03:55:13.532Z"
+      "bytes": 3464548,
+      "mtime": "2026-07-12T16:35:02.282Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 11291,
-      "mtime": "2026-07-12T04:17:04.938Z",
-      "indexed_at": "2026-07-12T04:17:04.938Z",
+      "bytes": 11580,
+      "mtime": "2026-07-12T16:33:43.686Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z",
       "synopsis_index_only": true
     },
     {
@@ -36804,9 +36804,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 502145,
-      "mtime": "2026-07-11T16:13:05.907Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z"
+      "bytes": 502682,
+      "mtime": "2026-07-12T16:34:51.864Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -38897,9 +38897,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 175285,
-      "mtime": "2026-07-12T02:50:18.635Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z"
+      "bytes": 175861,
+      "mtime": "2026-07-12T16:34:51.479Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39362,9 +39362,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 604248,
-      "mtime": "2026-07-12T16:21:05.539Z",
-      "indexed_at": "2026-07-12T16:21:13.410Z"
+      "bytes": 604603,
+      "mtime": "2026-07-12T16:34:37.068Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65650,10 +65650,13 @@
     },
     {
       "path": "routes/lifeos-consent-routes.js",
-      "synopsis": "Registers LifeosConsentRoutes routes/handlers (routes/lifeos-consent-routes.js).",
-      "bytes": 5941,
-      "mtime": "2026-07-12T16:22:53.855Z",
-      "indexed_at": "2026-07-12T16:22:53.855Z"
+      "synopsis": "LifeOS consent API — grant/revoke/status using createConsentRegistry.",
+      "bytes": 4188,
+      "mtime": "2026-07-12T16:33:41.853Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z",
+      "ssot": [
+        "docs/products/lifeos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/lifeos-copilot-routes.js",
@@ -85222,10 +85225,10 @@
     },
     {
       "path": "services/never-stop-product-factory-scheduler.js",
-      "synopsis": "Railway + local scheduler — never-stop product factory (only halts on token exhaustion).",
-      "bytes": 7281,
-      "mtime": "2026-07-10T05:52:10.478Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "synopsis": "Railway never-stop product factory scheduler.",
+      "bytes": 8709,
+      "mtime": "2026-07-12T16:34:11.227Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -85465,9 +85468,9 @@
     {
       "path": "services/product-build-orchestrator.js",
       "synopsis": "General product-build orchestrator — turns a product's structured",
-      "bytes": 23829,
-      "mtime": "2026-07-11T02:23:13.876Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 25172,
+      "mtime": "2026-07-12T16:34:32.626Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -87614,9 +87617,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 48788,
-      "mtime": "2026-07-12T16:23:04.381Z",
-      "indexed_at": "2026-07-12T16:23:04.381Z",
+      "bytes": 48771,
+      "mtime": "2026-07-12T16:33:43.574Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -88997,9 +89000,9 @@
     {
       "path": "tests/product-build-orchestrator.test.js",
       "synopsis": "js — tests/product-build-orchestrator.test.js.",
-      "bytes": 10785,
-      "mtime": "2026-07-09T03:45:40.549Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 11475,
+      "mtime": "2026-07-12T16:34:11.307Z",
+      "indexed_at": "2026-07-12T16:35:09.114Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
