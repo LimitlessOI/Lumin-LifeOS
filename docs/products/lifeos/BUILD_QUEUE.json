@@ -460,7 +460,7 @@
     },
     {
       "id": "lo-ui-directives-routes",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-ui-directives-routes.js",
       "task": "Thin Express routes for ui_directives propose/apply/get + twin reaction simulate.",
       "spec": "ESM export registerLifeosUiDirectivesRoutes(app, deps) with deps={pool, requireAuth, callCouncilMember?}. Mount under /api/v1/lifeos/twin: POST /ui-directives/propose {text}, POST /ui-directives/apply {directives}, GET /ui-directives, POST /reaction/simulate {idea,context?}. Auth required. Use createUiDirectivesService + createTwinReactionSimulator. JSON only. No browser globals. Do not edit server.js. @ssot docs/products/lifeos/PRODUCT_HOME.md",
@@ -468,13 +468,14 @@
         "lo-twin-reaction-simulator"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerLifeosUiDirectivesRoutes"
       ],
       "commit_sha": "21786d7d67ac8527bbaff20a480b1e4331bbdc03",
-      "last_attempt_at": "2026-07-12T18:26:11.869Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_attempt_at": "2026-07-12T18:43:21.928Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "completed_at": "2026-07-12T18:43:34.000Z"
     },
     {
       "id": "lo-ui-directives-auto-register",
