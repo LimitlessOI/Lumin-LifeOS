@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — Comms: presence + build-status routing (no CLARIFY theater on “don’t fix me” / “did that build land?”). |
+| **Last Updated** | 2026-07-12 — Comms overnight prove PASS on tip (`LIFEOS_COMMS_OVERNIGHT_PROOF.json`); presence/joke rhythm in Chair prompt. |
 
 ---
 

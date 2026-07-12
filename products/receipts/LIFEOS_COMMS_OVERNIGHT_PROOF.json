@@ -1,0 +1,34 @@
+{
+  "schema": "lifeos_comms_overnight_proof_v1",
+  "at": "2026-07-12T03:54:06.161Z",
+  "tip_sha_at_prove": "ac09dd295349",
+  "verdict": "PASS_CORE_ROUTING",
+  "fixes": [
+    "isBuildStatusQuestion / isCounselPresenceIntent exempt from isBuildRequest",
+    "relational prompt: no machine-health greetings",
+    "intent_clarify drawer softened"
+  ],
+  "live_probes": {
+    "casual": {
+      "theater": false,
+      "sample": "Still here. What's on your mind?"
+    },
+    "presence": {
+      "theater": false,
+      "sample": "I'm here."
+    },
+    "build_ask": {
+      "theater": false,
+      "notes": "answered with last commit SHA, no mission recital"
+    },
+    "money": {
+      "theater": false,
+      "notes": "partner tone + one sharp question"
+    }
+  },
+  "remaining": [
+    "Twin-matched voice depth still thin without loaded twin prefs",
+    "Presence can be warmer/longer when Adam wants more than one line",
+    "Keep multi-turn continuity under load"
+  ]
+}
