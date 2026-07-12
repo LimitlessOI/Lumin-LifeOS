@@ -5,6 +5,12 @@
 
 ---
 
+## [MONEY] 2026-07-12 — MarketingOS first: ungated social publish + community value drafts
+
+Adam: get MarketingOS promoting (Reddit/FB/IG/LinkedIn/videos) and making money ASAP. Ungated Phase 5 `mos-social-publisher` + publish routes (still gated by `LIVE_SOCIAL_PUBLISH_ENABLED` default off + approval). Seeded community value-draft queue. Priority list: marketingos → site-builder → lifeos. Never-stop next build: `mos-social-publisher`. Honest: live posts still need connected social sessions + Railway kill-switch ON; Google YouTube OAuth still needs Adam's client IDs.
+
+---
+
 ## [FIX] 2026-07-12 — Kill Site Builder unplannable SENTRY fake loop; LifeOS twin queue
 
 Never-stop was burning cycles on `sentry_fix_plan_site-builder` (planner filtered all steps) because LifeOS BUILD_QUEUE was 100% done and SENTRY replan sat at priority ~2 beating LifeOS extend at ~6. Demoted SENTRY replan, stamped site-builder unplannable, seeded LifeOS Digital Twin steps (`lo-ui-directives-service` → reaction simulator → routes → auto-register).
