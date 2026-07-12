@@ -478,7 +478,7 @@
     },
     {
       "id": "lo-ui-directives-auto-register",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Auto-register lifeos-ui-directives-routes so twin UI directive APIs mount at boot.",
       "spec": "Ensure modules[] contains {\"path\":\"routes/lifeos-ui-directives-routes.js\",\"register\":\"registerLifeosUiDirectivesRoutes\",\"enabled\":true}. Preserve all existing entries. Valid JSON only.",
@@ -486,13 +486,13 @@
         "lo-ui-directives-routes"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "file_contains": [
         "lifeos-ui-directives-routes.js",
         "registerLifeosUiDirectivesRoutes"
       ],
       "commit_sha": "7fb0a3f9eedfa16525fae943cc700e5cb324224e",
-      "last_attempt_at": "2026-07-12T18:37:31.669Z",
+      "last_attempt_at": "2026-07-12T18:38:38.596Z",
       "last_error": "verify_exit_1"
     }
   ],
