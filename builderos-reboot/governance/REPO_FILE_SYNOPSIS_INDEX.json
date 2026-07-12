@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T19:49:54.248Z",
+  "generated_at": "2026-07-12T19:53:33.852Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11475,
+  "file_count": 11474,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39486,9 +39486,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 98541,
-      "mtime": "2026-07-12T19:49:24.015Z",
-      "indexed_at": "2026-07-12T19:49:24.710Z"
+      "bytes": 99022,
+      "mtime": "2026-07-12T19:53:30.428Z",
+      "indexed_at": "2026-07-12T19:53:33.852Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -84830,16 +84830,6 @@
       ]
     },
     {
-      "path": "services/marketing-publisher.js",
-      "synopsis": "// @ssot docs/products/marketingos/PRODUCT_HOME.md",
-      "bytes": 5747,
-      "mtime": "2026-07-12T19:49:54.248Z",
-      "indexed_at": "2026-07-12T19:49:54.248Z",
-      "ssot": [
-        "docs/products/marketingos/PRODUCT_HOME.md"
-      ]
-    },
-    {
       "path": "services/marketing-repurpose.js",
       "synopsis": "Repurpose one source piece into platform-specific content variants using the injected council member only.",
       "bytes": 4617,
@@ -85624,9 +85614,9 @@
     {
       "path": "services/railway-managed-env-service.js",
       "synopsis": "Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.",
-      "bytes": 22968,
-      "mtime": "2026-07-12T02:37:40.074Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 23001,
+      "mtime": "2026-07-12T19:53:23.609Z",
+      "indexed_at": "2026-07-12T19:53:33.852Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
