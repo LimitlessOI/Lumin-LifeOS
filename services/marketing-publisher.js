@@ -1,10 +1,10 @@
 // SYNOPSIS:
 // @ssot docs/products/marketingos/PRODUCT_HOME.md
 
-import { getConnection } from './services/marketing-social-connections.js';
-import { buildPublishGoal } from './services/marketing-social-goals.js';
-import { runGoalOnSession } from './services/general-browser-agent-live.js';
-import { executeAction, makeEvidenceVerifier } from './services/general-browser-agent-runtime.js';
+import { getConnection } from './marketing-social-connections.js';
+import { buildPublishGoal } from './marketing-social-goals.js';
+import { runGoalOnSession } from './general-browser-agent-live.js';
+import { executeAction, makeEvidenceVerifier } from './general-browser-agent-runtime.js';
 
 async function getExistingTemplate(pool, platform, goalKey) {
   const { rows } = await pool.query(

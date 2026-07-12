@@ -264,7 +264,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         previewUrl: job.previewUrl || null,
         deferred: true,
         statusUrl: job.clientId
-          ? `/api/v1/sites/prospects/${job.clientId}/status`
+          ? `/api/v1/sites/public-preview-status/${job.clientId}`
           : null,
       });
     } catch (err) {

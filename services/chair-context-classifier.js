@@ -281,7 +281,7 @@ export function resolveChairContext(text = '', ctx = {}) {
 
   if (scores.personal >= 5 && scores.build < 5) {
     return {
-      channel: 'lumin',
+      channel: shouldDisplayOnly ? 'chair' : 'lumin',
       domain: 'personal_life',
       confidence: Math.min(1, scores.personal / 10),
       requires_execute_clarify: false,
