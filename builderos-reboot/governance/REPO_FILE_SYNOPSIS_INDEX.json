@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T03:03:04.265Z",
+  "generated_at": "2026-07-12T03:04:22.280Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11457,
+  "file_count": 11458,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66176,6 +66176,13 @@
       "bytes": 2693,
       "mtime": "2026-07-05T19:10:02.192Z",
       "indexed_at": "2026-07-11T02:57:52.492Z"
+    },
+    {
+      "path": "routes/phase14-cert-routes.js",
+      "synopsis": "Registers Phase14CertRoutes routes/handlers (routes/phase14-cert-routes.js).",
+      "bytes": 674,
+      "mtime": "2026-07-12T03:04:22.280Z",
+      "indexed_at": "2026-07-12T03:04:22.280Z"
     },
     {
       "path": "routes/progress-report-routes.js",
