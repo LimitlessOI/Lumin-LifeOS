@@ -91,7 +91,7 @@
     },
     {
       "id": "step-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/wellness-studio-data.js",
       "task": "Create data-access service for wellness studio sessions and insights",
       "spec": "Exports getSessionsByUser(userId, db), createSession(payload, db), updateSession(sessionId, patch, db), getInsightsBySession(sessionId, db), createInsight(payload, db). All functions return promises, accept a pg db pool as last arg, query only wellness_studio_sessions and wellness_studio_insights plus read-only joins to joy_checkins, integrity_score_log, wearable_data, emotional_patterns. No top-level browser globals. No AI imports.",
@@ -99,7 +99,10 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "5094434114cb90306f98e15c0587213ffd63ddd9",
+      "last_attempt_at": "2026-07-12T18:51:01.892Z",
+      "completed_at": "2026-07-12T18:51:25.864Z"
     },
     {
       "id": "step-03",
