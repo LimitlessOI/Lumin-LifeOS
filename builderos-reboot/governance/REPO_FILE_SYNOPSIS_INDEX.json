@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T18:09:14.991Z",
+  "generated_at": "2026-07-12T18:18:35.561Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11468,
+  "file_count": 11469,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65945,6 +65945,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/lifeos-ui-directives-routes.js",
+      "synopsis": "Registers LifeosUiDirectivesRoutes routes/handlers (routes/lifeos-ui-directives-routes.js).",
+      "bytes": 6048,
+      "mtime": "2026-07-12T18:18:35.561Z",
+      "indexed_at": "2026-07-12T18:18:35.561Z"
     },
     {
       "path": "routes/lifeos-victory-vault-routes.js",
