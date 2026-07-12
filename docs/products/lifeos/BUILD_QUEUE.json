@@ -394,10 +394,13 @@
         "lo-consent-therapist-share"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerLifeosConsentRoutes"
-      ]
+      ],
+      "commit_sha": "ea72d7403681840ea010ad12981cdc9aaed26264",
+      "last_attempt_at": "2026-07-12T16:32:21.907Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-consent-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "lo-consent-auto-register",
