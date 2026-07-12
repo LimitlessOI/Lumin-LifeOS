@@ -486,13 +486,13 @@
         "lo-ui-directives-routes"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "file_contains": [
         "lifeos-ui-directives-routes.js",
         "registerLifeosUiDirectivesRoutes"
       ],
       "commit_sha": "7fb0a3f9eedfa16525fae943cc700e5cb324224e",
-      "last_attempt_at": "2026-07-12T18:30:34.484Z",
+      "last_attempt_at": "2026-07-12T18:37:31.669Z",
       "last_error": "verify_exit_1"
     }
   ],
