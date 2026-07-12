@@ -39,7 +39,7 @@
     },
     {
       "id": "ws-therapist-routes",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/wellness-therapist-routes.js",
       "task": "Express surface for therapist profile, client links, and consent-gated brief share. Export registerWellnessTherapistRoutes(app, deps).",
       "spec": "ESM export registerWellnessTherapistRoutes(app, deps) with deps={pool, requireAuth, consentRegistry}. Mount under /api/v1/wellness/therapist: POST /profile, GET /profile/me, POST /links, GET /clients (therapist|admin), POST /briefs, POST /briefs/:id/share. Share path uses shareBriefIfConsented. JSON only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
@@ -47,13 +47,15 @@
         "ws-therapist-service"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 1,
       "expected_exports": [
         "registerWellnessTherapistRoutes"
       ],
       "commit_sha": "870b5a88199b10bf3e2e828f4b31a14605f3ec19",
-      "last_attempt_at": "2026-07-12T04:15:55.203Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_attempt_at": "2026-07-12T04:23:09.094Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "revive_count": 1,
+      "completed_at": "2026-07-12T04:23:10.430Z"
     },
     {
       "id": "ws-therapist-auto-register",
