@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T03:47:51.662Z",
+  "generated_at": "2026-07-12T03:48:16.887Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11461,
+  "file_count": 11462,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87190,6 +87190,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/wellness-therapist.js",
+      "synopsis": "Exports createWellnessTherapistService — services/wellness-therapist.js.",
+      "bytes": 5642,
+      "mtime": "2026-07-12T03:48:16.887Z",
+      "indexed_at": "2026-07-12T03:48:16.887Z"
     },
     {
       "path": "services/white-label-service.js",
