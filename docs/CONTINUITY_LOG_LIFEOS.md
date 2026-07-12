@@ -8,6 +8,10 @@
 
 ---
 
+## [STEER] Update 2026-07-12 — Never-stop crash loop fixed
+
+Adam standing order: never stop unless out of credits; skip blockers → next project; report why + fix list. KNOW: tip was crash-looping (~2 min) because deploy-proof always self-redeployed before checking live SHA — wiped cycles (`total_runs:0`). Fix: prove-first in `never-stop-product-factory.js`; daily cap unlimited; report `docs/FOUNDER_NEVER_STOP_REPORT.md`. Re-enable never-stop after fix deploy.
+
 ## [STEER] Update 2026-07-11 — Never stop building; skip blockers
 
 Adam standing order: never stop unless out of credits; if blocked go to next project; report why stopped + how to fix. KNOW: tip never-stop was enabled but idle (`total_runs:0`) until kicked — now running. Managed-env set faster interval + AUTOPILOT=1. Report: `docs/FOUNDER_NEVER_STOP_REPORT.md`. Next: allowlist `NEVER_STOP_DAILY_STEP_CAP=0` so 60/day soft cap can't idle factory.

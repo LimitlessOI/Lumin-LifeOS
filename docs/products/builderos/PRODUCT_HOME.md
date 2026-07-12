@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Never-stop standing order: skip blockers, raise daily cap allowlist, founder report. |
+| **Last Updated** | 2026-07-12 — Never-stop crash-loop fix: deploy-proof proves tip SHA before self-redeploy (was killing process every cycle). |
 
 ### Related docs (this product)
 

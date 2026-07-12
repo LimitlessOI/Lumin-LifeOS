@@ -11,7 +11,7 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { executeIntakeBlueprint } from './intake-blueprint-executor.js';
 import { SOCIALMEDIAOS_INTAKE_SESSION } from './lifeos-mission-pipeline-executor.js';
 import { loadBuildQueue, normalizeQueue, selectNextStep, runNextStep, persistQueue, queueSummary, queuePathForProduct, reviveStaleBlockedSteps, evaluateModuleHealthForStep, evaluateStepExpectations, STEP_STATUS } from './product-build-orchestrator.js';
-import { waitForDeploySha } from './deploy-truth.js';
+import { proveDeployServesSha, waitForDeploySha } from './deploy-truth.js';
 import { enforceClaim, toWatchlist } from './truth-ladder.js';
 import { extractCorpusBacklog, backlogSignature, planBuildQueue } from './build-queue-planner.js';
 import { buildIntegrationContext } from './build-integration-context.js';
@@ -1309,7 +1309,6 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       };
     }
     if (!baseUrl) return { ok: false, reason: 'no_base_url_for_deploy_proof' };
-    await coalescedRedeploy();
     // The /ready endpoint is auth-gated (401 without the command key), so the
     // proof MUST send it — otherwise every proof fails `ready_http_401`, the
     // deploy is never provable, and no step can ever reach `done` (the real
@@ -1319,12 +1318,52 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       ...opts,
       headers: { ...(opts.headers || {}), 'x-command-key': commandKey },
     });
+    // PROVE FIRST. Unconditional self-redeploy kills this Railway process
+    // mid-cycle (in-memory never-stop state + queue-status commit never land),
+    // which looked like "never-stop idle / total_runs=0" and crash-looped tip
+    // every ~2 min when pre-existing route artifacts short-circuited to deploy
+    // proof. If tip already serves/contains the built SHA, skip redeploy.
+    const already = await proveDeployServesSha({
+      expectedSha: commit_sha,
+      baseUrl,
+      fetchFn: authedFetch,
+      compareFn: githubCompareStatus,
+    });
+    if (already.ok) {
+      log({
+        event: 'deploy_proof_already_live',
+        commit_sha,
+        served_sha: already.served_sha,
+        reason: already.reason,
+      });
+      return {
+        ok: true,
+        reason: already.reason || 'already_live',
+        served_sha: already.served_sha,
+        contains: already.contains || already.matches || false,
+        skipped_redeploy: true,
+      };
+    }
+    // Not live yet — persist intent, then redeploy. Awaiting the full rebuild
+    // in-process is futile (this container dies on redeploy). Return a
+    // retryable miss so the next boot only re-proves instead of rebuilding.
+    log({
+      event: 'deploy_proof_redeploy_needed',
+      commit_sha,
+      prior_reason: already.reason,
+      served_sha: already.served_sha,
+    });
+    try {
+      await coalescedRedeploy();
+    } catch (err) {
+      log({ event: 'deploy_proof_redeploy_error', error: err?.message || String(err) });
+    }
     const proof = await waitForDeploySha({
       expectedSha: commit_sha,
       baseUrl,
       fetchFn: authedFetch,
-      attempts: 40,
-      intervalMs: 15_000,
+      attempts: 8,
+      intervalMs: 10_000,
       compareFn: githubCompareStatus,
     });
     return {
@@ -1332,6 +1371,7 @@ async function runProductBuildStep(task, { baseUrl, commandKey, logger } = {}) {
       reason: proof.ok ? null : (proof.reason || 'deploy_did_not_serve_sha'),
       served_sha: proof.served_sha,
       contains: proof.contains || false,
+      redeployed: true,
     };
   };
 

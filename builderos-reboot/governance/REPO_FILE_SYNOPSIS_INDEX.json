@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T02:40:24.883Z",
+  "generated_at": "2026-07-12T02:50:31.352Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11456,
   "files": [
@@ -36776,9 +36776,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 72212,
-      "mtime": "2026-07-12T02:37:42.856Z",
-      "indexed_at": "2026-07-12T02:40:24.883Z"
+      "bytes": 72683,
+      "mtime": "2026-07-12T02:50:21.005Z",
+      "indexed_at": "2026-07-12T02:50:31.352Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -37632,9 +37632,9 @@
     {
       "path": "docs/FOUNDER_NEVER_STOP_REPORT.md",
       "synopsis": "Founder Never-Stop Report — 2026-07-11",
-      "bytes": 3953,
-      "mtime": "2026-07-12T02:40:23.447Z",
-      "indexed_at": "2026-07-12T02:40:24.883Z"
+      "bytes": 4043,
+      "mtime": "2026-07-12T02:50:08.177Z",
+      "indexed_at": "2026-07-12T02:50:31.352Z"
     },
     {
       "path": "docs/FOUNDER_SOVEREIGNTY_PRIORITY_AUDIT_V1.md",
@@ -38890,9 +38890,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 175259,
-      "mtime": "2026-07-12T02:40:23.089Z",
-      "indexed_at": "2026-07-12T02:40:24.883Z"
+      "bytes": 175285,
+      "mtime": "2026-07-12T02:50:18.635Z",
+      "indexed_at": "2026-07-12T02:50:31.352Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -85197,9 +85197,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 74594,
-      "mtime": "2026-07-11T02:34:31.785Z",
-      "indexed_at": "2026-07-11T02:57:52.492Z",
+      "bytes": 76123,
+      "mtime": "2026-07-12T02:49:34.528Z",
+      "indexed_at": "2026-07-12T02:50:31.352Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

@@ -1,59 +1,64 @@
 <!-- SYNOPSIS: Founder Never-Stop Report — 2026-07-11 -->
 
-# Founder Never-Stop Report — 2026-07-11
+# Founder Never-Stop Report — 2026-07-12
 
 **Standing order (Adam):** Never stop building unless out of credits. If blocked, skip to the next buildable thing / next project. Report why anything stopped and what Adam can fix.
 
 ---
 
-## Current machine state (KNOW)
+## Verdict (KNOW)
 
-| Check | Status |
-|---|---|
-| Tip deploy | `622467639d…` ready |
-| Never-stop enabled | **YES** (`BUILDEROS_NEVER_STOP=1`) |
-| Cycle when checked | **running** (receipt phase `started`) |
-| Token capacity | OK (4 model keys present) |
-| Daily step cap | 60/day (remaining 60) — raising to unlimited next deploy |
-| Governed fence | OFF (ungoverned never-stop allowed) |
-| Autopilot flag | Set to `1` via managed-env |
+Never-stop was enabled, but tip was **crash-looping every ~2 minutes** — so it looked idle (`total_runs: 0`) and kept restarting instead of shipping.
 
-Priority order (money first): **site-builder → limitlessos → lifeos → marketingos → …**
+**Root cause:** deploy-proof always called Railway self-redeploy *before* checking whether tip already served the built SHA. That killed the web process mid-cycle, wiped in-memory state, and prevented queue-status commits. Pre-existing route artifacts short-circuited to that path → redeploy → die → reboot → repeat.
+
+**Fix shipping now:** prove-first (skip redeploy when already live). Daily cap set to unlimited (`NEVER_STOP_DAILY_STEP_CAP=0`). Loop paused briefly only to stop the crash loop, then re-enabled after the fix deploy.
 
 ---
 
-## Why it looked “stopped” earlier
+## Current machine state
 
-1. Never-stop was **enabled** but **had never completed a cycle** on tip (`total_runs: 0`, `last_run_at: null`) until kicked.
-2. Scheduler ticks every ~5 minutes after boot; no live “I’m building X” surface was checked.
-3. Several money/video features are **blocked on founder secrets**, so the loop must **skip those steps** and build other queue work.
+| Check | Status |
+|---|---|
+| Tip SHA (at report) | `b5d8abdd…` then fix commit after push |
+| Never-stop doctrine | ON after fix redeploy |
+| Daily step cap | **Unlimited** (`cap=0`) |
+| Token keys present | YES (4) — not a credit-presence halt |
+| Skip-blocked → next product | Already in orchestrator (`founder_gated` skipped) |
+| Money-first priority | site-builder → limitlessos → lifeos → marketingos |
 
-**Action taken:** kicked `POST /api/v1/lifeos/never-stop/run-once` (accepted; was already running). Set faster interval (`120000` ms) + `BUILDEROS_AUTOPILOT=1`. Adding `NEVER_STOP_DAILY_STEP_CAP=0` (unlimited) to managed allowlist so a 60/day soft stop cannot idle the factory while credits remain.
+---
+
+## Why it “stopped” (honest)
+
+1. **Crash loop (platform bug)** — not out of credits. Fixed by prove-before-redeploy.
+2. Soft 60/day cap risk — cleared (`NEVER_STOP_DAILY_STEP_CAP=0`).
+3. Feature paths blocked on **your secrets** still skip; system should build other queue work.
 
 ---
 
 ## Founder blockers — what YOU can fix
 
-| Blocker | Why it stops that path | What you do |
+| Blocker | Why that path stalls | What you do |
 |---|---|---|
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` missing | YouTube connect + channel analytics stay off | Paste OAuth Web client into Railway; redirect = `https://lumin-web-production-e3a9.up.railway.app/api/v1/marketing/youtube/callback` |
-| `REPLICATE_API_TOKEN` missing | AI video / generative modes stay gated | Paste Replicate token (`r8_…`) into Railway |
-| Google web login / 2FA | Agent cannot create OAuth client with App Passwords alone | One human Google Cloud login, or paste Client ID/Secret |
-| External cold email (Postmark pending / SMTP timeout) | Site Builder invite blast to prospects blocked | Approve Postmark **or** paste working `RESEND_API_KEY` / SMTP |
-| Site Builder `founder_gated` steps (11) | Queue won't auto-build those until unlocked | Decide which gated steps to open, or leave them human-only |
-| R2 storage (`STORAGE_*`) | SMOS audio upload path stays off | Add R2 bucket vars when you want audio sessions |
-| Daily step cap = 60 | Soft halt after 60 builder attempts/day even with credits | Will set `NEVER_STOP_DAILY_STEP_CAP=0` after allowlist ship |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | YouTube connect + channel analytics stay off | Paste OAuth Web client into Railway; redirect = `https://lumin-web-production-e3a9.up.railway.app/api/v1/marketing/youtube/callback` |
+| `REPLICATE_API_TOKEN` | Generative video modes stay gated | Paste Replicate token (`r8_…`) into Railway |
+| Google web login / 2FA | Agent cannot create OAuth client with App Passwords | One human Google Cloud login, or paste Client ID/Secret |
+| External cold email (Postmark pending / SMTP) | Site Builder invite blast blocked | Approve Postmark **or** paste working `RESEND_API_KEY` / SMTP |
+| Site Builder `founder_gated` UI steps (11) | Auto-loop skips those | Unlock specific steps if you want UI built without you |
+| R2 `STORAGE_*` | SMOS audio upload path off | Add when you want audio sessions |
+| Live $ balance | System only sees key *presence* | Check provider dashboards if spend stalls |
 
 ---
 
-## What the system SHOULD keep building while blocked
+## What keeps building while those are blocked
 
-(Skip gated items; do not idle.)
+1. **Site Builder** — non-gated queue / money path glue  
+2. **Command Center / LifeOS / LimitlessOS** — open `BUILD_QUEUE` steps  
+3. **MarketingOS** — Phase 5 publish verifier + ungated steps  
+4. Plan/SENTRY repair lanes when no product step is actionable  
 
-1. **Site Builder** — remaining auto-buildable queue steps (not founder_gated)
-2. **MarketingOS Phase 5** — social publish pipeline (3 pending: publisher → route → sentry)
-3. **LifeOS / LimitlessOS / other products** in `PRODUCT_BUILD_PRIORITY.json` with open `BUILD_QUEUE` steps
-4. Plan/SENTRY repair lanes when no product step is actionable
+YouTube/Replicate secrets do **not** idle the whole factory.
 
 ---
 
@@ -64,17 +69,19 @@ curl -sS -H "x-command-key: $COMMAND_CENTER_KEY" \
   "$PUBLIC_BASE_URL/api/v1/lifeos/never-stop/status?events=25"
 ```
 
-Kick a cycle:
+Kick:
 
 ```bash
 curl -sS -X POST -H "x-command-key: $COMMAND_CENTER_KEY" \
   "$PUBLIC_BASE_URL/api/v1/lifeos/never-stop/run-once"
 ```
 
+Healthy signal: `enabled:true`, `daily_budget.unlimited` or `cap:0`, `total_runs` climbing, tip `uptime` not resetting every ~2 min.
+
 ---
 
 ## Honesty labels
 
-- **KNOW:** never-stop enabled; cycle was running after kick; Google/Replicate tokens still absent on tip; Site Builder money path still email-blocked for cold outreach.
-- **THINK:** with unlimited daily cap + skip logic, tip should keep picking Site Builder / MarketingOS publish / other queues without waiting on YouTube keys.
-- **DON'T KNOW:** live model billing balance (system only checks key *presence*, not remaining $).
+- **KNOW:** crash loop from unconditional deploy-proof redeploy; daily cap unlimited on tip after env load; Google/Replicate still absent; cold email still blocked for first-dollar outreach.
+- **THINK:** after prove-first ships, never-stop completes cycles without suicide-redeploy when tip already contains the built SHA.
+- **DON'T KNOW:** remaining provider dollar balances (keys present ≠ balance > 0).
