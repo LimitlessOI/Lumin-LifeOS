@@ -10,10 +10,10 @@ export function registerPhase14CertRoutes(app, deps = {}) {
     try {
       const result = await getPhase14Cert(db);
       res.set('Cache-Control', 'no-store');
-      return res.json(result);
+      res.json(result);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      return res.status(500).json({ error: message });
+      res.set('Cache-Control', 'no-store');
+      res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
     }
   });
 }
