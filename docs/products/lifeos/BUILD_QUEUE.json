@@ -350,17 +350,20 @@
     },
     {
       "id": "lo-therapist-role",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/lifeos-user-service.js",
       "task": "Allow LifeOS accounts with role=therapist (clinical partner login). Add ROLE allowlist including therapist; reject unknown roles; export listRoles(); JWT still carries role.",
       "spec": "ESM. Keep existing exports. Add export const LIFEOS_ROLES = ['member','admin','therapist','operator','founder_admin']. In createUser: if role provided and not in LIFEOS_ROLES throw Error('invalid_role'); default remains member. Do not weaken password hashing or session revoke. No new DB migration in this step (role column already exists). No browser globals. @ssot docs/products/lifeos/PRODUCT_HOME.md",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "LIFEOS_ROLES",
         "therapist"
-      ]
+      ],
+      "commit_sha": "6b81d93ae2228f72bd18a1f1a1f0651f82343316",
+      "last_attempt_at": "2026-07-12T03:39:28.711Z",
+      "completed_at": "2026-07-12T03:39:44.600Z"
     },
     {
       "id": "lo-consent-therapist-share",
