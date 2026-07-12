@@ -121,7 +121,7 @@
     },
     {
       "id": "step-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/wellness-studio-orchestrator.js",
       "task": "Create orchestrator that ties data access, AI insights, and therapist integration",
       "spec": "Exports async runWellnessSession(userId, sessionType, deps) where deps = {db, callCouncilMember, wellnessTherapist}. Imports wellness-studio-data.js and wellness-studio-ai.js from sibling paths. Calls createSession, then generateWellnessInsight, then createInsight, then optionally calls deps.wellnessTherapist.notifyIfNeeded(userId, insight) if that method exists. Returns {session, insight}. No browser globals.",
@@ -130,7 +130,10 @@
         "step-03"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "b6e8776789b7466787634df73d76904d3dd0e5c5",
+      "last_attempt_at": "2026-07-12T19:01:39.802Z",
+      "completed_at": "2026-07-12T19:01:50.775Z"
     },
     {
       "id": "step-05",
