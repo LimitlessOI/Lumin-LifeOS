@@ -1,8 +1,6 @@
 /**
- * SYNOPSIS: email-reader.js
- * email-reader.js
- * IMAP-based inbox reader for system email accounts.
- * Primary use: catch verification emails during autonomous signups.
+ * SYNOPSIS: IMAP inbox reader for signup verification emails (Gmail app password).
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  *
  * Deps: imapflow
  * Env: GMAIL_SIGNUP_EMAIL, GMAIL_SIGNUP_APP_PASSWORD
@@ -33,6 +31,114 @@ function buildClient(email, appPassword) {
  *
  * Returns { subject, from, body, links } or null on timeout.
  */
+async function searchMailboxOnce({
+  client,
+  mailbox,
+  since,
+  fromDomain = null,
+  subjectContains = null,
+}) {
+  await client.mailboxOpen(mailbox);
+  const criteria = { since };
+  if (fromDomain) criteria.from = `@${fromDomain}`;
+  if (subjectContains) criteria.subject = subjectContains;
+
+  const messages = [];
+  for await (const msg of client.fetch(criteria, {
+    envelope: true,
+    bodyStructure: true,
+    source: true,
+  })) {
+    messages.push(msg);
+  }
+  return messages;
+}
+
+function toEmailResult(msg) {
+  const raw = msg.source?.toString("utf8") || "";
+  return {
+    subject: msg.envelope?.subject || "",
+    from: msg.envelope?.from?.[0]?.address || "",
+    body: raw,
+    links: extractLinks(raw),
+    date: msg.envelope?.date || null,
+  };
+}
+
+/**
+ * One-shot scan of INBOX + Spam for a verification email.
+ * Use when resume-verify runs long after signup (lookback beyond a few minutes).
+ */
+export async function findRecentVerificationEmail({
+  email = process.env.GMAIL_SIGNUP_EMAIL,
+  appPassword = process.env.GMAIL_SIGNUP_APP_PASSWORD,
+  fromDomain = null,
+  subjectContains = null,
+  since = new Date(Date.now() - 48 * 3600 * 1000),
+  mailboxes = ["INBOX", "[Gmail]/Spam"],
+  logger = console,
+} = {}) {
+  if (!email || !appPassword) {
+    throw new Error("GMAIL_SIGNUP_EMAIL and GMAIL_SIGNUP_APP_PASSWORD are required");
+  }
+
+  const client = buildClient(email, appPassword);
+  try {
+    await client.connect();
+    const attempts = [];
+    if (fromDomain || subjectContains) {
+      attempts.push({ fromDomain, subjectContains });
+    }
+    // Fallbacks: domain-only miss is common (mail comes from ESP hosts).
+    attempts.push({ fromDomain: null, subjectContains: subjectContains || "verif" });
+    attempts.push({ fromDomain: null, subjectContains: "confirm" });
+    attempts.push({ fromDomain: null, subjectContains: null });
+
+    for (const attempt of attempts) {
+      for (const mailbox of mailboxes) {
+        try {
+          const messages = await searchMailboxOnce({
+            client,
+            mailbox,
+            since,
+            fromDomain: attempt.fromDomain,
+            subjectContains: attempt.subjectContains,
+          });
+          if (!messages.length) continue;
+
+          let chosen = messages[messages.length - 1];
+          if (fromDomain) {
+            const domainHit = [...messages].reverse().find((msg) => {
+              const from = msg.envelope?.from?.[0]?.address || "";
+              const raw = msg.source?.toString("utf8") || "";
+              const blob = `${from} ${msg.envelope?.subject || ""} ${raw.slice(0, 4000)}`.toLowerCase();
+              return blob.includes(String(fromDomain).toLowerCase());
+            });
+            if (domainHit) chosen = domainHit;
+            else if (attempt.fromDomain || attempt.subjectContains) {
+              // Keep scanning softer attempts rather than grabbing unrelated mail.
+              continue;
+            }
+          }
+
+          const result = toEmailResult(chosen);
+          logger.log?.(
+            `[EMAIL-READER] Found email in ${mailbox}: "${result.subject}" from ${result.from} — ${result.links.length} links`
+          );
+          return { ...result, mailbox };
+        } catch (err) {
+          logger.warn?.(`[EMAIL-READER] ${mailbox} search failed: ${err.message}`);
+        }
+      }
+    }
+  } finally {
+    try {
+      await client.logout();
+    } catch (_) {}
+  }
+  return null;
+}
+
 export async function waitForVerificationEmail({
   email = process.env.GMAIL_SIGNUP_EMAIL,
   appPassword = process.env.GMAIL_SIGNUP_APP_PASSWORD,
@@ -50,42 +156,15 @@ export async function waitForVerificationEmail({
   logger.log?.(`[EMAIL-READER] Waiting for verification email (domain: ${fromDomain}, subject: ${subjectContains})`);
 
   while (Date.now() < deadline) {
-    const client = buildClient(email, appPassword);
-    try {
-      await client.connect();
-      await client.mailboxOpen("INBOX");
-
-      // Search criteria
-      const criteria = { since };
-      if (fromDomain) criteria.from = `@${fromDomain}`;
-      if (subjectContains) criteria.subject = subjectContains;
-
-      const messages = [];
-      for await (const msg of client.fetch(criteria, {
-        envelope: true,
-        bodyStructure: true,
-        source: true,
-      })) {
-        messages.push(msg);
-      }
-
-      await client.logout();
-
-      if (messages.length > 0) {
-        // Take the most recent match
-        const msg = messages[messages.length - 1];
-        const raw = msg.source?.toString("utf8") || "";
-        const links = extractLinks(raw);
-        const subject = msg.envelope?.subject || "";
-        const from = msg.envelope?.from?.[0]?.address || "";
-
-        logger.log?.(`[EMAIL-READER] Found email: "${subject}" from ${from} — ${links.length} links`);
-        return { subject, from, body: raw, links };
-      }
-    } catch (err) {
-      logger.warn?.(`[EMAIL-READER] IMAP error: ${err.message}`);
-      try { await client.logout(); } catch (_) {}
-    }
+    const found = await findRecentVerificationEmail({
+      email,
+      appPassword,
+      fromDomain,
+      subjectContains,
+      since,
+      logger,
+    });
+    if (found) return found;
 
     await sleep(POLL_INTERVAL_MS);
   }
@@ -129,4 +208,9 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export default { waitForVerificationEmail, extractLinks, findVerificationLink };
+export default {
+  waitForVerificationEmail,
+  findRecentVerificationEmail,
+  extractLinks,
+  findVerificationLink,
+};
