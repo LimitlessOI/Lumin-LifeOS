@@ -403,7 +403,7 @@
     },
     {
       "id": "mos-community-value-routes",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-community-value-routes.js",
       "task": "Thin API: POST /api/v1/marketing/community/draft-reply for value-first community outreach drafts.",
       "spec": "ESM export registerMarketingCommunityValueRoutes(app, deps={pool, requireKey, callCouncilMember, logger}). POST /api/v1/marketing/community/draft-reply body {platform, threadTitle, threadBody, productAngle?, tone?} → createCommunityValueDrafter. Auth via requireKey. JSON only. No browser globals. Do not edit server.js. @ssot docs/products/marketingos/PRODUCT_HOME.md",
@@ -411,13 +411,14 @@
         "mos-community-value-drafter"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerMarketingCommunityValueRoutes"
       ],
-      "commit_sha": "74acb49bec309ea1a4483f721978eea6374e5cd1",
-      "last_attempt_at": "2026-07-12T20:25:12.678Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "commit_sha": "4fcdd6e1e668c621f35510637e5624a86cef24a3",
+      "last_attempt_at": "2026-07-12T21:28:53.429Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "completed_at": "2026-07-12T21:28:56.051Z"
     },
     {
       "id": "mos-community-value-auto-register",
