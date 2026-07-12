@@ -57,6 +57,8 @@ import { shouldAttachStrategicBrief } from './chair-lumin-personal-mode.js';
 import {
   isBlueprintExecuteIntent,
   isBuildRequest,
+  isBuildStatusQuestion,
+  isCounselPresenceIntent,
   isExplicitExecuteCommand,
   isPureCounselQuestion,
   isFounderRepairOrderIntent,
@@ -85,6 +87,8 @@ import { runChairDirectAgent } from './chair-direct-agent.js';
 export {
   isBlueprintExecuteIntent,
   isBuildRequest,
+  isBuildStatusQuestion,
+  isCounselPresenceIntent,
   isExplicitExecuteCommand,
   isPureCounselQuestion,
 } from './chair-intent-signals.js';
@@ -440,7 +444,11 @@ export async function runLuminChairTurn(ctx, deps) {
   // 92s handler deadline — which is exactly how drawer_direct_build got
   // "No response from system." Skip the front-door agent for those turns.
   const skipDirectAgentForBuild = doPrefix.forcedExecute
-    || isBuildRequest(doPrefix.text || cleanedInput)
+    || (
+      isBuildRequest(doPrefix.text || cleanedInput)
+      && !isBuildStatusQuestion(doPrefix.text || cleanedInput)
+      && !isCounselPresenceIntent(doPrefix.text || cleanedInput)
+    )
     || isExplicitExecuteCommand(cleanedInput)
     || /^\s*(do|execute|run)\s*:/i.test(ctx.originalText || cleanedInput);
 

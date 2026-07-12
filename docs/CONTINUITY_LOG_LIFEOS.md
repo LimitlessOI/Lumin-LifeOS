@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-12 — Communications all-night: CLARIFY theater killed
+
+Adam: work communications until good. KNOW: tip was sending "don't fix me" / "did that build land?" into intent CLARIFY because isBuildRequest matched "fix"/"build". Fixed exemptions + soft clarify card + relational prompt. Next: tip prove presence + build-status answers as Chair.
+
 ## [LIFEOS] Update 2026-07-12 — Chat ship gate + therapist ownership
 
 Adam: LifeOS whole kit; chat is shit / cannot ship; therapist backend account with consent. KNOW: Amendment 21 renamed to `docs/products/lifeos/PRODUCT_HOME.md`. Therapist clinical = Wellness Studio Module 4 + Clinical Partnership tier — no `therapist` role in code yet. Chat root cause: bare "Lumin" matched as system-knowledge → ops/mission mode every turn. Fix: personal_turn default + narrow lumin matcher + counsel reply strip + priority lifeos first. Next: tip prove chat; then consent ledger + therapist role via factory.
