@@ -418,7 +418,7 @@
     },
     {
       "id": "step-04",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/site-builder-color-palettes-routes.js",
       "task": "Register REST routes for color palettes and mount via auto-registration",
       "spec": "Export registerSiteBuilderColorPalettesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/color-palettes (returns all palettes) and GET /api/site-builder/color-palettes/:id. Import site-builder-color-palettes.js from step-03. After verifying tests pass, add an entry for this module to config/auto-registered-product-modules.json so the framework mounts it automatically — do NOT edit server.js.",
@@ -426,9 +426,9 @@
         "step-03"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "commit_sha": "a84c6abd68e548990f223dd15f095ebcecfde68b",
-      "last_attempt_at": "2026-07-12T02:55:25.495Z",
+      "last_attempt_at": "2026-07-12T03:03:10.676Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     }
   ]
