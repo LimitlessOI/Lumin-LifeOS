@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T03:19:53.085Z",
+  "generated_at": "2026-07-12T03:25:40.783Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11458,
+  "file_count": 11459,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85364,6 +85364,13 @@
         "docs/SSOT_COMPANION.md §0.5J",
         "docs/constitution/NORTH_STAR_SSOT.md Article II §2.16"
       ]
+    },
+    {
+      "path": "services/pending-adam-service.js",
+      "synopsis": "Exports getPendingAdam — services/pending-adam-service.js.",
+      "bytes": 1481,
+      "mtime": "2026-07-12T03:25:40.783Z",
+      "indexed_at": "2026-07-12T03:25:40.783Z"
     },
     {
       "path": "services/phase14-cert-service.js",
