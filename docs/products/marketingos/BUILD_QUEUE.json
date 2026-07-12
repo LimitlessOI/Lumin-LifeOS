@@ -417,7 +417,7 @@
     },
     {
       "id": "mos-community-value-auto-register",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Auto-register community value draft routes.",
       "spec": "Ensure modules[] contains {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"registerMarketingCommunityValueRoutes\",\"enabled\":true}. Preserve all existing. Valid JSON only.",
@@ -425,11 +425,14 @@
         "mos-community-value-routes"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "marketing-community-value-routes.js",
         "registerMarketingCommunityValueRoutes"
-      ]
+      ],
+      "commit_sha": "fd2b22e7692d14b98ba2ebc3598fca48cff54d31",
+      "last_attempt_at": "2026-07-12T20:34:02.561Z",
+      "completed_at": "2026-07-12T20:34:09.721Z"
     }
   ],
   "backlog_signature": "marketingos-money-2026071219"
