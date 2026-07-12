@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T16:35:41.167Z",
+  "generated_at": "2026-07-12T18:06:19.319Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11465,
+  "file_count": 11466,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -32327,6 +32327,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/sentry-unplannable-stamps.json",
+      "synopsis": "JSON data/config — data/sentry-unplannable-stamps.json.",
+      "bytes": 169,
+      "mtime": "2026-07-12T18:05:35.443Z",
+      "indexed_at": "2026-07-12T18:06:19.319Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/twins/default/adam/communication.json",
       "synopsis": "JSON data/config — data/twins/default/adam/communication.json.",
       "bytes": 225,
@@ -36804,9 +36812,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 502682,
-      "mtime": "2026-07-12T16:34:51.864Z",
-      "indexed_at": "2026-07-12T16:35:09.114Z"
+      "bytes": 503151,
+      "mtime": "2026-07-12T18:06:12.817Z",
+      "indexed_at": "2026-07-12T18:06:19.319Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -38897,9 +38905,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 175861,
-      "mtime": "2026-07-12T16:34:51.479Z",
-      "indexed_at": "2026-07-12T16:35:09.114Z"
+      "bytes": 176206,
+      "mtime": "2026-07-12T18:06:10.575Z",
+      "indexed_at": "2026-07-12T18:06:19.319Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39362,9 +39370,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 604603,
-      "mtime": "2026-07-12T16:34:37.068Z",
-      "indexed_at": "2026-07-12T16:35:09.114Z"
+      "bytes": 605110,
+      "mtime": "2026-07-12T18:06:07.789Z",
+      "indexed_at": "2026-07-12T18:06:19.319Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -85236,9 +85244,9 @@
     {
       "path": "services/never-stop-product-factory.js",
       "synopsis": "Permanent product expansion lane — work exists even when BP_PRIORITY queue reads complete.",
-      "bytes": 76123,
-      "mtime": "2026-07-12T02:49:34.528Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 78187,
+      "mtime": "2026-07-12T18:05:22.663Z",
+      "indexed_at": "2026-07-12T18:06:19.319Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
@@ -89010,9 +89018,9 @@
     {
       "path": "tests/product-expansion-lanes.test.js",
       "synopsis": "Multiple-lane concurrency — the factory builds several products'",
-      "bytes": 5776,
-      "mtime": "2026-07-09T01:03:41.540Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 5814,
+      "mtime": "2026-07-12T18:06:03.831Z",
+      "indexed_at": "2026-07-12T18:06:19.319Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

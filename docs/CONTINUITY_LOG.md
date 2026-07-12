@@ -5,6 +5,12 @@
 
 ---
 
+## [FIX] 2026-07-12 — Kill Site Builder unplannable SENTRY fake loop; LifeOS twin queue
+
+Never-stop was burning cycles on `sentry_fix_plan_site-builder` (planner filtered all steps) because LifeOS BUILD_QUEUE was 100% done and SENTRY replan sat at priority ~2 beating LifeOS extend at ~6. Demoted SENTRY replan, stamped site-builder unplannable, seeded LifeOS Digital Twin steps (`lo-ui-directives-service` → reaction simulator → routes → auto-register).
+
+---
+
 ## [FIX] 2026-07-12 — Never-stop is Railway-only; halt only on FOUNDER_STOP / tokens
 
 Adam: building must not depend on the laptop; never stop unless he says so or token budget is out. Clarified + hardened Railway never-stop scheduler (`hard_halt` only FOUNDER_STOP / PAUSE_AUTONOMY / token_capacity / daily_budget). Fixed consent routes quality (use real consent-registry) + auto-register chicken-egg so the queue advances. Truth of throughput = `origin/main` commits + `GET /api/v1/lifeos/never-stop/status` — not local pm2.

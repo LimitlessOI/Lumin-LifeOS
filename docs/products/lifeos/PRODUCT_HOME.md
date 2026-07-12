@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — Consent routes quality rewrite + auto-register; never-stop Railway-only halt contract. |
+| **Last Updated** | 2026-07-12 — Seed Digital Twin ui_directives + reaction simulator queue; kill Site Builder unplannable SENTRY fake loop. |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-12 | **LifeOS twin phase queued + fake-loop kill** — Seeded `lo-ui-directives-service` → twin reaction simulator → routes → auto-register. Never-stop: SENTRY fix plans demoted to priority 8; founder-priority queue extend promoted to 2.05; durable `data/sentry-unplannable-stamps.json` + site-builder queue stamp so unplannable Site Builder replan cannot starve LifeOS. | Adam: no fake loops; work on LifeOS. | ✅ discover → lifeos ui-directives | tip push + kick |
 | 2026-07-12 | **Consent API quality + auto-register GAP-FILL** — Rewrote `routes/lifeos-consent-routes.js` to use `services/consent-registry.js` (builder had invented broken SQL + duplicate registry). Fixed botched `register-runtime-routes.js` mount. Added auto-register entry. Queue: `lo-consent-auto-register` done; `lo-consent-api` awaiting redeploy functional proof. | Adam: never stop unless I say so / tokens. | ✅ orchestrator tests | tip push + never-stop |
 | 2026-07-12 | **Consent registry therapist_share unblock** — `services/consent-registry.js`: added `therapist_share` + `clinical_brief_export` to FEATURES; exported `getConsentFeatures()`. Unblocks never-stop step `lo-consent-therapist-share` (was BLOCKED_TOOLING / no_commit_sha). Spine fix: `routes/command-center-mode-routes.js` imports `getCurrentMode as getMode`, aligns `setMode` call + VALID_MODES with service. | Adam: system must keep building quality code. | ✅ 394 pass, 0 fail | push + never-stop kick |
 | 2026-07-12 | **Comms routing: presence + build-status never CLARIFY** — `isBuildStatusQuestion` / `isCounselPresenceIntent` exempt "did that build land?" and "don't fix me" from `isBuildRequest` so Chair direct-agent answers. Soften intent_clarify drawer card. Prompt: relational ≠ machine health. Tests: `tests/chair-comms-routing.test.js`. | Adam: work communications all night until good. | ✅ local tests | tip prove |

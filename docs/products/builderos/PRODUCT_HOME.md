@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — Never-stop: Railway-only; hard-halt only FOUNDER_STOP / PAUSE_AUTONOMY / token / daily budget; auto-reg chicken-egg prefers register sibling. |
+| **Last Updated** | 2026-07-12 — Never-stop: demote unplannable SENTRY replan below LifeOS builds; durable unplannable stamps. |
 
 ### Related docs (this product)
 
@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-12 | **Kill SENTRY unplannable fake loop** — `discoverSentryFixWork` priority 2→8; top-5 product `extend_build_queue` priority →2.05; durable stamps in `data/sentry-unplannable-stamps.json`; cycle selection prefers product_build > non-sentry plan > sentry plan. Site-builder stamped unplannable. | Adam: no fake loops; build LifeOS. | ✅ sentry tests + discover smoke | tip |
 | 2026-07-12 | **Never-stop Railway-only halt contract** — Scheduler hard-halts ticks only on `FOUNDER_STOP` / `PAUSE_AUTONOMY` / token keys / daily budget; interval never self-cancels. Status exposes `laptop_is_not_builder` + `hard_halt`. Orchestrator: when a route has `commit_sha` + auto-reg last_error, `selectNextStep` prefers the auto-register sibling (fixes PENDING chicken-egg before maxAttempts BLOCKED). | Adam: this should never run from my laptop; never stop unless I say so or tokens. | ✅ orchestrator 17/17 | tip push + kick |
 | 2026-07-11 | **Never-stop standing order** — Adam: never stop unless out of credits; skip blocked → next project; report why stopped. Added managed allowlist `NEVER_STOP_DAILY_STEP_CAP`/`NEVER_STOP_BOOT_DELAY_MS`/`NEVER_STOP_LANES`; kicked tip run-once; wrote `docs/FOUNDER_NEVER_STOP_REPORT.md`. | Idle-looking never-stop (`total_runs:0`) + soft 60/day cap could idle while credits remain. | ✅ status kick | tip redeploy + set cap=0 |
 | 2026-07-11 | **Communication Law: no go-between scrub damage** — drop bare `you want` / `you'd like` forbidden phrases (gutted English); add forbid for "translation layer between" / "go-between". Chair prompt identity fix co-shipped in LifeOS home. | Adam: chat must be the system, not a middleman. | ✅ lifeos:lumin:communication:verify | tip |

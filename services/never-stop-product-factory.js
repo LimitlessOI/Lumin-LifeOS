@@ -528,10 +528,15 @@ export function discoverPlanWork() {
     const allDone = steps.length > 0 && steps.every((s) => s.status === STEP_STATUS.DONE);
     if (!allDone) continue;
     if (queue.backlog_signature && queue.backlog_signature === backlogSignature(backlog)) continue;
+    // Founder priority products (top of PRODUCT_BUILD_PRIORITY) must extend
+    // BEFORE lower-priority SENTRY replan noise (was priority 6 → starved by
+    // sentry_fix_plan at ~2.0002 — fake loops while LifeOS sat complete).
+    const listedIdx = priorityList.indexOf(productId);
+    const extendBase = listedIdx >= 0 && listedIdx < 5 ? 2.05 : 6;
     found.push({
       id: `extend_build_queue_${productId}`,
       kind: 'plan_build_queue',
-      priority: 6 + productRankFraction(productId, priorityList, backlog.length),
+      priority: extendBase + productRankFraction(productId, priorityList, backlog.length),
       product: productId,
       product_id: productId,
       home_path: homePath,
@@ -562,7 +567,7 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   // appends only genuinely-new documented steps (deduped by id + target_file/
   // task) onto the shipped ones — the loop grows its own backlog in place.
   let existingQueue = null;
-  if (task.extend) {
+  if (task.extend || task.sentry_signature) {
     try { existingQueue = loadBuildQueue(task.product_id); } catch { existingQueue = null; }
   }
   // SENTRY self-fix tasks carry their findings+solutions as extra backlog so the
@@ -606,6 +611,7 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
         } catch (e) {
           stampCommitted = e.message;
         }
+        persistSentryUnplannableStamp(task.product_id, task.sentry_signature, planReason?.msg);
         log({
           event: 'sentry_signature_stamped_unplannable',
           product_id: task.product_id,
@@ -658,6 +664,39 @@ async function runPlanBuildQueue(task, { callModel, logger } = {}) {
 }
 
 const SENTRY_REGISTRY_PATH = path.join(ROOT, 'builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json');
+const SENTRY_UNPLANNABLE_STAMP_PATH = path.join(ROOT, 'data/sentry-unplannable-stamps.json');
+
+function readSentryUnplannableStamps() {
+  try {
+    const j = JSON.parse(fs.readFileSync(SENTRY_UNPLANNABLE_STAMP_PATH, 'utf8'));
+    return j && typeof j === 'object' ? j : {};
+  } catch {
+    return {};
+  }
+}
+
+/** Durable spin-break when queue stamp commit fails or redeploy wipes local queue. */
+export function persistSentryUnplannableStamp(productId, signature, reason) {
+  if (!productId || !signature) return;
+  const stamps = readSentryUnplannableStamps();
+  stamps[productId] = {
+    signature: String(signature),
+    reason: reason ? String(reason).slice(0, 400) : null,
+    stamped_at: new Date().toISOString(),
+  };
+  try {
+    fs.mkdirSync(path.dirname(SENTRY_UNPLANNABLE_STAMP_PATH), { recursive: true });
+    fs.writeFileSync(SENTRY_UNPLANNABLE_STAMP_PATH, `${JSON.stringify(stamps, null, 2)}\n`);
+  } catch {
+    // non-fatal — queue stamp still attempted
+  }
+}
+
+export function isSentryUnplannableStamped(productId, signature) {
+  if (!productId || !signature) return false;
+  const row = readSentryUnplannableStamps()[productId];
+  return Boolean(row && row.signature === String(signature));
+}
 
 // Map a SENTRY registry product to the docs/products directory that owns its
 // BUILD_QUEUE, derived from its `ssot` (docs/products/<dir>/PRODUCT_HOME.md).
@@ -679,6 +718,9 @@ function sentryProductQueueDir(ssot) {
  * the system fixes itself. Fail-closed and WASTE-SAFE: emits nothing when a
  * feed is missing/empty, and skips a product whose queue already carries the
  * current findings signature (no re-planning the same findings every cycle).
+ *
+ * Priority is intentionally BELOW product_build_step (2.x) and founder-priority
+ * extend (2.05.x) so unplannable SENTRY replans cannot starve LifeOS.
  */
 export function discoverSentryFixWork() {
   let registry;
@@ -698,16 +740,10 @@ export function discoverSentryFixWork() {
     try {
       feed = JSON.parse(fs.readFileSync(path.join(ROOT, feedRel), 'utf8'));
     } catch (e) {
-      // VISIBILITY: a registry-listed feed that is missing/unreadable must never
-      // be a silent [] — that exact ghost (feed excluded from the Docker image)
-      // starved the loop for cycles with no signal. Emit an ops event so it
-      // surfaces in recent_events instead of vanishing.
       log({ event: 'sentry_feed_unreadable', product_id: product?.id || queueDir, feed: feedRel, error: e.message });
       continue;
     }
     const raw = Array.isArray(feed?.findings) ? feed.findings : [];
-    // Solution-mandatory: a finding is only actionable if it carries a fix, so
-    // the planned step always has a concrete next action to build.
     const backlog = raw
       .filter((f) => f && (f.proposed_solution || f.solution))
       .map((f) => {
@@ -719,17 +755,18 @@ export function discoverSentryFixWork() {
     if (!backlog.length) continue;
 
     const sig = backlogSignature(backlog);
+    if (isSentryUnplannableStamped(queueDir, sig)) continue;
     let existingQueue = null;
     try { existingQueue = loadBuildQueue(queueDir); } catch { existingQueue = null; }
-    // Already planned these exact findings — don't burn a planner call re-doing it.
     if (existingQueue?.sentry_signature && existingQueue.sentry_signature === sig) continue;
+    if (existingQueue?.sentry_unplannable_at && existingQueue?.sentry_signature === sig) continue;
 
     found.push({
       id: `sentry_fix_plan_${queueDir}`,
       kind: 'plan_build_queue',
-      // Gate FAILs are top-tier product work: plan them just under fresh build
-      // steps so the loop localizes+fixes them before lower-priority expansion.
-      priority: 2 + productRankFraction(queueDir, priorityList),
+      // Below concrete builds (2.x) and founder-priority extend (2.05.x).
+      // Fake unplannable loops at priority≈2 were starving LifeOS.
+      priority: 8 + productRankFraction(queueDir, priorityList),
       product: queueDir,
       product_id: queueDir,
       home_path: path.join(ROOT, product.ssot),
@@ -1460,8 +1497,20 @@ export async function runProductExpansionCycle(options = {}) {
   // highest-priority task this runner can actually act on, and only fall back to
   // the deferred item when there is genuinely nothing buildable.
   const DEFER_ONLY_KINDS = new Set(['foundation_pipeline', 'founder_usability_gap']);
-  const actionable = work.find((w) => w && !DEFER_ONLY_KINDS.has(w.kind));
-  const task = actionable || work[0];
+  // Prefer real product builds, then non-SENTRY plans (LifeOS extend), never
+  // let unplannable SENTRY replan win when LifeOS/other builds exist.
+  const ranked = [...work].sort((a, b) => {
+    const score = (w) => {
+      if (!w || DEFER_ONLY_KINDS.has(w.kind)) return 1000 + (w.priority || 0);
+      if (w.kind === 'product_build_step') return w.priority || 0;
+      if (w.kind === 'plan_build_queue' && !w.sentry_signature) return 0.5 + (w.priority || 0);
+      if (w.kind === 'plan_build_queue' && w.sentry_signature) return 50 + (w.priority || 0);
+      return 10 + (w.priority || 0);
+    };
+    return score(a) - score(b);
+  });
+  const actionable = ranked.find((w) => w && !DEFER_ONLY_KINDS.has(w.kind));
+  const task = actionable || ranked[0] || work[0];
   if (!task) {
     log({ event: 'expansion_empty_unexpected' });
     return { ok: false, reason: 'no_work' };
@@ -1473,7 +1522,7 @@ export async function runProductExpansionCycle(options = {}) {
       skipped_kind: work[0].kind,
       selected: actionable.id,
       selected_kind: actionable.kind,
-      note: `skipped ${work[0].id} (defer-only, kind: ${work[0].kind}) — advancing to next buildable ${actionable.id} (kind: ${actionable.kind})`,
+      note: `skipped ${work[0].id} (defer-only or lower-value) — advancing to ${actionable.id}`,
     });
   }
 
