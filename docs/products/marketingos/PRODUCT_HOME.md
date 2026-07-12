@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — Allowlist + set LIVE_SOCIAL_PUBLISH_ENABLED=true via managed-env (Adam: system sets its own vars). |
+| **Last Updated** | 2026-07-12 — Value-first MarketingOS: buy limitlesssites.com (cheap Site Builder URL), community replies help-first then soft CTA — never spam. |
 
 ---
 
@@ -1348,6 +1348,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-12 | **Value-first marketing + Site Builder URL** — Adam: not spam; add value, engage, then soft offer. Decoupled `mos-community-value-drafter` from sentry so it can ship now (help-first drafts → soft CTA to Site Builder / limitlesssites.com). Started founder-authority domain purchase for **limitlesssites.com** (Porkbun + Namecheap); card vault ready (****0736). Tip Site Builder URL live: `/site-builder`. | Adam: value not spam; cheap URL + debit card for Site Builder fit. | ⚠️ domain purchase in flight / captcha | community-value build + DNS after domain owned |
 | 2026-07-12 | **LIVE_SOCIAL_PUBLISH_ENABLED allowlisted + set true** — Adam: system can add its own Railway vars — why wasn't the kill switch flipped? Added `LIVE_SOCIAL_PUBLISH_ENABLED` to `DEFAULT_ALLOWED_KEYS` in `railway-managed-env-service.js`, then `POST /api/v1/railway/managed-env/bulk` `{LIVE_SOCIAL_PUBLISH_ENABLED:true}` + redeploy. Approval gate + connected accounts still required for a real post. | Adam: set LIVE_SOCIAL_PUBLISH_ENABLED=true yourself. | ✅ allowlist + bulk | tip verify |
 | 2026-07-12 | **Money ASAP — ungated Phase 5 social publish + community value drafts** — Adam: promote everywhere (Reddit/FB/IG/LinkedIn), MarketingOS must work for paying customers. Set founder_gated:false on mos-social-publisher + mos-social-publish-route (kill switch LIVE_SOCIAL_PUBLISH_ENABLED still defaults OFF). Seeded mos-community-value-* draft API. PRODUCT_BUILD_PRIORITY: marketingos #1. | Adam: make money ASAP; MarketingOS promoting. | ✅ | ⬜ | tip never-stop builds publisher |
 | 2026-07-11 | **YouTube suggestions AI call fix + UI reload** — `callCouncilMember` now uses positional `(gemini_flash, prompt)` like Phase 1 routes so tip can return `ai_research_defaults`; home UI retries suggestion load. Still blocked: tip `oauthConfigured:false` — no GOOGLE_CLIENT_ID/SECRET in Railway or local `.env`; Google Cloud Console requires Adam’s login (agent hit sign-in wall). | Adam: suggestions + thumbnails + connect channel/analytics + set Google keys / login as me. | ✅ | ⬜ | suggestions LIVE; OAuth HALT on Adam credentials |

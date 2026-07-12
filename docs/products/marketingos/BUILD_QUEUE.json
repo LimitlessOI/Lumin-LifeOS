@@ -381,9 +381,9 @@
       "status": "pending",
       "target_file": "services/marketing-community-value.js",
       "task": "Draft high-value community replies for Reddit / Facebook groups / LinkedIn / X — offer help first, soft CTA last. No live posting in this module.",
-      "spec": "ESM. Export createCommunityValueDrafter({ callCouncilMember }). draftReply({ platform, threadTitle, threadBody, productAngle, tone }) returns { ok:true, reply_text, cta_line, risk_notes:string[] }. Platforms allowed: reddit|facebook_group|linkedin|x|instagram_comment. Rules embedded in prompt: lead with concrete help, no fake stats, no hype, optional soft CTA to Limitless/LifeOS/Site Builder only if natural, never claim paying customers you do not have. If callCouncilMember missing, return deterministic template draft (still ok:true). Named export + default. // SYNOPSIS + @ssot docs/products/marketingos/PRODUCT_HOME.md",
+      "spec": "ESM. Export createCommunityValueDrafter({ callCouncilMember }). draftReply({ platform, threadTitle, threadBody, productAngle, tone }) returns { ok:true, reply_text, cta_line, risk_notes:string[] }. Platforms allowed: reddit|facebook_group|linkedin|x|instagram_comment. Rules embedded in prompt: VALUE FIRST — never spam, never drop product links as the first move, answer the person's actual question with concrete usable help, engage like an ideal neighbor in the community, earn attention, THEN optional soft CTA to Site Builder / Limitless / LifeOS only if it naturally fits (prefer CTA URL https://limitlesssites.com or SITE_BASE_URL/site-builder). No fake stats, no hype, never claim paying customers you do not have. If callCouncilMember missing, return deterministic template draft (still ok:true). Named export + default. // SYNOPSIS + @ssot docs/products/marketingos/PRODUCT_HOME.md",
       "depends_on": [
-        "mos-social-sentry-layer-a"
+        "mos-social-publisher"
       ],
       "founder_gated": false,
       "attempts": 0,

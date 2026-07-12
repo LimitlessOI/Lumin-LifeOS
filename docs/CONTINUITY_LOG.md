@@ -7,7 +7,7 @@
 
 ## [MONEY] 2026-07-12 — MarketingOS first: ungated social publish + community value drafts
 
-Adam: get MarketingOS promoting (Reddit/FB/IG/LinkedIn/videos) and making money ASAP. Ungated Phase 5 `mos-social-publisher` + publish routes (still gated by `LIVE_SOCIAL_PUBLISH_ENABLED` default off + approval). Seeded community value-draft queue. Priority list: marketingos → site-builder → lifeos. Never-stop next build: `mos-social-publisher`. Honest: live posts still need connected social sessions + Railway kill-switch ON; Google YouTube OAuth still needs Adam's client IDs.
+Adam: system can set its own Railway vars — set `LIVE_SOCIAL_PUBLISH_ENABLED=true`. Done: allowlisted key in `railway-managed-env-service.js` (`0b0b5046`), bulk upsert + sync (create/changed), self-redeploy so process.env loads it. Kill switch is ON in vault; real posts still need connected social sessions + approved pieces. MarketingOS remains #1 priority / never-stop queue.
 
 ---
 
