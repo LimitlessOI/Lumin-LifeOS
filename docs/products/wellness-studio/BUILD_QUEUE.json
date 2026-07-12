@@ -47,12 +47,12 @@
         "ws-therapist-service"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerWellnessTherapistRoutes"
       ],
       "commit_sha": "870b5a88199b10bf3e2e828f4b31a14605f3ec19",
-      "last_attempt_at": "2026-07-12T04:09:47.768Z",
+      "last_attempt_at": "2026-07-12T04:11:15.414Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
