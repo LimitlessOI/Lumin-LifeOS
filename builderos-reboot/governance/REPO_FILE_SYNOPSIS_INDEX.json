@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T18:51:20.763Z",
+  "generated_at": "2026-07-12T19:00:13.521Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11471,
+  "file_count": 11472,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87251,6 +87251,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/wellness-studio-ai.js",
+      "synopsis": "Exports generateWellnessInsight — services/wellness-studio-ai.js.",
+      "bytes": 3977,
+      "mtime": "2026-07-12T19:00:13.521Z",
+      "indexed_at": "2026-07-12T19:00:13.521Z"
     },
     {
       "path": "services/wellness-studio-data.js",
