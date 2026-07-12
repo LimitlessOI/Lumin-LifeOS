@@ -8,7 +8,11 @@ import express from "express";
 import { createSignupAgent, SIGNUP_RECIPES } from "../core/signup-agent.js";
 import { createAccountManager } from "../services/account-manager.js";
 import { buildConnectGuide, imapCredsForEmail, inboxUrlForEmail } from "../services/lifeos-connect-guide.js";
-import { waitForVerificationEmail, findVerificationLink } from "../services/email-reader.js";
+import {
+  waitForVerificationEmail,
+  findRecentVerificationEmail,
+  findVerificationLink,
+} from "../services/email-reader.js";
 import { createSession } from "../services/browser-agent.js";
 
 export function createAccountManagerRoutes({ requireKey, accountManager, pool, logger = console } = {}) {
@@ -271,19 +275,37 @@ export function createAccountManagerRoutes({ requireKey, accountManager, pool, l
           guide: buildConnectGuide(account),
         });
       }
-      const since = new Date(Date.now() - 30 * 60 * 1000);
-      const emailResult = await waitForVerificationEmail({
+      // Look back from account creation (not a 30-min window) — resume often runs hours later.
+      const createdAt = account.created_at ? new Date(account.created_at) : null;
+      const floorMs = Date.now() - 48 * 3600 * 1000;
+      const createdMs =
+        createdAt && !Number.isNaN(createdAt.getTime())
+          ? createdAt.getTime() - 15 * 60 * 1000
+          : floorMs;
+      const since = new Date(Math.max(floorMs, createdMs));
+      let emailResult = await findRecentVerificationEmail({
         email: imap.email,
         appPassword: imap.appPassword,
         fromDomain: host,
+        subjectContains: account.service_name || null,
         since,
-        timeoutMs: 45_000,
         logger,
       });
+      if (!emailResult) {
+        emailResult = await waitForVerificationEmail({
+          email: imap.email,
+          appPassword: imap.appPassword,
+          fromDomain: host,
+          since,
+          timeoutMs: 45_000,
+          logger,
+        });
+      }
       if (!emailResult) {
         return res.status(404).json({
           ok: false,
           error: "Verification email not found yet",
+          since: since.toISOString(),
           inboxUrl: inboxUrlForEmail(account.email_used),
           guide: buildConnectGuide(account),
         });
