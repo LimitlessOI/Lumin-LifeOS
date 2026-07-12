@@ -198,7 +198,11 @@ export async function runChairDirectAgent({ message, history = [], deps = {}, ct
       memoryContext: deps.memoryContext ?? null,
       userId: ctx.userId || null,
       userHandle: ctx.userHandle || null,
-    }, { domain: 'chair', user_handle: ctx.userHandle || null });
+    }, {
+      domain: 'chair',
+      conversational_mode: true,
+      user_handle: ctx.userHandle || null,
+    });
   } catch { systemFacts = {}; }
 
   const threadBlock = history.length ? `\n\nRECENT CONVERSATION (continue it naturally — do not restart or summarize):\n${formatThreadForPrompt(history)}` : '';

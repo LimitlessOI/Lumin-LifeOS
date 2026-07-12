@@ -7,19 +7,20 @@
     "path_to_10": "docs/TOP_10_PATH_TO_10.json"
   },
   "schema": "product_build_priority_v1",
-  "updated_at": "2026-07-11",
+  "updated_at": "2026-07-12",
   "rules": {
     "financial_first": "`priority` is an ordered list of product_ids by financial priority, highest first. The loop builds listed products before unlisted ones.",
     "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity — a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
     "skip_undefined": "Products with no documented work in PRODUCT_HOME/conversations AND no BUILD_QUEUE.json are skipped until the founder adds ideas (never fabricated).",
     "corpus": "Planner reads PRODUCT_HOME.md + conversations/*.md + sibling product docs, then writes BUILD_QUEUE.json (executable blueprint) and builds.",
-    "what_matters": "Adam 2026-07-11: keep building but what matters — first dollar (Site Builder / LimitlessOS), LifeOS Chair usable, then Marketing publish. Do not thrash YouTube SENTRY ahead of money. NEVER STOP unless out of credits; if blocked skip to next buildable product/step and report founder unblockers.",
+    "what_matters": "Adam 2026-07-12: LifeOS is the big kit — ship-grade Chair chat first (cannot ship as operator-console theater), then therapist/consent backend per SSOT (Wellness Studio Module 4 + Clinical Partnership). Site Builder money path stays parallel but does not outrank LifeOS human OS until chat is usable. NEVER STOP unless out of credits.",
     "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
   },
   "priority": [
+    "lifeos",
+    "wellness-studio",
     "site-builder",
     "limitlessos",
-    "lifeos",
     "marketingos",
     "lifere",
     "tc-service",
@@ -49,6 +50,7 @@
     "zero-drift-handoff-protocol"
   ],
   "notes": [
+    "2026-07-12: Adam — LifeOS whole kit (chat must ship; therapist account with consent). lifeos → wellness-studio → site-builder money parallel.",
     "2026-07-11: Adam — keep building but what matters. Reordered: site-builder + limitlessos (first dollar) → lifeos → marketingos publish. YouTube SENTRY is not ahead of money.",
     "2026-07-11: Founder — system must read all product folders + conversations, blueprint (BUILD_QUEUE), and keep building. Expanded priority across ~30 products; corpus planner enrolls the rest by maturity.",
     "2026-07-10: Founder — keep building vision in any order; do not stop. Expanded priority so never-stop plans queues for products with documented backlog (tc-service, builderos, …) after MarketingOS Layer B closed. marketingos/lifeos first for vision continuity.",

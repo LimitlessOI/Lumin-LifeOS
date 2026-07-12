@@ -104,10 +104,27 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   const text = String(input || '').trim();
   const systemQuestion = needsSystemKnowledge(text);
   const explicitPersonalLifeIntent = isFounderPersonalLifeIntent(text);
+  // Default conversational turns (founder drawer / Chair) are personal unless the
+  // user is clearly asking about product/build/ops. Previously only
+  // personal_life domain or explicit life-admin intents counted — so almost every
+  // drawer message got Point B / strategic briefs injected and felt like an
+  // operator console, not a shippable human OS chat.
+  const productOpsTurn = systemQuestion
+    || hasProductBuildContext(text)
+    || isBuildRequest(text)
+    || /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next|queue|deploy|commit)\b/i.test(text);
+  const conversationalDefault = chairContext.conversational_mode !== false
+    && (chairContext.domain === 'chair'
+      || chairContext.domain === 'counsel'
+      || chairContext.domain === 'lumin'
+      || chairContext.domain === 'conversation'
+      || chairContext.conversational_mode === true);
   const personalTurn = !chairContext.alpha_probe
-    && !systemQuestion
+    && !productOpsTurn
     && chairContext.personal_search !== false
-    && (explicitPersonalLifeIntent || chairContext.domain === 'personal_life');
+    && (explicitPersonalLifeIntent
+      || chairContext.domain === 'personal_life'
+      || conversationalDefault);
 
   const facts = {
     schema: 'chair_native_facts_v1',
@@ -143,7 +160,10 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
       facts.program_context = sysKnow.programs;
       facts.chair_note = `${facts.chair_note} Answer using program_context and system_knowledge — do not claim the system lacks this; do not answer a different topic.`;
     }
-    if ((sysKnow.programs?.length || systemQuestion) && !explicitPersonalLifeIntent) {
+    // Only demote personal_turn for real system/ops questions. Matching the
+    // "lumin|chair" program keyword alone used to force ops mode on every drawer
+    // turn that mentioned Lumin — that made chat unshippable.
+    if (systemQuestion && !explicitPersonalLifeIntent) {
       facts.personal_turn = false;
     }
   } catch {

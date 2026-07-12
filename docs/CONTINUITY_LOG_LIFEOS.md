@@ -8,6 +8,10 @@
 
 ---
 
+## [LIFEOS] Update 2026-07-12 — Chat ship gate + therapist ownership
+
+Adam: LifeOS whole kit; chat is shit / cannot ship; therapist backend account with consent. KNOW: Amendment 21 renamed to `docs/products/lifeos/PRODUCT_HOME.md`. Therapist clinical = Wellness Studio Module 4 + Clinical Partnership tier — no `therapist` role in code yet. Chat root cause: bare "Lumin" matched as system-knowledge → ops/mission mode every turn. Fix: personal_turn default + narrow lumin matcher + counsel reply strip + priority lifeos first. Next: tip prove chat; then consent ledger + therapist role via factory.
+
 ## [STEER] Update 2026-07-12 — Never-stop crash loop fixed
 
 Adam standing order: never stop unless out of credits; skip blockers → next project; report why + fix list. KNOW: tip was crash-looping (~2 min) because deploy-proof always self-redeployed before checking live SHA — wiped cycles (`total_runs:0`). Fix: prove-first in `never-stop-product-factory.js`; daily cap unlimited; report `docs/FOUNDER_NEVER_STOP_REPORT.md`. Re-enable never-stop after fix deploy.
