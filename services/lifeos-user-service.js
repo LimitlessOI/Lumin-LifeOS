@@ -5,7 +5,16 @@
 import crypto from 'node:crypto';
 import { hashPassword, verifyPassword, signToken, generateRefreshToken } from './lifeos-auth.js';
 
+export const LIFEOS_ROLES = ['member', 'admin', 'therapist', 'operator', 'founder_admin'];
+
 const REFRESH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+function normalizeRole(role) {
+  if (role == null || role === '') return 'member';
+  const normalized = String(role).trim().toLowerCase();
+  if (!LIFEOS_ROLES.includes(normalized)) throw new Error('invalid_role');
+  return normalized;
+}
 
 export async function createUser(pool, { handle, email, password, displayName, role, tier, inviteCode }) {
   if (inviteCode) {
@@ -17,16 +26,17 @@ export async function createUser(pool, { handle, email, password, displayName, r
   }
 
   const normalHandle = String(handle || '').trim().toLowerCase();
-  const normalEmail  = email ? String(email).trim().toLowerCase() : null;
+  const normalEmail = email ? String(email).trim().toLowerCase() : null;
   if (!normalHandle) throw Object.assign(new Error('handle is required'), { statusCode: 400 });
 
+  const normalizedRole = normalizeRole(role);
   const hash = password ? hashPassword(password) : null;
 
   const { rows } = await pool.query(
     `INSERT INTO lifeos_users (user_handle, display_name, email, password_hash, role, tier)
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id, user_handle, display_name, email, role, tier, created_at`,
-    [normalHandle, displayName || normalHandle, normalEmail, hash, role || 'member', tier || 'free'],
+    [normalHandle, displayName || normalHandle, normalEmail, hash, normalizedRole, tier || 'free'],
   );
 
   const user = rows[0];
@@ -85,10 +95,10 @@ export async function loginUser(pool, { handleOrEmail, password }) {
 
   await pool.query(`UPDATE lifeos_users SET last_login_at = NOW() WHERE id = $1`, [user.id]);
 
-  const accessToken  = signToken({ sub: String(user.id), handle: user.user_handle, role: user.role, tier: user.tier });
+  const accessToken = signToken({ sub: String(user.id), handle: user.user_handle, role: user.role, tier: user.tier });
   const refreshToken = generateRefreshToken();
-  const tokenHash    = crypto.createHash('sha256').update(refreshToken).digest('hex');
-  const expiresAt    = new Date(Date.now() + REFRESH_TTL_MS);
+  const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+  const expiresAt = new Date(Date.now() + REFRESH_TTL_MS);
 
   await pool.query(
     `INSERT INTO lifeos_sessions (user_id, token_hash, expires_at) VALUES ($1, $2, $3)`,
@@ -110,7 +120,7 @@ export async function refreshSession(pool, refreshToken) {
   );
   if (!rows.length) throw Object.assign(new Error('Session expired or not found'), { statusCode: 401 });
 
-  const session     = rows[0];
+  const session = rows[0];
   const accessToken = signToken({ sub: String(session.user_id), handle: session.user_handle, role: session.role, tier: session.tier });
   return { accessToken, userId: session.user_id };
 }
