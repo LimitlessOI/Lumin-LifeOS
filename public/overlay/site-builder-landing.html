@@ -8,357 +8,669 @@
   <meta name="description" content="We rebuild your business website first. See a live preview, then publish for $45 including 2 months of management." />
   <style>
     :root {
-      --bg: #0f1412;
-      --paper: #171d1a;
-      --ink: #f3f6f2;
-      --muted: #a7b5ab;
-      --line: #2a3530;
+      --bg: #0b0f0d;
+      --paper: #111713;
+      --ink: #f2f7f4;
+      --muted: #9fb3a6;
+      --line: #25332b;
       --accent: #5ecf8e;
       --accent-deep: #1f6b45;
+      --accent-soft: rgba(94,207,142,0.12);
       --shadow: 0 24px 60px rgba(0,0,0,0.35);
-      --radius: 18px;
-      --radius-sm: 12px;
+      --shadow-soft: 0 8px 30px rgba(0,0,0,0.18);
+      --radius: 20px;
+      --radius-sm: 14px;
       --font: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-      --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      --sans: "Avenir Next", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
     body {
       margin: 0;
-      font-family: var(--font);
+      font-family: var(--sans);
       color: var(--ink);
       background:
-        radial-gradient(circle at 12% 8%, rgba(94,207,142,0.18), transparent 36%),
-        radial-gradient(circle at 88% 0%, rgba(70,120,255,0.12), transparent 28%),
-        linear-gradient(180deg, #121816 0%, var(--bg) 55%, #0c100e 100%);
-      line-height: 1.55;
+        radial-gradient(circle at 14% 6%, rgba(94,207,142,0.20), transparent 38%),
+        radial-gradient(circle at 92% 0%, rgba(70,120,255,0.10), transparent 26%),
+        linear-gradient(180deg, #101714 0%, var(--bg) 55%, #080b09 100%);
+      line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-    a { color: inherit; }
+    a { color: inherit; text-decoration: none; }
     .shell {
-      width: min(1120px, calc(100vw - 2rem));
+      width: min(1160px, calc(100vw - 2rem));
       margin: 0 auto;
-      padding: 1.25rem 0 4rem;
+      padding: 0 0 4rem;
     }
-    .nav {
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(11,17,15,0.78);
+      border-bottom: 1px solid rgba(42,60,51,0.6);
+    }
+    .topbar-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      padding: 0.5rem 0 1.5rem;
+      padding: 0.75rem 0;
     }
     .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
       font-family: var(--sans);
       font-size: 0.85rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
     }
+    .brand strong {
+      color: var(--ink);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
     .nav-links {
       display: flex;
-      gap: 0.75rem;
+      align-items: center;
+      gap: 0.4rem;
       flex-wrap: wrap;
-      font-family: var(--sans);
       font-size: 0.9rem;
     }
-    .pill {
-      border: 1px solid var(--line);
+    .nav-links a {
+      padding: 0.45rem 0.75rem;
       border-radius: 999px;
-      padding: 0.55rem 0.95rem;
-      background: rgba(255,255,255,0.03);
-      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s, background 0.2s;
     }
+    .nav-links a:hover { color: var(--ink); background: rgba(255,255,255,0.04); }
+    .nav-links a.cta-link {
+      background: var(--accent);
+      color: #062212;
+      font-weight: 700;
+      padding: 0.55rem 0.9rem;
+    }
+    .nav-links a.cta-link:hover { background: #4fd180; }
     .hero {
+      padding: 3.5rem 0 2rem;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 1.25rem;
-      align-items: stretch;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 2rem;
+      align-items: center;
     }
-    .card {
-      background: rgba(23,29,26,0.88);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+    .hero-copy {
+      max-width: 620px;
     }
-    .hero-copy { padding: 2.2rem; }
     .eyebrow {
       display: inline-flex;
       border-radius: 999px;
-      padding: 0.35rem 0.75rem;
-      background: rgba(94,207,142,0.12);
+      padding: 0.35rem 0.85rem;
+      background: var(--accent-soft);
       color: var(--accent);
-      font-family: var(--sans);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
     h1 {
-      margin: 1rem 0 0.9rem;
-      font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+      margin: 1.1rem 0 0.9rem;
+      font-family: var(--font);
+      font-size: clamp(2.6rem, 5.6vw, 4.6rem);
       line-height: 0.98;
       font-weight: 700;
-      max-width: 11ch;
+      letter-spacing: -0.02em;
     }
     .lede {
-      max-width: 48ch;
+      max-width: 52ch;
       color: var(--muted);
-      font-size: 1.08rem;
-      margin-bottom: 1.35rem;
+      font-size: 1.12rem;
+      margin-bottom: 1.5rem;
+    }
+    .price-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin: 0.3rem 0 1.1rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
       font-family: var(--sans);
     }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1.1rem;
+    .price-chip strong {
+      font-size: 2.1rem;
+      color: var(--accent);
+      font-weight: 800;
     }
+    .price-chip span { color: var(--muted); font-size: 0.95rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
-      padding: 0.9rem 1.2rem;
+      padding: 0.95rem 1.4rem;
       border-radius: 999px;
-      text-decoration: none;
-      font-family: var(--sans);
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 700;
       border: 0;
       cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
     }
-    .btn-primary { background: var(--accent); color: #082214; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--accent);
+      color: #062212;
+      box-shadow: 0 8px 22px rgba(94,207,142,0.22);
+    }
+    .btn-primary:hover { background: #4fd180; box-shadow: 0 10px 28px rgba(94,207,142,0.28); }
     .btn-secondary {
       border: 1px solid var(--line);
-      background: transparent;
+      background: rgba(255,255,255,0.03);
       color: var(--ink);
     }
-    .price-chip {
+    .btn-secondary:hover { background: rgba(255,255,255,0.07); }
+    .guarantee {
       display: inline-flex;
-      align-items: baseline;
-      gap: 0.45rem;
-      margin: 0.4rem 0 1rem;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+    .hero-visual {
+      min-width: 0;
+    }
+    .browser-mockup {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .browser-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+    }
+    .browser-dots { display: flex; gap: 0.4rem; }
+    .browser-dots span { width: 10px; height: 10px; border-radius: 50%; background: #3a4a42; }
+    .browser-dots span:nth-child(1) { background: #e34e4e; }
+    .browser-dots span:nth-child(2) { background: #e0a53e; }
+    .browser-dots span:nth-child(3) { background: #3ecf6e; }
+    .browser-title {
+      flex: 1;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
       font-family: var(--sans);
     }
-    .price-chip strong {
-      font-size: 2rem;
+    .browser-open {
+      font-size: 0.75rem;
       color: var(--accent);
-    }
-    .price-chip span { color: var(--muted); font-size: 0.92rem; }
-    .hero-panel { padding: 1.2rem; display: grid; gap: 0.9rem; }
-    .demo {
-      border-radius: 16px;
-      overflow: hidden;
       border: 1px solid var(--line);
-      background: #0b100e;
-      min-height: 240px;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
     }
+    .browser-open:hover { background: rgba(94,207,142,0.08); }
     .demo iframe {
       width: 100%;
-      height: 260px;
+      height: 340px;
       border: 0;
       background: #fff;
+      display: block;
     }
-    .demo-meta {
+    .demo-footer {
       display: flex;
       justify-content: space-between;
-      gap: 0.75rem;
-      font-family: var(--sans);
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--line);
       font-size: 0.85rem;
       color: var(--muted);
-      padding: 0 0.15rem;
+      background: var(--paper);
     }
-    .section { margin-top: 1.25rem; padding: 1.5rem; }
-    .section h3 { margin: 0 0 0.6rem; font-size: 1.5rem; }
-    .section > p {
-      margin: 0 0 1rem;
+    .card {
+      background: rgba(23,31,26,0.86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+    }
+    .section { margin-top: 2.5rem; padding: 2.2rem; }
+    .section h2 {
+      margin: 0 0 0.6rem;
+      font-family: var(--font);
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .section > .section-sub {
+      margin: 0 0 1.5rem;
       color: var(--muted);
-      max-width: 60ch;
-      font-family: var(--sans);
+      max-width: 62ch;
+      font-size: 1.05rem;
     }
     .three-up {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.85rem;
+      gap: 1rem;
     }
-    .step, .offer {
+    .step, .offer, .feature {
       border: 1px solid var(--line);
       border-radius: var(--radius-sm);
       background: rgba(255,255,255,0.03);
-      padding: 1rem;
+      padding: 1.25rem;
     }
-    .step strong, .offer strong {
+    .step-icon {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+    .step strong, .offer strong, .feature strong {
       display: block;
       font-family: var(--sans);
-      margin-bottom: 0.35rem;
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
     }
-    .step span, .offer span {
+    .step span, .feature span, .offer span {
       color: var(--muted);
-      font-family: var(--sans);
-      font-size: 0.92rem;
+      font-size: 0.94rem;
+      line-height: 1.55;
     }
+    .offer { display: flex; flex-direction: column; justify-content: space-between; min-height: 170px; }
     .offer-price {
-      font-family: var(--sans);
       font-weight: 800;
       color: var(--accent);
-      font-size: 1.25rem;
-      margin-bottom: 0.35rem;
+      font-size: 1.6rem;
+      margin-bottom: 0.2rem;
+    }
+    .offer.featured {
+      border-color: rgba(94,207,142,0.35);
+      background: linear-gradient(180deg, rgba(31,107,69,0.18), rgba(23,31,26,0.95));
+      position: relative;
+    }
+    .offer.featured::before {
+      content: "Most popular";
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      background: var(--accent);
+      color: #062212;
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 0 0 0 10px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .feature {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+    }
+    .feature-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+    .feature div { flex: 1; }
+    .feature strong { margin-bottom: 0.25rem; }
+    .feature span { font-size: 0.92rem; }
+    .trust-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+    }
+    .faq details {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 0.75rem;
+      padding: 0.9rem 1.1rem;
+    }
+    .faq summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--ink);
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      color: var(--accent);
+      font-size: 1.3rem;
+      font-weight: 300;
+    }
+    .faq details[open] summary::after { content: "−"; }
+    .faq details p {
+      margin: 0.75rem 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
     }
     .lead-form {
       display: grid;
-      gap: 0.75rem;
+      gap: 0.9rem;
       margin-top: 0.5rem;
     }
     .lead-form label {
       display: grid;
       gap: 0.35rem;
-      font-family: var(--sans);
       font-size: 0.88rem;
       color: var(--muted);
     }
     .lead-form input {
       border: 1px solid var(--line);
       border-radius: 12px;
-      background: #0f1512;
+      background: #0f1613;
       color: var(--ink);
-      padding: 0.85rem 0.95rem;
+      padding: 0.95rem 1rem;
       font-size: 1rem;
       font-family: var(--sans);
+    }
+    .lead-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(94,207,142,0.12);
     }
     .lead-form .row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      gap: 0.9rem;
     }
     .status {
-      min-height: 1.3rem;
-      font-family: var(--sans);
-      font-size: 0.9rem;
+      min-height: 1.5rem;
+      font-size: 0.92rem;
       color: var(--accent);
     }
     .status.error { color: #ff8f8f; }
+    .preview-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+    .preview-actions a { display: none; }
+    .preview-actions.visible a { display: inline-flex; }
     .cta {
-      margin-top: 1.25rem;
-      padding: 1.6rem;
+      margin-top: 2.5rem;
+      padding: 2.2rem;
       text-align: center;
       border: 1px solid rgba(94,207,142,0.25);
-      background: linear-gradient(180deg, rgba(31,107,69,0.28), rgba(23,29,26,0.95));
+      background: linear-gradient(180deg, rgba(31,107,69,0.22), rgba(23,31,26,0.95));
       border-radius: var(--radius);
     }
-    .cta h3 { margin: 0 0 0.5rem; font-size: 1.7rem; }
-    .cta p {
-      margin: 0 auto 1rem;
-      max-width: 52ch;
+    .cta h2 { margin: 0 0 0.5rem; font-family: var(--font); font-size: clamp(1.6rem, 3.5vw, 2.2rem); }
+    .cta p { margin: 0 auto 1.1rem; max-width: 54ch; color: var(--muted); font-size: 1.05rem; }
+    .footer {
+      margin-top: 3rem;
+      padding: 2rem 0 0;
+      border-top: 1px solid var(--line);
       color: var(--muted);
-      font-family: var(--sans);
+      font-size: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
     }
+    .footer a { color: var(--accent); }
     .small-note {
       margin-top: 0.75rem;
       color: var(--muted);
-      font-family: var(--sans);
       font-size: 0.84rem;
     }
     @media (max-width: 900px) {
-      .hero, .three-up, .lead-form .row { grid-template-columns: 1fr; }
+      .hero, .three-up, .features-grid, .lead-form .row { grid-template-columns: 1fr; }
+      .hero { padding: 2rem 0 1rem; }
+      .topbar-inner { padding: 0.65rem 0; }
+      .nav-links a:not(.cta-link) { display: none; }
+      .demo iframe { height: 280px; }
+      .section { padding: 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <div class="nav">
-      <div class="brand">LimitlessOS · Site Builder</div>
-      <div class="nav-links">
-        <a class="pill" href="#demo">Live demo</a>
-        <a class="pill" href="#pricing">Pricing</a>
-        <a class="pill" href="#request">Get yours</a>
+  <div class="topbar">
+    <div class="shell">
+      <div class="topbar-inner">
+        <div class="brand"><strong>LimitlessOS</strong> <span>Site Builder</span></div>
+        <div class="nav-links">
+          <a href="#how">How it works</a>
+          <a href="#demo">Demo</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+          <a class="cta-link" href="#request">Get my preview</a>
+        </div>
       </div>
     </div>
+  </div>
 
+  <div class="shell">
     <section class="hero">
-      <div class="hero-copy card">
-        <div class="eyebrow">Beta test · Las Vegas local businesses</div>
-        <h1>See a better site before you pay.</h1>
+      <div class="hero-copy">
+        <div class="eyebrow">Beta test — Las Vegas local businesses</div>
+        <h1>Get a website that actually brings in clients.</h1>
         <div class="price-chip">
           <strong>$45</strong>
-          <span>beta-tester publish · 2 months care included</span>
+          <span>beta-tester publish · 2 months of care included</span>
         </div>
         <p class="lede">
-          We’re testing this with real practices — that’s why the price is this good.
-          You get a free live preview first. If you like it, publish for $45 as a beta tester.
-          If not, walk away. After beta, this rate goes away.
+          No templates. No risk. Send us your current site URL and we rebuild your homepage as a clean,
+          conversion-focused page. Preview it live. If you like it, publish for $45. If not, walk away.
         </p>
         <div class="actions">
-          <a class="btn btn-primary" href="#request">Request your preview</a>
-          <a class="btn btn-secondary" href="#demo">View a live dental demo</a>
+          <a class="btn btn-primary" href="#request">Get my free preview</a>
+          <a class="btn btn-secondary" href="#demo">View live demo</a>
         </div>
+        <div class="guarantee">🛡️ Free preview · no card · no sales call · approve before paying</div>
       </div>
 
-      <div class="hero-panel card" id="demo">
-        <div class="demo-meta">
-          <span>Live demo · Flores Family Dental</span>
-          <a href="/previews/prev_1783784688744_nw7c/index.html" target="_blank" rel="noopener">Open full preview</a>
-        </div>
-        <div class="demo">
-          <iframe
-            title="Flores Family Dental preview"
-            loading="lazy"
-            src="/previews/prev_1783784688744_nw7c/index.html"
-          ></iframe>
-        </div>
-        <div class="actions" style="margin:0">
-          <a class="btn btn-primary" href="/api/v1/sites/publish/checkout?clientId=prev_1783784688744_nw7c" target="_blank" rel="noopener">Buy this demo for $45</a>
-          <a class="btn btn-secondary" href="#request">Build mine instead</a>
+      <div class="hero-visual" id="demo">
+        <div class="browser-mockup">
+          <div class="browser-header">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="browser-title">Live demo · Flores Family Dental</div>
+            <a class="browser-open" href="/previews/prev_1783784688744_nw7c/index.html" target="_blank" rel="noopener">Open full</a>
+          </div>
+          <div class="demo">
+            <iframe
+              title="Flores Family Dental preview"
+              loading="lazy"
+              src="/previews/prev_1783784688744_nw7c/index.html"
+            ></iframe>
+          </div>
+          <div class="demo-footer">
+            <span>This is a real preview built from a public URL.</span>
+            <a class="btn btn-primary" href="/api/v1/sites/publish/checkout?clientId=prev_1783784688744_nw7c" target="_blank" rel="noopener">Buy this demo for $45</a>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section card" id="how">
-      <h3>How buying works</h3>
-      <p>Simple path. No giant website project. No risk before you see the work.</p>
+      <h2>How it works</h2>
+      <p class="section-sub">A simple, no-pressure path from your current site to a better one.</p>
       <div class="three-up">
         <div class="step">
-          <strong>1. Send your current site</strong>
-          <span>Paste your business URL. We rebuild a conversion-first homepage preview.</span>
+          <div class="step-icon">1</div>
+          <strong>Send your current site</strong>
+          <span>Paste your business URL. We scrape it, rebuild a conversion-first homepage, and host a live preview.</span>
         </div>
         <div class="step">
-          <strong>2. Review the live preview</strong>
-          <span>Open it on your phone. Share it with your team. Decide with evidence.</span>
+          <div class="step-icon">2</div>
+          <strong>Review your live preview</strong>
+          <span>Open it on your phone. Share it with your team. See the before/after and decide with evidence.</span>
         </div>
         <div class="step">
-          <strong>3. Publish for $45</strong>
-          <span>Stripe checkout. Includes the first 2 months of site management.</span>
+          <div class="step-icon">3</div>
+          <strong>Publish for $45</strong>
+          <span>Stripe checkout. Includes the first 2 months of site management, updates, and SEO help.</span>
         </div>
+      </div>
+    </section>
+
+    <section class="section card" id="included">
+      <h2>What you get</h2>
+      <p class="section-sub">Built for local wellness, health, and service businesses — not generic brochure sites.</p>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">📝</div>
+          <div>
+            <strong>Conversion-first copy</strong>
+            <span>Headlines and CTAs written around the real problems your clients already have.</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📱</div>
+          <div>
+            <strong>Mobile-first design</strong>
+            <span>Most local traffic is on a phone. Every preview is designed for thumb-sized decisions.</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔍</div>
+          <div>
+            <strong>Local SEO</strong>
+            <span>Schema.org markup, page titles, and structure built to show up when people search.</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📅</div>
+          <div>
+            <strong>Booking / POS integration</strong>
+            <span>We wire in the booking, Square, Jane, or Mindbody flow you already use.</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📰</div>
+          <div>
+            <strong>Content support</strong>
+            <span>First 2 months of edits, SEO tweaks, and content help included with the $45 publish.</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🛡️</div>
+          <div>
+            <strong>Honest, fact-based previews</strong>
+            <span>No invented claims. We use what is publicly available and flag what we could not verify.</span>
+          </div>
+        </div>
+      </div>
+      <div class="trust-bar">
+        <div class="trust-pill">✓ No fake stock photos</div>
+        <div class="trust-pill">✓ No invented 5-star reviews</div>
+        <div class="trust-pill">✓ No hidden fees</div>
+        <div class="trust-pill">✓ You approve before paying</div>
       </div>
     </section>
 
     <section class="section card" id="pricing">
-      <h3>Beta-tester pricing</h3>
-      <p>We’re still testing this system with real businesses. That’s why the price is this low — your honest feedback is part of the deal. After beta, these rates go away.</p>
+      <h2>Beta-tester pricing</h2>
+      <p class="section-sub">We are testing this with real businesses. That is why the price is this good — your honest feedback is part of the deal. After beta, this rate goes away.</p>
       <div class="three-up">
         <div class="offer">
-          <div class="offer-price">Free</div>
-          <strong>Preview rebuild</strong>
-          <span>See the work first. No card. No call. Judge quality before you pay.</span>
+          <div>
+            <div class="offer-price">Free</div>
+            <strong>Preview rebuild</strong>
+            <span>See the work first. No card. No call. Judge quality before you pay.</span>
+          </div>
+        </div>
+        <div class="offer featured">
+          <div>
+            <div class="offer-price">$45</div>
+            <strong>Beta publish + 2 months care</strong>
+            <span>Publish the site and get two months of management, updates, and SEO help.</span>
+          </div>
         </div>
         <div class="offer">
-          <div class="offer-price">$45</div>
-          <strong>Beta publish + 2 months care</strong>
-          <span>Beta-tester rate while we learn. Includes two months of management — not a forever discount for everyone.</span>
-        </div>
-        <div class="offer">
-          <div class="offer-price">$35/mo</div>
-          <strong>Ongoing care</strong>
-          <span>After the included months: updates, SEO help, content support — always under the publish price.</span>
+          <div>
+            <div class="offer-price">$35/mo</div>
+            <strong>Ongoing care</strong>
+            <span>After the included months: updates, content support, and SEO help — always under the publish price.</span>
+          </div>
         </div>
       </div>
     </section>
 
+    <section class="section card" id="faq">
+      <h2>Common questions</h2>
+      <p class="section-sub">Straight answers. No marketing fluff.</p>
+      <div class="faq">
+        <details>
+          <summary>How long does the preview take?</summary>
+          <p>Most previews are ready to view in under 90 seconds. The first time you open the link we do the build, so it is ready when you are.</p>
+        </details>
+        <details>
+          <summary>Do I need to enter a credit card?</summary>
+          <p>No. The preview is free. You only pay if you choose to publish, and that happens through Stripe.</p>
+        </details>
+        <details>
+          <summary>What if I don't like the preview?</summary>
+          <p>Walk away. There is no obligation. You can also reply to the preview email with changes and we will iterate.</p>
+        </details>
+        <details>
+          <summary>Can I edit the site myself?</summary>
+          <p>Yes. After you publish you get an editor link where you can change copy, colors, and sections, or ask the AI to make edits for you.</p>
+        </details>
+        <details>
+          <summary>What is included in the $45?</summary>
+          <p>Publishing the site to your domain, plus the first 2 months of updates, SEO help, and content support. After that, care is $35/mo.</p>
+        </details>
+      </div>
+    </section>
+
     <section class="section card" id="request">
-      <h3>Request your beta preview</h3>
-      <p>Paste your website. We’ll email a preview link — it builds when you open it (usually under a minute).</p>
+      <h2>Request your beta preview</h2>
+      <p class="section-sub">Paste your website. We will email you a preview link — it builds when you open it, usually under a minute.</p>
       <form class="lead-form" id="lead-form">
         <label>
           Business website URL
-          <input id="businessUrl" name="businessUrl" type="text" required placeholder="yourbusiness.com" autocomplete="url" autocapitalize="off" autocorrect="off" spellcheck="false" />
+          <input id="businessUrl" name="businessUrl" type="text" required placeholder="yourbusiness.com" autocomplete="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" />
         </label>
         <div class="row">
           <label>
@@ -372,55 +684,146 @@
         </div>
         <button class="btn btn-primary" type="submit" id="lead-submit">Build my preview</button>
         <div class="status" id="lead-status" aria-live="polite"></div>
+        <div class="preview-actions" id="preview-actions">
+          <a class="btn btn-secondary" id="preview-link" href="#" target="_blank" rel="noopener">Open preview</a>
+          <a class="btn btn-primary" id="publish-link" href="#" target="_blank" rel="noopener">Publish for $45</a>
+        </div>
+        <div class="small-note">Prefer to talk? Call or text Adam at (702) 860-2007 · or email adam@hopkinsgroup.org</div>
       </form>
-      <div class="small-note">Prefer to talk? Call or text Adam at (702) 860-2007 · or email adam@hopkinsgroup.org</div>
     </section>
 
     <section class="cta card">
-      <h3>Ready now?</h3>
+      <h2>Ready now?</h2>
       <p>See the dental demo, then request your own. First dollar starts with one yes.</p>
       <a class="btn btn-primary" href="#request">Get my $45 beta preview</a>
     </section>
+
+    <footer class="footer">
+      <div>LimitlessOS · Site Builder</div>
+      <div>Questions? <a href="mailto:adam@hopkinsgroup.org">adam@hopkinsgroup.org</a> · (702) 860-2007</div>
+    </footer>
   </div>
+
   <script>
     (function () {
       const form = document.getElementById('lead-form');
       const status = document.getElementById('lead-status');
       const submit = document.getElementById('lead-submit');
-      if (!form) return;
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        status.className = 'status';
-        status.textContent = 'Starting your preview build…';
-        submit.disabled = true;
-        let businessUrl = document.getElementById('businessUrl').value.trim();
-        if (businessUrl && !/^https?:\/\//i.test(businessUrl)) {
-          businessUrl = 'https://' + businessUrl.replace(/^\/+/, '');
+      const previewActions = document.getElementById('preview-actions');
+      const previewLink = document.getElementById('preview-link');
+      const publishLink = document.getElementById('publish-link');
+
+      let pollTimer = null;
+
+      function normalizeUrl(raw) {
+        if (!raw) return '';
+        let v = raw.trim();
+        if (!/^https?:\/\//i.test(v)) {
+          v = 'https://' + v.replace(/^\/+/, '');
         }
-        const body = {
-          businessUrl,
-          contactEmail: document.getElementById('contactEmail').value.trim(),
-          businessName: document.getElementById('businessName').value.trim() || undefined,
-        };
-        try {
-          const resp = await fetch('/api/v1/sites/public-lead', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(body),
-          });
-          const data = await resp.json().catch(() => ({}));
-          if (!resp.ok || data.ok === false) {
-            throw new Error(data.error || ('Request failed (' + resp.status + ')'));
+        return v;
+      }
+
+      function stopPoll() {
+        if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+      }
+
+      function pollStatus(clientId, statusUrl, previewUrl) {
+        stopPoll();
+        let attempts = 0;
+        const maxAttempts = 60;
+        pollTimer = setInterval(async () => {
+          attempts++;
+          try {
+            const resp = await fetch(statusUrl);
+            const data = await resp.json().catch(() => ({}));
+            if (data.ok && data.ready) {
+              stopPoll();
+              status.textContent = 'Preview ready. Check your email or open it below.';
+              previewLink.href = previewUrl;
+              publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+              previewActions.classList.add('visible');
+              submit.disabled = false;
+              submit.textContent = 'Build another preview';
+              return;
+            }
+            if (data.error || data.errorMessage || (data.building === false && data.ready === false && !data.error)) {
+              // keep polling unless explicit error
+            }
+            if (data.error || attempts >= maxAttempts) {
+              stopPoll();
+              if (attempts >= maxAttempts) {
+                status.textContent = 'Preview is still building. Check your email for the link.';
+              } else {
+                status.className = 'status error';
+                status.textContent = data.error || 'Preview could not be built.';
+              }
+              submit.disabled = false;
+              return;
+            }
+            status.textContent = 'Building your preview…' + (data.status ? ` (${data.status})` : '');
+          } catch (err) {
+            if (attempts >= maxAttempts) {
+              stopPoll();
+              status.textContent = 'Preview is still building. Check your email for the link.';
+              submit.disabled = false;
+            }
           }
-          status.textContent = data.message || 'Preview started. Check your email shortly.';
-          form.reset();
-        } catch (err) {
-          status.className = 'status error';
-          status.textContent = err.message || 'Could not start preview';
-        } finally {
-          submit.disabled = false;
-        }
-      });
+        }, 3000);
+      }
+
+      if (form) {
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          stopPoll();
+          previewActions.classList.remove('visible');
+          status.className = 'status';
+          status.textContent = 'Starting your preview build…';
+          submit.disabled = true;
+          submit.textContent = 'Building…';
+
+          const businessUrl = normalizeUrl(document.getElementById('businessUrl').value);
+          const body = {
+            businessUrl,
+            contactEmail: document.getElementById('contactEmail').value.trim(),
+            businessName: document.getElementById('businessName').value.trim() || undefined,
+          };
+
+          try {
+            const resp = await fetch('/api/v1/sites/public-lead', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify(body),
+            });
+            const data = await resp.json().catch(() => ({}));
+            if (!resp.ok || data.ok === false) {
+              throw new Error(data.error || ('Request failed (' + resp.status + ')'));
+            }
+
+            const clientId = data.clientId;
+            const previewUrl = data.previewUrl || (clientId ? `/previews/${encodeURIComponent(clientId)}/index.html` : '#');
+            const statusUrl = data.statusUrl;
+
+            if (data.deferred && statusUrl && clientId) {
+              status.textContent = data.message || 'Preview started. We will email the link too.';
+              pollStatus(clientId, statusUrl, previewUrl);
+            } else {
+              status.textContent = data.message || 'Preview started. Check your email shortly.';
+              previewLink.href = previewUrl;
+              publishLink.href = `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}`;
+              previewActions.classList.add('visible');
+              submit.disabled = false;
+              submit.textContent = 'Build another preview';
+              form.reset();
+            }
+          } catch (err) {
+            status.className = 'status error';
+            status.textContent = err.message || 'Could not start preview';
+            submit.disabled = false;
+            submit.textContent = 'Build my preview';
+          }
+        });
+      }
     })();
   </script>
 </body>

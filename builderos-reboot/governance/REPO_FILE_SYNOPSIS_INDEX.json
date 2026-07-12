@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T20:28:18.174Z",
+  "generated_at": "2026-07-12T20:48:55.585Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11478,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3467597,
-      "mtime": "2026-07-12T20:28:18.060Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z"
+      "bytes": 3468246,
+      "mtime": "2026-07-12T20:48:50.205Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -39757,9 +39757,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 100395,
-      "mtime": "2026-07-12T20:28:17.859Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z"
+      "bytes": 100645,
+      "mtime": "2026-07-12T20:46:06.461Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -63039,8 +63039,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 198,
-      "mtime": "2026-07-12T20:28:14.749Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z",
+      "mtime": "2026-07-12T20:46:36.393Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z",
       "synopsis_index_only": true
     },
     {
@@ -63054,9 +63054,9 @@
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 3712,
-      "mtime": "2026-07-12T20:28:14.749Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z",
+      "bytes": 3840,
+      "mtime": "2026-07-12T20:46:36.089Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z",
       "synopsis_index_only": true
     },
     {
@@ -63159,16 +63159,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 782,
-      "mtime": "2026-07-12T20:28:14.750Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z",
+      "mtime": "2026-07-12T20:46:36.525Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1195,
-      "mtime": "2026-07-12T20:28:14.750Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z",
+      "mtime": "2026-07-12T20:46:36.301Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z",
       "synopsis_index_only": true
     },
     {
@@ -63199,8 +63199,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-12T20:28:14.750Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z",
+      "mtime": "2026-07-12T20:46:36.617Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z",
       "synopsis_index_only": true
     },
     {
@@ -63979,9 +63979,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 184660,
-      "mtime": "2026-07-12T20:28:14.775Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z"
+      "bytes": 184861,
+      "mtime": "2026-07-12T20:41:41.609Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z"
     },
     {
       "path": "public/overlay/lifeos-balance-wheel.html",
@@ -64457,9 +64457,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 14029,
-      "mtime": "2026-07-12T20:28:14.781Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z"
+      "bytes": 28703,
+      "mtime": "2026-07-12T20:44:21.121Z",
+      "indexed_at": "2026-07-12T20:48:55.585Z"
     },
     {
       "path": "public/overlay/socialmediaos-session.html",
