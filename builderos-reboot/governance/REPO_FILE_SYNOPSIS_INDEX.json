@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T19:00:13.521Z",
+  "generated_at": "2026-07-12T19:01:46.111Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11472,
+  "file_count": 11473,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -87265,6 +87265,13 @@
       "bytes": 7462,
       "mtime": "2026-07-12T18:51:20.763Z",
       "indexed_at": "2026-07-12T18:51:20.763Z"
+    },
+    {
+      "path": "services/wellness-studio-orchestrator.js",
+      "synopsis": "Exports runWellnessSession — services/wellness-studio-orchestrator.js.",
+      "bytes": 2962,
+      "mtime": "2026-07-12T19:01:46.111Z",
+      "indexed_at": "2026-07-12T19:01:46.111Z"
     },
     {
       "path": "services/wellness-therapist.js",
