@@ -407,10 +407,13 @@
         "mos-community-value-drafter"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "registerMarketingCommunityValueRoutes"
-      ]
+      ],
+      "commit_sha": "74acb49bec309ea1a4483f721978eea6374e5cd1",
+      "last_attempt_at": "2026-07-12T20:25:12.678Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "mos-community-value-auto-register",
