@@ -7,9 +7,7 @@
   ],
   "planned_at": "2026-07-08T20:57:28.573Z",
   "backlog_signature": "554bd608226b9a58",
-  "sentry_signature": "86e9fcb246d1e4dc",
-  "sentry_unplannable_at": "2026-07-10T03:20:00.000Z",
-  "sentry_unplannable_reason": "all proposed steps filtered (dedupe/already-done/no target_file) — spin-break stamp so never-stop builds real queues",
+  "sentry_signature": "e13571a50ae90b27",
   "steps": [
     {
       "id": "s01",
@@ -349,7 +347,67 @@
       "note": "Unlocked 2026-07-09: Adam never-idle order — customer UI builds allowed. Conductor never-idle 2026-07-09: UI shipped. Conductor never-idle 2026-07-09: UI shipped.",
       "completed_at": "2026-07-10T00:09:28.741Z",
       "commit_sha": "pending_push"
+    },
+    {
+      "id": "lo-therapist-role",
+      "status": "pending",
+      "target_file": "services/lifeos-user-service.js",
+      "task": "Allow LifeOS accounts with role=therapist (clinical partner login). Add ROLE allowlist including therapist; reject unknown roles; export listRoles(); JWT still carries role.",
+      "spec": "ESM. Keep existing exports. Add export const LIFEOS_ROLES = ['member','admin','therapist','operator','founder_admin']. In createUser: if role provided and not in LIFEOS_ROLES throw Error('invalid_role'); default remains member. Do not weaken password hashing or session revoke. No new DB migration in this step (role column already exists). No browser globals. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "LIFEOS_ROLES",
+        "therapist"
+      ]
+    },
+    {
+      "id": "lo-consent-therapist-share",
+      "status": "pending",
+      "target_file": "services/consent-registry.js",
+      "task": "Add therapist_share and clinical_brief_export to consent FEATURES allowlist so pattern sharing with a therapist is fail-closed without explicit grant.",
+      "spec": "ESM. Extend FEATURES array with 'therapist_share' and 'clinical_brief_export'. Keep append-only grant/revoke. Export getConsentFeatures() returning a copy of FEATURES. hasConsent must refuse unknown features. No schema change. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "therapist_share",
+        "clinical_brief_export"
+      ]
+    },
+    {
+      "id": "lo-consent-api",
+      "status": "pending",
+      "target_file": "routes/lifeos-consent-routes.js",
+      "task": "Thin Express routes for grant/revoke/list consent including therapist_share. Export registerLifeosConsentRoutes(app, deps).",
+      "spec": "ESM export registerLifeosConsentRoutes(app, deps) with deps={pool, requireAuth}. Mount under /api/v1/lifeos/consent: POST /grant {feature,consentText}, POST /revoke {feature,reason}, GET /status?feature=. Use createConsentRegistry({pool}). Auth required. Return JSON only. No browser globals. Do not edit server.js. @ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "depends_on": [
+        "lo-consent-therapist-share"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerLifeosConsentRoutes"
+      ]
+    },
+    {
+      "id": "lo-consent-auto-register",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Register lifeos-consent-routes so therapist consent API mounts at boot without editing server.js.",
+      "spec": "Ensure modules[] contains {\"path\":\"routes/lifeos-consent-routes.js\",\"register\":\"registerLifeosConsentRoutes\",\"enabled\":true}. Preserve all existing entries. Valid JSON only.",
+      "depends_on": [
+        "lo-consent-api"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "lifeos-consent-routes.js",
+        "registerLifeosConsentRoutes"
+      ]
     }
   ],
-  "sentry_signature": "e13571a50ae90b27"
+  "updated_at": "2026-07-12",
+  "notes": "Adam 2026-07-12: LifeOS whole kit — chat ship gate landed; therapist role + consent-gated clinical share foundation. Clinical dashboard continues in wellness-studio BUILD_QUEUE."
 }

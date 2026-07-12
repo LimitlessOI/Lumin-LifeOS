@@ -1,0 +1,53 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "wellness-studio",
+  "verify_script": null,
+  "planned_at": "2026-07-12T03:40:00.000Z",
+  "notes": "Module 4 Therapist Integration beachhead — Clinical Partnership. Consent-gated briefs; therapist account lists linked clients who granted therapist_share. LifeOS consent foundation is a dependency.",
+  "updated_at": "2026-07-12",
+  "steps": [
+    {
+      "id": "ws-therapist-schema",
+      "status": "pending",
+      "target_file": "db/migrations/20260712_wellness_therapist_integration.sql",
+      "task": "Create therapist_profiles, therapist_client_links, and session_briefs tables (IF NOT EXISTS) for Wellness Studio Module 4.",
+      "spec": "SQL only. Idempotent CREATE TABLE IF NOT EXISTS for: therapist_profiles(id uuid PK default gen_random_uuid(), user_id bigint NOT NULL UNIQUE, display_name text, approach text, session_frequency text, focus_areas jsonb default '[]'::jsonb, crisis_contact text, created_at timestamptz default now()); therapist_client_links(id uuid PK default gen_random_uuid(), therapist_user_id bigint NOT NULL, client_user_id bigint NOT NULL, status text default 'pending', client_consented_at timestamptz, created_at timestamptz default now(), UNIQUE(therapist_user_id, client_user_id)); session_briefs(id uuid PK default gen_random_uuid(), client_user_id bigint NOT NULL, therapist_user_id bigint, period_start date, period_end date, brief_json jsonb NOT NULL, client_reviewed_at timestamptz, shared_at timestamptz, created_at timestamptz default now()). No DROP. No ALTER that destroys data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "ws-therapist-service",
+      "status": "pending",
+      "target_file": "services/wellness-therapist.js",
+      "task": "Therapist integration service: upsertTherapistProfile, linkClient, listLinkedClients, createSessionBrief, markBriefReviewed, shareBriefIfConsented.",
+      "spec": "ESM. Export createWellnessTherapistService({ pool, consentRegistry }). shareBriefIfConsented MUST call consentRegistry.hasConsent(clientUserId, 'therapist_share') and refuse without grant. Never return raw chat transcripts — only brief_json. Parameterised SQL only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
+      "depends_on": ["ws-therapist-schema"],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": ["createWellnessTherapistService"]
+    },
+    {
+      "id": "ws-therapist-routes",
+      "status": "pending",
+      "target_file": "routes/wellness-therapist-routes.js",
+      "task": "Express surface for therapist profile, client links, and consent-gated brief share. Export registerWellnessTherapistRoutes(app, deps).",
+      "spec": "ESM export registerWellnessTherapistRoutes(app, deps) with deps={pool, requireAuth, consentRegistry}. Mount under /api/v1/wellness/therapist: POST /profile, GET /profile/me, POST /links, GET /clients (therapist|admin), POST /briefs, POST /briefs/:id/share. Share path uses shareBriefIfConsented. JSON only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
+      "depends_on": ["ws-therapist-service"],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": ["registerWellnessTherapistRoutes"]
+    },
+    {
+      "id": "ws-therapist-auto-register",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register wellness therapist routes at boot without editing server.js.",
+      "spec": "Add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"registerWellnessTherapistRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
+      "depends_on": ["ws-therapist-routes"],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": ["wellness-therapist-routes.js", "registerWellnessTherapistRoutes"]
+    }
+  ]
+}

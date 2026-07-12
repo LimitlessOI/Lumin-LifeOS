@@ -429,7 +429,9 @@
       "attempts": 3,
       "commit_sha": "a84c6abd68e548990f223dd15f095ebcecfde68b",
       "last_attempt_at": "2026-07-12T03:03:10.676Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "revive_count": 99,
+      "note": " | 2026-07-12: revive capped — LifeOS therapist queue takes priority; auto-reg chicken-egg was thrashing never-stop."
     }
   ]
 }

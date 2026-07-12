@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-06-29 |
+| **Last Updated** | 2026-07-12 — BUILD_QUEUE seeded for Module 4 therapist integration beachhead (schema → service → routes → auto-register). |
 
 ---
 | Field | Value |
