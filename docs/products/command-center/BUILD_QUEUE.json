@@ -62,7 +62,7 @@
     },
     {
       "id": "s5",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/phase14-cert-routes.js",
       "task": "Expose GET /api/v1/builder/cert/phase14 endpoint",
       "spec": "Export registerPhase14CertRoutes(app,deps) where deps={db}. GET /api/v1/builder/cert/phase14 calls getPhase14Cert(db) and returns JSON result with Cache-Control no-store. On error returns {error:message} 500. Import only ../services/phase14-cert-service.js. No browser globals.",
@@ -70,9 +70,9 @@
         "s4"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "commit_sha": "f5e77c0bad35248cdae1d602664aeaf0542ca875",
-      "last_attempt_at": "2026-07-12T03:15:54.175Z",
+      "last_attempt_at": "2026-07-12T03:20:34.427Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/phase14-cert-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
