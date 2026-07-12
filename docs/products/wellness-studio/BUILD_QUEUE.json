@@ -75,6 +75,89 @@
       "commit_sha": "aa68f8fb7f7c6d6fa3c5632df0cb6bc527bf2bb4",
       "last_attempt_at": "2026-07-12T04:21:37.859Z",
       "completed_at": "2026-07-12T04:21:38.858Z"
+    },
+    {
+      "id": "step-01",
+      "status": "pending",
+      "target_file": "db/migrations/20260713_wellness_studio_core_tables.sql",
+      "task": "Create wellness_studio_sessions and wellness_studio_insights tables",
+      "spec": "CREATE TABLE IF NOT EXISTS wellness_studio_sessions with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, session_type text NOT NULL, joy_checkin_id uuid REFERENCES joy_checkins(id), integrity_score_log_id uuid REFERENCES integrity_score_log(id), wearable_data_id uuid REFERENCES wearable_data(id), emotional_pattern_id uuid REFERENCES emotional_patterns(id), session_notes text, status text NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(). CREATE TABLE IF NOT EXISTS wellness_studio_insights with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, session_id uuid REFERENCES wellness_studio_sessions(id), insight_type text NOT NULL, content jsonb NOT NULL DEFAULT '{}', confidence_score numeric(4,3), created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(). All constraints use IF NOT EXISTS guards; zero DROP or ALTER statements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-02",
+      "status": "pending",
+      "target_file": "services/wellness-studio-data.js",
+      "task": "Create data-access service for wellness studio sessions and insights",
+      "spec": "Exports getSessionsByUser(userId, db), createSession(payload, db), updateSession(sessionId, patch, db), getInsightsBySession(sessionId, db), createInsight(payload, db). All functions return promises, accept a pg db pool as last arg, query only wellness_studio_sessions and wellness_studio_insights plus read-only joins to joy_checkins, integrity_score_log, wearable_data, emotional_patterns. No top-level browser globals. No AI imports.",
+      "depends_on": [
+        "step-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-03",
+      "status": "pending",
+      "target_file": "services/wellness-studio-ai.js",
+      "task": "Create AI insight generation service using callCouncilMember",
+      "spec": "Exports async generateWellnessInsight(userId, sessionContext, callCouncilMember) which builds a structured prompt from sessionContext fields (joy_score, integrity_score, wearable_summary, emotional_pattern), calls callCouncilMember('wellness-coach', prompt), parses the response into {insight_type, content, confidence_score}, and returns that object. No direct AI SDK imports. No browser globals.",
+      "depends_on": [
+        "step-02"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-04",
+      "status": "pending",
+      "target_file": "services/wellness-studio-orchestrator.js",
+      "task": "Create orchestrator that ties data access, AI insights, and therapist integration",
+      "spec": "Exports async runWellnessSession(userId, sessionType, deps) where deps = {db, callCouncilMember, wellnessTherapist}. Imports wellness-studio-data.js and wellness-studio-ai.js from sibling paths. Calls createSession, then generateWellnessInsight, then createInsight, then optionally calls deps.wellnessTherapist.notifyIfNeeded(userId, insight) if that method exists. Returns {session, insight}. No browser globals.",
+      "depends_on": [
+        "step-02",
+        "step-03"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-05",
+      "status": "pending",
+      "target_file": "routes/wellness-studio-routes.js",
+      "task": "Create Express route module for wellness studio API endpoints",
+      "spec": "Exports registerWellnessStudioRoutes(app, deps) where deps = {db, callCouncilMember, wellnessTherapist}. Mounts: GET /api/wellness-studio/sessions (returns sessions for req.user.id), POST /api/wellness-studio/sessions (calls orchestrator.runWellnessSession), GET /api/wellness-studio/sessions/:sessionId/insights (returns insights). Imports wellness-studio-orchestrator.js and wellness-studio-data.js by relative path. All routes require authenticated req.user. Returns JSON. No browser globals. No top-level side effects.",
+      "depends_on": [
+        "step-04"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "step-07",
+      "status": "founder_gated",
+      "target_file": "public/overlay/wellness-studio.html",
+      "task": "Create founder-gated wellness studio dashboard overlay UI",
+      "spec": "Self-contained HTML file with inline CSS and inline JS (no external script tags beyond the page's own asset conventions). Renders a wellness session launcher with session type selector, a start-session button that POSTs to /api/wellness-studio/sessions, and a panel that displays returned insight content and confidence score. Uses fetch inside inline script tags only. No server-side imports. Passes founder design review: uses existing CSS variable palette, branded header 'Wellness Studio', accessible labels.",
+      "depends_on": [
+        "step-05"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step-08",
+      "status": "pending",
+      "target_file": "scripts/wellness-studio-backfill.mjs",
+      "task": "Create one-time backfill script to seed wellness sessions from existing table data",
+      "spec": "ES module script. Imports pg from 'pg', reads DATABASE_URL from process.env, queries users who have joy_checkins or integrity_score_log entries but no wellness_studio_sessions row in the last 30 days, and inserts a seed session of type 'onboarding-backfill' for each via parameterised INSERT. Logs count of rows created to stdout. No AI calls. No browser globals. Designed to be run once via node scripts/wellness-studio-backfill.mjs.",
+      "depends_on": [
+        "step-01"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }
