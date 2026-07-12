@@ -181,6 +181,11 @@
       "path": "routes/lifeos-ui-directives-routes.js",
       "register": "registerLifeosUiDirectivesRoutes",
       "enabled": true
+    },
+    {
+      "path": "routes/marketing-community-value-routes.js",
+      "register": "registerMarketingCommunityValueRoutes",
+      "enabled": true
     }
   ]
 }
