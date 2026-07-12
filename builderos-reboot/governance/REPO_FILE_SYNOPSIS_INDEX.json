@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T20:16:21.249Z",
+  "generated_at": "2026-07-12T20:17:49.672Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11475,
+  "file_count": 11476,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66047,6 +66047,13 @@
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/marketing-community-value-routes.js",
+      "synopsis": "Registers MarketingCommunityValueRoutes routes/handlers (routes/marketing-community-value-routes.js).",
+      "bytes": 3776,
+      "mtime": "2026-07-12T20:17:49.672Z",
+      "indexed_at": "2026-07-12T20:17:49.672Z"
     },
     {
       "path": "routes/marketing-intel-routes.js",
