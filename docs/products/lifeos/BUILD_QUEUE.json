@@ -394,22 +394,13 @@
         "lo-consent-therapist-share"
       ],
       "founder_gated": false,
-<<<<<<< HEAD
-      "attempts": 2,
-=======
       "attempts": 0,
->>>>>>> 10dae066cd (GAP-FILL: never-stop stalled on consent auto-reg chicken-egg + broken routes mount; Railway must keep building until FOUNDER_STOP or tokens — rewrite consent routes to consent-registry, auto-register, hard-halt contract, prefer register sibling)
       "expected_exports": [
         "registerLifeosConsentRoutes"
       ],
       "commit_sha": "ea72d7403681840ea010ad12981cdc9aaed26264",
-<<<<<<< HEAD
       "last_attempt_at": "2026-07-12T16:33:38.161Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-consent-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
-=======
-      "last_attempt_at": "2026-07-12T16:32:21.907Z",
       "last_error": "awaiting_redeploy_functional_proof_after_quality_rewrite"
->>>>>>> 10dae066cd (GAP-FILL: never-stop stalled on consent auto-reg chicken-egg + broken routes mount; Railway must keep building until FOUNDER_STOP or tokens — rewrite consent routes to consent-registry, auto-register, hard-halt contract, prefer register sibling)
     },
     {
       "id": "lo-consent-auto-register",
