@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T20:48:55.585Z",
+  "generated_at": "2026-07-12T20:55:12.741Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11478,
   "files": [
@@ -60179,9 +60179,9 @@
     {
       "path": "factory-staging/factory-core/sentry/anti-pattern-check.js",
       "synopsis": "Exports antiPatternCheck — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js.",
-      "bytes": 1507,
-      "mtime": "2026-07-12T20:28:14.731Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z"
+      "bytes": 1501,
+      "mtime": "2026-07-12T20:54:35.445Z",
+      "indexed_at": "2026-07-12T20:55:12.741Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/behavior-assertions.js",
@@ -60231,9 +60231,9 @@
     {
       "path": "factory-staging/factory-core/sentry/verify-step-contract.js",
       "synopsis": "Exports loadAcceptanceTestsForMission — builderos-reboot/MISSIONS/FACTORY-REBOOT-0008/CONTENT/verify-step-contract.js.",
-      "bytes": 1682,
-      "mtime": "2026-07-12T20:28:14.731Z",
-      "indexed_at": "2026-07-12T20:28:18.174Z"
+      "bytes": 1676,
+      "mtime": "2026-07-12T20:54:33.277Z",
+      "indexed_at": "2026-07-12T20:55:12.741Z"
     },
     {
       "path": "factory-staging/factory-core/sentry/verify-step-result.js",
