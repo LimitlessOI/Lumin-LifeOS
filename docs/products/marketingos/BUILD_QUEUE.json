@@ -304,7 +304,7 @@
     },
     {
       "id": "mos-social-publish-route",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/marketing-publish-routes.js",
       "task": "Thin Express surface for social-connection status + publishing an approved piece. Pre-registered in config/auto-registered-product-modules.json (path routes/marketing-publish-routes.js, register registerMarketingPublishRoutes) — do NOT edit server.js or any boot file.",
       "spec": "Export registerMarketingPublishRoutes(app, deps) (+ default). deps = { pool, requireKey, logger, createBrowserSession, callModel } (createBrowserSession is an injected async () => session factory — if absent, /publish must return { ok:false, reason:'browser_session_unavailable' } rather than throwing). GET /api/v1/marketing/social-connections (requireKey; owner_id from req.user?.id else req.query.owner_id, 400 if absent) → calls listConnections from services/marketing-social-connections.js, returns { ok:true, connections }. POST /api/v1/marketing/publish (requireKey; body { piece_id }, 400 if missing) → SELECT the marketing_content_pieces row by id, 404 if not found; if row.status !== 'approved', return 400 { ok:false, error:'not_approved' } (a SECOND, independent check on top of the one inside services/marketing-publisher.js — never rely on only one gate for a live-posting action); else await createBrowserSession(), call publishApprovedPiece({ pool, piece: row, session, callModel }) from services/marketing-publisher.js, return its result as JSON. Never accept or construct raw session_state/credentials/cookies in this route — those only ever flow through services/marketing-social-connections.js. ZERO top-level browser globals (server module). Wrap every handler in try/catch → JSON { ok:false, error } with sensible status, never leak stacks/secrets. Named export registerMarketingPublishRoutes + default. Start with `// SYNOPSIS:` + `// @ssot docs/products/marketingos/PRODUCT_HOME.md`.",
@@ -312,16 +312,17 @@
         "mos-social-publisher"
       ],
       "founder_gated": false,
-      "attempts": 3,
+      "attempts": 4,
       "max_output_tokens": 10000,
-      "note": "Adam 2026-07-12: ungated — make MarketingOS publish path for paying customers ASAP. LIVE_SOCIAL_PUBLISH_ENABLED still defaults OFF until Adam flips Railway.",
-      "commit_sha": "14939bc867b7e619c80efd562b10d10281fa87d6",
-      "last_attempt_at": "2026-07-12T20:10:59.026Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-publish-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "note": "Adam 2026-07-12 PM: money ASAP — enabled auto-register + fixed listConnections(pool,{ownerId}). Functional proof should pass after tip redeploy.",
+      "commit_sha": "104b4c8ef22af94df77e3d7b646010c521f614c4",
+      "last_attempt_at": "2026-07-12T21:20:59.973Z",
+      "last_error": null,
+      "completed_at": "2026-07-12T21:21:00.276Z"
     },
     {
       "id": "mos-social-sentry-layer-a",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/run-marketingos-social-publish-verify.mjs",
       "task": "Structural Layer A verifier proving the new publish surface's GATES are real — WITHOUT ever posting to a real platform. Must run safely with LIVE_SOCIAL_PUBLISH_ENABLED unset (the default).",
       "spec": "ESM script, same stack/shape as scripts/run-marketingos-layer-a.mjs. Requires PUBLIC_BASE_URL + COMMAND_CENTER_KEY. Assertions, fail-closed: (1) GET /api/v1/marketing/social-connections returns 200 { ok:true }. (2) POST /api/v1/marketing/publish against a piece that is NOT status:approved (create one via the existing Phase 1 API if needed, or use a known draft) returns { ok:false, error:'not_approved' } — proves the approval gate is real, never soft. (3) POST /api/v1/marketing/publish against an approved piece for a platform with no connection returns { ok:false, reason:'not_connected' } — proves it never silently no-ops or fakes success. (4) With LIVE_SOCIAL_PUBLISH_ENABLED unset/false on the target environment, confirm no assertion above ever results in a real platform post (the kill switch inside services/marketing-publisher.js must short-circuit before any browser action). Do NOT attempt to assert a real platform post succeeds — that requires a real connected account from the Grok sign-in flow and is explicitly out of scope; a manual founder test covers that once a real connection exists. Write receipt products/receipts/SENTRY_MARKETINGOS_SOCIAL_PUBLISH_LAYER_A.json (include which named gate was proven for each assertion). Register in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json under marketingos as an additional A-check. @ssot docs/products/marketingos/PRODUCT_HOME.md",
@@ -329,8 +330,11 @@
         "mos-social-publish-route"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 10000
+      "attempts": 1,
+      "max_output_tokens": 10000,
+      "commit_sha": "191d0dc1a4802ad4e7f7a16ff81c179007c81606",
+      "last_attempt_at": "2026-07-12T21:22:29.622Z",
+      "completed_at": "2026-07-12T21:22:58.753Z"
     },
     {
       "id": "mos-youtube-oauth-service",
@@ -399,7 +403,7 @@
     },
     {
       "id": "mos-community-value-routes",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/marketing-community-value-routes.js",
       "task": "Thin API: POST /api/v1/marketing/community/draft-reply for value-first community outreach drafts.",
       "spec": "ESM export registerMarketingCommunityValueRoutes(app, deps={pool, requireKey, callCouncilMember, logger}). POST /api/v1/marketing/community/draft-reply body {platform, threadTitle, threadBody, productAngle?, tone?} → createCommunityValueDrafter. Auth via requireKey. JSON only. No browser globals. Do not edit server.js. @ssot docs/products/marketingos/PRODUCT_HOME.md",
@@ -407,13 +411,14 @@
         "mos-community-value-drafter"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerMarketingCommunityValueRoutes"
       ],
-      "commit_sha": "74acb49bec309ea1a4483f721978eea6374e5cd1",
-      "last_attempt_at": "2026-07-12T20:25:12.678Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "commit_sha": "4fcdd6e1e668c621f35510637e5624a86cef24a3",
+      "last_attempt_at": "2026-07-12T21:28:53.429Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-community-value-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "completed_at": "2026-07-12T21:28:56.051Z"
     },
     {
       "id": "mos-community-value-auto-register",

@@ -1,6 +1,7 @@
-// SYNOPSIS:
-// @ssot docs/products/marketingos/PRODUCT_HOME.md
-
+/**
+ * SYNOPSIS: MarketingOS social publish + connections HTTP surface.
+ * @ssot docs/products/marketingos/PRODUCT_HOME.md
+ */
 import { listConnections } from '../services/marketing-social-connections.js';
 import { publishApprovedPiece } from '../services/marketing-publisher.js';
 
@@ -28,7 +29,12 @@ export function registerMarketingPublishRoutes(app, deps = {}) {
         return sendJson(res, 400, { ok: false, error: 'owner_id_required' });
       }
 
-      const connections = await listConnections({ pool: deps.pool, ownerId });
+      const listed = await listConnections(deps.pool, { ownerId });
+      const connections = Array.isArray(listed)
+        ? listed
+        : Array.isArray(listed?.connections)
+          ? listed.connections
+          : [];
       return sendJson(res, 200, { ok: true, connections });
     } catch (err) {
       logger?.error?.({ err }, 'marketing social connections list failed');

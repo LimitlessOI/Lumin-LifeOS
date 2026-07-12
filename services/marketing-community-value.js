@@ -1,5 +1,6 @@
 /**
- * SYNOPSIS: Exports createCommunityValueDrafter — services/marketing-community-value.js.
+ * SYNOPSIS: Exports createCommunityValueDrafter — value-first community reply drafts.
+ * @ssot docs/products/marketingos/PRODUCT_HOME.md
  */
 export function createCommunityValueDrafter({ callCouncilMember } = {}) {
   const allowedPlatforms = new Set([
