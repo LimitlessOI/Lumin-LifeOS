@@ -57,7 +57,7 @@
     },
     {
       "id": "ws-therapist-auto-register",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Auto-register wellness therapist routes at boot without editing server.js.",
       "spec": "Add {\"path\":\"routes/wellness-therapist-routes.js\",\"register\":\"registerWellnessTherapistRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
@@ -65,11 +65,14 @@
         "ws-therapist-routes"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "wellness-therapist-routes.js",
         "registerWellnessTherapistRoutes"
-      ]
+      ],
+      "commit_sha": "aa68f8fb7f7c6d6fa3c5632df0cb6bc527bf2bb4",
+      "last_attempt_at": "2026-07-12T04:21:37.859Z",
+      "completed_at": "2026-07-12T04:21:38.858Z"
     }
   ]
 }
