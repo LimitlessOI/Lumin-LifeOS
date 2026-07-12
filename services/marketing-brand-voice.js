@@ -98,18 +98,15 @@ export async function buildBrandVoiceProfile(pool, ownerId) {
   try {
     const query = `
       SELECT
-          mc.content_text,
-          ms.id AS session_id
+          mcp.content_text,
+          mcp.session_id
       FROM
           marketing_content_pieces mcp
-      JOIN
-          marketing_content mc ON mcp.content_text = mc.content_data -- Assuming content_text is in marketing_content.content_data as per schema, and mcp.content_text is the join key. If not, this join needs adjustment based on actual data model.
       JOIN
           marketing_sessions ms ON mcp.session_id = ms.id
       WHERE
           ms.owner_id = $1
           AND mcp.status = 'approved'
-          AND mc.content_type = 'marketing_content_piece_text';
     `;
     const { rows } = await pool.query(query, [ownerId]);
 

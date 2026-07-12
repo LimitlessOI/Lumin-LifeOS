@@ -10,8 +10,7 @@ function escapeHtml(unsafe) {
     .replace(/'/g, '&#039;');
 }
 
-function renderPage(title, bodyHtml, clientScript = '') {
-  const authBootstrap = `
+const sharedMarketingClientAuth = `
       (function bootstrapMarketingAuth() {
         try {
           const q = new URLSearchParams(location.search);
@@ -134,6 +133,8 @@ function renderPage(title, bodyHtml, clientScript = '') {
         el.style.display = 'block';
       }
     `;
+
+function renderPage(title, bodyHtml, clientScript = '') {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -214,7 +215,7 @@ function renderPage(title, bodyHtml, clientScript = '') {
         ${bodyHtml}
     </div>
     <script>
-    ${authBootstrap}
+    ${sharedMarketingClientAuth}
     ${clientScript}
     </script>
 </body>
@@ -332,7 +333,6 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions(); });
             loadYoutubeStatus();
             loadSuggestions().catch(function(){});
-            setTimeout(function() { loadSuggestions().catch(function(){}); }, 800);
         `;
     res.send(renderPage('SocialMediaOS', body, clientScript));
   });
@@ -687,4 +687,5 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   logger.info('Marketing session UI routes registered.');
 }
 
+export { sharedMarketingClientAuth };
 export default registerMarketingSessionUiRoutes;

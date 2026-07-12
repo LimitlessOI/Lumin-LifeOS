@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — Money ASAP: Site Builder #1; publish routes live; unwrap social-connections list shape. |
+| **Last Updated** | 2026-07-12 — Phase 2 calendar/atom UI/UX fix (removed duplicate YouTube suggestion loading, wired calendar/atoms UI to shared `marketingFetch`, fixed `getOwnerId` + calendar SQL + atom validation, added `POST /api/v1/marketing/calendar`, fixed `services/marketing-brand-voice.js`). Also: Money ASAP / Site Builder #1; publish routes live; unwrap social-connections list shape; `services/marketing-publisher.js` import paths fixed. |
 
 ---
 
@@ -38,7 +38,7 @@ Master verbatim: `docs/conversation_dumps/2026-06-29-limitlessos-ecosystem-found
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-06-28 |
+| **Last Updated** | 2026-07-12 |
 | **Owner** | adam |
 | **Parent System** | [LimitlessOS](../limitlessos/PRODUCT_HOME.md) |
 | **First Module** | SocialMediaOS |
@@ -1344,10 +1344,20 @@ config/council-members.js           — shared AI config
 
 ---
 
+## Agent Handoff Notes
+
+- State: MarketingOS/SocialMediaOS Phase 1 core loop (consent → coach → extract → generate → approve → export) is live and served at `/marketing` standalone and inside `lifeos-app.html` (`/marketing?shell=1`). Phase 2 surfaces (`/marketing/calendar`, `/marketing/atoms`) are now auth-aware and load/save correctly.
+- Last verified: 2026-07-12 — `npm run builder:preflight` PASS; `npm run ssot:validate` PASS; `npm run check:overlay` PASS; `npm run repo:sync-check` PASS. UI smoke tests passed: standalone `/marketing` loads YouTube suggestions without duplicates; `/marketing/calendar` loads 1 scheduled item and `Save date` updates it; `/marketing/atoms` loads/creates atoms; all surfaces work inside `lifeos-app.html`.
+- Next priority: run `npm run lifeos:product-home:verify` post-merge; continue blocking/UX cleanup for session flow `/marketing/session/new` and export `/marketing/session/:id/export`; after PR merge, redeploy Railway and verify `/marketing` production.
+- Open honest blocker: YouTube OAuth still requires `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` set in Railway and a Google Cloud Console redirect URI. Phase 2 schedule/atom UI is functional; real customer experience still needs tested session-to-export flow with a generated content piece.
+
+---
+
 ## Change Receipts
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-12 | **Phase 2 calendar/atom UI/UX fix** — `routes/marketing-session-ui-routes.js`: extracted shared `sharedMarketingClientAuth` (auth bootstrap + `marketingFetch`) and removed duplicate `setTimeout` suggestion load. `routes/marketing-calendar-ui-routes.js`: imported shared auth, switched `fetch` → `marketingFetch` for calendar/atoms, fixed save piece id fallback, updated atom placeholders to match DB enum (`hook/story/insight/cta`, `session_only/90d/perpetual`). `routes/marketing-calendar-routes.js`: imported `getOwnerId` from `marketing-session-routes.js`, fixed calendar SQL to only select existing columns and nest `content_piece`, aligned `ALLOWED_ATOM_TYPES`/`ALLOWED_REUSE_CONSENT_LEVELS` with migration, normalized `reuse_consent_level`/`tags`, added `POST /api/v1/marketing/calendar` with ownership check, fixed `GET` responses to `slots`/`atoms` keys, fixed `brand-voice/rebuild` call. `services/marketing-brand-voice.js`: fixed query to join `marketing_sessions` on `marketing_content_pieces` and removed non-existent `marketing_content` table. | Audit found calendar/atom UI failed to load and `Save date` 404ed; needed fixes before Phase 2 is customer-facing. | ✅ | ✅ | `node --check` on all touched files; `npm run builder:preflight` pending; UI re-test pending. |
 | 2026-07-12 | **Fixed `marketing-publisher.js` import paths.** `services/marketing-publisher.js` imported four sibling modules with `services/` prefix (`services/services/marketing-social-connections.js`, etc.), causing `ERR_MODULE_NOT_FOUND` and breaking the `spine-import-resolution` preflight check. Corrected to `./` relative paths. | Uncovered while fixing `builder:preflight` failures before Site Builder product work. | ✅ | ✅ | `node -c services/marketing-publisher.js` |
 | 2026-07-12 | **Money ASAP — mount publish + fix community drafts** — Enabled `marketing-publish-routes` auto-register; fixed `listConnections(pool,{ownerId})`; rewrote community draft route to use `createCommunityValueDrafter` (deterministic fallback). PRODUCT_BUILD_PRIORITY: site-builder → marketingos. Flores $45 Stripe checkout live. | Adam: get this making money ASAP don't stop. | ⚠️ tip deploy + outreach | first paid convert |
 | 2026-07-12 | **Value-first marketing + Site Builder URL** — Adam: not spam; add value, engage, then soft offer. Decoupled `mos-community-value-drafter` from sentry so it can ship now (help-first drafts → soft CTA to Site Builder / limitlesssites.com). Started founder-authority domain purchase for **limitlesssites.com** (Porkbun + Namecheap); card vault ready (****0736). Tip Site Builder URL live: `/site-builder`. | Adam: value not spam; cheap URL + debit card for Site Builder fit. | ⚠️ domain purchase in flight / captcha | community-value build + DNS after domain owned |

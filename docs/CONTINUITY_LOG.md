@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-07-12 — MarketingOS/SocialMediaOS Phase 1/2 UI/UX audit + fix
+
+Audited MarketingOS/SocialMediaOS inside `lifeos-app.html` and standalone (`/marketing`, `/marketing/calendar`, `/marketing/atoms`, `/creative/studio`, `/api/v1/marketing/youtube/suggestions`). Fixed duplicate YouTube suggestion loading on `/marketing` home, extracted `sharedMarketingClientAuth` into `routes/marketing-session-ui-routes.js` and reused it in `routes/marketing-calendar-ui-routes.js`, wired calendar/atom UI to `marketingFetch` with auth headers, fixed `getOwnerId` handling in `routes/marketing-calendar-routes.js`, fixed calendar SQL to only select existing `marketing_content_pieces` columns and nest `content_piece`, aligned atom type/reuse-consent validation with migration, added `POST /api/v1/marketing/calendar` for scheduling, and fixed `services/marketing-brand-voice.js` to query `marketing_content_pieces` directly. `npm run builder:preflight` PASS, `npm run ssot:validate` PASS, `npm run check:overlay` PASS, `npm run repo:sync-check` PASS. Standalone and in-shell UI tests show calendar loads 1 scheduled item, `Save date` updates slot, atom library loads/creates atoms, and marketing home loads researched YouTube suggestions. PR created from `devin/marketing-social-ux`.
+
+---
+
 ## [MONEY] 2026-07-12 — MarketingOS first: ungated social publish + community value drafts
 
 Adam: system can set its own Railway vars — set `LIVE_SOCIAL_PUBLISH_ENABLED=true`. Done: allowlisted key in `railway-managed-env-service.js` (`0b0b5046`), bulk upsert + sync (create/changed), self-redeploy so process.env loads it. Kill switch is ON in vault; real posts still need connected social sessions + approved pieces. MarketingOS remains #1 priority / never-stop queue.
