@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T16:21:13.410Z",
+  "generated_at": "2026-07-12T16:22:53.855Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11464,
+  "file_count": 11465,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65647,6 +65647,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/lifeos-consent-routes.js",
+      "synopsis": "Registers LifeosConsentRoutes routes/handlers (routes/lifeos-consent-routes.js).",
+      "bytes": 5941,
+      "mtime": "2026-07-12T16:22:53.855Z",
+      "indexed_at": "2026-07-12T16:22:53.855Z"
     },
     {
       "path": "routes/lifeos-copilot-routes.js",
