@@ -49,13 +49,16 @@
     },
     {
       "id": "s4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/phase14-cert-service.js",
       "task": "Implement phase14 cert service reading phase_ledger from findingsJson",
       "spec": "Export async function getPhase14Cert(db) that queries the findings store (SELECT findings_json FROM builder_findings ORDER BY created_at DESC LIMIT 1 using CREATE TABLE IF NOT EXISTS builder_findings guard at top via a one-time DDL check) and extracts phase_ledger array from findingsJson. Returns {certified:bool, phase_ledger:[], generated_at:isoString, summary:{total,passed,failed}}. If no findings row exists returns {certified:false,phase_ledger:[],generated_at:now,summary:{total:0,passed:0,failed:0}}. No AI SDK imports; no browser globals.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "8dec86d685662f3c735a15667ab724595ddf05d2",
+      "last_attempt_at": "2026-07-12T03:02:58.542Z",
+      "completed_at": "2026-07-12T03:03:09.140Z"
     },
     {
       "id": "s5",
