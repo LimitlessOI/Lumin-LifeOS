@@ -1,9 +1,9 @@
 /**
  * SYNOPSIS: Registers CommandCenterModeRoutes routes/handlers (routes/command-center-mode-routes.js).
  */
-import { setMode, getMode } from "../services/builder-runtime-mode-service.js";
+import { setMode, getCurrentMode as getMode } from "../services/builder-runtime-mode-service.js";
 
-const VALID_MODES = new Set(["idle", "active", "paused", "maintenance"]);
+const VALID_MODES = new Set(["run", "dry_run", "paused"]);
 
 function sendError(res, status, message) {
   return res.status(status).json({ error: message });
@@ -53,14 +53,11 @@ export function registerCommandCenterModeRoutes(app, deps) {
         return sendError(res, 400, "triggered_by is required");
       }
 
-      const receipt = await setMode(db, {
-        mode,
-        triggered_by,
-        callCouncilMember,
-        logger,
+      const result = await setMode(db, mode, triggered_by, {
+        source: "command_center_mode_routes",
       });
 
-      return res.status(200).json(receipt);
+      return res.status(200).json(result);
     } catch (error) {
       logger?.error?.({ err: error }, "failed to set command center mode");
       return sendError(res, 500, "Failed to set command center mode");

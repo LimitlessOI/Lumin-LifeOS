@@ -22,7 +22,13 @@ const FEATURES = [
   'research_aggregate',
   'family_sharing',
   'tone_analysis',
+  'therapist_share',
+  'clinical_brief_export',
 ];
+
+export function getConsentFeatures() {
+  return [...FEATURES];
+}
 
 export function createConsentRegistry({ pool }) {
 

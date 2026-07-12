@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — Comms overnight prove PASS on tip (`LIFEOS_COMMS_OVERNIGHT_PROOF.json`); presence/joke rhythm in Chair prompt. |
+| **Last Updated** | 2026-07-12 — Consent registry therapist_share FEATURES unblock (never-stop BLOCKED_TOOLING fix). Prior: Comms overnight prove PASS on tip (`LIFEOS_COMMS_OVERNIGHT_PROOF.json`); presence/joke rhythm in Chair prompt. |
 
 ---
 
@@ -1721,6 +1721,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-07-12 | **Consent registry therapist_share unblock** — `services/consent-registry.js`: added `therapist_share` + `clinical_brief_export` to FEATURES; exported `getConsentFeatures()`. Unblocks never-stop step `lo-consent-therapist-share` (was BLOCKED_TOOLING / no_commit_sha). Spine fix: `routes/command-center-mode-routes.js` imports `getCurrentMode as getMode`, aligns `setMode` call + VALID_MODES with service. | Adam: system must keep building quality code. | ✅ 394 pass, 0 fail | push + never-stop kick |
 | 2026-07-12 | **Comms routing: presence + build-status never CLARIFY** — `isBuildStatusQuestion` / `isCounselPresenceIntent` exempt "did that build land?" and "don't fix me" from `isBuildRequest` so Chair direct-agent answers. Soften intent_clarify drawer card. Prompt: relational ≠ machine health. Tests: `tests/chair-comms-routing.test.js`. | Adam: work communications all night until good. | ✅ local tests | tip prove |
 | 2026-07-12 | **LifeOS + Wellness therapist queues seeded** — never-stop was enabled but thrashing Site Builder step-04 (auto-reg revive). Seeded LifeOS steps `lo-therapist-role` → consent FEATURES → consent routes → auto-register; Wellness Studio Module 4 queue (schema/service/routes/auto-reg). Cap SB step-04 revive_count. Discover now ranks lifeos first. | Adam: is the system building it? If not, make it work. | ✅ queues + discover smoke | tip push + never-stop kick |
 | 2026-07-12 | **Chat ship gate (personal mode)** — Bare `"Lumin"` no longer forces system-knowledge/ops mode (`chair-system-knowledge.js`). Conversational Chair turns default `personal_turn` so Point B/strategic briefs stay out unless asked (`chair-native-facts.js` + `chair-direct-agent` passes `conversational_mode:true`). Counsel replies prefer plain `human_summary` (`lifeos-system-reply.js`). Chair channel cost tier cheap→medium. Priority: lifeos → wellness-studio → site-builder. | Adam: LifeOS whole kit; chat is shit / cannot ship; therapist account with consent. | ✅ local classification smoke | tip redeploy + live chat prove |

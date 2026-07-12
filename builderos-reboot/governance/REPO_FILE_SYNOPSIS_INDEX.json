@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-12T04:17:04.938Z",
+  "generated_at": "2026-07-12T16:21:13.410Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11464,
   "files": [
@@ -39362,9 +39362,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 603637,
-      "mtime": "2026-07-12T03:54:53.853Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z"
+      "bytes": 604248,
+      "mtime": "2026-07-12T16:21:05.539Z",
+      "indexed_at": "2026-07-12T16:21:13.410Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -65217,9 +65217,9 @@
     {
       "path": "routes/command-center-mode-routes.js",
       "synopsis": "Registers CommandCenterModeRoutes routes/handlers (routes/command-center-mode-routes.js).",
-      "bytes": 2242,
-      "mtime": "2026-07-10T20:42:48.094Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z"
+      "bytes": 2230,
+      "mtime": "2026-07-12T16:20:44.058Z",
+      "indexed_at": "2026-07-12T16:21:13.410Z"
     },
     {
       "path": "routes/command-center-routes.js",
@@ -82068,9 +82068,9 @@
     {
       "path": "services/consent-registry.js",
       "synopsis": "services/consent-registry.js",
-      "bytes": 4833,
-      "mtime": "2026-06-29T17:21:08.844Z",
-      "indexed_at": "2026-07-12T03:55:11.681Z",
+      "bytes": 4947,
+      "mtime": "2026-07-12T16:20:38.582Z",
+      "indexed_at": "2026-07-12T16:21:13.410Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
