@@ -21,7 +21,7 @@
     },
     {
       "id": "ws-therapist-service",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/wellness-therapist.js",
       "task": "Therapist integration service: upsertTherapistProfile, linkClient, listLinkedClients, createSessionBrief, markBriefReviewed, shareBriefIfConsented.",
       "spec": "ESM. Export createWellnessTherapistService({ pool, consentRegistry }). shareBriefIfConsented MUST call consentRegistry.hasConsent(clientUserId, 'therapist_share') and refuse without grant. Never return raw chat transcripts — only brief_json. Parameterised SQL only. No browser globals. @ssot docs/products/wellness-studio/PRODUCT_HOME.md",
@@ -29,10 +29,13 @@
         "ws-therapist-schema"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "createWellnessTherapistService"
-      ]
+      ],
+      "commit_sha": "94dc057d510417ab9b0a3cde550b2f06fb52a0df",
+      "last_attempt_at": "2026-07-12T03:48:08.972Z",
+      "completed_at": "2026-07-12T03:48:21.700Z"
     },
     {
       "id": "ws-therapist-routes",
