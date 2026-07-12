@@ -373,11 +373,13 @@
       "spec": "ESM. Extend FEATURES array with 'therapist_share' and 'clinical_brief_export'. Keep append-only grant/revoke. Export getConsentFeatures() returning a copy of FEATURES. hasConsent must refuse unknown features. No schema change. @ssot docs/products/lifeos/PRODUCT_HOME.md",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "therapist_share",
         "clinical_brief_export"
-      ]
+      ],
+      "last_attempt_at": "2026-07-12T03:46:25.247Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
       "id": "lo-consent-api",
