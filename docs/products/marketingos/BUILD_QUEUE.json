@@ -322,7 +322,7 @@
     },
     {
       "id": "mos-social-sentry-layer-a",
-      "status": "pending",
+      "status": "done",
       "target_file": "scripts/run-marketingos-social-publish-verify.mjs",
       "task": "Structural Layer A verifier proving the new publish surface's GATES are real — WITHOUT ever posting to a real platform. Must run safely with LIVE_SOCIAL_PUBLISH_ENABLED unset (the default).",
       "spec": "ESM script, same stack/shape as scripts/run-marketingos-layer-a.mjs. Requires PUBLIC_BASE_URL + COMMAND_CENTER_KEY. Assertions, fail-closed: (1) GET /api/v1/marketing/social-connections returns 200 { ok:true }. (2) POST /api/v1/marketing/publish against a piece that is NOT status:approved (create one via the existing Phase 1 API if needed, or use a known draft) returns { ok:false, error:'not_approved' } — proves the approval gate is real, never soft. (3) POST /api/v1/marketing/publish against an approved piece for a platform with no connection returns { ok:false, reason:'not_connected' } — proves it never silently no-ops or fakes success. (4) With LIVE_SOCIAL_PUBLISH_ENABLED unset/false on the target environment, confirm no assertion above ever results in a real platform post (the kill switch inside services/marketing-publisher.js must short-circuit before any browser action). Do NOT attempt to assert a real platform post succeeds — that requires a real connected account from the Grok sign-in flow and is explicitly out of scope; a manual founder test covers that once a real connection exists. Write receipt products/receipts/SENTRY_MARKETINGOS_SOCIAL_PUBLISH_LAYER_A.json (include which named gate was proven for each assertion). Register in builderos-reboot/governance/SENTRY_PRODUCT_REGISTRY.json under marketingos as an additional A-check. @ssot docs/products/marketingos/PRODUCT_HOME.md",
@@ -330,8 +330,11 @@
         "mos-social-publish-route"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "max_output_tokens": 10000
+      "attempts": 1,
+      "max_output_tokens": 10000,
+      "commit_sha": "191d0dc1a4802ad4e7f7a16ff81c179007c81606",
+      "last_attempt_at": "2026-07-12T21:22:29.622Z",
+      "completed_at": "2026-07-12T21:22:58.753Z"
     },
     {
       "id": "mos-youtube-oauth-service",
