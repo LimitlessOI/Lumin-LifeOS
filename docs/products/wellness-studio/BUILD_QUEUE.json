@@ -145,9 +145,9 @@
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "commit_sha": "93a1a5f5120d73bdef6fc07010ff899066535ab9",
-      "last_attempt_at": "2026-07-12T19:13:58.524Z",
+      "last_attempt_at": "2026-07-12T19:15:50.119Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-studio-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
