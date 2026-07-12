@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — BUILD_QUEUE seeded for Module 4 therapist integration beachhead (schema → service → routes → auto-register). |
+| **Last Updated** | 2026-07-12 — Therapist route auth/consent hardening after critical bug sweep. |
 
 ---
 | Field | Value |
@@ -185,4 +185,9 @@ For couples who want to do the work together, with shared visibility where chose
 
 | Date | Change | Author |
 |---|---|---|
+| 2026-07-12 | Critical bug sweep fixed Wellness therapist routes: auto-registered auth now reaches `req.lifeosUser`; therapist-only actions require therapist/admin roles; client links and brief sharing fail closed on therapist_share consent and stored session briefs instead of trusting request bodies. Added `tests/wellness-therapist-routes-security.test.js`. Known remaining dependency: no UI/consent grant flow for `therapist_share` yet, so sharing remains blocked until consent foundation adds that feature. | Cursor |
 | 2026-04-03 | Initial draft — all 7 modules defined; revenue model; readiness gates | Claude |
+
+## Agent Handoff Notes
+
+- 2026-07-12: Wellness therapist API security slice patched. Next priority is adding the real `therapist_share` consent grant/revoke UX/API before any therapist brief export can be user-facing.
