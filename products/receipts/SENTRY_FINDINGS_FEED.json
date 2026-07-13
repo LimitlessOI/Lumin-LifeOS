@@ -1,27 +1,41 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T05:43:41.346Z",
-  "findings_count": 3,
+  "generated_at": "2026-07-13T06:32:05.898Z",
+  "findings_count": 5,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "No obvious labels or guidance around what the 4 templates and 3 color palettes change, so it may take a little guessing.",
-      "proposed_solution": "Add plain-language labels under each template and palette, like 'more elegant', 'warmer', or 'best for wellness services'.",
+      "detail": "The template choices are visible, but there’s no quick hint about what each one feels like before switching.",
+      "proposed_solution": "Show a one-line description under each template, like calm, modern, or warm.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The chat box accepts text, but it is not clear what happened after sending because the input cleared.",
-      "proposed_solution": "Show a simple confirmation after chat messages and save, such as 'Done' or 'Your change was applied'.",
+      "detail": "The color palette count is shown, but it’s not obvious which palette matches my kind of business.",
+      "proposed_solution": "Add simple labels for palettes, such as soft, bright, or natural.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "There is a save button, but with no edits made it is hard to tell whether it confirms anything useful for a non-technical person.",
-      "proposed_solution": "Add a short first-time hint near the device toggle and template switcher explaining how to preview desktop vs mobile and how to choose a style.",
+      "detail": "The chat box exists, but it feels a little separate from the main editing flow.",
+      "proposed_solution": "Make chat feel more built-in by suggesting what I can ask first.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_4",
+      "detail": "Save is there, but there’s no clear sign of what changed after clicking it.",
+      "proposed_solution": "After Save, show a clear confirmation like Saved successfully and what was saved.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_5",
+      "detail": "The device toggle is present, but it isn’t obvious what I should check on each view.",
+      "proposed_solution": "Add a small tip near the device toggle explaining what to look for on mobile vs desktop.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -31,15 +45,23 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "No obvious labels or guidance around what the 4 templates and 3 color palettes change, so it may take a little guessing."
+        "detail": "The template choices are visible, but there’s no quick hint about what each one feels like before switching."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The chat box accepts text, but it is not clear what happened after sending because the input cleared."
+        "detail": "The color palette count is shown, but it’s not obvious which palette matches my kind of business."
       },
       {
         "code": "ux_friction_3",
-        "detail": "There is a save button, but with no edits made it is hard to tell whether it confirms anything useful for a non-technical person."
+        "detail": "The chat box exists, but it feels a little separate from the main editing flow."
+      },
+      {
+        "code": "ux_friction_4",
+        "detail": "Save is there, but there’s no clear sign of what changed after clicking it."
+      },
+      {
+        "code": "ux_friction_5",
+        "detail": "The device toggle is present, but it isn’t obvious what I should check on each view."
       }
     ]
   }
