@@ -78,6 +78,7 @@ const SPAM_SUBJECT_PATTERNS = [
   /\b(home inspection discount|uncover \d+ ways to reduce your tax)\b/i,
   /\b(new listing\s*[•·\-]|must see!|thought you would be interested)\b/i,
   /\b(super mario|galaxy movie|netflix|streaming now)\b/i,
+  /\b(properties in distress|distress list|expired list|paid study opportunity)\b/i,
 ];
 
 // FYI/auto patterns — safe to auto-mark read, no alert needed
@@ -380,9 +381,9 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
     const includeSeen = opts.includeSeen === true || organizeMode;
     const maxMessages = Math.min(
       500,
-      Math.max(1, Number(opts.maxMessages) || (organizeMode ? 300 : 80))
+      Math.max(1, Number(opts.maxMessages) || (organizeMode ? 80 : 80))
     );
-    const maxAi = Math.min(100, Math.max(0, Number(opts.maxAi) || (organizeMode ? 40 : 25)));
+    const maxAi = Math.min(100, Math.max(0, Number(opts.maxAi) || (organizeMode ? 20 : 25)));
     const dryRun = opts.dryRun === true;
     const skipAlerts = organizeMode || opts.skipAlerts === true;
 
@@ -407,7 +408,7 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
 
         for await (const msg of client.fetch(
           search,
-          { envelope: true, bodyStructure: true, source: true }
+          { envelope: true, bodyStructure: true, uid: true }
         )) {
           if (results.total >= maxMessages) break;
 
@@ -419,7 +420,6 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
           const from      = msg.envelope?.from?.[0]?.address || '';
           const date      = msg.envelope?.date || new Date();
           const messageId = msg.envelope?.messageId || null;
-          const preview   = extractPreview(msg.source);
           const hasAttach = !!(msg.bodyStructure?.childNodes?.length ||
             msg.bodyStructure?.disposition === 'attachment');
 
@@ -473,6 +473,14 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
             }
 
           } else {
+            let preview = '';
+            try {
+              const full = await client.fetchOne(uid, { source: true }, { uid: true });
+              preview = extractPreview(full?.source);
+            } catch {
+              preview = '';
+            }
+
             const ruleCategory = classifyByRules(subject, from, preview);
 
             if (ruleCategory && ruleCategory !== CATEGORIES.CLIENT) {
