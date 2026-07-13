@@ -14,6 +14,13 @@
       "note": "LifeOS Personal Finance API. The finance router was defined but never mounted in the founder-builder runtime lane, so the dashboard's GET /api/v1/lifeos/finance/goals returned 404 — surfaced by SENTRY lifeos-founder-ui finding no_js_errors (Error loading goals: HTTP 404). Mounted here via auto-register (no composition-root edit) so the dashboard goals/summary/accounts calls resolve. Fixes SENTRY defect #1 (rank 8)."
     },
     {
+      "path": "routes/lifeos-engine-routes.js",
+      "register": "registerLifeOSEngineRoutes",
+      "mount_path": "/api/v1/lifeos/engine",
+      "enabled": true,
+      "note": "GAP-FILL: LifeOS Engine (Google Calendar connect/sync, calendar events, outreach) 404'd on tip because Railway boots founder_builder only and never runs the full-runtime mount. Same auto-register pattern as finance/core. Unblocks Connect → Google Calendar for LifeOS, LifeRe scheduling context, and MarketingOS/SocialMediaOS shared Google OAuth app."
+    },
+    {
       "path": "routes/lifeos-core-routes.js",
       "register": "registerLifeOSCoreRoutes",
       "mount_path": "/api/v1/lifeos",
