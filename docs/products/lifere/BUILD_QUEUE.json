@@ -1,0 +1,69 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "lifere",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
+  "corpus_sources": [
+    "docs/products/lifere/PRODUCT_HOME.md",
+    "docs/products/lifere/AGENTS.md",
+    "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/quoteService.js",
+      "task": "confirm PASS quote",
+      "spec": "Service that confirms a quote has passed the validation requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "db/migrations/20231010_create_boldtrail_contacts_table.sql",
+      "task": "create BoldTrail contact table",
+      "spec": "SQL migration to create a database table for BoldTrail contacts if it doesn't already exist, incl. columns for contact details.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "services/boldTrailContactCleanupService.js",
+      "task": "optional BoldTrail test contact cleanup",
+      "spec": "Service to check and clean up test contacts from the BoldTrail contact table.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "routes/quoteRoutes.js",
+      "task": "register quote routes",
+      "spec": "Route module that registers API endpoints for confirming PASS quotes.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "add quote routes to auto-registration",
+      "spec": "Entry in JSON config to auto-register the quoteRoutes module.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    }
+  ]
+}
