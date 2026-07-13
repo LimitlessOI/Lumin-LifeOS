@@ -2,15 +2,15 @@
   "schema": "product_build_queue_v1",
   "product_id": "limitlessos",
   "verify_script": "scripts/verify-go-vegas-scheduler.mjs",
-  "notes": "Go Vegas revenue slice \u2014 outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
+  "notes": "Go Vegas revenue slice — outreach pipeline v1 already shipped as code; this queue closes the last mile to live revenue: scheduler tick (daily discover/invite/follow-up under caps), dry-run proof script, and SENTRY-facing status receipt. No founder UI in this slice.",
   "updated_at": "2026-07-09",
   "steps": [
     {
       "id": "gv-scheduler",
       "status": "done",
       "target_file": "services/go-vegas-outreach-scheduler.js",
-      "task": "Add a useful-work-guarded Go Vegas outreach scheduler that runs discover\u2192enrich\u2192invite\u2192follow-up under daily caps without burning tokens when there is no work.",
-      "spec": "ESM module @ssot docs/products/limitlessos/PRODUCT_HOME.md. Export startGoVegasOutreachScheduler({ pool, notificationService, logger }) and getGoVegasOutreachSchedulerStatus(). Use createUsefulWorkGuard from services/useful-work-guard.js (and requireEnvVars/requireTableRows helpers if present). Prerequisites: pool present; skip hard if neither COMMAND_CENTER_KEY nor notification path can send (do not invent secrets). workCheck: COUNT go_vegas_prospects needing invite (status discovered/enriched with contact_email) OR follow-up eligible \u2014 if 0, still allow one discover tick when GO_VEGAS_ALLOW_DISCOVER_IDLE=1 else skip. execute: const outreach = createGoVegasOutreach({ pool, sendEmail, logger }); then in order outreach.discoverBusinesses({ count: 5 }), outreach.enrichProspects({ limit: 10 }), outreach.inviteBatch({ limit: 5 }), outreach.runFollowUpCron({}). Use EXACT method names inviteBatch + runFollowUpCron (not sendInvites). Honor getSendQuota / daily caps inside those methods. Interval from GO_VEGAS_SCHEDULER_MS default 21600000 (6h); boot delay 120000. Never log emails or secrets. Named exports only; no browser globals.",
+      "task": "Add a useful-work-guarded Go Vegas outreach scheduler that runs discover→enrich→invite→follow-up under daily caps without burning tokens when there is no work.",
+      "spec": "ESM module @ssot docs/products/limitlessos/PRODUCT_HOME.md. Export startGoVegasOutreachScheduler({ pool, notificationService, logger }) and getGoVegasOutreachSchedulerStatus(). Use createUsefulWorkGuard from services/useful-work-guard.js (and requireEnvVars/requireTableRows helpers if present). Prerequisites: pool present; skip hard if neither COMMAND_CENTER_KEY nor notification path can send (do not invent secrets). workCheck: COUNT go_vegas_prospects needing invite (status discovered/enriched with contact_email) OR follow-up eligible — if 0, still allow one discover tick when GO_VEGAS_ALLOW_DISCOVER_IDLE=1 else skip. execute: const outreach = createGoVegasOutreach({ pool, sendEmail, logger }); then in order outreach.discoverBusinesses({ count: 5 }), outreach.enrichProspects({ limit: 10 }), outreach.inviteBatch({ limit: 5 }), outreach.runFollowUpCron({}). Use EXACT method names inviteBatch + runFollowUpCron (not sendInvites). Honor getSendQuota / daily caps inside those methods. Interval from GO_VEGAS_SCHEDULER_MS default 21600000 (6h); boot delay 120000. Never log emails or secrets. Named exports only; no browser globals.",
       "depends_on": [],
       "founder_gated": false,
       "attempts": 1,
@@ -61,6 +61,114 @@
       "last_attempt_at": "2026-07-09T03:36:34.729Z",
       "note": "GAP-FILL: endpoint live on founder runtime via createGoVegasOutreachRoutes (not auto-register). Never-stop was thrashing queue-status commits while blocked on false auto-register requirement.",
       "commit_sha": "6cf61119d6c569695a05525b8a1b920c671314fc"
+    },
+    {
+      "id": "1",
+      "status": "pending",
+      "target_file": "services/canonical-id.js",
+      "task": "set canonical product id",
+      "spec": "Exports a function to get canonical product id. Returns 'LimitlessOS' or 'BusinessOS' as needed.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "2",
+      "status": "pending",
+      "target_file": "services/audit-data-sources.js",
+      "task": "integrate live audit data sources",
+      "spec": "Exports a function to fetch audit data from supported sources: Plaid, manual intake, OAuth per vendor.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "3",
+      "status": "pending",
+      "target_file": "routes/audit-intake-flow-routes.js",
+      "task": "create audit intake flow routes",
+      "spec": "Exports registerAuditIntakeFlowRoutes(app, deps); handles route logic for audit intake flow including questions and optional system connections.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "db/migrations/002_create_price_book_api.sql",
+      "task": "create price book API schema",
+      "spec": "Creates tables for price book API for print partners.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "5",
+      "status": "pending",
+      "target_file": "services/price-book.js",
+      "task": "build price book comparison",
+      "spec": "Exports a function to compare vendors, explaining differences like honest vs weak reviews.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "6",
+      "status": "pending",
+      "target_file": "routes/marketingos-sku-routes.js",
+      "task": "implement physical marketing SKUs",
+      "spec": "Exports registerMarketingOSSkuRoutes(app, deps); manages SKU operations under MarketingOS commerce layer.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "services/bundle-skus.js",
+      "task": "bundle SKU creation",
+      "spec": "Exports a function to create bundles tying website, automation, and social tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "8",
+      "status": "founder_gated",
+      "target_file": "routes/cityos-home-routes.js",
+      "task": "create CityOS/Go Vegas product home",
+      "spec": "Exports registerCityOSHomeRoutes(app, deps); creates a product home page for CityOS/Go Vegas.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "9",
+      "status": "founder_gated",
+      "target_file": "public/overlay/canonical-branding.html",
+      "task": "formalize BusinessOS naming",
+      "spec": "Displays 'BusinessOS' or 'LimitlessOS' as branding to the user based on product id logic.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "10",
+      "status": "founder_gated",
+      "target_file": "public/overlay/audit-intake.html",
+      "task": "audit intake flow UI",
+      "spec": "User interface for audit intake flow, including questions and optional connections.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": true,
+      "attempts": 0
     }
   ]
 }
