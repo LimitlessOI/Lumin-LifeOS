@@ -33,6 +33,7 @@ import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
 import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID } from './site-builder-design-systems.js';
+import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 
 function createEditToken() {
@@ -219,6 +220,54 @@ function renderVerifiedData(verified) {
   return lines.join('\n') + '\n';
 }
 
+function renderAssetData(asset) {
+  if (!asset) return 'ASSET DATA: NONE FOUND.\n- Use subtle gradient placeholders or CSS shapes for imagery; do not invent image URLs.\n';
+  const lines = ['ASSET DATA (real images, social profiles, videos, testimonials — use these exact URLs):'];
+  if (asset.images?.logo) lines.push(`- Logo URL: ${asset.images.logo}`);
+  if (asset.images?.hero?.length) lines.push(`- Hero image URLs: ${asset.images.hero.join(', ')}`);
+  if (asset.images?.team?.length) lines.push(`- Team/people image URLs: ${asset.images.team.join(', ')}`);
+  if (asset.images?.product?.length) lines.push(`- Service/facility image URLs: ${asset.images.product.join(', ')}`);
+  if (asset.images?.social?.length) lines.push(`- Social/Instagram image URLs: ${asset.images.social.map((i) => i.url).join(', ')}`);
+  if (asset.social?.instagram) {
+    const ig = asset.social.instagram;
+    lines.push(`- Instagram @${ig.username}: ${ig.followers || 0} followers, ${ig.postsCount || 0} posts. Bio: "${String(ig.bio || '').slice(0, 160)}"`);
+    if (ig.posts?.length) {
+      for (const p of ig.posts.slice(0, 4)) {
+        lines.push(`  Instagram post: ${p.displayUrl} — "${String(p.caption || '').slice(0, 120)}"`);
+      }
+    }
+  }
+  if (asset.social?.youtube?.videos?.length) {
+    lines.push(`- YouTube videos: ${asset.social.youtube.videos.length} found.`);
+    for (const v of asset.social.youtube.videos.slice(0, 4)) {
+      lines.push(`  Video: ${v.embedUrl} — thumbnail ${v.thumbnailUrl} — "${v.title}"`);
+    }
+  }
+  if (asset.social?.facebook?.url) lines.push(`- Facebook page: ${asset.social.facebook.url}`);
+  if (asset.testimonials?.length) {
+    lines.push(`- Real testimonials (${asset.testimonials.length} found):`);
+    for (const t of asset.testimonials.slice(0, 4)) {
+      lines.push(`  • "${String(t.text).slice(0, 240)}" — ${t.author}${t.source ? ` (${t.source})` : ''}`);
+    }
+  }
+  if (asset.businessDetails?.address) lines.push(`- Address: ${asset.businessDetails.address}`);
+  if (asset.businessDetails?.phone) lines.push(`- Phone: ${asset.businessDetails.phone}`);
+  if (asset.businessDetails?.hours && Object.keys(asset.businessDetails.hours).length) {
+    lines.push(`- Hours: ${JSON.stringify(asset.businessDetails.hours)}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function renderIndustryBenchmarks(benchmarks) {
+  if (!benchmarks?.standards?.length) return 'INDUSTRY BENCHMARKS: NOT AVAILABLE.\n';
+  const lines = ['INDUSTRY BENCHMARKS (use this to build an honest "Digital Presence Score" section):'];
+  lines.push(benchmarks.summary || 'Scores compare this business to typical small-business peers in the industry.');
+  for (const s of benchmarks.standards) {
+    lines.push(`- ${s.area}: client ${s.clientScore ?? '—'}/10 vs industry avg ${s.industryAverage ?? '—'}/10 — ${s.verdict}${s.notes ? ` (${s.notes})` : ''}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
 export default class SiteBuilder {
   constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '' } = {}) {
     this.callCouncil = callCouncil;
@@ -325,10 +374,10 @@ export default class SiteBuilder {
         ? []
         : await withTimeout(this.generateBlogPosts(businessInfo, 3), GENERATION_TIMEOUT_MS, 'generateBlogPosts');
 
-      // Step 5: Fetch YouTube videos (RSS, no API key)
-      const videos = businessInfo.youtubeChannelId
-        ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId)
-        : [];
+      // Step 5: YouTube videos (already fetched during asset ingestion if available)
+      const videos = businessInfo.youtubeVideos?.length
+        ? businessInfo.youtubeVideos
+        : (businessInfo.youtubeChannelId ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId) : []);
 
       // Step 6: Build blog index page
       const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
@@ -354,9 +403,8 @@ export default class SiteBuilder {
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
       await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
 
-      // Client-facing scorecard — before/after site score always included when we have
-      // a real existing-site score; competitor/presence sections added when analyzed.
-      if (businessInfo.existingSiteScore || (benchmark && benchmark.analyzedCount > 0) || presence) {
+      // Client-facing scorecard — before/after, industry benchmarks, competitor/presence.
+      if (businessInfo.existingSiteScore || businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence) {
         await fs.writeFile(
           path.join(deployDir, 'scorecard.html'),
           this.generateScorecardHtml(businessInfo, benchmark, presence, {
@@ -386,7 +434,7 @@ export default class SiteBuilder {
         editToken,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
-        scorecardUrl: (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
+        scorecardUrl: businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
         editorUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/editor?clientId=${clientId}&token=${editToken}` : null,
         publishCheckoutUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${clientId}` : null,
       };
@@ -531,7 +579,7 @@ export default class SiteBuilder {
       const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken);
       await fs.writeFile(path.join(deployDir, 'index.html'), switcher);
 
-      if (businessInfo.existingSiteScore || (benchmark && benchmark.analyzedCount > 0) || presence) {
+      if (businessInfo.existingSiteScore || businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence) {
         await fs.writeFile(
           path.join(deployDir, 'scorecard.html'),
           this.generateScorecardHtml(businessInfo, benchmark, presence, {
@@ -552,6 +600,7 @@ export default class SiteBuilder {
         editToken,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
+        scorecardUrl: businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence ? `${this.baseUrl}/previews/${clientId}/scorecard.html` : null,
         editorUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/editor?clientId=${clientId}&token=${editToken}` : null,
         publishCheckoutUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${clientId}` : null,
         mode: 'variants',
@@ -668,8 +717,13 @@ export default class SiteBuilder {
    * Extracts: name, tagline, services, contact, colors, testimonials, social links.
    */
   async scrapeBusinessInfo(url, options = {}) {
-    // If manual info is provided (no scraping needed), use it directly
-    if (options.businessInfo) return options.businessInfo;
+    // If manual info is provided (no scraping needed), use it directly, but
+    // always attach the source URL so richer ingestion knows what to look up.
+    if (options.businessInfo) {
+      const info = options.businessInfo;
+      if (!info.sourceUrl) info.sourceUrl = url;
+      return info;
+    }
 
     let puppeteer;
     let browser;
@@ -800,29 +854,39 @@ Return ONLY valid JSON with this exact structure:
 
   /**
    * Enrich a business profile with REAL, sourced data from its live web presence
-   * (Google Business, Yelp, Facebook, its own socials): rating, review count, real
-   * review snippets, and verifiable facts. Uses real search providers only — no AI
-   * fabrication fallback (callAI is intentionally omitted). Returns null when no
-   * search provider key is configured or nothing verifiable is found. Fails closed:
-   * it will NEVER invent a rating, review, or fact.
+   * (Google Business, Yelp, Facebook, its own socials, Instagram, YouTube):
+   * rating, review count, real review snippets, images, videos, and industry
+   * benchmarks. Fails closed — never fabricates.
    */
   async enrichWithRealData(info, options = {}) {
+    if (!info.businessName) return null;
+
+    // Primary richer pipeline: discover the real homepage, social profiles,
+    // testimonials, and images. This mutates info with discovered fields.
+    let result = null;
+    try {
+      result = await ingestAll(info, {
+        callCouncil: this.callCouncil,
+        targetUrl: info.sourceUrl || options.targetUrl,
+        timeoutMs: Math.min(65_000, GENERATION_TIMEOUT_MS),
+      });
+    } catch (err) {
+      logger.warn('[SITE] asset ingestion failed (falling back to web search)', { error: err.message });
+    }
+
+    // If richer ingestion produced verified data and updated the profile, use it.
+    if (result?.verifiedData && (result.verifiedData.rating || result.verifiedData.testimonials?.length)) {
+      return result.verifiedData;
+    }
+
+    // Fallback to the original web-search-only path when asset ingestion found nothing.
     const search = createWebSearchService({
       BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
       PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
-      // No callAI on purpose — factual enrichment must come from real search, not model memory.
     });
-
     const name = info.businessName;
-    if (!name) return null;
     const locale = info.location ? ` ${info.location}` : '';
-    const queries = [
-      `${name}${locale} reviews rating`,
-      `${name}${locale} yelp`,
-      `${name}${locale} google reviews`,
-      `${name}${locale} facebook`,
-    ];
-
+    const queries = [`${name}${locale} reviews rating`, `${name}${locale} yelp`, `${name}${locale} google reviews`, `${name}${locale} facebook`];
     const snippets = [];
     for (const q of queries) {
       try {
@@ -835,12 +899,8 @@ Return ONLY valid JSON with this exact structure:
         logger.warn('[SITE] enrichment query failed', { q, error: err.message });
       }
     }
-
-    // No provider key / no results → fail closed, no fabrication.
     if (!snippets.length || !this.callCouncil) return null;
 
-    // Extract ONLY what is literally present in the real snippets. The extractor is
-    // instructed to leave fields null rather than infer or estimate.
     const corpus = snippets.map((s) => `SOURCE: ${s.url}\nTITLE: ${s.title}\nTEXT: ${s.text}`).join('\n\n').slice(0, 6000);
     const prompt = `Below are REAL web search result snippets about a business named "${name}".
 Extract ONLY facts that are literally stated in the snippets. If a value is not explicitly present, use null. NEVER estimate, infer, round, or invent.
@@ -857,35 +917,23 @@ Return ONLY valid JSON:
   "facts": ["short verifiable fact explicitly stated, e.g. 'Open since 2011'"] (else []),
   "designCues": ["visual/brand style cues actually described in the snippets, e.g. 'earthy green + cream palette', 'minimalist photography', 'calm spa aesthetic'"] (only if described; else [])
 }`;
-    let parsed;
     try {
-      // useCache:false: real-data enrichment uses a different search context per
-      // business; the semantic cache can reuse another business's extracted facts.
       const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction', useCache: false });
       const m = resp.match(/\{[\s\S]+\}/);
-      parsed = m ? JSON.parse(m[0]) : null;
+      const parsed = m ? JSON.parse(m[0]) : null;
+      if (!parsed) return null;
+      const rating = typeof parsed.rating === 'number' && parsed.rating >= 1 && parsed.rating <= 5 ? parsed.rating : null;
+      const testimonials = Array.isArray(parsed.testimonials)
+        ? parsed.testimonials.filter((t) => t && typeof t.text === 'string' && t.text.trim().length > 12).slice(0, 4)
+        : [];
+      const facts = Array.isArray(parsed.facts) ? parsed.facts.filter((f) => typeof f === 'string' && f.trim()).slice(0, 4) : [];
+      const designCues = Array.isArray(parsed.designCues) ? parsed.designCues.filter((d) => typeof d === 'string' && d.trim()).slice(0, 5) : [];
+      if (!rating && !testimonials.length && !facts.length && !designCues.length) return null;
+      return { rating, reviewCount: Number.isInteger(parsed.reviewCount) ? parsed.reviewCount : null, ratingSource: parsed.ratingSource || null, testimonials, facts, designCues };
     } catch (err) {
       logger.warn('[SITE] enrichment extraction failed', { error: err.message });
       return null;
     }
-    if (!parsed) return null;
-
-    const rating = typeof parsed.rating === 'number' && parsed.rating >= 1 && parsed.rating <= 5 ? parsed.rating : null;
-    const testimonials = Array.isArray(parsed.testimonials)
-      ? parsed.testimonials.filter((t) => t && typeof t.text === 'string' && t.text.trim().length > 12).slice(0, 4)
-      : [];
-    const facts = Array.isArray(parsed.facts) ? parsed.facts.filter((f) => typeof f === 'string' && f.trim()).slice(0, 4) : [];
-    const designCues = Array.isArray(parsed.designCues) ? parsed.designCues.filter((d) => typeof d === 'string' && d.trim()).slice(0, 5) : [];
-
-    if (!rating && !testimonials.length && !facts.length && !designCues.length) return null;
-    return {
-      rating,
-      reviewCount: Number.isInteger(parsed.reviewCount) ? parsed.reviewCount : null,
-      ratingSource: parsed.ratingSource || null,
-      testimonials,
-      facts,
-      designCues,
-    };
   }
 
   /**
@@ -936,6 +984,8 @@ BUSINESS PROFILE:
 - Services: ${(info.services || []).join(', ') || 'wellness services'}
 - Target audience: ${info.targetAudience || 'local community'}
 - Location: ${info.location || ''}
+- Address: ${info.address || ''}
+- Hours: ${JSON.stringify(info.hours || {})}
 - Unique value: ${info.uniqueValue || 'expert, compassionate care'}
 - Tone: ${info.tone || 'warm and professional'}
 - Client pain points: ${(info.painPoints || []).join('; ')}
@@ -946,6 +996,8 @@ BUSINESS PROFILE:
 - Brand colors: Primary ${primary}, Accent ${accent}
 - Testimonials: ${(info.testimonials || []).join(' | ')}
 ${renderVerifiedData(info.verifiedData)}
+${renderAssetData(info.assetData)}
+${renderIndustryBenchmarks(info.industryBenchmarks)}
 PAYMENT/BOOKING SYSTEM:
 - We recommend ${posPartner.name} for scheduling + payments
 - Referral link: ${posPartner.url}
@@ -953,7 +1005,7 @@ PAYMENT/BOOKING SYSTEM:
 
 TRUTH RULE (HIGHEST PRIORITY — overrides everything below):
 - NEVER invent facts. Do not fabricate prices, dollar amounts, star ratings, review counts, client/family counts, years in business, awards, or named testimonials/quotes.
-- Use ONLY the concrete facts provided in the BUSINESS PROFILE and VERIFIED REAL DATA below. If a fact is not provided, leave it out entirely — do not guess or approximate.
+- Use ONLY the concrete facts provided in BUSINESS PROFILE, VERIFIED REAL DATA, ASSET DATA, and INDUSTRY BENCHMARKS. If a fact is not provided, leave it out entirely — do not guess or approximate.
 - A shorter, truthful page ALWAYS beats an impressive-looking page built on invented claims. Empty is better than fake.
 
 HARD REQUIREMENTS:
@@ -967,23 +1019,27 @@ HARD REQUIREMENTS:
 8. Use CSS custom properties inside ONE small <style> block for theme tokens and any shaped background effects
 9. Do NOT use placeholder lorem ipsum, fake star ratings with no basis, or generic "AI agency" language
 10. If real testimonials are missing, use a clearly labeled section like "What clients often appreciate" instead of fabricated quotes
+11. Use real image/photo URLs from ASSET DATA when provided; otherwise use subtle gradient placeholders or CSS shapes
+12. Embed real YouTube videos from ASSET DATA as iframes in the VIDEO SECTION when available
+13. Include a "Digital Presence Score" section using INDUSTRY BENCHMARKS data when available; be honest and show improvement opportunities
 
 CLICK FUNNEL STRUCTURE (in this exact order):
 1. NAVIGATION: Logo + nav links + "Book Free Call" CTA button (sticky)
-2. HERO: Bold headline about transformation/outcome (not features). Subheadline. Two CTAs: primary "Book Your Free Consultation" + secondary "See How It Works". Add a subtle background gradient using primary color.
-3. SOCIAL PROOF BAR: ONLY include real, provided metrics (e.g. a real Google/Yelp rating + review count, or a verified years-in-business figure) from VERIFIED REAL DATA. If no real metrics are provided, OMIT this bar entirely — do NOT invent stats like "200+ served" or "5★ rated".
+2. HERO: Bold headline about transformation/outcome (not features). Subheadline. Two CTAs: primary "Book Your Free Consultation" + secondary "See How It Works". Use the real logo URL from ASSET DATA if available as an <img>. Use a real hero image URL as a background or <img> if available; otherwise a gradient.
+3. SOCIAL PROOF BAR: ONLY include real, provided metrics (e.g. a real Google/Yelp rating + review count, Instagram followers, YouTube videos) from VERIFIED REAL DATA and ASSET DATA. If no real metrics are provided, OMIT this bar entirely — do NOT invent stats like "200+ served" or "5★ rated".
 4. PROBLEM SECTION: "Does this sound familiar?" — 3 pain points as cards with icons (use emoji)
 5. SOLUTION SECTION: "Here's how we help" — 3-step process with numbered steps
 6. SERVICES SECTION: Service cards with name and description. Include a price ONLY if a real price is provided for that service — otherwise no price. "Learn More" / "Book" CTA.
-7. TESTIMONIALS: Prefer REAL reviews from VERIFIED REAL DATA — quote them verbatim with the source (e.g. "— via Google"). If NO real reviews are provided, you MAY show up to 2 illustrative sample testimonials, but EACH card MUST carry a clearly visible small-print label reading exactly: "AI-generated testimonial sample — not a real client review". Never present a sample as real, never invent a real client's name, and never attach a star rating to a sample.
+7. TESTIMONIALS: Prefer REAL reviews from ASSET DATA / VERIFIED REAL DATA — quote them verbatim with the author and source (e.g. "— Ana H. via Google"). If NO real reviews are provided, you MAY show up to 2 illustrative sample testimonials, but EACH card MUST carry a clearly visible small-print label reading exactly: "AI-generated testimonial sample — not a real client review". Never present a sample as real, never invent a real client's name, and never attach a star rating to a sample.
 8. OFFER/PACKAGES: Show pricing ONLY if a real price/priceRange is provided in the BUSINESS PROFILE or VERIFIED REAL DATA. If real pricing exists, present it accurately. If NO real pricing is provided, do NOT invent tiers or dollar amounts — instead show a single "Request pricing / Book a free consultation" CTA that links to booking.
-9. ABOUT SECTION: Brief about the practitioner, warm and personal
-10. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click)
-11. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt placeholders (links to /blog/)
-12. VIDEO SECTION: "Watch & Learn" — if videos are unavailable, show a useful educational content teaser instead of an empty embed grid
-13. BOOKING CTA SECTION: Full-width colored section "Ready to start your journey?" with big CTA button
-14. FOOTER: Logo, nav links, contact info, social links, copyright, concise trust note
-15. MOBILE STICKY CTA BAR: a bottom booking bar visible on small screens only
+9. DIGITAL PRESENCE SCORE: If INDUSTRY BENCHMARKS are provided, render a clean scorecard table (Area | Client score | Industry avg | Verdict) and a short "Where we can improve" list. Use the scores exactly as given; do not embellish.
+10. ABOUT SECTION: Brief about the practitioner, warm and personal. Use a real team image from ASSET DATA if available.
+11. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click)
+12. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt placeholders (links to /blog/)
+13. VIDEO SECTION: "Watch & Learn" — embed up to 3 real YouTube videos from ASSET DATA as iframes (src="https://www.youtube.com/embed/{videoId}"). If no real videos, show an educational teaser.
+14. BOOKING CTA SECTION: Full-width colored section "Ready to start your journey?" with big CTA button
+15. FOOTER: Logo, nav links, contact info, social links, copyright, concise trust note
+16. MOBILE STICKY CTA BAR: a bottom booking bar visible on small screens only
 
 SEO REQUIREMENTS:
 - <title> tag: [Business Name] | [City] [Industry] | [Tagline]
@@ -992,7 +1048,7 @@ SEO REQUIREMENTS:
 - Open Graph tags (og:title, og:description, og:type=website)
 - Include only truthful schema properties that are supported by the provided business data
 - All H1/H2/H3 hierarchy correct (only ONE h1)
-- Alt text on any images (use gradient placeholders, no external images)
+- Alt text on any images. Use real external image URLs from ASSET DATA when available; otherwise gradient placeholders
 - Internal links between sections
 
 DESIGN INTELLIGENCE:
@@ -1361,8 +1417,8 @@ Return ONLY valid JSON array:
   }
 
   /**
-   * Render a client-facing competitor scorecard page. Shows each competitor's
-   * 1-10 score with what they do well / poorly, and how the new site beats them.
+   * Render a client-facing scorecard page: before/after, competitor scores,
+   * presence audit, and industry benchmarks.
    */
   generateScorecardHtml(info, benchmark, presence = null, beforeAfter = null) {
     const primary = info.primaryColor || '#7C3AED';
@@ -1371,6 +1427,9 @@ Return ONLY valid JSON array:
     const presenceSection = presence ? this.generatePresenceSectionHtml(presence) : '';
     const beforeAfterSection = beforeAfter && beforeAfter.before && beforeAfter.after
       ? this.generateBeforeAfterSectionHtml(beforeAfter.before, beforeAfter.after)
+      : '';
+    const industrySection = info.industryBenchmarks?.standards?.length
+      ? this.generateIndustryBenchmarksSectionHtml(info.industryBenchmarks)
       : '';
     const cards = (benchmark?.scorecards || [])
       .map(c => {
@@ -1395,7 +1454,7 @@ Return ONLY valid JSON array:
     const beat = (brief.beat || []).map(x => `<li>${this.escapeHtml(x)}</li>`).join('');
     return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${this.escapeHtml(name)} — Competitor Scorecard</title>
+<title>${this.escapeHtml(name)} — Site Scorecard</title>
 <style>
   :root{--primary:${primary};--accent:${accent}}
   *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a2e;background:#faf9fc}
@@ -1415,9 +1474,9 @@ Return ONLY valid JSON array:
   .beat{background:#fff;border:2px solid var(--primary);border-radius:16px;padding:24px;margin-top:8px}
   .beat h3{margin:0 0 10px;color:var(--primary)}
   .section-title{font-size:20px;margin:8px 0 16px}
-  table.presence{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden}
-  table.presence th,table.presence td{padding:12px 14px;text-align:left;border-bottom:1px solid #f0f0f0;font-size:14px}
-  table.presence th{background:#f7f5fb;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#555}
+  table.presence,table.ib{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden}
+  table.presence th,table.presence td,table.ib th,table.ib td{padding:12px 14px;text-align:left;border-bottom:1px solid #f0f0f0;font-size:14px}
+  table.presence th,table.ib th{background:#f7f5fb;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#555}
   .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
   .b-ahead{background:#dcfce7;color:#166534}.b-behind{background:#fee2e2;color:#991b1b}
   .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:#f3f4f6;color:#6b7280}
@@ -1442,12 +1501,29 @@ Return ONLY valid JSON array:
 </header>
 <main>
   ${beforeAfterSection}
+  ${industrySection}
   ${presenceSection}
   ${cards ? `<h2 class="section-title">Competitor websites, scored</h2>${cards}` : ''}
   ${beat ? `<div class="beat"><h3>How your new site wins</h3><ul>${beat}</ul></div>` : ''}
-  ${!beforeAfterSection && !presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
+  ${!beforeAfterSection && !industrySection && !presenceSection && !cards ? '<p>No sites could be analyzed.</p>' : ''}
 </main>
 </body></html>`;
+  }
+
+  /**
+   * Render the industry-benchmark scorecard: where the business leads or
+   * lags against typical small-business peers in each digital area.
+   */
+  generateIndustryBenchmarksSectionHtml(benchmarks) {
+    const rows = (benchmarks.standards || [])
+      .map((s) => `<tr><td>${this.escapeHtml(s.area)}</td><td>${s.clientScore ?? '—'}/10</td><td>${s.industryAverage ?? '—'}/10</td><td>${this.escapeHtml(s.verdict)}${s.notes ? ` <small>(${this.escapeHtml(s.notes)})</small>` : ''}</td></tr>`)
+      .join('');
+    return `<h2 class="section-title">Your digital presence vs. industry averages</h2>
+  <p style="color:#555;font-size:14px;margin-bottom:16px">${this.escapeHtml(benchmarks.summary || 'Directional scores based on publicly available metrics vs typical peers.')}</p>
+  <table class="ib">
+    <thead><tr><th>Area</th><th>You</th><th>Industry avg</th><th>Verdict</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
   }
 
   /**

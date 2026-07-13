@@ -32,7 +32,7 @@ const FINDINGS_FEED = 'products/receipts/SENTRY_FINDINGS_FEED.json';
 // preview — previews live on ephemeral disk and are wiped on every redeploy, so
 // the completion gate must self-provision one or it fails closed forever and the
 // never-stop loop thrashes on the blocked step.
-const FIXTURE_URL = process.env.SENTRY_GATE_FIXTURE_URL || 'https://onlinewellroundedmama.com';
+const FIXTURE_URL = process.env.SENTRY_GATE_FIXTURE_URL || 'https://www.wellroundedmomma.com';
 
 // Ensure at least one editable preview exists on prod before the layers run.
 // Idempotent: reuses an existing preview; only builds when none is present.
