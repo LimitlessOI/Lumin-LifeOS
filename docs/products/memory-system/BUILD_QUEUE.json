@@ -49,13 +49,16 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/auth.js",
       "task": "update auth import",
       "spec": "Ensure auth.js exports necessary middleware functions for seamless operation.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "450e9fe064d5ace9d20c3a43decc6e3fdacedf4f",
+      "last_attempt_at": "2026-07-13T14:32:44.887Z",
+      "completed_at": "2026-07-13T14:32:57.068Z"
     },
     {
       "id": "5",
