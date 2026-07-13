@@ -512,7 +512,7 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-biological-age.js",
       "task": "implement biological age calculation",
       "spec": "const fetchBiologicalAge = async (userId) => { /* Fetch lab results and calculate PhenoAge and VO2 max */ }; module.exports = { fetchBiologicalAge };",
@@ -520,8 +520,8 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-13T10:51:17.174Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T10:56:41.328Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
