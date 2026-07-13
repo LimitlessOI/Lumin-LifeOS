@@ -295,9 +295,9 @@ export default class ProspectPipeline {
                 metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
                 updated_at = NOW()
           WHERE client_id = $1
-            AND status IN ('queued', 'invited', 'sent', 'failed')
-            AND COALESCE(metadata->>'deferredBuild', 'false') = 'true'
+            AND status IN ('queued', 'invited', 'sent', 'failed', 'built', 'qa_hold')
             AND (metadata->>'previewHtml' IS NULL OR metadata->>'previewHtml' = '')
+            AND COALESCE((metadata->>'repairRebuildAttempts')::int, 0) < 2
           RETURNING client_id, business_url, contact_email, contact_name, business_name, preview_url, metadata`,
         [
           clientId,

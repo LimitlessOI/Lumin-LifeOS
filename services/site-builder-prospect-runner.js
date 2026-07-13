@@ -120,7 +120,7 @@ export async function triggerBuildOnView(pipeline, clientId) {
   try {
     const result = await pipeline.pool.query(
       `SELECT client_id, business_url, contact_email, contact_name, business_name,
-              status, preview_url, metadata
+              status, preview_url, metadata, updated_at
          FROM prospect_sites
         WHERE client_id = $1
         LIMIT 1`,
@@ -139,13 +139,38 @@ export async function triggerBuildOnView(pipeline, clientId) {
   if (row.status === 'building' && activeJobs.has(String(clientId))) {
     return { ok: true, started: false, reason: 'building', building: true };
   }
-  if (metadata.deferredBuild !== true && !['queued', 'invited'].includes(String(row.status))) {
+  // A 'building' row not in *this* instance's in-memory activeJobs isn't necessarily
+  // stalled — on Railway's multi-instance deploy, the job may simply be running on a
+  // different instance than the one serving this request. Trust the DB's recency
+  // (heartbeat) over local-only state: only treat it as stuck once it's actually stale
+  // (matches the same PROSPECT_STALE_MS threshold failStaleProspectJobs uses elsewhere).
+  // Getting this wrong in the other direction is what let a real in-progress cross-
+  // instance repair get served the "couldn't finish" honest-failure page mid-build.
+  const rowUpdatedAtMs = row.updated_at ? new Date(row.updated_at).getTime() : 0;
+  if (row.status === 'building' && rowUpdatedAtMs > 0 && (Date.now() - rowUpdatedAtMs) < PROSPECT_STALE_MS) {
+    return { ok: true, started: false, reason: 'building', building: true };
+  }
+  // A terminal row (sent/built/qa_hold) with no previewHtml is not "done", it's broken —
+  // the pipeline reported success but the durable HTML write never landed (e.g. the
+  // full multi-variant path returning a shape the persist step didn't handle the same
+  // way the lean path does). Self-heal with one bounded retry instead of leaving the
+  // visitor staring at a fake "still building" page forever.
+  const repairAttempts = Number(metadata.repairRebuildAttempts) || 0;
+  const isRepairableTerminal = ['sent', 'built', 'qa_hold', 'failed'].includes(String(row.status))
+    && repairAttempts < 2;
+  if (metadata.deferredBuild !== true && !['queued', 'invited'].includes(String(row.status)) && !isRepairableTerminal) {
     return { ok: true, started: false, reason: 'not_deferred' };
   }
 
   const claimed = await pipeline.markProspectBuilding(clientId, {
     jobClaimToken: `view_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     jobClaimExpiresAt: new Date(Date.now() + 3 * 60 * 1000).toISOString(),
+    // Clear the previous attempt's failure message — otherwise a fresh, successfully
+    // in-progress build keeps reporting the prior attempt's stale error to callers
+    // polling status mid-build (observed live: "stale_building_reclaimed…" persisted
+    // through an entire successful repair run).
+    jobError: null,
+    ...(isRepairableTerminal ? { repairRebuildAttempts: repairAttempts + 1 } : {}),
   });
   if (!claimed.ok) {
     return { ok: true, started: false, reason: 'claimed_elsewhere_or_ready', building: row.status === 'building' };
@@ -162,10 +187,13 @@ export async function triggerBuildOnView(pipeline, clientId) {
     enrich: metadata.enrich === true,
     skipRepair: metadata.skipRepair !== false,
     skipBlogs: metadata.skipBlogs !== false,
-    skipAi: metadata.skipAi !== false,
-    leanTemplate: metadata.leanTemplate !== false,
+    // Repair retries always use the lean single-template path — proven to persist
+    // previewHtml reliably — rather than repeating whatever path may have produced
+    // a result the persist step couldn't durably save the first time.
+    skipAi: isRepairableTerminal ? true : (metadata.skipAi !== false),
+    leanTemplate: isRepairableTerminal ? true : (metadata.leanTemplate !== false),
     businessInfo: metadata.businessInfo || null,
-    skipQualify: metadata.skipQualify === true,
+    skipQualify: metadata.skipQualify === true || isRepairableTerminal,
   };
   if (!options.businessUrl) {
     await pipeline.failProspectJob(clientId, 'build_on_view failed — missing businessUrl');
@@ -438,24 +466,37 @@ export async function getProspectJobStatus(pool, clientId, { pipeline = null } =
     const terminal = ['sent', 'built', 'qa_hold', 'failed', 'converted', 'lost', 'expired', 'viewed', 'invited'].includes(
       String(status || '').toLowerCase()
     );
+    // Statuses implying a live, viewable preview page exists. If the job reached one of
+    // these but metadata.previewHtml never actually landed, the preview link is broken —
+    // "done" must not claim success on status alone (that's what let a broken build report
+    // done:true to a real prospect while /previews/:id kept serving a fake "still building"
+    // page forever). 'failed' has no preview to check by definition.
+    const requiresPreview = ['sent', 'built', 'qa_hold', 'converted', 'viewed'].includes(
+      String(status || '').toLowerCase()
+    );
 
     const metadataReady = metadata && typeof metadata.previewHtml === 'string' && metadata.previewHtml.length > 100;
     const deferredPending = metadata.deferredBuild === true && !metadataReady
       && ['queued', 'invited', 'building'].includes(String(status || '').toLowerCase());
+    const previewBroken = requiresPreview && !metadataReady && !deferredPending;
 
     return {
       ok: true,
       clientId: row.client_id,
       status,
-      done: (status !== 'building' && status !== 'queued' && terminal && !deferredPending) || metadataReady,
+      done: (status !== 'building' && status !== 'queued' && terminal && !deferredPending && !previewBroken) || metadataReady,
       building: status === 'building' || (deferredPending && status === 'building'),
       deferred: metadata.deferredBuild === true || undefined,
       waitingForClick: status === 'queued' || status === 'invited' || undefined,
+      previewReady: metadataReady,
+      previewBroken: previewBroken || undefined,
       previewUrl: row.preview_url,
       emailSent: row.email_sent,
       businessName: row.business_name,
       contactEmail: row.contact_email,
-      error: metadata.jobError || metadata.lastError || metadata.emailSendError || null,
+      error: previewBroken
+        ? (metadata.jobError || metadata.lastError || metadata.emailSendError || 'preview_html_missing_despite_terminal_status')
+        : (metadata.jobError || metadata.lastError || metadata.emailSendError || null),
       updatedAt: row.updated_at,
       createdAt: row.created_at,
       stale_reclaimed: staleBuilding || undefined,

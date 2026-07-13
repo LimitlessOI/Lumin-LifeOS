@@ -186,6 +186,12 @@
       "path": "routes/marketing-community-value-routes.js",
       "register": "registerMarketingCommunityValueRoutes",
       "enabled": true
+    },
+    {
+      "path": "routes/marketing-session-export-routes.js",
+      "register": "registerMarketingSessionExportRoutes",
+      "enabled": true,
+      "note": "GAP-FILL: built (BUILD_QUEUE mos-session-export/mos-r2-upload) but never auto-registered, so it stayed unreachable through 3 verify attempts. Also fixed on the same pass: the route's own local buildSessionExport/uploadAudioToR2 reimplementations never called the real services/marketing-session-export.js and services/marketing-r2-upload.js built alongside them in the same session (the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3/R2 PutObject), and the auth check used req.session.userId even though this codebase has no express-session middleware anywhere, so it would 401 every request unconditionally. Swapped to deps.requireKey, the pattern every other auto-registered route already uses."
     }
   ]
 }

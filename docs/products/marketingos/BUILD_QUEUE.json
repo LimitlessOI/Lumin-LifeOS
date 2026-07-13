@@ -497,19 +497,20 @@
     },
     {
       "id": "step-05",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/marketing-session-export-routes.js",
       "task": "Wire session export and audio upload API endpoints",
-      "spec": "Export registerMarketingSessionExportRoutes(app, deps) where deps={db, callCouncilMember}. Mount POST /marketing/session/:id/export — calls buildSessionExport, returns JSON. Mount POST /marketing/session/:id/audio — reads multipart body via busboy (already installed), calls uploadAudioToR2, returns {r2Key, r2Url}. If R2_CONFIG_MISSING error caught, respond 503 with {error, hint:'Set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME, R2_BUCKET_URL in Railway env vars'}. Mount GET /marketing/session/:id/export/status — returns latest export row from marketing_session_exports. All routes require req.session.userId else 401.",
+      "spec": "Export registerMarketingSessionExportRoutes(app, deps) where deps={pool, callCouncilMember, requireKey}. Mount POST /marketing/session/:id/export — calls the real buildSessionExport(sessionId, format, db, callCouncilMember) from services/marketing-session-export.js (not a local reimplementation), returns JSON. Mount POST /marketing/session/:id/audio — reads multipart body via busboy, calls the real uploadAudioToR2(sessionId, buffer, mimeType, db) from services/marketing-r2-upload.js (not a fabricated AI-generated URL), returns {r2Key, r2Url}. If R2_CONFIG_MISSING error caught, respond 503 with {error, hint:'Set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME, R2_BUCKET_URL in Railway env vars'}. Mount GET /marketing/session/:id/export/status — returns latest export row from marketing_session_exports. All routes require deps.requireKey (this codebase has no express-session anywhere — req.session.userId, the original spec text below the correction, can never succeed).",
       "depends_on": [
         "step-03",
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 3,
-      "commit_sha": "8369a01a2256151bafcbeba558b15ad4461e18f1",
-      "last_attempt_at": "2026-07-13T04:34:53.101Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-session-export-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "attempts": 6,
+      "commit_sha": "3b377875588b95cb617fb3e5f5c8390f37960163",
+      "last_attempt_at": "2026-07-13T08:32:13.554Z",
+      "last_error": null,
+      "gap_fill_note": "3 prior loop attempts (2026-07-13T04:29-04:34Z) all diagnosed the identical missing-auto-registration error without taking the 1-line config fix and gave up. Founder audit of the loop's commit history (2026-07-13) found and fixed 4 real, distinct bugs, verifying live after each redeploy rather than trusting the fix: (1) never auto-registered; (2) the route reimplemented broken local logic instead of calling the real services built alongside it in the same session — the R2 upload path asked an AI council member to fabricate a URL instead of doing a real S3 PutObject; (3) auth checked req.session.userId, which can never succeed since this codebase has no express-session middleware anywhere; (4) services/marketing-r2-upload.js imported @aws-sdk/client-s3, which was never added to package.json/package-lock.json/yarn.lock, so the module could not load in production since the day it was written. A stale intermediate deploy (commit 5d7bd5bab4a6, before the dependency fix landed) briefly re-blocked this same step with the now-fixed package error — resolved by the dependency-fix commit that followed. CONFIRMED LIVE 2026-07-13T08:32Z via GET /api/v1/lifeos/builder/module-health (status:mounted, error:null) AND a real functional call: GET /marketing/session/<uuid>/export/status returns 200 with real DB-backed JSON when authenticated, 401 when not — not a 404, not a crash."
     },
     {
       "id": "step-06",

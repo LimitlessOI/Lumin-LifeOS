@@ -90,6 +90,75 @@ function buildingPlaceholderHtml(clientId, businessName = '') {
 }
 
 
+/** Honest terminal state shown once repair retries (triggerBuildOnView, capped at 2) are exhausted — no more fake "still building" spinner with no work happening behind it. */
+function previewUnavailableHtml(clientId, businessName = '') {
+  const safeName = String(businessName || 'your site').replace(/[<>&"]/g, '');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preview unavailable</title>
+  <style>
+    :root { color-scheme: light; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:Georgia, "Times New Roman", serif;
+      background: radial-gradient(circle at top, #fef2f2, #f8fafc 55%); color:#0f172a; }
+    .card { max-width:28rem; padding:2rem; text-align:center; }
+    h1 { font-size:1.5rem; margin:0 0 .75rem; }
+    p { color:#475569; line-height:1.5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>We couldn't finish building ${safeName}'s preview</h1>
+    <p>Two automatic rebuild attempts didn't produce a viewable page — this needs a human look, not another retry. We've been notified.</p>
+  </div>
+</body>
+</html>`;
+}
+
+/**
+ * /build and /build-variants write only to the responding instance's local disk
+ * (via SiteBuilder's internal fs.writeFile calls) — on Railway's multi-instance /
+ * ephemeral-disk deploys, that means the returned previewUrl 404s the moment a
+ * later request lands on a different instance or the instance recycles. The
+ * prospect-pipeline flow avoids this by also writing metadata.previewHtml to
+ * prospect_sites, which GET /previews/:clientId/index.html checks first. Give
+ * direct /build and /build-variants calls the same durability, best-effort —
+ * a persistence failure here must never fail the build response itself.
+ */
+async function persistDirectBuild(pool, targetUrl, result) {
+  if (!pool || !result?.success || !result.clientId || typeof result.siteHtml !== 'string') return;
+  try {
+    await pool.query(
+      `INSERT INTO prospect_sites
+        (client_id, business_url, business_name, preview_url, status, metadata, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, 'built', $5::jsonb, NOW(), NOW())
+       ON CONFLICT (client_id) DO UPDATE SET
+         preview_url = EXCLUDED.preview_url,
+         metadata = COALESCE(prospect_sites.metadata, '{}'::jsonb) || EXCLUDED.metadata,
+         updated_at = NOW()`,
+      [
+        result.clientId,
+        targetUrl,
+        result.businessName || null,
+        result.previewUrl || null,
+        JSON.stringify({
+          previewHtml: result.siteHtml.slice(0, 400_000),
+          editToken: result.metadata?.editToken || null,
+          qualityReport: result.qualityReport || null,
+          directBuild: true,
+        }),
+      ]
+    );
+  } catch (err) {
+    logger.warn('[SITE] persistDirectBuild failed (preview will only exist on this instance)', {
+      clientId: result.clientId,
+      error: err.message,
+    });
+  }
+}
+
 let _siteBuilder = null;
 let _prospectPipeline = null;
 
@@ -427,6 +496,13 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         });
         res.set('Content-Type', 'text/html; charset=utf-8');
         res.set('Cache-Control', 'no-store');
+        // 'not_deferred' with no rebuild started means repair retries are exhausted
+        // (or the row was never buildable at all) — showing the spinner here would
+        // poll forever with no work happening behind it. Say so honestly instead.
+        if (kick?.reason === 'not_deferred' && !kick?.started) {
+          res.set('X-Preview-Source', 'unavailable');
+          return res.status(200).send(previewUnavailableHtml(clientId, row.business_name || ''));
+        }
         res.set('X-Preview-Source', 'building-placeholder');
         return res.status(200).send(buildingPlaceholderHtml(clientId, row.business_name || ''));
       }
@@ -525,6 +601,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const result = await builder.buildFromUrl(targetUrl, { businessInfo, competitorUrls });
 
+      await persistDirectBuild(pool, targetUrl, result);
       res.json({ ok: result.success, ...result });
     } catch (err) {
       logger.error('[SITE] Build error', { error: err.message });
@@ -548,6 +625,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const result = await builder.buildVariants(targetUrl, { businessInfo, competitorUrls, variantCount, styleIds });
 
+      await persistDirectBuild(pool, targetUrl, result);
       res.json({ ok: result.success, ...result });
     } catch (err) {
       logger.error('[SITE] Build-variants error', { error: err.message });
