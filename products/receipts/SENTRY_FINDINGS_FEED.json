@@ -1,34 +1,20 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T18:54:56.354Z",
-  "findings_count": 4,
+  "generated_at": "2026-07-13T19:02:56.866Z",
+  "findings_count": 2,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Template choices are visible, but 4 options can still feel like a lot if I’m just trying to get started quickly.",
-      "proposed_solution": "Show a simple starting recommendation like “Best for wellness practices” so I can begin faster.",
+      "detail": "Template choices are present, but the labels feel a little too design-focused for someone not technical.",
+      "proposed_solution": "Add a short plain-English description under each template so I know what kind of business style it creates.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The chat box accepted my text, but it wasn’t obvious what happened next after I sent it.",
-      "proposed_solution": "After I send a chat message, show a visible reply or status so I know it heard me.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_3",
-      "detail": "Save worked, but there was no clear confirmation that anything changed.",
-      "proposed_solution": "Give a stronger save confirmation, like “Saved” with a timestamp.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_4",
-      "detail": "The device toggle exists, but it may add one more thing to notice before I feel done.",
-      "proposed_solution": "Label the device toggle more clearly as “Desktop / Mobile preview” so it feels obvious.",
+      "detail": "The chat clears after sending, which makes it feel like my message may have disappeared before I know it was received.",
+      "proposed_solution": "Keep sent chat messages visible in the conversation so I can confirm what I asked and what was answered.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -38,19 +24,11 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Template choices are visible, but 4 options can still feel like a lot if I’m just trying to get started quickly."
+        "detail": "Template choices are present, but the labels feel a little too design-focused for someone not technical."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The chat box accepted my text, but it wasn’t obvious what happened next after I sent it."
-      },
-      {
-        "code": "ux_friction_3",
-        "detail": "Save worked, but there was no clear confirmation that anything changed."
-      },
-      {
-        "code": "ux_friction_4",
-        "detail": "The device toggle exists, but it may add one more thing to notice before I feel done."
+        "detail": "The chat clears after sending, which makes it feel like my message may have disappeared before I know it was received."
       }
     ]
   }

@@ -686,14 +686,15 @@ export default class SiteBuilder {
       <nav class="mt-2 flex gap-2 overflow-x-auto pb-1">
         <template x-for="(v,i) in variants" :key="v.id">
           <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400"
-            :aria-pressed="i===index" @click="show(i)">
+            :aria-pressed="i===index" @click="show(i)" :title="v.blurb">
             <span x-text="v.name"></span><span class="tier" x-text="v.tier === 'paid' ? '$1' : 'free'"></span>
           </button>
         </template>
-        <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-amber-500 text-amber-300 hover:border-amber-300" @click="showCustom()">
+        <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-amber-500 text-amber-300 hover:border-amber-300" @click="showCustom()" title="Co-design a unique template and website with us; pay only when you approve it.">
           <span>Custom co-design</span><span class="tier">$30</span>
         </button>
       </nav>
+      <p class="text-xs text-slate-300 mt-2 max-w-2xl" x-text="current.blurb || ''"></p>
     </header>
     <iframe :src="current.file" :title="current.name" x-ref="frame"></iframe>
     <div x-show="saved" x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl" x-text="savedMsg">
