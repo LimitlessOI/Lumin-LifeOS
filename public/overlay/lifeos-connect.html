@@ -96,6 +96,15 @@
     </p>
 
     <div class="panel">
+      <h2>Google (LifeOS · LifeRe · Marketing / SocialMediaOS)</h2>
+      <p class="meta" style="margin-bottom:12px">
+        One Google Cloud OAuth app powers Calendar + YouTube. You click Google once per product;
+        passwords never pass through LifeOS. Commitments / todos stay in LifeOS and can sync onto your calendar after connect.
+      </p>
+      <div id="google-hub"></div>
+    </div>
+
+    <div class="panel">
       <h2>Start a connection</h2>
       <div class="row">
         <input id="connect-url" placeholder="https://app.smartlead.ai/sign-up" value="https://app.smartlead.ai/sign-up" />
@@ -174,6 +183,95 @@
         <button class="btn" data-reveal="${service}" data-field="${field}">Show</button>
         <button class="btn" data-hide="${service}" data-field="${field}" style="display:none">Hide</button>
       </div>`;
+    }
+
+    function googleCard(title, meta, status, actionsHtml) {
+      const ok = status === 'connected' || status === 'configured';
+      const need = status === 'not_connected' || status === 'missing_oauth';
+      return `<div class="card">
+        <div class="card-head">
+          <div>
+            <div class="title">${title}</div>
+            <div class="meta">${meta || ''}</div>
+          </div>
+          <span class="badge ${ok ? 'ok' : (need ? 'need' : '')}">${status}</span>
+        </div>
+        <div class="row" style="margin-top:10px">${actionsHtml || ''}</div>
+      </div>`;
+    }
+
+    async function loadGoogleHub() {
+      const el = document.getElementById('google-hub');
+      if (!el) return;
+      el.innerHTML = '<div class="meta">Checking Google…</div>';
+      try {
+        const [calStatus, ytStatus] = await Promise.all([
+          api('/api/v1/lifeos/engine/calendar/status?user=adam').catch((e) => ({ ok: false, error: e.message })),
+          api('/api/v1/marketing/youtube/status?owner_id=adam').catch((e) => ({ ok: false, error: e.message })),
+        ]);
+
+        const calConnected = Boolean(calStatus?.google?.connected);
+        const ytConnected = Boolean(ytStatus?.connected);
+        const ytConfigured = ytStatus?.oauthConfigured !== false;
+
+        const params = new URLSearchParams(location.search);
+        const flash = params.get('google');
+        const flashHtml = flash === 'calendar_connected'
+          ? '<div class="okmsg">Google Calendar connected. Click Sync to pull events into LifeOS.</div>'
+          : '';
+
+        el.innerHTML = flashHtml +
+          googleCard(
+            'Google Calendar',
+            calConnected
+              ? `Connected${calStatus.google?.connectedSince ? ' · since ' + new Date(calStatus.google.connectedSince).toLocaleString() : ''}. Powers LifeOS Engine, LifeRe scheduling, and commitment deadlines.`
+              : (calStatus.error || 'Not connected — required for calendar + todo deadlines on Google.'),
+            calStatus.ok === false && !calConnected ? 'error' : (calConnected ? 'connected' : 'not_connected'),
+            `<button class="btn primary" id="btn-google-cal">${calConnected ? 'Reconnect' : 'Connect Calendar'}</button>
+             <button class="btn" id="btn-google-sync" ${calConnected ? '' : 'disabled'}>Sync now</button>`
+          ) +
+          googleCard(
+            'YouTube (MarketingOS / SocialMediaOS)',
+            ytConnected
+              ? 'Channel connected — upload + analytics available.'
+              : (ytConfigured
+                ? (ytStatus.redirectUri ? 'OAuth ready. Redirect: ' + ytStatus.redirectUri : 'OAuth ready on tip.')
+                : 'GOOGLE_CLIENT_ID / SECRET missing on tip.'),
+            !ytConfigured ? 'missing_oauth' : (ytConnected ? 'connected' : 'not_connected'),
+            `<button class="btn primary" id="btn-google-yt" ${ytConfigured ? '' : 'disabled'}>${ytConnected ? 'Reconnect YouTube' : 'Connect YouTube'}</button>
+             <button class="btn" id="btn-open-marketing">Open Marketing</button>`
+          );
+
+        document.getElementById('btn-google-cal')?.addEventListener('click', async () => {
+          try {
+            const r = await api('/api/v1/lifeos/engine/calendar/google/connect?user=adam');
+            if (!r.authUrl) throw new Error(r.error || 'No auth URL');
+            openExternal(r.authUrl);
+          } catch (e) { alert(e.message); }
+        });
+        document.getElementById('btn-google-sync')?.addEventListener('click', async () => {
+          try {
+            const r = await api('/api/v1/lifeos/engine/calendar/google/sync', {
+              method: 'POST',
+              body: JSON.stringify({ user: 'adam' }),
+            });
+            alert(r.synced != null ? `Synced ${r.synced} Google events into LifeOS.` : (r.error || 'Sync done'));
+            loadGoogleHub();
+          } catch (e) { alert(e.message); }
+        });
+        document.getElementById('btn-google-yt')?.addEventListener('click', async () => {
+          try {
+            const r = await api('/api/v1/marketing/youtube/connect?owner_id=adam&format=json');
+            if (!r.authUrl) throw new Error(r.error || 'No auth URL');
+            openExternal(r.authUrl);
+          } catch (e) { alert(e.message); }
+        });
+        document.getElementById('btn-open-marketing')?.addEventListener('click', () => {
+          openExternal('/marketing');
+        });
+      } catch (e) {
+        el.innerHTML = `<div class="err">${e.message}</div>`;
+      }
     }
 
     async function loadAttention() {
@@ -301,6 +399,7 @@
       }
     });
 
+    loadGoogleHub();
     loadAttention();
     loadVault();
     setInterval(() => { loadAttention(); }, 8000);
