@@ -583,14 +583,14 @@
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-member-feedback.js",
       "task": "process member feedback",
       "spec": "function processFeedback(feedback) { /* Queue for founder review */ } module.exports = { processFeedback };",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-13T12:39:45.099Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T12:44:37.822Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
