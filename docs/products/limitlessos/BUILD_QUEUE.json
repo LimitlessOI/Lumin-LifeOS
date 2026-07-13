@@ -133,15 +133,15 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/marketingos-sku-routes.js",
       "task": "implement physical marketing SKUs",
       "spec": "Exports registerMarketingOSSkuRoutes(app, deps); manages SKU operations under MarketingOS commerce layer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "commit_sha": "425b126560adef69c34f0c5d4c0814908fe297df",
-      "last_attempt_at": "2026-07-13T13:31:39.021Z",
+      "last_attempt_at": "2026-07-13T13:36:35.517Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/marketingos-sku-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
