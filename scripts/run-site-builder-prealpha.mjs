@@ -192,6 +192,9 @@ function finish(preview) {
     note: allPass
       ? 'Layer A structural walkthrough passed. Proceed to Layer B (human-sim browser + UX critique).'
       : `Layer A failed on: ${failed.join(', ')} — feature is NOT done; fix before founder handoff.`,
+    bp_sync: {
+      updated: ['builderos-reboot/BP_PRIORITY.json'],
+    },
   };
 
   try {
