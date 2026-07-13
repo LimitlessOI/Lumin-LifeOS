@@ -167,7 +167,7 @@
     },
     {
       "id": "step-08",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "scripts/wellness-studio-backfill.mjs",
       "task": "Create one-time backfill script to seed wellness sessions from existing table data",
       "spec": "ES module script. Imports pg from 'pg', reads DATABASE_URL from process.env, queries users who have joy_checkins or integrity_score_log entries but no wellness_studio_sessions row in the last 30 days, and inserts a seed session of type 'onboarding-backfill' for each via parameterised INSERT. Logs count of rows created to stdout. No AI calls. No browser globals. Designed to be run once via node scripts/wellness-studio-backfill.mjs.",
@@ -175,8 +175,8 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-13T03:46:48.086Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T03:51:29.925Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ]
