@@ -1,9 +1,15 @@
 /**
  * SYNOPSIS: Exports buildSessionExport — services/marketing-session-export.js.
+ * @ssot docs/products/marketingos/PRODUCT_HOME.md
  */
-export async function buildSessionExport(sessionId, format, db, callCouncilMember) {
+export async function buildSessionExport(sessionId, format, db, callCouncilMember, options = {}) {
   if (!sessionId) {
     throw new Error('buildSessionExport requires sessionId');
+  }
+  if (!options?.ownerId) {
+    const error = new Error('buildSessionExport requires ownerId');
+    error.statusCode = 400;
+    throw error;
   }
 
   const exportFormat = format === 'markdown' ? 'markdown' : 'json';
@@ -20,8 +26,9 @@ export async function buildSessionExport(sessionId, format, db, callCouncilMembe
     `select *
      from marketing_sessions
      where id = $1
+       and owner_id = $2
      limit 1`,
-    [sessionId]
+    [sessionId, options.ownerId]
   );
 
   const session = sessionResult.rows[0];

@@ -3,6 +3,7 @@
  * @ssot docs/products/marketingos/PRODUCT_HOME.md
  */
 import busboy from 'busboy';
+import { createHash } from 'crypto';
 import { buildSessionExport } from '../services/marketing-session-export.js';
 import { uploadAudioToR2 } from '../services/marketing-r2-upload.js';
 
@@ -14,10 +15,42 @@ function jsonError(res, status, error, extra = {}) {
   return res.status(status).json({ error, ...extra });
 }
 
+function toOwnerUuid(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return null;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{12}$/i.test(s)) {
+    return s.toLowerCase();
+  }
+  const hex = createHash('sha256').update(`marketing-owner:${s}`).digest('hex');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-5${hex.slice(13, 16)}-a${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
+}
+
+function normalizeOwnerId(req) {
+  return toOwnerUuid(
+    req.lifeosUser?.sub
+      || req.user?.id
+      || req.user?.sub
+      || req.body?.owner_id
+      || req.query?.owner_id
+      || null
+  );
+}
+
 function isR2MissingError(err) {
   const code = err?.code || err?.name;
   const msg = String(err?.message || '');
   return code === 'R2_CONFIG_MISSING' || msg.includes('R2_CONFIG_MISSING');
+}
+
+async function assertSessionOwner(db, sessionId, ownerId) {
+  const result = await db.query(
+    `SELECT id
+     FROM marketing_sessions
+     WHERE id = $1 AND owner_id = $2
+     LIMIT 1`,
+    [sessionId, ownerId]
+  );
+  return Boolean(result.rows[0]);
 }
 
 function parseMultipartAudio(req) {
@@ -58,7 +91,11 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
     try {
       const sessionId = req.params.id;
       const format = req.body?.format === 'markdown' ? 'markdown' : 'json';
-      const result = await buildSessionExport(sessionId, format, db, deps?.callCouncilMember);
+      const ownerId = normalizeOwnerId(req);
+      if (!ownerId) {
+        return jsonError(res, 400, 'owner_id_required');
+      }
+      const result = await buildSessionExport(sessionId, format, db, deps?.callCouncilMember, { ownerId });
       return res.json(result);
     } catch (err) {
       const status = err?.statusCode || (String(err?.message || '').startsWith('Session not found') ? 404 : 500);
@@ -69,6 +106,14 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
   app.post('/marketing/session/:id/audio', requireKey, async (req, res) => {
     try {
       const sessionId = req.params.id;
+      const ownerId = normalizeOwnerId(req);
+      if (!ownerId) {
+        return jsonError(res, 400, 'owner_id_required');
+      }
+      const ownsSession = await assertSessionOwner(db, sessionId, ownerId);
+      if (!ownsSession) {
+        return jsonError(res, 404, 'Session not found');
+      }
       const upload = await parseMultipartAudio(req);
       if (!upload.buffer.length) {
         return jsonError(res, 400, 'No audio file provided');
@@ -88,13 +133,18 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
 
   app.get('/marketing/session/:id/export/status', requireKey, async (req, res) => {
     try {
+      const ownerId = normalizeOwnerId(req);
+      if (!ownerId) {
+        return jsonError(res, 400, 'owner_id_required');
+      }
       const result = await db.query(
-        `SELECT *
-         FROM marketing_session_exports
-         WHERE session_id = $1
-         ORDER BY COALESCE(exported_at, created_at) DESC, created_at DESC
+        `SELECT e.*
+         FROM marketing_session_exports e
+         INNER JOIN marketing_sessions s ON s.id = e.session_id
+         WHERE e.session_id = $1 AND s.owner_id = $2
+         ORDER BY COALESCE(e.exported_at, e.created_at) DESC, e.created_at DESC
          LIMIT 1`,
-        [req.params.id]
+        [req.params.id, ownerId]
       );
 
       return res.json(result.rows[0] || null);
