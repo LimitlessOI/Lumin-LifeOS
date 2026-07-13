@@ -26,7 +26,7 @@ import { promises as fsp } from 'node:fs';
 import SiteBuilder, { POS_PARTNERS } from '../services/site-builder.js';
 import { DESIGN_SYSTEMS } from '../services/site-builder-design-systems.js';
 import { generateLogoStudioPage } from '../services/site-builder-logo-studio.js';
-import ProspectPipeline from '../services/prospect-pipeline.js';
+import ProspectPipeline, { runFollowUpCron } from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
 import {
   enqueueProspectJob,
@@ -186,6 +186,14 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     legacyHeaders: false,
   });
 
+  const publicHealthScoreLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 15,
+    message: { ok: false, error: 'Too many audits — try again in an hour' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
   // Public launch URL — sales front door
   app.get(['/site-builder', '/sitebuilder', '/sites'], (_req, res) => {
     res.redirect(302, '/overlay/site-builder-landing.html');
@@ -194,6 +202,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   /**
    * POST /api/v1/sites/public-lead
    * Public beta intake — no command key. Builds a lean preview and emails the lead when possible.
+   * Body: { businessUrl, contactEmail, businessName?, contactName?, referrer?, vertical? }
    */
   router.post('/public-lead', publicLeadLimiter, async (req, res) => {
     try {
@@ -201,6 +210,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const contactEmail = String(req.body?.contactEmail || req.body?.email || '').trim().toLowerCase();
       const businessName = String(req.body?.businessName || req.body?.name || '').trim() || undefined;
       const contactName = String(req.body?.contactName || '').trim() || undefined;
+      const referrer = String(req.body?.referrer || req.body?.referrerClientId || req.body?.ref || '').trim() || undefined;
+      const vertical = String(req.body?.vertical || req.query?.vertical || '').trim() || undefined;
 
       // Real users type "yourbusiness.com", not "https://yourbusiness.com" — normalize instead of rejecting.
       if (businessUrl && !/^https?:\/\//i.test(businessUrl)) {
@@ -226,6 +237,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         contactEmail,
         contactName,
         businessName,
+        referrer,
+        vertical,
         enrich: false,
         skipRepair: true,
         skipBlogs: true,
@@ -269,6 +282,86 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       });
     } catch (err) {
       logger.error('[SITE] Public lead error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * GET /api/v1/sites/health-score
+   * Public website health score — no command key. Rate-limited.
+   * Query: { url }
+   */
+  router.get('/health-score', publicHealthScoreLimiter, async (req, res) => {
+    try {
+      let targetUrl = String(req.query.url || '').trim();
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url is required' });
+      if (!/^https?:\/\//i.test(targetUrl)) targetUrl = `https://${targetUrl.replace(/^\/+/, '')}`;
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(targetUrl)) {
+        return res.status(400).json({ ok: false, error: 'Enter a valid website URL' });
+      }
+
+      const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
+      const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
+
+      // Rough revenue-leak estimate for the lead magnet. Not a real forecast.
+      const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
+      const vertical = String(req.query.vertical || '').trim();
+      const baseValue = leadValue[vertical] || leadValue.default;
+      const leakFactor = result.opportunityScore >= 80 ? 0.12
+        : result.opportunityScore >= 60 ? 0.08
+        : result.opportunityScore >= 40 ? 0.05
+        : result.opportunityScore >= 20 ? 0.02
+        : 0;
+      const revenueLeakEstimate = result.opportunityScore ? Math.round(baseValue * leakFactor) : 0;
+
+      return res.json({
+        ok: true,
+        ...result,
+        revenueLeakEstimate,
+        leadValue: baseValue,
+      });
+    } catch (err) {
+      logger.error('[SITE] Health score error', { error: err.message });
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
+   * GET /api/v1/sites/audit
+   * Public website revenue leak audit — alias for health-score with longer framing.
+   * Query: { url }
+   */
+  router.get('/audit', publicHealthScoreLimiter, async (req, res) => {
+    try {
+      let targetUrl = String(req.query.url || '').trim();
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url is required' });
+      if (!/^https?:\/\//i.test(targetUrl)) targetUrl = `https://${targetUrl.replace(/^\/+/, '')}`;
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(targetUrl)) {
+        return res.status(400).json({ ok: false, error: 'Enter a valid website URL' });
+      }
+
+      const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
+      const result = await scoreProspectUrl(targetUrl, { timeout: 6000 });
+
+      const leadValue = { dentist: 2500, attorney: 2400, contractor: 1500, advisor: 1800, default: 1200 };
+      const vertical = String(req.query.vertical || '').trim();
+      const baseValue = leadValue[vertical] || leadValue.default;
+      const leakFactor = result.opportunityScore >= 80 ? 0.12
+        : result.opportunityScore >= 60 ? 0.08
+        : result.opportunityScore >= 40 ? 0.05
+        : result.opportunityScore >= 20 ? 0.02
+        : 0;
+      const revenueLeakEstimate = result.opportunityScore ? Math.round(baseValue * leakFactor) : 0;
+
+      return res.json({
+        ok: true,
+        audit: true,
+        ...result,
+        revenueLeakEstimate,
+        leadValue: baseValue,
+      });
+    } catch (err) {
+      logger.error('[SITE] Audit error', { error: err.message });
       return res.status(500).json({ ok: false, error: err.message });
     }
   });
@@ -1034,7 +1127,35 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     });
   });
 
+  /**
+   * GET /api/v1/sites/referral/:clientId
+   * Public referral link for a given preview clientId.
+   */
+  router.get('/referral/:clientId', (req, res) => {
+    const { clientId } = req.params;
+    if (!clientId || !/[\w-]+/.test(String(clientId))) {
+      return res.status(400).json({ ok: false, error: 'Invalid clientId' });
+    }
+    const safeBase = String(baseUrl || '').replace(/\/$/, '') || `${req.protocol}://${req.get('host')}`;
+    const referralUrl = `${safeBase}/overlay/site-builder-landing.html?ref=${encodeURIComponent(clientId)}`;
+    return res.json({ ok: true, clientId, referralUrl });
+  });
+
   app.use('/api/v1/sites', router);
 
   logger.info('[SITE] Routes registered at /api/v1/sites/*');
+
+  // Start the 4-step follow-up / nurture cron (1h interval, 1m initial delay).
+  if (pool && notificationService?.sendEmail) {
+    const sendEmail = async (to, subject, html) => {
+      const result = await notificationService.sendEmail({ to, subject, html, text: '' });
+      if (!result.success) logger.warn('[SITE] Follow-up email not sent', { to, reason: result.error });
+      return result;
+    };
+    const tick = () => runFollowUpCron({ pool, sendEmail, baseUrl }).catch((err) => {
+      logger.warn('[SITE] Follow-up cron error', { error: err.message });
+    });
+    setTimeout(tick, 60 * 1000);
+    setInterval(tick, 60 * 60 * 1000);
+  }
 }

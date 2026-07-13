@@ -126,6 +126,8 @@ export default class ProspectPipeline {
             skipAi: options.skipAi === true,
             leanTemplate: options.leanTemplate === true,
             businessInfo: options.businessInfo || null,
+            referrer: options.referrer || null,
+            vertical: options.vertical || null,
           }),
         ]
       );
@@ -322,6 +324,8 @@ export default class ProspectPipeline {
       contactName = '',
       businessName = '',
       skipEmail = false,
+      referrer = null,
+      vertical = null,
     } = options;
 
     if (!businessUrl) return { success: false, error: 'businessUrl required' };
@@ -440,6 +444,11 @@ export default class ProspectPipeline {
         ...(buildResult.metadata || {}),
         qualityReport,
         buildCompletedAt: new Date().toISOString(),
+        referrer: referrer || undefined,
+        vertical: vertical || undefined,
+        opportunityScore: opportunityAnalysis?.opportunityScore ?? null,
+        opportunityGrade: opportunityAnalysis?.grade ?? null,
+        referralCode: clientId,
         // Survive multi-instance / redeploy ephemeral disk wipe
         previewHtml: typeof buildResult.siteHtml === 'string'
           ? buildResult.siteHtml.slice(0, 400_000)
@@ -516,6 +525,11 @@ export default class ProspectPipeline {
       metadata: {
         ...(buildResult.metadata || {}),
         qualityReport,
+        referrer: referrer || undefined,
+        vertical: vertical || undefined,
+        opportunityScore: opportunityAnalysis?.opportunityScore ?? null,
+        opportunityGrade: opportunityAnalysis?.grade ?? null,
+        referralCode: clientId,
         // Keep durable preview HTML across the post-email write (was wiped by
         // metadata = EXCLUDED.metadata before merge fix).
         previewHtml: typeof buildResult.siteHtml === 'string'
@@ -727,6 +741,72 @@ Return ONLY valid JSON:
   }
 
   /**
+   * Nurture email template (1–4 step sequence). Category-agnostic.
+   */
+  nurtureEmailHtml(contactName, businessName, previewUrl, followUpNumber = 2, referralCode = null) {
+    const name = contactName || 'there';
+    const biz = businessName || 'your business';
+    const offer = getBetaPublishOfferSummary();
+    const months = SITE_BUILDER_PRICING.carePlan.includedMonthsOnPublish || 2;
+    const referralLink = referralCode && this.baseUrl
+      ? `${String(this.baseUrl).replace(/\/$/, '')}/overlay/site-builder-landing.html?ref=${encodeURIComponent(referralCode)}`
+      : null;
+    const referralBlock = referralLink
+      ? `<p>Know another business owner who could use this? Forward them your referral link: <a href="${referralLink}" style="color:#0F766E;">${referralLink}</a>. If they publish, you get one free month of care.</p>`
+      : '';
+
+    const steps = {
+      1: {
+        subject: `${biz} — your preview should be in your inbox`,
+        body: `<p>Hi ${name},</p>
+<p>Your free preview for ${biz} is built and ready. If you missed it, here is the link again.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Open my free preview</a></p>
+<p>It is a beta-tester rate: ${SITE_BUILDER_PRICING.publish.display} to publish, includes ${months} months of care, then ${SITE_BUILDER_PRICING.carePlan.display}. No obligation.</p>
+${referralBlock}`,
+      },
+      2: {
+        subject: `Quick question about ${biz}`,
+        body: `<p>Hi ${name},</p>
+<p>Just checking in — did you get a chance to look at the preview for ${biz}? The feedback so far is that the site loads faster and makes the booking path clearer.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Review the preview</a></p>
+<p>Happy to tweak anything before you publish. Reply with what you would change.</p>
+${referralBlock}`,
+      },
+      3: {
+        subject: `Last follow-up — ${biz}`,
+        body: `<p>Hi ${name},</p>
+<p>This is my last follow-up. I completely understand if the timing is not right. If you do want the preview to go live, the beta-tester rate (${SITE_BUILDER_PRICING.publish.display}) is still open for now.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Publish ${biz} for ${SITE_BUILDER_PRICING.publish.display}</a></p>
+<p>Either way, no hard feelings. I will close the loop after this.</p>
+${referralBlock}`,
+      },
+      4: {
+        subject: `One month later — still want the ${biz} preview?`,
+        body: `<p>Hi ${name},</p>
+<p>Your preview for ${biz} has been live for a month. If you have questions or want to move forward, just reply. If not, I will leave you alone.</p>
+<p style="margin:28px 0;"><a href="${previewUrl}" style="background:#0F766E;color:white;padding:14px 26px;border-radius:4px;text-decoration:none;font-weight:bold;display:inline-block;font-family:Arial,sans-serif;">Open my preview</a></p>
+<p>The beta-tester rate is still on the table.</p>
+${referralBlock}`,
+      },
+    };
+
+    const step = steps[followUpNumber] || steps[2];
+    return `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${step.subject}</title></head>
+<body style="font-family:Georgia,'Times New Roman',serif;max-width:600px;margin:0 auto;padding:24px;color:#1a1a1a;line-height:1.55;">
+  ${step.body}
+  <p>Best,<br>The Lumin team</p>
+  <hr style="margin-top:36px;border:none;border-top:1px solid #e5e5e5;">
+  <p style="font-size:12px;color:#777;font-family:Arial,sans-serif;">
+    Beta-tester offer: ${offer}<br>
+    <a href="${previewUrl}" style="color:#0F766E;">${previewUrl}</a>
+  </p>
+</body>
+</html>`;
+  }
+
+  /**
    * Save prospect record to database.
    */
   async recordProspect(data) {
@@ -792,8 +872,8 @@ Return ONLY valid JSON:
   }
 
   /**
-   * Send follow-up sequence to a prospect (3 emails over 7 days).
-   * Call this on day 3 and day 7 after initial outreach.
+   * Send follow-up sequence to a prospect (4 emails over 14 days).
+   * followUpNumber: 1 (day 1), 2 (day 3), 3 (day 7), 4 (day 14)
    */
   async sendFollowUp(prospectId, followUpNumber = 2) {
     if (!this.pool || !this.sendEmail) return { success: false, error: 'pool and sendEmail are required' };
@@ -814,49 +894,49 @@ Return ONLY valid JSON:
       return { success: false, error: `prospect status ${row.status} is not follow-up eligible` };
     }
 
-    const subjects = {
-      2: `Quick question about ${row.business_name || 'your site preview'}`,
-      3: `Last follow-up — ${row.business_name || 'your free preview'}`,
-    };
-
-    const bodies = {
-      2: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url)
-        .replace('I just wanted to show you', 'Just following up — did you get a chance to see the preview?'),
-      3: this.fallbackEmailHtml(row.contact_name, row.business_name, row.preview_url)
-        .replace('No obligation at all', 'This is my last follow-up — completely understand if the timing isn\'t right'),
-    };
-
-    if (subjects[followUpNumber]) {
-      const delivery = await this.sendEmail(row.contact_email, subjects[followUpNumber], bodies[followUpNumber]);
-      if (delivery?.success === false) {
-        logger.warn('[PROSPECT] Follow-up email not sent', {
-          prospectId,
-          followUpNumber,
-          recipient: row.contact_email,
-          error: delivery.error || 'unknown',
-        });
-        return { success: false, error: delivery.error || 'follow-up send failed' };
-      }
-
-      await this.pool.query(
-        `UPDATE prospect_sites
-            SET follow_up_count = COALESCE(follow_up_count, 0) + 1,
-                last_follow_up_at = NOW(),
-                last_contacted_at = NOW(),
-                updated_at = NOW()
-          WHERE client_id = $1`,
-        [prospectId]
-      ).catch(() => {});
-
-      logger.info('[PROSPECT] Follow-up sent', { prospectId, followUpNumber, recipient: row.contact_email });
-      return { success: true, prospectId, followUpNumber, recipient: row.contact_email };
+    if (![1, 2, 3, 4].includes(Number(followUpNumber))) {
+      return { success: false, error: `unsupported followUpNumber ${followUpNumber}` };
     }
 
-    return { success: false, error: `unsupported followUpNumber ${followUpNumber}` };
+    const html = this.nurtureEmailHtml(
+      row.contact_name,
+      row.business_name,
+      row.preview_url,
+      Number(followUpNumber),
+      prospectId
+    );
+    const subjectMatch = html.match(/<title>([^<]*)<\/title>/);
+    const subject = subjectMatch?.[1]?.trim()
+      ? subjectMatch[1].trim()
+      : `Quick question about ${row.business_name || 'your free preview'}`;
+
+    const delivery = await this.sendEmail(row.contact_email, subject, html);
+    if (delivery?.success === false) {
+      logger.warn('[PROSPECT] Follow-up email not sent', {
+        prospectId,
+        followUpNumber,
+        recipient: row.contact_email,
+        error: delivery.error || 'unknown',
+      });
+      return { success: false, error: delivery.error || 'follow-up send failed' };
+    }
+
+    await this.pool.query(
+      `UPDATE prospect_sites
+          SET follow_up_count = COALESCE(follow_up_count, 0) + 1,
+              last_follow_up_at = NOW(),
+              last_contacted_at = NOW(),
+              updated_at = NOW()
+        WHERE client_id = $1`,
+      [prospectId]
+    ).catch(() => {});
+
+    logger.info('[PROSPECT] Follow-up sent', { prospectId, followUpNumber, recipient: row.contact_email });
+    return { success: true, prospectId, followUpNumber, recipient: row.contact_email };
   }
 }
 
-export async function runFollowUpCron({ pool, sendEmail } = {}) {
+export async function runFollowUpCron({ pool, sendEmail, baseUrl = '' } = {}) {
   if (!pool) {
     logger.warn('[PROSPECT] Follow-up cron disabled — no DB pool');
     return { success: false, error: 'pool required', processed: 0, sent: 0 };
@@ -865,6 +945,7 @@ export async function runFollowUpCron({ pool, sendEmail } = {}) {
   const pipeline = new ProspectPipeline({
     pool,
     sendEmail: sendEmail || createNoopEmailAdapter(),
+    baseUrl,
   });
 
   logger.info('[PROSPECT] Running follow-up cron');
@@ -882,10 +963,15 @@ export async function runFollowUpCron({ pool, sendEmail } = {}) {
        WHERE email_sent = TRUE
          AND contact_email IS NOT NULL
          AND status NOT IN ('converted', 'lost', 'expired')
+         AND COALESCE(follow_up_count, 0) < 4
          AND (
-           (COALESCE(follow_up_count, 0) = 0 AND created_at <= NOW() - INTERVAL '3 days')
+           (COALESCE(follow_up_count, 0) = 0 AND created_at <= NOW() - INTERVAL '1 day')
            OR
-           (COALESCE(follow_up_count, 0) = 1 AND created_at <= NOW() - INTERVAL '7 days')
+           (COALESCE(follow_up_count, 0) = 1 AND created_at <= NOW() - INTERVAL '3 days')
+           OR
+           (COALESCE(follow_up_count, 0) = 2 AND created_at <= NOW() - INTERVAL '7 days')
+           OR
+           (COALESCE(follow_up_count, 0) = 3 AND created_at <= NOW() - INTERVAL '14 days')
          )
        ORDER BY created_at ASC
     `);
@@ -894,7 +980,7 @@ export async function runFollowUpCron({ pool, sendEmail } = {}) {
     const errors = [];
 
     for (const row of result.rows) {
-      const followUpNumber = Number(row.follow_up_count || 0) === 0 ? 2 : 3;
+      const followUpNumber = Number(row.follow_up_count || 0) + 1;
       const outcome = await pipeline.sendFollowUp(row.client_id, followUpNumber);
       if (outcome?.success) sent += 1;
       else if (outcome?.error) errors.push({ clientId: row.client_id, error: outcome.error });

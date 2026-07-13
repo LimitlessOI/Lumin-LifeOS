@@ -133,6 +133,37 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
         }),
       ]
     );
+
+    // Credit the referrer (if any) with one free care month.
+    try {
+      const converted = await pool.query(
+        `SELECT metadata FROM prospect_sites WHERE client_id = $1`,
+        [clientId]
+      );
+      const metadata = converted.rows?.[0]?.metadata || {};
+      const referrer = metadata?.referrer || metadata?.referrerClientId;
+      if (referrer) {
+        const creditUntil = new Date();
+        creditUntil.setMonth(creditUntil.getMonth() + 1);
+        await pool.query(
+          `UPDATE prospect_sites
+              SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,
+                  updated_at = NOW()
+            WHERE client_id = $1`,
+          [
+            referrer,
+            JSON.stringify({
+              referralConvertedAt: new Date().toISOString(),
+              referralConvertedClientId: clientId,
+              referralCreditEarnedAt: new Date().toISOString(),
+              referralCreditUntil: creditUntil.toISOString(),
+            }),
+          ]
+        );
+      }
+    } catch (err) {
+      logger.warn('[SITE-CHECKOUT] Referral credit update failed', { error: err.message });
+    }
   }
 
   return {
