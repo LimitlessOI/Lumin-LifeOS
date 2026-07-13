@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:36:34.048Z",
+  "generated_at": "2026-07-13T23:36:43.096Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11508,
+  "file_count": 11509,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -80826,6 +80826,13 @@
       "bytes": 1159,
       "mtime": "2026-07-13T23:36:23.324Z",
       "indexed_at": "2026-07-13T23:36:23.324Z"
+    },
+    {
+      "path": "scripts/write-phase14-ledger.mjs",
+      "synopsis": "Script — Write Phase14 Ledger.",
+      "bytes": 2375,
+      "mtime": "2026-07-13T23:36:43.096Z",
+      "indexed_at": "2026-07-13T23:36:43.096Z"
     },
     {
       "path": "scripts/zero-drift-check.mjs",
