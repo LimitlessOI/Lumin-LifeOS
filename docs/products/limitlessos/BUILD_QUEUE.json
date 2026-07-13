@@ -146,13 +146,16 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/bundle-skus.js",
       "task": "bundle SKU creation",
       "spec": "Exports a function to create bundles tying website, automation, and social tiers.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "39216db91d8462b7c3283ff4a30da4ee4e57f17e",
+      "last_attempt_at": "2026-07-13T13:37:53.699Z",
+      "completed_at": "2026-07-13T13:38:04.900Z"
     },
     {
       "id": "8",
