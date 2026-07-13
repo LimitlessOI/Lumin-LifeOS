@@ -499,13 +499,16 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260422_lifeos_biological_age.sql",
       "task": "create biological-age tables",
       "spec": "CREATE TABLE IF NOT EXISTS biological_age (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, pheno_age NUMERIC, vo2_max NUMERIC, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now()); CREATE TABLE IF NOT EXISTS lab_results (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, results JSONB, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now());",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "f25557b4629653ef8b73202e28ba8bdcefa08706",
+      "last_attempt_at": "2026-07-13T10:43:40.490Z",
+      "completed_at": "2026-07-13T10:43:53.691Z"
     },
     {
       "id": "2",
