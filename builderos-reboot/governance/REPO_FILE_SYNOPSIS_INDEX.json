@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T13:48:03.261Z",
+  "generated_at": "2026-07-13T13:54:55.098Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11499,
+  "file_count": 11500,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81148,6 +81148,13 @@
       "bytes": 10098,
       "mtime": "2026-07-12T13:24:22.177Z",
       "indexed_at": "2026-07-13T09:10:46.716Z"
+    },
+    {
+      "path": "services/boldTrailContactCleanupService.js",
+      "synopsis": "Service module — BoldTrailContactCleanupService.",
+      "bytes": 1576,
+      "mtime": "2026-07-13T13:54:55.098Z",
+      "indexed_at": "2026-07-13T13:54:55.098Z"
     },
     {
       "path": "services/bp-priority-completion.js",
