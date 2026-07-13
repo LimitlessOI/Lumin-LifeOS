@@ -497,7 +497,7 @@
     },
     {
       "id": "step-05",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/marketing-session-export-routes.js",
       "task": "Wire session export and audio upload API endpoints",
       "spec": "Export registerMarketingSessionExportRoutes(app, deps) where deps={db, callCouncilMember}. Mount POST /marketing/session/:id/export — calls buildSessionExport, returns JSON. Mount POST /marketing/session/:id/audio — reads multipart body via busboy (already installed), calls uploadAudioToR2, returns {r2Key, r2Url}. If R2_CONFIG_MISSING error caught, respond 503 with {error, hint:'Set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME, R2_BUCKET_URL in Railway env vars'}. Mount GET /marketing/session/:id/export/status — returns latest export row from marketing_session_exports. All routes require req.session.userId else 401.",
@@ -506,7 +506,10 @@
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 3,
+      "commit_sha": "8369a01a2256151bafcbeba558b15ad4461e18f1",
+      "last_attempt_at": "2026-07-13T04:34:53.101Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-session-export-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "step-06",
