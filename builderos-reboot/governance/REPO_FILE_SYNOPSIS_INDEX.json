@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T13:37:59.467Z",
+  "generated_at": "2026-07-13T13:46:53.484Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11497,
+  "file_count": 11498,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -85785,6 +85785,13 @@
       "bytes": 6936,
       "mtime": "2026-07-12T13:24:22.205Z",
       "indexed_at": "2026-07-13T09:10:46.716Z"
+    },
+    {
+      "path": "services/quoteService.js",
+      "synopsis": "Service module — QuoteService.",
+      "bytes": 471,
+      "mtime": "2026-07-13T13:46:53.484Z",
+      "indexed_at": "2026-07-13T13:46:53.484Z"
     },
     {
       "path": "services/railway-managed-env-service.js",
