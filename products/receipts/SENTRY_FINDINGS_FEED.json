@@ -1,41 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T06:32:05.898Z",
-  "findings_count": 5,
+  "generated_at": "2026-07-13T06:43:06.214Z",
+  "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "The template choices are visible, but there’s no quick hint about what each one feels like before switching.",
-      "proposed_solution": "Show a one-line description under each template, like calm, modern, or warm.",
+      "detail": "The template choices don’t say what each one means, so I’d have to guess.",
+      "proposed_solution": "Add plain-language labels under each template like 'calm and clean' or 'bold and modern'.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The color palette count is shown, but it’s not obvious which palette matches my kind of business.",
-      "proposed_solution": "Add simple labels for palettes, such as soft, bright, or natural.",
+      "detail": "Three color palettes is helpful, but I can’t tell what mood or style each palette gives me.",
+      "proposed_solution": "Show a one-line description for each color palette so I can pick faster.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat box exists, but it feels a little separate from the main editing flow.",
-      "proposed_solution": "Make chat feel more built-in by suggesting what I can ask first.",
+      "detail": "The chat is there, but it’s not obvious what I should ask it first.",
+      "proposed_solution": "Give chat a starter prompt like 'Ask me to change colors, text, or layout'.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_4",
-      "detail": "Save is there, but there’s no clear sign of what changed after clicking it.",
-      "proposed_solution": "After Save, show a clear confirmation like Saved successfully and what was saved.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_5",
-      "detail": "The device toggle is present, but it isn’t obvious what I should check on each view.",
-      "proposed_solution": "Add a small tip near the device toggle explaining what to look for on mobile vs desktop.",
+      "detail": "Save is present, but there’s no clear feedback about what was saved or what changed.",
+      "proposed_solution": "After saving, show a simple confirmation like 'Saved successfully' plus what was saved.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -45,23 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "The template choices are visible, but there’s no quick hint about what each one feels like before switching."
+        "detail": "The template choices don’t say what each one means, so I’d have to guess."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The color palette count is shown, but it’s not obvious which palette matches my kind of business."
+        "detail": "Three color palettes is helpful, but I can’t tell what mood or style each palette gives me."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat box exists, but it feels a little separate from the main editing flow."
+        "detail": "The chat is there, but it’s not obvious what I should ask it first."
       },
       {
         "code": "ux_friction_4",
-        "detail": "Save is there, but there’s no clear sign of what changed after clicking it."
-      },
-      {
-        "code": "ux_friction_5",
-        "detail": "The device toggle is present, but it isn’t obvious what I should check on each view."
+        "detail": "Save is present, but there’s no clear feedback about what was saved or what changed."
       }
     ]
   }
