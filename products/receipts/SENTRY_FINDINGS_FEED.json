@@ -1,27 +1,27 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T06:51:05.651Z",
+  "generated_at": "2026-07-13T07:00:23.404Z",
   "findings_count": 3,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only 3 color palettes, so it may feel limited if I want a stronger brand look.",
-      "proposed_solution": "Show a quick confirmation or reply after I send a chat message so I know it worked.",
+      "detail": "The template choices are there, but the names don’t tell me what kind of business look I’m picking at a glance.",
+      "proposed_solution": "Use plain-language template labels like calm, premium, or energetic so I can choose faster.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The template choices are a bit sparse with just 4 options, which could make it harder to find a close match quickly.",
-      "proposed_solution": "Add a few more template options to make it easier to find a style that fits my business.",
+      "detail": "There are only 3 palette options, so it feels a little limited if I want to quickly match my brand.",
+      "proposed_solution": "Show palette previews with more descriptive names to make branding easier.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat sent my message, but there was no visible response, so it may feel like nothing happened.",
-      "proposed_solution": "Offer a little more guidance on what each palette changes, so I can choose faster without guessing.",
+      "detail": "The chat box accepts input, but it’s not obvious what it does after I send a message.",
+      "proposed_solution": "After I send a chat message, show a clear response or next step so I know the help is working.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -31,15 +31,15 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only 3 color palettes, so it may feel limited if I want a stronger brand look."
+        "detail": "The template choices are there, but the names don’t tell me what kind of business look I’m picking at a glance."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The template choices are a bit sparse with just 4 options, which could make it harder to find a close match quickly."
+        "detail": "There are only 3 palette options, so it feels a little limited if I want to quickly match my brand."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat sent my message, but there was no visible response, so it may feel like nothing happened."
+        "detail": "The chat box accepts input, but it’s not obvious what it does after I send a message."
       }
     ]
   }
