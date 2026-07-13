@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:36:16.090Z",
+  "generated_at": "2026-07-13T23:36:23.324Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11507,
   "files": [
@@ -80816,9 +80816,9 @@
     {
       "path": "scripts/wellness-studio-backfill.mjs",
       "synopsis": "Script — Wellness Studio Backfill.",
-      "bytes": 1193,
-      "mtime": "2026-07-13T23:34:50.647Z",
-      "indexed_at": "2026-07-13T23:34:50.647Z"
+      "bytes": 1159,
+      "mtime": "2026-07-13T23:36:23.324Z",
+      "indexed_at": "2026-07-13T23:36:23.324Z"
     },
     {
       "path": "scripts/zero-drift-check.mjs",

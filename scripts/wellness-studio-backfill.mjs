@@ -16,42 +16,40 @@ const client = new Client({
 });
 
 const BACKFILL_SQL = `
-WITH eligible_users AS (
+WITH candidate_users AS (
   SELECT DISTINCT user_id
   FROM (
     SELECT user_id FROM joy_checkins
     UNION
     SELECT user_id FROM integrity_score_log
-  ) src
+  ) AS activity
   WHERE user_id IS NOT NULL
 ),
-missing_sessions AS (
-  SELECT eu.user_id
-  FROM eligible_users eu
+users_needing_sessions AS (
+  SELECT c.user_id
+  FROM candidate_users c
   WHERE NOT EXISTS (
     SELECT 1
-    FROM wellness_studio_sessions wss
-    WHERE wss.user_id = eu.user_id
-      AND wss.created_at >= NOW() - INTERVAL '30 days'
+    FROM wellness_studio_sessions s
+    WHERE s.user_id = c.user_id
+      AND s.created_at >= NOW() - INTERVAL '30 days'
   )
 )
 INSERT INTO wellness_studio_sessions (user_id, session_type, created_at, updated_at)
 SELECT user_id, $1, NOW(), NOW()
-FROM missing_sessions
+FROM users_needing_sessions
 RETURNING id;
 `;
 
 async function main() {
   await client.connect();
+
   try {
     const result = await client.query(BACKFILL_SQL, ['onboarding-backfill']);
-    console.log(result.rowCount ?? 0);
+    process.stdout.write(`${result.rowCount ?? 0}\n`);
   } finally {
     await client.end();
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+await main();
