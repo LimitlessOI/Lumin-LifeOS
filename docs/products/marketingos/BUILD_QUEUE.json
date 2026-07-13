@@ -482,7 +482,7 @@
     },
     {
       "id": "step-04",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/marketing-session-export.js",
       "task": "Implement session-to-export content assembly service",
       "spec": "Export async buildSessionExport(sessionId, format, db, callCouncilMember) where format is 'json'|'markdown'. Loads the session, its approved content pieces, and brand voice from DB. Calls callCouncilMember('strategist', prompt) to produce a final export summary string. Inserts a row into marketing_session_exports via db. Returns {exportText, exportFormat, sessionId}. No browser globals. No direct AI SDK import.",
@@ -490,7 +490,10 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "10726245627d59c332ecffbf58d5cb0779a834ea",
+      "last_attempt_at": "2026-07-13T04:17:31.379Z",
+      "completed_at": "2026-07-13T04:17:51.646Z"
     },
     {
       "id": "step-05",
