@@ -2,77 +2,70 @@
 
 # Memory TTL Policy
 
-This document defines the implementation-level retention policy for memory records used by the application. ## Core Model
+This document defines the implementation-level TTL and archive behavior for memory records in this repository. ## Purpose
 
-Each memory record MUST include:
+Memory records are retained in the active store for a bounded time window, then moved to an archive store for long-term retention and reduced operational cost. ## Record Types
 
-- `id`: unique identifier
-- `createdAt`: ISO-8601 timestamp
-- `updatedAt`: ISO-8601 timestamp
-- `lastAccessedAt`: ISO-8601 timestamp, updated on read when applicable
-- `ttlMs`: time-to-live in milliseconds
-- `expiresAt`: computed expiration timestamp
-- `status`: one of `active`, `stale`, `archived`, `expired`, `deleted`
-- `archiveAt`: optional timestamp when the record is moved to archive storage
-- `deletedAt`: optional timestamp when the record is removed from active and archive storage
+Apply this policy to any persisted memory object that is time-scoped, including:
 
-## TTL Semantics
+- user memories
+- session memories
+- agent observations
+- derived summaries
+- operational notes that are stored with a timestamp
+
+Each memory record must include:
+
+- `id`
+- `createdAt` as an ISO-8601 timestamp
+- `updatedAt` as an ISO-8601 timestamp
+- `ttlMs` or a policy-resolved TTL value
+- `status` with one of:
+  - `active`
+  - `archived`
+  - `deleted`
+
+## TTL Rules
 
 ### Default TTL
 
-Unless a shorter or longer TTL is explicitly assigned, memory records default to:
+If a record does not specify its own TTL, use the default active TTL:
 
-- `ttlMs = 30 days`
+- `DEFAULT_MEMORY_TTL_MS = 30 days`
 
-The system should treat this as the baseline retention window for ordinary memories. ### Per-Record TTL
+### Override TTL
 
-Implementations may assign per-record TTL values based on memory type or confidence, for example:
+A record may provide a TTL override when it is created. The override must be a finite positive integer in milliseconds. Validation rules:
 
-- short-lived operational memory: hours to days
-- user preference memory: weeks to months
-- stable profile memory: months
-- temporary task context: minutes to days
+- if `ttlMs` is missing, use the default TTL
+- if `ttlMs <= 0`, reject the write or coerce to the default depending on the calling layer’s policy
+- if `ttlMs` exceeds the configured maximum, clamp it to the maximum allowed TTL
 
-A record-specific TTL always overrides the default TTL. ### Expiration Calculation
+### Maximum TTL
 
-`expiresAt` MUST be computed as:
+To prevent indefinite active retention, active TTL must be bounded:
 
-- `expiresAt = createdAt + ttlMs`
+- `MAX_MEMORY_TTL_MS = 180 days`
 
-If a record is refreshed or rewritten, implementations MAY either:
+Any active record older than this bound must be archived or deleted by lifecycle processing. ## Expiration Semantics
 
-- preserve the original `createdAt` and keep the original expiration, or
-- update `createdAt` and recalculate `expiresAt`
+A record expires when:
 
-The chosen behavior MUST be consistent within a given memory type. For user-facing preferences and durable facts, prefer preserving the original creation time unless the content materially changes. ## Access Refresh Policy
+- `now >= createdAt + ttlMs`
 
-A read operation MUST NOT automatically extend TTL unless the memory type explicitly opts into sliding expiration. ### Fixed TTL
+Expiration does not immediately imply deletion. Expired records transition through an archive step first unless the record is explicitly configured for direct purge. ## Lifecycle States
 
-For fixed-TTL memories:
+### Active
 
-- reads update `lastAccessedAt`
-- reads do not change `expiresAt`
+A record is active when it is eligible for normal reads, indexing, and ranking. Archived records:
 
-### Sliding TTL
+- are excluded from default active queries
+- remain readable through archive-specific APIs
+- should not be re-ranked with active memories
+- may be compacted into cheaper storage
 
-For sliding-TTL memories:
+### Deleted
 
-- reads update `lastAccessedAt`
-- reads MAY extend `expiresAt` by resetting it to `now + ttlMs`
+A record is deleted when it is no longer required for retention. Recommended defaults:
 
-Sliding TTL should only be used when the memory is meant to stay alive while actively used. ### Archived
-
-A record is `archived` when it is no longer part of the primary active set but is retained for low-cost historical access. ### Expired
-
-A record is `expired` when:
-
-- `now >= expiresAt`
-
-Expired records are no longer treated as active memories. Expired records MAY remain in archive storage if archive retention applies. ### Deleted
-
-A record is `deleted` when:
-
-- it has been removed from both active and archive storage, or
-- a hard-delete request has been processed
-
-Deleted records
+- `DEFAULT_ARCHIVE_TTL_MS
