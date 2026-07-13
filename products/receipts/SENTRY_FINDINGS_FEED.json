@@ -1,41 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T03:33:44.374Z",
-  "findings_count": 5,
+  "generated_at": "2026-07-13T04:06:50.624Z",
+  "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "The site preview appears to use placeholder/parked content instead of a real business site, so I can’t tell if my own content is being preserved.",
-      "proposed_solution": "Show a clear real-site preview loaded with my actual business content, not placeholder content.",
+      "detail": "Template names like 'editorial-luxe' and 'organic-warm' feel a little design-y instead of plain and obvious.",
+      "proposed_solution": "Use plain-language template names and short descriptions under each one.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The template chips and palette options are visible, but they don’t explain what changes they make before I click them.",
-      "proposed_solution": "Add short labels or helper text for templates and palettes so I know what each choice will do.",
+      "detail": "There are only 4 template choices, so it may feel a bit limited if I want more directions.",
+      "proposed_solution": "Show a quick 'best for' hint on each template and palette.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat is present, but it isn’t clear what I should ask it for or how it helps me finish the site.",
-      "proposed_solution": "Give chat a few suggested prompts like 'write my homepage intro' or 'change my colors' to make it easier to use.",
+      "detail": "The chat box is present, but it’s not clear what I should ask it for first.",
+      "proposed_solution": "Add a first-time helper prompt in chat like 'Ask me to change colors, fonts, or layout.'",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_4",
-      "detail": "The save/publish actions are there, but I don’t see strong reassurance about what was saved or what happens next.",
-      "proposed_solution": "After save, show a simple confirmation like 'Your changes were saved' and what was included.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_5",
-      "detail": "Device toggle exists, but it’s not obvious how to compare versions or whether the changes are truly responsive.",
-      "proposed_solution": "Make the device toggle more obvious with side-by-side or labeled desktop/mobile previews so I can compare quickly.",
+      "detail": "Save worked, but there wasn’t a clear sign of what changed when I clicked it.",
+      "proposed_solution": "Make Save give a very clear confirmation, like 'Saved' or 'All changes saved.'",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -45,23 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "The site preview appears to use placeholder/parked content instead of a real business site, so I can’t tell if my own content is being preserved."
+        "detail": "Template names like 'editorial-luxe' and 'organic-warm' feel a little design-y instead of plain and obvious."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The template chips and palette options are visible, but they don’t explain what changes they make before I click them."
+        "detail": "There are only 4 template choices, so it may feel a bit limited if I want more directions."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat is present, but it isn’t clear what I should ask it for or how it helps me finish the site."
+        "detail": "The chat box is present, but it’s not clear what I should ask it for first."
       },
       {
         "code": "ux_friction_4",
-        "detail": "The save/publish actions are there, but I don’t see strong reassurance about what was saved or what happens next."
-      },
-      {
-        "code": "ux_friction_5",
-        "detail": "Device toggle exists, but it’s not obvious how to compare versions or whether the changes are truly responsive."
+        "detail": "Save worked, but there wasn’t a clear sign of what changed when I clicked it."
       }
     ]
   }
