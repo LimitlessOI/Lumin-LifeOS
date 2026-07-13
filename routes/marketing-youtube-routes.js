@@ -4,11 +4,15 @@
 import { createYouTubeService } from '../services/marketing-youtube.js';
 
 function resolveOwnerId(req) {
-  return req?.user?.id
-    ?? req?.lifeosUser?.sub
-    ?? req?.query?.owner_id
-    ?? req?.body?.owner_id
-    ?? null;
+  const explicit = req?.query?.owner_id ?? req?.body?.owner_id ?? null;
+  if (isNonEmptyString(explicit)) return String(explicit).trim();
+
+  const fromUser = req?.lifeosUser?.sub ?? req?.user?.id ?? null;
+  if (!isNonEmptyString(fromUser)) return null;
+  const id = String(fromUser).trim();
+  // Command-key auth sometimes stamps synthetic ids — never use those as YouTube owners.
+  if (id === 'emergency-key' || id === 'command-key' || id.startsWith('cmd-')) return null;
+  return id;
 }
 
 function isNonEmptyString(value) {
