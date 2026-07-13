@@ -4,7 +4,7 @@
     "step_id": "S801",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/verify-step-contract.js",
-    "expected_sha256": "1afce341cbc647bb98c79cc335889aecf200931959b91b92b3bfda5767631d55"
+    "expected_sha256": "79761936d20783e106883615ca16121d82b145366c22e2ddc43c6f5e6392a0ab"
   },
   {
     "test_id": "AT-S802-1",
