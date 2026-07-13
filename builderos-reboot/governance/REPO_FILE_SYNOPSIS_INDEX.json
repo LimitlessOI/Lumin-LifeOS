@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T12:16:50.573Z",
+  "generated_at": "2026-07-13T12:19:04.473Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11489,
+  "file_count": 11490,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65610,6 +65610,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/lifeos-biological-age-routes.js",
+      "synopsis": "Registers LifeosBiologicalAgeRoutes routes/handlers (routes/lifeos-biological-age-routes.js).",
+      "bytes": 1786,
+      "mtime": "2026-07-13T12:19:04.473Z",
+      "indexed_at": "2026-07-13T12:19:04.473Z"
     },
     {
       "path": "routes/lifeos-briefing-routes.js",
