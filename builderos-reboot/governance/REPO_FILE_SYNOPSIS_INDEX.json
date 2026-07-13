@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T07:24:07.294Z",
+  "generated_at": "2026-07-13T08:23:56.372Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11484,
+  "file_count": 11485,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3470229,
-      "mtime": "2026-07-13T07:08:03.833Z",
-      "indexed_at": "2026-07-13T07:08:08.672Z"
+      "bytes": 3470653,
+      "mtime": "2026-07-13T08:23:30.637Z",
+      "indexed_at": "2026-07-13T08:23:56.372Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30391,9 +30391,9 @@
     {
       "path": "config/auto-registered-product-modules.json",
       "synopsis": "Configuration — Auto Registered Product Modules.",
-      "bytes": 11831,
-      "mtime": "2026-07-12T21:11:30.158Z",
-      "indexed_at": "2026-07-13T07:08:02.540Z",
+      "bytes": 12738,
+      "mtime": "2026-07-13T08:20:34.494Z",
+      "indexed_at": "2026-07-13T08:23:56.372Z",
       "synopsis_index_only": true
     },
     {
@@ -38926,9 +38926,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 178282,
-      "mtime": "2026-07-13T07:05:48.063Z",
-      "indexed_at": "2026-07-13T07:08:02.540Z"
+      "bytes": 181029,
+      "mtime": "2026-07-13T08:23:00.215Z",
+      "indexed_at": "2026-07-13T08:23:56.372Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39500,9 +39500,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 103469,
-      "mtime": "2026-07-13T03:41:54.517Z",
-      "indexed_at": "2026-07-13T07:08:02.540Z"
+      "bytes": 106953,
+      "mtime": "2026-07-13T08:22:14.776Z",
+      "indexed_at": "2026-07-13T08:23:56.372Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66098,9 +66098,12 @@
     {
       "path": "routes/marketing-session-export-routes.js",
       "synopsis": "Exports registerMarketingSessionExportRoutes — routes/marketing-session-export-routes.js.",
-      "bytes": 5560,
-      "mtime": "2026-07-13T07:02:23.884Z",
-      "indexed_at": "2026-07-13T07:08:02.540Z"
+      "bytes": 3735,
+      "mtime": "2026-07-13T08:19:56.689Z",
+      "indexed_at": "2026-07-13T08:23:56.372Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "routes/marketing-session-routes.js",
@@ -70147,6 +70150,16 @@
       "bytes": 2905,
       "mtime": "2026-06-29T17:44:54.634Z",
       "indexed_at": "2026-07-13T07:08:02.540Z",
+      "ssot": [
+        "docs/products/builderos/PRODUCT_HOME.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-gap-fill-honesty.mjs",
+      "synopsis": "Blocks a GAP-FILL commit that claims \"no blueprint/mission pack exists\"",
+      "bytes": 4287,
+      "mtime": "2026-07-13T08:15:23.930Z",
+      "indexed_at": "2026-07-13T08:23:56.372Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

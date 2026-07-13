@@ -1,7 +1,10 @@
 /**
  * SYNOPSIS: Exports registerMarketingSessionExportRoutes — routes/marketing-session-export-routes.js.
+ * @ssot docs/products/marketingos/PRODUCT_HOME.md
  */
 import busboy from 'busboy';
+import { buildSessionExport } from '../services/marketing-session-export.js';
+import { uploadAudioToR2 } from '../services/marketing-r2-upload.js';
 
 function normalizeDb(deps) {
   return deps?.db || deps?.pool;
@@ -11,56 +14,14 @@ function jsonError(res, status, error, extra = {}) {
   return res.status(status).json({ error, ...extra });
 }
 
-function getUserId(req) {
-  return req?.session?.userId ?? null;
-}
-
 function isR2MissingError(err) {
   const code = err?.code || err?.name;
   const msg = String(err?.message || '');
   return code === 'R2_CONFIG_MISSING' || msg.includes('R2_CONFIG_MISSING');
 }
 
-async function buildSessionExport(sessionId, deps) {
-  const db = normalizeDb(deps);
-  if (!db) throw new Error('DB client unavailable');
-
-  const sessionResult = await db.query(
-    'SELECT * FROM marketing_sessions WHERE id = $1 LIMIT 1',
-    [sessionId]
-  );
-
-  const session = sessionResult.rows[0];
-  if (!session) {
-    const err = new Error('Session not found');
-    err.statusCode = 404;
-    throw err;
-  }
-
-  const exportPayload = {
-    session,
-  };
-
-  const exportUrl = `${deps.baseUrl || ''}/marketing/session/${sessionId}/export`;
-
-  const inserted = await db.query(
-    `INSERT INTO marketing_session_exports (session_id, exported_at, export_format, export_url)
-     VALUES ($1, NOW(), $2, $3)
-     RETURNING *`,
-    [sessionId, 'json', exportUrl]
-  );
-
-  return {
-    exportRow: inserted.rows[0],
-    exportPayload,
-  };
-}
-
-async function uploadAudioToR2(req, sessionId, deps) {
-  const db = normalizeDb(deps);
-  if (!db) throw new Error('DB client unavailable');
-
-  const upload = await new Promise((resolve, reject) => {
+function parseMultipartAudio(req) {
+  return new Promise((resolve, reject) => {
     const bb = busboy({ headers: req.headers });
     const chunks = [];
     let filename = null;
@@ -79,90 +40,40 @@ async function uploadAudioToR2(req, sessionId, deps) {
 
     bb.on('error', reject);
     bb.on('finish', () => {
-      resolve({
-        buffer: Buffer.concat(chunks),
-        filename,
-        mimeType,
-      });
+      resolve({ buffer: Buffer.concat(chunks), filename, mimeType });
     });
 
     req.pipe(bb);
   });
-
-  if (!upload.buffer.length) {
-    const err = new Error('No audio file provided');
-    err.statusCode = 400;
-    throw err;
-  }
-
-  const key = `marketing-sessions/${sessionId}/${Date.now()}-${upload.filename || 'audio'}`;
-
-  if (!deps?.callCouncilMember) {
-    const err = new Error('R2_CONFIG_MISSING');
-    err.code = 'R2_CONFIG_MISSING';
-    throw err;
-  }
-
-  const resultText = await deps.callCouncilMember(
-    'ops',
-    JSON.stringify({
-      action: 'uploadAudioToR2',
-      sessionId,
-      key,
-      mimeType: upload.mimeType,
-      size: upload.buffer.length,
-      note: 'Return a JSON object with r2Url only if upload is handled externally; otherwise confirm configuration missing.',
-    })
-  );
-
-  let r2Url = null;
-  try {
-    const parsed = JSON.parse(resultText);
-    r2Url = parsed?.r2Url || null;
-  } catch {
-    r2Url = null;
-  }
-
-  if (!r2Url) {
-    const err = new Error('R2_CONFIG_MISSING');
-    err.code = 'R2_CONFIG_MISSING';
-    throw err;
-  }
-
-  const inserted = await db.query(
-    `INSERT INTO marketing_audio_uploads (session_id, r2_key, r2_url, upload_status, error_text)
-     VALUES ($1, $2, $3, $4, $5)
-     RETURNING *`,
-    [sessionId, key, r2Url, 'uploaded', null]
-  );
-
-  return {
-    uploadRow: inserted.rows[0],
-    r2Key: key,
-    r2Url,
-  };
 }
 
 export async function registerMarketingSessionExportRoutes(app, deps) {
-  app.post('/marketing/session/:id/export', async (req, res) => {
-    if (!getUserId(req)) return jsonError(res, 401, 'Unauthorized');
+  const db = normalizeDb(deps);
+  const requireKey = deps?.requireKey;
+  if (!db || typeof requireKey !== 'function') {
+    throw new Error('registerMarketingSessionExportRoutes requires deps.pool (or deps.db) and deps.requireKey');
+  }
 
+  app.post('/marketing/session/:id/export', requireKey, async (req, res) => {
     try {
       const sessionId = req.params.id;
-      const result = await buildSessionExport(sessionId, deps);
+      const format = req.body?.format === 'markdown' ? 'markdown' : 'json';
+      const result = await buildSessionExport(sessionId, format, db, deps?.callCouncilMember);
       return res.json(result);
     } catch (err) {
-      const status = err?.statusCode || 500;
+      const status = err?.statusCode || (String(err?.message || '').startsWith('Session not found') ? 404 : 500);
       return jsonError(res, status, err?.message || 'Failed to build session export');
     }
   });
 
-  app.post('/marketing/session/:id/audio', async (req, res) => {
-    if (!getUserId(req)) return jsonError(res, 401, 'Unauthorized');
-
+  app.post('/marketing/session/:id/audio', requireKey, async (req, res) => {
     try {
       const sessionId = req.params.id;
-      const result = await uploadAudioToR2(req, sessionId, deps);
+      const upload = await parseMultipartAudio(req);
+      if (!upload.buffer.length) {
+        return jsonError(res, 400, 'No audio file provided');
+      }
+      const result = await uploadAudioToR2(sessionId, upload.buffer, upload.mimeType, db);
       return res.json({ r2Key: result.r2Key, r2Url: result.r2Url });
     } catch (err) {
       if (isR2MissingError(err)) {
@@ -175,13 +86,8 @@ export async function registerMarketingSessionExportRoutes(app, deps) {
     }
   });
 
-  app.get('/marketing/session/:id/export/status', async (req, res) => {
-    if (!getUserId(req)) return jsonError(res, 401, 'Unauthorized');
-
+  app.get('/marketing/session/:id/export/status', requireKey, async (req, res) => {
     try {
-      const db = normalizeDb(deps);
-      if (!db) return jsonError(res, 500, 'DB client unavailable');
-
       const result = await db.query(
         `SELECT *
          FROM marketing_session_exports

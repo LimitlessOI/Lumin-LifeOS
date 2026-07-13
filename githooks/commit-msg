@@ -3,6 +3,7 @@
 # Tracked: githooks/commit-msg → install via npm run hooks:install
 # @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
 
+ROOT="$(git rev-parse --show-toplevel)"
 COMMIT_MSG_FILE="$1"
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 
@@ -25,6 +26,17 @@ if [ -n "$STAGED_PRODUCT" ]; then
       exit 1
       ;;
   esac
+fi
+
+# ── 1b. §2.11 GAP-FILL honesty gate (HARD) ────────────────────────────────────
+# The check above only verifies a GAP-FILL commit message EXISTS and is shaped
+# right — it never verified the justification inside it was TRUE. A real incident
+# (commit ac50782319) hand-authored Site Builder server code citing "no BuilderOS
+# mission pack exists" when docs/products/site-builder/BUILD_QUEUE.json already had
+# 33 tracked steps. This cross-checks any "no blueprint exists" style claim against
+# the real BUILD_QUEUE.json files on disk before allowing the commit.
+if ! node "$ROOT/scripts/verify-gap-fill-honesty.mjs" "$COMMIT_MSG_FILE"; then
+  exit 1
 fi
 
 # ── 2. §2.15 Intent Drift gate ────────────────────────────────────────────────
