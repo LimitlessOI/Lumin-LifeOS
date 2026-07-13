@@ -8,63 +8,44 @@ const { Client } = pg;
 const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
-  console.error('DATABASE_URL is required');
-  process.exit(1);
+  throw new Error('DATABASE_URL is required');
 }
 
 const client = new Client({
-  connectionString: DATABASE_URL
+  connectionString: DATABASE_URL,
 });
 
-const SELECT_ELIGIBLE_USERS = `
-  WITH recent_activity AS (
-    SELECT user_id
-    FROM joy_checkins
-    WHERE created_at >= NOW() - INTERVAL '30 days'
-    GROUP BY user_id
-
+const BACKFILL_SQL = `
+WITH eligible_users AS (
+  SELECT DISTINCT user_id
+  FROM (
+    SELECT user_id FROM joy_checkins
     UNION
-
-    SELECT user_id
-    FROM integrity_score_log
-    WHERE created_at >= NOW() - INTERVAL '30 days'
-    GROUP BY user_id
-  ),
-  recent_sessions AS (
-    SELECT user_id
-    FROM wellness_studio_sessions
-    WHERE created_at >= NOW() - INTERVAL '30 days'
-    GROUP BY user_id
+    SELECT user_id FROM integrity_score_log
+  ) src
+  WHERE user_id IS NOT NULL
+),
+missing_sessions AS (
+  SELECT eu.user_id
+  FROM eligible_users eu
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM wellness_studio_sessions wss
+    WHERE wss.user_id = eu.user_id
+      AND wss.created_at >= NOW() - INTERVAL '30 days'
   )
-  SELECT DISTINCT ra.user_id
-  FROM recent_activity ra
-  LEFT JOIN recent_sessions rs ON rs.user_id = ra.user_id
-  WHERE rs.user_id IS NULL
-`;
-
-const INSERT_SESSION = `
-  INSERT INTO wellness_studio_sessions (
-    user_id,
-    session_type,
-    created_at,
-    updated_at
-  )
-  VALUES ($1, $2, NOW(), NOW())
+)
+INSERT INTO wellness_studio_sessions (user_id, session_type, created_at, updated_at)
+SELECT user_id, $1, NOW(), NOW()
+FROM missing_sessions
+RETURNING id;
 `;
 
 async function main() {
   await client.connect();
-
   try {
-    const { rows } = await client.query(SELECT_ELIGIBLE_USERS);
-    let created = 0;
-
-    for (const row of rows) {
-      await client.query(INSERT_SESSION, [row.user_id, 'onboarding-backfill']);
-      created += 1;
-    }
-
-    process.stdout.write(`${created}\n`);
+    const result = await client.query(BACKFILL_SQL, ['onboarding-backfill']);
+    console.log(result.rowCount ?? 0);
   } finally {
     await client.end();
   }
@@ -72,5 +53,5 @@ async function main() {
 
 main().catch((error) => {
   console.error(error);
-  process.exit(1);
+  process.exitCode = 1;
 });
