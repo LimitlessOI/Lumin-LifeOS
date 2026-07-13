@@ -58,11 +58,15 @@ const TC_CATEGORIES = new Set([CATEGORIES.TC_CONTRACT, CATEGORIES.TC_DEADLINE, C
 // ── Spam patterns ──────────────────────────────────────────────────────────
 // These are high-confidence spam signals — no AI needed.
 const SPAM_SENDER_PATTERNS = [
-  /noreply|no-reply|donotreply|do-not-reply|mailer-daemon/i,
+  /mailer-daemon/i,
   /@.*bulk|@.*mass|@.*blast/i,
   /unsubscribe@|optout@|list-unsubscribe/i,
   /@shared\d*\.ccsend\.com$/i,
   /@.*\.ccsend\.com$/i,
+  /@propertyblasthomes\.com$/i,
+  /@fastemail\.email$/i,
+  /@email-homesforheroes\.com$/i,
+  /@movies\.fandango\.com$/i,
 ];
 const SPAM_SUBJECT_PATTERNS = [
   /\b(you('ve| have) won|you are (selected|chosen)|congratulations.*prize|claim your (reward|prize|gift))\b/i,
@@ -364,6 +368,77 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
     ).catch(() => {});
   }
 
+  // Reclassify already-logged triage rows as spam (no full mailbox walk).
+  // Then trash matching UIDs in one IMAP session.
+  async function purgeLoggedSpam({ limit = 200, dryRun = false } = {}) {
+    const { rows } = await pool.query(
+      `SELECT id, uid, from_address, subject
+         FROM email_triage_log
+        WHERE spam_deleted IS NOT TRUE
+          AND actioned_at IS NULL
+        ORDER BY received_at DESC
+        LIMIT $1`,
+      [Math.min(500, Math.max(1, Number(limit) || 200))]
+    ).catch(() => ({ rows: [] }));
+
+    const hits = [];
+    for (const row of rows) {
+      const from = row.from_address || '';
+      const subject = row.subject || '';
+      const blocked = await isSpamBlocked(from);
+      if (blocked || isDefiniteSpam(subject, from)) {
+        hits.push(row);
+      }
+    }
+
+    if (dryRun) {
+      return {
+        ok: true,
+        dry_run: true,
+        scanned: rows.length,
+        would_purge: hits.length,
+        samples: hits.slice(0, 15).map((h) => ({
+          subject: h.subject,
+          from: h.from_address,
+        })),
+      };
+    }
+
+    for (const row of hits) {
+      await updateExistingAsSpam(row.uid, row.from_address, row.subject);
+      await blockSender(row.from_address, 'logged-spam purge');
+    }
+
+    let trashed = 0;
+    if (hits.length && (await isTCImapConfigured({ accountManager, logger }))) {
+      const cfg = await resolveTCImapConfig({ accountManager, logger });
+      const client = new ImapFlow(cfg);
+      try {
+        await client.connect();
+        const trashPath = await resolveTrashPath(client);
+        const lock = await client.getMailboxLock('INBOX');
+        try {
+          for (const row of hits) {
+            try {
+              await moveToTrash(client, String(row.uid), trashPath);
+              trashed++;
+            } catch { /* ignore per-message */ }
+          }
+        } finally {
+          lock.release();
+        }
+        await client.logout();
+      } catch (err) {
+        logger.warn?.({ err: err.message, marked: hits.length }, '[EMAIL-TRIAGE] purgeLoggedSpam IMAP trash partial');
+        return { ok: true, marked: hits.length, trashed, imap_error: err.message };
+      }
+    }
+
+    return { ok: true, scanned: rows.length, marked: hits.length, trashed };
+  }
+
+  let organizeInFlight = null;
+
   // ── Main scan ─────────────────────────────────────────────────────────────
   // Default: last 12h, unread only (cron).
   // Organize pass: { days: 40, includeSeen: true } — last N days, spam→Trash,
@@ -615,7 +690,10 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
   }
 
   async function organizeRecentInbox({ days = 40, dryRun = false, maxMessages, maxAi } = {}) {
-    return scanInbox({
+    if (organizeInFlight && !dryRun) {
+      return { ok: false, reason: 'organize_in_flight', message: 'A TC inbox organize pass is already running.' };
+    }
+    const run = scanInbox({
       days,
       includeSeen: true,
       organize: true,
@@ -624,6 +702,9 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
       maxAi,
       skipAlerts: true,
     });
+    if (dryRun) return run;
+    organizeInFlight = run.finally(() => { organizeInFlight = null; });
+    return organizeInFlight;
   }
 
   // ── Alerts ────────────────────────────────────────────────────────────────
@@ -824,6 +905,7 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
   return {
     scanInbox,
     organizeRecentInbox,
+    purgeLoggedSpam,
     sendDailyDigest,
     startTriageCron,
     getTriagedEmail,
