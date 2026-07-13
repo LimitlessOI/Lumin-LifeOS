@@ -130,7 +130,14 @@ export async function registerMarketingSessionRoutes(app, deps) {
             }
 
             const { id } = req.params;
-            const { message, talk_pack: talkPackBody, seed_pack: seedPackBody, bullet_index: bulletIndexBody } = req.body;
+            const {
+                message,
+                talk_pack: talkPackBody,
+                seed_pack: seedPackBody,
+                bullet_index: bulletIndexBody,
+                line_index: lineIndexBody,
+                mode: coachModeBody,
+            } = req.body;
             if (!message) {
                 return res.status(400).json({ ok: false, error: 'Message is required.' });
             }
@@ -160,23 +167,45 @@ export async function registerMarketingSessionRoutes(app, deps) {
             coachMessages.push({ role: 'user', content: message });
 
             const bulletIndex = Number.isFinite(Number(bulletIndexBody)) ? Number(bulletIndexBody) : 0;
+            const lineIndex = Number.isFinite(Number(lineIndexBody)) ? Number(lineIndexBody) : 0;
+            const coachMode = String(coachModeBody || 'live').trim() || 'live';
+            const scriptLines = Array.isArray(talkPack?.sample_script) ? talkPack.sample_script : [];
+            const currentLine = scriptLines[lineIndex] || '';
             const packJson = talkPack ? JSON.stringify(talkPack) : 'null';
             const systemPrompt = talkPack
-                ? `You are a talk-card PRODUCER coach for a founder filming on camera.
-He already has a talk card — do NOT ask vague "what should I say?" questions and do NOT rewrite his voice into AI-sounding copy.
+                ? `You are a talk-card PRODUCER + teleprompter coach for a founder filming on camera.
+He has a full sample script he can READ like a teleprompter. Do NOT ask vague "what should I say?" and do NOT rewrite him into AI-sounding copy.
 
 Talk card (JSON): ${packJson}
-Current bullet index (0-based): ${bulletIndex}
+Current teleprompter line index (0-based): ${lineIndex}
+Current line text: ${JSON.stringify(currentLine)}
+Current bullet index: ${bulletIndex}
+Mode: ${coachMode} (live = while reading/practicing; after_read = full take review; freestyle = off-script practice)
 
-Your job while he practices:
-1. Quote specific language he used that landed — "I liked when you said…"
-2. When vague, push for lived detail — "Give me more — who / what number / what scar?"
-3. Keep him on the current beat (hook → intro → bullets → exit), then nudge to the next bullet.
-4. Keep replies short (2–4 sentences). Sound like a sharp producer, not a chatbot.
+Your job:
+1. Track where he is on the script. If he goes off topic, leave the highlight at the last good line and say "pick up here: …"
+2. Quote language that landed — "I liked when you said…"
+3. Flag reading-sound ("you sound like you're reading that line — freestyle this beat using the story you told earlier")
+4. Push must_say / competitor_gap beats he skipped — "this video has to land: …"
+5. After a full read, give redo notes: which lines to remake, which to freestyle, which story to pull from another take
+6. Keep replies short (2–4 sentences). Sharp producer, not chatbot.
 
 Respond ONLY with JSON:
-{ "response": "producer reply", "hookDetected": true/false, "hookText": "phrase or null", "currentBullet": 0, "quotedMoment": "exact words you liked or null", "askMore": true/false }`
-                : `You are a talk-card producer coach. Help the founder lock a hook, intro, 3 spoken bullets, and exit for one video. Prefer lived specificity over AI fluff. Detect hook moments (names, numbers, scars). Respond with JSON: { "response": "…", "hookDetected": true/false, "hookText": "…", "currentBullet": null, "quotedMoment": null, "askMore": false }.`;
+{
+  "response": "producer reply",
+  "hookDetected": true/false,
+  "hookText": "phrase or null",
+  "currentBullet": 0,
+  "lineIndex": 0,
+  "quotedMoment": "exact words you liked or null",
+  "askMore": true/false,
+  "soundsLikeReading": true/false,
+  "freestyleCue": "one freestyle instruction or null",
+  "missedMustSay": "must-say he skipped or null",
+  "redoFromLine": null,
+  "pickUpLine": "exact teleprompter line to resume or null"
+}`
+                : `You are a talk-card producer coach. Help the founder lock a hook, intro, sample script lines, must_say beats, and exit. Prefer lived specificity. Respond with JSON: { "response": "…", "hookDetected": true/false, "hookText": "…", "currentBullet": null, "lineIndex": 0, "quotedMoment": null, "askMore": false, "soundsLikeReading": false, "freestyleCue": null, "missedMustSay": null, "redoFromLine": null, "pickUpLine": null }.`;
             const history = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
             const fullPrompt = `${systemPrompt}\n\nConversation history:\n${history}\n\nAI:`;
 
@@ -187,16 +216,28 @@ Respond ONLY with JSON:
             let hookDetected = false;
             let hookText = null;
             let currentBullet = bulletIndex;
+            let nextLineIndex = lineIndex;
             let quotedMoment = null;
             let askMore = false;
+            let soundsLikeReading = false;
+            let freestyleCue = null;
+            let missedMustSay = null;
+            let redoFromLine = null;
+            let pickUpLine = null;
 
             if (aiResponse && typeof aiResponse.response === 'string') {
                 responseContent = aiResponse.response;
                 hookDetected = aiResponse.hookDetected === true;
                 hookText = aiResponse.hookText || null;
                 if (Number.isFinite(Number(aiResponse.currentBullet))) currentBullet = Number(aiResponse.currentBullet);
+                if (Number.isFinite(Number(aiResponse.lineIndex))) nextLineIndex = Number(aiResponse.lineIndex);
+                if (Number.isFinite(Number(aiResponse.redoFromLine))) redoFromLine = Number(aiResponse.redoFromLine);
                 quotedMoment = aiResponse.quotedMoment || null;
                 askMore = aiResponse.askMore === true;
+                soundsLikeReading = aiResponse.soundsLikeReading === true;
+                freestyleCue = aiResponse.freestyleCue || null;
+                missedMustSay = aiResponse.missedMustSay || null;
+                pickUpLine = aiResponse.pickUpLine || null;
             } else {
                 responseContent = aiResponseText;
                 if (/(energy|specific|numbers|details)/i.test(responseContent)) {
@@ -212,8 +253,14 @@ Respond ONLY with JSON:
                     hookDetected,
                     hookText,
                     currentBullet,
+                    lineIndex: nextLineIndex,
                     quotedMoment,
                     askMore,
+                    soundsLikeReading,
+                    freestyleCue,
+                    missedMustSay,
+                    redoFromLine,
+                    pickUpLine,
                 },
             });
 
@@ -228,8 +275,14 @@ Respond ONLY with JSON:
                 hookDetected,
                 hookText,
                 currentBullet,
+                lineIndex: nextLineIndex,
                 quotedMoment,
                 askMore,
+                soundsLikeReading,
+                freestyleCue,
+                missedMustSay,
+                redoFromLine,
+                pickUpLine,
             });
         } catch (error) {
             logger.error(`Error in POST /api/v1/marketing/sessions/${req.params.id}/coach:`, error);

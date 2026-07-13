@@ -207,6 +207,28 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .script-panel { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: #0d0d15; margin-bottom: 16px; }
         .script-panel h2 { border: none; margin: 0 0 10px; padding: 0; font-size: 1.05rem; }
         .script-panel .active-bullet { border-left: 3px solid var(--accent); padding-left: 10px; background: rgba(124,58,237,0.08); }
+        .teleprompter-dock {
+          position: sticky; top: 0; z-index: 30; margin: 0 0 14px;
+          background: linear-gradient(180deg, #161622 0%, #0d0d15 100%);
+          border: 1px solid var(--accent); border-radius: 12px; padding: 16px;
+          box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+        }
+        .teleprompter-dock .tp-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #c4b5fd; margin-bottom: 6px; }
+        .teleprompter-dock .tp-current {
+          font-size: 1.35rem; line-height: 1.35; color: #fff; font-weight: 600;
+          min-height: 2.6em; font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+        }
+        .teleprompter-dock .tp-meta { font-size: 12px; color: var(--muted); margin-top: 8px; }
+        .tp-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .tp-controls button { background: #1a1a24; border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
+        .tp-controls button:hover { border-color: var(--accent); }
+        .tp-controls button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .tp-lines { max-height: 280px; overflow: auto; border: 1px solid var(--border); border-radius: 10px; padding: 8px; background: #0a0a10; }
+        .tp-line { padding: 10px 12px; border-radius: 8px; margin: 4px 0; color: var(--muted); font-size: 14px; line-height: 1.4; cursor: pointer; border-left: 3px solid transparent; }
+        .tp-line.done { opacity: 0.45; }
+        .tp-line.active { background: rgba(124,58,237,0.18); color: #fff; border-left-color: var(--accent); font-weight: 600; font-size: 15px; }
+        .tp-line.must { border-left-color: #fbbf24; }
+        .sample-preview { font-size: 12px; color: var(--muted); max-height: 72px; overflow: hidden; }
         .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(124,58,237,0.2); color: #c4b5fd; font-size: 11px; margin-right: 6px; }
         @media (max-width: 640px) {
           .suggest-card { grid-template-columns: 1fr; }
@@ -310,6 +332,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   card.className = 'suggest-card';
                   const bullets = (s.talking_points || []).map(function(b) { return '<li>' + escapeHtml(b) + '</li>'; }).join('');
                   const comps = (s.competitors || []).map(function(c) { return escapeHtml(c); }).join(' · ');
+                  const musts = (s.must_say || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
+                  const scriptPreview = (s.sample_script || []).slice(0, 4).map(function(l) { return escapeHtml(l); }).join(' · ');
                   card.innerHTML = '<img alt="thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
                     '<div class="suggest-body">' +
                     '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span><span class="pill">' + escapeHtml(s.angle || 'idea') + '</span></div>' +
@@ -317,6 +341,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     '<div class="talk-block"><strong>Hook</strong>' + escapeHtml(s.hook || '') + '</div>' +
                     '<div class="talk-block"><strong>Your intro</strong>' + escapeHtml(s.intro || '') + '</div>' +
                     '<div class="talk-block"><strong>Talk through these</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block"><strong>Must say (competitors miss this)</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block"><strong>Sample script (teleprompter)</strong><div class="sample-preview">' + (scriptPreview || '—') + ( (s.sample_script||[]).length > 4 ? '…' : '') + '</div></div>' +
                     '<div class="talk-block"><strong>Exit</strong>' + escapeHtml(s.close || '') + '</div>' +
                     '<div class="talk-block"><strong>Why this beats competitors</strong>' + escapeHtml(s.competitor_gap || s.why || '') +
                     (comps ? '<div class="suggest-meta" style="margin-top:4px">Vs: ' + comps + '</div>' : '') + '</div>' +
@@ -457,25 +483,39 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const seedPack = String(req.query.seed_pack || '');
     const body = `
             <h1>Talk-card coaching</h1>
-            <p>Use the script on the left. Speak the hook, your intro, each bullet, then the exit. Coach will react like a producer — “give me more” or “I liked when you said…”</p>
+            <p>Read the teleprompter if you want — especially for detail-heavy beats. Highlight stays where you stopped. Coach adapts live: must-say gaps, “sounds like reading,” freestyle that story.</p>
+            <div class="teleprompter-dock" id="tpDock" style="display:none;">
+              <div class="tp-label">Teleprompter · current line</div>
+              <div class="tp-current" id="tpCurrent">—</div>
+              <div class="tp-meta" id="tpMeta">Line 0 / 0</div>
+              <div class="tp-controls" id="tpControls">
+                <button type="button" data-tp="prev">Prev</button>
+                <button type="button" class="primary" data-tp="next">Next line</button>
+                <button type="button" data-tp="pause">Pause / hold</button>
+                <button type="button" data-tp="pickup">Pick up here</button>
+                <button type="button" data-tp="must">Jump to must-say</button>
+              </div>
+            </div>
             <div class="script-panel" id="scriptPanel">
               <h2>Your talk card</h2>
               <p class="suggest-meta" id="scriptTitle">Loading…</p>
               <div id="scriptBody"></div>
             </div>
             <div class="chip-row" id="coachChips">
-              <button type="button" data-chip="I'm on the hook — listen to this take: ">Say the hook</button>
-              <button type="button" data-chip="Here's my intro: ">Say my intro</button>
-              <button type="button" data-chip="Talking point: ">Next bullet</button>
+              <button type="button" data-chip="I'm reading the current teleprompter line out loud: ">Read current line</button>
+              <button type="button" data-chip="I went off topic — pick me up at the highlighted line.">Went off topic</button>
+              <button type="button" data-chip="Full take done — review me like a producer.">After full read</button>
+              <button type="button" data-chip="I sounded like I was reading — help me freestyle this beat.">Sounds like reading</button>
+              <button type="button" data-chip="Freestyle this part using a real story from another video: ">Freestyle this</button>
+              <button type="button" data-chip="Did I hit the must-say / competitor gap? ">Check must-say</button>
               <button type="button" data-chip="Give me more on that — who specifically / what number / what scar?">Ask: give me more</button>
               <button type="button" data-chip="I liked when I said: ">Flag what landed</button>
-              <button type="button" data-chip="Closing now: ">Say the exit</button>
             </div>
             <div id="conversation"></div>
             <form id="coachForm">
                 <div class="form-group">
-                    <label for="userInput">Talk it out (paste or type what you'd say on camera)</label>
-                    <textarea id="userInput" name="userInput" placeholder="Say the hook out loud, then type what you said…" required></textarea>
+                    <label for="userInput">Talk it out (paste what you said on camera — or read from the teleprompter)</label>
+                    <textarea id="userInput" name="userInput" placeholder="Paste your take here…" required></textarea>
                 </div>
                 <div class="actions-row">
                   <button type="submit">Send to Coach</button>
@@ -498,6 +538,10 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             const messageDiv = document.getElementById('message');
             let talkPack = null;
             let bulletIndex = 0;
+            let lineIndex = 0;
+            let scriptLines = [];
+            let paused = false;
+            let coachMode = 'live';
 
             function decodeSeedPack(raw) {
               if (!raw) return null;
@@ -508,6 +552,70 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               } catch (_) {
                 try { return JSON.parse(decodeURIComponent(raw)); } catch (e2) { return null; }
               }
+            }
+
+            function currentLineText() {
+              return scriptLines[lineIndex] || '';
+            }
+
+            function setLine(i, opts) {
+              if (!scriptLines.length) return;
+              const hold = opts && opts.hold;
+              if (paused && !hold && !(opts && opts.force)) return;
+              lineIndex = Math.max(0, Math.min(scriptLines.length - 1, Number(i) || 0));
+              const dock = document.getElementById('tpDock');
+              const cur = document.getElementById('tpCurrent');
+              const meta = document.getElementById('tpMeta');
+              if (dock) dock.style.display = 'block';
+              if (cur) cur.textContent = currentLineText();
+              if (meta) meta.textContent = 'Line ' + (lineIndex + 1) + ' / ' + scriptLines.length + (paused ? ' · held' : '');
+              document.querySelectorAll('.tp-line').forEach(function(el) {
+                const idx = Number(el.getAttribute('data-li'));
+                el.classList.toggle('active', idx === lineIndex);
+                el.classList.toggle('done', idx < lineIndex);
+              });
+              const active = document.querySelector('.tp-line.active');
+              if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              try { sessionStorage.setItem('smos_tp_line_' + sessionId, String(lineIndex)); } catch(_) {}
+            }
+
+            function isMustLine(text) {
+              const must = (talkPack && talkPack.must_say) || [];
+              const t = String(text || '').toLowerCase();
+              return must.some(function(m) { return t.indexOf(String(m).toLowerCase().slice(0, 18)) !== -1; })
+                || /don't leave without|what the other channels|must say|competitor/i.test(text || '');
+            }
+
+            function renderTeleprompter() {
+              scriptLines = (talkPack && Array.isArray(talkPack.sample_script)) ? talkPack.sample_script.filter(Boolean) : [];
+              const body = document.getElementById('scriptBody');
+              if (!scriptLines.length) {
+                document.getElementById('tpDock').style.display = 'none';
+                return;
+              }
+              let saved = 0;
+              try { saved = Number(sessionStorage.getItem('smos_tp_line_' + sessionId) || 0) || 0; } catch(_) {}
+              const linesHtml = scriptLines.map(function(line, i) {
+                const cls = ['tp-line'];
+                if (isMustLine(line)) cls.push('must');
+                return '<div class="' + cls.join(' ') + '" data-li="' + i + '">' + escapeHtml(line) + '</div>';
+              }).join('');
+              const musts = ((talkPack && talkPack.must_say) || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
+              const bullets = ((talkPack && talkPack.talking_points) || []).map(function(b, i) {
+                return '<li class="' + (i === 0 ? 'active-bullet' : '') + '" data-bi="' + i + '">' + escapeHtml(b) + '</li>';
+              }).join('');
+              body.innerHTML =
+                '<div class="talk-block"><strong>Full sample script</strong><div class="tp-lines" id="tpLines">' + linesHtml + '</div></div>' +
+                '<div class="talk-block"><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
+                '<div class="talk-block"><strong>Bullets</strong><ul id="bulletList">' + bullets + '</ul></div>' +
+                '<div class="talk-block"><strong>Competitor gap</strong>' + escapeHtml((talkPack && (talkPack.competitor_gap || talkPack.why)) || '') + '</div>';
+              document.getElementById('tpLines').addEventListener('click', function(e) {
+                const line = e.target.closest('.tp-line');
+                if (!line) return;
+                paused = true;
+                setLine(Number(line.getAttribute('data-li')), { force: true, hold: true });
+              });
+              setLine(saved, { force: true });
             }
 
             function loadTalkPack() {
@@ -521,22 +629,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 body.innerHTML = '<p class="suggest-meta">No talk card attached — coach will still help you find a hook and outline.</p>';
                 return;
               }
-              const bullets = (talkPack.talking_points || []).map(function(b, i) {
-                return '<li class="' + (i === 0 ? 'active-bullet' : '') + '" data-bi="' + i + '">' + escapeHtml(b) + '</li>';
-              }).join('');
-              body.innerHTML =
-                '<div class="talk-block"><strong>Hook</strong>' + escapeHtml(talkPack.hook || '') + '</div>' +
-                '<div class="talk-block"><strong>Intro</strong>' + escapeHtml(talkPack.intro || '') + '</div>' +
-                '<div class="talk-block"><strong>Bullets</strong><ul id="bulletList">' + bullets + '</ul></div>' +
-                '<div class="talk-block"><strong>Exit</strong>' + escapeHtml(talkPack.close || '') + '</div>' +
-                '<div class="talk-block"><strong>Competitor gap</strong>' + escapeHtml(talkPack.competitor_gap || talkPack.why || '') + '</div>';
+              renderTeleprompter();
               try {
                 sessionStorage.removeItem('smos_seed_title');
                 sessionStorage.removeItem('smos_seed_angle');
                 sessionStorage.removeItem('smos_seed_pack');
               } catch(_) {}
-              if (document.getElementById('userInput') && talkPack.hook) {
-                document.getElementById('userInput').value = 'Opening hook I want to use: "' + talkPack.hook + '". Then my intro: "' + (talkPack.intro || '') + '". Coach me through bullet 1: "' + ((talkPack.talking_points || [])[0] || '') + '".';
+              if (document.getElementById('userInput') && currentLineText()) {
+                document.getElementById('userInput').value = 'Reading from teleprompter (line ' + (lineIndex + 1) + '): "' + currentLineText() + '"';
               }
             }
 
@@ -547,16 +647,60 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               });
             }
 
+            function applyCoachNav(data) {
+              if (!data) return;
+              if (Number.isFinite(Number(data.currentBullet))) highlightBullet(Number(data.currentBullet));
+              if (Number.isFinite(Number(data.redoFromLine))) {
+                paused = true;
+                setLine(Number(data.redoFromLine), { force: true, hold: true });
+                return;
+              }
+              if (data.pickUpLine && scriptLines.length) {
+                const idx = scriptLines.findIndex(function(l) { return l === data.pickUpLine || l.indexOf(data.pickUpLine) !== -1 || data.pickUpLine.indexOf(l) !== -1; });
+                if (idx >= 0) { paused = true; setLine(idx, { force: true, hold: true }); return; }
+              }
+              if (!paused && Number.isFinite(Number(data.lineIndex))) {
+                setLine(Number(data.lineIndex), { force: true });
+              }
+            }
+
+            document.getElementById('tpControls').addEventListener('click', function(e) {
+              const btn = e.target.closest('button[data-tp]');
+              if (!btn) return;
+              const act = btn.getAttribute('data-tp');
+              if (act === 'prev') { paused = false; setLine(lineIndex - 1, { force: true }); }
+              if (act === 'next') { paused = false; setLine(lineIndex + 1, { force: true }); }
+              if (act === 'pause') {
+                paused = !paused;
+                setLine(lineIndex, { force: true, hold: true });
+                showMsg(messageDiv, paused ? 'Held on this line — go off topic if you want; pick up here anytime.' : 'Teleprompter unpaused.', 'success');
+              }
+              if (act === 'pickup') {
+                paused = true;
+                setLine(lineIndex, { force: true, hold: true });
+                document.getElementById('userInput').value = 'Pick me up at the highlighted line: "' + currentLineText() + '". I went off topic.';
+                coachMode = 'live';
+              }
+              if (act === 'must') {
+                const idx = scriptLines.findIndex(function(l) { return isMustLine(l); });
+                if (idx >= 0) { paused = true; setLine(idx, { force: true, hold: true }); }
+              }
+            });
+
             document.getElementById('coachChips').addEventListener('click', function(e) {
               const btn = e.target.closest('button[data-chip]');
               if (!btn) return;
               const input = document.getElementById('userInput');
               let prefix = btn.getAttribute('data-chip') || '';
-              if (prefix.indexOf('Talking point') === 0 && talkPack && talkPack.talking_points) {
-                const next = Math.min(bulletIndex + 1, (talkPack.talking_points.length || 1) - 1);
-                if (bulletIndex < next) highlightBullet(next);
-                const b = talkPack.talking_points[bulletIndex] || talkPack.talking_points[0] || '';
-                prefix = 'Talking point ' + (bulletIndex + 1) + ': "' + b + '". Here is my take: ';
+              if (prefix.indexOf('Reading from') === 0 || prefix.indexOf("I'm reading") === 0) {
+                prefix = 'I\\'m reading the current teleprompter line out loud: "' + currentLineText() + '". ';
+                coachMode = 'live';
+              }
+              if (prefix.indexOf('Full take') === 0) coachMode = 'after_read';
+              if (prefix.indexOf('Freestyle') === 0 || prefix.indexOf('I sounded') === 0) coachMode = 'freestyle';
+              if (prefix.indexOf('I went off topic') === 0) {
+                prefix = 'I went off topic — pick me up at the highlighted line: "' + currentLineText() + '".';
+                coachMode = 'live';
               }
               input.value = prefix + (input.value || '');
               input.focus();
@@ -575,6 +719,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             function renderConversation(messages) {
                 conversationDiv.innerHTML = '';
+                let lastCoachMeta = null;
                 (messages || []).forEach(msg => {
                     const msgElement = document.createElement('div');
                     if (msg.role === 'user') {
@@ -584,6 +729,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                         msgElement.className = 'coach-message';
                         let contentHtml = '<p><strong>Coach:</strong> ' + escapeHtml(msg.content) + '</p>';
                         const meta = msg.metadata || {};
+                        lastCoachMeta = meta;
                         if (meta.hooks_detected && meta.hooks_detected.length) {
                             contentHtml += '<div class="hook-detected">HOOK DETECTED: ' + escapeHtml(meta.hooks_detected.join(', ')) + '</div>';
                         }
@@ -596,13 +742,30 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                         if (meta.askMore) {
                             contentHtml += '<div class="coach-more">Producer nudge: give me more — who / what number / what scar?</div>';
                         }
-                        if (Number.isFinite(Number(meta.currentBullet))) {
-                            highlightBullet(Number(meta.currentBullet));
+                        if (meta.soundsLikeReading) {
+                            contentHtml += '<div class="coach-more">Sounds like reading — freestyle this beat.</div>';
+                        }
+                        if (meta.freestyleCue) {
+                            contentHtml += '<div class="coach-cue">Freestyle: ' + escapeHtml(meta.freestyleCue) + '</div>';
+                        }
+                        if (meta.missedMustSay) {
+                            contentHtml += '<div class="coach-more">Must-say miss: ' + escapeHtml(meta.missedMustSay) + '</div>';
+                        }
+                        if (meta.pickUpLine) {
+                            contentHtml += '<div class="coach-cue">Pick up here: “' + escapeHtml(meta.pickUpLine) + '”</div>';
                         }
                         msgElement.innerHTML = contentHtml;
                     }
                     conversationDiv.appendChild(msgElement);
                 });
+                if (lastCoachMeta) {
+                  applyCoachNav({
+                    currentBullet: lastCoachMeta.currentBullet,
+                    lineIndex: lastCoachMeta.lineIndex,
+                    redoFromLine: lastCoachMeta.redoFromLine,
+                    pickUpLine: lastCoachMeta.pickUpLine
+                  });
+                }
             }
 
             document.getElementById('coachForm').addEventListener('submit', async function(event) {
@@ -622,15 +785,21 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                           message: userInput,
                           owner_id: marketingOwnerId(),
                           talk_pack: talkPack,
-                          bullet_index: bulletIndex
+                          bullet_index: bulletIndex,
+                          line_index: lineIndex,
+                          mode: coachMode
                         })
                     });
                     const data = await response.json();
                     if (!response.ok) throw new Error(data.error || 'Failed to get coach reply.');
-                    if (Number.isFinite(Number(data.currentBullet))) highlightBullet(Number(data.currentBullet));
-                    if (data.quotedMoment) showMsg(messageDiv, 'I liked when you said: "' + data.quotedMoment + '"', 'success');
+                    applyCoachNav(data);
+                    if (data.soundsLikeReading) showMsg(messageDiv, "Producer: you sound like you're reading — freestyle that beat.", 'success');
+                    else if (data.missedMustSay) showMsg(messageDiv, 'Must-say miss: ' + data.missedMustSay, 'success');
+                    else if (data.freestyleCue) showMsg(messageDiv, 'Freestyle: ' + data.freestyleCue, 'success');
+                    else if (data.quotedMoment) showMsg(messageDiv, 'I liked when you said: "' + data.quotedMoment + '"', 'success');
                     else if (data.askMore) showMsg(messageDiv, 'Give me more — who / what number / what scar?', 'success');
                     else if (data.hookDetected) showMsg(messageDiv, 'Hook detected: ' + (data.hookText || 'yes'), 'success');
+                    coachMode = 'live';
                     await loadSession();
                 } catch (error) {
                     console.error('Error in coaching session:', error);

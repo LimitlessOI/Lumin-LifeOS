@@ -82,6 +82,52 @@ function encodeSeedPack(pack) {
 const DEFAULT_INTRO = 'Hey — I\'m Adam. I help people get clear results without the fluff.';
 const DEFAULT_CLOSE = 'If this helped, tell me in the comments what you\'re stuck on next — I\'ll answer.';
 
+function normalizeScriptLines(raw) {
+  if (Array.isArray(raw)) {
+    return raw.map((line) => String(line || '').trim()).filter(Boolean);
+  }
+  if (typeof raw === 'string' && raw.trim()) {
+    return raw.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function buildSampleScript(pack) {
+  const existing = normalizeScriptLines(pack.sample_script);
+  if (existing.length >= 4) return existing;
+  const lines = [];
+  if (pack.hook) lines.push(String(pack.hook).trim());
+  if (pack.intro) lines.push(String(pack.intro).trim());
+  for (const point of pack.talking_points || []) {
+    const p = String(point || '').trim();
+    if (!p) continue;
+    lines.push(p);
+    lines.push(`Here's the part most people skip: ${p.toLowerCase().replace(/\.$/, '')}.`);
+  }
+  for (const must of pack.must_say || []) {
+    const m = String(must || '').trim();
+    if (m && !lines.some((l) => l.toLowerCase().includes(m.toLowerCase().slice(0, 24)))) {
+      lines.push(`Don't leave without this: ${m}`);
+    }
+  }
+  if (pack.competitor_gap) {
+    lines.push(`What the other channels won't say: ${String(pack.competitor_gap).trim()}`);
+  }
+  if (pack.close) lines.push(String(pack.close).trim());
+  return lines.filter(Boolean);
+}
+
+function buildMustSay(pack) {
+  const existing = Array.isArray(pack.must_say) ? pack.must_say.map((x) => String(x || '').trim()).filter(Boolean) : [];
+  if (existing.length) return existing.slice(0, 5);
+  const out = [];
+  if (pack.competitor_gap) out.push(String(pack.competitor_gap).trim());
+  for (const point of (pack.talking_points || []).slice(0, 2)) {
+    if (point) out.push(String(point).trim());
+  }
+  return out.slice(0, 5);
+}
+
 const FALLBACK_IDEAS = [
   {
     title: 'The follow-up most agents skip after closing',
@@ -94,6 +140,21 @@ const FALLBACK_IDEAS = [
       'What clients feel the week after closing that nobody prepares them for',
       'One concrete follow-up ritual you actually run',
       'The business result when you stay present after the deal',
+    ],
+    must_say: [
+      'Name one post-closing fear clients actually text about',
+      'Show your exact follow-up ritual (day/time/message)',
+      'Say what competitors celebrate instead of serving after close',
+    ],
+    sample_script: [
+      'Closed is not the finish line.',
+      'Hey — I\'m Adam. I help people get clear results without the fluff.',
+      'Most agents disappear the week after closing — and that\'s when clients feel the most alone.',
+      'They\'re staring at a mortgage, a move, and a stack of "now what?" questions nobody answered.',
+      'Here\'s the ritual I actually run: one check-in within 72 hours, one local intro in week one, one 30-day "any landmines?" call.',
+      'Don\'t leave without this: name one post-closing fear clients actually text about.',
+      'What the other channels won\'t say: closing day content is vanity — presence after close is the business.',
+      'If this helped, tell me in the comments what you\'re stuck on next — I\'ll answer.',
     ],
     intro: DEFAULT_INTRO,
     close: DEFAULT_CLOSE,
@@ -110,6 +171,21 @@ const FALLBACK_IDEAS = [
       'How you pull one real story from a real week',
       'The 3-beat structure: hook → lived detail → clear ask',
     ],
+    must_say: [
+      'Call out the "no names, no numbers, no scars" tell',
+      'Give one real story from YOUR week, not a template',
+      'End with a clear human ask, not "smash like"',
+    ],
+    sample_script: [
+      'If it could be anyone\'s post, it shouldn\'t be yours.',
+      'Hey — I\'m Adam. I help people get clear results without the fluff.',
+      'You can smell AI content in three seconds: no names, no numbers, no scars.',
+      'Here\'s how I pull a real story: I look at what actually happened this week — one client, one mess, one win.',
+      'Then I run three beats: hook, lived detail, clear ask.',
+      'Don\'t leave without this: one real story from YOUR week, not a template.',
+      'What the other channels won\'t say: templates make you louder, not more you.',
+      'If this helped, tell me in the comments what you\'re stuck on next — I\'ll answer.',
+    ],
     intro: DEFAULT_INTRO,
     close: DEFAULT_CLOSE,
   },
@@ -124,6 +200,21 @@ const FALLBACK_IDEAS = [
       'Why daily posting burns founders out without filling the calendar',
       'The one weekly video format that maps to a booked conversation',
       'How you measure "did this video create a real next step?"',
+    ],
+    must_say: [
+      'Daily posting is not the same as booked conversations',
+      'Name the one weekly format that maps to a call',
+      'Define the metric: real next step, not vanity views',
+    ],
+    sample_script: [
+      'One video. One offer. One clear next step.',
+      'Hey — I\'m Adam. I help people get clear results without the fluff.',
+      'Daily posting burns founders out — and still leaves the calendar empty.',
+      'I film one intentional weekly video aimed at one booked conversation.',
+      'The measure is simple: did someone take a real next step?',
+      'Don\'t leave without this: vanity views are not the win.',
+      'What the other channels won\'t say: volume without a next step is expensive noise.',
+      'If this helped, tell me in the comments what you\'re stuck on next — I\'ll answer.',
     ],
     intro: DEFAULT_INTRO,
     close: DEFAULT_CLOSE,
@@ -140,6 +231,21 @@ const FALLBACK_IDEAS = [
       'What that audience was actually hungry for',
       'The next film that answers that hunger without copying a competitor',
     ],
+    must_say: [
+      'Point to one title that held past 30 seconds',
+      'Name the hunger behind that retention',
+      'Propose the next film from YOUR data, not a trend list',
+    ],
+    sample_script: [
+      'Your best next video is already hiding in the numbers.',
+      'Hey — I\'m Adam. I help people get clear results without the fluff.',
+      'Forget the trend list for a second — look at what kept people past 30 seconds on YOUR channel.',
+      'That retention spike is the hunger signal.',
+      'The next film answers that hunger without copying a competitor.',
+      'Don\'t leave without this: your data beats someone else\'s trend.',
+      'What the other channels won\'t say: chasing trends skips the audience you already earned.',
+      'If this helped, tell me in the comments what you\'re stuck on next — I\'ll answer.',
+    ],
     intro: DEFAULT_INTRO,
     close: DEFAULT_CLOSE,
   },
@@ -154,6 +260,21 @@ const FALLBACK_IDEAS = [
       'The open line that names the viewer\'s exact stuck point',
       'Proof you\'ve lived it (one specific beat)',
       'The promise of what they\'ll walk away with in this video',
+    ],
+    must_say: [
+      'Name the viewer\'s exact stuck point in the open',
+      'Prove you\'ve lived it with one specific beat',
+      'Promise what they walk away with — then deliver the exit',
+    ],
+    sample_script: [
+      'If second 15 fails, minute 2 never happens.',
+      'Hey — I\'m Adam. I help people get clear results without the fluff.',
+      'Open by naming the stuck point — not a vague "struggling with content."',
+      'Then prove you\'ve lived it with one specific beat from your week.',
+      'Promise what they\'ll walk away with before you teach anything.',
+      'Don\'t leave without this: earned attention is a contract you keep.',
+      'What the other channels won\'t say: a formula hook without your scar is still forgettable.',
+      'If this helped, tell me in the comments what you\'re stuck on next — I\'ll answer.',
     ],
     intro: DEFAULT_INTRO,
     close: DEFAULT_CLOSE,
@@ -341,7 +462,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         : (FALLBACK_IDEAS[idx % FALLBACK_IDEAS.length].talking_points || []);
       const competitors = Array.isArray(idea.competitors) ? idea.competitors.slice(0, 4) : [];
       const competitor_gap = idea.competitor_gap || idea.competitor_context?.gap || '';
-      const pack = {
+      const draft = {
         title,
         why: idea.why || idea.rationale || '',
         angle: idea.angle || 'story',
@@ -351,6 +472,15 @@ export function createYouTubeService(poolOrDeps = {}) {
         talking_points,
         competitors,
         competitor_gap,
+        must_say: idea.must_say,
+        sample_script: idea.sample_script,
+      };
+      const must_say = buildMustSay(draft);
+      const sample_script = buildSampleScript({ ...draft, must_say });
+      const pack = {
+        ...draft,
+        must_say,
+        sample_script,
       };
       const seedPack = encodeSeedPack(pack);
       const startPath = `/marketing/session/new?seed_title=${encodeURIComponent(title)}&seed_angle=${encodeURIComponent(pack.angle)}&seed_pack=${encodeURIComponent(seedPack)}`;
@@ -413,18 +543,21 @@ export function createYouTubeService(poolOrDeps = {}) {
         const prompt = `You are a YouTube producer for a founder who hates AI-sounding scripts.
 Return ONLY a JSON array of exactly 5 talk cards. Each object MUST have:
 title, why, angle, hook, intro, talking_points (array of 3 short spoken bullets), close,
-competitors (array of 2 competing channel types or example creators), competitor_gap (one sentence: what they miss that we cover).
+competitors (array of 2 competing channel types or example creators), competitor_gap (one sentence: what they miss that we cover),
+must_say (array of 2–3 non-negotiable lines this video MUST land — especially competitor gaps and detail-heavy facts),
+sample_script (array of 8–14 short teleprompter lines he can READ aloud; include numbers/details when the topic needs them — e.g. cost of living, fees, timelines. Spoken English, not essay paragraphs).
 
 Rules:
 - Sound human. No hashtags. No corporate fluff. Specific > generic.
 - Hook = first line on camera (under 14 words).
 - intro = how THIS founder opens ("Hey I'm…") — use this founder intro if present: ${JSON.stringify(founderIntro)}
 - talking_points = what he talks through on camera (not essay paragraphs).
+- sample_script = full readable teleprompter: hook → intro → detail beats → must_say → competitor gap → close.
 - close = exit / CTA in his voice.
 - Research competitors relative to channel: ${channelTitle || 'founder-led business channel'}
 - Recent titles on this channel: ${recentTitles.join(' | ') || 'none yet'}
 Prefer filmable ideas that beat competitors by lived specificity, not louder AI voice.`;
-        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 2200 });
+        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 3200 });
         const text = typeof raw === 'string' ? raw : (raw?.text || raw?.content || '');
         const match = String(text).match(/\[[\s\S]*\]/);
         const parsed = match ? JSON.parse(match[0]) : null;
@@ -443,6 +576,10 @@ Prefer filmable ideas that beat competitors by lived specificity, not louder AI 
                 : fb.talking_points,
               competitors: Array.isArray(item.competitors) ? item.competitors : fb.competitors,
               competitor_gap: item.competitor_gap || item.competitor_context?.gap || fb.competitor_gap,
+              must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : fb.must_say,
+              sample_script: normalizeScriptLines(item.sample_script).length
+                ? normalizeScriptLines(item.sample_script)
+                : fb.sample_script,
             };
           });
           if (!status.connected) source = 'ai_research_defaults';
