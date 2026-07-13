@@ -1,34 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T02:01:29.045Z",
+  "generated_at": "2026-07-13T02:11:56.292Z",
   "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only one template chip, so there wasn’t much real choice in the editor.",
-      "proposed_solution": "Show a few more template options so the user can compare styles and feel in control.",
+      "detail": "Only 1 template option, so it feels like I have almost no choice for my site.",
+      "proposed_solution": "Show a few more template options so I can compare different looks quickly.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The template switch area felt a bit bare because there was only a single option to compare against.",
-      "proposed_solution": "Add clearer labels or previews for the palette choices so the differences are easy to understand at a glance.",
+      "detail": "The design choices look limited overall, with just 3 color palettes.",
+      "proposed_solution": "Offer more palette choices or simple style presets that match wellness businesses.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "Palette choices were present, but the overall design-control area still felt limited for a business owner trying to shape a brand.",
-      "proposed_solution": "Make the first-time editor flow feel more guided, with a simple step-by-step path for branding and page setup.",
+      "detail": "It’s not clear up front what I’m supposed to do first in the editor.",
+      "proposed_solution": "Add a clear first-step prompt like 'Start here: pick a look, then edit your text.'",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_4",
-      "detail": "The editor is functional, but the experience feels more like a simple setup screen than a full website-design workspace.",
-      "proposed_solution": "Surface a stronger visual summary of what can be edited so the workspace feels more complete and less sparse.",
+      "detail": "Chat is there, but I’d want it to feel more like a helpful guide instead of another thing to figure out.",
+      "proposed_solution": "Make the chat feel more guided, with examples of what it can help me change.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -38,19 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only one template chip, so there wasn’t much real choice in the editor."
+        "detail": "Only 1 template option, so it feels like I have almost no choice for my site."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The template switch area felt a bit bare because there was only a single option to compare against."
+        "detail": "The design choices look limited overall, with just 3 color palettes."
       },
       {
         "code": "ux_friction_3",
-        "detail": "Palette choices were present, but the overall design-control area still felt limited for a business owner trying to shape a brand."
+        "detail": "It’s not clear up front what I’m supposed to do first in the editor."
       },
       {
         "code": "ux_friction_4",
-        "detail": "The editor is functional, but the experience feels more like a simple setup screen than a full website-design workspace."
+        "detail": "Chat is there, but I’d want it to feel more like a helpful guide instead of another thing to figure out."
       }
     ]
   }
