@@ -1,34 +1,27 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-10T21:04:35.124Z",
-  "findings_count": 4,
+  "generated_at": "2026-07-13T01:32:33.284Z",
+  "findings_count": 3,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business.",
-      "proposed_solution": "Offer a few more template options so I can choose a style that feels like my business.",
+      "detail": "Only one template choice, so it feels like there’s not much room to pick a style that fits my business.",
+      "proposed_solution": "Show a few more template options so I can compare looks without feeling boxed in.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand.",
-      "proposed_solution": "Add simple labels or helper text for the chat, save, and device toggle so I know what each one is for.",
+      "detail": "Three color palettes is nice, but it still feels a bit limited if I want the site to feel more personal.",
+      "proposed_solution": "Offer a clearer starting walkthrough like 'pick a style, then edit text, then save/publish'.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site.",
-      "proposed_solution": "Provide a very short getting-started prompt like ‘Choose a template, then pick a color palette’ to reduce the blank-screen feeling.",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_4",
-      "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does.",
-      "proposed_solution": "Show a clearer before/after preview when switching device views so I can tell what changed.",
+      "detail": "The editor seems to work, but from a non-technical point of view I may need a bit more guidance on what to do first.",
+      "proposed_solution": "Add quick preview examples for each palette so I can tell which one matches a wellness brand fast.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -38,19 +31,15 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only one template choice, so it feels like I’m being handed a finished look instead of picking what fits my business."
+        "detail": "Only one template choice, so it feels like there’s not much room to pick a style that fits my business."
       },
       {
         "code": "ux_friction_2",
-        "detail": "There are only three color palettes, which feels a bit limiting if I want the site to match my brand."
+        "detail": "Three color palettes is nice, but it still feels a bit limited if I want the site to feel more personal."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat box is visible, but it’s not obvious what I should ask it to do or whether it will actually help me change the site."
-      },
-      {
-        "code": "ux_friction_4",
-        "detail": "The editor seems to work, but as a non-technical user I’d want clearer guidance on where to start and what each control does."
+        "detail": "The editor seems to work, but from a non-technical point of view I may need a bit more guidance on what to do first."
       }
     ]
   }

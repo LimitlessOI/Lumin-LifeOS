@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T01:21:25.289Z",
+  "generated_at": "2026-07-13T01:33:29.838Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11479,
   "files": [
@@ -36819,9 +36819,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 507359,
-      "mtime": "2026-07-13T01:21:09.245Z",
-      "indexed_at": "2026-07-13T01:21:25.289Z"
+      "bytes": 507428,
+      "mtime": "2026-07-13T01:30:24.157Z",
+      "indexed_at": "2026-07-13T01:33:29.838Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39757,9 +39757,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 102675,
-      "mtime": "2026-07-13T01:19:11.461Z",
-      "indexed_at": "2026-07-13T01:21:25.289Z"
+      "bytes": 102693,
+      "mtime": "2026-07-13T01:30:18.489Z",
+      "indexed_at": "2026-07-13T01:33:29.838Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -63062,9 +63062,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.",
-      "bytes": 2478,
-      "mtime": "2026-07-12T13:24:22.077Z",
-      "indexed_at": "2026-07-13T01:19:58.926Z",
+      "bytes": 1813,
+      "mtime": "2026-07-13T01:33:29.509Z",
+      "indexed_at": "2026-07-13T01:33:29.838Z",
       "synopsis_index_only": true
     },
     {
@@ -68995,9 +68995,9 @@
     {
       "path": "scripts/run-site-builder-prealpha.mjs",
       "synopsis": "Site Builder pre-alpha SENTRY gate — Layer A (structural walkthrough).",
-      "bytes": 9246,
-      "mtime": "2026-07-12T13:24:22.141Z",
-      "indexed_at": "2026-07-13T01:19:58.926Z",
+      "bytes": 9322,
+      "mtime": "2026-07-13T01:33:13.365Z",
+      "indexed_at": "2026-07-13T01:33:29.838Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
