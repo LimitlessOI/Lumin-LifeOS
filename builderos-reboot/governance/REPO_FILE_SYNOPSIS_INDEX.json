@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:53:55.239Z",
+  "generated_at": "2026-07-13T23:55:03.619Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11511,
   "files": [
@@ -84351,9 +84351,9 @@
     {
       "path": "services/lifeos-twin-simulator.js",
       "synopsis": "Exports simulateTwinReactions — services/lifeos-twin-simulator.js.",
-      "bytes": 333,
-      "mtime": "2026-07-13T23:53:47.855Z",
-      "indexed_at": "2026-07-13T23:53:47.855Z"
+      "bytes": 233,
+      "mtime": "2026-07-13T23:55:03.619Z",
+      "indexed_at": "2026-07-13T23:55:03.619Z"
     },
     {
       "path": "services/lifeos-ui-directives.js",
