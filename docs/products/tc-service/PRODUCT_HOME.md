@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — TC organize speed: envelope-first spam/FYI; 40-day RE triage live. |
+| **Last Updated** | 2026-07-13 — TC organize runs in background (proxy-safe); 40-day RE triage. |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-13 | **TC organize background** — `POST /email/organize` returns immediately and runs IMAP triage async (dry_run/`await:true` still sync). | Tip proxy timed out 180–300s on live organize batches. | ✅ | | tip kick + poll attention |
 | 2026-07-13 | **TC inbox organize speed** — envelope-first classify (spam/FYI without full body download); default organize batch 80; fewer proxy timeouts on tip. | Live `/email/organize` 150–200 msgs timed out at 240–300s with 0 bytes. | ✅ | | tip batch organize |
 | 2026-07-13 | **TC inbox organize (40-day)** — `scanInbox({ days, includeSeen, organize })` + `POST /api/v1/tc/email/organize` (default 40d). Spam/marketing → Trash + block list; keep contracts/deadlines/docs/client reachouts; FYI marked read. Tightened spam patterns (ccsend, CE pitches, lead blasts). Cron still 12h unread. | Adam: TC monitor RE emails; organize last 30–40 days; delete spam. | ✅ | | tip organize after deploy |
 | 2026-07-11 | **Google YouTube OAuth setup probe** — `POST /api/v1/browser-agent/setup/google-youtube-oauth` uses tip `WORK_EMAIL`/`GMAIL_SIGNUP_*` app password in-process (never returned). Names blocker when Google web login rejects app password / 2FA. | Adam: use Railway email + permission to login and set Google API keys. | ✅ | | tip prove after deploy |

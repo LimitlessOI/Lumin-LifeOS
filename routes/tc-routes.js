@@ -2289,6 +2289,7 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/email/organize — last N days: keep RE/client/paperwork, trash spam
+  // Long IMAP passes exceed Railway proxy timeouts if awaited — start in background.
   router.post('/email/organize', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
@@ -2297,13 +2298,33 @@ export function createTCRoutes(
       const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
       const body = req.body || {};
       const daysRaw = Number(body.days);
-      const result = await triage.organizeRecentInbox({
-        days: Number.isFinite(daysRaw) ? Math.min(60, Math.max(7, daysRaw)) : 40,
-        dryRun: body.dry_run === true,
-        maxMessages: body.max_messages,
-        maxAi: body.max_ai,
+      const days = Number.isFinite(daysRaw) ? Math.min(60, Math.max(7, daysRaw)) : 40;
+      const dryRun = body.dry_run === true;
+      const maxMessages = body.max_messages;
+      const maxAi = body.max_ai;
+      const awaitResult = body.await === true;
+
+      if (awaitResult || dryRun) {
+        const result = await triage.organizeRecentInbox({ days, dryRun, maxMessages, maxAi });
+        return res.json(result);
+      }
+
+      res.json({
+        ok: true,
+        started: true,
+        days,
+        message: 'TC inbox organize started in background. Spam → Trash; contracts/docs/client kept. Poll GET /api/v1/tc/email/attention.',
       });
-      res.json(result);
+
+      setImmediate(() => {
+        triage.organizeRecentInbox({ days, dryRun: false, maxMessages, maxAi })
+          .then((result) => {
+            logger?.info?.({ ...result, background: true }, '[TC-EMAIL] background organize complete');
+          })
+          .catch((err) => {
+            logger?.error?.({ err: err.message }, '[TC-EMAIL] background organize failed');
+          });
+      });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
