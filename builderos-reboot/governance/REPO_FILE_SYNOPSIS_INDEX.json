@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T13:16:58.234Z",
+  "generated_at": "2026-07-13T13:26:11.886Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11495,
+  "file_count": 11496,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66176,6 +66176,13 @@
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/marketingos-sku-routes.js",
+      "synopsis": "Exports registerMarketingosSkuRoutes — routes/marketingos-sku-routes.js.",
+      "bytes": 8102,
+      "mtime": "2026-07-13T13:26:11.886Z",
+      "indexed_at": "2026-07-13T13:26:11.886Z"
     },
     {
       "path": "routes/memory-capsule-routes.js",
