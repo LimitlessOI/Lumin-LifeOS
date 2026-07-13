@@ -1,43 +1,23 @@
-<!-- SYNOPSIS: Amendment 02 — Migration Runbook -->
+<!-- SYNOPSIS: Amendment 02 Migration Runbook -->
 
-# Amendment 02 — Migration Runbook
+# Amendment 02 Migration Runbook
 
 ## Purpose
 
-This runbook covers the conversation_memory migration and the recency threshold used during backfill and verification.
+This runbook covers the migration of `conversation_memory` and confirms the recency threshold used by default during migration.
 
-## Recency Threshold
+## Recency Threshold Confirmation
 
-The default recency threshold is **90 days**.
+The default recency threshold for `conversation_memory` migration is **90 days**.
 
-This means:
+This is the correct default threshold and should be used unless a specific migration override is intentionally configured.
 
-- Only conversation_memory records within the last 90 days are considered recent by default.
-- Records older than 90 days are treated as non-recent unless a migration job or override explicitly specifies otherwise.
-- Any code, configuration, documentation, or operational notes that reference a different default must be updated to **90 days**.
+## Validation Checklist
 
-## Validation
+- Confirm the migration logic uses a default threshold of **90 days**
+- Confirm there are no conflicting values in documentation, configs, or migration scripts
+- Confirm any overrides are explicit and scoped to the relevant migration run
 
-To confirm the threshold is correct:
+## Notes
 
-1. Check the migration job configuration for the conversation_memory pipeline.
-2. Check any derived filters or query predicates that define "recent" records.
-3. Ensure the documented default matches the runtime default.
-4. Verify test fixtures and examples use 90 days where a default recency window is expected.
-
-## Discrepancy Handling
-
-If a discrepancy is found:
-
-- Update the source of truth first, then the documentation.
-- Re-run any migration validation that depends on recency filtering.
-- Confirm no downstream reports, alerts, or rollback steps assume a different threshold.
-
-## Operational Notes
-
-- The 90-day threshold should be treated as the baseline unless a specific migration step overrides it.
-- Overrides should be explicit and documented alongside the migration command or job definition.
-
-## Change Log
-
-- Amendment 02: Confirmed default recency threshold for conversation_memory migration is 90 days.
+If any discrepancy is found in implementation or docs, align it back to the **90-day default** unless a deliberate change has been approved and applied consistently across the codebase.
