@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T13:46:53.484Z",
+  "generated_at": "2026-07-13T13:48:03.261Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11498,
+  "file_count": 11499,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -33449,6 +33449,13 @@
       "bytes": 452,
       "mtime": "2026-07-12T13:24:21.581Z",
       "indexed_at": "2026-07-13T09:10:46.716Z"
+    },
+    {
+      "path": "db/migrations/20231010_create_boldtrail_contacts_table.sql",
+      "synopsis": "Database migration — 20231010_create_boldtrail_contacts_table.sql.",
+      "bytes": 348,
+      "mtime": "2026-07-13T13:48:03.261Z",
+      "indexed_at": "2026-07-13T13:48:03.261Z"
     },
     {
       "path": "db/migrations/20231105_create_bioprinting_tables.sql",
