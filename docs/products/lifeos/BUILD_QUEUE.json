@@ -520,8 +520,8 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-13T10:49:40.523Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-07-13T10:51:17.174Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
