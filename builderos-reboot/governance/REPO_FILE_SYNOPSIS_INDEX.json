@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T03:42:19.155Z",
+  "generated_at": "2026-07-13T03:58:09.531Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11479,
+  "file_count": 11480,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35542,6 +35542,13 @@
       "bytes": 1036,
       "mtime": "2026-07-12T03:47:37.676Z",
       "indexed_at": "2026-07-13T03:42:16.930Z"
+    },
+    {
+      "path": "db/migrations/20260713_marketing_session_export.sql",
+      "synopsis": "Database migration — 20260713_marketing_session_export.sql.",
+      "bytes": 379,
+      "mtime": "2026-07-13T03:58:09.531Z",
+      "indexed_at": "2026-07-13T03:58:09.531Z"
     },
     {
       "path": "db/migrations/20260713_wellness_studio_core_tables.sql",
