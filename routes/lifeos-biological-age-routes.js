@@ -15,3 +15,5 @@ router.get('/biological-age/:userId', async (req, res) => {
 export function registerBiologicalAgeRoutes(app) {
   app.use('/api', router);
 }
+
+export { router };
