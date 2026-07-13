@@ -1,27 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T01:32:33.284Z",
-  "findings_count": 3,
+  "generated_at": "2026-07-13T02:01:29.045Z",
+  "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only one template choice, so it feels like there’s not much room to pick a style that fits my business.",
-      "proposed_solution": "Show a few more template options so I can compare looks without feeling boxed in.",
+      "detail": "Only one template chip, so there wasn’t much real choice in the editor.",
+      "proposed_solution": "Show a few more template options so the user can compare styles and feel in control.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "Three color palettes is nice, but it still feels a bit limited if I want the site to feel more personal.",
-      "proposed_solution": "Offer a clearer starting walkthrough like 'pick a style, then edit text, then save/publish'.",
+      "detail": "The template switch area felt a bit bare because there was only a single option to compare against.",
+      "proposed_solution": "Add clearer labels or previews for the palette choices so the differences are easy to understand at a glance.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The editor seems to work, but from a non-technical point of view I may need a bit more guidance on what to do first.",
-      "proposed_solution": "Add quick preview examples for each palette so I can tell which one matches a wellness brand fast.",
+      "detail": "Palette choices were present, but the overall design-control area still felt limited for a business owner trying to shape a brand.",
+      "proposed_solution": "Make the first-time editor flow feel more guided, with a simple step-by-step path for branding and page setup.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_4",
+      "detail": "The editor is functional, but the experience feels more like a simple setup screen than a full website-design workspace.",
+      "proposed_solution": "Surface a stronger visual summary of what can be edited so the workspace feels more complete and less sparse.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -31,15 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only one template choice, so it feels like there’s not much room to pick a style that fits my business."
+        "detail": "Only one template chip, so there wasn’t much real choice in the editor."
       },
       {
         "code": "ux_friction_2",
-        "detail": "Three color palettes is nice, but it still feels a bit limited if I want the site to feel more personal."
+        "detail": "The template switch area felt a bit bare because there was only a single option to compare against."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The editor seems to work, but from a non-technical point of view I may need a bit more guidance on what to do first."
+        "detail": "Palette choices were present, but the overall design-control area still felt limited for a business owner trying to shape a brand."
+      },
+      {
+        "code": "ux_friction_4",
+        "detail": "The editor is functional, but the experience feels more like a simple setup screen than a full website-design workspace."
       }
     ]
   }

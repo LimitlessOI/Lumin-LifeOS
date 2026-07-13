@@ -437,6 +437,14 @@
     }
     .preview-actions a { display: none; }
     .preview-actions.visible a { display: inline-flex; }
+    .audit-result { margin-top: 1rem; padding: 1.2rem; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,0.04); }
+    .score-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
+    .score-ring { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 1.5rem; background: conic-gradient(var(--accent) calc(var(--score, 0) * 1%), rgba(255,255,255,0.08) 0); color: #fff; }
+    .score-label { color: var(--muted); }
+    .pain-list { list-style: none; padding: 0; margin: 0.8rem 0; display: grid; gap: 0.5rem; }
+    .pain-list li { padding: 0.6rem 0.8rem; border-radius: 10px; background: rgba(255,255,255,0.05); border-left: 3px solid var(--accent); color: #e0e6e1; }
+    .chat-bubble { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 100; }
+    .chat-bubble a { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent); color: #0b0f0d; padding: 0.75rem 1rem; border-radius: 999px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
     .cta {
       margin-top: 2.5rem;
       padding: 2.2rem;
@@ -481,6 +489,7 @@
         <div class="brand"><strong>LimitlessOS</strong> <span>Site Builder</span></div>
         <div class="nav-links">
           <a href="#how">How it works</a>
+          <a href="#audit">Free audit</a>
           <a href="#demo">Demo</a>
           <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
@@ -493,33 +502,32 @@
   <div class="shell">
     <section class="hero">
       <div class="hero-copy">
-        <div class="eyebrow">Beta test — Las Vegas local businesses</div>
-        <h1>Get a website that actually brings in clients.</h1>
+        <div class="eyebrow">Beta test — any business that needs a better website</div>
+        <h1 id="hero-headline">Get a website that actually brings in customers.</h1>
         <div class="price-chip">
           <strong>$45</strong>
           <span>beta-tester publish · 2 months of care included</span>
         </div>
-        <p class="lede">
-          No templates. No risk. Send us your current site URL and we rebuild your homepage as a clean,
-          conversion-focused page. Preview it live. If you like it, publish for $45. If not, walk away.
+        <p class="lede" id="hero-lede">
+          Send us your current site URL. We rebuild your homepage as a clean, conversion-focused page. Preview it live. If you like it, publish for $45. If not, walk away.
         </p>
         <div class="actions">
           <a class="btn btn-primary" href="#request">Get my free preview</a>
-          <a class="btn btn-secondary" href="#demo">View live demo</a>
+          <a class="btn btn-secondary" href="#audit">Get my free website audit</a>
         </div>
-        <div class="guarantee">🛡️ Free preview · no card · no sales call · approve before paying</div>
+        <div class="guarantee">Free preview · no card · no sales call · approve before paying</div>
       </div>
 
       <div class="hero-visual" id="demo">
         <div class="browser-mockup">
           <div class="browser-header">
             <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-title">Live demo · Flores Family Dental</div>
+            <div class="browser-title">Live demo · a real local business</div>
             <a class="browser-open" href="/previews/prev_1783784688744_nw7c/index.html" target="_blank" rel="noopener">Open full</a>
           </div>
           <div class="demo">
             <iframe
-              title="Flores Family Dental preview"
+              title="Site Builder preview demo"
               loading="lazy"
               src="/previews/prev_1783784688744_nw7c/index.html"
             ></iframe>
@@ -554,9 +562,31 @@
       </div>
     </section>
 
+    <section class="section card" id="audit">
+      <h2>Free website health score</h2>
+      <p class="section-sub">Paste any website URL. We scan it and show you exactly what is costing you leads.</p>
+      <form class="lead-form" id="audit-form">
+        <label>
+          Your website URL
+          <input id="auditUrl" name="auditUrl" type="text" required placeholder="yourbusiness.com" autocomplete="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        </label>
+        <button class="btn btn-primary" type="submit" id="audit-submit">Get my score</button>
+        <div class="status" id="audit-status" aria-live="polite"></div>
+        <div class="audit-result" id="audit-result" style="display:none;">
+          <div class="score-row">
+            <div class="score-ring" id="audit-score">—</div>
+            <div class="score-label">Grade <strong id="audit-grade">—</strong></div>
+          </div>
+          <p id="audit-recommendation"></p>
+          <ul class="pain-list" id="audit-pains"></ul>
+          <a class="btn btn-primary" id="audit-cta" href="#request">Fix this with a free preview</a>
+        </div>
+      </form>
+    </section>
+
     <section class="section card" id="included">
       <h2>What you get</h2>
-      <p class="section-sub">Built for local wellness, health, and service businesses — not generic brochure sites.</p>
+      <p class="section-sub">Built for any business that sells a real product or service — not generic brochure sites.</p>
       <div class="features-grid">
         <div class="feature">
           <div class="feature-icon">📝</div>
@@ -583,7 +613,7 @@
           <div class="feature-icon">📅</div>
           <div>
             <strong>Booking / POS integration</strong>
-            <span>We wire in the booking, Square, Jane, or Mindbody flow you already use.</span>
+            <span>We wire in the booking, payment, or POS flow you already use.</span>
           </div>
         </div>
         <div class="feature">
@@ -679,7 +709,7 @@
           </label>
           <label>
             Business name (optional)
-            <input id="businessName" name="businessName" type="text" placeholder="Flores Family Dental" autocomplete="organization" />
+            <input id="businessName" name="businessName" type="text" placeholder="Acme Law Firm" autocomplete="organization" />
           </label>
         </div>
         <button class="btn btn-primary" type="submit" id="lead-submit">Build my preview</button>
@@ -692,9 +722,25 @@
       </form>
     </section>
 
+    <section class="section card" id="referral">
+      <h2>Refer another business, get a free month</h2>
+      <p class="section-sub">Already have a preview? Share your referral link. If they publish, you get one free month of site care.</p>
+      <form class="lead-form" id="referral-form">
+        <label>
+          Your preview client ID
+          <input id="referralClientId" name="referralClientId" type="text" placeholder="copy from your email" autocapitalize="off" autocomplete="off" />
+        </label>
+        <button class="btn btn-secondary" type="submit" id="referral-submit">Get my referral link</button>
+        <div class="status" id="referral-status" aria-live="polite"></div>
+        <div class="preview-actions" id="referral-actions">
+          <input id="referral-link" readonly value="" style="width: 100%; padding: 0.7rem; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,0.05); color: #e0e6e1; font-family: var(--sans);" />
+        </div>
+      </form>
+    </section>
+
     <section class="cta card">
       <h2>Ready now?</h2>
-      <p>See the dental demo, then request your own. First dollar starts with one yes.</p>
+      <p>See the live demo, then request your own. First dollar starts with one yes.</p>
       <a class="btn btn-primary" href="#request">Get my $45 beta preview</a>
     </section>
 
@@ -702,6 +748,10 @@
       <div>LimitlessOS · Site Builder</div>
       <div>Questions? <a href="mailto:adam@hopkinsgroup.org">adam@hopkinsgroup.org</a> · (702) 860-2007</div>
     </footer>
+  </div>
+
+  <div class="chat-bubble">
+    <a href="mailto:adam@hopkinsgroup.org?subject=Question about Site Builder" title="Message us">💬 Message</a>
   </div>
 
   <script>
@@ -783,10 +833,16 @@
           submit.textContent = 'Building…';
 
           const businessUrl = normalizeUrl(document.getElementById('businessUrl').value);
+          let referrer = null;
+          let vertical = null;
+          try { referrer = sessionStorage.getItem('site-builder-ref'); } catch (e) {}
+          try { vertical = document.body.getAttribute('data-vertical'); } catch (e) {}
           const body = {
             businessUrl,
             contactEmail: document.getElementById('contactEmail').value.trim(),
             businessName: document.getElementById('businessName').value.trim() || undefined,
+            referrer: referrer || undefined,
+            vertical: vertical || undefined,
           };
 
           try {
@@ -823,6 +879,112 @@
             submit.textContent = 'Build my preview';
           }
         });
+      }
+    })();
+
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const vertical = params.get('vertical');
+      const verticals = {
+        dentist: { headline: 'A website that brings in more patients.', lede: 'Built for dental and medical practices. Send us your URL and see a conversion-focused preview in 90 seconds.' },
+        attorney: { headline: 'A website that brings in more clients.', lede: 'Built for law firms and professional services. Send us your URL and see a trust-first preview in 90 seconds.' },
+        contractor: { headline: 'A website that brings in more jobs.', lede: 'Built for HVAC, roofing, and home service businesses. Send us your URL and see a lead-generating preview in 90 seconds.' },
+        advisor: { headline: 'A website that brings in more qualified prospects.', lede: 'Built for CPAs, financial advisors, and consultants. Send us your URL and see a clean, credible preview in 90 seconds.' },
+      };
+      if (vertical && verticals[vertical]) {
+        const h = document.getElementById('hero-headline');
+        const l = document.getElementById('hero-lede');
+        if (h) h.textContent = verticals[vertical].headline;
+        if (l) l.textContent = verticals[vertical].lede;
+        document.body.setAttribute('data-vertical', vertical);
+      }
+
+      const ref = params.get('ref');
+      if (ref) {
+        try { sessionStorage.setItem('site-builder-ref', ref); } catch (e) {}
+      }
+
+      const auditForm = document.getElementById('audit-form');
+      const auditSubmit = document.getElementById('audit-submit');
+      const auditStatus = document.getElementById('audit-status');
+      const auditResult = document.getElementById('audit-result');
+      const auditScore = document.getElementById('audit-score');
+      const auditGrade = document.getElementById('audit-grade');
+      const auditRecommendation = document.getElementById('audit-recommendation');
+      const auditPains = document.getElementById('audit-pains');
+      const auditCta = document.getElementById('audit-cta');
+
+      if (auditForm) {
+        auditForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const url = normalizeUrl(document.getElementById('auditUrl').value);
+          auditStatus.className = 'status';
+          auditStatus.textContent = 'Scanning your site…';
+          auditSubmit.disabled = true;
+          auditResult.style.display = 'none';
+          try {
+            const resp = await fetch(`/api/v1/sites/health-score?url=${encodeURIComponent(url)}`);
+            const data = await resp.json().catch(() => ({}));
+            if (!resp.ok || data.ok === false) {
+              throw new Error(data.error || ('Request failed (' + resp.status + ')'));
+            }
+            auditScore.textContent = data.opportunityScore ?? data.score ?? '—';
+            auditScore.style.setProperty('--score', data.opportunityScore ?? data.score ?? 0);
+            auditGrade.textContent = data.grade || '—';
+            auditRecommendation.textContent = data.recommendation || '';
+            auditPains.innerHTML = (data.painPoints || []).slice(0, 5).map(p => `<li>${p}</li>`).join('');
+            auditCta.href = `#request?url=${encodeURIComponent(url)}`;
+            auditResult.style.display = 'block';
+            auditStatus.textContent = 'Done.';
+          } catch (err) {
+            auditStatus.className = 'status error';
+            auditStatus.textContent = err.message || 'Could not scan site.';
+          } finally {
+            auditSubmit.disabled = false;
+            auditSubmit.textContent = 'Get my score';
+          }
+        });
+      }
+
+      const referralForm = document.getElementById('referral-form');
+      const referralStatus = document.getElementById('referral-status');
+      const referralLink = document.getElementById('referral-link');
+      const referralActions = document.getElementById('referral-actions');
+
+      if (referralForm) {
+        referralActions.style.display = 'none';
+        referralForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const clientId = document.getElementById('referralClientId').value.trim();
+          if (!clientId) return;
+          const baseUrl = `${window.location.origin}${window.location.pathname}`;
+          const link = `${baseUrl}?ref=${encodeURIComponent(clientId)}`;
+          referralLink.value = link;
+          referralActions.style.display = 'flex';
+          referralActions.classList.add('visible');
+          referralStatus.textContent = 'Copy this link and send it to another business owner.';
+          referralLink.select();
+          try { document.execCommand('copy'); referralStatus.textContent = 'Copied to clipboard.'; } catch (e) {}
+        });
+      }
+
+      const leadForm = document.getElementById('lead-form');
+      if (leadForm) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        if (url) {
+          const businessUrl = document.getElementById('businessUrl');
+          if (businessUrl) businessUrl.value = url;
+        }
+      }
+
+      function normalizeUrl(raw) {
+        if (!raw) return '';
+        let v = raw.trim();
+        if (!/^https?:\/\//i.test(v)) {
+          v = 'https://' + v.replace(/^\/+/, '');
+        }
+        return v;
       }
     })();
   </script>
