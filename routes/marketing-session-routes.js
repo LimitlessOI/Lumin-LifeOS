@@ -130,9 +130,22 @@ export async function registerMarketingSessionRoutes(app, deps) {
             }
 
             const { id } = req.params;
-            const { message } = req.body;
+            const { message, talk_pack: talkPackBody, seed_pack: seedPackBody, bullet_index: bulletIndexBody } = req.body;
             if (!message) {
                 return res.status(400).json({ ok: false, error: 'Message is required.' });
+            }
+
+            let talkPack = talkPackBody && typeof talkPackBody === 'object' ? talkPackBody : null;
+            if (!talkPack && typeof seedPackBody === 'string' && seedPackBody.trim()) {
+                try {
+                    talkPack = JSON.parse(Buffer.from(seedPackBody, 'base64url').toString('utf8'));
+                } catch {
+                    try {
+                        talkPack = JSON.parse(decodeURIComponent(seedPackBody));
+                    } catch {
+                        talkPack = null;
+                    }
+                }
             }
 
             const sessionResult = await pool.query(
@@ -146,7 +159,24 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const coachMessages = sessionResult.rows[0].coach_messages_json || [];
             coachMessages.push({ role: 'user', content: message });
 
-            const systemPrompt = `You are a marketing coach AI. Your goal is to help the user articulate their marketing goals, target audience, and content ideas. Keep the conversation focused on marketing strategy. Detect "hook moments" when the user mentions specific energy, numbers, or details that could be a compelling hook for content. Respond with a JSON object { "response": "AI's reply", "hookDetected": true/false, "hookText": "Detected hook phrase" }.`;
+            const bulletIndex = Number.isFinite(Number(bulletIndexBody)) ? Number(bulletIndexBody) : 0;
+            const packJson = talkPack ? JSON.stringify(talkPack) : 'null';
+            const systemPrompt = talkPack
+                ? `You are a talk-card PRODUCER coach for a founder filming on camera.
+He already has a talk card — do NOT ask vague "what should I say?" questions and do NOT rewrite his voice into AI-sounding copy.
+
+Talk card (JSON): ${packJson}
+Current bullet index (0-based): ${bulletIndex}
+
+Your job while he practices:
+1. Quote specific language he used that landed — "I liked when you said…"
+2. When vague, push for lived detail — "Give me more — who / what number / what scar?"
+3. Keep him on the current beat (hook → intro → bullets → exit), then nudge to the next bullet.
+4. Keep replies short (2–4 sentences). Sound like a sharp producer, not a chatbot.
+
+Respond ONLY with JSON:
+{ "response": "producer reply", "hookDetected": true/false, "hookText": "phrase or null", "currentBullet": 0, "quotedMoment": "exact words you liked or null", "askMore": true/false }`
+                : `You are a talk-card producer coach. Help the founder lock a hook, intro, 3 spoken bullets, and exit for one video. Prefer lived specificity over AI fluff. Detect hook moments (names, numbers, scars). Respond with JSON: { "response": "…", "hookDetected": true/false, "hookText": "…", "currentBullet": null, "quotedMoment": null, "askMore": false }.`;
             const history = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
             const fullPrompt = `${systemPrompt}\n\nConversation history:\n${history}\n\nAI:`;
 
@@ -156,28 +186,51 @@ export async function registerMarketingSessionRoutes(app, deps) {
             let responseContent = 'An error occurred while processing the AI response.';
             let hookDetected = false;
             let hookText = null;
+            let currentBullet = bulletIndex;
+            let quotedMoment = null;
+            let askMore = false;
 
             if (aiResponse && typeof aiResponse.response === 'string') {
                 responseContent = aiResponse.response;
                 hookDetected = aiResponse.hookDetected === true;
                 hookText = aiResponse.hookText || null;
+                if (Number.isFinite(Number(aiResponse.currentBullet))) currentBullet = Number(aiResponse.currentBullet);
+                quotedMoment = aiResponse.quotedMoment || null;
+                askMore = aiResponse.askMore === true;
             } else {
-                // If AI doesn't return JSON, assume raw text and try to detect hooks heuristically
                 responseContent = aiResponseText;
-                if (/(energy|specific|numbers|details)/i.test(responseContent)) { // Simple heuristic
+                if (/(energy|specific|numbers|details)/i.test(responseContent)) {
                     hookDetected = true;
                     hookText = responseContent.match(/(energy|specific|numbers|details)/i)?.[0] || null;
                 }
             }
 
-            coachMessages.push({ role: 'assistant', content: responseContent });
+            coachMessages.push({
+                role: 'assistant',
+                content: responseContent,
+                metadata: {
+                    hookDetected,
+                    hookText,
+                    currentBullet,
+                    quotedMoment,
+                    askMore,
+                },
+            });
 
             await pool.query(
                 `UPDATE marketing_sessions SET coach_messages_json = $1 WHERE id = $2 AND owner_id = $3`,
                 [JSON.stringify(coachMessages), id, owner_id]
             );
 
-            res.status(200).json({ ok: true, response: responseContent, hookDetected, hookText });
+            res.status(200).json({
+                ok: true,
+                response: responseContent,
+                hookDetected,
+                hookText,
+                currentBullet,
+                quotedMoment,
+                askMore,
+            });
         } catch (error) {
             logger.error(`Error in POST /api/v1/marketing/sessions/${req.params.id}/coach:`, error);
             res.status(500).json({ ok: false, error: error.message });

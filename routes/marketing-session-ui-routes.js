@@ -177,6 +177,8 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .coach-message { background: rgba(16,185,129,0.1); padding: 14px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid var(--ok); }
         .user-message { background: rgba(59,130,246,0.1); padding: 14px; border-radius: 10px; margin-bottom: 12px; border-right: 4px solid #3b82f6; text-align: right; }
         .hook-detected { color: #fbbf24; font-weight: 700; margin-top: 6px; }
+        .coach-cue { color: #6ee7b7; font-weight: 600; margin-top: 6px; font-size: 13px; }
+        .coach-more { color: #fbbf24; font-weight: 600; margin-top: 6px; font-size: 13px; }
         .content-card { background: #0d0d15; border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
         .content-card h3 { margin-top: 0; color: var(--text); }
         .content-card .actions { text-align: right; margin-top: 12px; }
@@ -190,11 +192,21 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .yt-panel { margin: 22px 0; padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: #0d0d15; }
         .yt-panel h2 { border: none; margin: 0 0 8px; padding: 0; font-size: 1.15rem; }
         .suggest-grid { display: grid; gap: 14px; margin-top: 14px; }
-        .suggest-card { display: grid; grid-template-columns: 160px 1fr; gap: 12px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #12121a; }
-        .suggest-card img { width: 160px; height: 90px; object-fit: cover; background: #000; }
-        .suggest-body { padding: 10px 12px 12px 0; }
-        .suggest-body h3 { margin: 0 0 6px; font-size: 1rem; border: none; padding: 0; }
+        .suggest-card { display: grid; grid-template-columns: 200px 1fr; gap: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #12121a; padding-bottom: 4px; }
+        .suggest-card img { width: 200px; height: 112px; object-fit: cover; background: #000; }
+        .suggest-body { padding: 10px 14px 14px 0; }
+        .suggest-body h3 { margin: 0 0 6px; font-size: 1.05rem; border: none; padding: 0; }
         .suggest-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+        .talk-block { margin: 8px 0; font-size: 13px; color: var(--text); line-height: 1.45; }
+        .talk-block strong { color: #c4b5fd; display: block; margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .talk-block ul { margin: 4px 0 0 18px; padding: 0; }
+        .talk-block li { margin: 3px 0; }
+        .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .chip-row button { background: #1a1a24; border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
+        .chip-row button:hover { border-color: var(--accent); }
+        .script-panel { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: #0d0d15; margin-bottom: 16px; }
+        .script-panel h2 { border: none; margin: 0 0 10px; padding: 0; font-size: 1.05rem; }
+        .script-panel .active-bullet { border-left: 3px solid var(--accent); padding-left: 10px; background: rgba(124,58,237,0.08); }
         .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(124,58,237,0.2); color: #c4b5fd; font-size: 11px; margin-right: 6px; }
         @media (max-width: 640px) {
           .suggest-card { grid-template-columns: 1fr; }
@@ -250,7 +262,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             <div class="yt-panel">
               <h2>Top videos to make</h2>
-              <p id="suggestMeta">Loading researched ideas + ready thumbnails…</p>
+              <p id="suggestMeta">Loading researched talk cards (hook · intro · bullets · close · thumbnail)…</p>
               <div id="suggestGrid" class="suggest-grid"></div>
             </div>
 
@@ -296,13 +308,20 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 (data.suggestions || []).forEach(function(s) {
                   const card = document.createElement('div');
                   card.className = 'suggest-card';
-                  card.innerHTML = '<img alt="" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
+                  const bullets = (s.talking_points || []).map(function(b) { return '<li>' + escapeHtml(b) + '</li>'; }).join('');
+                  const comps = (s.competitors || []).map(function(c) { return escapeHtml(c); }).join(' · ');
+                  card.innerHTML = '<img alt="thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
                     '<div class="suggest-body">' +
                     '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span><span class="pill">' + escapeHtml(s.angle || 'idea') + '</span></div>' +
                     '<h3>' + escapeHtml(s.title) + '</h3>' +
-                    '<p class="suggest-meta">' + escapeHtml(s.why || '') + '</p>' +
+                    '<div class="talk-block"><strong>Hook</strong>' + escapeHtml(s.hook || '') + '</div>' +
+                    '<div class="talk-block"><strong>Your intro</strong>' + escapeHtml(s.intro || '') + '</div>' +
+                    '<div class="talk-block"><strong>Talk through these</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block"><strong>Exit</strong>' + escapeHtml(s.close || '') + '</div>' +
+                    '<div class="talk-block"><strong>Why this beats competitors</strong>' + escapeHtml(s.competitor_gap || s.why || '') +
+                    (comps ? '<div class="suggest-meta" style="margin-top:4px">Vs: ' + comps + '</div>' : '') + '</div>' +
                     '<div class="actions-row">' +
-                    '<a class="btn" href="' + escapeHtml(marketingHref(s.startUrl)) + '">Start making</a>' +
+                    '<a class="btn" href="' + escapeHtml(marketingHref(s.startUrl)) + '">Film this talk card</a>' +
                     '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Open Studio</a>' +
                     '</div></div>';
                   grid.appendChild(card);
@@ -340,10 +359,11 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   app.get('/marketing/session/new', (req, res) => {
     const seedTitle = String(req.query.seed_title || '');
     const seedAngle = String(req.query.seed_angle || '');
+    const seedPack = String(req.query.seed_pack || '');
     const body = `
             <h1>New Session</h1>
             <p>Consent is required before coaching starts. You review and approve every piece before export.</p>
-            ${seedTitle ? `<div class="message success" style="display:block;">Starting from researched idea: <strong>${escapeHtml(seedTitle)}</strong></div>` : ''}
+            ${seedTitle ? `<div class="message success" style="display:block;">Starting from talk card: <strong>${escapeHtml(seedTitle)}</strong> — coach will walk you through hook, intro, bullets, and exit.</div>` : ''}
             <form id="consentForm">
                 <div class="form-group">
                     <label for="consentAccepted">I agree to let SocialMediaOS process my input and generate marketing content. I am responsible for reviewing and approving all content before publication.</label>
@@ -365,10 +385,12 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const clientScript = `
             const seedTitle = ${JSON.stringify(seedTitle)};
             const seedAngle = ${JSON.stringify(seedAngle)};
-            if (seedTitle) {
+            const seedPack = ${JSON.stringify(seedPack)};
+            if (seedTitle || seedPack) {
               try {
                 sessionStorage.setItem('smos_seed_title', seedTitle);
                 sessionStorage.setItem('smos_seed_angle', seedAngle || '');
+                if (seedPack) sessionStorage.setItem('smos_seed_pack', seedPack);
               } catch (_) {}
             }
             document.getElementById('consentForm').addEventListener('submit', async function(event) {
@@ -413,8 +435,12 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     if (!sessionResponse.ok) throw new Error(sessionData.error || 'Failed to start session.');
 
                     const sid = sessionData.id || sessionData.session?.id;
-                    let next = '/marketing/session/' + sid;
-                    if (seedTitle) next += '?seed_title=' + encodeURIComponent(seedTitle) + '&seed_angle=' + encodeURIComponent(seedAngle || '');
+                    let next = '/marketing/session/' + sid + '?';
+                    const q = [];
+                    if (seedTitle) q.push('seed_title=' + encodeURIComponent(seedTitle));
+                    if (seedAngle) q.push('seed_angle=' + encodeURIComponent(seedAngle));
+                    if (seedPack) q.push('seed_pack=' + encodeURIComponent(seedPack));
+                    next += q.join('&');
                     window.location.href = marketingHref(next);
                 } catch (error) {
                     console.error('Error in new session setup:', error);
@@ -428,14 +454,28 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   app.get('/marketing/session/:id', (req, res) => {
     const sessionId = req.params.id;
     const seedTitle = String(req.query.seed_title || '');
+    const seedPack = String(req.query.seed_pack || '');
     const body = `
-            <h1>Coaching Session</h1>
-            <p>Talk about your business, stories, and goals. When you have enough material, extract stories then generate the content pack.</p>
+            <h1>Talk-card coaching</h1>
+            <p>Use the script on the left. Speak the hook, your intro, each bullet, then the exit. Coach will react like a producer — “give me more” or “I liked when you said…”</p>
+            <div class="script-panel" id="scriptPanel">
+              <h2>Your talk card</h2>
+              <p class="suggest-meta" id="scriptTitle">Loading…</p>
+              <div id="scriptBody"></div>
+            </div>
+            <div class="chip-row" id="coachChips">
+              <button type="button" data-chip="I'm on the hook — listen to this take: ">Say the hook</button>
+              <button type="button" data-chip="Here's my intro: ">Say my intro</button>
+              <button type="button" data-chip="Talking point: ">Next bullet</button>
+              <button type="button" data-chip="Give me more on that — who specifically / what number / what scar?">Ask: give me more</button>
+              <button type="button" data-chip="I liked when I said: ">Flag what landed</button>
+              <button type="button" data-chip="Closing now: ">Say the exit</button>
+            </div>
             <div id="conversation"></div>
             <form id="coachForm">
                 <div class="form-group">
-                    <label for="userInput">Your message</label>
-                    <textarea id="userInput" name="userInput" placeholder="E.g. I help Vegas buyers and sellers — most agents ghost after closing and I refuse to." required></textarea>
+                    <label for="userInput">Talk it out (paste or type what you'd say on camera)</label>
+                    <textarea id="userInput" name="userInput" placeholder="Say the hook out loud, then type what you said…" required></textarea>
                 </div>
                 <div class="actions-row">
                   <button type="submit">Send to Coach</button>
@@ -453,13 +493,76 @@ export function registerMarketingSessionUiRoutes(app, deps) {
     const clientScript = `
             const sessionId = ${JSON.stringify(sessionId)};
             const seedTitleFromQuery = ${JSON.stringify(seedTitle)};
+            const seedPackFromQuery = ${JSON.stringify(seedPack)};
             const conversationDiv = document.getElementById('conversation');
             const messageDiv = document.getElementById('message');
-            const seedTitle = seedTitleFromQuery || (function(){ try { return sessionStorage.getItem('smos_seed_title') || ''; } catch(_) { return ''; } })();
-            if (seedTitle && document.getElementById('userInput')) {
-              document.getElementById('userInput').value = 'I want to make this video next: "' + seedTitle + '". Help me lock the hook, outline, and thumbnail promise.';
-              try { sessionStorage.removeItem('smos_seed_title'); sessionStorage.removeItem('smos_seed_angle'); } catch(_) {}
+            let talkPack = null;
+            let bulletIndex = 0;
+
+            function decodeSeedPack(raw) {
+              if (!raw) return null;
+              try {
+                const bin = atob(raw.replace(/-/g, '+').replace(/_/g, '/'));
+                const bytes = Uint8Array.from(bin, function(c) { return c.charCodeAt(0); });
+                return JSON.parse(new TextDecoder().decode(bytes));
+              } catch (_) {
+                try { return JSON.parse(decodeURIComponent(raw)); } catch (e2) { return null; }
+              }
             }
+
+            function loadTalkPack() {
+              let raw = seedPackFromQuery;
+              try { if (!raw) raw = sessionStorage.getItem('smos_seed_pack') || ''; } catch(_) {}
+              talkPack = decodeSeedPack(raw);
+              const title = (talkPack && talkPack.title) || seedTitleFromQuery || (function(){ try { return sessionStorage.getItem('smos_seed_title') || ''; } catch(_) { return ''; } })();
+              document.getElementById('scriptTitle').textContent = title || 'Freeform session';
+              const body = document.getElementById('scriptBody');
+              if (!talkPack) {
+                body.innerHTML = '<p class="suggest-meta">No talk card attached — coach will still help you find a hook and outline.</p>';
+                return;
+              }
+              const bullets = (talkPack.talking_points || []).map(function(b, i) {
+                return '<li class="' + (i === 0 ? 'active-bullet' : '') + '" data-bi="' + i + '">' + escapeHtml(b) + '</li>';
+              }).join('');
+              body.innerHTML =
+                '<div class="talk-block"><strong>Hook</strong>' + escapeHtml(talkPack.hook || '') + '</div>' +
+                '<div class="talk-block"><strong>Intro</strong>' + escapeHtml(talkPack.intro || '') + '</div>' +
+                '<div class="talk-block"><strong>Bullets</strong><ul id="bulletList">' + bullets + '</ul></div>' +
+                '<div class="talk-block"><strong>Exit</strong>' + escapeHtml(talkPack.close || '') + '</div>' +
+                '<div class="talk-block"><strong>Competitor gap</strong>' + escapeHtml(talkPack.competitor_gap || talkPack.why || '') + '</div>';
+              try {
+                sessionStorage.removeItem('smos_seed_title');
+                sessionStorage.removeItem('smos_seed_angle');
+                sessionStorage.removeItem('smos_seed_pack');
+              } catch(_) {}
+              if (document.getElementById('userInput') && talkPack.hook) {
+                document.getElementById('userInput').value = 'Opening hook I want to use: "' + talkPack.hook + '". Then my intro: "' + (talkPack.intro || '') + '". Coach me through bullet 1: "' + ((talkPack.talking_points || [])[0] || '') + '".';
+              }
+            }
+
+            function highlightBullet(i) {
+              bulletIndex = i;
+              document.querySelectorAll('#bulletList li').forEach(function(li) {
+                li.classList.toggle('active-bullet', Number(li.getAttribute('data-bi')) === i);
+              });
+            }
+
+            document.getElementById('coachChips').addEventListener('click', function(e) {
+              const btn = e.target.closest('button[data-chip]');
+              if (!btn) return;
+              const input = document.getElementById('userInput');
+              let prefix = btn.getAttribute('data-chip') || '';
+              if (prefix.indexOf('Talking point') === 0 && talkPack && talkPack.talking_points) {
+                const next = Math.min(bulletIndex + 1, (talkPack.talking_points.length || 1) - 1);
+                if (bulletIndex < next) highlightBullet(next);
+                const b = talkPack.talking_points[bulletIndex] || talkPack.talking_points[0] || '';
+                prefix = 'Talking point ' + (bulletIndex + 1) + ': "' + b + '". Here is my take: ';
+              }
+              input.value = prefix + (input.value || '');
+              input.focus();
+            });
+
+            loadTalkPack();
 
             async function loadSession() {
                 const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId, { headers: marketingAuthHeaders() });
@@ -480,11 +583,21 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     } else {
                         msgElement.className = 'coach-message';
                         let contentHtml = '<p><strong>Coach:</strong> ' + escapeHtml(msg.content) + '</p>';
-                        if (msg.metadata && msg.metadata.hooks_detected && msg.metadata.hooks_detected.length) {
-                            contentHtml += '<div class="hook-detected">HOOK DETECTED: ' + escapeHtml(msg.metadata.hooks_detected.join(', ')) + '</div>';
+                        const meta = msg.metadata || {};
+                        if (meta.hooks_detected && meta.hooks_detected.length) {
+                            contentHtml += '<div class="hook-detected">HOOK DETECTED: ' + escapeHtml(meta.hooks_detected.join(', ')) + '</div>';
                         }
-                        if (msg.hookDetected || msg.hookText) {
-                            contentHtml += '<div class="hook-detected">HOOK DETECTED: ' + escapeHtml(msg.hookText || 'yes') + '</div>';
+                        if (msg.hookDetected || msg.hookText || meta.hookDetected || meta.hookText) {
+                            contentHtml += '<div class="hook-detected">HOOK DETECTED: ' + escapeHtml(msg.hookText || meta.hookText || 'yes') + '</div>';
+                        }
+                        if (meta.quotedMoment) {
+                            contentHtml += '<div class="coach-cue">I liked when you said: “' + escapeHtml(meta.quotedMoment) + '”</div>';
+                        }
+                        if (meta.askMore) {
+                            contentHtml += '<div class="coach-more">Producer nudge: give me more — who / what number / what scar?</div>';
+                        }
+                        if (Number.isFinite(Number(meta.currentBullet))) {
+                            highlightBullet(Number(meta.currentBullet));
                         }
                         msgElement.innerHTML = contentHtml;
                     }
@@ -505,11 +618,19 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     const response = await marketingFetch('/api/v1/marketing/sessions/' + sessionId + '/coach', {
                         method: 'POST',
                         headers: marketingAuthHeaders(),
-                        body: JSON.stringify({ message: userInput, owner_id: marketingOwnerId() })
+                        body: JSON.stringify({
+                          message: userInput,
+                          owner_id: marketingOwnerId(),
+                          talk_pack: talkPack,
+                          bullet_index: bulletIndex
+                        })
                     });
                     const data = await response.json();
                     if (!response.ok) throw new Error(data.error || 'Failed to get coach reply.');
-                    if (data.hookDetected) showMsg(messageDiv, 'Hook detected: ' + (data.hookText || 'yes'), 'success');
+                    if (Number.isFinite(Number(data.currentBullet))) highlightBullet(Number(data.currentBullet));
+                    if (data.quotedMoment) showMsg(messageDiv, 'I liked when you said: "' + data.quotedMoment + '"', 'success');
+                    else if (data.askMore) showMsg(messageDiv, 'Give me more — who / what number / what scar?', 'success');
+                    else if (data.hookDetected) showMsg(messageDiv, 'Hook detected: ' + (data.hookText || 'yes'), 'success');
                     await loadSession();
                 } catch (error) {
                     console.error('Error in coaching session:', error);
