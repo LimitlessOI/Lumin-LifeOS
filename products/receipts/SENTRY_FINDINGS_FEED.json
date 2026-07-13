@@ -1,20 +1,27 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T19:02:56.866Z",
-  "findings_count": 2,
+  "generated_at": "2026-07-13T19:10:35.876Z",
+  "findings_count": 3,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Template choices are present, but the labels feel a little too design-focused for someone not technical.",
-      "proposed_solution": "Add a short plain-English description under each template so I know what kind of business style it creates.",
+      "detail": "Template names felt a bit technical rather than friendly or descriptive.",
+      "proposed_solution": "Use more plain-language template labels that describe the style in everyday terms.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The chat clears after sending, which makes it feel like my message may have disappeared before I know it was received.",
-      "proposed_solution": "Keep sent chat messages visible in the conversation so I can confirm what I asked and what was answered.",
+      "detail": "There are only 3 palettes, so visual choices may feel a little limited.",
+      "proposed_solution": "Show clearer visual previews or stronger differences between the 4 templates.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_3",
+      "detail": "The chat box accepted input, but it wasn’t obvious what happened after sending.",
+      "proposed_solution": "After chat messages are sent, show a visible response or confirmation so it feels useful.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -24,11 +31,15 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Template choices are present, but the labels feel a little too design-focused for someone not technical."
+        "detail": "Template names felt a bit technical rather than friendly or descriptive."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The chat clears after sending, which makes it feel like my message may have disappeared before I know it was received."
+        "detail": "There are only 3 palettes, so visual choices may feel a little limited."
+      },
+      {
+        "code": "ux_friction_3",
+        "detail": "The chat box accepted input, but it wasn’t obvious what happened after sending."
       }
     ]
   }

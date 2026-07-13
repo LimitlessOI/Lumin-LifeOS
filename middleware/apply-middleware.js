@@ -74,6 +74,10 @@ export function applyMiddleware(app, {
     if (skipStaticPaths.has(req.path)) {
       return next();
     }
+    // Preview index/variant files are DB-backed; the registered route must win over disk.
+    if (/^\/previews\/[\w-]+(\/variants\/[\w-]+)?\/index\.html$/.test(req.path)) {
+      return next();
+    }
     return express.static(publicDir)(req, res, next);
   });
 

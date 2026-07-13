@@ -158,7 +158,7 @@ const DESIGN_SYSTEMS = [
     id: 'dark-aura',
     name: 'Dark Aura',
     blurb: 'A dark canvas with neon glow and glass — premium, modern, and spa-tech.',
-    tier: 'paid',
+    tier: 'free',
     audience: 'High-end wellness, med-spas, tech-enabled services, and brands that want to feel premium and futuristic.',
     personality: ['premium', 'futuristic', 'moody', 'confident', 'sleek'],
     tokens: {

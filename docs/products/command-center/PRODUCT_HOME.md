@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Live env inventory: `npm run env:inventory` → `docs/ENV_LIVE_INVENTORY.json` (names + present only). Re-run after any Railway var change. |
+| **Last Updated** | 2026-07-13 — `middleware/apply-middleware.js` now skips the global static handler for `/previews/:clientId/index.html` and `/previews/:clientId/variants/:variantId/index.html` so DB-backed Site Builder preview routes win over stale disk files. Prior: 2026-07-10 — Live env inventory: `npm run env:inventory` → `docs/ENV_LIVE_INVENTORY.json` (names + present only). Re-run after any Railway var change. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).

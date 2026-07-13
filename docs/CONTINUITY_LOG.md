@@ -1,4 +1,10 @@
+<!-- SYNOPSIS: Continuity Log -->
+
 ---
+
+## 2026-07-13 — Site Builder template tier fix + DB-backed preview routing
+
+Follow-up to the shared design studio deploy: the live `wellroundedmama.com` preview `prev_1783969932165_08i5` showed every template as `paid` and the `X-Preview-Source: db` route was not being reached. Root causes: (1) `services/site-builder.js` `buildVariants` did not copy `designSystem.tier` into the `variants` array, so `generateVariantSwitcher` defaulted every chip to `paid`. (2) `middleware/apply-middleware.js` mounted `express.static(publicDir)` before `routes/site-builder-routes.js` registered `GET /previews/:clientId/index.html`, so stale disk files masked the DB-backed switcher. Implemented: `services/site-builder.js` `variants.push` includes `tier: ds.tier || 'paid'`; `config/design-studio.js` set `dark-aura` as the 5th free template; `middleware/apply-middleware.js` skips static for `/previews/:clientId/index.html` and `/previews/:clientId/variants/:variantId/index.html`; `scripts/patch-preview-tier.mjs` regenerates `previewHtml` for existing rows without rebuilding all variants. `docs/products/site-builder/PRODUCT_HOME.md` and `docs/products/command-center/PRODUCT_HOME.md` updated. Verification: `node --check` all changed JS files, `npm run builder:preflight` PASS. Final `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, and `npm run sentry:site-builder:gate` pending post-deploy.
 
 ## 2026-07-13 — Site Builder shared design studio + template pricing + MarketingOS integration
 
@@ -7,8 +13,6 @@ Adam: "In our system stack of Builder OS, we're supposed to have a studio that t
 ## 2026-07-13 — SocialMediaOS readiness audit + content pack quality fix
 
 Audited SocialMediaOS/MarketingOS Phase 1–2 flows on production: `/marketing` loads researched YouTube suggestions, consent → coaching → extraction → generation → approve → export works, calendar loads/saves, atoms create/load. Fixed `routes/marketing-session-routes.js` generation to produce distinct multi-platform pieces with titles (using `claude_sonnet` batch prompt), improved `parseCouncilResponse` JSON extraction, added `title` column to `marketing_content_pieces`, corrected `services/marketing-content-engine.js` `@ssot`. Remaining honest blockers: YouTube OAuth requires `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` + Google Cloud Console redirect URI; audio upload requires Cloudflare R2 `STORAGE_*` env vars; Phase 5 social publishing needs platform connection setup and `createBrowserSession` wiring in `registerMarketingPublishRoutes`.
-
-<!-- SYNOPSIS: Continuity Log -->
 
 # Continuity Log
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.

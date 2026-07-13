@@ -555,7 +555,7 @@ export default class SiteBuilder {
           await fs.mkdir(vDir, { recursive: true });
           await fs.writeFile(path.join(vDir, 'index.html'), html);
           variantHtmls[ds.id] = html;
-          variants.push({ id: ds.id, name: ds.name, blurb: ds.blurb, file: `variants/${ds.id}/index.html`, scorePct: quality.scorePct });
+          variants.push({ id: ds.id, name: ds.name, blurb: ds.blurb, tier: ds.tier || 'paid', file: `variants/${ds.id}/index.html`, scorePct: quality.scorePct });
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
         }
