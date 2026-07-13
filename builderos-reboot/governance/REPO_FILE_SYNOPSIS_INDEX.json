@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T12:19:04.473Z",
+  "generated_at": "2026-07-13T12:50:49.320Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11490,
+  "file_count": 11491,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81701,6 +81701,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/canonical-id.js",
+      "synopsis": "Exports getCanonicalProductId — services/canonical-id.js.",
+      "bytes": 187,
+      "mtime": "2026-07-13T12:50:49.320Z",
+      "indexed_at": "2026-07-13T12:50:49.320Z"
     },
     {
       "path": "services/capability-map-service.js",
