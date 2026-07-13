@@ -45,10 +45,12 @@ function parseTokens(raw) {
   return raw;
 }
 
-function thumbnailSvgDataUri({ title, subtitle = 'SocialMediaOS', accent = '#7c3aed' }) {
+function thumbnailSvgDataUri({ title, subtitle = 'SocialMediaOS', hook = '', accent = '#7c3aed' }) {
   const safeTitle = String(title || 'Video idea').slice(0, 72)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const safeSub = String(subtitle).slice(0, 40)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const safeHook = String(hook || '').slice(0, 90)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
   <defs>
@@ -59,15 +61,26 @@ function thumbnailSvgDataUri({ title, subtitle = 'SocialMediaOS', accent = '#7c3
   </defs>
   <rect width="1280" height="720" fill="url(#g)"/>
   <rect x="48" y="48" width="1184" height="624" rx="28" fill="rgba(0,0,0,0.35)" stroke="rgba(255,255,255,0.18)"/>
-  <text x="96" y="160" fill="#a78bfa" font-family="Arial, sans-serif" font-size="34" font-weight="700">${safeSub}</text>
-  <text x="96" y="280" fill="#ffffff" font-family="Arial, sans-serif" font-size="64" font-weight="700">
-    <tspan x="96" dy="0">${safeTitle.slice(0, 34)}</tspan>
-    <tspan x="96" dy="78">${safeTitle.slice(34, 68)}</tspan>
+  <text x="96" y="140" fill="#a78bfa" font-family="Arial, sans-serif" font-size="30" font-weight="700">${safeSub}</text>
+  <text x="96" y="250" fill="#ffffff" font-family="Arial, sans-serif" font-size="58" font-weight="700">
+    <tspan x="96" dy="0">${safeTitle.slice(0, 32)}</tspan>
+    <tspan x="96" dy="70">${safeTitle.slice(32, 64)}</tspan>
   </text>
-  <text x="96" y="620" fill="#c4b5fd" font-family="Arial, sans-serif" font-size="28">Click → Start making</text>
+  <text x="96" y="480" fill="#fde68a" font-family="Arial, sans-serif" font-size="34">
+    <tspan x="96" dy="0">${safeHook.slice(0, 48)}</tspan>
+    <tspan x="96" dy="44">${safeHook.slice(48, 90)}</tspan>
+  </text>
+  <text x="96" y="620" fill="#c4b5fd" font-family="Arial, sans-serif" font-size="26">Talk card · hook · bullets · close</text>
 </svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
+
+function encodeSeedPack(pack) {
+  return Buffer.from(JSON.stringify(pack), 'utf8').toString('base64url');
+}
+
+const DEFAULT_INTRO = 'Hey — I\'m Adam. I help people get clear results without the fluff.';
+const DEFAULT_CLOSE = 'If this helped, tell me in the comments what you\'re stuck on next — I\'ll answer.';
 
 const FALLBACK_IDEAS = [
   {
@@ -75,30 +88,75 @@ const FALLBACK_IDEAS = [
     why: 'Retention + trust story; high comment potential for service businesses.',
     angle: 'story',
     hook: 'Closed is not the finish line.',
+    competitor_gap: 'Most agent channels stop at the closing day highlight reel.',
+    competitors: ['Typical agent listing tours', 'Generic "just closed!" posts'],
+    talking_points: [
+      'What clients feel the week after closing that nobody prepares them for',
+      'One concrete follow-up ritual you actually run',
+      'The business result when you stay present after the deal',
+    ],
+    intro: DEFAULT_INTRO,
+    close: DEFAULT_CLOSE,
   },
   {
     title: 'Stop posting content that sounds like AI wrote it',
     why: 'Direct pain for founders who hate sounding fake on camera.',
     angle: 'teaching',
-    hook: 'If it could be anyone’s post, it shouldn’t be yours.',
+    hook: 'If it could be anyone\'s post, it shouldn\'t be yours.',
+    competitor_gap: 'Competing "content tips" channels sell templates; few show how to sound like yourself.',
+    competitors: ['Generic AI content coaches', 'Template-first social gurus'],
+    talking_points: [
+      'The tell that a post was generated (no specific names, numbers, or scars)',
+      'How you pull one real story from a real week',
+      'The 3-beat structure: hook → lived detail → clear ask',
+    ],
+    intro: DEFAULT_INTRO,
+    close: DEFAULT_CLOSE,
   },
   {
     title: 'One weekly video that fills your calendar',
     why: 'Simple operating system > random posting streaks.',
     angle: 'system',
     hook: 'One video. One offer. One clear next step.',
+    competitor_gap: 'Growth channels push daily posting; yours can win on one intentional weekly film.',
+    competitors: ['Daily-post hustle channels', 'Batch-content factories'],
+    talking_points: [
+      'Why daily posting burns founders out without filling the calendar',
+      'The one weekly video format that maps to a booked conversation',
+      'How you measure "did this video create a real next step?"',
+    ],
+    intro: DEFAULT_INTRO,
+    close: DEFAULT_CLOSE,
   },
   {
     title: 'What your analytics are actually telling you to film next',
     why: 'Uses channel truth when connected; otherwise founder defaults.',
     angle: 'analytics',
     hook: 'Your best next video is already hiding in the numbers.',
+    competitor_gap: 'Most creators chase trends; few reverse-engineer their own retention graph.',
+    competitors: ['Trend-chasing Shorts channels', 'Thumbnail-only growth advice'],
+    talking_points: [
+      'Which recent title retained people past 30 seconds',
+      'What that audience was actually hungry for',
+      'The next film that answers that hunger without copying a competitor',
+    ],
+    intro: DEFAULT_INTRO,
+    close: DEFAULT_CLOSE,
   },
   {
     title: 'The 15-second open that earns the next minute',
     why: 'Earned-attention framework — practical and rewatchable.',
     angle: 'script',
     hook: 'If second 15 fails, minute 2 never happens.',
+    competitor_gap: 'Hook tips are everywhere; few give a reusable open + exit for YOUR voice.',
+    competitors: ['Hook formula channels', 'Faceless AI narration pages'],
+    talking_points: [
+      'The open line that names the viewer\'s exact stuck point',
+      'Proof you\'ve lived it (one specific beat)',
+      'The promise of what they\'ll walk away with in this video',
+    ],
+    intro: DEFAULT_INTRO,
+    close: DEFAULT_CLOSE,
   },
 ];
 
@@ -272,21 +330,39 @@ export function createYouTubeService(poolOrDeps = {}) {
     return { ok: true, videos };
   }
 
-  function buildSuggestionCards(ideas, { source, channelTitle }) {
+  function buildSuggestionCards(ideas, { source, channelTitle, founderIntro }) {
     return ideas.map((idea, idx) => {
       const title = idea.title || idea.text;
-      const startPath = `/marketing/session/new?seed_title=${encodeURIComponent(title)}&seed_angle=${encodeURIComponent(idea.angle || 'story')}`;
-      return {
-        id: `yt-idea-${idx + 1}`,
-        rank: idx + 1,
+      const hook = idea.hook || '';
+      const intro = idea.intro || founderIntro || DEFAULT_INTRO;
+      const close = idea.close || DEFAULT_CLOSE;
+      const talking_points = Array.isArray(idea.talking_points) && idea.talking_points.length
+        ? idea.talking_points.slice(0, 5)
+        : (FALLBACK_IDEAS[idx % FALLBACK_IDEAS.length].talking_points || []);
+      const competitors = Array.isArray(idea.competitors) ? idea.competitors.slice(0, 4) : [];
+      const competitor_gap = idea.competitor_gap || idea.competitor_context?.gap || '';
+      const pack = {
         title,
         why: idea.why || idea.rationale || '',
         angle: idea.angle || 'story',
-        hook: idea.hook || '',
+        hook,
+        intro,
+        close,
+        talking_points,
+        competitors,
+        competitor_gap,
+      };
+      const seedPack = encodeSeedPack(pack);
+      const startPath = `/marketing/session/new?seed_title=${encodeURIComponent(title)}&seed_angle=${encodeURIComponent(pack.angle)}&seed_pack=${encodeURIComponent(seedPack)}`;
+      return {
+        id: `yt-idea-${idx + 1}`,
+        rank: idx + 1,
+        ...pack,
         source,
         channelTitle: channelTitle || null,
         thumbnailUrl: thumbnailSvgDataUri({
           title,
+          hook,
           subtitle: channelTitle ? `${channelTitle} · researched` : 'Researched · ready to film',
         }),
         startUrl: startPath,
@@ -295,11 +371,27 @@ export function createYouTubeService(poolOrDeps = {}) {
     });
   }
 
+  async function loadFounderIntro(ownerId) {
+    if (!pool?.query) return DEFAULT_INTRO;
+    try {
+      const { rows } = await pool.query(
+        `SELECT brand_voice_json FROM marketing_channel_profiles WHERE owner_id = $1 LIMIT 1`,
+        [String(ownerId)]
+      );
+      const voice = rows[0]?.brand_voice_json;
+      const parsed = typeof voice === 'string' ? JSON.parse(voice) : voice;
+      return parsed?.founderIntro || parsed?.intro || DEFAULT_INTRO;
+    } catch {
+      return DEFAULT_INTRO;
+    }
+  }
+
   async function getSuggestions(ownerId, { callCouncilMember } = {}) {
     const status = await getStatus(ownerId);
     let channelTitle = null;
     let recentTitles = [];
     let source = 'founder_defaults';
+    const founderIntro = await loadFounderIntro(ownerId);
 
     if (status.connected) {
       try {
@@ -318,22 +410,41 @@ export function createYouTubeService(poolOrDeps = {}) {
     let ideas = FALLBACK_IDEAS;
     if (typeof callCouncilMember === 'function') {
       try {
-        const prompt = `You are a YouTube growth strategist for a founder-led channel.
-Return ONLY a JSON array of exactly 5 objects with keys: title, why, angle, hook.
-Channel: ${channelTitle || 'not connected yet'}
-Recent titles: ${recentTitles.join(' | ') || 'none'}
-Prefer specific, filmable ideas. No hashtags. English only.`;
-        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 900 });
+        const prompt = `You are a YouTube producer for a founder who hates AI-sounding scripts.
+Return ONLY a JSON array of exactly 5 talk cards. Each object MUST have:
+title, why, angle, hook, intro, talking_points (array of 3 short spoken bullets), close,
+competitors (array of 2 competing channel types or example creators), competitor_gap (one sentence: what they miss that we cover).
+
+Rules:
+- Sound human. No hashtags. No corporate fluff. Specific > generic.
+- Hook = first line on camera (under 14 words).
+- intro = how THIS founder opens ("Hey I'm…") — use this founder intro if present: ${JSON.stringify(founderIntro)}
+- talking_points = what he talks through on camera (not essay paragraphs).
+- close = exit / CTA in his voice.
+- Research competitors relative to channel: ${channelTitle || 'founder-led business channel'}
+- Recent titles on this channel: ${recentTitles.join(' | ') || 'none yet'}
+Prefer filmable ideas that beat competitors by lived specificity, not louder AI voice.`;
+        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 2200 });
         const text = typeof raw === 'string' ? raw : (raw?.text || raw?.content || '');
         const match = String(text).match(/\[[\s\S]*\]/);
         const parsed = match ? JSON.parse(match[0]) : null;
         if (Array.isArray(parsed) && parsed.length) {
-          ideas = parsed.slice(0, 5).map((item, i) => ({
-            title: item.title || item.text || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].title,
-            why: item.why || item.rationale || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].why,
-            angle: item.angle || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].angle,
-            hook: item.hook || FALLBACK_IDEAS[i % FALLBACK_IDEAS.length].hook,
-          }));
+          ideas = parsed.slice(0, 5).map((item, i) => {
+            const fb = FALLBACK_IDEAS[i % FALLBACK_IDEAS.length];
+            return {
+              title: item.title || item.text || fb.title,
+              why: item.why || item.rationale || fb.why,
+              angle: item.angle || fb.angle,
+              hook: item.hook || fb.hook,
+              intro: item.intro || founderIntro || fb.intro,
+              close: item.close || fb.close,
+              talking_points: Array.isArray(item.talking_points) && item.talking_points.length
+                ? item.talking_points
+                : fb.talking_points,
+              competitors: Array.isArray(item.competitors) ? item.competitors : fb.competitors,
+              competitor_gap: item.competitor_gap || item.competitor_context?.gap || fb.competitor_gap,
+            };
+          });
           if (!status.connected) source = 'ai_research_defaults';
         }
       } catch (err) {
@@ -346,7 +457,7 @@ Prefer specific, filmable ideas. No hashtags. English only.`;
       connected: !!status.connected,
       oauthConfigured: !!status.oauthConfigured,
       source,
-      suggestions: buildSuggestionCards(ideas, { source, channelTitle }),
+      suggestions: buildSuggestionCards(ideas, { source, channelTitle, founderIntro }),
     };
   }
 

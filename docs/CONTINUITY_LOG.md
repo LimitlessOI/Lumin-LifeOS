@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-13 — SocialMediaOS talk-card coaching redesign
+
+Adam rejected vague “what should I say?” coaching. Redesigned YouTube suggestions into talk cards (hook, intro, spoken bullets, exit, competitor gap + SVG thumbnail) and coaching into a producer walkthrough with script panel + chips (“give me more”, “I liked when…”). Files: `services/marketing-youtube.js`, `routes/marketing-session-ui-routes.js`, `routes/marketing-session-routes.js`. Thumbnails remain SVG (not image-gen yet). Verify on tip: `/marketing` → Refresh ideas → Film this talk card.
+
 ## 2026-07-13 — BuilderOS governed autonomous loop fix
 
 `BuilderOS is never supposed to be idle.` Root cause: `GOVERNED_FACTORY_ONLY` is active, so the legacy `never-stop` loop correctly fences itself off. The replacement `governed-autonomous-shipping-loop` is running, but `POST /factory/ship-queue` did not pass `skip_intake_gate`, so every `GOVERNED-AUTONOMOUS-*` mission hit `runBpbIntakeGate` with a missing mission pack and returned `step_blocked_by_governance`. Token capacity (4 keys) and daily budget (59/60) are fine. Implemented: `services/governed-autonomous-shipping-loop.js` adds `skip_intake_gate: true` to autonomous ship-queue requests; `services/never-stop-product-factory-scheduler.js` includes `governed_autonomous_ship` status in `GET /api/v1/lifeos/never-stop/status`. Verification: `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`; live `factory/historian/summary` should show `queue_complete` after the next tick.

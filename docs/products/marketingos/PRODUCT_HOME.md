@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — YouTube connect owner_id: prefer query; ignore emergency-key stamp. |
+| **Last Updated** | 2026-07-13 — Talk-card coaching: hook/intro/bullets/exit + producer coach. |
 
 ---
 
@@ -1346,10 +1346,10 @@ config/council-members.js           — shared AI config
 
 ## Agent Handoff Notes
 
-- State: MarketingOS/SocialMediaOS Phase 1 core loop (consent → coach → extract → generate → approve → export) is live and served at `/marketing` standalone and inside `lifeos-app.html` (`/marketing?shell=1`). Phase 2 surfaces (`/marketing/calendar`, `/marketing/atoms`) are now auth-aware and load/save correctly.
-- Last verified: 2026-07-12 — `npm run builder:preflight` PASS; `npm run ssot:validate` PASS; `npm run check:overlay` PASS; `npm run repo:sync-check` PASS. UI smoke tests passed: standalone `/marketing` loads YouTube suggestions without duplicates; `/marketing/calendar` loads 1 scheduled item and `Save date` updates it; `/marketing/atoms` loads/creates atoms; all surfaces work inside `lifeos-app.html`.
-- Next priority: run `npm run lifeos:product-home:verify` post-merge; continue blocking/UX cleanup for session flow `/marketing/session/new` and export `/marketing/session/:id/export`; after PR merge, redeploy Railway and verify `/marketing` production.
-- Open honest blocker: YouTube OAuth still requires `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` set in Railway and a Google Cloud Console redirect URI. Phase 2 schedule/atom UI is functional; real customer experience still needs tested session-to-export flow with a generated content piece.
+- State: SocialMediaOS home cards are **talk cards** (hook, founder intro, spoken bullets, exit, competitor gap, SVG thumbnail). Film this talk card → consent → coaching session with script panel + producer chips. Coach API accepts `talk_pack` and returns `quotedMoment` / `askMore` / `currentBullet`.
+- YouTube connected for Adam on tip (2026-07-13).
+- Next: live-verify Refresh ideas + Film this talk card on tip after deploy; real AI thumbnails still Phase-later (SVG talk-card thumbs for now); IG/FB Connect + R2 audio still open.
+- Honest note: thumbnails are researched SVG talk-card art, not Replicate/image-gen yet.
 
 ---
 
@@ -1357,6 +1357,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-13 | **Talk-card coaching UX** — Suggestions return full pack (hook, intro, talking_points, close, competitors, competitor_gap) + `seed_pack` on start URL. `/marketing` cards render the pack beside thumbnail. Coaching session shows script panel + chips; coach prompt is producer-style (“give me more” / “I liked when you said…”); `POST …/coach` accepts `talk_pack` + `bullet_index`. | Adam: stop vague “what should I say?” AI coach — need researched talk cards with hook, intro, bullets, exit, competitor context, and live coaching while speaking through bullets. | ✅ | — | `node --check`; tip verify after deploy |
 | 2026-07-13 | **YouTube connect owner fix** — `resolveOwnerId` prefers `owner_id` query/body; ignores synthetic `emergency-key`/`command-key` so OAuth `state` stores `adam` and tokens land on the right owner. | Safari/API connect via command key stamped `state=emergency-key`, so Connect never showed connected for Adam. | ✅ | — | tip after deploy + Adam Safari consent |
 | 2026-07-13 | **Shared design studio integration.** `routes/marketing-session-routes.js` now imports `getDesignSystemForBrand` and `buildDesignSystemPrompt` from `config/design-studio.js` and includes the selected system's color, typography, tone, and visual motifs in the content-generation prompt for every content pack. This makes MarketingOS output visually on-brand with the Site Builder design studio. | Founder: "Marketing OS is also supposed to have access to the same studio" (the BuilderOS/Site Builder design studio). | ✅ | ✅ | `node --check` on touched files; `npm run builder:preflight` PASS; `npm run verify:ci` PASS; `npm run lifeos:bp-priority:verify` PASS. SENTRY gate and live preview verification pending after deploy. | — |
 | 2026-07-13 | **SMOS content pack quality + title column.** `routes/marketing-session-routes.js`: generate route now uses `claude_sonnet` with a structured batch prompt to produce 2–3 distinct pieces per extraction (different platform, format, and angle), adds a `title` for each, and inserts `generated_by_model=claude_sonnet`. `parseCouncilResponse` improved to handle markdown JSON blocks, direct JSON, and embedded JSON. `services/marketing-content-engine.js` SSOT corrected to `docs/products/marketingos/PRODUCT_HOME.md`. `db/migrations/20260713_marketing_piece_title.sql` adds `title` column to `marketing_content_pieces`. Export now includes `Title:`. | Audited SocialMediaOS end-to-end: session consent, coach, extract, generate, approve, export, calendar, and atoms all work, but generated pieces were identical Instagram posts. This fix turns the output into a sellable multi-platform content pack. | ✅ | ✅ | `node --check` on touched files; `npm run builder:preflight` passed; `npm run lifeos:bp-priority:verify` passed; manual UI re-test pending. | — |

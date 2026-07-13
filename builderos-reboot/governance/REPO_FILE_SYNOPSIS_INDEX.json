@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T22:33:59.282Z",
+  "generated_at": "2026-07-13T22:55:31.310Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11506,
   "files": [
@@ -36892,9 +36892,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 521802,
-      "mtime": "2026-07-13T22:33:53.822Z",
-      "indexed_at": "2026-07-13T22:33:59.282Z"
+      "bytes": 522379,
+      "mtime": "2026-07-13T22:55:20.396Z",
+      "indexed_at": "2026-07-13T22:55:31.310Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39559,9 +39559,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 109698,
-      "mtime": "2026-07-13T22:33:54.198Z",
-      "indexed_at": "2026-07-13T22:33:59.282Z"
+      "bytes": 109694,
+      "mtime": "2026-07-13T22:55:19.028Z",
+      "indexed_at": "2026-07-13T22:55:31.310Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66181,9 +66181,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 28939,
-      "mtime": "2026-07-13T20:29:53.081Z",
-      "indexed_at": "2026-07-13T22:33:59.282Z",
+      "bytes": 31258,
+      "mtime": "2026-07-13T22:54:54.890Z",
+      "indexed_at": "2026-07-13T22:55:31.310Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -66191,9 +66191,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 39195,
-      "mtime": "2026-07-13T03:41:54.524Z",
-      "indexed_at": "2026-07-13T22:33:59.282Z",
+      "bytes": 47616,
+      "mtime": "2026-07-13T22:55:13.261Z",
+      "indexed_at": "2026-07-13T22:55:31.310Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -85116,9 +85116,9 @@
     {
       "path": "services/marketing-youtube.js",
       "synopsis": "MarketingOS YouTube OAuth + channel analytics + video suggestion packs",
-      "bytes": 13580,
-      "mtime": "2026-07-11T22:44:01.045Z",
-      "indexed_at": "2026-07-13T22:33:59.282Z",
+      "bytes": 19037,
+      "mtime": "2026-07-13T22:53:31.122Z",
+      "indexed_at": "2026-07-13T22:55:31.310Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
