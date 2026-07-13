@@ -1,0 +1,84 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "lifere",
+  "planned_at": "2026-07-13T13:41:44.982Z",
+  "backlog_signature": "b887ae416099c233",
+  "corpus_sources": [
+    "docs/products/lifere/PRODUCT_HOME.md",
+    "docs/products/lifere/AGENTS.md",
+    "docs/products/lifere/FOUNDER_USABILITY_CONTRACT.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "services/quoteService.js",
+      "task": "confirm PASS quote",
+      "spec": "Service that confirms a quote has passed the validation requirements.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "b6f82d39f12da3e00ffa99f927235034298910f1",
+      "last_attempt_at": "2026-07-13T13:46:49.446Z",
+      "completed_at": "2026-07-13T13:46:58.363Z"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "db/migrations/20231010_create_boldtrail_contacts_table.sql",
+      "task": "create BoldTrail contact table",
+      "spec": "SQL migration to create a database table for BoldTrail contacts if it doesn't already exist, incl. columns for contact details.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "e322035549726463063202acfbffd83ea8f0b536",
+      "last_attempt_at": "2026-07-13T13:47:52.897Z",
+      "completed_at": "2026-07-13T13:48:08.290Z"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "services/boldTrailContactCleanupService.js",
+      "task": "optional BoldTrail test contact cleanup",
+      "spec": "Service to check and clean up test contacts from the BoldTrail contact table.",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "e9059ced8a838e754e775206ed4fd02b7165eab2",
+      "last_attempt_at": "2026-07-13T13:54:33.270Z",
+      "completed_at": "2026-07-13T13:55:01.129Z"
+    },
+    {
+      "id": "4",
+      "status": "blocked",
+      "target_file": "routes/quoteRoutes.js",
+      "task": "register quote routes",
+      "spec": "Route module that registers API endpoints for confirming PASS quotes.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 3,
+      "commit_sha": "00787f9d70b64917e86d38c7b7d34e5f917e01e0",
+      "last_attempt_at": "2026-07-13T14:13:57.936Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/quoteRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "add quote routes to auto-registration",
+      "spec": "Entry in JSON config to auto-register the quoteRoutes module.",
+      "depends_on": [
+        "4"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "5d7bd5bab4a6da45597e3ca764ebff090aa822e6",
+      "last_attempt_at": "2026-07-13T14:07:01.059Z",
+      "completed_at": "2026-07-13T14:07:01.471Z"
+    }
+  ]
+}

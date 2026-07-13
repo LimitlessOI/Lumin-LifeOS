@@ -1,0 +1,158 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "memory-system",
+  "planned_at": "2026-07-13T14:17:02.954Z",
+  "backlog_signature": "d072930074a896de",
+  "corpus_sources": [
+    "docs/products/memory-system/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "db/migrations/202311_schema_update.sql",
+      "task": "create vector embedding column",
+      "spec": "Add a vector embedding column to existing tables for efficient memory retrieval.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "6ace0489913d45e528e5efa36ac949f3930438f9",
+      "last_attempt_at": "2026-07-13T14:21:11.655Z",
+      "completed_at": "2026-07-13T14:21:36.717Z"
+    },
+    {
+      "id": "2",
+      "status": "blocked",
+      "target_file": "docs/memory_ttl_policy.md",
+      "task": "specify memory TTL policy",
+      "spec": "Document memory TTL and archive logic at implementation level for clear developer guidance.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T14:27:43.220Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+    },
+    {
+      "id": "3",
+      "status": "done",
+      "target_file": "db/migrations/202311_memory_taxonomy_update.sql",
+      "task": "add memory category taxonomy",
+      "spec": "Update the schema to include a memory category taxonomy: user_preference, decision, context, and fact.",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "a70ee4bd3a2430f548336395cfdd8da14d7491a9",
+      "last_attempt_at": "2026-07-13T14:30:40.985Z",
+      "completed_at": "2026-07-13T14:31:01.029Z"
+    },
+    {
+      "id": "4",
+      "status": "done",
+      "target_file": "services/auth.js",
+      "task": "update auth import",
+      "spec": "Ensure auth.js exports necessary middleware functions for seamless operation.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "450e9fe064d5ace9d20c3a43decc6e3fdacedf4f",
+      "last_attempt_at": "2026-07-13T14:32:44.887Z",
+      "completed_at": "2026-07-13T14:32:57.068Z"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
+      "task": "fix source_type CHECK constraint",
+      "spec": "Add the missing user_input constraint to source_type CHECK to resolve PostgreSQL error PG 23514.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "5a3c36a009b7643ca3a411d86562acee77df5a0d",
+      "last_attempt_at": "2026-07-13T14:35:44.202Z",
+      "completed_at": "2026-07-13T14:35:44.617Z"
+    },
+    {
+      "id": "6",
+      "status": "blocked",
+      "target_file": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
+      "task": "confirm recency threshold",
+      "spec": "Verify the default 90 days recency threshold for conversation_memory migration is correct and update any discrepancies.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T14:41:51.575Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "db/migrations/202311_capsule_id_format.sql",
+      "task": "run schema migration for UUID v4",
+      "spec": "Ensure Capsule IDs are formatted with UUID v4 as default; necessary schema migrations must be applied.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "8",
+      "status": "pending",
+      "target_file": "routes/memory_routes.js",
+      "task": "register memory routes",
+      "spec": "Implement a registerMemoryRoutes(app, deps) function for managing memory-related API endpoints.",
+      "depends_on": [
+        "3"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "9",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "add memory routes",
+      "spec": "Integrate memory routes module into the application's auto-registration system for seamless route management.",
+      "depends_on": [
+        "8"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "scripts/memory-pressure-test.mjs",
+      "task": "verify live mode pressure test",
+      "spec": "Deploy `phase7-railway-probe` branch and ensure 20/20 passing result under pressure test with real Neon state.",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "reviews/phase7_pr_review.md",
+      "task": "write final PR review",
+      "spec": "Compose a detailed PR review document for the `phase7-railway-probe` branch, ensuring a comprehensive note accompanies the formal review process.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "deploy/live_deploy_railway_pipeline.json",
+      "task": "deploy branch to live",
+      "spec": "Deploy the `phase7-railway-probe` branch to Railway, confirming readiness for live applications after all checks.",
+      "depends_on": [
+        "10",
+        "11"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    }
+  ]
+}

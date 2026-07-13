@@ -496,6 +496,114 @@
       "last_attempt_at": "2026-07-12T18:38:38.596Z",
       "completed_at": "2026-07-13T03:40:00.000Z",
       "note": "Marked done 2026-07-13 — entry already live in config; verify_exit_1 was product UI SENTRY thrash on config JSON (token waste). Never-stop must not revive this."
+    },
+    {
+      "id": "1",
+      "status": "done",
+      "target_file": "db/migrations/20260422_lifeos_biological_age.sql",
+      "task": "create biological-age tables",
+      "spec": "CREATE TABLE IF NOT EXISTS biological_age (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, pheno_age NUMERIC, vo2_max NUMERIC, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now()); CREATE TABLE IF NOT EXISTS lab_results (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, results JSONB, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now());",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "f25557b4629653ef8b73202e28ba8bdcefa08706",
+      "last_attempt_at": "2026-07-13T10:43:40.490Z",
+      "completed_at": "2026-07-13T10:43:53.691Z"
+    },
+    {
+      "id": "2",
+      "status": "done",
+      "target_file": "services/lifeos-biological-age.js",
+      "task": "implement biological age calculation",
+      "spec": "const fetchBiologicalAge = async (userId) => { /* Fetch lab results and calculate PhenoAge and VO2 max */ }; module.exports = { fetchBiologicalAge };",
+      "depends_on": [
+        "1"
+      ],
+      "founder_gated": false,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-13T12:15:45.638Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "commit_sha": "66a4095f2b17f95f2c09d1dffd10dfe2836e5681",
+      "revive_count": 1,
+      "completed_at": "2026-07-13T12:16:55.799Z"
+    },
+    {
+      "id": "3",
+      "status": "blocked",
+      "target_file": "routes/lifeos-biological-age-routes.js",
+      "task": "implement routes for biological age",
+      "spec": "const express = require('express'); const { fetchBiologicalAge } = require('../services/lifeos-biological-age.js'); const router = express.Router(); router.get('/biological-age/:userId', async (req, res) => { const { userId } = req.params; const data = await fetchBiologicalAge(userId); res.json(data); }); module.exports = { registerBiologicalAgeRoutes: (app) => app.use('/api', router) };",
+      "depends_on": [
+        "2"
+      ],
+      "founder_gated": false,
+      "attempts": 3,
+      "commit_sha": "6afa15d7f7fc9690162ce29083b1d95aa4012cbb",
+      "last_attempt_at": "2026-07-13T12:31:42.173Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-biological-age-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+    },
+    {
+      "id": "5",
+      "status": "done",
+      "target_file": "db/migrations/20260423_lifeos_twin_simulator.sql",
+      "task": "create twin reaction simulator table",
+      "spec": "CREATE TABLE IF NOT EXISTS twin_simulator_feedback (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID NOT NULL, feedback TEXT, created_at TIMESTAMP DEFAULT now(), updated_at TIMESTAMP DEFAULT now());",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 1,
+      "commit_sha": "524e96b895509bdd04f1506a2da1be0c343dfda8",
+      "last_attempt_at": "2026-07-13T10:58:23.653Z",
+      "completed_at": "2026-07-13T10:58:32.129Z"
+    },
+    {
+      "id": "6",
+      "status": "blocked",
+      "target_file": "services/lifeos-twin-simulator.js",
+      "task": "simulate twin reactions",
+      "spec": "async function simulateTwinReactions(userId, uiData) { /* Call AI to predict user response */ } module.exports = { simulateTwinReactions };",
+      "depends_on": [
+        "5"
+      ],
+      "founder_gated": false,
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T12:33:26.287Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+    },
+    {
+      "id": "7",
+      "status": "pending",
+      "target_file": "routes/lifeos-twin-simulator-routes.js",
+      "task": "implement routes for twin simulator",
+      "spec": "const express = require('express'); const { simulateTwinReactions } = require('../services/lifeos-twin-simulator.js'); const router = express.Router(); router.post('/twin-simulator/:userId', async (req, res) => { const { userId } = req.params; const uiData = req.body.uiData; const response = await simulateTwinReactions(userId, uiData); res.json(response); }); module.exports = { registerTwinSimulatorRoutes: (app) => app.use('/api', router) };",
+      "depends_on": [
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    },
+    {
+      "id": "9",
+      "status": "blocked",
+      "target_file": "services/lifeos-member-feedback.js",
+      "task": "process member feedback",
+      "spec": "function processFeedback(feedback) { /* Queue for founder review */ } module.exports = { processFeedback };",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T12:44:37.822Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+    },
+    {
+      "id": "10",
+      "status": "pending",
+      "target_file": "routes/lifeos-member-feedback-routes.js",
+      "task": "implement routes for member feedback",
+      "spec": "const express = require('express'); const { processFeedback } = require('../services/lifeos-member-feedback.js'); const router = express.Router(); router.post('/member-feedback', (req, res) => { const feedback = req.body.feedback; processFeedback(feedback); res.status(200).send('Feedback processed'); }); module.exports = { registerMemberFeedbackRoutes: (app) => app.use('/api', router) };",
+      "depends_on": [
+        "9"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ],
   "updated_at": "2026-07-12",
