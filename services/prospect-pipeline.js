@@ -342,7 +342,10 @@ export default class ProspectPipeline {
     // business we can't dramatically improve.
     let opportunityAnalysis = null;
     try {
-      opportunityAnalysis = await scoreProspectUrl(businessUrl, { timeout: 6000 });
+      opportunityAnalysis = await Promise.race([
+        scoreProspectUrl(businessUrl, { timeout: 6000 }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('scoreProspectUrl hard timeout')), 10_000)),
+      ]);
       logger.info('[PROSPECT] Opportunity score', {
         businessUrl,
         score: opportunityAnalysis.opportunityScore,
@@ -370,7 +373,10 @@ export default class ProspectPipeline {
         const scored = await Promise.all(
           competitorUrls.map(async (url) => {
             try {
-              const analysis = await scoreProspectUrl(url, { timeout: 6000 });
+              const analysis = await Promise.race([
+                scoreProspectUrl(url, { timeout: 6000 }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('scoreProspectUrl hard timeout')), 10_000)),
+              ]);
               return { url, opportunityScore: analysis.opportunityScore, grade: analysis.grade, painPoints: analysis.painPoints };
             } catch (err) {
               return { url, opportunityScore: null, grade: null, error: err.message };

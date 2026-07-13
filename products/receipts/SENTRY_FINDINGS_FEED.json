@@ -1,27 +1,27 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T05:30:27.068Z",
+  "generated_at": "2026-07-13T05:43:41.346Z",
   "findings_count": 3,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "The template choices are visible, but it may not be obvious at a glance what each one changes.",
-      "proposed_solution": "Add one-line descriptions under each template chip so I can tell the style difference fast.",
+      "detail": "No obvious labels or guidance around what the 4 templates and 3 color palettes change, so it may take a little guessing.",
+      "proposed_solution": "Add plain-language labels under each template and palette, like 'more elegant', 'warmer', or 'best for wellness services'.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The chat is present, but it may not clearly explain how to use it for quick site edits.",
-      "proposed_solution": "Show simple examples or prompts in the chat, like 'Change my headline' or 'Update my colors.'",
+      "detail": "The chat box accepts text, but it is not clear what happened after sending because the input cleared.",
+      "proposed_solution": "Show a simple confirmation after chat messages and save, such as 'Done' or 'Your change was applied'.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The save/publish flow works, but I still have to figure out what happens after I click Publish.",
-      "proposed_solution": "Make the Save and Publish buttons spell out what they do in plain language, such as 'Save draft' and 'Publish to live site.'",
+      "detail": "There is a save button, but with no edits made it is hard to tell whether it confirms anything useful for a non-technical person.",
+      "proposed_solution": "Add a short first-time hint near the device toggle and template switcher explaining how to preview desktop vs mobile and how to choose a style.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -31,15 +31,15 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "The template choices are visible, but it may not be obvious at a glance what each one changes."
+        "detail": "No obvious labels or guidance around what the 4 templates and 3 color palettes change, so it may take a little guessing."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The chat is present, but it may not clearly explain how to use it for quick site edits."
+        "detail": "The chat box accepts text, but it is not clear what happened after sending because the input cleared."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The save/publish flow works, but I still have to figure out what happens after I click Publish."
+        "detail": "There is a save button, but with no edits made it is hard to tell whether it confirms anything useful for a non-technical person."
       }
     ]
   }
