@@ -37,7 +37,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/boldTrailContactCleanupService.js",
       "task": "optional BoldTrail test contact cleanup",
       "spec": "Service to check and clean up test contacts from the BoldTrail contact table.",
@@ -45,7 +45,10 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "e9059ced8a838e754e775206ed4fd02b7165eab2",
+      "last_attempt_at": "2026-07-13T13:54:33.270Z",
+      "completed_at": "2026-07-13T13:55:01.129Z"
     },
     {
       "id": "4",
