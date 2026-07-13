@@ -1,34 +1,27 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T04:06:50.624Z",
-  "findings_count": 4,
+  "generated_at": "2026-07-13T04:18:07.911Z",
+  "findings_count": 3,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Template names like 'editorial-luxe' and 'organic-warm' feel a little design-y instead of plain and obvious.",
-      "proposed_solution": "Use plain-language template names and short descriptions under each one.",
+      "detail": "The template names were not obvious at a glance, so picking one feels a little like guessing.",
+      "proposed_solution": "Show a short plain-English label under each template so I can tell what vibe it gives without opening it.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "There are only 4 template choices, so it may feel a bit limited if I want more directions.",
-      "proposed_solution": "Show a quick 'best for' hint on each template and palette.",
+      "detail": "There are only 3 palette choices, which makes the style options feel somewhat limited.",
+      "proposed_solution": "Add brief descriptions for the color palettes, like calm, bold, or warm, so choosing feels easier.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat box is present, but it’s not clear what I should ask it for first.",
-      "proposed_solution": "Add a first-time helper prompt in chat like 'Ask me to change colors, fonts, or layout.'",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_4",
-      "detail": "Save worked, but there wasn’t a clear sign of what changed when I clicked it.",
-      "proposed_solution": "Make Save give a very clear confirmation, like 'Saved' or 'All changes saved.'",
+      "detail": "The chat box is present, but it is not clear what it can help with before trying it.",
+      "proposed_solution": "Add one sentence near the chat box explaining what kinds of help I can ask for.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -38,19 +31,15 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Template names like 'editorial-luxe' and 'organic-warm' feel a little design-y instead of plain and obvious."
+        "detail": "The template names were not obvious at a glance, so picking one feels a little like guessing."
       },
       {
         "code": "ux_friction_2",
-        "detail": "There are only 4 template choices, so it may feel a bit limited if I want more directions."
+        "detail": "There are only 3 palette choices, which makes the style options feel somewhat limited."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat box is present, but it’s not clear what I should ask it for first."
-      },
-      {
-        "code": "ux_friction_4",
-        "detail": "Save worked, but there wasn’t a clear sign of what changed when I clicked it."
+        "detail": "The chat box is present, but it is not clear what it can help with before trying it."
       }
     ]
   }
