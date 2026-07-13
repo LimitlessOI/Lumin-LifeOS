@@ -32,12 +32,21 @@ const getOwnerId = (req) => {
 const parseCouncilResponse = (text) => {
     try {
         // Attempt to find JSON array or object within the text
-        const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/);
+        const mdMatch = text.match(/```json\n([\s\S]*?)\n```/);
+        if (mdMatch && mdMatch[1]) {
+            return JSON.parse(mdMatch[1]);
+        }
+        // Some models return JSON directly without markdown
+        const trimmed = String(text || '').trim();
+        if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+            return JSON.parse(trimmed);
+        }
+        // Fallback: find the first JSON array or object in the response
+        const jsonMatch = text.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
         if (jsonMatch && jsonMatch[1]) {
             return JSON.parse(jsonMatch[1]);
         }
-        // Fallback to direct parse if no markdown block
-        return JSON.parse(text);
+        return null;
     } catch (e) {
         return null; // Return null if parsing fails
     }
@@ -268,23 +277,68 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const validPlatforms = ['instagram', 'linkedin', 'x', 'facebook', 'email', 'general'];
             const validFormats = ['post', 'caption', 'hook', 'subject_line', 'thread', 'short_script'];
 
+            // Fetch transcript for context and ensure we don't duplicate language across pieces.
+            const sessionTranscriptResult = await pool.query(
+                `SELECT coach_messages_json FROM marketing_sessions WHERE id = $1 AND owner_id = $2`,
+                [id, owner_id]
+            );
+            const coachMessages = sessionTranscriptResult.rows[0]?.coach_messages_json || [];
+            const transcriptText = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+
             for (const extraction of extractions) {
-                const generationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, generate a marketing content piece based on the following extraction. The piece should be suitable for a social media post or a short article snippet. Extraction type: ${extraction.extraction_type}, Raw text: "${extraction.raw_text}". Focus on creating compelling copy. Return a JSON object: { "platform": "instagram", "format": "post", "content_text": "Generated content here" }. Choose a platform and format from: ${validPlatforms.join(', ')} and ${validFormats.join(', ')}.`;
+                const generationPrompt = `You are the MarketingOS content generator. Brand voice: ${JSON.stringify(brandVoice)}.
 
-                const aiResponseText = await callCouncilMember('gemini_flash', generationPrompt);
-                const generatedContent = parseCouncilResponse(aiResponseText);
+Source extraction type: ${extraction.extraction_type}
+Source raw text: """${extraction.raw_text}"""
+Full session transcript for context:
+"""${transcriptText}"""
 
-                if (generatedContent && generatedContent.content_text) {
-                    const platform = validPlatforms.includes(generatedContent.platform) ? generatedContent.platform : 'general';
-                    const format = validFormats.includes(generatedContent.format) ? generatedContent.format : 'post';
+Generate a DISTINCT content pack of 2-3 pieces from this extraction. Each piece must be different in platform, format, and angle. Do NOT repeat the same wording across pieces. Use the source raw text as the kernel, but adapt the copy for each platform and format.
+
+Valid platforms: ${validPlatforms.join(', ')}.
+Valid formats: ${validFormats.join(', ')}.
+
+Return a JSON array of objects with this exact shape:
+[
+  { "title": "Short title", "platform": "instagram", "format": "post", "content_text": "The rendered piece" }
+]
+
+Rules:
+- Instagram posts should be concise and visual.
+- LinkedIn posts should be professional and story-led.
+- X posts should be punchy and under 280 characters.
+- Facebook posts can be warmer and longer.
+- Email should be a subject_line + short body.
+- Hooks should be one-line attention grabbers.
+- Subject lines should be one line.
+- Every content_text must be different. Do not copy the same sentence between pieces.
+- Include a short title for each piece.
+- Return ONLY the JSON array.`;
+
+                const aiResponseText = await callCouncilMember('claude_sonnet', generationPrompt);
+                const generatedContents = parseCouncilResponse(aiResponseText);
+
+                const pieces = Array.isArray(generatedContents) ? generatedContents : (generatedContents && generatedContents.content_text ? [generatedContents] : []);
+
+                if (!pieces.length) {
+                    logger.warn(`Failed to generate content for extraction ID ${extraction.id}. AI response: ${aiResponseText}`);
+                    continue;
+                }
+
+                for (const piece of pieces) {
+                    if (!piece || typeof piece.content_text !== 'string') {
+                        logger.warn(`Skipping malformed generated piece for extraction ${extraction.id}`, { piece });
+                        continue;
+                    }
+                    const platform = validPlatforms.includes(piece.platform) ? piece.platform : 'general';
+                    const format = validFormats.includes(piece.format) ? piece.format : 'post';
+                    const title = typeof piece.title === 'string' && piece.title.trim() ? piece.title.trim() : `${platform} ${format}`;
 
                     const insertResult = await pool.query(
-                        `INSERT INTO marketing_content_pieces (session_id, extraction_id, platform, format, content_text, status, generated_by_model) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-                        [id, extraction.id, platform, format, generatedContent.content_text, 'draft', 'marketing-generator']
+                        `INSERT INTO marketing_content_pieces (session_id, extraction_id, title, platform, format, content_text, status, generated_by_model) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+                        [id, extraction.id, title, platform, format, piece.content_text, 'draft', 'claude_sonnet']
                     );
                     generatedPieces.push(insertResult.rows[0]);
-                } else {
-                    logger.warn(`Failed to generate content for extraction ID ${extraction.id}. AI response: ${aiResponseText}`);
                 }
             }
 
@@ -430,7 +484,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
 
             const { id } = req.params;
             const approvedPiecesResult = await pool.query(
-                `SELECT p.platform, p.format, p.content_text FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved' ORDER BY p.created_at ASC`,
+                `SELECT p.title, p.platform, p.format, p.content_text FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.session_id = $1 AND s.owner_id = $2 AND p.status = 'approved' ORDER BY p.created_at ASC`,
                 [id, owner_id]
             );
 
@@ -441,6 +495,7 @@ export async function registerMarketingSessionRoutes(app, deps) {
             let exportText = `Marketing Content Export for Session ID: ${id}\n\n`;
             approvedPiecesResult.rows.forEach((piece, index) => {
                 exportText += `--- Piece ${index + 1} ---\n`;
+                exportText += `Title: ${piece.title || 'Untitled'}\n`;
                 exportText += `Platform: ${piece.platform}\n`;
                 exportText += `Format: ${piece.format}\n`;
                 exportText += `Content:\n${piece.content_text}\n\n`;

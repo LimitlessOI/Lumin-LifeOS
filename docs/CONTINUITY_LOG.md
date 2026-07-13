@@ -1,3 +1,9 @@
+---
+
+## 2026-07-13 — SocialMediaOS readiness audit + content pack quality fix
+
+Audited SocialMediaOS/MarketingOS Phase 1–2 flows on production: `/marketing` loads researched YouTube suggestions, consent → coaching → extraction → generation → approve → export works, calendar loads/saves, atoms create/load. Fixed `routes/marketing-session-routes.js` generation to produce distinct multi-platform pieces with titles (using `claude_sonnet` batch prompt), improved `parseCouncilResponse` JSON extraction, added `title` column to `marketing_content_pieces`, corrected `services/marketing-content-engine.js` `@ssot`. Remaining honest blockers: YouTube OAuth requires `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` + Google Cloud Console redirect URI; audio upload requires Cloudflare R2 `STORAGE_*` env vars; Phase 5 social publishing needs platform connection setup and `createBrowserSession` wiring in `registerMarketingPublishRoutes`.
+
 <!-- SYNOPSIS: Continuity Log -->
 
 # Continuity Log

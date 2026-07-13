@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: This engine is a foundational component of the MarketingOS and SocialMediaOS platforms,
  * @file services/marketing-content-engine.js
- * @ssot docs/products/builderos/PRODUCT_HOME.md
+ * @ssot docs/products/marketingos/PRODUCT_HOME.md
  * @description Provides core functionalities for extracting and potentially generating marketing content snippets from raw transcripts.
  * This engine is a foundational component of the MarketingOS and SocialMediaOS platforms,
  * designed to identify and refine content suitable for various marketing channels.

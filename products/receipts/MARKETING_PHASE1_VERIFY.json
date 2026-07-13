@@ -6,7 +6,7 @@
       "ok": true,
       "details": {
         "status": 201,
-        "owner_id": "493dc0d4-3ffe-48d4-972f-ade26ee7707c"
+        "owner_id": "7a3bc012-1756-41e7-9308-acf9da12318c"
       }
     },
     {
@@ -18,7 +18,7 @@
       "ok": true,
       "details": {
         "status": 201,
-        "id": "1a09317f-3144-4b5a-8dfa-81c0ea2d24e7"
+        "id": "14aa6c94-e1e7-4a7d-a7ca-6901cca00e1d"
       }
     },
     {
@@ -42,7 +42,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "id": "5aee5790-4f40-47e8-b67b-fa3906d6ae60"
+        "id": "d381019a-a210-4eb7-914c-3b43bc320552"
       }
     },
     {
@@ -58,7 +58,7 @@
       "ok": true,
       "details": {
         "status": 200,
-        "contentDisposition": "attachment; filename=\"marketing-content-session-1a09317f-3144-4b5a-8dfa-81c0ea2d24e7.txt\""
+        "contentDisposition": "attachment; filename=\"marketing-content-session-14aa6c94-e1e7-4a7d-a7ca-6901cca00e1d.txt\""
       }
     },
     {
@@ -92,6 +92,6 @@
       "next_unblocking_action": "Point package scripts at verify-marketing-phase1-live.mjs or delete/replace stale file"
     }
   ],
-  "at": "2026-07-10T02:01:02.343Z",
+  "at": "2026-07-13T08:48:24.642Z",
   "note": "ok=true means all runnable §6 text-mode tests passed; infra blockers remain named in blockers[]"
 }
