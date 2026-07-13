@@ -643,7 +643,7 @@
       <div class="faq">
         <details>
           <summary>How long does the preview take?</summary>
-          <p>Most previews are ready to view in under 90 seconds. The first time you open the link we do the build, so it is ready when you are.</p>
+          <p>Most previews are ready to view in under 90 seconds. We build the preview as soon as you submit it, so the link is ready when you open it.</p>
         </details>
         <details>
           <summary>Do I need to enter a credit card?</summary>
@@ -666,7 +666,7 @@
 
     <section class="section card" id="request">
       <h2>Request your beta preview</h2>
-      <p class="section-sub">Paste your website. We will email you a preview link — it builds when you open it, usually under a minute.</p>
+      <p class="section-sub">Paste your website. We will email you a preview link — we build it as soon as you submit, so it is ready when you open it.</p>
       <form class="lead-form" id="lead-form">
         <label>
           Business website URL
@@ -804,7 +804,7 @@
             const previewUrl = data.previewUrl || (clientId ? `/previews/${encodeURIComponent(clientId)}/index.html` : '#');
             const statusUrl = data.statusUrl;
 
-            if (data.deferred && statusUrl && clientId) {
+            if (statusUrl && clientId) {
               status.textContent = data.message || 'Preview started. We will email the link too.';
               pollStatus(clientId, statusUrl, previewUrl);
             } else {

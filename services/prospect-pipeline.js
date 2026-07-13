@@ -397,28 +397,20 @@ export default class ProspectPipeline {
     }, 20_000);
     let buildResult;
     try {
-      // Lean/no-AI fast path for deferred click builds and public-lead reliability.
-      // Full cold builds still use buildVariants unless lean/skipAi is set.
-      const useLeanSinglePath = options.leanTemplate || options.skipAi || options.deferredBuild === true;
-      buildResult = useLeanSinglePath
-        ? await this.siteBuilder.buildFromUrl(businessUrl, {
-            businessInfo: options.businessInfo || null,
-            clientId: options.clientId || null,
-            enrich: options.enrich,
-            skipRepair: options.skipRepair,
-            skipBlogs: options.skipBlogs,
-            skipAi: options.skipAi || options.deferredBuild === true,
-            leanTemplate: options.leanTemplate || options.deferredBuild === true,
-            onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
-          })
-        : await this.siteBuilder.buildVariants(businessUrl, {
-            businessInfo: options.businessInfo || null,
-            clientId: options.clientId || null,
-            enrich: options.enrich,
-            skipRepair: options.skipRepair,
-            competitorUrls: options.competitorUrls || [],
-            onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
-          });
+      // Always use the single-site build path. Pre-builds are stored in Postgres
+      // via previewHtml (buildVariants' switcher could not be durably served on
+      // ephemeral disk). Variants can still be generated with /build-variants.
+      buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
+        businessInfo: options.businessInfo || null,
+        clientId: options.clientId || null,
+        enrich: options.enrich,
+        skipRepair: options.skipRepair,
+        skipBlogs: options.skipBlogs,
+        skipAi: options.skipAi || options.deferredBuild === true,
+        leanTemplate: options.leanTemplate || options.deferredBuild === true,
+        competitorUrls: options.competitorUrls || [],
+        onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
+      });
     } finally {
       clearInterval(heartbeat);
     }

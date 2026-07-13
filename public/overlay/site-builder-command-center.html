@@ -446,11 +446,22 @@
       try {
         const res = await api('/api/v1/sites/prospect', {
           method: 'POST',
-          body: JSON.stringify({ businessUrl, contactEmail, businessName, skipEmail })
+          body: JSON.stringify({
+            businessUrl,
+            contactEmail,
+            businessName,
+            skipEmail,
+            leanTemplate: true,
+            skipAi: true,
+            skipBlogs: true,
+            skipRepair: true,
+            enrich: false,
+            skipQualify: true,
+          })
         });
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.error || 'Build failed');
-        setBuildStatus(`Preview queued: ${data.clientId || ''}`);
+        setBuildStatus(`Preview build started: ${data.clientId || ''}`);
         urlInput.value = '';
         emailInput.value = '';
         nameInput.value = '';
