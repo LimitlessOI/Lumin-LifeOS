@@ -804,6 +804,57 @@ async function fetchYouTubeRss(rssParam, { logger: log } = {}) {
   }
 }
 
+async function fetchYouTubeVideosFromChannelPage(channelId, { logger: log } = {}) {
+  const log2 = log || logger;
+  if (!channelId) return [];
+  try {
+    const res = await withTimeout(
+      fetchText(`https://www.youtube.com/channel/${channelId}/videos`, { timeoutMs: 15_000, headers: { 'User-Agent': 'Mozilla/5.0' } }),
+      15_000,
+      'fetchYouTubeVideosFromChannelPage',
+    );
+    if (!res.ok) return [];
+    const match = res.text.match(/ytInitialData = (\{[\s\S]*?\});<\/script>/);
+    if (!match) return [];
+    const data = JSON.parse(match[1]);
+    const tabs = data?.contents?.twoColumnBrowseResultsRenderer?.tabs || [];
+    const videosTab = tabs.find((t) => t?.tabRenderer?.title === 'Videos');
+    const contents = videosTab?.tabRenderer?.content?.richGridRenderer?.contents || [];
+    const videos = [];
+    for (const item of contents) {
+      const vm = item?.richItemRenderer?.content?.lockupViewModel;
+      if (!vm || vm.contentType !== 'LOCKUP_CONTENT_TYPE_VIDEO') continue;
+      const videoId = vm.contentId;
+      const title = vm.metadata?.lockupMetadataViewModel?.title?.content;
+      const rows = vm.metadata?.lockupMetadataViewModel?.metadata?.contentMetadataViewModel?.metadataRows || [];
+      let viewsText = null;
+      let publishedText = null;
+      for (const row of rows) {
+        for (const part of row.metadataParts || []) {
+          const text = part?.text?.content;
+          if (!text) continue;
+          if (/\d+\s+(?:view|views)/.test(text)) viewsText = text;
+          else if (/(year|month|week|day|hour|minute|second)s?\s+ago/.test(text)) publishedText = text;
+        }
+      }
+      if (videoId) {
+        videos.push({
+          videoId,
+          title: title || 'Video',
+          embedUrl: `https://www.youtube.com/embed/${videoId}`,
+          thumbnailUrl: `https://i3.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+          viewsText,
+          publishedText,
+        });
+      }
+    }
+    return videos;
+  } catch (err) {
+    log2.warn('[ASSET] YouTube channel page parse failed', { channelId, error: err.message });
+    return [];
+  }
+}
+
 async function ingestYouTube(businessInfo, social, { logger: log }) {
   const log2 = log || logger;
   const candidates = [];
@@ -843,7 +894,10 @@ async function ingestYouTube(businessInfo, social, { logger: log }) {
   for (const candidate of candidates.slice(0, 4)) {
     const resolved = await resolveYouTubeChannel(candidate, { logger: log2 });
     if (!resolved) continue;
-    const videos = await fetchYouTubeRss(resolved.rssParam, { logger: log2 });
+    let videos = await fetchYouTubeRss(resolved.rssParam, { logger: log2 });
+    if (!videos.length && resolved.channelId) {
+      videos = await fetchYouTubeVideosFromChannelPage(resolved.channelId, { logger: log2 });
+    }
     if (!best || (videos?.length || 0) > (best.videos?.length || 0)) {
       best = { url: candidate, ...resolved, videos };
     }

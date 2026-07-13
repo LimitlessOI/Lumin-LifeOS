@@ -1,27 +1,27 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T04:18:07.911Z",
+  "generated_at": "2026-07-13T05:16:06.137Z",
   "findings_count": 3,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "The template names were not obvious at a glance, so picking one feels a little like guessing.",
-      "proposed_solution": "Show a short plain-English label under each template so I can tell what vibe it gives without opening it.",
+      "detail": "No clear labels for what each template or palette changes before I click it.",
+      "proposed_solution": "Add plain-language labels and one-line descriptions for templates and color palettes.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "There are only 3 palette choices, which makes the style options feel somewhat limited.",
-      "proposed_solution": "Add brief descriptions for the color palettes, like calm, bold, or warm, so choosing feels easier.",
+      "detail": "The chat box accepted my message, but it wasn’t obvious what happened next.",
+      "proposed_solution": "Show a visible confirmation or suggested next step after sending a chat message.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat box is present, but it is not clear what it can help with before trying it.",
-      "proposed_solution": "Add one sentence near the chat box explaining what kinds of help I can ask for.",
+      "detail": "The device toggle is present, but it wasn’t clear what I should use it for as a non-technical person.",
+      "proposed_solution": "Add simple helper text near the device toggle, like 'Preview on phone or desktop.'",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -31,15 +31,15 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "The template names were not obvious at a glance, so picking one feels a little like guessing."
+        "detail": "No clear labels for what each template or palette changes before I click it."
       },
       {
         "code": "ux_friction_2",
-        "detail": "There are only 3 palette choices, which makes the style options feel somewhat limited."
+        "detail": "The chat box accepted my message, but it wasn’t obvious what happened next."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat box is present, but it is not clear what it can help with before trying it."
+        "detail": "The device toggle is present, but it wasn’t clear what I should use it for as a non-technical person."
       }
     ]
   }
