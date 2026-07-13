@@ -2263,13 +2263,46 @@ export function createTCRoutes(
   });
 
   // POST /api/v1/tc/email/scan — trigger inbox scan now
+  // Body: { days?: number, include_seen?: boolean, organize?: boolean,
+  //         max_messages?: number, max_ai?: number, dry_run?: boolean }
   router.post('/email/scan', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const accountManager = await getAccountManager();
       const notificationService = await getNotificationService();
       const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
-      const result = await triage.scanInbox();
+      const body = req.body || {};
+      const daysRaw = Number(body.days);
+      const result = await triage.scanInbox({
+        days: Number.isFinite(daysRaw) ? daysRaw : undefined,
+        includeSeen: body.include_seen === true || body.organize === true,
+        organize: body.organize === true || (Number.isFinite(daysRaw) && daysRaw >= 7),
+        maxMessages: body.max_messages,
+        maxAi: body.max_ai,
+        dryRun: body.dry_run === true,
+        skipAlerts: body.skip_alerts !== false && (body.organize === true || (Number.isFinite(daysRaw) && daysRaw >= 7)),
+      });
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/organize — last N days: keep RE/client/paperwork, trash spam
+  router.post('/email/organize', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const accountManager = await getAccountManager();
+      const notificationService = await getNotificationService();
+      const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
+      const body = req.body || {};
+      const daysRaw = Number(body.days);
+      const result = await triage.organizeRecentInbox({
+        days: Number.isFinite(daysRaw) ? Math.min(60, Math.max(7, daysRaw)) : 40,
+        dryRun: body.dry_run === true,
+        maxMessages: body.max_messages,
+        maxAi: body.max_ai,
+      });
       res.json(result);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });

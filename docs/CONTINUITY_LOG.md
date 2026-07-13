@@ -19,6 +19,10 @@ Audited SocialMediaOS/MarketingOS Phase 1–2 flows on production: `/marketing` 
 
 ---
 
+## [SESSION] 2026-07-13 — TC email organize (40-day RE triage + spam trash)
+
+Adam: TC should monitor emails for important real-estate client reachouts and paperwork; organize last ~40 days; delete spam. Extended `services/email-triage.js` `scanInbox({ days, includeSeen })` + `POST /api/v1/tc/email/organize` (default 40 days); tightened spam/marketing patterns; cron still uses short unread window.
+
 ## [SESSION] 2026-07-13 — Google Calendar + YouTube connect on tip (LifeOS Connect hub)
 
 Adam asked to connect Google calendars/todos across LifeOS, LifeRe, MarketingOS/SocialMediaOS. KNOW: tip already had `GOOGLE_CLIENT_ID`/`SECRET` (`youtube/status` oauthConfigured:true) but `/api/v1/lifeos/engine/*` 404'd because Railway boots `founder_builder` and never mounts full-runtime engine routes. GAP-FILL: `registerLifeOSEngineRoutes` + auto-register entry; LifeOS calendar redirect hard-set to engine callback; Connect page Google hub (Calendar + YouTube). Adam still must (1) add Calendar redirect URI in Google Console, (2) click Connect Calendar + Connect YouTube in LifeOS Connect (OAuth consent cannot be done by the agent).

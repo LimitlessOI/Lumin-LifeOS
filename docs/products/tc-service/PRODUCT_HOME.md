@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-11 — Google OAuth setup probe: tip hit Google UI click wall (app password / challenge). |
+| **Last Updated** | 2026-07-13 — TC inbox organize: 40-day lookback, spam→Trash, keep client/paperwork/contracts. |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-13 | **TC inbox organize (40-day)** — `scanInbox({ days, includeSeen, organize })` + `POST /api/v1/tc/email/organize` (default 40d). Spam/marketing → Trash + block list; keep contracts/deadlines/docs/client reachouts; FYI marked read. Tightened spam patterns (ccsend, CE pitches, lead blasts). Cron still 12h unread. | Adam: TC monitor RE emails; organize last 30–40 days; delete spam. | ✅ | | tip organize after deploy |
 | 2026-07-11 | **Google YouTube OAuth setup probe** — `POST /api/v1/browser-agent/setup/google-youtube-oauth` uses tip `WORK_EMAIL`/`GMAIL_SIGNUP_*` app password in-process (never returned). Names blocker when Google web login rejects app password / 2FA. | Adam: use Railway email + permission to login and set Google API keys. | ✅ | | tip prove after deploy |
 | 2026-07-11 | **SendGrid + Resend HTTP fallbacks** — NotificationService Postmark-pending → Resend → SendGrid → SMTP. Twilio From provision lives under LifeOS SMS routes. | Adam: pay/open whatever for first dollar; captcha still human. | ✅ | | ⚠️ tip + API keys |
 | 2026-07-11 | **Resend HTTP provider** — NotificationService `EMAIL_PROVIDER=resend` + Postmark-pending falls through to Resend before SMTP. | Railway SMTP times out; need HTTP email for first dollar. | ✅ | | ⚠️ tip + RESEND_API_KEY |
