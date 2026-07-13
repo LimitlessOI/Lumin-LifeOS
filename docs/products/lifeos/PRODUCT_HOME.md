@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — IMAP resume-verify: look back from account create + Spam folder (system has Gmail creds — do not ask founder to open inbox). |
+| **Last Updated** | 2026-07-13 — Marked lo-ui-directives-auto-register DONE (already mounted); stop verify_exit_1 thrash. |
 ---
 
 ## Founder conversations (2026-06-29)

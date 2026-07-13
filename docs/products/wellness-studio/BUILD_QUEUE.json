@@ -137,7 +137,10 @@
     },
     {
       "id": "step-05",
-      "status": "blocked",
+      "status": "skipped",
+      "demoted": true,
+      "demoted_at": "2026-07-13T03:40:00.000Z",
+      "demote_reason": "auto_reg_blocked_no_sibling_register_step — thrashing burned tokens; add ws-studio-auto-register before reopening",
       "target_file": "routes/wellness-studio-routes.js",
       "task": "Create Express route module for wellness studio API endpoints",
       "spec": "Exports registerWellnessStudioRoutes(app, deps) where deps = {db, callCouncilMember, wellnessTherapist}. Mounts: GET /api/wellness-studio/sessions (returns sessions for req.user.id), POST /api/wellness-studio/sessions (calls orchestrator.runWellnessSession), GET /api/wellness-studio/sessions/:sessionId/insights (returns insights). Imports wellness-studio-orchestrator.js and wellness-studio-data.js by relative path. All routes require authenticated req.user. Returns JSON. No browser globals. No top-level side effects.",
