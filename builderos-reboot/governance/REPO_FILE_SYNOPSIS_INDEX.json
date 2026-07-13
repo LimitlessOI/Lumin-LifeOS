@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T06:57:40.829Z",
+  "generated_at": "2026-07-13T07:02:22.109Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11484,
   "files": [
@@ -63069,9 +63069,9 @@
     {
       "path": "products/receipts/SENTRY_FINDINGS_FEED.json",
       "synopsis": "Product receipt — SENTRY FINDINGS FEED.",
-      "bytes": 1746,
-      "mtime": "2026-07-13T06:51:05.650Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z",
+      "bytes": 1753,
+      "mtime": "2026-07-13T07:00:23.402Z",
+      "indexed_at": "2026-07-13T07:02:22.109Z",
       "synopsis_index_only": true
     },
     {
