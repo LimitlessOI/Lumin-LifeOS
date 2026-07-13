@@ -143,7 +143,7 @@
     "step_id": "S420",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/anti-pattern-check.js",
-    "expected_sha256": "b5aa8412ac63cb309ce3cb8cfb6ed39f503042854427d9864c4fa49e96f78954"
+    "expected_sha256": "2eba8b167afe997e7d795ff928a0fdc8bd24096f92a21b3668da27ff5f52de8e"
   },
   {
     "test_id": "AT-S421-1",

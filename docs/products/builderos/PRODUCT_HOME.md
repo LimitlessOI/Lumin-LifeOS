@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — Never-stop: demote unplannable SENTRY replan below LifeOS builds; durable unplannable stamps. |
+| **Last Updated** | 2026-07-12 — BuilderOS factory:ci green: stale mission acceptance/blueprint hashes fixed; `factory-ci.mjs` now generates `lumin-factory-bundle` before `cutover_verify`; `REPO_FILE_SYNOPSIS_INDEX.json` re-indexed. |
 
 ### Related docs (this product)
 
@@ -301,6 +301,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-07-12 | **BuilderOS factory:ci green** — refreshed `byte_exact_copy` sha256 contracts in `FACTORY-REBOOT-0003/0004/0008/0020/0024/0028` `BLUEPRINT.json` and `CONTENT`/`ARTIFACTS` to match `factory-staging/factory-core/sentry/*` and `builderos-reboot/scripts/*.mjs` on disk; added `bundle` step to `builderos-reboot/scripts/factory-ci.mjs` so `cutover_verify` no longer fails on a missing `lumin-factory-bundle`; re-indexed `REPO_FILE_SYNOPSIS_INDEX.json`. | `factory:ci` was failing `acceptance` (4 missions) and `cutover_verify` → `readiness`/`certification` cascading FAIL; now ALL PASS. | `npm run factory:ci` + `npm run builder:preflight` + `npm run lifeos:bp-priority:verify` | green |
 | 2026-07-12 | **Kill SENTRY unplannable fake loop** — `discoverSentryFixWork` priority 2→8; top-5 product `extend_build_queue` priority →2.05; durable stamps in `data/sentry-unplannable-stamps.json`; cycle selection prefers product_build > non-sentry plan > sentry plan. Site-builder stamped unplannable. | Adam: no fake loops; build LifeOS. | ✅ sentry tests + discover smoke | tip |
 | 2026-07-12 | **Never-stop Railway-only halt contract** — Scheduler hard-halts ticks only on `FOUNDER_STOP` / `PAUSE_AUTONOMY` / token keys / daily budget; interval never self-cancels. Status exposes `laptop_is_not_builder` + `hard_halt`. Orchestrator: when a route has `commit_sha` + auto-reg last_error, `selectNextStep` prefers the auto-register sibling (fixes PENDING chicken-egg before maxAttempts BLOCKED). | Adam: this should never run from my laptop; never stop unless I say so or tokens. | ✅ orchestrator 17/17 | tip push + kick |
 | 2026-07-11 | **Never-stop standing order** — Adam: never stop unless out of credits; skip blocked → next project; report why stopped. Added managed allowlist `NEVER_STOP_DAILY_STEP_CAP`/`NEVER_STOP_BOOT_DELAY_MS`/`NEVER_STOP_LANES`; kicked tip run-once; wrote `docs/FOUNDER_NEVER_STOP_REPORT.md`. | Idle-looking never-stop (`total_runs:0`) + soft 60/day cap could idle while credits remain. | ✅ status kick | tip redeploy + set cap=0 |
@@ -964,13 +965,13 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 
 ## Agent Handoff Notes
 
-**Current state:** **SNT mechanical PASS; live BLOCKED on deploy drift.** GitHub `57ef960c16`; Railway still `23fc14fe02`. `SNT_VERIFY_RESULT.json` verdict: `SNT_MECHANICAL_PASS_LIVE_BLOCKED`. **Deliberation phase alpha NOT signed.**
+**Current state:** BuilderOS `factory:ci` ALL PASS, `npm run builder:preflight` PASS, `npm run lifeos:bp-priority:verify` PASS. Refreshed `FACTORY-REBOOT-0003/0004/0008/0020/0024/0028` `BLUEPRINT.json` sha256 contracts and `CONTENT`/`ARTIFACTS` to match the `factory-staging` / `builderos-reboot/scripts` files on disk. `builderos-reboot/scripts/factory-ci.mjs` now runs `build-lumin-factory-bundle.mjs` before `cutover_verify`, so the bundle gate is self-contained. `REPO_FILE_SYNOPSIS_INDEX.json` re-indexed.
 
 **Next priority:**
-1. Railway `build-from-latest` until SHA matches `57ef960c16`
-2. `npm run lifeos:deliberation:snt-live` → 9/9
-3. Mission → `complete` / PROVEN; then deliberation slice counts toward BuilderOS alpha receipt
+1. Run `factory:ci` on a clean clone to confirm cold reproducibility
+2. Address `npm test` 2 pre-existing failures in `tests/auto-register-product-modules.test.js` when `os.tmpdir()` is `/tmp` (outside repo root); CI passes because `TMPDIR` is under the workspace
+3. Continue `site-builder` / `marketingos` money-lane builds per `PRODUCT_BUILD_PRIORITY.json`
 
 **Legacy code:** Many files still say TSOS dept or six depts — read v2.7 vocabulary; rename on touch with receipt.
 
-**⚠️ INCOMPLETE:** SNT live verify on Railway after pass-3 deploy; REP catalog UI; Founder Debrief auto-delivery.
+**⚠️ INCOMPLETE:** `npm test` local-run temp-dir ESM issue (not `builder:preflight`/`factory:ci`); SNT live verify on Railway after pass-3 deploy; REP catalog UI; Founder Debrief auto-delivery.

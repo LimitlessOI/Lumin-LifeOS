@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-07-12 — BuilderOS audit: `factory:ci` green
+
+Audited BuilderOS health and factory CI. `npm run builder:preflight` and `npm run lifeos:bp-priority:verify` passed, but `npm run factory:ci` failed `acceptance` on four missions (`FACTORY-REBOOT-0003`, `0004`, `0008`, `0024`, `0028` had stale `byte_exact_copy` sha256 contracts) and `cutover_verify` because `lumin-factory-bundle` was not generated. Refreshed the `BLUEPRINT.json` sha256 contracts and `CONTENT`/`ARTIFACTS` files for those missions to match `factory-staging/factory-core/sentry/*` and `builderos-reboot/scripts/*.mjs` on disk, synced `ACCEPTANCE_TESTS.json` from blueprints, added a `bundle` step to `builderos-reboot/scripts/factory-ci.mjs` to run `build-lumin-factory-bundle.mjs` before `cutover_verify`, and re-indexed `REPO_FILE_SYNOPSIS_INDEX.json`. After fixes, `npm run factory:ci` ALL PASS, `npm run builder:preflight` PASS, `npm run lifeos:bp-priority:verify` PASS. `npm test` still has 2 pre-existing failures in `tests/auto-register-product-modules.test.js` when `os.tmpdir()` is `/tmp` outside the repo root; CI passes because `TMPDIR` is under the workspace. PR created from `devin/builderos-audit`.
+
+---
+
 ## [SESSION] 2026-07-12 — MarketingOS/SocialMediaOS Phase 1/2 UI/UX audit + fix
 
 Audited MarketingOS/SocialMediaOS inside `lifeos-app.html` and standalone (`/marketing`, `/marketing/calendar`, `/marketing/atoms`, `/creative/studio`, `/api/v1/marketing/youtube/suggestions`). Fixed duplicate YouTube suggestion loading on `/marketing` home, extracted `sharedMarketingClientAuth` into `routes/marketing-session-ui-routes.js` and reused it in `routes/marketing-calendar-ui-routes.js`, wired calendar/atom UI to `marketingFetch` with auth headers, fixed `getOwnerId` handling in `routes/marketing-calendar-routes.js`, fixed calendar SQL to only select existing `marketing_content_pieces` columns and nest `content_piece`, aligned atom type/reuse-consent validation with migration, added `POST /api/v1/marketing/calendar` for scheduling, and fixed `services/marketing-brand-voice.js` to query `marketing_content_pieces` directly. `npm run builder:preflight` PASS, `npm run ssot:validate` PASS, `npm run check:overlay` PASS, `npm run repo:sync-check` PASS. Standalone and in-shell UI tests show calendar loads 1 scheduled item, `Save date` updates slot, atom library loads/creates atoms, and marketing home loads researched YouTube suggestions. PR created from `devin/marketing-social-ux`.

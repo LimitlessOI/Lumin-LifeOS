@@ -23,6 +23,7 @@ const steps = [
   ['greenfield_3x', ['run-greenfield-determinism-3x.mjs']],
   ['duplication', ['factory-duplication-test.mjs']],
   ['queue_dry_run', ['autopilot-run-queue.mjs']],
+  ['bundle', ['build-lumin-factory-bundle.mjs']],
   ['cutover_verify', ['cutover-verify.mjs']],
   ['readiness', ['readiness-report.mjs']],
   ['full_loop_proof', ['run-full-loop-proof.mjs']],
