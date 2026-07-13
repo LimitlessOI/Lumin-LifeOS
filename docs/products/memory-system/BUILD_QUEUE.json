@@ -22,14 +22,14 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "docs/memory_ttl_policy.md",
       "task": "specify memory TTL policy",
       "spec": "Document memory TTL and archive logic at implementation level for clear developer guidance.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-13T14:25:55.088Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T14:27:43.220Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
