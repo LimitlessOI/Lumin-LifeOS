@@ -22,6 +22,7 @@ import {
   factoryRuntimeEnvPresence,
 } from './never-stop-product-factory.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
+import { getGovernedAutonomousShipStatus } from './governed-autonomous-shipping-loop.js';
 import { founderStopActive } from '../factory-staging/factory-core/arc/gate-enforcement.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -111,6 +112,7 @@ export function getNeverStopProductFactoryStatus({ events = 25 } = {}) {
       env_present: factoryRuntimeEnvPresence(),
       last_receipt: state.lastReceipt || readLastReceipt(),
       recent_events: readRecentFactoryLog(events),
+      governed_status: getGovernedAutonomousShipStatus().governed_autonomous_ship,
     },
   };
 }

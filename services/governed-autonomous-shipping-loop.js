@@ -81,6 +81,7 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
       mission_id: `GOVERNED-AUTONOMOUS-${product_id}`,
       blueprint_id: `governed-autonomous-${product_id}`,
       steps: ship_steps,
+      skip_intake_gate: true,
     }),
   });
   const body = await res.json().catch(() => ({}));
