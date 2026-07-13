@@ -589,8 +589,8 @@
       "spec": "function processFeedback(feedback) { /* Queue for founder review */ } module.exports = { processFeedback };",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-13T12:38:10.013Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-07-13T12:39:45.099Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
