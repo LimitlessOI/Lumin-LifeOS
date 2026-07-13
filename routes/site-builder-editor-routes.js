@@ -116,7 +116,7 @@ function buildEditorContext(meta, clientId, baseUrl) {
   return {
     businessName,
     clientId,
-    siteFile: 'index.html',
+    siteFile: variants[0]?.file || 'index.html',
     variants,
     palettes,
     editToken: meta.editToken,

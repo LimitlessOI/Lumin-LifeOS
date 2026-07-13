@@ -464,14 +464,16 @@ export default class SiteBuilder {
       }
 
       // Shared content (built once, reused across every variant)
-      const blogPosts = await this.generateBlogPosts(businessInfo, 3);
-      const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
+      const blogPosts = options.skipBlogs ? [] : await this.generateBlogPosts(businessInfo, 3);
+      const blogHtml = options.skipBlogs ? '' : this.generateBlogIndex(businessInfo, blogPosts);
       const sitemap = this.generateSitemap(clientId, blogPosts);
       const robots = this.generateRobots();
 
       const deployDir = path.join(process.cwd(), this.previewsDir, clientId);
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
-      await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
+      if (!options.skipBlogs) {
+        await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
+      }
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);
       await fs.writeFile(path.join(deployDir, 'robots.txt'), robots);
       for (const post of blogPosts) {
@@ -485,6 +487,7 @@ export default class SiteBuilder {
         : '';
 
       const variants = [];
+      const variantHtmls = {};
       for (const ds of systems) {
         try {
           let html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds });
@@ -502,6 +505,7 @@ export default class SiteBuilder {
           const vDir = path.join(deployDir, 'variants', ds.id);
           await fs.mkdir(vDir, { recursive: true });
           await fs.writeFile(path.join(vDir, 'index.html'), html);
+          variantHtmls[ds.id] = html;
           variants.push({ id: ds.id, name: ds.name, blurb: ds.blurb, file: `variants/${ds.id}/index.html`, scorePct: quality.scorePct });
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
@@ -516,7 +520,7 @@ export default class SiteBuilder {
       const bestVariant = variants.reduce((best, v) => (v.scorePct > (best?.scorePct ?? -1) ? v : best), null);
       let qualityReport = null;
       try {
-        const bestHtml = await fs.readFile(path.join(deployDir, bestVariant.file), 'utf8');
+        const bestHtml = variantHtmls[bestVariant.id];
         qualityReport = this.scoreSiteHtml(bestHtml, businessInfo);
       } catch (err) {
         logger.warn('[SITE] Could not re-score best variant (non-fatal)', { clientId, error: err.message });
@@ -552,7 +556,15 @@ export default class SiteBuilder {
         publishCheckoutUrl: this.baseUrl ? `${this.baseUrl}/api/v1/sites/publish/checkout?clientId=${clientId}` : null,
         mode: 'variants',
       };
-      await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
+      // Write a lightweight meta.json to disk; keep the full variant HTMLs in
+      // memory for the DB payload and the runtime variant-file fallback route.
+      const diskMeta = { ...metadata };
+      await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(diskMeta, null, 2));
+
+      // Durable DB payload: switcher as previewHtml + every variant HTML for
+      // recovery when ephemeral disk is lost on another Railway instance.
+      metadata.previewHtml = switcher;
+      metadata.variantHtmls = variantHtmls;
 
       logger.info('[SITE] Variants deployed', { clientId, count: variants.length, previewUrl: metadata.previewUrl, bestScore: qualityReport.scorePct });
       return {
@@ -564,6 +576,7 @@ export default class SiteBuilder {
         qualityReport,
         posPartner: posPartner.name,
         metadata,
+        siteHtml: switcher,
       };
     } catch (err) {
       logger.error('[SITE] Variant build failed', { clientId, error: err.message });

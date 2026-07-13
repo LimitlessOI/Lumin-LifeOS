@@ -180,7 +180,7 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
  *  custom brand-color match ($5). Shares the same session-create/verify shape as
  *  the publish checkout above. `kind` selects the price + product metadata. */
 const UPSELL_CONFIG = {
-  'template-additional': () => ({ ...SITE_BUILDER_PRICING.templates.additional, label: 'One more site design' }),
+  'template-additional': () => ({ ...SITE_BUILDER_PRICING.templates.additional, label: `${SITE_BUILDER_PRICING.templates.additional.slotCount || 10} more site designs` }),
   'template-custom': () => ({ ...SITE_BUILDER_PRICING.templates.custom, label: 'Fully custom site design' }),
   'color-custom': () => ({ ...SITE_BUILDER_PRICING.colors.custom, label: 'Custom brand colors' }),
 };
@@ -260,7 +260,10 @@ export async function verifyUpsellCheckoutSession({ sessionId, clientId, kind, p
 
   if (pool) {
     const unlockField = metaKind === 'color-custom' ? 'customColorUnlocked' : 'unlockedTemplateSlots';
-    const increment = metaKind === 'color-custom' ? null : 1;
+    const isAdditional = metaKind === 'template-additional';
+    const increment = metaKind === 'color-custom'
+      ? null
+      : (isAdditional ? SITE_BUILDER_PRICING.templates.additional.slotCount || 10 : 1);
     await pool.query(
       `UPDATE prospect_sites
           SET metadata = COALESCE(metadata, '{}'::jsonb) || $2::jsonb,

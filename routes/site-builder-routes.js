@@ -239,11 +239,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         businessName,
         referrer,
         vertical,
-        enrich: false,
-        skipRepair: true,
+        enrich: true,
+        skipRepair: false,
         skipBlogs: true,
-        skipAi: true,
-        leanTemplate: true,
         skipQualify: true,
       };
 
@@ -379,15 +377,29 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         [clientId]
       );
       const row = result.rows[0];
-      const html = row?.metadata?.previewHtml;
+      const meta = row?.metadata && typeof row.metadata === 'object' ? { ...row.metadata } : {};
+      const html = meta.previewHtml;
       if (html && typeof html === 'string') {
         const deployDir = path.join(process.cwd(), 'public', 'previews', clientId);
         await fsp.mkdir(deployDir, { recursive: true }).catch(() => null);
         await fsp.writeFile(path.join(deployDir, 'index.html'), html).catch(() => null);
-        if (row?.metadata?.editToken) {
+
+        // Restore variant HTML files (and a lightweight meta.json) so the
+        // switcher iframe / editor work even after ephemeral disk is wiped.
+        const variantHtmls = meta.variantHtmls && typeof meta.variantHtmls === 'object' ? meta.variantHtmls : {};
+        for (const [variantId, vHtml] of Object.entries(variantHtmls)) {
+          if (typeof vHtml !== 'string') continue;
+          const vDir = path.join(deployDir, 'variants', variantId);
+          await fsp.mkdir(vDir, { recursive: true }).catch(() => null);
+          await fsp.writeFile(path.join(vDir, 'index.html'), vHtml).catch(() => null);
+        }
+        if (meta.editToken) {
+          const diskMeta = { ...meta };
+          delete diskMeta.previewHtml;
+          delete diskMeta.variantHtmls;
           await fsp.writeFile(
             path.join(deployDir, 'meta.json'),
-            JSON.stringify(row.metadata, null, 2)
+            JSON.stringify(diskMeta, null, 2)
           ).catch(() => null);
         }
         res.set('Content-Type', 'text/html; charset=utf-8');
@@ -460,6 +472,38 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       fallthrough: true,
     })
   );
+
+  // Variant file DB fallback — serves each variant's HTML from Postgres when the
+  // file has been lost due to ephemeral disk. Also writes it back so subsequent
+  // requests hit the static file.
+  app.get('/previews/:clientId/variants/:variantId/index.html', async (req, res, next) => {
+    try {
+      if (!pool) return next();
+      const clientId = String(req.params.clientId || '');
+      const variantId = String(req.params.variantId || '');
+      if (!clientId || !/^[\w-]+$/.test(clientId) || !variantId || !/^[\w-]+$/.test(variantId)) {
+        return next();
+      }
+      const result = await pool.query(
+        `SELECT metadata FROM prospect_sites WHERE client_id = $1 LIMIT 1`,
+        [clientId]
+      );
+      const row = result.rows[0];
+      const meta = row?.metadata && typeof row.metadata === 'object' ? { ...row.metadata } : {};
+      const vHtml = meta.variantHtmls?.[variantId];
+      if (vHtml && typeof vHtml === 'string') {
+        const vDir = path.join(process.cwd(), 'public', 'previews', clientId, 'variants', variantId);
+        await fsp.mkdir(vDir, { recursive: true }).catch(() => null);
+        await fsp.writeFile(path.join(vDir, 'index.html'), vHtml).catch(() => null);
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.set('X-Preview-Source', 'db-variant');
+        return res.send(vHtml);
+      }
+      return next();
+    } catch {
+      return next();
+    }
+  });
 
   app.get('/previews/:clientId', (req, res) => {
     res.redirect(302, `/previews/${encodeURIComponent(req.params.clientId)}/index.html`);

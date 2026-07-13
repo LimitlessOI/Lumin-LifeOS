@@ -1,34 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T02:11:56.292Z",
+  "generated_at": "2026-07-13T03:24:57.630Z",
   "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only 1 template option, so it feels like I have almost no choice for my site.",
-      "proposed_solution": "Show a few more template options so I can compare different looks quickly.",
+      "detail": "Only 1 template choice, so it feels like there’s hardly any design control.",
+      "proposed_solution": "Offer a few more template options so I can pick a look that fits my business.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The design choices look limited overall, with just 3 color palettes.",
-      "proposed_solution": "Offer more palette choices or simple style presets that match wellness businesses.",
+      "detail": "The palette options are very limited, which makes the editor feel a bit boxed in.",
+      "proposed_solution": "Show more color palette choices or a simple way to customize colors.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "It’s not clear up front what I’m supposed to do first in the editor.",
-      "proposed_solution": "Add a clear first-step prompt like 'Start here: pick a look, then edit your text.'",
+      "detail": "The chat box is present, but after sending text it looks like nothing stays there, which can feel awkward.",
+      "proposed_solution": "Make the chat interaction feel more responsive by showing the message after I send it.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_4",
-      "detail": "Chat is there, but I’d want it to feel more like a helpful guide instead of another thing to figure out.",
-      "proposed_solution": "Make the chat feel more guided, with examples of what it can help me change.",
+      "detail": "The template switch area was skipped because there was only one chip, so the experience feels incomplete.",
+      "proposed_solution": "If there’s only one template, hide the template switch area or replace it with clearer design guidance.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -38,19 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only 1 template option, so it feels like I have almost no choice for my site."
+        "detail": "Only 1 template choice, so it feels like there’s hardly any design control."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The design choices look limited overall, with just 3 color palettes."
+        "detail": "The palette options are very limited, which makes the editor feel a bit boxed in."
       },
       {
         "code": "ux_friction_3",
-        "detail": "It’s not clear up front what I’m supposed to do first in the editor."
+        "detail": "The chat box is present, but after sending text it looks like nothing stays there, which can feel awkward."
       },
       {
         "code": "ux_friction_4",
-        "detail": "Chat is there, but I’d want it to feel more like a helpful guide instead of another thing to figure out."
+        "detail": "The template switch area was skipped because there was only one chip, so the experience feels incomplete."
       }
     ]
   }

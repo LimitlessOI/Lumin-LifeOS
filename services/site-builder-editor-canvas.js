@@ -251,7 +251,7 @@ export function renderCanvas({
     <div class="lifeos-canvas-group" aria-label="Templates" title="Click a look to swap your site's design instantly">
       <span class="lifeos-canvas-label">Template</span>
       ${variantChips}
-      <a class="lifeos-canvas-chip lifeos-canvas-upsell" href="${upsellBase}&kind=template-additional" title="Get one more design beyond your free templates">+1 more (${additionalDisplay})</a>
+      <a class="lifeos-canvas-chip lifeos-canvas-upsell" href="${upsellBase}&kind=template-additional" title="Unlock 10 more design options beyond your free templates">+10 more (${additionalDisplay})</a>
       <a class="lifeos-canvas-chip lifeos-canvas-upsell" href="${upsellBase}&kind=template-custom" title="A fully bespoke design, unique to your business only">✨ Custom design (${customDisplay})</a>
     </div>
     <div class="lifeos-canvas-group" aria-label="Palettes" title="Click a color set to recolor your site">
