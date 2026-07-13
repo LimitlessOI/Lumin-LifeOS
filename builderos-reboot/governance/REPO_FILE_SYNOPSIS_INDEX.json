@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:45:26.025Z",
+  "generated_at": "2026-07-13T23:48:13.582Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11510,
+  "file_count": 11511,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36035,6 +36035,13 @@
       "bytes": 23475,
       "mtime": "2026-07-03T21:46:43.727Z",
       "indexed_at": "2026-07-13T23:38:02.175Z"
+    },
+    {
+      "path": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
+      "synopsis": "Amendment 02 — Migration Runbook",
+      "bytes": 1628,
+      "mtime": "2026-07-13T23:48:13.582Z",
+      "indexed_at": "2026-07-13T23:48:13.582Z"
     },
     {
       "path": "docs/api/clients.md",
