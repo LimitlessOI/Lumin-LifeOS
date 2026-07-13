@@ -11,7 +11,7 @@ async function getExistingTemplate(pool, platform, goalKey) {
     `SELECT id, platform, goal_key, steps_json, captured_at, last_used_at, last_verified_ok_at, site_version_hint, created_at
      FROM marketing_social_posting_templates
      WHERE platform = $1 AND goal_key = $2
-     ORDER BY last_verified_ok_at DESC NULLS LAST, captured_at DESC NULLS LAST, created_at DESC DESC
+     ORDER BY last_verified_ok_at DESC NULLS LAST, captured_at DESC NULLS LAST, created_at DESC
      LIMIT 1`,
     [platform, goalKey]
   );
@@ -59,7 +59,12 @@ export async function publishApprovedPiece({ pool, piece, session, callModel }) 
       return { ok: false, reason: 'not_approved' };
     }
 
-    const connection = await getConnection(pool, { ownerId: piece.owner_id, platform: piece.platform });
+    const connectionResult = await getConnection(pool, { ownerId: piece.owner_id, platform: piece.platform });
+    if (!connectionResult?.ok) {
+      return { ok: false, reason: 'connection_lookup_failed', error: connectionResult?.error };
+    }
+
+    const connection = connectionResult.connection;
     if (!connection || connection.status !== 'connected') {
       return { ok: false, reason: 'not_connected' };
     }
@@ -82,9 +87,9 @@ export async function publishApprovedPiece({ pool, piece, session, callModel }) 
 
       const verify = makeEvidenceVerifier({ mustContain: goal.mustContain });
       const evidence = await session.observePage();
-      const verified = verify(evidence);
+      const verified = await verify({ goal: goal.goal, observation: evidence });
 
-      if (verified) {
+      if (verified?.reached === true) {
         publishRecordStatus = 'published';
         platformPostId = evidence?.postId || evidence?.platformPostId || null;
         outcome = {

@@ -1,13 +1,13 @@
 -- SYNOPSIS: Database migration — 20260713_wellness_studio_core_tables.sql.
-Specification references joy_checkins, wearable_data, and emotional_patterns tables that are not present in the injected schema, so foreign-key validity is uncertain.
+-- Wellness Studio extends canonical LifeOS bigint user/signal tables.
 CREATE TABLE IF NOT EXISTS wellness_studio_sessions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL,
+  user_id bigint NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE,
   session_type text NOT NULL,
-  joy_checkin_id uuid REFERENCES joy_checkins(id),
-  integrity_score_log_id uuid REFERENCES integrity_score_log(id),
-  wearable_data_id uuid REFERENCES wearable_data(id),
-  emotional_pattern_id uuid REFERENCES emotional_patterns(id),
+  joy_checkin_id bigint REFERENCES joy_checkins(id),
+  integrity_score_log_id bigint REFERENCES integrity_score_log(id),
+  wearable_data_id bigint REFERENCES wearable_data(id),
+  emotional_pattern_id bigint REFERENCES emotional_patterns(id),
   session_notes text,
   status text NOT NULL DEFAULT 'active',
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -37,7 +37,7 @@ CREATE INDEX IF NOT EXISTS wellness_studio_sessions_emotional_pattern_id_idx
 
 CREATE TABLE IF NOT EXISTS wellness_studio_insights (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL,
+  user_id bigint NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE,
   session_id uuid REFERENCES wellness_studio_sessions(id),
   insight_type text NOT NULL,
   content jsonb NOT NULL DEFAULT '{}',
