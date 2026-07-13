@@ -190,6 +190,24 @@
       "enabled": true
     },
     {
+      "path": "routes/lifeos-biological-age-routes.js",
+      "register": "registerBiologicalAgeRoutes",
+      "enabled": true,
+      "note": "LifeOS biological age REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+    },
+    {
+      "path": "routes/lifeos-twin-simulator-routes.js",
+      "register": "registerTwinSimulatorRoutes",
+      "enabled": true,
+      "note": "LifeOS digital-twin simulator REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+    },
+    {
+      "path": "routes/lifeos-member-feedback-routes.js",
+      "register": "registerMemberFeedbackRoutes",
+      "enabled": true,
+      "note": "LifeOS member feedback REST surface. Auto-register entry added so the governed factory can ship the route and module-health can prove it LIVE."
+    },
+    {
       "path": "routes/marketing-community-value-routes.js",
       "register": "registerMarketingCommunityValueRoutes",
       "enabled": true

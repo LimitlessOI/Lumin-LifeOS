@@ -13,13 +13,13 @@
     "maturity_fallback": "Products NOT in `priority` are ranked after listed ones by definition maturity \u2014 a product with a larger documented backlog / more fleshed-out PRODUCT_HOME builds before a thinner one.",
     "skip_undefined": "Products with no documented work in PRODUCT_HOME/conversations AND no BUILD_QUEUE.json are skipped until the founder adds ideas (never fabricated).",
     "corpus": "Planner reads PRODUCT_HOME.md + conversations/*.md + sibling product docs, then writes BUILD_QUEUE.json (executable blueprint) and builds.",
-    "what_matters": "Adam 2026-07-12: making money ASAP — do not stop. Site Builder $45 checkout first (live Stripe); MarketingOS value-first outreach + publish second.",
+    "what_matters": "Adam 2026-07-12: LifeOS first (never stop; follow blueprint step-by-step), then Site Builder, MarketingOS, LimitlessOS, and the rest in financial priority order. Making money ASAP — do not stop.",
     "editable": "Adam edits this list anytime. Adding a product_id here promotes it; removing it drops it back to maturity-based ordering."
   },
   "priority": [
+    "lifeos",
     "site-builder",
     "marketingos",
-    "lifeos",
     "limitlessos",
     "creative-engine",
     "wellness-studio",
@@ -50,7 +50,7 @@
     "zero-drift-handoff-protocol"
   ],
   "notes": [
-    "2026-07-12 PM: Adam \u2014 MarketingOS first (promote everywhere, paying customers). Ungated Phase 5 social publish.",
+    "2026-07-12 PM: Adam \u2014 LifeOS first (never stop; follow BUILD_QUEUE blueprint step-by-step). Then Site Builder, MarketingOS, LimitlessOS, and the rest in financial priority order. Only stop for token/budget exhaustion or SENTRY/governance failure.",
     "2026-07-12: Adam \u2014 LifeOS whole kit (chat must ship; therapist account with consent). lifeos \u2192 wellness-studio \u2192 site-builder money parallel.",
     "2026-07-11: Adam \u2014 keep building but what matters. Reordered: site-builder + limitlessos (first dollar) \u2192 lifeos \u2192 marketingos publish. YouTube SENTRY is not ahead of money.",
     "2026-07-11: Founder \u2014 system must read all product folders + conversations, blueprint (BUILD_QUEUE), and keep building. Expanded priority across ~30 products; corpus planner enrolls the rest by maturity.",

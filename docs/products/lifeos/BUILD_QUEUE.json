@@ -512,7 +512,7 @@
     },
     {
       "id": "2",
-      "status": "done",
+      "status": "pending",
       "target_file": "services/lifeos-biological-age.js",
       "task": "implement biological age calculation",
       "spec": "const fetchBiologicalAge = async (userId) => { /* Fetch lab results and calculate PhenoAge and VO2 max */ }; module.exports = { fetchBiologicalAge };",
@@ -520,16 +520,11 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-13T12:15:45.638Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
-      "commit_sha": "66a4095f2b17f95f2c09d1dffd10dfe2836e5681",
-      "revive_count": 1,
-      "completed_at": "2026-07-13T12:16:55.799Z"
+      "attempts": 0
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/lifeos-biological-age-routes.js",
       "task": "implement routes for biological age",
       "spec": "const express = require('express'); const { fetchBiologicalAge } = require('../services/lifeos-biological-age.js'); const router = express.Router(); router.get('/biological-age/:userId', async (req, res) => { const { userId } = req.params; const data = await fetchBiologicalAge(userId); res.json(data); }); module.exports = { registerBiologicalAgeRoutes: (app) => app.use('/api', router) };",
@@ -537,10 +532,7 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 3,
-      "commit_sha": "6afa15d7f7fc9690162ce29083b1d95aa4012cbb",
-      "last_attempt_at": "2026-07-13T12:31:42.173Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-biological-age-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "attempts": 0
     },
     {
       "id": "5",

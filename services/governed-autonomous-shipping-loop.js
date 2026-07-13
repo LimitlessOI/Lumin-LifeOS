@@ -7,9 +7,13 @@
  * proven), ships each product's steps via the already-proven live surface
  * POST /factory/ship-queue (self-HTTP, so it reuses the exact
  * BPB→Builder→SENTRY→TSOS→Historian dispatch + codegen the route wires, with NO
- * duplicated dispatch wiring), then marks the shipped BUILD_QUEUE steps done.
+ * duplicated dispatch wiring), then marks the shipped BUILD_QUEUE steps done and
+ * commits the shipped files to GitHub so builds survive redeploy.
  * Same token + daily-budget guardrails as never-stop; only ships steps that are
  * provable (the STEP 5e planning gate surfaces the rest as gaps, never shipped).
+ * The loop sources work from BUILD_QUEUE.json, which is the executable blueprint
+ * per product, and orders products by the founder-owned PRODUCT_BUILD_PRIORITY.json.
+ * It only halts for token/budget exhaustion or SENTRY/governance failure.
  *
  * CONDUCTOR-GLUE: pure orchestration of SENTRY-proven primitives
  * (governed-build-queue-scheduler + governed-shipping-runner) and existing
@@ -26,6 +30,7 @@ import { governedFactoryOnly } from './governed-factory-guard.js';
 import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
 import { loadBuildQueue, persistQueue, STEP_STATUS } from './product-build-orchestrator.js';
+import { createDeploymentService } from './deployment-service.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTS_DIR = path.join(REPO_ROOT, 'docs/products');
@@ -36,6 +41,8 @@ const state = {
   totalRuns: 0,
   lastShipped: 0,
   tokenHaltSince: null,
+  lastCommitSha: null,
+  lastCommitError: null,
 };
 
 const TRUTHY = new Set(['1', 'true', 'yes', 'on']);
@@ -50,12 +57,32 @@ export function governedAutonomousShippingEnabled() {
   return TRUTHY.has(v);
 }
 
+function loadProductPriorityOrder() {
+  try {
+    const raw = fs.readFileSync(path.join(PRODUCTS_DIR, 'PRODUCT_BUILD_PRIORITY.json'), 'utf8');
+    const parsed = JSON.parse(raw);
+    const priority = Array.isArray(parsed?.priority) ? parsed.priority : [];
+    const order = new Map();
+    for (let i = 0; i < priority.length; i += 1) order.set(priority[i], i);
+    return order;
+  } catch { return new Map(); }
+}
+
 export function listProductsWithQueues() {
   try {
-    return fs.readdirSync(PRODUCTS_DIR, { withFileTypes: true })
+    const order = loadProductPriorityOrder();
+    const ids = fs.readdirSync(PRODUCTS_DIR, { withFileTypes: true })
       .filter((d) => d.isDirectory())
       .map((d) => d.name)
       .filter((id) => fs.existsSync(path.join(PRODUCTS_DIR, id, 'BUILD_QUEUE.json')));
+    return ids.sort((a, b) => {
+      const oa = order.get(a);
+      const ob = order.get(b);
+      if (oa !== undefined && ob !== undefined) return oa - ob;
+      if (oa !== undefined) return -1;
+      if (ob !== undefined) return 1;
+      return a.localeCompare(b);
+    });
   } catch {
     return [];
   }
@@ -88,21 +115,79 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
   return { status: res.status, body };
 }
 
-function markShippedStepsDone(product_id, shippedStepIds) {
+function markShippedStepsDone(product_id, shippedStepIds, commit_sha) {
   if (!shippedStepIds.length) return;
   const queue = loadBuildQueue(product_id);
   if (!queue || !Array.isArray(queue.steps)) return;
   const done = new Set(shippedStepIds);
   let changed = false;
+  const now = new Date().toISOString();
   for (const step of queue.steps) {
-    if (done.has(step.id) && step.status !== STEP_STATUS.DONE) {
-      step.status = STEP_STATUS.DONE;
-      step.shipped_via = 'governed_ship_queue';
-      step.shipped_at = new Date().toISOString();
-      changed = true;
+    if (done.has(step.id)) {
+      if (step.status !== STEP_STATUS.DONE) {
+        step.status = STEP_STATUS.DONE;
+        step.shipped_via = 'governed_ship_queue';
+        step.shipped_at = now;
+        changed = true;
+      }
+      if (commit_sha && step.commit_sha !== commit_sha) {
+        step.commit_sha = commit_sha;
+        changed = true;
+      }
     }
   }
   if (changed) persistQueue(queue);
+}
+
+function queuePathForProduct(productId) {
+  return path.join(PRODUCTS_DIR, productId, 'BUILD_QUEUE.json');
+}
+
+const { commitManyToGitHub } = createDeploymentService({
+  pool: { query: async () => ({ rows: [] }) },
+  systemMetrics: null,
+  broadcastToAll: () => {},
+  GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+  GITHUB_REPO: process.env.GITHUB_REPO,
+  GITHUB_DEPLOY_BRANCH: process.env.GITHUB_DEPLOY_BRANCH || 'main',
+});
+
+async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger) {
+  if (!shippedStepIds.length || !Array.isArray(ship_steps)) return null;
+  const shipped = new Set(shippedStepIds);
+  const steps = ship_steps.filter((s) => shipped.has(s.step_id));
+  const fileEntries = [];
+  const queuePath = queuePathForProduct(product_id);
+  if (fs.existsSync(queuePath)) {
+    fileEntries.push({ path: path.relative(REPO_ROOT, queuePath).replace(/\\/g, '/'), content: fs.readFileSync(queuePath, 'utf8') });
+  }
+  for (const step of steps) {
+    const target = step.target_file;
+    if (!target) continue;
+    const abs = path.isAbsolute(target) ? target : path.join(REPO_ROOT, target);
+    if (fs.existsSync(abs)) {
+      fileEntries.push({ path: target.replace(/\\/g, '/'), content: fs.readFileSync(abs, 'utf8') });
+    }
+  }
+  if (fileEntries.length === 0) return null;
+  const message = `GOVERNED-AUTONOMOUS-SHIP: ${product_id} ${shippedStepIds.join(', ')}`;
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  try {
+    const result = await commitManyToGitHub(fileEntries, message, branch);
+    if (result?.ok && result.sha) {
+      state.lastCommitSha = result.sha;
+      state.lastCommitError = null;
+      logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] committed ${fileEntries.length} files for ${product_id}: ${result.sha.slice(0, 7)}`);
+      return result.sha;
+    }
+    state.lastCommitError = result?.error || 'commit returned !ok';
+    logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] commit for ${product_id} returned !ok: ${state.lastCommitError}`);
+    return null;
+  } catch (err) {
+    state.lastCommitError = String(err?.message || err);
+    logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] commit for ${product_id} failed: ${state.lastCommitError}`);
+    return null;
+  }
 }
 
 export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct = 1, shipFn = shipViaGovernedQueue } = {}) {
@@ -140,7 +225,11 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       const shippedIds = ok && Array.isArray(body.shipped)
         ? body.shipped.map((s) => s.step_id).filter(Boolean)
         : [];
-      if (shippedIds.length) markShippedStepsDone(entry.product_id, shippedIds);
+      if (shippedIds.length) {
+        markShippedStepsDone(entry.product_id, shippedIds);
+        const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
+        if (commitSha) markShippedStepsDone(entry.product_id, shippedIds, commitSha);
+      }
       shipped += shippedIds.length;
       perProduct.push({
         product_id: entry.product_id,
@@ -206,8 +295,17 @@ export function startGovernedAutonomousShippingLoop({ logger } = {}) {
       return { ok: true };
     },
     workCheck: async () => {
-      const count = listProductsWithQueues().length;
-      return { count, description: `${count} product(s) with a BUILD_QUEUE` };
+      const products = listProductsWithQueues();
+      const plan = planGovernedBuildQueueRun({
+        products,
+        readQueue: (id) => loadBuildQueue(id),
+        maxStepsPerProduct: 1,
+      });
+      const activeProducts = plan.by_product.filter((p) => p.ship_steps.length > 0).length;
+      return {
+        count: plan.total_shippable,
+        description: `${plan.total_shippable} shippable step(s) across ${activeProducts} product(s) (priority: ${products.slice(0, 3).join(', ')})`,
+      };
     },
     execute: async () => runGovernedAutonomousShipOnce({ logger }),
     logger,
