@@ -22,6 +22,7 @@ export const STEP_STATUS = Object.freeze({
   BUILDING: 'building',
   DONE: 'done',
   BLOCKED: 'blocked',
+  SKIPPED: 'skipped',
   FOUNDER_GATED: 'founder_gated',
 });
 
@@ -77,7 +78,12 @@ function parkBlockedStep(step, queue, info, blockerClass) {
   return entry;
 }
 
-const TERMINAL = new Set([STEP_STATUS.DONE, STEP_STATUS.BLOCKED, STEP_STATUS.FOUNDER_GATED]);
+const TERMINAL = new Set([
+  STEP_STATUS.DONE,
+  STEP_STATUS.BLOCKED,
+  STEP_STATUS.SKIPPED,
+  STEP_STATUS.FOUNDER_GATED,
+]);
 
 /**
  * Locate a product's BUILD_QUEUE.json from its id. Deterministic, no network.
@@ -265,6 +271,9 @@ function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
  * dependencies are all done. Founder-gated steps are surfaced separately so the
  * loop stops re-building work only Adam can clear (the "attempt 35" waste fix).
  *
+ * Prefer PENDING over recently-revivable BLOCKED work: blocked thrash must not
+ * starve a later pending blueprint step in the same queue.
+ *
  * Chicken-egg: if the next candidate is a route that already committed but only
  * failed functional proof for missing auto-registration, prefer the pending
  * auto-register config sibling instead of rebuilding the route forever.
@@ -272,11 +281,20 @@ function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
 export function selectNextStep(queue) {
   const doneIds = new Set(queue.steps.filter((s) => s.status === STEP_STATUS.DONE).map((s) => s.id));
   const gated = [];
-  for (const step of queue.steps) {
-    if (TERMINAL.has(step.status)) continue;
-    if (step.founder_gated) { gated.push(step); continue; }
+
+  function consider(step) {
+    if (TERMINAL.has(step.status)) return null;
+    if (step.demoted === true || step.status === STEP_STATUS.SKIPPED) return null;
+    if (step.founder_gated) {
+      gated.push(step);
+      return null;
+    }
+    if (step.park_until) {
+      const until = Date.parse(step.park_until);
+      if (Number.isFinite(until) && until > Date.now()) return null;
+    }
     const deps = Array.isArray(step.depends_on) ? step.depends_on : [];
-    if (!deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) continue;
+    if (!deps.every((d) => depSatisfiedForSelect(d, doneIds, queue, step))) return null;
 
     const autoRegErr = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
       String(step.last_error || ''),
@@ -293,10 +311,24 @@ export function selectNextStep(queue) {
         if (!rDeps.includes(step.id)) return false;
         return rDeps.every((d) => depSatisfiedForSelect(d, doneIds, queue, s));
       });
-      if (registerSibling) return { step: registerSibling, gated };
+      if (registerSibling) return registerSibling;
     }
 
-    return { step, gated };
+    return step;
+  }
+
+  // Pass 1: pending/building only — never promote blocked thrash ahead of real work.
+  for (const step of queue.steps) {
+    if (step.status !== STEP_STATUS.PENDING && step.status !== STEP_STATUS.BUILDING) continue;
+    const picked = consider(step);
+    if (picked) return { step: picked, gated };
+  }
+
+  // Pass 2: anything else non-terminal (should be rare).
+  for (const step of queue.steps) {
+    if (step.status === STEP_STATUS.PENDING || step.status === STEP_STATUS.BUILDING) continue;
+    const picked = consider(step);
+    if (picked) return { step: picked, gated };
   }
   return { step: null, gated };
 }
@@ -324,6 +356,11 @@ export function reviveStaleBlockedSteps(queue, {
   for (const step of queue.steps) {
     if (step.status !== STEP_STATUS.BLOCKED) continue;
     if (step.founder_gated) continue;
+    if (step.demoted === true) continue;
+    if (step.park_until) {
+      const until = Date.parse(step.park_until);
+      if (Number.isFinite(until) && until > now) continue;
+    }
     const reviveCount = typeof step.revive_count === 'number' ? step.revive_count : 0;
     const autoRegBlock = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
       String(step.last_error || ''),
@@ -331,27 +368,30 @@ export function reviveStaleBlockedSteps(queue, {
     const artifactToolingBlock = /artifact_proof_failed:\s*assertion_threw/i.test(
       String(step.last_error || ''),
     );
-    // Auto-register chicken-egg: once the config step can run (or already did),
-    // allow one more revive past the normal cap so the route can prove mount.
-    // Cap auto-reg chicken-egg revives at maxRevives+3 so we don't spin forever.
-    // assertion_threw on shallow clones is tooling — same revive budget as auto-reg.
+    const verifyThrash = /^verify_exit_/i.test(String(step.last_error || ''));
+    // Cap thrash hard. Same error after budget → SKIPPED (terminal), stop burning tokens.
     const effectiveMax = (autoRegBlock || artifactToolingBlock) ? maxRevives + 3 : maxRevives;
-    if (reviveCount >= effectiveMax) continue;
+    if (reviveCount >= effectiveMax || (verifyThrash && reviveCount >= 2)) {
+      step.status = STEP_STATUS.SKIPPED;
+      step.demoted = true;
+      step.demoted_at = new Date(now).toISOString();
+      step.demote_reason = `revive_exhausted:${String(step.last_error || 'unknown').slice(0, 160)}`;
+      continue;
+    }
     const lastAt = Date.parse(step.last_attempt_at || step.completed_at || '');
     const waited = Number.isFinite(lastAt) ? now - lastAt : Infinity;
-    // Auto-reg chicken-egg: stay BLOCKED until the register-config sibling is
-    // DONE. Reviving while s10 is only pending re-selects the route forever and
-    // starves s8/s9 (observed: s7 auto-reg block → revive → never reach s8).
+    // Auto-reg chicken-egg: ONLY revive when THIS route's register sibling is DONE.
+    // (Bug was: any done register unlocked every auto-reg-blocked route → eternal thrash.)
     if (autoRegBlock) {
-      const registerDone = (queue.steps || []).find(
-        (s) => isAutoRegisterConfigStep(s) && s.status === STEP_STATUS.DONE,
-      );
+      const registerDone = (queue.steps || []).find((s) => {
+        if (!isAutoRegisterConfigStep(s) || s.status !== STEP_STATUS.DONE) return false;
+        const rDeps = Array.isArray(s.depends_on) ? s.depends_on : [];
+        return rDeps.includes(step.id);
+      });
       if (!registerDone) continue;
-      // Register landed — revive immediately (no 15m cooldown).
     } else if (waited < cooldownMs && !artifactToolingBlock) {
       continue;
     }
-    // Tooling assertion_threw: short 60s cooldown then revive.
     if (artifactToolingBlock && waited < Math.min(cooldownMs, 60_000)) continue;
     step.status = STEP_STATUS.PENDING;
     step.attempts = 0;

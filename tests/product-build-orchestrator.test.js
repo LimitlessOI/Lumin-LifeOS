@@ -158,7 +158,46 @@ test('reviveStaleBlockedSteps revives blocked steps past cooldown, bounded, neve
   assert.equal(stale.revive_count, 1);
   assert.equal(q.steps.find((s) => s.id === 'recent').status, STEP_STATUS.BLOCKED, 'within cooldown stays blocked');
   assert.equal(q.steps.find((s) => s.id === 'gated').status, STEP_STATUS.BLOCKED, 'founder-gated never auto-revives');
-  assert.equal(q.steps.find((s) => s.id === 'exhausted').status, STEP_STATUS.BLOCKED, 'revive cap respected');
+  assert.equal(q.steps.find((s) => s.id === 'exhausted').status, STEP_STATUS.SKIPPED, 'revive cap demotes to skipped');
+  assert.equal(q.steps.find((s) => s.id === 'exhausted').demoted, true);
+});
+
+test('reviveStaleBlockedSteps does not unlock auto-reg route via unrelated register DONE', () => {
+  const q = makeQueue([
+    {
+      id: 'route-a',
+      target_file: 'routes/a.js',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'route module not auto-registered',
+      revive_count: 0,
+      last_attempt_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 'reg-other',
+      target_file: 'config/auto-registered-product-modules.json',
+      task: 'register other',
+      depends_on: ['route-other'],
+      status: STEP_STATUS.DONE,
+    },
+  ]);
+  const revived = reviveStaleBlockedSteps(q);
+  assert.deepEqual(revived, []);
+  assert.equal(q.steps.find((s) => s.id === 'route-a').status, STEP_STATUS.BLOCKED);
+});
+
+test('selectNextStep prefers pending blueprint step over earlier blocked thrash', () => {
+  const q = makeQueue([
+    {
+      id: 'blocked-route',
+      target_file: 'routes/x.js',
+      task: 't',
+      status: STEP_STATUS.BLOCKED,
+      last_error: 'route module not auto-registered',
+    },
+    { id: 'pending-script', target_file: 'scripts/y.mjs', task: 't2', status: STEP_STATUS.PENDING },
+  ]);
+  assert.equal(selectNextStep(q).step.id, 'pending-script');
 });
 
 test('reviveStaleBlockedSteps makes a blocked step selectable again', () => {

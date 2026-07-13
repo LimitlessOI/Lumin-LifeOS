@@ -38,7 +38,9 @@ export function isNonUiBuildQueueTarget(targetFile) {
   if (/^(services|routes|middleware|startup|factory-staging\/factory-core)\//.test(target)) {
     return true;
   }
-  if (/^config\//.test(target) && /\.(js|mjs|cjs|ts)$/i.test(target)) return true;
+  // Config modules (including auto-register JSON) are not founder-UI surfaces —
+  // product SENTRY UI gates must not thrash them with verify_exit_1.
+  if (/^config\//.test(target)) return true;
   if (/\.(js|mjs|cjs|ts)$/i.test(target)) return true;
   return false;
 }
@@ -412,7 +414,8 @@ export function discoverBuildQueueWork() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = loadBuildQueue(productId);
-      reviveStaleBlockedSteps(queue);
+      // Do NOT revive on discover — revive mutates blocked→pending and schedules
+      // thrashers ahead of real pending blueprint steps. Revive only at execute.
       const { step } = selectNextStep(queue);
       if (step) {
         found.push({
@@ -454,7 +457,7 @@ export async function discoverBuildQueueWorkFresh() {
     if (!fs.existsSync(queuePath)) continue;
     try {
       const queue = await loadBuildQueuePreferRemote(productId);
-      reviveStaleBlockedSteps(queue);
+      // Discover must not revive — see discoverBuildQueueWork.
       const { step } = selectNextStep(queue);
       if (step) {
         found.push({
@@ -1622,7 +1625,9 @@ export async function runProductExpansionLanes(options = {}) {
   }
 
   const discover = options.discoverFn || discoverBuildQueueWorkFresh;
-  const work = await Promise.resolve(discover());
+  const workRaw = await Promise.resolve(discover());
+  // Financial priority first — never burn all lanes on low-priority thrashers.
+  const work = [...workRaw].sort((a, b) => (a.priority || 99) - (b.priority || 99)).slice(0, Math.max(1, concurrency));
   if (!work.length) {
     log({ event: 'expansion_lanes_empty' });
     return { ok: true, lanes: 0, built: 0, live: 0, detail: 'no_build_queue_work' };
@@ -1631,7 +1636,7 @@ export async function runProductExpansionLanes(options = {}) {
   const laneStepFn = options.laneStepFn
     || ((task) => runProductBuildStep(task, { baseUrl, commandKey, logger }));
 
-  writeState({ status: 'running_lanes', lanes: work.map((w) => w.id), concurrency });
+  writeState({ status: 'running_lanes', lanes: work.map((w) => w.id), concurrency, deferred: workRaw.length - work.length });
   const results = await mapConcurrent(work, concurrency, async (task) => {
     try {
       const r = await laneStepFn(task, { baseUrl, commandKey, logger });
@@ -1643,7 +1648,7 @@ export async function runProductExpansionLanes(options = {}) {
 
   const built = results.filter((r) => r && r.outcome && (r.outcome.commit_sha || (r.outcome.outcome && r.outcome.outcome.commit_sha))).length;
   const live = results.filter((r) => r && r.outcome && r.outcome.deploy_proven).length;
-  log({ event: 'expansion_lanes', lanes: work.length, built, live });
+  log({ event: 'expansion_lanes', lanes: work.length, discovered: workRaw.length, built, live, selected: work.map((w) => w.id) });
   writeState({ status: 'idle', last_lanes: work.map((w) => w.id), lanes_built: built, lanes_live: live });
   return { ok: true, lanes: work.length, built, live, results };
 }
