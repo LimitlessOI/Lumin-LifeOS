@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/wellness-studio/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — Demoted thrashing step-05 (auto-reg without sibling); never-stop must build pending blueprint steps instead. |
+| **Last Updated** | 2026-07-13 — Repaired core migration bigint contract so Wellness Studio extends canonical LifeOS user/signal tables without UUID foreign-key boot failures. |
 
 ---
 | Field | Value |
@@ -185,4 +185,5 @@ For couples who want to do the work together, with shared visibility where chose
 
 | Date | Change | Author |
 |---|---|---|
+| 2026-07-13 | Critical migration repair: `20260713_wellness_studio_core_tables.sql` now uses bigint `user_id` and bigint LifeOS signal references (`joy_checkins`, `integrity_score_log`, `wearable_data`, `emotional_patterns`) instead of UUID columns that cannot FK to canonical LifeOS tables. Added `tests/wellness-studio-migration.test.js` and wired it into `npm test`. Validation pending follow-up commit/test loop. | Cursor |
 | 2026-04-03 | Initial draft — all 7 modules defined; revenue model; readiness gates | Claude |
