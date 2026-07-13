@@ -105,13 +105,16 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/002_create_price_book_api.sql",
       "task": "create price book API schema",
       "spec": "Creates tables for price book API for print partners.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "b3ea20188d0e80cbdaa9224f4fda4094278eaad0",
+      "last_attempt_at": "2026-07-13T13:15:22.754Z",
+      "completed_at": "2026-07-13T13:16:06.179Z"
     },
     {
       "id": "5",
