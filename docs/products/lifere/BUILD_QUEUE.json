@@ -52,7 +52,7 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/quoteRoutes.js",
       "task": "register quote routes",
       "spec": "Route module that registers API endpoints for confirming PASS quotes.",
@@ -60,9 +60,9 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "commit_sha": "00787f9d70b64917e86d38c7b7d34e5f917e01e0",
-      "last_attempt_at": "2026-07-13T14:12:52.357Z",
+      "last_attempt_at": "2026-07-13T14:13:57.936Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/quoteRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
