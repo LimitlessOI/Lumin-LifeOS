@@ -454,13 +454,16 @@
     },
     {
       "id": "step-02",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260713_marketing_r2_uploads.sql",
       "task": "Add R2 audio upload tracking table",
       "spec": "CREATE TABLE IF NOT EXISTS marketing_audio_uploads with columns: id uuid PRIMARY KEY DEFAULT gen_random_uuid(), session_id uuid NOT NULL, r2_key text NOT NULL, r2_url text, upload_status text NOT NULL DEFAULT 'pending', error_text text, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(). Unblocks audio upload once Cloudflare R2 bucket and Railway env vars are set. No DROP or ALTER.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "be4ab9fbffdcc973c6c616ca7fe5889a1b2025b0",
+      "last_attempt_at": "2026-07-13T04:06:19.375Z",
+      "completed_at": "2026-07-13T04:06:29.432Z"
     },
     {
       "id": "step-03",
