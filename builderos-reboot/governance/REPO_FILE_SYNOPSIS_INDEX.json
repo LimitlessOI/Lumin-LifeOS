@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T08:23:56.372Z",
+  "generated_at": "2026-07-13T08:28:12.790Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11485,
   "files": [
@@ -39500,9 +39500,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 106953,
-      "mtime": "2026-07-13T08:22:14.776Z",
-      "indexed_at": "2026-07-13T08:23:56.372Z"
+      "bytes": 108078,
+      "mtime": "2026-07-13T08:27:41.569Z",
+      "indexed_at": "2026-07-13T08:28:12.790Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -62142,17 +62142,17 @@
     {
       "path": "package-lock.json",
       "synopsis": "JSON data/config — package-lock.json.",
-      "bytes": 336944,
-      "mtime": "2026-06-30T01:31:06.401Z",
-      "indexed_at": "2026-07-13T07:08:02.540Z",
+      "bytes": 352428,
+      "mtime": "2026-07-13T08:26:43.239Z",
+      "indexed_at": "2026-07-13T08:28:12.790Z",
       "synopsis_index_only": true
     },
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 31369,
-      "mtime": "2026-07-10T05:48:07.763Z",
-      "indexed_at": "2026-07-13T07:08:02.540Z",
+      "bytes": 31408,
+      "mtime": "2026-07-13T08:26:43.161Z",
+      "indexed_at": "2026-07-13T08:28:12.790Z",
       "synopsis_index_only": true
     },
     {
