@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T21:03:33.923Z",
+  "generated_at": "2026-07-13T21:12:23.804Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11506,
   "files": [
@@ -39888,9 +39888,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 109382,
-      "mtime": "2026-07-13T21:03:28.529Z",
-      "indexed_at": "2026-07-13T21:03:33.923Z"
+      "bytes": 109689,
+      "mtime": "2026-07-13T21:12:18.121Z",
+      "indexed_at": "2026-07-13T21:12:23.804Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66605,9 +66605,9 @@
     {
       "path": "routes/tc-routes.js",
       "synopsis": "tc-routes.js",
-      "bytes": 153588,
-      "mtime": "2026-07-13T21:03:25.708Z",
-      "indexed_at": "2026-07-13T21:03:33.923Z",
+      "bytes": 154249,
+      "mtime": "2026-07-13T21:12:15.444Z",
+      "indexed_at": "2026-07-13T21:12:23.804Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -82765,9 +82765,9 @@
     {
       "path": "services/email-triage.js",
       "synopsis": "email-triage.js",
-      "bytes": 34895,
-      "mtime": "2026-07-13T20:54:33.355Z",
-      "indexed_at": "2026-07-13T20:54:41.335Z",
+      "bytes": 37513,
+      "mtime": "2026-07-13T21:12:14.625Z",
+      "indexed_at": "2026-07-13T21:12:23.804Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]

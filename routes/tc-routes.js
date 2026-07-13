@@ -2330,6 +2330,23 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/email/purge-spam — reclassify logged marketing/spam + trash UIDs
+  router.post('/email/purge-spam', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const accountManager = await getAccountManager();
+      const triage = createEmailTriage({ pool, accountManager, logger });
+      const body = req.body || {};
+      const result = await triage.purgeLoggedSpam({
+        limit: body.limit,
+        dryRun: body.dry_run === true,
+      });
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // POST /api/v1/tc/email/triage/:id/action — mark an email as handled
   router.post('/email/triage/:id/action', requireKey, async (req, res) => {
     try {
