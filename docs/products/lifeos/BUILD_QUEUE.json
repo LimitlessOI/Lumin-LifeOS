@@ -537,7 +537,10 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "6afa15d7f7fc9690162ce29083b1d95aa4012cbb",
+      "last_attempt_at": "2026-07-13T12:25:12.141Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/lifeos-biological-age-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "5",
