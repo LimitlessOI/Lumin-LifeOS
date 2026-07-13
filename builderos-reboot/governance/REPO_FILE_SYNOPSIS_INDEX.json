@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:29:40.277Z",
+  "generated_at": "2026-07-13T23:33:23.117Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11506,
   "files": [
@@ -83850,9 +83850,9 @@
     {
       "path": "services/lifeos-biological-age.js",
       "synopsis": "Service module — Lifeos Biological Age.",
-      "bytes": 5913,
-      "mtime": "2026-07-13T18:57:58.568Z",
-      "indexed_at": "2026-07-13T23:29:13.053Z"
+      "bytes": 536,
+      "mtime": "2026-07-13T23:33:23.117Z",
+      "indexed_at": "2026-07-13T23:33:23.117Z"
     },
     {
       "path": "services/lifeos-calendar-events-resolver.js",
