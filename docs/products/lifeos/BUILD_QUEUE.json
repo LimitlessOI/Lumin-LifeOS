@@ -520,10 +520,9 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "commit_sha": "66a4095f2b17f95f2c09d1dffd10dfe2836e5681",
-      "last_attempt_at": "2026-07-13T23:30:50.691Z",
-      "completed_at": "2026-07-13T23:30:51.153Z"
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-13T23:33:21.182Z"
     },
     {
       "id": "3",
@@ -537,7 +536,7 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:34:40.333Z"
+      "shipped_at": "2026-07-13T23:36:14.676Z"
     },
     {
       "id": "5",
@@ -566,7 +565,7 @@
       "last_attempt_at": "2026-07-13T12:33:26.287Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:41:51.329Z"
+      "shipped_at": "2026-07-13T23:49:17.429Z"
     },
     {
       "id": "7",
@@ -578,9 +577,7 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-13T23:47:33.375Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "attempts": 0
     },
     {
       "id": "9",

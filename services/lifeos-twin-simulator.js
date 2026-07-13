@@ -5,7 +5,7 @@ export async function simulateTwinReactions(userId, uiData) {
   return {
     userId,
     uiData,
-    reactions: [],
-    simulated: false
+    predictedReaction: null,
+    error: "AI prediction not implemented"
   };
 }
