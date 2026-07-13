@@ -60,7 +60,10 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "00787f9d70b64917e86d38c7b7d34e5f917e01e0",
+      "last_attempt_at": "2026-07-13T14:05:45.122Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/quoteRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
       "id": "5",
