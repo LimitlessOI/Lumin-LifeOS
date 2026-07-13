@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:38:38.263Z",
+  "generated_at": "2026-07-13T23:38:48.927Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11509,
   "files": [
@@ -38734,10 +38734,10 @@
     },
     {
       "path": "docs/memory_ttl_policy.md",
-      "synopsis": "Documentation — Memory Ttl Policy.",
-      "bytes": 97,
-      "mtime": "2026-07-13T23:36:56.714Z",
-      "indexed_at": "2026-07-13T23:38:02.175Z"
+      "synopsis": "Memory TTL Policy",
+      "bytes": 2740,
+      "mtime": "2026-07-13T23:38:48.927Z",
+      "indexed_at": "2026-07-13T23:38:48.927Z"
     },
     {
       "path": "docs/mobile/DIRECT_INSTALL.md",
