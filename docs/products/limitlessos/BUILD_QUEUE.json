@@ -118,7 +118,7 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/price-book.js",
       "task": "build price book comparison",
       "spec": "Exports a function to compare vendors, explaining differences like honest vs weak reviews.",
@@ -126,7 +126,10 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "3fb8cf8dd7dbc943a014902d2ac1d3adfbde0229",
+      "last_attempt_at": "2026-07-13T13:16:46.701Z",
+      "completed_at": "2026-07-13T13:17:02.904Z"
     },
     {
       "id": "6",
