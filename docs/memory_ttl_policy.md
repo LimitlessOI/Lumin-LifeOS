@@ -2,82 +2,101 @@
 
 # Memory TTL Policy
 
-This document defines the implementation-level policy for memory retention, expiration, and archive behavior. Properties:
+## Purpose
 
-- indexed for query and lookup
-- considered live for application decisions
-- subject to TTL expiry
-- may be promoted to archive before deletion
+This document defines the implementation-level policy for memory retention, expiration, and archiving. The goal is to keep active memory lean, preserve useful long-term context, and make TTL behavior deterministic for developers. ## Scope
 
-### 2. Archived Memory
+This policy applies to all stored memory records managed by the application, including:
 
-Archived memory is retained historical data. Properties:
+- user-scoped memory
+- session-scoped memory
+- system-generated memory
+- derived or summarized memory artifacts
+- archived memory records
 
-- not used in normal active lookup paths
-- may be restored or referenced for auditing
-- retained according to archive retention rules
-- may be compressed or summarized separately from active records
+## Core Concepts
+
+### Active memory
+Active memory is memory that may be read during normal application operation. It is subject to TTL-based expiration. ### Archived memory
+Archived memory is no longer considered active, but remains retained for audit, recovery, or historical analysis. ### Expiration
+Expiration is the point at which a memory record is no longer eligible to remain active. Once expired, it is either archived or deleted according to retention rules. ### TTL
+TTL (time to live) is the maximum duration a memory record may remain active after its creation or last refresh, depending on the memory class. ---
 
 ## TTL Rules
 
-Each memory record must have an expiration policy. Required fields:
+### 1. TTL is class-specific
+Each memory record must have a memory class and a corresponding TTL policy. Recommended classes:
 
-- `createdAt`: timestamp when the record was created
-- `updatedAt`: timestamp when the record was last modified
-- `ttlMs`: time-to-live in milliseconds, or a policy reference that resolves to a TTL
-- `expiresAt`: computed absolute expiration timestamp
+- `session`
+- `user_short`
+- `user_long`
+- `system`
+- `summary`
+- `archive`
 
-### TTL Computation
+### 2. TTL starts from a defined anchor
+A memory record must define a TTL anchor:
 
-Implementation must compute:
+- `createdAt` for immutable memory
+- `lastAccessAt` for access-refresh policies
+- `updatedAt` for mutable memory
+- `pinnedUntil` if a record is temporarily exempt from expiration
 
-- `expiresAt = createdAt + ttlMs`
+The implementation must use one anchor consistently per class. ### 3. TTL must be deterministic
+The expiration decision must be based only on stored timestamps and configured policy values. Do not use implicit heuristics in the expiration check. ### 4. ---
 
-If a record is updated and the update is intended to extend its lifetime, the system must explicitly recompute:
+## Recommended Default TTLs
 
-- `updatedAt = now`
-- `expiresAt = updatedAt + ttlMs`
+These values are implementation defaults and may be adjusted by product configuration. - `session`: 24 hours
+- `user_short`: 7 days
+- `user_long`: 90 days
+- `system`: 180 days
+- `summary`: 30 days
+- `archive`: no active TTL; retained until retention purge
 
-If the record is not intended to extend on update, `expiresAt` remains unchanged. ### Default TTL
+If a record has no explicit class, it should default to the shortest applicable TTL for safety. ---
 
-If no TTL is specified, the system must apply a configured default based on memory class. The default must be defined centrally and not duplicated across callers. ## Expiration Behavior
+## Expiration Logic
 
-A memory record is considered expired when:
+A memory record is expired when:
 
-- `now >= expiresAt`
+- `now >= ttlAnchor + ttlDuration`
 
-Expired records must not be returned by normal active-memory queries. Expired records must be processed by cleanup or archival routines. ## Expiration Processing
+Where:
 
-The system must have a periodic cleanup job or equivalent trigger that:
+- `ttlAnchor` is the timestamp selected by the class policy
+- `ttlDuration` is the configured retention interval for the class
 
-1. scans for expired active records
-2. decides whether each record should be archived
-3. archives eligible records
-4. deletes or deactivates records that are not eligible for archive
-5. records the outcome for observability
+### Access-refresh behavior
 
-Cleanup must be idempotent. Running it multiple times must not create duplicate archives or corrupt state. ## Archive Eligibility
+Some memory classes may refresh TTL on access. If enabled:
 
-Not all expired memory should be archived. Archive eligibility should be determined by policy flags or record metadata. A record is eligible for archive when one or more of the following are true:
+- update `lastAccessAt` on successful read
+- recompute expiration from `lastAccessAt`
+- do not refresh TTL on failed reads or background scans
 
-- it is marked as important
-- it is referenced by other durable entities
-- it belongs to a category requiring historical retention
-- it has a configured archive policy
+Access-refresh should only be used when the class policy explicitly allows it. ---
 
-If a record is not archive-eligible, it should be deleted or tombstoned after expiry according to storage policy. ## Archiving Rules
+## Archive Logic
 
-When a record is archived:
+### Archive eligibility
+When a memory record expires, the system must evaluate whether it should be archived instead of deleted. A record is archive-eligible if:
 
-1. the source active record is marked expired or inactive
-2. an archive record is written with preserved identity metadata
-3. the archive record includes provenance:
-   - source record id
-   - archivedAt timestamp
-   - original createdAt
-   - original expiresAt
-   - archive reason
-4. the active lookup path must exclude the archived source record
-5. archive writes must be deduplicated by source record identity and archive version
+- it is not marked `ephemeral`
+- it is not already archived
+- it is not explicitly excluded by policy
+- it has not exceeded maximum retention for archival storage
 
-Archived records must
+### Archive action
+Archiving must:
+
+1. copy or move the record to archive storage
+2. preserve original identifiers where needed for traceability
+3. mark the active record as archived or tombstoned
+4. record the archive timestamp
+
+### Archive payload
+Archived records should include:
+
+- original record id
+- memory class
