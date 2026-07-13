@@ -4,8 +4,8 @@
 export async function simulateTwinReactions(userId, uiData) {
   return {
     userId,
-    uiData,
+    input: uiData,
     reactions: [],
-    simulated: false
+    simulated: true
   };
 }
