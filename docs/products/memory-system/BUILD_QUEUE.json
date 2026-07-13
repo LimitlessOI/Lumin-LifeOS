@@ -34,7 +34,7 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_memory_taxonomy_update.sql",
       "task": "add memory category taxonomy",
       "spec": "Update the schema to include a memory category taxonomy: user_preference, decision, context, and fact.",
@@ -42,7 +42,10 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "a70ee4bd3a2430f548336395cfdd8da14d7491a9",
+      "last_attempt_at": "2026-07-13T14:30:40.985Z",
+      "completed_at": "2026-07-13T14:31:01.029Z"
     },
     {
       "id": "4",
