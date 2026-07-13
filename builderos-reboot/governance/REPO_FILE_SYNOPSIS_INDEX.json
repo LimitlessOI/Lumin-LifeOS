@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T14:30:55.201Z",
+  "generated_at": "2026-07-13T14:32:52.351Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11503,
+  "file_count": 11504,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81051,6 +81051,13 @@
       "bytes": 1738,
       "mtime": "2026-07-12T13:24:22.177Z",
       "indexed_at": "2026-07-13T09:10:46.716Z"
+    },
+    {
+      "path": "services/auth.js",
+      "synopsis": "Exports requireAuth — services/auth.js.",
+      "bytes": 325,
+      "mtime": "2026-07-13T14:32:52.351Z",
+      "indexed_at": "2026-07-13T14:32:52.351Z"
     },
     {
       "path": "services/authentication/stripeIntegration.js",
