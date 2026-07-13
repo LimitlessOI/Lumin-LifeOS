@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T12:52:51.324Z",
+  "generated_at": "2026-07-13T13:00:09.711Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11492,
+  "file_count": 11493,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65011,6 +65011,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/audit-intake-flow-routes.js",
+      "synopsis": "Registers AuditIntakeFlowRoutes routes/handlers (routes/audit-intake-flow-routes.js).",
+      "bytes": 11760,
+      "mtime": "2026-07-13T13:00:09.711Z",
+      "indexed_at": "2026-07-13T13:00:09.711Z"
     },
     {
       "path": "routes/audit-routes.js",
