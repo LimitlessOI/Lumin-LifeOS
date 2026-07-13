@@ -268,7 +268,7 @@ export async function enqueueProspectJob(pipeline, options = {}) {
  * Closes multi-instance orphan: accepting replica dies after 202, poller on
  * another replica can continue processProspect.
  */
-export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs = 15_000 } = {}) {
+export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs = PROSPECT_STALE_MS } = {}) {
   if (!pipeline?.processProspect || !pipeline?.pool || !clientId) {
     return { ok: false, resumed: false, reason: 'missing_pipeline_or_id' };
   }
@@ -347,6 +347,7 @@ export async function resumeProspectJobIfOrphaned(pipeline, clientId, { minAgeMs
     skipAi: metadata.skipAi === true,
     leanTemplate: metadata.leanTemplate === true,
     deferredBuild: metadata.deferredBuild === true,
+    skipQualify: metadata.skipQualify === true,
     businessInfo: metadata.businessInfo || null,
   };
   if (!options.businessUrl) {

@@ -125,6 +125,7 @@ export default class ProspectPipeline {
             skipBlogs: options.skipBlogs === true,
             skipAi: options.skipAi === true,
             leanTemplate: options.leanTemplate === true,
+            skipQualify: options.skipQualify === true,
             businessInfo: options.businessInfo || null,
             referrer: options.referrer || null,
             vertical: options.vertical || null,
