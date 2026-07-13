@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:40:03.748Z",
+  "generated_at": "2026-07-13T23:41:53.008Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11509,
+  "file_count": 11510,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84340,6 +84340,13 @@
       "bytes": 4730,
       "mtime": "2026-07-12T19:48:36.310Z",
       "indexed_at": "2026-07-13T23:38:02.175Z"
+    },
+    {
+      "path": "services/lifeos-twin-simulator.js",
+      "synopsis": "Exports simulateTwinReactions — services/lifeos-twin-simulator.js.",
+      "bytes": 233,
+      "mtime": "2026-07-13T23:41:53.008Z",
+      "indexed_at": "2026-07-13T23:41:53.008Z"
     },
     {
       "path": "services/lifeos-ui-directives.js",
