@@ -77,13 +77,16 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/audit-data-sources.js",
       "task": "integrate live audit data sources",
       "spec": "Exports a function to fetch audit data from supported sources: Plaid, manual intake, OAuth per vendor.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "75a6d2555240b95ba8ac13d444f83159fc272b87",
+      "last_attempt_at": "2026-07-13T12:52:39.025Z",
+      "completed_at": "2026-07-13T12:52:56.268Z"
     },
     {
       "id": "3",
