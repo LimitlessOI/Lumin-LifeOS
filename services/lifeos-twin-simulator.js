@@ -4,8 +4,10 @@
 export async function simulateTwinReactions(userId, uiData) {
   return {
     userId,
-    uiData,
-    predictedReaction: null,
-    error: "AI prediction not implemented"
+    input: uiData,
+    predictedResponse: null,
+    confidence: 0,
+    generatedAt: new Date().toISOString(),
+    note: "AI prediction not implemented"
   };
 }
