@@ -98,9 +98,9 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "commit_sha": "470893ce50f192efc7dde67671e95a9d9957ee18",
-      "last_attempt_at": "2026-07-13T13:04:41.827Z",
+      "last_attempt_at": "2026-07-13T13:06:32.646Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/audit-intake-flow-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
