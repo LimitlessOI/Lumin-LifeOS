@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T06:57:40.829Z",
+  "generated_at": "2026-07-13T07:07:26.260Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11484,
   "files": [
@@ -38926,9 +38926,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 178632,
-      "mtime": "2026-07-13T03:57:21.221Z",
-      "indexed_at": "2026-07-13T06:55:55.596Z"
+      "bytes": 178282,
+      "mtime": "2026-07-13T07:05:48.063Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39771,9 +39771,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 113868,
-      "mtime": "2026-07-13T06:55:33.534Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z"
+      "bytes": 118284,
+      "mtime": "2026-07-13T07:05:04.864Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -63046,8 +63046,8 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 198,
-      "mtime": "2026-07-13T06:56:56.630Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z",
+      "mtime": "2026-07-13T07:06:24.390Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "synopsis_index_only": true
     },
     {
@@ -63062,8 +63062,8 @@
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 3840,
-      "mtime": "2026-07-13T06:56:56.342Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z",
+      "mtime": "2026-07-13T07:06:23.884Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "synopsis_index_only": true
     },
     {
@@ -63166,16 +63166,16 @@
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 782,
-      "mtime": "2026-07-13T06:56:56.762Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z",
+      "mtime": "2026-07-13T07:06:24.677Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1195,
-      "mtime": "2026-07-13T06:56:56.542Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z",
+      "mtime": "2026-07-13T07:06:24.191Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "synopsis_index_only": true
     },
     {
@@ -63206,8 +63206,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 1001,
-      "mtime": "2026-07-13T06:56:56.854Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z",
+      "mtime": "2026-07-13T07:06:24.788Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "synopsis_index_only": true
     },
     {
@@ -66433,9 +66433,9 @@
     {
       "path": "routes/site-builder-routes.js",
       "synopsis": "Site Builder Routes — Done-for-you website pipeline",
-      "bytes": 49396,
-      "mtime": "2026-07-13T06:54:38.730Z",
-      "indexed_at": "2026-07-13T06:57:40.829Z",
+      "bytes": 52993,
+      "mtime": "2026-07-13T07:03:32.484Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -85655,9 +85655,9 @@
     {
       "path": "services/prospect-pipeline.js",
       "synopsis": "Prospect Pipeline — Find a business → build their mock site → email it to them",
-      "bytes": 42733,
-      "mtime": "2026-07-13T05:52:16.029Z",
-      "indexed_at": "2026-07-13T06:55:55.596Z",
+      "bytes": 42757,
+      "mtime": "2026-07-13T07:02:29.453Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -86179,9 +86179,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 18129,
-      "mtime": "2026-07-13T05:32:49.525Z",
-      "indexed_at": "2026-07-13T06:55:55.596Z",
+      "bytes": 20088,
+      "mtime": "2026-07-13T07:02:29.453Z",
+      "indexed_at": "2026-07-13T07:07:26.260Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
