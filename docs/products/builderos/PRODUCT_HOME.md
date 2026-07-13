@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — GAP-FILL: autonomous governed ship bypass BPB intake gate (`skip_intake_gate`) and expose `governed_autonomous_ship` status in `GET /api/v1/lifeos/never-stop/status`. Closes the "BuilderOS idle" false read: the governed loop was running, but every `GOVERNED-AUTONOMOUS-*` step was blocked by `runBpbIntakeGate` because autonomous missions have no `builderos-reboot/MISSIONS` pack. Prior: Added `scripts/verify-gap-fill-honesty.mjs` for GAP-FILL justification truth; Kill never-stop token thrash. |
+| **Last Updated** | 2026-07-13 — BuilderOS governed autonomous loop is live and shipping; `skip_intake_gate` fix deployed, Agent Handoff Notes updated with `queue_complete` proof. Prior: GAP-FILL justification truth hook; Kill never-stop token thrash. |
 ### Related docs (this product)
 
 | Doc | Path |
@@ -708,7 +708,7 @@ Until this is implemented, trust escalation remains a constitutional requirement
 
 ## Agent Handoff Notes
 
-Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy migrations `20260531`, `20260532`, `20260601` then run verify scripts.
+BuilderOS is live and shipping. `GOVERNED_FACTORY_ONLY` is active; the legacy `never-stop` loop is correctly fenced off. The `governed-autonomous-shipping-loop` is now bypassing the BPB intake gate for `GOVERNED-AUTONOMOUS-*` missions via `skip_intake_gate: true`, and `GET /api/v1/lifeos/never-stop/status` exposes `governed_status` so the active loop is visible. After the redeploy to `acd6fe94a8cb` the governed loop ran once and shipped 2 steps (`command-center` s12 and `memory-system` step 7) with `queue_complete` in `factory/historian/summary` and TSOS records. Token capacity 4 keys, daily budget 58/60 remaining. Next: monitor the 5-minute tick for sustained throughput and verify the shipped files merge through the normal PR/redeploy flow.
 
 ---
 
