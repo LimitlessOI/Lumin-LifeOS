@@ -76,23 +76,13 @@ function namedInfraBlockers() {
   return [
     {
       code: 'STORAGE_R2_UNVERIFIED',
-      why_cant_fix_now: 'STORAGE_* not in managed-env allowlist; audio upload intentionally excluded from Phase 1 queue',
-      next_unblocking_action: 'Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then enqueue audio upload',
+      why_cant_fix_now: 'Cloudflare R2 credentials not yet set in Railway; audio upload intentionally excluded from Phase 1 text-mode verification',
+      next_unblocking_action: 'Add verified STORAGE_PROVIDER=r2 + STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY/PUBLIC_URL to Railway, then test audio upload end-to-end',
     },
     {
-      code: 'LEGACY_SOCIALMEDIAOS_404',
-      why_cant_fix_now: 'Founder runtime serves canonical /api/v1/marketing/*; legacy /api/v1/socialmediaos/* not mounted',
-      next_unblocking_action: 'Mount legacy adapter or update all docs/scripts to /marketing only',
-    },
-    {
-      code: 'SENTRY_LAYER_B_NOT_RUN',
-      why_cant_fix_now: 'Browser walkthrough of /marketing/session/new not executed this session',
-      next_unblocking_action: 'Run SENTRY Layer B against /marketing flow and store receipt',
-    },
-    {
-      code: 'STALE_VERIFY_MARKETING_PHASE1_MJS',
-      why_cant_fix_now: 'scripts/verify-marketing-phase1.mjs still probes hallucinated /marketingos paths',
-      next_unblocking_action: 'Point package scripts at verify-marketing-phase1-live.mjs or delete/replace stale file',
+      code: 'GOOGLE_YOUTUBE_OAUTH_UNVERIFIED',
+      why_cant_fix_now: 'GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET not set in Railway; YouTube connect cannot exchange tokens',
+      next_unblocking_action: 'Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to Railway, then add redirect URI https://robust-magic-production.up.railway.app/api/v1/marketing/youtube/callback in Google Cloud Console and test /marketing/youtube/connect',
     },
   ];
 }

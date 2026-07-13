@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — SocialMediaOS content generation quality fix: distinct multi-platform content pack with per-piece titles, robust JSON parsing, and corrected SSOT. Prior: founder audit of session-export/audio-upload routes (auto-registered and wired to real services). |
+| **Last Updated** | 2026-07-13 — SocialMediaOS readiness verified end-to-end after deploy: consent → coach → extract → generate → approve → export all pass; generated content now distinct multi-platform pack with titles; remaining honest blockers are R2 audio upload and Google YouTube OAuth credentials. |
 
 ---
 
