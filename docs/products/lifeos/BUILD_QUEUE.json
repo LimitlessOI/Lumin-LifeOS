@@ -557,7 +557,7 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-twin-simulator.js",
       "task": "simulate twin reactions",
       "spec": "async function simulateTwinReactions(userId, uiData) { /* Call AI to predict user response */ } module.exports = { simulateTwinReactions };",
@@ -565,8 +565,8 @@
         "5"
       ],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-13T11:06:48.446Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-13T12:33:26.287Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
