@@ -81,7 +81,9 @@
       "spec": "Verify the default 90 days recency threshold for conversation_memory migration is correct and update any discrepancies.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-13T14:36:47.796Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
       "id": "7",
