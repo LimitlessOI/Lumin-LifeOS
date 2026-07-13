@@ -1,25 +1,28 @@
 /**
  * SYNOPSIS: Script — Write Phase14 Ledger.
  */
-import pg from 'pg';
 import { readFile } from 'fs/promises';
+import pg from 'pg';
 
 const { Client } = pg;
 
-function buildPhaseLedger(payload) {
+const FINDINGS_JSON_PATH = process.env.FINDINGS_JSON_PATH ?? './findings.json';
+const DATABASE_URL = process.env.DATABASE_URL;
+
+function derivePhaseLedger(payload) {
   if (Array.isArray(payload?.phases)) {
     return payload.phases.map((phase) => ({
       phase: phase?.phase ?? phase?.name ?? phase?.id ?? 'unknown',
-      status: phase?.status === 'pass' ? 'pass' : 'fail',
+      status: phase?.status === 'fail' ? 'fail' : 'pass',
       note: phase?.note ?? phase?.message ?? '',
     }));
   }
 
   if (Array.isArray(payload?.findings)) {
     return payload.findings.map((finding, index) => ({
-      phase: finding?.phase ?? finding?.name ?? `phase-${index + 1}`,
-      status: finding?.status === 'pass' ? 'pass' : 'fail',
-      note: finding?.note ?? finding?.message ?? String(finding ?? ''),
+      phase: finding?.phase ?? finding?.name ?? finding?.id ?? `phase-${index + 1}`,
+      status: finding?.status === 'fail' ? 'fail' : 'pass',
+      note: finding?.note ?? finding?.message ?? '',
     }));
   }
 
@@ -27,21 +30,26 @@ function buildPhaseLedger(payload) {
 }
 
 async function main() {
-  const findingsPath = process.env.FINDINGS_JSON_PATH ?? './findings.json';
-  const raw = await readFile(findingsPath, 'utf8');
-  const payload = JSON.parse(raw);
-  const phaseLedger = buildPhaseLedger(payload);
+  if (!DATABASE_URL) {
+    throw new Error('DATABASE_URL is required');
+  }
 
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
+  const raw = await readFile(FINDINGS_JSON_PATH, 'utf8');
+  const payload = JSON.parse(raw);
+  const phaseLedger = derivePhaseLedger(payload);
+
+  const findingsJson = JSON.stringify({
+    ...payload,
+    phase_ledger: phaseLedger,
   });
 
+  const client = new Client({ connectionString: DATABASE_URL });
   await client.connect();
 
   try {
     const result = await client.query(
       'INSERT INTO builder_findings(findings_json) VALUES($1)',
-      [JSON.stringify({ ...payload, phase_ledger: phaseLedger })],
+      [findingsJson],
     );
 
     console.log(
@@ -50,14 +58,12 @@ async function main() {
         phase_ledger_length: phaseLedger.length,
       }),
     );
-
-    process.exit(0);
   } finally {
-    await client.end().catch(() => {});
+    await client.end();
   }
 }
 
 main().catch((error) => {
-  console.error(error);
+  console.error(error instanceof Error ? error.message : String(error));
   process.exit(1);
 });

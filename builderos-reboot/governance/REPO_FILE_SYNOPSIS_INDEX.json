@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:45:17.931Z",
+  "generated_at": "2026-07-13T23:45:26.025Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11510,
   "files": [
@@ -80830,9 +80830,9 @@
     {
       "path": "scripts/write-phase14-ledger.mjs",
       "synopsis": "Script — Write Phase14 Ledger.",
-      "bytes": 1620,
-      "mtime": "2026-07-13T23:43:41.812Z",
-      "indexed_at": "2026-07-13T23:43:41.812Z"
+      "bytes": 1793,
+      "mtime": "2026-07-13T23:45:26.025Z",
+      "indexed_at": "2026-07-13T23:45:26.025Z"
     },
     {
       "path": "scripts/zero-drift-check.mjs",
