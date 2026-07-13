@@ -175,7 +175,9 @@
         "step-01"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-13T03:44:36.954Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ]
 }
