@@ -28,7 +28,9 @@
       "spec": "Document memory TTL and archive logic at implementation level for clear developer guidance.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-13T14:24:08.846Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
       "id": "3",
