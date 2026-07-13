@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T07:14:05.866Z",
+  "generated_at": "2026-07-13T07:24:07.294Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11484,
   "files": [
@@ -39771,9 +39771,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 120127,
-      "mtime": "2026-07-13T07:13:56.388Z",
-      "indexed_at": "2026-07-13T07:14:05.866Z"
+      "bytes": 120716,
+      "mtime": "2026-07-13T07:23:57.388Z",
+      "indexed_at": "2026-07-13T07:24:07.294Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -86179,9 +86179,9 @@
     {
       "path": "services/site-builder-prospect-runner.js",
       "synopsis": "Async Site Builder prospect jobs — accept fast, build+email in background.",
-      "bytes": 20977,
-      "mtime": "2026-07-13T07:13:04.500Z",
-      "indexed_at": "2026-07-13T07:14:05.866Z",
+      "bytes": 21306,
+      "mtime": "2026-07-13T07:23:29.591Z",
+      "indexed_at": "2026-07-13T07:24:07.294Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

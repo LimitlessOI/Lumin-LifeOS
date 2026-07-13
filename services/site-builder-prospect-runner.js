@@ -165,6 +165,11 @@ export async function triggerBuildOnView(pipeline, clientId) {
   const claimed = await pipeline.markProspectBuilding(clientId, {
     jobClaimToken: `view_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     jobClaimExpiresAt: new Date(Date.now() + 3 * 60 * 1000).toISOString(),
+    // Clear the previous attempt's failure message — otherwise a fresh, successfully
+    // in-progress build keeps reporting the prior attempt's stale error to callers
+    // polling status mid-build (observed live: "stale_building_reclaimed…" persisted
+    // through an entire successful repair run).
+    jobError: null,
     ...(isRepairableTerminal ? { repairRebuildAttempts: repairAttempts + 1 } : {}),
   });
   if (!claimed.ok) {
