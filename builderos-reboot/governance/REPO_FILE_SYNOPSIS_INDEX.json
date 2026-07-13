@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T13:54:55.098Z",
+  "generated_at": "2026-07-13T14:01:13.862Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11500,
+  "file_count": 11501,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -66357,6 +66357,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/quoteRoutes.js",
+      "synopsis": "Registers QuoteRoutes routes/handlers (routes/quoteRoutes.js).",
+      "bytes": 4747,
+      "mtime": "2026-07-13T14:01:13.862Z",
+      "indexed_at": "2026-07-13T14:01:13.862Z"
     },
     {
       "path": "routes/railway-managed-env-routes.js",
