@@ -120,7 +120,7 @@ export async function triggerBuildOnView(pipeline, clientId) {
   try {
     const result = await pipeline.pool.query(
       `SELECT client_id, business_url, contact_email, contact_name, business_name,
-              status, preview_url, metadata
+              status, preview_url, metadata, updated_at
          FROM prospect_sites
         WHERE client_id = $1
         LIMIT 1`,
@@ -137,6 +137,17 @@ export async function triggerBuildOnView(pipeline, clientId) {
     return { ok: true, started: false, reason: 'already_built', ready: true };
   }
   if (row.status === 'building' && activeJobs.has(String(clientId))) {
+    return { ok: true, started: false, reason: 'building', building: true };
+  }
+  // A 'building' row not in *this* instance's in-memory activeJobs isn't necessarily
+  // stalled — on Railway's multi-instance deploy, the job may simply be running on a
+  // different instance than the one serving this request. Trust the DB's recency
+  // (heartbeat) over local-only state: only treat it as stuck once it's actually stale
+  // (matches the same PROSPECT_STALE_MS threshold failStaleProspectJobs uses elsewhere).
+  // Getting this wrong in the other direction is what let a real in-progress cross-
+  // instance repair get served the "couldn't finish" honest-failure page mid-build.
+  const rowUpdatedAtMs = row.updated_at ? new Date(row.updated_at).getTime() : 0;
+  if (row.status === 'building' && rowUpdatedAtMs > 0 && (Date.now() - rowUpdatedAtMs) < PROSPECT_STALE_MS) {
     return { ok: true, started: false, reason: 'building', building: true };
   }
   // A terminal row (sent/built/qa_hold) with no previewHtml is not "done", it's broken —
