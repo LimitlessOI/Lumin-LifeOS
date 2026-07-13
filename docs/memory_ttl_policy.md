@@ -2,70 +2,82 @@
 
 # Memory TTL Policy
 
-This document defines the implementation-level TTL and archive behavior for memory records in this repository. ## Purpose
+This document defines the implementation-level policy for memory retention, expiration, and archive behavior. Properties:
 
-Memory records are retained in the active store for a bounded time window, then moved to an archive store for long-term retention and reduced operational cost. ## Record Types
+- indexed for query and lookup
+- considered live for application decisions
+- subject to TTL expiry
+- may be promoted to archive before deletion
 
-Apply this policy to any persisted memory object that is time-scoped, including:
+### 2. Archived Memory
 
-- user memories
-- session memories
-- agent observations
-- derived summaries
-- operational notes that are stored with a timestamp
+Archived memory is retained historical data. Properties:
 
-Each memory record must include:
-
-- `id`
-- `createdAt` as an ISO-8601 timestamp
-- `updatedAt` as an ISO-8601 timestamp
-- `ttlMs` or a policy-resolved TTL value
-- `status` with one of:
-  - `active`
-  - `archived`
-  - `deleted`
+- not used in normal active lookup paths
+- may be restored or referenced for auditing
+- retained according to archive retention rules
+- may be compressed or summarized separately from active records
 
 ## TTL Rules
 
-### Default TTL
+Each memory record must have an expiration policy. Required fields:
 
-If a record does not specify its own TTL, use the default active TTL:
+- `createdAt`: timestamp when the record was created
+- `updatedAt`: timestamp when the record was last modified
+- `ttlMs`: time-to-live in milliseconds, or a policy reference that resolves to a TTL
+- `expiresAt`: computed absolute expiration timestamp
 
-- `DEFAULT_MEMORY_TTL_MS = 30 days`
+### TTL Computation
 
-### Override TTL
+Implementation must compute:
 
-A record may provide a TTL override when it is created. The override must be a finite positive integer in milliseconds. Validation rules:
+- `expiresAt = createdAt + ttlMs`
 
-- if `ttlMs` is missing, use the default TTL
-- if `ttlMs <= 0`, reject the write or coerce to the default depending on the calling layer’s policy
-- if `ttlMs` exceeds the configured maximum, clamp it to the maximum allowed TTL
+If a record is updated and the update is intended to extend its lifetime, the system must explicitly recompute:
 
-### Maximum TTL
+- `updatedAt = now`
+- `expiresAt = updatedAt + ttlMs`
 
-To prevent indefinite active retention, active TTL must be bounded:
+If the record is not intended to extend on update, `expiresAt` remains unchanged. ### Default TTL
 
-- `MAX_MEMORY_TTL_MS = 180 days`
+If no TTL is specified, the system must apply a configured default based on memory class. The default must be defined centrally and not duplicated across callers. ## Expiration Behavior
 
-Any active record older than this bound must be archived or deleted by lifecycle processing. ## Expiration Semantics
+A memory record is considered expired when:
 
-A record expires when:
+- `now >= expiresAt`
 
-- `now >= createdAt + ttlMs`
+Expired records must not be returned by normal active-memory queries. Expired records must be processed by cleanup or archival routines. ## Expiration Processing
 
-Expiration does not immediately imply deletion. Expired records transition through an archive step first unless the record is explicitly configured for direct purge. ## Lifecycle States
+The system must have a periodic cleanup job or equivalent trigger that:
 
-### Active
+1. scans for expired active records
+2. decides whether each record should be archived
+3. archives eligible records
+4. deletes or deactivates records that are not eligible for archive
+5. records the outcome for observability
 
-A record is active when it is eligible for normal reads, indexing, and ranking. Archived records:
+Cleanup must be idempotent. Running it multiple times must not create duplicate archives or corrupt state. ## Archive Eligibility
 
-- are excluded from default active queries
-- remain readable through archive-specific APIs
-- should not be re-ranked with active memories
-- may be compacted into cheaper storage
+Not all expired memory should be archived. Archive eligibility should be determined by policy flags or record metadata. A record is eligible for archive when one or more of the following are true:
 
-### Deleted
+- it is marked as important
+- it is referenced by other durable entities
+- it belongs to a category requiring historical retention
+- it has a configured archive policy
 
-A record is deleted when it is no longer required for retention. Recommended defaults:
+If a record is not archive-eligible, it should be deleted or tombstoned after expiry according to storage policy. ## Archiving Rules
 
-- `DEFAULT_ARCHIVE_TTL_MS
+When a record is archived:
+
+1. the source active record is marked expired or inactive
+2. an archive record is written with preserved identity metadata
+3. the archive record includes provenance:
+   - source record id
+   - archivedAt timestamp
+   - original createdAt
+   - original expiresAt
+   - archive reason
+4. the active lookup path must exclude the archived source record
+5. archive writes must be deduplicated by source record identity and archive version
+
+Archived records must
