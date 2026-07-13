@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T13:26:11.886Z",
+  "generated_at": "2026-07-13T13:37:59.467Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11496,
+  "file_count": 11497,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -81729,6 +81729,13 @@
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/bundle-skus.js",
+      "synopsis": "Exports createBundles — services/bundle-skus.js.",
+      "bytes": 690,
+      "mtime": "2026-07-13T13:37:59.467Z",
+      "indexed_at": "2026-07-13T13:37:59.467Z"
     },
     {
       "path": "services/canonical-id.js",
