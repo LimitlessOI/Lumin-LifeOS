@@ -62,7 +62,7 @@ function buildingPlaceholderHtml(clientId, businessName = '') {
 <body>
   <div class="card">
     <h1>Building ${safeName}</h1>
-    <p>We only spend build time when someone opens the link. Your lean preview usually lands in under 90 seconds.</p>
+    <p>Your preview is being prepared. Most lean previews land in under 90 seconds.</p>
     <div class="bar" aria-hidden="true"><span></span></div>
     <p class="meta" id="status">Starting…</p>
   </div>
@@ -231,41 +231,41 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         skipBlogs: true,
         skipAi: true,
         leanTemplate: true,
-        deferred: true,
+        skipQualify: true,
       };
 
-      const job = await enqueueDeferredProspectJob(pipeline, options);
+      const job = await enqueueProspectJob(pipeline, options);
       if (!job.ok) {
         return res.status(job.error?.includes('already running') ? 409 : 400).json(job);
       }
 
+      const previewUrl = job.clientId ? pipeline.resolvePreviewUrl(job.clientId) : null;
+      const statusUrl = job.clientId ? `/api/v1/sites/public-preview-status/${job.clientId}` : null;
       const founderNotify = process.env.ADAM_NOTIFY_EMAIL || process.env.WORK_EMAIL || 'adam@hopkinsgroup.org';
       if (notificationService?.sendEmail) {
         notificationService
           .sendEmail({
             to: founderNotify,
             subject: `Site Builder lead — ${businessName || businessUrl}`,
-            html: `<p>New public lead from Site Builder launch page (deferred preview).</p>
+            html: `<p>New public lead from Site Builder launch page (prebuilt preview).</p>
               <p><b>Business:</b> ${businessName || '(none)'}<br>
               <b>URL:</b> ${businessUrl}<br>
               <b>Email:</b> ${contactEmail}<br>
               <b>clientId:</b> ${job.clientId || ''}<br>
-              <b>Preview:</b> <a href="${job.previewUrl || ''}">${job.previewUrl || ''}</a></p>`,
+              <b>Preview:</b> <a href="${previewUrl || ''}">${previewUrl || ''}</a></p>`,
             text: `Site Builder lead: ${businessUrl} / ${contactEmail}`,
           })
           .catch((err) => logger.warn?.('[SITE] founder lead notify failed', { error: err.message }));
       }
 
-      logger.info('[SITE] Public lead accepted (deferred)', { businessUrl, contactEmail, clientId: job.clientId });
+      logger.info('[SITE] Public lead accepted (prebuilt)', { businessUrl, contactEmail, clientId: job.clientId, previewUrl });
       return res.status(202).json({
         ok: true,
-        message: 'Preview link ready. We build when you open it — usually under 90 seconds.',
+        message: 'Preview build started. We will email you when it is ready.',
         clientId: job.clientId || null,
-        previewUrl: job.previewUrl || null,
-        deferred: true,
-        statusUrl: job.clientId
-          ? `/api/v1/sites/public-preview-status/${job.clientId}`
-          : null,
+        previewUrl,
+        deferred: false,
+        statusUrl,
       });
     } catch (err) {
       logger.error('[SITE] Public lead error', { error: err.message });
@@ -494,20 +494,20 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   /**
    * POST /api/v1/sites/prospect
-   * Async by default. With a contactEmail, deferred=true (default): email the link now,
-   * lean-build only when they click — saves AI spend on non-engagers.
-   * Body: { businessUrl, contactEmail?, deferred?, skipEmail?, sync?, leanTemplate?, ... }
-   * deferred=false or skipEmail=true → build immediately (legacy / SENTRY path).
+   * Pre-build by default. The preview is built as soon as the request is accepted,
+   * and the outreach email is sent after the build completes. Set deferred=true to
+   * email the link immediately and build only when the prospect opens it.
+   * Body: { businessUrl, contactEmail?, deferred?, skipEmail?, sync?, leanTemplate?, skipQualify?, ... }
    */
   router.post('/prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
       const {
         businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo, sync,
-        enrich, skipRepair, skipBlogs, skipAi, leanTemplate, deferred,
+        enrich, skipRepair, skipBlogs, skipAi, leanTemplate, deferred, skipQualify,
       } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
 
-      const useDeferred = deferred !== false
+      const useDeferred = deferred === true
         && !!contactEmail
         && skipEmail !== true
         && sync !== true
@@ -520,7 +520,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
       const options = {
         businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo,
-        enrich, skipRepair, skipBlogs, skipAi, leanTemplate,
+        enrich, skipRepair, skipBlogs, skipAi, leanTemplate, skipQualify,
       };
 
       if (sync === true || req.query.sync === '1') {
@@ -583,7 +583,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
   /**
    * POST /api/v1/sites/bulk-prospect
-   * Batch deferred invites by default (email link now, lean build on click).
+   * Pre-build each preview by default, then email the link. Set deferred=true to email
+   * the link immediately and build on first click (legacy/lower cost per non-engager).
    * Body: { prospects: [...], deferred?: boolean }
    */
   router.post('/bulk-prospect', requireKey, prospectLimiter, async (req, res) => {
@@ -592,17 +593,26 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!prospects.length) return res.status(400).json({ ok: false, error: 'prospects array required' });
       if (prospects.length > 20) return res.status(400).json({ ok: false, error: 'Max 20 prospects per batch' });
 
-      logger.info('[SITE] Bulk prospect request', { count: prospects.length, deferred: deferred !== false });
+      logger.info('[SITE] Bulk prospect request', { count: prospects.length, deferred: deferred === true });
       const pipeline = getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl });
 
       const results = [];
       for (const prospect of prospects) {
-        const useDeferred = deferred !== false
+        const useDeferred = deferred === true
           && !!prospect.contactEmail
           && prospect.skipEmail !== true;
+        const options = {
+          ...prospect,
+          skipAi: prospect.skipAi !== false,
+          leanTemplate: prospect.leanTemplate !== false,
+          skipRepair: prospect.skipRepair !== false,
+          skipBlogs: prospect.skipBlogs !== false,
+          enrich: prospect.enrich === true,
+          skipQualify: prospect.skipQualify !== false,
+        };
         const job = useDeferred
-          ? await enqueueDeferredProspectJob(pipeline, prospect)
-          : await enqueueProspectJob(pipeline, prospect);
+          ? await enqueueDeferredProspectJob(pipeline, options)
+          : await enqueueProspectJob(pipeline, options);
         results.push(job);
       }
 
@@ -610,7 +620,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       res.status(202).json({
         ok: true,
         async: true,
-        deferred: deferred !== false,
+        deferred: deferred === true,
         total: prospects.length,
         accepted,
         failed: prospects.length - accepted,

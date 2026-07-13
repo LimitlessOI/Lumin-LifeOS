@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-07-12 — Site Builder pre-built previews + monetization ideation
+
+Adam asked for 25 promotion/monetization ideas for Site Builder and for previews to be pre-built before the link is opened. Delivered the 25 ideas (separate deliverable) and changed the pipeline: `POST /api/v1/sites/public-lead` now queues a lean, no-AI build via `enqueueProspectJob` with `skipQualify: true` and polls `public-preview-status`; `POST /api/v1/sites/prospect` defaults to pre-build (`deferred=true` required for build-on-click legacy); `POST /api/v1/sites/bulk-prospect` defaults to pre-build with lean defaults; `services/prospect-pipeline.js` `processProspect` now always uses `buildFromUrl` so the durable `metadata.previewHtml` DB fallback is populated; `services/site-builder.js` `generateSiteHtml` defaults to a random design system when none is supplied; `public/overlay/site-builder-landing.html` and `site-builder-command-center.html` copy/flags updated. `npm run builder:preflight` PASS, `npm run lifeos:bp-priority:verify` PASS, `node --check` on touched JS files PASS, `npm run check:overlay` PASS. SENTRY Layer A/B and production smoke tests planned for post-deploy. PR created from `devin/site-builder-prebuild`.
+
+---
+
 ## [SESSION] 2026-07-12 — BuilderOS audit: `factory:ci` green
 
 Audited BuilderOS health and factory CI. `npm run builder:preflight` and `npm run lifeos:bp-priority:verify` passed, but `npm run factory:ci` failed `acceptance` on four missions (`FACTORY-REBOOT-0003`, `0004`, `0008`, `0024`, `0028` had stale `byte_exact_copy` sha256 contracts) and `cutover_verify` because `lumin-factory-bundle` was not generated. Refreshed the `BLUEPRINT.json` sha256 contracts and `CONTENT`/`ARTIFACTS` files for those missions to match `factory-staging/factory-core/sentry/*` and `builderos-reboot/scripts/*.mjs` on disk, synced `ACCEPTANCE_TESTS.json` from blueprints, added a `bundle` step to `builderos-reboot/scripts/factory-ci.mjs` to run `build-lumin-factory-bundle.mjs` before `cutover_verify`, and re-indexed `REPO_FILE_SYNOPSIS_INDEX.json`. After fixes, `npm run factory:ci` ALL PASS, `npm run builder:preflight` PASS, `npm run lifeos:bp-priority:verify` PASS. `npm test` still has 2 pre-existing failures in `tests/auto-register-product-modules.test.js` when `os.tmpdir()` is `/tmp` outside the repo root; CI passes because `TMPDIR` is under the workspace. PR created from `devin/builderos-audit`.

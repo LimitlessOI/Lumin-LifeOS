@@ -904,8 +904,9 @@ Return ONLY valid JSON:
     const competitorBrief = designBrief?.text
       ? `\n\nCOMPETITOR-INFORMED DESIGN BRIEF (beat the market, do not copy):\n${designBrief.text}`
       : '';
-    const designSystemBlock = options.designSystem
-      ? `\n\n${renderDesignSystemDirectives(options.designSystem)}`
+    const designSystem = options.designSystem || pickDesignSystems(1, options.styleIds || [])[0];
+    const designSystemBlock = designSystem
+      ? `\n\n${renderDesignSystemDirectives(designSystem)}`
       : '';
 
     const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
