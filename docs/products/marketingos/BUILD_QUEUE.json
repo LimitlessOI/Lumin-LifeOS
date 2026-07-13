@@ -506,9 +506,9 @@
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "commit_sha": "8369a01a2256151bafcbeba558b15ad4461e18f1",
-      "last_attempt_at": "2026-07-13T04:29:28.834Z",
+      "last_attempt_at": "2026-07-13T04:30:56.700Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/marketing-session-export-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
     },
     {
