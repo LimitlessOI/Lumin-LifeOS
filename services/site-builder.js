@@ -32,7 +32,7 @@ import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.
 import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
-import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID } from './site-builder-design-systems.js';
+import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID, getDesignSystemCss, getDesignSystemFontLinks } from './site-builder-design-systems.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 
@@ -67,8 +67,8 @@ const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '1400
 // free-tier model — only strong, paid models are hardwired into what the system ships.
 // Env-overridable; on any provider error we fall back to another STRONG model (gpt-4o),
 // NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
-const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'openai_gpt';
-const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'claude_sonnet';
+const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'claude_sonnet';
+const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'openai_gpt';
 const GENERATION_TIMEOUT_MS = Math.max(15_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '60000'));
 const PUPPETEER_LAUNCH_TIMEOUT_MS = Math.max(5_000, Number(process.env.SITE_BUILDER_PUPPETEER_LAUNCH_TIMEOUT_MS || '25000'));
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
@@ -477,7 +477,7 @@ export default class SiteBuilder {
    */
   async buildVariants(targetUrl, options = {}) {
     const clientId = options.clientId || `prev_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
-    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || SITE_BUILDER_PRICING.templates.freeCount || 10));
+    const count = Math.max(1, Number(options.variantCount || process.env.SITE_BUILDER_VARIANTS || (SITE_BUILDER_PRICING.templates.freeCount + SITE_BUILDER_PRICING.templates.additional.slotCount) || 10));
     const systems = pickDesignSystems(count, options.styleIds || []);
     logger.info('[SITE] Building variants', { clientId, targetUrl, systems: systems.map((s) => s.id) });
 
@@ -567,6 +567,10 @@ export default class SiteBuilder {
       // pipeline's send-quality gate) need one canonical score to decide whether
       // this build is ready to email, same contract buildFromUrl provides.
       const bestVariant = variants.reduce((best, v) => (v.scorePct > (best?.scorePct ?? -1) ? v : best), null);
+      if (bestVariant) {
+        businessInfo.designSystemId = bestVariant.id;
+        businessInfo.designSystemName = bestVariant.name;
+      }
       let qualityReport = null;
       try {
         const bestHtml = variantHtmls[bestVariant.id];
@@ -646,7 +650,7 @@ export default class SiteBuilder {
     const editorUrl = this.baseUrl && editToken
       ? `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken)}`
       : '';
-    const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, blurb: v.blurb, file: v.file })));
+    const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, tier: v.tier || 'paid', blurb: v.blurb, file: v.file })));
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -659,7 +663,8 @@ export default class SiteBuilder {
   body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   .chip { transition: all .15s ease; }
   .chip[aria-pressed="true"] { background:#fff; color:#0f172a; font-weight:600; }
-  iframe { border:0; width:100%; height:calc(100vh - 116px); display:block; background:#fff; }
+  .chip .tier { font-size:10px; opacity:.7; margin-left:6px; text-transform:uppercase; }
+  iframe { border:0; width:100%; height:calc(100vh - 128px); display:block; background:#fff; }
 </style>
 </head>
 <body class="bg-slate-900">
@@ -672,22 +677,26 @@ export default class SiteBuilder {
         </div>
         <div class="text-right flex flex-wrap gap-2 justify-end items-center">
           ${editorUrl ? `<a href="${editorUrl}" class="bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold px-3 py-2 rounded-lg">Editor</a>` : ''}
-          ${publishUrl ? `<a href="${publishUrl}" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-3 py-2 rounded-lg">Publish ${SITE_BUILDER_PRICING.publish.display}</a>` : ''}
-          <p class="text-xs text-slate-400 mb-1 w-full" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name"></p>
+          <a :href="checkoutUrl" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-3 py-2 rounded-lg"><span x-text="selected === 'custom' ? 'Custom co-design' : 'Publish ${SITE_BUILDER_PRICING.publish.display}'"></span></a>
           <button @click="choose()" class="bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg">✓ Use this design</button>
+          <p class="text-xs text-slate-400 mb-1 w-full" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name + (current.tier === 'paid' ? ' ($1 at publish)' : '')"></p>
         </div>
       </div>
-      <p class="text-xs text-slate-400 mt-2">Not loving it? Toggle through the designs below — each is a different professionally-designed style.</p>
+      <p class="text-xs text-slate-400 mt-2">5 free designs · 10 paid designs you can preview · $30 custom co-design (pay only when you approve). Toggle to compare.</p>
       <nav class="mt-2 flex gap-2 overflow-x-auto pb-1">
         <template x-for="(v,i) in variants" :key="v.id">
           <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400"
-            :aria-pressed="i===index" @click="show(i)" x-text="v.name"></button>
+            :aria-pressed="i===index" @click="show(i)">
+            <span x-text="v.name"></span><span class="tier" x-text="v.tier === 'paid' ? '$1' : 'free'"></span>
+          </button>
         </template>
+        <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-amber-500 text-amber-300 hover:border-amber-300" @click="showCustom()">
+          <span>Custom co-design</span><span class="tier">$30</span>
+        </button>
       </nav>
     </header>
     <iframe :src="current.file" :title="current.name" x-ref="frame"></iframe>
-    <div x-show="saved" x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl">
-      Saved — <span x-text="current.name"></span> selected. We'll be in touch.
+    <div x-show="saved" x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl" x-text="savedMsg">
     </div>
   </div>
 <script src="${ALPINE_CDN}" defer></script>
@@ -696,12 +705,30 @@ export default class SiteBuilder {
     return {
       variants: ${data},
       index: 0,
+      selected: null,
+      selectedTier: null,
       saved: false,
+      savedMsg: '',
       get current(){ return this.variants[this.index]; },
-      init(){ const h = parseInt(new URLSearchParams(location.search).get('v')); if(!isNaN(h) && this.variants[h]) this.index = h; },
-      show(i){ this.index = i; this.saved = false; },
+      get checkoutUrl(){
+        const base = ${JSON.stringify(publishUrl)};
+        if (!base) return '';
+        if (this.selected === 'custom') return base + '&templateTier=template-custom';
+        if (this.selected && this.selectedTier === 'paid') return base + '&templateTier=template-additional&selectedDesign=' + encodeURIComponent(this.selected);
+        return base;
+      },
+      init(){ const h = parseInt(new URLSearchParams(location.search).get('v')); if(!isNaN(h) && this.variants[h]) this.index = h; this.show(this.index); },
+      show(i){ this.index = i; this.selected = this.variants[i].id; this.selectedTier = this.variants[i].tier; this.saved = false; },
+      showCustom(){ this.selected = 'custom'; this.selectedTier = 'custom'; this.saved = true; this.savedMsg = 'Custom co-design selected — you will only pay when you approve the final design.'; setTimeout(()=>{ this.saved = false; }, 4000); },
       choose(){
         this.saved = true;
+        this.selected = this.current.id;
+        this.selectedTier = this.current.tier;
+        if (this.selectedTier === 'paid') {
+          this.savedMsg = this.current.name + ' selected — pay the $1 template fee when you publish.';
+        } else {
+          this.savedMsg = this.current.name + ' selected — free design.';
+        }
         var base = ${JSON.stringify(selectBase)};
         if(base){ try { navigator.sendBeacon ? navigator.sendBeacon(base + '?id=${clientId}&style=' + this.current.id) : fetch(base + '?id=${clientId}&style=' + this.current.id, {mode:'no-cors'}); } catch(e){} }
         setTimeout(()=>{ this.saved = false; }, 4000);
@@ -972,8 +999,12 @@ Return ONLY valid JSON:
       ? `\n\nCOMPETITOR-INFORMED DESIGN BRIEF (beat the market, do not copy):\n${designBrief.text}`
       : '';
     const designSystem = options.designSystem || pickDesignSystems(1, options.styleIds || [])[0];
+    if (designSystem) {
+      info.designSystemId = designSystem.id;
+      info.designSystemName = designSystem.name;
+    }
     const designSystemBlock = designSystem
-      ? `\n\n${renderDesignSystemDirectives(designSystem)}`
+      ? `\n\n${renderDesignSystemDirectives(designSystem, info)}`
       : '';
 
     const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
@@ -1033,7 +1064,7 @@ CLICK FUNNEL STRUCTURE (in this exact order):
 6. SERVICES SECTION: Service cards with name and description. Include a price ONLY if a real price is provided for that service — otherwise no price. "Learn More" / "Book" CTA.
 7. TESTIMONIALS: Prefer REAL reviews from ASSET DATA / VERIFIED REAL DATA — quote them verbatim with the author and source (e.g. "— Ana H. via Google"). If NO real reviews are provided, you MAY show up to 2 illustrative sample testimonials, but EACH card MUST carry a clearly visible small-print label reading exactly: "AI-generated testimonial sample — not a real client review". Never present a sample as real, never invent a real client's name, and never attach a star rating to a sample.
 8. OFFER/PACKAGES: Show pricing ONLY if a real price/priceRange is provided in the BUSINESS PROFILE or VERIFIED REAL DATA. If real pricing exists, present it accurately. If NO real pricing is provided, do NOT invent tiers or dollar amounts — instead show a single "Request pricing / Book a free consultation" CTA that links to booking.
-9. DIGITAL PRESENCE SCORE: If INDUSTRY BENCHMARKS are provided, render a clean scorecard table (Area | Client score | Industry avg | Verdict) and a short "Where we can improve" list. Use the scores exactly as given; do not embellish.
+9. DIGITAL PRESENCE SCORE: If INDUSTRY BENCHMARKS are provided, render a visually compelling scorecard section: a circular score ring for the overall score, a small progress bar per benchmark area, and a table (Area | Client score | Industry avg | Verdict). Be honest; show improvement opportunities. Use the scores exactly as given; do not embellish.
 10. ABOUT SECTION: Brief about the practitioner, warm and personal. Use a real team image from ASSET DATA if available.
 11. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click)
 12. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt placeholders (links to /blog/)
@@ -1056,9 +1087,9 @@ DESIGN INTELLIGENCE:
 ${designIntel}${competitorBrief}${designSystemBlock}
 
 DESIGN REQUIREMENTS:
-- Use Tailwind utility classes for layout and components, plus one concise <style> block for theme tokens and a few intentional visual effects
-- Primary color: ${primary} — use in CTAs, borders, highlights
-- Accent color: ${accent} — use in gradients, hover states, and editorial moments
+- Use Tailwind utility classes for layout and components, plus the MANDATORY CSS <style> block from the DESIGN SYSTEM SPEC above for theme tokens, fonts, and visual effects
+- Primary color: ${primary} and Accent color: ${accent} are used as described in the DESIGN SYSTEM SPEC
+- The DESIGN SYSTEM SPEC is the source of truth for color, typography, layout, motifs, and anti-patterns — follow it exactly
 - Make the site feel custom to this business, not like a generic wellness template
 - Avoid default purple-on-white unless the extracted brand colors actually call for it
 - Use stronger hierarchy, editorial spacing, clear card groupings, and at least one visually distinctive section treatment
@@ -1144,12 +1175,29 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
    */
   patchSiteHtml(html, info = {}) {
     let h = this.sanitizeInlineSvgBackgrounds(String(html || ''));
-    const primary = info.primaryColor || '#7C3AED';
-    const accent = info.accentColor || '#EC4899';
+    const primary = info.primaryColor || '#0F766E';
+    const accent = info.accentColor || '#F59E0B';
     const phone = info.phone || '';
     const email = info.email || '';
     const bookingUrl = info.bookingUrl || '#book';
     const name = info.businessName || 'the practice';
+
+    // 0. Inject shared design-system tokens, Google Fonts, and body marker so the
+    // AI-generated design system is enforced regardless of which Tailwind classes the model emits.
+    const designSystem = getDesignSystem(info.designSystemId) || getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
+    if (designSystem && !h.includes('<!--design-system-tokens-->')) {
+      const fontLinks = getDesignSystemFontLinks(designSystem)
+        .filter((link) => !h.includes(link))
+        .join('\n');
+      const dsCss = `<style>\n${getDesignSystemCss(designSystem, primary, accent)}\n</style>\n<!--design-system-tokens-->`;
+      const dsBlock = fontLinks ? `${fontLinks}\n${dsCss}` : dsCss;
+      h = h.includes('</head>')
+        ? h.replace('</head>', `${dsBlock}\n</head>`)
+        : dsBlock + h;
+    }
+    if (!/<body\b[^>]*data-lumin-ds/i.test(h)) {
+      h = h.replace(/<body\b([^>]*)>/i, '<body data-lumin-ds="1"$1>');
+    }
 
     // 1. Schema.org JSON-LD — required for hasSchemaMarkup (8pts)
     if (!/application\/ld\+json/i.test(h)) {
@@ -1422,16 +1470,23 @@ Return ONLY valid JSON array:
    * presence audit, and industry benchmarks.
    */
   generateScorecardHtml(info, benchmark, presence = null, beforeAfter = null) {
-    const primary = info.primaryColor || '#7C3AED';
-    const accent = info.accentColor || '#EC4899';
+    const designSystem = getDesignSystem(info.designSystemId) || getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
+    const primary = info.primaryColor || '#0F766E';
+    const accent = info.accentColor || '#F59E0B';
     const name = info.businessName || 'Your Business';
-    const presenceSection = presence ? this.generatePresenceSectionHtml(presence) : '';
+    const fontLinks = getDesignSystemFontLinks(designSystem).join('\n');
+    const dsCss = getDesignSystemCss(designSystem, primary, accent);
+    const presenceSection = presence ? this.generatePresenceSectionHtml(presence, primary, accent) : '';
     const beforeAfterSection = beforeAfter && beforeAfter.before && beforeAfter.after
-      ? this.generateBeforeAfterSectionHtml(beforeAfter.before, beforeAfter.after)
+      ? this.generateBeforeAfterSectionHtml(beforeAfter.before, beforeAfter.after, primary, accent)
       : '';
     const industrySection = info.industryBenchmarks?.standards?.length
-      ? this.generateIndustryBenchmarksSectionHtml(info.industryBenchmarks)
+      ? this.generateIndustryBenchmarksSectionHtml(info.industryBenchmarks, primary, accent)
       : '';
+    const siteScore = beforeAfter?.after?.scorePct ?? 0;
+    const benchmarkScores = info.industryBenchmarks?.standards?.map((s) => s.clientScore).filter((s) => typeof s === 'number') || [];
+    const benchmarkAvg = benchmarkScores.length ? Math.round(benchmarkScores.reduce((a, b) => a + b, 0) / benchmarkScores.length) : null;
+    const overall = this.renderOverallRings(siteScore, benchmarkAvg);
     const cards = (benchmark?.scorecards || [])
       .map(c => {
         const scoreLabel = c.score != null ? `${c.score}/10` : 'N/A';
@@ -1456,51 +1511,65 @@ Return ONLY valid JSON array:
     return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${this.escapeHtml(name)} — Site Scorecard</title>
+${fontLinks}
 <style>
-  :root{--primary:${primary};--accent:${accent}}
-  *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a2e;background:#faf9fc}
-  header{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:48px 24px;text-align:center}
-  header h1{margin:0 0 8px;font-size:28px}header p{margin:0;opacity:.9}
-  main{max-width:960px;margin:0 auto;padding:32px 20px}
-  .card{background:#fff;border:1px solid #eee;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+  ${dsCss}
+  *{box-sizing:border-box}
+  body[data-lumin-ds]{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6}
+  h1,h2,h3,h4{font-family:var(--font-display);margin:0 0 .5rem}
+  header{background:linear-gradient(135deg,var(--primary),var(--accent));color:var(--button-text,#fff);padding:48px 24px;text-align:center}
+  header h1{margin:0 0 8px;font-size:clamp(1.8rem,5vw,2.6rem)}
+  header p{margin:0;opacity:.9}
+  main{max-width:1040px;margin:0 auto;padding:32px 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow)}
   .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .host{font-weight:700;font-size:18px}
-  .score{font-weight:800;font-size:20px;color:var(--primary);background:rgba(124,58,237,.08);padding:4px 12px;border-radius:999px}
-  .summary{color:#555;margin:.25rem 0 1rem}
+  .host{font-weight:700;font-size:18px;font-family:var(--font-display)}
+  .score{font-weight:800;font-size:20px;color:var(--primary);background:var(--overlay);padding:4px 12px;border-radius:999px}
+  .summary{color:var(--muted);margin:.25rem 0 1rem}
   .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   @media(max-width:640px){.cols{grid-template-columns:1fr}}
-  h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+  h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-family:var(--font-body)}
   h4.good{color:#16a34a}h4.bad{color:#dc2626}
-  ul{margin:0;padding-left:18px;color:#333;font-size:14px;line-height:1.6}
-  .beat{background:#fff;border:2px solid var(--primary);border-radius:16px;padding:24px;margin-top:8px}
-  .beat h3{margin:0 0 10px;color:var(--primary)}
-  .section-title{font-size:20px;margin:8px 0 16px}
-  table.presence,table.ib{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eee;border-radius:16px;overflow:hidden}
-  table.presence th,table.presence td,table.ib th,table.ib td{padding:12px 14px;text-align:left;border-bottom:1px solid #f0f0f0;font-size:14px}
-  table.presence th,table.ib th{background:#f7f5fb;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#555}
+  ul{margin:0;padding-left:18px;color:var(--text);font-size:14px;line-height:1.6}
+  .beat{background:var(--card);border:2px solid var(--primary);border-radius:var(--radius);padding:24px;margin-top:8px;box-shadow:var(--shadow)}
+  .beat h3{margin:0 0 10px;color:var(--primary);font-family:var(--font-display)}
+  .section-title{font-size:clamp(1.3rem,3vw,1.7rem);margin:8px 0 16px;font-family:var(--font-display)}
+  .ring-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px;justify-items:center;margin-bottom:24px}
+  .ring-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .score-ring{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.6rem;background:conic-gradient(var(--primary) calc(var(--pct,0) * 1%), var(--line) 0);color:var(--text);position:relative}
+  .score-ring::before{content:'';position:absolute;width:80px;height:80px;border-radius:50%;background:var(--card)}
+  .score-ring span{position:relative;z-index:1;font-family:var(--font-display)}
+  .ring-label{font-size:.8rem;color:var(--muted);text-align:center}
+  .bar-track{width:100%;height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:calc(var(--pct) * 1%)}
+  .metric{display:flex;align-items:center;justify-content:space-between;font-size:.95rem;margin-bottom:4px;color:var(--text)}
+  table.presence,table.ib{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  table.presence th,table.presence td,table.ib th,table.ib td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+  table.presence th,table.ib th{background:var(--overlay);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-family:var(--font-body)}
   .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
   .b-ahead{background:#dcfce7;color:#166534}.b-behind{background:#fee2e2;color:#991b1b}
-  .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:#f3f4f6;color:#6b7280}
-  .gap{background:#fff;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:16px 0}
+  .b-even{background:#e5e7eb;color:#374151}.b-open{background:#fef9c3;color:#854d0e}.b-unknown{background:var(--overlay);color:var(--muted)}
+  .gap{background:var(--card);border-left:4px solid var(--primary);border-radius:var(--radius);padding:18px 20px;margin:16px 0;box-shadow:var(--shadow)}
   .ba-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:stretch;margin-bottom:8px}
-  .ba-col{background:#fff;border:1px solid #eee;border-radius:16px;padding:22px}
+  .ba-col{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
   .ba-col.before{border-top:4px solid #dc2626}
   .ba-col.after{border-top:4px solid #16a34a}
-  .ba-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:#555;margin-bottom:6px}
-  .ba-score{font-size:40px;font-weight:800;line-height:1}
+  .ba-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted);margin-bottom:6px}
+  .ba-score{font-size:40px;font-weight:800;line-height:1;font-family:var(--font-display)}
   .ba-col.before .ba-score{color:#dc2626}
   .ba-col.after .ba-score{color:#16a34a}
-  .ba-grade{font-size:14px;color:#777;margin-bottom:12px}
+  .ba-grade{font-size:14px;color:var(--muted);margin-bottom:12px}
   .ba-arrow{display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--primary);font-weight:800}
-  .ba-issues{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#444}
+  .ba-issues{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:var(--text)}
   @media(max-width:640px){.ba-wrap{grid-template-columns:1fr}.ba-arrow{transform:rotate(90deg);padding:4px 0}}
 </style></head>
-<body>
+<body data-lumin-ds="1">
 <header>
   <h1>Your Site Scorecard for ${this.escapeHtml(name)}</h1>
   <p>An honest look at where you stand today, what we changed, and how you compare.</p>
 </header>
 <main>
+  ${overall}
   ${beforeAfterSection}
   ${industrySection}
   ${presenceSection}
@@ -1512,19 +1581,51 @@ Return ONLY valid JSON array:
   }
 
   /**
+   * Render a pair of score rings for the new site and the digital presence benchmark.
+   */
+  renderOverallRings(siteScorePct, benchmarkAvg) {
+    if (!siteScorePct && benchmarkAvg == null) return '';
+    const items = [];
+    if (siteScorePct) {
+      items.push(`<div class="ring-wrap"><div class="score-ring" style="--pct:${Math.min(100, siteScorePct)}"><span>${siteScorePct}%</span></div><div class="ring-label">New site quality</div></div>`);
+    }
+    if (benchmarkAvg != null) {
+      items.push(`<div class="ring-wrap"><div class="score-ring" style="--pct:${Math.min(100, benchmarkAvg * 10)}"><span>${benchmarkAvg}/10</span></div><div class="ring-label">Digital presence score</div></div>`);
+    }
+    return `<div class="ring-grid">${items.join('')}</div>`;
+  }
+
+  /**
    * Render the industry-benchmark scorecard: where the business leads or
    * lags against typical small-business peers in each digital area.
    */
-  generateIndustryBenchmarksSectionHtml(benchmarks) {
-    const rows = (benchmarks.standards || [])
-      .map((s) => `<tr><td>${this.escapeHtml(s.area)}</td><td>${s.clientScore ?? '—'}/10</td><td>${s.industryAverage ?? '—'}/10</td><td>${this.escapeHtml(s.verdict)}${s.notes ? ` <small>(${this.escapeHtml(s.notes)})</small>` : ''}</td></tr>`)
-      .join('');
+  generateIndustryBenchmarksSectionHtml(benchmarks, primary, accent) {
+    const standards = benchmarks.standards || [];
+    const rows = standards.map((s) => {
+      const pct = Math.min(100, Math.max(0, ((s.clientScore ?? 0) / 10) * 100));
+      const avgPct = Math.min(100, Math.max(0, ((s.industryAverage ?? 0) / 10) * 100));
+      return `<tr>
+        <td>${this.escapeHtml(s.area)}</td>
+        <td><div class="metric"><span><strong>${s.clientScore ?? '—'}</strong>/10</span></div><div class="bar-track"><div class="bar-fill" style="--pct:${pct}"></div></div></td>
+        <td><div class="metric"><span><strong>${s.industryAverage ?? '—'}</strong>/10</span></div><div class="bar-track"><div class="bar-fill" style="--pct:${avgPct};background:var(--line)"></div></div></td>
+        <td>${this.escapeHtml(s.verdict)}${s.notes ? ` <small style="color:var(--muted)">(${this.escapeHtml(s.notes)})</small>` : ''}</td>
+      </tr>`;
+    }).join('');
+    const scores = standards.map((s) => s.clientScore).filter((s) => typeof s === 'number');
+    const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+    const avgPct = Math.min(100, avg * 10);
     return `<h2 class="section-title">Your digital presence vs. industry averages</h2>
-  <p style="color:#555;font-size:14px;margin-bottom:16px">${this.escapeHtml(benchmarks.summary || 'Directional scores based on publicly available metrics vs typical peers.')}</p>
-  <table class="ib">
-    <thead><tr><th>Area</th><th>You</th><th>Industry avg</th><th>Verdict</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
+  <div class="card">
+    <div class="ring-wrap" style="align-items:flex-start;margin-bottom:18px">
+      <div class="score-ring" style="--pct:${avgPct}"><span>${avg}</span></div>
+      <div class="ring-label">Overall presence score (out of 10)</div>
+    </div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px">${this.escapeHtml(benchmarks.summary || 'Directional scores based on publicly available metrics vs typical peers.')}</p>
+    <table class="ib">
+      <thead><tr><th>Area</th><th>You</th><th>Industry avg</th><th>Verdict</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
   }
 
   /**
@@ -1532,7 +1633,7 @@ Return ONLY valid JSON array:
    * (scoreSiteHtml) applied to the prospect's existing site and the new one,
    * so the improvement is a real, comparable number, not a marketing claim.
    */
-  generateBeforeAfterSectionHtml(before, after) {
+  generateBeforeAfterSectionHtml(before, after, primary, accent) {
     const beforeIssues = (before.summaryIssues || before.issues || []).slice(0, 5)
       .map(x => `<li>${this.escapeHtml(x)}</li>`).join('') || '<li>—</li>';
     const afterFixed = (before.summaryIssues || before.issues || [])
@@ -1563,7 +1664,7 @@ Return ONLY valid JSON array:
    * Render the head-to-head presence section: per-channel you-vs-competitors
    * table + plain-English gap/opportunity readout.
    */
-  generatePresenceSectionHtml(presence) {
+  generatePresenceSectionHtml(presence, primary, accent) {
     const labels = { website: 'Website', google: 'Google Business', instagram: 'Instagram', facebook: 'Facebook', linkedin: 'LinkedIn' };
     const verdictBadge = v => {
       const map = { ahead: ['b-ahead', 'You lead'], behind: ['b-behind', 'Behind'], even: ['b-even', 'Even'], open_lane: ['b-open', 'Open lane'], unknown: ['b-unknown', '—'] };
@@ -1574,17 +1675,19 @@ Return ONLY valid JSON array:
       .map(c => {
         const you = c.clientScore != null ? `${c.clientScore}/10` : '—';
         const comp = c.competitorAvg != null ? `${c.competitorAvg}/10` : (c.competitorsPresent ? 'present' : '—');
-        return `<tr><td>${labels[c.channel] || c.channel}</td><td>${you}</td><td>${comp} <small>(${c.competitorsPresent}/${c.totalCompetitors})</small></td><td>${verdictBadge(c.verdict)}</td></tr>`;
+        return `<tr><td>${labels[c.channel] || c.channel}</td><td>${you}</td><td>${comp} <small style="color:var(--muted)">(${c.competitorsPresent}/${c.totalCompetitors})</small></td><td>${verdictBadge(c.verdict)}</td></tr>`;
       })
       .join('');
     const gap = presence.gap || {};
     const quickWins = (gap.quickWins || []).map(w => `<li>${this.escapeHtml(w)}</li>`).join('');
     return `<h2 class="section-title">Your online presence vs. competitors</h2>
-  <table class="presence">
-    <thead><tr><th>Channel</th><th>You</th><th>Competitors (avg)</th><th>Verdict</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>
-  ${gap.summary ? `<div class="gap"><p>${this.escapeHtml(gap.summary)}</p>${gap.biggestOpportunity ? `<p><strong>Biggest opportunity:</strong> ${this.escapeHtml(gap.biggestOpportunity)}</p>` : ''}${quickWins ? `<p><strong>Quick wins:</strong></p><ul>${quickWins}</ul>` : ''}</div>` : ''}`;
+    <div class="card">
+      <table class="presence">
+        <thead><tr><th>Channel</th><th>You</th><th>Competitors (avg)</th><th>Verdict</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${gap.summary ? `<div class="gap"><p>${this.escapeHtml(gap.summary)}</p>${gap.biggestOpportunity ? `<p><strong>Biggest opportunity:</strong> ${this.escapeHtml(gap.biggestOpportunity)}</p>` : ''}${quickWins ? `<p><strong>Quick wins:</strong></p><ul>${quickWins}</ul>` : ''}</div>` : ''}
+    </div>`;
   }
 
   escapeHtml(s) {

@@ -300,7 +300,7 @@ Return ONLY valid JSON:
   "keywords": ["keyword"]
 }`;
   try {
-    const resp = await withTimeout(callCouncil('groq_llama', prompt, { maxOutputTokens: 900, taskType: 'extraction', useCache: false }), 25_000, 'parseBusinessPageWithAI');
+    const resp = await withTimeout(callCouncil('openai_gpt', prompt, { maxOutputTokens: 900, taskType: 'extraction', useCache: false }), 25_000, 'parseBusinessPageWithAI');
     const m = resp.match(/\{[\s\S]+\}/);
     const parsed = m ? JSON.parse(m[0]) : null;
     if (parsed && parsed.social && typeof parsed.social === 'object') {
@@ -986,7 +986,7 @@ async function parseReviewsWithAI(markdown, { callCouncil } = {}) {
   const prompt = `Extract real customer reviews/testimonials from the public page below. Return ONLY valid JSON: [{"author":"Name","rating":5,"text":"verbatim quote"}]. Only include reviews with actual quoted text.
 \n${String(markdown || '').slice(0, 6000)}`;
   try {
-    const resp = await withTimeout(callCouncil('groq_llama', prompt, { maxOutputTokens: 1200, taskType: 'extraction', useCache: false }), 25_000, 'parseReviewsWithAI');
+    const resp = await withTimeout(callCouncil('openai_gpt', prompt, { maxOutputTokens: 1200, taskType: 'extraction', useCache: false }), 25_000, 'parseReviewsWithAI');
     const m = resp.match(/\[[\s\S]*\]/);
     const parsed = m ? JSON.parse(m[0]) : [];
     return (Array.isArray(parsed) ? parsed : []).filter((r) => r && typeof r.text === 'string' && r.text.trim().length > 20);
@@ -1178,7 +1178,7 @@ Services: ${(businessInfo.services || []).join(', ')}
 Current site score (if known): ${businessInfo.existingSiteScore?.scorePct || 'n/a'}`;
 
   try {
-    const resp = await withTimeout(callCouncil('groq_llama', prompt, { maxOutputTokens: 1200, taskType: 'analysis', useCache: false }), 25_000, 'computeIndustryBenchmarks');
+    const resp = await withTimeout(callCouncil('openai_gpt', prompt, { maxOutputTokens: 1200, taskType: 'analysis', useCache: false }), 25_000, 'computeIndustryBenchmarks');
     const m = resp.match(/\{[\s\S]+\}/);
     const parsed = m ? JSON.parse(m[0]) : null;
     if (parsed?.standards && Array.isArray(parsed.standards)) {

@@ -1,27 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T07:00:23.404Z",
-  "findings_count": 3,
+  "generated_at": "2026-07-13T18:54:56.354Z",
+  "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "The template choices are there, but the names don’t tell me what kind of business look I’m picking at a glance.",
-      "proposed_solution": "Use plain-language template labels like calm, premium, or energetic so I can choose faster.",
+      "detail": "Template choices are visible, but 4 options can still feel like a lot if I’m just trying to get started quickly.",
+      "proposed_solution": "Show a simple starting recommendation like “Best for wellness practices” so I can begin faster.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "There are only 3 palette options, so it feels a little limited if I want to quickly match my brand.",
-      "proposed_solution": "Show palette previews with more descriptive names to make branding easier.",
+      "detail": "The chat box accepted my text, but it wasn’t obvious what happened next after I sent it.",
+      "proposed_solution": "After I send a chat message, show a visible reply or status so I know it heard me.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat box accepts input, but it’s not obvious what it does after I send a message.",
-      "proposed_solution": "After I send a chat message, show a clear response or next step so I know the help is working.",
+      "detail": "Save worked, but there was no clear confirmation that anything changed.",
+      "proposed_solution": "Give a stronger save confirmation, like “Saved” with a timestamp.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_4",
+      "detail": "The device toggle exists, but it may add one more thing to notice before I feel done.",
+      "proposed_solution": "Label the device toggle more clearly as “Desktop / Mobile preview” so it feels obvious.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -31,15 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "The template choices are there, but the names don’t tell me what kind of business look I’m picking at a glance."
+        "detail": "Template choices are visible, but 4 options can still feel like a lot if I’m just trying to get started quickly."
       },
       {
         "code": "ux_friction_2",
-        "detail": "There are only 3 palette options, so it feels a little limited if I want to quickly match my brand."
+        "detail": "The chat box accepted my text, but it wasn’t obvious what happened next after I sent it."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat box accepts input, but it’s not obvious what it does after I send a message."
+        "detail": "Save worked, but there was no clear confirmation that anything changed."
+      },
+      {
+        "code": "ux_friction_4",
+        "detail": "The device toggle exists, but it may add one more thing to notice before I feel done."
       }
     ]
   }

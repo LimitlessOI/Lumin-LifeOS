@@ -27,20 +27,20 @@ export const SITE_BUILDER_PRICING = {
     'social-media-management': { display: '$297/mo', cadence: 'monthly' },
     'seo-content-care-plan': { display: '$35/mo', cadence: 'monthly' },
   },
-  /** Template gallery: 4 free designs to toggle/preview; 10 more paid for $1
-   *  and a fully bespoke design are paid upsells (founder direction 2026-07-12). */
+  /** Template gallery: 5 free designs to toggle/preview; 10 more paid for $1
+   *  and a fully bespoke design are paid upsells (founder direction 2026-07-13). */
   templates: {
-    freeCount: Number(process.env.SITE_BUILDER_FREE_TEMPLATE_COUNT || 4),
+    freeCount: Number(process.env.SITE_BUILDER_FREE_TEMPLATE_COUNT || 5),
     additional: {
       oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_CENTS || 100),
       display: process.env.SITE_BUILDER_TEMPLATE_ADDITIONAL_DISPLAY || '$1',
-      description: 'Unlock 10 more template designs beyond the 4 free templates.',
+      description: 'Preview and switch to any of 10 additional professionally-designed templates; pay only when you publish.',
       slotCount: 10,
     },
     custom: {
       oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_CUSTOM_CENTS || 3000),
       display: process.env.SITE_BUILDER_TEMPLATE_CUSTOM_DISPLAY || '$30',
-      description: 'A fully custom design built to your direction — unique to your business, not from the shared template library.',
+      description: 'Co-design a fully custom template and website with us — unique to your business, never duplicated. Locked and paid only when you approve it.',
     },
   },
   /** Preset color palettes are free; a fully custom brand-color match is a paid upsell. */

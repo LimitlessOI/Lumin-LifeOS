@@ -84,6 +84,8 @@ export function createSiteBuilderCheckoutRoutes(app, { pool, baseUrl } = {}) {
         businessName,
         baseUrl,
         pool,
+        templateTier: String(req.query.templateTier || '').trim(),
+        selectedDesign: String(req.query.selectedDesign || '').trim(),
       });
 
       if (!checkout.ok) {

@@ -6,7 +6,7 @@ import logger from './logger.js';
 import { getStripeClient } from './stripe-client.js';
 import { SITE_BUILDER_PRICING, getBetaPublishOfferSummary } from '../config/site-builder-pricing.js';
 
-export async function createPublishCheckoutSession({ clientId, businessName, baseUrl, pool }) {
+export async function createPublishCheckoutSession({ clientId, businessName, baseUrl, pool, templateTier = '', selectedDesign = '' }) {
   if (!clientId || !/^[\w-]+$/.test(String(clientId))) {
     return { ok: false, error: 'Invalid clientId' };
   }
@@ -26,21 +26,53 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
   const label = businessName ? `Beta publish — ${businessName}` : 'Beta publish your site';
   const description = `${SITE_BUILDER_PRICING.publish.description} (${getBetaPublishOfferSummary()})`;
 
+  const lineItems = [
+    {
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: label,
+          description,
+        },
+        unit_amount: Math.round(amountCents),
+      },
+      quantity: 1,
+    },
+  ];
+
+  if (templateTier === 'template-additional' || (selectedDesign && SITE_BUILDER_PRICING.templates.additional.oneTimeCents > 0)) {
+    const add = SITE_BUILDER_PRICING.templates.additional;
+    lineItems.push({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: `${add.slotCount} more site designs`,
+          description: add.description,
+        },
+        unit_amount: Math.round(add.oneTimeCents),
+      },
+      quantity: 1,
+    });
+  }
+
+  if (templateTier === 'template-custom') {
+    const custom = SITE_BUILDER_PRICING.templates.custom;
+    lineItems.push({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: 'Custom co-design',
+          description: custom.description,
+        },
+        unit_amount: Math.round(custom.oneTimeCents),
+      },
+      quantity: 1,
+    });
+  }
+
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: label,
-            description,
-          },
-          unit_amount: Math.round(amountCents),
-        },
-        quantity: 1,
-      },
-    ],
+    line_items: lineItems,
     success_url: `${safeBase}/api/v1/sites/publish/success?clientId=${encodeURIComponent(clientId)}&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${safeBase}/previews/${encodeURIComponent(clientId)}/`,
     metadata: {
@@ -49,6 +81,8 @@ export async function createPublishCheckoutSession({ clientId, businessName, bas
       beta: 'true',
       careIncludedMonths: String(months),
       offerSummary: getBetaPublishOfferSummary(),
+      templateTier: templateTier || '',
+      selectedDesign: selectedDesign || '',
     },
   });
 

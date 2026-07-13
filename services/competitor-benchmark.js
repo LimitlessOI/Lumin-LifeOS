@@ -130,7 +130,7 @@ Return ONLY valid JSON:
     try {
       // useCache:false: competitor scorecards are per-URL; the semantic cache can
       // return a scorecard from a different competitor with a similar-looking prompt.
-      const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 700, taskType: 'analysis', useCache: false });
+      const response = await this.callCouncil('openai_gpt', prompt, { maxOutputTokens: 700, taskType: 'analysis', useCache: false });
       const jsonMatch = response.match(/\{[\s\S]+\}/);
       const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
       const score = Math.max(1, Math.min(10, Math.round(Number(parsed.score) || 5)));
@@ -180,7 +180,7 @@ Synthesize a concrete design brief so the NEW site beats all of them. Return ONL
 
     try {
       // useCache:false: design briefs are derived from a specific business + competitor set.
-      const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'analysis', useCache: false });
+      const response = await this.callCouncil('openai_gpt', prompt, { maxOutputTokens: 800, taskType: 'analysis', useCache: false });
       const jsonMatch = response.match(/\{[\s\S]+\}/);
       const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
       const adopt = Array.isArray(parsed.adopt) ? parsed.adopt.slice(0, 6) : [];

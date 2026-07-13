@@ -3,6 +3,7 @@
 
 import { Router } from 'express';
 import { createHash } from 'crypto';
+import { getDesignSystemForBrand, buildDesignSystemPrompt } from '../config/design-studio.js';
 
 const router = Router();
 
@@ -266,6 +267,13 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 [owner_id]
             );
             const brandVoice = channelProfileResult.rows[0]?.brand_voice_json || { tone: 'professional', style: 'direct' };
+            const designSystem = getDesignSystemForBrand({ tone: brandVoice.tone, industry: brandVoice.industry || 'general' });
+            const designSystemPrompt = buildDesignSystemPrompt(designSystem, {
+              brandPrimary: brandVoice.primaryColor,
+              brandAccent: brandVoice.accentColor,
+              businessName: brandVoice.businessName,
+              industry: brandVoice.industry,
+            });
 
             const extractionsResult = await pool.query(
                 `SELECT * FROM marketing_content_extractions WHERE session_id = $1 ORDER BY id ASC`,
@@ -286,7 +294,13 @@ export async function registerMarketingSessionRoutes(app, deps) {
             const transcriptText = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
 
             for (const extraction of extractions) {
-                const generationPrompt = `You are the MarketingOS content generator. Brand voice: ${JSON.stringify(brandVoice)}.
+                const generationPrompt = `You are the MarketingOS content generator.
+
+BRAND VOICE:
+${JSON.stringify(brandVoice)}
+
+SHARED DESIGN STUDIO (use this for color, typography, tone, and visual motifs so MarketingOS output is on-brand with the Site Builder studio):
+${designSystemPrompt}
 
 Source extraction type: ${extraction.extraction_type}
 Source raw text: """${extraction.raw_text}"""
