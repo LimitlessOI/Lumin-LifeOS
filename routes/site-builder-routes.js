@@ -112,12 +112,13 @@ async function notifySlack(event, businessName, detail = '') {
   } catch { /* Slack notify is best-effort */ }
 }
 
-function getSiteBuilder({ callCouncilMember, baseUrl }) {
+function getSiteBuilder({ callCouncilMember, baseUrl, pool = null }) {
   if (!_siteBuilder) {
     _siteBuilder = new SiteBuilder({
       callCouncil: callCouncilMember,
       previewsDir: 'public/previews',
       baseUrl,
+      pool,
     });
   }
   return _siteBuilder;
@@ -125,7 +126,7 @@ function getSiteBuilder({ callCouncilMember, baseUrl }) {
 
 function getProspectPipeline({ callCouncilMember, pool, outreachAutomation, notificationService, baseUrl }) {
   if (!_prospectPipeline) {
-    const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+    const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
 
     // Build sendEmail adapter — prefer NotificationService (Postmark + suppression),
     // fall back to outreachAutomation, then log-only.
@@ -521,7 +522,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
 
       logger.info('[SITE] Build request', { url: targetUrl, competitors: (competitorUrls || []).length });
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const result = await builder.buildFromUrl(targetUrl, { businessInfo, competitorUrls });
 
       res.json({ ok: result.success, ...result });
@@ -544,7 +545,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
 
       logger.info('[SITE] Build-variants request', { url: targetUrl, variantCount: variantCount || null });
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const result = await builder.buildVariants(targetUrl, { businessInfo, competitorUrls, variantCount, styleIds });
 
       res.json({ ok: result.success, ...result });
@@ -599,7 +600,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       if (!Array.isArray(competitorUrls) || competitorUrls.length === 0) {
         return res.status(400).json({ ok: false, error: 'competitorUrls (non-empty array) is required' });
       }
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const info = businessInfo || { industry };
       const result = await builder.benchmarkCompetitors(info, competitorUrls);
       res.json({ ok: true, ...result });
@@ -620,7 +621,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
       const { businessInfo, url, competitorUrls, industry } = req.body;
       const info = businessInfo || (url ? { sourceUrl: url, website: url, industry } : null);
       if (!info) return res.status(400).json({ ok: false, error: 'businessInfo or url is required' });
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const result = await builder.auditPresence(info, Array.isArray(competitorUrls) ? competitorUrls : []);
       res.json({ ok: true, ...result });
     } catch (err) {
@@ -824,7 +825,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    */
   router.get('/previews', requireKey, async (req, res) => {
     try {
-      const builder = getSiteBuilder({ callCouncilMember, baseUrl });
+      const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
       const previews = await builder.listPreviews();
       res.json({ ok: true, count: previews.length, previews });
     } catch (err) {

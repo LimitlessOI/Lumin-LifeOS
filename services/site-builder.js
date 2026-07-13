@@ -269,10 +269,11 @@ function renderIndustryBenchmarks(benchmarks) {
 }
 
 export default class SiteBuilder {
-  constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '' } = {}) {
+  constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '', pool = null } = {}) {
     this.callCouncil = callCouncil;
     this.previewsDir = previewsDir;
     this.baseUrl = baseUrl;
+    this.pool = pool;
   }
 
   /**
@@ -1678,19 +1679,55 @@ Return ONLY valid JSON array:
   }
 
   /**
-   * List all deployed preview sites.
+   * List all deployed preview sites. Merges disk previews with durable Postgres
+   * metadata so Railway redeploys / ephemeral disk wipes do not hide previews.
    */
   async listPreviews() {
-    const previews = [];
+    const byId = new Map();
     try {
       const dir = path.join(process.cwd(), this.previewsDir);
       const entries = await fs.readdir(dir);
       for (const entry of entries) {
         const metaPath = path.join(dir, entry, 'meta.json');
         const meta = await fs.readFile(metaPath, 'utf-8').then(JSON.parse).catch(() => null);
-        if (meta) previews.push(meta);
+        if (meta?.clientId) byId.set(meta.clientId, meta);
       }
     } catch { /* dir may not exist yet */ }
-    return previews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    if (this.pool) {
+      try {
+        const result = await this.pool.query(
+          `SELECT client_id, business_name, preview_url, email_sent, status, metadata, created_at, updated_at
+             FROM prospect_sites
+            WHERE status IN ('built', 'qa_hold', 'sent', 'viewed', 'converted')
+              AND metadata->>'previewUrl' IS NOT NULL
+              AND metadata->>'editToken' IS NOT NULL
+            ORDER BY updated_at DESC
+            LIMIT 200`
+        );
+        for (const row of result.rows || []) {
+          const meta = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+          const clientId = row.client_id;
+          const preview = byId.get(clientId) || {
+            clientId,
+            businessName: row.business_name || meta.businessName,
+            businessInfo: meta.businessInfo || {},
+            previewUrl: meta.previewUrl || row.preview_url,
+            editToken: meta.editToken,
+            scorecardUrl: meta.scorecardUrl,
+            editorUrl: meta.editorUrl,
+            publishCheckoutUrl: meta.publishCheckoutUrl,
+            status: row.status,
+            createdAt: row.created_at?.toISOString?.() || meta.createdAt,
+            updatedAt: row.updated_at?.toISOString?.() || meta.updatedAt,
+          };
+          byId.set(clientId, preview);
+        }
+      } catch (err) {
+        logger.warn('[SITE] listPreviews DB merge failed', { error: err.message });
+      }
+    }
+
+    return Array.from(byId.values()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 }
