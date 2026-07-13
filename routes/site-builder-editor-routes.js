@@ -212,6 +212,7 @@ Return ONLY the full modified HTML document.`;
       const modelResponse = await callCouncilMember('gemini_flash', prompt, {
         maxOutputTokens: 14000,
         taskType: 'site_builder_edit',
+        useCache: false,
       });
       const responseText = typeof modelResponse === 'string'
         ? modelResponse

@@ -1,34 +1,41 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T03:24:57.630Z",
-  "findings_count": 4,
+  "generated_at": "2026-07-13T03:33:44.374Z",
+  "findings_count": 5,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "Only 1 template choice, so it feels like there’s hardly any design control.",
-      "proposed_solution": "Offer a few more template options so I can pick a look that fits my business.",
+      "detail": "The site preview appears to use placeholder/parked content instead of a real business site, so I can’t tell if my own content is being preserved.",
+      "proposed_solution": "Show a clear real-site preview loaded with my actual business content, not placeholder content.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "The palette options are very limited, which makes the editor feel a bit boxed in.",
-      "proposed_solution": "Show more color palette choices or a simple way to customize colors.",
+      "detail": "The template chips and palette options are visible, but they don’t explain what changes they make before I click them.",
+      "proposed_solution": "Add short labels or helper text for templates and palettes so I know what each choice will do.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_3",
-      "detail": "The chat box is present, but after sending text it looks like nothing stays there, which can feel awkward.",
-      "proposed_solution": "Make the chat interaction feel more responsive by showing the message after I send it.",
+      "detail": "The chat is present, but it isn’t clear what I should ask it for or how it helps me finish the site.",
+      "proposed_solution": "Give chat a few suggested prompts like 'write my homepage intro' or 'change my colors' to make it easier to use.",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_4",
-      "detail": "The template switch area was skipped because there was only one chip, so the experience feels incomplete.",
-      "proposed_solution": "If there’s only one template, hide the template switch area or replace it with clearer design guidance.",
+      "detail": "The save/publish actions are there, but I don’t see strong reassurance about what was saved or what happens next.",
+      "proposed_solution": "After save, show a simple confirmation like 'Your changes were saved' and what was included.",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_5",
+      "detail": "Device toggle exists, but it’s not obvious how to compare versions or whether the changes are truly responsive.",
+      "proposed_solution": "Make the device toggle more obvious with side-by-side or labeled desktop/mobile previews so I can compare quickly.",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -38,19 +45,23 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "Only 1 template choice, so it feels like there’s hardly any design control."
+        "detail": "The site preview appears to use placeholder/parked content instead of a real business site, so I can’t tell if my own content is being preserved."
       },
       {
         "code": "ux_friction_2",
-        "detail": "The palette options are very limited, which makes the editor feel a bit boxed in."
+        "detail": "The template chips and palette options are visible, but they don’t explain what changes they make before I click them."
       },
       {
         "code": "ux_friction_3",
-        "detail": "The chat box is present, but after sending text it looks like nothing stays there, which can feel awkward."
+        "detail": "The chat is present, but it isn’t clear what I should ask it for or how it helps me finish the site."
       },
       {
         "code": "ux_friction_4",
-        "detail": "The template switch area was skipped because there was only one chip, so the experience feels incomplete."
+        "detail": "The save/publish actions are there, but I don’t see strong reassurance about what was saved or what happens next."
+      },
+      {
+        "code": "ux_friction_5",
+        "detail": "Device toggle exists, but it’s not obvious how to compare versions or whether the changes are truly responsive."
       }
     ]
   }

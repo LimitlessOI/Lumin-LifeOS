@@ -786,7 +786,10 @@ Return ONLY valid JSON with this exact structure:
 }`;
 
     // groq_llama is fine for structured JSON extraction — fast and cheap
-    const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 1000, taskType: 'extraction' });
+    // useCache:false: business profile extraction must not be served from a cached
+    // response for a different URL/business (the semantic cache can match long
+    // template prompts across different businesses and return the wrong profile).
+    const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 1000, taskType: 'extraction', useCache: false });
     try {
       const jsonMatch = response.match(/\{[\s\S]+\}/);
       return jsonMatch ? JSON.parse(jsonMatch[0]) : {};
@@ -856,7 +859,9 @@ Return ONLY valid JSON:
 }`;
     let parsed;
     try {
-      const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction' });
+      // useCache:false: real-data enrichment uses a different search context per
+      // business; the semantic cache can reuse another business's extracted facts.
+      const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction', useCache: false });
       const m = resp.match(/\{[\s\S]+\}/);
       parsed = m ? JSON.parse(m[0]) : null;
     } catch (err) {
@@ -1015,7 +1020,7 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     let response;
     try {
       response = await withTimeout(
-        this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false }),
+        this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false, useCache: false }),
         GENERATION_TIMEOUT_MS,
         `generateSiteHtml:${GENERATION_MODEL}`
       );
@@ -1023,7 +1028,7 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
       if (GENERATION_MODEL !== GENERATION_FALLBACK_MODEL) {
         logger.warn('[SITE] primary generation model failed, falling back', { model: GENERATION_MODEL, error: err.message });
         response = await withTimeout(
-          this.callCouncil(GENERATION_FALLBACK_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false }),
+          this.callCouncil(GENERATION_FALLBACK_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false, useCache: false }),
           GENERATION_TIMEOUT_MS,
           `generateSiteHtml:${GENERATION_FALLBACK_MODEL}`
         );
@@ -1208,7 +1213,7 @@ ${existingHtml}
 `;
 
     // Repair rewrites the actual client-facing site HTML → use the STRONG product model.
-    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false });
+    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false, useCache: false });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
@@ -1241,7 +1246,7 @@ Return ONLY valid JSON array:
 
     // Blog posts are client-facing product content → use the STRONG product model
     // (never a free tier). 3 posts × 600-800 words needs long output; claude_sonnet (16k) fits.
-    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), allowModelDowngrade: false });
+    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), allowModelDowngrade: false, useCache: false });
     try {
       const jsonMatch = response.match(/\[[\s\S]+\]/);
       const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];

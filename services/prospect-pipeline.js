@@ -395,6 +395,16 @@ export default class ProspectPipeline {
       };
     }
 
+    // If the caller gave a businessName but no structured businessInfo, use it
+    // as the profile. This prevents parked/placeholder sites (e.g. HugeDomains)
+    // from poisoning the generated site with the parking page's brand.
+    if (!options.businessInfo && options.businessName) {
+      options.businessInfo = {
+        businessName: options.businessName,
+        industry: options.vertical || 'wellness',
+      };
+    }
+
     await this.touchProspectJob(clientIdEarly, 'build');
     const heartbeat = setInterval(() => {
       this.touchProspectJob(clientIdEarly, 'build_heartbeat').catch(() => null);
@@ -679,7 +689,8 @@ Return ONLY valid JSON:
 
       try {
         // groq_llama: fast JSON extraction — cold email body is ~300-500 tokens, well within groq's limit
-        const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 900, taskType: 'extraction' });
+        // useCache:false: outreach emails are customized to a specific business + preview URL.
+        const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 900, taskType: 'extraction', useCache: false });
         const jsonMatch = response.match(/\{[\s\S]+\}/);
         if (jsonMatch) {
           const parsed = JSON.parse(jsonMatch[0]);
