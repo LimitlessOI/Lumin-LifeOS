@@ -64,13 +64,16 @@
     },
     {
       "id": "1",
-      "status": "pending",
+      "status": "done",
       "target_file": "services/canonical-id.js",
       "task": "set canonical product id",
       "spec": "Exports a function to get canonical product id. Returns 'LimitlessOS' or 'BusinessOS' as needed.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "4ae3d30b8e2073239ee2af8e0de98a7f9413ddf3",
+      "last_attempt_at": "2026-07-13T12:50:46.065Z",
+      "completed_at": "2026-07-13T12:50:54.388Z"
     },
     {
       "id": "2",
