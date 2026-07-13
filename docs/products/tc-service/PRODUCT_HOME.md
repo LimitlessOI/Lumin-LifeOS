@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — TC purge-spam for logged marketing junk + background 40d organize. |
+| **Last Updated** | 2026-07-13 — Narrow spam sender rules (noreply was too broad; Google billing false-positive). |
 
 ---
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-13 | **Spam sender rules narrowed** — removed blanket `noreply` auto-spam (false-trashed Google Workspace billing). Keep ccsend/blast domains + subject patterns. | Purge marked Google payment-declined as spam. | ✅ | | tip redeploy |
 | 2026-07-13 | **TC purge-spam** — `purgeLoggedSpam` + `POST /email/purge-spam` reclassifies already-logged marketing as spam and trashes UIDs; organize single-flight lock. | Background organize hung on IMAP; attention queue still showed ccsend/CE blasts as time_sensitive. | ✅ | | tip purge-spam |
 | 2026-07-13 | **TC organize background** — `POST /email/organize` returns immediately and runs IMAP triage async (dry_run/`await:true` still sync). | Tip proxy timed out 180–300s on live organize batches. | ✅ | | tip kick + poll attention |
 | 2026-07-13 | **TC inbox organize speed** — envelope-first classify (spam/FYI without full body download); default organize batch 80; fewer proxy timeouts on tip. | Live `/email/organize` 150–200 msgs timed out at 240–300s with 0 bytes. | ✅ | | tip batch organize |

@@ -58,11 +58,15 @@ const TC_CATEGORIES = new Set([CATEGORIES.TC_CONTRACT, CATEGORIES.TC_DEADLINE, C
 // ── Spam patterns ──────────────────────────────────────────────────────────
 // These are high-confidence spam signals — no AI needed.
 const SPAM_SENDER_PATTERNS = [
-  /noreply|no-reply|donotreply|do-not-reply|mailer-daemon/i,
+  /mailer-daemon/i,
   /@.*bulk|@.*mass|@.*blast/i,
   /unsubscribe@|optout@|list-unsubscribe/i,
   /@shared\d*\.ccsend\.com$/i,
   /@.*\.ccsend\.com$/i,
+  /@propertyblasthomes\.com$/i,
+  /@fastemail\.email$/i,
+  /@email-homesforheroes\.com$/i,
+  /@movies\.fandango\.com$/i,
 ];
 const SPAM_SUBJECT_PATTERNS = [
   /\b(you('ve| have) won|you are (selected|chosen)|congratulations.*prize|claim your (reward|prize|gift))\b/i,
