@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:33:23.117Z",
+  "generated_at": "2026-07-13T23:33:31.810Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11506,
+  "file_count": 11507,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -80812,6 +80812,13 @@
       "bytes": 4839,
       "mtime": "2026-07-12T13:24:22.173Z",
       "indexed_at": "2026-07-13T23:29:13.053Z"
+    },
+    {
+      "path": "scripts/wellness-studio-backfill.mjs",
+      "synopsis": "Script — Wellness Studio Backfill.",
+      "bytes": 1521,
+      "mtime": "2026-07-13T23:33:31.810Z",
+      "indexed_at": "2026-07-13T23:33:31.810Z"
     },
     {
       "path": "scripts/zero-drift-check.mjs",
