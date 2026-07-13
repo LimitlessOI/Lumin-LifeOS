@@ -24,13 +24,16 @@
     },
     {
       "id": "2",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20231010_create_boldtrail_contacts_table.sql",
       "task": "create BoldTrail contact table",
       "spec": "SQL migration to create a database table for BoldTrail contacts if it doesn't already exist, incl. columns for contact details.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "e322035549726463063202acfbffd83ea8f0b536",
+      "last_attempt_at": "2026-07-13T13:47:52.897Z",
+      "completed_at": "2026-07-13T13:48:08.290Z"
     },
     {
       "id": "3",
