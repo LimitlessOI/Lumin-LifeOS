@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T23:33:31.810Z",
+  "generated_at": "2026-07-13T23:34:42.197Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11507,
   "files": [
@@ -65658,10 +65658,10 @@
     },
     {
       "path": "routes/lifeos-biological-age-routes.js",
-      "synopsis": "Registers LifeosBiologicalAgeRoutes routes/handlers (routes/lifeos-biological-age-routes.js).",
-      "bytes": 1786,
-      "mtime": "2026-07-13T18:57:58.564Z",
-      "indexed_at": "2026-07-13T23:29:13.053Z"
+      "synopsis": "Registers BiologicalAgeRoutes routes/handlers (routes/lifeos-biological-age-routes.js).",
+      "bytes": 494,
+      "mtime": "2026-07-13T23:34:42.197Z",
+      "indexed_at": "2026-07-13T23:34:42.197Z"
     },
     {
       "path": "routes/lifeos-briefing-routes.js",
