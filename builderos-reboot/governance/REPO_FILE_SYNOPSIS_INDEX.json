@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T10:58:27.221Z",
+  "generated_at": "2026-07-13T12:16:50.573Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11488,
+  "file_count": 11489,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -83738,6 +83738,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-biological-age.js",
+      "synopsis": "Service module — Lifeos Biological Age.",
+      "bytes": 5913,
+      "mtime": "2026-07-13T12:16:50.573Z",
+      "indexed_at": "2026-07-13T12:16:50.573Z"
     },
     {
       "path": "services/lifeos-calendar-events-resolver.js",
