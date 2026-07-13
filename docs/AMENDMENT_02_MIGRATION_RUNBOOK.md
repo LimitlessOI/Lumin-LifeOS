@@ -3,21 +3,15 @@
 # Amendment 02 Migration Runbook
 
 ## Purpose
+This runbook covers the `conversation_memory` migration and the recency threshold used during the migration process.
 
-This runbook covers the migration of `conversation_memory` and confirms the recency threshold used by default during migration.
-
-## Recency Threshold Confirmation
-
+## Recency Threshold
 The default recency threshold for `conversation_memory` migration is **90 days**.
 
-This is the correct default threshold and should be used unless a specific migration override is intentionally configured.
-
-## Validation Checklist
-
-- Confirm the migration logic uses a default threshold of **90 days**
-- Confirm there are no conflicting values in documentation, configs, or migration scripts
-- Confirm any overrides are explicit and scoped to the relevant migration run
+## Verification
+- Confirm that any migration logic, documentation, or configuration referencing the recency threshold uses **90 days** as the default.
+- If any discrepancy is found, update the relevant source to match this default.
 
 ## Notes
-
-If any discrepancy is found in implementation or docs, align it back to the **90-day default** unless a deliberate change has been approved and applied consistently across the codebase.
+- This threshold is intended to govern how recent conversation records must be in order to be included in the migration scope.
+- Any environment-specific override, if supported elsewhere in the system, should be documented separately.
