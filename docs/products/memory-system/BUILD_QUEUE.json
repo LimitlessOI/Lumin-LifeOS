@@ -62,13 +62,16 @@
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/20260523_memory_capsule_constraint_repair.sql",
       "task": "fix source_type CHECK constraint",
       "spec": "Add the missing user_input constraint to source_type CHECK to resolve PostgreSQL error PG 23514.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "5a3c36a009b7643ca3a411d86562acee77df5a0d",
+      "last_attempt_at": "2026-07-13T14:35:44.202Z",
+      "completed_at": "2026-07-13T14:35:44.617Z"
     },
     {
       "id": "6",
