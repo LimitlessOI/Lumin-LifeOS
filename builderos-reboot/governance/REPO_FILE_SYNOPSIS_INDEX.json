@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-13T10:43:48.491Z",
+  "generated_at": "2026-07-13T10:58:27.221Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11487,
+  "file_count": 11488,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -34226,6 +34226,13 @@
       "bytes": 655,
       "mtime": "2026-07-12T13:24:21.585Z",
       "indexed_at": "2026-07-13T09:10:46.716Z"
+    },
+    {
+      "path": "db/migrations/20260423_lifeos_twin_simulator.sql",
+      "synopsis": "Database migration — 20260423_lifeos_twin_simulator.sql.",
+      "bytes": 293,
+      "mtime": "2026-07-13T10:58:27.221Z",
+      "indexed_at": "2026-07-13T10:58:27.221Z"
     },
     {
       "path": "db/migrations/20260423_tsos_savings_ledger.sql",
