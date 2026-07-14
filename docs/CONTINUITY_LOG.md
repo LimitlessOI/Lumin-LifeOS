@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — SMOS gap close (suggestions + aliases)
+
+Tip gap probe against product matrix: core loop + Film Studio + calendar/atoms UI PASS; `/youtube/suggestions` still 502 / ignored `mode=fast` and returned ~571KB JPEG thumbs. Fixed: honor fast mode (SVG), dashboard first-paint fast + Refresh deep, intel/community field aliases, Creative Studio link on `/marketing`.
+
 ## 2026-07-14 — Extract status + approve aliases (tip verified)
 
 Tip loop after `70c44a25`: extract HTTP 200 (no more `marketing_sessions_status_check`); generate pieces; PATCH `status:approved` and `action:approve` both → approved; export text pack 200. Still external: Replicate Ideogram 429 until payment method.

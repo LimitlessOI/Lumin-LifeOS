@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Audit fixes: title dedupe by stem; extract/generate fail-soft; marketing owner_id prefers handle over numeric JWT sub. |
+| **Last Updated** | 2026-07-14 — Gap close: suggestions honor `mode=fast` + SVG thumbs (no 502); dashboard Creative Studio link; intel/community field aliases. |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **Gap close — suggestions + aliases + studio link** — `/youtube/suggestions` honors `mode=fast`/`fast=1` (SVG thumbs, no Sharp JPEG bloat); full path budgets 18s then fast; catch→degraded fast (never gateway-empty). Dashboard loads fast, Refresh = deep. Intel accepts niche/script/content_text aliases; community accepts snake_case thread fields. `/marketing` → Creative Studio. | Tip gap probe: suggestions 502 / ignored mode=fast; 571KB JPEG payloads; intel/community 400 on snake_case; no studio nav. | ✅ | — | tip after deploy |
 | 2026-07-14 | **Extract status + approve aliases** — stop writing illegal `status=extracted` (DB check); accept `status:approved` / `approved:true` on content PATCH. | Tip verify: extract 500 on status check; approve 400 Invalid action. | ✅ | — | tip `70c44a25` extract→generate→approve→export PASS |
 | 2026-07-14 | **Audit fix pack** — stem-based talk title dedupe (no more “(Dive into…)” clones); extract parses council objects + heuristic fallback; generate template fallback so packs aren’t empty; session `getOwnerId` prefers handle/`owner_id` over numeric JWT `sub`. | Tip audit: duplicate titles, extract JSON fail → 0 generate pieces, owner UUID drift risk. | ✅ | — | tip after deploy |
 | 2026-07-14 | **Audit P0 fixes** — consent API defaults `consent_text`; `/youtube/suggestions` races a 22s budget then returns `fast` playbook packs (skip AI+Ideogram) instead of gateway 502; Ideogram thumb race 8s. | Tip audit: suggestions 502, consent 500 without text, browser spam cards while API connected. | ✅ | — | tip after deploy |

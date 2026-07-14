@@ -22,9 +22,15 @@ export function registerMarketingCommunityValueRoutes(app, deps = {}) {
     try {
       const body = req?.body && typeof req.body === 'object' ? req.body : {};
       const platform = typeof body.platform === 'string' ? body.platform.trim() : '';
-      const threadTitle = typeof body.threadTitle === 'string' ? body.threadTitle.trim() : '';
-      const threadBody = typeof body.threadBody === 'string' ? body.threadBody.trim() : '';
-      const productAngle = typeof body.productAngle === 'string' ? body.productAngle.trim() : '';
+      const threadTitle = typeof body.threadTitle === 'string'
+        ? body.threadTitle.trim()
+        : (typeof body.thread_title === 'string' ? body.thread_title.trim() : '');
+      const threadBody = typeof body.threadBody === 'string'
+        ? body.threadBody.trim()
+        : (typeof body.thread_body === 'string' ? body.thread_body.trim() : '');
+      const productAngle = typeof body.productAngle === 'string'
+        ? body.productAngle.trim()
+        : (typeof body.product_angle === 'string' ? body.product_angle.trim() : '');
       const tone = typeof body.tone === 'string' ? body.tone.trim() : '';
 
       if (!platform || !threadTitle || !threadBody) {

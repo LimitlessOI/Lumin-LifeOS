@@ -33,7 +33,7 @@ export function registerMarketingIntelRoutes(app, deps = {}) {
 
   app.post('/api/v1/marketing/intel/titles', requireKey, async (req, res) => {
     try {
-      const topic = req.body?.topic;
+      const topic = req.body?.topic || req.body?.niche || req.body?.subject;
       if (!isNonEmptyString(topic)) {
         return sendError(res, 400, 'Missing required field: topic');
       }
@@ -57,7 +57,7 @@ export function registerMarketingIntelRoutes(app, deps = {}) {
 
   app.post('/api/v1/marketing/intel/score-script', requireKey, async (req, res) => {
     try {
-      const scriptText = req.body?.scriptText;
+      const scriptText = req.body?.scriptText || req.body?.script || req.body?.script_text;
       if (!isNonEmptyString(scriptText)) {
         return sendError(res, 400, 'Missing required field: scriptText');
       }
@@ -76,7 +76,9 @@ export function registerMarketingIntelRoutes(app, deps = {}) {
 
   app.post('/api/v1/marketing/intel/publish-gate', requireKey, async (req, res) => {
     try {
-      const piece = req.body?.piece;
+      const piece = req.body?.piece
+        ?? (isNonEmptyString(req.body?.content_text) ? { content_text: req.body.content_text, platform: req.body.platform } : null)
+        ?? (isNonEmptyString(req.body?.contentText) ? { content_text: req.body.contentText, platform: req.body.platform } : null);
       if (piece === undefined || piece === null || piece === '') {
         return sendError(res, 400, 'Missing required field: piece');
       }
@@ -95,12 +97,14 @@ export function registerMarketingIntelRoutes(app, deps = {}) {
 
   app.post('/api/v1/marketing/intel/repurpose', requireKey, async (req, res) => {
     try {
-      const piece = req.body?.piece;
+      const piece = req.body?.piece
+        ?? (isNonEmptyString(req.body?.content_text) ? { content_text: req.body.content_text } : null)
+        ?? (isNonEmptyString(req.body?.contentText) ? { content_text: req.body.contentText } : null);
       if (piece === undefined || piece === null || piece === '') {
         return sendError(res, 400, 'Missing required field: piece');
       }
 
-      const formats = req.body?.formats;
+      const formats = req.body?.formats || (req.body?.target ? [req.body.target] : undefined);
       const result = await repurposePiece({
         piece,
         formats,

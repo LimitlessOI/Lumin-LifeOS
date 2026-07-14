@@ -366,6 +366,7 @@ async function composeCompetitiveThumbnail({
   cardIndex = 0,
   market = '',
   angle = '',
+  fast = false,
 }) {
   const punch = buildThumbnailPunch({ title, angle, idx: cardIndex, market });
   const useAccent = accent || punch.accent;
@@ -380,6 +381,20 @@ async function composeCompetitiveThumbnail({
     competitorCount,
     layoutDistinct: true,
   });
+
+  // Fast path: SVG only — avoids Sharp JPEG base64 payloads (~100KB+/card) that blow edge budgets.
+  if (fast) {
+    return {
+      thumbnailUrl: thumbnailSvgDataUri({ title, hook: overlayText, subtitle: channelTitle || 'SocialMediaOS', accent: useAccent }),
+      overlayText,
+      layoutId: punch.layoutId,
+      faceUrl: faceUrl || null,
+      backgroundUrl: null,
+      competition,
+      composed: false,
+      thumbnailSource: 'svg_fast',
+    };
+  }
 
   let sharpMod = null;
   try {
@@ -1640,6 +1655,7 @@ export function createYouTubeService(poolOrDeps = {}) {
           cardIndex: idx,
           market: playbook?.market || '',
           angle: draft.angle,
+          fast: !!skipIdeogram,
         }),
         skipIdeogram
           ? Promise.resolve(null)

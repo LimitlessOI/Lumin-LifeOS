@@ -126,29 +126,67 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
   app.get('/api/v1/marketing/youtube/suggestions', requireKey, async (req, res) => {
     try {
       const ownerId = resolveOwnerId(req) || 'adam';
-      // Railway/proxy often kills ~30s. Prefer a complete fast pack over a gateway 502.
-      const SUGGEST_BUDGET_MS = Number(process.env.MARKETING_YT_SUGGEST_BUDGET_MS || 22000);
-      const fullPromise = youtube.getSuggestions(ownerId, { callCouncilMember });
-      const result = await Promise.race([
-        fullPromise,
-        new Promise((resolve) => setTimeout(() => resolve({ __budget: true }), SUGGEST_BUDGET_MS)),
-      ]);
-      if (result && result.__budget) {
+      const mode = String(req.query.mode || '').toLowerCase();
+      const wantFast = mode === 'fast'
+        || req.query.fast === '1'
+        || String(req.query.fast || '').toLowerCase() === 'true';
+
+      // Explicit fast: skip YT research + AI + Sharp JPEG (SVG thumbs). Dashboard first paint.
+      if (wantFast) {
         const fast = await youtube.getSuggestions(ownerId, {
           callCouncilMember: null,
           fast: true,
         });
         return res.json({
           ...fast,
-          timed_out: true,
+          mode: 'fast',
           copy_rewrite_skipped: true,
-          hint: 'Returned playbook + local thumbs under edge budget. Hit Refresh ideas for full YouTube research + AI rewrite.',
+          hint: 'Fast pack (playbook + SVG thumbs). Use Refresh ideas for full YouTube research + AI rewrite.',
         });
       }
-      return res.json(result);
+
+      // Full path: Railway/proxy often kills ~30s. Race a budget, then return fast pack.
+      const SUGGEST_BUDGET_MS = Number(process.env.MARKETING_YT_SUGGEST_BUDGET_MS || 18000);
+      const fullPromise = youtube.getSuggestions(ownerId, { callCouncilMember });
+      const result = await Promise.race([
+        fullPromise.then((r) => ({ __full: true, payload: r })).catch((err) => ({ __full_err: err })),
+        new Promise((resolve) => setTimeout(() => resolve({ __budget: true }), SUGGEST_BUDGET_MS)),
+      ]);
+      if (result && result.__full) {
+        return res.json({ ...result.payload, mode: 'full' });
+      }
+      if (result && result.__full_err) {
+        logger?.warn?.({ err: result.__full_err }, 'marketing youtube full suggestions failed; serving fast pack');
+      }
+      const fast = await youtube.getSuggestions(ownerId, {
+        callCouncilMember: null,
+        fast: true,
+      });
+      return res.json({
+        ...fast,
+        mode: 'fast',
+        timed_out: !result?.__full_err,
+        copy_rewrite_skipped: true,
+        hint: 'Returned playbook + SVG thumbs under edge budget. Hit Refresh ideas again when tip is warm for full research.',
+        full_error: result?.__full_err ? getErrorMessage(result.__full_err) : undefined,
+      });
     } catch (error) {
       logger?.error?.({ err: error }, 'marketing youtube suggestions failed');
-      return res.status(500).json({ ok: false, error: getErrorMessage(error) });
+      // Last resort: never 502 the dashboard — empty playbook pack is better than gateway death.
+      try {
+        const ownerId = resolveOwnerId(req) || 'adam';
+        const fast = await youtube.getSuggestions(ownerId, { callCouncilMember: null, fast: true });
+        return res.status(200).json({
+          ...fast,
+          mode: 'fast',
+          degraded: true,
+          copy_rewrite_skipped: true,
+          error: getErrorMessage(error),
+          hint: 'Degraded fast pack after suggestions error.',
+        });
+      } catch (fallbackErr) {
+        return res.status(500).json({ ok: false, error: getErrorMessage(error || fallbackErr) });
+      }
     }
   });
 

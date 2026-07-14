@@ -450,6 +450,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <a class="btn secondary" href="/marketing/session/new" data-tip="Start a coaching session without a talk card.">Start New Session</a>
               <a class="btn secondary" href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Content Calendar</a>
               <a class="btn secondary" href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atom Library</a>
+              <a class="btn secondary" href="/creative/studio" data-tip="Edit footage, captions, and brand kits in Creative Engine.">Creative Studio</a>
             </div>
             <div id="ytBanner" class="message" style="display:none;"></div>
             <div id="apiBanner" class="message" style="display:none;"></div>
@@ -707,34 +708,44 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               }
             }
 
-            async function loadSuggestions() {
+            async function applySuggestionsPayload(data, meta, apiBanner) {
+              filmModes = data.filmModes || filmModes;
+              allSuggestions = data.suggestions || [];
+              if (data.youtubeApiNext) showMsg(apiBanner, data.youtubeApiNext, 'error');
+              else apiBanner.style.display = 'none';
+              const pb = data.playbook || {};
+              const playbookMeta = document.getElementById('playbookMeta');
+              if (playbookMeta) {
+                playbookMeta.textContent = (pb.label || 'Playbook') + ' · outcome: ' + (pb.primary_outcome || 'leads') + (pb.market ? (' · market: ' + pb.market) : '') + ' · researched ' + String(data.researchedCount || 0) + '/' + String((pb.seed_topics || []).length || 0);
+              }
+              const vis = data.channelVisuals || {};
+              const visualMeta = document.getElementById('visualMeta');
+              if (visualMeta) {
+                visualMeta.textContent = 'Visuals: ' + (vis.faceUrl ? 'face ✓' : 'face missing') + ' · ' + (vis.videoCount || 0) + ' uploads · source ' + (vis.assetSource || 'none');
+              }
+              const urlInput = document.getElementById('channelUrlInput');
+              if (urlInput && vis.publicUrl) urlInput.value = vis.publicUrl;
+              renderChannelOps(data.channel_ops || []);
+              renderModes();
+              renderSuggestionCards();
+              const modeNote = data.mode === 'fast' || data.timed_out ? ' · fast pack' : (data.mode === 'full' ? ' · full research' : '');
+              meta.textContent = (data.connected ? 'Channel linked · ' : '') + 'source: ' + (data.source || 'unknown') + (data.copyModel ? (' · copy: ' + data.copyModel) : '') + modeNote + (data.hint ? (' · ' + data.hint) : '');
+            }
+
+            async function loadSuggestions(opts) {
+              const deep = !!(opts && opts.deep);
               const meta = document.getElementById('suggestMeta');
               const apiBanner = document.getElementById('apiBanner');
-              meta.textContent = 'Researching shelf + composing lead-intent talk cards…';
+              meta.textContent = deep
+                ? 'Deep research: shelf + AI rewrite + composed thumbs…'
+                : 'Loading fast talk cards…';
               try {
-                const res = await marketingFetch('/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
+                const q = '/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId())
+                  + (deep ? '' : '&mode=fast');
+                const res = await marketingFetch(q, { headers: marketingAuthHeaders() });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'suggestions failed');
-                filmModes = data.filmModes || filmModes;
-                allSuggestions = data.suggestions || [];
-                if (data.youtubeApiNext) showMsg(apiBanner, data.youtubeApiNext, 'error');
-                else apiBanner.style.display = 'none';
-                const pb = data.playbook || {};
-                const playbookMeta = document.getElementById('playbookMeta');
-                if (playbookMeta) {
-                  playbookMeta.textContent = (pb.label || 'Playbook') + ' · outcome: ' + (pb.primary_outcome || 'leads') + (pb.market ? (' · market: ' + pb.market) : '') + ' · researched ' + String(data.researchedCount || 0) + '/' + String((pb.seed_topics || []).length || 0);
-                }
-                const vis = data.channelVisuals || {};
-                const visualMeta = document.getElementById('visualMeta');
-                if (visualMeta) {
-                  visualMeta.textContent = 'Visuals: ' + (vis.faceUrl ? 'face ✓' : 'face missing') + ' · ' + (vis.videoCount || 0) + ' uploads · source ' + (vis.assetSource || 'none');
-                }
-                const urlInput = document.getElementById('channelUrlInput');
-                if (urlInput && vis.publicUrl) urlInput.value = vis.publicUrl;
-                renderChannelOps(data.channel_ops || []);
-                renderModes();
-                renderSuggestionCards();
-                meta.textContent = (data.connected ? 'Channel linked · ' : '') + 'source: ' + (data.source || 'unknown') + (data.copyModel ? (' · copy: ' + data.copyModel) : '') + ' · ' + meta.textContent;
+                await applySuggestionsPayload(data, meta, apiBanner);
               } catch (err) {
                 meta.textContent = 'Could not load ideas: ' + err.message;
               }
@@ -811,7 +822,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 showMsg(banner, 'Connect error: ' + err.message, 'error');
               }
             });
-            document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions(); });
+            document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions({ deep: true }); });
             renderModes();
             loadYoutubeStatus();
             loadSuggestions().catch(function(){});
