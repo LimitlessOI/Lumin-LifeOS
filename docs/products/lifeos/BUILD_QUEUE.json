@@ -606,9 +606,11 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-14T00:37:27.753Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T01:51:33.394Z"
+      "shipped_at": "2026-07-14T01:52:57.235Z"
     }
   ],
   "updated_at": "2026-07-12",
