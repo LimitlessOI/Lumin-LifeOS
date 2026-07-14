@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — Prime-time cards, competitive thumbs, hover tips, product tour. |
+| **Last Updated** | 2026-07-14 — YouTube intelligence: niche playbooks, researched shelf/velocity, face+title thumbs, channel ops for leads. |
 
 ---
 
@@ -1346,9 +1346,9 @@ config/council-members.js           — shared AI config
 
 ## Agent Handoff Notes
 
-- State: Talk cards now include **sample_script** (readable teleprompter lines) + **must_say** beats. Coaching session has sticky teleprompter dock (current line highlighted, Pause/hold, Pick up here, Jump to must-say). Coach modes: live / after_read / freestyle — flags soundsLikeReading, freestyleCue, missedMustSay, redoFromLine, pickUpLine.
-- YouTube connected for Adam on tip.
-- Next: live-verify teleprompter after deploy; real AI thumbnails still later; IG/FB Connect + R2 audio still open.
+- State: **YouTube SMOS Intelligence** — niche playbooks (`realtor_relocation` first for Adam), YouTube `search.list` + velocity (views/subs), research_basis on cards, face+title thumbs (no random B-roll frames), real competitor shelf thumbs, `channel_ops` (refresh / A/B / sequel) optimized for **leads not views**.
+- Tip verify: `/marketing` → Refresh ideas → playbookMeta shows Realtor relocation; cards show researched + velocity; channel_ops populated when uploads exist.
+- Next: founder eye-test on thumbs; IG/TikTok/LinkedIn doctrine stub only (not built); producer shot-list still backlog.
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **YouTube SMOS Intelligence** — Niche playbook resolver (realtor = relocation → buyer intel; insurance + founder variants). Real YouTube search + views/subs velocity + gap into suggestions. Titles researched with `research_basis`. Thumbs = face hero + 3–5 word TITLE overlay (no random channel frames). Real competitor shelf thumbs. `channel_ops` refresh/A-B/sequel for leads. UI truth on `/marketing`. | Adam: thumbs were shit; research titles/velocity/gap; beat competition; niche-aware (relocation first for realtor); leads not views; offer improve old videos. | ✅ | — | tip after deploy |
 | 2026-07-13 | **Prime-time SMOS surface** — Real vertical media cards; sharp-composited competitive thumbnails (face + channel frame + bold overlay); CTR grade + YouTube shelf test; hover tips everywhere; interactive product tour; public channel URL fallback when YouTube Data API is disabled; `POST /youtube/channel-url`. | Adam: looks second-rate; needs real cards, competing thumbnails from his photo/videos, shelf test, tips, tour — make it amazing / prime time. | ✅ | — | tip after deploy; enable YouTube Data API v3 for full face/frame pull |
 | 2026-07-13 | **Sellable SMOS UI + modes + 3 hooks** — Light/dark themes (Syne/DM Sans; amber dark / teal light). Film-mode chips (teleprompter, bullets, bookends, read&riff, story, hot-seat, analytics, shorts). Talk cards offer 3 hook options + competitor strong/fail. Canvas brief for competitor map. | Adam: cutting-edge design, light+dark, modes for how people film, best hooks to pick from, know competitor strengths/gaps. | ✅ | — | tip after deploy |
 | 2026-07-13 | **Teleprompter + must-say coaching** — Suggestions include `sample_script` + `must_say`; sticky teleprompter holds highlight on pause/off-topic; coach adapts (sounds like reading → freestyle, missed competitor must-say, redo after full read). | Adam: detail-heavy topics need a readable script; teleprompter should stay on the line; coach should catch reading-sound and must-cover gaps. | ✅ | — | tip after deploy |

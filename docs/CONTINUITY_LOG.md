@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — YouTube SMOS Intelligence (niche → research → leads)
+
+Adam: thumbs were absolute shit; titles must be researched with velocity (views vs subs), gap/trending, competitive shelf; niche-aware (realtor = relocation first, then schools/neighborhoods/CA compare/Phoenix vs Vegas; insurance different); optimize for reach-outs not views; offer improve old videos (A/B, reuse). Implemented in `services/marketing-youtube.js` + `/marketing` UI: playbooks, YouTube search research, face+title thumbs (no random frames), real competitor thumbs + velocity, `channel_ops`. Doctrine stub for IG/TikTok/LinkedIn in socialmediaos PRODUCT_HOME.
+
 ## 2026-07-14 — Site Builder real blog generation + placeholder scrubbing
 
 Adam: the `wellroundedmama.com` preview must pass the "mom test" with no placeholders and real content. `generateBlogPosts` was returning an empty array because the prompt asked for 3 full 600-800 word posts in one JSON array, which `gemini_flash` truncated and `JSON.parse` failed. Fixed: (1) `services/site-builder.js` `generateBlogPosts` now generates one post per call with a 400-500 word target, so each response fits in `maxOutputTokens: 4000` and parses cleanly. (2) `patchSiteHtml` removes any "Coming Soon:" blog placeholder section or `<p>` when no `blogPosts` are available. (3) `docs/products/site-builder/PRODUCT_HOME.md` updated. `REPO_FILE_SYNOPSIS_INDEX.json` re-indexed. Verification: `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify` PASS. Next: commit, push, redeploy Railway, rebuild `www.wellroundedmomma.com` preview, and verify blog posts are populated and no placeholder text remains.

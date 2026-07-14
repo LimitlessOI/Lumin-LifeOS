@@ -7,7 +7,18 @@
 **Product id:** `socialmediaos` (module under MarketingOS)  
 **Constitutional law:** `docs/constitution/NORTH_STAR_SSOT.md`  
 **Machine manifest:** `docs/products/marketingos/socialmediaos/FILE_MANIFEST.json`  
-**Last Updated:** 2026-06-30 — session MVP machine path reached TECHNICAL_PASS; coaching/content generation hardened for low-cost execution
+**Last Updated:** 2026-07-14 — YouTube intelligence playbooks (relocation-first realtor) + platform creative doctrine stub
+
+---
+
+## Platform creative doctrine
+
+| Platform | Status | Rule |
+|----------|--------|------|
+| **YouTube** | Implemented (intelligence path) | Niche playbook → search shelf → velocity/gap → researched title → face+title thumb → lead CTA. Outcome = reach-outs, not vanity views. Offer refresh/A-B/sequel on old uploads. |
+| **Instagram** | Next surface | Format-native best practices required — no YouTube paste. Carousel / mute-first / save-worthy. |
+| **TikTok** | Next surface | Format-native — hook in 1s, native audio, pattern interrupt. No YouTube paste. |
+| **LinkedIn** | Partial (session generate + carousel repurpose) | Format-native — professional insight density, carousel machine; no YouTube paste. |
 
 ---
 
@@ -30,6 +41,7 @@ High-signal surfaces:
 - `public/overlay/lifeos-lifere.html` — founder panel
 - `lifeos-app.html?stack=socialmediaos` — stack launcher
 - `public/overlay/socialmediaos-session.html` — session MVP overlay
+- **Live founder surface:** `/marketing` (YouTube intelligence + talk cards) via MarketingOS routes
 
 ## Verification
 

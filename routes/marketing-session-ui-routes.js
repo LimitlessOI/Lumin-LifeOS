@@ -397,13 +397,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             </div>
 
             <div class="yt-panel" data-tour="channel">
-              <h2 data-tip="We pull your face + recent video frames to build thumbnails that can compete in-feed.">YouTube channel &amp; thumbnail engine</h2>
+              <h2 data-tip="Niche playbook first (realtor = relocation → buyer intel). Then researched titles, velocity, face+title thumbs optimized for leads — not vanity views.">YouTube intelligence</h2>
               <p id="ytStatus">Checking connection…</p>
+              <p class="suggest-meta" id="playbookMeta">Resolving niche playbook…</p>
               <div class="actions-row">
                 <a class="btn" id="ytConnectBtn" href="#" data-tip="Sign in with Google on Google's page — we never see your password.">Connect YouTube</a>
-                <button type="button" class="secondary" id="ytRefreshBtn" data-tip="Rebuild talk cards + competitive thumbnails from your latest channel assets.">Refresh ideas</button>
+                <button type="button" class="secondary" id="ytRefreshBtn" data-tip="Research YouTube shelf + rebuild lead-intent talk cards and face+title thumbnails.">Refresh ideas</button>
               </div>
-              <label for="channelUrlInput" data-tip="If YouTube Data API is blocked, paste your public channel URL (@handle) so we can still pull real thumbs via RSS.">Public channel URL (fallback for real thumbnails)</label>
+              <label for="channelUrlInput" data-tip="If YouTube Data API is blocked, paste your public channel URL (@handle) so we can still pull your face via RSS.">Public channel URL (face fallback)</label>
               <div class="channel-row">
                 <input type="text" id="channelUrlInput" placeholder="https://www.youtube.com/@yourhandle">
                 <button type="button" class="secondary" id="channelUrlSave">Save &amp; pull assets</button>
@@ -411,8 +412,14 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               <p class="suggest-meta" id="visualMeta">Waiting for channel visuals…</p>
             </div>
 
+            <div class="yt-panel" data-tour="ops">
+              <h2 data-tip="Improve what you already filmed: refresh metadata, A/B titles, sequel/update older uploads for leads.">Channel improvement offers</h2>
+              <p class="suggest-meta" id="opsMeta">Will appear when we can see your uploads.</p>
+              <div class="suggest-grid" id="opsGrid"></div>
+            </div>
+
             <div class="yt-panel" data-tour="cards">
-              <h2 data-tip="Each card is a filmable unit: competitive thumbnail, 3 hooks, must-says, and where it would land vs niche thumbs.">Talk cards</h2>
+              <h2 data-tip="Each card: researched title, real competitor shelf + velocity, face+title thumb, 3 hooks, must-says — ranked for reach-outs.">Talk cards</h2>
               <p id="suggestMeta">Loading researched talk cards…</p>
               <div class="suggest-grid" id="suggestGrid"></div>
             </div>
@@ -492,6 +499,33 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               return '/marketing/session/new?seed_title=' + encodeURIComponent(s.title || '') + '&seed_angle=' + encodeURIComponent(s.angle || '') + '&seed_pack=' + encodeURIComponent(seed);
             }
 
+            function renderChannelOps(ops) {
+              const grid = document.getElementById('opsGrid');
+              const meta = document.getElementById('opsMeta');
+              if (!grid || !meta) return;
+              grid.innerHTML = '';
+              const list = ops || [];
+              if (!list.length) {
+                meta.textContent = 'Connect YouTube (or pull uploads) to get refresh / A/B / sequel offers on older videos.';
+                return;
+              }
+              meta.textContent = list.length + ' ways to improve existing videos for leads — not just film new.';
+              list.forEach(function(op) {
+                const card = document.createElement('article');
+                card.className = 'suggest-card';
+                const actions = (op.actions || []).map(function(a) { return '<li>' + escapeHtml(a) + '</li>'; }).join('');
+                card.innerHTML =
+                  '<div class="suggest-body">' +
+                  '<div class="suggest-meta"><span class="pill">' + escapeHtml(op.type || 'ops') + '</span></div>' +
+                  '<h3>' + escapeHtml(op.proposedTitle || 'Improve upload') + '</h3>' +
+                  '<div class="talk-block"><strong>Current</strong> ' + escapeHtml(op.currentTitle || '—') + '</div>' +
+                  '<div class="talk-block">' + escapeHtml(op.why || '') + '</div>' +
+                  '<div class="talk-block"><strong>Do this</strong><ul>' + (actions || '<li>—</li>') + '</ul></div>' +
+                  '</div>';
+                grid.appendChild(card);
+              });
+            }
+
             function renderSuggestionCards() {
               const meta = document.getElementById('suggestMeta');
               const grid = document.getElementById('suggestGrid');
@@ -504,7 +538,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 meta.textContent = selectedMode ? 'No talk cards for that mode yet — clear the mode or refresh ideas.' : 'No suggestions returned.';
                 return;
               }
-              meta.textContent = list.length + ' competitive talk card' + (list.length === 1 ? '' : 's') + (selectedMode ? ' · mode filtered' : '');
+              meta.textContent = list.length + ' lead-ranked talk card' + (list.length === 1 ? '' : 's') + (selectedMode ? ' · mode filtered' : '');
               list.forEach(function(s, cardIdx) {
                   const card = document.createElement('article');
                   card.className = 'suggest-card';
@@ -524,33 +558,47 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   let cIdx = 0;
                   for (let r = 1; r <= 4; r++) {
                     if (r === oursRank) {
-                      serpRows.push('<div class="serp-row ours"><img class="serp-mini" alt="" src="' + escapeHtml(s.thumbnailUrl) + '"/><div><div class="serp-title">' + escapeHtml(s.title) + '</div><div class="serp-meta">YOU · est. CTR ' + ctr + '</div></div><div class="score-ring">' + grade + '</div></div>');
+                      serpRows.push('<div class="serp-row ours"><img class="serp-mini" alt="" src="' + escapeHtml(s.thumbnailUrl) + '"/><div><div class="serp-title">' + escapeHtml(s.title) + '</div><div class="serp-meta">YOU · lead intent ' + escapeHtml(String(s.lead_intent_score || '—')) + ' · est. CTR ' + ctr + '</div></div><div class="score-ring">' + grade + '</div></div>');
                     } else if (cIdx < compsArr.length) {
                       const c = compsArr[cIdx++];
-                      serpRows.push('<div class="serp-row"><div class="serp-mini" style="background:linear-gradient(135deg,#333,#111)"></div><div><div class="serp-title">' + escapeHtml(c.title || c.name) + '</div><div class="serp-meta">Competitor shelf · score ' + escapeHtml(String(c.score || '—')) + '</div></div><div class="score-ring">' + escapeHtml(String(c.score || '')) + '</div></div>');
+                      const thumb = c.thumbnailUrl
+                        ? '<img class="serp-mini" alt="" src="' + escapeHtml(c.thumbnailUrl) + '"/>'
+                        : '<div class="serp-mini" style="background:linear-gradient(135deg,#333,#111)"></div>';
+                      const vel = (c.viewsPerSub != null)
+                        ? (Number(c.viewsPerSub).toFixed(2) + 'x views/sub')
+                        : ('score ' + String(c.score || '—'));
+                      const views = c.views != null ? (Number(c.views).toLocaleString() + ' views') : 'Competitor';
+                      serpRows.push('<div class="serp-row">' + thumb + '<div><div class="serp-title">' + escapeHtml(c.title || c.name) + '</div><div class="serp-meta">' + escapeHtml(c.name || '') + ' · ' + escapeHtml(views) + ' · ' + escapeHtml(vel) + (c.outlier ? ' · outlier' : '') + '</div></div><div class="score-ring">' + escapeHtml(String(c.score || '')) + '</div></div>');
                     }
                   }
                   const checks = (comp.checks || []).map(function(ch) {
                     return '<li data-tip="' + escapeHtml(ch.tip || '') + '">' + (ch.pass ? '✓ ' : '○ ') + escapeHtml(ch.name || '') + '</li>';
                   }).join('');
+                  const basis = s.research_basis || {};
+                  const basisHtml = basis.gap_reason
+                    ? ('<div class="talk-block" data-tip="Why this title exists: gap vs real YouTube shelf."><strong>Research basis</strong> ' + escapeHtml(basis.gap_reason) + (basis.query ? (' <span class="pill">' + escapeHtml(basis.query) + '</span>') : '') + '</div>')
+                    : '';
                   card.innerHTML =
-                    '<div class="thumb-stage" data-tip="Competitive thumbnail from your face + channel footage when available. Badge = CTR potential score.">' +
+                    '<div class="thumb-stage" data-tip="Face hero + 3–5 word TITLE overlay (researched). No random B-roll frames.">' +
                     '<img class="thumb-main" alt="competitive thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
-                    '<div class="thumb-badge' + ((comp.score || 0) >= 72 ? ' good' : '') + '">Thumb ' + grade + ' · CTR ' + ctr + '</div>' +
+                    '<div class="thumb-badge' + ((comp.score || 0) >= 72 ? ' good' : '') + '">Thumb ' + grade + (s.thumbnailOverlay ? (' · ' + escapeHtml(s.thumbnailOverlay)) : '') + '</div>' +
                     '</div>' +
                     '<div class="suggest-body">' +
-                    '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span><span class="pill">' + escapeHtml(s.angle || 'idea') + '</span>' +
+                    '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span>' +
+                    '<span class="pill" data-tip="Optimized for reach-outs / booked conversations.">leads ' + escapeHtml(String(s.lead_intent_score || '—')) + '</span>' +
+                    (s.researched ? '<span class="pill">researched</span>' : '<span class="pill">playbook</span>') +
                     (s.film_mode ? '<span class="pill">' + escapeHtml(s.film_mode) + '</span>' : '') +
                     (s.thumbnailComposed ? '<span class="pill">composed</span>' : '') +
                     '</div>' +
                     '<h3>' + escapeHtml(s.title) + '</h3>' +
-                    '<div class="serp-box" data-tip="Shelf test: estimated placement vs typical niche competitor thumbs."><div class="suggest-meta"><strong>YouTube shelf test</strong> — ' + escapeHtml(serp.label || 'Estimated placement') + '</div>' + serpRows.join('') + '</div>' +
+                    basisHtml +
+                    '<div class="serp-box" data-tip="Real competitor shelf when API research succeeds — velocity = views vs subs."><div class="suggest-meta"><strong>YouTube shelf</strong> — ' + escapeHtml(serp.label || 'Researched placement') + '</div>' + serpRows.join('') + '</div>' +
                     '<div class="talk-block"><strong>Pick your hook (best 3)</strong><div class="hook-pick">' + hookHtml + '</div></div>' +
-                    '<div class="talk-block" data-tip="What competing channels do well — match or beat this."><strong>Competitors are strong on</strong>' + escapeHtml(s.competitor_strong || '—') + '</div>' +
-                    '<div class="talk-block" data-tip="The gap we must fill so this video wins."><strong>They fail to give</strong>' + escapeHtml(s.competitor_fail || s.competitor_gap || '') + '</div>' +
+                    '<div class="talk-block" data-tip="What competing videos do well — match or beat this."><strong>Competitors are strong on</strong> ' + escapeHtml(s.competitor_strong || '—') + '</div>' +
+                    '<div class="talk-block" data-tip="The gap we must fill so relocators / buyers reach out."><strong>They fail to give</strong> ' + escapeHtml(s.competitor_fail || s.competitor_gap || '') + '</div>' +
                     '<div class="talk-block" data-tip="Non-negotiable lines. Skip these and the video underperforms."><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
                     '<div class="talk-block"><strong>Talk through</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
-                    '<div class="talk-block" data-tip="Thumbnail quality checklist vs 2026 CTR best practices."><strong>Thumb checklist</strong><ul>' + (checks || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block" data-tip="Thumbnail quality checklist — face, title text, research, lead intent."><strong>Thumb checklist</strong><ul>' + (checks || '<li>—</li>') + '</ul></div>' +
                     '<div class="actions-row">' +
                     '<a class="btn film-btn" href="#" data-tip="Open coaching with this talk card + chosen hook.">Film this talk card</a>' +
                     '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Studio</a>' +
@@ -586,7 +634,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             async function loadSuggestions() {
               const meta = document.getElementById('suggestMeta');
               const apiBanner = document.getElementById('apiBanner');
-              meta.textContent = 'Composing competitive talk cards + thumbnails…';
+              meta.textContent = 'Researching shelf + composing lead-intent talk cards…';
               try {
                 const res = await marketingFetch('/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
                 const data = await res.json();
@@ -595,13 +643,19 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 allSuggestions = data.suggestions || [];
                 if (data.youtubeApiNext) showMsg(apiBanner, data.youtubeApiNext, 'error');
                 else apiBanner.style.display = 'none';
+                const pb = data.playbook || {};
+                const playbookMeta = document.getElementById('playbookMeta');
+                if (playbookMeta) {
+                  playbookMeta.textContent = (pb.label || 'Playbook') + ' · outcome: ' + (pb.primary_outcome || 'leads') + (pb.market ? (' · market: ' + pb.market) : '') + ' · researched ' + String(data.researchedCount || 0) + '/' + String((pb.seed_topics || []).length || 0);
+                }
                 const vis = data.channelVisuals || {};
                 const visualMeta = document.getElementById('visualMeta');
                 if (visualMeta) {
-                  visualMeta.textContent = 'Visuals: ' + (vis.faceUrl ? 'face ✓' : 'face missing') + ' · ' + (vis.videoCount || 0) + ' channel frames · source ' + (vis.assetSource || 'none');
+                  visualMeta.textContent = 'Visuals: ' + (vis.faceUrl ? 'face ✓' : 'face missing') + ' · ' + (vis.videoCount || 0) + ' uploads · source ' + (vis.assetSource || 'none');
                 }
                 const urlInput = document.getElementById('channelUrlInput');
                 if (urlInput && vis.publicUrl) urlInput.value = vis.publicUrl;
+                renderChannelOps(data.channel_ops || []);
                 renderModes();
                 renderSuggestionCards();
                 meta.textContent = (data.connected ? 'Channel linked · ' : '') + 'source: ' + (data.source || 'unknown') + ' · ' + meta.textContent;
@@ -629,12 +683,12 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             });
 
             const tourSteps = [
-              { title: 'Welcome to SocialMediaOS', body: 'Not a generic AI script app — talk cards, competitive thumbnails, and a producer that keeps your voice.' },
-              { title: 'Pick how you film', body: 'Teleprompter, bullets, bookends, story-first, hot-seat, analytics reverse, Shorts. Hover any control for tips.' },
-              { title: 'Channel powers the thumbnails', body: 'We composite your face + recent frames into feed-ready thumbs and score CTR. Paste your @handle if the API is blocked.' },
-              { title: 'Talk cards are the product', body: 'Shelf test, 3 hooks, competitor strong/fail, must-says. Then Film this talk card.' },
-              { title: 'Producer coaching', body: 'Teleprompter holds your place. Coach flags reading-sound and missed must-says.' },
-              { title: 'You’re ready', body: 'Refresh ideas, pick a hook, film. Everything you hover explains itself.' }
+              { title: 'Welcome to SocialMediaOS', body: 'Niche playbook first. For a realtor: relocation → buyer intel. Outcome = leads, not vanity views.' },
+              { title: 'Research before you film', body: 'We search the real YouTube shelf, score velocity (views vs subs), and pick titles that fill a gap.' },
+              { title: 'Thumbnails that compete', body: 'Your face + 3–5 word TITLE text. No random B-roll frames. Shelf shows real competitor thumbs.' },
+              { title: 'Improve old videos too', body: 'Refresh metadata, A/B titles, sequel/update offers — reuse what you already filmed.' },
+              { title: 'Talk cards + producer', body: '3 hooks, must-says, teleprompter. Film when the research says this angle can earn reach-outs.' },
+              { title: 'You’re ready', body: 'Refresh ideas, pick a relocation card, film. Hover anything for tips.' }
             ];
             let tourIndex = 0;
             function openTour(i) {
