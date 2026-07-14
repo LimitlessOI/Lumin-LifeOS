@@ -3730,18 +3730,15 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           /59080|initial day labor/i
         );
         await new Promise((r) => setTimeout(r, 400));
-        const applySelected = (selId, label) => {
-          const sel = document.getElementById(selId);
-          const opt = sel?.selectedOptions?.[0];
-          if (!opt || !opt.value || opt.value === '00000000-0000-0000-0000-000000000000') {
-            attempts.push({ label, ok: false, error: 'no_selected_option' });
+        const applyByValue = (value, text, label) => {
+          if (!value || value === '00000000-0000-0000-0000-000000000000') {
+            attempts.push({ label, ok: false, error: 'no_value' });
             return false;
           }
           const fake = document.createElement('div');
-          fake.setAttribute('data-id', opt.value);
-          fake.setAttribute('data-text', (opt.textContent || '').trim());
-          fake.setAttribute('data-type', selId);
-          fake.textContent = (opt.textContent || '').trim();
+          fake.setAttribute('data-id', value);
+          fake.setAttribute('data-text', String(text || '').trim());
+          fake.textContent = String(text || '').trim();
           let used = null;
           try {
             if (typeof window.digSelectionProcessDD === 'function') {
@@ -3755,10 +3752,10 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
             return false;
           }
-          attempts.push({ label, ok: Boolean(used), text: used || 'no_helper', value: opt.value });
+          attempts.push({ label, ok: Boolean(used), text: used || 'no_helper', value: String(value).slice(0, 40) });
           return Boolean(used);
         };
-        applySelected('SearchService', 'apply_procedure');
+        if (procedure?.value) applyByValue(procedure.value, procedure.text, 'apply_procedure');
         clickAddNear('SearchService', 'add_procedure');
         callHelpers([
           'addBillingService',
@@ -3773,7 +3770,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
         );
         await new Promise((r) => setTimeout(r, 400));
-        applySelected('DignosticService', 'apply_diagnosis');
+        if (diagnosis?.value) applyByValue(diagnosis.value, diagnosis.text, 'apply_diagnosis');
         clickAddNear('DignosticService', 'add_diagnosis');
         callHelpers([
           'addBillingDiagnosis',
@@ -4076,8 +4073,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               url: location.href,
             };
           });
-          // Prove persist via Review Sent Bills, not ChargeSlipId care-type GUID.
+          // Prove persist via Review Sent Bills AND patient billing chart (Sent Bills may only show filed claims).
           let sentBills = { checked: false };
+          let chartCharges = { checked: false };
           try {
             const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
               timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
@@ -4107,7 +4105,35 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           } catch (err) {
             sentBills = { checked: false, error: String(err?.message || err).slice(0, 120) };
           }
-          persistCheck = { ...persistCheck, sentBills };
+          if (pregnancyId) {
+            try {
+              const chartNav = await gotoWithBudget(session.page, `${origin}/Pregnancy/Billing/${encodeURIComponent(pregnancyId)}`, {
+                timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+              });
+              if (chartNav.ok) {
+                await sleep(2000);
+                await dismissSessionTakeover(session.page);
+                chartCharges = await session.page.evaluate(() => {
+                  const text = (document.body.innerText || '').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, ' ').replace(/\s+/g, ' ').trim();
+                  const has594 = /59400|59409|59080/i.test(text);
+                  const hasO80 = /\bO80\b/i.test(text);
+                  const chargeHints = (text.match(/.{0,40}(59400|59409|59080|charge slip|billed|\$\d[\d,]*)\.{0,40}/gi) || []).slice(0, 8);
+                  return {
+                    checked: true,
+                    has594,
+                    hasO80,
+                    chargeHints,
+                    preview: text.slice(0, 500),
+                  };
+                });
+              } else {
+                chartCharges = { checked: false, error: chartNav.error };
+              }
+            } catch (err) {
+              chartCharges = { checked: false, error: String(err?.message || err).slice(0, 120) };
+            }
+          }
+          persistCheck = { ...persistCheck, sentBills, chartCharges };
           saveResult = { ...saveResult, persistCheck };
         }
       }
@@ -4141,12 +4167,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           ? (codesSelected?.procedure || codesSelected?.diagnosis || dailySuperBill?.clicked
             ? (dryRun !== false
               ? 'Patient + codes ready — re-run dry_run=false to Save.'
-              : (persistCheck?.sentBills?.nameHit
-                ? 'PROVED: patient appears on Review Sent Bills after Save — continue HCFA/submit path.'
-                : (persistCheck?.sentBills?.noItems
-                  ? 'Save ran but Review Sent Bills still empty for this patient — line item Add/POS/units still incomplete.'
+              : (persistCheck?.sentBills?.nameHit || persistCheck?.chartCharges?.has594
+                ? 'PROVED: charge evidence on Sent Bills and/or patient billing chart after Save — continue HCFA/submit.'
+                : (persistCheck?.sentBills?.noItems && !persistCheck?.chartCharges?.has594
+                  ? 'Save ran but Sent Bills empty and billing chart shows no 594xx — line apply still incomplete.'
                   : (saveResult.attempted
-                    ? 'Save attempted — Sent Bills check inconclusive; inspect persistCheck.sentBills + lineHints.'
+                    ? 'Save attempted — inspect persistCheck.sentBills + chartCharges + lineHints.'
                     : (saveResult.blocked || 'Save blocked/missing.')))))
             : 'Patient bound but no procedure/diagnosis hydrated — inspect codesMap; may need fee-schedule seeding.')
           : (visitList?.match?.pregnancyId

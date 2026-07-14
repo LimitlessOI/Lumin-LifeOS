@@ -464,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **ChargeSlip chart proof** — Sent Bills empty after Save may mean unfiled slip. applyByValue(digSelectionProcessDD); also check patient billing chart for 594xx; sanitize job JSON control chars. |
 | 2026-07-14 | **ChargeSlip line apply** — tip Sent Bills empty after Save; Mod/POS/Units blank. Call digSelectionProcessDD on selected CPT/ICD; fill summary-grid Units/POS; updateBillingDiagonsticCodeRecord. |
 | 2026-07-14 | **ChargeSlip false persist** — tip nonZeroChargeSlip was Intrapartum care-type GUID, not a slip. Prove via Review Sent Bills; exclude Add Remittance false Add click. |
 | 2026-07-14 | **Job stale + ChargeSlip hang** — Neon timestamps (`…+00`) made Date.parse NaN so stale never fired; hung job never completed. Fix parse; do not call digSelectionProcess() bare; 60s evaluate timeout on code select. |

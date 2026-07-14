@@ -190,7 +190,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           job.kind || 'unknown',
           job.status || 'queued',
           JSON.stringify(job.request || {}),
-          JSON.stringify(job.result || {}),
+          JSON.stringify(job.result || {}, (_k, v) => (typeof v === 'string' ? v.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, ' ') : v)),
           job.error || null,
           ['completed', 'failed'].includes(job.status) ? new Date().toISOString() : null,
         ]
