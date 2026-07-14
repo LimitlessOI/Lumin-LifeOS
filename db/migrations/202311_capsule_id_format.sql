@@ -2,6 +2,15 @@
 ALTER TABLE capsules
   ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
-UPDATE capsules
-  SET id = gen_random_uuid()
-  WHERE id IS NULL;
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'capsules_id_uuid_v4_check'
+  ) THEN
+    ALTER TABLE capsules
+      ADD CONSTRAINT capsules_id_uuid_v4_check
+      CHECK (uuid_version(id) = 4);
+  END IF;
+END $$;
