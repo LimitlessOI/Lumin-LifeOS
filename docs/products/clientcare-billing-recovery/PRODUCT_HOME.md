@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — **BirthBill** public sellable product live: midwife landing `/birthbill`, Stripe pilot checkout ($297 + 5% recovered), tenant signup into packaging. Honest offer = forever-chase + claim-status; ChargeSlip auto-create not promised. |
+| **Last Updated** | 2026-07-14 — BirthBill multi-tenant: encrypted ClientCare credential vault, claims.tenant_id, post-pay connect UI, forever-chase scoped by tenant. |
 
 ---
 
@@ -35,6 +35,7 @@ Billing-recovery and revenue-cycle operating system built around the ClientCare 
 | **Public API** | `GET /api/v1/clientcare-billing/public/offer`, `POST …/signup`, `POST …/checkout`, `GET …/checkout/success` (no command key) |
 | **V1 promise** | Forever-chase unpaid/underpaid queue + claim-status prep + human-in-loop ClientCare coworker |
 | **V1 non-promise** | Guaranteed silent ChargeSlip/HCFA auto-create for every birth |
+| **Multi-tenant** | Encrypted ClientCare vault per practice + claims.tenant_id + forever-chase filter |
 
 Two linked lanes:
 - **Insurance Recovery OS** — eligibility, claims, denials, underpayments, ERA/remits, appeals, forever-chase follow-up, collections forecast
@@ -477,6 +478,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **BirthBill multi-tenant** — Encrypted `clientcare_tenant_credentials`, `claims.tenant_id`, public connect-ClientCare after pay, forever-chase/browser login scoped by tenant. |
 | 2026-07-14 | **BirthBill sellable** — Public midwife product: `/birthbill` landing, Stripe pilot checkout ($297 + 5% recovered), `public/signup`→tenant packaging, honest V1 (forever-chase + claim-status; no ChargeSlip promise). | Adam: sell to other midwives now. | 2h | 2h | none | ✅ | pending tip |
 | 2026-07-14 | **HCFA wedge guard** — tip job hung after SuperBillReport claim-link/openwindowSuperBilling. 45s evaluate timeout; skip bare SuperBilling helpers; keep Invoice/HCFA click only. |
 | 2026-07-14 | **SuperBillReport claim links** — tip report shows Denise + 59400 + Invoice/HCFA/UB-04 (BCBS). Click those + openwindowSuperBilling; Sent Bills probe from report; ChargeSlip rebind via SearchBillingSlipPregnancyList. |

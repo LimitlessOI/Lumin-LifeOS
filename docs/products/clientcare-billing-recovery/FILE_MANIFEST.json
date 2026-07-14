@@ -32,7 +32,8 @@
     "scripts/verify-project.mjs",
     "config/clientcare-billing-pricing.js",
     "public/overlay/clientcare-collections-landing.html",
-    "public/overlay/clientcare-collections-welcome.html"
+    "public/overlay/clientcare-collections-welcome.html",
+    "db/migrations/20260714_birthbill_tenant_isolation.sql"
   ],
   "shared_dependencies": [
     {

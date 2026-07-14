@@ -20,10 +20,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
   const billingService = createClientCareBillingService({ pool, logger });
   const syncService = createClientCareSyncService({ billingService, logger });
-  const browserService = createClientCareBrowserService({ logger, syncService });
-  const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, callCouncilWithFailover, logger });
   const sellableService = createClientCareSellableService({ pool, logger });
   const conversationStore = createConversationStore(pool);
+  const browserService = createClientCareBrowserService({
+    logger,
+    syncService,
+    resolveTenantCredentials: async (tenantId) => sellableService.getTenantCredentials(tenantId),
+  });
+  const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, callCouncilWithFailover, logger });
 
   async function withDeadline(task, ms, label = 'request') {
     let timer = null;
@@ -206,10 +210,58 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const q = new URLSearchParams({
         paid: result.paid ? '1' : '0',
         tenant_id: String(result.tenant_id || ''),
+        session_id: String(result.session_id || req.query?.session_id || ''),
       });
       return res.redirect(302, `/birthbill/welcome?${q.toString()}`);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] public checkout success failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/public/onboarding-status', async (req, res) => {
+    try {
+      const tenantId = req.query?.tenant_id || req.query?.tenantId;
+      if (!tenantId) return res.status(400).json({ ok: false, error: 'tenant_id required' });
+      const tenants = await sellableService.listTenants();
+      const tenant = (tenants || []).find((t) => String(t.id) === String(tenantId));
+      const creds = await sellableService.getTenantCredentialStatus(tenantId);
+      const onboarding = await sellableService.getOnboarding(tenantId);
+      res.json({
+        ok: true,
+        tenant: tenant ? {
+          id: tenant.id,
+          name: tenant.name,
+          status: tenant.status,
+          contact_email: tenant.contact_email,
+        } : null,
+        credentials: creds,
+        onboarding,
+        next: creds.connected
+          ? 'Credentials connected — seed forever-chase for this tenant.'
+          : 'Connect ClientCare username/password to finish onboard.',
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] onboarding-status failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/public/connect-clientcare', async (req, res) => {
+    try {
+      const result = await sellableService.connectClientCareAfterPay({
+        tenantId: req.body?.tenant_id || req.body?.tenantId,
+        sessionId: req.body?.session_id || req.body?.sessionId,
+        baseUrl: req.body?.base_url || req.body?.baseUrl,
+        username: req.body?.username,
+        password: req.body?.password,
+        mfaMode: req.body?.mfa_mode || req.body?.mfaMode,
+        mfaSecret: req.body?.mfa_secret || req.body?.mfaSecret,
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] connect-clientcare failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
@@ -485,7 +537,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   router.get('/forever-chase', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
-      const queue = await billingService.getForeverChaseQueue({ limit: req.query?.limit });
+      const tenantId = getTenantId(req);
+      const queue = await billingService.getForeverChaseQueue({ limit: req.query?.limit, tenantId });
       res.json({ ok: true, ...queue });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] forever-chase queue failed');
@@ -496,14 +549,19 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   router.post('/forever-chase/seed', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req) || req.body?.tenant_id || null;
       const seeded = await billingService.seedForeverChaseFromInventory({
         births: req.body?.births || [],
         accounts: req.body?.accounts || [],
+        tenantId,
+        midwifeLabel: req.body?.midwife_label || req.body?.midwifeLabel || null,
         evidence: {
-          operator_note: req.body?.operator_note || 'Direct forever-chase seed (Sherry did the work; prior billing neglect is not a write-off).',
+          operator_note: req.body?.operator_note
+            || 'Direct forever-chase seed (the midwife did the work; prior billing neglect is not a write-off).',
+          midwife_label: req.body?.midwife_label || req.body?.midwifeLabel || null,
         },
       });
-      const queue = await billingService.getForeverChaseQueue({ limit: 100 });
+      const queue = await billingService.getForeverChaseQueue({ limit: 100, tenantId });
       res.json({
         ok: true,
         seeded,
@@ -520,6 +578,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
       const dryRun = req.body?.dry_run === true;
+      const tenantId = getTenantId(req) || req.body?.tenant_id || null;
       const job = enqueueBrowserJob(
         'forever_chase_sync',
         async () => {
@@ -527,6 +586,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           const accountLimit = Math.max(10, Math.min(Number(req.body?.account_limit || 50), 100));
           const evidence = {
             operator_note: req.body?.operator_note || 'Tip forever-chase sync from birth activity + billing notes backlog.',
+            midwife_label: req.body?.midwife_label || null,
           };
           // Sequential: dual Puppeteer Promise.all OOMs / recycles Railway mid-run and leaves jobs stuck.
           let births = [];
@@ -534,17 +594,19 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           let birthError = null;
           let backlogError = null;
           try {
-            const birthsResult = await browserService.scanBirthActivity({ maxRows: birthLimit });
+            const birthsResult = await browserService.scanBirthActivity({ maxRows: birthLimit, tenantId });
             births = birthsResult?.births || [];
           } catch (err) {
             birthError = err.message;
           }
           let seededBirths = null;
           if (!dryRun && births.length) {
-            seededBirths = await billingService.seedForeverChaseFromInventory({ births, accounts: [], evidence });
+            seededBirths = await billingService.seedForeverChaseFromInventory({
+              births, accounts: [], evidence, tenantId, midwifeLabel: evidence.midwife_label,
+            });
           }
           try {
-            const backlogResult = await browserService.buildBacklogSummary({ accountLimit });
+            const backlogResult = await browserService.buildBacklogSummary({ accountLimit, tenantId });
             accounts = backlogResult?.accounts || [];
           } catch (err) {
             backlogError = err.message;
@@ -565,8 +627,10 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
             births,
             accounts,
             evidence,
+            tenantId,
+            midwifeLabel: evidence.midwife_label,
           });
-          const queue = await billingService.getForeverChaseQueue({ limit: 100 });
+          const queue = await billingService.getForeverChaseQueue({ limit: 100, tenantId });
           return {
             ok: true,
             partial_seed_after_births: seededBirths,
@@ -584,7 +648,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
             })),
           };
         },
-        req.body || {}
+        { ...(req.body || {}), tenant_id: tenantId },
       );
       res.status(202).json({
         ok: true,

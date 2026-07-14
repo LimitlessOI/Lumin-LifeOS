@@ -1,48 +1,119 @@
 <!DOCTYPE html>
-<!-- SYNOPSIS: BirthBill pilot welcome after Stripe checkout -->
+<!-- SYNOPSIS: BirthBill pilot welcome + Connect ClientCare after Stripe pay -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BirthBill — Welcome</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;600&display=swap" rel="stylesheet" />
+  <title>BirthBill — Connect ClientCare</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    :root { --teal:#0f6a6a; --deep:#0a4548; --ink:#142029; --muted:#4d5f6b; --line:rgba(20,32,41,.12); }
     body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
       font-family: Manrope, system-ui, sans-serif;
-      background: linear-gradient(180deg, #e7f1f2, #f3f7f8);
-      color: #142029;
-      padding: 1.5rem;
+      background: linear-gradient(180deg, #e7f1f2, #f3f7f8); color: var(--ink); padding: 1.5rem;
     }
     .box {
-      width: min(520px, 100%);
-      background: #fff;
-      border-radius: 24px;
-      padding: 2rem;
+      width: min(560px, 100%); background: #fff; border-radius: 24px; padding: 2rem;
       box-shadow: 0 28px 70px rgba(10, 40, 48, 0.14);
     }
-    h1 { font-family: Fraunces, Georgia, serif; color: #0a4548; margin: 0 0 0.75rem; }
-    p { color: #4d5f6b; line-height: 1.55; }
-    a { color: #0f6a6a; font-weight: 600; }
+    h1 { font-family: Fraunces, Georgia, serif; color: var(--deep); margin: 0 0 0.5rem; font-size: 1.8rem; }
+    p { color: var(--muted); line-height: 1.55; margin: 0 0 1rem; }
+    label { display: grid; gap: 0.3rem; font-size: 0.82rem; font-weight: 600; color: var(--muted); margin-bottom: 0.75rem; }
+    input {
+      font: inherit; padding: 0.7rem 0.85rem; border-radius: 12px; border: 1px solid var(--line); background: #fbfeff;
+    }
+    button {
+      appearance: none; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+      background: var(--deep); color: #fff; border-radius: 999px; padding: 0.85rem 1.2rem; width: 100%;
+    }
+    button:disabled { opacity: 0.6; cursor: wait; }
+    .status { min-height: 1.2rem; margin-top: 0.75rem; font-size: 0.9rem; color: var(--teal); }
+    .status.err { color: #8a4b2a; }
+    a { color: var(--teal); font-weight: 600; }
+    .meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; }
   </style>
 </head>
 <body>
   <div class="box">
-    <h1>Welcome to BirthBill</h1>
-    <p id="msg">Confirming your pilot payment…</p>
-    <p><a href="/birthbill">Back to BirthBill</a> · <a href="/clientcare-billing">Open operator board</a></p>
+    <h1 id="title">Connect ClientCare</h1>
+    <p id="msg">After pilot payment, store your ClientCare login encrypted so BirthBill can run forever-chase for your practice only.</p>
+    <div class="meta" id="meta"></div>
+    <form id="connectForm">
+      <label>ClientCare base URL
+        <input name="base_url" value="https://clientcarewest.net" required />
+      </label>
+      <label>Username
+        <input name="username" autocomplete="username" required />
+      </label>
+      <label>Password
+        <input name="password" type="password" autocomplete="current-password" required />
+      </label>
+      <button type="submit" id="btn">Save encrypted credentials</button>
+      <div class="status" id="status" aria-live="polite"></div>
+    </form>
+    <p style="margin-top:1.25rem;font-size:0.9rem;"><a href="/birthbill">Back to BirthBill</a> · <a href="/clientcare-billing">Operator board</a></p>
   </div>
   <script>
+    const API = '/api/v1/clientcare-billing/public';
     const q = new URLSearchParams(location.search);
-    const msg = document.getElementById('msg');
-    if (q.get('paid') === '1') {
-      msg.textContent = 'Pilot paid. Next: we connect your ClientCare login securely and seed your forever-chase unpaid-birth queue. Reply to your receipt email or open the operator board when invited.';
-    } else {
-      msg.textContent = 'We could not confirm payment yet. If you were charged, email support with your practice name — we will match the Stripe receipt.';
+    const tenantId = q.get('tenant_id') || '';
+    const sessionId = q.get('session_id') || '';
+    const paid = q.get('paid') === '1';
+    const statusEl = document.getElementById('status');
+    const btn = document.getElementById('btn');
+    document.getElementById('meta').textContent = tenantId
+      ? ('Practice tenant #' + tenantId + (paid ? ' · pilot paid' : ''))
+      : 'Missing tenant_id — reopen from checkout success link.';
+
+    function setStatus(msg, isErr) {
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('err', Boolean(isErr));
     }
+
+    async function refresh() {
+      if (!tenantId) return;
+      try {
+        const res = await fetch(API + '/onboarding-status?tenant_id=' + encodeURIComponent(tenantId));
+        const data = await res.json();
+        if (data.credentials?.connected) {
+          document.getElementById('title').textContent = 'ClientCare connected';
+          document.getElementById('msg').textContent = 'Credentials stored. Next: we seed your forever-chase queue for unpaid births.';
+          document.getElementById('connectForm').style.display = 'none';
+          setStatus('Connected as ' + (data.credentials.username_hint || 'practice user'));
+        } else if (!paid) {
+          setStatus('Pay the pilot first, then connect ClientCare.', true);
+        }
+      } catch (_) {}
+    }
+
+    document.getElementById('connectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!tenantId) return setStatus('tenant_id required', true);
+      btn.disabled = true;
+      setStatus('Saving encrypted credentials…');
+      const fd = new FormData(e.target);
+      const body = Object.fromEntries(fd.entries());
+      body.tenant_id = tenantId;
+      if (sessionId) body.session_id = sessionId;
+      try {
+        const res = await fetch(API + '/connect-clientcare', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Connect failed');
+        setStatus(data.next || 'Connected.');
+        await refresh();
+      } catch (err) {
+        setStatus(String(err.message || err), true);
+        btn.disabled = false;
+      }
+    });
+
+    if (paid) setStatus('Pilot payment confirmed. Connect ClientCare to finish onboard.');
+    refresh();
   </script>
 </body>
 </html>

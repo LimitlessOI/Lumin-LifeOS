@@ -2,6 +2,11 @@
 
 
 
+
+## 2026-07-14 — BirthBill multi-tenant vault
+
+Not done was fair: public landing alone is not sellable. Shipped encrypted per-tenant ClientCare credentials, claims.tenant_id isolation, post-pay connect UI on /birthbill/welcome, forever-chase + browser login scoped by tenant_id. ChargeSlip auto-create still unproved (honest V1).
+
 ## 2026-07-14 — BirthBill sellable to midwives
 
 Adam: sell ClientCare recovery to other midwives now. Shipped public product **BirthBill** at `/birthbill` with Stripe pilot checkout ($297 + 5% recovered), practice signup → `clientcare_tenants` packaging, honest V1 promise (forever-chase queue + claim-status; ChargeSlip auto-create not sold). Tip forever-chase remains 64 open for Sherry; multi-tenant claim ledger isolation still next.

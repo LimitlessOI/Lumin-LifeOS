@@ -6,6 +6,7 @@
  */
 
 import { getStripeClient } from './stripe-client.js';
+import { encrypt, decrypt } from '../core/tco-encryption.js';
 import {
   CLIENTCARE_BILLING_PRICING,
   getBirthBillPilotOfferSummary,
@@ -629,14 +630,157 @@ export function createClientCareSellableService({ pool, logger = console }) {
     };
   }
 
+  function maskUsername(value) {
+    const s = String(value || '');
+    if (!s) return '';
+    if (s.length <= 4) return `${s.slice(0, 1)}***`;
+    return `${s.slice(0, 2)}***${s.slice(-2)}`;
+  }
+
+  async function getTenantCredentialStatus(tenantId) {
+    if (!tenantId) return { connected: false };
+    try {
+      const { rows } = await pool.query(
+        `SELECT tenant_id, base_url, username_hint, status, last_verified_at, last_error, updated_at
+         FROM clientcare_tenant_credentials WHERE tenant_id = $1 LIMIT 1`,
+        [tenantId]
+      );
+      const row = rows[0];
+      if (!row) return { connected: false, tenant_id: tenantId };
+      return {
+        connected: true,
+        tenant_id: row.tenant_id,
+        base_url: row.base_url,
+        username_hint: row.username_hint,
+        status: row.status,
+        last_verified_at: row.last_verified_at,
+        last_error: row.last_error,
+        updated_at: row.updated_at,
+      };
+    } catch (error) {
+      if (isMissingRelation(error)) return { connected: false, tenant_id: tenantId, error: 'credentials_table_missing' };
+      throw error;
+    }
+  }
+
+  async function getTenantCredentials(tenantId) {
+    if (!tenantId) return null;
+    const { rows } = await pool.query(
+      `SELECT * FROM clientcare_tenant_credentials WHERE tenant_id = $1 LIMIT 1`,
+      [tenantId]
+    );
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      tenantId: row.tenant_id,
+      baseUrl: row.base_url,
+      username: row.username,
+      password: decrypt(row.encrypted_password),
+      mfaMode: row.mfa_mode || null,
+      mfaSecret: row.encrypted_mfa_secret ? decrypt(row.encrypted_mfa_secret) : null,
+      status: row.status,
+    };
+  }
+
+  async function saveTenantCredentials(tenantId, {
+    baseUrl = 'https://clientcarewest.net',
+    username = '',
+    password = '',
+    mfaMode = null,
+    mfaSecret = null,
+  } = {}) {
+    if (!tenantId) return { ok: false, error: 'tenant_id required' };
+    const user = String(username || '').trim();
+    const pass = String(password || '');
+    if (!user || !pass) return { ok: false, error: 'username and password required' };
+    const encPass = encrypt(pass);
+    if (!encPass) return { ok: false, error: 'encryption_failed — set TCO_ENCRYPTION_KEY' };
+    const encMfa = mfaSecret ? encrypt(String(mfaSecret)) : null;
+    const url = String(baseUrl || 'https://clientcarewest.net').trim().replace(/\/$/, '') || 'https://clientcarewest.net';
+    try {
+      const { rows } = await pool.query(
+        `INSERT INTO clientcare_tenant_credentials (
+           tenant_id, base_url, username, encrypted_password, mfa_mode, encrypted_mfa_secret,
+           username_hint, status, last_error, updated_at
+         ) VALUES ($1,$2,$3,$4,$5,$6,$7,'stored',NULL,NOW())
+         ON CONFLICT (tenant_id) DO UPDATE SET
+           base_url=EXCLUDED.base_url,
+           username=EXCLUDED.username,
+           encrypted_password=EXCLUDED.encrypted_password,
+           mfa_mode=EXCLUDED.mfa_mode,
+           encrypted_mfa_secret=COALESCE(EXCLUDED.encrypted_mfa_secret, clientcare_tenant_credentials.encrypted_mfa_secret),
+           username_hint=EXCLUDED.username_hint,
+           status='stored',
+           last_error=NULL,
+           updated_at=NOW()
+         RETURNING tenant_id, base_url, username_hint, status, updated_at`,
+        [tenantId, url, user, encPass, mfaMode || null, encMfa, maskUsername(user)]
+      );
+      const prior = await getOnboarding(tenantId);
+      await saveOnboarding(tenantId, { ...prior, browser_ready: true });
+      await logAudit({
+        tenantId,
+        actor: user,
+        action_type: 'birthbill_clientcare_connected',
+        entity_type: 'credentials',
+        entity_id: String(tenantId),
+        details: { base_url: url, username_hint: maskUsername(user) },
+      });
+      return { ok: true, credentials: rows[0], onboarding: await getOnboarding(tenantId) };
+    } catch (error) {
+      if (isMissingRelation(error)) return { ok: false, error: 'credentials_table_missing — redeploy migration' };
+      throw error;
+    }
+  }
+
+  async function connectClientCareAfterPay({
+    tenantId = null,
+    sessionId = null,
+    baseUrl = '',
+    username = '',
+    password = '',
+    mfaMode = null,
+    mfaSecret = null,
+  } = {}) {
+    if (!tenantId) return { ok: false, error: 'tenant_id required' };
+    const { rows } = await pool.query(`SELECT * FROM clientcare_tenants WHERE id = $1 LIMIT 1`, [tenantId]);
+    const tenant = rows[0];
+    if (!tenant) return { ok: false, error: 'tenant_not_found' };
+    const paidStatuses = new Set(['pilot_paid', 'active', 'live']);
+    let paid = paidStatuses.has(String(tenant.status || ''));
+    if (!paid && sessionId) {
+      const verified = await verifyPilotCheckoutSession({ tenantId, sessionId });
+      paid = Boolean(verified.paid);
+    }
+    if (!paid) return { ok: false, error: 'pilot_payment_required_before_connect' };
+    const saved = await saveTenantCredentials(tenantId, {
+      baseUrl: baseUrl || 'https://clientcarewest.net',
+      username,
+      password,
+      mfaMode,
+      mfaSecret,
+    });
+    if (!saved.ok) return saved;
+    return {
+      ok: true,
+      tenant_id: tenantId,
+      status: saved.credentials?.status || 'stored',
+      username_hint: saved.credentials?.username_hint,
+      next: 'Credentials stored encrypted. Run forever-chase seed with this tenant_id next.',
+    };
+  }
+
   return {
     assertOperatorAccess,
     buildLiveValidation,
+    connectClientCareAfterPay,
     createPilotCheckoutSession,
     exportAuditLogCsv,
     getPackagingOverview,
     getPublicOffer,
     getReadinessReport,
+    getTenantCredentials,
+    getTenantCredentialStatus,
     getValidationHistory,
     listAuditLog,
     getOnboarding,
@@ -647,6 +791,7 @@ export function createClientCareSellableService({ pool, logger = console }) {
     saveOnboarding,
     saveOperatorAccess,
     saveTenant,
+    saveTenantCredentials,
     signupPracticeLead,
     verifyPilotCheckoutSession,
   };

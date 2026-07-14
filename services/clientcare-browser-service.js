@@ -1868,7 +1868,12 @@ function derivePageState(summary = {}) {
   };
 }
 
-export function createClientCareBrowserService({ env = process.env, logger = console, syncService = null } = {}) {
+export function createClientCareBrowserService({
+  env = process.env,
+  logger = console,
+  syncService = null,
+  resolveTenantCredentials = null,
+} = {}) {
   function getReadiness() {
     const configured = [];
     const missing = [];
@@ -1888,15 +1893,40 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       workflowTemplates: WORKFLOW_TEMPLATES,
       configuredBaseUrl: env.CLIENTCARE_BASE_URL ? redact(env.CLIENTCARE_BASE_URL) : null,
       configuredUsername: env.CLIENTCARE_USERNAME ? redact(env.CLIENTCARE_USERNAME) : null,
+      multiTenantCredentials: typeof resolveTenantCredentials === 'function',
       notes: [
         'Do not store ClientCare credentials in code or docs.',
-        'Use Railway secrets or the encrypted account vault only if browser automation is confirmed necessary.',
+        'BirthBill tenants use encrypted clientcare_tenant_credentials; founder default may use Railway CLIENTCARE_*.',
         'Selectors and automation steps should be finalized only after a live walkthrough of the ClientCare billing screens.',
       ],
     };
   }
 
-  function getCredentials() {
+  async function getCredentials({ tenantId = null, override = null } = {}) {
+    if (override?.baseUrl && override?.username && override?.password) {
+      return {
+        baseUrl: override.baseUrl,
+        username: override.username,
+        password: override.password,
+        mfaMode: override.mfaMode || null,
+        mfaSecret: override.mfaSecret || null,
+        source: 'override',
+      };
+    }
+    if (tenantId && typeof resolveTenantCredentials === 'function') {
+      const tenantCreds = await resolveTenantCredentials(tenantId);
+      if (tenantCreds?.baseUrl && tenantCreds?.username && tenantCreds?.password) {
+        return {
+          baseUrl: tenantCreds.baseUrl,
+          username: tenantCreds.username,
+          password: tenantCreds.password,
+          mfaMode: tenantCreds.mfaMode || null,
+          mfaSecret: tenantCreds.mfaSecret || null,
+          source: 'tenant_vault',
+          tenantId,
+        };
+      }
+    }
     if (!env.CLIENTCARE_BASE_URL || !env.CLIENTCARE_USERNAME || !env.CLIENTCARE_PASSWORD) {
       throw new Error('ClientCare browser credentials are not fully configured');
     }
@@ -1906,11 +1936,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       password: env.CLIENTCARE_PASSWORD,
       mfaMode: env.CLIENTCARE_MFA_MODE || null,
       mfaSecret: env.CLIENTCARE_MFA_SECRET || null,
+      source: 'env',
     };
   }
 
-  async function login({ dryRun = false } = {}) {
-    const credentials = getCredentials();
+  async function login({ dryRun = false, tenantId = null, credentials: override = null } = {}) {
+    const credentials = await getCredentials({ tenantId, override });
     const session = await createSession({ logger });
     const screenshots = [];
 
@@ -2773,8 +2804,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function buildBacklogSummary({ maxPages = 12, pageTimeoutMs = 15000, accountLimit = 200 } = {}) {
-    const result = await login({ dryRun: false });
+  async function buildBacklogSummary({ maxPages = 12, pageTimeoutMs = 15000, accountLimit = 200, tenantId = null } = {}) {
+    const result = await login({ dryRun: false, tenantId });
     const { session } = result;
     try {
       const apiConfig = await captureBillingNotesApiConfig(session.page, { pageTimeoutMs });
@@ -3092,8 +3123,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     pageTimeoutMs = 20000,
     resolveDirectory = true,
     maxNameResolves = 12,
+    tenantId = null,
   } = {}) {
-    const result = await login({ dryRun: false });
+    const result = await login({ dryRun: false, tenantId });
     const { session, screenshots } = result;
     try {
       const target = new URL('/Home/BirthActivityPartial', session.currentUrl()).toString();

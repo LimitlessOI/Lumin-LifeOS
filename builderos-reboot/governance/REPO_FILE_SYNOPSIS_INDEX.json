@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T17:17:13.464Z",
+  "generated_at": "2026-07-14T17:23:43.904Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11530,
+  "file_count": 11531,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -35657,6 +35657,13 @@
       "indexed_at": "2026-07-14T14:56:07.653Z"
     },
     {
+      "path": "db/migrations/20260714_birthbill_tenant_isolation.sql",
+      "synopsis": "BirthBill multi-tenant isolation — credentials vault + claims.tenant_id.",
+      "bytes": 1420,
+      "mtime": "2026-07-14T17:19:49.560Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z"
+    },
+    {
       "path": "db/migrations/20260714_clientcare_browser_jobs.sql",
       "synopsis": "Persist ClientCare billing browser jobs across Railway instances (birth-activity / claim-prep).",
       "bytes": 778,
@@ -36953,9 +36960,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 7251,
-      "mtime": "2026-07-14T17:16:43.001Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z"
+      "bytes": 7584,
+      "mtime": "2026-07-14T17:23:30.516Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39139,17 +39146,17 @@
     {
       "path": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 14152,
-      "mtime": "2026-07-14T17:17:08.362Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z",
+      "bytes": 14213,
+      "mtime": "2026-07-14T17:23:30.515Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 90137,
-      "mtime": "2026-07-14T17:16:47.181Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z"
+      "bytes": 90339,
+      "mtime": "2026-07-14T17:23:30.512Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -63962,10 +63969,10 @@
     },
     {
       "path": "public/overlay/clientcare-collections-welcome.html",
-      "synopsis": "BirthBill pilot welcome after Stripe checkout",
-      "bytes": 1823,
-      "mtime": "2026-07-14T17:16:16.633Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z"
+      "synopsis": "BirthBill pilot welcome + Connect ClientCare after Stripe pay",
+      "bytes": 5407,
+      "mtime": "2026-07-14T17:23:19.592Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z"
     },
     {
       "path": "public/overlay/code-installation-test.js",
@@ -65397,9 +65404,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 77404,
-      "mtime": "2026-07-14T17:15:45.587Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z",
+      "bytes": 80256,
+      "mtime": "2026-07-14T17:23:01.182Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82196,9 +82203,9 @@
     {
       "path": "services/clientcare-billing-service.js",
       "synopsis": "clientcare-billing-service.js",
-      "bytes": 83465,
-      "mtime": "2026-07-14T13:44:04.736Z",
-      "indexed_at": "2026-07-14T14:56:07.653Z",
+      "bytes": 84653,
+      "mtime": "2026-07-14T17:21:11.992Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82206,9 +82213,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 200919,
-      "mtime": "2026-07-14T17:11:58.286Z",
-      "indexed_at": "2026-07-14T17:12:12.835Z",
+      "bytes": 202119,
+      "mtime": "2026-07-14T17:23:24.894Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82226,9 +82233,9 @@
     {
       "path": "services/clientcare-sellable-service.js",
       "synopsis": "clientcare-sellable-service.js",
-      "bytes": 24884,
-      "mtime": "2026-07-14T17:15:35.000Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z",
+      "bytes": 30484,
+      "mtime": "2026-07-14T17:21:31.631Z",
+      "indexed_at": "2026-07-14T17:23:43.904Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
