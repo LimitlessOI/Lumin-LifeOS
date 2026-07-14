@@ -16,5 +16,3 @@ router.post('/twin-simulator/:userId', async (req, res) => {
 export function registerTwinSimulatorRoutes(app) {
   app.use('/api', router);
 }
-
-export { router };
