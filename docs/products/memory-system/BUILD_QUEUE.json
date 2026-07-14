@@ -77,7 +77,7 @@
     },
     {
       "id": "6",
-      "status": "blocked",
+      "status": "done",
       "target_file": "docs/AMENDMENT_02_MIGRATION_RUNBOOK.md",
       "task": "confirm recency threshold",
       "spec": "Verify the default 90 days recency threshold for conversation_memory migration is correct and update any discrepancies.",
@@ -85,17 +85,21 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T14:41:51.575Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:03:01.502Z"
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_capsule_id_format.sql",
       "task": "run schema migration for UUID v4",
       "spec": "Ensure Capsule IDs are formatted with UUID v4 as default; necessary schema migrations must be applied.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:45:07.362Z"
     },
     {
       "id": "8",

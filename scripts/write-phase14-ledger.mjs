@@ -6,11 +6,10 @@ import pg from 'pg';
 
 const { Client } = pg;
 
-function derivePhaseLedger(payload) {
-  if (Array.isArray(payload?.phase_ledger)) {
-    return payload.phase_ledger;
-  }
+const FINDINGS_JSON_PATH = process.env.FINDINGS_JSON_PATH ?? './findings.json';
+const DATABASE_URL = process.env.DATABASE_URL;
 
+function derivePhaseLedger(payload) {
   if (Array.isArray(payload?.phases)) {
     return payload.phases.map((phase) => ({
       phase: phase?.phase ?? phase?.name ?? phase?.id ?? 'unknown',
@@ -20,10 +19,10 @@ function derivePhaseLedger(payload) {
   }
 
   if (Array.isArray(payload?.findings)) {
-    return payload.findings.map((finding, idx) => ({
-      phase: finding?.phase ?? finding?.name ?? finding?.id ?? `phase-${idx + 1}`,
+    return payload.findings.map((finding, index) => ({
+      phase: finding?.phase ?? finding?.name ?? finding?.id ?? `phase-${index + 1}`,
       status: finding?.status === 'fail' ? 'fail' : 'pass',
-      note: finding?.note ?? finding?.message ?? finding?.finding ?? '',
+      note: finding?.note ?? finding?.message ?? '',
     }));
   }
 
@@ -31,24 +30,26 @@ function derivePhaseLedger(payload) {
 }
 
 async function main() {
-  const findingsJsonPath = process.env.FINDINGS_JSON_PATH ?? './findings.json';
-  const databaseUrl = process.env.DATABASE_URL;
-
-  if (!databaseUrl) {
+  if (!DATABASE_URL) {
     throw new Error('DATABASE_URL is required');
   }
 
-  const raw = await readFile(findingsJsonPath, 'utf8');
+  const raw = await readFile(FINDINGS_JSON_PATH, 'utf8');
   const payload = JSON.parse(raw);
   const phaseLedger = derivePhaseLedger(payload);
 
-  const client = new Client({ connectionString: databaseUrl });
+  const findingsJson = JSON.stringify({
+    ...payload,
+    phase_ledger: phaseLedger,
+  });
+
+  const client = new Client({ connectionString: DATABASE_URL });
   await client.connect();
 
   try {
     const result = await client.query(
       'INSERT INTO builder_findings(findings_json) VALUES($1)',
-      [JSON.stringify({ ...payload, phase_ledger: phaseLedger })],
+      [findingsJson],
     );
 
     console.log(

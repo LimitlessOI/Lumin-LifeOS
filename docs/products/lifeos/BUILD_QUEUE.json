@@ -570,7 +570,7 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-twin-simulator-routes.js",
       "task": "implement routes for twin simulator",
       "spec": "const express = require('express'); const { simulateTwinReactions } = require('../services/lifeos-twin-simulator.js'); const router = express.Router(); router.post('/twin-simulator/:userId', async (req, res) => { const { userId } = req.params; const uiData = req.body.uiData; const response = await simulateTwinReactions(userId, uiData); res.json(response); }); module.exports = { registerTwinSimulatorRoutes: (app) => app.use('/api', router) };",
@@ -578,11 +578,13 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:04:07.684Z"
     },
     {
       "id": "9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-member-feedback.js",
       "task": "process member feedback",
       "spec": "function processFeedback(feedback) { /* Queue for founder review */ } module.exports = { processFeedback };",
@@ -590,7 +592,9 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T12:44:37.822Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:45:00.560Z"
     },
     {
       "id": "10",

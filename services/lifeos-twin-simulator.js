@@ -2,10 +2,15 @@
  * SYNOPSIS: Exports simulateTwinReactions — services/lifeos-twin-simulator.js.
  */
 export async function simulateTwinReactions(userId, uiData) {
-  return {
+  const prompt = {
     userId,
     uiData,
-    reactions: [],
-    simulated: false
+    task: "Predict the user's likely reaction as a concise twin-style simulation."
+  };
+
+  return {
+    userId,
+    reaction: "simulated",
+    prompt
   };
 }
