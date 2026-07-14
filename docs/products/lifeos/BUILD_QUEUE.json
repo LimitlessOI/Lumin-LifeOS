@@ -629,8 +629,8 @@
         "getDailyReminders",
         "rateDay"
       ],
-      "attempts": 1,
-      "last_attempt_at": "2026-07-14T10:35:37.756Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-07-14T10:37:07.750Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     },
     {
