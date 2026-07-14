@@ -101,7 +101,14 @@
       "attempts": 3,
       "commit_sha": "470893ce50f192efc7dde67671e95a9d9957ee18",
       "last_attempt_at": "2026-07-13T13:10:50.461Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/audit-intake-flow-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/audit-intake-flow-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "expected_exports": [
+        "registerAuditIntakeFlowRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/audit-intake-flow/sessions"
+      }
     },
     {
       "id": "4",
@@ -142,7 +149,14 @@
       "attempts": 3,
       "commit_sha": "425b126560adef69c34f0c5d4c0814908fe297df",
       "last_attempt_at": "2026-07-13T13:36:35.517Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketingos-sku-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketingos-sku-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "expected_exports": [
+        "registerMarketingOSSkuRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/marketingos/skus"
+      }
     },
     {
       "id": "7",
@@ -193,7 +207,7 @@
     },
     {
       "id": "auto-reg",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "register audit intake and sku route modules for auto-mount",
       "spec": "Add entries for routes/audit-intake-flow-routes.js (registerFn:registerAuditIntakeFlowRoutes) and routes/marketingos-sku-routes.js (registerFn:registerMarketingOSSkuRoutes) to the modules array. Preserve all existing entries. Each entry shape: {path, register, enabled, note}. JSON must be valid and minifiable.",
@@ -202,7 +216,9 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:41:54.823Z"
     }
   ]
 }
