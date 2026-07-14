@@ -2,10 +2,10 @@
   "schema": "product_file_manifest_v1",
   "product_id": "clientcare-billing-recovery",
   "project_id": "clientcare_billing_recovery",
-  "name": "ClientCare Billing Recovery",
+  "name": "BirthBill \u2014 ClientCare Billing Recovery",
   "canonical_home": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
   "amendment_path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-14",
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
@@ -29,7 +29,11 @@
     "public/shared/lifeos-voice-chat.js",
     "services/insurance-card-parse.js",
     "scripts/test-card-ocr.mjs",
-    "scripts/verify-project.mjs"
+    "scripts/verify-project.mjs",
+    "config/clientcare-billing-pricing.js",
+    "public/overlay/clientcare-collections-landing.html",
+    "public/overlay/clientcare-collections-welcome.html",
+    "db/migrations/20260714_birthbill_tenant_isolation.sql"
   ],
   "shared_dependencies": [
     {
@@ -219,6 +223,26 @@
       "path": "/api/v1/clientcare-billing/payer-rules",
       "expected_status": 200,
       "description": "Save operator payer-rule override"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/public/offer",
+      "description": "BirthBill public offer"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/public/signup",
+      "description": "BirthBill practice signup"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/public/checkout",
+      "description": "BirthBill Stripe pilot checkout"
+    },
+    {
+      "method": "GET",
+      "path": "/birthbill",
+      "description": "BirthBill public landing redirect"
     }
   ],
   "required_tables": [
@@ -402,6 +426,9 @@
     "Internal operational completeness and sellable v1 completeness are both reached",
     "Tenant-scoped operator access gates write actions when operators are configured for that tenant",
     "Operations Assistant supports browser voice input and optional spoken replies",
-    "Overlay opens safely without a saved command key and prompts for access instead of crashing on 401 responses"
+    "Overlay opens safely without a saved command key and prompts for access instead of crashing on 401 responses",
+    "BirthBill public landing serves at /birthbill",
+    "Public offer/signup/checkout routes work without command key",
+    "V1 sellable promise excludes unproved ChargeSlip auto-create"
   ]
 }

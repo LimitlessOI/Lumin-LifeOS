@@ -785,7 +785,10 @@ export function createClientCareBillingService({ pool, logger = console, now = (
 
   async function upsertClaim(input = {}) {
     const normalized = normalizeImportedClaim(input);
+    const tenantIdRaw = input.tenant_id ?? normalized.tenant_id ?? null;
+    const tenantId = tenantIdRaw == null || tenantIdRaw === '' ? null : Number(tenantIdRaw);
     const claim = {
+      tenant_id: Number.isFinite(tenantId) ? tenantId : null,
       external_claim_id: normalized.external_claim_id || null,
       patient_id: normalized.patient_id || null,
       patient_name: normalized.patient_name || null,
@@ -836,7 +839,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     }
 
     const valuesWithExternal = [
-      claim.external_claim_id, claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
+      claim.tenant_id, claim.external_claim_id, claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
       claim.date_of_service, claim.service_end_date, claim.original_submitted_at, claim.latest_submitted_at, claim.claim_status, claim.submission_status,
       claim.denial_code, claim.denial_reason, claim.billed_amount, claim.allowed_amount, claim.paid_amount, claim.patient_balance, claim.insurance_balance,
       JSON.stringify(claim.cpt_codes), JSON.stringify(claim.icd_codes), JSON.stringify(claim.modifiers), classification.timelyFilingDeadline, classification.timelyFilingSource,
@@ -845,26 +848,30 @@ export function createClientCareBillingService({ pool, logger = console, now = (
 
     let rows;
     if (claim.external_claim_id) {
-      // Partial unique index (WHERE external_claim_id IS NOT NULL) cannot be targeted by bare ON CONFLICT (external_claim_id).
       const existing = await pool.query(
-        `SELECT id FROM clientcare_claims WHERE external_claim_id = $1 LIMIT 1`,
-        [claim.external_claim_id]
+        `SELECT id FROM clientcare_claims
+         WHERE external_claim_id = $1
+           AND COALESCE(tenant_id, 0) = COALESCE($2::bigint, 0)
+         LIMIT 1`,
+        [claim.external_claim_id, claim.tenant_id]
       );
       if (existing.rows[0]?.id) {
         ({ rows } = await pool.query(
           `UPDATE clientcare_claims SET
-             patient_id=$2, patient_name=$3, payer_name=$4, payer_type=$5, provider_state=$6, member_id=$7, claim_number=$8, account_number=$9,
-             date_of_service=$10, service_end_date=$11,
-             original_submitted_at=COALESCE(original_submitted_at, $12), latest_submitted_at=$13,
-             claim_status=$14, submission_status=$15, denial_code=$16, denial_reason=$17,
-             billed_amount=$18, allowed_amount=$19, paid_amount=$20, patient_balance=$21, insurance_balance=$22,
-             cpt_codes=$23, icd_codes=$24, modifiers=$25,
-             timely_filing_deadline=$26, timely_filing_source=$27, rescue_bucket=$28, rescue_confidence=$29,
-             recovery_probability=$30, priority_score=$31, source=$32, notes=$33, metadata=$34, updated_at=NOW()
+             tenant_id=$2,
+             patient_id=$3, patient_name=$4, payer_name=$5, payer_type=$6, provider_state=$7, member_id=$8, claim_number=$9, account_number=$10,
+             date_of_service=$11, service_end_date=$12,
+             original_submitted_at=COALESCE(original_submitted_at, $13), latest_submitted_at=$14,
+             claim_status=$15, submission_status=$16, denial_code=$17, denial_reason=$18,
+             billed_amount=$19, allowed_amount=$20, paid_amount=$21, patient_balance=$22, insurance_balance=$23,
+             cpt_codes=$24, icd_codes=$25, modifiers=$26,
+             timely_filing_deadline=$27, timely_filing_source=$28, rescue_bucket=$29, rescue_confidence=$30,
+             recovery_probability=$31, priority_score=$32, source=$33, notes=$34, metadata=$35, updated_at=NOW()
            WHERE id=$1
            RETURNING *`,
           [
             existing.rows[0].id,
+            claim.tenant_id,
             claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
             claim.date_of_service, claim.service_end_date, claim.original_submitted_at, claim.latest_submitted_at, claim.claim_status, claim.submission_status,
             claim.denial_code, claim.denial_reason, claim.billed_amount, claim.allowed_amount, claim.paid_amount, claim.patient_balance, claim.insurance_balance,
@@ -875,17 +882,17 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       } else {
         ({ rows } = await pool.query(
           `INSERT INTO clientcare_claims (
-             external_claim_id, patient_id, patient_name, payer_name, payer_type, provider_state, member_id, claim_number, account_number,
+             tenant_id, external_claim_id, patient_id, patient_name, payer_name, payer_type, provider_state, member_id, claim_number, account_number,
              date_of_service, service_end_date, original_submitted_at, latest_submitted_at, claim_status, submission_status,
              denial_code, denial_reason, billed_amount, allowed_amount, paid_amount, patient_balance, insurance_balance,
              cpt_codes, icd_codes, modifiers, timely_filing_deadline, timely_filing_source, rescue_bucket, rescue_confidence,
              recovery_probability, priority_score, source, notes, metadata
            ) VALUES (
-             $1,$2,$3,$4,$5,$6,$7,$8,$9,
-             $10,$11,$12,$13,$14,$15,
-             $16,$17,$18,$19,$20,$21,$22,
-             $23,$24,$25,$26,$27,$28,$29,
-             $30,$31,$32,$33,$34
+             $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,
+             $11,$12,$13,$14,$15,$16,
+             $17,$18,$19,$20,$21,$22,$23,
+             $24,$25,$26,$27,$28,$29,$30,
+             $31,$32,$33,$34,$35
            )
            RETURNING *`,
           valuesWithExternal
@@ -894,20 +901,20 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     } else {
       ({ rows } = await pool.query(
         `INSERT INTO clientcare_claims (
-           patient_id, patient_name, payer_name, payer_type, provider_state, member_id, claim_number, account_number,
+           tenant_id, patient_id, patient_name, payer_name, payer_type, provider_state, member_id, claim_number, account_number,
            date_of_service, service_end_date, original_submitted_at, latest_submitted_at, claim_status, submission_status,
            denial_code, denial_reason, billed_amount, allowed_amount, paid_amount, patient_balance, insurance_balance,
            cpt_codes, icd_codes, modifiers, timely_filing_deadline, timely_filing_source, rescue_bucket, rescue_confidence,
            recovery_probability, priority_score, source, notes, metadata
          ) VALUES (
-           $1,$2,$3,$4,$5,$6,$7,$8,
-           $9,$10,$11,$12,$13,$14,
-           $15,$16,$17,$18,$19,$20,$21,
-           $22,$23,$24,$25,$26,$27,$28,
-           $29,$30,$31,$32,$33
+           $1,$2,$3,$4,$5,$6,$7,$8,$9,
+           $10,$11,$12,$13,$14,$15,
+           $16,$17,$18,$19,$20,$21,$22,
+           $23,$24,$25,$26,$27,$28,$29,
+           $30,$31,$32,$33,$34
          ) RETURNING *`,
         [
-          claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
+          claim.tenant_id, claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
           claim.date_of_service, claim.service_end_date, claim.original_submitted_at, claim.latest_submitted_at, claim.claim_status, claim.submission_status,
           claim.denial_code, claim.denial_reason, claim.billed_amount, claim.allowed_amount, claim.paid_amount, claim.patient_balance, claim.insurance_balance,
           JSON.stringify(claim.cpt_codes), JSON.stringify(claim.icd_codes), JSON.stringify(claim.modifiers), classification.timelyFilingDeadline, classification.timelyFilingSource,
@@ -921,11 +928,11 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return { claim: saved, classification };
   }
 
-  async function importClaims(claims = [], { source = 'manual_import' } = {}) {
+  async function importClaims(claims = [], { source = 'manual_import', tenantId = null } = {}) {
     const results = [];
     for (const item of claims) {
       try {
-        results.push(await upsertClaim({ ...item, source: item.source || source }));
+        results.push(await upsertClaim({ ...item, source: item.source || source, tenant_id: item.tenant_id ?? tenantId }));
       } catch (error) {
         logger.warn?.({ err: error.message, claim: item.external_claim_id || item.claim_number || item.patient_name }, '[CLIENTCARE-BILLING] import failed');
         results.push({ error: error.message, claim: item });
@@ -1633,13 +1640,16 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     births = [],
     accounts = [],
     evidence = {},
+    tenantId = null,
+    midwifeLabel = null,
   } = {}) {
     const claims = [];
+    const midwife = String(midwifeLabel || evidence?.midwife_label || (tenantId ? 'The midwife' : 'Sherry')).trim();
     const workNote = [
-      'FOUNDER FOREVER-CHASE MANDATE (2026-07-14):',
-      'Every insurance birth unpaid or underpaid stays open until paid enough, insurer gives written no-liability denial, or founder closes.',
+      'FOREVER-CHASE MANDATE (BirthBill):',
+      'Every insurance birth unpaid or underpaid stays open until paid enough, insurer gives written no-liability denial, or practice closes.',
       'Ask the insurance company when status is unknown. Old age is not a stop.',
-      'Sherry performed the midwifery work and must be compensated; prior billing neglect is not a write-off.',
+      `${midwife} performed the midwifery work and must be compensated; prior billing neglect is not a write-off.`,
       evidence?.operator_note ? `Operator note: ${evidence.operator_note}` : null,
     ].filter(Boolean).join(' ');
 
@@ -1669,7 +1679,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
           lane: 'unpaid_birth',
           billing_href: href,
           resolve: birth.resolve || null,
-          work_performed_by: 'Sherry',
+          work_performed_by: midwife,
           prior_billing_failure: true,
           founder_mandate: 'forever_chase_until_paid_or_written_denial',
         },
@@ -1696,14 +1706,15 @@ export function createClientCareBillingService({ pool, logger = console, now = (
           lane: 'billing_notes_backlog',
           recovery_band: account.recoveryBand || account.recovery_band || null,
           note_count: account.noteCount || account.note_count || null,
-          work_performed_by: 'Sherry',
+          work_performed_by: midwife,
           prior_billing_failure: true,
           founder_mandate: 'forever_chase_until_paid_or_written_denial',
         },
       });
     }
 
-    const imported = await importClaims(claims, { source: 'forever_chase_seed' });
+    const stamped = claims.map((c) => ({ ...c, tenant_id: c.tenant_id ?? tenantId }));
+    const imported = await importClaims(stamped, { source: 'forever_chase_seed', tenantId });
 
     // Force open forever_chase / ask_insurer actions on anything still marked write-off style.
     await pool.query(
@@ -1726,12 +1737,18 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       seeded_from: { births: births.length, accounts: accounts.length, claim_rows: claims.length },
       imported: imported.length,
       doctrine: 'forever_chase_until_paid_or_written_denial',
-      work_performed_by: 'Sherry',
+      work_performed_by: midwife,
     };
   }
 
-  async function getForeverChaseQueue({ limit = 200 } = {}) {
+  async function getForeverChaseQueue({ limit = 200, tenantId = null } = {}) {
     const capped = Math.max(1, Math.min(Number(limit || 200), 500));
+    const hasTenant = !(tenantId == null || tenantId === '');
+    const tenantParam = hasTenant ? Number(tenantId) : null;
+    const tenantSql = hasTenant ? ' AND COALESCE(tenant_id, 0) = COALESCE($1::bigint, 0)' : '';
+    const countParams = hasTenant ? [tenantParam] : [];
+    const listParams = hasTenant ? [tenantParam, capped] : [capped];
+    const limitPlaceholder = hasTenant ? '$2' : '$1';
     const { rows: countRows } = await pool.query(
       `SELECT
          COUNT(*)::int AS total_open,
@@ -1748,11 +1765,12 @@ export function createClientCareBillingService({ pool, logger = console, now = (
            OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')
            OR COALESCE(paid_amount, 0) <= 0
            OR GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0) >= 10
-         )`
+         )${tenantSql}`,
+      countParams
     );
     const { rows } = await pool.query(
       `SELECT
-         id, patient_name, payer_name, claim_number, date_of_service, claim_status, submission_status,
+         id, tenant_id, patient_name, payer_name, claim_number, date_of_service, claim_status, submission_status,
          billed_amount, allowed_amount, paid_amount, patient_balance, insurance_balance,
          rescue_bucket, priority_score, source, notes, metadata, updated_at,
          GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0)::numeric AS short_paid_amount
@@ -1763,18 +1781,19 @@ export function createClientCareBillingService({ pool, logger = console, now = (
            OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')
            OR COALESCE(paid_amount, 0) <= 0
            OR GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0) >= 10
-         )
+         )${tenantSql}
        ORDER BY
          CASE WHEN COALESCE(paid_amount, 0) <= 0 THEN 0 ELSE 1 END,
          date_of_service ASC NULLS LAST,
          priority_score DESC NULLS LAST
-       LIMIT $1`,
-      [capped]
+       LIMIT ${limitPlaceholder}`,
+      listParams
     );
 
     const items = rows.map((row) => {
       const shortPaid = money(row.short_paid_amount);
       const unpaid = money(row.paid_amount) <= 0;
+      const midwife = row.metadata?.work_performed_by || 'The midwife';
       return {
         ...mapClaimRow(row),
         short_paid_amount: Number(shortPaid.toFixed(2)),
@@ -1784,15 +1803,16 @@ export function createClientCareBillingService({ pool, logger = console, now = (
           : (shortPaid >= 10
             ? 'Underpaid: send ERA/EOB + contract proof; demand remaining allowed amount.'
             : 'Follow up until written resolution.'),
-        work_performed_by: row.metadata?.work_performed_by || 'Sherry',
+        work_performed_by: midwife,
         evidence_for_payer: row.metadata?.evidence_message_for_payer
-          || 'Sherry performed the midwifery work. Prior billing that claimed this was handled failed — compensate the provider.',
+          || `${midwife} performed the midwifery work. Prior billing that claimed this was handled failed — compensate the provider.`,
       };
     });
 
     const counts = countRows[0] || {};
     return {
       doctrine: 'forever_chase_until_paid_or_written_denial',
+      tenant_id: tenantParam,
       summary: {
         total_open: counts.total_open || 0,
         unpaid: counts.unpaid || 0,

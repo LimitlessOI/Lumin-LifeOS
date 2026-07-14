@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Forever-chase seed unblocked: claim upsert no longer needs ON CONFLICT on partial unique index; tip inventory 15 births + 50 notes ready to import. |
+| **Last Updated** | 2026-07-14 — BirthBill UX clarity: definitions + steps on landing/offer, welcome wizard, workboard BirthBill mode (`?product=birthbill`). Not prime-time — claim create still human-supervised. |
 
 ---
 
@@ -19,11 +19,23 @@
 
 ## Mission
 
-Billing-recovery and revenue-cycle operating system built around the ClientCare EHR/billing platform used by Sherry's practice.
+**BirthBill** — sellable insurance forever-chase + billing coworker for midwifery practices on ClientCare (not Sherry-only).
 
-**Founder forever-chase mandate (2026-07-14):** Every birth that should have been paid by insurance and was not — and every claim that paid but not enough — stays open until the insurer pays enough, issues a written no-liability denial, or the founder closes it. Age is not a stop. Unknown status → ask the insurance company. The system keeps hounding. Sherry did the clinical work and must be compensated; prior billing neglect is evidence, not a write-off.
+Billing-recovery and revenue-cycle operating system built around the ClientCare EHR/billing platform. First live tenant is Sherry's practice; the same packaging now sells to other ClientCare midwives via `/birthbill`.
 
-Designed to rescue unpaid insurance claims already earned, prevent additional claims from aging out, and give Sherry a controlled work queue with clear next actions.
+**Founder forever-chase mandate (2026-07-14):** Every birth that should have been paid by insurance and was not — and every claim that paid but not enough — stays open until the insurer pays enough, issues a written no-liability denial, or the founder closes it. Age is not a stop. Unknown status → ask the insurance company. The system keeps hounding. The midwife did the clinical work and must be compensated; prior billing neglect is evidence, not a write-off.
+
+## Sellable product (BirthBill)
+
+| Field | Value |
+|---|---|
+| **Public name** | BirthBill |
+| **Front door** | `/birthbill` → `public/overlay/clientcare-collections-landing.html` |
+| **Pricing** | `config/clientcare-billing-pricing.js` — pilot **$297** (1 mo care) + **5%** of insurance dollars recovered |
+| **Public API** | `GET /api/v1/clientcare-billing/public/offer`, `POST …/signup`, `POST …/checkout`, `GET …/checkout/success` (no command key) |
+| **V1 promise** | Forever-chase unpaid/underpaid queue + claim-status prep + human-in-loop ClientCare coworker |
+| **V1 non-promise** | Guaranteed silent ChargeSlip/HCFA auto-create for every birth |
+| **Multi-tenant** | Encrypted ClientCare vault per practice + claims.tenant_id + forever-chase filter |
 
 Two linked lanes:
 - **Insurance Recovery OS** — eligibility, claims, denials, underpayments, ERA/remits, appeals, forever-chase follow-up, collections forecast
@@ -89,9 +101,11 @@ This now expands into two linked lanes:
 ## REVENUE MODEL
 | Lane | Revenue Effect |
 |------|----------------|
+| BirthBill pilot ($297) | Stripe checkout onboard for ClientCare midwife practices |
+| Recovery share (5% default) | Share of insurance dollars recovered via forever-chase |
+| Ongoing care ($97/mo) | Operator seat after pilot month |
 | Claims rescue | Recover already-earned revenue sitting unbilled / rejected / denied |
 | Ongoing billing ops | Reduce leakage, speed submission, reduce aged A/R |
-| Billing dashboard / rescue queue | Internal force multiplier first; potential product later |
 
 ---
 
@@ -464,6 +478,23 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **BirthBill UX clarity** — Landing/welcome show definitions + 4 steps + honest pilot readiness; public offer returns `definitions`/`steps`/`readiness_label`; workboard `?product=birthbill` uses midwife copy + glossary (not Sherry-only). Prime-time = no until ChargeSlip/HCFA tip-proved. |
+| 2026-07-14 | **BirthBill multi-tenant** — Encrypted `clientcare_tenant_credentials`, `claims.tenant_id`, public connect-ClientCare after pay, forever-chase/browser login scoped by tenant. |
+| 2026-07-14 | **BirthBill sellable** — Public midwife product: `/birthbill` landing, Stripe pilot checkout ($297 + 5% recovered), `public/signup`→tenant packaging, honest V1 (forever-chase + claim-status; no ChargeSlip promise). | Adam: sell to other midwives now. | 2h | 2h | none | ✅ | pending tip |
+| 2026-07-14 | **HCFA wedge guard** — tip job hung after SuperBillReport claim-link/openwindowSuperBilling. 45s evaluate timeout; skip bare SuperBilling helpers; keep Invoice/HCFA click only. |
+| 2026-07-14 | **SuperBillReport claim links** — tip report shows Denise + 59400 + Invoice/HCFA/UB-04 (BCBS). Click those + openwindowSuperBilling; Sent Bills probe from report; ChargeSlip rebind via SearchBillingSlipPregnancyList. |
+| 2026-07-14 | **SuperBillReport same-tab** — tip popup path via browser.pages wedged CDP (job stale 240s, empty result). Navigate `/Billing/SuperBillReport?FromDate=` directly; inventory+Filter/Create Claim; return ChargeSlip+rebind; timeout 360s. |
+| 2026-07-14 | **SuperBillReport path** — tip proved Daily Super Bill → `openReportItems()` → `/Billing/SuperBillReport?FromDate=…`. First popup driver clicked Create New Client (wrong) and wiped patient. Wait for Loading; ranked Create Claim/Filter actions; checkbox rows; rebind before Save. |
+| 2026-07-14 | **Daily Super Bill drive** — tip Save/DSB click still leaves Sent Bills empty + no chart 594xx. After DSB click: capture onclick/popups, inventory modals/helpers/lineHints, fill date, Create/Generate (not Save), modal follow-up, then Save + persist proof. | Save click alone does not create durable charge. | 0.5h | 0.5h | none | ✅ | pending tip Denise |
+| 2026-07-14 | **ChargeSlip no list-click** — even native row click wedged tip CDP. Select CPT/ICD via dropdown only + Daily Super Bill + Save; prove via Sent Bills/chart. |
+| 2026-07-14 | **ChargeSlip digSelection hang** — tip job hung with no result after digSelectionProcess on real rows. Native click only inside evaluate; always try Daily Super Bill after codes. |
+| 2026-07-14 | **ChargeSlip real row click** — digSelectionProcessDD(fake) throws DiagnosisCodeN. Click real procedure/diagnosis list rows; open Billing tab before chart proof. |
+| 2026-07-14 | **ChargeSlip chart proof** — Sent Bills empty after Save may mean unfiled slip. applyByValue(digSelectionProcessDD); also check patient billing chart for 594xx; sanitize job JSON control chars. |
+| 2026-07-14 | **ChargeSlip line apply** — tip Sent Bills empty after Save; Mod/POS/Units blank. Call digSelectionProcessDD on selected CPT/ICD; fill summary-grid Units/POS; updateBillingDiagonsticCodeRecord. |
+| 2026-07-14 | **ChargeSlip false persist** — tip nonZeroChargeSlip was Intrapartum care-type GUID, not a slip. Prove via Review Sent Bills; exclude Add Remittance false Add click. |
+| 2026-07-14 | **Job stale + ChargeSlip hang** — Neon timestamps (`…+00`) made Date.parse NaN so stale never fired; hung job never completed. Fix parse; do not call digSelectionProcess() bare; 60s evaluate timeout on code select. |
+| 2026-07-14 | **ChargeSlip Denise tip** — Save failed: date-mask Units/POS fill (`1_/__/____`), `BillingServiceRecordId` undefined, then “Please select a patient first”. Prefer 59409/59400 (not 59080), skip date masks, Add after code select, rebind patient before Save. |
+| 2026-07-14 | **Browser job heartbeat** — ChargeSlip tip jobs marked stale at 90s while still running; bump map timeout to 240s + 25s heartbeat + longer stale grace. |
 | 2026-07-14 | **ChargeSlip persist probe** — Save now prefers POS 12, tries vendor save helpers, captures alert/validation + post-save ChargeSlipId (non-zero = persist proved). Next: tip live Save Denise/Yanhari/Monzello. | Save click did not land Sent Bills. | 0.5h | 0.5h | none | ✅ | pending tip |
 | 2026-07-14 | **Forever-chase seed unblock** — tip import of 65 chase rows failed: `ON CONFLICT (external_claim_id)` vs partial unique index. Upsert now SELECT+UPDATE/INSERT; metadata.forever_chase forces bucket + ask_insurer_forever. Stale browser jobs auto-fail; sync sequential; POST /forever-chase/seed. Tip inventory: 15 births + 50 notes. | Ledger stayed empty after mandate. | 1h | 1h | none | ✅ | tip seed: 64 unpaid forever_chase open |
 | 2026-07-14 | **Forever-chase mandate** — Adam: every unpaid/underpaid insurance birth stays open forever; ask insurer when unknown; Sherry did the work. Tip ledger was **0 claims** while browser shows **15 births + 50 notes accounts**. Added seedForeverChaseFromInventory + GET/POST forever-chase. Age is not a write-off. | Empty ledger blocked money chase. | 1h | 1h | none | ✅ | tip seeded 64 open forever_chase |

@@ -205,7 +205,14 @@ export async function registerFounderRuntimeRoutes(app, deps) {
         sendSMS: deps.sendSMS || null,
       }),
     );
-    logger.info("✅ [CLIENTCARE-BILLING] Founder-builder routes mounted at /api/v1/clientcare-billing");
+    app.get(["/birthbill", "/midwife-billing", "/clientcare-collections"], (_req, res) => {
+      res.redirect(302, "/overlay/clientcare-collections-landing.html");
+    });
+    app.get(["/birthbill/welcome", "/midwife-billing/welcome"], (req, res) => {
+      const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+      res.redirect(302, "/overlay/clientcare-collections-welcome.html" + qs);
+    });
+    logger.info("✅ [CLIENTCARE-BILLING] Founder-builder routes mounted at /api/v1/clientcare-billing + /birthbill");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[CLIENTCARE-BILLING] founder-lane mount failed (non-fatal)");
   }

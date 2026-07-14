@@ -111,6 +111,18 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function evaluateWithTimeout(page, pageFunction, arg, timeoutMs = 45000) {
+  const run = arguments.length >= 3 && arg !== undefined
+    ? page.evaluate(pageFunction, arg)
+    : page.evaluate(pageFunction);
+  return Promise.race([
+    run,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error(`page.evaluate timed out after ${timeoutMs}ms`)), Math.max(1000, Number(timeoutMs) || 45000));
+    }),
+  ]);
+}
+
 async function waitForCondition(fn, { timeoutMs = 10000, intervalMs = 500 } = {}) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
@@ -1856,7 +1868,12 @@ function derivePageState(summary = {}) {
   };
 }
 
-export function createClientCareBrowserService({ env = process.env, logger = console, syncService = null } = {}) {
+export function createClientCareBrowserService({
+  env = process.env,
+  logger = console,
+  syncService = null,
+  resolveTenantCredentials = null,
+} = {}) {
   function getReadiness() {
     const configured = [];
     const missing = [];
@@ -1876,15 +1893,40 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       workflowTemplates: WORKFLOW_TEMPLATES,
       configuredBaseUrl: env.CLIENTCARE_BASE_URL ? redact(env.CLIENTCARE_BASE_URL) : null,
       configuredUsername: env.CLIENTCARE_USERNAME ? redact(env.CLIENTCARE_USERNAME) : null,
+      multiTenantCredentials: typeof resolveTenantCredentials === 'function',
       notes: [
         'Do not store ClientCare credentials in code or docs.',
-        'Use Railway secrets or the encrypted account vault only if browser automation is confirmed necessary.',
+        'BirthBill tenants use encrypted clientcare_tenant_credentials; founder default may use Railway CLIENTCARE_*.',
         'Selectors and automation steps should be finalized only after a live walkthrough of the ClientCare billing screens.',
       ],
     };
   }
 
-  function getCredentials() {
+  async function getCredentials({ tenantId = null, override = null } = {}) {
+    if (override?.baseUrl && override?.username && override?.password) {
+      return {
+        baseUrl: override.baseUrl,
+        username: override.username,
+        password: override.password,
+        mfaMode: override.mfaMode || null,
+        mfaSecret: override.mfaSecret || null,
+        source: 'override',
+      };
+    }
+    if (tenantId && typeof resolveTenantCredentials === 'function') {
+      const tenantCreds = await resolveTenantCredentials(tenantId);
+      if (tenantCreds?.baseUrl && tenantCreds?.username && tenantCreds?.password) {
+        return {
+          baseUrl: tenantCreds.baseUrl,
+          username: tenantCreds.username,
+          password: tenantCreds.password,
+          mfaMode: tenantCreds.mfaMode || null,
+          mfaSecret: tenantCreds.mfaSecret || null,
+          source: 'tenant_vault',
+          tenantId,
+        };
+      }
+    }
     if (!env.CLIENTCARE_BASE_URL || !env.CLIENTCARE_USERNAME || !env.CLIENTCARE_PASSWORD) {
       throw new Error('ClientCare browser credentials are not fully configured');
     }
@@ -1894,11 +1936,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       password: env.CLIENTCARE_PASSWORD,
       mfaMode: env.CLIENTCARE_MFA_MODE || null,
       mfaSecret: env.CLIENTCARE_MFA_SECRET || null,
+      source: 'env',
     };
   }
 
-  async function login({ dryRun = false } = {}) {
-    const credentials = getCredentials();
+  async function login({ dryRun = false, tenantId = null, credentials: override = null } = {}) {
+    const credentials = await getCredentials({ tenantId, override });
     const session = await createSession({ logger });
     const screenshots = [];
 
@@ -2761,8 +2804,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function buildBacklogSummary({ maxPages = 12, pageTimeoutMs = 15000, accountLimit = 200 } = {}) {
-    const result = await login({ dryRun: false });
+  async function buildBacklogSummary({ maxPages = 12, pageTimeoutMs = 15000, accountLimit = 200, tenantId = null } = {}) {
+    const result = await login({ dryRun: false, tenantId });
     const { session } = result;
     try {
       const apiConfig = await captureBillingNotesApiConfig(session.page, { pageTimeoutMs });
@@ -3080,8 +3123,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     pageTimeoutMs = 20000,
     resolveDirectory = true,
     maxNameResolves = 12,
+    tenantId = null,
   } = {}) {
-    const result = await login({ dryRun: false });
+    const result = await login({ dryRun: false, tenantId });
     const { session, screenshots } = result;
     try {
       const target = new URL('/Home/BirthActivityPartial', session.currentUrl()).toString();
@@ -3634,9 +3678,16 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       });
 
       let codesSelected = { procedure: null, diagnosis: null, attempts: [] };
-      codesSelected = await session.page.evaluate(async () => {
+      try {
+        codesSelected = await evaluateWithTimeout(session.page, async () => {
         const attempts = [];
-        const pickFromSelect = (selId, label, preferRe) => {
+        const isDateMaskInput = (el) => {
+          if (!el) return true;
+          const v = String(el.value || el.placeholder || '');
+          const id = `${el.id || ''} ${el.name || ''} ${el.className || ''} ${el.getAttribute?.('data-mask') || ''}`;
+          return /date|dob|born|__/i.test(id) || /_\/__\/____|mm\/dd\/yyyy/i.test(v) || el.type === 'date';
+        };
+        const pickFromSelect = (selId, label, preferRe, excludeRe = null) => {
           const sel = document.getElementById(selId);
           if (!sel) return null;
           const opts = Array.from(sel.options || []).filter((o) => {
@@ -3645,13 +3696,17 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             return t && v && v !== '00000000-0000-0000-0000-000000000000' && !/create-new|^select/i.test(t);
           });
           const preferred = preferRe
-            ? opts.find((o) => preferRe.test((o.textContent || '').trim()))
+            ? opts.find((o) => {
+              const t = (o.textContent || '').trim();
+              return preferRe.test(t) && !(excludeRe && excludeRe.test(t));
+            })
             : null;
           const opt = preferred
-            || opts.find((o) => !/^(000|001)\b|deductible|coinsurance/i.test((o.textContent || '').trim()))
+            || opts.find((o) => !/^(000|001)\b|deductible|coinsurance|59080|initial day labor/i.test((o.textContent || '').trim()))
             || opts[0];
           if (!opt) return null;
           sel.value = opt.value;
+          Array.from(sel.options || []).forEach((o) => { o.selected = o === opt; });
           sel.dispatchEvent(new Event('change', { bubbles: true }));
           try { window.$(sel).trigger('change'); } catch (_) { /* ignore */ }
           attempts.push({
@@ -3663,55 +3718,119 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           });
           return { text: (opt.textContent || '').trim().slice(0, 80), value: opt.value };
         };
-        // Birth money path: prefer delivery/global midwifery CPTs + delivery encounter ICD-10s.
-        let procedure = pickFromSelect(
-          'SearchService',
-          'SearchService',
-          /59409|59400|59431|delivery only|global midwifery|vaginal birth|vaginal delivery|labor management/i
-        );
-        let diagnosis = pickFromSelect(
-          'DignosticService',
-          'DignosticService',
-          /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
-        );
-        // Click first procedure/diagnosis row that has data-id / digSelectionProcess handler.
-        const clickFirst = (rootId, label) => {
-          const root = document.getElementById(rootId);
-          if (!root) return null;
-          const el = Array.from(root.querySelectorAll('[data-id], [onclick*="digSelection"], [onclick*="Selection"], tr, li, a'))
-            .find((node) => {
-              const t = (node.innerText || '').replace(/\s+/g, ' ').trim();
-              return t && !/no results/i.test(t) && ((node.getAttribute('data-id') || node.getAttribute('onclick') || '').length > 0);
-            });
-          if (!el) return null;
-          try {
-            if (typeof window.digSelectionProcess === 'function' && el.getAttribute('data-id')) {
-              window.digSelectionProcess(el);
-            } else {
-              el.click();
+        const clickAddNear = (anchorId, label) => {
+          const anchor = document.getElementById(anchorId);
+          const roots = [anchor, anchor?.closest('form, .panel, .card, .row, section, div'), document.body].filter(Boolean);
+          for (const root of roots) {
+            const btn = Array.from(root.querySelectorAll('button, input[type="button"], input[type="submit"], a, span[onclick], i[onclick]'))
+              .find((el) => {
+                const t = `${el.textContent || el.value || el.title || el.getAttribute('aria-label') || ''} ${el.className || ''}`.trim();
+                if (/remittance|era|payment|print|delete|remove|cancel/i.test(t)) return false;
+                return /^(add|\+)$/i.test(t) || /^add\s+(service|code|procedure|diagnosis|cpt|icd)/i.test(t) || /fa-plus|glyphicon-plus|icon-plus/i.test(t);
+              });
+            if (!btn) continue;
+            try {
+              btn.click();
+              attempts.push({ label, ok: true, text: (btn.textContent || btn.value || btn.className || 'add').toString().slice(0, 60) });
+              return true;
+            } catch (err) {
+              attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 100) });
             }
-            attempts.push({ label, ok: true, text: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80) });
-            return { text: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80) };
+          }
+          attempts.push({ label, ok: false, error: 'no_add_button' });
+          return false;
+        };
+        const callHelpers = (names, label) => {
+          for (const name of names) {
+            if (typeof window[name] !== 'function') continue;
+            try {
+              window[name]();
+              attempts.push({ label: `${label}:${name}`, ok: true });
+              return name;
+            } catch (err) {
+              attempts.push({ label: `${label}:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+            }
+          }
+          return null;
+        };
+        const clickFirst = (rootId, label, preferRe = null) => {
+          const root = document.getElementById(rootId);
+          if (!root) {
+            attempts.push({ label, ok: false, error: 'root_missing' });
+            return null;
+          }
+          const nodes = Array.from(root.querySelectorAll('[data-id], [data-text], [onclick*="digSelection"], [onclick*="Selection"], tr, li, a, button'));
+          const scored = nodes
+            .map((node) => {
+              const t = `${node.innerText || node.value || ''} ${node.getAttribute('data-text') || ''} ${node.getAttribute('data-id') || ''}`.replace(/\s+/g, ' ').trim();
+              if (!t || /no results/i.test(t)) return null;
+              if (!(node.getAttribute('data-id') || node.getAttribute('onclick') || node.tagName === 'TR')) return null;
+              const preferred = preferRe ? preferRe.test(t) : false;
+              return { node, t, preferred, dataId: node.getAttribute('data-id') };
+            })
+            .filter(Boolean);
+          const hit = (preferRe && scored.find((x) => x.preferred)) || scored[0];
+          if (!hit) {
+            attempts.push({ label, ok: false, error: 'no_clickable' });
+            return null;
+          }
+          // Tip: digSelectionProcess* inside evaluate can hang the CDP session forever.
+          // Only native click here; Node-side timeout wraps this evaluate.
+          try {
+            hit.node.click();
+            attempts.push({ label, ok: true, text: hit.t.slice(0, 80), dataId: hit.dataId });
+            return { text: hit.t.slice(0, 80), dataId: hit.dataId };
           } catch (err) {
             attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
             return null;
           }
         };
-        if (!procedure) procedure = clickFirst('procedure-codes-section', 'procedure_row');
-        if (!diagnosis) diagnosis = clickFirst('diagnosis-codes-section', 'diagnosis_row');
+
+        // Birth money path: delivery/global first — never prefer 59080 labor-day alone.
+        let procedure = pickFromSelect(
+          'SearchService',
+          'SearchService',
+          /59409|59400|59410|59431|delivery only|global midwifery|vaginal birth|vaginal delivery/i,
+          /59080|initial day labor/i
+        );
+        await new Promise((r) => setTimeout(r, 600));
+        // Do NOT click procedure/diagnosis list rows here — tip proved digSelection/native click can wedge CDP.
+        // Rely on SearchService/DignosticService change + updateBilling* + Daily Super Bill.
+        clickAddNear('SearchService', 'add_procedure');
+        callHelpers([
+          'addBillingService',
+          'AddBillingService',
+          'addServiceToChargeSlip',
+          'serviceSelectionProcess',
+          'updateBillingServiceRecord',
+        ], 'proc_helper');
+        let diagnosis = pickFromSelect(
+          'DignosticService',
+          'DignosticService',
+          /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
+        );
+        await new Promise((r) => setTimeout(r, 600));
+        clickAddNear('DignosticService', 'add_diagnosis');
+        callHelpers([
+          'addBillingDiagnosis',
+          'AddBillingDiagnosis',
+          'diagnosisSelectionProcess',
+          'updateBillingDiagonsticCodeRecord',
+          'updateBillingDiagnosticCodeRecord',
+        ], 'dx_helper');
         await new Promise((r) => setTimeout(r, 800));
-        // Tip: Save left ChargeSlipId empty — summary showed Mod/POS/Units blank. Fill required slip fields.
+
         const fillNearby = (needle, value) => {
           const labels = Array.from(document.querySelectorAll('label, span, td, th, div'));
           for (const lab of labels) {
             const t = (lab.textContent || '').trim();
-            if (!new RegExp(`^${needle}$`, 'i').test(t) && !new RegExp(`${needle}\\s*:`, 'i').test(t)) continue;
+            if (!new RegExp(`^${needle}$`, 'i').test(t) && !new RegExp(`^${needle}\\s*:$`, 'i').test(t)) continue;
             const root = lab.closest('tr, .form-group, .row, td, div') || lab.parentElement;
             const input = root?.querySelector('input, select');
-            if (!input) continue;
+            if (!input || isDateMaskInput(input)) continue;
             if (input.tagName === 'SELECT') {
               const opt = Array.from(input.options || []).find((o) => String(o.value) === String(value) || (o.textContent || '').includes(String(value)))
-                || Array.from(input.options || []).find((o) => /11|office/i.test(`${o.value} ${o.textContent || ''}`));
+                || Array.from(input.options || []).find((o) => new RegExp(`\\b${value}\\b|home|other`, 'i').test(`${o.value} ${o.textContent || ''}`));
               if (!opt) continue;
               input.value = opt.value;
             } else {
@@ -3723,16 +3842,38 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             attempts.push({ label: `fill_${needle}`, ok: true, value: String(input.value).slice(0, 40) });
             return true;
           }
+          attempts.push({ label: `fill_${needle}`, ok: false, error: 'no_safe_input' });
           return false;
         };
         fillNearby('Units', '1');
-        // Births are usually home/other facility — POS 12, not office 11.
         fillNearby('POS', '12');
-        fillNearby('Mod', '');
-        // Explicit common IDs if present.
+        // Fill blank Mod/POS/Units cells inside the charge slip summary grid (tip showed empty).
+        const summaryRoot = document.getElementById('ChargeSlipSummaryBase');
+        if (summaryRoot) {
+          const inputs = Array.from(summaryRoot.querySelectorAll('input, select'));
+          for (const input of inputs) {
+            if (isDateMaskInput(input)) continue;
+            const ctx = `${input.id || ''} ${input.name || ''} ${input.className || ''} ${(input.closest('td, th, div, label')?.textContent || '')}`.slice(0, 120);
+            let val = null;
+            if (/unit/i.test(ctx)) val = '1';
+            else if (/pos|place.?of.?service/i.test(ctx)) val = '12';
+            if (!val) continue;
+            if (input.tagName === 'SELECT') {
+              const opt = Array.from(input.options || []).find((o) => String(o.value) === val || new RegExp(`\\b${val}\\b`).test(o.textContent || ''));
+              if (!opt) continue;
+              input.value = opt.value;
+            } else {
+              input.value = val;
+            }
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
+            attempts.push({ label: 'summary_fill', ok: true, ctx: ctx.slice(0, 40), value: val });
+          }
+        }
         for (const [id, val] of [['Units', '1'], ['Unit', '1'], ['PlaceOfServiceCode', '12'], ['POS', '12'], ['PlaceOfService', '12']]) {
           const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
-          if (!el) continue;
+          if (!el || isDateMaskInput(el)) continue;
           el.value = val;
           el.dispatchEvent(new Event('change', { bubbles: true }));
           attempts.push({ label: `field_${id}`, ok: true, value: val });
@@ -3746,21 +3887,332 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         }
         await new Promise((r) => setTimeout(r, 800));
         const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
-        return { procedure, diagnosis, attempts, summary };
-      });
+        const lineRows = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service], #service-grid tr'))
+          .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 100))
+          .filter((t) => t && /594|590|O80|Z37|CPT|unit/i.test(t))
+          .slice(0, 8);
+        const helperNames = Object.getOwnPropertyNames(window)
+          .filter((n) => /^(add|save|update|create|change|select|refresh|dig)/i.test(n) && /billing|charge|slip|service|diagnos|Selection/i.test(n) && typeof window[n] === 'function')
+          .slice(0, 40);
+        const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80);
+        return {
+          procedure,
+          diagnosis,
+          attempts,
+          summary,
+          lineRows,
+          helperNames,
+          fullNameText,
+          patientStillBound: Boolean(fullNameText && !/please select/i.test(fullNameText)),
+        };
+      }, undefined, 60000);
+      } catch (err) {
+        codesSelected = {
+          procedure: null,
+          diagnosis: null,
+          attempts: [{ label: 'codes_evaluate', ok: false, error: String(err?.message || err).slice(0, 160) }],
+          error: String(err?.message || err).slice(0, 200),
+        };
+      }
       await sleep(800);
 
-      // Daily Super bill is an alternate create path when lists stay empty.
+      // If code selection wiped patient context, re-bind visit row before Save.
+      if (codesSelected && codesSelected.patientStillBound === false && visitList?.match?.pregnancyId) {
+        const rebind = await session.page.evaluate((wantId) => {
+          const rows = Array.from(document.querySelectorAll('tr, li, a, div'));
+          const row = rows.find((el) => {
+            const onclick = el.getAttribute('onclick') || '';
+            const text = (el.innerText || '').replace(/\s+/g, ' ');
+            return (wantId && (onclick.includes(wantId) || text.toLowerCase().includes(String(wantId).slice(0, 8).toLowerCase())))
+              || (typeof window.selectClick === 'function' && /selectClick\(this\)/i.test(onclick));
+          });
+          if (!row) return { ok: false };
+          try {
+            if (typeof window.selectClick === 'function') window.selectClick(row);
+            else row.click();
+            return { ok: true, name: (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80) };
+          } catch (err) {
+            return { ok: false, error: String(err?.message || err).slice(0, 120) };
+          }
+        }, visitList.match.pregnancyId);
+        codesSelected.rebindBeforeSave = rebind;
+        await sleep(1200);
+      }
+
+      // Daily Super Bill → SuperBillReport (tip: openReportItems → /Billing/SuperBillReport?FromDate=).
+      // Prefer same-tab navigate — popup CDP (browser.pages) wedged tip mid-run.
       let dailySuperBill = { clicked: false };
-      if (!codesSelected?.procedure && !codesSelected?.diagnosis) {
-        dailySuperBill = await session.page.evaluate(() => {
-          const btn = Array.from(document.querySelectorAll('button, input[type="button"], a'))
-            .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
-          if (!btn) return { clicked: false };
-          btn.click();
-          return { clicked: true };
+      const reportDate = matchedDate || visitDate || null;
+      dailySuperBill = await session.page.evaluate(() => {
+        const btn = Array.from(document.querySelectorAll('button, input[type="button"], a, span'))
+          .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
+        if (!btn) return { clicked: false, present: false };
+        return {
+          clicked: false,
+          present: true,
+          text: (btn.textContent || btn.value || '').trim().slice(0, 40),
+          onclick: (btn.getAttribute?.('onclick') || '').slice(0, 200),
+          deferred: true,
+        };
+      });
+      if (reportDate) {
+        const reportUrl = `${origin}/Billing/SuperBillReport?FromDate=${encodeURIComponent(reportDate)}`;
+        const reportNav = await gotoWithBudget(session.page, reportUrl, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
         });
-        if (dailySuperBill.clicked) await sleep(2500);
+        dailySuperBill.reportNav = { ok: reportNav.ok, url: reportUrl, error: reportNav.error || null };
+        if (reportNav.ok) {
+          dailySuperBill.clicked = true;
+          dailySuperBill.path = 'direct_SuperBillReport';
+          await sleep(2000);
+          for (let w = 0; w < 8; w += 1) {
+            const loading = await session.page.evaluate(() => /Loading\s*\.{0,3}/i.test(document.body?.innerText || ''));
+            if (!loading) break;
+            await sleep(750);
+          }
+          const inventory = await session.page.evaluate(() => {
+            const visible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
+            const navNoise = /home|clients|schedule|reports|sign out|create new client|english|spanish|help center|terms|privacy|my profile/i;
+            const buttons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+              .filter(visible)
+              .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => t && t.length < 60 && !navNoise.test(t))
+              .slice(0, 40);
+            const inputs = Array.from(document.querySelectorAll('input, select, textarea'))
+              .filter(visible)
+              .map((el) => ({
+                id: el.id || null,
+                name: el.name || null,
+                type: el.type || null,
+                value: String(el.value || '').slice(0, 40),
+              }))
+              .slice(0, 30);
+            const helpers = Object.getOwnPropertyNames(window)
+              .filter((n) => /super|claim|bill|create|generate|filter|report/i.test(n) && typeof window[n] === 'function')
+              .slice(0, 40);
+            const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, .k-master-row'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => t && t.length < 220)
+              .slice(0, 20);
+            return {
+              url: location.href,
+              title: document.title || null,
+              buttons,
+              inputs,
+              helpers,
+              rows,
+              preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 900),
+            };
+          });
+          dailySuperBill.inventory = inventory;
+
+          let interact = { attempts: [], error: 'not_run' };
+          try {
+            interact = await evaluateWithTimeout(session.page, (wantDate) => {
+            const attempts = [];
+            const visible = (el) => {
+              if (!el) return false;
+              const s = window.getComputedStyle(el);
+              if (s.display === 'none' || s.visibility === 'hidden') return false;
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.height > 0;
+            };
+            const navNoise = /^(home|clients|schedule|reports|wrm|cora|help|sign out|english|spanish|french|italian|german|portuguese|russian|dutch|ukrainian|text messages|back|send|terms|privacy|front desk|new note|create new client|view client list|manage account|practice management|employee log|my profile|billing slip|record insurance|review sent|review all faxes)$/i;
+            // Prefer row-level claim create: Invoice / HCFA / UB-04 on the matched patient line.
+            const claimLinks = Array.from(document.querySelectorAll('a, button, input[type="button"], span, td'))
+              .filter(visible)
+              .filter((el) => /^(invoice|hcfa|ub-?04)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                || /invoice|hcfa|ub-?04|create\s*claim/i.test(el.getAttribute?.('onclick') || ''));
+            if (claimLinks.length) {
+              const prefer = claimLinks.find((el) => /^hcfa$/i.test((el.textContent || '').trim()))
+                || claimLinks.find((el) => /^invoice$/i.test((el.textContent || '').trim()))
+                || claimLinks[0];
+              prefer.click();
+              attempts.push({
+                label: 'claim_link',
+                ok: true,
+                text: (prefer.textContent || prefer.value || '').trim().slice(0, 40),
+                count: claimLinks.length,
+              });
+            }
+            for (const name of [
+              'createClaims',
+              'CreateClaims',
+            ]) {
+              if (typeof window[name] !== 'function') continue;
+              try {
+                window[name]();
+                attempts.push({ label: `helper:${name}`, ok: true });
+                break;
+              } catch (err) {
+                attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+              }
+            }
+            // Do NOT call openwindowSuperBilling / filterRecords here — tip CDP wedged on bare helpers.
+            if (wantDate) {
+              for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
+                if (/radio|checkbox|hidden|submit|button/i.test(el.type || '')) continue;
+                const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.className || ''}`;
+                if (/lmp|dob|birth|born|rdo|sms|message|filtertext/i.test(ctx)) continue;
+                if (!/date|from|to|dos|service|visit|bill/i.test(ctx)) continue;
+                el.focus();
+                el.value = String(wantDate);
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+                try { window.$(el).trigger('change'); } catch (_) { /* ignore */ }
+                attempts.push({ label: 'fill_date', ok: true, id: el.id || el.name || null, value: String(wantDate) });
+                break;
+              }
+            }
+            // Only click Filter/Search if no claim link fired.
+            if (!attempts.some((a) => a.label === 'claim_link' && a.ok)) {
+              const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .filter(visible)
+                .map((el) => {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                  let score = 0;
+                  if (/create\s*claim|generate\s*claim|create\s*super|post\s*claim|build\s*claim/i.test(t)) score += 100;
+                  if (/^(invoice|hcfa|ub-?04)$/i.test(t)) score += 90;
+                  if (/filter|search|apply|run\s*report|refresh|load/i.test(t)) score += 40;
+                  if (navNoise.test(t) || /create new client/i.test(t)) score -= 200;
+                  return { el, t, score };
+                })
+                .filter((x) => x.t && x.score > 0)
+                .sort((a, b) => b.score - a.score);
+              if (ranked[0]) {
+                ranked[0].el.click();
+                attempts.push({ label: 'click_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+              } else {
+                attempts.push({ label: 'click_action', ok: false, error: 'no_report_action' });
+              }
+            }
+            const checks = Array.from(document.querySelectorAll('input[type="checkbox"]')).filter(visible);
+            let checked = 0;
+            for (const c of checks.slice(0, 25)) {
+              if (!c.checked) { c.click(); checked += 1; }
+            }
+            if (checks.length) attempts.push({ label: 'checkboxes', ok: true, total: checks.length, checked });
+            return {
+              attempts,
+              url: location.href,
+              preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+              deniseRow: (document.body.innerText || '').match(/Denise[^.]{0,120}/i)?.[0] || null,
+            };
+          }, reportDate, 45000);
+          } catch (err) {
+            interact = { attempts: [], error: String(err?.message || err).slice(0, 160) };
+          }
+          dailySuperBill.interact = interact;
+          await sleep(2500);
+          dailySuperBill.afterReport = await session.page.evaluate(() => ({
+            url: location.href,
+            preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+            rows: Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /59400|59409|claim|alvarado|denise|\$\d|invoice|hcfa/i.test(t))
+              .slice(0, 12),
+            claimLinks: Array.from(document.querySelectorAll('a, button'))
+              .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /^(invoice|hcfa|ub-?04)$/i.test(t))
+              .slice(0, 10),
+          }));
+
+          // Prove claim create from report without needing ChargeSlip Save.
+          try {
+            const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+              timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+            });
+            if (billsNav.ok) {
+              await sleep(2000);
+              dailySuperBill.sentBillsProbe = await session.page.evaluate((wantName) => {
+                const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+                const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 3) || '';
+                return {
+                  checked: true,
+                  noItems: /no items to display|no records|no data/i.test(text),
+                  nameHit: Boolean(needle && text.toLowerCase().includes(needle)),
+                  preview: text.slice(0, 400),
+                };
+              }, visitList?.match?.name || patientQuery || 'Alvarado');
+            } else {
+              dailySuperBill.sentBillsProbe = { checked: false, error: billsNav.error };
+            }
+          } catch (err) {
+            dailySuperBill.sentBillsProbe = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
+        }
+
+        // Return to ChargeSlip and rebind patient for Save / persist proof.
+        const backQs = pregnancyId ? `?pregnancyId=${encodeURIComponent(pregnancyId)}` : '';
+        const backNav = await gotoWithBudget(session.page, `${origin}/Company/ChargeSlip${backQs}`, {
+          timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+        });
+        dailySuperBill.backToChargeSlip = { ok: backNav.ok, error: backNav.error || null };
+        if (backNav.ok) {
+          await sleep(1500);
+          await dismissSessionTakeover(session.page);
+          if (reportDate) {
+            await session.page.evaluate((rawDate) => {
+              const input = document.querySelector('input[name="DateFilter"]')
+                || Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+              if (!input) return;
+              input.value = String(rawDate);
+              input.dispatchEvent(new Event('input', { bubbles: true }));
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+            }, reportDate);
+            await sleep(500);
+          }
+          // Re-fetch visit list and selectClick DOM row (same binder as initial map).
+          if (visitList?.match?.pregnancyId) {
+            const rebind = await session.page.evaluate(async ({ providerId, dateSelection, wantPregnancyId }) => {
+              const pid = providerId || '00000000-0000-0000-0000-000000000000';
+              const date = dateSelection || '';
+              try {
+                const url = `/Company/SearchBillingSlipPregnancyList?PrividerId=${encodeURIComponent(pid)}&DateSelection=${encodeURIComponent(date)}&_=${Date.now()}`;
+                const res = await fetch(url, { credentials: 'same-origin' });
+                const data = await res.json();
+                const rows = Array.isArray(data) ? data : (data?.Data || data?.data || []);
+                const match = (rows || []).find((r) => String(r.PregnancyID || r.PregnancyId || '').toLowerCase() === String(wantPregnancyId).toLowerCase());
+                const rowEl = Array.from(document.querySelectorAll('tr, li, a, div')).find((el) => {
+                  const onclick = el.getAttribute('onclick') || '';
+                  return wantPregnancyId && onclick.includes(wantPregnancyId);
+                }) || Array.from(document.querySelectorAll('[onclick*="selectClick"]')).find((el) => /selectClick\(this\)/i.test(el.getAttribute('onclick') || ''));
+                if (rowEl && typeof window.selectClick === 'function') {
+                  window.selectClick(rowEl);
+                } else if (match && typeof window.selectClick === 'function') {
+                  // Last resort: click any selectClick(this) row whose text mentions the name.
+                  const name = String(match.FullName || '').split(',')[0].trim();
+                  const byName = Array.from(document.querySelectorAll('[onclick*="selectClick"]')).find((el) => (el.innerText || '').includes(name));
+                  if (byName) window.selectClick(byName);
+                  else return { ok: false, error: 'no_dom_row', matchName: name || null };
+                } else {
+                  return { ok: false, error: 'no_row_or_selectClick', hasMatch: Boolean(match) };
+                }
+                await new Promise((r) => setTimeout(r, 800));
+                const name = (document.getElementById('FullNameText')?.textContent || '').trim();
+                return {
+                  ok: Boolean(name && !/please select/i.test(name)),
+                  name: name.slice(0, 80),
+                  matchName: match?.FullName || null,
+                };
+              } catch (err) {
+                return { ok: false, error: String(err?.message || err).slice(0, 120) };
+              }
+            }, {
+              providerId: providerSet?.value || null,
+              dateSelection: reportDate,
+              wantPregnancyId: visitList.match.pregnancyId,
+            });
+            dailySuperBill.rebindAfter = rebind;
+            await sleep(800);
+          }
+        }
       }
 
       const map = await session.page.evaluate((wantName) => {
@@ -3806,8 +4258,20 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       let saveResult = { attempted: false };
       let persistCheck = null;
       if (!dryRun) {
-        if (!boundOk) {
-          saveResult = { attempted: false, blocked: true, reason: 'fail_closed_wrong_or_missing_patient' };
+        const preSavePatient = await session.page.evaluate(() => {
+          const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+          return {
+            fullNameText: fullNameText.slice(0, 80),
+            ok: Boolean(fullNameText && !/please select/i.test(fullNameText) && /[A-Za-z]{2,}/.test(fullNameText)),
+          };
+        });
+        if (!boundOk || !preSavePatient.ok) {
+          saveResult = {
+            attempted: false,
+            blocked: true,
+            reason: 'fail_closed_patient_missing_before_save',
+            preSavePatient,
+          };
         } else if (!codesSelected?.procedure && !codesSelected?.diagnosis && !dailySuperBill?.clicked) {
           saveResult = { attempted: false, blocked: true, reason: 'no_procedure_or_diagnosis_selected' };
         } else {
@@ -3869,15 +4333,89 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
             const body = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
             const errorBits = (body.match(/(please select|required|error[^\.]{0,80}|cannot save[^\.]{0,80})/ig) || []).slice(0, 5);
+            const lineHints = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service]'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /59400|59409|59080|O80|Z37|\$\d/.test(t))
+              .slice(0, 8);
+            // ChargeSlipId is the CARE TYPE select (Intrapartum GUID) — not a durable slip id.
+            const careTypeOnly = /intrapartum|antepartum|postpartum|care/i.test(chargeText);
             return {
               chargeSlipValue: chargeVal,
               chargeSlipText: chargeText.slice(0, 80),
+              careTypeOnly,
               nonZeroChargeSlip: Boolean(chargeVal && chargeVal !== '00000000-0000-0000-0000-000000000000'),
+              lineHints,
               summary,
               errorBits,
               url: location.href,
             };
           });
+          // Prove persist via Review Sent Bills AND patient billing chart (Sent Bills may only show filed claims).
+          let sentBills = { checked: false };
+          let chartCharges = { checked: false };
+          try {
+            const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+              timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+            });
+            if (billsNav.ok) {
+              await sleep(2000);
+              sentBills = await session.page.evaluate((wantName) => {
+                const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+                const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 3) || '';
+                const noItems = /no items to display|no records|no data/i.test(text);
+                const hit = needle && text.toLowerCase().includes(needle);
+                const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+                  .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                  .filter((t) => t && needle && t.toLowerCase().includes(needle))
+                  .slice(0, 5);
+                return {
+                  checked: true,
+                  noItems,
+                  nameHit: Boolean(hit),
+                  rows,
+                  preview: text.slice(0, 400),
+                };
+              }, visitList?.match?.name || patientQuery || 'Alvarado');
+            } else {
+              sentBills = { checked: false, error: billsNav.error };
+            }
+          } catch (err) {
+            sentBills = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
+          if (pregnancyId) {
+            try {
+              const chartNav = await gotoWithBudget(session.page, `${origin}/Pregnancy/Billing/${encodeURIComponent(pregnancyId)}`, {
+                timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+              });
+              if (chartNav.ok) {
+                await sleep(1500);
+                await dismissSessionTakeover(session.page);
+                await session.page.evaluate(() => {
+                  const tab = document.querySelector('a[href*="#tabs-billing"], a[href*="tabs-billing"], [data-toggle="tab"][href*="billing"]');
+                  if (tab) tab.click();
+                });
+                await sleep(2000);
+                chartCharges = await session.page.evaluate(() => {
+                  const text = (document.body.innerText || '').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, ' ').replace(/\s+/g, ' ').trim();
+                  const has594 = /59400|59409|59080/i.test(text);
+                  const hasO80 = /\bO80\b/i.test(text);
+                  const chargeHints = (text.match(/.{0,40}(59400|59409|59080|charge slip|billed|\$\d[\d,]*)\.{0,40}/gi) || []).slice(0, 8);
+                  return {
+                    checked: true,
+                    has594,
+                    hasO80,
+                    chargeHints,
+                    preview: text.slice(0, 500),
+                  };
+                });
+              } else {
+                chartCharges = { checked: false, error: chartNav.error };
+              }
+            } catch (err) {
+              chartCharges = { checked: false, error: String(err?.message || err).slice(0, 120) };
+            }
+          }
+          persistCheck = { ...persistCheck, sentBills, chartCharges };
           saveResult = { ...saveResult, persistCheck };
         }
       }
@@ -3911,11 +4449,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           ? (codesSelected?.procedure || codesSelected?.diagnosis || dailySuperBill?.clicked
             ? (dryRun !== false
               ? 'Patient + codes ready — re-run dry_run=false to Save.'
-              : (persistCheck?.nonZeroChargeSlip
-                ? 'ChargeSlip persisted (non-zero ChargeSlipId) — verify Review Sent Bills / HCFA next.'
-                : (saveResult.attempted
-                  ? 'Save attempted but ChargeSlipId still empty — capture validation/dialogs; may need line-item Add before Save or Daily Super Bill path.'
-                  : (saveResult.blocked || 'Save blocked/missing.'))))
+              : (persistCheck?.sentBills?.nameHit || persistCheck?.chartCharges?.has594
+                ? 'PROVED: charge evidence on Sent Bills and/or patient billing chart after Save — continue HCFA/submit.'
+                : (persistCheck?.sentBills?.noItems && !persistCheck?.chartCharges?.has594
+                  ? 'Save ran but Sent Bills empty and billing chart shows no 594xx — line apply still incomplete.'
+                  : (saveResult.attempted
+                    ? 'Save attempted — inspect persistCheck.sentBills + chartCharges + lineHints.'
+                    : (saveResult.blocked || 'Save blocked/missing.')))))
             : 'Patient bound but no procedure/diagnosis hydrated — inspect codesMap; may need fee-schedule seeding.')
           : (visitList?.match?.pregnancyId
             ? 'Visit row found but ChargeSlip #FullNameText still empty — call selectClick(rowEl) only (not API raw).'
