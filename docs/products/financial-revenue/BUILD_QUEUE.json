@@ -75,10 +75,13 @@
       "spec": "Implement the daily revenue report service to send SMS/email",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "sendDailyRevenueReport"
-      ]
+      ],
+      "last_attempt_at": "2026-07-14T21:36:53.379Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "5",
