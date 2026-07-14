@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Sales-first doctrine: industry buyer psychology + dual-sale midwifery shell (why home birth → why this midwife). |
+| **Last Updated** | 2026-07-14 — Dual-path sales (not forced sequence): decided visitors → why this midwife; curious → why home birth → book or why midwife. |
 
 ---
 
@@ -23,7 +23,7 @@ Done-for-you website builder for wellness/health businesses. Scrapes a prospect'
 
 **Mission statement:** Find businesses with bad websites → build their dream site in 2 minutes → email them the link → close the deal.
 
-**Sales-first law (founder, 2026-07-14):** A website is not an ego page. It exists to sell the product/service. Before any industry layout ships, Site Builder must answer: who is the client, why they seek this, fears, benefits, reluctant-buyer friction — then run the **dual sale** when the category itself needs selling (e.g. midwifery: (1) why home birth, (2) why this midwife). Builder OS wins by being the best at sales psychology on the page, not by prettier decoration.
+**Sales-first law (founder, 2026-07-14):** A website is not an ego page. It exists to sell the product/service. Before any industry layout ships, Site Builder must answer: who is the client, why they seek this, fears, benefits, reluctant-buyer friction — then offer the **dual path** when the category itself can need selling (e.g. midwifery: why home birth AND why this midwife). Do not force a sequence — many visitors already know they want the category and only need WHO; others are curious first and may book after category or still need the provider sale. Builder OS wins by being the best at sales psychology on the page, not by prettier decoration.
 
 ## Readiness state
 
@@ -306,6 +306,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-14 | **Dual-path midwifery (not forced sequence).** Hero leads with Why this midwife (decided visitors); Curious about home birth? is the other path; after category, bridge to book or why midwife. Pack copy updated. | Adam: many already know why home birth — they need WHO; both paths not always needed. | ✅ local | tip rebuild |
 | 2026-07-14 | **Sales-first dual-sale midwifery.** New `config/site-builder-industry-sales.js` (who/fears/benefits/reluctant buyer + category vs provider sale). Midwifery layouts use `shellMidwiferyDualSale` with two hero CTAs: Why home birth / Why this midwife. Product home Mission now states websites sell — not ego. | Adam: websites exist to sell; Builder OS must be best at sales psychology; home birth needs two sales. | ✅ local smoke | tip rebuild Sherry |
 | 2026-07-14 | **Owned photos first + unique paid shells.** (1) Asset ingestion ranks Instagram → site JPGs → other CDN; Flux only if zero owned photos. (2) Extract Wix/HTML CDN URLs, not just markdown images. (3) Paid designs get their own layout shells (soft-pastel, retro-warm, local-trust, artisan-heritage, urban-gold, refined-brutalist, agentic) instead of remapping onto free shells. (4) Layouts use photo strips + service photos from their gallery. | Adam: paid/older variants still unoriginal; don't spend on AI photos when their website/IG already have photos they like. | ✅ local smoke | tip rebuild Sherry |
 | 2026-07-14 | **Variant sameness fix.** (1) New `config/design-studio-layouts.js` — hand-authored structurally distinct layout shells (editorial split, clinical, organic blobs, bold type, true dark, coastal panel, swiss grid, bento). (2) `buildVariants` defaults to shells (`useAiLayouts: true` restores old AI HTML). (3) Asset ingestion no longer treats logo PNGs as heroes; Flux hero fills when no real photo remains. (4) Stronger design-token CSS remaps for stone/slate. | Adam: Sherry preview designs terrible and nearly identical — not taste, a pipeline glitch. | ✅ `node --check` + local shell smoke | tip rebuild after deploy |

@@ -6,10 +6,11 @@
  */
 
 /**
- * Dual-sale rule (founder, 2026-07-14):
- * 1) Sell the CATEGORY (why home birth / why this kind of care)
- * 2) Sell THIS PROVIDER (why hire this midwife / practice)
- * Never collapse those into one generic wellness pitch.
+ * Dual-path sales rule (founder, 2026-07-14):
+ * Offer BOTH category sale and provider sale — but do not force a sequence.
+ * Many visitors already know they want home birth; they need WHO to hire.
+ * Others are curious about home birth first; after that they may book directly
+ * or still need "why this midwife." Meet the visitor where they are.
  */
 
 export const INDUSTRY_SALES_PACKS = {
@@ -42,19 +43,20 @@ export const INDUSTRY_SALES_PACKS = {
       'First-time parents who need permission to ask hard questions',
     ],
     categorySale: {
-      eyebrow: 'First sale',
+      eyebrow: 'If you are still exploring',
       title: 'Why home birth',
-      blurb: 'Safety, benefits, and who it is for — before you pick a midwife.',
-      cta: 'Why home birth',
+      blurb: 'Curious about home birth? Benefits, safety questions, and who it is for.',
+      cta: 'Curious about home birth?',
       anchor: 'why-home-birth',
+      nextAfter: 'If that sounds like your birth — meet this midwife next, or book a consult.',
       sections: [
         {
-          heading: 'The fear underneath every consult',
-          body: 'People do not hire a home-birth midwife because birth is trendy. They hire because they want their baby and their body safe — and they want a care model that treats them as the decision-maker. Safety questions belong on the homepage, not buried in FAQ.',
+          heading: 'The fear underneath',
+          body: 'People do not hire a home-birth midwife because birth is trendy. They hire because they want their baby and their body safe — and a care model that treats them as the decision-maker.',
         },
         {
-          heading: 'What “safe enough” actually means',
-          body: 'Home birth for screened, low-risk pregnancies with a qualified midwife includes ongoing assessment, clear transfer criteria, and a plan for hospital backup. The honest sales move is not “zero risk.” It is “here is how risk is watched, and here is what we do if the picture changes.”',
+          heading: 'What “safe enough” means',
+          body: 'Screened, low-risk pregnancies with a qualified midwife include ongoing assessment, clear transfer criteria, and hospital backup. Honest sales is not “zero risk.” It is “here is how risk is watched.”',
         },
         {
           heading: 'Why families seek this out',
@@ -63,9 +65,9 @@ export const INDUSTRY_SALES_PACKS = {
       ],
     },
     providerSale: {
-      eyebrow: 'Second sale',
+      eyebrow: 'If you already know you want home birth',
       title: 'Why this midwife',
-      blurb: 'Credentials, presence, and the specific reasons to hire this practice.',
+      blurb: 'Already decided on home birth? Here is who you would hire — and why.',
       cta: 'Why this midwife',
       anchor: 'why-this-midwife',
       promptQuestions: [
@@ -76,9 +78,11 @@ export const INDUSTRY_SALES_PACKS = {
         'What do real clients say — in their own words?',
       ],
     },
-    heroPrimaryCta: { label: 'Why home birth', href: '#why-home-birth' },
-    heroSecondaryCta: { label: 'Why this midwife', href: '#why-this-midwife' },
+    // Decided visitors are the common midwife-site traffic — lead with WHO.
+    heroPrimaryCta: { label: 'Why this midwife', href: '#why-this-midwife', path: 'decided' },
+    heroSecondaryCta: { label: 'Curious about home birth?', href: '#why-home-birth', path: 'curious' },
     bookCta: { label: 'Book a free consult', href: null },
+    heroLead: 'Already know you want home birth? Meet who you would hire. Still exploring the idea? Start there — then book if it fits.',
   },
 };
 
