@@ -705,6 +705,32 @@
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T13:48:08.140Z",
       "commit_sha": "fba2d238473d1b32ba38e1aeec14e5a18a1a2320"
+    },
+    {
+      "id": "4",
+      "status": "pending",
+      "target_file": "services/lifeos-ai-photo-food-logger.js",
+      "task": "implement ai photo food logger",
+      "spec": "Build service for AI-driven photo food logging integrated with nutrition data.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "logFoodWithPhoto"
+      ]
+    },
+    {
+      "id": "8",
+      "status": "founder_gated",
+      "target_file": "services/lifeos-crisis-language-detector.js",
+      "task": "implement crisis language detector",
+      "spec": "Service to detect crisis language from user inputs, integrating with Amendment 28.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0,
+      "expected_exports": [
+        "detectCrisisLanguage"
+      ]
     }
   ],
   "updated_at": "2026-07-14",
