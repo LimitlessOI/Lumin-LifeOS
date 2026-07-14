@@ -26,11 +26,22 @@ const OPTIONAL_WITH_WARNINGS = [
   { key: 'REDIS_URL', desc: 'BullMQ will use in-memory (not persistent)', feature: 'Queue' },
 ];
 
+function envPresent(key) {
+  if (String(process.env[key] || '').trim()) return true;
+  if (key === 'REPLICATE_API_TOKEN' && String(process.env.REPLICATE_API || '').trim()) return true;
+  return false;
+}
+
 export function validateEnv(logger) {
+  // Accept founder short-name REPLICATE_API as REPLICATE_API_TOKEN
+  if (!String(process.env.REPLICATE_API_TOKEN || '').trim() && String(process.env.REPLICATE_API || '').trim()) {
+    process.env.REPLICATE_API_TOKEN = process.env.REPLICATE_API;
+  }
+
   const missing = [];
 
   for (const { key, desc } of REQUIRED) {
-    if (!process.env[key]) {
+    if (!envPresent(key)) {
       missing.push(`  ❌ ${key} — ${desc}`);
     }
   }
@@ -44,7 +55,7 @@ export function validateEnv(logger) {
 
   const warnings = [];
   for (const { key, desc, feature } of OPTIONAL_WITH_WARNINGS) {
-    if (!process.env[key]) {
+    if (!envPresent(key)) {
       warnings.push({ key, desc, feature });
     }
   }

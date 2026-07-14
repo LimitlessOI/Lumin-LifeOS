@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Replicate env alias: REPLICATE_API → REPLICATE_API_TOKEN
+
+Adam set Railway var as `REPLICATE_API` (not `REPLICATE_API_TOKEN`). Tip health still `replicateConfigured:false`. Fix: `applyEnvAliases()` in `config/runtime-env.js` + env-validator / registry health / provider-key-health accept the short name. Prefer renaming to `REPLICATE_API_TOKEN` when convenient; alias keeps graphics/video live either way.
+
 ## 2026-07-14 — Creative Engine graphic_design mode (Ideogram/Recraft/Flux via Replicate) — real AI graphics for SMOS + Site Builder
 
 Adam: "we don't have [good graphics] and I don't have the time or patience... if it's affordable that we can use it, let's incorporate it into our system." Researched the market: Ideogram v3 ($0.03/img, best text-in-image), Recraft v3 ($0.04-0.08/img, native SVG vector/brand kits), Flux 2 Pro ($0.055/img, photorealism) — all reachable through the Replicate account this repo already holds (used for Kling/Wan video), so no new vendor relationship needed. Adam approved and flagged: Cursor/Grok 4.5 is concurrently improving SocialMediaOS, and Site Builder needs this badly.

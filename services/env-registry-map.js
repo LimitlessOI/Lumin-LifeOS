@@ -43,7 +43,8 @@ export const ENV_REGISTRY = [
   { name: "OPENROUTER_MODEL",    status: "RETIRED",    category: "ai",       purpose: "OpenRouter model override — unused" },
   { name: "PERPLEXITY_API_KEY",  status: "OPTIONAL",   category: "ai",       purpose: "Perplexity — web-search-grounded answers" },
   { name: "BRAVE_SEARCH_API_KEY",status: "OPTIONAL",   category: "ai",       purpose: "Brave Search — web intelligence" },
-  { name: "REPLICATE_API_TOKEN", status: "SET",        category: "ai",       purpose: "Replicate — Kling/Wan video generation" },
+  { name: "REPLICATE_API_TOKEN", status: "NEEDED",     category: "ai",       purpose: "Replicate — Ideogram/Recraft/Flux graphics + Kling/Wan video (alias: REPLICATE_API)" },
+  { name: "REPLICATE_API",       status: "DEPRECATED", category: "ai",       purpose: "Founder short-name — aliased to REPLICATE_API_TOKEN at boot" },
   { name: "GEMINI_MODEL",        status: "OPTIONAL",   category: "ai",       purpose: "Override Gemini model name" },
 
   // ── Database ─────────────────────────────────────────────────────────────────
@@ -214,9 +215,21 @@ export const ENV_REGISTRY = [
  * Compares registry expected status against what's actually in process.env.
  * No Railway API call needed — Railway injects all vars at boot time.
  */
+const ENV_PRESENT_ALIASES = {
+  REPLICATE_API_TOKEN: ['REPLICATE_API'],
+};
+
+function isEnvPresent(name) {
+  if (String(process.env[name] || '').trim()) return true;
+  for (const alias of ENV_PRESENT_ALIASES[name] || []) {
+    if (String(process.env[alias] || '').trim()) return true;
+  }
+  return false;
+}
+
 export function getRegistryHealth() {
   const results = ENV_REGISTRY.map((entry) => {
-    const present = Boolean(process.env[entry.name]);
+    const present = isEnvPresent(entry.name);
     let healthStatus;
 
     if (entry.status === "DEPRECATED") {

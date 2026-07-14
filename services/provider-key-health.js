@@ -144,7 +144,7 @@ export const PROVIDERS = [
     probe: openAiCompatibleProbe('https://api.fireworks.ai/inference/v1', 'accounts/fireworks/models/llama-v3p1-8b-instruct'),
   },
   {
-    id: 'replicate', label: 'Replicate', envVars: ['REPLICATE_API_TOKEN'],
+    id: 'replicate', label: 'Replicate', envVars: ['REPLICATE_API_TOKEN', 'REPLICATE_API'],
     billingUrl: 'https://replicate.com/account/billing',
     probe: async (key) => {
       const res = await timedFetch('https://api.replicate.com/v1/account', { headers: { authorization: `Bearer ${key}` } });

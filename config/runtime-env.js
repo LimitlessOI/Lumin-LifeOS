@@ -46,8 +46,26 @@ export function refreshBuilderOsEnvFallback() {
   return applyBuilderOsEnv(raw, { override: false });
 }
 
+/**
+ * Founder sometimes names Railway secrets short (e.g. REPLICATE_API).
+ * Canonical code reads REPLICATE_API_TOKEN — copy aliases here once at boot.
+ */
+export function applyEnvAliases() {
+  const aliases = [
+    ['REPLICATE_API_TOKEN', 'REPLICATE_API'],
+  ];
+  for (const [canonical, alias] of aliases) {
+    const haveCanonical = String(process.env[canonical] || '').trim();
+    const haveAlias = String(process.env[alias] || '').trim();
+    if (!haveCanonical && haveAlias) {
+      process.env[canonical] = haveAlias;
+    }
+  }
+}
+
 export function loadRuntimeEnv() {
   loadBuilderOsEnvFallback();
+  applyEnvAliases();
   const {
     DATABASE_URL,
     DATABASE_URL_SANDBOX,

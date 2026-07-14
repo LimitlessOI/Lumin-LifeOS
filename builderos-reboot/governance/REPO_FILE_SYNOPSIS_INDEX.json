@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T06:43:10.181Z",
+  "generated_at": "2026-07-14T06:50:48.237Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11519,
   "files": [
@@ -30739,9 +30739,9 @@
     {
       "path": "config/runtime-env.js",
       "synopsis": "Exports loadRuntimeEnv — config/runtime-env.js. @ssot docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)",
-      "bytes": 10312,
-      "mtime": "2026-07-03T18:55:11.553Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 10873,
+      "mtime": "2026-07-14T06:49:48.215Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z",
       "ssot": [
         "docs/products/ai-council/PRODUCT_HOME.md — council/env overlap (Ollama policy, spend caps)"
       ]
@@ -36916,9 +36916,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 536573,
-      "mtime": "2026-07-14T06:35:56.597Z",
-      "indexed_at": "2026-07-14T06:36:08.457Z"
+      "bytes": 537000,
+      "mtime": "2026-07-14T06:49:54.847Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -37681,9 +37681,9 @@
     {
       "path": "docs/ENV_REGISTRY.md",
       "synopsis": "ENV_REGISTRY.md — Environment Variable Registry",
-      "bytes": 39187,
-      "mtime": "2026-07-14T06:42:58.641Z",
-      "indexed_at": "2026-07-14T06:43:10.181Z"
+      "bytes": 39210,
+      "mtime": "2026-07-14T06:49:52.128Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z"
     },
     {
       "path": "docs/ENVIRONMENT_SETUP.md",
@@ -38879,9 +38879,9 @@
     {
       "path": "docs/products/ai-council/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — AI Council",
-      "bytes": 50824,
-      "mtime": "2026-07-10T11:50:27.120Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 51167,
+      "mtime": "2026-07-14T06:50:22.773Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z"
     },
     {
       "path": "docs/products/ai-receptionist/FILE_MANIFEST.json",
@@ -39016,9 +39016,9 @@
     {
       "path": "docs/products/builderos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BuilderOS",
-      "bytes": 184723,
-      "mtime": "2026-07-14T04:07:15.498Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 184585,
+      "mtime": "2026-07-14T06:50:34.843Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z"
     },
     {
       "path": "docs/products/builderos/specs/BP_V1.md",
@@ -39125,9 +39125,9 @@
     {
       "path": "docs/products/command-center/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Command Center",
-      "bytes": 106103,
-      "mtime": "2026-07-13T20:29:53.071Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 106081,
+      "mtime": "2026-07-14T06:50:15.292Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z"
     },
     {
       "path": "docs/products/COMMANDCENTER.md",
@@ -39176,9 +39176,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 7252,
-      "mtime": "2026-07-14T06:35:20.565Z",
-      "indexed_at": "2026-07-14T06:36:08.457Z"
+      "bytes": 7520,
+      "mtime": "2026-07-14T06:50:45.126Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -82948,9 +82948,9 @@
     {
       "path": "services/env-registry-map.js",
       "synopsis": "env-registry-map.js",
-      "bytes": 27098,
-      "mtime": "2026-07-10T18:14:18.182Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 27595,
+      "mtime": "2026-07-14T06:49:53.413Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z",
       "ssot": [
         "docs/products/command-center/PRODUCT_HOME.md"
       ]
@@ -82966,9 +82966,9 @@
     {
       "path": "services/env-validator.js",
       "synopsis": "Startup environment variable validator.",
-      "bytes": 2917,
-      "mtime": "2026-07-03T00:17:45.099Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 3370,
+      "mtime": "2026-07-14T06:49:49.054Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z"
     },
     {
       "path": "services/execution-queue.js",
@@ -85915,9 +85915,9 @@
     {
       "path": "services/provider-key-health.js",
       "synopsis": "Provider API-key health — enumerate the AI/LLM/tool keys Railway",
-      "bytes": 9178,
-      "mtime": "2026-07-10T11:48:54.662Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 9195,
+      "mtime": "2026-07-14T06:49:50.716Z",
+      "indexed_at": "2026-07-14T06:50:48.237Z",
       "ssot": [
         "docs/products/builderos/PRODUCT_HOME.md"
       ]

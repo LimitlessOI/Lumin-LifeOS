@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — `middleware/apply-middleware.js` now skips the global static handler for `/previews/:clientId/index.html` and `/previews/:clientId/variants/:variantId/index.html` so DB-backed Site Builder preview routes win over stale disk files. Prior: 2026-07-10 — Live env inventory: `npm run env:inventory` → `docs/ENV_LIVE_INVENTORY.json` (names + present only). Re-run after any Railway var change. |
+| **Last Updated** | 2026-07-14 — Accept Railway short-name `REPLICATE_API` as alias for `REPLICATE_API_TOKEN` (boot + registry). Founder deployed as `REPLICATE_API`. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-07-14 | **Replicate short-name alias** — `env-registry-map` + `env-validator` treat `REPLICATE_API` as present for `REPLICATE_API_TOKEN`. | Founder deployed Railway var as `REPLICATE_API`. | ✅ | tip verify after alias deploy |
 | 2026-07-10 | **Live env inventory** — `scripts/env-live-inventory.mjs` + `npm run env:inventory` writes `docs/ENV_LIVE_INVENTORY.json` (names + present only). Registry map adds `GOOGLE_PLACES_KEY` + `GO_VEGAS_*`. | Adam: system should read vars and keep the list updated when they change. | ✅ live registry probe; Places ABSENT on tip | push + re-run inventory after Places set |
 | 2026-07-03 | **Command-center/operator live-origin cleanup** — `scripts/governed-autonomy-idle-analysis.mjs`, `scripts/governed-overnight-autonomy.mjs`, and related operator probes now resolve the live base URL through the shared public-origin helper instead of shipping with stale `robust-magic` defaults. | Overnight/operator diagnostics were capable of grading the wrong surface even when the underlying command-center logic was fine. The command layer must look at the active `lumin-web` path, not folklore. | ✅ local syntax | deploy + rerun operator probes |
 | 2026-06-29 | **`routes/lifeos-command-center-routes.js`** — `GET /api/v1/lifeos/command-center/never-stop-product-factory` surfaces live factory lane status (expansion mission, last heartbeat, enabled state). | Never-stop factory scheduler needed a command-center read path to confirm it's running. | AM12 | pending deploy |

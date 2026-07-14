@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-10 — Provider key health probes use current Anthropic/Gemini model ids. |
+| **Last Updated** | 2026-07-14 — `config/runtime-env.js` `applyEnvAliases()` maps `REPLICATE_API` → `REPLICATE_API_TOKEN` at boot. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-10 — Provider key health probes use current Anthropic/Gemini model ids. |
+| **Last Updated** | 2026-07-14 — `config/runtime-env.js` `applyEnvAliases()` maps `REPLICATE_API` → `REPLICATE_API_TOKEN` at boot. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 
@@ -470,6 +470,7 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-07-14 | **`config/runtime-env.js` `applyEnvAliases()`** — copies `REPLICATE_API` → `REPLICATE_API_TOKEN` at boot so founder short-name Railway vars work. | Adam named tip var `REPLICATE_API`; code only read `REPLICATE_API_TOKEN`. | ✅ | tip health after redeploy |
 | 2026-07-10 | **`services/provider-key-health.js`** — Anthropic probe model `claude-sonnet-4-6`; Gemini probe `gemini-2.0-flash` (retired haiku-latest / 1.5-flash ids were false-erroring). | Honest tip provider diagnosis for T02/build hangs. | ✅ | tip after deploy |
 | 2026-07-03 | **Public-origin resolver + deploy target cleanup:** `config/public-origin.js` added as the canonical runtime/script origin resolver; `config/runtime-env.js` no longer defaults `RAILWAY_PUBLIC_DOMAIN` to the retired robust-magic host; council-adjacent runtime and audit scripts now resolve `PUBLIC_BASE_URL`/domain through that helper; `.github/workflows/railway-deploy.yml` now targets `lumin-web` by default instead of an implicit/ambiguous service. | Builder/runtime utilities were still teaching and probing stale Railway origins, which makes live diagnosis look like app drift when the real issue may be service targeting or deploy auth. | ✅ local syntax + resolver probe | pending deploy/auth fix |
 | 2026-06-28 | **`services/savings-ledger.js` + `services/council-service.js`** — token rows record `started_at` + `duration_ms` on every metered council call via `meterTiming()`. | Adam: every token spend must align to timestamps for operation timeline. | ✅ | deploy |
