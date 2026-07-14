@@ -3410,20 +3410,33 @@ export function createClientCareBrowserService({ env = process.env, logger = con
                 return false;
               }
             };
-            // Prefer selectClick — tip proved it reads FullName from a visit row.
-            if (typeof window.selectClick === 'function') {
-              tryCall('selectClick(raw)', () => window.selectClick(match.raw));
-              tryCall('selectClick(raw,eventId)', () => window.selectClick(match.raw, match.scheduledEventId));
-              const idx = normalized.findIndex((r) => r.pregnancyId === match.pregnancyId);
-              tryCall('selectClick(index)', () => window.selectClick(idx));
+            // selectClick expects a DOM row (onclick="selectClick(this)"), NOT the API object.
+            // Calling it with raw poisons state (clears form then throws on .FullName).
+            const needle = String(match.name || '').toLowerCase().split(/\s+/).find((p) => p.length > 2) || '___never___';
+            const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], .hover-select'))
+              .map((tr) => {
+                const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
+                const cells = tr.querySelectorAll('td, [role="gridcell"]').length;
+                return { tr, t, cells, score: (t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) + (tr.classList?.contains('hover-select') ? 2 : 0) - Math.min(t.length, 400) / 100 };
+              })
+              .filter((r) => r.score >= 15)
+              .sort((a, b) => b.score - a.score);
+            const rowEl = rowCandidates[0]?.tr || null;
+            if (rowEl && typeof window.selectClick === 'function') {
+              tryCall('selectClick(rowEl)', () => window.selectClick(rowEl));
+            } else if (rowEl) {
+              rowEl.click();
+              selected.attempts.push({ label: 'row_click_only', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80) });
             }
-            if (typeof window.SelectBillingSlipPregnancy === 'function') {
-              tryCall('SelectBillingSlipPregnancy(raw)', () => window.SelectBillingSlipPregnancy(match.raw));
-              tryCall('SelectBillingSlipPregnancy(eventId)', () => window.SelectBillingSlipPregnancy(match.scheduledEventId));
-              tryCall('SelectBillingSlipPregnancy(pregnancyId)', () => window.SelectBillingSlipPregnancy(match.pregnancyId));
-            }
-            if (typeof window.digSelectionProcess === 'function') {
-              tryCall('digSelectionProcess(raw)', () => window.digSelectionProcess(match.raw));
+            if (rowEl) {
+              selected.clickedRow = true;
+              selected.attempts.push({
+                label: 'row_target',
+                ok: true,
+                text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80),
+                score: rowCandidates[0].score,
+                onclick: (rowEl.getAttribute('onclick') || '').slice(0, 80),
+              });
             }
             for (const name of ['PregnancyID', 'PregnancyId', 'pregnancyId', 'SelectedPregnancyId', 'PatientId', 'PatientID', 'ScheduledEventID', 'ScheduledEventId']) {
               const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
@@ -3434,33 +3447,15 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               el.dispatchEvent(new Event('change', { bubbles: true }));
               selected.attempts.push({ label: `field:${name}`, ok: true });
             }
-            const needle = String(match.name || '').toLowerCase().split(/\s+/).find((p) => p.length > 2) || '___never___';
-            const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
-              .map((tr) => {
-                const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
-                const cells = tr.querySelectorAll('td, [role="gridcell"]').length;
-                return { tr, t, cells, score: (t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) - Math.min(t.length, 400) / 100 };
-              })
-              .filter((r) => r.score >= 15)
-              .sort((a, b) => b.score - a.score);
-            const rowEl = rowCandidates[0]?.tr || null;
-            if (rowEl) {
-              rowEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-              rowEl.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
-              rowEl.click();
-              selected.clickedRow = true;
-              selected.attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80), score: rowCandidates[0].score });
-              const onclick = rowEl.getAttribute('onclick') || rowEl.querySelector('[onclick]')?.getAttribute('onclick') || '';
-              if (onclick) {
-                selected.attempts.push({ label: 'row_onclick_attr', ok: true, text: onclick.slice(0, 160) });
-                tryCall('row_onclick_eval', () => { eval(onclick); });
-              }
-            }
-            const patientLine = ((document.body.innerText || '').match(/Patient:\s*([^\n]{0,80})/i) || [])[1] || '';
-            selected.applied = Boolean(patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine));
+            const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+            const patientLine = fullNameText
+              || ((document.body.innerText || '').match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || [])[1]
+              || '';
+            selected.applied = Boolean(fullNameText || (patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine)));
             selected.pregnancyId = match.pregnancyId;
             selected.scheduledEventId = match.scheduledEventId;
-            selected.patientLineAfter = patientLine.slice(0, 80);
+            selected.patientLineAfter = (fullNameText || patientLine).slice(0, 80);
+            selected.fullNameText = fullNameText.slice(0, 80);
           }
           return {
             ok: res.ok,
@@ -3518,46 +3513,32 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           const call = (label, fn) => {
             try { fn(); attempts.push({ label, ok: true }); } catch (e) { attempts.push({ label, ok: false, error: String(e?.message || e).slice(0, 100) }); }
           };
-          if (typeof window.selectClick === 'function') {
-            call('selectClick(raw)', () => window.selectClick(match));
-            call('selectClick(index)', () => window.selectClick(rows.findIndex((r) => String(r.PregnancyID || '').toLowerCase() === String(wantPregnancyId || '').toLowerCase())));
-          }
-          if (typeof window.SelectBillingSlipPregnancy === 'function') {
-            call('SelectBillingSlipPregnancy(raw)', () => window.SelectBillingSlipPregnancy(match));
-            call('SelectBillingSlipPregnancy(event)', () => window.SelectBillingSlipPregnancy(match.ScheduledEventID));
-          }
           const needle = String(match.FullName || '').toLowerCase().split(/\s+/).find((p) => p.length > 2);
-          const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+          const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], .hover-select'))
             .map((tr) => {
               const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
               const cells = tr.querySelectorAll('td, [role="gridcell"]').length;
-              return { tr, t, cells, score: (needle && t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) - Math.min(t.length, 400) / 100 };
+              return { tr, t, cells, score: (needle && t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) + (tr.classList?.contains('hover-select') ? 2 : 0) - Math.min(t.length, 400) / 100 };
             })
             .filter((r) => r.score >= 15)
             .sort((a, b) => b.score - a.score);
           const rowEl = rowCandidates[0]?.tr || null;
-          if (rowEl) {
+          if (rowEl && typeof window.selectClick === 'function') {
+            call('selectClick(rowEl)', () => window.selectClick(rowEl));
+          } else if (rowEl) {
             rowEl.click();
-            attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80) });
-            const onclick = rowEl.getAttribute('onclick') || '';
-            if (onclick) {
-              attempts.push({ label: 'row_onclick_attr', ok: true, text: onclick.slice(0, 160) });
-              try { eval(onclick); attempts.push({ label: 'row_onclick_eval', ok: true }); } catch (e) { attempts.push({ label: 'row_onclick_eval', ok: false, error: String(e?.message || e).slice(0, 100) }); }
-            }
+            attempts.push({ label: 'row_click_only', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80) });
           }
-          const fnSources = {};
-          for (const name of ['selectClick', 'digSelectionProcess', 'digSelectionProcessDD']) {
-            if (typeof window[name] === 'function') fnSources[name] = String(window[name]).slice(0, 1200);
-          }
-          await new Promise((r) => setTimeout(r, 800));
+          await new Promise((r) => setTimeout(r, 1200));
+          const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
           const text = (document.body.innerText || '').replace(/\s+/g, ' ');
-          const patientLine = (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1] || '';
+          const patientLine = fullNameText || (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1] || '';
           return {
             ok: true,
             attempts,
-            fnSources,
+            fullNameText: fullNameText.slice(0, 80),
             patientLine: patientLine.slice(0, 80),
-            patientSelected: Boolean(patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine)),
+            patientSelected: Boolean(fullNameText || (patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine))),
           };
         }, {
           providerId: providerSet?.value || '00000000-0000-0000-0000-000000000000',
@@ -3636,9 +3617,16 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       const map = await session.page.evaluate((wantName) => {
         const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
-        const patientLine = (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1] || '';
-        const dobLine = (text.match(/DOB:\s*([^\s]{0,40})/i) || [])[1] || '';
-        const ageLine = (text.match(/Age:\s*([^\s]{0,20})/i) || [])[1] || '';
+        const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+        const patientLine = fullNameText
+          || (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1]
+          || '';
+        const dobLine = (document.getElementById('DOBText')?.textContent || '').trim()
+          || (text.match(/DOB:\s*([^\s]{0,40})/i) || [])[1]
+          || '';
+        const ageLine = (document.getElementById('AgeText')?.textContent || '').trim()
+          || (text.match(/Age:\s*([^\s]{0,20})/i) || [])[1]
+          || '';
         const needle = String(wantName || '').trim().toLowerCase().split(/\s+/).find((p) => p.length > 2);
         const nameOk = !needle || patientLine.toLowerCase().includes(needle);
         const patientSelected = Boolean(
@@ -3655,6 +3643,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         return {
           patientSelected,
           patientLine: patientLine.slice(0, 80),
+          fullNameText: fullNameText.slice(0, 80),
           ageLine: ageLine.slice(0, 40),
           dobLine: dobLine.slice(0, 40),
           chargeOpts,
@@ -3708,7 +3697,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             ? 'Correct patient bound — re-run with dry_run=false to Save (after procedure/diagnosis if required).'
             : (saveResult.attempted ? 'Save clicked — verify Review Sent Bills / Charge Slip.' : 'Bound but Save control missing.'))
           : (visitList?.match?.pregnancyId
-            ? 'Visit row found but ChargeSlip Patient: still empty — binder needs SelectBillingSlipPregnancy(raw); see visitList.selected/rebind.'
+            ? 'Visit row found but ChargeSlip #FullNameText still empty — call selectClick(rowEl) only (not API raw).'
             : 'Fail-closed: pregnancy not found on scanned visit dates — widen visit_dates or confirm chart Born date.'),
       };
     } finally {
