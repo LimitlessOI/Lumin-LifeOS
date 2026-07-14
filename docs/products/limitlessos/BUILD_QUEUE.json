@@ -165,7 +165,7 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": null,
-      "last_attempt_at": "2026-07-14T21:51:45.291Z",
+      "last_attempt_at": "2026-07-14T21:53:46.219Z",
       "last_error": "governed_ship_failed",
       "expected_exports": [
         "registerMarketingOSSkuRoutes"
@@ -175,7 +175,7 @@
         "path": "/api/marketingos/skus"
       },
       "revive_count": 3,
-      "revived_at": "2026-07-14T21:51:37.877Z",
+      "revived_at": "2026-07-14T21:53:38.421Z",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
