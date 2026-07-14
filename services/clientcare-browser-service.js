@@ -3365,6 +3365,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             chargeSlipId: row.ChargeSlipId || null,
             scheduledEventId: row.ScheduledEventID || row.ScheduledEventId || null,
             rawKeys: Object.keys(row || {}).slice(0, 20),
+            raw: row,
           }));
           const wantId = String(wantPregnancyId || '').toLowerCase();
           const want = String(wantName || '').toLowerCase();
@@ -3380,43 +3381,83 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               status: res.status,
               url,
               count: normalized.length,
-              sample: normalized.slice(0, 8),
+              sample: normalized.slice(0, 8).map(({ raw, ...rest }) => rest),
               match: null,
               selected: { applied: false, reason: 'pregnancy_id_not_in_visit_list' },
             };
           }
 
-          let selected = { applied: false };
+          let selected = { applied: false, attempts: [] };
           if (match?.pregnancyId) {
-            for (const name of ['PregnancyID', 'PregnancyId', 'pregnancyId', 'SelectedPregnancyId', 'PatientId', 'PatientID']) {
+            const fnNames = Object.getOwnPropertyNames(window)
+              .filter((k) => /select|billing|slip|pregnancy|charge|patient/i.test(k))
+              .filter((k) => typeof window[k] === 'function')
+              .slice(0, 40);
+            selected.fnNames = fnNames;
+            const tryCall = (label, fn) => {
+              try {
+                const out = fn();
+                selected.attempts.push({ label, ok: true, out: out == null ? null : String(out).slice(0, 80) });
+                return true;
+              } catch (err) {
+                selected.attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
+                return false;
+              }
+            };
+            // Vendor binder usually wants the full visit row (ScheduledEventID), not just pregnancy UUID.
+            if (typeof window.SelectBillingSlipPregnancy === 'function') {
+              tryCall('SelectBillingSlipPregnancy(raw)', () => window.SelectBillingSlipPregnancy(match.raw));
+              tryCall('SelectBillingSlipPregnancy(eventId)', () => window.SelectBillingSlipPregnancy(match.scheduledEventId));
+              tryCall('SelectBillingSlipPregnancy(pregnancyId)', () => window.SelectBillingSlipPregnancy(match.pregnancyId));
+            }
+            for (const name of fnNames) {
+              if (name === 'SelectBillingSlipPregnancy') continue;
+              tryCall(`${name}(raw)`, () => window[name](match.raw));
+            }
+            for (const name of ['PregnancyID', 'PregnancyId', 'pregnancyId', 'SelectedPregnancyId', 'PatientId', 'PatientID', 'ScheduledEventID', 'ScheduledEventId']) {
               const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
               if (!el) continue;
-              el.value = match.pregnancyId;
+              const value = /scheduled/i.test(name) ? (match.scheduledEventId || match.pregnancyId) : match.pregnancyId;
+              el.value = value;
               el.dispatchEvent(new Event('input', { bubbles: true }));
               el.dispatchEvent(new Event('change', { bubbles: true }));
-              selected = { applied: true, via: name, pregnancyId: match.pregnancyId };
+              selected.attempts.push({ label: `field:${name}`, ok: true });
             }
             const needle = String(match.name || '').toLowerCase().split(/\s+/).find((p) => p.length > 2) || '___never___';
-            const rowEl = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
-              .find((tr) => (tr.innerText || '').toLowerCase().includes(needle));
+            const rowEl = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], li, .list-group-item, a'))
+              .find((tr) => {
+                const t = (tr.innerText || '').toLowerCase();
+                return t.includes(needle) && /\b\d{1,2}:\d{2}\b/.test(t);
+              });
             if (rowEl) {
+              rowEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+              rowEl.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
               rowEl.click();
-              selected = { ...selected, clickedRow: true };
+              rowEl.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+              selected.clickedRow = true;
+              selected.attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').slice(0, 80) });
             }
-            if (typeof window.SelectBillingSlipPregnancy === 'function') {
-              try {
-                window.SelectBillingSlipPregnancy(match.pregnancyId);
-                selected = { ...selected, via: 'SelectBillingSlipPregnancy' };
-              } catch (_) { /* ignore */ }
-            }
+            const patientLine = ((document.body.innerText || '').match(/Patient:\s*([^\n]{0,80})/i) || [])[1] || '';
+            selected.applied = Boolean(patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine))
+              || selected.attempts.some((a) => a.ok && /^SelectBillingSlipPregnancy/.test(a.label));
+            selected.pregnancyId = match.pregnancyId;
+            selected.scheduledEventId = match.scheduledEventId;
+            selected.patientLineAfter = patientLine.slice(0, 80);
           }
           return {
             ok: res.ok,
             status: res.status,
             url,
             count: normalized.length,
-            sample: normalized.slice(0, 8),
-            match: match ? { pregnancyId: match.pregnancyId, name: match.name, time: match.time, visit: match.visit, chargeSlipId: match.chargeSlipId } : null,
+            sample: normalized.slice(0, 8).map(({ raw, ...rest }) => rest),
+            match: match ? {
+              pregnancyId: match.pregnancyId,
+              name: match.name,
+              time: match.time,
+              visit: match.visit,
+              chargeSlipId: match.chargeSlipId,
+              scheduledEventId: match.scheduledEventId,
+            } : null,
             selected,
             dataKeys: data && typeof data === 'object' && !Array.isArray(data) ? Object.keys(data).slice(0, 20) : null,
           };
@@ -3433,7 +3474,68 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           break;
         }
       }
-      if (visitList?.selected?.applied) await sleep(1500);
+      if (visitList?.match?.pregnancyId) {
+        // Ensure DOM date matches the API day, then re-bind with the matched visit row.
+        await session.page.evaluate((rawDate) => {
+          const input =
+            document.querySelector('input[name="DateFilter"]') ||
+            Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+          if (!input || !rawDate) return;
+          input.value = rawDate;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+          try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
+        }, matchedDate);
+        await sleep(2000);
+        const rebind = await session.page.evaluate(async ({ providerId, dateSelection, wantPregnancyId }) => {
+          const pid = providerId || '00000000-0000-0000-0000-000000000000';
+          const url = `/Company/SearchBillingSlipPregnancyList?PrividerId=${encodeURIComponent(pid)}&DateSelection=${encodeURIComponent(dateSelection)}&_=${Date.now()}`;
+          const res = await fetch(url, { credentials: 'same-origin' });
+          const data = await res.json().catch(() => []);
+          const rows = Array.isArray(data) ? data : [];
+          const match = rows.find((r) => String(r.PregnancyID || '').toLowerCase() === String(wantPregnancyId || '').toLowerCase()) || null;
+          if (!match) return { ok: false, reason: 'match_missing_on_rebind' };
+          const attempts = [];
+          const call = (label, fn) => {
+            try { fn(); attempts.push({ label, ok: true }); } catch (e) { attempts.push({ label, ok: false, error: String(e?.message || e).slice(0, 100) }); }
+          };
+          if (typeof window.SelectBillingSlipPregnancy === 'function') {
+            call('SelectBillingSlipPregnancy(raw)', () => window.SelectBillingSlipPregnancy(match));
+            call('SelectBillingSlipPregnancy(event)', () => window.SelectBillingSlipPregnancy(match.ScheduledEventID));
+          }
+          const needle = String(match.FullName || '').toLowerCase().split(/\s+/).find((p) => p.length > 2);
+          const rowEl = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+            .find((tr) => {
+              const t = (tr.innerText || '').toLowerCase();
+              return needle && t.includes(needle) && /\b\d{1,2}:\d{2}\b/.test(t);
+            });
+          if (rowEl) {
+            rowEl.click();
+            attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').slice(0, 80) });
+          }
+          await new Promise((r) => setTimeout(r, 800));
+          const text = (document.body.innerText || '').replace(/\s+/g, ' ');
+          const patientLine = (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1] || '';
+          return {
+            ok: true,
+            attempts,
+            patientLine: patientLine.slice(0, 80),
+            patientSelected: Boolean(patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine)),
+          };
+        }, {
+          providerId: providerSet?.value || '00000000-0000-0000-0000-000000000000',
+          dateSelection: matchedDate,
+          wantPregnancyId: pregnancyId,
+        });
+        visitList = { ...visitList, rebind };
+        if (rebind?.patientSelected) {
+          visitList.selected = { ...(visitList.selected || {}), applied: true, via: 'rebind', patientLine: rebind.patientLine };
+        }
+        await sleep(1200);
+      } else if (visitList?.selected?.applied) {
+        await sleep(1500);
+      }
 
       // Fail-closed: never DOM-click a random visit when pregnancyId was requested.
       let visitClick = { clicked: false, skipped: true, reason: pregnancyId ? 'require_pregnancy_id_match' : null };
@@ -3569,7 +3671,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           ? (dryRun !== false
             ? 'Correct patient bound — re-run with dry_run=false to Save (after procedure/diagnosis if required).'
             : (saveResult.attempted ? 'Save clicked — verify Review Sent Bills / Charge Slip.' : 'Bound but Save control missing.'))
-          : 'Fail-closed: pregnancy not found on scanned visit dates — widen visit_dates or confirm chart Born date.',
+          : (visitList?.match?.pregnancyId
+            ? 'Visit row found but ChargeSlip Patient: still empty — binder needs SelectBillingSlipPregnancy(raw); see visitList.selected/rebind.'
+            : 'Fail-closed: pregnancy not found on scanned visit dates — widen visit_dates or confirm chart Born date.'),
       };
     } finally {
       await session.close().catch(() => {});

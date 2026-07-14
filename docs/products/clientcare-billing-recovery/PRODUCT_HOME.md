@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — ChargeSlip fail-closed + date-scan; never bind wrong visit patient. |
+| **Last Updated** | 2026-07-14 — ChargeSlip visit match found Denise on 06/13; rebind SelectBillingSlipPregnancy(raw). |
 
 ---
 
@@ -64,7 +64,7 @@ All ClientCare conversations, brainstorms, and session dumps live at:
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-14 — ChargeSlip fail-closed (no wrong-patient bind) + Born-date + ±scanDays visit-list search; session takeover dismiss; live Save still pending correct bind.
+**Last Updated:** 2026-07-14 — Tip: Denise pregnancyId on 06/13 visit list but Patient: empty until SelectBillingSlipPregnancy(raw)/rebind; Yanhari also on that day.
 
 ---
 
@@ -459,6 +459,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **ChargeSlip binder retry** — tip matched Denise on 06/13 (`SearchBillingSlipPregnancyList`) but UI showed Error Please select a patient first. Pass full visit raw + ScheduledEventID into SelectBillingSlipPregnancy; date rebind; keep fail-closed. |
 | 2026-07-14 | **ChargeSlip fail-closed + date-scan** — tip `11/21/2025` returned a different scheduled patient; mapper must not Save wrong chart. Read Born from billing, scan ±days, require pregnancyId match, dismiss “Use this computer now”, prefer exact care type. Next: tip-bind 3 status-ready IDs then live Save. | Wrong-patient bind risk blocked money. | 0.5h | 0.5h | none | ✅ | pending tip after redeploy |
 | 2026-07-14 | **ChargeSlip patient select PROVED** — `SearchBillingSlipPregnancyList` returns PregnancyID/FullName; tip selected patient on ChargeSlip after fixing field map; care type sets. Next: live Save + procedure codes for status-ready births. | Visit-list bind was the create-path blocker. | 1h | 1h | none | ✅ | tip `c5950e11d3` |
 | 2026-07-14 | **Charge Slip map route** — `POST /browser/map-charge-slip` + `mapChargeSlip` (patient query seed). SuperBill SPA + bare HCFA 500 on vendor; ChargeSlip is create surface. | Need visit/procedure pick to bill. | 30m | 30m | none | ✅ | tip after redeploy |
