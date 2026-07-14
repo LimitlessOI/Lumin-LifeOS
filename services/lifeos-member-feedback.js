@@ -3,8 +3,7 @@
  */
 export function processFeedback(feedback) {
   return {
-    status: "queued",
-    queue: "founder-review",
+    queuedForFounderReview: true,
     feedback
   };
 }
