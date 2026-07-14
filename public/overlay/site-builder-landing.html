@@ -269,6 +269,11 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem;
     }
+    .four-up {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+    }
     .step, .offer, .feature {
       border: 1px solid var(--line);
       border-radius: var(--radius-sm);
@@ -479,7 +484,7 @@
       font-size: 0.84rem;
     }
     @media (max-width: 900px) {
-      .hero, .three-up, .features-grid, .lead-form .row { grid-template-columns: 1fr; }
+      .hero, .three-up, .four-up, .features-grid, .lead-form .row { grid-template-columns: 1fr; }
       .hero { padding: 2rem 0 1rem; }
       .topbar-inner { padding: 0.65rem 0; }
       .nav-links a:not(.cta-link) { display: none; }
@@ -653,12 +658,19 @@
     <section class="section card" id="pricing">
       <h2>Beta-tester pricing</h2>
       <p class="section-sub">We are testing this with real businesses. That is why the price is this good — your honest feedback is part of the deal. After beta, this rate goes away.</p>
-      <div class="three-up">
+      <div class="four-up">
         <div class="offer">
           <div>
             <div class="offer-price">Free</div>
             <strong>Preview rebuild</strong>
-            <span>See the work first. No card. No call. Judge quality before you pay.</span>
+            <span>See the work first. No card. No call. Judge quality before you pay. Includes 5 template designs to toggle.</span>
+          </div>
+        </div>
+        <div class="offer">
+          <div>
+            <div class="offer-price">$1</div>
+            <strong>Extra templates</strong>
+            <span>Unlock any of 10 more professional templates when you publish — pay only if you use them.</span>
           </div>
         </div>
         <div class="offer featured">
@@ -670,12 +682,13 @@
         </div>
         <div class="offer">
           <div>
-            <div class="offer-price">$35/mo</div>
-            <strong>Ongoing care</strong>
-            <span>After the included months: updates, content support, and SEO help — always under the publish price.</span>
+            <div class="offer-price">$35</div>
+            <strong>Custom one-of-one template</strong>
+            <span>Co-design a unique template with us — directed conversation + research. Locked and paid only when you approve it.</span>
           </div>
         </div>
       </div>
+      <p class="section-sub" style="margin-top:1.25rem;">Ongoing care after the included months is <strong>$35/mo</strong> — updates, content support, and SEO help.</p>
     </section>
 
     <section class="section card" id="faq">
@@ -701,6 +714,10 @@
         <details>
           <summary>What is included in the $45?</summary>
           <p>Publishing the site to your domain, plus the first 2 months of updates, SEO help, and content support. After that, care is $35/mo.</p>
+        </details>
+        <details>
+          <summary>What about templates?</summary>
+          <p>You get 5 free designs to preview and switch. Ten more templates are $1 each when you publish. A fully custom one-of-one template is $35 — co-designed with you, never duplicated.</p>
         </details>
       </div>
     </section>

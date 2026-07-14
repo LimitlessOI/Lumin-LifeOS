@@ -7,11 +7,16 @@ function resolveOwnerId(req) {
   const explicit = req?.query?.owner_id ?? req?.body?.owner_id ?? null;
   if (isNonEmptyString(explicit)) return String(explicit).trim();
 
+  const handle = req?.lifeosUser?.handle ?? req?.user?.handle ?? null;
+  if (isNonEmptyString(handle)) return String(handle).trim();
+
   const fromUser = req?.lifeosUser?.sub ?? req?.user?.id ?? null;
   if (!isNonEmptyString(fromUser)) return null;
   const id = String(fromUser).trim();
   // Command-key auth sometimes stamps synthetic ids — never use those as YouTube owners.
   if (id === 'emergency-key' || id === 'command-key' || id.startsWith('cmd-')) return null;
+  // Numeric JWT sub is not the YouTube OAuth owner key (that's usually the handle).
+  if (/^\d+$/.test(id)) return null;
   return id;
 }
 

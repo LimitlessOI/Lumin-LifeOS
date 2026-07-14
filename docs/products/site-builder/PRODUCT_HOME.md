@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Landing mobile CTA/chat overlap fix (prime-time audit). Prior: Flux hero fallback logger-scope fix. |
+| **Last Updated** | 2026-07-14 — Landing shows Free / $1 extras / $45 publish / $35 custom one-of-one template pricing (audit fix). |
 
 ---
 
@@ -304,6 +304,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-14 | **Landing pricing cards** — show Free preview (5 templates) / $1 extras / $45 publish / **$35 custom one-of-one** + FAQ on templates. | Tip audit: config had $35 custom but landing only showed $45 + $35/mo care. | ✅ HTML | tip eye-test |
 | 2026-07-14 | **Landing mobile CTA** — btn wrap + chat bubble raised so "Get my free preview" is not clipped/overlapped on narrow viewports. | Founder prime-time audit screenshot. | ✅ local CSS | tip eye-test |
 | 2026-07-14 | **Flux hero fallback** — `maybeFillGeneratedHero` in asset ingestion calls Creative Engine graphic_design (Flux) when scraped hero images are empty. | Adam: REPLICATE_API is in — finish Site Builder wire. | ✅ local | tip rebuild after deploy |
 | 2026-07-14 | **Custom template price → $35.** `SITE_BUILDER_PRICING.templates.custom` default `3500` cents / `$35`; switcher copy + editor fallback + checkout comment aligned. Description now says directed conversation + research. | Founder: $35 one-of-one custom (not $30); keep 5 free / $1 extras; industry packs + Replicate images (Cloud Code). | ✅ pricing defaults + UI strings | Tip env override if `SITE_BUILDER_TEMPLATE_CUSTOM_CENTS` still set to 3000 |

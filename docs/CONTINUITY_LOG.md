@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Fix audit findings (SMOS + Site Builder)
+
+Fixed: talk title stem-dedupe; extract/generate fail-soft (heuristic + template fallback); marketing owner_id prefers handle over numeric JWT sub; Site Builder landing pricing shows Free/$1/$45/$35 custom. Tip redeploy after push.
+
 ## 2026-07-14 — Full product audit SMOS + Site Builder
 
 API+browser audit: Film Studio assets PASS; footage_edit PASS; YouTube connected PASS but suggestions 502 (AI+Ideogram over edge budget) → fail-soft fast path; consent 500 missing consent_text → default text; browser unauth/generic spam when suggestions die. Site Builder landing+$35+launch-readiness PASS; designSystems key false-fail in auditor; public-lead rejects example.com (expected). Ideogram still 429 until Replicate payment method.

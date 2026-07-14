@@ -130,18 +130,45 @@ function thumbnailOverlayWords(titleOrHook, { maxWords = 5 } = {}) {
   return words.slice(0, maxWords).join(' ').toUpperCase();
 }
 
+function titleDedupeKey(title) {
+  return String(title || '')
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\b(the|a|an|to|for|of|in|on|and|or|vs|versus)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 48);
+}
+
+function distinctTitleForDuplicate(idea, idx, count) {
+  const seed = String(idea?.seed_topic_id || '').replace(/_/g, ' ').trim();
+  const must = Array.isArray(idea?.must_say) && idea.must_say[0]
+    ? String(idea.must_say[0]).replace(/[^\w\s]/g, ' ').trim().slice(0, 36)
+    : '';
+  const mode = String(idea?.film_mode || '').replace(/_/g, ' ').trim();
+  const market = String(idea?.market || idea?.research_basis?.market || '').trim();
+  const variants = [
+    must,
+    seed ? `${seed} — what locals skip` : '',
+    market ? `${market}: costly first-week mistakes` : '',
+    mode ? `${mode} cut: the line that earns the DM` : '',
+    `Angle ${count}: ${String(idea?.competitor_gap || idea?.why || 'lead-intent take').slice(0, 42)}`,
+  ].map((t) => String(t || '').replace(/\s+/g, ' ').trim()).filter((t) => t.length >= 12);
+  return (variants[idx % variants.length] || `Talk card ${idx + 1}`).slice(0, 90);
+}
+
 function dedupeSuggestionTitles(ideas = []) {
   const seen = new Map();
   return (ideas || []).map((idea, idx) => {
     const base = String(idea?.title || idea?.text || `Idea ${idx + 1}`).trim() || `Idea ${idx + 1}`;
-    const key = base.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    const key = titleDedupeKey(base) || `idea-${idx}`;
     const count = (seen.get(key) || 0) + 1;
     seen.set(key, count);
-    if (count === 1) return { ...idea, title: base };
-    const angle = String(idea?.angle || idea?.lead_weight || `take ${count}`).replace(/_/g, ' ');
+    if (count === 1) return { ...idea, title: base.replace(/\s*\([^)]*\)\s*$/, '').trim() || base };
     return {
       ...idea,
-      title: `${base.replace(/[!?.]+$/, '')} (${angle.slice(0, 28)})`.slice(0, 90),
+      title: distinctTitleForDuplicate({ ...idea, title: base }, idx, count),
     };
   });
 }

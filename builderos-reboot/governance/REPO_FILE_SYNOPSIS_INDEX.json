@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T08:50:52.532Z",
+  "generated_at": "2026-07-14T08:57:30.814Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11520,
   "files": [
@@ -36916,9 +36916,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 539570,
-      "mtime": "2026-07-14T08:50:33.502Z",
-      "indexed_at": "2026-07-14T08:50:52.532Z"
+      "bytes": 539862,
+      "mtime": "2026-07-14T08:57:17.753Z",
+      "indexed_at": "2026-07-14T08:57:30.814Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39590,9 +39590,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 114118,
-      "mtime": "2026-07-14T08:50:33.500Z",
-      "indexed_at": "2026-07-14T08:50:52.532Z"
+      "bytes": 114484,
+      "mtime": "2026-07-14T08:57:14.401Z",
+      "indexed_at": "2026-07-14T08:57:30.814Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -39861,9 +39861,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 124163,
-      "mtime": "2026-07-14T08:22:14.185Z",
-      "indexed_at": "2026-07-14T08:22:23.635Z"
+      "bytes": 124419,
+      "mtime": "2026-07-14T08:57:13.233Z",
+      "indexed_at": "2026-07-14T08:57:30.814Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -64554,9 +64554,9 @@
     {
       "path": "public/overlay/site-builder-landing.html",
       "synopsis": "HTML page: Site Builder — public $45 beta sales front door",
-      "bytes": 38378,
-      "mtime": "2026-07-14T08:21:57.613Z",
-      "indexed_at": "2026-07-14T08:22:23.635Z"
+      "bytes": 39307,
+      "mtime": "2026-07-14T08:56:45.584Z",
+      "indexed_at": "2026-07-14T08:57:30.814Z"
     },
     {
       "path": "public/overlay/socialmediaos-session.html",
@@ -66243,9 +66243,9 @@
     {
       "path": "routes/marketing-session-routes.js",
       "synopsis": "Express route module for MarketingOS session API.",
-      "bytes": 34401,
-      "mtime": "2026-07-14T08:49:24.044Z",
-      "indexed_at": "2026-07-14T08:50:52.532Z",
+      "bytes": 40300,
+      "mtime": "2026-07-14T08:56:25.340Z",
+      "indexed_at": "2026-07-14T08:57:30.814Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -66263,9 +66263,9 @@
     {
       "path": "routes/marketing-youtube-routes.js",
       "synopsis": "MarketingOS YouTube connect + channel status + video suggestion routes",
-      "bytes": 6621,
-      "mtime": "2026-07-14T08:50:04.267Z",
-      "indexed_at": "2026-07-14T08:50:52.532Z",
+      "bytes": 6877,
+      "mtime": "2026-07-14T08:57:10.757Z",
+      "indexed_at": "2026-07-14T08:57:30.814Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -85220,9 +85220,9 @@
     {
       "path": "services/marketing-youtube.js",
       "synopsis": "MarketingOS YouTube OAuth + channel analytics + video suggestion packs",
-      "bytes": 84224,
-      "mtime": "2026-07-14T08:50:21.879Z",
-      "indexed_at": "2026-07-14T08:50:52.532Z",
+      "bytes": 85342,
+      "mtime": "2026-07-14T08:55:42.405Z",
+      "indexed_at": "2026-07-14T08:57:30.814Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

@@ -17,41 +17,83 @@ function toOwnerUuid(raw) {
     return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-5${hex.slice(13, 16)}-a${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
 }
 
-// Helper to extract owner_id
+// Prefer human handle / explicit owner_id over numeric JWT sub (sub=1 ≠ adam).
 const getOwnerId = (req) => {
-    return toOwnerUuid(
-        req.lifeosUser?.sub
-        || req.user?.id
-        || req.user?.sub
-        || req.body?.owner_id
-        || req.query?.owner_id
-        || null
-    );
+    const bodyOwner = req.body?.owner_id || req.query?.owner_id || null;
+    const handle = req.lifeosUser?.handle || req.user?.handle || req.user?.username || null;
+    const sub = req.lifeosUser?.sub || req.user?.id || req.user?.sub || null;
+    const raw = bodyOwner
+      || handle
+      || (sub && !/^\d+$/.test(String(sub)) ? String(sub) : null)
+      || sub
+      || null;
+    return toOwnerUuid(raw);
 };
 
-// Helper to safely parse JSON from council member
+function councilText(aiResponse) {
+    if (aiResponse == null) return '';
+    if (typeof aiResponse === 'string') return aiResponse;
+    if (typeof aiResponse === 'object') {
+        return String(
+            aiResponse.text
+            || aiResponse.content
+            || aiResponse.message
+            || aiResponse.output
+            || (Array.isArray(aiResponse.choices) ? aiResponse.choices[0]?.message?.content : '')
+            || ''
+        );
+    }
+    return String(aiResponse);
+}
+
 const parseCouncilResponse = (text) => {
     try {
-        // Attempt to find JSON array or object within the text
-        const mdMatch = text.match(/```json\n([\s\S]*?)\n```/);
+        const raw = councilText(text).trim();
+        if (!raw) return null;
+        const mdMatch = raw.match(/```(?:json)?\s*([\s\S]*?)```/i);
         if (mdMatch && mdMatch[1]) {
-            return JSON.parse(mdMatch[1]);
+            return JSON.parse(mdMatch[1].trim());
         }
-        // Some models return JSON directly without markdown
-        const trimmed = String(text || '').trim();
-        if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
-            return JSON.parse(trimmed);
+        if (raw.startsWith('[') || raw.startsWith('{')) {
+            return JSON.parse(raw);
         }
-        // Fallback: find the first JSON array or object in the response
-        const jsonMatch = text.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
+        const jsonMatch = raw.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
         if (jsonMatch && jsonMatch[1]) {
             return JSON.parse(jsonMatch[1]);
         }
-        return null;
     } catch (e) {
-        return null; // Return null if parsing fails
+        return null;
     }
+    return null;
 };
+
+function heuristicExtractionsFromTranscript(transcriptText) {
+    const lines = String(transcriptText || '')
+        .split(/\n+/)
+        .map((l) => l.replace(/^(user|assistant|coach|you):\s*/i, '').trim())
+        .filter((l) => l.length >= 24);
+    const out = [];
+    const push = (extraction_type, raw_text, confidence_score) => {
+        if (!raw_text) return;
+        out.push({
+            extraction_type,
+            raw_text: String(raw_text).slice(0, 1200),
+            confidence_score,
+            source_quote: String(raw_text).slice(0, 400),
+        });
+    };
+    if (lines[0]) push('hook', lines[0], 0.55);
+    const story = lines.find((l) => /\b(I|we|my|client|family|when|after)\b/i.test(l) && l.length > 40);
+    if (story) push('story', story, 0.5);
+    const teach = lines.find((l) => /\b(because|so|means|check|avoid|don't|do not)\b/i.test(l));
+    if (teach) push('teaching', teach, 0.48);
+    const cta = lines.find((l) => /\b(reach out|message|call|book|dm|comment|talk)\b/i.test(l));
+    if (cta) push('cta', cta, 0.5);
+    const offer = lines.find((l) => /\b(help|consult|walkthrough|I help)\b/i.test(l));
+    if (offer) push('offer', offer, 0.45);
+    if (!out.length && lines[0]) push('emotional_truth', lines.slice(0, 3).join(' '), 0.4);
+    return out.slice(0, 6);
+}
 
 export async function registerMarketingSessionRoutes(app, deps) {
     const { pool, requireKey, callCouncilMember, logger, baseUrl } = deps;
@@ -324,33 +366,76 @@ Respond ONLY with JSON:
             );
 
             const coachMessages = sessionResult.rows[0].coach_messages_json || [];
-            const transcriptText = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+            const transcriptText = coachMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n').trim();
+            if (!transcriptText || transcriptText.length < 20) {
+                return res.status(400).json({
+                    ok: false,
+                    error: 'No coaching transcript yet. Talk to the coach (or record a take) before extracting.',
+                });
+            }
 
             const extractionPrompt = `Given the following marketing coaching session transcript, extract key marketing content items. For each item, identify its type (must be one of: hook, story, teaching, objection, offer, cta, emotional_truth), the raw text from the transcript, and a confidence score (0-1). Return a JSON array of objects: [{ "extraction_type": "...", "raw_text": "...", "confidence_score": 0.X, "source_quote": "..." }].\n\nTranscript:\n${transcriptText}`;
 
-            const aiResponseText = await callCouncilMember('gemini_flash', extractionPrompt);
-            const extractions = parseCouncilResponse(aiResponseText);
-
-            if (!Array.isArray(extractions)) {
-                throw new Error('AI extraction response was not a valid JSON array.');
+            let aiResponseText = '';
+            try {
+                aiResponseText = councilText(await callCouncilMember('gemini_flash', extractionPrompt, {
+                    maxTokens: 1800,
+                    taskType: 'marketing_extract',
+                }));
+            } catch (err) {
+                logger?.warn?.({ err }, 'extract council call failed; using heuristic fallback');
+            }
+            let extractions = parseCouncilResponse(aiResponseText);
+            if (extractions && !Array.isArray(extractions) && Array.isArray(extractions.items)) {
+                extractions = extractions.items;
+            }
+            if (extractions && !Array.isArray(extractions) && Array.isArray(extractions.extractions)) {
+                extractions = extractions.extractions;
+            }
+            let usedFallback = false;
+            if (!Array.isArray(extractions) || !extractions.length) {
+                extractions = heuristicExtractionsFromTranscript(transcriptText);
+                usedFallback = true;
+            }
+            if (!Array.isArray(extractions) || !extractions.length) {
+                return res.status(422).json({
+                    ok: false,
+                    error: 'Could not extract story items from this transcript. Add more specific coach turns and retry.',
+                });
             }
 
             const validExtractionTypes = ['hook', 'story', 'teaching', 'objection', 'offer', 'cta', 'emotional_truth'];
             const insertedExtractions = [];
 
             for (const item of extractions) {
-                if (!validExtractionTypes.includes(item.extraction_type)) {
-                    logger.warn(`Skipping invalid extraction_type: ${item.extraction_type}`);
+                const extractionType = String(item.extraction_type || item.type || '').trim().toLowerCase();
+                if (!validExtractionTypes.includes(extractionType)) {
+                    logger.warn(`Skipping invalid extraction_type: ${extractionType}`);
                     continue;
                 }
+                const rawText = String(item.raw_text || item.text || item.content || '').trim();
+                if (!rawText) continue;
                 const insertResult = await pool.query(
                     `INSERT INTO marketing_content_extractions (session_id, extraction_type, raw_text, confidence_score, source_quote) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-                    [id, item.extraction_type, item.raw_text, item.confidence_score, item.source_quote || item.raw_text]
+                    [id, extractionType, rawText, Number(item.confidence_score ?? item.confidence ?? 0.5) || 0.5, item.source_quote || rawText]
                 );
                 insertedExtractions.push(insertResult.rows[0]);
             }
 
-            res.status(200).json({ ok: true, extractions: insertedExtractions });
+            if (!insertedExtractions.length) {
+                return res.status(422).json({ ok: false, error: 'Extraction returned no usable items.' });
+            }
+
+            await pool.query(
+                `UPDATE marketing_sessions SET status = 'extracted', extraction_run_at = NOW() WHERE id = $1 AND owner_id = $2`,
+                [id, owner_id]
+            );
+
+            res.status(200).json({
+                ok: true,
+                extractions: insertedExtractions,
+                fallback: usedFallback || undefined,
+            });
         } catch (error) {
             logger.error(`Error in POST /api/v1/marketing/sessions/${req.params.id}/extract:`, error);
             res.status(500).json({ ok: false, error: error.message });
@@ -397,6 +482,12 @@ Respond ONLY with JSON:
                 [id]
             );
             const extractions = extractionsResult.rows;
+            if (!extractions.length) {
+                return res.status(400).json({
+                    ok: false,
+                    error: 'No extractions yet. Run Extract Stories first.',
+                });
+            }
 
             const generatedPieces = [];
             const validPlatforms = ['instagram', 'linkedin', 'x', 'facebook', 'email', 'general'];
@@ -446,13 +537,41 @@ Rules:
 - Include a short title for each piece.
 - Return ONLY the JSON array.`;
 
-                const aiResponseText = await callCouncilMember('claude_sonnet', generationPrompt);
+                const aiResponseText = councilText(await callCouncilMember('claude_sonnet', generationPrompt, {
+                    maxTokens: 2200,
+                    taskType: 'marketing_generate',
+                }));
                 const generatedContents = parseCouncilResponse(aiResponseText);
 
-                const pieces = Array.isArray(generatedContents) ? generatedContents : (generatedContents && generatedContents.content_text ? [generatedContents] : []);
+                const pieces = Array.isArray(generatedContents)
+                    ? generatedContents
+                    : (generatedContents && Array.isArray(generatedContents.pieces) ? generatedContents.pieces : null)
+                    || (generatedContents && generatedContents.content_text ? [generatedContents] : []);
 
                 if (!pieces.length) {
-                    logger.warn(`Failed to generate content for extraction ID ${extraction.id}. AI response: ${aiResponseText}`);
+                    // Deterministic fallback so generate never returns 0 pieces after a successful extract.
+                    const fallbackPieces = [
+                        {
+                            title: `${extraction.extraction_type} — Instagram`,
+                            platform: 'instagram',
+                            format: 'post',
+                            content_text: `${extraction.raw_text}\n\n— If this landed, message me and tell me where you're stuck.`,
+                        },
+                        {
+                            title: `${extraction.extraction_type} — LinkedIn`,
+                            platform: 'linkedin',
+                            format: 'post',
+                            content_text: `A note from the session:\n\n${extraction.raw_text}\n\nCurious what you'd challenge here — comment or DM.`,
+                        },
+                    ];
+                    for (const piece of fallbackPieces) {
+                        const insertResult = await pool.query(
+                            `INSERT INTO marketing_content_pieces (session_id, extraction_id, title, platform, format, content_text, status, generated_by_model) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+                            [id, extraction.id, piece.title, piece.platform, piece.format, piece.content_text, 'draft', 'fallback_template']
+                        );
+                        generatedPieces.push(insertResult.rows[0]);
+                    }
+                    logger.warn(`Failed to generate content for extraction ID ${extraction.id}; used template fallback.`);
                     continue;
                 }
 
