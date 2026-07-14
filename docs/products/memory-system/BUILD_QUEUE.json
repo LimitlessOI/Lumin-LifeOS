@@ -157,14 +157,14 @@
     },
     {
       "id": "11",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "reviews/phase7_pr_review.md",
       "task": "write final PR review",
       "spec": "Compose a detailed PR review document for the `phase7-railway-probe` branch, ensuring a comprehensive note accompanies the formal review process.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-14T20:51:57.929Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-14T20:53:40.270Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "blocker_class": "BLOCKED_TOOLING"
     },
