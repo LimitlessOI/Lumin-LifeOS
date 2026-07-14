@@ -3721,6 +3721,42 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           }
           return null;
         };
+        const clickFirst = (rootId, label, preferRe = null) => {
+          const root = document.getElementById(rootId);
+          if (!root) {
+            attempts.push({ label, ok: false, error: 'root_missing' });
+            return null;
+          }
+          const nodes = Array.from(root.querySelectorAll('[data-id], [data-text], [onclick*="digSelection"], [onclick*="Selection"], tr, li, a, button'));
+          const scored = nodes
+            .map((node) => {
+              const t = `${node.innerText || node.value || ''} ${node.getAttribute('data-text') || ''} ${node.getAttribute('data-id') || ''}`.replace(/\s+/g, ' ').trim();
+              if (!t || /no results/i.test(t)) return null;
+              if (!(node.getAttribute('data-id') || node.getAttribute('onclick') || node.tagName === 'TR')) return null;
+              const preferred = preferRe ? preferRe.test(t) : false;
+              return { node, t, preferred };
+            })
+            .filter(Boolean);
+          const el = (preferRe && scored.find((x) => x.preferred)?.node) || scored[0]?.node;
+          if (!el) {
+            attempts.push({ label, ok: false, error: 'no_clickable' });
+            return null;
+          }
+          try {
+            if (typeof window.digSelectionProcess === 'function' && el.getAttribute('data-id')) {
+              window.digSelectionProcess(el);
+            } else if (typeof window.digSelectionProcessDD === 'function' && el.getAttribute('data-id')) {
+              window.digSelectionProcessDD(el);
+            } else {
+              el.click();
+            }
+            attempts.push({ label, ok: true, text: (el.innerText || el.getAttribute('data-text') || '').replace(/\s+/g, ' ').trim().slice(0, 80) });
+            return { text: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80) };
+          } catch (err) {
+            attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
+            return null;
+          }
+        };
 
         // Birth money path: delivery/global first — never prefer 59080 labor-day alone.
         let procedure = pickFromSelect(
@@ -3729,33 +3765,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           /59409|59400|59410|59431|delivery only|global midwifery|vaginal birth|vaginal delivery/i,
           /59080|initial day labor/i
         );
-        await new Promise((r) => setTimeout(r, 400));
-        const applyByValue = (value, text, label) => {
-          if (!value || value === '00000000-0000-0000-0000-000000000000') {
-            attempts.push({ label, ok: false, error: 'no_value' });
-            return false;
-          }
-          const fake = document.createElement('div');
-          fake.setAttribute('data-id', value);
-          fake.setAttribute('data-text', String(text || '').trim());
-          fake.textContent = String(text || '').trim();
-          let used = null;
-          try {
-            if (typeof window.digSelectionProcessDD === 'function') {
-              window.digSelectionProcessDD(fake);
-              used = 'digSelectionProcessDD';
-            } else if (typeof window.digSelectionProcess === 'function') {
-              window.digSelectionProcess(fake);
-              used = 'digSelectionProcess';
-            }
-          } catch (err) {
-            attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
-            return false;
-          }
-          attempts.push({ label, ok: Boolean(used), text: used || 'no_helper', value: String(value).slice(0, 40) });
-          return Boolean(used);
-        };
-        if (procedure?.value) applyByValue(procedure.value, procedure.text, 'apply_procedure');
+        await new Promise((r) => setTimeout(r, 600));
+        // Real fee-schedule / code-list rows only — fake digSelectionProcessDD nodes throw DiagnosisCodeN.
+        {
+          const clicked = clickFirst('procedure-codes-section', 'procedure_row_594', /59400|59409|global midwifery|delivery only/i);
+          if (!clicked) clickFirst('procedure-codes-section', 'procedure_row_any');
+        }
+        if (!procedure) procedure = clickFirst('procedure-codes-section', 'procedure_row_fallback', /59400|59409|59080/i);
         clickAddNear('SearchService', 'add_procedure');
         callHelpers([
           'addBillingService',
@@ -3769,8 +3785,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           'DignosticService',
           /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
         );
-        await new Promise((r) => setTimeout(r, 400));
-        if (diagnosis?.value) applyByValue(diagnosis.value, diagnosis.text, 'apply_diagnosis');
+        await new Promise((r) => setTimeout(r, 600));
+        {
+          const clickedDx = clickFirst('diagnosis-codes-section', 'diagnosis_row_O80', /O80|normal delivery|Z37/i);
+          if (!clickedDx) clickFirst('diagnosis-codes-section', 'diagnosis_row_any');
+        }
+        if (!diagnosis) diagnosis = clickFirst('diagnosis-codes-section', 'diagnosis_row_fallback', /O80|Z37/i);
         clickAddNear('DignosticService', 'add_diagnosis');
         callHelpers([
           'addBillingDiagnosis',
@@ -3779,31 +3799,6 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           'updateBillingDiagonsticCodeRecord',
           'updateBillingDiagnosticCodeRecord',
         ], 'dx_helper');
-
-        const clickFirst = (rootId, label) => {
-          const root = document.getElementById(rootId);
-          if (!root) return null;
-          const el = Array.from(root.querySelectorAll('[data-id], [onclick*="digSelection"], [onclick*="Selection"], tr, li, a'))
-            .find((node) => {
-              const t = (node.innerText || '').replace(/\s+/g, ' ').trim();
-              return t && !/no results/i.test(t) && ((node.getAttribute('data-id') || node.getAttribute('onclick') || '').length > 0);
-            });
-          if (!el) return null;
-          try {
-            if (typeof window.digSelectionProcess === 'function' && el.getAttribute('data-id')) {
-              window.digSelectionProcess(el);
-            } else {
-              el.click();
-            }
-            attempts.push({ label, ok: true, text: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80) });
-            return { text: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80) };
-          } catch (err) {
-            attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
-            return null;
-          }
-        };
-        if (!procedure) procedure = clickFirst('procedure-codes-section', 'procedure_row');
-        if (!diagnosis) diagnosis = clickFirst('diagnosis-codes-section', 'diagnosis_row');
         await new Promise((r) => setTimeout(r, 800));
 
         const fillNearby = (needle, value) => {
@@ -4111,8 +4106,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
                 timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
               });
               if (chartNav.ok) {
-                await sleep(2000);
+                await sleep(1500);
                 await dismissSessionTakeover(session.page);
+                await session.page.evaluate(() => {
+                  const tab = document.querySelector('a[href*="#tabs-billing"], a[href*="tabs-billing"], [data-toggle="tab"][href*="billing"]');
+                  if (tab) tab.click();
+                });
+                await sleep(2000);
                 chartCharges = await session.page.evaluate(() => {
                   const text = (document.body.innerText || '').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, ' ').replace(/\s+/g, ' ').trim();
                   const has594 = /59400|59409|59080/i.test(text);
