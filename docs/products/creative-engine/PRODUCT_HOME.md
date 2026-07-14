@@ -9,7 +9,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/creative-engine/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/creative/*` + `/creative` studio UI |
-| **Last Updated** | 2026-07-14 — **KNOW:** Railway `REPLICATE_API` live (`replicateConfigured:true`). Wired Site Builder Flux hero fallback + SMOS Ideogram thumbs. graphic_design accepts `REPLICATE_API` alias. |
+| **Last Updated** | 2026-07-14 — script_compose fails closed when pipeline returns job id but no publicUrl (founder walk honesty). |
 
 ---
 
@@ -75,6 +75,7 @@ Studio: `/creative`, `/creative/studio`
 
 | Date | What | Why | State |
 |------|------|-----|-------|
+| 2026-07-14 | **script_compose honesty** — return `ok:false` / `script_compose_no_output` when pipeline has no file URL (was marking completed with empty outputs). | Founder walk: job completed in ~400ms with `vid_*` id and zero outputs. | ✅ code |
 | 2026-07-14 | **Wire consumers** — Site Builder `maybeFillGeneratedHero` (Flux when no scraped hero); SMOS `tryIdeogramThumbnail` prefers Ideogram over Sharp compose; `getReplicateApiToken()` accepts `REPLICATE_API`. Tip proved `replicateConfigured:true` + real render. | Adam: token is in as `REPLICATE_API` — finish it. | ✅ tip health + render; wire push pending |
 | 2026-07-14 | **Env alias** — accept Railway `REPLICATE_API` as `REPLICATE_API_TOKEN` via boot alias + registry/provider health. | Founder deployed as `REPLICATE_API`; tip still `replicateConfigured:false`. | ✅ code; tip verify post-redeploy |
 | 2026-07-14 | **graphic_design mode shipped** — `services/creative-engine/modes/graphic-design.js` (Ideogram v3-turbo / Recraft v3-svg / Flux 1.1-pro via Replicate, gated on `REPLICATE_API_TOKEN`) + `routes/creative-engine-graphic-design-routes.js` (standalone, see architectural-gap note above) + auto-register entry in `config/auto-registered-product-modules.json`. Verified live in production: `POST /api/v1/creative/graphic-design/estimate` returns real per-asset-type pricing; `POST .../render` correctly returns 503 `REPLICATE_API_TOKEN_REQUIRED` (token not yet set on Railway). Both governed builds (`22da9c4870`, `94d55baaf7`) committed via `POST /api/v1/lifeos/builder/build` with `platform_gap_fill:true` per SO-001; a third governed build (edit `index.js` dispatcher) was correctly rejected by Zone-3 governance — see architectural-gap note. Site Builder / SocialMediaOS consumption not yet wired (SocialMediaOS actively being iterated by a concurrent agent same day — see `docs/CONTINUITY_LOG.md`; Site Builder wiring needs the same Zone-3 edit-patch platform fix). | Adam: "we don't have [good graphics] and I don't have the time or patience... if it's affordable... let's incorporate it into our system." Researched market (Ideogram/Recraft/Flux all $0.03-0.08/image, already reachable through the existing Replicate account used for Kling/Wan video). | ✅ routes live + verified; ⛔ render blocked on `REPLICATE_API_TOKEN` |

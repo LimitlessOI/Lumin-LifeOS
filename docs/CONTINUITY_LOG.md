@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Founder walk as Adam (vault login + every SMOS feature)
+
+Adam: log in as me from Railway creds; test every feature; build a video. Minted founder session via tip vault (`LIFEOS_FOUNDER_LOGIN_*`). Matrix: YouTube API connected for `owner_id=adam`; browser JWT used numeric `sub` so UI said disconnected + generic founder spam cards — fixed `marketingOwnerId` to prefer handle. Consent→session→coach PASS; extract FAIL (bad JSON); generate 0 pieces; export FAIL. `script_compose` fake-completed with no MP4 — fail-closed. Real `footage_edit` 9:16 MP4 built (~3.4MB). Replicate Ideogram 429 until payment method on Replicate account.
+
 ## 2026-07-14 — Prime-time readiness report + fixes (SMOS + Site Builder)
 
 Adam: ignore accidental petition voice-note; want report — ready to market? If not, fix. **Verdict:** neither is ready for broad paid marketing yet; both are ready for founder-led beta / design partners. Live tip issues fixed this pass: SMOS brand overflow, duplicate talk titles, sequential Ideogram thrash → parallel; Site Builder mobile CTA clipped by chat bubble.

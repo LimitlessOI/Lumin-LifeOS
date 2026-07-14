@@ -74,10 +74,16 @@ const sharedMarketingClientAuth = `
       }
       function marketingOwnerId() {
         try {
+          const stored = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || '';
           const token = localStorage.getItem('lifeos_access_token') || '';
-          if (!token) return localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
+          if (!token) return stored || 'adam';
           const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-          return payload.sub || payload.handle || localStorage.getItem('lifeos_user') || 'adam';
+          // Prefer human handle over numeric sub — YouTube OAuth rows key on owner_id=adam.
+          const handle = String(payload.handle || payload.user_handle || stored || '').trim();
+          if (handle) return handle;
+          const sub = String(payload.sub || '').trim();
+          if (sub && !/^\d+$/.test(sub)) return sub;
+          return stored || 'adam';
         } catch {
           return localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
         }

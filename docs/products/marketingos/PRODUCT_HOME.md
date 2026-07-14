@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Prime-time fixes: unique talk titles, parallel Ideogram thumbs, brand overflow, default click psychology. |
+| **Last Updated** | 2026-07-14 — Founder walk: marketingOwnerId prefers JWT handle over numeric sub (fixes YouTube “not connected” + wrong playbook in browser). |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **Founder browser owner_id bug** — `marketingOwnerId()` preferred JWT `sub` (numeric `1`) over `handle` (`adam`), so tip UI missed YouTube OAuth + fell into founder spam playbook. Prefer handle. | Founder walk as Adam: API connected for `owner_id=adam`, browser said not connected + generic “Missing Clients?” cards. | ✅ | — | tip after deploy |
 | 2026-07-14 | **Prime-time SMOS polish** — dedupe duplicate talk titles; parallel Ideogram+Sharp thumbs; default `click_psychology`; `/marketing` brand no longer clips on narrow viewports. | Founder: ready to market? Live tip showed duplicate titles, 1/5 Ideogram, clipped SocialMediaOS brand. | ✅ | — | tip after deploy |
 | 2026-07-14 | **Ideogram thumbs via Replicate** — `tryIdeogramThumbnail` prefers Ideogram over Sharp compose when `REPLICATE_API` present; `thumbnailSource` on cards. | Adam: finish Replicate wiring into SMOS. | ✅ | — | tip after deploy |
 | 2026-07-14 | **SMOS creative v2** — Distinct thumbnail layouts + click-trigger punch lines; strong-model (`claude_sonnet`) talk rewrite after YouTube research; sales/click psychology + earned-attention `retention_beats` (0–10s earns next…); deeper shelf (relevance + viewCount). | Adam: thumbs terrible/same; copy mid — use higher model, more research, sales principles, every 10s earns next 10s. | ✅ | — | tip after deploy |

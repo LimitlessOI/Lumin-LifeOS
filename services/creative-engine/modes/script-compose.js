@@ -50,6 +50,14 @@ export async function runScriptCompose({ job, logger, VideoPipeline, storage }) 
   }
 
   logger?.info?.('[script_compose] completed', { outputKey, publicUrl });
+  if (!publicUrl && !absolutePath) {
+    return {
+      ok: false,
+      error: 'script_compose_no_output',
+      hint: 'Video pipeline returned a job id but no file URL. Path B may still be async/incomplete.',
+      pipelineResult: result && typeof result === 'object' ? { jobId: result.jobId || result.id } : undefined,
+    };
+  }
   return {
     ok: true,
     outputKey,

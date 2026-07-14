@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T08:22:23.635Z",
+  "generated_at": "2026-07-14T08:36:37.504Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11519,
   "files": [
@@ -36916,9 +36916,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 537886,
-      "mtime": "2026-07-14T08:22:18.607Z",
-      "indexed_at": "2026-07-14T08:22:23.635Z"
+      "bytes": 538544,
+      "mtime": "2026-07-14T08:36:08.157Z",
+      "indexed_at": "2026-07-14T08:36:37.504Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39176,9 +39176,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 7675,
-      "mtime": "2026-07-14T07:23:15.206Z",
-      "indexed_at": "2026-07-14T07:23:43.131Z"
+      "bytes": 7850,
+      "mtime": "2026-07-14T08:36:07.433Z",
+      "indexed_at": "2026-07-14T08:36:37.504Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -39590,9 +39590,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 112700,
-      "mtime": "2026-07-14T08:22:11.449Z",
-      "indexed_at": "2026-07-14T08:22:23.635Z"
+      "bytes": 113097,
+      "mtime": "2026-07-14T08:36:05.013Z",
+      "indexed_at": "2026-07-14T08:36:37.504Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66243,9 +66243,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 85530,
-      "mtime": "2026-07-14T08:20:52.672Z",
-      "indexed_at": "2026-07-14T08:22:23.635Z",
+      "bytes": 85843,
+      "mtime": "2026-07-14T08:36:01.208Z",
+      "indexed_at": "2026-07-14T08:36:37.504Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -82543,9 +82543,9 @@
     {
       "path": "services/creative-engine/modes/script-compose.js",
       "synopsis": "Creative Engine mode — script → Flux stills → FFmpeg compose (Replicate-gated)",
-      "bytes": 1928,
-      "mtime": "2026-07-10T21:33:45.139Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 2261,
+      "mtime": "2026-07-14T08:36:00.955Z",
+      "indexed_at": "2026-07-14T08:36:37.504Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
