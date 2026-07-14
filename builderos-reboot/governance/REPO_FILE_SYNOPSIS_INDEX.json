@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T00:03:02.624Z",
+  "generated_at": "2026-07-14T00:04:09.223Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11512,
   "files": [
@@ -66050,9 +66050,9 @@
     {
       "path": "routes/lifeos-twin-simulator-routes.js",
       "synopsis": "Registers TwinSimulatorRoutes routes/handlers (routes/lifeos-twin-simulator-routes.js).",
-      "bytes": 571,
-      "mtime": "2026-07-14T00:02:55.563Z",
-      "indexed_at": "2026-07-14T00:02:55.563Z"
+      "bytes": 551,
+      "mtime": "2026-07-14T00:04:09.223Z",
+      "indexed_at": "2026-07-14T00:04:09.223Z"
     },
     {
       "path": "routes/lifeos-ui-directives-routes.js",
