@@ -200,8 +200,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   }
   const BROWSER_JOB_TIMEOUT_MS = {
-    map_charge_slip: 90000,
-    charge_slip_from_billing: 90000,
+    map_charge_slip: 240000,
+    charge_slip_from_billing: 180000,
     prepare_claim_status: 180000,
     birth_activity: 180000,
     backlog_summary: 180000,
@@ -212,7 +212,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     if (!job || !['queued', 'running'].includes(job.status)) return job;
     const timeoutMs = BROWSER_JOB_TIMEOUT_MS[job.kind] || 120000;
     const startedAt = Date.parse(job.updated_at || job.created_at || '') || 0;
-    if (!startedAt || (Date.now() - startedAt) < (timeoutMs + 30000)) return job;
+    // Require a long grace past timeout so multi-instance GET polls do not kill a live runner mid-Puppeteer.
+    if (!startedAt || (Date.now() - startedAt) < (timeoutMs + 180000)) return job;
     const stale = {
       ...job,
       status: 'failed',
@@ -275,6 +276,10 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         job.updated_at = new Date().toISOString();
         void persistClientcareBrowserJob(job);
         let timer = null;
+        const heartbeat = setInterval(() => {
+          job.updated_at = new Date().toISOString();
+          void persistClientcareBrowserJob(job);
+        }, 25000);
         try {
           job.result = await Promise.race([
             runner(),
@@ -288,6 +293,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           job.error = err.message;
           logger.warn?.({ err: err.message, kind, id }, '[CLIENTCARE-BILLING] browser job failed');
         } finally {
+          clearInterval(heartbeat);
           if (timer) clearTimeout(timer);
         }
         job.updated_at = new Date().toISOString();
