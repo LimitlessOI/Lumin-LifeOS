@@ -3445,6 +3445,86 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  /**
+   * Open Charge Slip from a client billing chart (carries patient context better than cold ChargeSlip URL).
+   */
+  async function openChargeSlipFromBilling({
+    billingHref,
+    careType = 'Intrapartum Care',
+    dryRun = true,
+    pageTimeoutMs = 20000,
+  } = {}) {
+    if (!billingHref) return { ok: false, error: 'billingHref required' };
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, billingHref, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      if (!nav.ok) return { ok: false, error: nav.error, screenshots };
+      await sleep(1500);
+      const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+      if (billingTab) {
+        await billingTab.click().catch(() => {});
+        await sleep(800);
+      }
+
+      const clicked = await session.page.evaluate(() => {
+        const links = Array.from(document.querySelectorAll('a, button'));
+        const target = links.find((el) => /billing slip|charge slip|super ?bill/i.test((el.textContent || '').trim()))
+          || links.find((el) => /ChargeSlip|SuperBill/i.test(el.getAttribute('href') || ''));
+        if (!target) return { clicked: false };
+        target.click();
+        return { clicked: true, text: (target.textContent || '').trim().slice(0, 60), href: target.href || null };
+      });
+      await sleep(2500);
+
+      const url = session.page.url();
+      const chargeSlipType = await session.page.evaluate((wantType) => {
+        const sel = document.getElementById('ChargeSlipId');
+        if (!sel) return { set: false, reason: 'ChargeSlipId missing' };
+        const want = String(wantType || 'Intrapartum Care').toLowerCase();
+        const option = Array.from(sel.options || []).find((o) => (o.textContent || '').toLowerCase().includes(want))
+          || Array.from(sel.options || []).find((o) => /intrapartum|postpartum|newborn|antepartum/i.test(o.textContent || ''));
+        if (!option) return { set: false, available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()) };
+        sel.value = option.value;
+        Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        return { set: true, text: (option.textContent || '').trim(), value: option.value };
+      }, careType);
+
+      let saveResult = { attempted: false };
+      if (!dryRun && chargeSlipType?.set) {
+        saveResult = await session.page.evaluate(() => {
+          const save = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"]'))
+            .find((el) => /^save$/i.test((el.textContent || el.value || '').trim()));
+          if (!save) return { attempted: false };
+          save.click();
+          return { attempted: true, label: 'Save' };
+        });
+        await sleep(2500);
+      }
+
+      const page = await collectPageSummary(session.page);
+      const patientSelected = !/please select a patient/i.test(page.textPreview || '');
+      return {
+        ok: true,
+        billingHref,
+        clicked,
+        url,
+        chargeSlipType,
+        saveResult,
+        dryRun: dryRun !== false,
+        patientSelected,
+        page: { url: page.url, title: page.title, headings: page.headings },
+        textPreview: (page.textPreview || '').slice(0, 1200),
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function prepareClaimStatus({
     billingHref,
     clientBillingStatus = 'Claims Processing',
@@ -3475,6 +3555,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     scanBillingNotes,
     scanBirthActivity,
     mapChargeSlip,
+    openChargeSlipFromBilling,
     buildAccountRescueReport,
     buildFullAccountRescueReport,
     buildBacklogSummary,

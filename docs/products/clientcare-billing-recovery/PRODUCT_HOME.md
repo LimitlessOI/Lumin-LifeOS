@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — ChargeSlip: DateFilter + PersonId=All + visit-row click + care type + optional Save. |
+| **Last Updated** | 2026-07-14 — charge-slip-from-billing: open Billing Slip from client chart (patient context). |
 
 ---
 

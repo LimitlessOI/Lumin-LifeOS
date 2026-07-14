@@ -1167,6 +1167,34 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/charge-slip-from-billing', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const billingHref = String(req.body?.billing_href || req.body?.billingHref || '').trim();
+      if (!billingHref) return res.status(400).json({ ok: false, error: 'billing_href required' });
+      const job = enqueueBrowserJob(
+        'charge_slip_from_billing',
+        () => browserService.openChargeSlipFromBilling({
+          billingHref,
+          careType: req.body?.care_type || req.body?.careType,
+          dryRun: req.body?.dry_run !== false && req.body?.dryRun !== false,
+          pageTimeoutMs: req.body?.page_timeout_ms,
+        }),
+        req.body || {}
+      );
+      res.status(202).json({
+        ok: true,
+        started: true,
+        job_id: job.id,
+        poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        message: 'Charge Slip-from-billing queued',
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] charge-slip-from-billing failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/prepare-claim-status', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
