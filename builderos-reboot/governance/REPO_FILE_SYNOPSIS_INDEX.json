@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T20:41:38.471Z",
+  "generated_at": "2026-07-14T20:41:49.744Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11534,
   "files": [
@@ -66944,9 +66944,9 @@
     {
       "path": "routes/wellness-studio-routes.js",
       "synopsis": "Registers WellnessStudioRoutes routes/handlers (routes/wellness-studio-routes.js).",
-      "bytes": 3582,
-      "mtime": "2026-07-12T20:12:02.093Z",
-      "indexed_at": "2026-07-14T20:36:15.118Z"
+      "bytes": 1522,
+      "mtime": "2026-07-14T20:41:49.744Z",
+      "indexed_at": "2026-07-14T20:41:49.744Z"
     },
     {
       "path": "routes/wellness-therapist-routes.js",
