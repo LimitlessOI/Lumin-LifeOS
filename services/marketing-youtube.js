@@ -128,12 +128,56 @@ function buildMustSay(pack) {
   return out.slice(0, 5);
 }
 
+function buildHooks(pack, fb) {
+  const fromIdea = Array.isArray(pack.hooks) ? pack.hooks.map((h) => String(h || '').trim()).filter(Boolean) : [];
+  if (fromIdea.length >= 3) return fromIdea.slice(0, 3);
+  const primary = pack.hook || fb?.hook || '';
+  const extras = (fb?.hooks || []).filter(Boolean);
+  const out = [primary, ...fromIdea, ...extras].map((h) => String(h || '').trim()).filter(Boolean);
+  const uniq = [];
+  for (const h of out) {
+    if (!uniq.some((x) => x.toLowerCase() === h.toLowerCase())) uniq.push(h);
+  }
+  while (uniq.length < 3 && primary) {
+    const variants = [
+      primary,
+      primary.replace(/\.$/, '') + ' — and most people miss it.',
+      'Stop scrolling if ' + primary.charAt(0).toLowerCase() + primary.slice(1),
+    ];
+    for (const v of variants) {
+      if (uniq.length >= 3) break;
+      if (!uniq.some((x) => x.toLowerCase() === v.toLowerCase())) uniq.push(v);
+    }
+    break;
+  }
+  return uniq.slice(0, 3);
+}
+
+const FILM_MODES = [
+  { id: 'teleprompter', label: 'Teleprompter', blurb: 'Full script · sticky line · hold when you digress' },
+  { id: 'bullets', label: 'Bullet coach', blurb: 'Talk the bullets · producer pushes specificity' },
+  { id: 'bookends', label: 'Scripted bookends', blurb: 'Lock hook + exit · freestyle the middle' },
+  { id: 'read_riff', label: 'Read & riff', blurb: 'Glance the line · say it in your words' },
+  { id: 'story', label: 'Story-first', blurb: 'One lived story · then teaching + must-say' },
+  { id: 'interview', label: 'Hot-seat', blurb: 'Coach asks · you answer · extract hooks' },
+  { id: 'analytics', label: 'Analytics reverse', blurb: 'Film what your retention already proved' },
+  { id: 'shorts', label: 'Shorts-first', blurb: 'One hook · one punch · one CTA' },
+];
+
 const FALLBACK_IDEAS = [
   {
     title: 'The follow-up most agents skip after closing',
     why: 'Retention + trust story; high comment potential for service businesses.',
     angle: 'story',
     hook: 'Closed is not the finish line.',
+    hooks: [
+      'Closed is not the finish line.',
+      'Your client feels most alone the week AFTER closing.',
+      'Closing day content is vanity. Presence after close is the business.',
+    ],
+    competitor_strong: 'Listing tours and closing-day highlight reels get easy views.',
+    competitor_fail: 'Almost nobody teaches the post-close ritual with real client fears named.',
+    film_mode: 'story',
     competitor_gap: 'Most agent channels stop at the closing day highlight reel.',
     competitors: ['Typical agent listing tours', 'Generic "just closed!" posts'],
     talking_points: [
@@ -164,6 +208,14 @@ const FALLBACK_IDEAS = [
     why: 'Direct pain for founders who hate sounding fake on camera.',
     angle: 'teaching',
     hook: 'If it could be anyone\'s post, it shouldn\'t be yours.',
+    hooks: [
+      'If it could be anyone\'s post, it shouldn\'t be yours.',
+      'You can smell AI content in three seconds.',
+      'No names. No numbers. No scars. That\'s the tell.',
+    ],
+    competitor_strong: 'Template packs and "post every day" systems feel productive.',
+    competitor_fail: 'They never force a lived story from THIS week — so everything still sounds fake.',
+    film_mode: 'read_riff',
     competitor_gap: 'Competing "content tips" channels sell templates; few show how to sound like yourself.',
     competitors: ['Generic AI content coaches', 'Template-first social gurus'],
     talking_points: [
@@ -194,6 +246,14 @@ const FALLBACK_IDEAS = [
     why: 'Simple operating system > random posting streaks.',
     angle: 'system',
     hook: 'One video. One offer. One clear next step.',
+    hooks: [
+      'One video. One offer. One clear next step.',
+      'Daily posting is burning you out and still not booking calls.',
+      'If the video doesn\'t create a next step, it\'s expensive noise.',
+    ],
+    competitor_strong: 'Hustle channels win on posting volume and Shorts cadence.',
+    competitor_fail: 'They never define "filled calendar" as the metric — views substitute for revenue.',
+    film_mode: 'bookends',
     competitor_gap: 'Growth channels push daily posting; yours can win on one intentional weekly film.',
     competitors: ['Daily-post hustle channels', 'Batch-content factories'],
     talking_points: [
@@ -224,6 +284,14 @@ const FALLBACK_IDEAS = [
     why: 'Uses channel truth when connected; otherwise founder defaults.',
     angle: 'analytics',
     hook: 'Your best next video is already hiding in the numbers.',
+    hooks: [
+      'Your best next video is already hiding in the numbers.',
+      'Forget the trend list — what held people past 30 seconds on YOUR channel?',
+      'Your data beats someone else\'s trend every time.',
+    ],
+    competitor_strong: 'Trend-chasing Shorts and thumbnail advice feel current.',
+    competitor_fail: 'They skip reverse-engineering YOUR retention graph into the next film.',
+    film_mode: 'analytics',
     competitor_gap: 'Most creators chase trends; few reverse-engineer their own retention graph.',
     competitors: ['Trend-chasing Shorts channels', 'Thumbnail-only growth advice'],
     talking_points: [
@@ -254,6 +322,14 @@ const FALLBACK_IDEAS = [
     why: 'Earned-attention framework — practical and rewatchable.',
     angle: 'script',
     hook: 'If second 15 fails, minute 2 never happens.',
+    hooks: [
+      'If second 15 fails, minute 2 never happens.',
+      'Name the stuck point in the first breath — or lose them.',
+      'A formula hook without your scar is still forgettable.',
+    ],
+    competitor_strong: 'Hook-formula channels teach structures that get clicks.',
+    competitor_fail: 'They rarely pair open + lived proof + exit in the founder\'s real voice.',
+    film_mode: 'teleprompter',
     competitor_gap: 'Hook tips are everywhere; few give a reusable open + exit for YOUR voice.',
     competitors: ['Hook formula channels', 'Faceless AI narration pages'],
     talking_points: [
@@ -453,13 +529,14 @@ export function createYouTubeService(poolOrDeps = {}) {
 
   function buildSuggestionCards(ideas, { source, channelTitle, founderIntro }) {
     return ideas.map((idea, idx) => {
+      const fb = FALLBACK_IDEAS[idx % FALLBACK_IDEAS.length];
       const title = idea.title || idea.text;
       const hook = idea.hook || '';
       const intro = idea.intro || founderIntro || DEFAULT_INTRO;
       const close = idea.close || DEFAULT_CLOSE;
       const talking_points = Array.isArray(idea.talking_points) && idea.talking_points.length
         ? idea.talking_points.slice(0, 5)
-        : (FALLBACK_IDEAS[idx % FALLBACK_IDEAS.length].talking_points || []);
+        : (fb.talking_points || []);
       const competitors = Array.isArray(idea.competitors) ? idea.competitors.slice(0, 4) : [];
       const competitor_gap = idea.competitor_gap || idea.competitor_context?.gap || '';
       const draft = {
@@ -467,6 +544,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         why: idea.why || idea.rationale || '',
         angle: idea.angle || 'story',
         hook,
+        hooks: idea.hooks,
         intro,
         close,
         talking_points,
@@ -474,11 +552,18 @@ export function createYouTubeService(poolOrDeps = {}) {
         competitor_gap,
         must_say: idea.must_say,
         sample_script: idea.sample_script,
+        competitor_strong: idea.competitor_strong || fb.competitor_strong || '',
+        competitor_fail: idea.competitor_fail || fb.competitor_fail || '',
+        film_mode: idea.film_mode || fb.film_mode || 'teleprompter',
       };
+      const hooks = buildHooks(draft, fb);
       const must_say = buildMustSay(draft);
-      const sample_script = buildSampleScript({ ...draft, must_say });
+      const selectedHook = hooks[0] || hook;
+      const sample_script = buildSampleScript({ ...draft, hook: selectedHook, must_say });
       const pack = {
         ...draft,
+        hook: selectedHook,
+        hooks,
         must_say,
         sample_script,
       };
@@ -492,7 +577,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         channelTitle: channelTitle || null,
         thumbnailUrl: thumbnailSvgDataUri({
           title,
-          hook,
+          hook: selectedHook,
           subtitle: channelTitle ? `${channelTitle} · researched` : 'Researched · ready to film',
         }),
         startUrl: startPath,
@@ -542,33 +627,36 @@ export function createYouTubeService(poolOrDeps = {}) {
       try {
         const prompt = `You are a YouTube producer for a founder who hates AI-sounding scripts.
 Return ONLY a JSON array of exactly 5 talk cards. Each object MUST have:
-title, why, angle, hook, intro, talking_points (array of 3 short spoken bullets), close,
-competitors (array of 2 competing channel types or example creators), competitor_gap (one sentence: what they miss that we cover),
-must_say (array of 2–3 non-negotiable lines this video MUST land — especially competitor gaps and detail-heavy facts),
-sample_script (array of 8–14 short teleprompter lines he can READ aloud; include numbers/details when the topic needs them — e.g. cost of living, fees, timelines. Spoken English, not essay paragraphs).
+title, why, angle, hook, hooks (array of EXACTLY 3 distinct spoken openers — best you can invent; hook = hooks[0]),
+intro, talking_points (array of 3 short spoken bullets), close,
+competitors (array of 2 competing channel types), competitor_gap,
+competitor_strong (one sentence: what those competitors do well),
+competitor_fail (one sentence: what they fail to give that we will),
+must_say (array of 2–3 non-negotiable lines),
+film_mode (one of: teleprompter, bullets, bookends, read_riff, story, interview, analytics, shorts),
+sample_script (array of 8–14 short teleprompter lines; include numbers/details when needed).
 
 Rules:
 - Sound human. No hashtags. No corporate fluff. Specific > generic.
-- Hook = first line on camera (under 14 words).
-- intro = how THIS founder opens ("Hey I'm…") — use this founder intro if present: ${JSON.stringify(founderIntro)}
-- talking_points = what he talks through on camera (not essay paragraphs).
-- sample_script = full readable teleprompter: hook → intro → detail beats → must_say → competitor gap → close.
-- close = exit / CTA in his voice.
+- hooks = three DIFFERENT first lines on camera (under 16 words each). Make them the best opens you can.
+- intro = how THIS founder opens — use: ${JSON.stringify(founderIntro)}
 - Research competitors relative to channel: ${channelTitle || 'founder-led business channel'}
-- Recent titles on this channel: ${recentTitles.join(' | ') || 'none yet'}
-Prefer filmable ideas that beat competitors by lived specificity, not louder AI voice.`;
-        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 3200 });
+- Recent titles: ${recentTitles.join(' | ') || 'none yet'}
+Prefer filmable ideas that beat competitors by lived specificity.`;
+        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 3600 });
         const text = typeof raw === 'string' ? raw : (raw?.text || raw?.content || '');
         const match = String(text).match(/\[[\s\S]*\]/);
         const parsed = match ? JSON.parse(match[0]) : null;
         if (Array.isArray(parsed) && parsed.length) {
           ideas = parsed.slice(0, 5).map((item, i) => {
             const fb = FALLBACK_IDEAS[i % FALLBACK_IDEAS.length];
+            const hooks = buildHooks({ hook: item.hook || fb.hook, hooks: item.hooks }, fb);
             return {
               title: item.title || item.text || fb.title,
               why: item.why || item.rationale || fb.why,
               angle: item.angle || fb.angle,
-              hook: item.hook || fb.hook,
+              hook: hooks[0] || item.hook || fb.hook,
+              hooks,
               intro: item.intro || founderIntro || fb.intro,
               close: item.close || fb.close,
               talking_points: Array.isArray(item.talking_points) && item.talking_points.length
@@ -576,6 +664,9 @@ Prefer filmable ideas that beat competitors by lived specificity, not louder AI 
                 : fb.talking_points,
               competitors: Array.isArray(item.competitors) ? item.competitors : fb.competitors,
               competitor_gap: item.competitor_gap || item.competitor_context?.gap || fb.competitor_gap,
+              competitor_strong: item.competitor_strong || fb.competitor_strong,
+              competitor_fail: item.competitor_fail || fb.competitor_fail,
+              film_mode: item.film_mode || fb.film_mode,
               must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : fb.must_say,
               sample_script: normalizeScriptLines(item.sample_script).length
                 ? normalizeScriptLines(item.sample_script)
@@ -594,6 +685,7 @@ Prefer filmable ideas that beat competitors by lived specificity, not louder AI 
       connected: !!status.connected,
       oauthConfigured: !!status.oauthConfigured,
       source,
+      filmModes: FILM_MODES,
       suggestions: buildSuggestionCards(ideas, { source, channelTitle, founderIntro }),
     };
   }
@@ -606,6 +698,7 @@ Prefer filmable ideas that beat competitors by lived specificity, not louder AI 
     getChannel,
     listRecentVideos,
     getSuggestions,
+    filmModes: FILM_MODES,
   };
 }
 

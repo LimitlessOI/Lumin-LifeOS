@@ -136,107 +136,155 @@ const sharedMarketingClientAuth = `
 
 function renderPage(title, bodyHtml, clientScript = '') {
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${escapeHtml(title === 'SocialMediaOS' ? 'SocialMediaOS' : `${title} · SocialMediaOS`)}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
     <style>
-        :root {
-          --bg: #0a0a0f;
-          --surface: #14141c;
-          --border: rgba(255,255,255,0.08);
-          --text: #e8e8f0;
-          --muted: #9999bb;
-          --accent: #7c3aed;
-          --ok: #10b981;
-          --warn: #f59e0b;
-          --bad: #ef4444;
+        :root, html[data-theme="dark"] {
+          --bg: #0c0c0b;
+          --bg-glow: rgba(245, 158, 11, 0.12);
+          --surface: #161614;
+          --surface-2: #1e1e1a;
+          --border: rgba(255,255,255,0.09);
+          --text: #f4f1ea;
+          --muted: #a39e93;
+          --accent: #f59e0b;
+          --accent-soft: rgba(245, 158, 11, 0.16);
+          --accent-ink: #111;
+          --ok: #34d399;
+          --warn: #fbbf24;
+          --bad: #f87171;
+          --link: #fcd34d;
+          --tp-text: #fff;
         }
-        body { font-family: "Manrope", "Avenir Next", system-ui, sans-serif; margin: 0; padding: 20px; background: radial-gradient(1200px 600px at 10% -10%, rgba(124,58,237,0.22), transparent), var(--bg); color: var(--text); line-height: 1.6; }
-        .container { max-width: 720px; margin: 32px auto; background: var(--surface); padding: 28px 32px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 24px 80px rgba(0,0,0,0.35); }
-        .brand { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
-        .app-mode { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-        h1, h2 { color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin: 0 0 18px; font-family: "Space Grotesk", "Trebuchet MS", sans-serif; }
+        html[data-theme="light"] {
+          --bg: #f3efe6;
+          --bg-glow: rgba(13, 148, 136, 0.1);
+          --surface: #fffcf7;
+          --surface-2: #f7f2e8;
+          --border: rgba(28, 25, 23, 0.12);
+          --text: #1c1917;
+          --muted: #78716c;
+          --accent: #0f766e;
+          --accent-soft: rgba(15, 118, 110, 0.12);
+          --accent-ink: #fff;
+          --ok: #047857;
+          --warn: #b45309;
+          --bad: #b91c1c;
+          --link: #0f766e;
+          --tp-text: #1c1917;
+        }
+        * { box-sizing: border-box; }
+        body {
+          font-family: "DM Sans", "Avenir Next", system-ui, sans-serif;
+          margin: 0; padding: 20px;
+          background:
+            radial-gradient(900px 420px at 8% -8%, var(--bg-glow), transparent 55%),
+            radial-gradient(700px 380px at 100% 0%, rgba(255,255,255,0.03), transparent 50%),
+            var(--bg);
+          color: var(--text); line-height: 1.55;
+        }
+        .container { max-width: 960px; margin: 28px auto; background: var(--surface); padding: 28px 32px 36px; border-radius: 20px; border: 1px solid var(--border); }
+        .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+        .brand { font-family: "Syne", "Trebuchet MS", sans-serif; font-size: clamp(1.7rem, 3vw, 2.35rem); letter-spacing: -0.03em; color: var(--text); font-weight: 800; line-height: 1.05; margin: 0; border: none; padding: 0; }
+        .brand-sub { font-size: 13px; color: var(--muted); margin: 6px 0 0; max-width: 42ch; }
+        .theme-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: var(--surface-2); }
+        .theme-toggle button { background: transparent; color: var(--muted); border: none; border-radius: 0; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .theme-toggle button.active { background: var(--accent); color: var(--accent-ink); }
+        .app-mode { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+        h1, h2 { color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin: 0 0 18px; font-family: "Syne", "Trebuchet MS", sans-serif; letter-spacing: -0.02em; }
+        h1 { font-size: 1.35rem; border: none; padding: 0; margin-bottom: 8px; }
         p, li { color: var(--muted); }
-        a { color: #a78bfa; text-decoration: none; }
+        a { color: var(--link); text-decoration: none; }
         a:hover { text-decoration: underline; }
         .actions-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
-        button, input[type="submit"], a.btn { background: var(--accent); color: white; padding: 11px 16px; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; display: inline-block; text-decoration: none; }
-        a.btn:hover { text-decoration: none; filter: brightness(1.08); }
+        button, input[type="submit"], a.btn { background: var(--accent); color: var(--accent-ink); padding: 11px 16px; border: none; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 600; display: inline-block; text-decoration: none; }
+        a.btn:hover { text-decoration: none; filter: brightness(1.05); }
         button.secondary, a.btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
-        button:hover:not(:disabled) { filter: brightness(1.08); }
-        input[type="text"], textarea, select { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: #0d0d15; color: var(--text); box-sizing: border-box; }
+        button:hover:not(:disabled) { filter: brightness(1.05); }
+        input[type="text"], textarea, select { width: 100%; padding: 10px 12px; margin-top: 5px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; background: var(--surface-2); color: var(--text); }
         textarea { min-height: 120px; resize: vertical; }
         label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--text); }
-        .message { padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; }
-        .message.success { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.35); }
-        .message.error { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); }
+        .message { padding: 10px 14px; border-radius: 12px; margin-bottom: 14px; }
+        .message.success { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); border: 1px solid color-mix(in srgb, var(--ok) 35%, transparent); }
+        .message.error { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); border: 1px solid color-mix(in srgb, var(--bad) 30%, transparent); }
         .form-group { margin-bottom: 16px; }
-        .coach-message { background: rgba(16,185,129,0.1); padding: 14px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid var(--ok); }
-        .user-message { background: rgba(59,130,246,0.1); padding: 14px; border-radius: 10px; margin-bottom: 12px; border-right: 4px solid #3b82f6; text-align: right; }
-        .hook-detected { color: #fbbf24; font-weight: 700; margin-top: 6px; }
-        .coach-cue { color: #6ee7b7; font-weight: 600; margin-top: 6px; font-size: 13px; }
-        .coach-more { color: #fbbf24; font-weight: 600; margin-top: 6px; font-size: 13px; }
-        .content-card { background: #0d0d15; border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+        .coach-message { background: color-mix(in srgb, var(--ok) 10%, transparent); padding: 14px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid var(--ok); }
+        .user-message { background: var(--accent-soft); padding: 14px; border-radius: 12px; margin-bottom: 12px; border-right: 4px solid var(--accent); text-align: right; }
+        .hook-detected { color: var(--warn); font-weight: 700; margin-top: 6px; }
+        .coach-cue { color: var(--ok); font-weight: 600; margin-top: 6px; font-size: 13px; }
+        .coach-more { color: var(--warn); font-weight: 600; margin-top: 6px; font-size: 13px; }
+        .content-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
         .content-card h3 { margin-top: 0; color: var(--text); }
         .content-card .actions { text-align: right; margin-top: 12px; }
         .content-card .actions button { margin-left: 8px; }
         .status-badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.75em; font-weight: 700; text-transform: uppercase; }
-        .status-badge.draft, .status-badge.pending { background: rgba(245,158,11,0.2); color: #fbbf24; }
-        .status-badge.approved { background: rgba(16,185,129,0.2); color: #6ee7b7; }
-        .status-badge.rejected { background: rgba(239,68,68,0.2); color: #fca5a5; }
+        .status-badge.draft, .status-badge.pending { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+        .status-badge.approved { background: color-mix(in srgb, var(--ok) 18%, transparent); color: var(--ok); }
+        .status-badge.rejected { background: color-mix(in srgb, var(--bad) 18%, transparent); color: var(--bad); }
         .nav-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
         .lifeos-back { font-size: 13px; margin-bottom: 12px; }
-        .yt-panel { margin: 22px 0; padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: #0d0d15; }
+        .yt-panel { margin: 22px 0; padding: 18px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface-2); }
         .yt-panel h2 { border: none; margin: 0 0 8px; padding: 0; font-size: 1.15rem; }
-        .suggest-grid { display: grid; gap: 14px; margin-top: 14px; }
-        .suggest-card { display: grid; grid-template-columns: 200px 1fr; gap: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #12121a; padding-bottom: 4px; }
-        .suggest-card img { width: 200px; height: 112px; object-fit: cover; background: #000; }
-        .suggest-body { padding: 10px 14px 14px 0; }
-        .suggest-body h3 { margin: 0 0 6px; font-size: 1.05rem; border: none; padding: 0; }
+        .mode-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin: 12px 0 4px; }
+        .mode-chip { text-align: left; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 14px; padding: 10px 12px; cursor: pointer; font-size: 12px; line-height: 1.35; }
+        .mode-chip strong { display: block; font-size: 13px; margin-bottom: 2px; color: var(--text); }
+        .mode-chip.active { border-color: var(--accent); background: var(--accent-soft); }
+        .suggest-grid { display: grid; gap: 16px; margin-top: 14px; }
+        .suggest-card { display: grid; grid-template-columns: 220px 1fr; gap: 16px; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: var(--surface); padding-bottom: 6px; }
+        .suggest-card img { width: 220px; height: 124px; object-fit: cover; background: #000; }
+        .suggest-body { padding: 12px 16px 16px 0; }
+        .suggest-body h3 { margin: 0 0 6px; font-size: 1.15rem; border: none; padding: 0; font-family: "Syne", sans-serif; letter-spacing: -0.02em; color: var(--text); }
         .suggest-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
         .talk-block { margin: 8px 0; font-size: 13px; color: var(--text); line-height: 1.45; }
-        .talk-block strong { color: #c4b5fd; display: block; margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .talk-block strong { color: var(--accent); display: block; margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
         .talk-block ul { margin: 4px 0 0 18px; padding: 0; }
         .talk-block li { margin: 3px 0; }
+        .hook-pick { display: grid; gap: 6px; margin-top: 6px; }
+        .hook-pick label { display: flex; gap: 8px; align-items: flex-start; font-weight: 500; font-size: 13px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); cursor: pointer; color: var(--text); }
+        .hook-pick label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+        .hook-pick input { margin-top: 3px; }
         .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
-        .chip-row button { background: #1a1a24; border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
+        .chip-row button { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
         .chip-row button:hover { border-color: var(--accent); }
-        .script-panel { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: #0d0d15; margin-bottom: 16px; }
+        .script-panel { border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: var(--surface-2); margin-bottom: 16px; }
         .script-panel h2 { border: none; margin: 0 0 10px; padding: 0; font-size: 1.05rem; }
-        .script-panel .active-bullet { border-left: 3px solid var(--accent); padding-left: 10px; background: rgba(124,58,237,0.08); }
+        .script-panel .active-bullet { border-left: 3px solid var(--accent); padding-left: 10px; background: var(--accent-soft); }
         .teleprompter-dock {
           position: sticky; top: 0; z-index: 30; margin: 0 0 14px;
-          background: linear-gradient(180deg, #161622 0%, #0d0d15 100%);
-          border: 1px solid var(--accent); border-radius: 12px; padding: 16px;
-          box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+          background: var(--surface); border: 1px solid var(--accent); border-radius: 16px; padding: 16px;
         }
-        .teleprompter-dock .tp-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #c4b5fd; margin-bottom: 6px; }
+        .teleprompter-dock .tp-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
         .teleprompter-dock .tp-current {
-          font-size: 1.35rem; line-height: 1.35; color: #fff; font-weight: 600;
-          min-height: 2.6em; font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+          font-size: 1.4rem; line-height: 1.3; color: var(--tp-text); font-weight: 700;
+          min-height: 2.6em; font-family: "Syne", "Trebuchet MS", sans-serif; letter-spacing: -0.02em;
         }
         .teleprompter-dock .tp-meta { font-size: 12px; color: var(--muted); margin-top: 8px; }
         .tp-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-        .tp-controls button { background: #1a1a24; border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
+        .tp-controls button { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; cursor: pointer; }
         .tp-controls button:hover { border-color: var(--accent); }
-        .tp-controls button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-        .tp-lines { max-height: 280px; overflow: auto; border: 1px solid var(--border); border-radius: 10px; padding: 8px; background: #0a0a10; }
-        .tp-line { padding: 10px 12px; border-radius: 8px; margin: 4px 0; color: var(--muted); font-size: 14px; line-height: 1.4; cursor: pointer; border-left: 3px solid transparent; }
+        .tp-controls button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+        .tp-lines { max-height: 280px; overflow: auto; border: 1px solid var(--border); border-radius: 12px; padding: 8px; background: var(--surface); }
+        .tp-line { padding: 10px 12px; border-radius: 10px; margin: 4px 0; color: var(--muted); font-size: 14px; line-height: 1.4; cursor: pointer; border-left: 3px solid transparent; }
         .tp-line.done { opacity: 0.45; }
-        .tp-line.active { background: rgba(124,58,237,0.18); color: #fff; border-left-color: var(--accent); font-weight: 600; font-size: 15px; }
-        .tp-line.must { border-left-color: #fbbf24; }
+        .tp-line.active { background: var(--accent-soft); color: var(--text); border-left-color: var(--accent); font-weight: 600; font-size: 15px; }
+        .tp-line.must { border-left-color: var(--warn); }
         .sample-preview { font-size: 12px; color: var(--muted); max-height: 72px; overflow: hidden; }
-        .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(124,58,237,0.2); color: #c4b5fd; font-size: 11px; margin-right: 6px; }
-        @media (max-width: 640px) {
+        .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 11px; margin-right: 6px; font-weight: 600; }
+        @media (max-width: 720px) {
           .suggest-card { grid-template-columns: 1fr; }
           .suggest-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
-          .suggest-body { padding: 0 12px 12px; }
+          .suggest-body { padding: 0 14px 14px; }
+          .container { padding: 20px 16px 28px; }
         }
         html.in-lifeos-shell body { padding: 12px; background: var(--bg); }
-        html.in-lifeos-shell .container { margin: 0 auto; box-shadow: none; max-width: 880px; }
+        html.in-lifeos-shell .container { margin: 0 auto; box-shadow: none; max-width: 960px; }
         html.in-lifeos-shell .app-mode,
         html.in-lifeos-shell .lifeos-back { display: none; }
       </style>
@@ -244,11 +292,37 @@ function renderPage(title, bodyHtml, clientScript = '') {
 <body>
     <div class="container">
         <div class="lifeos-back"><a href="/overlay/lifeos-app.html?page=lifeos-dashboard.html">← Open LifeOS</a></div>
-        <div class="brand">SocialMediaOS</div>
-        <div class="app-mode">Standalone app · also available inside LifeOS</div>
+        <div class="topbar">
+          <div>
+            <div class="brand">SocialMediaOS</div>
+            <p class="brand-sub">Film like yourself. Research the gap. Sell the next conversation.</p>
+          </div>
+          <div class="theme-toggle" role="group" aria-label="Theme">
+            <button type="button" data-theme-set="dark" class="active">Dark</button>
+            <button type="button" data-theme-set="light">Light</button>
+          </div>
+        </div>
+        <div class="app-mode">Standalone product · also inside LifeOS</div>
         ${bodyHtml}
     </div>
     <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('smos_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        document.querySelectorAll('[data-theme-set]').forEach(function(btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-theme-set') === t);
+          btn.addEventListener('click', function() {
+            var next = btn.getAttribute('data-theme-set');
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('smos_theme', next);
+            document.querySelectorAll('[data-theme-set]').forEach(function(b) {
+              b.classList.toggle('active', b.getAttribute('data-theme-set') === next);
+            });
+          });
+        });
+      } catch (_) {}
+    })();
     ${sharedMarketingClientAuth}
     ${clientScript}
     </script>
@@ -262,14 +336,21 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   app.get('/marketing', (req, res) => {
     const ytFlag = String(req.query.youtube || '');
     const body = `
-            <h1>Home</h1>
-            <p>Turn a real conversation into a content pack — coach → extract → generate → approve → export.</p>
+            <h1>Film the next conversation</h1>
+            <p>Research the gap. Pick your hook. Choose how you film. Sound like yourself — not like AI.</p>
             <div id="ytBanner" class="message" style="display:none;"></div>
             <div class="actions-row">
               <a class="btn" href="/marketing/session/new">Start New Session</a>
               <a class="btn secondary" href="/marketing/calendar">Content Calendar</a>
               <a class="btn secondary" href="/marketing/atoms">Atom Library</a>
               <a class="btn secondary" href="/creative/studio">Creative Engine Studio</a>
+            </div>
+
+            <div class="yt-panel">
+              <h2>How do you want to film?</h2>
+              <p class="suggest-meta">Different creators film differently. Pick a mode — talk cards adapt.</p>
+              <div class="mode-grid" id="modeGrid"></div>
+              <p class="suggest-meta" id="modeBlurb">Select a mode to filter recommended talk cards.</p>
             </div>
 
             <div class="yt-panel">
@@ -283,21 +364,120 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             </div>
 
             <div class="yt-panel">
-              <h2>Top videos to make</h2>
-              <p id="suggestMeta">Loading researched talk cards (hook · intro · bullets · close · thumbnail)…</p>
-              <div id="suggestGrid" class="suggest-grid"></div>
-            </div>
-
-            <div class="nav-links">
-              <a href="/overlay/lifeos-app.html?page=marketing">Open inside LifeOS</a>
-              <a href="/overlay/lifeos-app.html?page=lifeos-lifere.html">LifeRE Marketing panel</a>
+              <h2>Talk cards</h2>
+              <p id="suggestMeta">Loading researched talk cards…</p>
+              <div class="suggest-grid" id="suggestGrid"></div>
             </div>
         `;
     const clientScript = `
-            const ytFlag = ${JSON.stringify(ytFlag)};
             const banner = document.getElementById('ytBanner');
+            const ytFlag = ${JSON.stringify(ytFlag)};
             if (ytFlag === 'connected') showMsg(banner, 'YouTube connected. Pulling channel ideas…', 'success');
             if (ytFlag === 'error') showMsg(banner, 'YouTube connect failed. Check Google OAuth keys + redirect URI, then retry.', 'error');
+            let selectedMode = (function(){ try { return localStorage.getItem('smos_film_mode') || ''; } catch(_) { return ''; } })();
+            let allSuggestions = [];
+            let filmModes = [];
+
+            function encodePack(pack) {
+              const json = JSON.stringify(pack);
+              const bytes = new TextEncoder().encode(json);
+              let bin = '';
+              bytes.forEach(function(b) { bin += String.fromCharCode(b); });
+              return btoa(bin).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/g, '');
+            }
+
+            function renderModes() {
+              const grid = document.getElementById('modeGrid');
+              if (!filmModes.length) {
+                filmModes = [
+                  { id: 'teleprompter', label: 'Teleprompter', blurb: 'Full script · sticky line' },
+                  { id: 'bullets', label: 'Bullet coach', blurb: 'Talk the bullets' },
+                  { id: 'bookends', label: 'Scripted bookends', blurb: 'Hook + exit locked' },
+                  { id: 'read_riff', label: 'Read & riff', blurb: 'Glance then say it' },
+                  { id: 'story', label: 'Story-first', blurb: 'Lived story then teach' },
+                  { id: 'interview', label: 'Hot-seat', blurb: 'Coach asks, you answer' },
+                  { id: 'analytics', label: 'Analytics reverse', blurb: 'Film what retained' },
+                  { id: 'shorts', label: 'Shorts-first', blurb: 'Hook · punch · CTA' }
+                ];
+              }
+              grid.innerHTML = filmModes.map(function(m) {
+                return '<button type="button" class="mode-chip' + (selectedMode === m.id ? ' active' : '') + '" data-mode="' + escapeHtml(m.id) + '"><strong>' + escapeHtml(m.label) + '</strong>' + escapeHtml(m.blurb || '') + '</button>';
+              }).join('');
+              const active = filmModes.find(function(m) { return m.id === selectedMode; });
+              document.getElementById('modeBlurb').textContent = active ? (active.label + ' — ' + (active.blurb || '')) : 'Showing all modes. Pick one to focus.';
+            }
+
+            document.getElementById('modeGrid').addEventListener('click', function(e) {
+              const btn = e.target.closest('[data-mode]');
+              if (!btn) return;
+              const id = btn.getAttribute('data-mode');
+              selectedMode = selectedMode === id ? '' : id;
+              try { localStorage.setItem('smos_film_mode', selectedMode); } catch(_) {}
+              renderModes();
+              renderSuggestionCards();
+            });
+
+            function buildStartUrl(s, hook) {
+              const pack = Object.assign({}, s, { hook: hook || s.hook, selected_hook: hook || s.hook, film_mode: selectedMode || s.film_mode });
+              delete pack.thumbnailUrl;
+              delete pack.startUrl;
+              delete pack.studioUrl;
+              const seed = encodePack(pack);
+              return '/marketing/session/new?seed_title=' + encodeURIComponent(s.title || '') + '&seed_angle=' + encodeURIComponent(s.angle || '') + '&seed_pack=' + encodeURIComponent(seed);
+            }
+
+            function renderSuggestionCards() {
+              const meta = document.getElementById('suggestMeta');
+              const grid = document.getElementById('suggestGrid');
+              grid.innerHTML = '';
+              const list = allSuggestions.filter(function(s) {
+                if (!selectedMode) return true;
+                return String(s.film_mode || '') === selectedMode;
+              });
+              if (!list.length) {
+                meta.textContent = selectedMode ? 'No talk cards for that mode yet — clear the mode or refresh ideas.' : 'No suggestions returned.';
+                return;
+              }
+              meta.textContent = (list.length) + ' talk card' + (list.length === 1 ? '' : 's') + (selectedMode ? ' · mode filtered' : '');
+              list.forEach(function(s, cardIdx) {
+                  const card = document.createElement('div');
+                  card.className = 'suggest-card';
+                  const bullets = (s.talking_points || []).map(function(b) { return '<li>' + escapeHtml(b) + '</li>'; }).join('');
+                  const comps = (s.competitors || []).map(function(c) { return escapeHtml(c); }).join(' · ');
+                  const musts = (s.must_say || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
+                  const hooks = (s.hooks && s.hooks.length ? s.hooks : [s.hook]).filter(Boolean).slice(0, 3);
+                  const hookHtml = hooks.map(function(h, i) {
+                    return '<label><input type="radio" name="hook-' + cardIdx + '" value="' + escapeHtml(h) + '"' + (i === 0 ? ' checked' : '') + '> <span>' + escapeHtml(h) + '</span></label>';
+                  }).join('');
+                  const scriptPreview = (s.sample_script || []).slice(0, 4).map(function(l) { return escapeHtml(l); }).join(' · ');
+                  card.innerHTML = '<img alt="thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
+                    '<div class="suggest-body">' +
+                    '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span><span class="pill">' + escapeHtml(s.angle || 'idea') + '</span>' +
+                    (s.film_mode ? '<span class="pill">' + escapeHtml(s.film_mode) + '</span>' : '') + '</div>' +
+                    '<h3>' + escapeHtml(s.title) + '</h3>' +
+                    '<div class="talk-block"><strong>Pick your hook (best 3)</strong><div class="hook-pick">' + hookHtml + '</div></div>' +
+                    '<div class="talk-block"><strong>Your intro</strong>' + escapeHtml(s.intro || '') + '</div>' +
+                    '<div class="talk-block"><strong>Talk through these</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block"><strong>Competitors are strong on</strong>' + escapeHtml(s.competitor_strong || '—') + '</div>' +
+                    '<div class="talk-block"><strong>They fail to give</strong>' + escapeHtml(s.competitor_fail || s.competitor_gap || '') + '</div>' +
+                    '<div class="talk-block"><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block"><strong>Sample script</strong><div class="sample-preview">' + (scriptPreview || '—') + ((s.sample_script||[]).length > 4 ? '…' : '') + '</div></div>' +
+                    '<div class="talk-block"><strong>Exit</strong>' + escapeHtml(s.close || '') +
+                    (comps ? '<div class="suggest-meta" style="margin-top:4px">Vs: ' + comps + '</div>' : '') + '</div>' +
+                    '<div class="actions-row">' +
+                    '<a class="btn film-btn" href="#">Film this talk card</a>' +
+                    '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Open Studio</a>' +
+                    '</div></div>';
+                  const filmBtn = card.querySelector('.film-btn');
+                  filmBtn.addEventListener('click', function(ev) {
+                    ev.preventDefault();
+                    const checked = card.querySelector('input[type=radio]:checked');
+                    const hook = checked ? checked.value : (hooks[0] || s.hook);
+                    window.location.href = marketingHref(buildStartUrl(s, hook));
+                  });
+                  grid.appendChild(card);
+              });
+            }
 
             async function loadYoutubeStatus() {
               const el = document.getElementById('ytStatus');
@@ -319,40 +499,16 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function loadSuggestions() {
               const meta = document.getElementById('suggestMeta');
-              const grid = document.getElementById('suggestGrid');
               meta.textContent = 'Loading researched ideas…';
-              grid.innerHTML = '';
               try {
                 const res = await marketingFetch('/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'suggestions failed');
-                meta.textContent = (data.connected ? 'Based on your channel + research · ' : 'Research defaults until channel connects · ') + 'source: ' + (data.source || 'unknown');
-                (data.suggestions || []).forEach(function(s) {
-                  const card = document.createElement('div');
-                  card.className = 'suggest-card';
-                  const bullets = (s.talking_points || []).map(function(b) { return '<li>' + escapeHtml(b) + '</li>'; }).join('');
-                  const comps = (s.competitors || []).map(function(c) { return escapeHtml(c); }).join(' · ');
-                  const musts = (s.must_say || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
-                  const scriptPreview = (s.sample_script || []).slice(0, 4).map(function(l) { return escapeHtml(l); }).join(' · ');
-                  card.innerHTML = '<img alt="thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
-                    '<div class="suggest-body">' +
-                    '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span><span class="pill">' + escapeHtml(s.angle || 'idea') + '</span></div>' +
-                    '<h3>' + escapeHtml(s.title) + '</h3>' +
-                    '<div class="talk-block"><strong>Hook</strong>' + escapeHtml(s.hook || '') + '</div>' +
-                    '<div class="talk-block"><strong>Your intro</strong>' + escapeHtml(s.intro || '') + '</div>' +
-                    '<div class="talk-block"><strong>Talk through these</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
-                    '<div class="talk-block"><strong>Must say (competitors miss this)</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
-                    '<div class="talk-block"><strong>Sample script (teleprompter)</strong><div class="sample-preview">' + (scriptPreview || '—') + ( (s.sample_script||[]).length > 4 ? '…' : '') + '</div></div>' +
-                    '<div class="talk-block"><strong>Exit</strong>' + escapeHtml(s.close || '') + '</div>' +
-                    '<div class="talk-block"><strong>Why this beats competitors</strong>' + escapeHtml(s.competitor_gap || s.why || '') +
-                    (comps ? '<div class="suggest-meta" style="margin-top:4px">Vs: ' + comps + '</div>' : '') + '</div>' +
-                    '<div class="actions-row">' +
-                    '<a class="btn" href="' + escapeHtml(marketingHref(s.startUrl)) + '">Film this talk card</a>' +
-                    '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Open Studio</a>' +
-                    '</div></div>';
-                  grid.appendChild(card);
-                });
-                if (!(data.suggestions || []).length) meta.textContent = 'No suggestions returned.';
+                filmModes = data.filmModes || filmModes;
+                allSuggestions = data.suggestions || [];
+                renderModes();
+                renderSuggestionCards();
+                meta.textContent = (data.connected ? 'Based on your channel + research · ' : 'Research defaults until channel connects · ') + 'source: ' + (data.source || 'unknown') + ' · ' + meta.textContent;
               } catch (err) {
                 meta.textContent = 'Could not load ideas: ' + err.message;
               }
@@ -376,6 +532,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
               }
             });
             document.getElementById('ytRefreshBtn').addEventListener('click', function() { loadSuggestions(); });
+            renderModes();
             loadYoutubeStatus();
             loadSuggestions().catch(function(){});
         `;
