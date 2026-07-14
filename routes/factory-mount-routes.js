@@ -11,7 +11,9 @@
  */
 import express from 'express';
 import fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
+import { autoRegisterProductModules } from '../startup/auto-register-product-modules.js';
 import { dispatchExecuteMission } from '../factory-staging/factory-core/builder/run-mission.js';
 import { runBpbIntakeGate } from '../factory-staging/factory-core/bpb/intake-gate.js';
 import { summarizeHistorian, appendHistorianRecord } from '../factory-staging/factory-core/historian/append-record.js';
@@ -41,6 +43,22 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
       return { status: res.status };
     },
     readFile: async (relPath) => fs.readFileSync(resolveRepoPath(relPath), 'utf8'),
+    importModule: async (relPath) => {
+      const target = resolveRepoPath(relPath);
+      if (!fs.existsSync(target)) return undefined;
+      const mod = await import(pathToFileURL(target).href);
+      return mod;
+    },
+    reload: async (target) => {
+      if (!target) throw new Error('reload target required');
+      const results = await autoRegisterProductModules(router, { requireKey, pool }, { modules: [{ path: target }], logger });
+      const key = String(target).replace(/\\/g, '/');
+      const entry = results.find((r) => r.module === key);
+      if (!entry || entry.status !== 'mounted') {
+        throw new Error(entry?.error || `reload did not mount ${target}`);
+      }
+      return entry;
+    },
   };
 
   // STEP 4 codegen runner (the "hands"), injected at the route boundary so

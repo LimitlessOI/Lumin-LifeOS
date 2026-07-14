@@ -90,6 +90,7 @@ export function authorAssertionsFromSpec(step) {
     const expect_status = Array.isArray(spec.route.expect_status) ? spec.route.expect_status : undefined;
     assertions.push({
       type: expect_status ? 'http_status' : 'module_mounts',
+      target,
       method: spec.route.method || 'GET',
       path: spec.route.path,
       ...(expect_status ? { expect_status } : {}),
