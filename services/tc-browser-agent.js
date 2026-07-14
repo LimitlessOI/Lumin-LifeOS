@@ -440,13 +440,15 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       while (Date.now() < deadline) {
         for (const p of await browser.pages()) {
           const u = p.url();
-          if (_urlLooksLikeTransactionDesk(u) || /transactiondesk\.com|lonewolf/i.test(u)) {
+          if (_urlLooksLikeTransactionDesk(u)) {
             if (typeof session.setPage === 'function') await session.setPage(p);
             return p;
           }
         }
         const fresh = (await browser.pages()).filter((p) => !before.has(p));
         for (const p of fresh.reverse()) {
+          const u = p.url();
+          if (_urlIsTransactionDeskLogin(u)) continue;
           if (typeof session.setPage === 'function') await session.setPage(p);
           return p;
         }
@@ -465,13 +467,42 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
 
         const urlAfterSso = session.page.url();
         lastSsoUrls.push(urlAfterSso);
-        if (_urlLooksLikeTransactionDesk(urlAfterSso) || /transactiondesk\.com|lonewolf/i.test(urlAfterSso)) {
+        if (_urlLooksLikeTransactionDesk(urlAfterSso)) {
           const sp = await screenshotPath('transactiondesk-loaded-via-sso');
           await session.page.screenshot({ path: sp });
           logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk loaded via direct SSO URL');
           return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
         }
-        logger.warn?.({ urlAfterSso, ssoUrl }, '[TC-BROWSER] SSO candidate did not land on TD');
+        if (_urlIsTransactionDeskLogin(urlAfterSso)) {
+          logger.warn?.({ urlAfterSso, ssoUrl }, '[TC-BROWSER] SSO landed on TD login — trying Clareity/SSO button');
+          const clickedSso = await session.page.evaluate(() => {
+            const els = Array.from(document.querySelectorAll('a, button, [role="button"], input[type="submit"]'));
+            const el = els.find((e) =>
+              /clareity|sso|single\s*sign|mls\s*login|glvar|login\s*with/i.test(
+                `${e.textContent || ''} ${e.value || ''} ${e.getAttribute?.('href') || ''}`
+              )
+            );
+            if (el) {
+              el.click();
+              return true;
+            }
+            return false;
+          });
+          if (clickedSso) {
+            await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+            await session.page.waitForTimeout(2000);
+            await adoptTdTabIfAny(6000);
+            const afterBtn = session.page.url();
+            lastSsoUrls.push(`login-btn→${afterBtn}`);
+            if (_urlLooksLikeTransactionDesk(afterBtn)) {
+              const sp = await screenshotPath('transactiondesk-loaded-via-sso-btn');
+              await session.page.screenshot({ path: sp });
+              return { ok: true, url: afterBtn, screenshots: [sp], via: 'td_login_clareity_button' };
+            }
+          }
+        } else {
+          logger.warn?.({ urlAfterSso, ssoUrl }, '[TC-BROWSER] SSO candidate did not land on TD');
+        }
       } catch (ssoErr) {
         lastSsoUrls.push(`ERR:${ssoErr.message}`);
         logger.warn?.({ err: ssoErr.message, ssoUrl }, '[TC-BROWSER] Direct SSO navigation threw');
@@ -550,6 +581,13 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
 
     const url = session.page.url();
+    if (!_urlLooksLikeTransactionDesk(url)) {
+      const sp = await screenshotPath('glvar-td-still-login');
+      await session.page.screenshot({ path: sp, fullPage: true });
+      throw new Error(
+        `Reached TransactionDesk host but not authenticated (url=${url}; SSO tries: ${lastSsoUrls.join(' | ')}). Screenshot: ${sp}`
+      );
+    }
     const sp = await screenshotPath('transactiondesk-loaded');
     await session.page.screenshot({ path: sp });
     logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to TransactionDesk via portal link');
@@ -587,7 +625,13 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   }
 
   function _urlLooksLikeTransactionDesk(url) {
-    return /transactiondesk|ziplogix|zipform|lonewolf|tdnavigator|pr\.transactiondesk/i.test(url || '');
+    const u = String(url || '');
+    if (/\/login|sign-?in|LogOn|auth\/|idp\/login/i.test(u)) return false;
+    return /transactiondesk|ziplogix|zipform|lonewolf|tdnavigator|pr\.transactiondesk/i.test(u);
+  }
+
+  function _urlIsTransactionDeskLogin(url) {
+    return /transactiondesk\.com/i.test(url || '') && /\/login|sign-?in|LogOn/i.test(url || '');
   }
 
   /**
@@ -604,7 +648,17 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const nav = await navigateToTransactionDesk(session);
     screenshots.push(...(nav.screenshots || []));
     url = session.page.url();
-    return { ok: true, via: 'portal_link', url, screenshots };
+    if (!_urlLooksLikeTransactionDesk(url)) {
+      return {
+        ok: false,
+        via: nav.via || 'failed',
+        url,
+        screenshots,
+        error: `Not authenticated into TransactionDesk (url=${url})`,
+        needs_human: 'Open GLVAR → TransactionDesk once in a browser to confirm SSO entitlement, then retry',
+      };
+    }
+    return { ok: true, via: nav.via || 'portal_link', url, screenshots };
   }
 
   /**

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T09:54:20.918Z",
+  "generated_at": "2026-07-14T09:57:15.254Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11523,
   "files": [
@@ -39939,9 +39939,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 112533,
-      "mtime": "2026-07-14T09:54:17.477Z",
-      "indexed_at": "2026-07-14T09:54:20.918Z"
+      "bytes": 112892,
+      "mtime": "2026-07-14T09:57:11.653Z",
+      "indexed_at": "2026-07-14T09:57:15.254Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -86794,9 +86794,9 @@
     {
       "path": "services/tc-browser-agent.js",
       "synopsis": "tc-browser-agent.js",
-      "bytes": 75722,
-      "mtime": "2026-07-14T09:54:03.069Z",
-      "indexed_at": "2026-07-14T09:54:20.918Z",
+      "bytes": 78093,
+      "mtime": "2026-07-14T09:57:10.304Z",
+      "indexed_at": "2026-07-14T09:57:15.254Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -86939,9 +86939,9 @@
     {
       "path": "services/tc-listing-skyslope-sync.js",
       "synopsis": "tc-listing-skyslope-sync.js",
-      "bytes": 4790,
-      "mtime": "2026-07-14T09:54:08.564Z",
-      "indexed_at": "2026-07-14T09:54:20.918Z",
+      "bytes": 4939,
+      "mtime": "2026-07-14T09:57:03.671Z",
+      "indexed_at": "2026-07-14T09:57:15.254Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
