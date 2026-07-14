@@ -9,7 +9,7 @@
   "steps": [
     {
       "id": "1",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "db/migrations/create_roi_tracker_persistence.sql",
       "task": "specify ROI tracker persistence",
       "spec": "Add a migration to create the ROI tracker table in the database",
@@ -19,14 +19,14 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS roi_tracker"
       ],
-      "last_attempt_at": "2026-07-14T21:54:29.259Z",
-      "last_error": "governed_ship_failed",
-      "blocker_class": null,
+      "last_attempt_at": "2026-07-14T22:10:22.250Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "blocker_class": "BLOCKED_TOOLING",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
-      "revive_count": 3,
-      "revived_at": "2026-07-14T21:53:38.423Z",
+      "revive_count": 4,
+      "revived_at": "2026-07-14T22:10:22.250Z",
       "last_attempt": null,
       "demoted": false,
       "demote_reason": null,
