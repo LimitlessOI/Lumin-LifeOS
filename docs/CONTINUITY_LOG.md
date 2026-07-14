@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Extract status + approve aliases (tip verified)
+
+Tip loop after `70c44a25`: extract HTTP 200 (no more `marketing_sessions_status_check`); generate pieces; PATCH `status:approved` and `action:approve` both → approved; export text pack 200. Still external: Replicate Ideogram 429 until payment method.
+
 ## 2026-07-14 — Fix audit findings (SMOS + Site Builder)
 
 Fixed: talk title stem-dedupe; extract/generate fail-soft (heuristic + template fallback); marketing owner_id prefers handle over numeric JWT sub; Site Builder landing pricing shows Free/$1/$45/$35 custom. Tip redeploy after push.
