@@ -203,8 +203,8 @@ export function registerMarketingCalendarRoutes(app, deps) {
       }
       if (!isNonEmptyString(text)) return jsonError(res, 400, 'text is required');
 
-      const reuse = isNonEmptyString(reuse_consent_level) ? reuse_consent_level.trim() : null;
-      if (reuse && !ALLOWED_REUSE_CONSENT_LEVELS.has(reuse)) {
+      const reuse = isNonEmptyString(reuse_consent_level) ? reuse_consent_level.trim() : 'session_only';
+      if (!ALLOWED_REUSE_CONSENT_LEVELS.has(reuse)) {
         return jsonError(res, 400, 'invalid reuse_consent_level');
       }
 

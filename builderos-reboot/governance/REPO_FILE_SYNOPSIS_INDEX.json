@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T09:09:46.183Z",
+  "generated_at": "2026-07-14T09:12:53.707Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11520,
   "files": [
@@ -39590,9 +39590,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 115366,
-      "mtime": "2026-07-14T09:09:37.422Z",
-      "indexed_at": "2026-07-14T09:09:46.183Z"
+      "bytes": 115484,
+      "mtime": "2026-07-14T09:12:48.006Z",
+      "indexed_at": "2026-07-14T09:12:53.707Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -66173,9 +66173,9 @@
     {
       "path": "routes/marketing-calendar-routes.js",
       "synopsis": "MarketingOS Phase 2 calendar/atoms JSON API routes.",
-      "bytes": 10640,
-      "mtime": "2026-07-13T03:41:54.522Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 10641,
+      "mtime": "2026-07-14T09:12:47.022Z",
+      "indexed_at": "2026-07-14T09:12:53.707Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
