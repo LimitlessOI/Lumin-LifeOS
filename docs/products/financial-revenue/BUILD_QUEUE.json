@@ -71,13 +71,13 @@
     },
     {
       "id": "3",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/revenueGoalTracking.js",
       "task": "define revenue goal tracking endpoint",
       "spec": "Define the revenue goal tracking endpoint with a $500/day target constraint",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "registerRevenueGoalTrackingRoutes"
       ],
@@ -85,7 +85,7 @@
         "method": "POST",
         "path": "/api/v1/financial-revenue/revenue-goal"
       },
-      "last_attempt_at": "2026-07-14T23:03:55.236Z",
+      "last_attempt_at": "2026-07-14T23:33:46.293Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "blocker_class": "BLOCKED_TOOLING",
       "commit_sha": null,
