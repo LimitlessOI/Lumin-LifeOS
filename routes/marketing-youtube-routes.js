@@ -128,6 +128,19 @@ export function registerMarketingYoutubeRoutes(app, deps = {}) {
       return res.status(500).json({ ok: false, error: getErrorMessage(error) });
     }
   });
+
+  app.post('/api/v1/marketing/youtube/channel-url', requireKey, async (req, res) => {
+    try {
+      const ownerId = resolveOwnerId(req) || 'adam';
+      const channelUrl = req.body?.channel_url || req.body?.youtubeChannelUrl || '';
+      const result = await youtube.saveChannelUrl(ownerId, channelUrl);
+      if (!result.ok) return res.status(400).json(result);
+      return res.json(result);
+    } catch (error) {
+      logger?.error?.({ err: error }, 'marketing youtube channel-url save failed');
+      return res.status(500).json({ ok: false, error: getErrorMessage(error) });
+    }
+  });
 }
 
 export default registerMarketingYoutubeRoutes;

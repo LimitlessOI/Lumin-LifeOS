@@ -236,11 +236,6 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .mode-chip { text-align: left; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 14px; padding: 10px 12px; cursor: pointer; font-size: 12px; line-height: 1.35; }
         .mode-chip strong { display: block; font-size: 13px; margin-bottom: 2px; color: var(--text); }
         .mode-chip.active { border-color: var(--accent); background: var(--accent-soft); }
-        .suggest-grid { display: grid; gap: 16px; margin-top: 14px; }
-        .suggest-card { display: grid; grid-template-columns: 220px 1fr; gap: 16px; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: var(--surface); padding-bottom: 6px; }
-        .suggest-card img { width: 220px; height: 124px; object-fit: cover; background: #000; }
-        .suggest-body { padding: 12px 16px 16px 0; }
-        .suggest-body h3 { margin: 0 0 6px; font-size: 1.15rem; border: none; padding: 0; font-family: "Syne", sans-serif; letter-spacing: -0.02em; color: var(--text); }
         .suggest-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
         .talk-block { margin: 8px 0; font-size: 13px; color: var(--text); line-height: 1.45; }
         .talk-block strong { color: var(--accent); display: block; margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -277,10 +272,57 @@ function renderPage(title, bodyHtml, clientScript = '') {
         .tp-line.must { border-left-color: var(--warn); }
         .sample-preview { font-size: 12px; color: var(--muted); max-height: 72px; overflow: hidden; }
         .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 11px; margin-right: 6px; font-weight: 600; }
+        [data-tip] { position: relative; cursor: help; }
+        [data-tip]::after {
+          content: attr(data-tip);
+          position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%) translateY(4px);
+          min-width: 180px; max-width: 280px; padding: 10px 12px; border-radius: 12px;
+          background: #111; color: #f5f5f4; font-size: 12px; line-height: 1.4; font-weight: 500;
+          opacity: 0; pointer-events: none; transition: opacity .15s ease, transform .15s ease; z-index: 50;
+          box-shadow: 0 12px 40px rgba(0,0,0,.35); text-align: left; white-space: normal;
+        }
+        html[data-theme="light"] [data-tip]::after { background: #1c1917; color: #fff; }
+        [data-tip]:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .suggest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 14px; }
+        .suggest-card {
+          display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 22px;
+          overflow: hidden; background: var(--surface); box-shadow: 0 18px 50px rgba(0,0,0,.18);
+          transition: transform .18s ease, border-color .18s ease;
+        }
+        .suggest-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+        .thumb-stage { position: relative; aspect-ratio: 16/9; background: #0a0a0a; overflow: hidden; }
+        .thumb-stage img.thumb-main { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .thumb-badge {
+          position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,.72); color: #fff;
+          font-size: 11px; font-weight: 700; padding: 6px 10px; border-radius: 999px; letter-spacing: .02em;
+        }
+        .thumb-badge.good { background: color-mix(in srgb, var(--ok) 85%, #000); }
+        .suggest-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        .suggest-body h3 { margin: 0 0 6px; font-size: 1.12rem; border: none; padding: 0; font-family: "Syne", sans-serif; letter-spacing: -0.02em; color: var(--text); }
+        .serp-box { margin: 10px 0; padding: 10px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface-2); }
+        .serp-row { display: grid; grid-template-columns: 56px 1fr auto; gap: 8px; align-items: center; padding: 6px 0; border-top: 1px solid var(--border); }
+        .serp-row:first-child { border-top: none; }
+        .serp-row.ours { background: var(--accent-soft); margin: 0 -6px; padding: 8px 6px; border-radius: 10px; border: none; }
+        .serp-mini { width: 56px; height: 32px; border-radius: 6px; object-fit: cover; background: #222; }
+        .serp-title { font-size: 12px; color: var(--text); font-weight: 600; line-height: 1.3; }
+        .serp-meta { font-size: 11px; color: var(--muted); }
+        .score-ring { font-size: 12px; font-weight: 800; color: var(--accent); }
+        .tour-panel {
+          position: fixed; inset: 0; background: rgba(0,0,0,.72); z-index: 100; display: none;
+          align-items: center; justify-content: center; padding: 20px;
+        }
+        .tour-panel.open { display: flex; }
+        .tour-card {
+          width: min(560px, 100%); background: var(--surface); border: 1px solid var(--border);
+          border-radius: 20px; padding: 22px; box-shadow: 0 30px 80px rgba(0,0,0,.45);
+        }
+        .tour-card h2 { border: none; margin: 0 0 8px; font-size: 1.4rem; }
+        .tour-progress { height: 4px; background: var(--border); border-radius: 999px; margin: 14px 0; overflow: hidden; }
+        .tour-progress > span { display: block; height: 100%; background: var(--accent); width: 0%; transition: width .25s ease; }
+        .channel-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin-top: 10px; }
+        .channel-row input { flex: 1; min-width: 220px; margin: 0; }
         @media (max-width: 720px) {
-          .suggest-card { grid-template-columns: 1fr; }
-          .suggest-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
-          .suggest-body { padding: 0 14px 14px; }
+          .suggest-grid { grid-template-columns: 1fr; }
           .container { padding: 20px 16px 28px; }
         }
         html.in-lifeos-shell body { padding: 12px; background: var(--bg); }
@@ -336,37 +378,55 @@ export function registerMarketingSessionUiRoutes(app, deps) {
   app.get('/marketing', (req, res) => {
     const ytFlag = String(req.query.youtube || '');
     const body = `
-            <h1>Film the next conversation</h1>
+            <h1 data-tip="This is your filming desk — research → hook → film mode → coach → publish pack.">Film the next conversation</h1>
             <p>Research the gap. Pick your hook. Choose how you film. Sound like yourself — not like AI.</p>
-            <div id="ytBanner" class="message" style="display:none;"></div>
             <div class="actions-row">
-              <a class="btn" href="/marketing/session/new">Start New Session</a>
-              <a class="btn secondary" href="/marketing/calendar">Content Calendar</a>
-              <a class="btn secondary" href="/marketing/atoms">Atom Library</a>
-              <a class="btn secondary" href="/creative/studio">Creative Engine Studio</a>
+              <button type="button" class="btn" id="tourStartBtn" data-tip="60-second interactive tour of SocialMediaOS — like a product demo video.">Watch product tour</button>
+              <a class="btn secondary" href="/marketing/session/new" data-tip="Start a coaching session without a talk card.">Start New Session</a>
+              <a class="btn secondary" href="/marketing/calendar" data-tip="Schedule approved pieces on your content calendar.">Content Calendar</a>
+              <a class="btn secondary" href="/marketing/atoms" data-tip="Reusable hooks, stories, and CTAs from past sessions.">Atom Library</a>
             </div>
+            <div id="ytBanner" class="message" style="display:none;"></div>
+            <div id="apiBanner" class="message" style="display:none;"></div>
 
-            <div class="yt-panel">
-              <h2>How do you want to film?</h2>
-              <p class="suggest-meta">Different creators film differently. Pick a mode — talk cards adapt.</p>
+            <div class="yt-panel" data-tour="modes">
+              <h2 data-tip="Different creators film differently. Modes change coaching style and which cards bubble up.">How do you want to film?</h2>
+              <p class="suggest-meta">Hover any mode for what it means. Click to filter talk cards.</p>
               <div class="mode-grid" id="modeGrid"></div>
               <p class="suggest-meta" id="modeBlurb">Select a mode to filter recommended talk cards.</p>
             </div>
 
-            <div class="yt-panel">
-              <h2>YouTube channel</h2>
+            <div class="yt-panel" data-tour="channel">
+              <h2 data-tip="We pull your face + recent video frames to build thumbnails that can compete in-feed.">YouTube channel &amp; thumbnail engine</h2>
               <p id="ytStatus">Checking connection…</p>
               <div class="actions-row">
-                <a class="btn" id="ytConnectBtn" href="#">Connect YouTube (Google login)</a>
-                <button type="button" class="secondary" id="ytRefreshBtn">Refresh ideas</button>
+                <a class="btn" id="ytConnectBtn" href="#" data-tip="Sign in with Google on Google's page — we never see your password.">Connect YouTube</a>
+                <button type="button" class="secondary" id="ytRefreshBtn" data-tip="Rebuild talk cards + competitive thumbnails from your latest channel assets.">Refresh ideas</button>
               </div>
-              <p class="suggest-meta">Google must use <strong>your</strong> login on Google’s page. SocialMediaOS never collects your Google password.</p>
+              <label for="channelUrlInput" data-tip="If YouTube Data API is blocked, paste your public channel URL (@handle) so we can still pull real thumbs via RSS.">Public channel URL (fallback for real thumbnails)</label>
+              <div class="channel-row">
+                <input type="text" id="channelUrlInput" placeholder="https://www.youtube.com/@yourhandle">
+                <button type="button" class="secondary" id="channelUrlSave">Save &amp; pull assets</button>
+              </div>
+              <p class="suggest-meta" id="visualMeta">Waiting for channel visuals…</p>
             </div>
 
-            <div class="yt-panel">
-              <h2>Talk cards</h2>
+            <div class="yt-panel" data-tour="cards">
+              <h2 data-tip="Each card is a filmable unit: competitive thumbnail, 3 hooks, must-says, and where it would land vs niche thumbs.">Talk cards</h2>
               <p id="suggestMeta">Loading researched talk cards…</p>
               <div class="suggest-grid" id="suggestGrid"></div>
+            </div>
+
+            <div class="tour-panel" id="tourPanel" aria-hidden="true">
+              <div class="tour-card">
+                <h2 id="tourTitle">Product tour</h2>
+                <p id="tourBody" class="suggest-meta"></p>
+                <div class="tour-progress"><span id="tourBar"></span></div>
+                <div class="actions-row">
+                  <button type="button" class="secondary" id="tourSkip">Skip</button>
+                  <button type="button" class="btn" id="tourNext">Next</button>
+                </div>
+              </div>
             </div>
         `;
     const clientScript = `
@@ -401,7 +461,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 ];
               }
               grid.innerHTML = filmModes.map(function(m) {
-                return '<button type="button" class="mode-chip' + (selectedMode === m.id ? ' active' : '') + '" data-mode="' + escapeHtml(m.id) + '"><strong>' + escapeHtml(m.label) + '</strong>' + escapeHtml(m.blurb || '') + '</button>';
+                return '<button type="button" class="mode-chip' + (selectedMode === m.id ? ' active' : '') + '" data-mode="' + escapeHtml(m.id) + '" data-tip="' + escapeHtml(m.blurb || m.label) + '"><strong>' + escapeHtml(m.label) + '</strong>' + escapeHtml(m.blurb || '') + '</button>';
               }).join('');
               const active = filmModes.find(function(m) { return m.id === selectedMode; });
               document.getElementById('modeBlurb').textContent = active ? (active.label + ' — ' + (active.blurb || '')) : 'Showing all modes. Pick one to focus.';
@@ -420,6 +480,12 @@ export function registerMarketingSessionUiRoutes(app, deps) {
             function buildStartUrl(s, hook) {
               const pack = Object.assign({}, s, { hook: hook || s.hook, selected_hook: hook || s.hook, film_mode: selectedMode || s.film_mode });
               delete pack.thumbnailUrl;
+              delete pack.thumbnailOverlay;
+              delete pack.thumbnailFaceUrl;
+              delete pack.thumbnailBgUrl;
+              delete pack.thumbnailComposed;
+              delete pack.competition;
+              delete pack.serpPreview;
               delete pack.startUrl;
               delete pack.studioUrl;
               const seed = encodePack(pack);
@@ -438,38 +504,58 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 meta.textContent = selectedMode ? 'No talk cards for that mode yet — clear the mode or refresh ideas.' : 'No suggestions returned.';
                 return;
               }
-              meta.textContent = (list.length) + ' talk card' + (list.length === 1 ? '' : 's') + (selectedMode ? ' · mode filtered' : '');
+              meta.textContent = list.length + ' competitive talk card' + (list.length === 1 ? '' : 's') + (selectedMode ? ' · mode filtered' : '');
               list.forEach(function(s, cardIdx) {
-                  const card = document.createElement('div');
+                  const card = document.createElement('article');
                   card.className = 'suggest-card';
                   const bullets = (s.talking_points || []).map(function(b) { return '<li>' + escapeHtml(b) + '</li>'; }).join('');
-                  const comps = (s.competitors || []).map(function(c) { return escapeHtml(c); }).join(' · ');
                   const musts = (s.must_say || []).map(function(m) { return '<li>' + escapeHtml(m) + '</li>'; }).join('');
                   const hooks = (s.hooks && s.hooks.length ? s.hooks : [s.hook]).filter(Boolean).slice(0, 3);
                   const hookHtml = hooks.map(function(h, i) {
-                    return '<label><input type="radio" name="hook-' + cardIdx + '" value="' + escapeHtml(h) + '"' + (i === 0 ? ' checked' : '') + '> <span>' + escapeHtml(h) + '</span></label>';
+                    return '<label data-tip="Spoken open line — pick the one that feels most like you."><input type="radio" name="hook-' + cardIdx + '" value="' + escapeHtml(h) + '"' + (i === 0 ? ' checked' : '') + '> <span>' + escapeHtml(h) + '</span></label>';
                   }).join('');
-                  const scriptPreview = (s.sample_script || []).slice(0, 4).map(function(l) { return escapeHtml(l); }).join(' · ');
-                  card.innerHTML = '<img alt="thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
+                  const comp = s.competition || {};
+                  const grade = escapeHtml(comp.grade || '—');
+                  const ctr = escapeHtml(comp.predictedCtr || '—');
+                  const serp = s.serpPreview || {};
+                  const serpRows = [];
+                  const oursRank = Number(serp.ourRank) || 3;
+                  const compsArr = serp.competitors || [];
+                  let cIdx = 0;
+                  for (let r = 1; r <= 4; r++) {
+                    if (r === oursRank) {
+                      serpRows.push('<div class="serp-row ours"><img class="serp-mini" alt="" src="' + escapeHtml(s.thumbnailUrl) + '"/><div><div class="serp-title">' + escapeHtml(s.title) + '</div><div class="serp-meta">YOU · est. CTR ' + ctr + '</div></div><div class="score-ring">' + grade + '</div></div>');
+                    } else if (cIdx < compsArr.length) {
+                      const c = compsArr[cIdx++];
+                      serpRows.push('<div class="serp-row"><div class="serp-mini" style="background:linear-gradient(135deg,#333,#111)"></div><div><div class="serp-title">' + escapeHtml(c.title || c.name) + '</div><div class="serp-meta">Competitor shelf · score ' + escapeHtml(String(c.score || '—')) + '</div></div><div class="score-ring">' + escapeHtml(String(c.score || '')) + '</div></div>');
+                    }
+                  }
+                  const checks = (comp.checks || []).map(function(ch) {
+                    return '<li data-tip="' + escapeHtml(ch.tip || '') + '">' + (ch.pass ? '✓ ' : '○ ') + escapeHtml(ch.name || '') + '</li>';
+                  }).join('');
+                  card.innerHTML =
+                    '<div class="thumb-stage" data-tip="Competitive thumbnail from your face + channel footage when available. Badge = CTR potential score.">' +
+                    '<img class="thumb-main" alt="competitive thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
+                    '<div class="thumb-badge' + ((comp.score || 0) >= 72 ? ' good' : '') + '">Thumb ' + grade + ' · CTR ' + ctr + '</div>' +
+                    '</div>' +
                     '<div class="suggest-body">' +
                     '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span><span class="pill">' + escapeHtml(s.angle || 'idea') + '</span>' +
-                    (s.film_mode ? '<span class="pill">' + escapeHtml(s.film_mode) + '</span>' : '') + '</div>' +
+                    (s.film_mode ? '<span class="pill">' + escapeHtml(s.film_mode) + '</span>' : '') +
+                    (s.thumbnailComposed ? '<span class="pill">composed</span>' : '') +
+                    '</div>' +
                     '<h3>' + escapeHtml(s.title) + '</h3>' +
+                    '<div class="serp-box" data-tip="Shelf test: estimated placement vs typical niche competitor thumbs."><div class="suggest-meta"><strong>YouTube shelf test</strong> — ' + escapeHtml(serp.label || 'Estimated placement') + '</div>' + serpRows.join('') + '</div>' +
                     '<div class="talk-block"><strong>Pick your hook (best 3)</strong><div class="hook-pick">' + hookHtml + '</div></div>' +
-                    '<div class="talk-block"><strong>Your intro</strong>' + escapeHtml(s.intro || '') + '</div>' +
-                    '<div class="talk-block"><strong>Talk through these</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
-                    '<div class="talk-block"><strong>Competitors are strong on</strong>' + escapeHtml(s.competitor_strong || '—') + '</div>' +
-                    '<div class="talk-block"><strong>They fail to give</strong>' + escapeHtml(s.competitor_fail || s.competitor_gap || '') + '</div>' +
-                    '<div class="talk-block"><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
-                    '<div class="talk-block"><strong>Sample script</strong><div class="sample-preview">' + (scriptPreview || '—') + ((s.sample_script||[]).length > 4 ? '…' : '') + '</div></div>' +
-                    '<div class="talk-block"><strong>Exit</strong>' + escapeHtml(s.close || '') +
-                    (comps ? '<div class="suggest-meta" style="margin-top:4px">Vs: ' + comps + '</div>' : '') + '</div>' +
+                    '<div class="talk-block" data-tip="What competing channels do well — match or beat this."><strong>Competitors are strong on</strong>' + escapeHtml(s.competitor_strong || '—') + '</div>' +
+                    '<div class="talk-block" data-tip="The gap we must fill so this video wins."><strong>They fail to give</strong>' + escapeHtml(s.competitor_fail || s.competitor_gap || '') + '</div>' +
+                    '<div class="talk-block" data-tip="Non-negotiable lines. Skip these and the video underperforms."><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block"><strong>Talk through</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
+                    '<div class="talk-block" data-tip="Thumbnail quality checklist vs 2026 CTR best practices."><strong>Thumb checklist</strong><ul>' + (checks || '<li>—</li>') + '</ul></div>' +
                     '<div class="actions-row">' +
-                    '<a class="btn film-btn" href="#">Film this talk card</a>' +
-                    '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Open Studio</a>' +
+                    '<a class="btn film-btn" href="#" data-tip="Open coaching with this talk card + chosen hook.">Film this talk card</a>' +
+                    '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Studio</a>' +
                     '</div></div>';
-                  const filmBtn = card.querySelector('.film-btn');
-                  filmBtn.addEventListener('click', function(ev) {
+                  card.querySelector('.film-btn').addEventListener('click', function(ev) {
                     ev.preventDefault();
                     const checked = card.querySelector('input[type=radio]:checked');
                     const hook = checked ? checked.value : (hooks[0] || s.hook);
@@ -486,7 +572,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'status failed');
                 if (!data.oauthConfigured) {
-                  el.innerHTML = 'Google OAuth is <strong>not configured</strong> on tip yet (GOOGLE_CLIENT_ID / SECRET missing). Paste those into Railway, add redirect <code>' + escapeHtml(data.redirectUri || '') + '</code> in Google Cloud Console, then connect.';
+                  el.innerHTML = 'Google OAuth is <strong>not configured</strong> on tip yet.';
                 } else if (data.connected) {
                   el.textContent = 'Connected' + (data.connectedSince ? (' since ' + new Date(data.connectedSince).toLocaleString()) : '') + '.';
                 } else {
@@ -499,20 +585,84 @@ export function registerMarketingSessionUiRoutes(app, deps) {
 
             async function loadSuggestions() {
               const meta = document.getElementById('suggestMeta');
-              meta.textContent = 'Loading researched ideas…';
+              const apiBanner = document.getElementById('apiBanner');
+              meta.textContent = 'Composing competitive talk cards + thumbnails…';
               try {
                 const res = await marketingFetch('/api/v1/marketing/youtube/suggestions?owner_id=' + encodeURIComponent(marketingOwnerId()), { headers: marketingAuthHeaders() });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'suggestions failed');
                 filmModes = data.filmModes || filmModes;
                 allSuggestions = data.suggestions || [];
+                if (data.youtubeApiNext) showMsg(apiBanner, data.youtubeApiNext, 'error');
+                else apiBanner.style.display = 'none';
+                const vis = data.channelVisuals || {};
+                const visualMeta = document.getElementById('visualMeta');
+                if (visualMeta) {
+                  visualMeta.textContent = 'Visuals: ' + (vis.faceUrl ? 'face ✓' : 'face missing') + ' · ' + (vis.videoCount || 0) + ' channel frames · source ' + (vis.assetSource || 'none');
+                }
+                const urlInput = document.getElementById('channelUrlInput');
+                if (urlInput && vis.publicUrl) urlInput.value = vis.publicUrl;
                 renderModes();
                 renderSuggestionCards();
-                meta.textContent = (data.connected ? 'Based on your channel + research · ' : 'Research defaults until channel connects · ') + 'source: ' + (data.source || 'unknown') + ' · ' + meta.textContent;
+                meta.textContent = (data.connected ? 'Channel linked · ' : '') + 'source: ' + (data.source || 'unknown') + ' · ' + meta.textContent;
               } catch (err) {
                 meta.textContent = 'Could not load ideas: ' + err.message;
               }
             }
+
+            const channelSave = document.getElementById('channelUrlSave');
+            if (channelSave) channelSave.addEventListener('click', async function() {
+              const url = (document.getElementById('channelUrlInput').value || '').trim();
+              if (!url) { showMsg(banner, 'Paste your YouTube channel URL first.', 'error'); return; }
+              try {
+                const res = await marketingFetch('/api/v1/marketing/youtube/channel-url', {
+                  method: 'POST', headers: marketingAuthHeaders(),
+                  body: JSON.stringify({ owner_id: marketingOwnerId(), channel_url: url })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'save failed');
+                showMsg(banner, 'Channel URL saved. Rebuilding thumbnails…', 'success');
+                await loadSuggestions();
+              } catch (err) {
+                showMsg(banner, 'Save error: ' + err.message, 'error');
+              }
+            });
+
+            const tourSteps = [
+              { title: 'Welcome to SocialMediaOS', body: 'Not a generic AI script app — talk cards, competitive thumbnails, and a producer that keeps your voice.' },
+              { title: 'Pick how you film', body: 'Teleprompter, bullets, bookends, story-first, hot-seat, analytics reverse, Shorts. Hover any control for tips.' },
+              { title: 'Channel powers the thumbnails', body: 'We composite your face + recent frames into feed-ready thumbs and score CTR. Paste your @handle if the API is blocked.' },
+              { title: 'Talk cards are the product', body: 'Shelf test, 3 hooks, competitor strong/fail, must-says. Then Film this talk card.' },
+              { title: 'Producer coaching', body: 'Teleprompter holds your place. Coach flags reading-sound and missed must-says.' },
+              { title: 'You’re ready', body: 'Refresh ideas, pick a hook, film. Everything you hover explains itself.' }
+            ];
+            let tourIndex = 0;
+            function openTour(i) {
+              tourIndex = i || 0;
+              const panel = document.getElementById('tourPanel');
+              if (!panel) return;
+              panel.classList.add('open');
+              document.getElementById('tourTitle').textContent = tourSteps[tourIndex].title;
+              document.getElementById('tourBody').textContent = tourSteps[tourIndex].body;
+              document.getElementById('tourBar').style.width = (((tourIndex + 1) / tourSteps.length) * 100) + '%';
+              document.getElementById('tourNext').textContent = tourIndex === tourSteps.length - 1 ? 'Finish' : 'Next';
+            }
+            function closeTour() {
+              const panel = document.getElementById('tourPanel');
+              if (!panel) return;
+              panel.classList.remove('open');
+              try { localStorage.setItem('smos_tour_seen', '1'); } catch(_) {}
+            }
+            const tourBtn = document.getElementById('tourStartBtn');
+            if (tourBtn) tourBtn.addEventListener('click', function() { openTour(0); });
+            const tourSkip = document.getElementById('tourSkip');
+            if (tourSkip) tourSkip.addEventListener('click', closeTour);
+            const tourNext = document.getElementById('tourNext');
+            if (tourNext) tourNext.addEventListener('click', function() {
+              if (tourIndex >= tourSteps.length - 1) closeTour();
+              else openTour(tourIndex + 1);
+            });
+            try { if (!localStorage.getItem('smos_tour_seen')) setTimeout(function(){ openTour(0); }, 600); } catch(_) {}
 
             document.getElementById('ytConnectBtn').addEventListener('click', async function(e) {
               e.preventDefault();

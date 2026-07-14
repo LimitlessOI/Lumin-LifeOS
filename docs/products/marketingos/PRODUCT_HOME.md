@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — Light/dark sell UI, film modes, 3-hook picker, competitor strong/fail. |
+| **Last Updated** | 2026-07-13 — Prime-time cards, competitive thumbs, hover tips, product tour. |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-13 | **Prime-time SMOS surface** — Real vertical media cards; sharp-composited competitive thumbnails (face + channel frame + bold overlay); CTR grade + YouTube shelf test; hover tips everywhere; interactive product tour; public channel URL fallback when YouTube Data API is disabled; `POST /youtube/channel-url`. | Adam: looks second-rate; needs real cards, competing thumbnails from his photo/videos, shelf test, tips, tour — make it amazing / prime time. | ✅ | — | tip after deploy; enable YouTube Data API v3 for full face/frame pull |
 | 2026-07-13 | **Sellable SMOS UI + modes + 3 hooks** — Light/dark themes (Syne/DM Sans; amber dark / teal light). Film-mode chips (teleprompter, bullets, bookends, read&riff, story, hot-seat, analytics, shorts). Talk cards offer 3 hook options + competitor strong/fail. Canvas brief for competitor map. | Adam: cutting-edge design, light+dark, modes for how people film, best hooks to pick from, know competitor strengths/gaps. | ✅ | — | tip after deploy |
 | 2026-07-13 | **Teleprompter + must-say coaching** — Suggestions include `sample_script` + `must_say`; sticky teleprompter holds highlight on pause/off-topic; coach adapts (sounds like reading → freestyle, missed competitor must-say, redo after full read). | Adam: detail-heavy topics need a readable script; teleprompter should stay on the line; coach should catch reading-sound and must-cover gaps. | ✅ | — | tip after deploy |
 | 2026-07-13 | **Talk-card coaching UX** — Suggestions return full pack (hook, intro, talking_points, close, competitors, competitor_gap) + `seed_pack` on start URL. `/marketing` cards render the pack beside thumbnail. Coaching session shows script panel + chips; coach prompt is producer-style (“give me more” / “I liked when you said…”); `POST …/coach` accepts `talk_pack` + `bullet_index`. | Adam: stop vague “what should I say?” AI coach — need researched talk cards with hook, intro, bullets, exit, competitor context, and live coaching while speaking through bullets. | ✅ | — | `node --check`; tip verify after deploy |
