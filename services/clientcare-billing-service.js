@@ -377,11 +377,19 @@ export function classifyClientCareClaim(claim = {}, now = new Date(), options = 
     priorityScore += 45;
     actions.push(action('medicaid_exception_review', 'normal', 'Review Nevada Medicaid exception path', 'Check for eligibility, agency, or system delay grounds before closing out.', ['eligibility timeline', 'submission timeline', 'remittance or denial'])) ;
   } else if (payerRule.payerType === 'medicare' && timelyDenial) {
-    rescueBucket = 'likely_uncollectible';
-    rescueConfidence = 0.7;
-    recoveryProbability = 0.15;
-    priorityScore += 10;
-    actions.push(action('medicare_timely_review', 'normal', 'Review for proof of prior filing only', 'Pure Medicare timely-filing misses are usually not worth standard appeal effort.', ['original submission proof if any'])) ;
+    // Founder forever-chase doctrine (2026-07-14): age/timely denial is NEVER a write-off.
+    // Keep hounding until paid, written no-liability denial, or founder closes.
+    rescueBucket = 'forever_chase';
+    rescueConfidence = 0.55;
+    recoveryProbability = 0.35;
+    priorityScore += 80;
+    actions.push(action(
+      'ask_insurer_forever',
+      'high',
+      'Call/write insurer and demand status + payment path',
+      'Do not stop because the claim is old. Ask the insurer what is owed, why unpaid/underpaid, and what document unlocks payment. Keep a dated receipt of every contact.',
+      ['payer phone/portal contact log', 'claim number', 'DOS', 'member ID', 'prior EOB/ERA if any']
+    ));
   } else if (!payerRule.filingWindowDays) {
     rescueBucket = 'payer_followup';
     rescueConfidence = 0.4;
@@ -389,11 +397,17 @@ export function classifyClientCareClaim(claim = {}, now = new Date(), options = 
     priorityScore += 25;
     actions.push(action('verify_payer_rule', 'high', 'Verify payer timely-filing and appeal rules', 'Commercial or unknown payer needs contract or manual review before the next move.', ['payer policy', 'contract terms'])) ;
   } else if (deadline && now > deadline) {
-    rescueBucket = 'timely_filing_exception';
-    rescueConfidence = 0.5;
-    recoveryProbability = 0.25;
-    priorityScore += 15;
-    actions.push(action('late_claim_review', 'normal', 'Review late-claim exception options', 'Claim appears outside baseline window; do not write it off until proof and payer rules are checked.', ['submission history', 'payer rule'])) ;
+    rescueBucket = 'forever_chase';
+    rescueConfidence = 0.55;
+    recoveryProbability = 0.4;
+    priorityScore += 70;
+    actions.push(action(
+      'ask_insurer_forever',
+      'high',
+      'Late claim — still chase: ask insurer for exception + payment',
+      'Outside baseline filing window is NOT permission to quit. Ask payer for reconsideration, good-cause exception, or proof they already paid. Document every ask.',
+      ['submission history', 'payer rule', 'call/portal receipt']
+    ));
   } else {
     rescueBucket = 'payer_followup';
     rescueConfidence = 0.6;
@@ -408,6 +422,25 @@ export function classifyClientCareClaim(claim = {}, now = new Date(), options = 
 
   if (rescueBucket !== 'resolved' && payerRule.payerType !== 'self_pay') {
     actions.push(action('contract_review', 'normal', 'Review patient-balance rules before any patient billing', 'Do not shift insurance balance to the patient until payer contract and signed agreements are checked.', ['payer contract', 'financial agreement'])) ;
+  }
+
+  // Founder forever-chase: anything still unpaid/short after 90 days keeps an ask-insurer action.
+  if (rescueBucket !== 'resolved' && outstanding > 0 && (daysOld || 0) >= 90) {
+    if (rescueBucket === 'likely_uncollectible' || rescueBucket === 'timely_filing_exception') {
+      rescueBucket = 'forever_chase';
+      recoveryProbability = Math.max(recoveryProbability, 0.35);
+      priorityScore += 50;
+    }
+    const hasAsk = actions.some((a) => a.action_type === 'ask_insurer_forever');
+    if (!hasAsk) {
+      actions.unshift(action(
+        'ask_insurer_forever',
+        'high',
+        'Ask insurer status + payment (age is not a stop)',
+        'Call/portal/write the payer. Demand what is owed, why unpaid/underpaid, and the document that unlocks payment. Log every contact. Do not quit because the claim is old.',
+        ['payer contact log', 'claim number', 'DOS', 'member ID']
+      ));
+    }
   }
 
   return {
@@ -450,7 +483,8 @@ function getCollectionTimingProfile(rescueBucket = 'payer_followup') {
     proof_of_timely_filing: { label: '61-90 days', days: 75, multiplier: 0.55 },
     timely_filing_exception: { label: '90+ days', days: 105, multiplier: 0.3 },
     payer_followup: { label: '31-60 days', days: 40, multiplier: 0.6 },
-    likely_uncollectible: { label: '90+ days', days: 120, multiplier: 0.08 },
+    likely_uncollectible: { label: '90+ days — STILL CHASE', days: 30, multiplier: 0.35 },
+    forever_chase: { label: 'forever chase', days: 14, multiplier: 0.45 },
     resolved: { label: 'Closed', days: 0, multiplier: 1 },
   };
   return profiles[rescueBucket] || profiles.payer_followup;
@@ -987,7 +1021,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
          COUNT(*) FILTER (WHERE rescue_bucket='correct_and_resubmit')::int AS correct_and_resubmit_count,
          COUNT(*) FILTER (WHERE rescue_bucket='proof_of_timely_filing')::int AS proof_count,
          COUNT(*) FILTER (WHERE rescue_bucket='timely_filing_exception')::int AS exception_count,
-         COUNT(*) FILTER (WHERE rescue_bucket='likely_uncollectible')::int AS likely_uncollectible_count
+         COUNT(*) FILTER (WHERE rescue_bucket='likely_uncollectible')::int AS likely_uncollectible_count,
+         COUNT(*) FILTER (WHERE rescue_bucket='forever_chase')::int AS forever_chase_count
        FROM clientcare_claims`
     );
     const summary = rows[0] || {};
@@ -1577,6 +1612,162 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     };
   }
 
+  /**
+   * Founder forever-chase seed: birth activity + billing-notes backlog → claims ledger.
+   * Age never ends the chase. Underpayments stay open until short-pay is recovered or founder closes.
+   */
+  async function seedForeverChaseFromInventory({
+    births = [],
+    accounts = [],
+    evidence = {},
+  } = {}) {
+    const claims = [];
+    const workNote = [
+      'FOUNDER FOREVER-CHASE MANDATE (2026-07-14):',
+      'Every insurance birth unpaid or underpaid stays open until paid enough, insurer gives written no-liability denial, or founder closes.',
+      'Ask the insurance company when status is unknown. Old age is not a stop.',
+      'Sherry performed the midwifery work and must be compensated; prior billing neglect is not a write-off.',
+      evidence?.operator_note ? `Operator note: ${evidence.operator_note}` : null,
+    ].filter(Boolean).join(' ');
+
+    for (const birth of Array.isArray(births) ? births : []) {
+      const name = String(birth.motherNameGuess || birth.patientName || birth.name || '').trim() || 'Unknown mother';
+      const dosRaw = birth.birthDateGuess || birth.date || birth.date_of_service;
+      const dos = toDateOnly(dosRaw);
+      if (!dos) continue;
+      const href = birth.billingHref || birth.clientHref || null;
+      const external = href
+        ? `birth:${String(href).replace(/^https?:\/\/[^/]+/i, '')}`
+        : `birth:${name.toLowerCase().replace(/\s+/g, '_')}:${isoDate(dos)}`;
+      claims.push({
+        external_claim_id: external.slice(0, 180),
+        patient_name: name,
+        payer_name: birth.insurer || birth.payer_name || 'Unknown — ask insurer',
+        date_of_service: isoDate(dos),
+        claim_status: birth.billingHref ? 'unbilled_birth_linked' : 'unbilled_birth',
+        submission_status: birth.billingHref ? 'chart_linked_not_proved_paid' : 'needs_billing_link',
+        billed_amount: birth.billed_amount || null,
+        paid_amount: birth.paid_amount || 0,
+        insurance_balance: birth.insurance_balance || null,
+        source: 'forever_chase_birth_activity',
+        notes: workNote,
+        metadata: {
+          forever_chase: true,
+          lane: 'unpaid_birth',
+          billing_href: href,
+          resolve: birth.resolve || null,
+          work_performed_by: 'Sherry',
+          prior_billing_failure: true,
+          founder_mandate: 'forever_chase_until_paid_or_written_denial',
+        },
+      });
+    }
+
+    for (const account of Array.isArray(accounts) ? accounts : []) {
+      const name = String(account.client || account.patientName || account.name || '').trim();
+      if (!name) continue;
+      const oldest = account.oldestNoteDate || account.oldest_note_date || account.date_of_service;
+      const dos = toDateOnly(oldest) || toDateOnly(account.latestNoteDate) || toDateOnly(new Date());
+      const external = `notes:${name.toLowerCase().replace(/\s+/g, '_')}:${isoDate(dos)}`;
+      claims.push({
+        external_claim_id: external.slice(0, 180),
+        patient_name: name,
+        payer_name: (Array.isArray(account.insurers) && account.insurers[0]) || account.payer_name || 'Unknown — ask insurer',
+        date_of_service: isoDate(dos),
+        claim_status: account.status || 'billing_notes_backlog',
+        submission_status: 'notes_queue',
+        source: 'forever_chase_billing_notes',
+        notes: `${workNote} Next: ${account.nextAction || account.next_action || 'Ask insurer / repair insurance setup.'}`,
+        metadata: {
+          forever_chase: true,
+          lane: 'billing_notes_backlog',
+          recovery_band: account.recoveryBand || account.recovery_band || null,
+          note_count: account.noteCount || account.note_count || null,
+          work_performed_by: 'Sherry',
+          prior_billing_failure: true,
+          founder_mandate: 'forever_chase_until_paid_or_written_denial',
+        },
+      });
+    }
+
+    const imported = await importClaims(claims, { source: 'forever_chase_seed' });
+
+    // Force open forever_chase / ask_insurer actions on anything still marked write-off style.
+    await pool.query(
+      `UPDATE clientcare_claims
+       SET rescue_bucket = 'forever_chase',
+           notes = CASE
+             WHEN notes IS NULL OR notes = '' THEN $1
+             WHEN notes LIKE '%FOREVER-CHASE MANDATE%' THEN notes
+             ELSE notes || E'\\n' || $1
+           END,
+           updated_at = NOW()
+       WHERE rescue_bucket IN ('likely_uncollectible', 'timely_filing_exception')
+          OR (metadata->>'forever_chase') = 'true'`
+      ,
+      [workNote]
+    );
+
+    return {
+      ok: true,
+      seeded_from: { births: births.length, accounts: accounts.length, claim_rows: claims.length },
+      imported: imported.length,
+      doctrine: 'forever_chase_until_paid_or_written_denial',
+      work_performed_by: 'Sherry',
+    };
+  }
+
+  async function getForeverChaseQueue({ limit = 200 } = {}) {
+    const { rows } = await pool.query(
+      `SELECT
+         id, patient_name, payer_name, claim_number, date_of_service, claim_status, submission_status,
+         billed_amount, allowed_amount, paid_amount, patient_balance, insurance_balance,
+         rescue_bucket, priority_score, source, notes, metadata, updated_at,
+         GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0)::numeric AS short_paid_amount
+       FROM clientcare_claims
+       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+         AND (
+           (metadata->>'forever_chase') = 'true'
+           OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')
+           OR COALESCE(paid_amount, 0) <= 0
+           OR GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0) >= 10
+         )
+       ORDER BY
+         CASE WHEN COALESCE(paid_amount, 0) <= 0 THEN 0 ELSE 1 END,
+         date_of_service ASC NULLS LAST,
+         priority_score DESC NULLS LAST
+       LIMIT $1`,
+      [Math.max(1, Math.min(Number(limit || 200), 500))]
+    );
+
+    const items = rows.map((row) => {
+      const shortPaid = money(row.short_paid_amount);
+      const unpaid = money(row.paid_amount) <= 0;
+      return {
+        ...mapClaimRow(row),
+        short_paid_amount: Number(shortPaid.toFixed(2)),
+        chase_lane: unpaid ? 'unpaid' : (shortPaid >= 10 ? 'underpaid' : 'open'),
+        next_action: unpaid
+          ? 'Ask insurer for claim status + payment. If never billed, create/submit claim then chase.'
+          : (shortPaid >= 10
+            ? 'Underpaid: send ERA/EOB + contract proof; demand remaining allowed amount.'
+            : 'Follow up until written resolution.'),
+        work_performed_by: row.metadata?.work_performed_by || 'Sherry',
+      };
+    });
+
+    return {
+      doctrine: 'forever_chase_until_paid_or_written_denial',
+      summary: {
+        total_open: items.length,
+        unpaid: items.filter((i) => i.chase_lane === 'unpaid').length,
+        underpaid: items.filter((i) => i.chase_lane === 'underpaid').length,
+        forever_chase_bucket: items.filter((i) => i.rescue_bucket === 'forever_chase').length,
+      },
+      items,
+    };
+  }
+
   return {
     importClaims,
     importPaymentHistoryCsv,
@@ -1598,6 +1789,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     buildAppealPacketPreview,
     queueAppealAction,
     queueUnderpaymentAction,
+    seedForeverChaseFromInventory,
+    getForeverChaseQueue,
     parseClaimsCsv,
     getImportTemplate: () => IMPORT_TEMPLATE_FIELDS,
   };

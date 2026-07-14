@@ -248,6 +248,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       prepare_claim_status: 180000,
       birth_activity: 180000,
       backlog_summary: 120000,
+      forever_chase_sync: 300000,
     })[kind] || 120000;
     setImmediate(() => {
       (async () => {
@@ -360,6 +361,79 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, ...underpayments });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] underpayment queue failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/forever-chase', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const queue = await billingService.getForeverChaseQueue({ limit: req.query?.limit });
+      res.json({ ok: true, ...queue });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] forever-chase queue failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/forever-chase/sync', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const dryRun = req.body?.dry_run === true;
+      const job = enqueueBrowserJob(
+        'forever_chase_sync',
+        async () => {
+          const birthLimit = Math.max(5, Math.min(Number(req.body?.birth_limit || 40), 80));
+          const accountLimit = Math.max(10, Math.min(Number(req.body?.account_limit || 50), 100));
+          const [birthsResult, backlogResult] = await Promise.all([
+            browserService.scanBirthActivity({ maxRows: birthLimit }),
+            browserService.buildBacklogSummary({ accountLimit }),
+          ]);
+          const births = birthsResult?.births || [];
+          const accounts = backlogResult?.accounts || [];
+          if (dryRun) {
+            return {
+              ok: true,
+              dry_run: true,
+              births: births.length,
+              accounts: accounts.length,
+              resolved_births: births.filter((b) => b.billingHref).length,
+              doctrine: 'forever_chase_until_paid_or_written_denial',
+            };
+          }
+          const seeded = await billingService.seedForeverChaseFromInventory({
+            births,
+            accounts,
+            evidence: {
+              operator_note: req.body?.operator_note || 'Tip forever-chase sync from birth activity + billing notes backlog.',
+            },
+          });
+          const queue = await billingService.getForeverChaseQueue({ limit: 100 });
+          return {
+            ok: true,
+            seeded,
+            queue_summary: queue.summary,
+            sample: queue.items.slice(0, 8).map((item) => ({
+              id: item.id,
+              patient_name: item.patient_name,
+              chase_lane: item.chase_lane,
+              rescue_bucket: item.rescue_bucket,
+              date_of_service: item.date_of_service,
+              next_action: item.next_action,
+            })),
+          };
+        },
+        req.body || {}
+      );
+      res.status(202).json({
+        ok: true,
+        started: true,
+        job_id: job.id,
+        poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        message: 'Forever-chase sync queued (births + backlog → claims ledger)',
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] forever-chase sync failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
@@ -1277,6 +1351,9 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         { method: 'GET', path: '/api/v1/clientcare-billing/clientcare/readiness' },
       ],
       money_path: [
+        { method: 'POST', path: '/api/v1/clientcare-billing/forever-chase/sync', summary: 'Seed forever-chase ledger from births + billing notes' },
+        { method: 'GET', path: '/api/v1/clientcare-billing/forever-chase', summary: 'Open unpaid/underpaid chase queue (never ages out)' },
+        { method: 'GET', path: '/api/v1/clientcare-billing/underpayments', summary: 'Short-paid claims vs allowed' },
         { method: 'GET', path: '/api/v1/clientcare-billing/browser/birth-activity?async=true', summary: 'Recent births → billing hrefs' },
         { method: 'GET', path: '/api/v1/clientcare-billing/browser/backlog-summary?async=true&account_limit=50', summary: 'Billing notes rescue queue (newest first)' },
         { method: 'POST', path: '/api/v1/clientcare-billing/browser/prepare-claim-status', body: { billing_hrefs: ['…'], dry_run: false }, summary: 'Set Claims Processing + CPM' },

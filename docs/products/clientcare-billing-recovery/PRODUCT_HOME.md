@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — ChargeSlip job timeout + skip Born chart when visit_date known. |
+| **Last Updated** | 2026-07-14 — Founder forever-chase: unpaid+underpaid births never age out; seed ledger from tip inventory. |
 
 ---
 
@@ -19,10 +19,14 @@
 
 ## Mission
 
-Billing-recovery and revenue-cycle operating system built around the ClientCare EHR/billing platform used by Sherry's practice. Designed to rescue unpaid insurance claims already earned, prevent additional claims from aging out, and give Sherry a controlled work queue with clear next actions.
+Billing-recovery and revenue-cycle operating system built around the ClientCare EHR/billing platform used by Sherry's practice.
+
+**Founder forever-chase mandate (2026-07-14):** Every birth that should have been paid by insurance and was not — and every claim that paid but not enough — stays open until the insurer pays enough, issues a written no-liability denial, or the founder closes it. Age is not a stop. Unknown status → ask the insurance company. The system keeps hounding. Sherry did the clinical work and must be compensated; prior billing neglect is evidence, not a write-off.
+
+Designed to rescue unpaid insurance claims already earned, prevent additional claims from aging out, and give Sherry a controlled work queue with clear next actions.
 
 Two linked lanes:
-- **Insurance Recovery OS** — eligibility, claims, denials, underpayments, ERA/remits, appeals, collections forecast
+- **Insurance Recovery OS** — eligibility, claims, denials, underpayments, ERA/remits, appeals, forever-chase follow-up, collections forecast
 - **Patient AR OS** — payment-plan monitoring, past-due balance work queue, provider-directed escalation, controlled outreach
 
 This product has no public API from the vendor. It uses browser automation (Puppeteer) as the execution path against the ClientCare web app.
@@ -64,7 +68,7 @@ All ClientCare conversations, brainstorms, and session dumps live at:
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-14 — Tip: Denise pregnancyId on 06/13 visit list but Patient: empty until SelectBillingSlipPregnancy(raw)/rebind; Yanhari also on that day.
+**Last Updated:** 2026-07-14 — Founder forever-chase: unpaid+underpaid never age out; seed ledger from 15 births + 50 notes accounts.
 
 ---
 
@@ -124,10 +128,11 @@ Every claim lands in one of these buckets:
 - `submit_now` — not yet submitted, still timely
 - `correct_and_resubmit` — rejected/denied for correctable issue
 - `timely_filing_exception` — late, but exception/reconsideration path may exist
+- `forever_chase` — unpaid/underpaid/old/unknown: keep asking the insurer until paid enough or written no-liability denial (founder mandate 2026-07-14). Replaces silent write-offs.
 - `payer_followup` — status unknown / payer response needed
 - `proof_of_timely_filing` — needs clearinghouse/report evidence
 - `contract_review` — patient-balance path must be checked before any statement is sent
-- `likely_uncollectible` — high-risk/expired without viable recovery path
+- `likely_uncollectible` — **deprecated as a stop**; treated as forever-chase intensity (still chase)
 
 ### 2. Execution Paths
 - **API path** if ClientCare or connected systems provide supported access.
@@ -459,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Forever-chase mandate** — Adam: every unpaid/underpaid insurance birth stays open forever; ask insurer when unknown; Sherry did the work. Tip ledger was **0 claims** while browser shows **15 births + 50 notes accounts**. Added seedForeverChaseFromInventory + GET/POST forever-chase. Age is not a write-off. | Empty ledger blocked money chase. | 1h | 1h | none | ✅ | pending tip sync |
 | 2026-07-14 | **ChargeSlip job timeout** — hung tip jobs never completed; enqueueBrowserJob 90s timeout; skip Born-chart nav when visit_date provided. |
 | 2026-07-14 | **ChargeSlip hang fix** — tip job hung inside `selectClick` during visit-list evaluate. Defer bind to post-match row click + 12s Node timeout; never call selectClick in scan loop. |
 | 2026-07-14 | **ChargeSlip selectClick(DOM)** — tip source: `selectClick(this)` + `#FullNameText`; API-raw calls poison form. Call `selectClick(rowEl)` only; detect bind via FullNameText. |
