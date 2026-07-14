@@ -3200,11 +3200,15 @@ export function createClientCareBrowserService({ env = process.env, logger = con
    */
   /**
    * Map / seed Charge Slip for a known pregnancy. Vendor SuperBill SPA URL 500s;
-   * ChargeSlip is the working create surface but needs patient/visit selection.
+   * ChargeSlip is the working create surface: DateFilter + PersonId load visit rows,
+   * click patient visit, set ChargeSlipId care type, then Save.
    */
   async function mapChargeSlip({
     pregnancyId = null,
     patientQuery = '',
+    careType = 'Intrapartum Care',
+    visitDate = null,
+    dryRun = true,
     pageTimeoutMs = 20000,
   } = {}) {
     const result = await login({ dryRun: false });
@@ -3220,35 +3224,100 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       await sleep(2000);
 
-      const chargeSlipType = await session.page.evaluate(() => {
-        const sel = document.getElementById('ChargeSlipId');
+      // Capture patient-search XHR while interacting.
+      const ajaxHits = [];
+      const onResponse = async (response) => {
+        try {
+          const url = response.url();
+          if (!/patient|client|pregnancy|chargeslip|superbill|visit|schedule/i.test(url)) return;
+          if (!/json|javascript|text/i.test(response.headers()['content-type'] || 'text/html')) return;
+          ajaxHits.push({
+            url: url.slice(0, 240),
+            status: response.status(),
+          });
+        } catch {
+          /* ignore */
+        }
+      };
+      session.page.on('response', onResponse);
+
+      // Date filter — prefer explicit visitDate, else today-ish window via visible date input.
+      const dateSet = await session.page.evaluate((rawDate) => {
+        const input =
+          document.getElementById('a5aae1e7567c45bd95654ab319c7f570') ||
+          document.querySelector('input[name="DateFilter"]') ||
+          Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+        if (!input) return { set: false };
+        const value = String(rawDate || '').trim() || input.value || '';
+        if (!value) return { set: false, reason: 'no_date_value' };
+        input.focus();
+        input.value = value;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+        try { window.$(input).data('kendoDatePicker')?.value(new Date(value)); } catch (_) {}
+        return { set: true, value };
+      }, visitDate);
+      if (dateSet?.set) await sleep(1500);
+
+      // Provider = All so visit list is not midwife-filtered empty.
+      const providerSet = await session.page.evaluate(() => {
+        const sel = document.getElementById('PersonId');
         if (!sel) return { set: false };
-        const want = /intrapartum|postpartum|newborn|antepartum/i;
-        const option = Array.from(sel.options || []).find((o) => want.test(o.textContent || ''));
-        if (!option) return { set: false, available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()) };
+        const option = Array.from(sel.options || []).find((o) => /^all$/i.test((o.textContent || '').trim())) || sel.options?.[0];
+        if (!option) return { set: false };
         sel.value = option.value;
         Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
         sel.dispatchEvent(new Event('change', { bubbles: true }));
         try { window.$(sel).data('kendoDropDownList')?.value(option.value); } catch (_) {}
         return { set: true, text: (option.textContent || '').trim(), value: option.value };
       });
+      if (providerSet?.set) await sleep(2000);
 
-      const typed = String(patientQuery || '').trim()
+      // Click a visit row matching patientQuery, else first real visit row.
+      const visitClick = await session.page.evaluate((q) => {
+        const want = String(q || '').trim().toLowerCase();
+        const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'));
+        const scored = [];
+        for (const tr of rows) {
+          const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"]'))
+            .map((td) => (td.innerText || '').trim().replace(/\s+/g, ' '))
+            .filter(Boolean);
+          if (cells.length < 2) continue;
+          const text = cells.join(' | ');
+          if (/no results|time\s+patient\s+visit/i.test(text) && cells.length <= 3) continue;
+          let score = 1;
+          if (want && text.toLowerCase().includes(want)) score += 10;
+          scored.push({ tr, cells: cells.slice(0, 6), text: text.slice(0, 160), score });
+        }
+        scored.sort((a, b) => b.score - a.score);
+        const best = scored[0];
+        if (!best) return { clicked: false, candidates: 0 };
+        best.tr.click();
+        return { clicked: true, candidates: scored.length, cells: best.cells, text: best.text, score: best.score };
+      }, patientQuery);
+      if (visitClick?.clicked) await sleep(2000);
+
+      // Patient autocomplete fallback when visit grid empty.
+      const typed = (!visitClick?.clicked && String(patientQuery || '').trim())
         ? await session.page.evaluate((q) => {
-            const all = Array.from(document.querySelectorAll('input, textarea, [contenteditable="true"], .k-input, .k-autocomplete input'));
+            const all = Array.from(document.querySelectorAll('input, textarea, [contenteditable="true"], .k-input, .k-autocomplete input, .k-combobox input'));
             const score = (el) => {
-              const near = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.getAttribute('aria-label') || ''} ${(el.closest('div,td,label,tr,span')?.innerText || '').slice(0, 60)}`;
+              const near = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.getAttribute('aria-label') || ''} ${(el.closest('div,td,label,tr,span')?.innerText || '').slice(0, 80)}`;
               let s = 0;
               if (/patient/i.test(near)) s += 5;
               if (/client|search/i.test(near)) s += 2;
+              if (/datefilter|personid|chargeslipid|sms|message/i.test(`${el.id}${el.name}`)) s -= 5;
               if (el.offsetParent === null) s -= 1;
               return s;
             };
             const ranked = all.map((el) => ({ el, s: score(el) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s);
             const patient = ranked[0]?.el;
             if (!patient) {
-              const hidden = Array.from(document.querySelectorAll('input[type="hidden"]')).filter((el) => /patient|pregnancy|client/i.test(`${el.id} ${el.name}`));
-              return { typed: false, hiddenIds: hidden.map((el) => ({ id: el.id, name: el.name, value: el.value })) };
+              const hidden = Array.from(document.querySelectorAll('input[type="hidden"]'))
+                .filter((el) => /patient|pregnancy|client/i.test(`${el.id} ${el.name}`))
+                .map((el) => ({ id: el.id, name: el.name, value: String(el.value || '').slice(0, 80) }));
+              return { typed: false, hiddenIds: hidden };
             }
             patient.focus();
             if ('value' in patient) patient.value = q;
@@ -3260,8 +3329,62 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             try { window.$(patient).data('kendoComboBox')?.search(q); } catch (_) {}
             return { typed: true, id: patient.id || null, name: patient.name || null, score: ranked[0].s };
           }, String(patientQuery).trim())
-        : { typed: false, skipped: true };
-      if (typed?.typed) await sleep(2500);
+        : { typed: false, skipped: Boolean(visitClick?.clicked) };
+      if (typed?.typed) {
+        await sleep(2000);
+        await session.page.evaluate((q) => {
+          const want = String(q || '').toLowerCase();
+          const items = Array.from(document.querySelectorAll('.k-list-item, .k-item, li[role="option"], .ui-menu-item'));
+          const match = items.find((el) => (el.textContent || '').toLowerCase().includes(want));
+          if (match) match.click();
+        }, patientQuery);
+        await sleep(1500);
+      }
+
+      // If pregnancyId known, force-set common hidden ids.
+      const hiddenForce = pregnancyId
+        ? await session.page.evaluate((id) => {
+            const ids = ['PregnancyId', 'PregnancyID', 'pregnancyId', 'PatientId', 'PatientID', 'ClientId'];
+            const set = [];
+            for (const name of ids) {
+              const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+              if (!el) continue;
+              el.value = id;
+              el.dispatchEvent(new Event('change', { bubbles: true }));
+              set.push(name);
+            }
+            return { set };
+          }, String(pregnancyId))
+        : { set: [] };
+
+      const chargeSlipType = await session.page.evaluate((wantType) => {
+        const sel = document.getElementById('ChargeSlipId');
+        if (!sel) return { set: false };
+        const want = String(wantType || 'Intrapartum Care').toLowerCase();
+        const option = Array.from(sel.options || []).find((o) => (o.textContent || '').toLowerCase().includes(want))
+          || Array.from(sel.options || []).find((o) => /intrapartum|postpartum|newborn|antepartum/i.test(o.textContent || ''));
+        if (!option) return { set: false, available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()) };
+        sel.value = option.value;
+        Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        try { window.$(sel).data('kendoDropDownList')?.value(option.value); } catch (_) {}
+        return { set: true, text: (option.textContent || '').trim(), value: option.value };
+      }, careType);
+      if (chargeSlipType?.set) await sleep(1500);
+
+      let saveResult = { attempted: false };
+      if (!dryRun) {
+        saveResult = await session.page.evaluate(() => {
+          const buttons = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'));
+          const save = buttons.find((el) => /^save$/i.test((el.textContent || el.value || '').trim()));
+          if (!save) return { attempted: false };
+          save.click();
+          return { attempted: true, label: (save.textContent || save.value || 'Save').trim() };
+        });
+        await sleep(2500);
+      }
+
+      session.page.off('response', onResponse);
 
       const map = await session.page.evaluate(() => {
         const visible = (el) => {
@@ -3288,9 +3411,11 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           .map((tr) => Array.from(tr.querySelectorAll('td')).map((td) => (td.innerText || '').trim()).filter(Boolean))
           .filter((cells) => cells.length >= 2)
           .slice(0, 20);
+        const patientSelected = !/please select a patient/i.test(document.body.innerText || '');
         return {
           controls,
           visitRows,
+          patientSelected,
           textPreview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 1500),
         };
       });
@@ -3300,11 +3425,20 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         url: target,
         pregnancyId: pregnancyId || null,
         patientQuery: patientQuery || null,
+        dryRun: dryRun !== false,
+        dateSet,
+        providerSet,
+        visitClick,
         chargeSlipType,
         typed,
+        hiddenForce,
+        saveResult,
+        ajaxHits: ajaxHits.slice(0, 30),
         ...map,
         screenshots,
-        next: 'Select visit row → add procedure/diagnosis → Save. Vendor SuperBill SPA URL currently 500s.',
+        next: map.patientSelected
+          ? 'Patient selected — add procedure/diagnosis codes then Save (dry_run=false).'
+          : 'Still need patient/visit selection — set visitDate (MM/DD/YYYY) matching birth, or confirm autocomplete.',
       };
     } finally {
       await session.close().catch(() => {});

@@ -1147,6 +1147,9 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         () => browserService.mapChargeSlip({
           pregnancyId: req.body?.pregnancy_id || req.body?.pregnancyId,
           patientQuery: req.body?.patient_query || req.body?.patientQuery,
+          careType: req.body?.care_type || req.body?.careType,
+          visitDate: req.body?.visit_date || req.body?.visitDate,
+          dryRun: req.body?.dry_run !== false && req.body?.dryRun !== false,
           pageTimeoutMs: req.body?.page_timeout_ms,
         }),
         req.body || {}
