@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — SuperBillReport via same-tab navigate (popup CDP wedged tip); map_charge_slip timeout 360s; drive Filter/Create Claim then rebind ChargeSlip. |
+| **Last Updated** | 2026-07-14 — SuperBillReport shows Denise+59400+Invoice/HCFA; click claim links + openwindowSuperBilling; Sent Bills probe from report; harden ChargeSlip rebind. |
 
 ---
 
@@ -464,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **SuperBillReport claim links** — tip report shows Denise + 59400 + Invoice/HCFA/UB-04 (BCBS). Click those + openwindowSuperBilling; Sent Bills probe from report; ChargeSlip rebind via SearchBillingSlipPregnancyList. |
 | 2026-07-14 | **SuperBillReport same-tab** — tip popup path via browser.pages wedged CDP (job stale 240s, empty result). Navigate `/Billing/SuperBillReport?FromDate=` directly; inventory+Filter/Create Claim; return ChargeSlip+rebind; timeout 360s. |
 | 2026-07-14 | **SuperBillReport path** — tip proved Daily Super Bill → `openReportItems()` → `/Billing/SuperBillReport?FromDate=…`. First popup driver clicked Create New Client (wrong) and wiped patient. Wait for Loading; ranked Create Claim/Filter actions; checkbox rows; rebind before Save. |
 | 2026-07-14 | **Daily Super Bill drive** — tip Save/DSB click still leaves Sent Bills empty + no chart 594xx. After DSB click: capture onclick/popups, inventory modals/helpers/lineHints, fill date, Create/Generate (not Save), modal follow-up, then Save + persist proof. | Save click alone does not create durable charge. | 0.5h | 0.5h | none | ✅ | pending tip Denise |

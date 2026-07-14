@@ -1,3 +1,10 @@
+<!-- SYNOPSIS: Continuity Log -->
+
+
+
+## 2026-07-14 — SuperBillReport has Denise 59400 + Invoice/HCFA
+
+Tip KNOW: same-tab SuperBillReport lists Denise Alvarado / BCBS Anthem / 59400 with Invoice HCFA UB-04 links. Filter panel helpers include filterRecords/openwindowSuperBilling. Next: click HCFA/Invoice, prove Sent Bills, fix ChargeSlip rebind after report.
 
 ## 2026-07-14 — SuperBillReport same-tab (CDP wedge bypass)
 

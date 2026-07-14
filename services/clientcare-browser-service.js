@@ -3990,25 +3990,30 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               return r.width > 0 && r.height > 0;
             };
             const navNoise = /^(home|clients|schedule|reports|wrm|cora|help|sign out|english|spanish|french|italian|german|portuguese|russian|dutch|ukrainian|text messages|back|send|terms|privacy|front desk|new note|create new client|view client list|manage account|practice management|employee log|my profile|billing slip|record insurance|review sent|review all faxes)$/i;
-            if (wantDate) {
-              for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
-                if (/radio|checkbox|hidden|submit|button/i.test(el.type || '')) continue;
-                const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.className || ''}`;
-                if (/lmp|dob|birth|born|rdo/i.test(ctx)) continue;
-                if (!/date|from|to|dos|service|visit|bill|filter/i.test(ctx) && el.type !== 'text') continue;
-                el.focus();
-                el.value = String(wantDate);
-                el.dispatchEvent(new Event('input', { bubbles: true }));
-                el.dispatchEvent(new Event('change', { bubbles: true }));
-                try { window.$(el).trigger('change'); } catch (_) { /* ignore */ }
-                attempts.push({ label: 'fill_date', ok: true, id: el.id || el.name || null, value: String(wantDate) });
-                break;
-              }
+            // Prefer row-level claim create: Invoice / HCFA / UB-04 on the matched patient line.
+            const claimLinks = Array.from(document.querySelectorAll('a, button, input[type="button"], span, td'))
+              .filter(visible)
+              .filter((el) => /^(invoice|hcfa|ub-?04)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                || /invoice|hcfa|ub-?04|create\s*claim/i.test(el.getAttribute?.('onclick') || ''));
+            if (claimLinks.length) {
+              const prefer = claimLinks.find((el) => /^hcfa$/i.test((el.textContent || '').trim()))
+                || claimLinks.find((el) => /^invoice$/i.test((el.textContent || '').trim()))
+                || claimLinks[0];
+              prefer.click();
+              attempts.push({
+                label: 'claim_link',
+                ok: true,
+                text: (prefer.textContent || prefer.value || '').trim().slice(0, 40),
+                count: claimLinks.length,
+              });
             }
             for (const name of [
-              'createClaims', 'CreateClaims', 'createClaim', 'CreateClaim',
-              'generateClaims', 'GenerateClaims', 'filterSuperBill', 'FilterSuperBill',
-              'searchSuperBill', 'createSuperBill', 'CreateSuperBill', 'Filter', 'Search',
+              'openwindowSuperBilling',
+              'OpenwindowSuperBilling',
+              'createClaims',
+              'CreateClaims',
+              'filterRecords',
+              'checkFilters',
             ]) {
               if (typeof window[name] !== 'function') continue;
               try {
@@ -4019,33 +4024,42 @@ export function createClientCareBrowserService({ env = process.env, logger = con
                 attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
               }
             }
-            const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
-              .filter(visible)
-              .map((el) => {
-                const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
-                let score = 0;
-                if (/create\s*claim|generate\s*claim|create\s*super|post\s*claim|build\s*claim/i.test(t)) score += 100;
-                if (/filter|search|apply|run\s*report|refresh|load/i.test(t)) score += 40;
-                if (/^ok$|^yes$|^continue$|^submit$|^generate$|^create$/i.test(t)) score += 20;
-                if (navNoise.test(t) || /create new client/i.test(t)) score -= 200;
-                return { el, t, score };
-              })
-              .filter((x) => x.t && x.score > 0)
-              .sort((a, b) => b.score - a.score);
-            if (ranked[0]) {
-              ranked[0].el.click();
-              attempts.push({ label: 'click_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
-            } else {
-              attempts.push({
-                label: 'click_action',
-                ok: false,
-                error: 'no_report_action',
-                candidates: Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"]'))
-                  .filter(visible)
-                  .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                  .filter((t) => t && t.length < 40 && !navNoise.test(t))
-                  .slice(0, 20),
-              });
+            if (wantDate) {
+              for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
+                if (/radio|checkbox|hidden|submit|button/i.test(el.type || '')) continue;
+                const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.className || ''}`;
+                if (/lmp|dob|birth|born|rdo|sms|message|filtertext/i.test(ctx)) continue;
+                if (!/date|from|to|dos|service|visit|bill/i.test(ctx)) continue;
+                el.focus();
+                el.value = String(wantDate);
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+                try { window.$(el).trigger('change'); } catch (_) { /* ignore */ }
+                attempts.push({ label: 'fill_date', ok: true, id: el.id || el.name || null, value: String(wantDate) });
+                break;
+              }
+            }
+            // Only click Filter/Search if no claim link fired.
+            if (!attempts.some((a) => a.label === 'claim_link' && a.ok)) {
+              const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .filter(visible)
+                .map((el) => {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                  let score = 0;
+                  if (/create\s*claim|generate\s*claim|create\s*super|post\s*claim|build\s*claim/i.test(t)) score += 100;
+                  if (/^(invoice|hcfa|ub-?04)$/i.test(t)) score += 90;
+                  if (/filter|search|apply|run\s*report|refresh|load/i.test(t)) score += 40;
+                  if (navNoise.test(t) || /create new client/i.test(t)) score -= 200;
+                  return { el, t, score };
+                })
+                .filter((x) => x.t && x.score > 0)
+                .sort((a, b) => b.score - a.score);
+              if (ranked[0]) {
+                ranked[0].el.click();
+                attempts.push({ label: 'click_action', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+              } else {
+                attempts.push({ label: 'click_action', ok: false, error: 'no_report_action' });
+              }
             }
             const checks = Array.from(document.querySelectorAll('input[type="checkbox"]')).filter(visible);
             let checked = 0;
@@ -4057,6 +4071,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               attempts,
               url: location.href,
               preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+              deniseRow: (document.body.innerText || '').match(/Denise[^.]{0,120}/i)?.[0] || null,
             };
           }, reportDate);
           dailySuperBill.interact = interact;
@@ -4066,9 +4081,37 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
             rows: Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
               .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
-              .filter((t) => /59400|59409|claim|alvarado|denise|\$\d/i.test(t))
+              .filter((t) => /59400|59409|claim|alvarado|denise|\$\d|invoice|hcfa/i.test(t))
               .slice(0, 12),
+            claimLinks: Array.from(document.querySelectorAll('a, button'))
+              .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /^(invoice|hcfa|ub-?04)$/i.test(t))
+              .slice(0, 10),
           }));
+
+          // Prove claim create from report without needing ChargeSlip Save.
+          try {
+            const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+              timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+            });
+            if (billsNav.ok) {
+              await sleep(2000);
+              dailySuperBill.sentBillsProbe = await session.page.evaluate((wantName) => {
+                const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+                const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 3) || '';
+                return {
+                  checked: true,
+                  noItems: /no items to display|no records|no data/i.test(text),
+                  nameHit: Boolean(needle && text.toLowerCase().includes(needle)),
+                  preview: text.slice(0, 400),
+                };
+              }, visitList?.match?.name || patientQuery || 'Alvarado');
+            } else {
+              dailySuperBill.sentBillsProbe = { checked: false, error: billsNav.error };
+            }
+          } catch (err) {
+            dailySuperBill.sentBillsProbe = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
         }
 
         // Return to ChargeSlip and rebind patient for Save / persist proof.
@@ -4080,35 +4123,60 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         if (backNav.ok) {
           await sleep(1500);
           await dismissSessionTakeover(session.page);
+          if (reportDate) {
+            await session.page.evaluate((rawDate) => {
+              const input = document.querySelector('input[name="DateFilter"]')
+                || Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+              if (!input) return;
+              input.value = String(rawDate);
+              input.dispatchEvent(new Event('input', { bubbles: true }));
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+            }, reportDate);
+            await sleep(500);
+          }
+          // Re-fetch visit list and selectClick DOM row (same binder as initial map).
           if (visitList?.match?.pregnancyId) {
-            // Re-set date + rebind visit row so Save is not fail-closed.
-            if (reportDate) {
-              await session.page.evaluate((rawDate) => {
-                const input = document.querySelector('input[name="DateFilter"]')
-                  || Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
-                if (!input) return;
-                input.value = String(rawDate);
-                input.dispatchEvent(new Event('change', { bubbles: true }));
-              }, reportDate);
-              await sleep(600);
-            }
-            const rebind = await session.page.evaluate((wantId) => {
-              const rows = Array.from(document.querySelectorAll('tr, li, a, div'));
-              const row = rows.find((el) => {
-                const onclick = el.getAttribute('onclick') || '';
-                return wantId && onclick.includes(wantId);
-              }) || rows.find((el) => /selectClick\(this\)/i.test(el.getAttribute('onclick') || ''));
-              if (!row) return { ok: false };
+            const rebind = await session.page.evaluate(async ({ providerId, dateSelection, wantPregnancyId }) => {
+              const pid = providerId || '00000000-0000-0000-0000-000000000000';
+              const date = dateSelection || '';
               try {
-                if (typeof window.selectClick === 'function') window.selectClick(row);
-                else row.click();
-                return { ok: true, name: (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80) };
+                const url = `/Company/SearchBillingSlipPregnancyList?PrividerId=${encodeURIComponent(pid)}&DateSelection=${encodeURIComponent(date)}&_=${Date.now()}`;
+                const res = await fetch(url, { credentials: 'same-origin' });
+                const data = await res.json();
+                const rows = Array.isArray(data) ? data : (data?.Data || data?.data || []);
+                const match = (rows || []).find((r) => String(r.PregnancyID || r.PregnancyId || '').toLowerCase() === String(wantPregnancyId).toLowerCase());
+                const rowEl = Array.from(document.querySelectorAll('tr, li, a, div')).find((el) => {
+                  const onclick = el.getAttribute('onclick') || '';
+                  return wantPregnancyId && onclick.includes(wantPregnancyId);
+                }) || Array.from(document.querySelectorAll('[onclick*="selectClick"]')).find((el) => /selectClick\(this\)/i.test(el.getAttribute('onclick') || ''));
+                if (rowEl && typeof window.selectClick === 'function') {
+                  window.selectClick(rowEl);
+                } else if (match && typeof window.selectClick === 'function') {
+                  // Last resort: click any selectClick(this) row whose text mentions the name.
+                  const name = String(match.FullName || '').split(',')[0].trim();
+                  const byName = Array.from(document.querySelectorAll('[onclick*="selectClick"]')).find((el) => (el.innerText || '').includes(name));
+                  if (byName) window.selectClick(byName);
+                  else return { ok: false, error: 'no_dom_row', matchName: name || null };
+                } else {
+                  return { ok: false, error: 'no_row_or_selectClick', hasMatch: Boolean(match) };
+                }
+                await new Promise((r) => setTimeout(r, 800));
+                const name = (document.getElementById('FullNameText')?.textContent || '').trim();
+                return {
+                  ok: Boolean(name && !/please select/i.test(name)),
+                  name: name.slice(0, 80),
+                  matchName: match?.FullName || null,
+                };
               } catch (err) {
                 return { ok: false, error: String(err?.message || err).slice(0, 120) };
               }
-            }, visitList.match.pregnancyId);
+            }, {
+              providerId: providerSet?.value || null,
+              dateSelection: reportDate,
+              wantPregnancyId: visitList.match.pregnancyId,
+            });
             dailySuperBill.rebindAfter = rebind;
-            await sleep(1200);
+            await sleep(800);
           }
         }
       }
