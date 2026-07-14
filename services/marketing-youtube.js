@@ -53,6 +53,72 @@ function escapeXml(s) {
     .replace(/"/g, '&quot;');
 }
 
+function extractJsonArray(text) {
+  let raw = String(text || '').trim();
+  if (!raw) return null;
+  raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+  const start = raw.indexOf('[');
+  const end = raw.lastIndexOf(']');
+  if (start < 0 || end <= start) return null;
+  let slice = raw.slice(start, end + 1);
+  const attempts = [
+    slice,
+    slice.replace(/,\s*([}\]])/g, '$1'),
+    slice.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"'),
+    slice.replace(/,\s*([}\]])/g, '$1').replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"'),
+  ];
+  for (const attempt of attempts) {
+    try {
+      const parsed = JSON.parse(attempt);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {
+      /* try next */
+    }
+  }
+  const objs = [];
+  let depth = 0;
+  let buf = '';
+  let inStr = false;
+  let esc = false;
+  for (let i = 0; i < slice.length; i++) {
+    const ch = slice[i];
+    if (inStr) {
+      buf += ch;
+      if (esc) esc = false;
+      else if (ch === '\\') esc = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') {
+      inStr = true;
+      buf += ch;
+      continue;
+    }
+    if (ch === '{') {
+      if (depth === 0) buf = '{';
+      else buf += ch;
+      depth += 1;
+      continue;
+    }
+    if (ch === '}') {
+      buf += ch;
+      depth -= 1;
+      if (depth === 0 && buf) {
+        try {
+          const obj = JSON.parse(buf.replace(/,\s*}/g, '}'));
+          if (obj && (obj.title || obj.seed_topic_id)) objs.push(obj);
+        } catch {
+          /* skip */
+        }
+        buf = '';
+      }
+      continue;
+    }
+    if (depth > 0) buf += ch;
+  }
+  return objs.length ? objs : null;
+}
+
 function thumbnailOverlayWords(titleOrHook, { maxWords = 5 } = {}) {
   const words = String(titleOrHook || '')
     .replace(/[^\w\s'-]/g, ' ')
@@ -1672,12 +1738,52 @@ Rules:
           copyRewriteError = attemptErrors.join(' | ') || 'all_models_failed';
           logger?.warn?.({ copyRewriteError }, 'strong-model talk rewrite failed all models');
         } else {
-          const match = String(raw).match(/\[[\s\S]*\]/);
-          let parsed = null;
-          try {
-            parsed = match ? JSON.parse(match[0]) : null;
-          } catch (parseErr) {
-            copyRewriteError = `json_parse: ${parseErr?.message || parseErr}`;
+          let parsed = extractJsonArray(raw);
+          // If batch JSON is mangled, rewrite one card at a time (stronger reliability).
+          if (!Array.isArray(parsed) || !parsed.length) {
+            const perCard = [];
+            for (const idea of ideas.slice(0, 5)) {
+              const onePrompt = `Rewrite ONE YouTube talk card as JSON object (not array). Sales/click + earned attention.
+Playbook ${playbook.id}, market ${playbook.market}. Outcome=leads.
+Research: ${JSON.stringify({
+                title: idea.title,
+                query: idea.research_query || idea.research_basis?.query,
+                gap: idea.research_basis?.gap_reason || idea.competitor_gap,
+                competitors: (idea.competitors || []).slice(0, 3),
+              })}
+Intro: ${JSON.stringify(founderIntro)}
+Keys: seed_topic_id, title, why, angle, click_psychology, hook, hooks, talking_points, close, competitor_strong, competitor_fail, competitor_gap, must_say, film_mode, lead_weight, retention_beats, sample_script.
+seed_topic_id must be ${JSON.stringify(idea.seed_topic_id || '')}.
+Return ONLY the JSON object.`;
+              let oneRaw = null;
+              for (const model of modelOrder) {
+                try {
+                  const res = await callCouncilMember(model, onePrompt, { maxTokens: 2500 });
+                  const text = typeof res === 'string' ? res : (res?.text || res?.content || '');
+                  if (!text || res?.error) continue;
+                  oneRaw = text;
+                  modelUsed = model;
+                  break;
+                } catch {
+                  /* next */
+                }
+              }
+              if (!oneRaw) continue;
+              const arr = extractJsonArray(`[${String(oneRaw).replace(/^```(?:json)?/i, '').replace(/```$/i, '').replace(/^[^{]*/, '').replace(/[^}]*$/, '')}]`);
+              let obj = Array.isArray(arr) ? arr[0] : null;
+              if (!obj) {
+                try {
+                  const s = String(oneRaw);
+                  const a = s.indexOf('{');
+                  const b = s.lastIndexOf('}');
+                  if (a >= 0 && b > a) obj = JSON.parse(s.slice(a, b + 1).replace(/,\s*}/g, '}'));
+                } catch {
+                  obj = null;
+                }
+              }
+              if (obj) perCard.push(obj);
+            }
+            if (perCard.length) parsed = perCard;
           }
           if (Array.isArray(parsed) && parsed.length) {
             copyModel = modelUsed;
@@ -1718,8 +1824,9 @@ Rules:
             source = researchedCount
               ? `youtube_research_${modelUsed}`
               : `ai_strong_${modelUsed}`;
-          } else if (!copyRewriteError) {
-            copyRewriteError = 'no_json_array_in_model_response';
+            copyRewriteError = null;
+          } else {
+            copyRewriteError = `no_json_array_in_model_response (${modelUsed || 'unknown'})`;
           }
         }
       } catch (err) {
