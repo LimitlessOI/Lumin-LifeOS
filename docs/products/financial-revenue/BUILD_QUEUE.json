@@ -19,12 +19,24 @@
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS roi_tracker"
       ],
-      "last_attempt_at": "2026-07-14T21:27:11.417Z",
+      "last_attempt_at": "2026-07-14T21:44:56.101Z",
       "last_error": "governed_ship_failed",
-      "blocker_class": "BLOCKED_TOOLING",
+      "blocker_class": null,
       "commit_sha": null,
       "built_sha": null,
-      "proof": null
+      "proof": null,
+      "revive_count": 1,
+      "revived_at": "2026-07-14T21:44:09.483Z",
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "2",
