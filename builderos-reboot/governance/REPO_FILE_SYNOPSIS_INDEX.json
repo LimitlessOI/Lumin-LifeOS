@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T06:15:37.798Z",
+  "generated_at": "2026-07-14T06:19:17.274Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11517,
   "files": [
@@ -85196,9 +85196,9 @@
     {
       "path": "services/marketing-youtube.js",
       "synopsis": "MarketingOS YouTube OAuth + channel analytics + video suggestion packs",
-      "bytes": 79908,
-      "mtime": "2026-07-14T06:15:35.054Z",
-      "indexed_at": "2026-07-14T06:15:37.798Z",
+      "bytes": 80250,
+      "mtime": "2026-07-14T06:18:55.002Z",
+      "indexed_at": "2026-07-14T06:19:17.274Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

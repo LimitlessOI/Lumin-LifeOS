@@ -1696,8 +1696,14 @@ sample_script (10-14 short lines).`;
           let oneRaw = null;
           for (const model of modelOrder) {
             try {
-              const res = await callCouncilMember(model, onePrompt, { maxTokens: 2800 });
-              const text = typeof res === 'string' ? res : (res?.text || res?.content || '');
+              const res = await callCouncilMember(model, onePrompt, {
+                maxTokens: 2800,
+                founderComms: true,
+                taskType: 'marketing_youtube_talk_pack',
+              });
+              const text = typeof res === 'string'
+                ? res
+                : (res?.text || res?.content || res?.message || (typeof res === 'object' ? JSON.stringify(res) : ''));
               if (res?.error || res?.ok === false) {
                 attemptErrors.push(`${idea.seed_topic_id || 'card'}/${model}: ${res.error || 'ok_false'}`);
                 continue;
@@ -1730,10 +1736,12 @@ sample_script (10-14 short lines).`;
                 obj = JSON.parse(s.slice(a, b + 1).replace(/,\s*([}\]])/g, '$1'));
               }
             } catch (err) {
-              attemptErrors.push(`${idea.seed_topic_id || 'card'}: parse ${err?.message || err}`);
+              attemptErrors.push(`${idea.seed_topic_id || 'card'}: parse ${err?.message || err} :: ${String(oneRaw).slice(0, 120)}`);
             }
           }
-          if (obj && (obj.title || obj.hook || obj.seed_topic_id)) {
+          if (!obj) {
+            attemptErrors.push(`${idea.seed_topic_id || 'card'}: no_object :: ${String(oneRaw).slice(0, 120)}`);
+          } else {
             perCard.push({ ...obj, seed_topic_id: obj.seed_topic_id || idea.seed_topic_id });
           }
         }
