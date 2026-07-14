@@ -606,7 +606,9 @@
         "9"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "last_attempt_at": "2026-07-14T00:40:06.060Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ],
   "updated_at": "2026-07-12",
