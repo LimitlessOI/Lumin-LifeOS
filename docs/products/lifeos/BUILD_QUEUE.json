@@ -659,8 +659,8 @@
         "GET /health",
         "registerLifeosPerfectDayRoutes"
       ],
-      "attempts": 1,
-      "last_attempt_at": "2026-07-14T11:03:00.106Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-07-14T11:10:10.734Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ],
