@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Tip PROVED claim-status persist: Claims Processing + CPM sticks after force $eval/Kendo (Sierra-insured birth). |
+| **Last Updated** | 2026-07-14 — ChargeSlip via pregnancyId URL + hydrate wait; Billing Slip nav drops context. |
 
 ---
 
@@ -459,6 +459,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Charge Slip map route** — `POST /browser/map-charge-slip` + `mapChargeSlip` (patient query seed). SuperBill SPA + bare HCFA 500 on vendor; ChargeSlip is create surface. | Need visit/procedure pick to bill. | 30m | 30m | none | ✅ | tip after redeploy |
 | 2026-07-14 | **Claim-status persist PROVED** — tip force `$eval`/Kendo on `BillingStatusID`/`BillUnderProvTypeID`; 3 resolved births now after-reload **Claims Processing + CPM** with insurers (Sierra / BCBS / Cigna). Dropped hanging `page.select`. Next: Super Bill `/Pregnancy/SuperBillSPAPartialNew/:id` → claim. | Writeback blank after Save blocked money. | 2h | 2h | none | ✅ | tip `a9555c342f` |
 | 2026-07-14 | **Birth→billing resolve + job persist** — Birth Activity rows lack client links; directory was filtered to future due dates → 0 search hits. Clear filter/View all + name filter + directory resolve in `scanBirthActivity`; raise directory extract cap to 500; persist `clientcare_browser_jobs` (tip multi-instance was losing prep jobs). | Unpaid 2026 births unlinked; claim-prep job expired mid-run. | 1.5h | 1.5h | none | ✅ | tip after redeploy |
 | 2026-07-14 | **Birth activity + async jobs + claim-status prep** — `scanBirthActivity`, newest-first backlog sort, `GET /browser/birth-activity` + `GET /browser/jobs/:id`, `POST /browser/prepare-claim-status` (Claims Processing + CPM), operator-catalog. Live repair applied on tip for newest notes account. | Unpaid births not in 2018–23 notes queue; tip 502 on long sync scans. | 1.5h | 1.5h | none | ✅ | tip after redeploy |
