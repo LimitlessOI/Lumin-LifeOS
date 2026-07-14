@@ -136,6 +136,18 @@ function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
         step.shipped_at = now;
         changed = true;
       }
+      if (step.last_error != null) {
+        step.last_error = null;
+        changed = true;
+      }
+      if (step.last_attempt_at != null) {
+        step.last_attempt_at = null;
+        changed = true;
+      }
+      if (step.attempts !== 0) {
+        step.attempts = 0;
+        changed = true;
+      }
       if (commit_sha && step.commit_sha !== commit_sha) {
         step.commit_sha = commit_sha;
         changed = true;

@@ -1,6 +1,6 @@
 {
   "test_id": "MECHANICAL-DETERMINISM-0005-DRY-RUN",
-  "run_at": "2026-07-14T10:30:06.418Z",
+  "run_at": "2026-07-14T11:36:58.640Z",
   "mission_id": "FACTORY-REBOOT-0005",
   "mode": "dry_run",
   "pass": true,
