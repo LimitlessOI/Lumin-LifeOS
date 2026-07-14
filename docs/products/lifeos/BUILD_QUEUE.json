@@ -659,9 +659,9 @@
         "await planPerfectDay(req.body.user_id",
         "deps.requireKey"
       ],
-      "attempts": 0,
-      "last_attempt_at": null,
-      "last_error": null,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-14T13:44:36.181Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
