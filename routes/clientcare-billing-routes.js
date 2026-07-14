@@ -1139,6 +1139,31 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/map-charge-slip', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const job = enqueueBrowserJob(
+        'map_charge_slip',
+        () => browserService.mapChargeSlip({
+          pregnancyId: req.body?.pregnancy_id || req.body?.pregnancyId,
+          patientQuery: req.body?.patient_query || req.body?.patientQuery,
+          pageTimeoutMs: req.body?.page_timeout_ms,
+        }),
+        req.body || {}
+      );
+      res.status(202).json({
+        ok: true,
+        started: true,
+        job_id: job.id,
+        poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        message: 'Charge Slip map queued',
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] map-charge-slip failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/prepare-claim-status', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
@@ -1207,6 +1232,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         { method: 'GET', path: '/api/v1/clientcare-billing/browser/birth-activity?async=true', summary: 'Recent births → billing hrefs' },
         { method: 'GET', path: '/api/v1/clientcare-billing/browser/backlog-summary?async=true&account_limit=50', summary: 'Billing notes rescue queue (newest first)' },
         { method: 'POST', path: '/api/v1/clientcare-billing/browser/prepare-claim-status', body: { billing_hrefs: ['…'], dry_run: false }, summary: 'Set Claims Processing + CPM' },
+        { method: 'POST', path: '/api/v1/clientcare-billing/browser/map-charge-slip', body: { pregnancy_id: '…', patient_query: 'Lastname' }, summary: 'Map Charge Slip create surface' },
         { method: 'POST', path: '/api/v1/clientcare-billing/ops/repair-account', summary: 'Field repair (dry_run default true)' },
         { method: 'GET', path: '/api/v1/clientcare-billing/browser/jobs/:jobId', summary: 'Poll async browser job' },
       ],

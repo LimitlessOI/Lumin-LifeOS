@@ -3198,6 +3198,92 @@ export function createClientCareBrowserService({ env = process.env, logger = con
    * Prepare claim-ready status on a billing account: set Client Billing Status + Bill Provider Type.
    * Does not flip payment_status (that means money received).
    */
+  /**
+   * Map / seed Charge Slip for a known pregnancy. Vendor SuperBill SPA URL 500s;
+   * ChargeSlip is the working create surface but needs patient/visit selection.
+   */
+  async function mapChargeSlip({
+    pregnancyId = null,
+    patientQuery = '',
+    pageTimeoutMs = 20000,
+  } = {}) {
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const origin = new URL(session.currentUrl()).origin;
+      const qs = pregnancyId ? `?pregnancyId=${encodeURIComponent(pregnancyId)}` : '';
+      const target = `${origin}/Company/ChargeSlip${qs}`;
+      const nav = await gotoWithBudget(session.page, target, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      if (!nav.ok) return { ok: false, error: nav.error, screenshots };
+
+      await sleep(2000);
+      const typed = String(patientQuery || '').trim()
+        ? await session.page.evaluate((q) => {
+            const inputs = Array.from(document.querySelectorAll('input, textarea'));
+            const patient = inputs.find((el) => {
+              const near = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${(el.closest('div,td,label,tr')?.innerText || '').slice(0, 40)}`;
+              return /patient/i.test(near);
+            }) || inputs.find((el) => /patient/i.test(el.id || el.name || ''));
+            if (!patient) return { typed: false };
+            patient.focus();
+            patient.value = q;
+            patient.dispatchEvent(new Event('input', { bubbles: true }));
+            patient.dispatchEvent(new Event('change', { bubbles: true }));
+            patient.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+            return { typed: true, id: patient.id || null, name: patient.name || null };
+          }, String(patientQuery).trim())
+        : { typed: false, skipped: true };
+      if (typed?.typed) await sleep(2000);
+
+      const map = await session.page.evaluate(() => {
+        const visible = (el) => {
+          if (!el) return false;
+          const style = window.getComputedStyle(el);
+          if (style.display === 'none' || style.visibility === 'hidden') return false;
+          const rect = el.getBoundingClientRect();
+          return rect.width > 0 && rect.height > 0;
+        };
+        const controls = Array.from(document.querySelectorAll('input, select, textarea, button'))
+          .filter(visible)
+          .map((el) => ({
+            tag: el.tagName,
+            type: el.getAttribute('type') || '',
+            id: el.id || '',
+            name: el.name || '',
+            value: el.tagName === 'SELECT'
+              ? (el.options?.[el.selectedIndex]?.text || el.value || '')
+              : (el.value || el.textContent || '').trim().slice(0, 80),
+            label: (el.closest('label,td,div,tr')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+          }))
+          .slice(0, 80);
+        const visitRows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+          .map((tr) => Array.from(tr.querySelectorAll('td')).map((td) => (td.innerText || '').trim()).filter(Boolean))
+          .filter((cells) => cells.length >= 2)
+          .slice(0, 20);
+        return {
+          controls,
+          visitRows,
+          textPreview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 1500),
+        };
+      });
+
+      return {
+        ok: true,
+        url: target,
+        pregnancyId: pregnancyId || null,
+        patientQuery: patientQuery || null,
+        typed,
+        ...map,
+        screenshots,
+        next: 'Select visit row → add procedure/diagnosis → Save. Vendor SuperBill SPA URL currently 500s.',
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function prepareClaimStatus({
     billingHref,
     clientBillingStatus = 'Claims Processing',
@@ -3227,6 +3313,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     scanClientBillingAccounts,
     scanBillingNotes,
     scanBirthActivity,
+    mapChargeSlip,
     buildAccountRescueReport,
     buildFullAccountRescueReport,
     buildBacklogSummary,
