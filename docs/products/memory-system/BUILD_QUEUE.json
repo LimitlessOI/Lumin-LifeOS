@@ -152,7 +152,8 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T20:42:02.298Z"
+      "shipped_at": "2026-07-14T20:42:02.298Z",
+      "commit_sha": "d5775f7b757f21fe52b0d5d942cbd7a6c1e474e7"
     },
     {
       "id": "11",
