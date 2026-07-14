@@ -46,12 +46,12 @@
       "spec": "Implement and export the income drone scheduler logic from the service",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "scheduleIncomeDrones"
       ],
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-14T22:29:02.935Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
@@ -64,7 +64,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
