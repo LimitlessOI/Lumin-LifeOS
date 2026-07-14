@@ -4,6 +4,7 @@
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { getDesignSystemCss, getDesignSystemFontLinks } from './design-studio.js';
+import { matchIndustrySalesPack, buildProviderWhyBullets } from './site-builder-industry-sales.js';
 
 function escapeHtml(s) {
   return String(s ?? '')
@@ -47,11 +48,12 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
   const partner = posPartner || { name: 'booking', url: '#book' };
   const booking = info.bookingUrl || partner.url || '#book';
   const services = (info.services || ['Prenatal care', 'Home birth support', 'Postpartum care']).slice(0, 6);
-  const pains = (info.painPoints || [
+  const salesPack = matchIndustrySalesPack(info);
+  const pains = (info.painPoints || salesPack?.fears || [
     'Hard to tell who is actually attending your birth',
     'Website feels dated and hard to trust',
     'Booking a consult takes too many steps',
-  ]).slice(0, 3);
+  ]).slice(0, 4);
   const testimonials = (
     info.verifiedData?.testimonials
     || info.assetData?.testimonials
@@ -93,6 +95,11 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     photoSource: heroes.length
       ? (/cdninstagram|fbcdn|scontent/.test(hero) ? 'instagram' : (/replicate\.delivery/.test(hero) ? 'generated' : 'website'))
       : 'none',
+    salesPack,
+    whySeek: salesPack?.whySeek || [],
+    benefits: salesPack?.benefits || [],
+    reluctantBuyer: salesPack?.reluctantBuyer || [],
+    providerWhy: buildProviderWhyBullets(info, salesPack),
   };
 }
 
@@ -1026,6 +1033,149 @@ ${footer(content)}
 </body></html>`;
 }
 
+/**
+ * Midwifery dual-sale shell — Sale 1: why home birth. Sale 2: why this midwife.
+ * Founder sales doctrine 2026-07-14.
+ */
+function shellMidwiferyDualSale(system, content) {
+  const pack = content.salesPack;
+  const cat = pack?.categorySale || {};
+  const prov = pack?.providerSale || {};
+  const css = `
+.nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 90%,transparent);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 0}
+.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--font-display);font-weight:700}
+.brand img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.hero{display:grid;gap:2rem;padding:3rem 0 2rem}
+@media(min-width:900px){.hero{grid-template-columns:1.05fr .95fr;align-items:center;padding:4.5rem 0 3rem}}
+.hero h1{max-width:14ch}
+.lead{margin-top:1.1rem;font-size:1.12rem;color:var(--muted);max-width:38ch}
+.dual-cta{display:grid;gap:.75rem;margin-top:1.75rem}
+@media(min-width:560px){.dual-cta{grid-template-columns:1fr 1fr}}
+.dual-cta a{display:flex;flex-direction:column;gap:.25rem;padding:1rem 1.15rem;border-radius:var(--radius);text-decoration:none;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.dual-cta a.primary{background:var(--primary);color:var(--button-text);border-color:transparent}
+.dual-cta strong{font-size:1.05rem}
+.dual-cta span{font-size:.85rem;opacity:.85}
+.hero-media,.hero-fallback{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow);background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--accent) 35%,white),var(--bg))}
+.section{padding:3.25rem 0}
+.section-alt{background:color-mix(in srgb,var(--accent) 10%,var(--bg));border-block:1px solid var(--line)}
+.grid{display:grid;gap:1rem}
+@media(min-width:800px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border-radius:var(--radius);padding:1.35rem;box-shadow:var(--shadow);border:1px solid var(--line)}
+.card h3{margin-bottom:.5rem;font-size:1.15rem}
+.sale-label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:.5rem}
+.list{display:grid;gap:.65rem;margin-top:1rem}
+.list li{list-style:none;padding-left:1.1rem;position:relative}
+.list li:before{content:"";position:absolute;left:0;top:.55rem;width:.45rem;height:.45rem;border-radius:50%;background:var(--primary)}
+.cta{text-align:center;padding:3.75rem 1rem;background:linear-gradient(160deg,color-mix(in srgb,var(--primary) 88%,#000),var(--primary));color:#fff}
+.cta .btn{background:#fff;color:var(--text)}
+.site-footer{padding:2.5rem 0 5rem}
+details{background:var(--card);border-radius:var(--radius);padding:1rem;margin-bottom:.7rem;box-shadow:var(--shadow)}
+summary{cursor:pointer;font-weight:700}
+`;
+  return `${head(system, content, css)}
+<body data-lumin-ds="1" data-layout="midwifery-dual-sale">
+<header class="nav"><div class="wrap nav-inner">
+  <div class="brand">${content.logo ? `<img src="${escapeHtml(content.logo)}" alt=""/>` : ''}<span>${escapeHtml(content.name)}</span></div>
+  <a class="btn" href="${escapeHtml(content.booking)}">Book free consult</a>
+</div></header>
+<main>
+  <section class="wrap hero">
+    <div>
+      ${proofLine(content)}
+      <h1 style="margin-top:.7rem">${escapeHtml(content.tagline)}</h1>
+      <p class="lead">Two decisions, in order: is home birth right for you — and is ${escapeHtml(content.name)} the midwife you trust for it.</p>
+      <div class="dual-cta">
+        <a class="primary" href="#${escapeHtml(cat.anchor || 'why-home-birth')}">
+          <strong>${escapeHtml(cat.cta || 'Why home birth')}</strong>
+          <span>${escapeHtml(cat.blurb || 'Benefits, safety questions, and who it is for')}</span>
+        </a>
+        <a href="#${escapeHtml(prov.anchor || 'why-this-midwife')}">
+          <strong>${escapeHtml(prov.cta || 'Why this midwife')}</strong>
+          <span>${escapeHtml(prov.blurb || `What makes ${content.name} the right hire`)}</span>
+        </a>
+      </div>
+    </div>
+    ${heroMedia(content)}
+  </section>
+
+  <section id="why-home-birth" class="section section-alt">
+    <div class="wrap">
+      <p class="sale-label">${escapeHtml(cat.eyebrow || 'First sale')} · category</p>
+      <h2>${escapeHtml(cat.title || 'Why home birth')}</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">We do not hide the fear. Families hire a home-birth midwife because they want safety with autonomy — and they need the safety plan in plain language.</p>
+      <div class="grid grid-2" style="margin-top:1.75rem">
+        <article class="card">
+          <h3>What families are afraid of</h3>
+          <ul class="list">${(content.pains || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </article>
+        <article class="card">
+          <h3>Why they seek this out anyway</h3>
+          <ul class="list">${(content.whySeek || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </article>
+      </div>
+      <div class="grid grid-2" style="margin-top:1rem">
+        <article class="card">
+          <h3>Benefits of this care model</h3>
+          <ul class="list">${(content.benefits || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </article>
+        <article class="card">
+          <h3>What makes someone hesitate</h3>
+          <ul class="list">${(content.reluctantBuyer || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+          <p class="muted" style="margin-top:1rem">A good consult answers the partner’s fear and the parent’s hope in the same conversation.</p>
+        </article>
+      </div>
+      <p class="muted" style="margin-top:1.5rem;max-width:56ch">Outcomes and transfer statistics belong in consult with your midwife’s real numbers — we will not invent rates on a marketing page. Ask for screening criteria, transfer rate, and hospital backup.</p>
+    </div>
+  </section>
+
+  <section id="why-this-midwife" class="section">
+    <div class="wrap">
+      <p class="sale-label">${escapeHtml(prov.eyebrow || 'Second sale')} · this provider</p>
+      <h2>Why ${escapeHtml(content.name)}</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">${escapeHtml(content.about.slice(0, 240))}</p>
+      <div class="grid grid-2" style="margin-top:1.75rem">
+        <article class="card">
+          <h3>Reasons to hire this practice</h3>
+          <ul class="list">${(content.providerWhy || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+          <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Book a free consult</a>
+        </article>
+        <article class="card">
+          <h3>Bring these questions</h3>
+          <ul class="list">${(prov.promptQuestions || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </article>
+      </div>
+      ${photoStrip(content)}
+    </div>
+  </section>
+
+  <section id="services" class="section section-alt"><div class="wrap">
+    <h2 style="margin-bottom:1.25rem">Care path</h2>
+    <div class="grid grid-3">${serviceCards(content)}</div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <h2 style="margin-bottom:1.25rem">From families who hired this care</h2>
+    <div class="grid grid-3">${testimonialCards(content)}</div>
+  </div></section>
+
+  <section class="section"><div class="wrap"><h2 style="margin-bottom:1rem">FAQ</h2>${faqBlock(content)}</div></section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Ready for the real conversation?</h2>
+      <p style="margin:1rem auto 0;max-width:40ch;opacity:.9">Start with why home birth. Then decide if ${escapeHtml(content.name)} is your midwife.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
+        <a class="btn" href="#why-home-birth" style="background:transparent;border:1px solid #fff;color:#fff">Why home birth</a>
+        <a class="btn" href="${escapeHtml(content.booking)}">Book free consult</a>
+      </div>
+    </div>
+  </section>
+</main>
+${footer(content)}
+</body></html>`;
+}
+
 const LAYOUT_RENDERERS = {
   'editorial-luxe': shellEditorialLuxe,
   'modern-clinical': shellModernClinical,
@@ -1044,6 +1194,16 @@ const LAYOUT_RENDERERS = {
   'agentic-conversational': shellAgentic,
 };
 
+const DUAL_SALE_LAYOUT_IDS = new Set([
+  'organic-warm',
+  'soft-pastel',
+  'local-trust',
+  'editorial-luxe',
+  'modern-clinical',
+  'coastal-light',
+  'artisan-heritage',
+]);
+
 /**
  * Render a distinct hand-authored layout for a design system.
  * Returns null only if system is missing.
@@ -1051,6 +1211,9 @@ const LAYOUT_RENDERERS = {
 export function renderDesignSystemLayout(system, info = {}, posPartner = null) {
   if (!system?.id) return null;
   const content = normalizeLayoutContent(info, posPartner);
+  if (content.salesPack?.id === 'midwifery_home_birth' && DUAL_SALE_LAYOUT_IDS.has(system.id)) {
+    return shellMidwiferyDualSale(system, content);
+  }
   const renderer = LAYOUT_RENDERERS[system.id] || shellEditorialLuxe;
   return renderer(system, content);
 }
