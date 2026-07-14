@@ -50,7 +50,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: large, rounded-full, with primary solid fill and subtle shadow. Use an accent underline on hover. Cards: white, rounded-2xl, soft shadow, with an accent thin rule at the top. Headings: display font, tight leading, mixed weights. Use a pull-quote style for the main value proposition.`,
     motifs: `Thin gold/amber accent rules, generous letter-spacing on small caps labels, a single large serif initial on the hero paragraph, and soft cream-to-white gradients.`,
     antiPatterns: `Do not use default purple-blue gradients. Do not use all-caps headings. Do not use all-caps body text. Do not use generic rounded avatars for testimonials unless real headshots are provided. Do not use a plain white background for every section; vary between cream and white.`,
-    sections: `1. Sticky nav with logo and "Book Free Call" CTA. 2. Hero split with serif headline, proof bar, two CTAs. 3. Problem cards. 4. Solution process. 5. Services with editorial grid. 6. Testimonials with source. 7. Offer/packages. 8. Digital Presence Score. 9. About. 10. FAQ accordion. 11. Blog preview. 12. Video embeds. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Sticky nav with logo and "Book Free Call" CTA. 2. Hero split with serif headline, proof bar, two CTAs. 3. Problem cards. 4. Solution process. 5. Services with editorial grid. 6. Testimonials with source. 7. Offer/packages. 8. About. 9. FAQ accordion. 10. Blog preview. 11. Video embeds. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'modern-clinical',
@@ -84,7 +84,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-xl, solid primary with a subtle hover lift. Cards: light card background, rounded-xl, thin border. Use icon badges in circles. Headings: space-grotesk, medium weight, tight leading. Use a subtle checkmark/pill for trust signals.`,
     motifs: `Soft teal-to-sky gradient accents, rounded pill badges, clean line separators, and a light-blue card surface. Use subtle medical-style icons (minimal).`,
     antiPatterns: `Do not use a dark background unless the brand explicitly demands it. Do not use playful rounded shapes. Do not use all-caps labels. Do not use generic wellness purple. Do not use fake medical credentials.`,
-    sections: `1. Clean sticky nav with CTA. 2. Hero with headline + trust badges + booking CTA. 3. Problem cards (3 pain points). 4. Solution process. 5. Services with icon cards. 6. Testimonials. 7. Offer/packages. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Clean sticky nav with CTA. 2. Hero with headline + trust badges + booking CTA. 3. Problem cards (3 pain points). 4. Solution process. 5. Services with icon cards. 6. Testimonials. 7. Offer/packages. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'organic-warm',
@@ -118,7 +118,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-full, primary color with a warm shadow. Cards: very rounded, soft shadow, with an earthy accent border. Headings: serif display, friendly, lower contrast. Use leaf/blob shapes as CSS backgrounds.`,
     motifs: `Soft terracotta and sage gradients, rounded blobs, hand-drawn-feeling icons, and natural textures. Use lots of rounded corners and gentle shadow.`,
     antiPatterns: `Do not use sharp corners. Do not use neon colors. Do not use a dark or clinical background. Do not use generic purple. Do not use rigid grid lines. Do not use all-caps headings.`,
-    sections: `1. Soft nav with rounded CTA. 2. Hero with rounded image and warm copy. 3. Problem cards with organic shapes. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Soft nav with rounded CTA. 2. Hero with rounded image and warm copy. 3. Problem cards with organic shapes. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'bold-minimal',
@@ -152,7 +152,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rectangular, solid black or white inverse, with a small accent hover. Cards: white, thin border, no or minimal shadow. Headings: oswald, uppercase tracking, very large. Use a stark contrast between sections.`,
     motifs: `Huge condensed type, thin 1px rules, a single accent color (brand accent) for hover and highlights, and a grid-like layout.`,
     antiPatterns: `Do not use rounded corners. Do not use gradients. Do not use more than one accent color. Do not use playful shapes. Do not use generic purple or blue. Do not use small body text.`,
-    sections: `1. Minimal nav with bold logo and CTA. 2. Huge hero headline + CTA. 3. Problem cards (black text on white). 4. Solution steps. 5. Services with thin-bordered cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Minimal nav with bold logo and CTA. 2. Huge hero headline + CTA. 3. Problem cards (black text on white). 4. Solution steps. 5. Services with thin-bordered cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'dark-aura',
@@ -186,7 +186,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-full, neon primary color, dark text, glow shadow. Cards: dark translucent card, thin border, rounded-2xl, glass blur. Headings: outfit, light weight, large. Use subtle gradient orbs behind key sections.`,
     motifs: `Neon glows, dark glass, radial gradient orbs, subtle grid lines, and a deep, immersive background. Use the accent for small highlights and primary for CTAs.`,
     antiPatterns: `Do not use a white background. Do not use black text. Do not use generic purple or pink. Do not use heavy drop shadows on dark cards. Do not use bright saturated colors for large backgrounds.`,
-    sections: `1. Dark nav with neon CTA. 2. Hero with headline and glow. 3. Problem cards (dark). 4. Solution steps with glow icons. 5. Services with glass cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Dark nav with neon CTA. 2. Hero with headline and glow. 3. Problem cards (dark). 4. Solution steps with glow icons. 5. Services with glass cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'gradient-energy',
@@ -220,7 +220,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-full, primary color, with a gradient hover. Cards: white, rounded-3xl, large shadow, with gradient accent borders. Headings: outfit, bold, large. Use gradient text for hero headline. Use bento-style service cards.`,
     motifs: `Mesh gradients, glass panels, rounded bento cards, large shadow, and a vibrant accent. Use gradient orbs and blurred colored shapes as background.`,
     antiPatterns: `Do not use flat white backgrounds. Do not use small body text. Do not use generic purple/blue gradients. Do not use all-caps. Do not use thin 1px rules. Do not use more than two accent colors.`,
-    sections: `1. Nav with rounded CTA. 2. Bento hero with gradient panel. 3. Problem cards. 4. Solution steps. 5. Bento service cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Nav with rounded CTA. 2. Bento hero with gradient panel. 3. Problem cards. 4. Solution steps. 5. Bento service cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'retro-warm',
@@ -254,7 +254,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-full, primary color, with a warm shadow. Cards: white, asymmetric rounded corners, with an accent border. Headings: abril fatface, large, retro. Use arched shapes and decorative circles.`,
     motifs: `Terracotta, mustard, and sage palette; arched shapes; decorative circles; 70s-inspired typography; warm, uneven shadows.`,
     antiPatterns: `Do not use dark backgrounds. Do not use neon colors. Do not use thin, clinical lines. Do not use generic blue/purple. Do not use all-caps headings.`,
-    sections: `1. Nav with rounded CTA. 2. Hero with arched image and retro headline. 3. Problem cards. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Nav with rounded CTA. 2. Hero with arched image and retro headline. 3. Problem cards. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'soft-pastel',
@@ -288,7 +288,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-full, primary color, with a soft shadow. Cards: white, very rounded, with a pastel border. Headings: poppins, medium, rounded feel. Use pastel gradient blobs as backgrounds.`,
     motifs: `Pastel lavender, pink, and mint gradients; rounded everything; soft shadows; calming, blob-like shapes.`,
     antiPatterns: `Do not use dark backgrounds. Do not use harsh shadows. Do not use neon colors. Do not use generic purple/white without the pastel palette. Do not use sharp corners. Do not use all-caps headings.`,
-    sections: `1. Soft nav with rounded CTA. 2. Hero with pastel gradient and calm copy. 3. Problem cards. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Soft nav with rounded CTA. 2. Hero with pastel gradient and calm copy. 3. Problem cards. 4. Solution steps. 5. Services with rounded cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'swiss-grid',
@@ -321,7 +321,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rectangular, solid primary, with a sharp hover. Cards: white, thick top border, no shadow. Headings: inter, bold, large, left-aligned. Use a single red accent for small highlights. Use a strong grid for service cards.`,
     motifs: `Black, white, and one red accent; thick rules; grid lines; uppercase small labels; no gradients; no shadows.`,
     antiPatterns: `Do not use rounded corners. Do not use gradients. Do not use shadows. Do not use multiple colors. Do not use centered hero text. Do not use playful shapes. Do not use generic purple.`,
-    sections: `1. Minimal nav with CTA. 2. Left-aligned hero with accent rule. 3. Problem grid. 4. Solution steps. 5. Services in strict grid. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Minimal nav with CTA. 2. Left-aligned hero with accent rule. 3. Problem grid. 4. Solution steps. 5. Services in strict grid. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'refined-brutalist',
@@ -355,7 +355,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rectangular, solid primary, with an offset shadow. Cards: white, thick black border, offset shadow, no rounded corners. Headings: space grotesk, bold, large. Use a single bright accent for highlights.`,
     motifs: `Thick black borders, offset shadows, monospace-style labels, high contrast, and a single orange accent.`,
     antiPatterns: `Do not use rounded corners. Do not use gradients. Do not use soft shadows. Do not use more than one accent. Do not use generic purple. Do not use thin rules. Do not use all-caps body text.`,
-    sections: `1. Bold nav with CTA. 2. Hero with offset shadow image. 3. Problem cards with thick borders. 4. Solution steps. 5. Services with offset cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Bold nav with CTA. 2. Hero with offset shadow image. 3. Problem cards with thick borders. 4. Solution steps. 5. Services with offset cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'coastal-light',
@@ -389,7 +389,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-xl, primary deep-sea blue, white text. Cards: light blue card surface, rounded-xl, soft shadow. Headings: cormorant garamond, elegant. Use a sandy gold accent for hover and small highlights.`,
     motifs: `Deep sea blue, sandy gold, white space, soft blue-tinted surfaces, and subtle wave-like shapes.`,
     antiPatterns: `Do not use dark backgrounds. Do not use neon colors. Do not use generic purple. Do not use all-caps headings. Do not use heavy shadows.`,
-    sections: `1. Airy nav with CTA. 2. Hero with serif headline and image. 3. Problem cards. 4. Solution steps. 5. Services with blue cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Airy nav with CTA. 2. Hero with serif headline and image. 3. Problem cards. 4. Solution steps. 5. Services with blue cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'urban-gold',
@@ -423,7 +423,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-xl, navy primary, white text, gold hover border. Cards: white, rounded-xl, with a subtle gold top border. Headings: cinzel, elegant, large. Use gold for small highlights and hover.`,
     motifs: `Deep navy, gold, cream, serif display type, elegant cards, and subtle gold rules.`,
     antiPatterns: `Do not use playful shapes. Do not use neon colors. Do not use generic purple/blue. Do not use all-caps headings. Do not use dark backgrounds for the main page.`,
-    sections: `1. Elegant nav with CTA. 2. Hero with serif headline and gold accent. 3. Problem cards. 4. Solution steps. 5. Services with gold-topped cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Elegant nav with CTA. 2. Hero with serif headline and gold accent. 3. Problem cards. 4. Solution steps. 5. Services with gold-topped cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
   {
     id: 'agentic-conversational',
@@ -456,7 +456,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-full, primary, with an arrow. Use "pill" chips for common actions. Cards: white, rounded-2xl, with a subtle shadow. Use a chat-like layout for the FAQ and contact. Headings: inter, bold, direct. Use a green accent for "available" / "quick" signals.`,
     motifs: `Chat bubbles, quick-action chips, typing-dot style loaders, status badges, a sticky bottom action, and a clean, app-like feel.`,
     antiPatterns: `Do not use a static brochure layout. Do not hide the booking action. Do not use generic hero stock photos. Do not use long paragraphs before the action. Do not use more than two accent colors. Do not use a dark theme.`,
-    sections: `1. Nav with CTA. 2. Hero with a question and quick-action chips. 3. Social proof bar. 4. Problem cards. 5. "How it works" steps. 6. Services with book chips. 7. Testimonials. 8. Offer. 9. Digital Presence Score. 10. About. 11. FAQ accordion. 12. Blog preview. 13. Video. 14. Sticky booking CTA. 15. Footer.`,
+    sections: `1. Nav with CTA. 2. Hero with a question and quick-action chips. 3. Social proof bar. 4. Problem cards. 5. "How it works" steps. 6. Services with book chips. 7. Testimonials. 8. Offer. 9. About. 10. FAQ accordion. 11. Blog preview. 12. Video. 13. Sticky booking CTA. 14. Footer.`,
   },
   {
     id: 'local-trust',
@@ -490,7 +490,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: large, rounded-xl, primary, with a phone icon. Use a sticky call bar on mobile. Cards: white, rounded-xl, shadow, with a check icon. Headings: merriweather, bold. Use a yellow accent for urgency and trust badges. Use a prominent "Call Now" and "Get a Quote" CTA.`,
     motifs: `Phone icons, trust badges, checkmarks, local map/area mentions, review stars, and a yellow accent for urgency.`,
     antiPatterns: `Do not hide the phone number. Do not use a generic hero image. Do not bury the CTA at the bottom. Do not use a dark theme. Do not use more than two accent colors. Do not use all-caps headings. Do not use fake awards.`,
-    sections: `1. Nav with phone + CTA. 2. Hero with headline, phone, and CTA. 3. Proof bar (real reviews, area, response time). 4. Problem cards. 5. Services with quote CTAs. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking/Call CTA. 14. Footer.`,
+    sections: `1. Nav with phone + CTA. 2. Hero with headline, phone, and CTA. 3. Proof bar (real reviews, area, response time). 4. Problem cards. 5. Services with quote CTAs. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking/Call CTA. 13. Footer.`,
   },
   {
     id: 'artisan-heritage',
@@ -524,7 +524,7 @@ const DESIGN_SYSTEMS = [
     components: `Buttons: rounded-rectangle, primary color, with subtle shadow. Cards: white, with a thin gold border and soft shadow. Headings: libre baskerville, elegant. Use a gold accent for small highlights and rule lines.`,
     motifs: `Warm cream, deep brown, gold foil accents, subtle paper texture, and craft-like iconography.`,
     antiPatterns: `Do not use neon colors. Do not use dark backgrounds. Do not use generic purple/blue. Do not use all-caps headings. Do not use sharp, cold corners.`,
-    sections: `1. Nav with CTA. 2. Hero with editorial headline and image. 3. Problem cards. 4. Solution steps. 5. Services with craft-style cards. 6. Testimonials. 7. Offer. 8. Digital Presence Score. 9. About. 10. FAQ. 11. Blog preview. 12. Video. 13. Booking CTA. 14. Footer.`,
+    sections: `1. Nav with CTA. 2. Hero with editorial headline and image. 3. Problem cards. 4. Solution steps. 5. Services with craft-style cards. 6. Testimonials. 7. Offer. 8. About. 9. FAQ. 10. Blog preview. 11. Video. 12. Booking CTA. 13. Footer.`,
   },
 ];
 
@@ -558,7 +558,11 @@ export function getDesignSystemCss(system, brandPrimary, brandAccent) {
 body[data-lumin-ds] { font-family: var(--font-body) !important; background-color: var(--bg) !important; color: var(--text) !important; }
 body[data-lumin-ds] h1, body[data-lumin-ds] h2, body[data-lumin-ds] h3, body[data-lumin-ds] h4, body[data-lumin-ds] h5, body[data-lumin-ds] h6 { font-family: var(--font-display) !important; color: var(--text) !important; }
 body[data-lumin-ds] .btn, body[data-lumin-ds] button, body[data-lumin-ds] a.btn { border-radius: var(--radius); background-color: var(--primary); color: var(--button-text); box-shadow: var(--shadow); }
-body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shadow); background-color: var(--card); color: var(--text); }`;
+body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shadow); background-color: var(--card); color: var(--text); }
+body[data-lumin-ds] .bg-white { background-color: var(--card) !important; }
+body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200 { background-color: var(--bg) !important; }
+body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted { color: var(--muted) !important; }
+body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black { color: var(--text) !important; }`;
 }
 
 export function getDesignSystemFontLinks(system) {

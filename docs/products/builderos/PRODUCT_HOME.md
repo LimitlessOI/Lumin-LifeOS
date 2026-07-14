@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/builderos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — BuilderOS governed autonomous loop now sources from `BUILD_QUEUE.json` as the executable blueprint, ordered by `PRODUCT_BUILD_PRIORITY.json` (LifeOS first), revives stale blocked steps, infers `expected_exports` from each spec, and commits shipped files. Only stops for token/budget exhaustion or SENTRY/governance failure. Prior: skip_intake_gate fix; GAP-FILL justification truth hook. |
+| **Last Updated** | 2026-07-14 — BuilderOS governed autonomous loop now sources from `BUILD_QUEUE.json` as the executable blueprint, ordered by `PRODUCT_BUILD_PRIORITY.json` (LifeOS first), revives stale blocked steps, infers `expected_exports` from each spec, and commits shipped files. Added CommonJS-to-ESM normalization (`normalizeCommonJsToEsm`) and remote `BUILD_QUEUE.json` merge with `commit_sha` persistence so the loop never stops building unless it runs out of tokens or SENTRY fails. |
 ### Related docs (this product)
 
 | Doc | Path |

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — Shared design studio overhaul: 5 free templates + 10 paid previewable templates + $30 custom co-design (pay only when approved), all design tokens/CSS/fonts injected at build time, MarketingOS shares the same studio, and Digital Presence Score visual refresh. Fixed `tier` propagation in `buildVariants` and DB-backed preview routing so the live preview switcher correctly shows free/$1/custom badges. SENTRY gate PASS (Layer A 7/7, Layer B 8/8, ux=good). |
+| **Last Updated** | 2026-07-14 — Preview quality hardening: real blog posts, FAQ, and YouTube embeds generated before the homepage; explicit ban on placeholder blog titles, empty FAQ answers, `[framemarker...]` placeholders, and a customer-facing Digital Presence Score in the public page. Design-system tokens override generic Tailwind classes (`bg-white`, `text-gray-*`, `text-muted`) and Wix-extracted brand colors are no longer injected as overrides. SENTRY gate PASS (Layer A 7/7, Layer B 8/8, ux=good). |
 
 ---
 

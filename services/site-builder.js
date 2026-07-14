@@ -268,6 +268,47 @@ function renderIndustryBenchmarks(benchmarks) {
   return lines.join('\n') + '\n';
 }
 
+function renderBlogPostsForPrompt(posts = []) {
+  if (!posts.length) return 'BLOG POSTS: NONE PROVIDED — omit the blog preview section or label it Coming Soon.\n';
+  const lines = ['BLOG POSTS (use these exact titles and excerpts for the "Latest from the Blog" cards; link to /blog/<slug>/):'];
+  for (const p of posts.slice(0, 3)) {
+    lines.push(`- Title: ${p.title || 'Blog post'}\n  Slug: ${p.slug || '#'}\n  Excerpt: ${p.excerpt || ''}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function renderFaqForPrompt(faq = []) {
+  if (!faq.length) return 'FAQ ITEMS: NONE PROVIDED — generate 5 useful Q&As from the business profile and common client questions. Each answer must be complete, not empty.\n';
+  const lines = ['FAQ ITEMS (use these exact questions and answers in the FAQ accordion):'];
+  for (const q of faq.slice(0, 8)) {
+    lines.push(`Q: ${q.question || 'Question'}\nA: ${q.answer || ''}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function renderVideoListForPrompt(videos = []) {
+  if (!videos.length) return 'REAL VIDEOS: NONE PROVIDED — show an educational teaser or omit the video section.\n';
+  const lines = ['REAL VIDEOS (embed these exact YouTube URLs as iframes in the video section):'];
+  for (const v of videos.slice(0, 3)) {
+    const url = typeof v === 'string' ? v : (v.embedUrl || v.url || `https://www.youtube.com/embed/${v.videoId || ''}`);
+    lines.push(`- ${url}`);
+  }
+  return lines.join('\n') + '\n';
+}
+
+function extractVideoEmbedUrls(info = {}) {
+  const videos = [];
+  if (info.youtubeVideos?.length) videos.push(...info.youtubeVideos);
+  if (info.assetData?.social?.youtube?.videos?.length) {
+    for (const v of info.assetData.social.youtube.videos) {
+      if (!videos.some((x) => (x.videoId || x.id) === (v.videoId || v.id))) {
+        videos.push(v);
+      }
+    }
+  }
+  return videos;
+}
+
 export default class SiteBuilder {
   constructor({ callCouncil, previewsDir = 'public/previews', baseUrl = '', pool = null } = {}) {
     this.callCouncil = callCouncil;
@@ -337,6 +378,22 @@ export default class SiteBuilder {
         }
       }
 
+      // Step 2c: Generate shared content BEFORE the main site so the homepage can use real blog posts, FAQ, and videos.
+      await progress(options.skipBlogs ? 'skip_blogs' : 'blogs');
+      const blogPosts = options.skipBlogs ? [] : await withTimeout(this.generateBlogPosts(businessInfo, 3), GENERATION_TIMEOUT_MS, 'generateBlogPosts');
+      let faq = [];
+      try {
+        faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+      } catch (err) {
+        logger.warn('[SITE] FAQ generation failed (continuing)', { clientId, error: err.message });
+      }
+      const videos = businessInfo.youtubeVideos?.length
+        ? businessInfo.youtubeVideos
+        : (businessInfo.youtubeChannelId ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId) : []);
+      businessInfo.blogPosts = blogPosts;
+      businessInfo.faq = faq;
+      businessInfo.youtubeVideos = videos;
+
       // Step 3: Generate main site HTML
       await progress('generate');
       let siteHtml = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief: benchmark?.designBrief, ...options });
@@ -369,18 +426,7 @@ export default class SiteBuilder {
         }
       }
 
-      // Step 4: Generate 3 SEO blog posts (skippable for lean/first-dollar probes)
-      await progress(options.skipBlogs ? 'skip_blogs' : 'blogs');
-      const blogPosts = options.skipBlogs
-        ? []
-        : await withTimeout(this.generateBlogPosts(businessInfo, 3), GENERATION_TIMEOUT_MS, 'generateBlogPosts');
-
-      // Step 5: YouTube videos (already fetched during asset ingestion if available)
-      const videos = businessInfo.youtubeVideos?.length
-        ? businessInfo.youtubeVideos
-        : (businessInfo.youtubeChannelId ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId) : []);
-
-      // Step 6: Build blog index page
+      // Step 4: Build blog index page from blog posts already generated before the main site HTML
       const blogHtml = this.generateBlogIndex(businessInfo, blogPosts);
 
       // Step 7: Generate SEO files
@@ -428,7 +474,7 @@ export default class SiteBuilder {
         businessInfo,
         posPartner,
         blogPosts: blogPosts.map(p => ({ slug: p.slug, title: p.title })),
-        videos: videos.length,
+        videos: (businessInfo.youtubeVideos || []).length,
         qualityReport,
         benchmark,
         presence,
@@ -514,6 +560,18 @@ export default class SiteBuilder {
 
       // Shared content (built once, reused across every variant)
       const blogPosts = options.skipBlogs ? [] : await this.generateBlogPosts(businessInfo, 3);
+      let faq = [];
+      try {
+        faq = await withTimeout(this.generateFaq(businessInfo, 5), GENERATION_TIMEOUT_MS, 'generateFaq');
+      } catch (err) {
+        logger.warn('[SITE] variant FAQ generation failed (continuing)', { clientId, error: err.message });
+      }
+      const videos = businessInfo.youtubeVideos?.length
+        ? businessInfo.youtubeVideos
+        : (businessInfo.youtubeChannelId ? await this.fetchYouTubeVideos(businessInfo.youtubeChannelId) : []);
+      businessInfo.blogPosts = blogPosts;
+      businessInfo.faq = faq;
+      businessInfo.youtubeVideos = videos;
       const blogHtml = options.skipBlogs ? '' : this.generateBlogIndex(businessInfo, blogPosts);
       const sitemap = this.generateSitemap(clientId, blogPosts);
       const robots = this.generateRobots();
@@ -993,8 +1051,6 @@ Return ONLY valid JSON:
       logger.info('[SITE] lean template (no AI)', { clientId, businessName: info?.businessName });
       return renderLeanProspectHtml(info, posPartner);
     }
-    const primary = info.primaryColor || '#7C3AED';
-    const accent = info.accentColor || '#EC4899';
     const designIntel = await this.loadDesignIntel();
     const competitorBrief = designBrief?.text
       ? `\n\nCOMPETITOR-INFORMED DESIGN BRIEF (beat the market, do not copy):\n${designBrief.text}`
@@ -1007,6 +1063,11 @@ Return ONLY valid JSON:
     const designSystemBlock = designSystem
       ? `\n\n${renderDesignSystemDirectives(designSystem, info)}`
       : '';
+    const primary = designSystem?.tokens?.primary || info.primaryColor || '#7C3AED';
+    const accent = designSystem?.tokens?.accent || info.accentColor || '#EC4899';
+    const blogPosts = info.blogPosts || [];
+    const faq = info.faq || [];
+    const videos = extractVideoEmbedUrls(info);
 
     const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
 
@@ -1030,7 +1091,9 @@ BUSINESS PROFILE:
 - Testimonials: ${(info.testimonials || []).join(' | ')}
 ${renderVerifiedData(info.verifiedData)}
 ${renderAssetData(info.assetData)}
-${renderIndustryBenchmarks(info.industryBenchmarks)}
+${renderVideoListForPrompt(videos)}
+${renderBlogPostsForPrompt(blogPosts)}
+${renderFaqForPrompt(faq)}
 PAYMENT/BOOKING SYSTEM:
 - We recommend ${posPartner.name} for scheduling + payments
 - Referral link: ${posPartner.url}
@@ -1038,7 +1101,7 @@ PAYMENT/BOOKING SYSTEM:
 
 TRUTH RULE (HIGHEST PRIORITY — overrides everything below):
 - NEVER invent facts. Do not fabricate prices, dollar amounts, star ratings, review counts, client/family counts, years in business, awards, or named testimonials/quotes.
-- Use ONLY the concrete facts provided in BUSINESS PROFILE, VERIFIED REAL DATA, ASSET DATA, and INDUSTRY BENCHMARKS. If a fact is not provided, leave it out entirely — do not guess or approximate.
+- Use ONLY the concrete facts provided in BUSINESS PROFILE, VERIFIED REAL DATA, ASSET DATA, BLOG POSTS, FAQ ITEMS, and REAL VIDEOS. If a fact is not provided, leave it out entirely — do not guess or approximate.
 - A shorter, truthful page ALWAYS beats an impressive-looking page built on invented claims. Empty is better than fake.
 
 HARD REQUIREMENTS:
@@ -1050,29 +1113,28 @@ HARD REQUIREMENTS:
 6. After </html> write: BUILD_COMPLETE
 7. Use semantic HTML, accessible buttons/links, and visible focus states
 8. Use CSS custom properties inside ONE small <style> block for theme tokens and any shaped background effects
-9. Do NOT use placeholder lorem ipsum, fake star ratings with no basis, or generic "AI agency" language
+9. Do NOT use placeholder lorem ipsum, fake star ratings with no basis, "Blog Post Title 1", "An excerpt from the blog post goes here", "[framemarker...]", or generic "AI agency" language
 10. If real testimonials are missing, use a clearly labeled section like "What clients often appreciate" instead of fabricated quotes
 11. Use real image/photo URLs from ASSET DATA when provided; otherwise use subtle gradient placeholders or CSS shapes
-12. Embed real YouTube videos from ASSET DATA as iframes in the VIDEO SECTION when available
-13. Include a "Digital Presence Score" section using INDUSTRY BENCHMARKS data when available; be honest and show improvement opportunities
+12. Embed the real YouTube URLs from REAL VIDEOS as iframes in the VIDEO SECTION when available
+13. Do NOT include a "Digital Presence Score" section in the public page; that lives on the separate scorecard.html and must not appear here
 
 CLICK FUNNEL STRUCTURE (in this exact order):
 1. NAVIGATION: Logo + nav links + "Book Free Call" CTA button (sticky)
 2. HERO: Bold headline about transformation/outcome (not features). Subheadline. Two CTAs: primary "Book Your Free Consultation" + secondary "See How It Works". Use the real logo URL from ASSET DATA if available as an <img>. Use a real hero image URL as a background or <img> if available; otherwise a gradient.
 3. SOCIAL PROOF BAR: ONLY include real, provided metrics (e.g. a real Google/Yelp rating + review count, Instagram followers, YouTube videos) from VERIFIED REAL DATA and ASSET DATA. If no real metrics are provided, OMIT this bar entirely — do NOT invent stats like "200+ served" or "5★ rated".
-4. PROBLEM SECTION: "Does this sound familiar?" — 3 pain points as cards with icons (use emoji)
+4. PROBLEM SECTION: "Does this sound familiar?" — 3 pain points as cards. Use real business/service context. Do NOT use emoji unless they genuinely match the design motif.
 5. SOLUTION SECTION: "Here's how we help" — 3-step process with numbered steps
 6. SERVICES SECTION: Service cards with name and description. Include a price ONLY if a real price is provided for that service — otherwise no price. "Learn More" / "Book" CTA.
 7. TESTIMONIALS: Prefer REAL reviews from ASSET DATA / VERIFIED REAL DATA — quote them verbatim with the author and source (e.g. "— Ana H. via Google"). If NO real reviews are provided, you MAY show up to 2 illustrative sample testimonials, but EACH card MUST carry a clearly visible small-print label reading exactly: "AI-generated testimonial sample — not a real client review". Never present a sample as real, never invent a real client's name, and never attach a star rating to a sample.
 8. OFFER/PACKAGES: Show pricing ONLY if a real price/priceRange is provided in the BUSINESS PROFILE or VERIFIED REAL DATA. If real pricing exists, present it accurately. If NO real pricing is provided, do NOT invent tiers or dollar amounts — instead show a single "Request pricing / Book a free consultation" CTA that links to booking.
-9. DIGITAL PRESENCE SCORE: If INDUSTRY BENCHMARKS are provided, render a visually compelling scorecard section: a circular score ring for the overall score, a small progress bar per benchmark area, and a table (Area | Client score | Industry avg | Verdict). Be honest; show improvement opportunities. Use the scores exactly as given; do not embellish.
-10. ABOUT SECTION: Brief about the practitioner, warm and personal. Use a real team image from ASSET DATA if available.
-11. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click)
-12. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt placeholders (links to /blog/)
-13. VIDEO SECTION: "Watch & Learn" — embed up to 3 real YouTube videos from ASSET DATA as iframes (src="https://www.youtube.com/embed/{videoId}"). If no real videos, show an educational teaser.
-14. BOOKING CTA SECTION: Full-width colored section "Ready to start your journey?" with big CTA button
-15. FOOTER: Logo, nav links, contact info, social links, copyright, concise trust note
-16. MOBILE STICKY CTA BAR: a bottom booking bar visible on small screens only
+9. ABOUT SECTION: Brief about the practitioner, warm and personal. Use a real team image from ASSET DATA if available.
+10. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click). Use the FAQ ITEMS above; if none, generate from the business profile. Each answer must be complete, not empty.
+11. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt from BLOG POSTS above. If none provided, omit this section entirely or show "Coming soon".
+12. VIDEO SECTION: "Watch & Learn" — embed up to 3 real YouTube URLs from REAL VIDEOS as iframes. If no real videos, show an educational teaser or omit.
+13. BOOKING CTA SECTION: Full-width colored section "Ready to start your journey?" with big CTA button
+14. FOOTER: Logo, nav links, contact info, social links, copyright, concise trust note
+15. MOBILE STICKY CTA BAR: a bottom booking bar visible on small screens only
 
 SEO REQUIREMENTS:
 - <title> tag: [Business Name] | [City] [Industry] | [Tagline]
@@ -1176,8 +1238,6 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
    */
   patchSiteHtml(html, info = {}) {
     let h = this.sanitizeInlineSvgBackgrounds(String(html || ''));
-    const primary = info.primaryColor || '#0F766E';
-    const accent = info.accentColor || '#F59E0B';
     const phone = info.phone || '';
     const email = info.email || '';
     const bookingUrl = info.bookingUrl || '#book';
@@ -1186,6 +1246,8 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     // 0. Inject shared design-system tokens, Google Fonts, and body marker so the
     // AI-generated design system is enforced regardless of which Tailwind classes the model emits.
     const designSystem = getDesignSystem(info.designSystemId) || getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
+    const primary = designSystem?.tokens?.primary || info.primaryColor || '#0F766E';
+    const accent = designSystem?.tokens?.accent || info.accentColor || '#F59E0B';
     if (designSystem && !h.includes('<!--design-system-tokens-->')) {
       const fontLinks = getDesignSystemFontLinks(designSystem)
         .filter((link) => !h.includes(link))
@@ -1199,6 +1261,31 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
     if (!/<body\b[^>]*data-lumin-ds/i.test(h)) {
       h = h.replace(/<body\b([^>]*)>/i, '<body data-lumin-ds="1"$1>');
     }
+
+    // 0b. Remove any customer-facing Digital Presence Score section if the model emitted one
+    h = h.replace(/<section[^>]*\bdata-section=["']digital-presence-score["'][^>]*>[\s\S]*?<\/section>/gi, '');
+    h = h.replace(/<section[^>]*>[^]*?\bDigital Presence Score\b[^]*?<\/section>/gi, (match) => {
+      return match.length > 0 ? '' : match;
+    });
+
+    // 0c. Replace placeholder blog titles/excerpts with real blog posts if available
+    const blogPosts = info.blogPosts || [];
+    if (blogPosts.length && /Blog Post Title|An excerpt from the blog post goes here/i.test(h)) {
+      let blogIdx = 0;
+      h = h.replace(/Blog Post Title \d+/gi, () => blogPosts[blogIdx]?.title || 'Blog Post');
+      h = h.replace(/An excerpt from the blog post goes here\.?\.?/gi, () => blogPosts[blogIdx]?.excerpt || 'Read more on the blog.');
+    }
+
+    // 0d. Replace [framemarker...] placeholders with real YouTube embeds or remove them
+    const videos = extractVideoEmbedUrls(info);
+    h = h.replace(/\[\s*framemarker[^\]]*\]/gi, (match) => {
+      const video = videos.find((v) => !v.used);
+      if (video) {
+        video.used = true;
+        return `<iframe width="560" height="315" src="${video.embedUrl || video.url}" title="${video.title || 'Video'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full rounded-2xl"></iframe>`;
+      }
+      return '';
+    });
 
     // 1. Schema.org JSON-LD — required for hasSchemaMarkup (8pts)
     if (!/application\/ld\+json/i.test(h)) {
@@ -1448,6 +1535,36 @@ Return ONLY valid JSON array:
   }
 
   /**
+   * Generate 5 real FAQ questions and answers for the business.
+   */
+  async generateFaq(info, count = 5) {
+    if (!this.callCouncil) return [];
+    const prompt = `Generate ${count} real, useful FAQ questions and answers for a ${info.industry || 'wellness'} business called "${info.businessName || 'the practice'}".
+
+Target audience: ${info.targetAudience || 'local clients'}
+Location: ${info.location || 'local area'}
+Services: ${(info.services || []).join(', ') || 'wellness services'}
+Unique value: ${info.uniqueValue || ''}
+${renderVerifiedData(info.verifiedData)}
+
+Return ONLY a valid JSON array:
+[
+  { "question": "...", "answer": "..." }
+]
+
+Each answer must be a complete, helpful sentence. If a specific fact is unknown, say "This is best discussed during your free consultation." — do not leave an answer empty or use placeholder text.`;
+    try {
+      const response = await this.callCouncil('openai_gpt', prompt, { maxOutputTokens: 2500, allowModelDowngrade: false, useCache: false });
+      const m = response.match(/\[[\s\S]+\]/);
+      const faq = m ? JSON.parse(m[0]) : [];
+      return Array.isArray(faq) ? faq.slice(0, count) : [];
+    } catch (err) {
+      logger.warn('[SITE] FAQ generation failed', { error: err.message });
+      return [];
+    }
+  }
+
+  /**
    * Benchmark competitor sites: returns a client-facing 1-10 scorecard per site
    * (strengths/weaknesses) plus a design brief that grounds generation in the
    * real market instead of a generic template.
@@ -1472,8 +1589,8 @@ Return ONLY valid JSON array:
    */
   generateScorecardHtml(info, benchmark, presence = null, beforeAfter = null) {
     const designSystem = getDesignSystem(info.designSystemId) || getDesignSystem(DEFAULT_DESIGN_SYSTEM_ID);
-    const primary = info.primaryColor || '#0F766E';
-    const accent = info.accentColor || '#F59E0B';
+    const primary = designSystem?.tokens?.primary || info.primaryColor || '#0F766E';
+    const accent = designSystem?.tokens?.accent || info.accentColor || '#F59E0B';
     const name = info.businessName || 'Your Business';
     const fontLinks = getDesignSystemFontLinks(designSystem).join('\n');
     const dsCss = getDesignSystemCss(designSystem, primary, accent);

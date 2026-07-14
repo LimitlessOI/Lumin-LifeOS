@@ -27,9 +27,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
-import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts } from './never-stop-product-factory.js';
+import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
-import { loadBuildQueue, persistQueue, STEP_STATUS } from './product-build-orchestrator.js';
+import { loadBuildQueue, persistQueue, normalizeQueue, STEP_STATUS } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -44,6 +44,10 @@ const state = {
   lastCommitSha: null,
   lastCommitError: null,
 };
+
+// Shared queue cache populated by workCheck and consumed by execute so both
+// phases use the same merged remote/local BUILD_QUEUE view.
+let sharedQueueCache = {};
 
 const TRUTHY = new Set(['1', 'true', 'yes', 'on']);
 
@@ -115,9 +119,11 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
   return { status: res.status, body };
 }
 
-function markShippedStepsDone(product_id, shippedStepIds, commit_sha) {
+function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
   if (!shippedStepIds.length) return;
-  const queue = loadBuildQueue(product_id);
+  const queue = typeof queueOrProductId === 'string'
+    ? loadBuildQueue(queueOrProductId)
+    : queueOrProductId;
   if (!queue || !Array.isArray(queue.steps)) return;
   const done = new Set(shippedStepIds);
   let changed = false;
@@ -141,6 +147,52 @@ function markShippedStepsDone(product_id, shippedStepIds, commit_sha) {
 
 function queuePathForProduct(productId) {
   return path.join(PRODUCTS_DIR, productId, 'BUILD_QUEUE.json');
+}
+
+async function fetchRemoteBuildQueue(productId) {
+  const localPath = queuePathForProduct(productId);
+  const relPath = path.relative(REPO_ROOT, localPath).replace(/\\/g, '/');
+  const token = process.env.GITHUB_TOKEN?.trim();
+  const repo = process.env.GITHUB_REPO?.trim();
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  if (!token || !repo) return loadBuildQueue(productId);
+  const [owner, repoName] = repo.split('/');
+  if (!owner || !repoName) return loadBuildQueue(productId);
+  try {
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${relPath}?ref=${branch}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+    });
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && typeof data.content === 'string') {
+        const text = Buffer.from(data.content, 'base64').toString('utf8');
+        const raw = JSON.parse(text);
+        return normalizeQueue(raw, localPath);
+      }
+    }
+  } catch (err) {
+    // Remote unavailable — fall back to local queue; local is the durable source
+    // of truth for runtime fields and the loop will keep working.
+  }
+  return loadBuildQueue(productId);
+}
+
+async function commitQueueStatus(product_id, shippedStepIds, queue, commitSha, logger) {
+  const { _sourcePath, ...clean } = queue;
+  const queuePath = queue._sourcePath || queuePathForProduct(product_id);
+  const relPath = path.relative(REPO_ROOT, queuePath).replace(/\\/g, '/');
+  const content = `${JSON.stringify(clean, null, 2)}\n`;
+  const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  try {
+    const result = await commitManyToGitHub([{ path: relPath, content }], `GOVERNED-AUTONOMOUS-QUEUE: ${product_id} ${shippedStepIds.join(', ')} ${commitSha.slice(0, 7)}`, branch);
+    if (result?.ok && result.sha) {
+      logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${commitSha.slice(0, 7)}`);
+    } else {
+      logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit returned !ok: ${result?.error || 'unknown'}`);
+    }
+  } catch (err) {
+    logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit failed: ${err.message}`);
+  }
 }
 
 const { commitManyToGitHub } = createDeploymentService({
@@ -190,7 +242,7 @@ async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger
   }
 }
 
-export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct = 1, shipFn = shipViaGovernedQueue } = {}) {
+export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct = 1, shipFn = shipViaGovernedQueue, queueCache: inputQueueCache } = {}) {
   if (state.running) return { ok: false, skipped: true, reason: 'already_running' };
   if (!governedFactoryOnly()) return { ok: false, skipped: true, reason: 'fence_off' };
 
@@ -208,9 +260,25 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
   state.totalRuns += 1;
   try {
     const products = listProductsWithQueues();
+    let queueCache = inputQueueCache || {};
+
+    // If no pre-merged cache was supplied, fetch remote BUILD_QUEUE and merge
+    // runtime fields so the loop never re-ships already-completed steps.
+    if (!Object.keys(queueCache).length) {
+      for (const pid of products) {
+        try {
+          const local = loadBuildQueue(pid);
+          const remote = await fetchRemoteBuildQueue(pid);
+          queueCache[pid] = mergeQueueRuntimeStatus(remote, local);
+        } catch (err) {
+          logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] could not load queue for ${pid}: ${err.message}`);
+        }
+      }
+    }
+
     const plan = planGovernedBuildQueueRun({
       products,
-      readQueue: (id) => loadBuildQueue(id),
+      readQueue: (id) => queueCache[id],
       maxStepsPerProduct,
     });
     if (!plan.runnable) {
@@ -220,15 +288,19 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
     const perProduct = [];
     for (const entry of plan.by_product) {
       if (!Array.isArray(entry.ship_steps) || entry.ship_steps.length === 0) continue;
+      const queue = queueCache[entry.product_id];
       const { status, body } = await shipFn(entry);
       const ok = status === 200 && body && body.ok === true;
       const shippedIds = ok && Array.isArray(body.shipped)
         ? body.shipped.map((s) => s.step_id).filter(Boolean)
         : [];
-      if (shippedIds.length) {
-        markShippedStepsDone(entry.product_id, shippedIds);
+      if (shippedIds.length && queue) {
+        markShippedStepsDone(queue, shippedIds);
         const commitSha = await commitShippedFiles(entry.product_id, shippedIds, entry.ship_steps, logger);
-        if (commitSha) markShippedStepsDone(entry.product_id, shippedIds, commitSha);
+        if (commitSha) {
+          markShippedStepsDone(queue, shippedIds, commitSha);
+          await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
+        }
       }
       shipped += shippedIds.length;
       perProduct.push({
@@ -296,9 +368,20 @@ export function startGovernedAutonomousShippingLoop({ logger } = {}) {
     },
     workCheck: async () => {
       const products = listProductsWithQueues();
+      const cache = {};
+      for (const pid of products) {
+        try {
+          const local = loadBuildQueue(pid);
+          const remote = await fetchRemoteBuildQueue(pid);
+          cache[pid] = mergeQueueRuntimeStatus(remote, local);
+        } catch (err) {
+          logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] workCheck could not load queue for ${pid}: ${err.message}`);
+        }
+      }
+      sharedQueueCache = cache;
       const plan = planGovernedBuildQueueRun({
         products,
-        readQueue: (id) => loadBuildQueue(id),
+        readQueue: (id) => cache[id],
         maxStepsPerProduct: 1,
       });
       const activeProducts = plan.by_product.filter((p) => p.ship_steps.length > 0).length;
@@ -307,7 +390,7 @@ export function startGovernedAutonomousShippingLoop({ logger } = {}) {
         description: `${plan.total_shippable} shippable step(s) across ${activeProducts} product(s) (priority: ${products.slice(0, 3).join(', ')})`,
       };
     },
-    execute: async () => runGovernedAutonomousShipOnce({ logger }),
+    execute: async () => runGovernedAutonomousShipOnce({ logger, queueCache: sharedQueueCache }),
     logger,
   });
 

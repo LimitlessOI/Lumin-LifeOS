@@ -18,7 +18,7 @@
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
-import { authorAssertionsFromSpec } from './author-assertions.js';
+import { authorAssertionsFromSpec, normalizeCommonJsToEsm } from './author-assertions.js';
 
 // Derive the narrowest sandbox boundary the governed pipe should allow for a
 // BUILD_QUEUE target: the immediate top-level directory (e.g. services/x.js ->
@@ -113,6 +113,8 @@ export function toGovernedShipStep(step, { product_id } = {}) {
   const assessment = assessBuildQueueStepProvability(step);
   if (!assessment.provable) return { ok: false, reason: assessment.reason };
 
+  const rawSpec = step?.spec || step?.task || '';
+  const spec = normalizeCommonJsToEsm(rawSpec, target);
   return {
     ok: true,
     step: {
@@ -122,7 +124,7 @@ export function toGovernedShipStep(step, { product_id } = {}) {
       sandbox_boundary: sandboxBoundaryForTarget(target),
       authoring: {
         task: step?.task || `Build ${target}`,
-        spec: step?.spec || step?.task || '',
+        spec,
         ...(step?.max_output_tokens ? { max_output_tokens: step.max_output_tokens } : {}),
       },
       assertion_spec: assessment.assertion_spec,

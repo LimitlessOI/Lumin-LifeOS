@@ -39,8 +39,6 @@ export function renderDesignSystemDirectives(designSystem, brandInfo = {}) {
   const ds = typeof designSystem === 'string' ? getDesignSystem(designSystem) : designSystem;
   if (!ds) return '';
   const prompt = buildDesignSystemPrompt(ds, {
-    brandPrimary: brandInfo.primaryColor,
-    brandAccent: brandInfo.accentColor,
     businessName: brandInfo.businessName,
     industry: brandInfo.industry,
   });

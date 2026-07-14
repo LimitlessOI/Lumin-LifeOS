@@ -17,6 +17,7 @@
  */
 import crypto from 'node:crypto';
 import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
+import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
 
 export const AUTHORING_ACTION_TYPE = 'author_then_write';
 
@@ -74,7 +75,8 @@ export async function runAuthoring(step, codegenRunner) {
     return { ...base, ok: false, reason: 'codegen_threw', error: String(err?.message || err) };
   }
 
-  const content = extractContent(result?.content);
+  const rawContent = extractContent(result?.content);
+  const content = normalizeCommonJsToEsm(rawContent, target_file);
   if (!content || !content.trim()) {
     return { ...base, ok: false, reason: 'codegen_empty', model_tier: result?.model_tier || null };
   }

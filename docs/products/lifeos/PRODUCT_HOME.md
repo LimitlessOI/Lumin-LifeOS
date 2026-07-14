@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — GAP-FILL: auto-register LifeOS Engine on founder lane so Google Calendar connect works on tip; Connect page Google hub (Calendar + YouTube). |
+| **Last Updated** | 2026-07-14 — BuilderOS governed autonomous shipping loop follows `BUILD_QUEUE.json` step-by-step with CommonJS-to-ESM normalization and remote queue sync/commit_sha persistence; loop only stops for token budget exhaustion or SENTRY failure. |
 ---
 
 ## Founder conversations (2026-06-29)
