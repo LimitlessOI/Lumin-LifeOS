@@ -2018,6 +2018,21 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         const applyResult = await applyBillingFieldUpdates(session.page, updates);
         operations = applyResult.operations || [];
         saveResult = await attemptBillingSave(session.page);
+        // ClientCare often posts/reloads; re-open billing so after-summary reflects persisted values.
+        await sleep(2000);
+        const reload = await gotoWithBudget(session.page, billingHref, {
+          timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
+        });
+        if (reload.ok) {
+          const tab = await session.page.$('a[href*="#tabs-billing"]');
+          if (tab) {
+            await tab.click().catch(() => {});
+            await sleep(1000);
+          }
+          saveResult = { ...saveResult, reloaded: true };
+        } else {
+          saveResult = { ...saveResult, reloaded: false, reloadError: reload.error };
+        }
       }
 
       const afterSummary = dryRun ? beforeSummary : await collectPageSummary(session.page);
