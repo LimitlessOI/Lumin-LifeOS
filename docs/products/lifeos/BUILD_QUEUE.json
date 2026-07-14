@@ -578,9 +578,11 @@
         "6"
       ],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
+      "last_attempt_at": "2026-07-13T23:47:33.375Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T00:11:52.134Z"
+      "shipped_at": "2026-07-14T00:13:40.995Z"
     },
     {
       "id": "9",
@@ -594,7 +596,7 @@
       "last_attempt_at": "2026-07-13T12:44:37.822Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T01:02:51.277Z"
+      "shipped_at": "2026-07-14T01:05:03.566Z"
     },
     {
       "id": "10",
