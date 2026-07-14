@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T09:18:55.738Z",
+  "generated_at": "2026-07-14T09:19:20.919Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11521,
+  "file_count": 11522,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -84348,6 +84348,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/lifeos-perfect-day.js",
+      "synopsis": "Exports planPerfectDay — services/lifeos-perfect-day.js.",
+      "bytes": 5054,
+      "mtime": "2026-07-14T09:19:20.919Z",
+      "indexed_at": "2026-07-14T09:19:20.919Z"
     },
     {
       "path": "services/lifeos-request-helpers.js",
