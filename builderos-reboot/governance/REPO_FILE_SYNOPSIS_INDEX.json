@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T17:23:43.904Z",
+  "generated_at": "2026-07-14T17:29:05.541Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11531,
   "files": [
@@ -30438,10 +30438,10 @@
     },
     {
       "path": "config/clientcare-billing-pricing.js",
-      "synopsis": "BirthBill (ClientCare Collections) public pricing for midwife practices.",
-      "bytes": 2687,
-      "mtime": "2026-07-14T17:14:51.133Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z",
+      "synopsis": "BirthBill (ClientCare Collections) public pricing + plain-language product definitions.",
+      "bytes": 5138,
+      "mtime": "2026-07-14T17:26:23.770Z",
+      "indexed_at": "2026-07-14T17:29:05.541Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -36960,9 +36960,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 7584,
-      "mtime": "2026-07-14T17:23:30.516Z",
-      "indexed_at": "2026-07-14T17:23:43.904Z"
+      "bytes": 7968,
+      "mtime": "2026-07-14T17:29:02.369Z",
+      "indexed_at": "2026-07-14T17:29:05.541Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39154,9 +39154,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 90339,
-      "mtime": "2026-07-14T17:23:30.512Z",
-      "indexed_at": "2026-07-14T17:23:43.904Z"
+      "bytes": 90692,
+      "mtime": "2026-07-14T17:28:49.794Z",
+      "indexed_at": "2026-07-14T17:29:05.541Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -63715,9 +63715,9 @@
     {
       "path": "public/clientcare-billing/clientcare-billing.js",
       "synopsis": "clientcare-billing.js",
-      "bytes": 288166,
-      "mtime": "2026-06-29T17:21:08.425Z",
-      "indexed_at": "2026-07-14T14:56:07.653Z",
+      "bytes": 290639,
+      "mtime": "2026-07-14T17:28:32.653Z",
+      "indexed_at": "2026-07-14T17:29:05.541Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -63962,17 +63962,17 @@
     },
     {
       "path": "public/overlay/clientcare-collections-landing.html",
-      "synopsis": "BirthBill — public sales landing for ClientCare midwife collections forever-chase",
-      "bytes": 11847,
-      "mtime": "2026-07-14T17:16:12.936Z",
-      "indexed_at": "2026-07-14T17:17:13.464Z"
+      "synopsis": "BirthBill — clear midwife sales landing with definitions + 4-step onboard",
+      "bytes": 13311,
+      "mtime": "2026-07-14T17:27:04.837Z",
+      "indexed_at": "2026-07-14T17:29:05.541Z"
     },
     {
       "path": "public/overlay/clientcare-collections-welcome.html",
-      "synopsis": "BirthBill pilot welcome + Connect ClientCare after Stripe pay",
-      "bytes": 5407,
-      "mtime": "2026-07-14T17:23:19.592Z",
-      "indexed_at": "2026-07-14T17:23:43.904Z"
+      "synopsis": "BirthBill post-pay wizard — connect ClientCare with clear next steps",
+      "bytes": 7717,
+      "mtime": "2026-07-14T17:27:04.846Z",
+      "indexed_at": "2026-07-14T17:29:05.541Z"
     },
     {
       "path": "public/overlay/code-installation-test.js",
@@ -82233,9 +82233,9 @@
     {
       "path": "services/clientcare-sellable-service.js",
       "synopsis": "clientcare-sellable-service.js",
-      "bytes": 30484,
-      "mtime": "2026-07-14T17:21:31.631Z",
-      "indexed_at": "2026-07-14T17:23:43.904Z",
+      "bytes": 30829,
+      "mtime": "2026-07-14T17:26:23.771Z",
+      "indexed_at": "2026-07-14T17:29:05.541Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]

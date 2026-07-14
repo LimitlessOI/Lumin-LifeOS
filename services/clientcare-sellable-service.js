@@ -437,9 +437,15 @@ export function createClientCareSellableService({ pool, logger = console }) {
       },
       includes: pricing.includes,
       excludes: pricing.excludes,
+      definitions: pricing.definitions,
+      steps: pricing.steps,
       offer_summary: getBirthBillPilotOfferSummary(pricing),
       reason_why: getBirthBillDealReasonWhy(pricing),
       beta: Boolean(pricing.beta),
+      readiness: pricing.product?.readiness || 'pilot',
+      readiness_label: pricing.product?.readiness_label || null,
+      workboard_url: '/clientcare-billing?product=birthbill',
+      connect_hint: 'After Stripe pay you land on /birthbill/welcome to connect ClientCare.',
     };
   }
 

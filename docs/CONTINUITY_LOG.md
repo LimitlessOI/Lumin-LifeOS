@@ -1,7 +1,8 @@
 <!-- SYNOPSIS: Continuity Log -->
 
+## 2026-07-14 — BirthBill UX: intuitive + clearly defined (not prime-time)
 
-
+Honest answer: **not prime-time**. Forever-chase + signup/connect are sellable as pilot; ChargeSlip/HCFA auto-create is not tip-proved. Shipped clearer landing (definitions + steps + excludes), welcome wizard, and BirthBill workboard mode so midwives know what each term means and what is / is not promised.
 
 ## 2026-07-14 — BirthBill multi-tenant vault
 
