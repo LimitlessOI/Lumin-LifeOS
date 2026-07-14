@@ -103,7 +103,7 @@
     },
     {
       "id": "8",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/memory_routes.js",
       "task": "register memory routes",
       "spec": "Implement a registerMemoryRoutes(app, deps) function for managing memory-related API endpoints.",
@@ -111,8 +111,8 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 2,
-      "last_attempt_at": "2026-07-14T04:36:52.389Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-14T04:42:27.805Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
       "commit_sha": "fe0d6a12f2828c621c2913a915c6a01a8b1ea98b"
     },
