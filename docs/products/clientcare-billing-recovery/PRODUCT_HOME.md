@@ -464,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **ChargeSlip Denise tip** — Save failed: date-mask Units/POS fill (`1_/__/____`), `BillingServiceRecordId` undefined, then “Please select a patient first”. Prefer 59409/59400 (not 59080), skip date masks, Add after code select, rebind patient before Save. |
 | 2026-07-14 | **Browser job heartbeat** — ChargeSlip tip jobs marked stale at 90s while still running; bump map timeout to 240s + 25s heartbeat + longer stale grace. |
 | 2026-07-14 | **ChargeSlip persist probe** — Save now prefers POS 12, tries vendor save helpers, captures alert/validation + post-save ChargeSlipId (non-zero = persist proved). Next: tip live Save Denise/Yanhari/Monzello. | Save click did not land Sent Bills. | 0.5h | 0.5h | none | ✅ | pending tip |
 | 2026-07-14 | **Forever-chase seed unblock** — tip import of 65 chase rows failed: `ON CONFLICT (external_claim_id)` vs partial unique index. Upsert now SELECT+UPDATE/INSERT; metadata.forever_chase forces bucket + ask_insurer_forever. Stale browser jobs auto-fail; sync sequential; POST /forever-chase/seed. Tip inventory: 15 births + 50 notes. | Ledger stayed empty after mandate. | 1h | 1h | none | ✅ | tip seed: 64 unpaid forever_chase open |

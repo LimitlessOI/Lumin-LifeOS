@@ -3636,7 +3636,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       let codesSelected = { procedure: null, diagnosis: null, attempts: [] };
       codesSelected = await session.page.evaluate(async () => {
         const attempts = [];
-        const pickFromSelect = (selId, label, preferRe) => {
+        const isDateMaskInput = (el) => {
+          if (!el) return true;
+          const v = String(el.value || el.placeholder || '');
+          const id = `${el.id || ''} ${el.name || ''} ${el.className || ''} ${el.getAttribute?.('data-mask') || ''}`;
+          return /date|dob|born|__/i.test(id) || /_\/__\/____|mm\/dd\/yyyy/i.test(v) || el.type === 'date';
+        };
+        const pickFromSelect = (selId, label, preferRe, excludeRe = null) => {
           const sel = document.getElementById(selId);
           if (!sel) return null;
           const opts = Array.from(sel.options || []).filter((o) => {
@@ -3645,13 +3651,17 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             return t && v && v !== '00000000-0000-0000-0000-000000000000' && !/create-new|^select/i.test(t);
           });
           const preferred = preferRe
-            ? opts.find((o) => preferRe.test((o.textContent || '').trim()))
+            ? opts.find((o) => {
+              const t = (o.textContent || '').trim();
+              return preferRe.test(t) && !(excludeRe && excludeRe.test(t));
+            })
             : null;
           const opt = preferred
-            || opts.find((o) => !/^(000|001)\b|deductible|coinsurance/i.test((o.textContent || '').trim()))
+            || opts.find((o) => !/^(000|001)\b|deductible|coinsurance|59080|initial day labor/i.test((o.textContent || '').trim()))
             || opts[0];
           if (!opt) return null;
           sel.value = opt.value;
+          Array.from(sel.options || []).forEach((o) => { o.selected = o === opt; });
           sel.dispatchEvent(new Event('change', { bubbles: true }));
           try { window.$(sel).trigger('change'); } catch (_) { /* ignore */ }
           attempts.push({
@@ -3663,18 +3673,70 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           });
           return { text: (opt.textContent || '').trim().slice(0, 80), value: opt.value };
         };
-        // Birth money path: prefer delivery/global midwifery CPTs + delivery encounter ICD-10s.
+        const clickAddNear = (anchorId, label) => {
+          const anchor = document.getElementById(anchorId);
+          const roots = [anchor, anchor?.closest('form, .panel, .card, .row, section, div'), document.body].filter(Boolean);
+          for (const root of roots) {
+            const btn = Array.from(root.querySelectorAll('button, input[type="button"], input[type="submit"], a, span[onclick], i[onclick]'))
+              .find((el) => {
+                const t = `${el.textContent || el.value || el.title || el.getAttribute('aria-label') || ''} ${el.className || ''}`.trim();
+                return /^(add|\+)$/i.test(t) || /\badd\b/i.test(t) || /fa-plus|glyphicon-plus|icon-plus/i.test(t);
+              });
+            if (!btn) continue;
+            try {
+              btn.click();
+              attempts.push({ label, ok: true, text: (btn.textContent || btn.value || btn.className || 'add').toString().slice(0, 60) });
+              return true;
+            } catch (err) {
+              attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 100) });
+            }
+          }
+          return false;
+        };
+        const callHelpers = (names, label) => {
+          for (const name of names) {
+            if (typeof window[name] !== 'function') continue;
+            try {
+              window[name]();
+              attempts.push({ label: `${label}:${name}`, ok: true });
+              return name;
+            } catch (err) {
+              attempts.push({ label: `${label}:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+            }
+          }
+          return null;
+        };
+
+        // Birth money path: delivery/global first — never prefer 59080 labor-day alone.
         let procedure = pickFromSelect(
           'SearchService',
           'SearchService',
-          /59409|59400|59431|delivery only|global midwifery|vaginal birth|vaginal delivery|labor management/i
+          /59409|59400|59410|59431|delivery only|global midwifery|vaginal birth|vaginal delivery/i,
+          /59080|initial day labor/i
         );
+        await new Promise((r) => setTimeout(r, 400));
+        clickAddNear('SearchService', 'add_procedure');
+        callHelpers([
+          'addBillingService',
+          'AddBillingService',
+          'addServiceToChargeSlip',
+          'digSelectionProcess',
+          'serviceSelectionProcess',
+        ], 'proc_helper');
         let diagnosis = pickFromSelect(
           'DignosticService',
           'DignosticService',
           /^O80|^Z37|^Z39|single live birth|encounter for full-term|outcome of delivery|normal delivery/i
         );
-        // Click first procedure/diagnosis row that has data-id / digSelectionProcess handler.
+        await new Promise((r) => setTimeout(r, 400));
+        clickAddNear('DignosticService', 'add_diagnosis');
+        callHelpers([
+          'addBillingDiagnosis',
+          'AddBillingDiagnosis',
+          'digSelectionProcess',
+          'diagnosisSelectionProcess',
+        ], 'dx_helper');
+
         const clickFirst = (rootId, label) => {
           const root = document.getElementById(rootId);
           if (!root) return null;
@@ -3700,18 +3762,18 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         if (!procedure) procedure = clickFirst('procedure-codes-section', 'procedure_row');
         if (!diagnosis) diagnosis = clickFirst('diagnosis-codes-section', 'diagnosis_row');
         await new Promise((r) => setTimeout(r, 800));
-        // Tip: Save left ChargeSlipId empty — summary showed Mod/POS/Units blank. Fill required slip fields.
+
         const fillNearby = (needle, value) => {
           const labels = Array.from(document.querySelectorAll('label, span, td, th, div'));
           for (const lab of labels) {
             const t = (lab.textContent || '').trim();
-            if (!new RegExp(`^${needle}$`, 'i').test(t) && !new RegExp(`${needle}\\s*:`, 'i').test(t)) continue;
+            if (!new RegExp(`^${needle}$`, 'i').test(t) && !new RegExp(`^${needle}\\s*:$`, 'i').test(t)) continue;
             const root = lab.closest('tr, .form-group, .row, td, div') || lab.parentElement;
             const input = root?.querySelector('input, select');
-            if (!input) continue;
+            if (!input || isDateMaskInput(input)) continue;
             if (input.tagName === 'SELECT') {
               const opt = Array.from(input.options || []).find((o) => String(o.value) === String(value) || (o.textContent || '').includes(String(value)))
-                || Array.from(input.options || []).find((o) => /11|office/i.test(`${o.value} ${o.textContent || ''}`));
+                || Array.from(input.options || []).find((o) => new RegExp(`\\b${value}\\b|home|other`, 'i').test(`${o.value} ${o.textContent || ''}`));
               if (!opt) continue;
               input.value = opt.value;
             } else {
@@ -3723,16 +3785,14 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             attempts.push({ label: `fill_${needle}`, ok: true, value: String(input.value).slice(0, 40) });
             return true;
           }
+          attempts.push({ label: `fill_${needle}`, ok: false, error: 'no_safe_input' });
           return false;
         };
         fillNearby('Units', '1');
-        // Births are usually home/other facility — POS 12, not office 11.
         fillNearby('POS', '12');
-        fillNearby('Mod', '');
-        // Explicit common IDs if present.
         for (const [id, val] of [['Units', '1'], ['Unit', '1'], ['PlaceOfServiceCode', '12'], ['POS', '12'], ['PlaceOfService', '12']]) {
           const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
-          if (!el) continue;
+          if (!el || isDateMaskInput(el)) continue;
           el.value = val;
           el.dispatchEvent(new Event('change', { bubbles: true }));
           attempts.push({ label: `field_${id}`, ok: true, value: val });
@@ -3746,9 +3806,49 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         }
         await new Promise((r) => setTimeout(r, 800));
         const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
-        return { procedure, diagnosis, attempts, summary };
+        const lineRows = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service], #service-grid tr'))
+          .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 100))
+          .filter((t) => t && /594|590|O80|Z37|CPT|unit/i.test(t))
+          .slice(0, 8);
+        const helperNames = Object.getOwnPropertyNames(window)
+          .filter((n) => /billing|charge|slip|service|diagnos|digSelection|save/i.test(n) && typeof window[n] === 'function')
+          .slice(0, 40);
+        const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80);
+        return {
+          procedure,
+          diagnosis,
+          attempts,
+          summary,
+          lineRows,
+          helperNames,
+          fullNameText,
+          patientStillBound: Boolean(fullNameText && !/please select/i.test(fullNameText)),
+        };
       });
       await sleep(800);
+
+      // If code selection wiped patient context, re-bind visit row before Save.
+      if (codesSelected && codesSelected.patientStillBound === false && visitList?.match?.pregnancyId) {
+        const rebind = await session.page.evaluate((wantId) => {
+          const rows = Array.from(document.querySelectorAll('tr, li, a, div'));
+          const row = rows.find((el) => {
+            const onclick = el.getAttribute('onclick') || '';
+            const text = (el.innerText || '').replace(/\s+/g, ' ');
+            return (wantId && (onclick.includes(wantId) || text.toLowerCase().includes(String(wantId).slice(0, 8).toLowerCase())))
+              || (typeof window.selectClick === 'function' && /selectClick\(this\)/i.test(onclick));
+          });
+          if (!row) return { ok: false };
+          try {
+            if (typeof window.selectClick === 'function') window.selectClick(row);
+            else row.click();
+            return { ok: true, name: (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80) };
+          } catch (err) {
+            return { ok: false, error: String(err?.message || err).slice(0, 120) };
+          }
+        }, visitList.match.pregnancyId);
+        codesSelected.rebindBeforeSave = rebind;
+        await sleep(1200);
+      }
 
       // Daily Super bill is an alternate create path when lists stay empty.
       let dailySuperBill = { clicked: false };
@@ -3806,8 +3906,20 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       let saveResult = { attempted: false };
       let persistCheck = null;
       if (!dryRun) {
-        if (!boundOk) {
-          saveResult = { attempted: false, blocked: true, reason: 'fail_closed_wrong_or_missing_patient' };
+        const preSavePatient = await session.page.evaluate(() => {
+          const fullNameText = (document.getElementById('FullNameText')?.textContent || '').trim();
+          return {
+            fullNameText: fullNameText.slice(0, 80),
+            ok: Boolean(fullNameText && !/please select/i.test(fullNameText) && /[A-Za-z]{2,}/.test(fullNameText)),
+          };
+        });
+        if (!boundOk || !preSavePatient.ok) {
+          saveResult = {
+            attempted: false,
+            blocked: true,
+            reason: 'fail_closed_patient_missing_before_save',
+            preSavePatient,
+          };
         } else if (!codesSelected?.procedure && !codesSelected?.diagnosis && !dailySuperBill?.clicked) {
           saveResult = { attempted: false, blocked: true, reason: 'no_procedure_or_diagnosis_selected' };
         } else {
