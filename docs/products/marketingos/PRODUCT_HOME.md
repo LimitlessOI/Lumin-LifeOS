@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Founder walk: marketingOwnerId prefers JWT handle over numeric sub (fixes YouTube “not connected” + wrong playbook in browser). |
+| **Last Updated** | 2026-07-14 — Film Studio on `/marketing/session/:id`: clean camera take (prompter never burned in), voice-synced teleprompter, director sound/background/B-roll by film mode; phone + desktop via PWA/Capacitor. |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **Film Studio (Phase 4 MVP)** — `/marketing/session/:id` arms camera/mic, live sound+light checks, director tips + B-roll list by `film_mode`, MediaRecorder clean take (camera stream only so teleprompter never appears in file), speech-synced teleprompter advance + “sounds like reading” cue, download + Creative Engine upload. Shared `public/shared/smos-film-studio.js`. Works on desktop + mobile browser / existing Capacitor LifeOS shell. | Adam: mobile+desktop film app; direct sound/background/B-roll; teleprompter moves as we talk; reading UI must not show in video (Descript-style). | ✅ | — | tip after deploy |
 | 2026-07-14 | **Founder browser owner_id bug** — `marketingOwnerId()` preferred JWT `sub` (numeric `1`) over `handle` (`adam`), so tip UI missed YouTube OAuth + fell into founder spam playbook. Prefer handle. | Founder walk as Adam: API connected for `owner_id=adam`, browser said not connected + generic “Missing Clients?” cards. | ✅ | — | tip after deploy |
 | 2026-07-14 | **Prime-time SMOS polish** — dedupe duplicate talk titles; parallel Ideogram+Sharp thumbs; default `click_psychology`; `/marketing` brand no longer clips on narrow viewports. | Founder: ready to market? Live tip showed duplicate titles, 1/5 Ideogram, clipped SocialMediaOS brand. | ✅ | — | tip after deploy |
 | 2026-07-14 | **Ideogram thumbs via Replicate** — `tryIdeogramThumbnail` prefers Ideogram over Sharp compose when `REPLICATE_API` present; `thumbnailSource` on cards. | Adam: finish Replicate wiring into SMOS. | ✅ | — | tip after deploy |

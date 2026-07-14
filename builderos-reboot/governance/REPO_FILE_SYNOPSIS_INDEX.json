@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T08:36:37.504Z",
+  "generated_at": "2026-07-14T08:44:15.680Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11519,
+  "file_count": 11520,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36916,9 +36916,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 538544,
-      "mtime": "2026-07-14T08:36:08.157Z",
-      "indexed_at": "2026-07-14T08:36:37.504Z"
+      "bytes": 539064,
+      "mtime": "2026-07-14T08:44:00.782Z",
+      "indexed_at": "2026-07-14T08:44:15.680Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39590,9 +39590,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 113097,
-      "mtime": "2026-07-14T08:36:05.013Z",
-      "indexed_at": "2026-07-14T08:36:37.504Z"
+      "bytes": 113803,
+      "mtime": "2026-07-14T08:44:02.172Z",
+      "indexed_at": "2026-07-14T08:44:15.680Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -64596,9 +64596,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7256,
-      "mtime": "2026-07-10T06:28:08.439Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 7289,
+      "mtime": "2026-07-14T08:44:09.322Z",
+      "indexed_at": "2026-07-14T08:44:15.680Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
@@ -64825,6 +64825,16 @@
       "bytes": 12418,
       "mtime": "2026-06-21T21:39:02.745Z",
       "indexed_at": "2026-07-14T06:23:47.288Z"
+    },
+    {
+      "path": "public/shared/smos-film-studio.js",
+      "synopsis": "SocialMediaOS Film Studio — camera take (prompter never burned in), speech-synced teleprompter, director checks.",
+      "bytes": 19716,
+      "mtime": "2026-07-14T08:42:40.795Z",
+      "indexed_at": "2026-07-14T08:44:15.680Z",
+      "ssot": [
+        "docs/products/marketingos/PRODUCT_HOME.md"
+      ]
     },
     {
       "path": "public/social.html",
@@ -66243,9 +66253,9 @@
     {
       "path": "routes/marketing-session-ui-routes.js",
       "synopsis": "SocialMediaOS / MarketingOS Phase 1 SSR UI — consent → coach → extract → generate → approve → export",
-      "bytes": 85843,
-      "mtime": "2026-07-14T08:36:01.208Z",
-      "indexed_at": "2026-07-14T08:36:37.504Z",
+      "bytes": 93389,
+      "mtime": "2026-07-14T08:43:57.624Z",
+      "indexed_at": "2026-07-14T08:44:15.680Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]

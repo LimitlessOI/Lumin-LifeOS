@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Film Studio (clean camera + voice teleprompter)
+
+Adam: create mobile+desktop film ability — direct sound/background/B-roll by video type; film with real recordings; teleprompter moves as we talk; Descript-style — reading UI must not appear in the video. Shipped Phase 4 MVP on `/marketing/session/:id` via `public/shared/smos-film-studio.js` (camera MediaRecorder only; prompter is HTML UI; speech sync; director tips). Uses existing LifeOS PWA/Capacitor shell — not a separate native SMOS app.
+
 ## 2026-07-14 — Founder walk as Adam (vault login + every SMOS feature)
 
 Adam: log in as me from Railway creds; test every feature; build a video. Minted founder session via tip vault (`LIFEOS_FOUNDER_LOGIN_*`). Matrix: YouTube API connected for `owner_id=adam`; browser JWT used numeric `sub` so UI said disconnected + generic founder spam cards — fixed `marketingOwnerId` to prefer handle. Consent→session→coach PASS; extract FAIL (bad JSON); generate 0 pieces; export FAIL. `script_compose` fake-completed with no MP4 — fail-closed. Real `footage_edit` 9:16 MP4 built (~3.4MB). Replicate Ideogram 429 until payment method on Replicate account.
