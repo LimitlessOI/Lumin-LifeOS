@@ -152,20 +152,20 @@ function renderPage(title, bodyHtml, clientScript = '') {
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
     <style>
         :root, html[data-theme="dark"] {
-          --bg: #0c0c0b;
-          --bg-glow: rgba(245, 158, 11, 0.12);
-          --surface: #161614;
-          --surface-2: #1e1e1a;
+          --bg: #0b1412;
+          --bg-glow: rgba(20, 113, 108, 0.16);
+          --surface: #121c1a;
+          --surface-2: #182421;
           --border: rgba(255,255,255,0.09);
-          --text: #f4f1ea;
-          --muted: #a39e93;
-          --accent: #f59e0b;
-          --accent-soft: rgba(245, 158, 11, 0.16);
-          --accent-ink: #111;
+          --text: #f2f7f5;
+          --muted: #9bb0aa;
+          --accent: #1f8f86;
+          --accent-soft: rgba(31, 143, 134, 0.16);
+          --accent-ink: #041413;
           --ok: #34d399;
           --warn: #fbbf24;
           --bad: #f87171;
-          --link: #fcd34d;
+          --link: #7dd3c7;
           --tp-text: #fff;
         }
         html[data-theme="light"] {

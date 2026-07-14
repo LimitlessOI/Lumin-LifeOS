@@ -5,30 +5,34 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TC Agent Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+            font-family: Manrope, system-ui, sans-serif;
             margin: 0;
-            background:#0b1020;
+            background:#0b1418;
             color:#edf2f7;
         }
         .header-bar {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: #0b1020;
+            background: rgba(11,20,24,.92);
+            backdrop-filter: blur(10px);
             padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 20px;
-            border-bottom: 1px solid #27304a;
+            border-bottom: 1px solid rgba(159,224,216,.12);
             box-shadow: 0 2px 10px rgba(0,0,0,.2);
         }
         .header-bar h1 {
             margin: 0;
+            font-family: Fraunces, Georgia, serif;
             font-size: 24px;
-            color: #e8eeff;
+            color: #e8f6f4;
+            letter-spacing: -.02em;
         }
         .header-search-input {
             flex-grow: 1;

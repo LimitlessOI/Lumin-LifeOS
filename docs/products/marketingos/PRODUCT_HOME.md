@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Gap close: suggestions honor `mode=fast` + SVG thumbs (no 502); dashboard Creative Studio link; intel/community field aliases. |
+| **Last Updated** | 2026-07-14 — `/marketing/for-you` presentation + teal Studio shell tokens; tip Replicate credit proved. |
 
 ---
 

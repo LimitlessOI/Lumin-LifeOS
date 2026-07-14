@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Tip SkySlope PASS; harden GLVAR→TD SSO fallback (return to portal). |
+| **Last Updated** | 2026-07-14 — `/tc/for-you` presentation + agent portal type/header polish; Studio hero. |
 
 ---
 

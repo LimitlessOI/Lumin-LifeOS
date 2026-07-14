@@ -150,6 +150,14 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("TC agent portal not found.");
   });
 
+  app.get(["/tc/for-you", "/transaction-care"], (_req, res) => {
+    res.redirect(302, "/overlay/tc-for-you.html");
+  });
+
+  app.get(["/marketing/for-you", "/socialmediaos"], (_req, res) => {
+    res.redirect(302, "/overlay/marketing-for-you.html");
+  });
+
   app.get("/tc/client", (req, res) => {
     const filePath = path.join(__dirname, "public", "tc", "client-portal.html");
     if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);

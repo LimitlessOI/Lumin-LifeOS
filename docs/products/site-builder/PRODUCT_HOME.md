@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Light/dark theme + competitor comparison popup + real blog generation + model routing hardening. `config/design-studio.js` now derives per-design-system dark tokens (`deriveDarkTokens`) and `getDesignSystemCss` emits a `body[data-lumin-ds][data-theme="dark"]` override block. `services/site-builder.js` `patchSiteHtml` injects `data-theme="light"` and a script that reads `?theme=dark` and listens for `postMessage` so the switcher can toggle theme. New `config/site-builder-switcher.js` renders the variant switcher with a **Dark/Light** toggle, a **Compare** button, and an interactive competitor/presence comparison modal. `services/site-builder.js` now uses `config/task-model-routing.js` strong-first, provider-diverse candidates with `builderExecution: true` and `allowModelDowngrade: false`; `services/competitor-benchmark.js` and `services/presence-audit.js` are also tagged as builder lane. `generateBlogPosts` now generates one post per call with a 400-500 word target. `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, and `npm run sentry:site-builder:gate` all PASS. Landing shows Free / $1 extras / $45 publish / $35 custom one-of-one template pricing (audit fix). |
+| **Last Updated** | 2026-07-14 — Full-bleed Studio hero on landing (`product-heroes/sitebuilder.png`); tip Replicate credit proved. |
 
 ---
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: TC — polished presentation surface with Studio hero -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TC — Transaction care that feels calm</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink:#142029; --muted:#5a6f74; --deep:#0a3d40; --teal:#14716c; --line:rgba(10,61,64,.12); --serif:"Fraunces",Georgia,serif; --sans:"Manrope",system-ui,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:var(--sans); color:var(--ink); background:linear-gradient(180deg,#e8f2f1,#f4f8f8 45%,#e3eceb); }
+    .hero {
+      min-height:78vh; display:grid; align-items:end;
+      background:
+        linear-gradient(180deg, rgba(10,30,40,.25), rgba(10,30,40,.84)),
+        url("/overlay/product-heroes/tc.png") center/cover no-repeat;
+      color:#fff;
+    }
+    .hero-inner { width:min(920px, calc(100vw - 2rem)); margin:0 auto; padding:3rem 0 2.4rem; animation:rise .7s ease both; }
+    .brand { font-family:var(--serif); font-size:1.35rem; font-weight:700; }
+    .brand span { color:#9fe0d8; font-weight:500; }
+    h1 { margin:.8rem 0 0; font-family:var(--serif); font-size:clamp(2.4rem,5vw,3.4rem); line-height:1.06; letter-spacing:-.03em; max-width:15ch; }
+    .lead { margin:1rem 0 0; max-width:36rem; color:rgba(255,255,255,.84); font-size:1.08rem; }
+    .actions { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.4rem; }
+    .btn { text-decoration:none; font:inherit; font-weight:700; border-radius:999px; padding:.9rem 1.3rem; display:inline-flex; border:0; }
+    .btn-primary { background:#fff; color:var(--deep); }
+    .btn-ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35); }
+    .shell { width:min(920px, calc(100vw - 2rem)); margin:0 auto; padding:2.2rem 0 3.5rem; }
+    section { padding:1.6rem 0; border-top:1px solid var(--line); }
+    h2 { margin:0 0 .5rem; font-family:var(--serif); color:var(--deep); font-size:1.55rem; }
+    p, li { color:var(--muted); max-width:42rem; }
+    .do { margin:0; padding-left:1.1rem; }
+    .do li { margin:.4rem 0; }
+    @keyframes rise { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand">TC <span>· transaction care</span></div>
+      <h1>Deal file chaos, made quiet.</h1>
+      <p class="lead">Agent portal, client portal, and assistant — deadlines, documents, and follow-through without a frantic dashboard.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/tc">Open agent portal</a>
+        <a class="btn btn-ghost" href="/tc/client">Client portal</a>
+      </div>
+    </div>
+  </header>
+  <main class="shell">
+    <section>
+      <h2>What this is for</h2>
+      <ul class="do">
+        <li>Keep every open transaction visible without drowning in panels.</li>
+        <li>Move documents, approvals, and reminders through one workspace.</li>
+        <li>Let the assistant help — you stay the decision-maker.</li>
+      </ul>
+    </section>
+    <section>
+      <h2>2026 design bar</h2>
+      <p>Studio hero photography, calm teal atmosphere, progressive disclosure inside the portals. Power tools stay available — they are not dumped on the first screen.</p>
+      <div class="actions" style="margin-top:1rem;">
+        <a class="btn btn-primary" href="/tc/assistant" style="background:var(--deep);color:#fff;">Open TC assistant</a>
+        <a class="btn btn-ghost" href="/creative/studio" style="color:var(--deep);border-color:var(--line);">Creative Studio</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

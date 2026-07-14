@@ -1,5 +1,10 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-14 — Replicate credit unlocked; product presentation polish
+
+Adam added Replicate payment. Tip proved Ideogram thumbnail render. Shipped Studio heroes + presentation surfaces: Site Builder full-bleed landing hero, `/marketing/for-you`, `/tc/for-you`, TC portal type polish, MarketingOS teal shell tokens.
+
+
 ## 2026-07-14 — BuilderOS governed codegen truth-envelope + cache-poison fix
 
 Fixed the root cause of `POST /factory/ship-queue` returning `codegen_authoring_failed` / `codegen_empty` for `command-center` `s3` and other route steps. `routes/factory-mount-routes.js` `codegenRunner` now calls `callCouncilMember` with `taskType: 'codegen'`, `product_lane: 'builderos'`, and `useCache: false` so `services/ai-prose-truth-envelope.js` skips the generated code and `services/response-cache.js` cannot reuse a poisoned empty cache entry. `factory-staging/factory-core/builder/authoring.js` `DEFAULT_CODEGEN_TIERS` now reuses `config/task-model-routing.js` `TRUSTED_FALLBACK_MODELS` (strong-first, provider-diverse), `runAuthoring` propagates the underlying `error` when codegen returns empty, and `factory-staging/factory-core/builder/run-step.js` surfaces that `error` in SENTRY evidence. `config/council-members.js` `claude_sonnet` default model is `claude-sonnet-4-6` and `config/task-model-routing.js` `TRUSTED_FALLBACK_MODELS` is reordered. `services/response-cache.js` now refuses to cache empty/whitespace responses. `docs/products/command-center/BUILD_QUEUE.json` `s3` spec now explicitly lists allowed mode enum values (`run`, `dry_run`, `paused`) so the governed factory can generate a valid route. Gates: `node --check`, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` all PASS. Next: commit, push, redeploy, force a BuilderOS tick, and verify `GET /api/v1/lifeos/never-stop/status` `governed_status.totalRuns`/`lastShipped` increments while `command-center` `s3` ships.

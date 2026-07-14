@@ -99,14 +99,44 @@
     }
     .nav-links a.cta-link:hover { background: #4fd180; }
     .hero {
-      padding: 3.5rem 0 2rem;
+      position: relative;
+      margin: 1.25rem 0 2rem;
+      min-height: min(78vh, 720px);
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 2rem;
-      align-items: center;
+      align-items: end;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      isolation: isolate;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(8,12,10,0.25) 0%, rgba(8,12,10,0.72) 58%, rgba(8,12,10,0.92) 100%),
+        url("/overlay/product-heroes/sitebuilder.png") center / cover no-repeat;
+      z-index: 0;
+      transform: scale(1.02);
+      animation: heroDrift 18s ease-in-out infinite alternate;
+    }
+    @keyframes heroDrift {
+      from { transform: scale(1.02) translate3d(0,0,0); }
+      to { transform: scale(1.06) translate3d(-1.5%, 1%, 0); }
     }
     .hero-copy {
-      max-width: 620px;
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      padding: 2.4rem 2rem 2.2rem;
+    }
+    .hero-visual { display: none; }
+    .demo-band {
+      margin: 0 0 2rem;
+    }
+    @media (max-width: 900px) {
+      .hero { min-height: 70vh; }
+      .hero-copy { padding: 1.6rem 1.2rem 1.5rem; }
     }
     .eyebrow {
       display: inline-flex;
@@ -518,7 +548,7 @@
   <div class="shell">
     <section class="hero">
       <div class="hero-copy">
-        <div class="eyebrow">Beta test — any business that needs a better website</div>
+        <div class="eyebrow">Studio-made still · 2026 rebuild path</div>
         <h1 id="hero-headline">Get a website that actually brings in customers.</h1>
         <div class="price-chip">
           <strong>$45</strong>
@@ -533,9 +563,10 @@
         </div>
         <div class="guarantee">Free preview · no card · no sales call · approve before paying</div>
       </div>
+    </section>
 
-      <div class="hero-visual" id="demo">
-        <div class="browser-mockup">
+    <section class="demo-band" id="demo">
+      <div class="browser-mockup">
           <div class="browser-header">
             <div class="browser-dots"><span></span><span></span><span></span></div>
             <div class="browser-title">Live demo · a real local business</div>
@@ -553,7 +584,6 @@
             <a class="btn btn-primary" href="/api/v1/sites/publish/checkout?clientId=prev_1783784688744_nw7c" target="_blank" rel="noopener">Buy this demo for $45</a>
           </div>
         </div>
-      </div>
     </section>
 
     <section class="section card" id="how">
