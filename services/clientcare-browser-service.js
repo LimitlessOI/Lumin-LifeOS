@@ -2804,11 +2804,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
   }
 
   function guessMotherNameFromBirthCells(cells = []) {
-    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name)$/i;
+    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name)(\s|$)/i;
+    const noisePhrase = /admitted|discharged/i;
     const staff = /^(sherry|cora)\b/i;
     for (const raw of cells) {
       const cell = String(raw || '').trim().replace(/\s+/g, ' ');
-      if (!cell || noise.test(cell) || /^\d/.test(cell) || staff.test(cell)) continue;
+      if (!cell || noise.test(cell) || noisePhrase.test(cell) || /^\d/.test(cell) || staff.test(cell)) continue;
       if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(cell)) continue;
       // "Amanda Winkels Amanda Winkels" → first two tokens once
       const tokens = cell.replace(/\.{2,}$/, '').split(/\s+/).filter(Boolean);
@@ -2873,6 +2874,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       let directory = [];
       const needResolve = resolveDirectory !== false && rows.some((r) => !r.clientHref);
+      const directoryPrep = { cleared: false, perNameSearches: 0 };
       if (needResolve) {
         const dirNav = await gotoWithBudget(
           session.page,
@@ -2881,12 +2883,35 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         );
         if (dirNav.ok) {
           await sleep(1500);
-          await prepareClientDirectoryForSearch(session.page);
+          const prep = await prepareClientDirectoryForSearch(session.page);
+          directoryPrep.cleared = Boolean(prep?.clicked);
           directory = await extractClientDirectory(session.page, 500);
+
+          // Paginate "next" a few times to capture more of the all-clients list.
+          for (let pageNum = 0; pageNum < 8 && directory.length < 400; pageNum += 1) {
+            const advanced = await session.page.evaluate(() => {
+              const next =
+                document.querySelector('a[title*="next" i], button[title*="next" i], .k-i-arrow-e, .k-pager-nav[aria-label*="next" i]') ||
+                Array.from(document.querySelectorAll('a, button')).find((el) => /^go to the next page$/i.test((el.textContent || '').trim()) || /^›$|^»$|^>$/.test((el.textContent || '').trim()));
+              if (!next || next.getAttribute('aria-disabled') === 'true' || next.classList.contains('k-state-disabled')) {
+                return false;
+              }
+              next.click();
+              return true;
+            });
+            if (!advanced) break;
+            await sleep(1200);
+            const more = await extractClientDirectory(session.page, 500);
+            const seen = new Set(directory.map((d) => d.href));
+            for (const item of more) {
+              if (!seen.has(item.href)) directory.push(item);
+            }
+          }
         }
       }
 
-      const births = rows.map((row) => {
+      const births = [];
+      for (const row of rows) {
         const motherNameGuess = guessMotherNameFromBirthCells(row.cells || []);
         let clientHref = row.clientHref || null;
         let billingHref = clientHref ? deriveBillingHrefFromClientHref(clientHref) : null;
@@ -2910,18 +2935,46 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               matchedName: best.name,
               mrn: best.mrn,
             };
-          } else {
-            resolve = { method: 'directory_miss', query: motherNameGuess };
           }
         }
-        return {
+        // Per-name filter search when bulk directory miss (postpartum moms often off first pages).
+        if (!billingHref && motherNameGuess && needResolve) {
+          directoryPrep.perNameSearches += 1;
+          await typeClientDirectoryFilter(session.page, motherNameGuess);
+          const filtered = await extractClientDirectory(session.page, 80);
+          const scored = filtered
+            .map((item) => ({
+              ...item,
+              score: scoreDirectoryClientMatch(motherNameGuess, item.name),
+            }))
+            .filter((item) => item.score >= 55)
+            .sort((a, b) => b.score - a.score);
+          const best = scored[0];
+          if (best) {
+            clientHref = best.href;
+            billingHref = deriveBillingHrefFromClientHref(best.href);
+            resolve = {
+              method: 'directory_filter',
+              query: motherNameGuess,
+              score: best.score,
+              matchedName: best.name,
+              mrn: best.mrn,
+            };
+            if (!directory.some((d) => d.href === best.href)) directory.push(best);
+          } else {
+            resolve = resolve || { method: 'directory_miss', query: motherNameGuess };
+          }
+        } else if (!billingHref && motherNameGuess) {
+          resolve = { method: 'directory_miss', query: motherNameGuess };
+        }
+        births.push({
           ...row,
           motherNameGuess,
           clientHref,
           billingHref,
           resolve,
-        };
-      });
+        });
+      }
 
       const page = await collectPageSummary(session.page);
       return {
@@ -2930,6 +2983,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         page: { url: page.url, title: page.title, headings: page.headings },
         count: births.length,
         resolved: births.filter((b) => b.billingHref).length,
+        directoryCount: directory.length,
+        directoryPrep,
         births,
         screenshots,
       };

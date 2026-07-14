@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Birth→billing resolve (clear due-date filter + directory match) + persisted `clientcare_browser_jobs`. |
+| **Last Updated** | 2026-07-14 — Per-name directory filter + pager for birth→billing resolve; mother-name parse fix. |
 
 ---
 
