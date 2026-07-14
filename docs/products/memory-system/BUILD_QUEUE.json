@@ -32,7 +32,7 @@
       "last_attempt_at": "2026-07-13T14:27:43.220Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:45:16.525Z"
+      "shipped_at": "2026-07-13T23:36:32.563Z"
     },
     {
       "id": "3",
@@ -87,17 +87,19 @@
       "last_attempt_at": "2026-07-13T14:41:51.575Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T00:13:49.374Z"
+      "shipped_at": "2026-07-13T23:48:12.052Z"
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_capsule_id_format.sql",
       "task": "run schema migration for UUID v4",
       "spec": "Ensure Capsule IDs are formatted with UUID v4 as default; necessary schema migrations must be applied.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:15:04.620Z"
     },
     {
       "id": "8",
