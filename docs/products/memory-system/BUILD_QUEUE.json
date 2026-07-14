@@ -114,11 +114,18 @@
       "attempts": 3,
       "last_attempt_at": "2026-07-14T04:42:27.805Z",
       "last_error": "route module not auto-registered — add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "commit_sha": "fe0d6a12f2828c621c2913a915c6a01a8b1ea98b"
+      "commit_sha": "fe0d6a12f2828c621c2913a915c6a01a8b1ea98b",
+      "expected_exports": [
+        "registerMemoryRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/memory/health"
+      }
     },
     {
       "id": "9",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "add memory routes",
       "spec": "Integrate memory routes module into the application's auto-registration system for seamless route management.",
@@ -126,7 +133,9 @@
         "8"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:42:19.499Z"
     },
     {
       "id": "10",
