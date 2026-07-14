@@ -1,3 +1,6 @@
+
+## 2026-07-14 — ClientCare ChargeSlip fail-closed
+Tip proved 11/21/2025 visit list can bind a *different* scheduled patient than the status-ready pregnancyId. Mapper now reads Born from billing, scans ±days, requires pregnancyId match before Save, dismisses session-takeover dialog. Live Save still pending correct bind for 3 status-ready births.
 <!-- SYNOPSIS: Continuity Log -->
 
 ---
