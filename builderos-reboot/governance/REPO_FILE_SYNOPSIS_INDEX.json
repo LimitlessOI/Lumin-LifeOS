@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T06:24:05.964Z",
+  "generated_at": "2026-07-14T06:29:38.591Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11518,
+  "file_count": 11519,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65394,6 +65394,13 @@
       "bytes": 1727,
       "mtime": "2026-07-05T19:10:02.191Z",
       "indexed_at": "2026-07-14T06:23:47.288Z"
+    },
+    {
+      "path": "routes/creative-engine-graphic-design-routes.js",
+      "synopsis": "Registers CreativeEngineGraphicDesignRoutes routes/handlers (routes/creative-engine-graphic-design-routes.js).",
+      "bytes": 1674,
+      "mtime": "2026-07-14T06:29:38.591Z",
+      "indexed_at": "2026-07-14T06:29:38.591Z"
     },
     {
       "path": "routes/creative-engine-routes.js",
