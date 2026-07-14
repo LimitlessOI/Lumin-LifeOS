@@ -33,12 +33,17 @@ import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
 import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID, getDesignSystemCss, getDesignSystemFontLinks } from './site-builder-design-systems.js';
+import { getVariantSwitcherHtml } from '../config/site-builder-switcher.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
 import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
+}
+
+function safeJson(obj) {
+  return JSON.stringify(obj).replace(/</g, '\\u003c');
 }
 
 function injectPreviewChrome(html, { clientId, baseUrl, editToken }) {
@@ -676,7 +681,7 @@ export default class SiteBuilder {
       }
 
       const editToken = createEditToken();
-      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken);
+      const switcher = this.generateVariantSwitcher(businessInfo, clientId, variants, editToken, benchmark, presence);
       await fs.writeFile(path.join(deployDir, 'index.html'), switcher);
 
       if (businessInfo.existingSiteScore || businessInfo.industryBenchmarks?.standards?.length || (benchmark && benchmark.analyzedCount > 0) || presence) {
@@ -735,105 +740,11 @@ export default class SiteBuilder {
 
   /**
    * Build the variant switcher shell: a top bar of design buttons + an iframe
-   * that swaps between the generated variants, plus a "Use this design" action
-   * that records the client's choice (best-effort beacon).
+   * that swaps between the generated variants, plus a light/dark toggle and
+   * an interactive competitor comparison popup.
    */
-  generateVariantSwitcher(info, clientId, variants, editToken = '') {
-    const name = (info.businessName || 'Your Website').replace(/</g, '&lt;');
-    const selectBase = this.baseUrl ? '/api/v1/sites/select-design' : '';
-    const publishUrl = this.baseUrl ? `/api/v1/sites/publish/checkout?clientId=${encodeURIComponent(clientId)}` : '';
-    const editorUrl = this.baseUrl && editToken
-      ? `/api/v1/sites/editor?clientId=${encodeURIComponent(clientId)}&token=${encodeURIComponent(editToken)}`
-      : '';
-    const data = JSON.stringify(variants.map((v) => ({ id: v.id, name: v.name, tier: v.tier || 'paid', blurb: v.blurb, file: v.file })));
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${name} — Choose your design</title>
-<script src="${TAILWIND_CDN}"></script>
-<style>
-  :root { --bar: #0f172a; }
-  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .chip { transition: all .15s ease; }
-  .chip[aria-pressed="true"] { background:#fff; color:#0f172a; font-weight:600; }
-  .chip .tier { font-size:10px; opacity:.7; margin-left:6px; text-transform:uppercase; }
-  iframe { border:0; width:100%; height:calc(100vh - 128px); display:block; background:#fff; }
-</style>
-</head>
-<body class="bg-slate-900">
-  <div x-data="switcher()" x-init="init()">
-    <header class="bg-slate-900 text-white px-4 pt-3 pb-3 sticky top-0 z-10 shadow-lg">
-      <div class="flex items-center justify-between gap-3 flex-wrap">
-        <div>
-          <p class="text-xs uppercase tracking-widest text-slate-400">Preview for</p>
-          <h1 class="text-lg font-semibold leading-tight">${name}</h1>
-        </div>
-        <div class="text-right flex flex-wrap gap-2 justify-end items-center">
-          ${editorUrl ? `<a href="${editorUrl}" class="bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold px-3 py-2 rounded-lg">Editor</a>` : ''}
-          <a :href="checkoutUrl" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-3 py-2 rounded-lg"><span x-text="selected === 'custom' ? 'Custom co-design' : 'Publish ${SITE_BUILDER_PRICING.publish.display}'"></span></a>
-          <button @click="choose()" class="bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-lg">✓ Use this design</button>
-          <p class="text-xs text-slate-400 mb-1 w-full" x-text="'Design ' + (index+1) + ' of ' + variants.length + ' — ' + current.name + (current.tier === 'paid' ? ' ($1 at publish)' : '')"></p>
-        </div>
-      </div>
-      <p class="text-xs text-slate-400 mt-2">5 free designs · 10 paid designs you can preview · $30 custom co-design (pay only when you approve). Toggle to compare.</p>
-      <nav class="mt-2 flex gap-2 overflow-x-auto pb-1">
-        <template x-for="(v,i) in variants" :key="v.id">
-          <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400"
-            :aria-pressed="i===index" @click="show(i)" :title="v.blurb">
-            <span x-text="v.name"></span><span class="tier" x-text="v.tier === 'paid' ? '$1' : 'free'"></span>
-          </button>
-        </template>
-        <button class="chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-amber-500 text-amber-300 hover:border-amber-300" @click="showCustom()" title="Co-design a unique template and website with us; pay only when you approve it.">
-          <span>Custom co-design</span><span class="tier">$30</span>
-        </button>
-      </nav>
-      <p class="text-xs text-slate-300 mt-2 max-w-2xl" x-text="current.blurb || ''"></p>
-    </header>
-    <iframe :src="current.file" :title="current.name" x-ref="frame"></iframe>
-    <div x-show="saved" x-transition class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-xl" x-text="savedMsg">
-    </div>
-  </div>
-<script src="${ALPINE_CDN}" defer></script>
-<script>
-  function switcher(){
-    return {
-      variants: ${data},
-      index: 0,
-      selected: null,
-      selectedTier: null,
-      saved: false,
-      savedMsg: '',
-      get current(){ return this.variants[this.index]; },
-      get checkoutUrl(){
-        const base = ${JSON.stringify(publishUrl)};
-        if (!base) return '';
-        if (this.selected === 'custom') return base + '&templateTier=template-custom';
-        if (this.selected && this.selectedTier === 'paid') return base + '&templateTier=template-additional&selectedDesign=' + encodeURIComponent(this.selected);
-        return base;
-      },
-      init(){ const h = parseInt(new URLSearchParams(location.search).get('v')); if(!isNaN(h) && this.variants[h]) this.index = h; this.show(this.index); },
-      show(i){ this.index = i; this.selected = this.variants[i].id; this.selectedTier = this.variants[i].tier; this.saved = false; },
-      showCustom(){ this.selected = 'custom'; this.selectedTier = 'custom'; this.saved = true; this.savedMsg = 'Custom co-design selected — you will only pay when you approve the final design.'; setTimeout(()=>{ this.saved = false; }, 4000); },
-      choose(){
-        this.saved = true;
-        this.selected = this.current.id;
-        this.selectedTier = this.current.tier;
-        if (this.selectedTier === 'paid') {
-          this.savedMsg = this.current.name + ' selected — pay the $1 template fee when you publish.';
-        } else {
-          this.savedMsg = this.current.name + ' selected — free design.';
-        }
-        var base = ${JSON.stringify(selectBase)};
-        if(base){ try { navigator.sendBeacon ? navigator.sendBeacon(base + '?id=${clientId}&style=' + this.current.id) : fetch(base + '?id=${clientId}&style=' + this.current.id, {mode:'no-cors'}); } catch(e){} }
-        setTimeout(()=>{ this.saved = false; }, 4000);
-      },
-    };
-  }
-</script>
-</body>
-</html>`;
+  generateVariantSwitcher(info, clientId, variants, editToken = '', benchmark = null, presence = null) {
+    return getVariantSwitcherHtml({ info, clientId, variants, editToken, benchmark, presence, baseUrl: this.baseUrl });
   }
 
   /**
@@ -1271,7 +1182,17 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
         : dsBlock + h;
     }
     if (!/<body\b[^>]*data-lumin-ds/i.test(h)) {
-      h = h.replace(/<body\b([^>]*)>/i, '<body data-lumin-ds="1"$1>');
+      h = h.replace(/<body\b([^>]*)>/i, '<body data-lumin-ds="1" data-theme="light"$1>');
+    } else if (!/<body\b[^>]*data-theme/i.test(h)) {
+      h = h.replace(/<body\b([^>]*)>/i, '<body data-theme="light"$1>');
+    }
+
+    // 0a. Theme query-param + postMessage support so the preview switcher can toggle light/dark.
+    const themeScript = `<script>
+(function(){ var p = new URLSearchParams(location.search); var t = p.get('theme') === 'dark' ? 'dark' : 'light'; document.body.setAttribute('data-theme', t); window.addEventListener('message', function(e){ if(e && e.data && e.data.type === 'lumin-theme'){ document.body.setAttribute('data-theme', e.data.theme || 'light'); } }, false); })();
+</script>`;
+    if (!h.includes('lumin-theme')) {
+      h = h.includes('</body>') ? h.replace('</body>', `${themeScript}\n</body>`) : h + themeScript;
     }
 
     // 0b. Remove any customer-facing Digital Presence Score section if the model emitted one

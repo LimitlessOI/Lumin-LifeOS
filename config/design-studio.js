@@ -537,9 +537,76 @@ function getGoogleFontLink(fonts) {
   return `https://fonts.googleapis.com/css2?${parts.join('&')}&display=swap`;
 }
 
+function hexToRgb(hex) {
+  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex) || /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(hex);
+  if (!m) return null;
+  const r = m.length === 7 ? parseInt(m[1], 16) : parseInt(m[1] + m[1], 16);
+  const g = m.length === 7 ? parseInt(m[2], 16) : parseInt(m[2] + m[2], 16);
+  const b = m.length === 7 ? parseInt(m[3], 16) : parseInt(m[3] + m[3], 16);
+  return { r, g, b };
+}
+
+function relativeLuminance({ r, g, b }) {
+  const a = [r, g, b].map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+}
+
+function isLightColor(hex) {
+  const rgb = hexToRgb(hex);
+  return rgb ? relativeLuminance(rgb) > 0.5 : true;
+}
+
+function toHex(r, g, b) {
+  return `#${[r, g, b].map((v) => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('')}`;
+}
+
+function blendWithWhite(hex, ratio) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  return toHex(rgb.r + (255 - rgb.r) * ratio, rgb.g + (255 - rgb.g) * ratio, rgb.b + (255 - rgb.b) * ratio);
+}
+
+export function deriveDarkTokens(tokens) {
+  if (!tokens) return tokens;
+  if (!isLightColor(tokens.bg)) return tokens;
+  const primary = tokens.primary || '#000000';
+  const accent = tokens.accent || '#CCCCCC';
+  const darkPrimary = isLightColor(accent) ? accent : (isLightColor(primary) ? primary : blendWithWhite(accent, 0.5));
+  return {
+    ...tokens,
+    primary: darkPrimary,
+    accent: isLightColor(accent) ? blendWithWhite(accent, 0.25) : blendWithWhite(accent, 0.6),
+    bg: '#0B0B0B',
+    text: '#F5F5F0',
+    muted: '#A8A8A0',
+    line: '#2A2A2A',
+    card: '#161616',
+    overlay: 'rgba(255,255,255,0.05)',
+    buttonText: '#0B0B0B',
+    shadow: '0 24px 60px rgba(0,0,0,0.45)',
+  };
+}
+
 export function getDesignSystemCss(system, brandPrimary, brandAccent) {
   const primary = brandPrimary || system.tokens.primary;
   const accent = brandAccent || system.tokens.accent;
+  const effectiveTokens = { ...system.tokens, primary, accent };
+  const darkTokens = deriveDarkTokens(effectiveTokens);
+  const darkBlock = darkTokens === effectiveTokens ? '' : `
+body[data-lumin-ds][data-theme="dark"] {
+  --primary: ${darkTokens.primary};
+  --accent: ${darkTokens.accent};
+  --bg: ${darkTokens.bg};
+  --text: ${darkTokens.text};
+  --muted: ${darkTokens.muted};
+  --line: ${darkTokens.line};
+  --card: ${darkTokens.card};
+  --overlay: ${darkTokens.overlay};
+  --button-text: ${darkTokens.buttonText};
+  --shadow: ${darkTokens.shadow};
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}`;
   return `:root {
   --primary: ${primary};
   --accent: ${accent};
@@ -562,7 +629,7 @@ body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shad
 body[data-lumin-ds] .bg-white { background-color: var(--card) !important; }
 body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200 { background-color: var(--bg) !important; }
 body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted { color: var(--muted) !important; }
-body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black { color: var(--text) !important; }`;
+body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black { color: var(--text) !important; }${darkBlock}`;
 }
 
 export function getDesignSystemFontLinks(system) {

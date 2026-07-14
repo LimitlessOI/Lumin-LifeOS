@@ -1,27 +1,20 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-13T20:29:46.230Z",
-  "findings_count": 3,
+  "generated_at": "2026-07-14T05:13:42.410Z",
+  "findings_count": 2,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "15 template chips may feel like a lot to scan at once",
-      "proposed_solution": "Group templates into clearer categories so I can pick faster",
+      "detail": "15 template choices feels like a lot to scan at once",
+      "proposed_solution": "Group the template chips into clearer categories like Calm, Clinical, and Luxe",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "Palette choices are only 3, which can feel a bit limited if I want a different mood",
-      "proposed_solution": "Show a simple preview of each palette so I can choose by look, not just name",
-      "severity": "warning",
-      "source": "uxCritique"
-    },
-    {
-      "code": "ux_friction_3",
-      "detail": "The chat input accepted my text, but it wasn’t clear what happened after I sent it",
-      "proposed_solution": "After I send a chat message, show an obvious confirmation or next step",
+      "detail": "Only 3 palette options may feel a bit limiting if none fit the brand right away",
+      "proposed_solution": "Show a tiny preview on hover so I can tell styles apart faster",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -31,15 +24,11 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "15 template chips may feel like a lot to scan at once"
+        "detail": "15 template choices feels like a lot to scan at once"
       },
       {
         "code": "ux_friction_2",
-        "detail": "Palette choices are only 3, which can feel a bit limited if I want a different mood"
-      },
-      {
-        "code": "ux_friction_3",
-        "detail": "The chat input accepted my text, but it wasn’t clear what happened after I sent it"
+        "detail": "Only 3 palette options may feel a bit limiting if none fit the brand right away"
       }
     ]
   }
