@@ -427,7 +427,7 @@ Respond ONLY with JSON:
             }
 
             await pool.query(
-                `UPDATE marketing_sessions SET status = 'extracted', extraction_run_at = NOW() WHERE id = $1 AND owner_id = $2`,
+                `UPDATE marketing_sessions SET extraction_run_at = NOW() WHERE id = $1 AND owner_id = $2`,
                 [id, owner_id]
             );
 
@@ -656,7 +656,11 @@ Rules:
             }
 
             const { id } = req.params;
-            const { action, hint } = req.body;
+            const { action, hint, status } = req.body;
+            const normalizedAction = action
+              || (status === 'approved' || status === 'approve' ? 'approve' : null)
+              || (status === 'rejected' || status === 'reject' ? 'reject' : null)
+              || (req.body?.approved === true ? 'approve' : null);
 
             const pieceResult = await pool.query(
                 `SELECT p.* FROM marketing_content_pieces p INNER JOIN marketing_sessions s ON s.id = p.session_id WHERE p.id = $1 AND s.owner_id = $2`,
@@ -668,24 +672,24 @@ Rules:
             const currentPiece = pieceResult.rows[0];
 
             let updatedPiece;
-            const validActions = ['approve', 'reject', 'regenerate']; // Derived from task description
-            if (!validActions.includes(action)) {
-                return res.status(400).json({ ok: false, error: 'Invalid action.' });
+            const validActions = ['approve', 'reject', 'regenerate'];
+            if (!validActions.includes(normalizedAction)) {
+                return res.status(400).json({ ok: false, error: 'Invalid action. Use approve, reject, or regenerate.' });
             }
 
-            if (action === 'approve') {
+            if (normalizedAction === 'approve') {
                 const updateResult = await pool.query(
                     `UPDATE marketing_content_pieces SET status = 'approved' WHERE id = $1 RETURNING *`,
                     [id]
                 );
                 updatedPiece = updateResult.rows[0];
-            } else if (action === 'reject') {
+            } else if (normalizedAction === 'reject') {
                 const updateResult = await pool.query(
                     `UPDATE marketing_content_pieces SET status = 'rejected' WHERE id = $1 RETURNING *`,
                     [id]
                 );
                 updatedPiece = updateResult.rows[0];
-            } else if (action === 'regenerate') {
+            } else if (normalizedAction === 'regenerate') {
                 const channelProfileResult = await pool.query(
                     `SELECT brand_voice_json FROM marketing_channel_profiles WHERE owner_id = $1`,
                     [owner_id]
@@ -703,7 +707,10 @@ Rules:
 
                 const regenerationPrompt = `Using the brand voice: ${JSON.stringify(brandVoice)}, regenerate the following marketing content piece. Original extraction type: ${sourceExtraction.extraction_type}, raw text: "${sourceExtraction.raw_text}". Current content: "${currentPiece.content_text}". Hint for regeneration: "${hint || 'Make it more engaging.'}". Return a JSON object: { "content_text": "Newly generated content here" }.`;
 
-                const aiResponseText = await callCouncilMember('gemini_flash', regenerationPrompt);
+                const aiResponseText = councilText(await callCouncilMember('gemini_flash', regenerationPrompt, {
+                    maxTokens: 1200,
+                    taskType: 'marketing_regenerate',
+                }));
                 const regeneratedContent = parseCouncilResponse(aiResponseText);
 
                 if (!regeneratedContent || !regeneratedContent.content_text) {
