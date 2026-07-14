@@ -215,23 +215,38 @@ function pickLogo(images) {
   return images[0]?.url || null;
 }
 
-function pickHeroImages(images) {
+function isLogoLikeImage(img, logoUrl = '') {
+  if (!img?.url) return true;
+  if (logoUrl && img.url === logoUrl) return true;
+  const alt = String(img.alt || '');
+  const url = String(img.url || '');
+  if (/\blogo\b|favicon|site icon|brand mark|sprite/i.test(alt)) return true;
+  if (/\blogo\b|favicon|icon[-_]?|\.ico(?:\?|$)/i.test(url)) return true;
+  return false;
+}
+
+function pickHeroImages(images, logoUrl = '') {
   return images
-    .filter((img) => /hero|banner|home|main|background/i.test(img.alt) || /wixstatic|unsplash|cdn|wp-content/i.test(img.url))
+    .filter((img) => !isLogoLikeImage(img, logoUrl))
+    .filter((img) => /hero|banner|home|main|background|birth|baby|family|care|room|clinic|wellness/i.test(img.alt || '')
+      || /unsplash|images\.unsplash|cdninstagram|ytimg|wp-content\/uploads/i.test(img.url || ''))
     .map((i) => i.url)
+    .filter((url, idx, arr) => url && arr.indexOf(url) === idx)
     .slice(0, 3);
 }
 
-function pickTeamImages(images) {
+function pickTeamImages(images, logoUrl = '') {
   return images
-    .filter((img) => /team|staff|practitioner|midwife|doula|about|profile|headshot|portrait/i.test(img.alt))
+    .filter((img) => !isLogoLikeImage(img, logoUrl))
+    .filter((img) => /team|staff|practitioner|midwife|doula|about|profile|headshot|portrait/i.test(img.alt || ''))
     .map((i) => i.url)
     .slice(0, 4);
 }
 
-function pickProductImages(images) {
+function pickProductImages(images, logoUrl = '') {
   return images
-    .filter((img) => /service|product|facility|room|office|clinic|yoga|massage|birth|baby/i.test(img.alt))
+    .filter((img) => !isLogoLikeImage(img, logoUrl))
+    .filter((img) => /service|product|facility|room|office|clinic|yoga|massage|birth|baby/i.test(img.alt || ''))
     .map((i) => i.url)
     .slice(0, 4);
 }
@@ -1382,9 +1397,9 @@ export async function ingestAll(businessInfo, options = {}) {
 
     // 4. Aggregate asset data
     const logoUrl = pickLogo(images);
-    const heroImages = pickHeroImages(images);
-    const teamImages = pickTeamImages(images);
-    const productImages = pickProductImages(images);
+    const heroImages = pickHeroImages(images, logoUrl);
+    const teamImages = pickTeamImages(images, logoUrl);
+    const productImages = pickProductImages(images, logoUrl);
     const socialImages = (instagramProfile?.posts || [])
       .filter((p) => p.displayUrl && !p.isVideo)
       .map((p) => ({ url: p.displayUrl, caption: p.caption, source: 'Instagram' }))
@@ -1510,8 +1525,15 @@ export async function ingestAll(businessInfo, options = {}) {
  * Never invents a photo of a specific person/place — atmosphere/category only.
  */
 async function maybeFillGeneratedHero(businessInfo, result, log = logger) {
-  const heroes = result?.assetData?.images?.hero;
-  if (Array.isArray(heroes) && heroes.length > 0) return;
+  const logo = result?.assetData?.images?.logo || businessInfo.logoUrl || '';
+  const rawHeroes = Array.isArray(result?.assetData?.images?.hero) ? result.assetData.images.hero : [];
+  const heroes = rawHeroes.filter((h) => h && h !== logo && !/\blogo\b|favicon/i.test(String(h)));
+  if (heroes.length > 0) {
+    result.assetData.images.hero = heroes;
+    businessInfo.heroImages = heroes;
+    return;
+  }
+  if (result?.assetData?.images) result.assetData.images.hero = [];
   try {
     const { default: runGraphicDesign, getReplicateApiToken } = await import('./creative-engine/modes/graphic-design.js');
     if (!getReplicateApiToken()) return;

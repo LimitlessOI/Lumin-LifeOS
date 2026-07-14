@@ -33,6 +33,7 @@ import CompetitorBenchmark from './competitor-benchmark.js';
 import PresenceAudit from './presence-audit.js';
 import { createWebSearchService } from './web-search-service.js';
 import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID, getDesignSystemCss, getDesignSystemFontLinks } from './site-builder-design-systems.js';
+import { renderDesignSystemLayout } from '../config/design-studio-layouts.js';
 import { getVariantSwitcherHtml } from '../config/site-builder-switcher.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
@@ -645,12 +646,26 @@ export default class SiteBuilder {
 
       const variants = [];
       const variantHtmls = {};
+      // Default: hand-authored layout shells so variants are structurally different.
+      // Opt into the old same-funnel AI HTML path with useAiLayouts: true.
+      const useLayoutShells = options.useAiLayouts !== true && options.useLayoutShells !== false;
       for (const ds of systems) {
         try {
-          let html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
+          businessInfo.designSystemId = ds.id;
+          businessInfo.designSystemName = ds.name;
+          let html;
+          let usedShell = false;
+          if (useLayoutShells) {
+            html = renderDesignSystemLayout(ds, businessInfo, posPartner);
+            usedShell = Boolean(html);
+          }
+          if (!html) {
+            html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
+          }
           html = this.patchSiteHtml(html, businessInfo);
           let quality = this.scoreSiteHtml(html, businessInfo);
-          if (!options.skipRepair && this.callCouncil && quality.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
+          // Do not run AI repair on hand shells — repair homogenizes art direction.
+          if (!usedShell && !options.skipRepair && this.callCouncil && quality.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
             const repaired = this.patchSiteHtml(
               await this.improveSiteHtml(html, businessInfo, quality, { clientId, posPartner, pass: 1 }),
               businessInfo,
@@ -663,7 +678,15 @@ export default class SiteBuilder {
           await fs.mkdir(vDir, { recursive: true });
           await fs.writeFile(path.join(vDir, 'index.html'), html);
           variantHtmls[ds.id] = html;
-          variants.push({ id: ds.id, name: ds.name, blurb: ds.blurb, tier: ds.tier || 'paid', file: `variants/${ds.id}/index.html`, scorePct: quality.scorePct });
+          variants.push({
+            id: ds.id,
+            name: ds.name,
+            blurb: ds.blurb,
+            tier: ds.tier || 'paid',
+            file: `variants/${ds.id}/index.html`,
+            scorePct: quality.scorePct,
+            layoutShell: usedShell,
+          });
         } catch (err) {
           logger.warn('[SITE] variant generation failed (skipping)', { clientId, style: ds.id, error: err.message });
         }

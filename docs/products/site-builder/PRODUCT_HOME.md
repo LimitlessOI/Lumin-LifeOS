@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Full-bleed Studio hero on landing (`product-heroes/sitebuilder.png`); tip Replicate credit proved. |
+| **Last Updated** | 2026-07-14 — Variant layout shells: hand-authored structurally distinct designs (fixes identical AI reskins); logo-as-hero glitch fixed. |
 
 ---
 
@@ -304,6 +304,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-14 | **Variant sameness fix.** (1) New `config/design-studio-layouts.js` — hand-authored structurally distinct layout shells (editorial split, clinical, organic blobs, bold type, true dark, coastal panel, swiss grid, bento). (2) `buildVariants` defaults to shells (`useAiLayouts: true` restores old AI HTML). (3) Asset ingestion no longer treats logo PNGs as heroes; Flux hero fills when no real photo remains. (4) Stronger design-token CSS remaps for stone/slate. | Adam: Sherry preview designs terrible and nearly identical — not taste, a pipeline glitch. | ✅ `node --check` + local shell smoke | tip rebuild after deploy |
 | 2026-07-14 | **Landing pricing cards** — show Free preview (5 templates) / $1 extras / $45 publish / **$35 custom one-of-one** + FAQ on templates. | Tip audit: config had $35 custom but landing only showed $45 + $35/mo care. | ✅ HTML | tip eye-test |
 | 2026-07-14 | **Landing mobile CTA** — btn wrap + chat bubble raised so "Get my free preview" is not clipped/overlapped on narrow viewports. | Founder prime-time audit screenshot. | ✅ local CSS | tip eye-test |
 | 2026-07-14 | **Flux hero fallback** — `maybeFillGeneratedHero` in asset ingestion calls Creative Engine graphic_design (Flux) when scraped hero images are empty. | Adam: REPLICATE_API is in — finish Site Builder wire. | ✅ local | tip rebuild after deploy |

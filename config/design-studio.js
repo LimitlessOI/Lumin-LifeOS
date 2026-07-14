@@ -627,9 +627,17 @@ body[data-lumin-ds] h1, body[data-lumin-ds] h2, body[data-lumin-ds] h3, body[dat
 body[data-lumin-ds] .btn, body[data-lumin-ds] button, body[data-lumin-ds] a.btn { border-radius: var(--radius); background-color: var(--primary); color: var(--button-text); box-shadow: var(--shadow); }
 body[data-lumin-ds] .card { border-radius: var(--radius); box-shadow: var(--shadow); background-color: var(--card); color: var(--text); }
 body[data-lumin-ds] .bg-white { background-color: var(--card) !important; }
-body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200 { background-color: var(--bg) !important; }
-body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted { color: var(--muted) !important; }
-body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black { color: var(--text) !important; }${darkBlock}`;
+body[data-lumin-ds] .bg-gray-50, body[data-lumin-ds] .bg-gray-100, body[data-lumin-ds] .bg-gray-200,
+body[data-lumin-ds] .bg-stone-50, body[data-lumin-ds] .bg-stone-100, body[data-lumin-ds] .bg-stone-200,
+body[data-lumin-ds] .bg-slate-50, body[data-lumin-ds] .bg-slate-100, body[data-lumin-ds] .bg-slate-200,
+body[data-lumin-ds] .bg-neutral-50, body[data-lumin-ds] .bg-neutral-100 { background-color: var(--bg) !important; }
+body[data-lumin-ds] .text-gray-500, body[data-lumin-ds] .text-gray-600, body[data-lumin-ds] .text-muted,
+body[data-lumin-ds] .text-stone-500, body[data-lumin-ds] .text-stone-600,
+body[data-lumin-ds] .text-slate-500, body[data-lumin-ds] .text-slate-600 { color: var(--muted) !important; }
+body[data-lumin-ds] .text-gray-700, body[data-lumin-ds] .text-gray-800, body[data-lumin-ds] .text-gray-900, body[data-lumin-ds] .text-black,
+body[data-lumin-ds] .text-stone-700, body[data-lumin-ds] .text-stone-800, body[data-lumin-ds] .text-stone-900,
+body[data-lumin-ds] .text-slate-700, body[data-lumin-ds] .text-slate-800, body[data-lumin-ds] .text-slate-900 { color: var(--text) !important; }
+body[data-lumin-ds] section, body[data-lumin-ds] .card, body[data-lumin-ds] article { color: var(--text); }${darkBlock}`;
 }
 
 export function getDesignSystemFontLinks(system) {
