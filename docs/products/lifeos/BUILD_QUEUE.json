@@ -764,6 +764,35 @@
       "completed_at": "2026-07-10T19:23:59.761Z"
     },
     {
+      "id": "lifeos-admin-1b",
+      "status": "done",
+      "target_file": "db/migrations/20260715_builder_runtime_config_id_text.sql",
+      "task": "Fix builder_runtime_config.id type from uuid to text and seed sentinel row",
+      "spec": "Idempotent SQL migration: change builder_runtime_config.id to text, and insert the sentinel row builder_runtime_config_singleton with mode 'run' if missing. Uses information_schema to only alter when not already text. Safe to re-run.",
+      "depends_on": [
+        "lifeos-admin-1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [],
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt_at": null,
+      "last_error": null,
+      "revive_count": 0,
+      "revived_at": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
+    },
+    {
       "id": "lifeos-admin-2",
       "status": "done",
       "target_file": "services/builder-runtime-mode-service.js",
@@ -785,12 +814,13 @@
       "task": "Wire POST /command-center/mode and GET /command-center/mode live using builder-runtime-mode-service",
       "spec": "Export registerCommandCenterModeRoutes(app,deps) where deps={db,callCouncilMember}. GET /api/v1/lifeos/command-center/mode returns {mode,updated_at,updated_by}. POST /api/v1/lifeos/command-center/mode accepts {mode,triggered_by} body, validates mode enum (allowed values: 'run', 'dry_run', 'paused', matching builder-runtime-mode-service), calls setMode, returns receipt. All errors return {error:string} with appropriate HTTP status. No top-level browser globals. Import only node builtins and ../services/builder-runtime-mode-service.js.",
       "depends_on": [
-        "lifeos-admin-2"
+        "lifeos-admin-2",
+        "lifeos-admin-1b"
       ],
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": null,
-      "last_attempt_at": "2026-07-14T21:27:16.173Z",
+      "last_attempt_at": "2026-07-14T22:55:47.120678+00:00",
       "last_error": "governed_ship_failed",
       "expected_exports": [
         "registerCommandCenterModeRoutes"
@@ -812,7 +842,8 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "park_until": "2026-07-15T04:00:00Z"
     },
     {
       "id": "lifeos-admin-4",
@@ -958,5 +989,5 @@
     }
   ],
   "updated_at": "2026-07-14",
-  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue \u2014 plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam \u2014 Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied."
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue \u2014 plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route) then s13 (auto-register entry). s12 file_contains changed to a stable symbol check; s13 makes the route persist across deploys. | 2026-07-14: Adam \u2014 Command Center is not a separate product; its admin surface (builder runtime mode, phase14 cert, pending Adam) is folded into lifeos as lifeos-admin-* steps. The standalone command-center BUILD_QUEUE is deprecated and emptied. | 2026-07-14: Added lifeos-admin-1b migration to fix builder_runtime_config.id type from uuid to text; lifeos-admin-3 is parked until the migration deploys and the route is ready to ship."
 }
