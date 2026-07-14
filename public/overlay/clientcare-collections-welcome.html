@@ -54,9 +54,9 @@
     <div class="progress">
       <div class="pill done" id="p1">1 · Paid</div>
       <div class="pill now" id="p2">2 · Connect ClientCare</div>
-      <div class="pill" id="p3">3 · Work the board</div>
+      <div class="pill" id="p3">3 · System chases</div>
     </div>
-    <div class="done-banner" id="doneBanner">ClientCare connected. Open the workboard to see forever-chase next actions.</div>
+    <div class="done-banner" id="doneBanner">ClientCare connected. The system seeds forever-chase and keeps working — you do not need to run a board.</div>
     <div class="box" id="panel">
       <div class="meta" id="meta"></div>
       <p><strong>What you enter:</strong> the same ClientCare username and password you use in the browser. We encrypt them for this practice only. We never put them in git or chat.</p>
@@ -104,7 +104,7 @@
     }
     function markConnected() {
       document.getElementById('title').textContent = 'You are connected';
-      document.getElementById('lead').textContent = 'Step 2 is done. Step 3 is working the forever-chase board.';
+      document.getElementById('lead').textContent = 'Step 2 is done. Step 3 is the system forever-chasing — you do not work a board.';
       document.getElementById('p2').classList.add('done');
       document.getElementById('p2').classList.remove('now');
       document.getElementById('p3').classList.add('now');

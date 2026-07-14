@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T18:04:07.317Z",
+  "generated_at": "2026-07-14T18:22:47.776Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11531,
+  "file_count": 11532,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -36960,9 +36960,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 10504,
-      "mtime": "2026-07-14T18:03:05.133Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z"
+      "bytes": 10862,
+      "mtime": "2026-07-14T18:22:45.739Z",
+      "indexed_at": "2026-07-14T18:22:47.776Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39154,9 +39154,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 90987,
-      "mtime": "2026-07-14T18:03:05.133Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z"
+      "bytes": 91209,
+      "mtime": "2026-07-14T18:22:35.110Z",
+      "indexed_at": "2026-07-14T18:22:47.776Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -63715,9 +63715,9 @@
     {
       "path": "public/clientcare-billing/clientcare-billing.js",
       "synopsis": "clientcare-billing.js",
-      "bytes": 290655,
-      "mtime": "2026-07-14T18:03:05.137Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z",
+      "bytes": 291924,
+      "mtime": "2026-07-14T18:22:23.706Z",
+      "indexed_at": "2026-07-14T18:22:47.776Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -63963,16 +63963,23 @@
     {
       "path": "public/overlay/clientcare-collections-landing.html",
       "synopsis": "BirthBill — clear midwife sales landing with definitions + 4-step onboard",
-      "bytes": 13330,
-      "mtime": "2026-07-14T18:03:05.137Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z"
+      "bytes": 13371,
+      "mtime": "2026-07-14T18:22:03.043Z",
+      "indexed_at": "2026-07-14T18:22:47.776Z"
     },
     {
       "path": "public/overlay/clientcare-collections-welcome.html",
       "synopsis": "BirthBill post-pay wizard — connect ClientCare with clear next steps",
-      "bytes": 7717,
-      "mtime": "2026-07-14T17:36:20.017Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z"
+      "bytes": 7770,
+      "mtime": "2026-07-14T18:22:27.410Z",
+      "indexed_at": "2026-07-14T18:22:47.776Z"
+    },
+    {
+      "path": "public/overlay/clientcare-for-sherry.html",
+      "synopsis": "BirthBill — polished wife/midwife presentation (reassurance, not operator UI)",
+      "bytes": 11557,
+      "mtime": "2026-07-14T18:22:02.734Z",
+      "indexed_at": "2026-07-14T18:22:47.776Z"
     },
     {
       "path": "public/overlay/code-installation-test.js",
@@ -88121,9 +88128,9 @@
     {
       "path": "startup/register-founder-runtime-routes.js",
       "synopsis": "Minimal founder-builder runtime route composition.",
-      "bytes": 14914,
-      "mtime": "2026-07-14T17:36:20.017Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z",
+      "bytes": 15075,
+      "mtime": "2026-07-14T18:21:45.931Z",
+      "indexed_at": "2026-07-14T18:22:47.776Z",
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]

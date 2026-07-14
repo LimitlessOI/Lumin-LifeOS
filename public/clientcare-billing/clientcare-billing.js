@@ -13,6 +13,7 @@
   const urlParams = new URLSearchParams(window.location.search || '');
   const isBirthBillMode = String(urlParams.get('product') || '').toLowerCase() === 'birthbill'
     || String(urlParams.get('mode') || '').toLowerCase() === 'birthbill';
+  const isPresentMode = isBirthBillMode && ['1', 'true', 'yes'].includes(String(urlParams.get('present') || '').toLowerCase());
   const operatorPersonLabel = isBirthBillMode ? 'You' : 'Sherry';
   const tenantIdFromUrl = urlParams.get('tenant_id') || urlParams.get('tenantId') || '';
   if (tenantIdFromUrl) {
@@ -4776,21 +4777,29 @@
       ${renderSetupStrip()}
       <div class="hero">
         <div>
-          <div class="eyebrow">${isBirthBillMode ? 'BirthBill · ClientCare midwife collections' : 'Sidecar for ClientCare West'}</div>
-          <h1>${isBirthBillMode ? 'Forever-chase workboard' : 'Billing assistant'}</h1>
-          <p class="muted" style="max-width:52ch;line-height:1.55;margin-top:6px;">${isBirthBillMode
+          <div class="eyebrow">${isPresentMode ? 'For Sherry · quiet view' : (isBirthBillMode ? 'BirthBill · ClientCare midwife collections' : 'Sidecar for ClientCare West')}</div>
+          <h1>${isPresentMode ? 'Your insurance chase' : (isBirthBillMode ? 'Forever-chase workboard' : 'Billing assistant')}</h1>
+          <p class="muted" style="max-width:52ch;line-height:1.55;margin-top:6px;">${isPresentMode
+            ? 'This board is for Adam and the system — not a to-do list for you. It shows births that stay open until insurance pays enough or issues a written denial.'
+            : (isBirthBillMode
             ? 'Keep <strong style="color:#edf2f7">ClientCare</strong> open for charting. Use this board for the forever-chase queue: unpaid and underpaid insurance births that stay open until paid or written denial. Age is not a write-off.'
-            : `Keep <strong style="color:#edf2f7">ClientCare</strong> open for real charting and billing. Use this page beside it for the live queue, VOB notes, ${escapeHtml(getBillingInvokeLabel())} (voice/chat), and quick actions — not a separate product, an assistant to what you already use.`}</p>
-          ${isBirthBillMode ? `<div class="card" style="margin-top:14px;background:#16353a;border-color:#2a6b6b;"><strong style="color:#9fe0d8">Sherry does nothing here</strong><p class="muted" style="margin-top:8px;color:#c9e8e4;line-height:1.5"><strong>Forever-chase</strong> = unpaid/underpaid stays open until paid enough or written no-liability denial.<br/><strong>Next action</strong> = what the <em>system</em> is doing (file claim, ask insurer) — not homework for the midwife.<br/><strong>Hands-off</strong> = after ClientCare is connected once, BirthBill prepares status and files ChargeSlip/HCFA on a loop.</p>${getBirthBillTenantId() ? `<p class="muted" style="margin-top:8px;color:#9fe0d8;">Practice tenant #${escapeHtml(getBirthBillTenantId())}</p>` : ''}</div>` : ''}
-          ${getApiKey().trim() ? '' : '<div class="card" style="margin-top:14px;background:#4a1f28;border-color:#ef476f;"><strong style="color:#ffb4c1">Access needed</strong><p class="muted" style="margin-top:8px;color:#ffd5dd">Save the command key below to unlock live billing data. The overlay now opens safely without crashing when protected endpoints return 401.</p></div>'}
+            : `Keep <strong style="color:#edf2f7">ClientCare</strong> open for real charting and billing. Use this page beside it for the live queue, VOB notes, ${escapeHtml(getBillingInvokeLabel())} (voice/chat), and quick actions — not a separate product, an assistant to what you already use.`)}</p>
+          ${isBirthBillMode ? `<div class="card" style="margin-top:14px;background:#16353a;border-color:#2a6b6b;"><strong style="color:#9fe0d8">${isPresentMode ? 'You do not have to run this' : 'Sherry does nothing here'}</strong><p class="muted" style="margin-top:8px;color:#c9e8e4;line-height:1.5"><strong>Forever-chase</strong> = unpaid/underpaid stays open until paid enough or written no-liability denial.<br/><strong>Next action</strong> = what the <em>system</em> is doing (file claim, ask insurer) — not homework for the midwife.<br/><strong>Hands-off</strong> = after ClientCare is connected once, BirthBill prepares status and files ChargeSlip/HCFA on a loop.</p>${getBirthBillTenantId() ? `<p class="muted" style="margin-top:8px;color:#9fe0d8;">Practice tenant #${escapeHtml(getBirthBillTenantId())}</p>` : ''}</div>` : ''}
+          ${(!getApiKey().trim() && !isPresentMode) ? '<div class="card" style="margin-top:14px;background:#4a1f28;border-color:#ef476f;"><strong style="color:#ffb4c1">Access needed</strong><p class="muted" style="margin-top:8px;color:#ffd5dd">Save the command key below to unlock live billing data. The overlay now opens safely without crashing when protected endpoints return 401.</p></div>' : ''}
+          ${isPresentMode ? '<p class="muted" style="margin-top:12px;"><a href="/birthbill/for-you" style="color:#9fe0d8;">← Back to the calm walkthrough</a></p>' : ''}
         </div>
-        <div class="card" style="min-width:320px;">
-          <label for="api-key">Command key</label>
+        ${isPresentMode && getApiKey().trim() ? `
+        <div class="card" style="min-width:280px;background:#16353a;border-color:#2a6b6b;">
+          <strong style="color:#9fe0d8;">Presentation mode</strong>
+          <p class="muted" style="margin-top:8px;color:#c9e8e4;line-height:1.5;">Access is already saved on this browser. Technical keys stay hidden so this view stays calm.</p>
+        </div>` : `
+        <div class="card" style="min-width:320px;${isPresentMode ? 'opacity:.92;' : ''}">
+          <label for="api-key">${isPresentMode ? 'Adam access (hidden from normal midwife use)' : 'Command key'}</label>
           <input id="api-key" type="password" value="${escapeHtml(getApiKey())}" placeholder="x-api-key">
-          <label for="operator-email" style="margin-top:10px">Your email (operator)</label>
+          <label for="operator-email" style="margin-top:10px">${isPresentMode ? 'Contact email' : 'Your email (operator)'}</label>
           <input id="operator-email-header" type="email" value="${escapeHtml(getOperatorEmail())}" placeholder="you@practice.com">
           <div style="margin-top:10px"><button id="save-key">Save access</button></div>
-        </div>
+        </div>`}
       </div>
 
       <div class="cc-section-label">At a glance</div>
@@ -5023,8 +5032,9 @@
       </div>
     `;
 
-    document.getElementById('save-key').addEventListener('click', async () => {
-      setApiKey(document.getElementById('api-key').value);
+    document.getElementById('save-key')?.addEventListener('click', async () => {
+      const keyInput = document.getElementById('api-key');
+      if (keyInput) setApiKey(keyInput.value);
       setOperatorEmail(document.getElementById('operator-email-header').value);
       await loadDashboard();
     });

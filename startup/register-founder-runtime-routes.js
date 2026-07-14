@@ -212,6 +212,9 @@ export async function registerFounderRuntimeRoutes(app, deps) {
       const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
       res.redirect(302, "/overlay/clientcare-collections-welcome.html" + qs);
     });
+    app.get(["/birthbill/for-you", "/birthbill/sherry", "/for-sherry"], (_req, res) => {
+      res.redirect(302, "/overlay/clientcare-for-sherry.html");
+    });
     logger.info("✅ [CLIENTCARE-BILLING] Founder-builder routes mounted at /api/v1/clientcare-billing + /birthbill");
   } catch (err) {
     logger.warn?.({ err: err.message }, "[CLIENTCARE-BILLING] founder-lane mount failed (non-fatal)");
