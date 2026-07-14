@@ -7,6 +7,10 @@ const GRAPHIC_MODELS = Object.freeze({
   photo: 'black-forest-labs/flux-1.1-pro',
 });
 
+export function getReplicateApiToken() {
+  return String(process.env.REPLICATE_API_TOKEN || process.env.REPLICATE_API || '').trim() || null;
+}
+
 function normalizeAssetType(assetType) {
   return assetType === 'vector' || assetType === 'photo' ? assetType : 'thumbnail';
 }
@@ -22,7 +26,7 @@ export function estimateGraphicDesignCost(request = {}) {
   return {
     cents: perImageCents * count,
     model: GRAPHIC_MODELS[assetType],
-    gated: !process.env.REPLICATE_API_TOKEN,
+    gated: !getReplicateApiToken(),
   };
 }
 
@@ -41,12 +45,13 @@ function resolveReplicateOutputUrl(output) {
 }
 
 export default async function runGraphicDesign({ job, logger, storage }) {
-  if (!process.env.REPLICATE_API_TOKEN) {
+  const apiToken = getReplicateApiToken();
+  if (!apiToken) {
     return {
       ok: false,
       gated: true,
       error: 'REPLICATE_API_TOKEN_REQUIRED',
-      hint: 'Set REPLICATE_API_TOKEN to enable graphic_design (Ideogram/Recraft/Flux via Replicate).',
+      hint: 'Set REPLICATE_API_TOKEN (or REPLICATE_API) to enable graphic_design (Ideogram/Recraft/Flux via Replicate).',
     };
   }
 
@@ -76,7 +81,7 @@ export default async function runGraphicDesign({ job, logger, storage }) {
   let output;
   try {
     const { default: Replicate } = await import('replicate');
-    const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });
+    const replicate = new Replicate({ auth: apiToken });
     output = await replicate.run(modelId, {
       input: {
         prompt: finalPrompt,

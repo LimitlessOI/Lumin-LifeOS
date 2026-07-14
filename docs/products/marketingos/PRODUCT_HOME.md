@@ -13,7 +13,7 @@
 | **Machine manifest** | `docs/products/marketingos/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/marketing/*` + `/marketing/*` UI (legacy `/api/v1/socialmediaos/*` not mounted on founder runtime — named blocker `LEGACY_SOCIALMEDIAOS_404`) |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Strong-model copy, distinct CTR thumbs, earned-attention beats. |
+| **Last Updated** | 2026-07-14 — SMOS YouTube thumbs prefer Ideogram via Replicate (`REPLICATE_API`) when available; Sharp compose remains fallback. |
 
 ---
 
@@ -1356,6 +1356,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **Ideogram thumbs via Replicate** — `tryIdeogramThumbnail` prefers Ideogram over Sharp compose when `REPLICATE_API` present; `thumbnailSource` on cards. | Adam: finish Replicate wiring into SMOS. | ✅ | — | tip after deploy |
 | 2026-07-14 | **SMOS creative v2** — Distinct thumbnail layouts + click-trigger punch lines; strong-model (`claude_sonnet`) talk rewrite after YouTube research; sales/click psychology + earned-attention `retention_beats` (0–10s earns next…); deeper shelf (relevance + viewCount). | Adam: thumbs terrible/same; copy mid — use higher model, more research, sales principles, every 10s earns next 10s. | ✅ | — | tip after deploy |
 | 2026-07-14 | **YouTube SMOS Intelligence** — Niche playbook resolver (realtor = relocation → buyer intel; insurance + founder variants). Real YouTube search + views/subs velocity + gap into suggestions. Titles researched with `research_basis`. Thumbs = face hero + 3–5 word TITLE overlay (no random channel frames). Real competitor shelf thumbs. `channel_ops` refresh/A-B/sequel for leads. UI truth on `/marketing`. | Adam: thumbs were shit; research titles/velocity/gap; beat competition; niche-aware (relocation first for realtor); leads not views; offer improve old videos. | ✅ | — | tip after deploy |
 | 2026-07-13 | **Prime-time SMOS surface** — Real vertical media cards; sharp-composited competitive thumbnails (face + channel frame + bold overlay); CTR grade + YouTube shelf test; hover tips everywhere; interactive product tour; public channel URL fallback when YouTube Data API is disabled; `POST /youtube/channel-url`. | Adam: looks second-rate; needs real cards, competing thumbnails from his photo/videos, shelf test, tips, tour — make it amazing / prime time. | ✅ | — | tip after deploy; enable YouTube Data API v3 for full face/frame pull |

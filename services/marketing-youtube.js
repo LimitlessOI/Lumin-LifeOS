@@ -266,6 +266,39 @@ async function fetchImageBuffer(url, timeoutMs = 8000) {
   }
 }
 
+async function tryIdeogramThumbnail({ title, overlay, market = '', angle = '', cardIndex = 0 }) {
+  try {
+    const { default: runGraphicDesign, getReplicateApiToken } = await import('./creative-engine/modes/graphic-design.js');
+    if (!getReplicateApiToken()) return null;
+
+    const punch = String(overlay || title || '').trim().slice(0, 48);
+    const prompt = [
+      'YouTube thumbnail, 16:9, ultra high contrast, bold readable text only:',
+      `"${punch}"`,
+      market ? `Market: ${market}.` : '',
+      angle ? `Angle: ${angle}.` : '',
+      'Professional realtor/creator style, face-friendly negative space on one side,',
+      'no watermark, no tiny text, no clutter, designed to beat the shelf.',
+      `Variant ${Number(cardIndex) + 1}.`,
+    ].filter(Boolean).join(' ');
+
+    const out = await Promise.race([
+      runGraphicDesign({
+        job: {
+          request_json: { prompt, assetType: 'thumbnail', aspectRatio: '16:9' },
+          owner_id: 'marketing-youtube',
+        },
+      }),
+      new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 45000)),
+    ]);
+
+    if (!out?.ok || !out.publicUrl) return null;
+    return { thumbnailUrl: out.publicUrl, model: out.model || 'ideogram-ai/ideogram-v3-turbo' };
+  } catch {
+    return null;
+  }
+}
+
 async function composeCompetitiveThumbnail({
   title,
   hook,
@@ -1545,6 +1578,23 @@ export function createYouTubeService(poolOrDeps = {}) {
         market: playbook?.market || '',
         angle: draft.angle,
       });
+      // Prefer Ideogram (Replicate) when available — real designed thumb with readable text.
+      // Keep composed Sharp thumb as fallback / alternate.
+      const aiThumb = await tryIdeogramThumbnail({
+        title,
+        overlay: thumb.overlayText || selectedHook,
+        market: playbook?.market || '',
+        angle: draft.angle,
+        cardIndex: idx,
+      });
+      if (aiThumb?.thumbnailUrl) {
+        thumb.composedThumbnailUrl = thumb.thumbnailUrl;
+        thumb.thumbnailUrl = aiThumb.thumbnailUrl;
+        thumb.thumbnailSource = 'ideogram_replicate';
+        thumb.model = aiThumb.model || null;
+      } else {
+        thumb.thumbnailSource = thumb.thumbnailSource || 'composed';
+      }
       const pack = {
         ...draft,
         hook: selectedHook,
@@ -1585,6 +1635,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         thumbnailFaceUrl: thumb.faceUrl,
         thumbnailBgUrl: null,
         thumbnailComposed: !!thumb.composed,
+        thumbnailSource: thumb.thumbnailSource || 'composed',
         competition: thumb.competition,
         serpPreview: {
           ourRank: thumb.competition?.serpRank || 3,

@@ -1480,6 +1480,10 @@ export async function ingestAll(businessInfo, options = {}) {
     businessInfo.assetData = result.assetData;
     result.businessInfoUpdated = true;
 
+    // When no real hero photos exist, generate one via Creative Engine (Flux on Replicate).
+    // Prefer scraped imagery; AI is fallback only so we never invent a fake "photo of the business."
+    await maybeFillGeneratedHero(businessInfo, result);
+
     // 6. Industry benchmarks
     result.industryBenchmarks = await computeIndustryBenchmarks(businessInfo, result.assetData, { callCouncil, logger: ingestLogger });
     businessInfo.industryBenchmarks = result.industryBenchmarks;
@@ -1499,6 +1503,57 @@ export async function ingestAll(businessInfo, options = {}) {
   });
 
   return result;
+}
+
+/**
+ * If ingestion found zero hero photos, generate one Flux photo via Creative Engine.
+ * Never invents a photo of a specific person/place — atmosphere/category only.
+ */
+async function maybeFillGeneratedHero(businessInfo, result) {
+  const heroes = result?.assetData?.images?.hero;
+  if (Array.isArray(heroes) && heroes.length > 0) return;
+  try {
+    const { default: runGraphicDesign, getReplicateApiToken } = await import('./creative-engine/modes/graphic-design.js');
+    if (!getReplicateApiToken()) return;
+
+    const name = String(businessInfo.businessName || 'local business').slice(0, 80);
+    const industry = String(businessInfo.industry || 'professional services').slice(0, 60);
+    const loc = String(businessInfo.location || '').slice(0, 60);
+    const prompt = [
+      `Photorealistic website hero photograph for ${name}, a ${industry}`,
+      loc ? `based in ${loc}` : '',
+      'Warm trustworthy premium atmosphere, natural light, shallow depth of field.',
+      'No text, no logos, no watermarks, no readable signs, no faces of real celebrities.',
+    ].filter(Boolean).join(' ');
+
+    const out = await withTimeout(
+      runGraphicDesign({
+        job: {
+          request_json: { prompt, assetType: 'photo', aspectRatio: '16:9' },
+          owner_id: 'site-builder',
+        },
+        logger: ingestLogger,
+      }),
+      55_000,
+      'graphic_design_hero'
+    );
+
+    if (!out?.ok || !out.publicUrl) {
+      ingestLogger.warn('[ASSET] generated hero skipped', { error: out?.error || 'no_url' });
+      return;
+    }
+
+    if (!result.assetData) result.assetData = { images: {} };
+    if (!result.assetData.images) result.assetData.images = {};
+    result.assetData.images.hero = [out.publicUrl];
+    result.assetData.images.generatedHero = true;
+    result.assetData.images.all = [out.publicUrl, ...(result.assetData.images.all || [])];
+    businessInfo.heroImages = [out.publicUrl];
+    businessInfo.assetData = result.assetData;
+    ingestLogger.info('[ASSET] generated Flux hero fallback', { url: out.publicUrl.slice(0, 80) });
+  } catch (err) {
+    ingestLogger.warn('[ASSET] generated hero failed', { error: err.message });
+  }
 }
 
 export default { ingestAll };

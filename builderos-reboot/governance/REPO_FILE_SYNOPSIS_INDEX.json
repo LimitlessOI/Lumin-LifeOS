@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T06:50:48.237Z",
+  "generated_at": "2026-07-14T07:23:43.131Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11519,
   "files": [
@@ -36916,9 +36916,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 537000,
-      "mtime": "2026-07-14T06:49:54.847Z",
-      "indexed_at": "2026-07-14T06:50:48.237Z"
+      "bytes": 537436,
+      "mtime": "2026-07-14T07:23:20.543Z",
+      "indexed_at": "2026-07-14T07:23:43.131Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39176,9 +39176,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 7520,
-      "mtime": "2026-07-14T06:50:45.126Z",
-      "indexed_at": "2026-07-14T06:50:48.237Z"
+      "bytes": 7675,
+      "mtime": "2026-07-14T07:23:15.206Z",
+      "indexed_at": "2026-07-14T07:23:43.131Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -39590,9 +39590,9 @@
     {
       "path": "docs/products/marketingos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — MarketingOS",
-      "bytes": 112082,
-      "mtime": "2026-07-14T06:07:07.536Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 112380,
+      "mtime": "2026-07-14T07:23:32.445Z",
+      "indexed_at": "2026-07-14T07:23:43.131Z"
     },
     {
       "path": "docs/products/marketingos/socialmediaos/conversations/2026-06-29-producer-director-model.md",
@@ -39861,9 +39861,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 123874,
-      "mtime": "2026-07-14T06:34:06.010Z",
-      "indexed_at": "2026-07-14T06:34:17.669Z"
+      "bytes": 123959,
+      "mtime": "2026-07-14T07:23:40.180Z",
+      "indexed_at": "2026-07-14T07:23:43.131Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -82526,9 +82526,9 @@
     {
       "path": "services/creative-engine/modes/graphic-design.js",
       "synopsis": "Exports estimateGraphicDesignCost — services/creative-engine/modes/graphic-design.js.",
-      "bytes": 3988,
-      "mtime": "2026-07-14T06:23:31.314Z",
-      "indexed_at": "2026-07-14T06:24:05.964Z"
+      "bytes": 4140,
+      "mtime": "2026-07-14T07:22:51.809Z",
+      "indexed_at": "2026-07-14T07:23:43.131Z"
     },
     {
       "path": "services/creative-engine/modes/photo-polish.js",
@@ -85210,9 +85210,9 @@
     {
       "path": "services/marketing-youtube.js",
       "synopsis": "MarketingOS YouTube OAuth + channel analytics + video suggestion packs",
-      "bytes": 80481,
-      "mtime": "2026-07-14T06:22:45.358Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 82552,
+      "mtime": "2026-07-14T07:23:11.064Z",
+      "indexed_at": "2026-07-14T07:23:43.131Z",
       "ssot": [
         "docs/products/marketingos/PRODUCT_HOME.md"
       ]
@@ -86304,9 +86304,9 @@
     {
       "path": "services/site-builder-asset-ingestion.js",
       "synopsis": "Site Builder Asset Ingestion — discover and pull real assets",
-      "bytes": 63988,
-      "mtime": "2026-07-13T20:29:53.087Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 66404,
+      "mtime": "2026-07-14T07:22:54.377Z",
+      "indexed_at": "2026-07-14T07:23:43.131Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

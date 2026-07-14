@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — REPLICATE_API confirmed live + wired into Site Builder + SMOS
+
+Adam: token is in Railway as `REPLICATE_API` — do you see it / finish it. KNOW: tip `replicateConfigured:true`, registry shows both `REPLICATE_API` and aliased `REPLICATE_API_TOKEN` present, real Ideogram render succeeded. Finished consumer wire: Site Builder Flux hero fallback when no scraped hero; SMOS Ideogram thumbs preferred over Sharp compose.
+
 ## 2026-07-14 — Replicate env alias: REPLICATE_API → REPLICATE_API_TOKEN
 
 Adam set Railway var as `REPLICATE_API` (not `REPLICATE_API_TOKEN`). Tip health still `replicateConfigured:false`. Fix: `applyEnvAliases()` in `config/runtime-env.js` + env-validator / registry health / provider-key-health accept the short name. Prefer renaming to `REPLICATE_API_TOKEN` when convenient; alias keeps graphics/video live either way.
