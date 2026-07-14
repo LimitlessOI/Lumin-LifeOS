@@ -76,7 +76,7 @@ export async function runGovernedShippingQueue({
     if (!passed) {
       // SENTRY/pipe refused it — governed block, surfaced, run stops (fail-closed).
       await signal({ kind: 'step_blocked_by_governance', mission_id, blueprint_id, step_id, index: i, httpStatus: result?.httpStatus, gap_type: result?.body?.gap_type, sentry: result?.body?.sentry?.implementation_status, resume_from: i });
-      return { ok: false, blocked: true, step_id, index: i, httpStatus: result?.httpStatus, resume_from: i, ...summary, shipped };
+      return { ok: false, blocked: true, step_id, index: i, httpStatus: result?.httpStatus, body: result?.body, resume_from: i, ...summary, shipped };
     }
 
     shipped.push({ step_id, index: i, assertion_provenance: authored.provenance, codegen: result?.body?.codegen || null });

@@ -7,10 +7,12 @@
  * (factory-staging/startup/register-routes.js) exposes, WITHOUT re-registering the
  * staging GET /health (which would collide with the production /health).
  *
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import express from 'express';
 import fs from 'node:fs';
+import os from 'node:os';
+import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
 import { autoRegisterProductModules } from '../startup/auto-register-product-modules.js';
@@ -95,6 +97,19 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               });
               const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
               if (content && content.trim()) {
+                // Fail-fast: reject syntax-broken codegen before it reaches SENTRY.
+                // node --check parses only; it does not load modules, so missing deps
+                // do not fail the check. We use .mjs to force ESM parsing.
+                const syntaxCheckFile = path.join(os.tmpdir(), `factory-codegen-${Date.now()}.mjs`);
+                try {
+                  fs.writeFileSync(syntaxCheckFile, content);
+                  execFileSync(process.execPath, ['--check', syntaxCheckFile]);
+                } catch (err) {
+                  lastError = `syntax_check_failed:${member}: ${String(err?.message || err)}`;
+                  try { fs.unlinkSync(syntaxCheckFile); } catch {}
+                  continue;
+                }
+                try { fs.unlinkSync(syntaxCheckFile); } catch {}
                 // Prefer real usage when council returns an object; otherwise estimate from text length.
                 const usage = (raw && typeof raw === 'object' && raw.usage) ? raw.usage : null;
                 const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);

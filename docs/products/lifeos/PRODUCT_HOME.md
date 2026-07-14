@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Reset `docs/products/lifeos/BUILD_QUEUE.json` s12 from `blocked` to `pending` with `attempts: 0` and `last_error`/`last_attempt_at` cleared; `routes/factory-mount-routes.js` SENTRY harness now always re-probes `http://127.0.0.1:${PORT}` after runtime reload so `module_mounts` tests the current Railway container, not a random peer; `services/governed-autonomous-shipping-loop.js` `markShippedStepsDone` also clears `blocker_class`, `claim_level`, `park_until`, `revive_count` on done. The governed loop will ship `routes/lifeos-perfect-day-routes.js` and prove `GET /api/v1/lifeos/perfect-day/health` 200. |
+| **Last Updated** | 2026-07-14 — s12 Perfect Day route unblocked: `docs/products/lifeos/BUILD_QUEUE.json` s12 reset from `blocked` to `pending` with `attempts: 0`, `last_error`/`last_attempt_at` cleared, `authoring.tiers: ['gemini_flash']`, spec aligned to `req.body.user_id`/`deps.requireKey`/`res.json(result)`, and `file_contains` tightened; s13 set to `write_file_exact` with the current `config/auto-registered-product-modules.json` exact content. Factory `codegenRunner` now runs `node --check` on generated ESM, `toGovernedShipStep` propagates `authoring.tiers` and supports `write_file_exact`, and `governed-shipping-runner` blocked response includes SENTRY `body`. |
 ---
 
 ## Founder conversations (2026-06-29)

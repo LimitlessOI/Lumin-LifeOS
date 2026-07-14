@@ -115,22 +115,32 @@ export function toGovernedShipStep(step, { product_id } = {}) {
 
   const rawSpec = step?.spec || step?.task || '';
   const spec = normalizeCommonJsToEsm(rawSpec, target);
-  return {
-    ok: true,
-    step: {
-      step_id: step?.id || step?.step_id || `bq-${target}`,
-      action_type: 'author_then_write',
-      target_file: target,
-      sandbox_boundary: sandboxBoundaryForTarget(target),
-      authoring: {
-        task: step?.task || `Build ${target}`,
-        spec,
-        max_output_tokens: Number(step?.max_output_tokens || step?.authoring?.max_output_tokens) || 8000,
-      },
-      assertion_spec: assessment.assertion_spec,
-      ...(product_id ? { product_id } : {}),
-    },
+  const stepAuthoring = step?.authoring || {};
+  const tierOverride = Array.isArray(stepAuthoring.tiers) ? stepAuthoring.tiers : undefined;
+  const maxOutputTokens = Number(step?.max_output_tokens || stepAuthoring.max_output_tokens) || 8000;
+
+  const governedStep = {
+    step_id: step?.id || step?.step_id || `bq-${target}`,
+    target_file: target,
+    sandbox_boundary: sandboxBoundaryForTarget(target),
+    assertion_spec: assessment.assertion_spec,
+    ...(product_id ? { product_id } : {}),
   };
+
+  if (step?.action_type === 'write_file_exact' && step?.exact_inputs?.exact_content != null) {
+    governedStep.action_type = 'write_file_exact';
+    governedStep.exact_inputs = { exact_content: step.exact_inputs.exact_content };
+  } else {
+    governedStep.action_type = 'author_then_write';
+    governedStep.authoring = {
+      task: step?.task || `Build ${target}`,
+      spec,
+      max_output_tokens: maxOutputTokens,
+      ...(tierOverride ? { tiers: tierOverride } : {}),
+    };
+  }
+
+  return { ok: true, step: governedStep };
 }
 
 /**
