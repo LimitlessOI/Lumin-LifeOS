@@ -423,49 +423,91 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   async function navigateToTransactionDesk(session) {
     // Strategy 1: SP-initiated SSO — the canonical Clareity→TransactionDesk entry point for GLVAR.
     // After Clareity login the session cookie authenticates this redirect automatically.
-    const GLVAR_TD_SSO_URL =
-      'https://pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR';
+    // Strategy 2: return to Clareity portal and click the TD tile (SSO often leaves us off-portal).
+    const portalUrlBefore = session.page.url();
+    const ssoCandidates = [
+      'https://pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR',
+      'https://pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.aspx?MLS=GLVAR',
+      'https://www.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR',
+    ];
+    const lastSsoUrls = [];
 
-    logger.info?.('[TC-BROWSER] Attempting direct SSO to TransactionDesk via SP-initiated URL');
-    try {
-      await session.navigate(GLVAR_TD_SSO_URL);
-      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
-      await session.page.waitForTimeout(2000);
-
-      const urlAfterSso = session.page.url();
-      if (_urlLooksLikeTransactionDesk(urlAfterSso)) {
-        const sp = await screenshotPath('transactiondesk-loaded-via-sso');
-        await session.page.screenshot({ path: sp });
-        logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk loaded via direct SSO URL');
-        return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
+    async function adoptTdTabIfAny(timeoutMs = 8000) {
+      const browser = session.browser;
+      if (!browser) return null;
+      const before = new Set((await browser.pages()).map((p) => p));
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        for (const p of await browser.pages()) {
+          const u = p.url();
+          if (_urlLooksLikeTransactionDesk(u) || /transactiondesk\.com|lonewolf/i.test(u)) {
+            if (typeof session.setPage === 'function') await session.setPage(p);
+            return p;
+          }
+        }
+        const fresh = (await browser.pages()).filter((p) => !before.has(p));
+        for (const p of fresh.reverse()) {
+          if (typeof session.setPage === 'function') await session.setPage(p);
+          return p;
+        }
+        await new Promise((r) => setTimeout(r, 350));
       }
-      // Might have landed on a TD login page — check if we're on pr.transactiondesk.com
-      if (urlAfterSso.includes('transactiondesk.com') || urlAfterSso.includes('lonewolf')) {
-        const sp = await screenshotPath('transactiondesk-loaded-via-sso');
-        await session.page.screenshot({ path: sp });
-        logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk domain reached via direct SSO');
-        return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
-      }
-      logger.warn?.({ urlAfterSso }, '[TC-BROWSER] Direct SSO URL did not land on TD — falling back to portal scan');
-    } catch (ssoErr) {
-      logger.warn?.({ err: ssoErr.message }, '[TC-BROWSER] Direct SSO navigation threw — falling back to portal scan');
+      return null;
     }
 
-    // Strategy 2: Scan portal page for TD link/tile
-    // First give the page a moment to fully render any dynamic JS tiles
-    await session.page.waitForTimeout(2500);
+    for (const ssoUrl of ssoCandidates) {
+      logger.info?.({ ssoUrl }, '[TC-BROWSER] Attempting direct SSO to TransactionDesk');
+      try {
+        await session.navigate(ssoUrl);
+        await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+        await session.page.waitForTimeout(1500);
+        await adoptTdTabIfAny(4000);
+
+        const urlAfterSso = session.page.url();
+        lastSsoUrls.push(urlAfterSso);
+        if (_urlLooksLikeTransactionDesk(urlAfterSso) || /transactiondesk\.com|lonewolf/i.test(urlAfterSso)) {
+          const sp = await screenshotPath('transactiondesk-loaded-via-sso');
+          await session.page.screenshot({ path: sp });
+          logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk loaded via direct SSO URL');
+          return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
+        }
+        logger.warn?.({ urlAfterSso, ssoUrl }, '[TC-BROWSER] SSO candidate did not land on TD');
+      } catch (ssoErr) {
+        lastSsoUrls.push(`ERR:${ssoErr.message}`);
+        logger.warn?.({ err: ssoErr.message, ssoUrl }, '[TC-BROWSER] Direct SSO navigation threw');
+      }
+    }
+
+    // Return to Clareity portal before scanning for tiles (SSO navigates away).
+    const portalCandidates = [
+      portalUrlBefore,
+      'https://glvar.clareityiam.net/idp/profile/SAML2/Redirect/SSO',
+      'https://glvar.clareityiam.net/',
+      GLVAR_LOGIN_URL,
+    ].filter((u, i, arr) => u && arr.indexOf(u) === i && !/transactiondesk/i.test(u));
+
+    for (const portal of portalCandidates) {
+      try {
+        await session.navigate(portal);
+        await session.page.waitForTimeout(2000);
+        if (/clareity|glvar|matrix|flexmls/i.test(session.page.url())) break;
+      } catch {
+        /* try next */
+      }
+    }
+    await session.page.waitForTimeout(1500);
 
     const tdSelectors = [
-      'a[href*="transactiondesk"]',
-      'a[href*="pr.transactiondesk"]',
-      'a[href*="ziplogix"]',
-      'a[href*="tdnavigator"]',
-      'a[href*="lonewolf"]',
+      'a[href*="transactiondesk" i]',
+      'a[href*="pr.transactiondesk" i]',
+      'a[href*="ziplogix" i]',
+      'a[href*="tdnavigator" i]',
+      'a[href*="lonewolf" i]',
     ];
 
     let clicked = false;
     for (const sel of tdSelectors) {
-      const el = await session.page.$(sel);
+      const el = await session.page.$(sel).catch(() => null);
       if (el) {
         await el.click();
         clicked = true;
@@ -474,26 +516,37 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     }
 
     if (!clicked) {
-      // Text/title-based tile search (Clareity dashboard uses app tiles, not plain <a> tags)
-      const linkFound = await session.page.evaluate(() => {
-        const candidates = Array.from(document.querySelectorAll('a, button, [role="button"], [role="link"], [class*="tile"], [class*="app"], [class*="icon"]'));
-        const td = candidates.find(l =>
-          /transactiondesk|transaction desk|lone\s*wolf\s*transactions/i.test(
-            `${l.textContent || ''} ${l.getAttribute?.('title') || ''} ${l.getAttribute?.('aria-label') || ''}`
+      clicked = await session.page.evaluate(() => {
+        const candidates = Array.from(
+          document.querySelectorAll('a, button, [role="button"], [role="link"], [class*="tile"], [class*="app"], [class*="icon"], img')
+        );
+        const td = candidates.find((l) =>
+          /transactiondesk|transaction desk|lone\s*wolf\s*transactions|zip\s*form|zipform/i.test(
+            `${l.textContent || ''} ${l.getAttribute?.('title') || ''} ${l.getAttribute?.('aria-label') || ''} ${l.getAttribute?.('alt') || ''} ${l.getAttribute?.('href') || ''}`
           )
         );
-        if (td) { td.click(); return true; }
+        if (td) {
+          (td.closest?.('a') || td).click();
+          return true;
+        }
         return false;
       });
-      clicked = linkFound;
+    }
+
+    if (!clicked) {
+      const launch = await clickTransactionLaunchIfPresent(session);
+      clicked = !!launch.clicked;
     }
 
     if (!clicked) {
       const sp = await screenshotPath('glvar-no-td-link');
       await session.page.screenshot({ path: sp, fullPage: true });
-      throw new Error(`TransactionDesk link not found on GLVAR portal. Screenshot: ${sp}`);
+      throw new Error(
+        `TransactionDesk link not found on GLVAR portal (after SSO tries: ${lastSsoUrls.join(' | ')}). Screenshot: ${sp}`
+      );
     }
 
+    await adoptTdTabIfAny(10000);
     await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
 
     const url = session.page.url();

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — SkySlope new-tab nav + durable `tc_browser_jobs` + async email-search. |
+| **Last Updated** | 2026-07-14 — Tip SkySlope PASS; harden GLVAR→TD SSO fallback (return to portal). |
 
 ---
 
@@ -978,7 +978,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
-| 2026-07-14 | **SkySlope nav + durable jobs + async email-search** — `navigateToSkySlope` adopts Okta new-tab/target; `createSession` exposes `browser`/`setPage`; `tc_browser_jobs` migration + persist/load for listing sync, TD workflows, email-search; `POST /intake/email-search` **202** by default; `test-skyslope-login` returns real `ok`/`needs_human`. | Tip: SkySlope left on Okta/sign-in; multi-instance job poll empty; email-search 502 on edge timeout. | ✅ | | tip verify after redeploy |
+| 2026-07-14 | **SkySlope nav + durable jobs + async email-search** — `navigateToSkySlope` adopts Okta new-tab/target; `createSession` exposes `browser`/`setPage`; `tc_browser_jobs` migration + persist/load for listing sync, TD workflows, email-search; `POST /intake/email-search` **202** by default; `test-skyslope-login` returns real `ok`/`needs_human`. | Tip: SkySlope left on Okta/sign-in; multi-instance job poll empty; email-search 502 on edge timeout. | ✅ | | tip `59931f8059`: SkySlope `ok:true` via `okta_tile_new_tab`; email-search 202→completed; listing job poll works (TD link fail separate) |
 | 2026-07-14 | **Doc intake export alias** — `createTCDocIntake` = `createTcEmailScanAndUpload` + `findExecutedAgreements`/`runFullIntake` wrappers. | Tip email-search 500: createTCDocIntake is not a function. | ✅ | | tip after deploy |
 | 2026-07-14 | **Browser-UI-as-API pack** — harden eXp Okta login (forced `/login/login.htm`, multi-selectors, already-auth recovery, observed fields on fail); `GET /browser/operator-catalog` + `POST /browser/debug-okta`; portal catalog link; `createMLSDealScanner` alias; `access_ready` no longer requires optional Asana; `fill()` tries comma selectors + iframes. | Adam: every TX aspect working; map UI like API when no vendor key. Tip: GLVAR live PASS; SkySlope failed missing Okta username field. | ✅ | | tip `b53294c548` catalog+GLVAR+access_ready PASS; Okta false-auth from enduser in redirect_uri — fix pending ship |
 | 2026-07-13 | **Spam sender rules narrowed** — removed blanket `noreply` auto-spam (false-trashed Google Workspace billing). Keep ccsend/blast domains + subject patterns. | Purge marked Google payment-declined as spam. | ✅ | | tip redeploy |
