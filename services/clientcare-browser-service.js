@@ -3907,16 +3907,220 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         await sleep(1200);
       }
 
-      // Daily Super Bill — tip fee-schedule digSelection hangs; try vendor alternate create path after codes.
+      // Daily Super Bill — tip fee-schedule digSelection hangs; drive this alternate create path hard.
       let dailySuperBill = { clicked: false };
+      const pagesBeforeDsb = (await session.page.browser().pages()).map((p) => p.url());
       dailySuperBill = await session.page.evaluate(() => {
         const btn = Array.from(document.querySelectorAll('button, input[type="button"], a, span'))
           .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
         if (!btn) return { clicked: false, present: false };
+        const meta = {
+          text: (btn.textContent || btn.value || '').trim().slice(0, 40),
+          tag: btn.tagName,
+          id: btn.id || null,
+          href: btn.getAttribute?.('href') || null,
+          onclick: (btn.getAttribute?.('onclick') || '').slice(0, 200),
+        };
         btn.click();
-        return { clicked: true, present: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) };
+        return { clicked: true, present: true, ...meta };
       });
-      if (dailySuperBill.clicked) await sleep(3000);
+      if (dailySuperBill.clicked) {
+        await sleep(2500);
+        const pagesAfterDsb = await session.page.browser().pages();
+        const newPages = pagesAfterDsb.filter((p) => !pagesBeforeDsb.includes(p.url()));
+        dailySuperBill.popups = [];
+        for (const popup of newPages) {
+          try {
+            await popup.waitForSelector('body', { timeout: 5000 }).catch(() => {});
+            const snap = await popup.evaluate(() => ({
+              url: location.href,
+              title: document.title || null,
+              preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 600),
+              buttons: Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                .filter((t) => t && t.length < 60)
+                .slice(0, 30),
+            }));
+            dailySuperBill.popups.push(snap);
+            const acted = await popup.evaluate((wantDate) => {
+              const attempts = [];
+              if (wantDate) {
+                for (const el of Array.from(document.querySelectorAll('input'))) {
+                  const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''}`;
+                  if (!/date|dos|service|visit|bill/i.test(ctx) || /dob|birth/i.test(ctx)) continue;
+                  el.value = String(wantDate);
+                  el.dispatchEvent(new Event('change', { bubbles: true }));
+                  attempts.push({ label: 'popup_fill_date', ok: true, id: el.id || el.name || null });
+                  break;
+                }
+              }
+              const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .find((el) => /ok|create|generate|build|process|continue|submit|post|save|yes/i.test((el.textContent || el.value || '').trim()));
+              if (btn) {
+                btn.click();
+                attempts.push({ label: 'popup_click', ok: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) });
+              }
+              return attempts;
+            }, matchedDate || visitDate || null);
+            dailySuperBill.popups[dailySuperBill.popups.length - 1].attempts = acted;
+            await sleep(2000);
+          } catch (err) {
+            dailySuperBill.popups.push({ error: String(err?.message || err).slice(0, 120) });
+          }
+        }
+
+        const inventory = await session.page.evaluate(() => {
+          const visible = (el) => {
+            if (!el) return false;
+            const s = window.getComputedStyle(el);
+            if (s.display === 'none' || s.visibility === 'hidden') return false;
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0;
+          };
+          const roots = Array.from(document.querySelectorAll('.k-window, .modal, .ui-dialog, [role="dialog"], .popup, .fancybox-wrap, iframe'))
+            .filter(visible);
+          const buttons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+            .filter(visible)
+            .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+            .filter((t) => t && t.length < 60)
+            .slice(0, 40);
+          const inputs = Array.from(document.querySelectorAll('input, select, textarea'))
+            .filter(visible)
+            .map((el) => ({
+              tag: el.tagName,
+              id: el.id || null,
+              name: el.name || null,
+              type: el.type || null,
+              value: String(el.value || '').slice(0, 40),
+              placeholder: el.placeholder || null,
+            }))
+            .slice(0, 40);
+          const modalText = roots
+            .map((el) => (el.tagName === 'IFRAME' ? `iframe:${el.src || ''}` : (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 240)))
+            .filter(Boolean)
+            .slice(0, 8);
+          const helpers = Object.getOwnPropertyNames(window)
+            .filter((n) => /super|daily|bill|charge|slip|create|generate/i.test(n) && typeof window[n] === 'function')
+            .slice(0, 30);
+          const lineHints = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service]'))
+            .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+            .filter((t) => /59400|59409|59080|O80|Z37|\$\d/.test(t))
+            .slice(0, 8);
+          return {
+            url: location.href,
+            buttonLabels: buttons,
+            inputs,
+            modalText,
+            helpers,
+            lineHints,
+            bodyPreview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 800),
+          };
+        });
+        dailySuperBill = { ...dailySuperBill, inventory };
+
+        // Fill obvious date/provider fields in any open dialog, then click create/generate/ok.
+        // Avoid re-clicking the main page "Save" here — that runs later with persist proof.
+        const interact = await session.page.evaluate((wantDate) => {
+          const attempts = [];
+          const visible = (el) => {
+            if (!el) return false;
+            const s = window.getComputedStyle(el);
+            if (s.display === 'none' || s.visibility === 'hidden') return false;
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0;
+          };
+          if (wantDate) {
+            for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
+              const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.className || ''}`;
+              if (!/date|dos|service|visit|bill/i.test(ctx)) continue;
+              if (/dob|birth|born/i.test(ctx)) continue;
+              el.focus();
+              el.value = String(wantDate);
+              el.dispatchEvent(new Event('input', { bubbles: true }));
+              el.dispatchEvent(new Event('change', { bubbles: true }));
+              try { window.$(el).trigger('change'); } catch (_) { /* ignore */ }
+              attempts.push({ label: 'fill_date', ok: true, id: el.id || el.name || null, value: String(wantDate) });
+              break;
+            }
+          }
+          for (const name of [
+            'createDailySuperBill',
+            'CreateDailySuperBill',
+            'generateDailySuperBill',
+            'GenerateDailySuperBill',
+            'runDailySuperBill',
+            'DailySuperBill',
+            'OpenDailySuperBill',
+            'openDailySuperBill',
+          ]) {
+            if (typeof window[name] !== 'function') continue;
+            try {
+              window[name]();
+              attempts.push({ label: `helper:${name}`, ok: true });
+              break;
+            } catch (err) {
+              attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+            }
+          }
+          const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+            .filter(visible)
+            .find((el) => {
+              const t = (el.textContent || el.value || '').trim();
+              if (/^save$/i.test(t)) return false;
+              return /^(ok|create|generate|build|process|continue|submit|post)$/i.test(t)
+                || /create|generate|build|process|daily super|super bill|post charges|create claim/i.test(t);
+            });
+          if (btn) {
+            btn.click();
+            attempts.push({ label: 'click_action', ok: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) });
+          } else {
+            attempts.push({ label: 'click_action', ok: false, error: 'no_action_button' });
+          }
+          return {
+            attempts,
+            url: location.href,
+            preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 500),
+          };
+        }, matchedDate || visitDate || null);
+        dailySuperBill.interact = interact;
+        await sleep(2500);
+
+        // Second pass: if a kendo/modal still open, click its primary OK/Create (not bare Save).
+        const followup = await session.page.evaluate(() => {
+          const visible = (el) => {
+            if (!el) return false;
+            const s = window.getComputedStyle(el);
+            if (s.display === 'none' || s.visibility === 'hidden') return false;
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0;
+          };
+          const scope = Array.from(document.querySelectorAll('.k-window, .modal, .ui-dialog, [role="dialog"]')).find(visible) || null;
+          if (!scope) return { clicked: false, reason: 'no_modal' };
+          const btn = Array.from(scope.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+            .filter(visible)
+            .find((el) => {
+              const t = (el.textContent || el.value || '').trim();
+              return /^(ok|create|generate|continue|yes)$/i.test(t) || /create|generate|continue/i.test(t);
+            });
+          if (!btn) return { clicked: false, reason: 'no_modal_action' };
+          btn.click();
+          return { clicked: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) };
+        });
+        dailySuperBill.followup = followup;
+        if (followup.clicked) await sleep(2000);
+
+        dailySuperBill.afterLines = await session.page.evaluate(() => {
+          const lineHints = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service]'))
+            .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+            .filter((t) => /59400|59409|59080|O80|Z37|\$\d/.test(t))
+            .slice(0, 8);
+          return {
+            url: location.href,
+            lineHints,
+            summary: (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300),
+          };
+        });
+      }
 
       const map = await session.page.evaluate((wantName) => {
         const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();

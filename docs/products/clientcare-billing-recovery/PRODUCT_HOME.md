@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Forever-chase seed unblocked: claim upsert no longer needs ON CONFLICT on partial unique index; tip inventory 15 births + 50 notes ready to import. |
+| **Last Updated** | 2026-07-14 — ChargeSlip Daily Super Bill post-click drive: inventory modals/popups/helpers, fill date, click Create/Generate (not bare Save), then prove via Sent Bills/chart 594xx. |
 
 ---
 
@@ -464,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Daily Super Bill drive** — tip Save/DSB click still leaves Sent Bills empty + no chart 594xx. After DSB click: capture onclick/popups, inventory modals/helpers/lineHints, fill date, Create/Generate (not Save), modal follow-up, then Save + persist proof. | Save click alone does not create durable charge. | 0.5h | 0.5h | none | ✅ | pending tip Denise |
 | 2026-07-14 | **ChargeSlip no list-click** — even native row click wedged tip CDP. Select CPT/ICD via dropdown only + Daily Super Bill + Save; prove via Sent Bills/chart. |
 | 2026-07-14 | **ChargeSlip digSelection hang** — tip job hung with no result after digSelectionProcess on real rows. Native click only inside evaluate; always try Daily Super Bill after codes. |
 | 2026-07-14 | **ChargeSlip real row click** — digSelectionProcessDD(fake) throws DiagnosisCodeN. Click real procedure/diagnosis list rows; open Billing tab before chart proof. |
