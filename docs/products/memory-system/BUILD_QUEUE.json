@@ -111,9 +111,10 @@
         "3"
       ],
       "founder_gated": false,
-      "attempts": 1,
-      "last_attempt_at": "2026-07-14T03:34:04.474Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "attempts": 2,
+      "last_attempt_at": "2026-07-14T04:36:52.389Z",
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/memory_routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "commit_sha": "fe0d6a12f2828c621c2913a915c6a01a8b1ea98b"
     },
     {
       "id": "9",
