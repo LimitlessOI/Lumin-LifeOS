@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T20:42:03.702Z",
+  "generated_at": "2026-07-14T20:48:24.896Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11534,
   "files": [
@@ -66560,9 +66560,9 @@
     {
       "path": "routes/quoteRoutes.js",
       "synopsis": "Registers QuoteRoutes routes/handlers (routes/quoteRoutes.js).",
-      "bytes": 4747,
-      "mtime": "2026-07-13T18:57:58.564Z",
-      "indexed_at": "2026-07-14T20:36:15.118Z"
+      "bytes": 374,
+      "mtime": "2026-07-14T20:48:24.896Z",
+      "indexed_at": "2026-07-14T20:48:24.896Z"
     },
     {
       "path": "routes/railway-managed-env-routes.js",
