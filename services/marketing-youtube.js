@@ -1590,6 +1590,9 @@ export function createYouTubeService(poolOrDeps = {}) {
       }
     }
 
+    let copyRewriteError = null;
+    let copyModel = null;
+
     if (typeof callCouncilMember === 'function') {
       try {
         const researchBrief = ideas.map((idea, i) => ({
@@ -1628,97 +1631,103 @@ Channel: ${channelTitle || 'founder'}
 Recent uploads: ${recentTitles.join(' | ') || 'none'}
 
 RESEARCH BRIEF (real shelf — do not invent competitor stats; use these):
-${JSON.stringify(researchBrief, null, 0)}
+${JSON.stringify(researchBrief)}
 
-Return ONLY a JSON array of exactly ${ideas.length} talk cards (same order as brief). Each object:
-{
-  "seed_topic_id": "...",
-  "title": "researched title that can beat the shelf (may improve the brief title)",
-  "why": "why this earns reach-outs",
-  "angle": "...",
-  "click_psychology": "one sentence: why someone clicks THIS thumb/title",
-  "hook": "spoken open <16 words",
-  "hooks": ["3 distinct opens"],
-  "intro": ${JSON.stringify(founderIntro)},
-  "talking_points": ["3 specific bullets"],
-  "close": "lead CTA — comment/message, not smash like",
-  "competitor_strong": "...",
-  "competitor_fail": "...",
-  "competitor_gap": "...",
-  "must_say": ["2-3 non-negotiables"],
-  "film_mode": "teleprompter|bullets|bookends|read_riff|story|interview|analytics|shorts",
-  "lead_weight": 0-100,
-  "retention_beats": [
-    {"range":"0–10s","job":"...","lines":["...","Stay for this: ..."]},
-    {"range":"10–20s","job":"...","lines":["..."]},
-    {"range":"20–30s","job":"...","lines":["..."]},
-    {"range":"30–60s","job":"...","lines":["..."]},
-    {"range":"1–2min","job":"...","lines":["..."]},
-    {"range":"close","job":"...","lines":["..."]}
-  ],
-  "sample_script": ["flat teleprompter lines derived from retention_beats, 10-16 lines"]
-}
+Return ONLY a JSON array of exactly ${ideas.length} talk cards (same order as brief). Each object keys:
+seed_topic_id, title, why, angle, click_psychology, hook, hooks (3), intro, talking_points (3), close,
+competitor_strong, competitor_fail, competitor_gap, must_say (2-3), film_mode, lead_weight,
+retention_beats (array of {range, job, lines} for 0–10s, 10–20s, 20–30s, 30–60s, 1–2min, close),
+sample_script (10-16 teleprompter lines).
 
 Rules:
 - Improve titles using research gaps; do not copy competitor titles.
-- Every retention_beats.lines block must end with or include an earn-the-next promise except close.
+- Every retention beat except close must plant a reason to stay for the next block.
 - Realtor: relocation / buyer-consideration first. No agent lifestyle fluff.
 - Sound like a sharp human who sells with honesty.`;
 
+        const modelOrder = ['claude_sonnet', 'openai_gpt', 'gemini_flash'];
         let raw = null;
-        let modelUsed = 'claude_sonnet';
-        try {
-          raw = await callCouncilMember('claude_sonnet', prompt, { maxTokens: 9000 });
-        } catch (err) {
-          logger?.warn?.({ err }, 'claude_sonnet talk rewrite failed; trying openai_gpt');
-          modelUsed = 'openai_gpt';
-          raw = await callCouncilMember('openai_gpt', prompt, { maxTokens: 9000 });
+        let modelUsed = null;
+        const attemptErrors = [];
+        for (const model of modelOrder) {
+          try {
+            const res = await callCouncilMember(model, prompt, { maxTokens: 8000 });
+            const text = typeof res === 'string' ? res : (res?.text || res?.content || res?.message || '');
+            if (res?.error || res?.ok === false) {
+              attemptErrors.push(`${model}: ${res.error || res.message || 'ok_false'}`);
+              continue;
+            }
+            if (!String(text || '').trim()) {
+              attemptErrors.push(`${model}: empty`);
+              continue;
+            }
+            raw = text;
+            modelUsed = model;
+            break;
+          } catch (err) {
+            attemptErrors.push(`${model}: ${err?.message || err}`);
+          }
         }
-        const text = typeof raw === 'string' ? raw : (raw?.text || raw?.content || '');
-        const match = String(text).match(/\[[\s\S]*\]/);
-        const parsed = match ? JSON.parse(match[0]) : null;
-        if (Array.isArray(parsed) && parsed.length) {
-          ideas = ideas.map((base, i) => {
-            const item = parsed[i] || parsed.find((p) => p.seed_topic_id === base.seed_topic_id) || {};
-            const hooks = buildHooks({ hook: item.hook || base.hook, hooks: item.hooks || base.hooks }, base);
-            const retention_beats = Array.isArray(item.retention_beats) && item.retention_beats.length
-              ? item.retention_beats
-              : buildEarnedAttentionBeats({ ...base, hook: hooks[0], must_say: item.must_say || base.must_say });
-            const merged = {
-              ...base,
-              title: item.title || base.title,
-              why: item.why || base.why,
-              angle: item.angle || base.angle,
-              click_psychology: item.click_psychology || null,
-              hook: hooks[0] || item.hook || base.hook,
-              hooks,
-              intro: item.intro || founderIntro || base.intro,
-              close: item.close || base.close,
-              talking_points: Array.isArray(item.talking_points) && item.talking_points.length
-                ? item.talking_points
-                : base.talking_points,
-              competitor_gap: item.competitor_gap || base.competitor_gap,
-              competitor_strong: item.competitor_strong || base.competitor_strong,
-              competitor_fail: item.competitor_fail || base.competitor_fail,
-              film_mode: item.film_mode || base.film_mode,
-              must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : base.must_say,
-              retention_beats,
-              sample_script: normalizeScriptLines(item.sample_script).length
-                ? normalizeScriptLines(item.sample_script)
-                : buildSampleScript({ ...base, hook: hooks[0], retention_beats }),
-              lead_weight: item.lead_weight || base.lead_weight,
-              copy_model: modelUsed,
-            };
-            merged.lead_intent_score = leadIntentScoreForIdea(merged, playbook);
-            return merged;
-          });
-          source = researchedCount
-            ? `youtube_research_${modelUsed}`
-            : `ai_strong_${modelUsed}`;
+        if (!raw) {
+          copyRewriteError = attemptErrors.join(' | ') || 'all_models_failed';
+          logger?.warn?.({ copyRewriteError }, 'strong-model talk rewrite failed all models');
+        } else {
+          const match = String(raw).match(/\[[\s\S]*\]/);
+          let parsed = null;
+          try {
+            parsed = match ? JSON.parse(match[0]) : null;
+          } catch (parseErr) {
+            copyRewriteError = `json_parse: ${parseErr?.message || parseErr}`;
+          }
+          if (Array.isArray(parsed) && parsed.length) {
+            copyModel = modelUsed;
+            ideas = ideas.map((base, i) => {
+              const item = parsed[i] || parsed.find((p) => p.seed_topic_id === base.seed_topic_id) || {};
+              const hooks = buildHooks({ hook: item.hook || base.hook, hooks: item.hooks || base.hooks }, base);
+              const retention_beats = Array.isArray(item.retention_beats) && item.retention_beats.length
+                ? item.retention_beats
+                : buildEarnedAttentionBeats({ ...base, hook: hooks[0], must_say: item.must_say || base.must_say });
+              const merged = {
+                ...base,
+                title: item.title || base.title,
+                why: item.why || base.why,
+                angle: item.angle || base.angle,
+                click_psychology: item.click_psychology || null,
+                hook: hooks[0] || item.hook || base.hook,
+                hooks,
+                intro: item.intro || founderIntro || base.intro,
+                close: item.close || base.close,
+                talking_points: Array.isArray(item.talking_points) && item.talking_points.length
+                  ? item.talking_points
+                  : base.talking_points,
+                competitor_gap: item.competitor_gap || base.competitor_gap,
+                competitor_strong: item.competitor_strong || base.competitor_strong,
+                competitor_fail: item.competitor_fail || base.competitor_fail,
+                film_mode: item.film_mode || base.film_mode,
+                must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : base.must_say,
+                retention_beats,
+                sample_script: normalizeScriptLines(item.sample_script).length
+                  ? normalizeScriptLines(item.sample_script)
+                  : buildSampleScript({ ...base, hook: hooks[0], retention_beats }),
+                lead_weight: item.lead_weight || base.lead_weight,
+                copy_model: modelUsed,
+              };
+              merged.lead_intent_score = leadIntentScoreForIdea(merged, playbook);
+              return merged;
+            });
+            source = researchedCount
+              ? `youtube_research_${modelUsed}`
+              : `ai_strong_${modelUsed}`;
+          } else if (!copyRewriteError) {
+            copyRewriteError = 'no_json_array_in_model_response';
+          }
         }
       } catch (err) {
+        copyRewriteError = err?.message || 'rewrite_exception';
         logger?.warn?.({ err }, 'strong-model talk rewrite failed; keeping research/playbook packs');
       }
+    } else {
+      copyRewriteError = 'callCouncilMember_unavailable';
     }
 
     ideas = ideas.map((idea) => {
@@ -1752,7 +1761,8 @@ Rules:
       },
       researchedCount,
       researchError,
-      copyModel: ideas[0]?.copy_model || null,
+      copyModel,
+      copyRewriteError,
       youtubeApiError: assets.apiError || researchError || null,
       youtubeApiNext: assets.apiError && /youtube\.googleapis\.com|has not been used|disabled/i.test(String(assets.apiError))
         ? 'Enable YouTube Data API v3 on the Google Cloud project, then Refresh ideas. Or paste your public channel URL below to pull face assets without the API.'
