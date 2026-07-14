@@ -501,6 +501,14 @@ function normalizeScriptLines(raw) {
   return [];
 }
 
+function normalizeBeatLines(lines) {
+  if (Array.isArray(lines)) return lines.map((l) => String(l || '').trim()).filter(Boolean);
+  if (typeof lines === 'string' && lines.trim()) {
+    return lines.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+  }
+  return [];
+}
+
 function buildEarnedAttentionBeats(pack) {
   const hook = String(pack.hook || '').trim();
   const intro = String(pack.intro || DEFAULT_INTRO).trim();
@@ -567,18 +575,21 @@ function buildEarnedAttentionBeats(pack) {
   return beats;
 }
 
+function normalizeRetentionBeats(beats, pack) {
+  if (!Array.isArray(beats) || !beats.length) return buildEarnedAttentionBeats(pack);
+  return beats.map((b) => ({
+    range: String(b?.range || '').trim() || 'beat',
+    job: String(b?.job || '').trim(),
+    lines: normalizeBeatLines(b?.lines),
+  })).filter((b) => b.lines.length);
+}
+
 function buildSampleScript(pack) {
-  if (Array.isArray(pack.retention_beats) && pack.retention_beats.length) {
-    const fromBeats = pack.retention_beats.flatMap((b) => (b.lines || []).map((l) => String(l || '').trim()).filter(Boolean));
-    if (fromBeats.length >= 6) return fromBeats;
-  }
+  const beats = normalizeRetentionBeats(pack.retention_beats, pack);
+  const fromBeats = beats.flatMap((b) => normalizeBeatLines(b.lines));
+  if (fromBeats.length >= 6) return fromBeats;
   const existing = normalizeScriptLines(pack.sample_script);
-  const beats = buildEarnedAttentionBeats(pack);
-  const fromBeats = beats.flatMap((b) => b.lines);
-  if (existing.length >= 8) {
-    // Prefer strong-model script if present, but ensure open still earns next beat
-    return existing;
-  }
+  if (existing.length >= 8) return existing;
   return fromBeats.filter(Boolean);
 }
 
@@ -1516,9 +1527,11 @@ export function createYouTubeService(poolOrDeps = {}) {
       const hooks = buildHooks(draft, fb);
       const must_say = buildMustSay(draft);
       const selectedHook = hooks[0] || hook;
-      const retention_beats = Array.isArray(idea.retention_beats) && idea.retention_beats.length
-        ? idea.retention_beats
-        : buildEarnedAttentionBeats({ ...draft, hook: selectedHook, must_say });
+      const retention_beats = normalizeRetentionBeats(idea.retention_beats, {
+        ...draft,
+        hook: selectedHook,
+        must_say,
+      });
       const sample_script = buildSampleScript({ ...draft, hook: selectedHook, must_say, retention_beats });
       const thumb = await composeCompetitiveThumbnail({
         title,
@@ -1752,9 +1765,11 @@ sample_script (10-14 short lines).`;
           ideas = ideas.map((base, i) => {
             const item = perCard[i] || perCard.find((p) => p.seed_topic_id === base.seed_topic_id) || {};
             const hooks = buildHooks({ hook: item.hook || base.hook, hooks: item.hooks || base.hooks }, base);
-            const retention_beats = Array.isArray(item.retention_beats) && item.retention_beats.length
-              ? item.retention_beats
-              : buildEarnedAttentionBeats({ ...base, hook: hooks[0], must_say: item.must_say || base.must_say });
+            const retention_beats = normalizeRetentionBeats(item.retention_beats, {
+              ...base,
+              hook: hooks[0],
+              must_say: item.must_say || base.must_say,
+            });
             const merged = {
               ...base,
               title: item.title || base.title,
@@ -1799,7 +1814,7 @@ sample_script (10-14 short lines).`;
 
     ideas = ideas.map((idea) => {
       if (idea.lead_intent_score == null) idea.lead_intent_score = leadIntentScoreForIdea(idea, playbook);
-      if (!idea.retention_beats) idea.retention_beats = buildEarnedAttentionBeats(idea);
+      idea.retention_beats = normalizeRetentionBeats(idea.retention_beats, idea);
       return idea;
     });
 
