@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-P26-07-14 — ChargeSlip: fetch SearchBillingSlipPregnancyList directly (no hanging response.json listener). |
+| **Last Updated** | 2026-07-14 — ChargeSlip visit API selects patient (PregnancyID/FullName); live Save next. |
 
 ---
 
@@ -64,7 +64,7 @@ All ClientCare conversations, brainstorms, and session dumps live at:
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-21 — SSOT alignment: **Railway vault / overlay command key** is authoritative when Adam has confirmed variables in Railway; **automated remote HTTP probes** only see `process.env` (and optional `.env`) on the machine running `verify-project.mjs` — a **401 from the verifier is local key drift vs the deployed secret or wrong public host**, not evidence that Railway lacks secrets. Verifier fix: `required_routes` now carry HTTP **method** (POST was previously probed as GET). Prior: 2026-04-23 billing overlay UX + smoke skips without key.
+**Last Updated:** 2026-07-14 — ChargeSlip visit API selects patient via SearchBillingSlipPregnancyList (PregnancyID/FullName); tip proved patientSelected; live Save next for status-ready births.
 
 ---
 
@@ -459,6 +459,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **ChargeSlip patient select PROVED** — `SearchBillingSlipPregnancyList` returns PregnancyID/FullName; tip selected patient on ChargeSlip after fixing field map; care type sets. Next: live Save + procedure codes for status-ready births. | Visit-list bind was the create-path blocker. | 1h | 1h | none | ✅ | tip `c5950e11d3` |
 | 2026-07-14 | **Charge Slip map route** — `POST /browser/map-charge-slip` + `mapChargeSlip` (patient query seed). SuperBill SPA + bare HCFA 500 on vendor; ChargeSlip is create surface. | Need visit/procedure pick to bill. | 30m | 30m | none | ✅ | tip after redeploy |
 | 2026-07-14 | **Claim-status persist PROVED** — tip force `$eval`/Kendo on `BillingStatusID`/`BillUnderProvTypeID`; 3 resolved births now after-reload **Claims Processing + CPM** with insurers (Sierra / BCBS / Cigna). Dropped hanging `page.select`. Next: Super Bill `/Pregnancy/SuperBillSPAPartialNew/:id` → claim. | Writeback blank after Save blocked money. | 2h | 2h | none | ✅ | tip `a9555c342f` |
 | 2026-07-14 | **Birth→billing resolve + job persist** — Birth Activity rows lack client links; directory was filtered to future due dates → 0 search hits. Clear filter/View all + name filter + directory resolve in `scanBirthActivity`; raise directory extract cap to 500; persist `clientcare_browser_jobs` (tip multi-instance was losing prep jobs). | Unpaid 2026 births unlinked; claim-prep job expired mid-run. | 1.5h | 1.5h | none | ✅ | tip after redeploy |

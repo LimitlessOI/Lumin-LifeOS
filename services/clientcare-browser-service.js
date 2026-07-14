@@ -3267,33 +3267,42 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           ? data
           : (data?.Data || data?.data || data?.Items || data?.items || []);
         const normalized = (Array.isArray(rows) ? rows : []).map((row) => ({
-          pregnancyId: row.PregnancyId || row.PregnancyID || row.pregnancyId || row.Id || row.id || null,
-          name: row.PatientName || row.ClientName || row.Name || row.name || row.FullName || null,
-          time: row.Time || row.VisitTime || row.time || null,
-          visit: row.Visit || row.VisitType || row.visit || null,
+          pregnancyId: row.PregnancyID || row.PregnancyId || row.pregnancyId || row.Id || row.id || null,
+          name: row.FullName || row.PatientName || row.ClientName || row.Name || row.name || null,
+          time: row.StartTimeStr || row.Time || row.VisitTime || row.time || null,
+          visit: row.Visit || row.VisitType || row.DefaultCategory || row.visit || null,
+          chargeSlipId: row.ChargeSlipId || null,
+          scheduledEventId: row.ScheduledEventID || row.ScheduledEventId || null,
           rawKeys: Object.keys(row || {}).slice(0, 20),
+          raw: row,
         }));
         const wantId = String(wantPregnancyId || '').toLowerCase();
         const want = String(wantName || '').toLowerCase();
         let match = normalized.find((r) => wantId && String(r.pregnancyId || '').toLowerCase() === wantId)
           || normalized.find((r) => want && String(r.name || '').toLowerCase().includes(want))
-          || normalized[0]
           || null;
 
-        // If ClientCare exposes a select helper, try it; else set hidden fields.
         let selected = { applied: false };
         if (match?.pregnancyId) {
-          for (const name of ['PregnancyId', 'PregnancyID', 'pregnancyId', 'SelectedPregnancyId', 'PatientId']) {
+          for (const name of ['PregnancyID', 'PregnancyId', 'pregnancyId', 'SelectedPregnancyId', 'PatientId', 'PatientID']) {
             const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
             if (!el) continue;
             el.value = match.pregnancyId;
+            el.dispatchEvent(new Event('input', { bubbles: true }));
             el.dispatchEvent(new Event('change', { bubbles: true }));
             selected = { applied: true, via: name, pregnancyId: match.pregnancyId };
+          }
+          // Prefer clicking the rendered visit row for this patient.
+          const rowEl = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+            .find((tr) => (tr.innerText || '').toLowerCase().includes(String(match.name || '').toLowerCase().split(/\s+/)[0] || '___never___'));
+          if (rowEl) {
+            rowEl.click();
+            selected = { ...selected, clickedRow: true };
           }
           if (typeof window.SelectBillingSlipPregnancy === 'function') {
             try {
               window.SelectBillingSlipPregnancy(match.pregnancyId);
-              selected = { applied: true, via: 'SelectBillingSlipPregnancy', pregnancyId: match.pregnancyId };
+              selected = { ...selected, via: 'SelectBillingSlipPregnancy' };
             } catch (_) { /* ignore */ }
           }
         }
@@ -3302,8 +3311,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           status: res.status,
           url,
           count: normalized.length,
-          sample: normalized.slice(0, 8),
-          match,
+          sample: normalized.slice(0, 8).map(({ raw, ...rest }) => rest),
+          match: match ? { pregnancyId: match.pregnancyId, name: match.name, time: match.time, visit: match.visit, chargeSlipId: match.chargeSlipId } : null,
           selected,
           dataKeys: data && typeof data === 'object' && !Array.isArray(data) ? Object.keys(data).slice(0, 20) : null,
         };
@@ -3363,8 +3372,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         const sel = document.getElementById('ChargeSlipId');
         if (!sel) return { set: false };
         const want = String(wantType || 'Intrapartum Care').toLowerCase();
-        const option = Array.from(sel.options || []).find((o) => (o.textContent || '').toLowerCase().includes(want))
-          || Array.from(sel.options || []).find((o) => /intrapartum|postpartum|newborn|antepartum/i.test(o.textContent || ''));
+        const option = Array.from(sel.options || []).find((o) => /^intrapartum/i.test((o.textContent || '').trim()))
+          || Array.from(sel.options || []).find((o) => (o.textContent || '').toLowerCase().includes(want))
+          || Array.from(sel.options || []).find((o) => /intrapartum|postpartum|newborn/i.test(o.textContent || ''));
         if (!option) return { set: false, available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()) };
         sel.value = option.value;
         Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
