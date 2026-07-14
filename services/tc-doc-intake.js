@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createTcEmailScanAndUpload — services/tc-doc-intake.js.
+ * @ssot docs/products/tc-service/PRODUCT_HOME.md
  */
 import { ImapFlow } from 'imapflow';
 import fs from 'fs/promises';
@@ -344,14 +345,15 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
   return {
     findAndProcessEmails,
     uploadFilesToSkySlope,
-    async findExecutedAgreements({ days = 90 } = {}) {
-      return findAndProcessEmails({ days, dryRun: true, searchAll: true });
+    async findExecutedAgreements({ days = 90, userId = 'adam' } = {}) {
+      return findAndProcessEmails({ userId, days, dryRun: true, searchAll: false });
     },
-    async runFullIntake({ days = 90, address, dryRun = true } = {}) {
+    async runFullIntake({ days = 90, address, dryRun = true, userId = 'adam' } = {}) {
       const emails = await findAndProcessEmails({
+        userId,
         days,
         dryRun: true,
-        searchAll: true,
+        searchAll: false,
       });
       const filtered = address
         ? emails.filter((e) => {
@@ -379,7 +381,7 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
         };
       }
       const files = filtered.flatMap((e) => e.files || []);
-      const upload = await uploadFilesToSkySlope(null, files, {
+      const upload = await uploadFilesToSkySlope(userId, files, {
         address,
         validateBeforeUpload: true,
       });

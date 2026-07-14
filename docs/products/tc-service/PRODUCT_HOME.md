@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Okta login hardened + operator-catalog (browser UI as API); MLS export alias; access_ready ignores optional Asana. |
+| **Last Updated** | 2026-07-14 — Doc intake `createTCDocIntake` alias + default userId=adam; Okta UI login + operator-catalog. |
 
 ---
 
