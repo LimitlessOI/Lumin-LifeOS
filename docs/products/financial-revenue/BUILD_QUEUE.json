@@ -77,7 +77,7 @@
       "spec": "Define the revenue goal tracking endpoint with a $500/day target constraint",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 1,
+      "attempts": 2,
       "expected_exports": [
         "registerRevenueGoalTrackingRoutes"
       ],
@@ -85,7 +85,7 @@
         "method": "POST",
         "path": "/api/v1/financial-revenue/revenue-goal"
       },
-      "last_attempt_at": "2026-07-14T22:38:41.433Z",
+      "last_attempt_at": "2026-07-14T23:03:55.236Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "blocker_class": "BLOCKED_TOOLING",
       "commit_sha": null,
