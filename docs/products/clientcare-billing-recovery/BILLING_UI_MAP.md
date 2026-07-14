@@ -75,7 +75,7 @@ Marketing: **AI-assisted charting** (+ optional audio) — clinical charting, **
 
 ## Next execution (money)
 
-1. Pull **Reports** claim aging / AR / missing transaction (export or scrape).  
-2. Walk **Birth Activity** → recent births → each client **Billing** tab → unbilled encounters.  
-3. For each under-90 / unbilled birth: insurance complete → charge slip / HCFA → submit (approval gate unless founder says auto-submit).  
-4. Make long browser jobs **async** (same pattern as TC `tc_browser_jobs`) so tip stops 502’ing mid-scan.
+1. `GET .../browser/birth-activity?async=true` → poll job → recent births with `billingHref` (directory resolve after Clear filter / View all).  
+2. `POST .../browser/prepare-claim-status` with those hrefs (`Claims Processing` + `CPM`).  
+3. Inspect each billing tab → charge slip `/Company/ChargeSlip` / HCFA → submit when insurance complete.  
+4. Reports aging remains secondary once birth→billing path is flowing.

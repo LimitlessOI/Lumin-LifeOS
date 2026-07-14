@@ -150,8 +150,84 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   router.use(express.json({ limit: '5mb' }));
   router.use(requireKey);
 
-  /** Long Puppeteer jobs — tip edge ~30–60s; return 202 + poll. */
+  /** Long Puppeteer jobs — tip edge ~30–60s; return 202 + poll. Persist so multi-instance tip doesn't lose jobs. */
   const browserJobs = new Map();
+  let clientcareBrowserJobsSchemaReady = false;
+  async function ensureClientcareBrowserJobsSchema() {
+    if (clientcareBrowserJobsSchemaReady || !pool?.query) return;
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS clientcare_browser_jobs (
+        id UUID PRIMARY KEY,
+        kind TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'queued'
+          CHECK (status IN ('queued', 'running', 'completed', 'failed')),
+        request_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+        result_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+        error TEXT,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        completed_at TIMESTAMPTZ
+      )
+    `);
+    clientcareBrowserJobsSchemaReady = true;
+  }
+  async function persistClientcareBrowserJob(job) {
+    if (!pool?.query || !job?.id) return;
+    try {
+      await ensureClientcareBrowserJobsSchema();
+      await pool.query(
+        `INSERT INTO clientcare_browser_jobs
+           (id, kind, status, request_json, result_json, error, updated_at, completed_at)
+         VALUES ($1,$2,$3,$4::jsonb,$5::jsonb,$6,NOW(),$7)
+         ON CONFLICT (id) DO UPDATE SET
+           status = EXCLUDED.status,
+           result_json = EXCLUDED.result_json,
+           error = EXCLUDED.error,
+           updated_at = NOW(),
+           completed_at = EXCLUDED.completed_at`,
+        [
+          job.id,
+          job.kind || 'unknown',
+          job.status || 'queued',
+          JSON.stringify(job.request || {}),
+          JSON.stringify(job.result || {}),
+          job.error || null,
+          ['completed', 'failed'].includes(job.status) ? new Date().toISOString() : null,
+        ]
+      );
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] job persist failed');
+    }
+  }
+  async function loadClientcareBrowserJob(jobId) {
+    const mem = browserJobs.get(jobId);
+    if (mem) return mem;
+    if (!pool?.query) return null;
+    try {
+      await ensureClientcareBrowserJobsSchema();
+      const { rows } = await pool.query(
+        `SELECT id, kind, status, request_json, result_json, error, created_at, updated_at, completed_at
+         FROM clientcare_browser_jobs WHERE id = $1 LIMIT 1`,
+        [jobId]
+      );
+      const row = rows[0];
+      if (!row) return null;
+      return {
+        id: row.id,
+        kind: row.kind,
+        status: row.status,
+        request: row.request_json || {},
+        result: row.result_json || null,
+        error: row.error,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        completed_at: row.completed_at,
+        from_db: true,
+      };
+    } catch {
+      return null;
+    }
+  }
   function enqueueBrowserJob(kind, runner, request = {}) {
     const id = randomUUID();
     const job = {
@@ -165,10 +241,12 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       updated_at: new Date().toISOString(),
     };
     browserJobs.set(id, job);
+    void persistClientcareBrowserJob(job);
     setImmediate(() => {
       (async () => {
         job.status = 'running';
         job.updated_at = new Date().toISOString();
+        void persistClientcareBrowserJob(job);
         try {
           job.result = await runner();
           job.status = 'completed';
@@ -178,13 +256,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           logger.warn?.({ err: err.message, kind, id }, '[CLIENTCARE-BILLING] browser job failed');
         }
         job.updated_at = new Date().toISOString();
+        void persistClientcareBrowserJob(job);
       })();
     });
     return job;
   }
 
   router.get('/browser/jobs/:jobId', async (req, res) => {
-    const job = browserJobs.get(req.params.jobId);
+    const job = await loadClientcareBrowserJob(req.params.jobId);
     if (!job) return res.status(404).json({ ok: false, error: 'Job not found or expired' });
     res.json({ ok: true, job });
   });

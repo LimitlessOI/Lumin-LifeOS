@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Birth Activity scan + async browser jobs + claim-status prep (Claims Processing/CPM). |
+| **Last Updated** | 2026-07-14 — Birth→billing resolve (clear due-date filter + directory match) + persisted `clientcare_browser_jobs`. |
 
 ---
 
@@ -459,6 +459,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Birth→billing resolve + job persist** — Birth Activity rows lack client links; directory was filtered to future due dates → 0 search hits. Clear filter/View all + name filter + directory resolve in `scanBirthActivity`; raise directory extract cap to 500; persist `clientcare_browser_jobs` (tip multi-instance was losing prep jobs). | Unpaid 2026 births unlinked; claim-prep job expired mid-run. | 1.5h | 1.5h | none | ✅ | tip after redeploy |
 | 2026-07-14 | **Birth activity + async jobs + claim-status prep** — `scanBirthActivity`, newest-first backlog sort, `GET /browser/birth-activity` + `GET /browser/jobs/:id`, `POST /browser/prepare-claim-status` (Claims Processing + CPM), operator-catalog. Live repair applied on tip for newest notes account. | Unpaid births not in 2018–23 notes queue; tip 502 on long sync scans. | 1.5h | 1.5h | none | ✅ | tip after redeploy |
 | 2026-07-14 | **Live tip map** — login PASS on `clientcarewest.net`; discover Billing Slip / ERA / Review Sent Bills / BillingPartial; backlog-summary **91 billing notes / 50 accounts**; wrote `BILLING_UI_MAP.md`. Sent Bills empty; notes queue is old (2018–22) — recent births need Birth Activity + Reports aging next. | Family unpaid-birth money | 1h | 1h | none | ✅ | tip `f8d3349f08` |
 | 2026-07-14 | **Founder-lane mount** — `register-founder-runtime-routes.js` mounts `createClientCareBillingRoutes` at `/api/v1/clientcare-billing`. Tip `founder_builder` was serving `/clientcare-billing` overlay but API 404'd — unblock unpaid-birth rescue. | Adam: bill unpaid births; stop asking permission; login is in Railway. | 0.2h | 0.2h | none | ✅ | tip login-test + discover + full-account-report after redeploy |

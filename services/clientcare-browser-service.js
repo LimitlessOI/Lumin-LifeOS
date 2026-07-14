@@ -238,7 +238,74 @@ async function extractClientDirectory(page, limit = 10) {
       if (unique.length >= maxItems) break;
     }
     return unique;
-  }, Math.max(1, Math.min(Number(limit) || 10, 25)));
+  }, Math.max(1, Math.min(Number(limit) || 10, 500)));
+}
+
+/**
+ * Client list defaults to Active Due Date window (future pregnancies only).
+ * Past births require Clear filter / View all or All Clients before scrape.
+ */
+async function prepareClientDirectoryForSearch(page) {
+  const clicked = await page.evaluate(() => {
+    const want = /clear filter|view all|all clients/i;
+    const nodes = Array.from(document.querySelectorAll('a, button, span, div, label, li'));
+    for (const el of nodes) {
+      const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
+      if (!text || text.length > 80) continue;
+      if (!want.test(text)) continue;
+      if (el.offsetParent === null && el.getClientRects().length === 0) continue;
+      el.click();
+      return { clicked: true, text: text.slice(0, 80) };
+    }
+    return { clicked: false };
+  });
+  if (clicked?.clicked) {
+    await new Promise((r) => setTimeout(r, 2000));
+  }
+
+  // Prefer typing into Filter if present (name search).
+  const filterReady = await page.evaluate(() => {
+    const input =
+      document.querySelector('input[placeholder*="Filter" i]') ||
+      document.querySelector('input[aria-label*="Filter" i]') ||
+      document.querySelector('.k-filter-row input') ||
+      document.querySelector('input[type="search"]') ||
+      Array.from(document.querySelectorAll('input[type="text"]')).find((el) => {
+        const near = (el.closest('div,td,th,label')?.innerText || '').slice(0, 40);
+        return /filter/i.test(near);
+      });
+    return Boolean(input);
+  });
+
+  return { ...clicked, filterInputPresent: filterReady };
+}
+
+async function typeClientDirectoryFilter(page, query) {
+  const q = String(query || '').trim();
+  if (!q) return { typed: false };
+  const typed = await page.evaluate((searchText) => {
+    const input =
+      document.querySelector('input[placeholder*="Filter" i]') ||
+      document.querySelector('input[aria-label*="Filter" i]') ||
+      document.querySelector('.k-filter-row input') ||
+      document.querySelector('input[type="search"]') ||
+      Array.from(document.querySelectorAll('input[type="text"]')).find((el) => {
+        const near = (el.closest('div,td,th,label')?.innerText || '').slice(0, 40);
+        return /filter|client/i.test(near);
+      });
+    if (!input) return { typed: false };
+    input.focus();
+    input.value = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.value = searchText;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    input.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }));
+    return { typed: true };
+  }, q);
+  if (typed?.typed) await new Promise((r) => setTimeout(r, 1800));
+  return typed;
 }
 
 function normalizeDirectoryName(value = '') {
@@ -2554,7 +2621,15 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       if (!directoryNav.ok) {
         return { ok: false, error: directoryNav.error || 'directory navigation failed', candidates: [] };
       }
-      const directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+      await sleep(1500);
+      const prep = await prepareClientDirectoryForSearch(session.page);
+      const typed = await typeClientDirectoryFilter(session.page, searchText);
+      let directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+      // If filter typing yielded nothing, clear again and scrape broader list.
+      if (!directory.length) {
+        await prepareClientDirectoryForSearch(session.page);
+        directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+      }
       const candidates = directory
         .map((item) => {
           const score = scoreDirectoryClientMatch(searchText, item.name);
@@ -2575,6 +2650,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       return {
         ok: true,
         query: searchText,
+        prep,
+        typed,
+        directoryCount: directory.length,
         candidates,
       };
     } finally {
@@ -2725,11 +2803,31 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     };
   }
 
+  function guessMotherNameFromBirthCells(cells = []) {
+    const noise = /^(admitted|discharged|home|hospital|birth|baby|babies|born|location|midwife|provider|date|time|status|name)$/i;
+    const staff = /^(sherry|cora)\b/i;
+    for (const raw of cells) {
+      const cell = String(raw || '').trim().replace(/\s+/g, ' ');
+      if (!cell || noise.test(cell) || /^\d/.test(cell) || staff.test(cell)) continue;
+      if (/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(cell)) continue;
+      // "Amanda Winkels Amanda Winkels" → first two tokens once
+      const tokens = cell.replace(/\.{2,}$/, '').split(/\s+/).filter(Boolean);
+      if (tokens.length >= 2) {
+        const a = tokens[0];
+        const b = tokens[1];
+        if (tokens[2] === a && tokens[3] === b) return `${a} ${b}`;
+        return `${a} ${b}`;
+      }
+      if (tokens.length === 1 && tokens[0].length >= 3) return tokens[0];
+    }
+    return null;
+  }
+
   /**
-   * Scan Birth Activity for recent births → client links (money path for unpaid births
-   * that are not yet in the old Billing Notes queue).
+   * Scan Birth Activity for recent births → resolve billing hrefs via row links
+   * or client-directory name match (money path for unpaid births not in old notes queue).
    */
-  async function scanBirthActivity({ maxRows = 40, pageTimeoutMs = 20000 } = {}) {
+  async function scanBirthActivity({ maxRows = 40, pageTimeoutMs = 20000, resolveDirectory = true } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
     try {
@@ -2744,7 +2842,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         const out = [];
         const seen = new Set();
         const push = (row) => {
-          const key = `${row.clientHref || ''}|${row.birthDateGuess || ''}|${(row.text || '').slice(0, 80)}`;
+          const key = `${row.birthDateGuess || ''}|${(row.text || '').slice(0, 80)}`;
           if (seen.has(key)) return;
           seen.add(key);
           out.push(row);
@@ -2756,47 +2854,83 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             .filter(Boolean);
           if (cells.length < 2) continue;
           const text = cells.join(' | ');
+          const dateMatch = text.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{2}-\d{2})\b/);
+          // Birth Activity money rows always carry a date; skip chrome without dates.
+          if (!dateMatch) continue;
           const link =
             tr.querySelector('a[href*="ShowDefaultClientScreen"]') ||
             tr.querySelector('a[href*="/Pregnancy/"]');
-          const dateMatch = text.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{2}-\d{2})\b/);
-          if (!link && !dateMatch) continue;
           push({
             cells: cells.slice(0, 8),
             text: text.slice(0, 320),
             clientHref: link?.href || null,
-            birthDateGuess: dateMatch ? dateMatch[1] : null,
+            birthDateGuess: dateMatch[1],
           });
           if (out.length >= max) break;
-        }
-
-        if (out.length < max) {
-          for (const a of Array.from(document.querySelectorAll('a[href*="ShowDefaultClientScreen"]'))) {
-            const text = (a.textContent || '').trim().replace(/\s+/g, ' ');
-            push({
-              cells: [text],
-              text: text.slice(0, 320),
-              clientHref: a.href,
-              birthDateGuess: null,
-            });
-            if (out.length >= max) break;
-          }
         }
         return out;
       }, Math.max(1, Math.min(Number(maxRows) || 40, 100)));
 
-      const page = await collectPageSummary(session.page);
-      const withBilling = rows.map((row) => ({
-        ...row,
-        billingHref: row.clientHref ? deriveBillingHrefFromClientHref(row.clientHref) : null,
-      }));
+      let directory = [];
+      const needResolve = resolveDirectory !== false && rows.some((r) => !r.clientHref);
+      if (needResolve) {
+        const dirNav = await gotoWithBudget(
+          session.page,
+          new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(),
+          { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) }
+        );
+        if (dirNav.ok) {
+          await sleep(1500);
+          await prepareClientDirectoryForSearch(session.page);
+          directory = await extractClientDirectory(session.page, 500);
+        }
+      }
 
+      const births = rows.map((row) => {
+        const motherNameGuess = guessMotherNameFromBirthCells(row.cells || []);
+        let clientHref = row.clientHref || null;
+        let billingHref = clientHref ? deriveBillingHrefFromClientHref(clientHref) : null;
+        let resolve = clientHref ? { method: 'row_link' } : null;
+        if (!billingHref && motherNameGuess && directory.length) {
+          const scored = directory
+            .map((item) => ({
+              ...item,
+              score: scoreDirectoryClientMatch(motherNameGuess, item.name),
+            }))
+            .filter((item) => item.score >= 55)
+            .sort((a, b) => b.score - a.score);
+          const best = scored[0];
+          if (best) {
+            clientHref = best.href;
+            billingHref = deriveBillingHrefFromClientHref(best.href);
+            resolve = {
+              method: 'directory_name',
+              query: motherNameGuess,
+              score: best.score,
+              matchedName: best.name,
+              mrn: best.mrn,
+            };
+          } else {
+            resolve = { method: 'directory_miss', query: motherNameGuess };
+          }
+        }
+        return {
+          ...row,
+          motherNameGuess,
+          clientHref,
+          billingHref,
+          resolve,
+        };
+      });
+
+      const page = await collectPageSummary(session.page);
       return {
         ok: true,
         url: target,
         page: { url: page.url, title: page.title, headings: page.headings },
-        count: withBilling.length,
-        births: withBilling,
+        count: births.length,
+        resolved: births.filter((b) => b.billingHref).length,
+        births,
         screenshots,
       };
     } finally {
