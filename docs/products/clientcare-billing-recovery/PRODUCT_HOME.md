@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Birth Activity scan + async browser jobs + claim-status prep (Claims Processing/CPM). |
+| **Last Updated** | 2026-07-14 — Claim-status prep now defaults to dry-run, rejects oversized batches, and fails closed when ClientCare does not apply or save every account. |
 
 ---
 
@@ -459,6 +459,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Critical claim-prep receipt fix** — `POST /browser/prepare-claim-status` defaults to dry-run unless `dry_run:false` is explicit, rejects batches above 25 instead of silently dropping accounts, and marks async jobs failed when any field update or ClientCare Save action fails. Added `tests/clientcare-claim-status-jobs.test.js`. | Prevent false completed receipts and omitted unpaid-birth accounts on the live money path. | n/a | n/a | none | ✅ | focused tests + preflight |
 | 2026-07-14 | **Birth activity + async jobs + claim-status prep** — `scanBirthActivity`, newest-first backlog sort, `GET /browser/birth-activity` + `GET /browser/jobs/:id`, `POST /browser/prepare-claim-status` (Claims Processing + CPM), operator-catalog. Live repair applied on tip for newest notes account. | Unpaid births not in 2018–23 notes queue; tip 502 on long sync scans. | 1.5h | 1.5h | none | ✅ | tip after redeploy |
 | 2026-07-14 | **Live tip map** — login PASS on `clientcarewest.net`; discover Billing Slip / ERA / Review Sent Bills / BillingPartial; backlog-summary **91 billing notes / 50 accounts**; wrote `BILLING_UI_MAP.md`. Sent Bills empty; notes queue is old (2018–22) — recent births need Birth Activity + Reports aging next. | Family unpaid-birth money | 1h | 1h | none | ✅ | tip `f8d3349f08` |
 | 2026-07-14 | **Founder-lane mount** — `register-founder-runtime-routes.js` mounts `createClientCareBillingRoutes` at `/api/v1/clientcare-billing`. Tip `founder_builder` was serving `/clientcare-billing` overlay but API 404'd — unblock unpaid-birth rescue. | Adam: bill unpaid births; stop asking permission; login is in Railway. | 0.2h | 0.2h | none | ✅ | tip login-test + discover + full-account-report after redeploy |
@@ -546,6 +547,12 @@ Operational inputs needed regardless of integration path:
 | 2026-03-28 | Added shared browser voice controls to the Operations Assistant with optional spoken replies | 2h | 2h | none | ✅ | ✅ | ✅ |
 | 2026-03-28 | Fixed billing overlay render guards and added no-key setup fallback so protected-endpoint 401s no longer crash the page | 1h | 1h | none | ✅ | pending | pending |
 | 2026-03-28 | Added no-cache public overlay delivery and versioned overlay scripts | 0.5h | 0.5h | none | ✅ | pending | pending |
+
+---
+
+## Agent Handoff Notes
+
+Claim-status preparation now fails closed locally. Before production use, deploy this commit and verify one explicit `dry_run:false` account reports `completed` only when both field operations apply and the ClientCare Save action is attempted.
 
 ---
 

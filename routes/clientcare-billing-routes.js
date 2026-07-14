@@ -15,6 +15,29 @@ import { createClientCareSellableService } from '../services/clientcare-sellable
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 import { createConversationStore } from '../services/conversation-store.js';
 
+const MAX_PREPARE_CLAIM_STATUS_ACCOUNTS = 25;
+
+export function assessClaimStatusResult(result, { dryRun = true } = {}) {
+  if (!result?.ok) {
+    return { ok: false, error: result?.error || 'ClientCare account update failed' };
+  }
+  if (dryRun) return { ok: true, error: null };
+
+  const operations = Array.isArray(result.operations) ? result.operations : [];
+  if (!operations.length) {
+    return { ok: false, error: 'ClientCare returned no field-update operations' };
+  }
+  const failedOperations = operations.filter((operation) => operation?.applied !== true);
+  if (failedOperations.length) {
+    const labels = failedOperations.map((operation) => operation?.kind || 'unknown').join(', ');
+    return { ok: false, error: `ClientCare field update failed: ${labels}` };
+  }
+  if (result.saveResult?.attempted !== true) {
+    return { ok: false, error: 'ClientCare Save action was not found or attempted' };
+  }
+  return { ok: true, error: null };
+}
+
 export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember, callCouncilWithFailover = null, notificationService = null, sendSMS = null }) {
   const router = express.Router();
   const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -171,7 +194,12 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         job.updated_at = new Date().toISOString();
         try {
           job.result = await runner();
-          job.status = 'completed';
+          if (job.result?.ok === false) {
+            job.status = 'failed';
+            job.error = job.result.error || `${kind} reported one or more failures`;
+          } else {
+            job.status = 'completed';
+          }
         } catch (err) {
           job.status = 'failed';
           job.error = err.message;
@@ -1066,14 +1094,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         ? req.body.billing_hrefs.map((h) => String(h || '').trim()).filter(Boolean)
         : [String(req.body?.billing_href || '').trim()].filter(Boolean);
       if (!hrefs.length) return res.status(400).json({ ok: false, error: 'billing_href or billing_hrefs required' });
-      const dryRun = req.body?.dry_run === true;
+      if (hrefs.length > MAX_PREPARE_CLAIM_STATUS_ACCOUNTS) {
+        return res.status(400).json({
+          ok: false,
+          error: `A maximum of ${MAX_PREPARE_CLAIM_STATUS_ACCOUNTS} billing accounts may be prepared per job`,
+        });
+      }
+      const dryRun = req.body?.dry_run !== false;
       const clientBillingStatus = req.body?.client_billing_status || 'Claims Processing';
       const billProviderType = req.body?.bill_provider_type || 'CPM';
       const job = enqueueBrowserJob(
         'prepare_claim_status',
         async () => {
           const results = [];
-          for (const billingHref of hrefs.slice(0, 25)) {
+          for (const billingHref of hrefs) {
             try {
               const r = await browserService.prepareClaimStatus({
                 billingHref,
@@ -1081,21 +1115,29 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
                 billProviderType,
                 dryRun,
               });
+              const assessment = assessClaimStatusResult(r, { dryRun });
               results.push({
                 billingHref,
-                ok: r.ok,
+                ok: assessment.ok,
                 dryRun: r.dryRun,
                 saveResult: r.saveResult,
                 operations: r.operations,
                 before: r.before?.accountSummary,
                 after: r.after?.accountSummary,
-                error: r.error,
+                error: assessment.error,
               });
             } catch (err) {
               results.push({ billingHref, ok: false, error: err.message });
             }
           }
-          return { ok: true, dryRun, count: results.length, results };
+          const ok = results.every((result) => result.ok);
+          return {
+            ok,
+            dryRun,
+            count: results.length,
+            results,
+            error: ok ? null : 'One or more ClientCare accounts were not prepared',
+          };
         },
         { hrefs, dryRun, clientBillingStatus, billProviderType }
       );

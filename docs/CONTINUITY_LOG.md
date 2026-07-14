@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — ClientCare claim-status jobs fail closed
+
+Recent claim-prep jobs silently truncated batches above 25, defaulted to live chart mutation, and returned completed/ok even when ClientCare fields or Save failed. Fixed the route to reject oversized batches, default to dry-run, propagate account failures to failed job status, and added focused regression tests. Production browser verification remains pending deploy.
+
 ## 2026-07-14 — ClientCare unpaid-birth rescue (founder mount)
 
 Adam: stop asking permission — login is in Railway; map billing; bill unpaid births. Mounted `/api/v1/clientcare-billing` on founder_builder (was overlay 404). Next tip: login-test → discover → full-account-report / backlog.
