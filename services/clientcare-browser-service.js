@@ -3932,38 +3932,156 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         for (const popup of newPages) {
           try {
             await popup.waitForSelector('body', { timeout: 5000 }).catch(() => {});
-            const snap = await popup.evaluate(() => ({
-              url: location.href,
-              title: document.title || null,
-              preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 600),
-              buttons: Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+            // SuperBillReport often shows "Loading ..." — wait for grid/body to settle.
+            for (let w = 0; w < 12; w += 1) {
+              const loading = await popup.evaluate(() => /Loading\s*\.{0,3}/i.test(document.body?.innerText || ''));
+              if (!loading) break;
+              await sleep(1000);
+            }
+            const snap = await popup.evaluate(() => {
+              const visible = (el) => {
+                if (!el) return false;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') return false;
+                const r = el.getBoundingClientRect();
+                return r.width > 0 && r.height > 0;
+              };
+              const buttons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .filter(visible)
                 .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
                 .filter((t) => t && t.length < 60)
-                .slice(0, 30),
-            }));
+                .slice(0, 40);
+              const inputs = Array.from(document.querySelectorAll('input, select, textarea'))
+                .filter(visible)
+                .map((el) => ({
+                  tag: el.tagName,
+                  id: el.id || null,
+                  name: el.name || null,
+                  type: el.type || null,
+                  value: String(el.value || '').slice(0, 40),
+                }))
+                .slice(0, 30);
+              const helpers = Object.getOwnPropertyNames(window)
+                .filter((n) => /super|claim|bill|create|generate|filter|report/i.test(n) && typeof window[n] === 'function')
+                .slice(0, 40);
+              const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, .k-master-row'))
+                .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                .filter((t) => t && t.length < 200)
+                .slice(0, 15);
+              return {
+                url: location.href,
+                title: document.title || null,
+                preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 900),
+                buttons,
+                inputs,
+                helpers,
+                rows,
+              };
+            });
             dailySuperBill.popups.push(snap);
             const acted = await popup.evaluate((wantDate) => {
               const attempts = [];
+              const visible = (el) => {
+                if (!el) return false;
+                const s = window.getComputedStyle(el);
+                if (s.display === 'none' || s.visibility === 'hidden') return false;
+                const r = el.getBoundingClientRect();
+                return r.width > 0 && r.height > 0;
+              };
+              const navNoise = /^(home|clients|schedule|reports|wrm|cora|help|sign out|english|spanish|french|italian|german|portuguese|russian|dutch|ukrainian|text messages|back|send|terms|privacy|front desk|new note|create new client|view client list|manage account|practice management|employee log|my profile|billing slip|record insurance|review sent|review all faxes)$/i;
               if (wantDate) {
-                for (const el of Array.from(document.querySelectorAll('input'))) {
-                  const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''}`;
-                  if (!/date|dos|service|visit|bill/i.test(ctx) || /dob|birth/i.test(ctx)) continue;
+                for (const el of Array.from(document.querySelectorAll('input')).filter(visible)) {
+                  if (/radio|checkbox|hidden|submit|button/i.test(el.type || '')) continue;
+                  const ctx = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.className || ''}`;
+                  if (/lmp|dob|birth|born|rdo/i.test(ctx)) continue;
+                  if (!/date|from|to|dos|service|visit|bill|filter/i.test(ctx) && el.type !== 'text') continue;
+                  el.focus();
                   el.value = String(wantDate);
+                  el.dispatchEvent(new Event('input', { bubbles: true }));
                   el.dispatchEvent(new Event('change', { bubbles: true }));
-                  attempts.push({ label: 'popup_fill_date', ok: true, id: el.id || el.name || null });
+                  try { window.$(el).trigger('change'); } catch (_) { /* ignore */ }
+                  attempts.push({ label: 'popup_fill_date', ok: true, id: el.id || el.name || null, value: String(wantDate) });
                   break;
                 }
               }
-              const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
-                .find((el) => /ok|create|generate|build|process|continue|submit|post|save|yes/i.test((el.textContent || el.value || '').trim()));
-              if (btn) {
-                btn.click();
-                attempts.push({ label: 'popup_click', ok: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) });
+              for (const name of [
+                'createClaims',
+                'CreateClaims',
+                'createClaim',
+                'CreateClaim',
+                'generateClaims',
+                'GenerateClaims',
+                'filterSuperBill',
+                'FilterSuperBill',
+                'searchSuperBill',
+                'createSuperBill',
+                'CreateSuperBill',
+              ]) {
+                if (typeof window[name] !== 'function') continue;
+                try {
+                  window[name]();
+                  attempts.push({ label: `popup_helper:${name}`, ok: true });
+                  break;
+                } catch (err) {
+                  attempts.push({ label: `popup_helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+                }
               }
-              return attempts;
+              // Prefer report-specific actions; never click global nav chrome.
+              const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                .filter(visible)
+                .map((el) => {
+                  const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                  let score = 0;
+                  if (/create\s*claim|generate\s*claim|create\s*super|post\s*claim|build\s*claim/i.test(t)) score += 100;
+                  if (/filter|search|apply|run\s*report|refresh|load/i.test(t)) score += 40;
+                  if (/^ok$|^yes$|^continue$|^submit$|^generate$|^create$/i.test(t)) score += 20;
+                  if (navNoise.test(t) || /create new client/i.test(t)) score -= 200;
+                  if (/daily super bill/i.test(t)) score -= 50;
+                  return { el, t, score };
+                })
+                .filter((x) => x.t && x.score > 0)
+                .sort((a, b) => b.score - a.score);
+              if (ranked[0]) {
+                ranked[0].el.click();
+                attempts.push({ label: 'popup_click', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+              } else {
+                attempts.push({
+                  label: 'popup_click',
+                  ok: false,
+                  error: 'no_report_action',
+                  candidates: Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"]'))
+                    .filter(visible)
+                    .map((el) => (el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
+                    .filter((t) => t && t.length < 40)
+                    .slice(0, 20),
+                });
+              }
+              // Check rows that look like charges and toggle checkboxes if present.
+              const checks = Array.from(document.querySelectorAll('input[type="checkbox"]')).filter(visible);
+              let checked = 0;
+              for (const c of checks.slice(0, 20)) {
+                if (!c.checked) {
+                  c.click();
+                  checked += 1;
+                }
+              }
+              if (checks.length) attempts.push({ label: 'popup_checkboxes', ok: true, total: checks.length, checked });
+              return {
+                attempts,
+                url: location.href,
+                preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+              };
             }, matchedDate || visitDate || null);
             dailySuperBill.popups[dailySuperBill.popups.length - 1].attempts = acted;
-            await sleep(2000);
+            await sleep(2500);
+            dailySuperBill.popups[dailySuperBill.popups.length - 1].after = await popup.evaluate(() => ({
+              url: location.href,
+              preview: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
+              rows: Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+                .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                .filter((t) => /59400|59409|claim|alvarado|denise|\$\d/i.test(t))
+                .slice(0, 12),
+            }));
           } catch (err) {
             dailySuperBill.popups.push({ error: String(err?.message || err).slice(0, 120) });
           }
@@ -4067,8 +4185,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             .find((el) => {
               const t = (el.textContent || el.value || '').trim();
               if (/^save$/i.test(t)) return false;
+              if (/daily super bill/i.test(t)) return false;
               return /^(ok|create|generate|build|process|continue|submit|post)$/i.test(t)
-                || /create|generate|build|process|daily super|super bill|post charges|create claim/i.test(t);
+                || /create claim|generate claim|post charges|create slip/i.test(t);
             });
           if (btn) {
             btn.click();
@@ -4118,8 +4237,36 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             url: location.href,
             lineHints,
             summary: (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300),
+            fullNameText: (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80),
           };
         });
+
+        // DSB popup / re-click can clear ChargeSlip patient — rebind before Save.
+        if (visitList?.match?.pregnancyId) {
+          const stillBound = await session.page.evaluate(() => {
+            const n = (document.getElementById('FullNameText')?.textContent || '').trim();
+            return Boolean(n && !/please select/i.test(n) && /[A-Za-z]{2,}/.test(n));
+          });
+          if (!stillBound) {
+            const rebind = await session.page.evaluate((wantId) => {
+              const rows = Array.from(document.querySelectorAll('tr, li, a, div'));
+              const row = rows.find((el) => {
+                const onclick = el.getAttribute('onclick') || '';
+                return wantId && onclick.includes(wantId);
+              }) || rows.find((el) => /selectClick\(this\)/i.test(el.getAttribute('onclick') || ''));
+              if (!row) return { ok: false };
+              try {
+                if (typeof window.selectClick === 'function') window.selectClick(row);
+                else row.click();
+                return { ok: true, name: (document.getElementById('FullNameText')?.textContent || '').trim().slice(0, 80) };
+              } catch (err) {
+                return { ok: false, error: String(err?.message || err).slice(0, 120) };
+              }
+            }, visitList.match.pregnancyId);
+            dailySuperBill.rebindAfter = rebind;
+            await sleep(1200);
+          }
+        }
       }
 
       const map = await session.page.evaluate((wantName) => {

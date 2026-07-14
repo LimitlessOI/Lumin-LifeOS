@@ -1,4 +1,8 @@
 
+## 2026-07-14 — SuperBillReport is the Daily Super Bill surface
+
+Tip KNOW: ChargeSlip "Daily Super bill" calls `openReportItems()` and opens `/Billing/SuperBillReport?FromDate=…` (title Super Bill Report; grid Loading then Procedure/Dx/Fee/Claims Created). First driver wrongly clicked Create New Client and cleared patient before Save. Next: drive report Filter/Create Claim actions + prove Sent Bills/chart 594xx. Forever-chase still 64 open.
+
 ## 2026-07-14 — ChargeSlip Daily Super Bill drive
 
 Money-path blocker: tip binds Denise, sets 59400/O80 via dropdown, clicks Daily Super Bill + Save, but Review Sent Bills stays empty and billing chart has no 594xx. Fee-schedule list clicks wedge tip CDP. Next ship inventories DSB post-click UI (modals/popups/helpers), drives Create/Generate, then re-proves persist. Forever-chase remains 64 open on tip.
