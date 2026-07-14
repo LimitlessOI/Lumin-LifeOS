@@ -67,8 +67,8 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
 
   // STEP 4 codegen runner (the "hands"), injected at the route boundary so
   // factory-core stays pure. It returns CANDIDATE CONTENT ONLY — never assertions
-  // (assertion-provenance lock). Cheapest capable tier first; escalate only on
-  // failure/empty output. The authored content is untrusted input that SENTRY
+  // (assertion-provenance lock). Strong-first, provider-diverse tier order; escalate
+  // only on failure/empty output. The authored content is untrusted input that SENTRY
   // proves independently via the Step-3 behavior gate.
   const codegenRunner = callCouncilMember
     ? {
@@ -90,7 +90,9 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
             const member = tiers[i];
             try {
               const raw = await callCouncilMember(member, prompt, {
-                taskType: 'builder_lane',
+                taskType: 'codegen',
+                product_lane: 'builderos',
+                useCache: false,
                 maxOutputTokens,
                 allowModelDowngrade: false,
                 returnObject: true,

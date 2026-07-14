@@ -37,7 +37,7 @@
       "status": "blocked",
       "target_file": "routes/command-center-mode-routes.js",
       "task": "Wire POST /command-center/mode and GET /command-center/mode live using builder-runtime-mode-service",
-      "spec": "Export registerCommandCenterModeRoutes(app,deps) where deps={db,callCouncilMember}. GET /api/v1/lifeos/command-center/mode returns {mode,updated_at,updated_by}. POST /api/v1/lifeos/command-center/mode accepts {mode,triggered_by} body, validates mode enum, calls setMode, returns receipt. All errors return {error:string} with appropriate HTTP status. No top-level browser globals. Import only node builtins and ../services/builder-runtime-mode-service.js.",
+      "spec": "Export registerCommandCenterModeRoutes(app,deps) where deps={db,callCouncilMember}. GET /api/v1/lifeos/command-center/mode returns {mode,updated_at,updated_by}. POST /api/v1/lifeos/command-center/mode accepts {mode,triggered_by} body, validates mode enum (allowed values: 'run', 'dry_run', 'paused', matching builder-runtime-mode-service), calls setMode, returns receipt. All errors return {error:string} with appropriate HTTP status. No top-level browser globals. Import only node builtins and ../services/builder-runtime-mode-service.js.",
       "depends_on": [
         "s2"
       ],

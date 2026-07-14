@@ -1,6 +1,6 @@
 {
   "certification_id": "FACTORY-REBOOT-CERT-002",
-  "generated_at": "2026-07-14T18:02:30.719Z",
+  "generated_at": "2026-07-14T18:58:20.134Z",
   "build_spec_phases": {
     "segments_0_10_runtime": true,
     "phase_11_full_loop_proof": true,

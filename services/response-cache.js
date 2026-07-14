@@ -1,6 +1,5 @@
 /**
  * SYNOPSIS: response-cache.js
- * response-cache.js
  * Two-tier AI response cache: L1 in-memory (fast) + L2 Neon DB (survives deploys).
  *
  * On startup: warms L1 from recent DB rows so cache hits resume immediately.
@@ -8,6 +7,8 @@
  * On cache hit: serves from L1; if L1 cold, checks DB (post-deploy warm path).
  *
  * TTL: 24h default. Research/analysis prompts use 72h (low churn).
+ *
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 import crypto from 'crypto';
@@ -246,6 +247,7 @@ export async function getCachedResponse(prompt, member, compressionMetrics) {
 // cacheResponse — write to L1 + DB
 // ---------------------------------------------------------------------------
 export function cacheResponse(prompt, member, response, taskType = '') {
+  if (typeof response !== 'string' || !response.trim()) return;
   const key = cacheKey(member, prompt);
   const sharedKey = sharedCacheKey(prompt);
   const expiresAt = Date.now() + ttlMs(taskType);

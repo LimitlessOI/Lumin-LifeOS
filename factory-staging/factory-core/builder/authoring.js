@@ -18,13 +18,14 @@
 import crypto from 'node:crypto';
 import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
 import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
+import { TRUSTED_FALLBACK_MODELS } from '../../../config/task-model-routing.js';
 
 export const AUTHORING_ACTION_TYPE = 'author_then_write';
 
-// Strong-first, provider-diverse hands (SO-003). Never start with the cheapest
+// Strong-first, provider-diverse failover chain (SO-003). Never start with the cheapest
 // free tier on a load-bearing codegen step. Fail over across providers, never sit
 // idle. Overridable per step via step.authoring.tiers.
-export const DEFAULT_CODEGEN_TIERS = ['claude_sonnet', 'openai_builder_standard', 'deepseek', 'openai_builder_escalation', 'openai_gpt', 'gemini_flash', 'openai_builder_mini'];
+export const DEFAULT_CODEGEN_TIERS = TRUSTED_FALLBACK_MODELS;
 
 export function stepRequiresAuthoring(step) {
   if (!step) return false;
@@ -80,7 +81,13 @@ export async function runAuthoring(step, codegenRunner) {
   const rawContent = extractContent(result?.content);
   const content = normalizeCommonJsToEsm(rawContent, target_file);
   if (!content || !content.trim()) {
-    return { ...base, ok: false, reason: 'codegen_empty', model_tier: result?.model_tier || null };
+    return {
+      ...base,
+      ok: false,
+      reason: 'codegen_empty',
+      model_tier: result?.model_tier || null,
+      error: result?.error || null,
+    };
   }
 
   const usage = result?.usage && typeof result.usage === 'object' ? result.usage : null;

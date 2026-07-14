@@ -32,7 +32,7 @@ export function createCouncilMembers({ DEEPSEEK_BRIDGE_ENABLED }) {
   return {
     claude_sonnet: {
       name: "Claude Sonnet 4.6 (Anthropic direct)",
-      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514",
+      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
       provider: "anthropic",
       role: "Primary Code Author & Builder",
       focus: "production code generation, complex reasoning, ESM Node.js, long-form output",

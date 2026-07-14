@@ -106,11 +106,11 @@ export const TASK_MODEL_MAP = {
 /** Default model when task type is unknown */
 export const DEFAULT_MODEL = 'openai_gpt';
 export const TRUSTED_FALLBACK_MODELS = [
-  'claude_sonnet',
   'openai_builder_standard',
-  'openai_builder_escalation',
   'openai_gpt',
   'deepseek',
+  'claude_sonnet',
+  'openai_builder_escalation',
   'gemini_flash',
   'groq_llama',
   'openai_builder_mini',

@@ -71,7 +71,7 @@ const escalatingCodegen = {
   },
 };
 const esc = await runAuthoring(baseStep, escalatingCodegen);
-assert('strong tier first (tier[0] attempted first)', DEFAULT_CODEGEN_TIERS[0] === 'claude_sonnet');
+assert('strong tier first (tier[0] attempted first)', DEFAULT_CODEGEN_TIERS[0] === 'openai_builder_standard');
 assert('escalates on first-tier failure', esc.ok === true && esc.escalated === true && esc.model_tier === DEFAULT_CODEGEN_TIERS[1], { model_tier: esc.model_tier, escalated: esc.escalated });
 
 // (6) FULL PIPE: author_then_write flows through write + SENTRY behavior gate to PASS.
