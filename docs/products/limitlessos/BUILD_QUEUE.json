@@ -163,10 +163,10 @@
       "spec": "Exports registerMarketingOSSkuRoutes(app, deps); manages SKU operations under MarketingOS commerce layer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "commit_sha": null,
-      "last_attempt_at": null,
-      "last_error": null,
+      "last_attempt_at": "2026-07-14T20:42:11.700Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "expected_exports": [
         "registerMarketingOSSkuRoutes"
       ],
@@ -185,7 +185,7 @@
       "park_until": null,
       "no_op": null,
       "pre_existing": null,
-      "blocker_class": null,
+      "blocker_class": "BLOCKED_TOOLING",
       "claim_level": null,
       "blocker_type": null,
       "blocker_resolution": null
