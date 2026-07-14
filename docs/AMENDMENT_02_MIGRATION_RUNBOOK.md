@@ -1,49 +1,35 @@
-<!-- SYNOPSIS: Amendment 02: Conversation Memory Migration Runbook -->
+<!-- SYNOPSIS: Amendment 02 Migration Runbook -->
 
-# Amendment 02: Conversation Memory Migration Runbook
+# Amendment 02 Migration Runbook
 
-## Purpose
+## Objective
 
-This runbook describes the migration of conversation memory data and the operational checks required to confirm the migration is safe, current, and complete.
+This runbook covers the migration of `conversation_memory` data into the updated schema and verifies the default recency threshold used during migration.
 
-## Recency Threshold
+## Recency Threshold Verification
 
 The default recency threshold for `conversation_memory` migration is **90 days**.
 
-This means records older than 90 days are treated as out of the active recency window unless a different threshold is explicitly configured for a specific migration job or environment.
+This means:
 
-## Verification
+- Records older than 90 days are excluded from the default migration scope.
+- Records within the last 90 days are included by default unless a different threshold is explicitly configured.
 
-Before running the migration, confirm:
+## Required Check
 
-1. The configured threshold is set to `90 days`.
-2. Any downstream filtering, archival, or cleanup logic matches that threshold.
-3. No environment-specific override changes the threshold unintentionally.
+Confirm that all migration logic, configuration, and documentation consistently use:
 
-## Migration Checklist
+- `90 days` as the default recency threshold
 
-- Confirm source and target schemas are compatible.
-- Confirm the migration job is using the expected recency window.
-- Validate sample records from both inside and outside the 90-day threshold.
-- Run the migration in a staging or dry-run mode if available.
-- Review logs for skipped, migrated, or archived conversation memory entries.
-- Verify counts after migration match expectations.
+If any discrepancy is found, update the source of truth to match this value.
 
-## Operational Notes
+## Migration Notes
 
-- If a different threshold is required for a specific deployment, document it alongside the deployment configuration.
-- Keep the threshold value consistent across migration scripts, scheduled jobs, and validation checks.
-- If the migration previously used a different default, update all references to reflect the 90-day standard.
+- Preserve existing data handling behavior unless the recency threshold is intentionally changed.
+- Ensure any environment variable, constant, or parameter related to recency filtering reflects the default of `90 days`.
+- Update related references in runbooks, comments, and operational docs where needed.
 
-## Post-Migration Validation
+## Verification Summary
 
-After migration:
-
-- Confirm recent conversation memory entries remain accessible.
-- Confirm entries outside the 90-day threshold are handled according to policy.
-- Check for any unexpected gaps in migrated data.
-- Record the migration timestamp, threshold used, and validation results.
-
-## Status
-
-The documented default recency threshold is **90 days** and should be treated as the authoritative value unless explicitly overridden by a controlled migration configuration.
+- Default threshold: **90 days**
+- Status: **confirmed**
