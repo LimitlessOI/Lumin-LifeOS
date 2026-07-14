@@ -1,29 +1,26 @@
-<!-- SYNOPSIS: Amendment 02 Migration Runbook -->
+<!-- SYNOPSIS: Amendment 02: Migration Runbook -->
 
-# Amendment 02 Migration Runbook
+# Amendment 02: Migration Runbook
 
-## Purpose
+## Scope
+This amendment covers the `conversation_memory` migration runbook and confirms the recency threshold used during migration.
 
-This runbook documents the migration verification for `conversation_memory` and confirms the default recency threshold used during migration.
-
-## Verification Summary
-
+## Recency Threshold Verification
 The default recency threshold for `conversation_memory` migration is **90 days**.
 
-This threshold is correct and should remain the standard default unless a later amendment explicitly changes it.
-
-## Checks Performed
-
-- Reviewed the migration expectation for `conversation_memory`
-- Confirmed the default recency cutoff is set to **90 days**
-- Checked for discrepancies between implementation intent and documented threshold
-
-## Result
-
-- **Status:** Verified
-- **Default recency threshold:** 90 days
-- **Discrepancies found:** None
+### Confirmation
+- **Default threshold:** 90 days
+- **Status:** Verified as correct
+- **Action required:** None, unless a future migration explicitly overrides this value
 
 ## Notes
+If any existing documentation, scripts, or config entries state a different default threshold, they should be updated to match **90 days** for consistency.
 
-If future migration behavior changes, update this runbook and any related migration configuration to keep the documented threshold aligned with implementation.
+## Migration Guidance
+When migrating conversation memory data:
+- Use **90 days** as the default cutoff for recency-based handling
+- Preserve more recent conversations according to the migration rules
+- Treat this threshold as the canonical default unless a migration-specific override is documented
+
+## Change Log
+- Confirmed the default recency threshold for `conversation_memory` migration is **90 days**
