@@ -3224,17 +3224,26 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       await sleep(2000);
 
-      // Capture patient-search XHR while interacting.
+      // Capture patient-search XHR while interacting (include JSON body for SearchBillingSlipPregnancyList).
       const ajaxHits = [];
       const onResponse = async (response) => {
         try {
           const url = response.url();
-          if (!/patient|client|pregnancy|chargeslip|superbill|visit|schedule/i.test(url)) return;
-          if (!/json|javascript|text/i.test(response.headers()['content-type'] || 'text/html')) return;
-          ajaxHits.push({
-            url: url.slice(0, 240),
-            status: response.status(),
-          });
+          if (!/SearchBillingSlipPregnancyList|patient|chargeslip|superbill|visit/i.test(url)) return;
+          const hit = { url: url.slice(0, 320), status: response.status() };
+          if (/SearchBillingSlipPregnancyList/i.test(url)) {
+            try {
+              const data = await response.json();
+              hit.bodyPreview = Array.isArray(data)
+                ? { count: data.length, sample: data.slice(0, 5) }
+                : (data && typeof data === 'object'
+                  ? { keys: Object.keys(data).slice(0, 20), count: data.Data?.length || data.data?.length || data.length || null, sample: (data.Data || data.data || data.Items || []).slice?.(0, 5) }
+                  : { rawType: typeof data });
+            } catch {
+              hit.bodyPreview = { parse: 'failed' };
+            }
+          }
+          ajaxHits.push(hit);
         } catch {
           /* ignore */
         }
@@ -3274,7 +3283,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       });
       if (providerSet?.set) await sleep(2000);
 
-      // Click a visit row matching patientQuery, else first real visit row.
+      // Click a visit row matching patientQuery, else first real visit row (skip chrome "No results").
       const visitClick = await session.page.evaluate((q) => {
         const want = String(q || '').trim().toLowerCase();
         const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'));
@@ -3285,7 +3294,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             .filter(Boolean);
           if (cells.length < 2) continue;
           const text = cells.join(' | ');
-          if (/no results|time\s+patient\s+visit/i.test(text) && cells.length <= 3) continue;
+          if (/no results found/i.test(text)) continue;
+          if (/^time$/i.test(cells[0] || '') && /patient/i.test(cells[1] || '')) continue;
+          if (/date:\s*provider:/i.test(text) && /no results/i.test(text)) continue;
+          if (cells.length === 1) continue;
+          // Real visit rows usually have a time-like token or a person-ish name.
+          const looksVisit = /\b\d{1,2}:\d{2}\b/.test(text) || /[A-Za-z]{2,}\s+[A-Za-z]{2,}/.test(text);
+          if (!looksVisit) continue;
           let score = 1;
           if (want && text.toLowerCase().includes(want)) score += 10;
           scored.push({ tr, cells: cells.slice(0, 6), text: text.slice(0, 160), score });
