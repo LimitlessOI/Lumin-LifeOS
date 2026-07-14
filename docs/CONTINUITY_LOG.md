@@ -1,4 +1,7 @@
 
+
+## 2026-07-14 — Forever-chase founder mandate
+Adam: chase every unpaid/underpaid insurance birth forever; ask insurers; prove Sherry did the work. Tip had 15 births + 50 notes accounts but claims ledger was empty (0 underpayments). Shipped seedForeverChaseFromInventory + GET/POST forever-chase; age no longer write-off. ChargeSlip Save still does not persist (parallel blocker).
 ## 2026-07-14 — ClientCare ChargeSlip fail-closed
 Tip proved 11/21/2025 visit list can bind a *different* scheduled patient than the status-ready pregnancyId. Mapper now reads Born from billing, scans ±days, requires pregnancyId match before Save, dismisses session-takeover dialog. Live Save still pending correct bind for 3 status-ready births.
 <!-- SYNOPSIS: Continuity Log -->
