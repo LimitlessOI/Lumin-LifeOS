@@ -426,15 +426,32 @@
         "step-03"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "last_error": "route module not auto-registered -- add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "attempts": 1,
+      "last_error": "governed_ship_failed",
       "expected_exports": [
         "registerSiteBuilderColorPalettesRoutes"
       ],
       "route": {
         "method": "GET",
         "path": "/api/site-builder/color-palettes"
-      }
+      },
+      "revive_count": 1,
+      "revived_at": "2026-07-14T21:26:17.511Z",
+      "commit_sha": null,
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "last_attempt_at": "2026-07-14T21:26:19.641Z",
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "step-04-register",
