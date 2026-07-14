@@ -75,18 +75,20 @@ export async function runAuthoring(step, codegenRunner) {
       max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
     });
   } catch (err) {
-    return { ...base, ok: false, reason: 'codegen_threw', error: String(err?.message || err) };
+    const errMsg = String(err?.message || err);
+    return { ...base, ok: false, reason: `codegen_threw: ${errMsg.slice(0, 500)}`, error: errMsg };
   }
 
   const rawContent = extractContent(result?.content);
   const content = normalizeCommonJsToEsm(rawContent, target_file);
   if (!content || !content.trim()) {
+    const errMsg = result?.error || null;
     return {
       ...base,
       ok: false,
-      reason: 'codegen_empty',
+      reason: errMsg ? `codegen_empty: ${String(errMsg).slice(0, 500)}` : 'codegen_empty',
       model_tier: result?.model_tier || null,
-      error: result?.error || null,
+      error: errMsg,
     };
   }
 

@@ -980,8 +980,10 @@ async function postBuilderBuild(baseUrl, commandKey, body) {
 // boot time, so writing it whole reverted every external BUILD_QUEUE edit.
 const QUEUE_RUNTIME_STEP_FIELDS = [
   'status', 'attempts', 'commit_sha', 'built_sha', 'proof',
-  'last_attempt_at', 'last_attempt', 'last_error', 'revive_count',
+  'last_attempt_at', 'last_attempt', 'last_error', 'revive_count', 'revived_at',
   'completed_at', 'no_op', 'pre_existing',
+  'demoted', 'demote_reason', 'demoted_at', 'park_until',
+  'blocker_class', 'claim_level', 'blocker_type', 'blocker_resolution',
 ];
 
 const STATUS_RANK = Object.freeze({
@@ -1021,8 +1023,12 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     const out = { ...repoStep };
     const repoRank = statusRank(repoStep.status);
     const memRank = statusRank(memStep.status);
+    // REVIVE: a deliberate in-memory revive (blocked -> pending/building) must be
+    // allowed to override the stale repo snapshot, otherwise the loop can never
+    // re-try a step that is currently blocked in the repo copy.
+    const memRevived = (memStep.revive_count || 0) > (repoStep.revive_count || 0);
     // Stale mem pending/building must not clobber a more-advanced repo status.
-    if (repoRank > memRank) {
+    if (repoRank > memRank && !memRevived) {
       return out;
     }
     // REVERSE: a deliberate repo reset (repo is pending, no runtime evidence,

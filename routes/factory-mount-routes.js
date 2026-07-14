@@ -12,6 +12,7 @@
 import express from 'express';
 import fs from 'node:fs';
 import os from 'node:os';
+import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { dispatchExecuteStep, resolveRepoPath } from '../factory-staging/factory-core/builder/run-step.js';
@@ -137,10 +138,10 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncil
               }
               lastError = `empty_output_from:${member}`;
             } catch (err) {
-              lastError = String(err?.message || err);
+              lastError = `${member}: ${String(err?.message || err)}`;
             }
           }
-          return { content: null, error: lastError || 'all_tiers_failed' };
+          return { content: null, error: lastError || 'all_tiers_failed', model_tier: member || null };
         },
       }
     : null;

@@ -372,7 +372,7 @@ export function reviveStaleBlockedSteps(queue, {
     const autoRegBlock = /auto-registered|not auto-registered|module-health|module_not_mounted/i.test(
       String(step.last_error || ''),
     );
-    const artifactToolingBlock = /artifact_proof_failed:\s*assertion_threw/i.test(
+    const artifactToolingBlock = /artifact_proof_failed:\s*assertion_threw|codegen_authoring_failed|codegen_empty|codegen_threw|no_codegen_runner|authoring_requires_blueprint_assertions/i.test(
       String(step.last_error || ''),
     );
     const verifyThrash = /^verify_exit_/i.test(String(step.last_error || ''));
@@ -404,6 +404,24 @@ export function reviveStaleBlockedSteps(queue, {
     step.attempts = 0;
     step.revive_count = reviveCount + 1;
     step.revived_at = new Date(now).toISOString();
+    // Strip stale runtime evidence from the previous failed attempt so the revived
+    // step does not appear to have a commit or a runtime error when re-queued.
+    step.commit_sha = null;
+    step.built_sha = null;
+    step.proof = null;
+    step.last_error = null;
+    step.last_attempt = null;
+    step.last_attempt_at = null;
+    step.demoted = false;
+    step.demote_reason = null;
+    step.demoted_at = null;
+    step.park_until = null;
+    step.no_op = null;
+    step.pre_existing = null;
+    step.blocker_class = null;
+    step.claim_level = null;
+    step.blocker_type = null;
+    step.blocker_resolution = null;
     revived.push(step.id);
   }
   return revived;

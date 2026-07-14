@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-14 — Chair-counsel fix: missing `path` import in `factory-mount-routes.js` codegenRunner
+
+Second-opinion review found the real `codegen_empty` cause: `routes/factory-mount-routes.js` was missing `import path from 'node:path'`, so the `node --check` syntax-check block threw `ReferenceError: path is not defined`, caught every tier, and returned `content: null` / `model_tier: null` to `runAuthoring`. Fixed by adding the import and prefixing the `catch` error with the failing member. `factory-staging/factory-core/builder/run-step.js` now exposes `error` in `codegen_authoring_failed` evidence. `services/product-build-orchestrator.js` `reviveStaleBlockedSteps` clears stale runtime evidence (`commit_sha`, `last_error`, `attempts`, etc.) on revive and treats `codegen_*` failures as tooling blocks. `services/never-stop-product-factory.js` `mergeQueueRuntimeStatus` honors a `revive_count` increase so a revived `PENDING` step is not clobbered by the stale repo `BLOCKED` snapshot. `docs/products/builderos/PRODUCT_HOME.md` updated. Next: run gates, push, redeploy, force a BuilderOS tick, verify `command-center` `s3` ships and `GET /api/v1/lifeos/never-stop/status` `governed_status.totalRuns`/`lastShipped` increments.
+
 ## 2026-07-14 — Replicate credit unlocked; product presentation polish
 
 Adam added Replicate payment. Tip proved Ideogram thumbnail render. Shipped Studio heroes + presentation surfaces: Site Builder full-bleed landing hero, `/marketing/for-you`, `/tc/for-you`, TC portal type polish, MarketingOS teal shell tokens.
