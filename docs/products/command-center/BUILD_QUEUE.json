@@ -93,7 +93,7 @@
       ],
       "founder_gated": false,
       "attempts": 0,
-      "commit_sha": null,
+      "commit_sha": "46bb1e34b8cd64181848ff3c81c161f50b10493d",
       "last_attempt_at": null,
       "last_error": null,
       "expected_exports": [
