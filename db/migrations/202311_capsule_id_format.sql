@@ -4,7 +4,7 @@ ALTER TABLE capsules
 
 UPDATE capsules
 SET id = gen_random_uuid()
-WHERE id IS NULL OR id = '';
+WHERE id IS NULL;
 
 ALTER TABLE capsules
   ALTER COLUMN id SET NOT NULL;
