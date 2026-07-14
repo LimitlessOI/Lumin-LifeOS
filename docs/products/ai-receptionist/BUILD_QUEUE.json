@@ -1,0 +1,92 @@
+{
+  "schema": "product_build_queue_v1",
+  "product_id": "ai-receptionist",
+  "planned_at": "2026-07-14T21:41:51.826Z",
+  "backlog_signature": "486822de981a150a",
+  "corpus_sources": [
+    "docs/products/ai-receptionist/PRODUCT_HOME.md"
+  ],
+  "steps": [
+    {
+      "id": "step1",
+      "status": "pending",
+      "target_file": "services/vapiService.js",
+      "task": "create Vapi account service",
+      "spec": "Create a service to handle Vapi account setup including storing the API key.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "setVapiApiKey"
+      ]
+    },
+    {
+      "id": "step2",
+      "status": "pending",
+      "target_file": "services/paymentService.js",
+      "task": "create Stripe price ID service",
+      "spec": "Create a service to handle Stripe pricing tiers by creating and storing price IDs for all three tiers.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "createStripePriceIDs"
+      ]
+    },
+    {
+      "id": "step3",
+      "status": "pending",
+      "target_file": "db/migrations/20231019_create_pricing_tiers.sql",
+      "task": "write DB migration for pricing tiers",
+      "spec": "Create a SQL migration to create a pricing_tiers table for storing Stripe price IDs.",
+      "depends_on": [],
+      "founder_gated": false,
+      "attempts": 0,
+      "file_contains": [
+        "CREATE TABLE IF NOT EXISTS pricing_tiers"
+      ]
+    },
+    {
+      "id": "step4",
+      "status": "pending",
+      "target_file": "routes/environmentRoutes.js",
+      "task": "create environment routes",
+      "spec": "Create a route to set environment variables for the application, including VAPI_API_KEY.",
+      "depends_on": [
+        "step1"
+      ],
+      "founder_gated": false,
+      "attempts": 0,
+      "expected_exports": [
+        "registerEnvironmentRoutes"
+      ],
+      "route": {
+        "path": "/api/v1/env"
+      }
+    },
+    {
+      "id": "step5",
+      "status": "founder_gated",
+      "target_file": "public/ai-receptionist.html",
+      "task": "build AI receptionist landing page",
+      "spec": "Develop the landing page UI for AI Receptionist service with brand elements and usage instructions.",
+      "depends_on": [],
+      "founder_gated": true,
+      "attempts": 0
+    },
+    {
+      "id": "step6",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "auto-register new modules",
+      "spec": "Add newly created service and route modules to auto-registered product modules configuration.",
+      "depends_on": [
+        "step1",
+        "step2",
+        "step4"
+      ],
+      "founder_gated": false,
+      "attempts": 0
+    }
+  ]
+}
