@@ -44,7 +44,7 @@
       "founder_gated": false,
       "attempts": 1,
       "commit_sha": null,
-      "last_attempt_at": "2026-07-14T21:37:31.982Z",
+      "last_attempt_at": "2026-07-14T21:27:16.173Z",
       "last_error": "governed_ship_failed",
       "park_until": null,
       "expected_exports": [
@@ -54,8 +54,8 @@
         "method": "GET",
         "path": "/api/v1/lifeos/command-center/mode"
       },
-      "revive_count": 4,
-      "revived_at": "2026-07-14T21:37:07.289Z",
+      "revive_count": 1,
+      "revived_at": "2026-07-14T21:26:17.512Z",
       "built_sha": null,
       "proof": null,
       "last_attempt": null,
@@ -84,7 +84,7 @@
     },
     {
       "id": "s5",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/phase14-cert-routes.js",
       "task": "Expose GET /api/v1/builder/cert/phase14 endpoint",
       "spec": "Export registerPhase14CertRoutes(app,deps) where deps={db}. GET /api/v1/builder/cert/phase14 calls getPhase14Cert(db) and returns JSON result with Cache-Control no-store. On error returns {error:message} 500. Import only ../services/phase14-cert-service.js. No browser globals.",
@@ -103,7 +103,7 @@
         "method": "GET",
         "path": "/api/v1/builder/cert/phase14"
       },
-      "revive_count": 1,
+      "revive_count": 0,
       "revived_at": "2026-07-14T21:26:17.512Z",
       "built_sha": null,
       "proof": null,
@@ -117,7 +117,9 @@
       "blocker_class": null,
       "claim_level": null,
       "blocker_type": null,
-      "blocker_resolution": null
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T21:39:13.663Z"
     },
     {
       "id": "s6",

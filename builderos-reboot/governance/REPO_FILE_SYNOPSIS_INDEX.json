@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T21:21:15.231Z",
+  "generated_at": "2026-07-14T21:39:15.205Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11534,
   "files": [
@@ -66519,9 +66519,9 @@
     {
       "path": "routes/phase14-cert-routes.js",
       "synopsis": "Registers Phase14CertRoutes routes/handlers (routes/phase14-cert-routes.js).",
-      "bytes": 671,
-      "mtime": "2026-07-12T13:24:22.125Z",
-      "indexed_at": "2026-07-14T21:19:15.358Z"
+      "bytes": 504,
+      "mtime": "2026-07-14T21:39:15.205Z",
+      "indexed_at": "2026-07-14T21:39:15.205Z"
     },
     {
       "path": "routes/progress-report-routes.js",
