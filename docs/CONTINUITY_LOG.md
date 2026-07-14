@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-07-14 — Creative Engine graphic_design mode (Ideogram/Recraft/Flux via Replicate) — real AI graphics for SMOS + Site Builder
+
+Adam: "we don't have [good graphics] and I don't have the time or patience... if it's affordable that we can use it, let's incorporate it into our system." Researched the market: Ideogram v3 ($0.03/img, best text-in-image), Recraft v3 ($0.04-0.08/img, native SVG vector/brand kits), Flux 2 Pro ($0.055/img, photorealism) — all reachable through the Replicate account this repo already holds (used for Kling/Wan video), so no new vendor relationship needed. Adam approved and flagged: Cursor/Grok 4.5 is concurrently improving SocialMediaOS, and Site Builder needs this badly.
+
+**Shipped (governed builder, `platform_gap_fill:true` per SO-001 — no blueprint yet covers this net-new capability):**
+- `services/creative-engine/modes/graphic-design.js` — new Creative Engine mode, gated on `REPLICATE_API_TOKEN`, routes `assetType` (`thumbnail`→Ideogram v3-turbo, `vector`→Recraft v3-svg, `photo`→Flux 1.1-pro). Commit `22da9c4870`.
+- `routes/creative-engine-graphic-design-routes.js` + `config/auto-registered-product-modules.json` entry — `POST /api/v1/creative/graphic-design/{estimate,render}`. Commits `94d55baaf7`, `8d8c7e4ecd`. **Verified live in production** (not just claimed): estimate returns real per-type pricing, render correctly 503s `REPLICATE_API_TOKEN_REQUIRED`.
+
+**Real platform gap found (not hacked around):** wiring `graphic_design` into the *shared* `services/creative-engine/index.js` dispatcher (so it gets DB-backed job history like the other 4 modes) was rejected by Zone-3 governance (`services/builderos-build-pipeline.js:77`) — that gate only exempts `additivePatch`, never `editPatch`, even though edit-patch already validates `old_string` matches the live file exactly once before this gate runs, so it carries none of the blind-rewrite-stub risk the gate exists to catch. Built a standalone stateless route pair instead (documented in `docs/products/creative-engine/PRODUCT_HOME.md` architectural-gap note, with the exact 2-line proposed fix). Site Builder's `enrichWithRealData` fallback wiring hit the identical wall — **deliberately not hand-hacked** (site-builder.js is Zone-3, live revenue-path code under active same-day iteration; a monkey-patch around governance on that file was judged too risky). Both are one small platform fix away from a clean wire-in.
+
+**Hard blocker — `REPLICATE_API_TOKEN` is not set on Railway** (`GET /api/v1/creative/health` → `replicateConfigured:false`, confirmed live, not from memory). Nothing generates a real image until Adam adds it; this is an external account/billing action only he can take (same token already used for `script_compose`/video, so one signup unlocks both).
+
+**Deliberately not touched:** `services/marketing-youtube.js` (SMOS thumbnails) — origin/main gained 3 more SMOS GAP-FILL commits from a concurrent agent mid-session (confirmed via `git log`, merged cleanly at `82afacbe17`), so wiring real thumbnails into that hot file is left as the next step rather than risking a collision.
+
+Verification: `npm run builder:preflight` PASS pre-session; both new endpoints smoke-tested live in production with real HTTP calls (not cited from a past receipt). Next: Adam adds `REPLICATE_API_TOKEN` to Railway → re-test `/render` for a real image → decide on the Zone-3 edit-patch governance fix → wire Site Builder hero/logo fallback + SMOS thumbnails once that lands.
+
 ## 2026-07-14 — Site Builder custom template $35 + competitive video honesty
 
 Adam: Replicate images (Cloud Code), 15 templates (5 free / $1 / $35 custom one-of-one), industry packs, directed co-design; asked what Descript/competitors do and whether we can dump footage → great video / tell good from bad. Pricing bumped to $35 custom. Honest gap: Creative Engine can crop/caption/aspect (`footage_edit` live) but has no transcript editor, no Underlord-class judgment, no virality/quality critic — dump→great is NOT ready yet.

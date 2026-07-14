@@ -9,7 +9,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/creative-engine/FILE_MANIFEST.json` |
 | **Primary runtime surface** | `/api/v1/creative/*` + `/creative` studio UI |
-| **Last Updated** | 2026-07-10 — tip proof PASS: footage_edit live (`CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`) |
+| **Last Updated** | 2026-07-14 — graphic_design mode (Ideogram/Recraft/Flux via Replicate) governed-built and live at `/api/v1/creative/graphic-design/{estimate,render}`, gated on `REPLICATE_API_TOKEN` (not yet set on Railway). |
 
 ---
 
@@ -38,12 +38,17 @@
 | `photo_polish` | **LIVE** | FFmpeg — scale + caption overlay |
 | `script_compose` | **GATED** | `REPLICATE_API_TOKEN` — wraps `services/video-pipeline.js` Path B |
 | `generative_broll` | **SCAFFOLD** | Returns gated until footage_edit tip-proven |
+| `graphic_design` | **GATED (routes live)** | `REPLICATE_API_TOKEN` — Ideogram v3-turbo (thumbnail text), Recraft v3-svg (vector/brand), Flux 1.1-pro (photo). Real AI graphics for SocialMediaOS thumbnails + Site Builder hero/brand imagery — the founder gap this closes: "we don't have good graphics and don't have time to learn it." |
 
 ### Owns
 - `services/creative-engine/**`
 - `routes/creative-engine-routes.js`
 - `routes/creative-engine-ui-routes.js`
+- `routes/creative-engine-graphic-design-routes.js` — standalone route pair for `graphic_design` (see note below on why it's not in the shared dispatcher)
 - `db/migrations/20260710_creative_engine_v1.sql`
+
+### Known architectural gap — graphic_design is NOT in the shared dispatcher
+`services/creative-engine/index.js` is 227 lines (Zone 3, >150-line governed-builder threshold). The platform's pre-commit governance (`services/builderos-build-pipeline.js:77`) hard-blocks Zone-3 targets unless `additivePatch === true` — it does **not** exempt `editPatch` even though edit-patch (`applyTargetedEdits`) already validates each `old_string` matches the live file exactly once before this gate runs, so it carries none of the "blind full-file rewrite stubs the file" risk the Zone-3 block exists to prevent. Net effect: `graphic_design` could not be safely wired into `index.js`'s `estimate()`/`processJob()` dispatch chain through the governed `/build` endpoint today. Worked around by shipping `routes/creative-engine-graphic-design-routes.js` as an independent, stateless route pair (no `creative_jobs` DB persistence, no `/api/v1/creative/jobs/:id` history) instead. **Proposed platform fix** (not yet applied — changes builder safety-gate logic, wants a deliberate look rather than a same-session patch): pass `editPatch: editPatchActive` alongside `additivePatch: additivePatchActive` into `runPrecommitGovernance` at `routes/lifeos-council-builder-routes.js:3139`, and widen the guard at `services/builderos-build-pipeline.js:77` to `zoneResult.zone === 3 && !intakeRewrite && opts.additivePatch !== true && opts.editPatch !== true`. Once fixed, `graphic_design` can be folded into the shared dispatcher for job history/consistency with the other 4 modes.
 
 ### Does NOT own
 - MarketingOS coaching / consent UX (calls engine)
@@ -59,6 +64,8 @@
 | POST | `/api/v1/creative/render` |
 | GET | `/api/v1/creative/jobs/:id` |
 | GET | `/api/v1/creative/jobs/:id/outputs` |
+| POST | `/api/v1/creative/graphic-design/estimate` — `{assetType: 'thumbnail'\|'vector'\|'photo', count?}` → `{cents, model, gated}` |
+| POST | `/api/v1/creative/graphic-design/render` — `{prompt, assetType?, brandColors?, aspectRatio?}` → `{ok, publicUrl, model, assetType}` or 503 `REPLICATE_API_TOKEN_REQUIRED` |
 
 Studio: `/creative`, `/creative/studio`
 
@@ -68,5 +75,6 @@ Studio: `/creative`, `/creative/studio`
 
 | Date | What | Why | State |
 |------|------|-----|-------|
+| 2026-07-14 | **graphic_design mode shipped** — `services/creative-engine/modes/graphic-design.js` (Ideogram v3-turbo / Recraft v3-svg / Flux 1.1-pro via Replicate, gated on `REPLICATE_API_TOKEN`) + `routes/creative-engine-graphic-design-routes.js` (standalone, see architectural-gap note above) + auto-register entry in `config/auto-registered-product-modules.json`. Verified live in production: `POST /api/v1/creative/graphic-design/estimate` returns real per-asset-type pricing; `POST .../render` correctly returns 503 `REPLICATE_API_TOKEN_REQUIRED` (token not yet set on Railway). Both governed builds (`22da9c4870`, `94d55baaf7`) committed via `POST /api/v1/lifeos/builder/build` with `platform_gap_fill:true` per SO-001; a third governed build (edit `index.js` dispatcher) was correctly rejected by Zone-3 governance — see architectural-gap note. Site Builder / SocialMediaOS consumption not yet wired (SocialMediaOS actively being iterated by a concurrent agent same day — see `docs/CONTINUITY_LOG.md`; Site Builder wiring needs the same Zone-3 edit-patch platform fix). | Adam: "we don't have [good graphics] and I don't have the time or patience... if it's affordable... let's incorporate it into our system." Researched market (Ideogram/Recraft/Flux all $0.03-0.08/image, already reachable through the existing Replicate account used for Kling/Wan video). | ✅ routes live + verified; ⛔ render blocked on `REPLICATE_API_TOKEN` |
 | 2026-07-10 | **Tip footage_edit PASS** — health `ffmpeg:true`; upload sample MP4; async render completed; output 1.3MB 9:16 at `/previews/creative/outputs/...`. Receipt `products/receipts/CREATIVE_ENGINE_V1_FOOTAGE_EDIT.json`. Default render for footage_edit is async (sync was Railway 502). | Plan proof criteria. | ✅ tip `069f8a4d25` |
 | 2026-07-10 | **v1 Creative Engine shipped** — schema, FFmpeg in Docker, media-storage, footage_edit + photo_polish + script_compose gate + generative_broll scaffold, routes/UI auto-registered, studio SSR. | Adam: build Creative Engine; video editing in v1; do all modes; decide for him. | ✅ tip `069f8a4d25` + async fix on `main` |

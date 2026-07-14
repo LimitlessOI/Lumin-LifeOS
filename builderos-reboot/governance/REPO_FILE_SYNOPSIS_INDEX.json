@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T06:34:17.669Z",
+  "generated_at": "2026-07-14T06:36:08.457Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11519,
   "files": [
@@ -36916,9 +36916,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 533052,
-      "mtime": "2026-07-14T06:34:08.568Z",
-      "indexed_at": "2026-07-14T06:34:17.669Z"
+      "bytes": 536573,
+      "mtime": "2026-07-14T06:35:56.597Z",
+      "indexed_at": "2026-07-14T06:36:08.457Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39176,9 +39176,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 3300,
-      "mtime": "2026-07-10T21:45:04.995Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 7252,
+      "mtime": "2026-07-14T06:35:20.565Z",
+      "indexed_at": "2026-07-14T06:36:08.457Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
