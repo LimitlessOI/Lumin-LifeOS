@@ -150,6 +150,45 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   router.use(express.json({ limit: '5mb' }));
   router.use(requireKey);
 
+  /** Long Puppeteer jobs — tip edge ~30–60s; return 202 + poll. */
+  const browserJobs = new Map();
+  function enqueueBrowserJob(kind, runner, request = {}) {
+    const id = randomUUID();
+    const job = {
+      id,
+      kind,
+      status: 'queued',
+      request,
+      result: null,
+      error: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    browserJobs.set(id, job);
+    setImmediate(() => {
+      (async () => {
+        job.status = 'running';
+        job.updated_at = new Date().toISOString();
+        try {
+          job.result = await runner();
+          job.status = 'completed';
+        } catch (err) {
+          job.status = 'failed';
+          job.error = err.message;
+          logger.warn?.({ err: err.message, kind, id }, '[CLIENTCARE-BILLING] browser job failed');
+        }
+        job.updated_at = new Date().toISOString();
+      })();
+    });
+    return job;
+  }
+
+  router.get('/browser/jobs/:jobId', async (req, res) => {
+    const job = browserJobs.get(req.params.jobId);
+    if (!job) return res.status(404).json({ ok: false, error: 'Job not found or expired' });
+    res.json({ ok: true, job });
+  });
+
   router.get('/dashboard', async (_req, res) => {
     try {
       res.json({ ok: true, dashboard: await billingService.getDashboard() });
@@ -974,16 +1013,128 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/browser/backlog-summary', async (req, res) => {
     try {
-      const result = await browserService.buildBacklogSummary({
+      const asyncMode = String(req.query?.async || '').toLowerCase() === 'true' || req.query?.async === '1';
+      const args = {
         maxPages: req.query?.max_pages,
         pageTimeoutMs: req.query?.page_timeout_ms,
         accountLimit: req.query?.account_limit,
-      });
+      };
+      if (asyncMode) {
+        const job = enqueueBrowserJob('backlog_summary', () => browserService.buildBacklogSummary(args), args);
+        return res.status(202).json({
+          ok: true,
+          started: true,
+          job_id: job.id,
+          poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        });
+      }
+      const result = await browserService.buildBacklogSummary(args);
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] backlog summary failed');
       res.status(500).json({ ok: false, error: error.message });
     }
+  });
+
+  router.get('/browser/birth-activity', async (req, res) => {
+    try {
+      const asyncMode = String(req.query?.async || 'true').toLowerCase() !== 'false';
+      const args = {
+        maxRows: req.query?.max_rows,
+        pageTimeoutMs: req.query?.page_timeout_ms,
+      };
+      if (asyncMode) {
+        const job = enqueueBrowserJob('birth_activity', () => browserService.scanBirthActivity(args), args);
+        return res.status(202).json({
+          ok: true,
+          started: true,
+          job_id: job.id,
+          poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        });
+      }
+      res.json(await browserService.scanBirthActivity(args));
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] birth activity failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/browser/prepare-claim-status', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const hrefs = Array.isArray(req.body?.billing_hrefs)
+        ? req.body.billing_hrefs.map((h) => String(h || '').trim()).filter(Boolean)
+        : [String(req.body?.billing_href || '').trim()].filter(Boolean);
+      if (!hrefs.length) return res.status(400).json({ ok: false, error: 'billing_href or billing_hrefs required' });
+      const dryRun = req.body?.dry_run === true;
+      const clientBillingStatus = req.body?.client_billing_status || 'Claims Processing';
+      const billProviderType = req.body?.bill_provider_type || 'CPM';
+      const job = enqueueBrowserJob(
+        'prepare_claim_status',
+        async () => {
+          const results = [];
+          for (const billingHref of hrefs.slice(0, 25)) {
+            try {
+              const r = await browserService.prepareClaimStatus({
+                billingHref,
+                clientBillingStatus,
+                billProviderType,
+                dryRun,
+              });
+              results.push({
+                billingHref,
+                ok: r.ok,
+                dryRun: r.dryRun,
+                saveResult: r.saveResult,
+                operations: r.operations,
+                before: r.before?.accountSummary,
+                after: r.after?.accountSummary,
+                error: r.error,
+              });
+            } catch (err) {
+              results.push({ billingHref, ok: false, error: err.message });
+            }
+          }
+          return { ok: true, dryRun, count: results.length, results };
+        },
+        { hrefs, dryRun, clientBillingStatus, billProviderType }
+      );
+      res.status(202).json({
+        ok: true,
+        started: true,
+        job_id: job.id,
+        poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        message: dryRun ? 'Dry-run claim-status prep queued' : 'Live claim-status prep queued (Claims Processing + CPM)',
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] prepare-claim-status failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/browser/operator-catalog', async (_req, res) => {
+    res.json({
+      ok: true,
+      mode: 'browser_ui_as_api',
+      note: 'ClientCare has no public billing API. Use these tip routes. Long jobs: async=true or POST prepare-claim-status.',
+      auth: { header: 'x-command-key' },
+      map_doc: 'docs/products/clientcare-billing-recovery/BILLING_UI_MAP.md',
+      login_probes: [
+        { method: 'POST', path: '/api/v1/clientcare-billing/browser/login-test' },
+        { method: 'GET', path: '/api/v1/clientcare-billing/clientcare/readiness' },
+      ],
+      money_path: [
+        { method: 'GET', path: '/api/v1/clientcare-billing/browser/birth-activity?async=true', summary: 'Recent births → billing hrefs' },
+        { method: 'GET', path: '/api/v1/clientcare-billing/browser/backlog-summary?async=true&account_limit=50', summary: 'Billing notes rescue queue (newest first)' },
+        { method: 'POST', path: '/api/v1/clientcare-billing/browser/prepare-claim-status', body: { billing_hrefs: ['…'], dry_run: false }, summary: 'Set Claims Processing + CPM' },
+        { method: 'POST', path: '/api/v1/clientcare-billing/ops/repair-account', summary: 'Field repair (dry_run default true)' },
+        { method: 'GET', path: '/api/v1/clientcare-billing/browser/jobs/:jobId', summary: 'Poll async browser job' },
+      ],
+      vendor_ai: {
+        embedded: 'AI-assisted charting only — not a billing API',
+        our_path: 'Puppeteer + Tiller/council for VOB and claim coaching',
+      },
+    });
   });
 
   router.get('/browser/client-directory-search', async (req, res) => {

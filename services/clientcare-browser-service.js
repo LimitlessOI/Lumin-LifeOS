@@ -2368,7 +2368,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           oldestNoteDate: [...group.noteDates].sort()[0] || '',
           latestNoteDate: [...group.noteDates].sort().slice(-1)[0] || '',
         }))
-        .sort((a, b) => String(a.oldestNoteDate || '').localeCompare(String(b.oldestNoteDate || '')))
+        .sort((a, b) => String(b.latestNoteDate || '').localeCompare(String(a.latestNoteDate || '')))
         .slice(0, Math.max(1, Number(accountLimit) || 100));
 
       const accounts = [];
@@ -2525,7 +2525,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             recoveryBand,
           };
         })
-        .sort((a, b) => String(a.oldestNoteDate || '').localeCompare(String(b.oldestNoteDate || '')))
+        .sort((a, b) => String(b.latestNoteDate || '').localeCompare(String(a.latestNoteDate || '')))
         .slice(0, Math.max(1, Number(accountLimit) || 200));
 
       return {
@@ -2725,6 +2725,105 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     };
   }
 
+  /**
+   * Scan Birth Activity for recent births → client links (money path for unpaid births
+   * that are not yet in the old Billing Notes queue).
+   */
+  async function scanBirthActivity({ maxRows = 40, pageTimeoutMs = 20000 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const target = new URL('/Home/BirthActivityPartial', session.currentUrl()).toString();
+      const nav = await gotoWithBudget(session.page, target, {
+        timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+      });
+      if (!nav.ok) return { ok: false, error: nav.error, screenshots };
+      await sleep(2500);
+
+      const rows = await session.page.evaluate((max) => {
+        const out = [];
+        const seen = new Set();
+        const push = (row) => {
+          const key = `${row.clientHref || ''}|${row.birthDateGuess || ''}|${(row.text || '').slice(0, 80)}`;
+          if (seen.has(key)) return;
+          seen.add(key);
+          out.push(row);
+        };
+
+        for (const tr of Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))) {
+          const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"]'))
+            .map((td) => (td.innerText || '').trim().replace(/\s+/g, ' '))
+            .filter(Boolean);
+          if (cells.length < 2) continue;
+          const text = cells.join(' | ');
+          const link =
+            tr.querySelector('a[href*="ShowDefaultClientScreen"]') ||
+            tr.querySelector('a[href*="/Pregnancy/"]');
+          const dateMatch = text.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{2}-\d{2})\b/);
+          if (!link && !dateMatch) continue;
+          push({
+            cells: cells.slice(0, 8),
+            text: text.slice(0, 320),
+            clientHref: link?.href || null,
+            birthDateGuess: dateMatch ? dateMatch[1] : null,
+          });
+          if (out.length >= max) break;
+        }
+
+        if (out.length < max) {
+          for (const a of Array.from(document.querySelectorAll('a[href*="ShowDefaultClientScreen"]'))) {
+            const text = (a.textContent || '').trim().replace(/\s+/g, ' ');
+            push({
+              cells: [text],
+              text: text.slice(0, 320),
+              clientHref: a.href,
+              birthDateGuess: null,
+            });
+            if (out.length >= max) break;
+          }
+        }
+        return out;
+      }, Math.max(1, Math.min(Number(maxRows) || 40, 100)));
+
+      const page = await collectPageSummary(session.page);
+      const withBilling = rows.map((row) => ({
+        ...row,
+        billingHref: row.clientHref ? deriveBillingHrefFromClientHref(row.clientHref) : null,
+      }));
+
+      return {
+        ok: true,
+        url: target,
+        page: { url: page.url, title: page.title, headings: page.headings },
+        count: withBilling.length,
+        births: withBilling,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  /**
+   * Prepare claim-ready status on a billing account: set Client Billing Status + Bill Provider Type.
+   * Does not flip payment_status (that means money received).
+   */
+  async function prepareClaimStatus({
+    billingHref,
+    clientBillingStatus = 'Claims Processing',
+    billProviderType = 'CPM',
+    dryRun = false,
+  } = {}) {
+    return repairBillingAccount({
+      billingHref,
+      updates: {
+        client_billing_status: clientBillingStatus,
+        bill_provider_type: billProviderType,
+      },
+      dryRun,
+    });
+  }
+
   return {
     getReadiness,
     getCredentials,
@@ -2737,12 +2836,14 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     inspectClientBillingAccount,
     scanClientBillingAccounts,
     scanBillingNotes,
+    scanBirthActivity,
     buildAccountRescueReport,
     buildFullAccountRescueReport,
     buildBacklogSummary,
     searchClientDirectory,
     extractClaimTables,
     repairBillingAccount,
+    prepareClaimStatus,
     runClientcareVobFlow,
     /** Post a billing note to ClientCare. billingHref is the client billing page URL. */
     async addBillingNote(billingHref, noteText) {

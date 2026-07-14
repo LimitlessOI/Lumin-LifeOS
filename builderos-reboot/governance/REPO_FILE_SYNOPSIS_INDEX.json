@@ -1,6 +1,10 @@
 {
   "schema": "repo_file_synopsis_index_v1",
+<<<<<<< HEAD
   "generated_at": "2026-07-14T10:59:28.876Z",
+=======
+  "generated_at": "2026-07-14T11:04:22.153Z",
+>>>>>>> a3101b6e02 (GAP-FILL: tip ClientCare long scans 502 and unpaid births missing from 2018–23 billing-notes queue — add Birth Activity scan, async browser jobs, prepare-claim-status (Claims Processing+CPM), newest-first backlog. No other path: no vendor billing API; family money depends on browser UI automation.)
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11524,
   "files": [
@@ -39130,9 +39134,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 80705,
-      "mtime": "2026-07-14T10:57:36.877Z",
-      "indexed_at": "2026-07-14T10:57:38.144Z"
+      "bytes": 81139,
+      "mtime": "2026-07-14T11:04:18.019Z",
+      "indexed_at": "2026-07-14T11:04:22.153Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
@@ -65359,9 +65363,9 @@
     {
       "path": "routes/clientcare-billing-routes.js",
       "synopsis": "clientcare-billing-routes.js",
-      "bytes": 54775,
-      "mtime": "2026-06-29T17:21:08.505Z",
-      "indexed_at": "2026-07-14T10:47:48.600Z",
+      "bytes": 61056,
+      "mtime": "2026-07-14T11:04:06.658Z",
+      "indexed_at": "2026-07-14T11:04:22.153Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
@@ -82158,9 +82162,9 @@
     {
       "path": "services/clientcare-browser-service.js",
       "synopsis": "clientcare-browser-service.js",
-      "bytes": 110257,
-      "mtime": "2026-06-29T17:21:08.829Z",
-      "indexed_at": "2026-07-14T10:47:48.600Z",
+      "bytes": 113869,
+      "mtime": "2026-07-14T11:03:48.211Z",
+      "indexed_at": "2026-07-14T11:04:22.153Z",
       "ssot": [
         "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md"
       ]
