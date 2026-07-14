@@ -90,7 +90,7 @@
     },
     {
       "id": "3",
-      "status": "blocked",
+      "status": "done",
       "target_file": "routes/audit-intake-flow-routes.js",
       "task": "create audit intake flow routes",
       "spec": "Exports registerAuditIntakeFlowRoutes(app, deps); handles route logic for audit intake flow including questions and optional system connections.",
@@ -98,17 +98,34 @@
         "2"
       ],
       "founder_gated": false,
-      "attempts": 3,
-      "commit_sha": "470893ce50f192efc7dde67671e95a9d9957ee18",
-      "last_attempt_at": "2026-07-13T13:10:50.461Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/audit-intake-flow-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "attempts": 0,
+      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
       "expected_exports": [
         "registerAuditIntakeFlowRoutes"
       ],
       "route": {
         "method": "GET",
         "path": "/api/audit-intake-flow/sessions"
-      }
+      },
+      "revive_count": 0,
+      "revived_at": "2026-07-14T20:41:32.603Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T20:41:37.208Z"
     },
     {
       "id": "4",
@@ -140,23 +157,38 @@
     },
     {
       "id": "6",
-      "status": "blocked",
+      "status": "pending",
       "target_file": "routes/marketingos-sku-routes.js",
       "task": "implement physical marketing SKUs",
       "spec": "Exports registerMarketingOSSkuRoutes(app, deps); manages SKU operations under MarketingOS commerce layer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 3,
-      "commit_sha": "425b126560adef69c34f0c5d4c0814908fe297df",
-      "last_attempt_at": "2026-07-13T13:36:35.517Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/marketingos-sku-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "attempts": 0,
+      "commit_sha": null,
+      "last_attempt_at": null,
+      "last_error": null,
       "expected_exports": [
         "registerMarketingOSSkuRoutes"
       ],
       "route": {
         "method": "GET",
         "path": "/api/marketingos/skus"
-      }
+      },
+      "revive_count": 1,
+      "revived_at": "2026-07-14T20:41:32.603Z",
+      "built_sha": null,
+      "proof": null,
+      "last_attempt": null,
+      "demoted": false,
+      "demote_reason": null,
+      "demoted_at": null,
+      "park_until": null,
+      "no_op": null,
+      "pre_existing": null,
+      "blocker_class": null,
+      "claim_level": null,
+      "blocker_type": null,
+      "blocker_resolution": null
     },
     {
       "id": "7",
