@@ -3693,7 +3693,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             const btn = Array.from(root.querySelectorAll('button, input[type="button"], input[type="submit"], a, span[onclick], i[onclick]'))
               .find((el) => {
                 const t = `${el.textContent || el.value || el.title || el.getAttribute('aria-label') || ''} ${el.className || ''}`.trim();
-                return /^(add|\+)$/i.test(t) || /\badd\b/i.test(t) || /fa-plus|glyphicon-plus|icon-plus/i.test(t);
+                if (/remittance|era|payment|print|delete|remove|cancel/i.test(t)) return false;
+                return /^(add|\+)$/i.test(t) || /^add\s+(service|code|procedure|diagnosis|cpt|icd)/i.test(t) || /fa-plus|glyphicon-plus|icon-plus/i.test(t);
               });
             if (!btn) continue;
             try {
@@ -3704,6 +3705,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 100) });
             }
           }
+          attempts.push({ label, ok: false, error: 'no_add_button' });
           return false;
         };
         const callHelpers = (names, label) => {
@@ -4000,15 +4002,55 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
             const body = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
             const errorBits = (body.match(/(please select|required|error[^\.]{0,80}|cannot save[^\.]{0,80})/ig) || []).slice(0, 5);
+            const lineHints = Array.from(document.querySelectorAll('#ChargeSlipSummaryBase tr, .billing-service-row, [data-billing-service]'))
+              .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+              .filter((t) => /59400|59409|59080|O80|Z37|\$\d/.test(t))
+              .slice(0, 8);
+            // ChargeSlipId is the CARE TYPE select (Intrapartum GUID) — not a durable slip id.
+            const careTypeOnly = /intrapartum|antepartum|postpartum|care/i.test(chargeText);
             return {
               chargeSlipValue: chargeVal,
               chargeSlipText: chargeText.slice(0, 80),
+              careTypeOnly,
               nonZeroChargeSlip: Boolean(chargeVal && chargeVal !== '00000000-0000-0000-0000-000000000000'),
+              lineHints,
               summary,
               errorBits,
               url: location.href,
             };
           });
+          // Prove persist via Review Sent Bills, not ChargeSlipId care-type GUID.
+          let sentBills = { checked: false };
+          try {
+            const billsNav = await gotoWithBudget(session.page, `${origin}/Billing/BillingListView`, {
+              timeout: Math.max(8000, Number(pageTimeoutMs) || 20000),
+            });
+            if (billsNav.ok) {
+              await sleep(2000);
+              sentBills = await session.page.evaluate((wantName) => {
+                const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+                const needle = String(wantName || '').toLowerCase().split(/\s+/).find((p) => p.length > 3) || '';
+                const noItems = /no items to display|no records|no data/i.test(text);
+                const hit = needle && text.toLowerCase().includes(needle);
+                const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
+                  .map((tr) => (tr.innerText || '').replace(/\s+/g, ' ').trim())
+                  .filter((t) => t && needle && t.toLowerCase().includes(needle))
+                  .slice(0, 5);
+                return {
+                  checked: true,
+                  noItems,
+                  nameHit: Boolean(hit),
+                  rows,
+                  preview: text.slice(0, 400),
+                };
+              }, visitList?.match?.name || patientQuery || 'Alvarado');
+            } else {
+              sentBills = { checked: false, error: billsNav.error };
+            }
+          } catch (err) {
+            sentBills = { checked: false, error: String(err?.message || err).slice(0, 120) };
+          }
+          persistCheck = { ...persistCheck, sentBills };
           saveResult = { ...saveResult, persistCheck };
         }
       }
@@ -4042,11 +4084,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           ? (codesSelected?.procedure || codesSelected?.diagnosis || dailySuperBill?.clicked
             ? (dryRun !== false
               ? 'Patient + codes ready — re-run dry_run=false to Save.'
-              : (persistCheck?.nonZeroChargeSlip
-                ? 'ChargeSlip persisted (non-zero ChargeSlipId) — verify Review Sent Bills / HCFA next.'
-                : (saveResult.attempted
-                  ? 'Save attempted but ChargeSlipId still empty — capture validation/dialogs; may need line-item Add before Save or Daily Super Bill path.'
-                  : (saveResult.blocked || 'Save blocked/missing.'))))
+              : (persistCheck?.sentBills?.nameHit
+                ? 'PROVED: patient appears on Review Sent Bills after Save — continue HCFA/submit path.'
+                : (persistCheck?.sentBills?.noItems
+                  ? 'Save ran but Review Sent Bills still empty for this patient — line item Add/POS/units still incomplete.'
+                  : (saveResult.attempted
+                    ? 'Save attempted — Sent Bills check inconclusive; inspect persistCheck.sentBills + lineHints.'
+                    : (saveResult.blocked || 'Save blocked/missing.')))))
             : 'Patient bound but no procedure/diagnosis hydrated — inspect codesMap; may need fee-schedule seeding.')
           : (visitList?.match?.pregnancyId
             ? 'Visit row found but ChargeSlip #FullNameText still empty — call selectClick(rowEl) only (not API raw).'

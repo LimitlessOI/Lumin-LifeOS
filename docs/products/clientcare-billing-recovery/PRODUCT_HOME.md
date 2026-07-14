@@ -464,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **ChargeSlip false persist** — tip nonZeroChargeSlip was Intrapartum care-type GUID, not a slip. Prove via Review Sent Bills; exclude Add Remittance false Add click. |
 | 2026-07-14 | **Job stale + ChargeSlip hang** — Neon timestamps (`…+00`) made Date.parse NaN so stale never fired; hung job never completed. Fix parse; do not call digSelectionProcess() bare; 60s evaluate timeout on code select. |
 | 2026-07-14 | **ChargeSlip Denise tip** — Save failed: date-mask Units/POS fill (`1_/__/____`), `BillingServiceRecordId` undefined, then “Please select a patient first”. Prefer 59409/59400 (not 59080), skip date masks, Add after code select, rebind patient before Save. |
 | 2026-07-14 | **Browser job heartbeat** — ChargeSlip tip jobs marked stale at 90s while still running; bump map timeout to 240s + 25s heartbeat + longer stale grace. |
