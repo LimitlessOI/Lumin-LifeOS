@@ -1149,6 +1149,8 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           patientQuery: req.body?.patient_query || req.body?.patientQuery,
           careType: req.body?.care_type || req.body?.careType,
           visitDate: req.body?.visit_date || req.body?.visitDate,
+          visitDates: req.body?.visit_dates || req.body?.visitDates || [],
+          scanDays: req.body?.scan_days ?? req.body?.scanDays,
           dryRun: req.body?.dry_run !== false && req.body?.dryRun !== false,
           pageTimeoutMs: req.body?.page_timeout_ms,
         }),
