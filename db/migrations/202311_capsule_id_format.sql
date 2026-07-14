@@ -2,4 +2,9 @@
 ALTER TABLE capsules
   ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+UPDATE capsules
+SET id = gen_random_uuid()
+WHERE id IS NULL;
+
+ALTER TABLE capsules
+  ALTER COLUMN id SET NOT NULL;
