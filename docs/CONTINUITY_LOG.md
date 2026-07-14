@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — ClientCare claim-status PROVED (3 births)
+
+KNOW: tip force `$eval`/Kendo writeback persists **Claims Processing + CPM** on 3 resolved births with insurers (Sierra/BCBS/Cigna). Birth Activity + directory clear finds recent births; SuperBillSPAPartialNew and bare InvoiceHCFAEdit 500 on vendor side. ChargeSlip loads but needs patient/visit pick. NEXT: automate ChargeSlip patient select → procedure codes → Save for those 3, then raise birth→billing resolve beyond 3/15.
+
 ## 2026-07-14 — ClientCare money path (birth→billing)
 
 Operator routes live on tip (`birth-activity`, `prepare-claim-status`, persisted `clientcare_browser_jobs`). KNOW: 2026 births found; directory clear yields ~235 clients; 3 births resolve to billing hrefs with insurers (Sierra/BCBS/Cigna). Claim-status apply runs + Save nearest controls, but after-reload status still blank — suspect Kendo DropDownList over native select (`page.select` hung on tip). NEXT: Kendo widget `.value()` force + verify persist, then ChargeSlip for those 3, then raise name-resolve budget for remaining births.
