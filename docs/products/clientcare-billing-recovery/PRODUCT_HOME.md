@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Prefer 59409/59400 + O80/Z37 codes before ChargeSlip Save. |
+| **Last Updated** | 2026-07-14 — Save still leaves ChargeSlipId empty; fill Units/POS then re-Save. |
 
 ---
 

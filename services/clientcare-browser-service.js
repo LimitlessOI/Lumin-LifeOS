@@ -3700,6 +3700,50 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         if (!procedure) procedure = clickFirst('procedure-codes-section', 'procedure_row');
         if (!diagnosis) diagnosis = clickFirst('diagnosis-codes-section', 'diagnosis_row');
         await new Promise((r) => setTimeout(r, 800));
+        // Tip: Save left ChargeSlipId empty — summary showed Mod/POS/Units blank. Fill required slip fields.
+        const fillNearby = (needle, value) => {
+          const labels = Array.from(document.querySelectorAll('label, span, td, th, div'));
+          for (const lab of labels) {
+            const t = (lab.textContent || '').trim();
+            if (!new RegExp(`^${needle}$`, 'i').test(t) && !new RegExp(`${needle}\\s*:`, 'i').test(t)) continue;
+            const root = lab.closest('tr, .form-group, .row, td, div') || lab.parentElement;
+            const input = root?.querySelector('input, select');
+            if (!input) continue;
+            if (input.tagName === 'SELECT') {
+              const opt = Array.from(input.options || []).find((o) => String(o.value) === String(value) || (o.textContent || '').includes(String(value)))
+                || Array.from(input.options || []).find((o) => /11|office/i.test(`${o.value} ${o.textContent || ''}`));
+              if (!opt) continue;
+              input.value = opt.value;
+            } else {
+              input.value = String(value);
+            }
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            try { window.$(input).trigger('change'); } catch (_) { /* ignore */ }
+            attempts.push({ label: `fill_${needle}`, ok: true, value: String(input.value).slice(0, 40) });
+            return true;
+          }
+          return false;
+        };
+        fillNearby('Units', '1');
+        fillNearby('POS', '11');
+        fillNearby('Mod', '');
+        // Explicit common IDs if present.
+        for (const [id, val] of [['Units', '1'], ['Unit', '1'], ['PlaceOfServiceCode', '11'], ['POS', '11']]) {
+          const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
+          if (!el) continue;
+          el.value = val;
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+          attempts.push({ label: `field_${id}`, ok: true, value: val });
+        }
+        try {
+          if (typeof window.updateBillingServiceRecord === 'function') window.updateBillingServiceRecord();
+          if (typeof window.updateBillingSlipSummaryRecord === 'function') window.updateBillingSlipSummaryRecord();
+          attempts.push({ label: 'update_billing_records', ok: true });
+        } catch (err) {
+          attempts.push({ label: 'update_billing_records', ok: false, error: String(err?.message || err).slice(0, 100) });
+        }
+        await new Promise((r) => setTimeout(r, 800));
         const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
         return { procedure, diagnosis, attempts, summary };
       });
