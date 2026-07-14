@@ -3,9 +3,10 @@
  */
 export function processFeedback(feedback) {
   return {
-    status: 'queued',
-    queue: 'founder-review',
-    receivedAt: new Date().toISOString(),
+    queued: true,
+    status: "queued_for_founder_review",
     feedback,
+    reviewedBy: null,
+    reviewedAt: null
   };
 }
