@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T06:31:31.772Z",
+  "generated_at": "2026-07-14T06:34:17.669Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11519,
   "files": [
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3479362,
-      "mtime": "2026-07-14T06:23:57.674Z",
-      "indexed_at": "2026-07-14T06:24:05.964Z"
+      "bytes": 3479683,
+      "mtime": "2026-07-14T06:34:09.750Z",
+      "indexed_at": "2026-07-14T06:34:17.669Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -30749,9 +30749,9 @@
     {
       "path": "config/site-builder-pricing.js",
       "synopsis": "Site Builder entry + upsell pricing (beta publish offer).",
-      "bytes": 3763,
-      "mtime": "2026-07-13T20:29:53.050Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 3797,
+      "mtime": "2026-07-14T06:33:38.089Z",
+      "indexed_at": "2026-07-14T06:34:17.669Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30760,8 +30760,8 @@
       "path": "config/site-builder-switcher.js",
       "synopsis": "Site Builder variant switcher template with light/dark toggle and competitor comparison popup.",
       "bytes": 16834,
-      "mtime": "2026-07-14T05:56:56.183Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "mtime": "2026-07-14T06:33:46.987Z",
+      "indexed_at": "2026-07-14T06:34:17.669Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -36916,9 +36916,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 532516,
-      "mtime": "2026-07-14T06:07:07.969Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 533052,
+      "mtime": "2026-07-14T06:34:08.568Z",
+      "indexed_at": "2026-07-14T06:34:17.669Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39861,9 +39861,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 124352,
-      "mtime": "2026-07-14T05:56:56.190Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 123874,
+      "mtime": "2026-07-14T06:34:06.010Z",
+      "indexed_at": "2026-07-14T06:34:17.669Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
@@ -86332,8 +86332,8 @@
       "path": "services/site-builder-editor-canvas.js",
       "synopsis": "Exports renderCanvas — services/site-builder-editor-canvas.js.",
       "bytes": 22597,
-      "mtime": "2026-07-13T03:41:54.534Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "mtime": "2026-07-14T06:33:45.822Z",
+      "indexed_at": "2026-07-14T06:34:17.669Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -86389,9 +86389,9 @@
     {
       "path": "services/site-builder-entry-checkout.js",
       "synopsis": "Site Builder beta publish checkout — Stripe session create + verify.",
-      "bytes": 11867,
-      "mtime": "2026-07-13T20:29:53.088Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z",
+      "bytes": 11866,
+      "mtime": "2026-07-14T06:33:54.460Z",
+      "indexed_at": "2026-07-14T06:34:17.669Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]

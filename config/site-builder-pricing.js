@@ -38,9 +38,9 @@ export const SITE_BUILDER_PRICING = {
       slotCount: 10,
     },
     custom: {
-      oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_CUSTOM_CENTS || 3000),
-      display: process.env.SITE_BUILDER_TEMPLATE_CUSTOM_DISPLAY || '$30',
-      description: 'Co-design a fully custom template and website with us — unique to your business, never duplicated. Locked and paid only when you approve it.',
+      oneTimeCents: Number(process.env.SITE_BUILDER_TEMPLATE_CUSTOM_CENTS || 3500),
+      display: process.env.SITE_BUILDER_TEMPLATE_CUSTOM_DISPLAY || '$35',
+      description: 'Co-design a fully custom template and website with us — unique to your business, never duplicated. Directed conversation + research; locked and paid only when you approve it.',
     },
   },
   /** Preset color palettes are free; a fully custom brand-color match is a paid upsell. */

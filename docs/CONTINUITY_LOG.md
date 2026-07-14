@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Site Builder custom template $35 + competitive video honesty
+
+Adam: Replicate images (Cloud Code), 15 templates (5 free / $1 / $35 custom one-of-one), industry packs, directed co-design; asked what Descript/competitors do and whether we can dump footage → great video / tell good from bad. Pricing bumped to $35 custom. Honest gap: Creative Engine can crop/caption/aspect (`footage_edit` live) but has no transcript editor, no Underlord-class judgment, no virality/quality critic — dump→great is NOT ready yet.
+
 ## 2026-07-14 — SMOS creative v2 (distinct thumbs + strong copy + earned attention)
 
 Adam: thumbs still terrible/identical; copy mid — use higher model, more research, sales/click principles; every 10 seconds of script must earn the next 10. Upgraded `marketing-youtube.js`: 5 distinct thumb layouts + punch lines; `claude_sonnet` rewrite after research; `retention_beats`; relevance+viewCount shelf. UI shows beats + why they click.

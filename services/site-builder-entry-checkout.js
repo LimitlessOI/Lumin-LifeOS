@@ -210,7 +210,7 @@ export async function verifyPublishCheckoutSession({ sessionId, clientId, pool }
   };
 }
 
-/** Template/color upsells: additional template ($10), fully custom template ($30),
+/** Template/color upsells: additional template ($1), fully custom template ($35),
  *  custom brand-color match ($5). Shares the same session-create/verify shape as
  *  the publish checkout above. `kind` selects the price + product metadata. */
 const UPSELL_CONFIG = {

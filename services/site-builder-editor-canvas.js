@@ -34,7 +34,7 @@ export function renderCanvas({
   const safePalettes = Array.isArray(palettes) ? palettes : [];
   const upsellBase = `${String(baseUrl ?? "").replace(/\/+$/, "")}/api/v1/sites/upsell/checkout?clientId=${encodeURIComponent(String(clientId ?? ""))}`;
   const additionalDisplay = htmlEscape(SITE_BUILDER_PRICING.templates?.additional?.display || "$10");
-  const customDisplay = htmlEscape(SITE_BUILDER_PRICING.templates?.custom?.display || "$30");
+  const customDisplay = htmlEscape(SITE_BUILDER_PRICING.templates?.custom?.display || "$35");
   const colorCustomDisplay = htmlEscape(SITE_BUILDER_PRICING.colors?.custom?.display || "$5");
   const initialFile = String(siteFile ?? "");
   // Preview files are served at ${baseUrl}/previews/${clientId}/<file>. The

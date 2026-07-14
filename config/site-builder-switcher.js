@@ -107,7 +107,7 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
           <p class='text-xs text-slate-400 mb-1 w-full' x-text='current.name + (current.tier === paidTier ? paidPublishNote : freePublishNote)'></p>
         </div>
       </div>
-      <p class='text-xs text-slate-400 mt-2'>5 free designs · 10 paid designs you can preview · $30 custom co-design (pay only when you approve). Toggle to compare.</p>
+      <p class='text-xs text-slate-400 mt-2'>5 free designs · 10 paid designs you can preview · $35 custom co-design (pay only when you approve). Toggle to compare.</p>
       <nav class='mt-2 flex gap-2 overflow-x-auto pb-1'>
         <template x-for='(v,i) in variants' :key='v.id'>
           <button class='chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-slate-600 text-slate-200 hover:border-slate-400'
@@ -116,7 +116,7 @@ export function getVariantSwitcherHtml({ info, clientId, variants, editToken = '
           </button>
         </template>
         <button class='chip whitespace-nowrap text-sm px-3 py-1.5 rounded-full border border-amber-500 text-amber-300 hover:border-amber-300' @click='showCustom()' title='Co-design a unique template and website with us; pay only when you approve it.'>
-          <span>Custom co-design</span><span class='tier'>$30</span>
+          <span>Custom co-design</span><span class='tier'>$35</span>
         </button>
       </nav>
       <p class='text-xs text-slate-300 mt-2 max-w-2xl' x-text='current.blurb || empty'></p>
