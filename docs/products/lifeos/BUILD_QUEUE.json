@@ -640,7 +640,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "done",
       "target_file": "routes/lifeos-perfect-day-routes.js",
       "task": "Implement LifeOS Perfect Day REST routes with auth and health endpoint",
       "spec": "This is an ES module route file. Export function registerLifeosPerfectDayRoutes(app, deps). Inside the function, create an express.Router and mount it with app.use('/api/v1/lifeos/perfect-day', router). Use deps.requireKey as auth middleware on every endpoint except /health. Endpoints:\n- GET /health returns { ok: true } and does NOT require auth.\n- POST /plan requires auth, calls planPerfectDay(req.body.user_id, req.body), and returns res.json(result).\n- GET /plan requires auth, calls getPerfectDay(req.body.user_id), and returns res.json(result).\n- POST /check-in requires auth, calls checkIn(req.body.user_id, req.body), and returns res.json(result).\n- GET /reminders requires auth, calls getDailyReminders(req.body.user_id), and returns res.json(result).\n- POST /rate requires auth, calls rateDay(req.body.user_id, req.body), and returns res.json(result).\nUse import { planPerfectDay, getPerfectDay, checkIn, getDailyReminders, rateDay } from '../services/lifeos-perfect-day.js';. Handle errors with res.status(500).json({ error: error.message }).",
@@ -659,9 +659,9 @@
         "await planPerfectDay(req.body.user_id",
         "deps.requireKey"
       ],
-      "attempts": 1,
-      "last_attempt_at": "2026-07-14T13:44:36.181Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "attempts": 0,
+      "last_attempt_at": null,
+      "last_error": null,
       "blocker_class": null,
       "claim_level": null,
       "park_until": null,
@@ -671,7 +671,10 @@
           "gemini_flash"
         ],
         "max_output_tokens": 8000
-      }
+      },
+      "revived_at": "2026-07-14T13:46:24.431Z",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T13:46:29.062Z"
     },
     {
       "id": "13",
