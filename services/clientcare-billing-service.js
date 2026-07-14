@@ -1731,6 +1731,25 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   }
 
   async function getForeverChaseQueue({ limit = 200 } = {}) {
+    const capped = Math.max(1, Math.min(Number(limit || 200), 500));
+    const { rows: countRows } = await pool.query(
+      `SELECT
+         COUNT(*)::int AS total_open,
+         COUNT(*) FILTER (WHERE COALESCE(paid_amount, 0) <= 0)::int AS unpaid,
+         COUNT(*) FILTER (
+           WHERE COALESCE(paid_amount, 0) > 0
+             AND GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0) >= 10
+         )::int AS underpaid,
+         COUNT(*) FILTER (WHERE rescue_bucket = 'forever_chase')::int AS forever_chase_bucket
+       FROM clientcare_claims
+       WHERE COALESCE(rescue_bucket, '') <> 'resolved'
+         AND (
+           (metadata->>'forever_chase') = 'true'
+           OR rescue_bucket IN ('forever_chase', 'submit_now', 'correct_and_resubmit', 'payer_followup', 'proof_of_timely_filing', 'timely_filing_exception', 'likely_uncollectible')
+           OR COALESCE(paid_amount, 0) <= 0
+           OR GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0) >= 10
+         )`
+    );
     const { rows } = await pool.query(
       `SELECT
          id, patient_name, payer_name, claim_number, date_of_service, claim_status, submission_status,
@@ -1750,7 +1769,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
          date_of_service ASC NULLS LAST,
          priority_score DESC NULLS LAST
        LIMIT $1`,
-      [Math.max(1, Math.min(Number(limit || 200), 500))]
+      [capped]
     );
 
     const items = rows.map((row) => {
@@ -1766,16 +1785,20 @@ export function createClientCareBillingService({ pool, logger = console, now = (
             ? 'Underpaid: send ERA/EOB + contract proof; demand remaining allowed amount.'
             : 'Follow up until written resolution.'),
         work_performed_by: row.metadata?.work_performed_by || 'Sherry',
+        evidence_for_payer: row.metadata?.evidence_message_for_payer
+          || 'Sherry performed the midwifery work. Prior billing that claimed this was handled failed — compensate the provider.',
       };
     });
 
+    const counts = countRows[0] || {};
     return {
       doctrine: 'forever_chase_until_paid_or_written_denial',
       summary: {
-        total_open: items.length,
-        unpaid: items.filter((i) => i.chase_lane === 'unpaid').length,
-        underpaid: items.filter((i) => i.chase_lane === 'underpaid').length,
-        forever_chase_bucket: items.filter((i) => i.rescue_bucket === 'forever_chase').length,
+        total_open: counts.total_open || 0,
+        unpaid: counts.unpaid || 0,
+        underpaid: counts.underpaid || 0,
+        forever_chase_bucket: counts.forever_chase_bucket || 0,
+        returned: items.length,
       },
       items,
     };

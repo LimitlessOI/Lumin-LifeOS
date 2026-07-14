@@ -3726,10 +3726,11 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           return false;
         };
         fillNearby('Units', '1');
-        fillNearby('POS', '11');
+        // Births are usually home/other facility — POS 12, not office 11.
+        fillNearby('POS', '12');
         fillNearby('Mod', '');
         // Explicit common IDs if present.
-        for (const [id, val] of [['Units', '1'], ['Unit', '1'], ['PlaceOfServiceCode', '11'], ['POS', '11']]) {
+        for (const [id, val] of [['Units', '1'], ['Unit', '1'], ['PlaceOfServiceCode', '12'], ['POS', '12'], ['PlaceOfService', '12']]) {
           const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
           if (!el) continue;
           el.value = val;
@@ -3803,6 +3804,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         && (map.patientSelected || visitList?.rebind?.patientSelected);
 
       let saveResult = { attempted: false };
+      let persistCheck = null;
       if (!dryRun) {
         if (!boundOk) {
           saveResult = { attempted: false, blocked: true, reason: 'fail_closed_wrong_or_missing_patient' };
@@ -3810,13 +3812,73 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           saveResult = { attempted: false, blocked: true, reason: 'no_procedure_or_diagnosis_selected' };
         } else {
           saveResult = await session.page.evaluate(() => {
+            const helpers = [
+              'saveChargeSlip',
+              'SaveChargeSlip',
+              'saveBillingSlip',
+              'SaveBillingSlip',
+              'saveBillingSlipSummaryRecord',
+              'createBillingSlip',
+              'CreateBillingSlip',
+            ].filter((name) => typeof window[name] === 'function');
             const buttons = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'));
-            const save = buttons.find((el) => /^save$/i.test((el.textContent || el.value || '').trim()));
-            if (!save) return { attempted: false };
-            save.click();
-            return { attempted: true, label: (save.textContent || save.value || 'Save').trim() };
+            const save = buttons.find((el) => /^save$/i.test((el.textContent || el.value || '').trim()))
+              || buttons.find((el) => /save\s*(slip|bill|charge)/i.test((el.textContent || el.value || '').trim()));
+            const dialogs = [];
+            const prevAlert = window.alert;
+            const prevConfirm = window.confirm;
+            window.alert = (msg) => { dialogs.push({ type: 'alert', msg: String(msg || '').slice(0, 200) }); };
+            window.confirm = (msg) => { dialogs.push({ type: 'confirm', msg: String(msg || '').slice(0, 200) }); return true; };
+            let helperUsed = null;
+            try {
+              if (helpers.includes('saveBillingSlipSummaryRecord')) {
+                window.saveBillingSlipSummaryRecord();
+                helperUsed = 'saveBillingSlipSummaryRecord';
+              } else if (helpers[0]) {
+                window[helpers[0]]();
+                helperUsed = helpers[0];
+              } else if (save) {
+                save.click();
+                helperUsed = 'button:' + (save.textContent || save.value || 'Save').trim();
+              } else {
+                return { attempted: false, helpers };
+              }
+            } finally {
+              window.alert = prevAlert;
+              window.confirm = prevConfirm;
+            }
+            const chargeVal = document.getElementById('ChargeSlipId')?.value || null;
+            const validation = (document.querySelector('.validation-summary-errors, .field-validation-error, .alert-danger, #ErrorMessage, .error')?.innerText || '')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .slice(0, 240);
+            return {
+              attempted: true,
+              label: helperUsed,
+              helpers,
+              dialogs,
+              chargeSlipValue: chargeVal,
+              validation: validation || null,
+            };
           });
-          await sleep(2500);
+          await sleep(3500);
+          persistCheck = await session.page.evaluate(() => {
+            const chargeSel = document.getElementById('ChargeSlipId');
+            const chargeVal = chargeSel?.value || '';
+            const chargeText = (chargeSel?.selectedOptions?.[0]?.textContent || '').trim();
+            const summary = (document.getElementById('ChargeSlipSummaryBase')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 300);
+            const body = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+            const errorBits = (body.match(/(please select|required|error[^\.]{0,80}|cannot save[^\.]{0,80})/ig) || []).slice(0, 5);
+            return {
+              chargeSlipValue: chargeVal,
+              chargeSlipText: chargeText.slice(0, 80),
+              nonZeroChargeSlip: Boolean(chargeVal && chargeVal !== '00000000-0000-0000-0000-000000000000'),
+              summary,
+              errorBits,
+              url: location.href,
+            };
+          });
+          saveResult = { ...saveResult, persistCheck };
         }
       }
 
@@ -3840,6 +3902,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         typed,
         hiddenForce,
         saveResult,
+        persistCheck,
         boundOk,
         ...map,
         patientSelected: boundOk,
@@ -3848,7 +3911,11 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           ? (codesSelected?.procedure || codesSelected?.diagnosis || dailySuperBill?.clicked
             ? (dryRun !== false
               ? 'Patient + codes ready — re-run dry_run=false to Save.'
-              : (saveResult.attempted ? 'Save clicked — verify Review Sent Bills.' : (saveResult.blocked || 'Save blocked/missing.')))
+              : (persistCheck?.nonZeroChargeSlip
+                ? 'ChargeSlip persisted (non-zero ChargeSlipId) — verify Review Sent Bills / HCFA next.'
+                : (saveResult.attempted
+                  ? 'Save attempted but ChargeSlipId still empty — capture validation/dialogs; may need line-item Add before Save or Daily Super Bill path.'
+                  : (saveResult.blocked || 'Save blocked/missing.'))))
             : 'Patient bound but no procedure/diagnosis hydrated — inspect codesMap; may need fee-schedule seeding.')
           : (visitList?.match?.pregnancyId
             ? 'Visit row found but ChargeSlip #FullNameText still empty — call selectClick(rowEl) only (not API raw).'
