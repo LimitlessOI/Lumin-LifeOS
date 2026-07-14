@@ -190,6 +190,19 @@
       ],
       "founder_gated": true,
       "attempts": 0
+    },
+    {
+      "id": "auto-reg",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "register audit intake and sku route modules for auto-mount",
+      "spec": "Add entries for routes/audit-intake-flow-routes.js (registerFn:registerAuditIntakeFlowRoutes) and routes/marketingos-sku-routes.js (registerFn:registerMarketingOSSkuRoutes) to the modules array. Preserve all existing entries. Each entry shape: {path, register, enabled, note}. JSON must be valid and minifiable.",
+      "depends_on": [
+        "3",
+        "6"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ]
 }

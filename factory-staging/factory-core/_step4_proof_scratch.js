@@ -1,4 +1,4 @@
 /**
- * SYNOPSIS: Factory staging —  Step4 Proof Scratch.
+ * SYNOPSIS: Factory CI proof scratch file. Auto-generated test artifact.
  */
 export const authored = true;

@@ -138,9 +138,6 @@
     {
       "id": "step-05",
       "status": "blocked",
-      "demoted": true,
-      "demoted_at": "2026-07-13T03:40:00.000Z",
-      "demote_reason": "auto_reg_blocked_no_sibling_register_step — thrashing burned tokens; add ws-studio-auto-register before reopening",
       "target_file": "routes/wellness-studio-routes.js",
       "task": "Create Express route module for wellness studio API endpoints",
       "spec": "Exports registerWellnessStudioRoutes(app, deps) where deps = {db, callCouncilMember, wellnessTherapist}. Mounts: GET /api/wellness-studio/sessions (returns sessions for req.user.id), POST /api/wellness-studio/sessions (calls orchestrator.runWellnessSession), GET /api/wellness-studio/sessions/:sessionId/insights (returns insights). Imports wellness-studio-orchestrator.js and wellness-studio-data.js by relative path. All routes require authenticated req.user. Returns JSON. No browser globals. No top-level side effects.",
@@ -148,10 +145,20 @@
         "step-04"
       ],
       "founder_gated": false,
-      "attempts": 4,
-      "commit_sha": "93a1a5f5120d73bdef6fc07010ff899066535ab9",
-      "last_attempt_at": "2026-07-13T03:42:50.800Z",
+      "attempts": 0,
       "last_error": "route module not auto-registered — add {\"path\":\"routes/wellness-studio-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+    },
+    {
+      "id": "step-05-register",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register wellness studio routes at boot without editing server.js",
+      "spec": "Add {\"path\":\"routes/wellness-studio-routes.js\",\"register\":\"registerWellnessStudioRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
+      "depends_on": [
+        "step-05"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     },
     {
       "id": "step-07",

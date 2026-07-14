@@ -20,7 +20,7 @@ const assert = (name, cond, detail = {}) => {
 // A server-code target under the factory scratch sandbox (ephemeral file).
 const TARGET = 'factory-staging/factory-core/_step4_proof_scratch.js';
 const SANDBOX = 'factory-staging/factory-core/**';
-const CONTENT = 'export const authored = true;\n';
+const CONTENT = '/**\n * SYNOPSIS: Factory CI proof scratch file. Auto-generated test artifact.\n */\nexport const authored = true;\n';
 
 const baseStep = {
   step_id: 's4-author',

@@ -254,7 +254,7 @@ export async function evaluateStepExpectations(step, {
   return { ok: true, applicable: true, reason: 'artifact_proof_pass', results };
 }
 
-function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
+export function depSatisfiedForSelect(depId, doneIds, queue, consumingStep) {
   if (doneIds.has(depId)) return true;
   // Chicken-egg break: a route step blocked ONLY for missing auto-registration
   // must not strand the register-config step that unblocks it. Allow the

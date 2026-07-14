@@ -19,65 +19,46 @@
  *
  * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
-import { selectShippableSteps, toGovernedShipStep } from '../factory-staging/factory-core/bpb/build-queue-step-adapter.js';
+import fs from 'node:fs';
+import { selectShippableSteps, toGovernedShipStep, deriveExpectedExportsFromSpec, parseRouteDeclaration } from '../factory-staging/factory-core/bpb/build-queue-step-adapter.js';
+import { resolveRepoPath } from '../factory-staging/factory-core/repo-paths.js';
 import { reviveStaleBlockedSteps, STEP_STATUS } from './product-build-orchestrator.js';
 
 const SERVER_CODE_DIR_RE = /^(routes|services|middleware|startup)\/|^factory-staging\/factory-core\//;
+const AUTO_REGISTER_TARGET = 'config/auto-registered-product-modules.json';
 
 function isServerCodeTarget(target) {
   const t = String(target || '').replace(/\\/g, '/');
   return SERVER_CODE_DIR_RE.test(t) && /\.(mjs|cjs|js|ts)$/.test(t);
 }
 
-function parseModuleExports(text) {
-  const names = [];
-  const match = text.match(/module\.exports\s*=\s*\{/s);
-  if (match) {
-    let depth = 1;
-    let i = match.index + match[0].length;
-    for (; i < text.length; i += 1) {
-      if (text[i] === '{') depth += 1;
-      else if (text[i] === '}') { depth -= 1; if (depth === 0) break; }
-    }
-    const inner = text.slice(match.index + match[0].length, i);
-    const keyRe = /([A-Za-z_$][A-Za-z0-9_$]*)\s*:/g;
-    let m;
-    while ((m = keyRe.exec(inner)) !== null) names.push(m[1]);
-    const shorthandRe = /(?:^|[,;])\s*([A-Za-z_$][A-Za-z0-9_$]*)\s*(?=[,;]|$)/g;
-    while ((m = shorthandRe.exec(inner)) !== null) names.push(m[1]);
-  }
-  return [...new Set(names)];
-}
-
-function parseESMExports(text) {
-  const names = [];
-  const re = /export\s+(?:async\s+)?(?:function|const|let|var|class)\s+([A-Za-z_$][A-Za-z0-9_$]*)/g;
-  let m;
-  while ((m = re.exec(text)) !== null) names.push(m[1]);
-  const namedRe = /export\s*\{([^}]*)\}/g;
-  while ((m = namedRe.exec(text)) !== null) {
-    const inner = m[1];
-    const idRe = /([A-Za-z_$][A-Za-z0-9_$]*)/g;
-    let idm;
-    while ((idm = idRe.exec(inner)) !== null) names.push(idm[1]);
-  }
-  return [...new Set(names)];
-}
-
-function deriveExpectedExportsFromSpec(step) {
+function inferRouteFromSpec(step) {
   const spec = String(step?.spec || '');
-  if (!spec) return [];
-  const moduleExports = parseModuleExports(spec);
-  if (moduleExports.length) return moduleExports;
-  return parseESMExports(spec);
+  if (!spec) return null;
+  // Search for explicit "METHOD /path" tokens in the spec prose.
+  const routeRe = /\b(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(\/\S*)/gi;
+  let m;
+  while ((m = routeRe.exec(spec)) !== null) {
+    const route = parseRouteDeclaration(`${m[1].toUpperCase()} ${m[2]}`);
+    if (route) return route;
+  }
+  return null;
 }
 
-function hasDeclarableExpectation(step) {
-  if (Array.isArray(step?.expected_exports) && step.expected_exports.length > 0) return true;
-  if (Array.isArray(step?.file_contains) && step.file_contains.length > 0) return true;
-  if (step?.route && (typeof step.route === 'string' || step.route.path)) return true;
-  if (step?.assertion_spec && typeof step.assertion_spec === 'object' && Object.keys(step.assertion_spec).length > 0) return true;
-  return false;
+function inferRouteFromFile(target) {
+  const t = String(target || '').replace(/\\/g, '/');
+  if (!t.startsWith('routes/')) return null;
+  const p = resolveRepoPath(t);
+  let content;
+  try {
+    content = fs.readFileSync(p, 'utf8');
+  } catch {
+    return null;
+  }
+  const re = /(?:app|router)\.(get|post|put|patch|delete|head|options)\s*\(\s*['"`](\/[^'"`]*)['"`]/i;
+  const m = content.match(re);
+  if (!m) return null;
+  return parseRouteDeclaration(`${m[1].toUpperCase()} ${m[2]}`);
 }
 
 function clearFutureLastAttemptAt(queue, now = Date.now()) {
@@ -101,11 +82,62 @@ function inferQueueExpectations(queue) {
     if (step.status === STEP_STATUS.SKIPPED) continue;
     if (step.founder_gated) continue;
     if (!isServerCodeTarget(step.target_file)) continue;
-    if (hasDeclarableExpectation(step)) continue;
-    const derived = deriveExpectedExportsFromSpec(step);
-    if (derived.length > 0) {
-      step.expected_exports = derived;
+
+    // Derive expected exports if not declared. We do this even when a route is
+    // already declared, because route + exports are complementary proofs.
+    if (!Array.isArray(step.expected_exports) || step.expected_exports.length === 0) {
+      const derived = deriveExpectedExportsFromSpec(step);
+      if (derived.length > 0) {
+        step.expected_exports = derived;
+      }
     }
+
+    // For route modules, derive a probe route from the spec prose or from the
+    // existing route file so SENTRY can module_mounts prove it live.
+    if (step.target_file?.startsWith('routes/') && !step.route) {
+      const route = inferRouteFromSpec(step) || inferRouteFromFile(step.target_file);
+      if (route) step.route = route;
+    }
+  }
+}
+
+function mergeAutoRegisterSteps(by_product) {
+  const autoSteps = [];
+  for (const { ship_steps } of by_product) {
+    if (!Array.isArray(ship_steps)) continue;
+    for (const step of ship_steps) {
+      if (step?.target_file === AUTO_REGISTER_TARGET && step?.action_type === 'write_file_exact' && step?.exact_inputs?.exact_content != null) {
+        autoSteps.push(step);
+      }
+    }
+  }
+  if (autoSteps.length === 0) return;
+
+  let current = { modules: [] };
+  try {
+    const raw = fs.readFileSync(resolveRepoPath(AUTO_REGISTER_TARGET), 'utf8');
+    current = JSON.parse(raw);
+  } catch { /* current config may be absent or malformed; start empty */ }
+  if (!Array.isArray(current.modules)) current.modules = [];
+
+  const seen = new Set(current.modules.map((m) => m.path));
+  for (const step of autoSteps) {
+    let incoming = { modules: [] };
+    try {
+      incoming = JSON.parse(String(step.exact_inputs.exact_content));
+    } catch { /* ignore malformed incoming */ }
+    if (!Array.isArray(incoming.modules)) incoming.modules = [];
+    for (const m of incoming.modules) {
+      if (m && m.path && !seen.has(m.path)) {
+        current.modules.push(m);
+        seen.add(m.path);
+      }
+    }
+  }
+
+  const mergedContent = `${JSON.stringify(current, null, 2)}\n`;
+  for (const step of autoSteps) {
+    step.exact_inputs = { exact_content: mergedContent };
   }
 }
 
@@ -140,18 +172,27 @@ export function planGovernedBuildQueueRun({ products, readQueue, maxStepsPerProd
       continue;
     }
     prepareQueueForPlanning(queue);
-    const shippable = selectShippableSteps(queue).slice(0, maxStepsPerProduct);
+    const shippable = selectShippableSteps(queue);
     const ship_steps = [];
     const gaps = [];
     for (const step of shippable) {
-      const converted = toGovernedShipStep(step, { product_id });
-      if (converted.ok) ship_steps.push(converted.step);
-      else gaps.push({ id: step.id, target_file: step.target_file, reason: converted.reason });
+      const converted = toGovernedShipStep(step, { product_id, queue });
+      if (converted.ok) {
+        ship_steps.push(converted.step);
+        if (ship_steps.length >= maxStepsPerProduct) break;
+      } else {
+        gaps.push({ id: step.id, target_file: step.target_file, reason: converted.reason });
+      }
     }
     total_shippable += ship_steps.length;
     total_gaps += gaps.length;
     by_product.push({ product_id, ship_steps, gaps });
   }
+
+  // Pre-merge all auto-register config steps into one exact_content. Each product
+  // then writes the same full config, so concurrent ticks do not overwrite each
+  // other's new entries.
+  mergeAutoRegisterSteps(by_product);
 
   return { by_product, total_shippable, total_gaps, runnable: total_shippable > 0 };
 }

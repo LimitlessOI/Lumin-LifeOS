@@ -421,17 +421,25 @@
       "status": "blocked",
       "target_file": "routes/site-builder-color-palettes-routes.js",
       "task": "Register REST routes for color palettes and mount via auto-registration",
-      "spec": "Export registerSiteBuilderColorPalettesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/color-palettes (returns all palettes) and GET /api/site-builder/color-palettes/:id. Import site-builder-color-palettes.js from step-03. After verifying tests pass, add an entry for this module to config/auto-registered-product-modules.json so the framework mounts it automatically \u2014 do NOT edit server.js.",
+      "spec": "Export registerSiteBuilderColorPalettesRoutes(app, deps) where deps includes db. Mount GET /api/site-builder/color-palettes (returns all palettes) and GET /api/site-builder/color-palettes/:id. Import site-builder-color-palettes.js from step-03. After verifying tests pass, add an entry for this module to config/auto-registered-product-modules.json so the framework mounts it automatically -- do NOT edit server.js.",
       "depends_on": [
         "step-03"
       ],
       "founder_gated": false,
-      "attempts": 3,
-      "commit_sha": "a84c6abd68e548990f223dd15f095ebcecfde68b",
-      "last_attempt_at": "2026-07-12T03:03:10.676Z",
-      "last_error": "route module not auto-registered \u2014 add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
-      "revive_count": 99,
-      "note": " | 2026-07-12: revive capped \u2014 LifeOS therapist queue takes priority; auto-reg chicken-egg was thrashing never-stop."
+      "attempts": 0,
+      "last_error": "route module not auto-registered -- add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+    },
+    {
+      "id": "step-04-register",
+      "status": "pending",
+      "target_file": "config/auto-registered-product-modules.json",
+      "task": "Auto-register site-builder color palettes routes at boot without editing server.js",
+      "spec": "Add {\"path\":\"routes/site-builder-color-palettes-routes.js\",\"register\":\"registerSiteBuilderColorPalettesRoutes\",\"enabled\":true} to modules[]. Preserve all existing entries. File must remain valid JSON.",
+      "depends_on": [
+        "step-04"
+      ],
+      "founder_gated": false,
+      "attempts": 0
     }
   ],
   "sentry_signature": "beba57e366c8c9cf",

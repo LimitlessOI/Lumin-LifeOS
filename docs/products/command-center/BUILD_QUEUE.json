@@ -104,12 +104,11 @@
       "id": "s8",
       "status": "pending",
       "target_file": "config/auto-registered-product-modules.json",
-      "task": "Register all new route modules so they mount at boot without editing server.js",
-      "spec": "Add entries for routes/command-center-mode-routes.js (registerFn:registerCommandCenterModeRoutes), routes/phase14-cert-routes.js (registerFn:registerPhase14CertRoutes), routes/pending-adam-routes.js (registerFn:registerPendingAdamRoutes) to the modules array. Preserve all existing entries. Each entry shape: {file,registerFn,deps:[]} where deps lists string keys the boot loader should pass from its shared deps object (db, callCouncilMember as applicable). JSON must be valid and minifiable.",
+      "task": "Register command-center mode and phase14 cert route modules so they mount at boot without editing server.js",
+      "spec": "Add entries for routes/command-center-mode-routes.js (registerFn:registerCommandCenterModeRoutes) and routes/phase14-cert-routes.js (registerFn:registerPhase14CertRoutes) to the modules array. Preserve all existing entries. Each entry shape: {path, register, enabled, note}. JSON must be valid and minifiable.",
       "depends_on": [
         "s3",
-        "s5",
-        "s7"
+        "s5"
       ],
       "founder_gated": false,
       "attempts": 0
