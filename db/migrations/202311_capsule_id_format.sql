@@ -1,23 +1,37 @@
 -- SYNOPSIS: Database migration — 202311_capsule_id_format.sql.
-ALTER TABLE capsules
-  ALTER COLUMN id SET DEFAULT gen_random_uuid();
+-- Ensure capsule IDs use UUID v4 by default
+-- This migration is intended to run safely on existing schemas.
+-- It assumes PostgreSQL and gen_random_uuid() availability.
 
-UPDATE capsules
-SET id = gen_random_uuid()
-WHERE id IS NULL;
-
-ALTER TABLE capsules
-  ALTER COLUMN id SET NOT NULL;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 DO $$
+DECLARE
+  tbl regclass;
 BEGIN
-  IF NOT EXISTS (
-    SELECT 1
-    FROM pg_constraint
-    WHERE conname = 'capsules_id_uuid_v4_check'
-  ) THEN
-    ALTER TABLE capsules
-      ADD CONSTRAINT capsules_id_uuid_v4_check
-      CHECK (id::text ~* '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+  IF to_regclass('public.capsules') IS NOT NULL THEN
+    tbl := 'public.capsules'::regclass;
+
+    -- Set default to UUID v4
+    EXECUTE format(
+      'ALTER TABLE %s ALTER COLUMN id SET DEFAULT gen_random_uuid()',
+      tbl
+    );
+
+    -- If the column is not already uuid, convert it
+    IF EXISTS (
+      SELECT 1
+      FROM information_schema.columns
+      WHERE table_schema = 'public'
+        AND table_name = 'capsules'
+        AND column_name = 'id'
+        AND data_type <> 'uuid'
+    ) THEN
+      EXECUTE format(
+        'ALTER TABLE %s ALTER COLUMN id TYPE uuid USING id::uuid',
+        tbl
+      );
+    END IF;
   END IF;
-END $$;
+END
+$$;
