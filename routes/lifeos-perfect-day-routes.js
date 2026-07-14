@@ -1,5 +1,7 @@
 /**
  * SYNOPSIS: Registers LifeosPerfectDayRoutes routes/handlers (routes/lifeos-perfect-day-routes.js).
+ *
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import express from 'express';
 import { planPerfectDay, getPerfectDay, checkIn, getDailyReminders, rateDay } from '../services/lifeos-perfect-day.js';

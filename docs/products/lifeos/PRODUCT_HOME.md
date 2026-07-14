@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/lifeos/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — s12 Perfect Day route unblocked: `docs/products/lifeos/BUILD_QUEUE.json` s12 reset from `blocked` to `pending` with `attempts: 0`, `last_error`/`last_attempt_at` cleared, `authoring.tiers: ['gemini_flash']`, spec aligned to `req.body.user_id`/`deps.requireKey`/`res.json(result)`, and `file_contains` tightened; s13 set to `write_file_exact` with the current `config/auto-registered-product-modules.json` exact content. Factory `codegenRunner` now runs `node --check` on generated ESM, `toGovernedShipStep` propagates `authoring.tiers` and supports `write_file_exact`, and `governed-shipping-runner` blocked response includes SENTRY `body`. |
+| **Last Updated** | 2026-07-14 — Perfect Day `s12` (`routes/lifeos-perfect-day-routes.js`) and `s13` (`config/auto-registered-product-modules.json`) are **done** and `GET /api/v1/lifeos/perfect-day/health` returns 200 on the deployed container. Factory `codegenRunner` now runs `node --check` on generated ESM, marks the council call `critical: true` so lossy token-optimizer layers are skipped and code passes through byte-exact, `toGovernedShipStep` propagates `authoring.tiers` and supports `write_file_exact`, and `governed-shipping-runner` blocked response includes SENTRY `body`. `BUILD_QUEUE.json` s12/s13 are `done` with `commit_sha` values. |
 ---
 
 ## Founder conversations (2026-06-29)
