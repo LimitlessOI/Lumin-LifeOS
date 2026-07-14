@@ -148,6 +148,22 @@ function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
         step.attempts = 0;
         changed = true;
       }
+      if (step.blocker_class != null) {
+        step.blocker_class = null;
+        changed = true;
+      }
+      if (step.claim_level != null) {
+        step.claim_level = null;
+        changed = true;
+      }
+      if (step.park_until != null) {
+        step.park_until = null;
+        changed = true;
+      }
+      if (step.revive_count != null && step.revive_count !== 0) {
+        step.revive_count = 0;
+        changed = true;
+      }
       if (commit_sha && step.commit_sha !== commit_sha) {
         step.commit_sha = commit_sha;
         changed = true;

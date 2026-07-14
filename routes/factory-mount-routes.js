@@ -23,14 +23,16 @@ import { reconcileRemoteTruth } from '../factory-staging/factory-core/readiness/
 import { extractContent } from '../factory-staging/factory-core/builder/authoring.js';
 import { runGovernedShippingQueue } from '../services/governed-shipping-runner.js';
 
-export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, callCouncilMember } = {}) {
+export function createFactoryMountRoutes({ requireKey, logger, pool, callCouncilMember } = {}) {
   const router = express.Router();
   const guard = typeof requireKey === 'function' ? requireKey : (_req, _res, next) => next();
 
   // SENTRY behavioral-proof runner, injected at the route boundary so
   // factory-core stays pure. Fail-closed: if a required assertion cannot run
   // (no runner), SENTRY returns FAIL rather than passing on omission.
-  const httpBase = (baseUrl || process.env.SITE_BASE_URL || `http://127.0.0.1:${process.env.PORT || 8080}`).replace(/\/$/, '');
+  // SENTRY must re-probe the local container after a runtime reload; a public
+  // baseUrl would hit a different Railway container and 404.
+  const httpBase = `http://127.0.0.1:${process.env.PORT || 8080}`.replace(/\/$/, '');
   const assertionRunner = {
     db: pool
       ? async (sql, params) => {
