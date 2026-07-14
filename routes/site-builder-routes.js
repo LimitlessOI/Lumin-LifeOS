@@ -617,13 +617,13 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    */
   router.post('/build-variants', requireKey, buildLimiter, async (req, res) => {
     try {
-      const { url, businessUrl, businessInfo, competitorUrls, variantCount, styleIds } = req.body;
+      const { url, businessUrl, businessInfo, competitorUrls, variantCount, styleIds, skipRepair, skipBlogs, skipAi, leanTemplate, enrich } = req.body;
       const targetUrl = url || businessUrl;
       if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
 
       logger.info('[SITE] Build-variants request', { url: targetUrl, variantCount: variantCount || null });
       const builder = getSiteBuilder({ callCouncilMember, baseUrl, pool });
-      const result = await builder.buildVariants(targetUrl, { businessInfo, competitorUrls, variantCount, styleIds });
+      const result = await builder.buildVariants(targetUrl, { businessInfo, competitorUrls, variantCount, styleIds, skipRepair, skipBlogs, skipAi, leanTemplate, enrich });
 
       await persistDirectBuild(pool, targetUrl, result);
       res.json({ ok: result.success, ...result });

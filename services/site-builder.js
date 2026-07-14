@@ -35,6 +35,7 @@ import { createWebSearchService } from './web-search-service.js';
 import { pickDesignSystems, getDesignSystem, renderDesignSystemDirectives, DEFAULT_DESIGN_SYSTEM_ID, getDesignSystemCss, getDesignSystemFontLinks } from './site-builder-design-systems.js';
 import { ingestAll } from './site-builder-asset-ingestion.js';
 import { SITE_BUILDER_PRICING } from '../config/site-builder-pricing.js';
+import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
 
 function createEditToken() {
   return crypto.randomBytes(24).toString('hex');
@@ -62,13 +63,27 @@ const TARGET_QUALITY_SCORE = Number(process.env.SITE_BUILDER_TARGET_SCORE || '88
 const MAX_REPAIR_PASSES = Math.max(0, Number(process.env.SITE_BUILDER_REPAIR_PASSES || '2'));
 const GENERATION_MAX_TOKENS = Number(process.env.SITE_BUILDER_GEN_TOKENS || '14000');
 const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '14000');
-// Design quality is driven mostly by the generation model. claude_sonnet (16k output)
-// produces markedly better design. Founder rule (2026-07-06): a PRODUCT never runs on a
-// free-tier model — only strong, paid models are hardwired into what the system ships.
-// Env-overridable; on any provider error we fall back to another STRONG model (gpt-4o),
-// NOT a free tier, so a build never hard-fails but never degrades to free-tier quality.
-const GENERATION_MODEL = process.env.SITE_BUILDER_GEN_MODEL || 'claude_sonnet';
-const GENERATION_FALLBACK_MODEL = process.env.SITE_BUILDER_GEN_FALLBACK_MODEL || 'openai_gpt';
+// Site generation uses the canonical task-model router. The canonical model for
+// site_builder.generate_site is gemini_flash because it supports 8k+ output tokens,
+// which is necessary for a full 15-section HTML page. On any provider error we failover
+// to the strongest available paid model (openai_gpt) so the build never hard-fails and
+// never sits idle per SO-003.
+const GENERATION_CANDIDATES = [...new Set([
+  getModelForTask('site_builder.generate_site') || 'gemini_flash',
+  'openai_gpt',
+  getModelForTask('site_builder.generate_site') || 'gemini_flash',
+])].filter(Boolean);
+const REPAIR_CANDIDATES = [...new Set([
+  getModelForTask('site_builder.repair_site') || 'gemini_flash',
+  'openai_gpt',
+  getModelForTask('site_builder.repair_site') || 'gemini_flash',
+])].filter(Boolean);
+const EXTRACTION_CANDIDATES = [...new Set([
+  getModelForTask('site_builder.extract_business') || 'groq_llama',
+  'gemini_flash',
+  'openai_gpt',
+])].filter(Boolean);
+const GENERATION_MODEL = GENERATION_CANDIDATES[0] || 'gemini_flash';
 const GENERATION_TIMEOUT_MS = Math.max(15_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '60000'));
 const PUPPETEER_LAUNCH_TIMEOUT_MS = Math.max(5_000, Number(process.env.SITE_BUILDER_PUPPETEER_LAUNCH_TIMEOUT_MS || '25000'));
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
@@ -315,6 +330,28 @@ export default class SiteBuilder {
     this.previewsDir = previewsDir;
     this.baseUrl = baseUrl;
     this.pool = pool;
+  }
+
+  /**
+   * Try a list of council member keys in order; return the first successful response.
+   * Implements SO-003: never sit idle on a provider error; fail over to the next strong model.
+   */
+  async callWithFallback(candidates, prompt, { maxOutputTokens = 4000, taskType = 'site_builder.generate_site', useCache = false, label = 'callWithFallback' } = {}) {
+    let lastErr = null;
+    for (const member of candidates) {
+      try {
+        const response = await withTimeout(
+          this.callCouncil(member, prompt, { maxOutputTokens, allowModelDowngrade: false, useCache, taskType }),
+          GENERATION_TIMEOUT_MS,
+          `${label}:${member}`
+        );
+        return response;
+      } catch (err) {
+        lastErr = err;
+        logger.warn('[SITE] model candidate failed, trying next', { member, label, taskType, error: err.message });
+      }
+    }
+    throw new Error(`${label} failed on all candidates: ${lastErr?.message}`);
   }
 
   /**
@@ -597,7 +634,7 @@ export default class SiteBuilder {
       const variantHtmls = {};
       for (const ds of systems) {
         try {
-          let html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds });
+          let html = await this.generateSiteHtml(businessInfo, { clientId, posPartner, designBrief, designSystem: ds, leanTemplate: options.leanTemplate, skipAi: options.skipAi });
           html = this.patchSiteHtml(html, businessInfo);
           let quality = this.scoreSiteHtml(html, businessInfo);
           if (!options.skipRepair && this.callCouncil && quality.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
@@ -926,11 +963,7 @@ Return ONLY valid JSON with this exact structure:
   "uniqueValue": "what makes them different in 1-2 sentences"
 }`;
 
-    // groq_llama is fine for structured JSON extraction — fast and cheap
-    // useCache:false: business profile extraction must not be served from a cached
-    // response for a different URL/business (the semantic cache can match long
-    // template prompts across different businesses and return the wrong profile).
-    const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 1000, taskType: 'extraction', useCache: false });
+    const response = await this.callWithFallback(EXTRACTION_CANDIDATES, prompt, { maxOutputTokens: 1000, taskType: 'extraction', useCache: false, label: 'extractBusinessInfoWithAI' });
     try {
       const jsonMatch = response.match(/\{[\s\S]+\}/);
       return jsonMatch ? JSON.parse(jsonMatch[0]) : {};
@@ -1165,28 +1198,7 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
 
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
-    // Prefer the higher-quality design model (claude_sonnet, 16k output). Fall back to another
-    // STRONG paid model (gpt-4o) on any provider error — never a free tier (founder rule).
-    // allowModelDowngrade:false prevents selectOptimalModel from overriding to groq_llama (4096 token limit)
-    let response;
-    try {
-      response = await withTimeout(
-        this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false, useCache: false }),
-        GENERATION_TIMEOUT_MS,
-        `generateSiteHtml:${GENERATION_MODEL}`
-      );
-    } catch (err) {
-      if (GENERATION_MODEL !== GENERATION_FALLBACK_MODEL) {
-        logger.warn('[SITE] primary generation model failed, falling back', { model: GENERATION_MODEL, error: err.message });
-        response = await withTimeout(
-          this.callCouncil(GENERATION_FALLBACK_MODEL, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false, useCache: false }),
-          GENERATION_TIMEOUT_MS,
-          `generateSiteHtml:${GENERATION_FALLBACK_MODEL}`
-        );
-      } else {
-        throw err;
-      }
-    }
+    const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, taskType: 'site_builder.generate_site', useCache: false, label: 'generateSiteHtml' });
     let clean = response.replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     // Strip markdown fences AI models sometimes wrap HTML in (```html...``` or ```...```)
     clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
@@ -1405,8 +1417,7 @@ CURRENT HTML:
 ${existingHtml}
 `;
 
-    // Repair rewrites the actual client-facing site HTML → use the STRONG product model.
-    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false, useCache: false });
+    const response = await this.callWithFallback(REPAIR_CANDIDATES, prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, taskType: 'site_builder.repair_site', useCache: false, label: 'improveSiteHtml' });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
@@ -1437,9 +1448,7 @@ Return ONLY valid JSON array:
   }
 ]`;
 
-    // Blog posts are client-facing product content → use the STRONG product model
-    // (never a free tier). 3 posts × 600-800 words needs long output; claude_sonnet (16k) fits.
-    const response = await this.callCouncil(GENERATION_MODEL, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), allowModelDowngrade: false, useCache: false });
+    const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: Math.max(4000, GENERATION_MAX_TOKENS), taskType: 'site_builder.generate_blogs', useCache: false, label: 'generateBlogPosts' });
     try {
       const jsonMatch = response.match(/\[[\s\S]+\]/);
       const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
@@ -1554,7 +1563,7 @@ Return ONLY a valid JSON array:
 
 Each answer must be a complete, helpful sentence. If a specific fact is unknown, say "This is best discussed during your free consultation." — do not leave an answer empty or use placeholder text.`;
     try {
-      const response = await this.callCouncil('openai_gpt', prompt, { maxOutputTokens: 2500, allowModelDowngrade: false, useCache: false });
+      const response = await this.callWithFallback(GENERATION_CANDIDATES, prompt, { maxOutputTokens: 2500, taskType: 'site_builder.generate_faq', useCache: false, label: 'generateFaq' });
       const m = response.match(/\[[\s\S]+\]/);
       const faq = m ? JSON.parse(m[0]) : [];
       return Array.isArray(faq) ? faq.slice(0, count) : [];

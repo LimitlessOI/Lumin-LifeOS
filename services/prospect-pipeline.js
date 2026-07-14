@@ -391,6 +391,7 @@ export default class ProspectPipeline {
       return {
         success: false,
         skipped: true,
+        error: 'existing site already strong enough',
         reason: 'existing_site_already_strong',
         opportunityScore: opportunityAnalysis.opportunityScore,
         grade: opportunityAnalysis.grade,
@@ -427,6 +428,8 @@ export default class ProspectPipeline {
         enrich: options.enrich,
         skipRepair: options.skipRepair,
         skipBlogs: options.skipBlogs,
+        skipAi: options.skipAi,
+        leanTemplate: options.leanTemplate,
         competitorUrls: options.competitorUrls || [],
         onProgress: (stage) => this.touchProspectJob(clientIdEarly, stage || 'build'),
       });

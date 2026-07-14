@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-14 — Site Builder model routing fix
+
+Site Builder `buildVariants`/`generateSiteHtml` was failing in production with `Anthropic HTTP 400: Your credit balance is too low to access the Anthropic API` because `services/site-builder.js` hardcoded `claude_sonnet` and `openai_gpt` while `config/task-model-routing.js` canonical routing maps `site_builder.generate_site`/`repair_site`/`generate_blogs`/`generate_faq` to `gemini_flash` (confirmed working by `POST /api/v1/lifeos/chat/build/plan`). Fixed: (1) `services/site-builder.js` now imports `getModelForTask` and uses `GENERATION_CANDIDATES`/`REPAIR_CANDIDATES`/`EXTRACTION_CANDIDATES` with `callWithFallback` so the build uses `gemini_flash` first, then `openai_gpt` as a strong failover per SO-003. (2) `services/competitor-benchmark.js` and `services/presence-audit.js` now import `DEFAULT_MODEL` from `config/task-model-routing.js` and use it for all scoring/extraction calls instead of hardcoded `openai_gpt`. (3) `services/prospect-pipeline.js` propagates `leanTemplate`/`skipAi` to `buildVariants` and adds `error` for `existing_site_already_strong` skips. (4) `routes/site-builder-routes.js` `POST /build-variants` now accepts `skipRepair`, `skipBlogs`, `skipAi`, `leanTemplate`, `enrich`. `REPO_FILE_SYNOPSIS_INDEX.json` re-indexed. `docs/products/site-builder/PRODUCT_HOME.md` updated. Verification: `node --check` all changed JS files, `npm run builder:preflight` PASS, `npm run verify:ci` PASS, `npm run lifeos:bp-priority:verify` PASS (after `npm run lifeos:file-synopsis:index`). Next: commit, push, redeploy Railway, then run `npm run sentry:site-builder:gate` and rebuild `wellroundedmama.com` preview to confirm the model routing fix resolves the build failures.
+
+---
+
 ## 2026-07-13 — SMOS competitor brief + sellable light/dark UI
 
 Adam wanted the live SMOS link, competitor comparison, light+dark cutting-edge design, film modes for how people make YouTube videos, and 3 hooks to pick from with competitor strong/fail. Canvas: `smos-competitor-design-brief.canvas.tsx`. Code: theme toggle + Syne/DM Sans redesign; 8 film modes; hooks[] + competitor_strong/fail on talk cards.

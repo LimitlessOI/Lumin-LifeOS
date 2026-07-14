@@ -18,6 +18,7 @@
  */
 
 import logger from './logger.js';
+import { DEFAULT_MODEL } from '../config/task-model-routing.js';
 import CompetitorBenchmark from './competitor-benchmark.js';
 
 const CHANNELS = ['website', 'google', 'instagram', 'facebook', 'linkedin'];
@@ -95,7 +96,7 @@ Rate this ${channel} presence 1-10 (10 = best-in-class). Return ONLY JSON:
     try {
       // useCache:false: presence scores are per-URL; the semantic cache can return
       // another channel's score for a similar-looking audit prompt.
-      const response = await this.callCouncil('openai_gpt', prompt, { maxOutputTokens: 600, taskType: 'analysis', useCache: false });
+      const response = await this.callCouncil(DEFAULT_MODEL, prompt, { maxOutputTokens: 600, taskType: 'analysis', useCache: false });
       const parsed = JSON.parse((response.match(/\{[\s\S]+\}/) || ['{}'])[0]);
       return {
         channel,
@@ -207,7 +208,7 @@ Give an honest, motivating read. Return ONLY JSON:
     try {
       // useCache:false: gap synthesis is per-business; the cache can reuse a different
       // business's comparison if the prompt is template-heavy.
-      const response = await this.callCouncil('openai_gpt', prompt, { maxOutputTokens: 700, taskType: 'analysis', useCache: false });
+      const response = await this.callCouncil(DEFAULT_MODEL, prompt, { maxOutputTokens: 700, taskType: 'analysis', useCache: false });
       const parsed = JSON.parse((response.match(/\{[\s\S]+\}/) || ['{}'])[0]);
       const quickWins = Array.isArray(parsed.quickWins) ? parsed.quickWins.slice(0, 5) : [];
       return {
