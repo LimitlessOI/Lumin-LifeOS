@@ -714,10 +714,13 @@
       "spec": "Build service for AI-driven photo food logging integrated with nutrition data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "expected_exports": [
         "logFoodWithPhoto"
-      ]
+      ],
+      "last_attempt_at": "2026-07-14T21:04:29.457Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "8",
