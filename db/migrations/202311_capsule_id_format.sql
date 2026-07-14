@@ -2,6 +2,19 @@
 ALTER TABLE capsules
   ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
-UPDATE capsules
-SET id = gen_random_uuid()
-WHERE id IS NULL;
+ALTER TABLE capsules
+  ALTER COLUMN id SET DATA TYPE uuid
+  USING id::uuid;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'capsules_id_check'
+  ) THEN
+    ALTER TABLE capsules
+      ADD CONSTRAINT capsules_id_check
+      CHECK (id IS NOT NULL);
+  END IF;
+END $$;
