@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T01:50:42.176Z",
+  "generated_at": "2026-07-14T01:51:34.819Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11516,
   "files": [
@@ -65998,8 +65998,8 @@
       "path": "routes/lifeos-member-feedback-routes.js",
       "synopsis": "HTTP route module — Lifeos Member Feedback Routes.",
       "bytes": 456,
-      "mtime": "2026-07-14T01:50:02.671Z",
-      "indexed_at": "2026-07-14T01:50:02.671Z"
+      "mtime": "2026-07-14T01:51:34.819Z",
+      "indexed_at": "2026-07-14T01:51:34.819Z"
     },
     {
       "path": "routes/lifeos-phase2-routes.js",
