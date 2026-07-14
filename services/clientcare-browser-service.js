@@ -3390,10 +3390,16 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           let selected = { applied: false, attempts: [] };
           if (match?.pregnancyId) {
             const fnNames = Object.getOwnPropertyNames(window)
-              .filter((k) => /select|billing|slip|pregnancy|charge|patient/i.test(k))
+              .filter((k) => /^(selectClick|digSelection|changeChargeSlip|clearAllSlips|SelectBilling|loadBilling|BillingSlip)/i.test(k) || /selectClick|digSelectionProcess/i.test(k))
               .filter((k) => typeof window[k] === 'function')
               .slice(0, 40);
             selected.fnNames = fnNames;
+            selected.fnSources = {};
+            for (const name of ['selectClick', 'digSelectionProcess', 'digSelectionProcessDD', 'changeChargeSlipId', 'SelectBillingSlipPregnancy']) {
+              if (typeof window[name] === 'function') {
+                selected.fnSources[name] = String(window[name]).slice(0, 1200);
+              }
+            }
             const tryCall = (label, fn) => {
               try {
                 const out = fn();
@@ -3404,15 +3410,20 @@ export function createClientCareBrowserService({ env = process.env, logger = con
                 return false;
               }
             };
-            // Vendor binder usually wants the full visit row (ScheduledEventID), not just pregnancy UUID.
+            // Prefer selectClick — tip proved it reads FullName from a visit row.
+            if (typeof window.selectClick === 'function') {
+              tryCall('selectClick(raw)', () => window.selectClick(match.raw));
+              tryCall('selectClick(raw,eventId)', () => window.selectClick(match.raw, match.scheduledEventId));
+              const idx = normalized.findIndex((r) => r.pregnancyId === match.pregnancyId);
+              tryCall('selectClick(index)', () => window.selectClick(idx));
+            }
             if (typeof window.SelectBillingSlipPregnancy === 'function') {
               tryCall('SelectBillingSlipPregnancy(raw)', () => window.SelectBillingSlipPregnancy(match.raw));
               tryCall('SelectBillingSlipPregnancy(eventId)', () => window.SelectBillingSlipPregnancy(match.scheduledEventId));
               tryCall('SelectBillingSlipPregnancy(pregnancyId)', () => window.SelectBillingSlipPregnancy(match.pregnancyId));
             }
-            for (const name of fnNames) {
-              if (name === 'SelectBillingSlipPregnancy') continue;
-              tryCall(`${name}(raw)`, () => window[name](match.raw));
+            if (typeof window.digSelectionProcess === 'function') {
+              tryCall('digSelectionProcess(raw)', () => window.digSelectionProcess(match.raw));
             }
             for (const name of ['PregnancyID', 'PregnancyId', 'pregnancyId', 'SelectedPregnancyId', 'PatientId', 'PatientID', 'ScheduledEventID', 'ScheduledEventId']) {
               const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
@@ -3424,22 +3435,29 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               selected.attempts.push({ label: `field:${name}`, ok: true });
             }
             const needle = String(match.name || '').toLowerCase().split(/\s+/).find((p) => p.length > 2) || '___never___';
-            const rowEl = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"], li, .list-group-item, a'))
-              .find((tr) => {
-                const t = (tr.innerText || '').toLowerCase();
-                return t.includes(needle) && /\b\d{1,2}:\d{2}\b/.test(t);
-              });
+            const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+              .map((tr) => {
+                const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
+                const cells = tr.querySelectorAll('td, [role="gridcell"]').length;
+                return { tr, t, cells, score: (t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) - Math.min(t.length, 400) / 100 };
+              })
+              .filter((r) => r.score >= 15)
+              .sort((a, b) => b.score - a.score);
+            const rowEl = rowCandidates[0]?.tr || null;
             if (rowEl) {
               rowEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
               rowEl.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
               rowEl.click();
-              rowEl.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
               selected.clickedRow = true;
-              selected.attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').slice(0, 80) });
+              selected.attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80), score: rowCandidates[0].score });
+              const onclick = rowEl.getAttribute('onclick') || rowEl.querySelector('[onclick]')?.getAttribute('onclick') || '';
+              if (onclick) {
+                selected.attempts.push({ label: 'row_onclick_attr', ok: true, text: onclick.slice(0, 160) });
+                tryCall('row_onclick_eval', () => { eval(onclick); });
+              }
             }
             const patientLine = ((document.body.innerText || '').match(/Patient:\s*([^\n]{0,80})/i) || [])[1] || '';
-            selected.applied = Boolean(patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine))
-              || selected.attempts.some((a) => a.ok && /^SelectBillingSlipPregnancy/.test(a.label));
+            selected.applied = Boolean(patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine));
             selected.pregnancyId = match.pregnancyId;
             selected.scheduledEventId = match.scheduledEventId;
             selected.patientLineAfter = patientLine.slice(0, 80);
@@ -3500,19 +3518,36 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           const call = (label, fn) => {
             try { fn(); attempts.push({ label, ok: true }); } catch (e) { attempts.push({ label, ok: false, error: String(e?.message || e).slice(0, 100) }); }
           };
+          if (typeof window.selectClick === 'function') {
+            call('selectClick(raw)', () => window.selectClick(match));
+            call('selectClick(index)', () => window.selectClick(rows.findIndex((r) => String(r.PregnancyID || '').toLowerCase() === String(wantPregnancyId || '').toLowerCase())));
+          }
           if (typeof window.SelectBillingSlipPregnancy === 'function') {
             call('SelectBillingSlipPregnancy(raw)', () => window.SelectBillingSlipPregnancy(match));
             call('SelectBillingSlipPregnancy(event)', () => window.SelectBillingSlipPregnancy(match.ScheduledEventID));
           }
           const needle = String(match.FullName || '').toLowerCase().split(/\s+/).find((p) => p.length > 2);
-          const rowEl = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
-            .find((tr) => {
-              const t = (tr.innerText || '').toLowerCase();
-              return needle && t.includes(needle) && /\b\d{1,2}:\d{2}\b/.test(t);
-            });
+          const rowCandidates = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'))
+            .map((tr) => {
+              const t = (tr.innerText || '').replace(/\s+/g, ' ').trim();
+              const cells = tr.querySelectorAll('td, [role="gridcell"]').length;
+              return { tr, t, cells, score: (needle && t.toLowerCase().includes(needle) ? 10 : 0) + (/\b\d{1,2}:\d{2}\b/.test(t) ? 5 : 0) + (cells >= 2 && cells <= 8 ? 3 : 0) - Math.min(t.length, 400) / 100 };
+            })
+            .filter((r) => r.score >= 15)
+            .sort((a, b) => b.score - a.score);
+          const rowEl = rowCandidates[0]?.tr || null;
           if (rowEl) {
             rowEl.click();
-            attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').slice(0, 80) });
+            attempts.push({ label: 'row_click', ok: true, text: (rowEl.innerText || '').replace(/\s+/g, ' ').slice(0, 80) });
+            const onclick = rowEl.getAttribute('onclick') || '';
+            if (onclick) {
+              attempts.push({ label: 'row_onclick_attr', ok: true, text: onclick.slice(0, 160) });
+              try { eval(onclick); attempts.push({ label: 'row_onclick_eval', ok: true }); } catch (e) { attempts.push({ label: 'row_onclick_eval', ok: false, error: String(e?.message || e).slice(0, 100) }); }
+            }
+          }
+          const fnSources = {};
+          for (const name of ['selectClick', 'digSelectionProcess', 'digSelectionProcessDD']) {
+            if (typeof window[name] === 'function') fnSources[name] = String(window[name]).slice(0, 1200);
           }
           await new Promise((r) => setTimeout(r, 800));
           const text = (document.body.innerText || '').replace(/\s+/g, ' ');
@@ -3520,6 +3555,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           return {
             ok: true,
             attempts,
+            fnSources,
             patientLine: patientLine.slice(0, 80),
             patientSelected: Boolean(patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine)),
           };
