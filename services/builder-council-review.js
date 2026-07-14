@@ -37,7 +37,7 @@ const PROVIDER_MODEL_MAP = {
   'cerebras': 'llama3.1-70b',
   'perplexity': 'sonar',
   'claude-3-7-sonnet-thinking': 'claude-3-7-sonnet-20250219',
-  'claude-sonnet-4-6': 'claude-sonnet-4-6',
+  'claude-sonnet-4-6': 'claude-sonnet-4-20250514',
   'skipped': 'none',
   'none': 'none',
 };
@@ -134,7 +134,7 @@ async function callAnthropic(prompt, systemPrompt = '', model = null, opts = {})
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY not set');
 
-  const selectedModel = model || process.env.COUNCIL_REVIEW_MODEL || 'claude-sonnet-4-6';
+  const selectedModel = model || process.env.COUNCIL_REVIEW_MODEL || 'claude-sonnet-4-20250514';
   const useThinking = opts.extendedThinking && selectedModel.includes('3-7');
   const thinkingBudget = opts.thinkingBudget || 8000;
 
@@ -638,8 +638,8 @@ Respond in this exact JSON format (no markdown, raw JSON only):
     provider = 'claude-3-7-sonnet-thinking';
   } catch {
     try {
-      text = await callAnthropic(prompt, '', 'claude-sonnet-4-6', { cache: true });
-      provider = 'claude-sonnet-4-6';
+      text = await callAnthropic(prompt, '', 'claude-sonnet-4-20250514', { cache: true });
+      provider = 'claude-sonnet-4-20250514';
     } catch {
       const r = await callFreeModel(prompt, '', 'groq');
       text = r.text; provider = r.provider;

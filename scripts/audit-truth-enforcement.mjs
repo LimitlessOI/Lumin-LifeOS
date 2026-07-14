@@ -51,7 +51,7 @@ const REQUIRED_SPINE = [
   //  - founder runtime: HTTP outbound enforcer (the minimal lane's boundary truth gate)
   { file: 'server-full-runtime.js', needles: ['createTruthResponseEnforcer', 'createSpineCallAI', 'spineCallAI', 'truthGateOutbound'] },
   { file: 'server-founder-runtime.js', needles: ['createTruthResponseEnforcer'] },
-  { file: 'services/council-service.js', needles: ['deliverCouncilText'] },
+  { file: 'services/council-service.js', needles: ['finalizeResponse'] },
   { file: 'core/memory-system.js', needles: ['gateMemoryWrite'] },
 ];
 

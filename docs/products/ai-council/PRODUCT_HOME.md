@@ -11,31 +11,32 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — `config/runtime-env.js` `applyEnvAliases()` maps `REPLICATE_API` → `REPLICATE_API_TOKEN` at boot. |
+| **Last Updated** | 2026-07-14 — Model routing hardening: quality-first, provider-diverse, strong paid models for chair/architect/century/planner/builder/site-builder; `MAX_DAILY_SPEND` default raised to $20/day; `allowModelDowngrade: false` and `builderExecution: true` on all load-bearing codegen, planning, and analysis calls. `config/runtime-env.js` `applyEnvAliases()` maps `REPLICATE_API` → `REPLICATE_API_TOKEN` at boot. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
 > This amendment contains full history, receipts, LCL architecture detail, and competitive analysis.
 
-> **Y-STATEMENT:** In the context of a platform that makes many AI calls daily,
-> facing the risk of runaway API costs and vendor lock-in,
-> we decided to build a council routing layer that routes every task to the cheapest
-> capable model to achieve near-zero AI spend, accepting added routing complexity
-> and the need to maintain model-capability knowledge as providers evolve.
+> **Y-STATEMENT:** In the context of a platform that builds itself with many AI calls daily,
+> facing the risk of both runaway API costs and low-quality output from wrong-model routing,
+> we decided to build a council routing layer that routes every task to the best-value model
+> for its role, starting with strong paid models for high-stakes reasoning and failing over
+> provider-diverse strong models before any free tier, measuring quality/cost per task
+> and never sitting idle because one provider is dry.
 
 | Field | Value |
 |---|---|
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-14 — `config/runtime-env.js` `applyEnvAliases()` maps `REPLICATE_API` → `REPLICATE_API_TOKEN` at boot. |
+| **Last Updated** | 2026-07-14 — Model routing hardening: quality-first, provider-diverse, strong paid models for chair/architect/century/planner/builder/site-builder; `MAX_DAILY_SPEND` default raised to $20/day; `allowModelDowngrade: false` and `builderExecution: true` on all load-bearing codegen, planning, and analysis calls. `config/runtime-env.js` `applyEnvAliases()` maps `REPLICATE_API` → `REPLICATE_API_TOKEN` at boot. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/products/ai-council/FILE_MANIFEST.json` |
 
 ---
 
 ## Mission
-Route every AI task to the cheapest capable model. Zero unnecessary spend. Free providers first, paid providers never unless explicitly authorized.
+Route every AI task to the best-value model for its role. Quality first, especially on the most important functions. Strong paid providers first for chair/architect/century/planner/builder/site-builder reasoning; provider-diverse failover before any free tier. Measure each model and which provider does best at each role; if a higher-cost model does not produce a better result, go to the next lower model. Never cheap out on load-bearing reasoning; never sit idle because one provider is dry.
 
 ### Canonical role clarification
 
@@ -88,7 +89,7 @@ routes/lifeos-gate-change-routes.js
 db/migrations/20260422_gate_change_proposals.sql
 config/council-members.js
 config/codebook-v1.js              ← NEW: LCL versioned symbol table (pre-shared key)
-config/task-model-routing.js       ← NEW: 30+ task types → cheapest capable model
+config/task-model-routing.js       ← NEW: 30+ task types → best-value capable model (strong paid first, provider-diverse failover)
 ```
 
 ## Protected Files (read-only for this project)
@@ -100,16 +101,15 @@ server.js           — composition root only
 
 ## Design Spec
 
-### Model Priority Chain (all free, in order)
-1. **Groq** — 13,950 req/day (3% buffer from 14,400)
-2. **Gemini Flash** — 1,455 req/day, 970k tokens/day
-3. **Cerebras** — 970 req/day
-4. **OpenRouter** — 195 req/day (free models only)
-5. **Mistral** — 485 req/day
-6. **Together** — 970 req/day
-7. **Ollama** — retired by founder directive; not available for routing
+### Model Priority Chain (role-driven, strong first, provider-diverse failover)
+1. **Anthropic Claude Sonnet** — chair debate, counsel, architect review, high-stakes reasoning (`claude_sonnet`)
+2. **OpenAI GPT-4o / o-series** — builder lane codegen, planning, business extraction, code review (`openai_builder_standard`, `openai_builder_escalation`, `openai_gpt`)
+3. **DeepSeek** — code generation/review, analysis, secondary failover (`deepseek`)
+4. **Gemini Flash** — fast generation, lightweight tasks, secondary failover (`gemini_flash`)
+5. **Groq / Cerebras / OpenRouter / Mistral / Together** — free-tier fallback, low-stakes or high-throughput tasks, not the primary path for load-bearing reasoning
+6. **Ollama** — retired by founder directive; not available for routing
 
-**Paid providers:** Anthropic, OpenAI — only fire if spend policy allows them. Builder lanes may use `BUILDEROS_MAX_DAILY_SPEND` independently from `MAX_DAILY_SPEND`.
+**Paid providers fire first for builder lanes and high-stakes reasoning.** `MAX_DAILY_SPEND` defaults to $20/day so paid models run until the daily cap is hit. `COST_SHUTDOWN_THRESHOLD` defaults to `MAX_DAILY_SPEND`; builder lane calls are protected from silent free-tier cascade by `builderExecution: true` and `allowModelDowngrade: false`.
 
 ### Token Compression Stack (applied in order)
 1. Exact cache hit → 100% savings
@@ -128,14 +128,14 @@ server.js           — composition root only
 ### Key Environment Variables
 | Var | Default | Purpose |
 |---|---|---|
-| `MAX_DAILY_SPEND` | `0` | Hard cap — $0 means never spend money |
+| `MAX_DAILY_SPEND` | `20` | Hard cap — default $20/day so strong paid models can run until the cap is hit |
 | `HAB_DAILY_LIMIT` | `100` | Human attention budget per key per day |
 | `LIFEOS_DIRECTED_MODE` | `true` | Disables all autonomous AI schedulers |
 | `PAUSE_AUTONOMY` | `1` | Secondary kill switch |
 | `LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER` | `false` | Auto-builder off |
 | `OLLAMA_ENDPOINT` | retired | Kept only for legacy compatibility; runtime routing must not depend on it |
 | `COUNCIL_OLLAMA_MODE` | retired / ignored | Founder directive retired Ollama from active routing |
-| `BUILDEROS_MAX_DAILY_SPEND` | unset | Optional BuilderOS-only spend cap; when unset, builder lane is governed by availability and explicit routing policy rather than generic `$0` shutdown drift |
+| `BUILDEROS_MAX_DAILY_SPEND` | unset | Optional BuilderOS-only spend cap; when unset, builder lane falls back to `MAX_DAILY_SPEND` (default $20/day) |
 
 ### DB Tables
 | Table | Purpose |
@@ -266,12 +266,12 @@ Every prompt → prompt-translator.js
   └── Return compressed prompt + routing recommendation to council-service.js
 ```
 
-**Paid models are essentially never used.** The only path to a paid call:
-1. `MAX_DAILY_SPEND > 0` (it's 0 by default — a hard env var gate)
-2. AND all free providers exhausted for the day
-3. AND the task contains a HIGH_STAKES keyword
+**Paid models are the default for builder lanes and high-stakes reasoning.** The path to a paid call:
+1. `MAX_DAILY_SPEND > 0` (default $20/day)
+2. AND the task is builder-lane, codegen, chair/architect/planner/century, or `HIGH_STAKES` keyword
+3. Strong provider-diverse failover is attempted before any free-tier fallback
 
-In normal operation: $0 spend, 100% free tier.
+In normal operation: builder lanes and high-stakes reasoning use paid providers up to $20/day; free tier is the fallback for low-stakes tasks once strong provider keys are exhausted.
 
 ### Versioning Rule
 
@@ -307,7 +307,7 @@ At Phase 3 we are 15-25x cheaper per call and the gap widens with volume.
 - [x] **Ollama spam 30-min cooldown** *(est: 0.5h \| actual: 0.5h)* `[safe]`
 - [x] **AI guard lazy hash (REALITY_MISMATCH fix)** *(est: 1h \| actual: 0.5h)* `[needs-review]`
 - [x] **LCL codebook-v1 + prompt-translator.js built** *(2026-04-19)* `[safe]`
-- [x] **task-model-routing.js — 30+ task types mapped to cheapest capable free model** *(2026-04-19)* `[safe]`
+- [x] **task-model-routing.js — 30+ task types mapped to best-value strong model with provider-diverse failover** *(2026-07-14)* `[safe]`
 - [x] **Wire prompt-translator.js into council-service.js as Layer 1.5** *(2026-04-19)* `[safe]`
 - [ ] **Improve `general` task type savings from 4% → 15%+** *(est: 3h)* `[needs-review]`
 - [ ] **Investigate Ollama 7,327 avg tokens/call — likely bloated system prompts** *(est: 2h)* `[safe]`
@@ -345,12 +345,12 @@ grep "0\.97" services/free-tier-governor.js
 
 ## Decision Log
 
-### Decision: Free providers only, $0 default — 2026-03-13
-> **Y-Statement:** In the context of a bootstrapped project with no revenue yet,
-> facing real API costs that would drain resources before the product ships,
-> we decided to default MAX_DAILY_SPEND=0 and route exclusively to free providers
-> to achieve zero burn rate, accepting that some tasks may get lower-quality responses
-> from free models vs paid ones.
+### Decision: Quality-first, bounded paid spend — 2026-07-14 (supersedes 2026-03-13)
+> **Y-Statement:** In the context of a self-building platform where output quality is the product,
+> facing both real API costs and the cost of shipping wrong or low-quality output,
+> we decided to default MAX_DAILY_SPEND=20 and route load-bearing tasks to strong paid providers first,
+> accepting a bounded daily burn while continuously measuring model quality per role and never
+> sitting idle when a provider fails.
 
 **Reversibility:** `two-way-door` — can enable paid spend with one env var
 

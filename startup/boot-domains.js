@@ -19,6 +19,7 @@ import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work
 import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
 import { startBpPriorityScheduler } from '../services/builderos-bp-priority-scheduler.js';
 import { startNeverStopProductFactoryScheduler } from '../services/never-stop-product-factory-scheduler.js';
+import { startGovernedAutonomousShippingLoop } from '../services/governed-autonomous-shipping-loop.js';
 import { getRuntimeProfile, isFullRuntimeProfile } from '../services/runtime-modes.js';
 
 const tcOperationsBootEnabled =
@@ -445,6 +446,11 @@ async function bootBuilderOSPriorityQueue(deps) {
     startNeverStopProductFactoryScheduler({ logger });
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[BOOT] Never-stop product factory failed to start (non-fatal)');
+  }
+  try {
+    startGovernedAutonomousShippingLoop({ logger });
+  } catch (err) {
+    logger?.warn?.({ err: err.message }, '[BOOT] Governed autonomous shipping loop failed to start (non-fatal)');
   }
 }
 

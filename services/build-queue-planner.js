@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { STEP_STATUS } from './product-build-orchestrator.js';
+import { parseRouteDeclaration } from '../factory-staging/factory-core/bpb/build-queue-step-adapter.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -292,6 +293,15 @@ export function normalizePlannedStep(raw, productId, index) {
   const task = String(raw.task || '').trim();
   if (!target_file || !task) return null;
   const id = slugify(raw.id || task, `${productId}-step-${index + 1}`);
+
+  const expectedExports = Array.isArray(raw.expected_exports)
+    ? raw.expected_exports.filter((n) => typeof n === 'string' && n.trim())
+    : null;
+  const route = parseRouteDeclaration(raw.route);
+  const fileContains = Array.isArray(raw.file_contains)
+    ? raw.file_contains.filter((s) => typeof s === 'string' && s.trim())
+    : null;
+
   const step = {
     id,
     status: STEP_STATUS.PENDING,
@@ -302,6 +312,11 @@ export function normalizePlannedStep(raw, productId, index) {
     founder_gated: Boolean(raw.founder_gated),
     attempts: 0,
   };
+
+  if (expectedExports && expectedExports.length) step.expected_exports = expectedExports;
+  if (route) step.route = route;
+  if (fileContains && fileContains.length) step.file_contains = fileContains;
+
   if (!step.founder_gated && shouldFounderGate(step)) step.founder_gated = true;
   if (step.founder_gated) step.status = STEP_STATUS.FOUNDER_GATED;
   return step;
@@ -341,9 +356,13 @@ ${backlog.map((b, i) => `${i + 1}. ${b}`).join('\n')}
 ${builtFiles.length ? `\nALREADY BUILT — these files/features are DONE. Do NOT propose them or re-create their behaviour:\n${builtFiles.map((f) => `- ${f}`).join('\n')}\n` : ''}
 Rules:
 - Output ONLY minified JSON, no prose, no markdown fences.
-- Shape: {"steps":[{"id","target_file","task","spec","depends_on":[],"founder_gated":bool}]}
+- Shape: {"steps":[{"id","target_file","task","spec","expected_exports":[],"route":"METHOD /path","file_contains":[],"depends_on":[],"founder_gated":bool}]}
 - Each step edits exactly ONE concrete repo file (target_file). Prefer existing conventional paths (services/*.js, routes/*.js, public/overlay/*.html, scripts/*.mjs, db/migrations/*.sql).
 - "task" is a short imperative; "spec" is the acceptance/definition-of-done for that file.
+- For server-code targets, you MUST declare checkable expectations so the governed factory can prove the step:
+  - "expected_exports": array of named exports the file must contain (e.g. ["registerXRoutes", "getHealth"]) — use for services/routes/modules.
+  - "route": the exact HTTP route the module exposes, as "METHOD /path" or bare "/path" (e.g. "GET /api/v1/lifeos/builder/ready" or "/api/v1/lifeos/builder/ready") — use for routes.
+  - "file_contains": array of strings that must appear in the file (e.g. ["CREATE TABLE IF NOT EXISTS", "@ssot"]) — use for SQL migrations or governance markers.
 - COMPOSITION (so the generated code actually runs and mounts — non-negotiable):
   - Each file must be SELF-CONTAINED: import ONLY node builtins, packages already installed, or sibling files created by an EARLIER step in this same queue (wire those with depends_on). NEVER import a package or file that does not exist.
   - A route module must export a register function (e.g. registerXRoutes(app, deps)) and be added to config/auto-registered-product-modules.json — NEVER instruct editing server.js or any boot file.
@@ -460,6 +479,7 @@ export async function planBuildQueue({
   }
 
   const existingStepsPre = Array.isArray(existingQueue?.steps) ? existingQueue.steps : [];
+  const doneCount = existingStepsPre.filter((s) => s.status === STEP_STATUS.DONE).length;
   const doneFiles = [...new Set(
     existingStepsPre
       .filter((s) => s.status === STEP_STATUS.DONE && s.target_file)
@@ -473,6 +493,8 @@ export async function planBuildQueue({
       // JSON was being cut off mid-array (parse -> no steps -> loop starved).
       maxOutputTokens: 8000,
       allowModelDowngrade: false,
+      taskType: 'builder_lane',
+      builderExecution: true,
     });
   } catch (e) {
     logger?.warn?.({ productId, error: e.message }, '[BUILD-QUEUE-PLANNER] model call failed — fail closed');
@@ -521,7 +543,7 @@ export async function planBuildQueue({
     product_id: productId,
     ...(verifyScript ? { verify_script: verifyScript } : (existingQueue?.verify_script ? { verify_script: existingQueue.verify_script } : {})),
     planned_at: new Date().toISOString(),
-    backlog_signature: backlogSignature(backlog),
+    backlog_signature: backlogSignature([...backlog, `__done_count:${doneCount}__`]),
     corpus_sources: corpusSources.map((s) => s.path),
     steps: [...existingSteps, ...added],
   };

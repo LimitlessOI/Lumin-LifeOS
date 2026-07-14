@@ -4,6 +4,7 @@
  *
  * @ssot builderos-reboot/BP_PRIORITY.json
  * @ssot docs/products/AUTHORITY_BOUNDARIES.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 
 import fs from 'node:fs';
@@ -19,6 +20,78 @@ const RECEIPTS_DIR = path.join(ROOT, 'products', 'receipts');
 function uniq(list = []) {
   return [...new Set(list.filter(Boolean))];
 }
+
+function buildSeedProposal({ id, source, sourceCode, priority, owner, lane, title, whyNow }) {
+  const proposal = {
+    proposal_id: id,
+    source,
+    source_code: sourceCode,
+    priority,
+    owner,
+    lane,
+    title,
+    why_now: whyNow,
+    consensus_path: ['SNT', 'CFO', 'Chair', 'ARC'],
+    arc_handoff_required: true,
+  };
+  return {
+    ...proposal,
+    blueprint_delta: buildImprovementDeltaContract({
+      source,
+      sourceCode,
+      priority,
+      owner,
+      title,
+      whyNow,
+    }),
+  };
+}
+
+// Governed product proposals from the founder. These are NOT ad-hoc builds;
+// they are captured in the improvement-loop blueprint so the factory can queue,
+// measure, and ship them through BP_PRIORITY / BUILD_QUEUE.
+export const BUILDEROS_IMPROVEMENT_PROPOSALS = [
+  buildSeedProposal({
+    id: 'MODEL-VALUE-BENCHMARK-001',
+    source: 'founder',
+    sourceCode: 'MODEL_VALUE_BENCHMARK',
+    priority: 'P1',
+    owner: 'CFO',
+    lane: 'optimization',
+    title: 'Model value-benchmarking router: measure quality/cost per role',
+    whyNow: 'We need to measure each model and where the highest model is needed, which LM company does best at whichever roles we have for them, and then apply the best agent for the maximum value attained. If a higher model costs more but does not produce a better result, go to the next lower model. Find and test everything to find the best at operating the system, but always quality first. We do not cheap out, especially on the most important parts.',
+  }),
+  buildSeedProposal({
+    id: 'REPLICATE-IMAGE-TEMPLATES-001',
+    source: 'founder',
+    sourceCode: 'REPLICATE_IMAGE_TEMPLATES',
+    priority: 'P2',
+    owner: 'Chair',
+    lane: 'product',
+    title: 'Site Builder: Replicate API pre-made image templates + asset curation',
+    whyNow: 'Use the Replicate API for images. Pre-make the first 15 design templates graphically so the sites look amazing. Read and distinguish good graphics/photos from bad ones, and pull images from the prospect\'s socials and webpage; if it is stored prominently, chances are they like it.',
+  }),
+  buildSeedProposal({
+    id: 'PERSUASION-PSYCHOLOGY-ADCOPY-001',
+    source: 'founder',
+    sourceCode: 'PERSUASION_PSYCHOLOGY_ADCOPY',
+    priority: 'P2',
+    owner: 'Chair',
+    lane: 'product',
+    title: 'MarketingOS/SocialMediaOS: persuasion-psychology ad-copy engine',
+    whyNow: 'We need to be the best in the world at creating ad copy. Build a deep understanding of the psychology of what makes people click and take action, what benefits we are offering, and how to present those benefits in the best possible way.',
+  }),
+  buildSeedProposal({
+    id: 'LIFEOS-PERFECT-DAY-001',
+    source: 'founder',
+    sourceCode: 'LIFEOS_PERFECT_DAY',
+    priority: 'P1',
+    owner: 'Chair',
+    lane: 'product',
+    title: 'LifeOS/LifeRe: Perfect Day builder + daily rating + flexible re-prioritization',
+    whyNow: 'Help a client build their perfect day: what time to wake up, what to do, how to make the perfect day. Then help encourage it, track it, and rate the day against it. If something more important comes up, that is OK — add it to the blueprint and re-prioritize against the urgent/important matrix. For ADD-style users, send 15-minute reminders to stay on task or check in when off task.',
+  }),
+];
 
 // Fold the per-product SENTRY self-fix feeds (written by scripts/sentry-prealpha-gate.mjs
 // via the system-authored closer) into the improvement queue. This is the last mile of
@@ -159,6 +232,7 @@ export function buildBuilderOSImprovementLoopStatus({
     ...warnings.slice(0, 5).map((w) => buildProposalFromFinding(w, 'warning')),
     ...fakeGreenRisks.slice(0, 3).map((r) => buildProposalFromFinding(r, 'fake_green')),
     ...(compound.levers || []).slice(0, 5).map((lever) => buildProposalFromLever(lever)),
+    ...BUILDEROS_IMPROVEMENT_PROPOSALS,
   ]
     .sort((a, b) => rankPriority(a.priority) - rankPriority(b.priority))
     .slice(0, 12);
@@ -183,8 +257,9 @@ export function buildBuilderOSImprovementLoopStatus({
       scheduler_healthy: schedulerStatus.scheduler.healthy,
       queue_has_incomplete_work: schedulerStatus.scheduler.queue_has_incomplete_work,
       cost_focus: [
-        'Use cheaper-first model routing until reasoning failure is proven.',
-        'Do not escalate model tier for infra/deploy/env/schema blockers.',
+        'Quality-first: strong paid models first for critical reasoning; never cheap out on the most important functions.',
+        'Provider-diverse failover: cycle Anthropic, OpenAI, DeepSeek before free tier; never idle because one provider is dry.',
+        'Measure per-task model value: if a higher-cost model does not produce a better result, go to the next lower model.',
         'Convert repeated failure families into permanent prevention hooks.',
       ],
     },

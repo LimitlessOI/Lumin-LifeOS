@@ -611,8 +611,48 @@
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
       "shipped_at": "2026-07-14T01:52:57.235Z"
+    },
+    {
+      "id": "11",
+      "status": "pending",
+      "target_file": "services/lifeos-perfect-day.js",
+      "task": "Implement LifeOS Perfect Day planning service with DB-backed schedule, check-in, reminders, and daily rating",
+      "spec": "This is an ES module service file. Export these named functions:\n- export async function planPerfectDay(userId, { wakeTime, schedule }) — upsert a user's perfect-day plan (wake time, ordered activities array with start/end) into a table named `perfect_day` (id, user_id, wake_time, schedule JSONB, created_at, updated_at).\n- export async function getPerfectDay(userId) — return the current plan for the user, or null.\n- export async function checkIn(userId, { currentActivity, distraction, priority }) — record a check-in and return the next recommended activity or a re-prioritization question.\n- export async function getDailyReminders(userId) — return the next 3 upcoming reminders for today based on the plan.\n- export async function rateDay(userId, { rating, note, whatMatteredMore }) — upsert a daily rating into `perfect_day_ratings` (id, user_id, perfect_day_id, rating smallint, note, what_mattered_more, created_at).\nUse the existing pool from '../services/db.js'. Use ON CONFLICT for upserts. SQL: CREATE TABLE IF NOT EXISTS perfect_day (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, wake_time time, schedule jsonb NOT NULL DEFAULT '[]'::jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(), UNIQUE(user_id)); CREATE TABLE IF NOT EXISTS perfect_day_ratings (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, perfect_day_id uuid REFERENCES perfect_day(id), rating smallint, note text, what_mattered_more text, created_at timestamptz DEFAULT now());\n",
+      "depends_on": [
+        "10"
+      ],
+      "founder_gated": false,
+      "expected_exports": [
+        "planPerfectDay",
+        "getPerfectDay",
+        "checkIn",
+        "getDailyReminders",
+        "rateDay"
+      ]
+    },
+    {
+      "id": "12",
+      "status": "pending",
+      "target_file": "routes/lifeos-perfect-day-routes.js",
+      "task": "Implement LifeOS Perfect Day REST routes with auth and health endpoint",
+      "spec": "This is an ES module route file. Export function registerLifeosPerfectDayRoutes(app, deps). Inside the function, create an express.Router and mount it with `app.use('/api/v1/lifeos/perfect-day', router)`. Use `deps.requireKey` or `deps.pool` where needed. Endpoints:\n- GET /health returns { ok: true } (no DB, for module-health).\n- POST /plan requires auth, calls planPerfectDay(req.body.user_id, req.body).\n- GET /plan requires auth, calls getPerfectDay(req.body.user_id).\n- POST /check-in requires auth, calls checkIn(req.body.user_id, req.body).\n- GET /reminders requires auth, calls getDailyReminders(req.body.user_id).\n- POST /rate requires auth, calls rateDay(req.body.user_id, req.body).\nUse `import { planPerfectDay, getPerfectDay, checkIn, getDailyReminders, rateDay } from '../services/lifeos-perfect-day.js';`. Handle errors with 500 JSON { error: ... }.",
+      "depends_on": [
+        "11"
+      ],
+      "founder_gated": false,
+      "expected_exports": [
+        "registerLifeosPerfectDayRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/perfect-day/health"
+      },
+      "file_contains": [
+        "GET /health",
+        "registerLifeosPerfectDayRoutes"
+      ]
     }
   ],
-  "updated_at": "2026-07-12",
-  "notes": "Adam 2026-07-12: LifeOS whole kit — chat ship + therapist consent done. Next: Digital Twin ui_directives + reaction simulator (doctrine). Never-stop must not spin on Site Builder unplannable SENTRY."
+  "updated_at": "2026-07-14",
+  "notes": "Adam 2026-07-14: LifeOS Perfect Day added to queue — plan, rate, flexible re-prioritization, ADD-style reminders. The factory must ship s11 (service) then s12 (route). Next: Digital Twin ui_directives + reaction simulator (doctrine). Never-stop must not spin on Site Builder unplannable SENTRY."
 }

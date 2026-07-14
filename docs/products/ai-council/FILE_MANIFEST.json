@@ -9,6 +9,7 @@
   "ownership_policy": "pointer_not_duplication",
   "owned_files": [
     "services/council-service.js",
+    "services/council-prompt-adapter.js",
     "services/token-optimizer.js",
     "services/savings-ledger.js",
     "services/free-tier-governor.js",
@@ -22,7 +23,13 @@
     "docs/products/ai-council/PRODUCT_HOME.md",
     "docs/products/ai-council/FILE_MANIFEST.json"
   ],
-  "shared_dependencies": [],
+  "shared_dependencies": [
+    {
+      "path": "docs/products/lifeos/PRODUCT_HOME.md",
+      "owner": "LifeOS",
+      "reason": "AI Council is consumed by the LifeOS runtime"
+    }
+  ],
   "history_anchors": [],
   "required_routes": [
     {

@@ -21,11 +21,9 @@ const STRONGER_MODELS = [
   'openai_builder_standard',
   'openai_builder_escalation',
   'claude_sonnet',
-  'gpt-5.1-codex',
-  'gpt-5.2-codex',
-  'ollama_qwen_coder_32b',
-  'ollama_deepseek_coder_v2',
-  'ollama_deepseek_coder_33b',
+  'openai_gpt',
+  'century',
+  'deepseek',
 ];
 
 function normalizePath(targetFile) {

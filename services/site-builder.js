@@ -68,27 +68,35 @@ const TARGET_QUALITY_SCORE = Number(process.env.SITE_BUILDER_TARGET_SCORE || '88
 const MAX_REPAIR_PASSES = Math.max(0, Number(process.env.SITE_BUILDER_REPAIR_PASSES || '2'));
 const GENERATION_MAX_TOKENS = Number(process.env.SITE_BUILDER_GEN_TOKENS || '14000');
 const REPAIR_MAX_TOKENS = Number(process.env.SITE_BUILDER_REPAIR_TOKENS || '14000');
-// Site generation uses the canonical task-model router. The canonical model for
-// site_builder.generate_site is gemini_flash because it supports 8k+ output tokens,
-// which is necessary for a full 15-section HTML page. On any provider error we failover
-// to the strongest available paid model (openai_gpt) so the build never hard-fails and
-// never sits idle per SO-003.
+// Site generation uses the canonical task-model router. Start with a strong,
+// paid, provider-diverse model (claude_sonnet for long-form HTML) and fail over
+// across OpenAI lanes so the build never hard-fails and never sits idle per SO-003.
 const GENERATION_CANDIDATES = [...new Set([
-  getModelForTask('site_builder.generate_site') || 'gemini_flash',
+  getModelForTask('site_builder.generate_site') || 'claude_sonnet',
+  'openai_builder_standard',
+  'deepseek',
+  'openai_builder_escalation',
   'openai_gpt',
-  getModelForTask('site_builder.generate_site') || 'gemini_flash',
+  'gemini_flash',
+  'openai_builder_mini',
 ])].filter(Boolean);
 const REPAIR_CANDIDATES = [...new Set([
-  getModelForTask('site_builder.repair_site') || 'gemini_flash',
+  getModelForTask('site_builder.repair_site') || 'openai_builder_standard',
+  'claude_sonnet',
+  'deepseek',
+  'openai_builder_escalation',
   'openai_gpt',
-  getModelForTask('site_builder.repair_site') || 'gemini_flash',
+  'gemini_flash',
+  'openai_builder_mini',
 ])].filter(Boolean);
 const EXTRACTION_CANDIDATES = [...new Set([
-  getModelForTask('site_builder.extract_business') || 'groq_llama',
-  'gemini_flash',
+  getModelForTask('site_builder.extract_business') || 'deepseek',
   'openai_gpt',
+  'claude_sonnet',
+  'gemini_flash',
+  'openai_builder_mini',
 ])].filter(Boolean);
-const GENERATION_MODEL = GENERATION_CANDIDATES[0] || 'gemini_flash';
+const GENERATION_MODEL = GENERATION_CANDIDATES[0] || 'claude_sonnet';
 const GENERATION_TIMEOUT_MS = Math.max(15_000, Number(process.env.SITE_BUILDER_GEN_TIMEOUT_MS || '60000'));
 const PUPPETEER_LAUNCH_TIMEOUT_MS = Math.max(5_000, Number(process.env.SITE_BUILDER_PUPPETEER_LAUNCH_TIMEOUT_MS || '25000'));
 // Real-data enrichment: search the business's Google/Yelp/Facebook presence for REAL
@@ -346,7 +354,7 @@ export default class SiteBuilder {
     for (const member of candidates) {
       try {
         const response = await withTimeout(
-          this.callCouncil(member, prompt, { maxOutputTokens, allowModelDowngrade: false, useCache, taskType }),
+          this.callCouncil(member, prompt, { maxOutputTokens, allowModelDowngrade: false, useCache, taskType, builderExecution: true }),
           GENERATION_TIMEOUT_MS,
           `${label}:${member}`
         );
@@ -949,7 +957,7 @@ Return ONLY valid JSON:
   "designCues": ["visual/brand style cues actually described in the snippets, e.g. 'earthy green + cream palette', 'minimalist photography', 'calm spa aesthetic'"] (only if described; else [])
 }`;
     try {
-      const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction', useCache: false });
+      const resp = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 800, taskType: 'extraction', useCache: false, builderExecution: true });
       const m = resp.match(/\{[\s\S]+\}/);
       const parsed = m ? JSON.parse(m[0]) : null;
       if (!parsed) return null;

@@ -71,8 +71,8 @@ const escalatingCodegen = {
   },
 };
 const esc = await runAuthoring(baseStep, escalatingCodegen);
-assert('cheapest tier first (tier[0] attempted first)', DEFAULT_CODEGEN_TIERS[0] === 'cerebras_llama');
-assert('escalates on cheapest failure', esc.ok === true && esc.escalated === true && esc.model_tier === DEFAULT_CODEGEN_TIERS[1], { model_tier: esc.model_tier, escalated: esc.escalated });
+assert('strong tier first (tier[0] attempted first)', DEFAULT_CODEGEN_TIERS[0] === 'claude_sonnet');
+assert('escalates on first-tier failure', esc.ok === true && esc.escalated === true && esc.model_tier === DEFAULT_CODEGEN_TIERS[1], { model_tier: esc.model_tier, escalated: esc.escalated });
 
 // (6) FULL PIPE: author_then_write flows through write + SENTRY behavior gate to PASS.
 //     Uses a stub assertion runner (file read) + stub codegen. skip_intake to isolate.

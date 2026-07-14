@@ -10,7 +10,7 @@
  *   LIFEOS_CHAT_COUNCIL_MEMBER / LUMIN_COUNCIL_MEMBER — council member key (default `anthropic`,
  *   which resolves via COUNCIL_ALIAS_MAP in config/council-members.js).
  *
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/ai-council/PRODUCT_HOME.md
  */
 
 /**
@@ -56,7 +56,7 @@ export function createCouncilPromptAdapter(callCouncilMember, opts = {}) {
       throw new Error('callAI: expected a string prompt (or system string + user string)');
     }
 
-    const options = { taskType: defaultTaskType, ...councilOpts };
+    const options = { taskType: defaultTaskType, allowModelDowngrade: false, ...councilOpts };
     const r = await callCouncilMember(member, prompt, options);
     return typeof r === 'string' ? r : (r?.content || r?.text || '');
   };

@@ -27,7 +27,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createUsefulWorkGuard } from './useful-work-guard.js';
 import { governedFactoryOnly } from './governed-factory-guard.js';
-import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus } from './never-stop-product-factory.js';
+import { hasTokenCapacity, dailyBuildBudget, recordDailyBuildAttempts, mergeQueueRuntimeStatus, defaultPlannerCallModel, discoverPlanWork, discoverSentryFixWork, runPlanBuildQueue } from './never-stop-product-factory.js';
 import { planGovernedBuildQueueRun } from './governed-build-queue-scheduler.js';
 import { loadBuildQueue, persistQueue, normalizeQueue, STEP_STATUS } from './product-build-orchestrator.js';
 import { createDeploymentService } from './deployment-service.js';
@@ -242,6 +242,52 @@ async function commitShippedFiles(product_id, shippedStepIds, ship_steps, logger
   }
 }
 
+async function planQueueIfNeeded({ products, queueCache, logger, maxPlanAttempts = 1 }) {
+  const callModel = defaultPlannerCallModel();
+  if (!callModel || typeof callModel !== 'function') {
+    logger?.warn?.('[GOVERNED-AUTONOMOUS-SHIP] no planner callModel available');
+    return 0;
+  }
+  let tasks = [];
+  try {
+    tasks = [...discoverPlanWork(), ...discoverSentryFixWork()]
+      .filter((t) => t && t.kind === 'plan_build_queue')
+      .sort((a, b) => (a.priority || 0) - (b.priority || 0));
+  } catch (err) {
+    logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] discover planning work threw: ${err.message}`);
+    return 0;
+  }
+  if (!tasks.length) return 0;
+
+  let planned = 0;
+  for (let attempt = 0; attempt < maxPlanAttempts; attempt += 1) {
+    let attemptPlanned = 0;
+    for (const task of tasks) {
+      try {
+        const result = await runPlanBuildQueue(task, { callModel, logger });
+        if (result?.ok) {
+          attemptPlanned += result.added || 0;
+          logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] planned ${result.added || 0} step(s) for ${result.product_id}`);
+          try {
+            const local = loadBuildQueue(task.product_id);
+            const remote = await fetchRemoteBuildQueue(task.product_id);
+            queueCache[task.product_id] = mergeQueueRuntimeStatus(remote, local);
+          } catch (err) {
+            logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] could not reload queue for ${task.product_id}: ${err.message}`);
+          }
+        } else {
+          logger?.info?.(`[GOVERNED-AUTONOMOUS-SHIP] plan for ${task.product_id}: ${result?.detail || 'no_queue'}`);
+        }
+      } catch (err) {
+        logger?.warn?.(`[GOVERNED-AUTONOMOUS-SHIP] plan task ${task.product_id} threw: ${err.message}`);
+      }
+    }
+    planned += attemptPlanned;
+    if (!attemptPlanned) break;
+  }
+  return planned;
+}
+
 export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct = 1, shipFn = shipViaGovernedQueue, queueCache: inputQueueCache } = {}) {
   if (state.running) return { ok: false, skipped: true, reason: 'already_running' };
   if (!governedFactoryOnly()) return { ok: false, skipped: true, reason: 'fence_off' };
@@ -276,11 +322,21 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
       }
     }
 
-    const plan = planGovernedBuildQueueRun({
+    let plan = planGovernedBuildQueueRun({
       products,
       readQueue: (id) => queueCache[id],
       maxStepsPerProduct,
     });
+    if (!plan.runnable) {
+      const planned = await planQueueIfNeeded({ products, queueCache, logger });
+      if (planned) {
+        plan = planGovernedBuildQueueRun({
+          products,
+          readQueue: (id) => queueCache[id],
+          maxStepsPerProduct,
+        });
+      }
+    }
     if (!plan.runnable) {
       return { ok: true, shipped: 0, reason: 'no_shippable_steps', gaps: plan.total_gaps };
     }

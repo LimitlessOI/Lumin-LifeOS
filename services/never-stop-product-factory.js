@@ -140,7 +140,7 @@ async function callGeminiModel(key, model, prompt, maxTokens) {
 export function defaultPlannerCallModel() {
   const candidates = [];
   if (process.env.ANTHROPIC_API_KEY) {
-    const m = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+    const m = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514';
     candidates.push({ name: `anthropic:${m}`, call: (p, t) => callAnthropicModel(process.env.ANTHROPIC_API_KEY, m, p, t) });
   }
   if (process.env.OPENAI_API_KEY) {
@@ -530,7 +530,9 @@ export function discoverPlanWork() {
     const steps = Array.isArray(queue.steps) ? queue.steps : [];
     const allDone = steps.length > 0 && steps.every((s) => s.status === STEP_STATUS.DONE);
     if (!allDone) continue;
-    if (queue.backlog_signature && queue.backlog_signature === backlogSignature(backlog)) continue;
+    const doneCount = steps.filter((s) => s.status === STEP_STATUS.DONE).length;
+    const sig = backlogSignature([...backlog, `__done_count:${doneCount}__`]);
+    if (queue.backlog_signature && queue.backlog_signature === sig) continue;
     // Founder priority products (top of PRODUCT_BUILD_PRIORITY) must extend
     // BEFORE lower-priority SENTRY replan noise (was priority 6 → starved by
     // sentry_fix_plan at ~2.0002 — fake loops while LifeOS sat complete).
@@ -556,7 +558,7 @@ export function discoverPlanWork() {
  * the injected planner model, then persist it so subsequent cycles execute the
  * steps. Fail-closed: writes nothing if planning yields no valid queue.
  */
-async function runPlanBuildQueue(task, { callModel, logger } = {}) {
+export async function runPlanBuildQueue(task, { callModel, logger } = {}) {
   if (typeof callModel !== 'function') {
     return { ok: false, detail: 'plan_skipped_no_model' };
   }

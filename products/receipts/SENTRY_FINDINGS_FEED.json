@@ -1,20 +1,34 @@
 {
   "schema": "sentry_findings_feed_v1",
-  "generated_at": "2026-07-14T05:13:42.410Z",
-  "findings_count": 2,
+  "generated_at": "2026-07-14T05:52:25.146Z",
+  "findings_count": 4,
   "without_solution": 0,
   "findings": [
     {
       "code": "ux_friction_1",
-      "detail": "15 template choices feels like a lot to scan at once",
-      "proposed_solution": "Group the template chips into clearer categories like Calm, Clinical, and Luxe",
+      "detail": "15 templates feels like a lot to scan at once",
+      "proposed_solution": "show a short 'best for' description on each template chip",
       "severity": "warning",
       "source": "uxCritique"
     },
     {
       "code": "ux_friction_2",
-      "detail": "Only 3 palette options may feel a bit limiting if none fit the brand right away",
-      "proposed_solution": "Show a tiny preview on hover so I can tell styles apart faster",
+      "detail": "the template names may still feel a bit hard to compare quickly",
+      "proposed_solution": "highlight one recommended template and palette for a wellness business",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_3",
+      "detail": "chat accepts input, but the send/reset behavior may feel abrupt if I don’t know what happened",
+      "proposed_solution": "add a simple confirmation after chat messages send so it feels responsive",
+      "severity": "warning",
+      "source": "uxCritique"
+    },
+    {
+      "code": "ux_friction_4",
+      "detail": "3 palettes is fine, but I may want clearer guidance on which one fits my business best",
+      "proposed_solution": "keep Save clearly visible and reassuring since I’ll want to know my changes are safe",
       "severity": "warning",
       "source": "uxCritique"
     }
@@ -24,11 +38,19 @@
     "warnings": [
       {
         "code": "ux_friction_1",
-        "detail": "15 template choices feels like a lot to scan at once"
+        "detail": "15 templates feels like a lot to scan at once"
       },
       {
         "code": "ux_friction_2",
-        "detail": "Only 3 palette options may feel a bit limiting if none fit the brand right away"
+        "detail": "the template names may still feel a bit hard to compare quickly"
+      },
+      {
+        "code": "ux_friction_3",
+        "detail": "chat accepts input, but the send/reset behavior may feel abrupt if I don’t know what happened"
+      },
+      {
+        "code": "ux_friction_4",
+        "detail": "3 palettes is fine, but I may want clearer guidance on which one fits my business best"
       }
     ]
   }

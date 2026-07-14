@@ -29,7 +29,7 @@ const REQUIRED = [
   },
   {
     file: 'services/council-service.js',
-    needles: ['deliverCouncilText', 'envelopeCouncilMemberOutput'],
+    needles: ['finalizeResponse', 'envelopeCouncilMemberOutput'],
   },
   {
     file: 'services/ai-prose-truth-envelope.js',

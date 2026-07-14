@@ -50,7 +50,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
   // proves independently via the Step-3 behavior gate.
   const codegenRunner = callCouncilMember
     ? {
-        generate: async ({ task, target_file, spec, tiers }) => {
+        generate: async ({ task, target_file, spec, tiers, max_output_tokens: stepMaxTokens }) => {
           const prompt = [
             'You are a code-authoring hand for a governed build factory.',
             'Output ONLY the exact, complete file content for the target file.',
@@ -62,11 +62,17 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
             task ? `TASK: ${task}` : '',
             spec ? `SPEC:\n${typeof spec === 'string' ? spec : JSON.stringify(spec, null, 2)}` : '',
           ].filter(Boolean).join('\n\n');
+          const maxOutputTokens = Number(stepMaxTokens) || 8000;
           let lastError = null;
           for (let i = 0; i < tiers.length; i += 1) {
             const member = tiers[i];
             try {
-              const raw = await callCouncilMember(member, prompt, { taskType: 'builder_lane' });
+              const raw = await callCouncilMember(member, prompt, {
+                taskType: 'builder_lane',
+                maxOutputTokens,
+                allowModelDowngrade: false,
+                returnObject: true,
+              });
               const content = extractContent(typeof raw === 'string' ? raw : raw?.content || raw?.text || '');
               if (content && content.trim()) {
                 // Prefer real usage when council returns an object; otherwise estimate from text length.
@@ -74,7 +80,6 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
                 const promptTokens = Number(usage?.prompt_tokens) || Math.ceil(prompt.length / 4);
                 const completionTokens = Number(usage?.completion_tokens) || Math.ceil(content.length / 4);
                 const totalTokens = Number(usage?.total_tokens) || (promptTokens + completionTokens);
-                // Conservative USD estimate when provider usage lacks cost (free tiers → 0).
                 const estimatedUsd = Number(usage?.estimated_usd) || 0;
                 return {
                   content,

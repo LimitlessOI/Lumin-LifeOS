@@ -125,7 +125,7 @@ export function toGovernedShipStep(step, { product_id } = {}) {
       authoring: {
         task: step?.task || `Build ${target}`,
         spec,
-        ...(step?.max_output_tokens ? { max_output_tokens: step.max_output_tokens } : {}),
+        max_output_tokens: Number(step?.max_output_tokens || step?.authoring?.max_output_tokens) || 8000,
       },
       assertion_spec: assessment.assertion_spec,
       ...(product_id ? { product_id } : {}),

@@ -13,7 +13,7 @@
  * structurally no channel for it to supply assertions, and a server-code authoring
  * step that declares no blueprint assertions fails closed BEFORE any model is called.
  *
- * @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * @ssot docs/products/builderos/PRODUCT_HOME.md
  */
 import crypto from 'node:crypto';
 import { stepRequiresBehaviorProof } from '../sentry/behavior-assertions.js';
@@ -21,9 +21,10 @@ import { normalizeCommonJsToEsm } from '../bpb/author-assertions.js';
 
 export const AUTHORING_ACTION_TYPE = 'author_then_write';
 
-// Cheapest capable hands first, escalate only on failure (Adam: "cheapest hands,
-// highest quality"). Overridable per step via step.authoring.tiers.
-export const DEFAULT_CODEGEN_TIERS = ['cerebras_llama', 'openai', 'claude_sonnet'];
+// Strong-first, provider-diverse hands (SO-003). Never start with the cheapest
+// free tier on a load-bearing codegen step. Fail over across providers, never sit
+// idle. Overridable per step via step.authoring.tiers.
+export const DEFAULT_CODEGEN_TIERS = ['claude_sonnet', 'openai_builder_standard', 'deepseek', 'openai_builder_escalation', 'openai_gpt', 'gemini_flash', 'openai_builder_mini'];
 
 export function stepRequiresAuthoring(step) {
   if (!step) return false;
@@ -70,6 +71,7 @@ export async function runAuthoring(step, codegenRunner) {
       target_file,
       spec: authoring.spec || step.spec || '',
       tiers: Array.isArray(authoring.tiers) && authoring.tiers.length ? authoring.tiers : DEFAULT_CODEGEN_TIERS,
+      max_output_tokens: Number(authoring.max_output_tokens || step.max_output_tokens) || 8000,
     });
   } catch (err) {
     return { ...base, ok: false, reason: 'codegen_threw', error: String(err?.message || err) };

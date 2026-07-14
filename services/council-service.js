@@ -598,19 +598,34 @@ export function createCouncilService({
 
   // ==================== SPEND & ROI HELPERS ====================
 
-  function calculateCost(usage, model = "gpt-4o-mini") {
+  function calculateCost(usage, model = "gpt-4o-mini", memberKey = null) {
+    const promptTokens =
+      usage?.prompt_tokens || usage?.input_tokens || usage?.total_tokens || 0;
+    const completionTokens = usage?.completion_tokens || usage?.output_tokens || 0;
+
+    const cfg = memberKey && COUNCIL_MEMBERS[memberKey];
+    if (cfg && cfg.costPer1M > 0) {
+      const inputCostPer1M = cfg.costPer1M;
+      const outputCostPer1M = cfg.costPer1M * 4;
+      return (
+        (promptTokens * inputCostPer1M) / 1_000_000 +
+        (completionTokens * outputCostPer1M) / 1_000_000
+      );
+    }
+
     const prices = {
       "claude-3-5-sonnet-latest": { input: 0.003, output: 0.015 },
+      "claude-sonnet-4-6": { input: 0.003, output: 0.015 },
+      "claude-sonnet-4-20250514": { input: 0.003, output: 0.015 },
       "gpt-4o": { input: 0.0025, output: 0.01 },
       "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
       "gemini-2.5-flash": { input: 0.0001, output: 0.0004 },
       "deepseek-coder": { input: 0.0001, output: 0.0003 },
+      "deepseek-v4-flash": { input: 0.0001, output: 0.0003 },
+      "deepseek-chat": { input: 0.0001, output: 0.0003 },
       "grok-2-1212": { input: 0.005, output: 0.015 },
     };
     const price = prices[model] || prices["gpt-4o-mini"];
-    const promptTokens =
-      usage?.prompt_tokens || usage?.input_tokens || usage?.total_tokens || 0;
-    const completionTokens = usage?.completion_tokens || usage?.output_tokens || 0;
 
     return (
       (promptTokens * price.input) / 1000 +
@@ -855,10 +870,29 @@ export function createCouncilService({
     const builderLane = isBuilderLaneRequest(member, options);
     const builderLaneSpendCap = builderLane ? getBuilderLaneSpendCap() : null;
 
-    function deliverCouncilText(rawText, taskTypeForEnvelope = options.taskType || 'general') {
+    function finalizeResponse(rawText, taskTypeForEnvelope = options.taskType || 'general', usage = null, cost = 0) {
       const { text, envelope } = envelopeCouncilMemberOutput(rawText, options, taskTypeForEnvelope, member);
       if (envelope.theater_blocked || envelope.voice_lie_blocked) {
         console.warn(`🛡️ [TRUTH-ENVELOPE] blocked deception (${envelope.hits.slice(0, 2).join('; ')}) member=${member} task=${taskTypeForEnvelope}`);
+      }
+      if (options.returnObject) {
+        const promptTokens = usage?.prompt_tokens ?? usage?.input_tokens ?? 0;
+        const completionTokens = usage?.completion_tokens ?? usage?.output_tokens ?? 0;
+        return {
+          content: text,
+          text,
+          member,
+          model: config?.model,
+          provider: config?.provider,
+          taskType: taskTypeForEnvelope,
+          usage: {
+            prompt_tokens: promptTokens,
+            completion_tokens: completionTokens,
+            total_tokens: usage?.total_tokens || (promptTokens + completionTokens),
+            estimated_usd: cost,
+          },
+          estimated_usd: cost,
+        };
       }
       return text;
     }
@@ -893,24 +927,25 @@ export function createCouncilService({
       throw new Error(`💰 [COST SHUTDOWN] Blocked ${member} — no free providers available right now.`);
     }
 
-    if (!founderComms && !builderLane && spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
+    const effectiveShutdownThreshold = COST_SHUTDOWN_THRESHOLD > 0 ? COST_SHUTDOWN_THRESHOLD : MAX_DAILY_SPEND;
+    if (!founderComms && !builderLane && spend >= effectiveShutdownThreshold && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
       if (!nextProvider) {
         throw new Error(
-          `💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} — no free providers available.`
+          `💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} — no free providers available.`
         );
       }
       const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
       for (const fallbackMember of fallbackMembers) {
         if (COUNCIL_MEMBERS[fallbackMember]) {
-          console.log(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} → cascading to ${fallbackMember} (${nextProvider})`);
+          console.log(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} → cascading to ${fallbackMember} (${nextProvider})`);
           return await callCouncilMember(fallbackMember, prompt, options);
         }
       }
-      throw new Error(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} — no free providers available.`);
+      throw new Error(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${effectiveShutdownThreshold} — no free providers available.`);
     }
 
-    const effectiveSpendCap = builderLane ? builderLaneSpendCap : MAX_DAILY_SPEND;
+    const effectiveSpendCap = builderLane ? (builderLaneSpendCap ?? MAX_DAILY_SPEND) : MAX_DAILY_SPEND;
     if (Number.isFinite(effectiveSpendCap) && effectiveSpendCap > 0 && spend > effectiveSpendCap * 0.1) {
       console.log(
         `💰 [SPEND CHECK] Today (${today}): $${spend.toFixed(
@@ -948,9 +983,9 @@ export function createCouncilService({
     // SOT context is now injected into the system prompt via buildSystemContext().
     // Removed: duplicate SOT injection into user prompt that caused double-billing.
 
-    if (!options.useOpenSourceCouncil && !founderComms) {
+    if (!options.useOpenSourceCouncil && !founderComms && !builderLane) {
       const optimalModel = selectOptimalModel(prompt, options.complexity);
-      if (optimalModel && options.allowModelDowngrade !== false) {
+      if (optimalModel && options.allowModelDowngrade === true) {
         const optimalConfig = COUNCIL_MEMBERS[optimalModel.member];
         if (optimalConfig) {
           const optimalKey = getApiKeyForProvider(optimalConfig.provider);
@@ -1058,7 +1093,7 @@ export function createCouncilService({
           qualityMethod: "rules-engine",
         }).catch(() => {});
 
-      return deliverCouncilText(text, taskType);
+      return finalizeResponse(text, taskType, { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0, estimated_usd: 0 }, 0);
     }
 
     if (ruleDecision.action === "override") {
@@ -1105,7 +1140,7 @@ export function createCouncilService({
             cacheHit: true,
             costUSD: 0,
           }).catch(() => {});
-        return deliverCouncilText(cached, taskType);
+        return finalizeResponse(cached, taskType, { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0, estimated_usd: 0 }, 0);
       }
     }
 
@@ -1304,7 +1339,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       if (taskType === 'voice_rail_department') return 1200;
       if (taskType === 'analysis' || taskType === 'review') return 600;
       if (taskType === 'planning') return 700;
-      if (taskType === 'codegen' || taskType === 'code') return 1500;
+      if (taskType === 'builder_lane' || taskType === 'codegen' || taskType === 'code') return 8000;
       return Math.min(config.maxTokens || 800, 800); // default cap: 800 (was 1000)
     })();
     const scopedMaxTokens = (() => {
@@ -1383,7 +1418,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         const cost = ZERO_COST_PROVIDERS.has(config.provider)
           ? 0
-          : calculateCost(json.usage, config.model);
+          : calculateCost(json.usage, config.model, member);
         if (cost > 0) {
           await updateDailySpend(cost);
         }
@@ -1449,7 +1484,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // LCL drift inspection — fire-and-forget, never blocks response
         lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
-        return deliverCouncilText(text, taskType);
+        return finalizeResponse(text, taskType, { prompt_tokens: inputTokens, completion_tokens: outputTokens, total_tokens: inputTokens + outputTokens, estimated_usd: cost }, cost);
       }
 
       if (config.provider === "gemini" || config.provider === "google") {
@@ -1558,7 +1593,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // LCL drift inspection — fire-and-forget, never blocks response
         lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
-        return deliverCouncilText(text, taskType);
+        return finalizeResponse(text, taskType, { prompt_tokens: inputTokens, completion_tokens: outputTokens, total_tokens: inputTokens + outputTokens, estimated_usd: 0 }, 0);
       }
 
       if (config.provider === "ollama" || member.startsWith("ollama_")) {
@@ -1602,7 +1637,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         text = decompressResponse(text, useCompression);
 
-        const cost = calculateCost(json.usage, config.model);
+        const cost = calculateCost(json.usage, config.model, member);
         await updateDailySpend(cost);
 
         if (options.useCache !== false) {
@@ -1631,7 +1666,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
 
-        return deliverCouncilText(text, taskType);
+        return finalizeResponse(text, taskType, { prompt_tokens: dsIn, completion_tokens: dsOut, total_tokens: dsIn + dsOut, estimated_usd: cost }, cost);
       }
 
       if (config.provider === "anthropic") {
@@ -1671,7 +1706,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         const inputTokens = json.usage?.input_tokens || estimateTokens(finalPrompt);
         const outputTokens = json.usage?.output_tokens || estimateTokens(text);
-        const cost = calculateCost(json.usage, config.model);
+        const cost = calculateCost(json.usage, config.model, member);
         if (cost > 0) await updateDailySpend(cost);
 
         tokenOptimizer.trackUsage({
@@ -1708,7 +1743,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
         lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
-        return deliverCouncilText(text, taskType);
+        return finalizeResponse(text, taskType, { prompt_tokens: inputTokens, completion_tokens: outputTokens, total_tokens: inputTokens + outputTokens, estimated_usd: cost }, cost);
       }
 
       throw new Error(

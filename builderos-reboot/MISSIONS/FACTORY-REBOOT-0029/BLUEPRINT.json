@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "bd478eeea2286f1f4514f8b8b01ed7c56322b7f53acb9584ebdc12d49ba92494"
+        "sha256": "d0d78c76cf8a816f70e9793c09cc46ef928abbcd8fd81310be50cf086300b0d7"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/tsos-guardrails.js"
