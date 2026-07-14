@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — BuilderOS governed factory: s11/s12 reset + repo-reset merge fix
+
+`services/never-stop-product-factory.js` `mergeQueueRuntimeStatus` now trusts a deliberate repo `pending` reset over stale in-container `done`/`blocked` snapshots, so the `lifeos` `s11`/`s12` reset is not reverted by another container. `services/product-build-orchestrator.js` `evaluateStepExpectations` now defaults to a real `importModule` runner so artifact proof catches `import { pool }` failures that static regex misses. `startup/auto-register-product-modules.js` supports a `reload` cache-buster so the SENTRY `runner.reload()` path re-imports a module that was absent/failed at boot. `docs/products/lifeos/BUILD_QUEUE.json` `s11`/`s12` reset to `pending` with `attempts: 0` so the governed loop can re-ship them. `builder:preflight`, `verify:ci`, `lifeos:bp-priority:verify`, and `factory:ci` all pass.
+
 ## 2026-07-14 — TC SkySlope nav + durable browser jobs + async email-search
 
 Finished open TX gaps: SkySlope Okta new-tab adoption (`setPage`), DB-backed `tc_browser_jobs` for multi-instance poll, email-search returns 202 + poll. Tip verify next after redeploy.

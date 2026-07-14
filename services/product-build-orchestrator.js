@@ -8,7 +8,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { authorAssertionsFromSpec } from '../factory-staging/factory-core/bpb/author-assertions.js';
 import { runBehaviorAssertions } from '../factory-staging/factory-core/sentry/behavior-assertions.js';
 
@@ -215,10 +215,17 @@ export async function evaluateStepExpectations(step, {
     return fs.readFileSync(path.join(root, relPath), 'utf8');
   };
 
+  const defaultImportModule = async (rel) => {
+    const relPath = String(rel || target).replace(/\\/g, '/');
+    const abs = path.join(root, relPath);
+    if (!fs.existsSync(abs)) return undefined;
+    return import(pathToFileURL(abs).href);
+  };
+
   const runner = {
     readFile: typeof readFile === 'function' ? readFile : defaultRead,
     http: typeof http === 'function' ? http : undefined,
-    ...(typeof importModule === 'function' ? { importModule } : {}),
+    importModule: typeof importModule === 'function' ? importModule : defaultImportModule,
   };
 
   // Only run assertions we can prove here. HTTP/DB need live runners — those stay

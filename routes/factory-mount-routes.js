@@ -51,7 +51,7 @@ export function createFactoryMountRoutes({ requireKey, logger, pool, baseUrl, ca
     },
     reload: async (target) => {
       if (!target) throw new Error('reload target required');
-      const results = await autoRegisterProductModules(router, { requireKey, pool }, { modules: [{ path: target }], logger });
+      const results = await autoRegisterProductModules(router, { requireKey, pool }, { modules: [{ path: target, reload: true }], logger });
       const key = String(target).replace(/\\/g, '/');
       const entry = results.find((r) => r.module === key);
       if (!entry || entry.status !== 'mounted') {

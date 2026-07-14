@@ -1025,6 +1025,15 @@ export function mergeQueueRuntimeStatus(repoQueue, memQueue) {
     if (repoRank > memRank) {
       return out;
     }
+    // REVERSE: a deliberate repo reset (repo is pending, no runtime evidence,
+    // while mem carries a stale done/blocked/error) must win. The conductor
+    // reset the step by clearing commit_sha/attempts; a stale in-container
+    // snapshot must not re-clobber it.
+    const repoHasRuntimeEvidence = Boolean(repoStep.commit_sha || repoStep.last_error || repoStep.last_attempt_at);
+    const memHasRuntimeEvidence = Boolean(memStep.commit_sha || memStep.last_error || (memStep.attempts > 0));
+    if (repoRank < memRank && repoStep.status === STEP_STATUS.PENDING && !repoHasRuntimeEvidence && memHasRuntimeEvidence) {
+      return out;
+    }
     for (const f of QUEUE_RUNTIME_STEP_FIELDS) {
       if (Object.prototype.hasOwnProperty.call(memStep, f)) out[f] = memStep[f];
     }
