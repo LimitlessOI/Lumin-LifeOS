@@ -616,27 +616,118 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       raw.split(/[\s,]+/).find((t) => t.length >= 3) || raw || '';
     if (!token) throw new Error('address_search / search text is empty');
 
-    const filled = await session.page.evaluate((text) => {
-      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'));
-      const searchInput =
-        inputs.find((i) => {
-          const ph = (i.placeholder || '').toLowerCase();
-          const nm = (i.name || '').toLowerCase();
-          const id = (i.id || '').toLowerCase();
-          return /search|find|filter|address|property|transaction|listing|file/i.test(ph + nm + id);
-        }) || inputs.find((i) => i.type === 'search');
-      if (!searchInput) return false;
-      searchInput.focus();
-      searchInput.value = text;
-      searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-      searchInput.dispatchEvent(new Event('change', { bubbles: true }));
-      return true;
-    }, token);
+    // ZipForm/TD often lands on a hub; try known list/search entry points first.
+    const cur = session.page.url();
+    if (/transactiondesk\.com/i.test(cur)) {
+      for (const next of [
+        'https://pr.transactiondesk.com/TransactionDesk/Transactions',
+        'https://pr.transactiondesk.com/TransactionDesk/Transaction',
+      ]) {
+        try {
+          await session.page.goto(next, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT_MS });
+          await session.page.waitForTimeout(1200);
+          break;
+        } catch {
+          /* try next */
+        }
+      }
+    }
+
+    async function fillSearchInContext(ctx) {
+      const selectors = [
+        'input[type="search"]',
+        'input[placeholder*="Search" i]',
+        'input[placeholder*="Address" i]',
+        'input[placeholder*="Transaction" i]',
+        'input[name*="search" i]',
+        'input[id*="search" i]',
+        'input[aria-label*="search" i]',
+        '#searchBox',
+        '.search-input input',
+      ];
+      for (const sel of selectors) {
+        const el = await ctx.$(sel).catch(() => null);
+        if (!el) continue;
+        await el.click({ clickCount: 3 }).catch(() => {});
+        try {
+          await el.type(token, { delay: 20 });
+        } catch {
+          await ctx.evaluate((s, t) => {
+            const i = document.querySelector(s);
+            if (!i) return;
+            i.focus();
+            i.value = t;
+            i.dispatchEvent(new Event('input', { bubbles: true }));
+            i.dispatchEvent(new Event('change', { bubbles: true }));
+          }, sel, token).catch(() => {});
+        }
+        return true;
+      }
+
+      return ctx.evaluate((text) => {
+        const tryDoc = (doc) => {
+          const inputs = Array.from(
+            doc.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])')
+          );
+          const searchInput =
+            inputs.find((i) => {
+              const ph = (i.placeholder || '').toLowerCase();
+              const nm = (i.name || '').toLowerCase();
+              const id = (i.id || '').toLowerCase();
+              const aria = (i.getAttribute('aria-label') || '').toLowerCase();
+              return /search|find|filter|address|property|transaction|listing|file/i.test(ph + nm + id + aria);
+            }) ||
+            inputs.find((i) => i.type === 'search') ||
+            inputs.find((i) => i.offsetParent !== null && (i.type === 'text' || !i.type));
+          if (!searchInput) return false;
+          searchInput.focus();
+          searchInput.value = text;
+          searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+          searchInput.dispatchEvent(new Event('change', { bubbles: true }));
+          return true;
+        };
+        if (tryDoc(document)) return true;
+        for (const frame of Array.from(document.querySelectorAll('iframe'))) {
+          try {
+            const doc = frame.contentDocument;
+            if (doc && tryDoc(doc)) return true;
+          } catch {
+            /* cross-origin */
+          }
+        }
+        return false;
+      }, token);
+    }
+
+    let filled = await fillSearchInContext(session.page);
+    if (!filled) {
+      for (const frame of session.page.frames()) {
+        try {
+          filled = await fillSearchInContext(frame);
+          if (filled) break;
+        } catch {
+          /* cross-origin / detached */
+        }
+      }
+    }
+
+    if (!filled) {
+      await session.page
+        .evaluate(() => {
+          const el = Array.from(document.querySelectorAll('a, button, [role="button"]')).find((e) =>
+            /search|find transaction|file search|advanced search/i.test((e.textContent || '').trim())
+          );
+          el?.click();
+        })
+        .catch(() => {});
+      await session.page.waitForTimeout(1200);
+      filled = await fillSearchInContext(session.page);
+    }
 
     if (!filled) {
       const sp = await screenshotPath('td-search-input-missing');
       await session.page.screenshot({ path: sp, fullPage: true });
-      throw new Error(`TransactionDesk search field not found. Screenshot: ${sp}`);
+      throw new Error(`TransactionDesk search field not found (url=${session.page.url()}). Screenshot: ${sp}`);
     }
 
     await session.page.keyboard.press('Enter');
@@ -645,7 +736,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const opened = await session.page.evaluate((text) => {
       const needle = text.toLowerCase();
       const rows = Array.from(
-        document.querySelectorAll('tr, [role="row"], li, .ag-row, [class*="result"], [class*="transaction"]')
+        document.querySelectorAll('tr, [role="row"], li, .ag-row, [class*="result"], [class*="transaction"], a')
       );
       for (const row of rows) {
         const t = (row.textContent || '').toLowerCase();
@@ -674,7 +765,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
 
     const sp = await screenshotPath('td-transaction-opened');
     await session.page.screenshot({ path: sp, fullPage: true });
-    return { ok: true, token, screenshot: sp };
+    return { ok: true, token, screenshot: sp, url: session.page.url() };
   }
 
   async function configurePuppeteerDownloads(session, dir) {
