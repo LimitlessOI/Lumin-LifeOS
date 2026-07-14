@@ -45,7 +45,14 @@
       "attempts": 3,
       "commit_sha": "22279982ca5d079aed823a1c558f64b76f6e86ca",
       "last_attempt_at": "2026-07-12T02:55:23.106Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/command-center-mode-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/command-center-mode-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "expected_exports": [
+        "registerCommandCenterModeRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/lifeos/command-center/mode"
+      }
     },
     {
       "id": "s4",
@@ -73,7 +80,14 @@
       "attempts": 3,
       "commit_sha": "f5e77c0bad35248cdae1d602664aeaf0542ca875",
       "last_attempt_at": "2026-07-12T03:20:34.427Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/phase14-cert-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/phase14-cert-routes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "expected_exports": [
+        "registerPhase14CertRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/v1/builder/cert/phase14"
+      }
     },
     {
       "id": "s6",
@@ -102,7 +116,7 @@
     },
     {
       "id": "s8",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "Register command-center mode and phase14 cert route modules so they mount at boot without editing server.js",
       "spec": "Add entries for routes/command-center-mode-routes.js (registerFn:registerCommandCenterModeRoutes) and routes/phase14-cert-routes.js (registerFn:registerPhase14CertRoutes) to the modules array. Preserve all existing entries. Each entry shape: {path, register, enabled, note}. JSON must be valid and minifiable.",
@@ -111,7 +125,9 @@
         "s5"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:42:27.159Z"
     },
     {
       "id": "s9",
