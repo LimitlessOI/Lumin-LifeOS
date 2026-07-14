@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T00:45:08.512Z",
+  "generated_at": "2026-07-14T00:45:33.982Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11514,
+  "file_count": 11515,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -65993,6 +65993,13 @@
       "ssot": [
         "docs/products/lifeos/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "routes/lifeos-member-feedback-routes.js",
+      "synopsis": "Registers LifeosMemberFeedbackRoutes routes/handlers (routes/lifeos-member-feedback-routes.js).",
+      "bytes": 2014,
+      "mtime": "2026-07-14T00:45:33.982Z",
+      "indexed_at": "2026-07-14T00:45:33.982Z"
     },
     {
       "path": "routes/lifeos-phase2-routes.js",
