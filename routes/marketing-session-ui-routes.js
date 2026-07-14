@@ -578,19 +578,28 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                   const basisHtml = basis.gap_reason
                     ? ('<div class="talk-block" data-tip="Why this title exists: gap vs real YouTube shelf."><strong>Research basis</strong> ' + escapeHtml(basis.gap_reason) + (basis.query ? (' <span class="pill">' + escapeHtml(basis.query) + '</span>') : '') + '</div>')
                     : '';
+                  const clickHtml = s.click_psychology
+                    ? ('<div class="talk-block" data-tip="Sales/click principle for this card."><strong>Why they click</strong> ' + escapeHtml(s.click_psychology) + '</div>')
+                    : '';
+                  const beats = (s.retention_beats || []).map(function(b) {
+                    const lines = (b.lines || []).map(function(l) { return '<li>' + escapeHtml(l) + '</li>'; }).join('');
+                    return '<div class="talk-block" data-tip="' + escapeHtml(b.job || 'Earn the next block of attention.') + '"><strong>' + escapeHtml(b.range || '') + '</strong> — ' + escapeHtml(b.job || '') + '<ul>' + lines + '</ul></div>';
+                  }).join('');
                   card.innerHTML =
-                    '<div class="thumb-stage" data-tip="Face hero + 3–5 word TITLE overlay (researched). No random B-roll frames.">' +
+                    '<div class="thumb-stage" data-tip="Distinct layout + click-trigger text. Face hero. No cloned templates.">' +
                     '<img class="thumb-main" alt="competitive thumbnail" src="' + escapeHtml(s.thumbnailUrl) + '"/>' +
-                    '<div class="thumb-badge' + ((comp.score || 0) >= 72 ? ' good' : '') + '">Thumb ' + grade + (s.thumbnailOverlay ? (' · ' + escapeHtml(s.thumbnailOverlay)) : '') + '</div>' +
+                    '<div class="thumb-badge' + ((comp.score || 0) >= 72 ? ' good' : '') + '">Thumb ' + grade + (s.thumbnailOverlay ? (' · ' + escapeHtml(s.thumbnailOverlay)) : '') + (s.thumbnail_layout ? (' · ' + escapeHtml(s.thumbnail_layout)) : '') + '</div>' +
                     '</div>' +
                     '<div class="suggest-body">' +
                     '<div class="suggest-meta"><span class="pill">#' + escapeHtml(String(s.rank)) + '</span>' +
                     '<span class="pill" data-tip="Optimized for reach-outs / booked conversations.">leads ' + escapeHtml(String(s.lead_intent_score || '—')) + '</span>' +
                     (s.researched ? '<span class="pill">researched</span>' : '<span class="pill">playbook</span>') +
+                    (s.copy_model ? '<span class="pill">' + escapeHtml(s.copy_model) + '</span>' : '') +
                     (s.film_mode ? '<span class="pill">' + escapeHtml(s.film_mode) + '</span>' : '') +
                     (s.thumbnailComposed ? '<span class="pill">composed</span>' : '') +
                     '</div>' +
                     '<h3>' + escapeHtml(s.title) + '</h3>' +
+                    clickHtml +
                     basisHtml +
                     '<div class="serp-box" data-tip="Real competitor shelf when API research succeeds — velocity = views vs subs."><div class="suggest-meta"><strong>YouTube shelf</strong> — ' + escapeHtml(serp.label || 'Researched placement') + '</div>' + serpRows.join('') + '</div>' +
                     '<div class="talk-block"><strong>Pick your hook (best 3)</strong><div class="hook-pick">' + hookHtml + '</div></div>' +
@@ -598,7 +607,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     '<div class="talk-block" data-tip="The gap we must fill so relocators / buyers reach out."><strong>They fail to give</strong> ' + escapeHtml(s.competitor_fail || s.competitor_gap || '') + '</div>' +
                     '<div class="talk-block" data-tip="Non-negotiable lines. Skip these and the video underperforms."><strong>Must say</strong><ul>' + (musts || '<li>—</li>') + '</ul></div>' +
                     '<div class="talk-block"><strong>Talk through</strong><ul>' + (bullets || '<li>—</li>') + '</ul></div>' +
-                    '<div class="talk-block" data-tip="Thumbnail quality checklist — face, title text, research, lead intent."><strong>Thumb checklist</strong><ul>' + (checks || '<li>—</li>') + '</ul></div>' +
+                    (beats ? ('<div class="talk-block"><strong>Earned attention (every block earns the next)</strong></div>' + beats) : '') +
+                    '<div class="talk-block" data-tip="Thumbnail quality checklist — face, click trigger, research, distinct layout."><strong>Thumb checklist</strong><ul>' + (checks || '<li>—</li>') + '</ul></div>' +
                     '<div class="actions-row">' +
                     '<a class="btn film-btn" href="#" data-tip="Open coaching with this talk card + chosen hook.">Film this talk card</a>' +
                     '<a class="btn secondary" href="' + escapeHtml(s.studioUrl) + '">Studio</a>' +
@@ -658,7 +668,7 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                 renderChannelOps(data.channel_ops || []);
                 renderModes();
                 renderSuggestionCards();
-                meta.textContent = (data.connected ? 'Channel linked · ' : '') + 'source: ' + (data.source || 'unknown') + ' · ' + meta.textContent;
+                meta.textContent = (data.connected ? 'Channel linked · ' : '') + 'source: ' + (data.source || 'unknown') + (data.copyModel ? (' · copy: ' + data.copyModel) : '') + ' · ' + meta.textContent;
               } catch (err) {
                 meta.textContent = 'Could not load ideas: ' + err.message;
               }

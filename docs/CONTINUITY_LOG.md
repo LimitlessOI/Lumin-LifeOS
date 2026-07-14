@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — SMOS creative v2 (distinct thumbs + strong copy + earned attention)
+
+Adam: thumbs still terrible/identical; copy mid — use higher model, more research, sales/click principles; every 10 seconds of script must earn the next 10. Upgraded `marketing-youtube.js`: 5 distinct thumb layouts + punch lines; `claude_sonnet` rewrite after research; `retention_beats`; relevance+viewCount shelf. UI shows beats + why they click.
+
 ## 2026-07-14 — YouTube SMOS Intelligence (niche → research → leads)
 
 Adam: thumbs were absolute shit; titles must be researched with velocity (views vs subs), gap/trending, competitive shelf; niche-aware (realtor = relocation first, then schools/neighborhoods/CA compare/Phoenix vs Vegas; insurance different); optimize for reach-outs not views; offer improve old videos (A/B, reuse). Implemented in `services/marketing-youtube.js` + `/marketing` UI: playbooks, YouTube search research, face+title thumbs (no random frames), real competitor thumbs + velocity, `channel_ops`. Doctrine stub for IG/TikTok/LinkedIn in socialmediaos PRODUCT_HOME.

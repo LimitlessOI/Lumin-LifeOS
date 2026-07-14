@@ -64,6 +64,53 @@ function thumbnailOverlayWords(titleOrHook, { maxWords = 5 } = {}) {
   return words.slice(0, maxWords).join(' ').toUpperCase();
 }
 
+/** Click psychology: curiosity, contrast, stakes — distinct punch line per card. */
+function buildThumbnailPunch({ title, angle, idx = 0, market = '' }) {
+  const t = String(title || '');
+  const m = String(market || 'HERE');
+  const patterns = [
+    () => {
+      if (/moving|relocat/i.test(t)) return { line1: 'MOVING HERE?', line2: 'READ THIS FIRST' };
+      if (/vs california/i.test(t)) return { line1: 'CA MONEY.', line2: 'DIFFERENT LIFE.' };
+      if (/phoenix|vegas/i.test(t) && /vs/i.test(t)) return { line1: 'PHOENIX?', line2: 'OR VEGAS?' };
+      if (/neighborhood/i.test(t)) return { line1: 'WRONG ZIP', line2: 'COSTS A YEAR' };
+      if (/school/i.test(t)) return { line1: 'HOUSE FIRST?', line2: "DON'T." };
+      return { line1: 'STOP.', line2: 'WATCH THIS.' };
+    },
+    () => {
+      if (/california/i.test(t)) return { line1: 'LEFT CA?', line2: `TRY ${m.toUpperCase().slice(0, 10)}` };
+      if (/neighborhood/i.test(t)) return { line1: 'NOT THE', line2: 'DRONE TOUR' };
+      if (/school/i.test(t)) return { line1: 'SCHOOLS', line2: 'BEFORE HOUSES' };
+      if (/vs/i.test(t)) return { line1: 'WRONG CITY', line2: '= WRONG YEAR' };
+      return { line1: "LOCALS WON'T", line2: 'SAY THIS' };
+    },
+    () => {
+      if (/relocat|moving/i.test(t)) return { line1: 'WEEK ONE', line2: 'SURPRISES' };
+      if (/vs/i.test(t)) return { line1: 'HONEST', line2: 'PROS & CONS' };
+      if (/school/i.test(t)) return { line1: 'RATINGS LIE', line2: 'ASK THIS' };
+      return { line1: 'BEFORE YOU', line2: 'BOOK A FLIGHT' };
+    },
+    () => {
+      if (/neighborhood/i.test(t)) return { line1: '3 AREAS', line2: 'WORTH SCOUTING' };
+      if (/california/i.test(t)) return { line1: 'SAME PAY.', line2: 'NEW LIFE?' };
+      return { line1: 'WHAT YOUTUBE', line2: 'SKIPS' };
+    },
+    () => {
+      if (/school/i.test(t)) return { line1: 'KIDS FIRST', line2: 'THEN TOURS' };
+      if (/vs/i.test(t)) return { line1: 'CHEERLEADERS', line2: 'ARE LYING' };
+      return { line1: m.toUpperCase().slice(0, 8), line2: 'NO HYPE' };
+    },
+  ];
+  const pick = patterns[idx % patterns.length]();
+  return {
+    ...pick,
+    overlayText: `${pick.line1} ${pick.line2}`.trim(),
+    layoutId: ['face_right', 'face_left', 'banner_top', 'big_type', 'split_half'][idx % 5],
+    accent: ['#F59E0B', '#EF4444', '#14B8A6', '#3B82F6', '#E2E8F0'][idx % 5],
+    angle: angle || '',
+  };
+}
+
 function scoreCompetitiveThumbnail({
   title,
   overlayText,
@@ -71,6 +118,7 @@ function scoreCompetitiveThumbnail({
   researched,
   leadIntentScore = 0,
   competitorCount = 0,
+  layoutDistinct = false,
 }) {
   let score = 32;
   const checks = [];
@@ -81,18 +129,24 @@ function scoreCompetitiveThumbnail({
     checks.push({ name: 'Founder face readable', pass: false, tip: 'Connect YouTube or set founder photo so the face is the hero.' });
   }
   const words = String(overlayText || '').trim().split(/\s+/).filter(Boolean);
-  if (words.length >= 3 && words.length <= 5) {
+  if (words.length >= 2 && words.length <= 6) {
     score += 18;
-    checks.push({ name: 'Title text 3–5 words', pass: true, tip: 'Phone-size readable title overlay — not a truncated hook.' });
+    checks.push({ name: 'Click-trigger text', pass: true, tip: 'Punchy words that create curiosity/stakes in under 1 second.' });
   } else {
     score += 4;
-    checks.push({ name: 'Title text 3–5 words', pass: false, tip: 'Overlay must be 3–5 punchy words from the researched title.' });
+    checks.push({ name: 'Click-trigger text', pass: false, tip: 'Overlay must create a reason to click — not a title dump.' });
   }
   if (researched) {
-    score += 14;
+    score += 12;
     checks.push({ name: 'Researched angle', pass: true, tip: 'Title filled a gap or rides a velocity outlier from real YouTube results.' });
   } else {
     checks.push({ name: 'Researched angle', pass: false, tip: 'Connect YouTube Data API so we search competitors before writing.' });
+  }
+  if (layoutDistinct) {
+    score += 8;
+    checks.push({ name: 'Distinct layout', pass: true, tip: 'Each card uses a different composition so the shelf does not look templated.' });
+  } else {
+    checks.push({ name: 'Distinct layout', pass: false, tip: 'Vary face side, type size, and accent so thumbs do not clone each other.' });
   }
   if (competitorCount >= 2) {
     score += 8;
@@ -101,7 +155,7 @@ function scoreCompetitiveThumbnail({
     checks.push({ name: 'Real competitor shelf', pass: false, tip: 'Need search results to show who you are beating.' });
   }
   if (leadIntentScore >= 60) {
-    score += 10;
+    score += 8;
     checks.push({ name: 'Lead-intent topic', pass: true, tip: 'Optimized for reach-outs / booked conversations — not vanity views.' });
   } else {
     checks.push({ name: 'Lead-intent topic', pass: false, tip: 'Prefer relocation / buyer-consideration angles that make people message you.' });
@@ -119,10 +173,10 @@ function scoreCompetitiveThumbnail({
     predictedCtr: `${predictedCtrMin}–${predictedCtrMax}%`,
     serpRank,
     serpLabel: serpRank === 1
-      ? 'Designed to beat researched shelf'
+      ? 'Designed to interrupt the shelf'
       : serpRank === 2
-        ? 'Competitive mid-shelf — tighten title overlay'
-        : 'Needs stronger researched title + face contrast',
+        ? 'Competitive mid-shelf — sharpen the click trigger'
+        : 'Needs stronger curiosity + face contrast',
     checks,
   };
 }
@@ -151,12 +205,17 @@ async function composeCompetitiveThumbnail({
   hook,
   channelTitle,
   faceUrl,
-  accent = '#F59E0B',
+  accent,
   researched = false,
   leadIntentScore = 0,
   competitorCount = 0,
+  cardIndex = 0,
+  market = '',
+  angle = '',
 }) {
-  const overlayText = thumbnailOverlayWords(title || hook, { maxWords: 5 });
+  const punch = buildThumbnailPunch({ title, angle, idx: cardIndex, market });
+  const useAccent = accent || punch.accent;
+  const overlayText = punch.overlayText || thumbnailOverlayWords(title || hook, { maxWords: 4 });
   const hasFace = !!faceUrl;
   const competition = scoreCompetitiveThumbnail({
     title,
@@ -165,6 +224,7 @@ async function composeCompetitiveThumbnail({
     researched,
     leadIntentScore,
     competitorCount,
+    layoutDistinct: true,
   });
 
   let sharpMod = null;
@@ -176,8 +236,9 @@ async function composeCompetitiveThumbnail({
 
   if (!sharpMod) {
     return {
-      thumbnailUrl: thumbnailSvgDataUri({ title, hook, subtitle: channelTitle || 'SocialMediaOS', accent }),
+      thumbnailUrl: thumbnailSvgDataUri({ title, hook: overlayText, subtitle: channelTitle || 'SocialMediaOS', accent: useAccent }),
       overlayText,
+      layoutId: punch.layoutId,
       faceUrl: faceUrl || null,
       backgroundUrl: null,
       competition,
@@ -188,21 +249,54 @@ async function composeCompetitiveThumbnail({
   try {
     const W = 1280;
     const H = 720;
+    const layout = punch.layoutId;
     const faceBuf = faceUrl ? await fetchImageBuffer(faceUrl) : null;
 
+    const bgColors = {
+      face_right: ['#0a0a09', '#1c1917', useAccent],
+      face_left: ['#111827', '#0f172a', useAccent],
+      banner_top: ['#020617', '#0c0a09', useAccent],
+      big_type: ['#000000', '#171717', useAccent],
+      split_half: ['#0c0a09', '#1e1b16', useAccent],
+    };
+    const [c0, c1, c2] = bgColors[layout] || bgColors.face_right;
+
     let base;
-    if (faceBuf) {
-      const blurred = await sharpMod(faceBuf)
-        .resize(W, H, { fit: 'cover', position: 'centre' })
-        .blur(28)
-        .modulate({ brightness: 0.45, saturation: 0.85 })
+    if (faceBuf && layout === 'split_half') {
+      const left = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${c0}"/><stop offset="100%" stop-color="${c1}"/>
+        </linearGradient></defs>
+        <rect width="100%" height="100%" fill="url(#g)"/>
+      </svg>`);
+      base = await sharpMod(Buffer.from(left)).jpeg().toBuffer();
+      const rightFace = await sharpMod(faceBuf)
+        .resize(Math.round(W * 0.52), H, { fit: 'cover', position: 'centre' })
+        .modulate({ brightness: 0.92, saturation: 1.1 })
         .jpeg()
         .toBuffer();
-      base = blurred;
+      base = await sharpMod(base)
+        .composite([{ input: rightFace, left: Math.round(W * 0.48), top: 0 }])
+        .jpeg()
+        .toBuffer();
+    } else if (faceBuf && (layout === 'banner_top' || layout === 'big_type')) {
+      base = await sharpMod(faceBuf)
+        .resize(W, H, { fit: 'cover', position: 'centre' })
+        .modulate({ brightness: layout === 'big_type' ? 0.38 : 0.5, saturation: 0.9 })
+        .blur(layout === 'big_type' ? 2 : 18)
+        .jpeg()
+        .toBuffer();
+    } else if (faceBuf) {
+      base = await sharpMod(faceBuf)
+        .resize(W, H, { fit: 'cover', position: 'centre' })
+        .blur(32)
+        .modulate({ brightness: 0.4, saturation: 0.8 })
+        .jpeg()
+        .toBuffer();
     } else {
       const svgBg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
         <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#0a0a09"/><stop offset="50%" stop-color="#1c1917"/><stop offset="100%" stop-color="${accent}"/>
+          <stop offset="0%" stop-color="${c0}"/><stop offset="55%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/>
         </linearGradient></defs>
         <rect width="100%" height="100%" fill="url(#g)"/>
       </svg>`;
@@ -210,16 +304,28 @@ async function composeCompetitiveThumbnail({
     }
 
     const layers = [];
-    const veil = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-      <defs><linearGradient id="v" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="rgba(0,0,0,0.78)"/><stop offset="50%" stop-color="rgba(0,0,0,0.42)"/><stop offset="100%" stop-color="rgba(0,0,0,0.22)"/>
-      </linearGradient></defs>
-      <rect width="100%" height="100%" fill="url(#v)"/>
-    </svg>`);
-    layers.push({ input: await sharpMod(veil).png().toBuffer() });
+    if (layout !== 'split_half') {
+      const [x1, y1, x2, y2] = layout === 'face_left'
+        ? [1, 0, 0, 0]
+        : layout === 'banner_top'
+          ? [0, 0, 0, 1]
+          : [0, 0, 1, 0];
+      const veil = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+        <defs><linearGradient id="v" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}">
+          <stop offset="0%" stop-color="rgba(0,0,0,0.82)"/><stop offset="55%" stop-color="rgba(0,0,0,0.4)"/><stop offset="100%" stop-color="rgba(0,0,0,0.15)"/>
+        </linearGradient></defs>
+        <rect width="100%" height="100%" fill="url(#v)"/>
+      </svg>`);
+      layers.push({ input: await sharpMod(veil).png().toBuffer() });
+    } else {
+      const veil = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+        <rect x="0" y="0" width="${Math.round(W * 0.52)}" height="${H}" fill="rgba(0,0,0,0.35)"/>
+      </svg>`);
+      layers.push({ input: await sharpMod(veil).png().toBuffer() });
+    }
 
-    if (faceBuf) {
-      const faceSize = 480;
+    if (faceBuf && layout !== 'split_half' && layout !== 'banner_top') {
+      const faceSize = layout === 'big_type' ? 360 : layout === 'face_left' ? 500 : 520;
       const circleSvg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${faceSize}" height="${faceSize}">
         <circle cx="${faceSize / 2}" cy="${faceSize / 2}" r="${faceSize / 2}" fill="#fff"/>
       </svg>`);
@@ -228,25 +334,33 @@ async function composeCompetitiveThumbnail({
         .composite([{ input: await sharpMod(circleSvg).png().toBuffer(), blend: 'dest-in' }])
         .png()
         .toBuffer();
-      const ring = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${faceSize + 20}" height="${faceSize + 20}">
-        <circle cx="${(faceSize + 20) / 2}" cy="${(faceSize + 20) / 2}" r="${faceSize / 2 + 5}" fill="none" stroke="${accent}" stroke-width="12"/>
+      const ring = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${faceSize + 22}" height="${faceSize + 22}">
+        <circle cx="${(faceSize + 22) / 2}" cy="${(faceSize + 22) / 2}" r="${faceSize / 2 + 5}" fill="none" stroke="${useAccent}" stroke-width="14"/>
       </svg>`);
-      layers.push({ input: await sharpMod(ring).png().toBuffer(), left: W - faceSize - 48 - 10, top: H - faceSize - 70 - 10 });
-      layers.push({ input: rounded, left: W - faceSize - 48, top: H - faceSize - 70 });
+      const left = layout === 'face_left' ? 40 : W - faceSize - 40;
+      const top = layout === 'big_type' ? H - faceSize - 40 : Math.round((H - faceSize) / 2) + 20;
+      layers.push({ input: await sharpMod(ring).png().toBuffer(), left: left - 11, top: top - 11 });
+      layers.push({ input: rounded, left, top });
     }
 
-    const words = overlayText.split(/\s+/).filter(Boolean);
-    const line1 = escapeXml(words.slice(0, 3).join(' '));
-    const line2 = escapeXml(words.slice(3, 5).join(' '));
+    const line1 = escapeXml(punch.line1 || overlayText.split(/\s+/).slice(0, 2).join(' '));
+    const line2 = escapeXml(punch.line2 || overlayText.split(/\s+/).slice(2, 5).join(' '));
+    const fontSize = layout === 'big_type' ? 118 : layout === 'banner_top' ? 100 : 88;
+    const textX = layout === 'face_left' ? 560 : 56;
+    const textY1 = layout === 'banner_top' ? 160 : layout === 'big_type' ? 220 : 280;
+    const textY2 = textY1 + Math.round(fontSize * 1.15);
+    const textW = layout === 'face_left' ? 660 : layout === 'split_half' ? 580 : 700;
     const textSvg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
       <style>
-        .t { font-family: Arial Black, Helvetica, sans-serif; font-weight: 900; fill: #fff; stroke: #0a0a0a; stroke-width: 16px; paint-order: stroke; font-size: 92px; }
-        .s { font-family: Arial, sans-serif; font-weight: 700; fill: ${accent}; font-size: 26px; letter-spacing: 2px; }
+        .t { font-family: Arial Black, Helvetica, sans-serif; font-weight: 900; fill: #fff; stroke: #000; stroke-width: ${layout === 'big_type' ? 18 : 14}px; paint-order: stroke; font-size: ${fontSize}px; }
+        .a { font-family: Arial Black, Helvetica, sans-serif; font-weight: 900; fill: ${useAccent}; stroke: #000; stroke-width: ${layout === 'big_type' ? 18 : 14}px; paint-order: stroke; font-size: ${fontSize}px; }
+        .s { font-family: Arial, sans-serif; font-weight: 700; fill: ${useAccent}; font-size: 24px; letter-spacing: 2px; }
       </style>
-      <text x="64" y="96" class="s">${escapeXml((channelTitle || 'SOCIALMEDIAOS').toUpperCase().slice(0, 32))}</text>
-      <text x="64" y="300" class="t">${line1}</text>
-      ${line2 ? `<text x="64" y="410" class="t">${line2}</text>` : ''}
-      <rect x="64" y="520" width="240" height="12" fill="${accent}"/>
+      ${layout === 'banner_top' ? `<rect x="0" y="0" width="${W}" height="210" fill="rgba(0,0,0,0.72)"/>` : ''}
+      <text x="${textX}" y="${layout === 'banner_top' ? 48 : 72}" class="s">${escapeXml((channelTitle || 'SOCIALMEDIAOS').toUpperCase().slice(0, 28))}</text>
+      <text x="${textX}" y="${textY1}" class="t">${line1}</text>
+      ${line2 ? `<text x="${textX}" y="${textY2}" class="a">${line2}</text>` : ''}
+      <rect x="${textX}" y="${Math.min(H - 80, textY2 + 40)}" width="${Math.min(280, textW)}" height="14" fill="${useAccent}"/>
     </svg>`);
     layers.push({ input: await sharpMod(textSvg).png().toBuffer() });
 
@@ -258,6 +372,7 @@ async function composeCompetitiveThumbnail({
     return {
       thumbnailUrl: `data:image/jpeg;base64,${out.toString('base64')}`,
       overlayText,
+      layoutId: layout,
       faceUrl: faceUrl || null,
       backgroundUrl: null,
       competition,
@@ -265,8 +380,9 @@ async function composeCompetitiveThumbnail({
     };
   } catch (err) {
     return {
-      thumbnailUrl: thumbnailSvgDataUri({ title, hook, subtitle: channelTitle || 'SocialMediaOS', accent }),
+      thumbnailUrl: thumbnailSvgDataUri({ title, hook: overlayText, subtitle: channelTitle || 'SocialMediaOS', accent: useAccent }),
       overlayText,
+      layoutId: punch.layoutId,
       faceUrl: faceUrl || null,
       backgroundUrl: null,
       competition,
@@ -319,29 +435,85 @@ function normalizeScriptLines(raw) {
   return [];
 }
 
+function buildEarnedAttentionBeats(pack) {
+  const hook = String(pack.hook || '').trim();
+  const intro = String(pack.intro || DEFAULT_INTRO).trim();
+  const points = (pack.talking_points || []).map((p) => String(p || '').trim()).filter(Boolean);
+  const musts = (pack.must_say || []).map((m) => String(m || '').trim()).filter(Boolean);
+  const gap = String(pack.competitor_gap || pack.competitor_fail || '').trim();
+  const close = String(pack.close || DEFAULT_CLOSE).trim();
+  const earn = (promise) => `Stay for this: ${promise}`;
+
+  const beats = [
+    {
+      range: '0–10s',
+      job: 'Interrupt + name the stuck person. Earn the next 10 seconds.',
+      lines: [
+        hook || 'If you are deciding whether to move — stop scrolling.',
+        earn('I will tell you what the pretty videos skip.'),
+      ],
+    },
+    {
+      range: '10–20s',
+      job: 'Prove you are talking to THEM. Earn the next 10 seconds.',
+      lines: [
+        intro,
+        'This is for people seriously considering a move — not locals browsing listings for fun.',
+        earn('The first tradeoff most people get wrong.'),
+      ],
+    },
+    {
+      range: '20–30s',
+      job: 'Deliver first concrete value. Earn the next 30 seconds.',
+      lines: [
+        points[0] || 'Here is the first thing relocators overestimate.',
+        earn('What that means for your timeline and money.'),
+      ],
+    },
+    {
+      range: '30–60s',
+      job: 'Deepen with lived specificity. Earn the next 1–2 minutes.',
+      lines: [
+        points[1] || 'Week-one reality beats brochure reality.',
+        points[2] || 'Here is how I help people decide without regret.',
+        musts[0] ? `Must say: ${musts[0]}` : null,
+        earn('The gap the other channels will not fill.'),
+      ].filter(Boolean),
+    },
+    {
+      range: '1–2min',
+      job: 'Gap vs competition + trust. Earn the rest.',
+      lines: [
+        gap ? `What other videos skip: ${gap}` : 'Other videos dump stats. They rarely help you decide.',
+        musts[1] ? `Must say: ${musts[1]}` : null,
+        earn('A clear next step if you are serious.'),
+      ].filter(Boolean),
+    },
+    {
+      range: 'close',
+      job: 'Payoff + lead CTA (reach-outs, not vanity).',
+      lines: [
+        musts[2] || musts[0] || 'If this matched your situation, do not leave with zero next step.',
+        close,
+      ],
+    },
+  ];
+  return beats;
+}
+
 function buildSampleScript(pack) {
+  if (Array.isArray(pack.retention_beats) && pack.retention_beats.length) {
+    const fromBeats = pack.retention_beats.flatMap((b) => (b.lines || []).map((l) => String(l || '').trim()).filter(Boolean));
+    if (fromBeats.length >= 6) return fromBeats;
+  }
   const existing = normalizeScriptLines(pack.sample_script);
-  if (existing.length >= 4) return existing;
-  const lines = [];
-  if (pack.hook) lines.push(String(pack.hook).trim());
-  if (pack.intro) lines.push(String(pack.intro).trim());
-  for (const point of pack.talking_points || []) {
-    const p = String(point || '').trim();
-    if (!p) continue;
-    lines.push(p);
-    lines.push(`Here's the part most people skip: ${p.toLowerCase().replace(/\.$/, '')}.`);
+  const beats = buildEarnedAttentionBeats(pack);
+  const fromBeats = beats.flatMap((b) => b.lines);
+  if (existing.length >= 8) {
+    // Prefer strong-model script if present, but ensure open still earns next beat
+    return existing;
   }
-  for (const must of pack.must_say || []) {
-    const m = String(must || '').trim();
-    if (m && !lines.some((l) => l.toLowerCase().includes(m.toLowerCase().slice(0, 24)))) {
-      lines.push(`Don't leave without this: ${m}`);
-    }
-  }
-  if (pack.competitor_gap) {
-    lines.push(`What the other channels won't say: ${String(pack.competitor_gap).trim()}`);
-  }
-  if (pack.close) lines.push(String(pack.close).trim());
-  return lines.filter(Boolean);
+  return fromBeats.filter(Boolean);
 }
 
 function buildMustSay(pack) {
@@ -1070,7 +1242,7 @@ export function createYouTubeService(poolOrDeps = {}) {
     }
   }
 
-  async function researchTopicShelf(yt, topicQuery, { maxResults = 5 } = {}) {
+  async function researchTopicShelf(yt, topicQuery, { maxResults = 5, order = 'relevance' } = {}) {
     if (!yt || !topicQuery) return { competitors: [], error: null };
     try {
       const search = await yt.search.list({
@@ -1078,7 +1250,7 @@ export function createYouTubeService(poolOrDeps = {}) {
         q: topicQuery,
         type: ['video'],
         maxResults,
-        order: 'relevance',
+        order,
         relevanceLanguage: 'en',
       });
       const items = search.data.items || [];
@@ -1271,27 +1443,38 @@ export function createYouTubeService(poolOrDeps = {}) {
         lead_intent_score,
         researched,
         primary_outcome: playbook?.primary_outcome || 'leads',
+        click_psychology: idea.click_psychology || null,
+        copy_model: idea.copy_model || null,
+        retention_beats: idea.retention_beats || null,
       };
       const hooks = buildHooks(draft, fb);
       const must_say = buildMustSay(draft);
       const selectedHook = hooks[0] || hook;
-      const sample_script = buildSampleScript({ ...draft, hook: selectedHook, must_say });
+      const retention_beats = Array.isArray(idea.retention_beats) && idea.retention_beats.length
+        ? idea.retention_beats
+        : buildEarnedAttentionBeats({ ...draft, hook: selectedHook, must_say });
+      const sample_script = buildSampleScript({ ...draft, hook: selectedHook, must_say, retention_beats });
       const thumb = await composeCompetitiveThumbnail({
         title,
         hook: selectedHook,
         channelTitle: channelTitle || assets?.channelTitle,
         faceUrl,
-        accent: idx % 2 === 0 ? '#F59E0B' : '#EF4444',
         researched,
         leadIntentScore: lead_intent_score,
         competitorCount: competitors.length,
+        cardIndex: idx,
+        market: playbook?.market || '',
+        angle: draft.angle,
       });
       const pack = {
         ...draft,
         hook: selectedHook,
         hooks,
         must_say,
+        retention_beats,
         sample_script,
+        click_psychology: idea.click_psychology || null,
+        thumbnail_layout: thumb.layoutId || null,
       };
       const seedPack = encodeSeedPack(pack);
       const startPath = `/marketing/session/new?seed_title=${encodeURIComponent(title)}&seed_angle=${encodeURIComponent(pack.angle)}&seed_pack=${encodeURIComponent(seedPack)}`;
@@ -1382,9 +1565,21 @@ export function createYouTubeService(poolOrDeps = {}) {
         const base = ideas.find((i) => i.seed_topic_id === topic.id) || ideas[enriched.length] || ideas[0];
         const idea = { ...base, research_query: topic.query, lead_weight: topic.lead_weight };
         if (topic.title_template) idea.title = topic.title_template;
-        const shelf = await researchTopicShelf(yt, topic.query, { maxResults: 5 });
+        const shelf = await researchTopicShelf(yt, topic.query, { maxResults: 8 });
         shelf.query = topic.query;
         if (shelf.error && !researchError) researchError = shelf.error;
+        // Second pass: viewCount order for velocity outliers
+        const hot = await researchTopicShelf(yt, topic.query, { maxResults: 5, order: 'viewCount' });
+        if (hot.competitors?.length) {
+          const byId = new Map((shelf.competitors || []).map((c) => [c.videoId, c]));
+          for (const c of hot.competitors) {
+            if (!byId.has(c.videoId)) {
+              shelf.competitors.push(c);
+            }
+          }
+          shelf.competitors.sort((a, b) => b.velocityScore - a.velocityScore);
+          shelf.competitors = shelf.competitors.slice(0, 6);
+        }
         enrichIdeaFromResearch(idea, shelf, playbook);
         if (idea.researched) researchedCount += 1;
         enriched.push(idea);
@@ -1393,65 +1588,142 @@ export function createYouTubeService(poolOrDeps = {}) {
         ideas = enriched;
         source = researchedCount ? 'youtube_research_playbook' : source;
       }
-    } else if (typeof callCouncilMember === 'function') {
+    }
+
+    if (typeof callCouncilMember === 'function') {
       try {
-        const prompt = `You are a YouTube producer optimizing for LEADS (reach-outs), not vanity views.
+        const researchBrief = ideas.map((idea, i) => ({
+          seed_topic_id: idea.seed_topic_id,
+          title: idea.title,
+          query: idea.research_query || idea.research_basis?.query,
+          gap: idea.research_basis?.gap_reason || idea.competitor_gap,
+          top_competitors: (idea.competitors || []).slice(0, 4).map((c) => (
+            typeof c === 'string'
+              ? c
+              : {
+                title: c.title,
+                channel: c.name || c.channelTitle,
+                views: c.views,
+                subs: c.subscribers,
+                viewsPerSub: c.viewsPerSub,
+                outlier: c.outlier,
+              }
+          )),
+          lead_weight: idea.lead_weight,
+          index: i,
+        }));
+        const prompt = `You are an elite YouTube + direct-response producer. Outcome = LEADS (messages/comments that start a conversation), NOT vanity views.
+
+SALES / CLICK PRINCIPLES (obey):
+- People click when curiosity + stakes + specificity beat the shelf in <1 second.
+- Titles must imply a cost of NOT watching (wrong city, wrong zip, wasted year, regret move).
+- Hooks must name the identity of the watcher ("if you're researching a move from California…").
+- EARNED ATTENTION: every 10 seconds must earn the next 10. First 3–10 seconds only job = earn 10–20. Then 20–30. Then 30–60. Then 1–2 min. Then close with a lead CTA.
+- Never mid generic coach-speak. Specific numbers, tradeoffs, lived local truth.
+
 Playbook: ${playbook.id} (${playbook.label}). Market: ${playbook.market}.
-Seed topics (keep this order/priority): ${playbook.seed_topics.map((t) => t.query).join(' || ')}
 Avoid: ${playbook.avoid_topics.join('; ')}
-Channel: ${channelTitle || 'founder channel'}
-Recent titles: ${recentTitles.join(' | ') || 'none'}
-Return ONLY a JSON array of exactly ${Math.min(5, playbook.seed_topics.length)} talk cards with:
-title, why, angle, hook, hooks (3), intro, talking_points (3), close,
-competitor_strong, competitor_fail, competitor_gap, must_say (2-3),
-film_mode, sample_script (8-12 lines), seed_topic_id, lead_weight (0-100).
-Rules: sound human; relocation/buyer-intent first for realtors; clear CTA to message/comment; no agent lifestyle fluff.
-Intro must use: ${JSON.stringify(founderIntro)}`;
-        const raw = await callCouncilMember('gemini_flash', prompt, { maxTokens: 3600 });
+Founder intro (use in 10–20s beat): ${JSON.stringify(founderIntro)}
+Channel: ${channelTitle || 'founder'}
+Recent uploads: ${recentTitles.join(' | ') || 'none'}
+
+RESEARCH BRIEF (real shelf — do not invent competitor stats; use these):
+${JSON.stringify(researchBrief, null, 0)}
+
+Return ONLY a JSON array of exactly ${ideas.length} talk cards (same order as brief). Each object:
+{
+  "seed_topic_id": "...",
+  "title": "researched title that can beat the shelf (may improve the brief title)",
+  "why": "why this earns reach-outs",
+  "angle": "...",
+  "click_psychology": "one sentence: why someone clicks THIS thumb/title",
+  "hook": "spoken open <16 words",
+  "hooks": ["3 distinct opens"],
+  "intro": ${JSON.stringify(founderIntro)},
+  "talking_points": ["3 specific bullets"],
+  "close": "lead CTA — comment/message, not smash like",
+  "competitor_strong": "...",
+  "competitor_fail": "...",
+  "competitor_gap": "...",
+  "must_say": ["2-3 non-negotiables"],
+  "film_mode": "teleprompter|bullets|bookends|read_riff|story|interview|analytics|shorts",
+  "lead_weight": 0-100,
+  "retention_beats": [
+    {"range":"0–10s","job":"...","lines":["...","Stay for this: ..."]},
+    {"range":"10–20s","job":"...","lines":["..."]},
+    {"range":"20–30s","job":"...","lines":["..."]},
+    {"range":"30–60s","job":"...","lines":["..."]},
+    {"range":"1–2min","job":"...","lines":["..."]},
+    {"range":"close","job":"...","lines":["..."]}
+  ],
+  "sample_script": ["flat teleprompter lines derived from retention_beats, 10-16 lines"]
+}
+
+Rules:
+- Improve titles using research gaps; do not copy competitor titles.
+- Every retention_beats.lines block must end with or include an earn-the-next promise except close.
+- Realtor: relocation / buyer-consideration first. No agent lifestyle fluff.
+- Sound like a sharp human who sells with honesty.`;
+
+        let raw = null;
+        let modelUsed = 'claude_sonnet';
+        try {
+          raw = await callCouncilMember('claude_sonnet', prompt, { maxTokens: 9000 });
+        } catch (err) {
+          logger?.warn?.({ err }, 'claude_sonnet talk rewrite failed; trying openai_gpt');
+          modelUsed = 'openai_gpt';
+          raw = await callCouncilMember('openai_gpt', prompt, { maxTokens: 9000 });
+        }
         const text = typeof raw === 'string' ? raw : (raw?.text || raw?.content || '');
         const match = String(text).match(/\[[\s\S]*\]/);
         const parsed = match ? JSON.parse(match[0]) : null;
         if (Array.isArray(parsed) && parsed.length) {
-          const defaults = buildPlaybookFallbackIdeas(playbook, founderIntro);
-          ideas = parsed.slice(0, 5).map((item, i) => {
-            const fb = defaults[i % defaults.length];
-            const hooks = buildHooks({ hook: item.hook || fb.hook, hooks: item.hooks }, fb);
-            const idea = {
-              title: item.title || item.text || fb.title,
-              why: item.why || item.rationale || fb.why,
-              angle: item.angle || fb.angle,
-              hook: hooks[0] || item.hook || fb.hook,
+          ideas = ideas.map((base, i) => {
+            const item = parsed[i] || parsed.find((p) => p.seed_topic_id === base.seed_topic_id) || {};
+            const hooks = buildHooks({ hook: item.hook || base.hook, hooks: item.hooks || base.hooks }, base);
+            const retention_beats = Array.isArray(item.retention_beats) && item.retention_beats.length
+              ? item.retention_beats
+              : buildEarnedAttentionBeats({ ...base, hook: hooks[0], must_say: item.must_say || base.must_say });
+            const merged = {
+              ...base,
+              title: item.title || base.title,
+              why: item.why || base.why,
+              angle: item.angle || base.angle,
+              click_psychology: item.click_psychology || null,
+              hook: hooks[0] || item.hook || base.hook,
               hooks,
-              intro: item.intro || founderIntro || fb.intro,
-              close: item.close || fb.close,
+              intro: item.intro || founderIntro || base.intro,
+              close: item.close || base.close,
               talking_points: Array.isArray(item.talking_points) && item.talking_points.length
                 ? item.talking_points
-                : fb.talking_points,
-              competitors: Array.isArray(item.competitors) ? item.competitors : [],
-              competitor_gap: item.competitor_gap || fb.competitor_gap,
-              competitor_strong: item.competitor_strong || fb.competitor_strong,
-              competitor_fail: item.competitor_fail || fb.competitor_fail,
-              film_mode: item.film_mode || fb.film_mode,
-              must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : fb.must_say,
+                : base.talking_points,
+              competitor_gap: item.competitor_gap || base.competitor_gap,
+              competitor_strong: item.competitor_strong || base.competitor_strong,
+              competitor_fail: item.competitor_fail || base.competitor_fail,
+              film_mode: item.film_mode || base.film_mode,
+              must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : base.must_say,
+              retention_beats,
               sample_script: normalizeScriptLines(item.sample_script).length
                 ? normalizeScriptLines(item.sample_script)
-                : fb.sample_script,
-              seed_topic_id: item.seed_topic_id || fb.seed_topic_id,
-              lead_weight: item.lead_weight || fb.lead_weight,
-              researched: false,
+                : buildSampleScript({ ...base, hook: hooks[0], retention_beats }),
+              lead_weight: item.lead_weight || base.lead_weight,
+              copy_model: modelUsed,
             };
-            idea.lead_intent_score = leadIntentScoreForIdea(idea, playbook);
-            return idea;
+            merged.lead_intent_score = leadIntentScoreForIdea(merged, playbook);
+            return merged;
           });
-          source = 'ai_playbook_defaults';
+          source = researchedCount
+            ? `youtube_research_${modelUsed}`
+            : `ai_strong_${modelUsed}`;
         }
       } catch (err) {
-        logger?.warn?.({ err }, 'youtube suggestion AI fallback to playbook defaults');
+        logger?.warn?.({ err }, 'strong-model talk rewrite failed; keeping research/playbook packs');
       }
     }
 
     ideas = ideas.map((idea) => {
       if (idea.lead_intent_score == null) idea.lead_intent_score = leadIntentScoreForIdea(idea, playbook);
+      if (!idea.retention_beats) idea.retention_beats = buildEarnedAttentionBeats(idea);
       return idea;
     });
 
@@ -1480,6 +1752,7 @@ Intro must use: ${JSON.stringify(founderIntro)}`;
       },
       researchedCount,
       researchError,
+      copyModel: ideas[0]?.copy_model || null,
       youtubeApiError: assets.apiError || researchError || null,
       youtubeApiNext: assets.apiError && /youtube\.googleapis\.com|has not been used|disabled/i.test(String(assets.apiError))
         ? 'Enable YouTube Data API v3 on the Google Cloud project, then Refresh ideas. Or paste your public channel URL below to pull face assets without the API.'
