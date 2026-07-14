@@ -1,20 +1,10 @@
 -- SYNOPSIS: Database migration — 202311_capsule_id_format.sql.
-ALTER TABLE capsules
+ALTER TABLE capsule
   ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
-DO $$
-BEGIN
-  IF EXISTS (
-    SELECT 1
-    FROM information_schema.columns
-    WHERE table_schema = 'public'
-      AND table_name = 'capsules'
-      AND column_name = 'id'
-      AND data_type = 'uuid'
-  ) THEN
-    -- no-op: keep UUID type, default updated above
-    NULL;
-  END IF;
-END $$;
+UPDATE capsule
+SET id = gen_random_uuid()
+WHERE id IS NULL;
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+ALTER TABLE capsule
+  ALTER COLUMN id SET NOT NULL;
