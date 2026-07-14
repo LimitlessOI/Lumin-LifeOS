@@ -1661,173 +1661,125 @@ export function createYouTubeService(poolOrDeps = {}) {
 
     if (typeof callCouncilMember === 'function') {
       try {
-        const researchBrief = ideas.map((idea, i) => ({
-          seed_topic_id: idea.seed_topic_id,
-          title: idea.title,
-          query: idea.research_query || idea.research_basis?.query,
-          gap: idea.research_basis?.gap_reason || idea.competitor_gap,
-          top_competitors: (idea.competitors || []).slice(0, 4).map((c) => (
-            typeof c === 'string'
-              ? c
-              : {
-                title: c.title,
-                channel: c.name || c.channelTitle,
-                views: c.views,
-                subs: c.subscribers,
-                viewsPerSub: c.viewsPerSub,
-                outlier: c.outlier,
-              }
-          )),
-          lead_weight: idea.lead_weight,
-          index: i,
-        }));
-        const prompt = `You are an elite YouTube + direct-response producer. Outcome = LEADS (messages/comments that start a conversation), NOT vanity views.
-
-SALES / CLICK PRINCIPLES (obey):
-- People click when curiosity + stakes + specificity beat the shelf in <1 second.
-- Titles must imply a cost of NOT watching (wrong city, wrong zip, wasted year, regret move).
-- Hooks must name the identity of the watcher ("if you're researching a move from California…").
-- EARNED ATTENTION: every 10 seconds must earn the next 10. First 3–10 seconds only job = earn 10–20. Then 20–30. Then 30–60. Then 1–2 min. Then close with a lead CTA.
-- Never mid generic coach-speak. Specific numbers, tradeoffs, lived local truth.
-
-Playbook: ${playbook.id} (${playbook.label}). Market: ${playbook.market}.
-Avoid: ${playbook.avoid_topics.join('; ')}
-Founder intro (use in 10–20s beat): ${JSON.stringify(founderIntro)}
-Channel: ${channelTitle || 'founder'}
-Recent uploads: ${recentTitles.join(' | ') || 'none'}
-
-RESEARCH BRIEF (real shelf — do not invent competitor stats; use these):
-${JSON.stringify(researchBrief)}
-
-Return ONLY a JSON array of exactly ${ideas.length} talk cards (same order as brief). Each object keys:
-seed_topic_id, title, why, angle, click_psychology, hook, hooks (3), intro, talking_points (3), close,
-competitor_strong, competitor_fail, competitor_gap, must_say (2-3), film_mode, lead_weight,
-retention_beats (array of {range, job, lines} for 0–10s, 10–20s, 20–30s, 30–60s, 1–2min, close),
-sample_script (10-16 teleprompter lines).
-
-Rules:
-- Improve titles using research gaps; do not copy competitor titles.
-- Every retention beat except close must plant a reason to stay for the next block.
-- Realtor: relocation / buyer-consideration first. No agent lifestyle fluff.
-- Sound like a sharp human who sells with honesty.`;
-
         const modelOrder = ['claude_sonnet', 'openai_gpt', 'gemini_flash'];
-        let raw = null;
         let modelUsed = null;
         const attemptErrors = [];
-        for (const model of modelOrder) {
-          try {
-            const res = await callCouncilMember(model, prompt, { maxTokens: 8000 });
-            const text = typeof res === 'string' ? res : (res?.text || res?.content || res?.message || '');
-            if (res?.error || res?.ok === false) {
-              attemptErrors.push(`${model}: ${res.error || res.message || 'ok_false'}`);
-              continue;
+        // One-card rewrites: batch JSON from models routinely truncates/breaks.
+        const perCard = [];
+        for (const idea of ideas.slice(0, 5)) {
+          const onePrompt = `You are an elite YouTube + direct-response producer. Outcome = LEADS not vanity views.
+Rewrite ONE talk card. Return ONLY a JSON object (no markdown, no array).
+
+SALES/CLICK: curiosity + stakes + specificity in <1s. Title implies cost of NOT watching.
+EARNED ATTENTION: retention_beats must cover 0–10s, 10–20s, 20–30s, 30–60s, 1–2min, close.
+Each beat except close must plant a reason to stay for the next block.
+
+Playbook: ${playbook.id} · Market: ${playbook.market}
+Intro to use: ${JSON.stringify(founderIntro)}
+seed_topic_id: ${JSON.stringify(idea.seed_topic_id || '')}
+Research: ${JSON.stringify({
+            title: idea.title,
+            query: idea.research_query || idea.research_basis?.query,
+            gap: (idea.research_basis?.gap_reason || idea.competitor_gap || '').slice(0, 280),
+            competitors: (idea.competitors || []).slice(0, 3).map((c) => typeof c === 'string' ? c : ({
+              title: c.title, channel: c.name || c.channelTitle, viewsPerSub: c.viewsPerSub, outlier: c.outlier,
+            })),
+          })}
+
+Required keys:
+seed_topic_id, title, why, angle, click_psychology, hook, hooks (3 strings),
+talking_points (3), close, competitor_strong, competitor_fail, competitor_gap,
+must_say (2-3), film_mode, lead_weight (number),
+retention_beats (6 objects with range, job, lines),
+sample_script (10-14 short lines).`;
+
+          let oneRaw = null;
+          for (const model of modelOrder) {
+            try {
+              const res = await callCouncilMember(model, onePrompt, { maxTokens: 2800 });
+              const text = typeof res === 'string' ? res : (res?.text || res?.content || '');
+              if (res?.error || res?.ok === false) {
+                attemptErrors.push(`${idea.seed_topic_id || 'card'}/${model}: ${res.error || 'ok_false'}`);
+                continue;
+              }
+              if (!String(text || '').trim()) {
+                attemptErrors.push(`${idea.seed_topic_id || 'card'}/${model}: empty`);
+                continue;
+              }
+              oneRaw = text;
+              modelUsed = model;
+              break;
+            } catch (err) {
+              attemptErrors.push(`${idea.seed_topic_id || 'card'}/${model}: ${err?.message || err}`);
             }
-            if (!String(text || '').trim()) {
-              attemptErrors.push(`${model}: empty`);
-              continue;
+          }
+          if (!oneRaw) continue;
+          let obj = null;
+          const asArr = extractJsonArray(oneRaw);
+          if (Array.isArray(asArr) && asArr[0]) obj = asArr[0];
+          if (!obj) {
+            const wrapped = extractJsonArray(`[${oneRaw}]`);
+            if (Array.isArray(wrapped) && wrapped[0]) obj = wrapped[0];
+          }
+          if (!obj) {
+            try {
+              const s = String(oneRaw).replace(/^```(?:json)?/i, '').replace(/```$/i, '');
+              const a = s.indexOf('{');
+              const b = s.lastIndexOf('}');
+              if (a >= 0 && b > a) {
+                obj = JSON.parse(s.slice(a, b + 1).replace(/,\s*([}\]])/g, '$1'));
+              }
+            } catch (err) {
+              attemptErrors.push(`${idea.seed_topic_id || 'card'}: parse ${err?.message || err}`);
             }
-            raw = text;
-            modelUsed = model;
-            break;
-          } catch (err) {
-            attemptErrors.push(`${model}: ${err?.message || err}`);
+          }
+          if (obj && (obj.title || obj.hook || obj.seed_topic_id)) {
+            perCard.push({ ...obj, seed_topic_id: obj.seed_topic_id || idea.seed_topic_id });
           }
         }
-        if (!raw) {
-          copyRewriteError = attemptErrors.join(' | ') || 'all_models_failed';
-          logger?.warn?.({ copyRewriteError }, 'strong-model talk rewrite failed all models');
+
+        if (perCard.length) {
+          copyModel = modelUsed;
+          copyRewriteError = null;
+          ideas = ideas.map((base, i) => {
+            const item = perCard[i] || perCard.find((p) => p.seed_topic_id === base.seed_topic_id) || {};
+            const hooks = buildHooks({ hook: item.hook || base.hook, hooks: item.hooks || base.hooks }, base);
+            const retention_beats = Array.isArray(item.retention_beats) && item.retention_beats.length
+              ? item.retention_beats
+              : buildEarnedAttentionBeats({ ...base, hook: hooks[0], must_say: item.must_say || base.must_say });
+            const merged = {
+              ...base,
+              title: item.title || base.title,
+              why: item.why || base.why,
+              angle: item.angle || base.angle,
+              click_psychology: item.click_psychology || null,
+              hook: hooks[0] || item.hook || base.hook,
+              hooks,
+              intro: item.intro || founderIntro || base.intro,
+              close: item.close || base.close,
+              talking_points: Array.isArray(item.talking_points) && item.talking_points.length
+                ? item.talking_points
+                : base.talking_points,
+              competitor_gap: item.competitor_gap || base.competitor_gap,
+              competitor_strong: item.competitor_strong || base.competitor_strong,
+              competitor_fail: item.competitor_fail || base.competitor_fail,
+              film_mode: item.film_mode || base.film_mode,
+              must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : base.must_say,
+              retention_beats,
+              sample_script: normalizeScriptLines(item.sample_script).length
+                ? normalizeScriptLines(item.sample_script)
+                : buildSampleScript({ ...base, hook: hooks[0], retention_beats }),
+              lead_weight: item.lead_weight || base.lead_weight,
+              copy_model: modelUsed,
+            };
+            merged.lead_intent_score = leadIntentScoreForIdea(merged, playbook);
+            return merged;
+          });
+          source = researchedCount
+            ? `youtube_research_${modelUsed}`
+            : `ai_strong_${modelUsed}`;
         } else {
-          let parsed = extractJsonArray(raw);
-          // If batch JSON is mangled, rewrite one card at a time (stronger reliability).
-          if (!Array.isArray(parsed) || !parsed.length) {
-            const perCard = [];
-            for (const idea of ideas.slice(0, 5)) {
-              const onePrompt = `Rewrite ONE YouTube talk card as JSON object (not array). Sales/click + earned attention.
-Playbook ${playbook.id}, market ${playbook.market}. Outcome=leads.
-Research: ${JSON.stringify({
-                title: idea.title,
-                query: idea.research_query || idea.research_basis?.query,
-                gap: idea.research_basis?.gap_reason || idea.competitor_gap,
-                competitors: (idea.competitors || []).slice(0, 3),
-              })}
-Intro: ${JSON.stringify(founderIntro)}
-Keys: seed_topic_id, title, why, angle, click_psychology, hook, hooks, talking_points, close, competitor_strong, competitor_fail, competitor_gap, must_say, film_mode, lead_weight, retention_beats, sample_script.
-seed_topic_id must be ${JSON.stringify(idea.seed_topic_id || '')}.
-Return ONLY the JSON object.`;
-              let oneRaw = null;
-              for (const model of modelOrder) {
-                try {
-                  const res = await callCouncilMember(model, onePrompt, { maxTokens: 2500 });
-                  const text = typeof res === 'string' ? res : (res?.text || res?.content || '');
-                  if (!text || res?.error) continue;
-                  oneRaw = text;
-                  modelUsed = model;
-                  break;
-                } catch {
-                  /* next */
-                }
-              }
-              if (!oneRaw) continue;
-              const arr = extractJsonArray(`[${String(oneRaw).replace(/^```(?:json)?/i, '').replace(/```$/i, '').replace(/^[^{]*/, '').replace(/[^}]*$/, '')}]`);
-              let obj = Array.isArray(arr) ? arr[0] : null;
-              if (!obj) {
-                try {
-                  const s = String(oneRaw);
-                  const a = s.indexOf('{');
-                  const b = s.lastIndexOf('}');
-                  if (a >= 0 && b > a) obj = JSON.parse(s.slice(a, b + 1).replace(/,\s*}/g, '}'));
-                } catch {
-                  obj = null;
-                }
-              }
-              if (obj) perCard.push(obj);
-            }
-            if (perCard.length) parsed = perCard;
-          }
-          if (Array.isArray(parsed) && parsed.length) {
-            copyModel = modelUsed;
-            ideas = ideas.map((base, i) => {
-              const item = parsed[i] || parsed.find((p) => p.seed_topic_id === base.seed_topic_id) || {};
-              const hooks = buildHooks({ hook: item.hook || base.hook, hooks: item.hooks || base.hooks }, base);
-              const retention_beats = Array.isArray(item.retention_beats) && item.retention_beats.length
-                ? item.retention_beats
-                : buildEarnedAttentionBeats({ ...base, hook: hooks[0], must_say: item.must_say || base.must_say });
-              const merged = {
-                ...base,
-                title: item.title || base.title,
-                why: item.why || base.why,
-                angle: item.angle || base.angle,
-                click_psychology: item.click_psychology || null,
-                hook: hooks[0] || item.hook || base.hook,
-                hooks,
-                intro: item.intro || founderIntro || base.intro,
-                close: item.close || base.close,
-                talking_points: Array.isArray(item.talking_points) && item.talking_points.length
-                  ? item.talking_points
-                  : base.talking_points,
-                competitor_gap: item.competitor_gap || base.competitor_gap,
-                competitor_strong: item.competitor_strong || base.competitor_strong,
-                competitor_fail: item.competitor_fail || base.competitor_fail,
-                film_mode: item.film_mode || base.film_mode,
-                must_say: Array.isArray(item.must_say) && item.must_say.length ? item.must_say : base.must_say,
-                retention_beats,
-                sample_script: normalizeScriptLines(item.sample_script).length
-                  ? normalizeScriptLines(item.sample_script)
-                  : buildSampleScript({ ...base, hook: hooks[0], retention_beats }),
-                lead_weight: item.lead_weight || base.lead_weight,
-                copy_model: modelUsed,
-              };
-              merged.lead_intent_score = leadIntentScoreForIdea(merged, playbook);
-              return merged;
-            });
-            source = researchedCount
-              ? `youtube_research_${modelUsed}`
-              : `ai_strong_${modelUsed}`;
-            copyRewriteError = null;
-          } else {
-            copyRewriteError = `no_json_array_in_model_response (${modelUsed || 'unknown'})`;
-          }
+          copyRewriteError = attemptErrors.slice(0, 8).join(' | ') || 'per_card_rewrite_failed';
         }
       } catch (err) {
         copyRewriteError = err?.message || 'rewrite_exception';
