@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/site-builder/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Dual-path sales (not forced sequence): decided visitors → why this midwife; curious → why home birth → book or why midwife. |
+| **Last Updated** | 2026-07-14 — Third path: energy & wellness (combined why + why Sherry, skippable sections). |
 
 ---
 
@@ -306,6 +306,7 @@ Failed sends do **not** increment follow-up counters.
 
 | Date | What Changed | Why | Verified | Next |
 |---|---|---|---|---|
+| 2026-07-14 | **Third path — energy & wellness.** Midwifery pack adds `wellnessSale` (combined why energy + why practitioner; jump/skip links for sound/Acutonics/why her). Hero gets three doors. Credentials from her site: CPM, herbalism courses, yoga 200hr, Reiki, sound, Acutonics (not invented acupuncture/master titles). | Adam: third path for energy/wellness; combine why+why Sherry; allow skipping; sound+acu-point work + herbalism. | ✅ local smoke | tip rebuild |
 | 2026-07-14 | **Dual-path midwifery (not forced sequence).** Hero leads with Why this midwife (decided visitors); Curious about home birth? is the other path; after category, bridge to book or why midwife. Pack copy updated. | Adam: many already know why home birth — they need WHO; both paths not always needed. | ✅ local | tip rebuild |
 | 2026-07-14 | **Sales-first dual-sale midwifery.** New `config/site-builder-industry-sales.js` (who/fears/benefits/reluctant buyer + category vs provider sale). Midwifery layouts use `shellMidwiferyDualSale` with two hero CTAs: Why home birth / Why this midwife. Product home Mission now states websites sell — not ego. | Adam: websites exist to sell; Builder OS must be best at sales psychology; home birth needs two sales. | ✅ local smoke | tip rebuild Sherry |
 | 2026-07-14 | **Owned photos first + unique paid shells.** (1) Asset ingestion ranks Instagram → site JPGs → other CDN; Flux only if zero owned photos. (2) Extract Wix/HTML CDN URLs, not just markdown images. (3) Paid designs get their own layout shells (soft-pastel, retro-warm, local-trust, artisan-heritage, urban-gold, refined-brutalist, agentic) instead of remapping onto free shells. (4) Layouts use photo strips + service photos from their gallery. | Adam: paid/older variants still unoriginal; don't spend on AI photos when their website/IG already have photos they like. | ✅ local smoke | tip rebuild Sherry |

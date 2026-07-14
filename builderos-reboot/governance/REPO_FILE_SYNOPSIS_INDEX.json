@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T22:52:56.864Z",
+  "generated_at": "2026-07-14T22:55:53.533Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11536,
   "files": [
@@ -30534,9 +30534,9 @@
     {
       "path": "config/design-studio-layouts.js",
       "synopsis": "Hand-authored layout shells per design system — real structural",
-      "bytes": 70391,
-      "mtime": "2026-07-14T22:52:56.057Z",
-      "indexed_at": "2026-07-14T22:52:56.864Z",
+      "bytes": 73728,
+      "mtime": "2026-07-14T22:55:34.498Z",
+      "indexed_at": "2026-07-14T22:55:53.533Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -30775,9 +30775,9 @@
     {
       "path": "config/site-builder-industry-sales.js",
       "synopsis": "Industry buyer-psychology packs for Site Builder — who the client is,",
-      "bytes": 6662,
-      "mtime": "2026-07-14T22:52:56.059Z",
-      "indexed_at": "2026-07-14T22:52:56.864Z",
+      "bytes": 11381,
+      "mtime": "2026-07-14T22:54:43.880Z",
+      "indexed_at": "2026-07-14T22:55:53.533Z",
       "ssot": [
         "docs/products/site-builder/PRODUCT_HOME.md"
       ]
@@ -39932,9 +39932,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder",
-      "bytes": 128764,
-      "mtime": "2026-07-14T22:52:56.061Z",
-      "indexed_at": "2026-07-14T22:52:56.864Z"
+      "bytes": 129188,
+      "mtime": "2026-07-14T22:55:47.375Z",
+      "indexed_at": "2026-07-14T22:55:53.533Z"
     },
     {
       "path": "docs/products/SITEBUILDER.md",
