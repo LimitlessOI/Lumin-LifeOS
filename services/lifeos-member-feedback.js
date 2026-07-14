@@ -4,7 +4,6 @@
 export function processFeedback(feedback) {
   return {
     status: "queued_for_founder_review",
-    feedback,
-    queuedAt: new Date().toISOString()
+    feedback
   };
 }
