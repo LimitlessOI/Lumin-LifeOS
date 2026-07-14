@@ -520,9 +520,10 @@
         "1"
       ],
       "founder_gated": false,
-      "attempts": 0,
-      "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:33:21.182Z"
+      "attempts": 1,
+      "commit_sha": "66a4095f2b17f95f2c09d1dffd10dfe2836e5681",
+      "last_attempt_at": "2026-07-13T23:30:50.691Z",
+      "completed_at": "2026-07-13T23:30:51.153Z"
     },
     {
       "id": "3",
@@ -536,7 +537,7 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:38:36.681Z"
+      "shipped_at": "2026-07-13T23:34:40.333Z"
     },
     {
       "id": "5",
@@ -565,7 +566,7 @@
       "last_attempt_at": "2026-07-13T12:33:26.287Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:59:06.720Z"
+      "shipped_at": "2026-07-13T23:41:51.329Z"
     },
     {
       "id": "7",
@@ -579,11 +580,11 @@
       "founder_gated": false,
       "attempts": 0,
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T00:35:00.268Z"
+      "shipped_at": "2026-07-14T00:00:57.056Z"
     },
     {
       "id": "9",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-member-feedback.js",
       "task": "process member feedback",
       "spec": "function processFeedback(feedback) { /* Queue for founder review */ } module.exports = { processFeedback };",
@@ -591,7 +592,9 @@
       "founder_gated": false,
       "attempts": 3,
       "last_attempt_at": "2026-07-13T12:44:37.822Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T00:36:50.199Z"
     },
     {
       "id": "10",
