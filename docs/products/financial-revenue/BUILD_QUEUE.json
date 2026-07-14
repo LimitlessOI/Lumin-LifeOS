@@ -15,10 +15,13 @@
       "spec": "Add a migration to create the ROI tracker table in the database",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0,
+      "attempts": 1,
       "file_contains": [
         "CREATE TABLE IF NOT EXISTS roi_tracker"
-      ]
+      ],
+      "last_attempt_at": "2026-07-14T21:23:31.015Z",
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "blocker_class": "BLOCKED_TOOLING"
     },
     {
       "id": "2",
