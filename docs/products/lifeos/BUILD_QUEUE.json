@@ -635,7 +635,8 @@
       "revive_count": 1,
       "revived_at": "2026-07-14T10:59:21.218Z",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T10:59:27.161Z"
+      "shipped_at": "2026-07-14T10:59:27.161Z",
+      "commit_sha": "af9fceacc9442f8ea7fd171a42d6cb0e7b45618a"
     },
     {
       "id": "12",
