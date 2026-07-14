@@ -111,7 +111,7 @@ function commandKey() {
 async function shipViaGovernedQueue({ product_id, ship_steps }) {
   const res = await fetch(`${httpBase()}/factory/ship-queue`, {
     method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-api-key': commandKey() },
+    headers: { 'content-type': 'application/json', 'x-command-key': commandKey() },
     body: JSON.stringify({
       mission_id: `GOVERNED-AUTONOMOUS-${product_id}`,
       blueprint_id: `governed-autonomous-${product_id}`,

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-12 — `builder_runtime_config` migration fixed to enable `pgcrypto` extension; `s3` temporarily parked until migration deploys; `s3` `last_error` was stale `route module not auto-registered` while the route was already registered and the real failure was `GET /api/v1/lifeos/command-center/mode` returning 500 because the table was missing. |
+| **Last Updated** | 2026-07-12 — `builder_runtime_config` migration fixed: `id` is `text PRIMARY KEY` with seeded sentinel row, `s3` parked until 2026-07-15, `factory/ship-queue` auth header fixed to `x-command-key`. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-12 — `builder_runtime_config` migration fixed (`pgcrypto`); `s3` parked until deploy; governed loop now records SENTRY failures back to `BUILD_QUEUE` so stale `autoReg` errors do not spin. |
+| **Last Updated** | 2026-07-12 — `builder_runtime_config` migration fixed: `id` is `text PRIMARY KEY` with seeded sentinel row, `s3` parked until 2026-07-15, `factory/ship-queue` auth header fixed to `x-command-key`. |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
@@ -309,7 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
-| 2026-07-12 | **`BUILD_QUEUE.json` `s3` migration & parking fix** — `db/migrations/20260601_builder_runtime_config.sql` now enables `pgcrypto` extension so `gen_random_uuid()` works in Neon; `s3` is parked until the migration deploys; `s3` `last_error` was stale `route module not auto-registered` while the route was already registered and the actual failure was `GET /api/v1/lifeos/command-center/mode` returning 500 because `builder_runtime_config` table was missing. `services/governed-autonomous-shipping-loop.js` now records SENTRY/governed failures back to `BUILD_QUEUE` so `reviveStaleBlockedSteps` can cool down instead of spinning on stale `autoReg` errors. | Adam: the builder must follow the blueprint and never stop; the factory must expose real failure reasons, not `codegen_empty`/`autoReg` theatre, and must not burn tokens re-attempting a DB-root failure. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` | push + redeploy + force BuilderOS tick |
+| 2026-07-12 | **`BUILD_QUEUE.json` `s3` migration & parking fix** — `db/migrations/20260601_builder_runtime_config.sql` now enables `pgcrypto`, uses `id text PRIMARY KEY` (was `uuid` causing the string sentinel `builder_runtime_config_singleton` to fail), and seeds a default row; `s3` is parked until 2026-07-15; `services/governed-autonomous-shipping-loop.js` now records SENTRY/governed failures back to `BUILD_QUEUE` and uses `x-command-key` for `factory/ship-queue` (was `x-api-key` causing `401`). The `s3` `last_error` was stale `route module not auto-registered` while the route was already registered and the actual failure was `GET /api/v1/lifeos/command-center/mode` returning 500. | Adam: the builder must follow the blueprint and never stop; the factory must expose real failure reasons, not `codegen_empty`/`autoReg` theatre, and must not burn tokens re-attempting a DB-root or auth failure. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` | push + redeploy + force BuilderOS tick |
 | 2026-07-14 | **`BUILD_QUEUE.json` `s3` spec correction** — mode route spec now lists allowed enum values `run`, `dry_run`, `paused` so governed codegen can produce a valid validator. | Adam: the builder must follow the blueprint and never stop; ambiguous specs are factory bugs and must be fixed in the blueprint. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` | push + redeploy + force BuilderOS tick |
 | 2026-07-14 | **Replicate short-name alias** — `env-registry-map` + `env-validator` treat `REPLICATE_API` as present for `REPLICATE_API_TOKEN`. | Founder deployed Railway var as `REPLICATE_API`. | ✅ | tip verify after alias deploy |
 | 2026-07-10 | **Live env inventory** — `scripts/env-live-inventory.mjs` + `npm run env:inventory` writes `docs/ENV_LIVE_INVENTORY.json` (names + present only). Registry map adds `GOOGLE_PLACES_KEY` + `GO_VEGAS_*`. | Adam: system should read vars and keep the list updated when they change. | ✅ live registry probe; Places ABSENT on tip | push + re-run inventory after Places set |
