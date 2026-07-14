@@ -718,11 +718,11 @@
       "expected_exports": [
         "logFoodWithPhoto"
       ],
-      "last_attempt_at": "2026-07-14T21:39:09.656Z",
+      "last_attempt_at": "2026-07-14T21:41:11.608Z",
       "last_error": "governed_ship_failed",
       "blocker_class": null,
-      "revive_count": 4,
-      "revived_at": "2026-07-14T21:39:07.894Z",
+      "revive_count": 5,
+      "revived_at": "2026-07-14T21:41:10.203Z",
       "commit_sha": null,
       "built_sha": null,
       "proof": null,
