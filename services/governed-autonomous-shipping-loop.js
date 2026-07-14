@@ -123,6 +123,35 @@ async function shipViaGovernedQueue({ product_id, ship_steps }) {
   return { status: res.status, body };
 }
 
+function deriveFailureReason(body) {
+  if (!body) return 'governed_ship_failed';
+  if (body.gap_type) return body.gap_type;
+  if (body.status) return body.status;
+  if (body.error) return String(body.error);
+  if (body.sentry?.blocking_findings?.length) return body.sentry.blocking_findings.join(', ');
+  if (body.sentry?.implementation_status) return body.sentry.implementation_status;
+  return 'governed_ship_failed';
+}
+
+async function markFailedStep(queue, stepId, body, productId, logger) {
+  if (!queue || !Array.isArray(queue.steps)) return;
+  const step = queue.steps.find((s) => s.id === stepId || s.step_id === stepId);
+  if (!step) return;
+  step.attempts = (typeof step.attempts === 'number' ? step.attempts : 0) + 1;
+  step.last_attempt_at = new Date().toISOString();
+  step.last_error = deriveFailureReason(body);
+  step.status = STEP_STATUS.BLOCKED;
+  step.commit_sha = null;
+  step.built_sha = null;
+  step.proof = null;
+  persistQueue(queue);
+  try {
+    await commitQueueStatus(productId, [stepId], queue, 'failed', logger);
+  } catch (err) {
+    logger?.warn?.({ product_id: productId, step_id: stepId, error: err.message }, '[GOVERNED-AUTONOMOUS-SHIP] failed queue status commit failed');
+  }
+}
+
 function markShippedStepsDone(queueOrProductId, shippedStepIds, commit_sha) {
   if (!shippedStepIds.length) return;
   const queue = typeof queueOrProductId === 'string'
@@ -209,16 +238,19 @@ async function fetchRemoteBuildQueue(productId) {
   return loadBuildQueue(productId);
 }
 
-async function commitQueueStatus(product_id, shippedStepIds, queue, commitSha, logger) {
+async function commitQueueStatus(product_id, stepIds, queue, commitSha, logger) {
   const { _sourcePath, ...clean } = queue;
   const queuePath = queue._sourcePath || queuePathForProduct(product_id);
   const relPath = path.relative(REPO_ROOT, queuePath).replace(/\\/g, '/');
   const content = `${JSON.stringify(clean, null, 2)}\n`;
   const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+  const failed = commitSha === 'failed';
+  const statusTag = failed ? 'FAILED' : 'QUEUE';
+  const shaTag = failed ? '0000000' : commitSha.slice(0, 7);
   try {
-    const result = await commitManyToGitHub([{ path: relPath, content }], `GOVERNED-AUTONOMOUS-QUEUE: ${product_id} ${shippedStepIds.join(', ')} ${commitSha.slice(0, 7)}`, branch);
+    const result = await commitManyToGitHub([{ path: relPath, content }], `GOVERNED-AUTONOMOUS-${statusTag}: ${product_id} ${stepIds.join(', ')} ${shaTag}`, branch);
     if (result?.ok && result.sha) {
-      logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${commitSha.slice(0, 7)}`);
+      logger?.info?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} BUILD_QUEUE.json updated with ${shaTag}`);
     } else {
       logger?.warn?.(`[GOVERNED-AUTONOMOUS-QUEUE] ${product_id} commit returned !ok: ${result?.error || 'unknown'}`);
     }
@@ -389,6 +421,11 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
           markShippedStepsDone(queue, shippedIds, commitSha);
           await commitQueueStatus(entry.product_id, shippedIds, queue, commitSha, logger);
         }
+      } else if (queue) {
+        for (const rawStep of entry.ship_steps || []) {
+          const stepId = rawStep?.step_id || rawStep?.id;
+          if (stepId) await markFailedStep(queue, stepId, body, entry.product_id, logger);
+        }
       }
       shipped += shippedIds.length;
       perProduct.push({
@@ -396,7 +433,7 @@ export async function runGovernedAutonomousShipOnce({ logger, maxStepsPerProduct
         status,
         ok,
         shipped: shippedIds.length,
-        error: ok ? undefined : (body && body.error),
+        error: ok ? undefined : deriveFailureReason(body),
       });
     }
     recordDailyBuildAttempts(shipped);

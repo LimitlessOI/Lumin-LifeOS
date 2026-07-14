@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — `docs/products/command-center/BUILD_QUEUE.json` `s3` spec corrected: the mode route spec now explicitly lists allowed enum values (`run`, `dry_run`, `paused`) matching `services/builder-runtime-mode-service.js`, so the governed factory can codegen the route with a valid validator instead of an underspecified `mode enum`. |
+| **Last Updated** | 2026-07-12 — `builder_runtime_config` migration fixed to enable `pgcrypto` extension; `s3` temporarily parked until migration deploys; `s3` `last_error` was stale `route module not auto-registered` while the route was already registered and the real failure was `GET /api/v1/lifeos/command-center/mode` returning 500 because the table was missing. |
 
 ---
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
@@ -28,7 +28,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-07-01 — health/liveness truth hardened for founder-builder runtime: `/healthz` and `/ready` now bypass public/static interception, which keeps command surfaces and external monitors from grading stale or hung health off the wrong layer. Prior: 2026-06-29 — never-stop product factory status route wired into command center |
+| **Last Updated** | 2026-07-12 — `builder_runtime_config` migration fixed (`pgcrypto`); `s3` parked until deploy; governed loop now records SENTRY failures back to `BUILD_QUEUE` so stale `autoReg` errors do not spin. |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/products/command-center/FILE_MANIFEST.json` |
 
@@ -309,6 +309,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-07-12 | **`BUILD_QUEUE.json` `s3` migration & parking fix** — `db/migrations/20260601_builder_runtime_config.sql` now enables `pgcrypto` extension so `gen_random_uuid()` works in Neon; `s3` is parked until the migration deploys; `s3` `last_error` was stale `route module not auto-registered` while the route was already registered and the actual failure was `GET /api/v1/lifeos/command-center/mode` returning 500 because `builder_runtime_config` table was missing. `services/governed-autonomous-shipping-loop.js` now records SENTRY/governed failures back to `BUILD_QUEUE` so `reviveStaleBlockedSteps` can cool down instead of spinning on stale `autoReg` errors. | Adam: the builder must follow the blueprint and never stop; the factory must expose real failure reasons, not `codegen_empty`/`autoReg` theatre, and must not burn tokens re-attempting a DB-root failure. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` | push + redeploy + force BuilderOS tick |
 | 2026-07-14 | **`BUILD_QUEUE.json` `s3` spec correction** — mode route spec now lists allowed enum values `run`, `dry_run`, `paused` so governed codegen can produce a valid validator. | Adam: the builder must follow the blueprint and never stop; ambiguous specs are factory bugs and must be fixed in the blueprint. | `node --check` changed JS files, `npm run builder:preflight`, `npm run verify:ci`, `npm run lifeos:bp-priority:verify`, `npm run factory:ci` | push + redeploy + force BuilderOS tick |
 | 2026-07-14 | **Replicate short-name alias** — `env-registry-map` + `env-validator` treat `REPLICATE_API` as present for `REPLICATE_API_TOKEN`. | Founder deployed Railway var as `REPLICATE_API`. | ✅ | tip verify after alias deploy |
 | 2026-07-10 | **Live env inventory** — `scripts/env-live-inventory.mjs` + `npm run env:inventory` writes `docs/ENV_LIVE_INVENTORY.json` (names + present only). Registry map adds `GOOGLE_PLACES_KEY` + `GO_VEGAS_*`. | Adam: system should read vars and keep the list updated when they change. | ✅ live registry probe; Places ABSENT on tip | push + re-run inventory after Places set |

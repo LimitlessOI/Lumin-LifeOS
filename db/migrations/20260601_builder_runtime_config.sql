@@ -1,4 +1,6 @@
 -- SYNOPSIS: Database migration — 20260601_builder_runtime_config.sql.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 CREATE TABLE IF NOT EXISTS builder_runtime_config (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   mode text NOT NULL DEFAULT 'run',
