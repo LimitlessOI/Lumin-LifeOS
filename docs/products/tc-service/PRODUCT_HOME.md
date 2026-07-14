@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **Doc intake export alias** — `createTCDocIntake` = `createTcEmailScanAndUpload` + `findExecutedAgreements`/`runFullIntake` wrappers. | Tip email-search 500: createTCDocIntake is not a function. | ✅ | | tip after deploy |
 | 2026-07-14 | **Browser-UI-as-API pack** — harden eXp Okta login (forced `/login/login.htm`, multi-selectors, already-auth recovery, observed fields on fail); `GET /browser/operator-catalog` + `POST /browser/debug-okta`; portal catalog link; `createMLSDealScanner` alias; `access_ready` no longer requires optional Asana; `fill()` tries comma selectors + iframes. | Adam: every TX aspect working; map UI like API when no vendor key. Tip: GLVAR live PASS; SkySlope failed missing Okta username field. | ✅ | | tip `b53294c548` catalog+GLVAR+access_ready PASS; Okta false-auth from enduser in redirect_uri — fix pending ship |
 | 2026-07-13 | **Spam sender rules narrowed** — removed blanket `noreply` auto-spam (false-trashed Google Workspace billing). Keep ccsend/blast domains + subject patterns. | Purge marked Google payment-declined as spam. | ✅ | | tip redeploy |
 | 2026-07-13 | **TC purge-spam** — `purgeLoggedSpam` + `POST /email/purge-spam` reclassifies already-logged marketing as spam and trashes UIDs; organize single-flight lock. | Background organize hung on IMAP; attention queue still showed ccsend/CE blasts as time_sensitive. | ✅ | | tip purge-spam |

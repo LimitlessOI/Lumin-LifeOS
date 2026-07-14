@@ -344,5 +344,49 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
   return {
     findAndProcessEmails,
     uploadFilesToSkySlope,
+    async findExecutedAgreements({ days = 90 } = {}) {
+      return findAndProcessEmails({ days, dryRun: true, searchAll: true });
+    },
+    async runFullIntake({ days = 90, address, dryRun = true } = {}) {
+      const emails = await findAndProcessEmails({
+        days,
+        dryRun: true,
+        searchAll: true,
+      });
+      const filtered = address
+        ? emails.filter((e) => {
+            const hay = `${e.subject || ''} ${e.from || ''}`.toLowerCase();
+            return hay.includes(String(address).toLowerCase());
+          })
+        : emails;
+      if (dryRun) {
+        return {
+          ok: true,
+          dryRun: true,
+          found: filtered.length,
+          emails: filtered.map((e) => ({
+            subject: e.subject,
+            from: e.from,
+            date: e.date,
+            isRPA: e.isRPA,
+            isListing: e.isListing,
+            files: (e.files || []).map((f) => ({
+              filename: f.filename,
+              docType: f.docType,
+              size: f.size,
+            })),
+          })),
+        };
+      }
+      const files = filtered.flatMap((e) => e.files || []);
+      const upload = await uploadFilesToSkySlope(null, files, {
+        address,
+        validateBeforeUpload: true,
+      });
+      return { ok: true, dryRun: false, found: filtered.length, upload };
+    },
   };
 }
+
+export const createTCDocIntake = createTcEmailScanAndUpload;
+export default createTcEmailScanAndUpload;
