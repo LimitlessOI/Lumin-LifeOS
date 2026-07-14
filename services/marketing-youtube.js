@@ -316,7 +316,8 @@ async function tryIdeogramThumbnail({ title, overlay, market = '', angle = '', c
           owner_id: 'marketing-youtube',
         },
       }),
-      new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 35000)),
+      // Keep under Railway edge budget when 5 cards run in parallel.
+      new Promise((resolve) => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 8000)),
     ]);
 
     if (!out?.ok || !out.publicUrl) return null;
@@ -1542,7 +1543,7 @@ export function createYouTubeService(poolOrDeps = {}) {
     return ops.slice(0, 3);
   }
 
-  async function buildSuggestionCards(ideas, { source, channelTitle, founderIntro, assets, playbook }) {
+  async function buildSuggestionCards(ideas, { source, channelTitle, founderIntro, assets, playbook, skipIdeogram = false }) {
     const faceUrl = assets?.faceUrl || null;
     const uniqueIdeas = dedupeSuggestionTitles(ideas).slice(0, 5);
 
@@ -1613,13 +1614,15 @@ export function createYouTubeService(poolOrDeps = {}) {
           market: playbook?.market || '',
           angle: draft.angle,
         }),
-        tryIdeogramThumbnail({
-          title,
-          overlay: punch.overlayText || selectedHook,
-          market: playbook?.market || '',
-          angle: draft.angle,
-          cardIndex: idx,
-        }),
+        skipIdeogram
+          ? Promise.resolve(null)
+          : tryIdeogramThumbnail({
+              title,
+              overlay: punch.overlayText || selectedHook,
+              market: playbook?.market || '',
+              angle: draft.angle,
+              cardIndex: idx,
+            }),
       ]);
       if (aiThumb?.thumbnailUrl) {
         thumb.composedThumbnailUrl = thumb.thumbnailUrl;
@@ -1692,7 +1695,7 @@ export function createYouTubeService(poolOrDeps = {}) {
     return voice?.founderIntro || voice?.intro || DEFAULT_INTRO;
   }
 
-  async function getSuggestions(ownerId, { callCouncilMember } = {}) {
+  async function getSuggestions(ownerId, { callCouncilMember, fast = false } = {}) {
     const status = await getStatus(ownerId);
     let channelTitle = null;
     let recentTitles = [];
@@ -1716,13 +1719,15 @@ export function createYouTubeService(poolOrDeps = {}) {
     let researchedCount = 0;
 
     let yt = null;
-    try {
-      const client = await getAuthedClient(ownerId);
-      if (!client.error) {
-        yt = google.youtube({ version: 'v3', auth: client.auth });
+    if (!fast) {
+      try {
+        const client = await getAuthedClient(ownerId);
+        if (!client.error) {
+          yt = google.youtube({ version: 'v3', auth: client.auth });
+        }
+      } catch (err) {
+        researchError = err?.message || 'yt_client_failed';
       }
-    } catch (err) {
-      researchError = err?.message || 'yt_client_failed';
     }
 
     if (yt) {
@@ -1759,7 +1764,7 @@ export function createYouTubeService(poolOrDeps = {}) {
     let copyRewriteError = null;
     let copyModel = null;
 
-    if (typeof callCouncilMember === 'function') {
+    if (!fast && typeof callCouncilMember === 'function') {
       try {
         const modelOrder = ['claude_sonnet', 'openai_gpt', 'gemini_flash'];
         let modelUsed = null;
@@ -1895,6 +1900,9 @@ sample_script (10-14 short lines).`;
         copyRewriteError = err?.message || 'rewrite_exception';
         logger?.warn?.({ err }, 'strong-model talk rewrite failed; keeping research/playbook packs');
       }
+    } else if (fast) {
+      copyRewriteError = 'fast_mode_skip_ai';
+      source = source === 'playbook_defaults' ? 'playbook_fast' : `${source}_fast`;
     } else {
       copyRewriteError = 'callCouncilMember_unavailable';
     }
@@ -1911,6 +1919,7 @@ sample_script (10-14 short lines).`;
       founderIntro,
       assets,
       playbook,
+      skipIdeogram: !!fast,
     });
 
     const channel_ops = buildChannelOps(assets.videos, playbook);

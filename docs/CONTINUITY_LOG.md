@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — Full product audit SMOS + Site Builder
+
+API+browser audit: Film Studio assets PASS; footage_edit PASS; YouTube connected PASS but suggestions 502 (AI+Ideogram over edge budget) → fail-soft fast path; consent 500 missing consent_text → default text; browser unauth/generic spam when suggestions die. Site Builder landing+$35+launch-readiness PASS; designSystems key false-fail in auditor; public-lead rejects example.com (expected). Ideogram still 429 until Replicate payment method.
+
 ## 2026-07-14 — Film Studio (clean camera + voice teleprompter)
 
 Adam: create mobile+desktop film ability — direct sound/background/B-roll by video type; film with real recordings; teleprompter moves as we talk; Descript-style — reading UI must not appear in the video. Shipped Phase 4 MVP on `/marketing/session/:id` via `public/shared/smos-film-studio.js` (camera MediaRecorder only; prompter is HTML UI; speech sync; director tips). Uses existing LifeOS PWA/Capacitor shell — not a separate native SMOS app.

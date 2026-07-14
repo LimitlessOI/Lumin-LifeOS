@@ -70,11 +70,22 @@ export async function registerMarketingSessionRoutes(app, deps) {
                 return res.status(400).json({ ok: false, error: 'owner_id is required.' });
             }
 
-            const { consent_type, consent_text } = req.body;
+            const { consent_type } = req.body;
+            const consent_text = String(req.body?.consent_text || req.body?.consentText || '').trim()
+              || (
+                consent_type === 'session_recording'
+                  ? 'I agree to allow SocialMediaOS to process my session input (including camera/mic takes when I record) and generate marketing content. I am responsible for reviewing and approving all generated content before publication.'
+                  : consent_type
+                    ? `I consent to ${consent_type} for SocialMediaOS marketing workflows.`
+                    : ''
+              );
 
             const validConsentTypes = ["session_recording","voice_reuse","likeness_reuse","data_sharing"];
             if (!validConsentTypes.includes(consent_type)) {
                 return res.status(400).json({ ok: false, error: 'Invalid consent_type.' });
+            }
+            if (!consent_text) {
+                return res.status(400).json({ ok: false, error: 'consent_text is required.' });
             }
 
             const result = await pool.query(
