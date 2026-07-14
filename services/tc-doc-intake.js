@@ -346,15 +346,18 @@ export function createTcEmailScanAndUpload({ pool, tcBrowser, accountManager, lo
     findAndProcessEmails,
     uploadFilesToSkySlope,
     async findExecutedAgreements({ days = 90, userId = 'adam' } = {}) {
-      return findAndProcessEmails({ userId, days, dryRun: true, searchAll: false });
+      const result = await findAndProcessEmails({ userId, days, dryRun: true, searchAll: false });
+      if (Array.isArray(result)) return result;
+      return Array.isArray(result?.emails) ? result.emails : [];
     },
     async runFullIntake({ days = 90, address, dryRun = true, userId = 'adam' } = {}) {
-      const emails = await findAndProcessEmails({
+      const result = await findAndProcessEmails({
         userId,
         days,
         dryRun: true,
         searchAll: false,
       });
+      const emails = Array.isArray(result) ? result : (Array.isArray(result?.emails) ? result.emails : []);
       const filtered = address
         ? emails.filter((e) => {
             const hay = `${e.subject || ''} ${e.from || ''}`.toLowerCase();
