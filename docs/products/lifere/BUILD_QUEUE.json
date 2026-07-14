@@ -63,11 +63,18 @@
       "attempts": 3,
       "commit_sha": "00787f9d70b64917e86d38c7b7d34e5f917e01e0",
       "last_attempt_at": "2026-07-13T14:13:57.936Z",
-      "last_error": "route module not auto-registered — add {\"path\":\"routes/quoteRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)"
+      "last_error": "route module not auto-registered — add {\"path\":\"routes/quoteRoutes.js\",\"register\":\"<registerFn>\",\"enabled\":true} to config/auto-registered-product-modules.json so the endpoint actually mounts LIVE (built + deployed but unreachable = false done)",
+      "expected_exports": [
+        "registerQuoteRoutes"
+      ],
+      "route": {
+        "method": "GET",
+        "path": "/api/quotes/pass"
+      }
     },
     {
       "id": "5",
-      "status": "pending",
+      "status": "done",
       "target_file": "config/auto-registered-product-modules.json",
       "task": "add quote routes to auto-registration",
       "spec": "Entry in JSON config to auto-register the quoteRoutes module.",
@@ -75,7 +82,9 @@
         "4"
       ],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 0,
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T17:42:11.190Z"
     }
   ]
 }
