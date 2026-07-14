@@ -713,12 +713,73 @@ async function applyBillingFieldUpdates(page, updates = {}) {
       return { kind, applied: true, target: desiredValue };
     };
 
+    const setSelectByIdOrMatcher = (ids, matcher, desiredValue, kind) => {
+      const normalizedDesired = normalize(desiredValue);
+      let control = null;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && visible(el)) {
+          control = el;
+          break;
+        }
+      }
+      if (!control) {
+        return setControlValue(matcher, desiredValue, kind);
+      }
+      if (control.tagName !== 'SELECT') {
+        return setControlValue(matcher, desiredValue, kind);
+      }
+      const option = Array.from(control.options || []).find((item) => {
+        return normalize(item.textContent) === normalizedDesired
+          || normalize(item.value) === normalizedDesired
+          || normalize(item.textContent).includes(normalizedDesired)
+          || normalizedDesired.includes(normalize(item.textContent));
+      });
+      if (!option) {
+        return {
+          kind,
+          applied: false,
+          reason: 'Option not found',
+          controlId: control.id || null,
+          availableOptions: Array.from(control.options || []).map((item) => (item.textContent || '').trim()).filter(Boolean).slice(0, 40),
+        };
+      }
+      Array.from(control.options || []).forEach((item) => {
+        item.selected = item === option;
+      });
+      control.value = option.value;
+      control.selectedIndex = Array.from(control.options || []).indexOf(option);
+      dispatch(control);
+      if (typeof window.jQuery === 'function') {
+        try { window.jQuery(control).val(option.value).trigger('change'); } catch (_) { /* ignore */ }
+      }
+      const selectedText = control.options?.[control.selectedIndex]?.text || '';
+      return {
+        kind,
+        applied: normalize(selectedText).includes(normalizedDesired) || normalize(control.value) === normalize(option.value),
+        target: option.textContent || option.value || desiredValue,
+        controlId: control.id || null,
+        selectedText,
+        selectedValue: control.value || null,
+      };
+    };
+
     const operations = [];
     if (requestedUpdates.client_billing_status) {
-      operations.push(setControlValue(/client billing status/i, requestedUpdates.client_billing_status, 'client_billing_status'));
+      operations.push(setSelectByIdOrMatcher(
+        ['BillingStatusID', 'ClientBillingStatusID', 'billingStatusID'],
+        /client billing status/i,
+        requestedUpdates.client_billing_status,
+        'client_billing_status'
+      ));
     }
     if (requestedUpdates.bill_provider_type) {
-      operations.push(setControlValue(/bill provider type/i, requestedUpdates.bill_provider_type, 'bill_provider_type'));
+      operations.push(setSelectByIdOrMatcher(
+        ['BillUnderProvTypeID', 'BillProviderTypeID', 'ProviderTypeID'],
+        /bill provider type/i,
+        requestedUpdates.bill_provider_type,
+        'bill_provider_type'
+      ));
     }
     if (requestedUpdates.payment_status) {
       operations.push(setControlValue(/payment status|paymentstatus/i, requestedUpdates.payment_status, 'payment_status'));
@@ -764,19 +825,45 @@ async function attemptBillingSave(page) {
       const rect = el.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0;
     };
+    const anchor =
+      document.getElementById('BillingStatusID') ||
+      document.getElementById('BillUnderProvTypeID') ||
+      document.querySelector('select[name="BillingStatusID"], select[name="BillUnderProvTypeID"]');
     const candidates = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'))
       .filter(visible)
       .map((el) => ({
         el,
         text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim(),
-      }));
-    const target = candidates.find((item) => /save|update|apply|submit/i.test(item.text));
-    if (!target) return null;
+      }))
+      .filter((item) => /^save$/i.test(item.text) || /^(update|apply)$/i.test(item.text) || /^save\b/i.test(item.text));
+
+    let target = null;
+    if (anchor && candidates.length) {
+      const aRect = anchor.getBoundingClientRect();
+      let best = null;
+      for (const item of candidates) {
+        const r = item.el.getBoundingClientRect();
+        const dist = Math.abs(r.top - aRect.top) + Math.abs(r.left - aRect.left);
+        if (!best || dist < best.dist) best = { item, dist };
+      }
+      target = best?.item || null;
+    }
+    if (!target) {
+      target = candidates.find((item) => /^save$/i.test(item.text)) || candidates[0] || null;
+    }
+    if (!target) {
+      const fallback = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'))
+        .filter(visible)
+        .map((el) => ({ el, text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim() }))
+        .find((item) => /save|update|apply|submit/i.test(item.text));
+      if (!fallback) return null;
+      target = fallback;
+    }
     if (typeof target.el.click === 'function') target.el.click();
     return target.text || 'save';
   });
   if (!clicked) return { attempted: false, label: null };
-  await sleep(1500);
+  await sleep(2500);
   return { attempted: true, label: clicked };
 }
 
@@ -2843,7 +2930,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
    * Scan Birth Activity for recent births → resolve billing hrefs via row links
    * or client-directory name match (money path for unpaid births not in old notes queue).
    */
-  async function scanBirthActivity({ maxRows = 40, pageTimeoutMs = 20000, resolveDirectory = true } = {}) {
+  async function scanBirthActivity({
+    maxRows = 40,
+    pageTimeoutMs = 20000,
+    resolveDirectory = true,
+    maxNameResolves = 12,
+  } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
     try {
@@ -2926,6 +3018,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       }
 
       const births = [];
+      let nameResolveBudget = Math.max(0, Math.min(Number(maxNameResolves) || 12, 25));
       for (const row of rows) {
         const motherNameGuess = guessMotherNameFromBirthCells(row.cells || []);
         let clientHref = row.clientHref || null;
@@ -2953,7 +3046,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           }
         }
         // Per-name filter search when bulk directory miss (postpartum moms often off first pages).
-        if (!billingHref && motherNameGuess && needResolve) {
+        if (!billingHref && motherNameGuess && needResolve && nameResolveBudget > 0) {
+          nameResolveBudget -= 1;
           directoryPrep.perNameSearches += 1;
           await typeClientDirectoryFilter(session.page, motherNameGuess);
           const filtered = await extractClientDirectory(session.page, 80);
@@ -2980,7 +3074,10 @@ export function createClientCareBrowserService({ env = process.env, logger = con
             resolve = resolve || { method: 'directory_miss', query: motherNameGuess };
           }
         } else if (!billingHref && motherNameGuess) {
-          resolve = { method: 'directory_miss', query: motherNameGuess };
+          resolve = resolve || {
+            method: nameResolveBudget <= 0 ? 'resolve_budget_exhausted' : 'directory_miss',
+            query: motherNameGuess,
+          };
         }
         births.push({
           ...row,

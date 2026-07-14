@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Repair reload after Save so claim-status after-summary reflects persisted fields. |
+| **Last Updated** | 2026-07-14 — ID-targeted BillingStatusID/BillUnderProvTypeID + nearest Save (status was not persisting). |
 
 ---
 

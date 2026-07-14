@@ -1121,6 +1121,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const args = {
         maxRows: req.query?.max_rows,
         pageTimeoutMs: req.query?.page_timeout_ms,
+        maxNameResolves: req.query?.max_name_resolves,
       };
       if (asyncMode) {
         const job = enqueueBrowserJob('birth_activity', () => browserService.scanBirthActivity(args), args);
