@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T10:57:38.144Z",
+  "generated_at": "2026-07-14T10:59:28.876Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11524,
   "files": [
@@ -84366,9 +84366,9 @@
     {
       "path": "services/lifeos-perfect-day.js",
       "synopsis": "Exports planPerfectDay — services/lifeos-perfect-day.js.",
-      "bytes": 5054,
-      "mtime": "2026-07-14T09:22:00.757Z",
-      "indexed_at": "2026-07-14T10:47:48.600Z"
+      "bytes": 2096,
+      "mtime": "2026-07-14T10:59:28.876Z",
+      "indexed_at": "2026-07-14T10:59:28.876Z"
     },
     {
       "path": "services/lifeos-request-helpers.js",

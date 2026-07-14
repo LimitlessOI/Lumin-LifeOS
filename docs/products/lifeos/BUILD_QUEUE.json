@@ -614,7 +614,7 @@
     },
     {
       "id": "11",
-      "status": "blocked",
+      "status": "done",
       "target_file": "services/lifeos-perfect-day.js",
       "task": "Implement LifeOS Perfect Day planning service with DB-backed schedule, check-in, reminders, and daily rating",
       "spec": "This is an ES module service file. Export these named functions:\n- export async function planPerfectDay(userId, { wakeTime, schedule }) — upsert a user's perfect-day plan (wake time, ordered activities array with start/end) into a table named `perfect_day` (id, user_id, wake_time, schedule JSONB, created_at, updated_at).\n- export async function getPerfectDay(userId) — return the current plan for the user, or null.\n- export async function checkIn(userId, { currentActivity, distraction, priority }) — record a check-in and return the next recommended activity or a re-prioritization question.\n- export async function getDailyReminders(userId) — return the next 3 upcoming reminders for today based on the plan.\n- export async function rateDay(userId, { rating, note, whatMatteredMore }) — upsert a daily rating into `perfect_day_ratings` (id, user_id, perfect_day_id, rating smallint, note, what_mattered_more, created_at).\nUse createDbPool from '../services/db.js' to create a local pool: const pool = createDbPool({ validatedDatabaseUrl: process.env.DATABASE_URL, DB_SSL_REJECT_UNAUTHORIZED: process.env.DB_SSL_REJECT_UNAUTHORIZED });. Use ON CONFLICT for upserts. SQL: CREATE TABLE IF NOT EXISTS perfect_day (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, wake_time time, schedule jsonb NOT NULL DEFAULT '[]'::jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now(), UNIQUE(user_id)); CREATE TABLE IF NOT EXISTS perfect_day_ratings (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, perfect_day_id uuid REFERENCES perfect_day(id), rating smallint, note text, what_mattered_more text, created_at timestamptz DEFAULT now());\n",
@@ -629,9 +629,13 @@
         "getDailyReminders",
         "rateDay"
       ],
-      "attempts": 3,
+      "attempts": 0,
       "last_attempt_at": "2026-07-14T10:41:06.742Z",
-      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
+      "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
+      "revive_count": 1,
+      "revived_at": "2026-07-14T10:59:21.218Z",
+      "shipped_via": "governed_ship_queue",
+      "shipped_at": "2026-07-14T10:59:27.161Z"
     },
     {
       "id": "12",
