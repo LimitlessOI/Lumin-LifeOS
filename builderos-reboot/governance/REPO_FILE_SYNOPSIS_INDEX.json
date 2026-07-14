@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T02:27:54.574Z",
+  "generated_at": "2026-07-14T02:36:58.575Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11516,
   "files": [
@@ -66253,9 +66253,9 @@
     {
       "path": "routes/memory_routes.js",
       "synopsis": "Registers MemoryRoutes routes/handlers (routes/memory_routes.js).",
-      "bytes": 7918,
-      "mtime": "2026-07-14T02:27:54.574Z",
-      "indexed_at": "2026-07-14T02:27:54.574Z"
+      "bytes": 11481,
+      "mtime": "2026-07-14T02:36:58.575Z",
+      "indexed_at": "2026-07-14T02:36:58.575Z"
     },
     {
       "path": "routes/memory-capsule-routes.js",
