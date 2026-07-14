@@ -1,4 +1,4 @@
-// SYNOPSIS: Creative Engine SSR UI — upload + footage edit / photo polish controls
+// SYNOPSIS: Creative Engine SSR UI — Studio with graphic_design (Ideogram/Flux) + 2026 calm design
 // @ssot docs/products/creative-engine/PRODUCT_HOME.md
 
 function escapeHtml(unsafe) {
@@ -16,31 +16,76 @@ function renderPage(title, body, script = '') {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${escapeHtml(title)} | Creative Engine</title>
+  <title>${escapeHtml(title)} | Creative Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    body{font-family:Manrope,system-ui,sans-serif;margin:0;padding:24px;background:#0a0a0f;color:#e8e8f0}
-    .wrap{max-width:720px;margin:0 auto;background:#14141c;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px}
-    .brand{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7c3aed;font-weight:700}
-    h1{margin:8px 0 12px;font-family:Space Grotesk,sans-serif}
-    p,label{color:#9999bb}
-    input,select,textarea,button{width:100%;box-sizing:border-box;margin:6px 0 14px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#0d0d15;color:#e8e8f0}
-    button{background:#7c3aed;border:none;cursor:pointer;font-weight:600}
-    .msg{padding:10px;border-radius:8px;display:none;margin-bottom:12px}
-    .msg.ok{display:block;background:rgba(16,185,129,.15);color:#6ee7b7}
-    .msg.err{display:block;background:rgba(239,68,68,.15);color:#fca5a5}
-    a{color:#a78bfa}
+    :root {
+      --ink:#132229; --muted:#5b6f76; --deep:#0a3d40; --teal:#14716c;
+      --paper:#f3f7f7; --line:rgba(10,61,64,.12); --ok:#1f6b45; --bad:#8a3b2a;
+      --serif:"Fraunces",Georgia,serif; --sans:"Manrope",system-ui,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;min-height:100vh;font-family:var(--sans);color:var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 100% -10%,rgba(126,196,188,.28),transparent 55%),
+        linear-gradient(180deg,#e8f2f1 0%,var(--paper) 45%,#e2eceb 100%);
+      line-height:1.55;-webkit-font-smoothing:antialiased;
+    }
+    .shell{width:min(760px,calc(100vw - 2rem));margin:0 auto;padding:1.4rem 0 3rem}
+    .top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:1.2rem}
+    .brand{font-family:var(--serif);font-size:1.45rem;font-weight:700;color:var(--deep);letter-spacing:-.02em}
+    .brand span{color:var(--teal);font-weight:500}
+    .quiet{font-size:.85rem;color:var(--muted)}
+    .panel{
+      background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:22px;
+      padding:1.35rem 1.45rem;box-shadow:0 24px 60px rgba(10,40,48,.08);
+    }
+    h1{margin:0 0 .45rem;font-family:var(--serif);font-size:clamp(1.7rem,3vw,2.15rem);color:var(--deep);letter-spacing:-.03em}
+    .lead{margin:0 0 1.1rem;color:var(--muted)}
+    label{display:grid;gap:.3rem;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:.75rem}
+    input,select,textarea,button{
+      font:inherit;width:100%;padding:.75rem .85rem;border-radius:12px;
+      border:1px solid var(--line);background:#fbfeff;color:var(--ink);
+    }
+    button{
+      appearance:none;border:0;cursor:pointer;font-weight:700;margin-top:.35rem;
+      background:var(--deep);color:#fff;border-radius:999px;padding:.9rem 1.2rem;
+    }
+    button:disabled{opacity:.55;cursor:wait}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    .msg{display:none;padding:.8rem 1rem;border-radius:14px;margin:0 0 1rem;font-size:.92rem}
+    .msg.ok{display:block;background:rgba(31,107,69,.1);border:1px solid rgba(31,107,69,.22);color:var(--ok)}
+    .msg.err{display:block;background:rgba(138,59,42,.08);border:1px solid rgba(138,59,42,.22);color:var(--bad)}
+    .preview{margin-top:1rem;display:none}
+    .preview img{width:100%;border-radius:16px;border:1px solid var(--line);display:block}
+    pre{white-space:pre-wrap;font-size:.75rem;color:var(--muted);max-height:180px;overflow:auto;margin-top:.75rem}
+    a{color:var(--teal);font-weight:600;text-decoration:none}
+    .links{margin-top:1rem;font-size:.9rem;color:var(--muted)}
+    .gd-only{display:none}
+    body.mode-gd .gd-only{display:grid}
+    body.mode-gd .legacy-only{display:none}
+    @media (max-width:720px){.row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="brand">Creative Engine</div>
-    ${body}
+  <div class="shell">
+    <header class="top">
+      <div class="brand">Creative <span>Studio</span></div>
+      <div class="quiet">2026 · purposeful tools · no purple chrome</div>
+    </header>
+    <div class="panel">
+      ${body}
+    </div>
+    <p class="links"><a href="/creative">Creative home</a> · <a href="/marketing">SocialMediaOS</a> · <a href="/site-builder">Site Builder</a> · <a href="/birthbill/for-you">BirthBill</a></p>
   </div>
   <script>
     function authHeaders(){
       const h={'Content-Type':'application/json'};
       const token=localStorage.getItem('lifeos_access_token')||'';
-      const key=localStorage.getItem('command_key')||localStorage.getItem('lifeos_command_key')||localStorage.getItem('COMMAND_CENTER_KEY')||'';
+      const key=localStorage.getItem('COMMAND_CENTER_KEY')||localStorage.getItem('lifeos_cmd_key')||localStorage.getItem('command_key')||localStorage.getItem('lifeos_command_key')||localStorage.getItem('x_api_key')||'';
       if(token) h.Authorization='Bearer '+token;
       else if(key){h['x-command-key']=key;h['x-api-key']=key;}
       return h;
@@ -65,44 +110,110 @@ export function registerCreativeEngineUiRoutes(app, deps = {}) {
   app.get('/creative', (_req, res) => {
     res.send(renderPage('Creative Engine', `
       <h1>Creative Engine</h1>
-      <p>Shared render infrastructure — video edit, photo polish, script compose.</p>
-      <p><a href="/creative/studio">Open Studio</a> · <a href="/marketing">SocialMediaOS</a> · <a href="/overlay/lifeos-app.html">LifeOS</a></p>
+      <p class="lead">Shared media infra — graphic design (Ideogram / Flux), video edit, photo polish, script compose.</p>
+      <p><a href="/creative/studio">Open Studio</a></p>
     `));
   });
 
   app.get('/creative/studio', (_req, res) => {
     const body = `
       <h1>Studio</h1>
-      <p>Upload a file (base64 from file picker), then run a mode.</p>
+      <p class="lead">Generate stills for Site Builder / SocialMediaOS, or edit footage. Graphic design uses Replicate (needs tip credit).</p>
       <div id="msg" class="msg"></div>
-      <label>Mode</label>
-      <select id="mode">
-        <option value="footage_edit">Footage edit (trim + captions + 9:16)</option>
-        <option value="photo_polish">Photo polish</option>
-        <option value="script_compose">Script compose (Replicate gated)</option>
-        <option value="generative_broll">Generative b-roll (scaffold)</option>
-      </select>
-      <label>File</label>
-      <input type="file" id="file" />
-      <label>Start sec (video)</label>
-      <input type="number" id="startSec" value="0" step="0.1" />
-      <label>End sec (video)</label>
-      <input type="number" id="endSec" value="8" step="0.1" />
-      <label>Caption text</label>
-      <input type="text" id="captionText" placeholder="Optional on-screen caption" />
-      <label>Script (script_compose only)</label>
-      <textarea id="script" rows="4" placeholder="Scene script for Flux + FFmpeg compose"></textarea>
+      <label>Mode
+        <select id="mode">
+          <option value="graphic_design" selected>Graphic design — Ideogram / Flux / Recraft</option>
+          <option value="footage_edit">Footage edit (trim + captions + 9:16)</option>
+          <option value="photo_polish">Photo polish</option>
+          <option value="script_compose">Script compose</option>
+          <option value="generative_broll">Generative b-roll (scaffold)</option>
+        </select>
+      </label>
+      <div class="gd-only">
+        <label>Prompt
+          <textarea id="gdPrompt" rows="3" placeholder="16:9 hero still for a midwifery practice — soft teal light, no text, editorial"></textarea>
+        </label>
+        <div class="row">
+          <label>Asset type
+            <select id="assetType">
+              <option value="thumbnail">YouTube thumbnail (Ideogram)</option>
+              <option value="photo">Photo / hero (Flux)</option>
+              <option value="vector">Vector / logo mark (Recraft)</option>
+            </select>
+          </label>
+          <label>Aspect
+            <select id="aspectRatio">
+              <option value="16:9">16:9</option>
+              <option value="1:1">1:1</option>
+              <option value="9:16">9:16</option>
+              <option value="4:3">4:3</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="legacy-only">
+        <label>File
+          <input type="file" id="file" />
+        </label>
+        <div class="row">
+          <label>Start sec
+            <input type="number" id="startSec" value="0" step="0.1" />
+          </label>
+          <label>End sec
+            <input type="number" id="endSec" value="8" step="0.1" />
+          </label>
+        </div>
+        <label>Caption text
+          <input type="text" id="captionText" placeholder="Optional on-screen caption" />
+        </label>
+        <label>Script (script_compose)
+          <textarea id="script" rows="3" placeholder="Scene script"></textarea>
+        </label>
+      </div>
       <button id="runBtn" type="button">Estimate + Render</button>
-      <pre id="out" style="white-space:pre-wrap;font-size:12px;color:#9999bb"></pre>
+      <div class="preview" id="preview"><img id="previewImg" alt="Generated preview" /></div>
+      <pre id="out"></pre>
     `;
     const script = `
       const msg=document.getElementById('msg');
       const out=document.getElementById('out');
+      const modeEl=document.getElementById('mode');
+      const preview=document.getElementById('preview');
+      const previewImg=document.getElementById('previewImg');
       function show(text, ok){ msg.textContent=text; msg.className='msg '+(ok?'ok':'err'); }
+      function syncMode(){
+        document.body.classList.toggle('mode-gd', modeEl.value==='graphic_design');
+      }
+      modeEl.addEventListener('change', syncMode);
+      syncMode();
       document.getElementById('runBtn').onclick=async()=>{
+        const btn=document.getElementById('runBtn');
         try{
-          msg.className='msg'; out.textContent='Working…';
-          const mode=document.getElementById('mode').value;
+          btn.disabled=true; msg.className='msg'; out.textContent='Working…'; preview.style.display='none';
+          const mode=modeEl.value;
+          if(mode==='graphic_design'){
+            const prompt=document.getElementById('gdPrompt').value.trim();
+            if(!prompt) throw new Error('Prompt required for graphic design');
+            const body={
+              owner_id:ownerId(),
+              prompt,
+              assetType:document.getElementById('assetType').value,
+              aspectRatio:document.getElementById('aspectRatio').value,
+            };
+            const est=await fetch('/api/v1/creative/graphic-design/estimate',{method:'POST',headers:authHeaders(),body:JSON.stringify(body)});
+            const ej=await est.json();
+            const ren=await fetch('/api/v1/creative/graphic-design/render',{method:'POST',headers:authHeaders(),body:JSON.stringify(body)});
+            const rj=await ren.json();
+            out.textContent=JSON.stringify({estimate:ej,render:rj},null,2);
+            if(rj.gated || String(rj.error||'').includes('402') || String(rj.error||'').includes('Insufficient credit')){
+              throw new Error('Replicate credit required on tip — add billing at replicate.com, then retry.');
+            }
+            if(!ren.ok || rj.ok===false) throw new Error(rj.error||'graphic_design failed');
+            const url=rj.publicUrl||rj.public_url;
+            if(url){ previewImg.src=url; preview.style.display='block'; show('Generated — '+url,true); }
+            else show('Render returned ok without publicUrl', false);
+            return;
+          }
           const file=document.getElementById('file').files[0];
           let assetKey=null;
           if(file && mode!=='script_compose' && mode!=='generative_broll'){
@@ -145,6 +256,7 @@ export function registerCreativeEngineUiRoutes(app, deps = {}) {
           }
           if(url) show('Done — '+url,true); else if(rj.ok===false||rj.processed?.ok===false) show(rj.error||rj.processed?.error||'failed',false); else show('Job '+ (rj.job?.status||'queued'), true);
         }catch(e){ show(e.message,false); out.textContent=String(e); }
+        finally{ btn.disabled=false; }
       };
     `;
     res.send(renderPage('Studio', body, script));

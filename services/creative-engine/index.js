@@ -8,8 +8,9 @@ import { runFootageEdit } from './modes/footage-edit.js';
 import { runPhotoPolish } from './modes/photo-polish.js';
 import { runScriptCompose } from './modes/script-compose.js';
 import { runGenerativeBroll, estimateGenerativeBrollCost } from './modes/generative-broll.js';
+import { getReplicateApiToken } from './modes/graphic-design.js';
 
-const MODES = ['footage_edit', 'photo_polish', 'script_compose', 'generative_broll'];
+const MODES = ['footage_edit', 'photo_polish', 'script_compose', 'generative_broll', 'graphic_design'];
 
 export function createCreativeEngine({
   pool,
@@ -84,8 +85,9 @@ export function createCreativeEngine({
       ok: ffmpegOk && storageWritable,
       ffmpeg: ffmpegOk,
       storageWritable,
-      replicateConfigured: Boolean(process.env.REPLICATE_API_TOKEN),
+      replicateConfigured: Boolean(getReplicateApiToken()),
       modes: MODES,
+      graphicDesignRoute: '/api/v1/creative/graphic-design/render',
       workerStarted,
     };
   }

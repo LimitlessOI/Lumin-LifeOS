@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T18:22:47.776Z",
+  "generated_at": "2026-07-14T18:28:11.810Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11532,
   "files": [
@@ -36960,9 +36960,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log — chronological session handoff and key decisions.",
-      "bytes": 10862,
-      "mtime": "2026-07-14T18:22:45.739Z",
-      "indexed_at": "2026-07-14T18:22:47.776Z"
+      "bytes": 11329,
+      "mtime": "2026-07-14T18:28:06.724Z",
+      "indexed_at": "2026-07-14T18:28:11.810Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39227,9 +39227,9 @@
     {
       "path": "docs/products/creative-engine/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Creative Engine",
-      "bytes": 7850,
-      "mtime": "2026-07-14T09:13:56.528Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z"
+      "bytes": 8239,
+      "mtime": "2026-07-14T18:28:03.156Z",
+      "indexed_at": "2026-07-14T18:28:11.810Z"
     },
     {
       "path": "docs/products/CREATIVEENGINE.md",
@@ -65506,10 +65506,10 @@
     },
     {
       "path": "routes/creative-engine-ui-routes.js",
-      "synopsis": "Creative Engine SSR UI — upload + footage edit / photo polish controls",
-      "bytes": 7466,
-      "mtime": "2026-07-12T13:24:22.121Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z",
+      "synopsis": "Creative Engine SSR UI — Studio with graphic_design (Ideogram/Flux) + 2026 calm design",
+      "bytes": 13214,
+      "mtime": "2026-07-14T18:27:41.726Z",
+      "indexed_at": "2026-07-14T18:28:11.810Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
@@ -82588,9 +82588,9 @@
     {
       "path": "services/creative-engine/index.js",
       "synopsis": "Creative Engine — estimate/render/jobs for footage, photo, script, b-roll modes",
-      "bytes": 8139,
-      "mtime": "2026-07-12T13:24:22.185Z",
-      "indexed_at": "2026-07-14T18:03:54.665Z",
+      "bytes": 8282,
+      "mtime": "2026-07-14T18:27:53.136Z",
+      "indexed_at": "2026-07-14T18:28:11.810Z",
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]

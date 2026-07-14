@@ -1,5 +1,9 @@
 <!-- SYNOPSIS: Continuity Log — chronological session handoff and key decisions. -->
 
+## 2026-07-14 — Studio image gen gate: connected in UI, blocked by Replicate 402
+
+Adam asked to polish Site Builder / SMOS / Marketing / TC through Studio with 2026 design — only if new image gen connected. Tip: `replicateConfigured:true` + estimate OK, but render returns **402 Insufficient credit**. Wired `/creative/studio` graphic_design mode (calm Fraunces/Manrope UI). HALT mass product image polish until Replicate credit; BirthBill still not prime-time.
+
 ## 2026-07-14 — Sherry presentation polish
 
 Adam presenting BirthBill to Sherry. Shipped calm `/birthbill/for-you` walkthrough + quiet workboard `?present=1` (hides technical keys when access already saved). Copy: she does nothing; honest that Sent Bills auto-file is still finishing. Not prime-time for money file — presentation-ready for reassurance.
