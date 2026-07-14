@@ -708,17 +708,17 @@
     },
     {
       "id": "4",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "services/lifeos-ai-photo-food-logger.js",
       "task": "implement ai photo food logger",
       "spec": "Build service for AI-driven photo food logging integrated with nutrition data.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "expected_exports": [
         "logFoodWithPhoto"
       ],
-      "last_attempt_at": "2026-07-14T21:10:36.612Z",
+      "last_attempt_at": "2026-07-14T21:17:54.881Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "blocker_class": "BLOCKED_TOOLING"
     },
