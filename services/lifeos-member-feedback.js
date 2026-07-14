@@ -4,6 +4,6 @@
 export function processFeedback(feedback) {
   return {
     queuedForFounderReview: true,
-    feedback
+    feedback,
   };
 }
