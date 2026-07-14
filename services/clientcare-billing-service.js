@@ -1799,10 +1799,10 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         short_paid_amount: Number(shortPaid.toFixed(2)),
         chase_lane: unpaid ? 'unpaid' : (shortPaid >= 10 ? 'underpaid' : 'open'),
         next_action: unpaid
-          ? 'Ask insurer for claim status + payment. If never billed, create/submit claim then chase.'
+          ? 'SYSTEM: create/submit claim if never billed, then ask insurer for status + payment until paid or written denial. Midwife does not need to act.'
           : (shortPaid >= 10
-            ? 'Underpaid: send ERA/EOB + contract proof; demand remaining allowed amount.'
-            : 'Follow up until written resolution.'),
+            ? 'SYSTEM: underpaid — send ERA/EOB + contract proof and demand remaining allowed amount. Midwife does not need to act.'
+            : 'SYSTEM: follow up until written resolution. Midwife does not need to act.'),
         work_performed_by: midwife,
         evidence_for_payer: row.metadata?.evidence_message_for_payer
           || `${midwife} performed the midwifery work. Prior billing that claimed this was handled failed — compensate the provider.`,

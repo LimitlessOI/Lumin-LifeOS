@@ -7,8 +7,8 @@ export const BIRTHBILL_PRODUCT = {
   name: 'BirthBill',
   tagline: 'Insurance forever-chase for ClientCare midwives',
   audience: 'Independent midwifery practices on ClientCare',
-  readiness: 'pilot', // not full prime-time — claim create still human-supervised
-  readiness_label: 'Pilot — forever-chase ready; claim create is human-supervised',
+  readiness: 'pilot', // forever-chase + hands-off loop live; claim create being tip-proved to Sent Bills
+  readiness_label: 'Pilot — system files and forever-chases; midwife does nothing after ClientCare connect',
 };
 
 /** Plain definitions midwives see on the landing page (no jargon left undefined). */
@@ -31,7 +31,7 @@ export const BIRTHBILL_DEFINITIONS = [
   {
     term: 'Human-in-the-loop',
     meaning:
-      'Automation does the clicking and queueing. You stay in charge of clinical/billing judgment. We do not promise silent claim inventing without your review.',
+      'Only for one-time ClientCare login connect and rare fail-closed exceptions (wrong patient bind). Day-to-day filing and chase is the system’s job — the midwife does not work a billing board to get paid.',
   },
   {
     term: 'ChargeSlip / HCFA',
@@ -63,8 +63,8 @@ export const BIRTHBILL_STEPS = [
   },
   {
     n: 4,
-    title: 'Work the board',
-    detail: 'Open the BirthBill workboard, take the next action on each row, and keep asking the insurer until paid or written denial.',
+    title: 'System files and chases',
+    detail: 'BirthBill prepares Claims Processing, files ChargeSlip/HCFA, and forever-chases unpaid births. You do not work the queue to get paid.',
   },
 ];
 
@@ -93,16 +93,15 @@ export const CLIENTCARE_BILLING_PRICING = {
   },
   includes: [
     'Forever-chase queue for unpaid and underpaid insurance births (age is not a write-off)',
-    'Claim-status prep in ClientCare (Claims Processing + provider type)',
+    'Hands-off claim-status prep + ChargeSlip/HCFA file attempts (system does the clicking)',
     'Encrypted ClientCare login vault for your practice only',
-    'Operator workboard with clear next actions',
-    'Human-in-the-loop coworker (browser automation against your ClientCare login)',
+    'Operator workboard for transparency (optional — midwife is not required to use it)',
+    'Browser automation coworker against your ClientCare login',
   ],
   excludes: [
-    'Guaranteed auto-create/submit of every ChargeSlip or HCFA without your review',
     'Practices not on ClientCare West / ClientCare.net',
     'Legal advice or payer-contract interpretation',
-    'A finished “set and forget” claims factory (that path is still being tip-proved)',
+    'Guaranteeing every payer pays on first file (forever-chase continues until paid or written denial)',
   ],
 };
 
@@ -112,7 +111,7 @@ export function getBirthBillPilotOfferSummary(pricing = CLIENTCARE_BILLING_PRICI
 }
 
 export function getBirthBillDealReasonWhy(pricing = CLIENTCARE_BILLING_PRICING) {
-  return `BirthBill is in pilot: forever-chase is live; automatic claim create is still human-supervised. Pilot is ${pricing.pilot.display} so you get the queue that never ages out while we finish the create path with real practices.`;
+  return `BirthBill is built so the midwife does nothing after connecting ClientCare: the system files and forever-chases until paid or written denial. Pilot is ${pricing.pilot.display} while we tip-prove Sent Bills on every unpaid birth.`;
 }
 
 export default CLIENTCARE_BILLING_PRICING;

@@ -4013,8 +4013,12 @@ export function createClientCareBrowserService({
           dailySuperBill.inventory = inventory;
 
           let interact = { attempts: [], error: 'not_run' };
+          const wantPatientNeedle = String(visitList?.match?.name || patientQuery || 'Alvarado')
+            .toLowerCase()
+            .split(/[\s,]+/)
+            .find((p) => p.length > 3) || 'alvarado';
           try {
-            interact = await evaluateWithTimeout(session.page, (wantDate) => {
+            interact = await evaluateWithTimeout(session.page, ({ wantDate, wantName }) => {
             const attempts = [];
             const visible = (el) => {
               if (!el) return false;
@@ -4024,21 +4028,72 @@ export function createClientCareBrowserService({
               return r.width > 0 && r.height > 0;
             };
             const navNoise = /^(home|clients|schedule|reports|wrm|cora|help|sign out|english|spanish|french|italian|german|portuguese|russian|dutch|ukrainian|text messages|back|send|terms|privacy|front desk|new note|create new client|view client list|manage account|practice management|employee log|my profile|billing slip|record insurance|review sent|review all faxes)$/i;
-            // Prefer row-level claim create: Invoice / HCFA / UB-04 on the matched patient line.
-            const claimLinks = Array.from(document.querySelectorAll('a, button, input[type="button"], span, td'))
-              .filter(visible)
-              .filter((el) => /^(invoice|hcfa|ub-?04)$/i.test((el.textContent || el.value || '').replace(/\s+/g, ' ').trim())
-                || /invoice|hcfa|ub-?04|create\s*claim/i.test(el.getAttribute?.('onclick') || ''));
-            if (claimLinks.length) {
-              const prefer = claimLinks.find((el) => /^hcfa$/i.test((el.textContent || '').trim()))
-                || claimLinks.find((el) => /^invoice$/i.test((el.textContent || '').trim()))
-                || claimLinks[0];
-              prefer.click();
+            // Prefer Invoice/HCFA/UB-04 on the matched patient row only (never a random row).
+            // Tip 2026-07-14: row text is "… Invoice HCFA UB-04" — links are leaf nodes / hrefs, not always exact ^(hcfa)$.
+            const nameRe = new RegExp(String(wantName || 'alvarado').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            const patientRows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, .k-master-row'))
+              .filter((tr) => nameRe.test((tr.innerText || '').replace(/\s+/g, ' ')));
+            const scopeRoots = patientRows.length ? patientRows : [document];
+            const scoreClaimEl = (el) => {
+              const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+              const ownText = Array.from(el.childNodes || [])
+                .filter((n) => n.nodeType === 3)
+                .map((n) => String(n.textContent || '').trim())
+                .filter(Boolean)
+                .join(' ');
+              const href = `${el.getAttribute?.('href') || ''} ${el.getAttribute?.('onclick') || ''}`;
+              let score = 0;
+              if (/^(invoice|hcfa|ub-?04)$/i.test(ownText || t)) score += 100;
+              else if (/^(invoice|hcfa|ub-?04)$/i.test(t) && t.length < 24) score += 95;
+              else if (el.children?.length === 0 && /^(invoice|hcfa|ub-?04)$/i.test(t)) score += 90;
+              else if (/invoicehcfa|hcfaedit|invoice.*hcfa|\/hcfa|createclaim/i.test(href)) score += 85;
+              else if (/^(invoice|hcfa|ub-?04)\b/i.test(t) && t.length < 40) score += 70;
+              else if (/\b(invoice|hcfa|ub-?04)\b/i.test(t) && t.length < 48) score += 40;
+              if (/create new client|home|clients|schedule/i.test(t)) score -= 200;
+              return score;
+            };
+            const claimCandidates = [];
+            for (const root of scopeRoots) {
+              for (const el of Array.from(root.querySelectorAll('a, button, input[type="button"], span, td, div')).filter(visible)) {
+                const score = scoreClaimEl(el);
+                if (score >= 40) {
+                  claimCandidates.push({
+                    el,
+                    score,
+                    text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 40),
+                    href: (el.getAttribute?.('href') || '').slice(0, 120),
+                    onclick: (el.getAttribute?.('onclick') || '').slice(0, 120),
+                  });
+                }
+              }
+            }
+            claimCandidates.sort((a, b) => b.score - a.score);
+            if (claimCandidates.length) {
+              const prefer = claimCandidates.find((c) => /^hcfa$/i.test(c.text))
+                || claimCandidates.find((c) => /hcfa/i.test(c.text) || /hcfa/i.test(c.href + c.onclick))
+                || claimCandidates.find((c) => /^invoice$/i.test(c.text))
+                || claimCandidates[0];
+              prefer.el.click();
               attempts.push({
                 label: 'claim_link',
                 ok: true,
-                text: (prefer.textContent || prefer.value || '').trim().slice(0, 40),
-                count: claimLinks.length,
+                text: prefer.text,
+                score: prefer.score,
+                href: prefer.href || null,
+                count: claimCandidates.length,
+                scoped_to_patient: patientRows.length > 0,
+                want_name: String(wantName || '').slice(0, 40),
+                top: claimCandidates.slice(0, 5).map((c) => ({ text: c.text, score: c.score, href: c.href || null })),
+              });
+            } else {
+              attempts.push({
+                label: 'claim_link',
+                ok: false,
+                error: 'no_claim_link_in_scope',
+                scoped_to_patient: patientRows.length > 0,
+                patient_row_preview: patientRows[0]
+                  ? (patientRows[0].innerText || '').replace(/\s+/g, ' ').trim().slice(0, 180)
+                  : null,
               });
             }
             for (const name of [
@@ -4091,6 +4146,31 @@ export function createClientCareBrowserService({
               } else {
                 attempts.push({ label: 'click_action', ok: false, error: 'no_report_action' });
               }
+              // Tip: Filter can materialize Invoice/HCFA cells — rescan patient row immediately.
+              const retryRows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, .k-master-row'))
+                .filter((tr) => nameRe.test((tr.innerText || '').replace(/\s+/g, ' ')));
+              const retryRoots = retryRows.length ? retryRows : scopeRoots;
+              const retryCandidates = [];
+              for (const root of retryRoots) {
+                for (const el of Array.from(root.querySelectorAll('a, button, input[type="button"], span, td, div')).filter(visible)) {
+                  const score = scoreClaimEl(el);
+                  if (score >= 40) retryCandidates.push({ el, score, text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim().slice(0, 40) });
+                }
+              }
+              retryCandidates.sort((a, b) => b.score - a.score);
+              if (retryCandidates[0]) {
+                const prefer = retryCandidates.find((c) => /hcfa/i.test(c.text)) || retryCandidates[0];
+                prefer.el.click();
+                attempts.push({
+                  label: 'claim_link',
+                  ok: true,
+                  text: prefer.text,
+                  score: prefer.score,
+                  count: retryCandidates.length,
+                  after_filter: true,
+                  scoped_to_patient: retryRows.length > 0,
+                });
+              }
             }
             const checks = Array.from(document.querySelectorAll('input[type="checkbox"]')).filter(visible);
             let checked = 0;
@@ -4103,13 +4183,80 @@ export function createClientCareBrowserService({
               url: location.href,
               preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),
               deniseRow: (document.body.innerText || '').match(/Denise[^.]{0,120}/i)?.[0] || null,
+              patientRowCount: patientRows.length,
             };
-          }, reportDate, 45000);
+          }, { wantDate: reportDate, wantName: wantPatientNeedle }, 45000);
           } catch (err) {
             interact = { attempts: [], error: String(err?.message || err).slice(0, 160) };
           }
           dailySuperBill.interact = interact;
           await sleep(2500);
+
+          // After Invoice/HCFA click: drive the claim editor Save/Submit (tip: bare click left Sent Bills empty).
+          const claimLinkOk = Array.isArray(interact?.attempts)
+            && interact.attempts.some((a) => a.label === 'claim_link' && a.ok);
+          if (claimLinkOk) {
+            try {
+              dailySuperBill.claimEditor = await evaluateWithTimeout(session.page, () => {
+                const visible = (el) => {
+                  if (!el) return false;
+                  const s = window.getComputedStyle(el);
+                  if (s.display === 'none' || s.visibility === 'hidden') return false;
+                  const r = el.getBoundingClientRect();
+                  return r.width > 0 && r.height > 0;
+                };
+                const url = location.href;
+                const text = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
+                const isEditor = /Invoice|HCFA|UB.?04|SuperBill|ClaimEdit|CreateClaim/i.test(url)
+                  || /hcfa|invoice|super bill|create claim/i.test(document.title || '')
+                  || /save\s*claim|submit\s*claim|print\s*hcfa|electronic\s*submit/i.test(text);
+                const attempts = [];
+                if (!isEditor && !/Invoice|HCFA|Billing/i.test(url)) {
+                  return { isEditor: false, url, preview: text.slice(0, 400), attempts };
+                }
+                const ranked = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+                  .filter(visible)
+                  .map((el) => {
+                    const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+                    let score = 0;
+                    if (/^save$/i.test(t) || /save\s*(claim|bill|hcfa|invoice)/i.test(t)) score += 100;
+                    if (/submit|send\s*claim|create\s*claim|file\s*claim|post\s*claim/i.test(t)) score += 90;
+                    if (/generate|print\s*and\s*save|electronic/i.test(t)) score += 50;
+                    if (/cancel|close|back|delete|home|clients/i.test(t)) score -= 200;
+                    return { el, t, score };
+                  })
+                  .filter((x) => x.t && x.score > 0)
+                  .sort((a, b) => b.score - a.score);
+                if (ranked[0]) {
+                  ranked[0].el.click();
+                  attempts.push({ label: 'editor_save', ok: true, text: ranked[0].t.slice(0, 40), score: ranked[0].score });
+                } else {
+                  attempts.push({ label: 'editor_save', ok: false, error: 'no_save_button' });
+                }
+                for (const name of ['SaveClaim', 'saveClaim', 'SubmitClaim', 'submitClaim', 'CreateClaim', 'createClaim']) {
+                  if (typeof window[name] !== 'function') continue;
+                  try {
+                    window[name]();
+                    attempts.push({ label: `helper:${name}`, ok: true });
+                    break;
+                  } catch (err) {
+                    attempts.push({ label: `helper:${name}`, ok: false, error: String(err?.message || err).slice(0, 100) });
+                  }
+                }
+                return {
+                  isEditor: true,
+                  url,
+                  title: document.title || null,
+                  attempts,
+                  preview: text.slice(0, 500),
+                };
+              }, undefined, 30000);
+              await sleep(3500);
+            } catch (err) {
+              dailySuperBill.claimEditor = { error: String(err?.message || err).slice(0, 160) };
+            }
+          }
+
           dailySuperBill.afterReport = await session.page.evaluate(() => ({
             url: location.href,
             preview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 700),

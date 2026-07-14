@@ -2,31 +2,34 @@
 
 # ClientCare Billing Recovery — Agent Cold-Start Entry
 
-**You are working on ClientCare Billing Recovery (billing rescue for Sherry's practice).**
+**You are working on ClientCare Billing Recovery / BirthBill (billing rescue so the midwife gets paid).**
 
 ## Read first
 
 1. `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` — mission, ownership, readiness state
 2. `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` — every file this product owns
-3. `docs/products/clientcare-billing-recovery/PRODUCT_HOME.md` — law, vendor model, operating constraints
-4. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
+3. `docs/products/AUTHORITY_BOUNDARIES.md` — what you can change vs. what is shared
 
-## What this product does
+## Founder mandate (2026-07-14) — NON-NEGOTIABLE
 
-Billing recovery and revenue-cycle OS for the ClientCare EHR/billing platform (browser-automation based — no vendor API). Two lanes:
-1. **Insurance Recovery OS** — eligibility, claims, denials, underpayments, ERA/remits, appeals, collections forecast
-2. **Patient AR OS** — payment-plan monitoring, past-due work queue, controlled outreach
+**Sherry (the midwife) does nothing to get paid.** The system files claims, prepares claim status, and forever-chases insurers until paid enough or written no-liability denial.
+
+- Midwife action after one-time ClientCare connect: **none**
+- Workboard next actions are **system work**, not homework for her
+- Auto-file path: `POST /api/v1/clientcare-billing/hands-off/run` + scheduler (`CLIENTCARE_HANDS_OFF`, default on)
+- Fail-closed patient bind still applies (never file the wrong chart)
 
 ## Critical constraints
 
-- **Never store ClientCare credentials in code, docs, or git.** Use Railway secrets only.
-- Browser automation may NOT auto-submit billing claims. Submissions require human approval gate.
-- Any payer-specific timely-filing, appeal, or rebill path must be confirmed evidence-backed before being coded as automatic.
+- **Never store ClientCare credentials in code, docs, or git.** Use Railway secrets / encrypted tenant vault only.
 - The vendor (ClientCare) provides no public API. Puppeteer is the execution path.
+- Any payer-specific timely-filing, appeal, or rebill path must be evidence-backed before coded as automatic.
+- Tip-prove claim create (Sent Bills nameHit or chart 594xx) before claiming “filed.”
 
 ## Owned code boundaries
 
 You may modify:
+
 - `routes/clientcare-billing-routes.js`
 - `services/clientcare-billing-service.js`
 - `services/clientcare-browser-service.js`
@@ -34,20 +37,6 @@ You may modify:
 - `services/clientcare-sellable-service.js`
 - `services/clientcare-sync-service.js`
 
-## Current state (as of 2026-06-27)
+## Next priority
 
-- Core services and routes exist. Browser automation path is defined.
-- No FOUNDER_PACKET.md, no BLUEPRINT.json, no mission ID in BP_PRIORITY.json.
-- No formal acceptance criteria defined.
-
-## Next priority for a cold agent
-
-Write `builderos-reboot/MISSIONS/PRODUCT-CLIENTCARE-V1-0001/FOUNDER_PACKET.md`. Key question to answer in the packet: what does "billing rescue is working" look like in Sherry's practice — a specific number of claims recovered, or a specific workflow she can run?
-
-Then convert to BLUEPRINT.json and add to BP_PRIORITY.json.
-
-## Amendment coupling
-
-Every `.js` file you touch in `routes/clientcare*.js` or `services/clientcare*.js` must have `@ssot AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` and the amendment must be updated in the same commit.
-
-Pre-commit hook will block if you violate this.
+Tip-prove Denise (or next insurer birth) SuperBillReport **HCFA/Invoice → editor Save → Sent Bills nameHit**, then let hands-off loop clear the forever-chase queue without midwife clicks.

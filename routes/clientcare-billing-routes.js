@@ -324,6 +324,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     birth_activity: 180000,
     backlog_summary: 180000,
     forever_chase_sync: 600000,
+    hands_off_file: 600000,
   };
 
   function parseClientcareJobTime(raw) {
@@ -1930,6 +1931,145 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.status(500).json({ ok: false, error: error.message });
     }
   });
+
+  /**
+   * Founder mandate 2026-07-14: Sherry/midwife does zero billing ops.
+   * System prepares claim status + files ChargeSlip/HCFA for recent resolved births.
+   */
+  function pregnancyIdFromBillingHref(href) {
+    const m = String(href || '').match(/Pregnancy\/Billing\/([0-9a-f-]{36})/i);
+    return m?.[1] || null;
+  }
+
+  async function runHandsOffFileCycle({
+    limit = 1,
+    tenantId = null,
+    preferQuery = null,
+    visitDate = null,
+  } = {}) {
+    const birthLimit = Math.max(5, Math.min(Number(limit) * 8, 40));
+    const scanned = await browserService.scanBirthActivity({ maxRows: birthLimit, tenantId });
+    let births = (scanned?.births || []).filter((b) => b.billingHref);
+    if (preferQuery) {
+      const needle = String(preferQuery).toLowerCase();
+      births = [
+        ...births.filter((b) => String(b.motherNameGuess || b.resolve?.matchedName || '').toLowerCase().includes(needle)),
+        ...births.filter((b) => !String(b.motherNameGuess || b.resolve?.matchedName || '').toLowerCase().includes(needle)),
+      ];
+    }
+    const targets = births.slice(0, Math.max(1, Math.min(Number(limit) || 1, 3)));
+    const results = [];
+    for (const birth of targets) {
+      const pregnancyId = pregnancyIdFromBillingHref(birth.billingHref);
+      const patientQuery = birth.resolve?.matchedName || birth.motherNameGuess || preferQuery || '';
+      const bornGuess = Array.isArray(birth.cells)
+        ? (birth.cells.find((c) => /\d{1,2}\/\d{1,2}\/\d{4}/.test(String(c || ''))) || null)
+        : null;
+      const step = {
+        patient: patientQuery,
+        pregnancy_id: pregnancyId,
+        billing_href: birth.billingHref,
+        prepare: null,
+        file: null,
+      };
+      try {
+        step.prepare = await browserService.prepareClaimStatus({
+          billingHref: birth.billingHref,
+          dryRun: false,
+        });
+      } catch (err) {
+        step.prepare = { ok: false, error: String(err?.message || err).slice(0, 160) };
+      }
+      if (pregnancyId) {
+        try {
+          step.file = await browserService.mapChargeSlip({
+            pregnancyId,
+            patientQuery,
+            visitDate: visitDate || bornGuess || null,
+            dryRun: false,
+          });
+        } catch (err) {
+          step.file = { ok: false, error: String(err?.message || err).slice(0, 160) };
+        }
+      } else {
+        step.file = { ok: false, error: 'pregnancy_id_missing_from_billing_href' };
+      }
+      const sentHit = Boolean(step.file?.dailySuperBill?.sentBillsProbe?.nameHit
+        || step.file?.persistCheck?.sentBills?.nameHit
+        || step.file?.persistCheck?.chartCharges?.has594);
+      step.proved_filed = sentHit;
+      results.push(step);
+      if (sentHit) break;
+    }
+    return {
+      ok: true,
+      doctrine: 'midwife_does_nothing_system_files_and_chases',
+      scanned: scanned?.count || 0,
+      resolved: scanned?.resolved || 0,
+      attempted: results.length,
+      proved_any: results.some((r) => r.proved_filed),
+      results,
+    };
+  }
+
+  router.post('/hands-off/run', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const tenantId = getTenantId(req) || req.body?.tenant_id || null;
+      const job = enqueueBrowserJob(
+        'hands_off_file',
+        () => runHandsOffFileCycle({
+          limit: req.body?.limit ?? 1,
+          tenantId,
+          preferQuery: req.body?.prefer_query || req.body?.patient_query || 'Alvarado',
+          visitDate: req.body?.visit_date || req.body?.visitDate || null,
+        }),
+        { ...(req.body || {}), tenant_id: tenantId },
+      );
+      res.status(202).json({
+        ok: true,
+        started: true,
+        job_id: job.id,
+        poll_url: `/api/v1/clientcare-billing/browser/jobs/${job.id}`,
+        message: 'Hands-off file cycle queued — midwife action not required',
+        doctrine: 'midwife_does_nothing_system_files_and_chases',
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] hands-off run failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/hands-off/status', async (_req, res) => {
+    res.json({
+      ok: true,
+      doctrine: 'midwife_does_nothing_system_files_and_chases',
+      enabled: String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0',
+      interval_ms: Number(process.env.CLIENTCARE_HANDS_OFF_INTERVAL_MS || 30 * 60 * 1000),
+      note: 'System prepares Claims Processing + CPM and files ChargeSlip/HCFA. Midwife only connects ClientCare once.',
+    });
+  });
+
+  // Auto-run on founder tip so Sherry never has to open the workboard.
+  if (String(process.env.CLIENTCARE_HANDS_OFF || '1') !== '0' && !globalThis.__clientcareHandsOffStarted) {
+    globalThis.__clientcareHandsOffStarted = true;
+    const intervalMs = Math.max(10 * 60 * 1000, Number(process.env.CLIENTCARE_HANDS_OFF_INTERVAL_MS || 30 * 60 * 1000));
+    const kick = () => {
+      try {
+        enqueueBrowserJob(
+          'hands_off_file',
+          () => runHandsOffFileCycle({ limit: 1, preferQuery: process.env.CLIENTCARE_HANDS_OFF_PREFER || null }),
+          { source: 'scheduler' },
+        );
+        logger.info?.({ intervalMs }, '[CLIENTCARE-BILLING] hands-off file cycle queued');
+      } catch (err) {
+        logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] hands-off scheduler enqueue failed');
+      }
+    };
+    setTimeout(kick, 90 * 1000);
+    setInterval(kick, intervalMs);
+    logger.info?.({ intervalMs }, '[CLIENTCARE-BILLING] hands-off scheduler armed (midwife does nothing)');
+  }
 
   return router;
 }

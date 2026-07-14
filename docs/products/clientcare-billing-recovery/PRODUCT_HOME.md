@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — BirthBill UX clarity: definitions + steps on landing/offer, welcome wizard, workboard BirthBill mode (`?product=birthbill`). Not prime-time — claim create still human-supervised. |
+| **Last Updated** | 2026-07-14 — Founder mandate: midwife does nothing; hands-off file loop + HCFA row click hardened. Tip still proving Sent Bills nameHit. |
 
 ---
 
@@ -478,6 +478,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Hands-off mandate** — Adam: Sherry does nothing to get paid. `POST /hands-off/run` + scheduler; SuperBillReport HCFA/Invoice leaf+href click + claim-editor Save; forever-chase next_action = SYSTEM work; AGENTS/pricing flipped. Tip Denise still Sent Bills empty until HCFA click proves. |
 | 2026-07-14 | **BirthBill UX clarity** — Landing/welcome show definitions + 4 steps + honest pilot readiness; public offer returns `definitions`/`steps`/`readiness_label`; workboard `?product=birthbill` uses midwife copy + glossary (not Sherry-only). Prime-time = no until ChargeSlip/HCFA tip-proved. |
 | 2026-07-14 | **BirthBill multi-tenant** — Encrypted `clientcare_tenant_credentials`, `claims.tenant_id`, public connect-ClientCare after pay, forever-chase/browser login scoped by tenant. |
 | 2026-07-14 | **BirthBill sellable** — Public midwife product: `/birthbill` landing, Stripe pilot checkout ($297 + 5% recovered), `public/signup`→tenant packaging, honest V1 (forever-chase + claim-status; no ChargeSlip promise). | Adam: sell to other midwives now. | 2h | 2h | none | ✅ | pending tip |
