@@ -582,7 +582,8 @@ export function registerMarketingSessionUiRoutes(app, deps) {
                     ? ('<div class="talk-block" data-tip="Sales/click principle for this card."><strong>Why they click</strong> ' + escapeHtml(s.click_psychology) + '</div>')
                     : '';
                   const beats = (s.retention_beats || []).map(function(b) {
-                    const lines = (b.lines || []).map(function(l) { return '<li>' + escapeHtml(l) + '</li>'; }).join('');
+                    const rawLines = Array.isArray(b.lines) ? b.lines : (typeof b.lines === 'string' ? [b.lines] : []);
+                    const lines = rawLines.map(function(l) { return '<li>' + escapeHtml(l) + '</li>'; }).join('');
                     return '<div class="talk-block" data-tip="' + escapeHtml(b.job || 'Earn the next block of attention.') + '"><strong>' + escapeHtml(b.range || '') + '</strong> — ' + escapeHtml(b.job || '') + '<ul>' + lines + '</ul></div>';
                   }).join('');
                   card.innerHTML =
