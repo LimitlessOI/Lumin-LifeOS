@@ -640,7 +640,7 @@
     },
     {
       "id": "12",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/lifeos-perfect-day-routes.js",
       "task": "Implement LifeOS Perfect Day REST routes with auth and health endpoint",
       "spec": "This is an ES module route file. Export function registerLifeosPerfectDayRoutes(app, deps). Inside the function, create an express.Router and mount it with `app.use('/api/v1/lifeos/perfect-day', router)`. Use `deps.requireKey` or `deps.pool` where needed. Endpoints:\n- GET /health returns { ok: true } (no DB, for module-health).\n- POST /plan requires auth, calls planPerfectDay(req.body.user_id, req.body).\n- GET /plan requires auth, calls getPerfectDay(req.body.user_id).\n- POST /check-in requires auth, calls checkIn(req.body.user_id, req.body).\n- GET /reminders requires auth, calls getDailyReminders(req.body.user_id).\n- POST /rate requires auth, calls rateDay(req.body.user_id, req.body).\nUse `import { planPerfectDay, getPerfectDay, checkIn, getDailyReminders, rateDay } from '../services/lifeos-perfect-day.js';`. Handle errors with 500 JSON { error: ... }.",
@@ -659,8 +659,8 @@
         "GET /health",
         "registerLifeosPerfectDayRoutes"
       ],
-      "attempts": 2,
-      "last_attempt_at": "2026-07-14T11:44:12.032Z",
+      "attempts": 3,
+      "last_attempt_at": "2026-07-14T11:48:16.467Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)"
     }
   ],
