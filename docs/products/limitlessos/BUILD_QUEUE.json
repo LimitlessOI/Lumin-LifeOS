@@ -157,15 +157,15 @@
     },
     {
       "id": "6",
-      "status": "pending",
+      "status": "blocked",
       "target_file": "routes/marketingos-sku-routes.js",
       "task": "implement physical marketing SKUs",
       "spec": "Exports registerMarketingOSSkuRoutes(app, deps); manages SKU operations under MarketingOS commerce layer.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 2,
+      "attempts": 3,
       "commit_sha": null,
-      "last_attempt_at": "2026-07-14T20:43:41.634Z",
+      "last_attempt_at": "2026-07-14T20:46:42.273Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "expected_exports": [
         "registerMarketingOSSkuRoutes"
