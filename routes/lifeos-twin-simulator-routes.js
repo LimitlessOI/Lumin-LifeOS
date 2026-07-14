@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: HTTP route module — Lifeos Twin Simulator Routes.
+ * SYNOPSIS: Registers TwinSimulatorRoutes routes/handlers (routes/lifeos-twin-simulator-routes.js).
  */
 import express from 'express';
 import { simulateTwinReactions } from '../services/lifeos-twin-simulator.js';
@@ -13,4 +13,8 @@ router.post('/twin-simulator/:userId', async (req, res) => {
   res.json(response);
 });
 
-export const registerTwinSimulatorRoutes = (app) => app.use('/api', router);
+export function registerTwinSimulatorRoutes(app) {
+  app.use('/api', router);
+}
+
+export { router };
