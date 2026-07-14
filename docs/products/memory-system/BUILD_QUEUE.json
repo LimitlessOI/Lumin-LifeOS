@@ -91,13 +91,16 @@
     },
     {
       "id": "7",
-      "status": "pending",
+      "status": "done",
       "target_file": "db/migrations/202311_capsule_id_format.sql",
       "task": "run schema migration for UUID v4",
       "spec": "Ensure Capsule IDs are formatted with UUID v4 as default; necessary schema migrations must be applied.",
       "depends_on": [],
       "founder_gated": false,
-      "attempts": 0
+      "attempts": 1,
+      "commit_sha": "870e70a322aa3be2dfe1654c6471f5e5073235ec",
+      "last_attempt_at": "2026-07-14T00:06:15.384Z",
+      "completed_at": "2026-07-14T00:06:25.970Z"
     },
     {
       "id": "8",
