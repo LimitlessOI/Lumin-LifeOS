@@ -10,7 +10,7 @@
 
 ## 2026-07-14 — SkySlope new-tab + durable jobs + async email-search
 
-Closed three open TC gaps: (1) `navigateToSkySlope` adopts Okta tile new-tab/target + `session.setPage`; (2) `tc_browser_jobs` table so `GET /browser-jobs/:id` works across Railway instances; (3) `POST /intake/email-search` async **202** + poll (avoids tip 502). Next: tip-verify skyslope login, email-search job, listing dry_run tx=1.
+Closed three open TC gaps on tip `59931f8059`+: (1) SkySlope Okta new-tab PASS (`ok:true` via `okta_tile_new_tab`); (2) `tc_browser_jobs` multi-instance poll works; (3) email-search **202→completed**. Listing dry_run still blocked on GLVAR→TD SSO (lands Clareity/TD login — fail-closed). Next: prove Clareity SSO cookie path or set `transaction_desk_id` after one human TD open.
 
 ## 2026-07-14 — Browser-UI-as-API
 

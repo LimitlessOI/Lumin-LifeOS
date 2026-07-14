@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T09:57:15.254Z",
+  "generated_at": "2026-07-14T09:59:43.712Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11523,
   "files": [
@@ -36929,9 +36929,9 @@
     {
       "path": "docs/CONTINUITY_LOG_TC.md",
       "synopsis": "Continuity Log — TC Lane",
-      "bytes": 3017,
-      "mtime": "2026-07-14T09:45:53.901Z",
-      "indexed_at": "2026-07-14T09:46:25.650Z"
+      "bytes": 3066,
+      "mtime": "2026-07-14T09:59:41.205Z",
+      "indexed_at": "2026-07-14T09:59:43.712Z"
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
@@ -39939,9 +39939,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 112892,
-      "mtime": "2026-07-14T09:57:11.653Z",
-      "indexed_at": "2026-07-14T09:57:15.254Z"
+      "bytes": 113010,
+      "mtime": "2026-07-14T09:59:41.137Z",
+      "indexed_at": "2026-07-14T09:59:43.712Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
