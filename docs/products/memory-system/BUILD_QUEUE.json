@@ -32,7 +32,7 @@
       "last_attempt_at": "2026-07-13T14:27:43.220Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-13T23:43:32.867Z"
+      "shipped_at": "2026-07-13T23:45:16.525Z"
     },
     {
       "id": "3",
@@ -87,7 +87,7 @@
       "last_attempt_at": "2026-07-13T14:41:51.575Z",
       "last_error": "no_commit_sha (claimed pass without proof — treated as failure)",
       "shipped_via": "governed_ship_queue",
-      "shipped_at": "2026-07-14T00:07:35.338Z"
+      "shipped_at": "2026-07-14T00:10:22.256Z"
     },
     {
       "id": "7",
