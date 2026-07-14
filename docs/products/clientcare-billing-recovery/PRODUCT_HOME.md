@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Founder forever-chase: unpaid+underpaid births never age out; seed ledger from tip inventory. |
+| **Last Updated** | 2026-07-14 — Forever-chase seed unblocked: claim upsert no longer needs ON CONFLICT on partial unique index; tip inventory 15 births + 50 notes ready to import. |
 
 ---
 
@@ -68,7 +68,7 @@ All ClientCare conversations, brainstorms, and session dumps live at:
 ---
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-07-14 — Founder forever-chase: unpaid+underpaid never age out; seed ledger from 15 births + 50 notes accounts.
+**Last Updated:** 2026-07-14 — Forever-chase seed: tip 15 births + 50 notes inventory proved; claim upsert fixed (partial unique index broke ON CONFLICT); stale browser jobs auto-fail.
 
 ---
 
@@ -464,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **Forever-chase seed unblock** — tip import of 65 chase rows failed: `ON CONFLICT (external_claim_id)` vs partial unique index. Upsert now SELECT+UPDATE/INSERT; metadata.forever_chase forces bucket + ask_insurer_forever. Stale browser jobs auto-fail; sync sequential; POST /forever-chase/seed. Tip inventory: 15 births + 50 notes. | Ledger stayed empty after mandate. | 1h | 1h | none | ✅ | tip re-import after redeploy |
 | 2026-07-14 | **Forever-chase mandate** — Adam: every unpaid/underpaid insurance birth stays open forever; ask insurer when unknown; Sherry did the work. Tip ledger was **0 claims** while browser shows **15 births + 50 notes accounts**. Added seedForeverChaseFromInventory + GET/POST forever-chase. Age is not a write-off. | Empty ledger blocked money chase. | 1h | 1h | none | ✅ | pending tip sync |
 | 2026-07-14 | **ChargeSlip job timeout** — hung tip jobs never completed; enqueueBrowserJob 90s timeout; skip Born-chart nav when visit_date provided. |
 | 2026-07-14 | **ChargeSlip hang fix** — tip job hung inside `selectClick` during visit-list evaluate. Defer bind to post-match row click + 12s Node timeout; never call selectClick in scan loop. |

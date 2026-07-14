@@ -199,9 +199,35 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       logger.warn?.({ err: err.message }, '[CLIENTCARE-BILLING] job persist failed');
     }
   }
+  const BROWSER_JOB_TIMEOUT_MS = {
+    map_charge_slip: 90000,
+    charge_slip_from_billing: 90000,
+    prepare_claim_status: 180000,
+    birth_activity: 180000,
+    backlog_summary: 180000,
+    forever_chase_sync: 600000,
+  };
+
+  async function markStaleClientcareBrowserJob(job) {
+    if (!job || !['queued', 'running'].includes(job.status)) return job;
+    const timeoutMs = BROWSER_JOB_TIMEOUT_MS[job.kind] || 120000;
+    const startedAt = Date.parse(job.updated_at || job.created_at || '') || 0;
+    if (!startedAt || (Date.now() - startedAt) < (timeoutMs + 30000)) return job;
+    const stale = {
+      ...job,
+      status: 'failed',
+      error: job.error || `browser job stale after ${timeoutMs}ms (instance likely recycled mid-run)`,
+      updated_at: new Date().toISOString(),
+      completed_at: new Date().toISOString(),
+    };
+    browserJobs.set(job.id, stale);
+    void persistClientcareBrowserJob(stale);
+    return stale;
+  }
+
   async function loadClientcareBrowserJob(jobId) {
     const mem = browserJobs.get(jobId);
-    if (mem) return mem;
+    if (mem) return markStaleClientcareBrowserJob(mem);
     if (!pool?.query) return null;
     try {
       await ensureClientcareBrowserJobsSchema();
@@ -212,7 +238,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       );
       const row = rows[0];
       if (!row) return null;
-      return {
+      return markStaleClientcareBrowserJob({
         id: row.id,
         kind: row.kind,
         status: row.status,
@@ -223,7 +249,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         updated_at: row.updated_at,
         completed_at: row.completed_at,
         from_db: true,
-      };
+      });
     } catch {
       return null;
     }
@@ -242,14 +268,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     };
     browserJobs.set(id, job);
     void persistClientcareBrowserJob(job);
-    const timeoutMs = ({
-      map_charge_slip: 90000,
-      charge_slip_from_billing: 90000,
-      prepare_claim_status: 180000,
-      birth_activity: 180000,
-      backlog_summary: 120000,
-      forever_chase_sync: 300000,
-    })[kind] || 120000;
+    const timeoutMs = BROWSER_JOB_TIMEOUT_MS[kind] || 120000;
     setImmediate(() => {
       (async () => {
         job.status = 'running';
@@ -376,6 +395,29 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/forever-chase/seed', async (req, res) => {
+    try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
+      const seeded = await billingService.seedForeverChaseFromInventory({
+        births: req.body?.births || [],
+        accounts: req.body?.accounts || [],
+        evidence: {
+          operator_note: req.body?.operator_note || 'Direct forever-chase seed (Sherry did the work; prior billing neglect is not a write-off).',
+        },
+      });
+      const queue = await billingService.getForeverChaseQueue({ limit: 100 });
+      res.json({
+        ok: true,
+        seeded,
+        queue_summary: queue.summary,
+        sample: queue.items.slice(0, 8),
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] forever-chase seed failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/forever-chase/sync', async (req, res) => {
     try {
       await enforceOperatorAccess(req, ['operator', 'manager']);
@@ -385,12 +427,30 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         async () => {
           const birthLimit = Math.max(5, Math.min(Number(req.body?.birth_limit || 40), 80));
           const accountLimit = Math.max(10, Math.min(Number(req.body?.account_limit || 50), 100));
-          const [birthsResult, backlogResult] = await Promise.all([
-            browserService.scanBirthActivity({ maxRows: birthLimit }),
-            browserService.buildBacklogSummary({ accountLimit }),
-          ]);
-          const births = birthsResult?.births || [];
-          const accounts = backlogResult?.accounts || [];
+          const evidence = {
+            operator_note: req.body?.operator_note || 'Tip forever-chase sync from birth activity + billing notes backlog.',
+          };
+          // Sequential: dual Puppeteer Promise.all OOMs / recycles Railway mid-run and leaves jobs stuck.
+          let births = [];
+          let accounts = [];
+          let birthError = null;
+          let backlogError = null;
+          try {
+            const birthsResult = await browserService.scanBirthActivity({ maxRows: birthLimit });
+            births = birthsResult?.births || [];
+          } catch (err) {
+            birthError = err.message;
+          }
+          let seededBirths = null;
+          if (!dryRun && births.length) {
+            seededBirths = await billingService.seedForeverChaseFromInventory({ births, accounts: [], evidence });
+          }
+          try {
+            const backlogResult = await browserService.buildBacklogSummary({ accountLimit });
+            accounts = backlogResult?.accounts || [];
+          } catch (err) {
+            backlogError = err.message;
+          }
           if (dryRun) {
             return {
               ok: true,
@@ -398,19 +458,22 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
               births: births.length,
               accounts: accounts.length,
               resolved_births: births.filter((b) => b.billingHref).length,
+              birth_error: birthError,
+              backlog_error: backlogError,
               doctrine: 'forever_chase_until_paid_or_written_denial',
             };
           }
           const seeded = await billingService.seedForeverChaseFromInventory({
             births,
             accounts,
-            evidence: {
-              operator_note: req.body?.operator_note || 'Tip forever-chase sync from birth activity + billing notes backlog.',
-            },
+            evidence,
           });
           const queue = await billingService.getForeverChaseQueue({ limit: 100 });
           return {
             ok: true,
+            partial_seed_after_births: seededBirths,
+            birth_error: birthError,
+            backlog_error: backlogError,
             seeded,
             queue_summary: queue.summary,
             sample: queue.items.slice(0, 8).map((item) => ({
@@ -1352,6 +1415,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       ],
       money_path: [
         { method: 'POST', path: '/api/v1/clientcare-billing/forever-chase/sync', summary: 'Seed forever-chase ledger from births + billing notes' },
+        { method: 'POST', path: '/api/v1/clientcare-billing/forever-chase/seed', summary: 'Seed forever-chase from provided births/accounts inventory' },
         { method: 'GET', path: '/api/v1/clientcare-billing/forever-chase', summary: 'Open unpaid/underpaid chase queue (never ages out)' },
         { method: 'GET', path: '/api/v1/clientcare-billing/underpayments', summary: 'Short-paid claims vs allowed' },
         { method: 'GET', path: '/api/v1/clientcare-billing/browser/birth-activity?async=true', summary: 'Recent births → billing hrefs' },

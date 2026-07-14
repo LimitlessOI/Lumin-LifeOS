@@ -1,5 +1,8 @@
 
 
+
+## 2026-07-14 — Forever-chase seed unblock
+Tip inventory proved (15 births + 50 notes) but claims/import failed on partial unique index ON CONFLICT. Fixed upsert; stale browser jobs auto-fail; forever-chase sync sequential + /seed. ChargeSlip Save still does not persist (parallel).
 ## 2026-07-14 — Forever-chase founder mandate
 Adam: chase every unpaid/underpaid insurance birth forever; ask insurers; prove Sherry did the work. Tip had 15 births + 50 notes accounts but claims ledger was empty (0 underpayments). Shipped seedForeverChaseFromInventory + GET/POST forever-chase; age no longer write-off. ChargeSlip Save still does not persist (parallel blocker).
 ## 2026-07-14 — ClientCare ChargeSlip fail-closed

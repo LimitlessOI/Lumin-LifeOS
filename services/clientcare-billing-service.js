@@ -431,7 +431,7 @@ export function classifyClientCareClaim(claim = {}, now = new Date(), options = 
       recoveryProbability = Math.max(recoveryProbability, 0.35);
       priorityScore += 50;
     }
-    const hasAsk = actions.some((a) => a.action_type === 'ask_insurer_forever');
+    const hasAsk = actions.some((a) => a.actionType === 'ask_insurer_forever');
     if (!hasAsk) {
       actions.unshift(action(
         'ask_insurer_forever',
@@ -817,67 +817,80 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     };
     const payerRuleOverrides = await getPayerRuleOverridesMap();
     const classification = classifyClientCareClaim(claim, now(), { payerRuleOverrides });
+    if (claim.metadata?.forever_chase && classification.rescueBucket !== 'resolved') {
+      classification.rescueBucket = 'forever_chase';
+      classification.recoveryProbability = Math.max(classification.recoveryProbability || 0, 0.35);
+      const hasAsk = (classification.actions || []).some((a) => a.actionType === 'ask_insurer_forever');
+      if (!hasAsk) {
+        classification.actions = [
+          action(
+            'ask_insurer_forever',
+            'high',
+            'Ask insurer status + payment (age is not a stop)',
+            'Call/portal/write the payer. Demand what is owed, why unpaid/underpaid, and the document that unlocks payment. Log every contact. Do not quit because the claim is old.',
+            ['payer contact log', 'claim number', 'DOS', 'member ID']
+          ),
+          ...(classification.actions || []),
+        ];
+      }
+    }
+
+    const valuesWithExternal = [
+      claim.external_claim_id, claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
+      claim.date_of_service, claim.service_end_date, claim.original_submitted_at, claim.latest_submitted_at, claim.claim_status, claim.submission_status,
+      claim.denial_code, claim.denial_reason, claim.billed_amount, claim.allowed_amount, claim.paid_amount, claim.patient_balance, claim.insurance_balance,
+      JSON.stringify(claim.cpt_codes), JSON.stringify(claim.icd_codes), JSON.stringify(claim.modifiers), classification.timelyFilingDeadline, classification.timelyFilingSource,
+      classification.rescueBucket, classification.rescueConfidence, classification.recoveryProbability, classification.priorityScore, claim.source, claim.notes, JSON.stringify(claim.metadata),
+    ];
 
     let rows;
     if (claim.external_claim_id) {
-      ({ rows } = await pool.query(
-        `INSERT INTO clientcare_claims (
-           external_claim_id, patient_id, patient_name, payer_name, payer_type, provider_state, member_id, claim_number, account_number,
-           date_of_service, service_end_date, original_submitted_at, latest_submitted_at, claim_status, submission_status,
-           denial_code, denial_reason, billed_amount, allowed_amount, paid_amount, patient_balance, insurance_balance,
-           cpt_codes, icd_codes, modifiers, timely_filing_deadline, timely_filing_source, rescue_bucket, rescue_confidence,
-           recovery_probability, priority_score, source, notes, metadata
-         ) VALUES (
-           $1,$2,$3,$4,$5,$6,$7,$8,$9,
-           $10,$11,$12,$13,$14,$15,
-           $16,$17,$18,$19,$20,$21,$22,
-           $23,$24,$25,$26,$27,$28,$29,
-           $30,$31,$32,$33,$34
-         )
-         ON CONFLICT (external_claim_id) DO UPDATE SET
-           patient_id=EXCLUDED.patient_id,
-           patient_name=EXCLUDED.patient_name,
-           payer_name=EXCLUDED.payer_name,
-           payer_type=EXCLUDED.payer_type,
-           provider_state=EXCLUDED.provider_state,
-           member_id=EXCLUDED.member_id,
-           claim_number=EXCLUDED.claim_number,
-           account_number=EXCLUDED.account_number,
-           date_of_service=EXCLUDED.date_of_service,
-           service_end_date=EXCLUDED.service_end_date,
-           original_submitted_at=COALESCE(clientcare_claims.original_submitted_at, EXCLUDED.original_submitted_at),
-           latest_submitted_at=EXCLUDED.latest_submitted_at,
-           claim_status=EXCLUDED.claim_status,
-           submission_status=EXCLUDED.submission_status,
-           denial_code=EXCLUDED.denial_code,
-           denial_reason=EXCLUDED.denial_reason,
-           billed_amount=EXCLUDED.billed_amount,
-           allowed_amount=EXCLUDED.allowed_amount,
-           paid_amount=EXCLUDED.paid_amount,
-           patient_balance=EXCLUDED.patient_balance,
-           insurance_balance=EXCLUDED.insurance_balance,
-           cpt_codes=EXCLUDED.cpt_codes,
-           icd_codes=EXCLUDED.icd_codes,
-           modifiers=EXCLUDED.modifiers,
-           timely_filing_deadline=EXCLUDED.timely_filing_deadline,
-           timely_filing_source=EXCLUDED.timely_filing_source,
-           rescue_bucket=EXCLUDED.rescue_bucket,
-           rescue_confidence=EXCLUDED.rescue_confidence,
-           recovery_probability=EXCLUDED.recovery_probability,
-           priority_score=EXCLUDED.priority_score,
-           source=EXCLUDED.source,
-           notes=EXCLUDED.notes,
-           metadata=EXCLUDED.metadata,
-           updated_at=NOW()
-         RETURNING *`,
-        [
-          claim.external_claim_id, claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
-          claim.date_of_service, claim.service_end_date, claim.original_submitted_at, claim.latest_submitted_at, claim.claim_status, claim.submission_status,
-          claim.denial_code, claim.denial_reason, claim.billed_amount, claim.allowed_amount, claim.paid_amount, claim.patient_balance, claim.insurance_balance,
-          JSON.stringify(claim.cpt_codes), JSON.stringify(claim.icd_codes), JSON.stringify(claim.modifiers), classification.timelyFilingDeadline, classification.timelyFilingSource,
-          classification.rescueBucket, classification.rescueConfidence, classification.recoveryProbability, classification.priorityScore, claim.source, claim.notes, JSON.stringify(claim.metadata),
-        ]
-      ));
+      // Partial unique index (WHERE external_claim_id IS NOT NULL) cannot be targeted by bare ON CONFLICT (external_claim_id).
+      const existing = await pool.query(
+        `SELECT id FROM clientcare_claims WHERE external_claim_id = $1 LIMIT 1`,
+        [claim.external_claim_id]
+      );
+      if (existing.rows[0]?.id) {
+        ({ rows } = await pool.query(
+          `UPDATE clientcare_claims SET
+             patient_id=$2, patient_name=$3, payer_name=$4, payer_type=$5, provider_state=$6, member_id=$7, claim_number=$8, account_number=$9,
+             date_of_service=$10, service_end_date=$11,
+             original_submitted_at=COALESCE(original_submitted_at, $12), latest_submitted_at=$13,
+             claim_status=$14, submission_status=$15, denial_code=$16, denial_reason=$17,
+             billed_amount=$18, allowed_amount=$19, paid_amount=$20, patient_balance=$21, insurance_balance=$22,
+             cpt_codes=$23, icd_codes=$24, modifiers=$25,
+             timely_filing_deadline=$26, timely_filing_source=$27, rescue_bucket=$28, rescue_confidence=$29,
+             recovery_probability=$30, priority_score=$31, source=$32, notes=$33, metadata=$34, updated_at=NOW()
+           WHERE id=$1
+           RETURNING *`,
+          [
+            existing.rows[0].id,
+            claim.patient_id, claim.patient_name, claim.payer_name, claim.payer_type, claim.provider_state, claim.member_id, claim.claim_number, claim.account_number,
+            claim.date_of_service, claim.service_end_date, claim.original_submitted_at, claim.latest_submitted_at, claim.claim_status, claim.submission_status,
+            claim.denial_code, claim.denial_reason, claim.billed_amount, claim.allowed_amount, claim.paid_amount, claim.patient_balance, claim.insurance_balance,
+            JSON.stringify(claim.cpt_codes), JSON.stringify(claim.icd_codes), JSON.stringify(claim.modifiers), classification.timelyFilingDeadline, classification.timelyFilingSource,
+            classification.rescueBucket, classification.rescueConfidence, classification.recoveryProbability, classification.priorityScore, claim.source, claim.notes, JSON.stringify(claim.metadata),
+          ]
+        ));
+      } else {
+        ({ rows } = await pool.query(
+          `INSERT INTO clientcare_claims (
+             external_claim_id, patient_id, patient_name, payer_name, payer_type, provider_state, member_id, claim_number, account_number,
+             date_of_service, service_end_date, original_submitted_at, latest_submitted_at, claim_status, submission_status,
+             denial_code, denial_reason, billed_amount, allowed_amount, paid_amount, patient_balance, insurance_balance,
+             cpt_codes, icd_codes, modifiers, timely_filing_deadline, timely_filing_source, rescue_bucket, rescue_confidence,
+             recovery_probability, priority_score, source, notes, metadata
+           ) VALUES (
+             $1,$2,$3,$4,$5,$6,$7,$8,$9,
+             $10,$11,$12,$13,$14,$15,
+             $16,$17,$18,$19,$20,$21,$22,
+             $23,$24,$25,$26,$27,$28,$29,
+             $30,$31,$32,$33,$34
+           )
+           RETURNING *`,
+          valuesWithExternal
+        ));
+      }
     } else {
       ({ rows } = await pool.query(
         `INSERT INTO clientcare_claims (
