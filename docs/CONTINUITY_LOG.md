@@ -2,9 +2,15 @@
 
 ---
 
+<<<<<<< Updated upstream
 ## 2026-07-14 — Site Builder preview quality hardening + BuilderOS ESM/queue fixes
 
 Adam: "The sample website looks terrible. How does it keep getting worse?" and BuilderOS must never stop building LifeOS unless it is out of tokens or SENTRY fails. Implemented: (1) `services/site-builder.js` generates real blog posts and FAQ Q&A before the homepage, passes real YouTube video URLs into the prompt, and explicitly forbids placeholder blog titles, empty FAQ answers, `[framemarker...]` placeholders, and a customer-facing Digital Presence Score in the public page. (2) `config/design-studio.js` removes the Digital Presence Score from all 15 design-system section blueprints and adds CSS overrides for generic Tailwind classes so design-system tokens win. (3) `services/site-builder-design-systems.js` no longer injects Wix-extracted brand colors over the chosen design system; `patchSiteHtml` uses design-system tokens. (4) `factory-staging/factory-core/bpb/author-assertions.js` adds `normalizeCommonJsToEsm` with `require`/`module.exports` conversion and one-line declaration support. (5) `factory-staging/factory-core/bpb/build-queue-step-adapter.js` and `factory-staging/factory-core/builder/authoring.js` run the normalizer before SENTRY and before returning authored code. (6) `services/governed-autonomous-shipping-loop.js` fetches remote `BUILD_QUEUE.json`, merges runtime status, commits the queue with `commit_sha`, and marks shipped steps with `commit_sha`. `docs/products/site-builder/PRODUCT_HOME.md`, `docs/products/builderos/PRODUCT_HOME.md`, `docs/products/lifeos/PRODUCT_HOME.md`, and `REPO_FILE_SYNOPSIS_INDEX.json` updated. Verification: `node --check` all changed JS files, `npm run builder:preflight` PASS, `npm run verify:ci` PASS, `npm run lifeos:bp-priority:verify` PASS.
+=======
+## 2026-07-13 — SMOS competitor brief + sellable light/dark UI
+
+Adam wanted the live SMOS link, competitor comparison, light+dark cutting-edge design, film modes for how people make YouTube videos, and 3 hooks to pick from with competitor strong/fail. Canvas: `smos-competitor-design-brief.canvas.tsx`. Code: theme toggle + Syne/DM Sans redesign; 8 film modes; hooks[] + competitor_strong/fail on talk cards.
+>>>>>>> Stashed changes
 
 ## 2026-07-13 — SocialMediaOS teleprompter + must-say coaching
 
