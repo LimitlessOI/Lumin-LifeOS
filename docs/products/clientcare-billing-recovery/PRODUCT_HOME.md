@@ -464,6 +464,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-07-14 | **ChargeSlip digSelection hang** — tip job hung with no result after digSelectionProcess on real rows. Native click only inside evaluate; always try Daily Super Bill after codes. |
 | 2026-07-14 | **ChargeSlip real row click** — digSelectionProcessDD(fake) throws DiagnosisCodeN. Click real procedure/diagnosis list rows; open Billing tab before chart proof. |
 | 2026-07-14 | **ChargeSlip chart proof** — Sent Bills empty after Save may mean unfiled slip. applyByValue(digSelectionProcessDD); also check patient billing chart for 594xx; sanitize job JSON control chars. |
 | 2026-07-14 | **ChargeSlip line apply** — tip Sent Bills empty after Save; Mod/POS/Units blank. Call digSelectionProcessDD on selected CPT/ICD; fill summary-grid Units/POS; updateBillingDiagonsticCodeRecord. |

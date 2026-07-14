@@ -3734,24 +3734,20 @@ export function createClientCareBrowserService({ env = process.env, logger = con
               if (!t || /no results/i.test(t)) return null;
               if (!(node.getAttribute('data-id') || node.getAttribute('onclick') || node.tagName === 'TR')) return null;
               const preferred = preferRe ? preferRe.test(t) : false;
-              return { node, t, preferred };
+              return { node, t, preferred, dataId: node.getAttribute('data-id') };
             })
             .filter(Boolean);
-          const el = (preferRe && scored.find((x) => x.preferred)?.node) || scored[0]?.node;
-          if (!el) {
+          const hit = (preferRe && scored.find((x) => x.preferred)) || scored[0];
+          if (!hit) {
             attempts.push({ label, ok: false, error: 'no_clickable' });
             return null;
           }
+          // Tip: digSelectionProcess* inside evaluate can hang the CDP session forever.
+          // Only native click here; Node-side timeout wraps this evaluate.
           try {
-            if (typeof window.digSelectionProcess === 'function' && el.getAttribute('data-id')) {
-              window.digSelectionProcess(el);
-            } else if (typeof window.digSelectionProcessDD === 'function' && el.getAttribute('data-id')) {
-              window.digSelectionProcessDD(el);
-            } else {
-              el.click();
-            }
-            attempts.push({ label, ok: true, text: (el.innerText || el.getAttribute('data-text') || '').replace(/\s+/g, ' ').trim().slice(0, 80) });
-            return { text: (el.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80) };
+            hit.node.click();
+            attempts.push({ label, ok: true, text: hit.t.slice(0, 80), dataId: hit.dataId });
+            return { text: hit.t.slice(0, 80), dataId: hit.dataId };
           } catch (err) {
             attempts.push({ label, ok: false, error: String(err?.message || err).slice(0, 120) });
             return null;
@@ -3920,18 +3916,16 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         await sleep(1200);
       }
 
-      // Daily Super bill is an alternate create path when lists stay empty.
+      // Daily Super Bill — tip fee-schedule digSelection hangs; try vendor alternate create path after codes.
       let dailySuperBill = { clicked: false };
-      if (!codesSelected?.procedure && !codesSelected?.diagnosis) {
-        dailySuperBill = await session.page.evaluate(() => {
-          const btn = Array.from(document.querySelectorAll('button, input[type="button"], a'))
-            .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
-          if (!btn) return { clicked: false };
-          btn.click();
-          return { clicked: true };
-        });
-        if (dailySuperBill.clicked) await sleep(2500);
-      }
+      dailySuperBill = await session.page.evaluate(() => {
+        const btn = Array.from(document.querySelectorAll('button, input[type="button"], a, span'))
+          .find((el) => /daily super bill/i.test((el.textContent || el.value || '').trim()));
+        if (!btn) return { clicked: false, present: false };
+        btn.click();
+        return { clicked: true, present: true, text: (btn.textContent || btn.value || '').trim().slice(0, 40) };
+      });
+      if (dailySuperBill.clicked) await sleep(3000);
 
       const map = await session.page.evaluate((wantName) => {
         const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
