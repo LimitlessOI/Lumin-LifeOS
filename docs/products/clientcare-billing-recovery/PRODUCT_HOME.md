@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — ChargeSlip visit API SearchBillingSlipPregnancyList proved; care type sets; date must match chart birth. |
+P26-07-14 — ChargeSlip: fetch SearchBillingSlipPregnancyList directly (no hanging response.json listener). |
 
 ---
 

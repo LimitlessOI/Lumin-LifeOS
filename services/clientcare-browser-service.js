@@ -3222,52 +3222,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       });
       if (!nav.ok) return { ok: false, error: nav.error, screenshots };
 
-      await sleep(2000);
-
-      // Capture patient-search XHR while interacting (include JSON body for SearchBillingSlipPregnancyList).
-      const ajaxHits = [];
-      const onResponse = async (response) => {
-        try {
-          const url = response.url();
-          if (!/SearchBillingSlipPregnancyList|patient|chargeslip|superbill|visit/i.test(url)) return;
-          const hit = { url: url.slice(0, 320), status: response.status() };
-          if (/SearchBillingSlipPregnancyList/i.test(url)) {
-            try {
-              const data = await response.json();
-              hit.bodyPreview = Array.isArray(data)
-                ? { count: data.length, sample: data.slice(0, 5) }
-                : (data && typeof data === 'object'
-                  ? { keys: Object.keys(data).slice(0, 20), count: data.Data?.length || data.data?.length || data.length || null, sample: (data.Data || data.data || data.Items || []).slice?.(0, 5) }
-                  : { rawType: typeof data });
-            } catch {
-              hit.bodyPreview = { parse: 'failed' };
-            }
-          }
-          ajaxHits.push(hit);
-        } catch {
-          /* ignore */
-        }
-      };
-      session.page.on('response', onResponse);
-
-      // Date filter — prefer explicit visitDate, else today-ish window via visible date input.
-      const dateSet = await session.page.evaluate((rawDate) => {
-        const input =
-          document.getElementById('a5aae1e7567c45bd95654ab319c7f570') ||
-          document.querySelector('input[name="DateFilter"]') ||
-          Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
-        if (!input) return { set: false };
-        const value = String(rawDate || '').trim() || input.value || '';
-        if (!value) return { set: false, reason: 'no_date_value' };
-        input.focus();
-        input.value = value;
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-        input.dispatchEvent(new Event('change', { bubbles: true }));
-        input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-        try { window.$(input).data('kendoDatePicker')?.value(new Date(value)); } catch (_) {}
-        return { set: true, value };
-      }, visitDate);
-      if (dateSet?.set) await sleep(1500);
+      await sleep(1500);
 
       // Provider = All so visit list is not midwife-filtered empty.
       const providerSet = await session.page.evaluate(() => {
@@ -3278,85 +3233,117 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         sel.value = option.value;
         Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
         sel.dispatchEvent(new Event('change', { bubbles: true }));
-        try { window.$(sel).data('kendoDropDownList')?.value(option.value); } catch (_) {}
         return { set: true, text: (option.textContent || '').trim(), value: option.value };
       });
-      if (providerSet?.set) await sleep(2000);
 
-      // Click a visit row matching patientQuery, else first real visit row (skip chrome "No results").
-      const visitClick = await session.page.evaluate((q) => {
-        const want = String(q || '').trim().toLowerCase();
-        const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'));
-        const scored = [];
-        for (const tr of rows) {
-          const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"]'))
-            .map((td) => (td.innerText || '').trim().replace(/\s+/g, ' '))
-            .filter(Boolean);
-          if (cells.length < 2) continue;
-          const text = cells.join(' | ');
-          if (/no results found/i.test(text)) continue;
-          if (/^time$/i.test(cells[0] || '') && /patient/i.test(cells[1] || '')) continue;
-          if (/date:\s*provider:/i.test(text) && /no results/i.test(text)) continue;
-          if (cells.length === 1) continue;
-          // Real visit rows usually have a time-like token or a person-ish name.
-          const looksVisit = /\b\d{1,2}:\d{2}\b/.test(text) || /[A-Za-z]{2,}\s+[A-Za-z]{2,}/.test(text);
-          if (!looksVisit) continue;
-          let score = 1;
-          if (want && text.toLowerCase().includes(want)) score += 10;
-          scored.push({ tr, cells: cells.slice(0, 6), text: text.slice(0, 160), score });
+      // Date filter — prefer explicit visitDate.
+      const dateSet = await session.page.evaluate((rawDate) => {
+        const input =
+          document.querySelector('input[name="DateFilter"]') ||
+          Array.from(document.querySelectorAll('input')).find((el) => /date/i.test(`${el.id} ${el.name} ${el.placeholder || ''}`));
+        if (!input) return { set: false };
+        const value = String(rawDate || '').trim() || input.value || '';
+        if (!value) return { set: false, reason: 'no_date_value' };
+        input.focus();
+        input.value = value;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+        return { set: true, value };
+      }, visitDate);
+      await sleep(1500);
+
+      // Direct visit-list API (proved tip URL). Do NOT use response.json() listeners — they hang Puppeteer.
+      const visitList = await session.page.evaluate(async ({ providerId, dateSelection, wantPregnancyId, wantName }) => {
+        const pid = providerId || '00000000-0000-0000-0000-000000000000';
+        const date = dateSelection || '';
+        if (!date) return { ok: false, error: 'date required' };
+        const url = `/Company/SearchBillingSlipPregnancyList?PrividerId=${encodeURIComponent(pid)}&DateSelection=${encodeURIComponent(date)}&_=${Date.now()}`;
+        const res = await fetch(url, { credentials: 'same-origin' });
+        const text = await res.text();
+        let data = null;
+        try { data = JSON.parse(text); } catch { data = text.slice(0, 500); }
+        const rows = Array.isArray(data)
+          ? data
+          : (data?.Data || data?.data || data?.Items || data?.items || []);
+        const normalized = (Array.isArray(rows) ? rows : []).map((row) => ({
+          pregnancyId: row.PregnancyId || row.PregnancyID || row.pregnancyId || row.Id || row.id || null,
+          name: row.PatientName || row.ClientName || row.Name || row.name || row.FullName || null,
+          time: row.Time || row.VisitTime || row.time || null,
+          visit: row.Visit || row.VisitType || row.visit || null,
+          rawKeys: Object.keys(row || {}).slice(0, 20),
+        }));
+        const wantId = String(wantPregnancyId || '').toLowerCase();
+        const want = String(wantName || '').toLowerCase();
+        let match = normalized.find((r) => wantId && String(r.pregnancyId || '').toLowerCase() === wantId)
+          || normalized.find((r) => want && String(r.name || '').toLowerCase().includes(want))
+          || normalized[0]
+          || null;
+
+        // If ClientCare exposes a select helper, try it; else set hidden fields.
+        let selected = { applied: false };
+        if (match?.pregnancyId) {
+          for (const name of ['PregnancyId', 'PregnancyID', 'pregnancyId', 'SelectedPregnancyId', 'PatientId']) {
+            const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+            if (!el) continue;
+            el.value = match.pregnancyId;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            selected = { applied: true, via: name, pregnancyId: match.pregnancyId };
+          }
+          if (typeof window.SelectBillingSlipPregnancy === 'function') {
+            try {
+              window.SelectBillingSlipPregnancy(match.pregnancyId);
+              selected = { applied: true, via: 'SelectBillingSlipPregnancy', pregnancyId: match.pregnancyId };
+            } catch (_) { /* ignore */ }
+          }
         }
-        scored.sort((a, b) => b.score - a.score);
-        const best = scored[0];
-        if (!best) return { clicked: false, candidates: 0 };
-        best.tr.click();
-        return { clicked: true, candidates: scored.length, cells: best.cells, text: best.text, score: best.score };
-      }, patientQuery);
-      if (visitClick?.clicked) await sleep(2000);
+        return {
+          ok: res.ok,
+          status: res.status,
+          url,
+          count: normalized.length,
+          sample: normalized.slice(0, 8),
+          match,
+          selected,
+          dataKeys: data && typeof data === 'object' && !Array.isArray(data) ? Object.keys(data).slice(0, 20) : null,
+        };
+      }, {
+        providerId: providerSet?.value || '00000000-0000-0000-0000-000000000000',
+        dateSelection: dateSet?.value || visitDate || '',
+        wantPregnancyId: pregnancyId,
+        wantName: patientQuery,
+      });
+      if (visitList?.selected?.applied) await sleep(1500);
 
-      // Patient autocomplete fallback when visit grid empty.
-      const typed = (!visitClick?.clicked && String(patientQuery || '').trim())
-        ? await session.page.evaluate((q) => {
-            const all = Array.from(document.querySelectorAll('input, textarea, [contenteditable="true"], .k-input, .k-autocomplete input, .k-combobox input'));
-            const score = (el) => {
-              const near = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.getAttribute('aria-label') || ''} ${(el.closest('div,td,label,tr,span')?.innerText || '').slice(0, 80)}`;
-              let s = 0;
-              if (/patient/i.test(near)) s += 5;
-              if (/client|search/i.test(near)) s += 2;
-              if (/datefilter|personid|chargeslipid|sms|message/i.test(`${el.id}${el.name}`)) s -= 5;
-              if (el.offsetParent === null) s -= 1;
-              return s;
-            };
-            const ranked = all.map((el) => ({ el, s: score(el) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s);
-            const patient = ranked[0]?.el;
-            if (!patient) {
-              const hidden = Array.from(document.querySelectorAll('input[type="hidden"]'))
-                .filter((el) => /patient|pregnancy|client/i.test(`${el.id} ${el.name}`))
-                .map((el) => ({ id: el.id, name: el.name, value: String(el.value || '').slice(0, 80) }));
-              return { typed: false, hiddenIds: hidden };
-            }
-            patient.focus();
-            if ('value' in patient) patient.value = q;
-            else patient.textContent = q;
-            patient.dispatchEvent(new Event('input', { bubbles: true }));
-            patient.dispatchEvent(new Event('change', { bubbles: true }));
-            patient.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-            try { window.$(patient).data('kendoAutoComplete')?.search(q); } catch (_) {}
-            try { window.$(patient).data('kendoComboBox')?.search(q); } catch (_) {}
-            return { typed: true, id: patient.id || null, name: patient.name || null, score: ranked[0].s };
-          }, String(patientQuery).trim())
-        : { typed: false, skipped: Boolean(visitClick?.clicked) };
-      if (typed?.typed) {
-        await sleep(2000);
-        await session.page.evaluate((q) => {
-          const want = String(q || '').toLowerCase();
-          const items = Array.from(document.querySelectorAll('.k-list-item, .k-item, li[role="option"], .ui-menu-item'));
-          const match = items.find((el) => (el.textContent || '').toLowerCase().includes(want));
-          if (match) match.click();
+      // DOM visit-row click only if API returned rows and selection didn't stick.
+      let visitClick = { clicked: false, skipped: true };
+      if (!visitList?.selected?.applied && (visitList?.count || 0) > 0) {
+        visitClick = await session.page.evaluate((q) => {
+          const want = String(q || '').trim().toLowerCase();
+          const rows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr, [role="row"]'));
+          const scored = [];
+          for (const tr of rows) {
+            const cells = Array.from(tr.querySelectorAll('td, [role="gridcell"]'))
+              .map((td) => (td.innerText || '').trim().replace(/\s+/g, ' '))
+              .filter(Boolean);
+            if (cells.length < 2) continue;
+            const text = cells.join(' | ');
+            if (/no results found/i.test(text)) continue;
+            if (!/\b\d{1,2}:\d{2}\b/.test(text) && !(want && text.toLowerCase().includes(want))) continue;
+            let score = 1;
+            if (want && text.toLowerCase().includes(want)) score += 10;
+            scored.push({ tr, cells: cells.slice(0, 6), text: text.slice(0, 160), score });
+          }
+          scored.sort((a, b) => b.score - a.score);
+          const best = scored[0];
+          if (!best) return { clicked: false, candidates: 0 };
+          best.tr.click();
+          return { clicked: true, candidates: scored.length, cells: best.cells, text: best.text, score: best.score };
         }, patientQuery);
-        await sleep(1500);
+        if (visitClick?.clicked) await sleep(1500);
       }
 
-      // If pregnancyId known, force-set common hidden ids.
+      const typed = { typed: false, skipped: true };
       const hiddenForce = pregnancyId
         ? await session.page.evaluate((id) => {
             const ids = ['PregnancyId', 'PregnancyID', 'pregnancyId', 'PatientId', 'PatientID', 'ClientId'];
@@ -3382,10 +3369,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         sel.value = option.value;
         Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
         sel.dispatchEvent(new Event('change', { bubbles: true }));
-        try { window.$(sel).data('kendoDropDownList')?.value(option.value); } catch (_) {}
         return { set: true, text: (option.textContent || '').trim(), value: option.value };
       }, careType);
-      if (chargeSlipType?.set) await sleep(1500);
+      if (chargeSlipType?.set) await sleep(1000);
 
       let saveResult = { attempted: false };
       if (!dryRun) {
@@ -3399,39 +3385,26 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         await sleep(2500);
       }
 
-      session.page.off('response', onResponse);
-
       const map = await session.page.evaluate(() => {
-        const visible = (el) => {
-          if (!el) return false;
-          const style = window.getComputedStyle(el);
-          if (style.display === 'none' || style.visibility === 'hidden') return false;
-          const rect = el.getBoundingClientRect();
-          return rect.width > 0 && rect.height > 0;
-        };
-        const controls = Array.from(document.querySelectorAll('input, select, textarea, button'))
-          .filter(visible)
-          .map((el) => ({
-            tag: el.tagName,
-            type: el.getAttribute('type') || '',
-            id: el.id || '',
-            name: el.name || '',
-            value: el.tagName === 'SELECT'
-              ? (el.options?.[el.selectedIndex]?.text || el.value || '')
-              : (el.value || el.textContent || '').trim().slice(0, 80),
-            label: (el.closest('label,td,div,tr')?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80),
-          }))
-          .slice(0, 80);
-        const visitRows = Array.from(document.querySelectorAll('table tr, .k-grid-content tr'))
-          .map((tr) => Array.from(tr.querySelectorAll('td')).map((td) => (td.innerText || '').trim()).filter(Boolean))
-          .filter((cells) => cells.length >= 2)
-          .slice(0, 20);
-        const patientSelected = !/please select a patient/i.test(document.body.innerText || '');
+        const text = (document.body.innerText || '').replace(/\s+/g, ' ').trim();
+        const patientLine = (text.match(/Patient:\s*([^A]{0,80}?)\s*Age:/i) || text.match(/Patient:\s*(.{0,80})/i) || [])[1] || '';
+        const dobLine = (text.match(/DOB:\s*([^\s]{0,40})/i) || [])[1] || '';
+        const ageLine = (text.match(/Age:\s*([^\s]{0,20})/i) || [])[1] || '';
+        const patientSelected = Boolean(
+          (patientLine && !/please select/i.test(patientLine) && /[A-Za-z]{2,}/.test(patientLine))
+          || (dobLine && /\d/.test(dobLine))
+          || (ageLine && /\d/.test(ageLine))
+        );
+        const chargeOpts = Array.from(document.getElementById('ChargeSlipId')?.options || [])
+          .map((o) => (o.textContent || '').trim())
+          .filter(Boolean);
         return {
-          controls,
-          visitRows,
           patientSelected,
-          textPreview: (document.body.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 1500),
+          patientLine: patientLine.slice(0, 80),
+          ageLine: ageLine.slice(0, 40),
+          dobLine: dobLine.slice(0, 40),
+          chargeOpts,
+          textPreview: text.slice(0, 1200),
         };
       });
 
@@ -3443,17 +3416,17 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         dryRun: dryRun !== false,
         dateSet,
         providerSet,
+        visitList,
         visitClick,
         chargeSlipType,
         typed,
         hiddenForce,
         saveResult,
-        ajaxHits: ajaxHits.slice(0, 30),
         ...map,
         screenshots,
         next: map.patientSelected
           ? 'Patient selected — add procedure/diagnosis codes then Save (dry_run=false).'
-          : 'Still need patient/visit selection — set visitDate (MM/DD/YYYY) matching birth, or confirm autocomplete.',
+          : 'Visit list empty or patient not bound — try chart birth date; inspect visitList.sample keys.',
       };
     } finally {
       await session.close().catch(() => {});
