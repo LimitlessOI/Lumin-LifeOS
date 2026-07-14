@@ -3219,23 +3219,49 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       if (!nav.ok) return { ok: false, error: nav.error, screenshots };
 
       await sleep(2000);
+
+      const chargeSlipType = await session.page.evaluate(() => {
+        const sel = document.getElementById('ChargeSlipId');
+        if (!sel) return { set: false };
+        const want = /intrapartum|postpartum|newborn|antepartum/i;
+        const option = Array.from(sel.options || []).find((o) => want.test(o.textContent || ''));
+        if (!option) return { set: false, available: Array.from(sel.options || []).map((o) => (o.textContent || '').trim()) };
+        sel.value = option.value;
+        Array.from(sel.options || []).forEach((o) => { o.selected = o === option; });
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        try { window.$(sel).data('kendoDropDownList')?.value(option.value); } catch (_) {}
+        return { set: true, text: (option.textContent || '').trim(), value: option.value };
+      });
+
       const typed = String(patientQuery || '').trim()
         ? await session.page.evaluate((q) => {
-            const inputs = Array.from(document.querySelectorAll('input, textarea'));
-            const patient = inputs.find((el) => {
-              const near = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${(el.closest('div,td,label,tr')?.innerText || '').slice(0, 40)}`;
-              return /patient/i.test(near);
-            }) || inputs.find((el) => /patient/i.test(el.id || el.name || ''));
-            if (!patient) return { typed: false };
+            const all = Array.from(document.querySelectorAll('input, textarea, [contenteditable="true"], .k-input, .k-autocomplete input'));
+            const score = (el) => {
+              const near = `${el.id || ''} ${el.name || ''} ${el.placeholder || ''} ${el.getAttribute('aria-label') || ''} ${(el.closest('div,td,label,tr,span')?.innerText || '').slice(0, 60)}`;
+              let s = 0;
+              if (/patient/i.test(near)) s += 5;
+              if (/client|search/i.test(near)) s += 2;
+              if (el.offsetParent === null) s -= 1;
+              return s;
+            };
+            const ranked = all.map((el) => ({ el, s: score(el) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s);
+            const patient = ranked[0]?.el;
+            if (!patient) {
+              const hidden = Array.from(document.querySelectorAll('input[type="hidden"]')).filter((el) => /patient|pregnancy|client/i.test(`${el.id} ${el.name}`));
+              return { typed: false, hiddenIds: hidden.map((el) => ({ id: el.id, name: el.name, value: el.value })) };
+            }
             patient.focus();
-            patient.value = q;
+            if ('value' in patient) patient.value = q;
+            else patient.textContent = q;
             patient.dispatchEvent(new Event('input', { bubbles: true }));
             patient.dispatchEvent(new Event('change', { bubbles: true }));
             patient.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-            return { typed: true, id: patient.id || null, name: patient.name || null };
+            try { window.$(patient).data('kendoAutoComplete')?.search(q); } catch (_) {}
+            try { window.$(patient).data('kendoComboBox')?.search(q); } catch (_) {}
+            return { typed: true, id: patient.id || null, name: patient.name || null, score: ranked[0].s };
           }, String(patientQuery).trim())
         : { typed: false, skipped: true };
-      if (typed?.typed) await sleep(2000);
+      if (typed?.typed) await sleep(2500);
 
       const map = await session.page.evaluate(() => {
         const visible = (el) => {
@@ -3274,6 +3300,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         url: target,
         pregnancyId: pregnancyId || null,
         patientQuery: patientQuery || null,
+        chargeSlipType,
         typed,
         ...map,
         screenshots,

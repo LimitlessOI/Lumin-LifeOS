@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/clientcare-billing-recovery/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — map-charge-slip route; next money step after Claims Processing+CPM proved on 3 births. |
+| **Last Updated** | 2026-07-14 — ChargeSlip map: set Intrapartum/Postpartum type + stronger patient autocomplete search. |
 
 ---
 
