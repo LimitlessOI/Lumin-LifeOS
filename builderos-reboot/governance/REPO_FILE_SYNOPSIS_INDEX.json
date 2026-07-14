@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T00:51:38.282Z",
+  "generated_at": "2026-07-14T00:54:15.719Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11515,
   "files": [
@@ -84249,8 +84249,8 @@
       "path": "services/lifeos-member-feedback.js",
       "synopsis": "Exports processFeedback — services/lifeos-member-feedback.js.",
       "bytes": 193,
-      "mtime": "2026-07-14T00:51:32.057Z",
-      "indexed_at": "2026-07-14T00:51:32.057Z"
+      "mtime": "2026-07-14T00:54:15.719Z",
+      "indexed_at": "2026-07-14T00:54:15.719Z"
     },
     {
       "path": "services/lifeos-mission-pipeline-executor.js",
