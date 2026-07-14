@@ -4,7 +4,7 @@
  * @ssot docs/products/site-builder/PRODUCT_HOME.md
  */
 import { getDesignSystemCss, getDesignSystemFontLinks } from './design-studio.js';
-import { matchIndustrySalesPack, buildProviderWhyBullets } from './site-builder-industry-sales.js';
+import { matchIndustrySalesPack, buildProviderWhyBullets, practiceOffersEnergyWellness, buildWellnessWhyBullets } from './site-builder-industry-sales.js';
 
 function escapeHtml(s) {
   return String(s ?? '')
@@ -100,6 +100,8 @@ export function normalizeLayoutContent(info = {}, posPartner = null) {
     benefits: salesPack?.benefits || [],
     reluctantBuyer: salesPack?.reluctantBuyer || [],
     providerWhy: buildProviderWhyBullets(info, salesPack),
+    showWellnessPath: practiceOffersEnergyWellness(info, salesPack),
+    wellnessWhy: buildWellnessWhyBullets(info, salesPack),
   };
 }
 
@@ -1034,13 +1036,56 @@ ${footer(content)}
 }
 
 /**
- * Midwifery dual-sale shell — Sale 1: why home birth. Sale 2: why this midwife.
+ * Midwifery multi-path shell — home birth (who / curious) + optional energy/wellness.
+ * Paths are not forced; wellness combines why energy + why this practitioner with skip links.
  * Founder sales doctrine 2026-07-14.
  */
 function shellMidwiferyDualSale(system, content) {
   const pack = content.salesPack;
   const cat = pack?.categorySale || {};
   const prov = pack?.providerSale || {};
+  const well = pack?.wellnessSale || {};
+  const showWellness = content.showWellnessPath && well.anchor;
+  const lead = pack?.heroLead
+    || `Already know you want home birth? Meet ${content.name}. Still exploring? Start with why home birth.`;
+  const pathCols = showWellness
+    ? '@media(min-width:720px){.path-cta{grid-template-columns:repeat(3,1fr)}}'
+    : '@media(min-width:560px){.path-cta{grid-template-columns:1fr 1fr}}';
+  const wellnessBlock = showWellness ? `
+  <section id="${escapeHtml(well.anchor)}" class="section">
+    <div class="wrap">
+      <p class="sale-label">${escapeHtml(well.eyebrow || 'Energy work & wellness')}</p>
+      <h2>${escapeHtml(well.title || 'Sound, energy & herbal healing')}</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">Here for wellness — not birth? Stay on this path. Skip any part that is not for you.</p>
+      <div class="skip-row" aria-label="Skip within wellness path">
+        ${(well.jumpLinks || []).map((j) => {
+          const href = j.href || content.booking;
+          return `<a href="${escapeHtml(href)}">${escapeHtml(j.label)}</a>`;
+        }).join('')}
+      </div>
+      <div class="grid grid-2" style="margin-top:1.5rem">
+        <article class="card" id="why-energy-work">
+          <h3>${escapeHtml(well.whyEnergy?.heading || 'Why energy work')}</h3>
+          <p class="muted" style="margin-top:.5rem">${escapeHtml(well.whyEnergy?.body || '')}</p>
+          <ul class="list">${(well.whyEnergy?.bullets || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </article>
+        <article class="card" id="sound-acutonics">
+          <h3>${escapeHtml(well.modalities?.heading || 'Sound + Acutonics')}</h3>
+          <p class="muted" style="margin-top:.5rem">${escapeHtml(well.modalities?.body || '')}</p>
+          <ul class="list">${(well.modalities?.bullets || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </article>
+      </div>
+      <article class="card" id="why-energy-practitioner" style="margin-top:1rem">
+        <h3>${escapeHtml(well.whyPractitioner?.heading || 'Why this practitioner')}</h3>
+        <p class="muted" style="margin-top:.5rem">${escapeHtml(well.whyPractitioner?.body || '')}</p>
+        <ul class="list">${(content.wellnessWhy || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        <div class="bridge">
+          <a class="btn" href="${escapeHtml(content.booking)}">Book a wellness consult</a>
+          <a class="btn btn-ghost" href="#why-this-midwife">Also exploring home birth?</a>
+        </div>
+      </article>
+    </div>
+  </section>` : '';
   const css = `
 .nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 90%,transparent);border-bottom:1px solid var(--line)}
 .nav-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 0}
@@ -1049,13 +1094,14 @@ function shellMidwiferyDualSale(system, content) {
 .hero{display:grid;gap:2rem;padding:3rem 0 2rem}
 @media(min-width:900px){.hero{grid-template-columns:1.05fr .95fr;align-items:center;padding:4.5rem 0 3rem}}
 .hero h1{max-width:14ch}
-.lead{margin-top:1.1rem;font-size:1.12rem;color:var(--muted);max-width:38ch}
-.dual-cta{display:grid;gap:.75rem;margin-top:1.75rem}
-@media(min-width:560px){.dual-cta{grid-template-columns:1fr 1fr}}
-.dual-cta a{display:flex;flex-direction:column;gap:.25rem;padding:1rem 1.15rem;border-radius:var(--radius);text-decoration:none;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
-.dual-cta a.primary{background:var(--primary);color:var(--button-text);border-color:transparent}
-.dual-cta strong{font-size:1.05rem}
-.dual-cta span{font-size:.85rem;opacity:.85}
+.lead{margin-top:1.1rem;font-size:1.12rem;color:var(--muted);max-width:44ch}
+.path-cta{display:grid;gap:.75rem;margin-top:1.75rem}
+${pathCols}
+.path-cta a{display:flex;flex-direction:column;gap:.25rem;padding:1rem 1.15rem;border-radius:var(--radius);text-decoration:none;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.path-cta a.primary{background:var(--primary);color:var(--button-text);border-color:transparent}
+.path-cta strong{font-size:1.05rem}
+.path-cta span{font-size:.85rem;opacity:.85}
+.book-row{margin-top:1rem}
 .hero-media,.hero-fallback{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow);background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--accent) 35%,white),var(--bg))}
 .section{padding:3.25rem 0}
 .section-alt{background:color-mix(in srgb,var(--accent) 10%,var(--bg));border-block:1px solid var(--line)}
@@ -1067,6 +1113,9 @@ function shellMidwiferyDualSale(system, content) {
 .list{display:grid;gap:.65rem;margin-top:1rem}
 .list li{list-style:none;padding-left:1.1rem;position:relative}
 .list li:before{content:"";position:absolute;left:0;top:.55rem;width:.45rem;height:.45rem;border-radius:50%;background:var(--primary)}
+.bridge{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-top:1.5rem}
+.skip-row{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 0}
+.skip-row a{font-size:.85rem;padding:.4rem .75rem;border-radius:999px;border:1px solid var(--line);text-decoration:none;background:var(--card);color:var(--text)}
 .cta{text-align:center;padding:3.75rem 1rem;background:linear-gradient(160deg,color-mix(in srgb,var(--primary) 88%,#000),var(--primary));color:#fff}
 .cta .btn{background:#fff;color:var(--text)}
 .site-footer{padding:2.5rem 0 5rem}
@@ -1084,26 +1133,52 @@ summary{cursor:pointer;font-weight:700}
     <div>
       ${proofLine(content)}
       <h1 style="margin-top:.7rem">${escapeHtml(content.tagline)}</h1>
-      <p class="lead">Two decisions, in order: is home birth right for you — and is ${escapeHtml(content.name)} the midwife you trust for it.</p>
-      <div class="dual-cta">
-        <a class="primary" href="#${escapeHtml(cat.anchor || 'why-home-birth')}">
-          <strong>${escapeHtml(cat.cta || 'Why home birth')}</strong>
-          <span>${escapeHtml(cat.blurb || 'Benefits, safety questions, and who it is for')}</span>
-        </a>
-        <a href="#${escapeHtml(prov.anchor || 'why-this-midwife')}">
+      <p class="lead">${escapeHtml(lead)}</p>
+      <div class="path-cta">
+        <a class="primary" href="#${escapeHtml(prov.anchor || 'why-this-midwife')}">
           <strong>${escapeHtml(prov.cta || 'Why this midwife')}</strong>
-          <span>${escapeHtml(prov.blurb || `What makes ${content.name} the right hire`)}</span>
+          <span>${escapeHtml(prov.blurb || `Already decided on home birth? Meet ${content.name}.`)}</span>
         </a>
+        <a href="#${escapeHtml(cat.anchor || 'why-home-birth')}">
+          <strong>${escapeHtml(cat.cta || 'Curious about home birth?')}</strong>
+          <span>${escapeHtml(cat.blurb || 'Still exploring — benefits, safety, and who it is for')}</span>
+        </a>
+        ${showWellness ? `<a href="#${escapeHtml(well.anchor)}">
+          <strong>${escapeHtml(well.cta || 'Energy & wellness')}</strong>
+          <span>${escapeHtml(well.blurb || 'Sound, energy, herbal — skip what is not for you')}</span>
+        </a>` : ''}
       </div>
+      <div class="book-row"><a class="btn btn-ghost" href="${escapeHtml(content.booking)}">Or book a free consult now</a></div>
     </div>
     ${heroMedia(content)}
   </section>
 
+  <section id="why-this-midwife" class="section">
+    <div class="wrap">
+      <p class="sale-label">${escapeHtml(prov.eyebrow || 'If you already know you want home birth')}</p>
+      <h2>Why ${escapeHtml(content.name)}</h2>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">${escapeHtml(content.about.slice(0, 240))}</p>
+      <div class="grid grid-2" style="margin-top:1.75rem">
+        <article class="card">
+          <h3>Why hire this midwife</h3>
+          <ul class="list">${(content.providerWhy || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+          <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Book a free consult</a>
+        </article>
+        <article class="card">
+          <h3>Bring these questions</h3>
+          <ul class="list">${(prov.promptQuestions || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </article>
+      </div>
+      ${photoStrip(content)}
+      <p class="muted" style="margin-top:1.25rem">Still weighing home birth itself? <a href="#why-home-birth">Read why home birth</a>.${showWellness ? ' Here for sound or energy work? <a href="#energy-wellness">Skip to wellness</a>.' : ''}</p>
+    </div>
+  </section>
+
   <section id="why-home-birth" class="section section-alt">
     <div class="wrap">
-      <p class="sale-label">${escapeHtml(cat.eyebrow || 'First sale')} · category</p>
+      <p class="sale-label">${escapeHtml(cat.eyebrow || 'If you are still exploring')}</p>
       <h2>${escapeHtml(cat.title || 'Why home birth')}</h2>
-      <p class="muted" style="margin-top:.75rem;max-width:52ch">We do not hide the fear. Families hire a home-birth midwife because they want safety with autonomy — and they need the safety plan in plain language.</p>
+      <p class="muted" style="margin-top:.75rem;max-width:52ch">For families who have heard about home birth and want the honest picture — fears, benefits, and who it fits — before they pick a midwife.</p>
       <div class="grid grid-2" style="margin-top:1.75rem">
         <article class="card">
           <h3>What families are afraid of</h3>
@@ -1122,39 +1197,25 @@ summary{cursor:pointer;font-weight:700}
         <article class="card">
           <h3>What makes someone hesitate</h3>
           <ul class="list">${(content.reluctantBuyer || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
-          <p class="muted" style="margin-top:1rem">A good consult answers the partner’s fear and the parent’s hope in the same conversation.</p>
         </article>
       </div>
-      <p class="muted" style="margin-top:1.5rem;max-width:56ch">Outcomes and transfer statistics belong in consult with your midwife’s real numbers — we will not invent rates on a marketing page. Ask for screening criteria, transfer rate, and hospital backup.</p>
+      <p class="muted" style="margin-top:1.5rem;max-width:56ch">Outcomes and transfer statistics belong in consult with real practice numbers — we will not invent rates on a marketing page.</p>
+      <div class="bridge">
+        <a class="btn" href="${escapeHtml(content.booking)}">Book a free consult</a>
+        <a class="btn btn-ghost" href="#why-this-midwife">Why ${escapeHtml(content.name.split(/[—-]/)[0].trim())}?</a>
+      </div>
+      <p class="muted" style="margin-top:.75rem">${escapeHtml(cat.nextAfter || 'If that sounds right, meet this midwife — or book if you are ready.')}</p>
     </div>
   </section>
 
-  <section id="why-this-midwife" class="section">
-    <div class="wrap">
-      <p class="sale-label">${escapeHtml(prov.eyebrow || 'Second sale')} · this provider</p>
-      <h2>Why ${escapeHtml(content.name)}</h2>
-      <p class="muted" style="margin-top:.75rem;max-width:52ch">${escapeHtml(content.about.slice(0, 240))}</p>
-      <div class="grid grid-2" style="margin-top:1.75rem">
-        <article class="card">
-          <h3>Reasons to hire this practice</h3>
-          <ul class="list">${(content.providerWhy || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
-          <a class="btn" style="margin-top:1.25rem" href="${escapeHtml(content.booking)}">Book a free consult</a>
-        </article>
-        <article class="card">
-          <h3>Bring these questions</h3>
-          <ul class="list">${(prov.promptQuestions || []).map((p) => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
-        </article>
-      </div>
-      ${photoStrip(content)}
-    </div>
-  </section>
+  ${wellnessBlock}
 
-  <section id="services" class="section section-alt"><div class="wrap">
+  <section id="services" class="section${showWellness ? ' section-alt' : ''}"><div class="wrap">
     <h2 style="margin-bottom:1.25rem">Care path</h2>
     <div class="grid grid-3">${serviceCards(content)}</div>
   </div></section>
 
-  <section class="section"><div class="wrap">
+  <section class="section${showWellness ? '' : ' section-alt'}"><div class="wrap">
     <h2 style="margin-bottom:1.25rem">From families who hired this care</h2>
     <div class="grid grid-3">${testimonialCards(content)}</div>
   </div></section>
@@ -1163,10 +1224,11 @@ summary{cursor:pointer;font-weight:700}
 
   <section class="cta">
     <div class="wrap">
-      <h2>Ready for the real conversation?</h2>
-      <p style="margin:1rem auto 0;max-width:40ch;opacity:.9">Start with why home birth. Then decide if ${escapeHtml(content.name)} is your midwife.</p>
+      <h2>Wherever you are in the decision</h2>
+      <p style="margin:1rem auto 0;max-width:46ch;opacity:.9">Home birth who · home birth curious · or energy & wellness. Skip what is not for you — then book.</p>
       <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
-        <a class="btn" href="#why-home-birth" style="background:transparent;border:1px solid #fff;color:#fff">Why home birth</a>
+        <a class="btn" href="#why-this-midwife" style="background:transparent;border:1px solid #fff;color:#fff">Why this midwife</a>
+        ${showWellness ? '<a class="btn" href="#energy-wellness" style="background:transparent;border:1px solid #fff;color:#fff">Energy & wellness</a>' : ''}
         <a class="btn" href="${escapeHtml(content.booking)}">Book free consult</a>
       </div>
     </div>
