@@ -164,30 +164,62 @@ export async function createSession({ headless = true, logger = console } = {}) 
    * Fill a form field. Tries CSS selector, then placeholder attr matching via evaluate.
    */
   async function fill(selector, value) {
-    // Try direct selector
-    const el = await page.$(selector);
-    if (el) {
-      await el.click({ clickCount: 3 }); // select all existing text
-      await el.type(value, { delay: 30 });
-      return;
+    const candidates = String(selector || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    for (const sel of candidates.length ? candidates : [selector]) {
+      try {
+        await page.waitForSelector(sel, { timeout: 2500 });
+      } catch {
+        /* try next */
+      }
+      const el = await page.$(sel);
+      if (el) {
+        await el.click({ clickCount: 3 });
+        await el.type(value, { delay: 30 });
+        return;
+      }
     }
-    // Try placeholder match
-    const filled = await page.evaluate((sel, val) => {
-      // selector might be a placeholder hint — try to find by placeholder
-      const inputs = Array.from(document.querySelectorAll("input, textarea"));
-      const match = inputs.find(
-        (i) => i.placeholder?.toLowerCase().includes(sel.toLowerCase()) ||
-               i.name?.toLowerCase().includes(sel.replace(/[^a-z]/gi, "").toLowerCase())
-      );
-      if (match) {
-        match.focus();
-        match.value = val;
-        match.dispatchEvent(new Event("input", { bubbles: true }));
-        match.dispatchEvent(new Event("change", { bubbles: true }));
-        return true;
+    // Try placeholder / name match across main document + same-origin iframes
+    const filled = await page.evaluate((sels, val) => {
+      const tryDoc = (doc) => {
+        for (const sel of sels) {
+          const direct = doc.querySelector(sel);
+          if (direct) {
+            direct.focus();
+            direct.value = val;
+            direct.dispatchEvent(new Event('input', { bubbles: true }));
+            direct.dispatchEvent(new Event('change', { bubbles: true }));
+            return true;
+          }
+        }
+        const inputs = Array.from(doc.querySelectorAll('input, textarea'));
+        const match = inputs.find(
+          (i) =>
+            i.placeholder?.toLowerCase().includes(String(sels[0] || '').toLowerCase()) ||
+            sels.some((sel) => i.name && sel.toLowerCase().includes(String(i.name).toLowerCase()))
+        );
+        if (match) {
+          match.focus();
+          match.value = val;
+          match.dispatchEvent(new Event('input', { bubbles: true }));
+          match.dispatchEvent(new Event('change', { bubbles: true }));
+          return true;
+        }
+        return false;
+      };
+      if (tryDoc(document)) return true;
+      for (const frame of Array.from(document.querySelectorAll('iframe'))) {
+        try {
+          const doc = frame.contentDocument;
+          if (doc && tryDoc(doc)) return true;
+        } catch {
+          /* cross-origin */
+        }
       }
       return false;
-    }, selector, value);
+    }, candidates, value);
 
     if (!filled) {
       throw new Error(`Could not find field: ${selector}`);

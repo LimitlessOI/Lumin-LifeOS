@@ -1703,6 +1703,103 @@ export function createTCRoutes(
     }
   });
 
+  // GET /api/v1/tc/browser/operator-catalog — API-shaped map of every browser UI operation (no vendor API keys).
+  router.get('/browser/operator-catalog', requireKey, async (_req, res) => {
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { TD_WORKFLOW_CATALOG } = await import('../services/tc-td-workflow-runner.js');
+      const tcBrowser = createTCBrowserAgent({ accountManager: await getAccountManager(), logger });
+      const tdPlans = Object.keys(tcBrowser.TD_UI_PLANS || {}).map((id) => ({
+        id,
+        kind: 'td_ui_plan',
+        method: 'POST',
+        path: '/api/v1/tc/transactions/:id/browser/td-ui-plan',
+        body: { plan: id },
+        summary: `TransactionDesk UI click plan: ${id}`,
+      }));
+      const workflows = (TD_WORKFLOW_CATALOG || []).map((w) => ({
+        id: w.id,
+        kind: 'td_workflow',
+        method: 'POST',
+        path: '/api/v1/tc/transactions/:id/browser/td-workflow',
+        body: { workflow: w.id },
+        summary: w.summary,
+      }));
+      res.json({
+        ok: true,
+        mode: 'browser_ui_as_api',
+        note: 'SkySlope/TransactionDesk/GLVAR have no public filing API here — these operations drive the same UIs a human uses, with screenshots as receipts.',
+        auth: { header: 'x-command-key' },
+        login_probes: [
+          { id: 'test_glvar', method: 'POST', path: '/api/v1/tc/test-glvar-login', body: { dryRun: false }, summary: 'Live GLVAR/Clareity login' },
+          { id: 'test_skyslope', method: 'POST', path: '/api/v1/tc/test-skyslope-login', body: { dryRun: false }, summary: 'Live eXp Okta → SkySlope' },
+          { id: 'test_boldtrail', method: 'POST', path: '/api/v1/tc/test-boldtrail', body: { dryRun: false }, summary: 'Live eXp Okta → BoldTrail tile' },
+          { id: 'debug_portal', method: 'POST', path: '/api/v1/tc/browser/debug-portal', body: {}, summary: 'GLVAR login + dump portal buttons/links' },
+          { id: 'debug_okta', method: 'POST', path: '/api/v1/tc/browser/debug-okta', body: { dryRun: true }, summary: 'Map Okta login fields/selectors without submitting' },
+        ],
+        file_ops: [
+          { id: 'listing_to_skyslope', method: 'POST', path: '/api/v1/tc/transactions/:id/browser/listing-to-skyslope', summary: 'TD executed listing → SkySlope upload' },
+          { id: 'td_sync_parties', method: 'POST', path: '/api/v1/tc/transactions/:id/browser/td-sync-parties', summary: 'Scrape TD parties into LifeOS' },
+        ],
+        td_ui_plans: tdPlans,
+        td_workflows: workflows,
+        portal: {
+          agent: '/tc/agent-portal.html',
+          client: '/tc/client-portal.html',
+          assistant: '/tc/tc-assistant.html',
+        },
+        active_transaction_hint: 'Use GET /api/v1/tc/intake/workspace then substitute :id (e.g. Mahogany Peak = 1)',
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] operator-catalog error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/browser/debug-okta — map Okta login page fields (default dryRun)
+  router.post('/browser/debug-okta', requireKey, async (req, res) => {
+    let session = null;
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const tcBrowser = createTCBrowserAgent({ accountManager: await getAccountManager(), logger });
+      const dryRun = req.body?.dryRun !== false;
+      const login = await tcBrowser.loginToExpOkta(dryRun);
+      session = login.session;
+      const url = session?.page ? session.page.url() : null;
+      const observed = login.observed || (session?.page
+        ? await session.page.evaluate(() => ({
+            url: location.href,
+            title: document.title,
+            inputs: Array.from(document.querySelectorAll('input,button')).slice(0, 60).map((el) => ({
+              tag: el.tagName,
+              type: el.getAttribute('type') || '',
+              name: el.getAttribute('name') || '',
+              id: el.id || '',
+              placeholder: el.getAttribute('placeholder') || '',
+            })),
+          }))
+        : null);
+      res.json({
+        ok: !!login.ok,
+        dryRun: !!login.dryRun || dryRun,
+        alreadyAuthenticated: !!login.alreadyAuthenticated,
+        url,
+        screenshots: login.screenshots || [],
+        observed,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] debug-okta error');
+      res.status(500).json({
+        ok: false,
+        error: err.message,
+        observed: err.observed || null,
+        screenshots: err.screenshots || [],
+      });
+    } finally {
+      await session?.close?.().catch(() => {});
+    }
+  });
+
   // POST /api/v1/tc/test-glvar-login — dry-run GLVAR MLS login (screenshots, no form submit)
   router.post('/test-glvar-login', requireKey, async (req, res) => {
     try {
@@ -1733,17 +1830,34 @@ export function createTCRoutes(
 
       if (dryRun || !loginResult.ok) {
         await loginResult.session?.close?.();
-        return res.json({ ok: loginResult.ok, dryRun: true, screenshots: loginResult.screenshots });
+        return res.json({
+          ok: loginResult.ok,
+          dryRun: true,
+          screenshots: loginResult.screenshots,
+          observed: loginResult.observed || null,
+          alreadyAuthenticated: !!loginResult.alreadyAuthenticated,
+        });
       }
 
       // Full: navigate to SkySlope via Okta dashboard
       const navResult = await tcBrowser.navigateToSkySlope(loginResult.session);
       await loginResult.session?.close?.();
 
-      res.json({ ok: true, skySlopeUrl: navResult.url, screenshots: [...loginResult.screenshots, ...navResult.screenshots] });
+      res.json({
+        ok: true,
+        dryRun: false,
+        skySlopeUrl: navResult.url,
+        screenshots: [...loginResult.screenshots, ...navResult.screenshots],
+        alreadyAuthenticated: !!loginResult.alreadyAuthenticated,
+      });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] test-skyslope-login error');
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(500).json({
+        ok: false,
+        error: err.message,
+        observed: err.observed || null,
+        screenshots: err.screenshots || [],
+      });
     }
   });
 

@@ -213,7 +213,12 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
       actionable_emails: triageEmails.filter((item) => !item.actioned_at).length,
       matched_candidates: matched,
       unmatched_contract_emails: unmatchedContracts,
-      access_ready: Object.values(readiness.readiness || {}).every(Boolean),
+      access_ready: Boolean(
+        readiness.readiness?.imap_ready
+        && readiness.readiness?.glvar_ready
+        && readiness.readiness?.skyslope_ready
+        && readiness.readiness?.transactiondesk_ready
+      ),
     };
 
     const nextActions = [];

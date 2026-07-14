@@ -75,47 +75,134 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   async function loginToExpOkta(dryRun = false) {
     const credentials = await getExpCredentials();
     const session = await createSession();
+    const screenshots = [];
+
+    const USERNAME_SELS = [
+      '#okta-signin-username',
+      'input[name="identifier"]',
+      'input[name="username"]',
+      'input[autocomplete="username"]',
+      'input[type="email"]',
+      'input[data-se="o-form-input-username"]',
+      'input.okta-form-input-field[type="text"]',
+    ].join(', ');
+    const PASSWORD_SELS = [
+      '#okta-signin-password',
+      'input[name="credentials.passcode"]',
+      'input[name="password"]',
+      'input[autocomplete="current-password"]',
+      'input[type="password"]',
+      'input[data-se="o-form-input-password"]',
+    ].join(', ');
+    const SUBMIT_SELS = '#okta-signin-submit, [data-type="save"], button[type="submit"], input[type="submit"]';
+
+    async function observeLoginFields() {
+      return session.page.evaluate(() => {
+        const inputs = Array.from(document.querySelectorAll('input, button, a[href]'))
+          .slice(0, 80)
+          .map((el) => ({
+            tag: el.tagName,
+            type: el.getAttribute('type') || '',
+            name: el.getAttribute('name') || '',
+            id: el.id || '',
+            autocomplete: el.getAttribute('autocomplete') || '',
+            placeholder: el.getAttribute('placeholder') || '',
+            text: (el.textContent || '').trim().slice(0, 60),
+            href: el.getAttribute('href') || '',
+          }));
+        return { url: location.href, title: document.title, inputs };
+      });
+    }
+
+    function looksAuthenticated(url, content) {
+      const u = String(url || '');
+      return /UserHome|enduser|session_hint=AUTHENTICATED|dashboard/i.test(u)
+        || (/skyslope|exprealty\.com\/agent/i.test(u) && !/login|signin/i.test(u))
+        || (/AUTHENTICATED/i.test(String(content || '')) && !/okta-signin|Sign In/i.test(String(content || '')));
+    }
 
     try {
-      await session.navigate(getExpOktaCredentialsFromEnv().url || EXP_OKTA_URL);
-      const sp = await screenshotPath('exp-okta-login-page');
+      // Force classic login form when possible (homepage often redirects to OAuth authorize without fields).
+      const loginUrl = getExpOktaCredentialsFromEnv().url || EXP_OKTA_URL;
+      const forcedLogin = String(loginUrl).includes('/login')
+        ? loginUrl
+        : 'https://exprealty.okta.com/login/login.htm';
+      await session.navigate(forcedLogin);
+      await session.page.waitForTimeout(1500);
+      let sp = await screenshotPath('exp-okta-login-page');
       await session.page.screenshot({ path: sp });
-      logger.info?.({ screenshot: sp }, '[TC-BROWSER] eXp Okta login page loaded');
+      screenshots.push(sp);
+      logger.info?.({ screenshot: sp, url: session.page.url() }, '[TC-BROWSER] eXp Okta login page loaded');
 
       if (dryRun) {
-        return { session, ok: true, dryRun: true, screenshots: [sp] };
+        return { session, ok: true, dryRun: true, screenshots, observed: await observeLoginFields() };
       }
 
-      // Okta standard login form
-      await session.fill('#okta-signin-username, input[name="identifier"], input[type="email"]', credentials.username);
+      // Already signed in (cookie/session) — skip form and proceed.
+      if (looksAuthenticated(session.page.url(), await session.page.content().catch(() => ''))) {
+        const successSp = await screenshotPath('exp-okta-already-authenticated');
+        await session.page.screenshot({ path: successSp });
+        screenshots.push(successSp);
+        return { session, ok: true, screenshots, alreadyAuthenticated: true };
+      }
 
-      // Okta may show password on same screen or after clicking Next
-      const nextBtn = await session.page.$('#okta-signin-submit, [data-type="save"]');
+      // Wait briefly for Identity Engine widgets to hydrate.
+      await session.page.waitForSelector(USERNAME_SELS, { timeout: 8000 }).catch(() => null);
+
+      try {
+        await session.fill(USERNAME_SELS, credentials.username);
+      } catch (fillErr) {
+        // If homepage redirect left us authenticated mid-flow, recover.
+        if (looksAuthenticated(session.page.url(), await session.page.content().catch(() => ''))) {
+          const successSp = await screenshotPath('exp-okta-already-authenticated');
+          await session.page.screenshot({ path: successSp });
+          screenshots.push(successSp);
+          return { session, ok: true, screenshots, alreadyAuthenticated: true };
+        }
+        const observed = await observeLoginFields();
+        const failSp = await screenshotPath('exp-okta-no-username-field');
+        await session.page.screenshot({ path: failSp });
+        screenshots.push(failSp);
+        await session.close();
+        const err = new Error(
+          `${fillErr.message}. Observed url=${observed.url} title=${observed.title}. Screenshot: ${failSp}`
+        );
+        err.observed = observed;
+        err.screenshots = screenshots;
+        throw err;
+      }
+
+      const nextBtn = await session.page.$(SUBMIT_SELS);
       if (nextBtn) {
         await nextBtn.click();
         await session.page.waitForTimeout(1500);
       }
 
-      await session.fill('#okta-signin-password, input[name="credentials.passcode"], input[type="password"]', credentials.password);
-      await session.click('#okta-signin-submit, [data-type="save"], button[type="submit"]');
+      await session.page.waitForSelector(PASSWORD_SELS, { timeout: 8000 }).catch(() => null);
+      await session.fill(PASSWORD_SELS, credentials.password);
+      await session.click(SUBMIT_SELS);
 
       await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: LOGIN_TIMEOUT_MS }).catch(() => {});
+      await session.page.waitForTimeout(1200);
 
       const url = session.page.url();
       const content = await session.page.content();
 
-      if (/sign.?in|login|error|incorrect/i.test(content) && url.includes('okta.com')) {
+      if (/sign.?in|login|error|incorrect|unable to sign in/i.test(content) && url.includes('okta.com')
+        && !looksAuthenticated(url, content)) {
         const failSp = await screenshotPath('exp-okta-login-failed');
         await session.page.screenshot({ path: failSp });
+        screenshots.push(failSp);
         await session.close();
         throw new Error(`eXp Okta login failed. Screenshot: ${failSp}`);
       }
 
       const successSp = await screenshotPath('exp-okta-login-success');
       await session.page.screenshot({ path: successSp });
+      screenshots.push(successSp);
       logger.info?.({ url, screenshot: successSp }, '[TC-BROWSER] eXp Okta login success');
 
-      return { session, ok: true, screenshots: [sp, successSp] };
+      return { session, ok: true, screenshots };
     } catch (err) {
       await session.close().catch(() => {});
       throw err;

@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — TC / TX browser-UI-as-API
+
+Adam: make every TX aspect work; if no API key, map the human UI and template it like an API. Tip readiness: IMAP+GLVAR+TD+SkySlope vaults present; Chromium OK. Live GLVAR login PASS. SkySlope Okta failed on missing username field — hardened Okta login + operator-catalog + debug-okta. MLS scanner export alias fixed. access_ready no longer blocked by optional Asana.
+
 ## 2026-07-14 — SMOS gap close (suggestions + aliases)
 
 Tip gap probe against product matrix: core loop + Film Studio + calendar/atoms UI PASS; `/youtube/suggestions` still 502 / ignored `mode=fast` and returned ~571KB JPEG thumbs. Fixed: honor fast mode (SVG), dashboard first-paint fast + Refresh deep, intel/community field aliases, Creative Studio link on `/marketing`.

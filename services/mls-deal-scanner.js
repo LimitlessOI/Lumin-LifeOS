@@ -213,3 +213,6 @@ export function createTcService({ pool, logger, callCouncilMember }) {
     updateDealStatus,
   };
 }
+
+export const createMLSDealScanner = createTcService;
+export default createTcService;

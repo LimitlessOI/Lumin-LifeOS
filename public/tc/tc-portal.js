@@ -1338,6 +1338,7 @@
           <div class="row-actions" style="margin-bottom:12px">
             <button id="test-glvar" class="ghost">Test GLVAR</button>
             <button id="test-skyslope" class="ghost">Test SkySlope</button>
+            <a class="ghost" href="/api/v1/tc/browser/operator-catalog" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#cbd5ff;border:1px solid #27304a">Operator catalog</a>
           </div>
           <div id="access-test-results">${renderWorkspaceTests(lastWorkspaceTests)}</div>
           <div id="missing-setup-items">${renderMissingSetupItems(missingSetupItems)}</div>

@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-13 — Narrow spam sender rules (noreply was too broad; Google billing false-positive). |
+| **Last Updated** | 2026-07-14 — Okta login hardened + operator-catalog (browser UI as API); MLS export alias; access_ready ignores optional Asana. |
 
 ---
 
@@ -932,8 +932,8 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ## Agent Handoff Notes (TC lane)
 
 - **Lane ownership:** The TC conductor owns **Amendment 17**, **`docs/CONTINUITY_LOG_TC.md`**, and TC-touched code under `routes/tc-*`, `routes/mls-*`, `services/tc-*`, `services/glvar-monitor.js`, `services/mls-deal-scanner.js`, `services/email-triage.js` (when the change is TC-scoped), `public/tc/*`, and TC migrations. The LifeOS conductor owns Amendment 21 and `lifeos-*` paths. **Do not** edit the same file in both lanes without a designated owner — **HALT / rebase** per North Star Article II §2.6 ¶9 and `docs/QUICK_LAUNCH.md`.
-- **Next execute (from manifest `next_task`):** Use the intake workspace transaction board to open the **6453 Mahogany Peak** file, confirm the real TC mailbox credentials in Railway/vault, then run the first real SRPD/photo package search and send from the portal.
-- **Current focus (from manifest `current_focus`):** TD upload hardened (iframes + shadow DOM + confirm dialogs + retries) — redeploy; R4R scan; check `/tmp/tc-screenshots` on failure.
+- **Next execute (from manifest `next_task`):** Open **6453 Mahogany Peak** (tx id `1`) in `/tc/agent-portal.html`. Creds: IMAP+GLVAR live; eXp Okta vault present — use `POST /api/v1/tc/browser/debug-okta` then `test-skyslope-login` with `dryRun:false`. Run listing→SkySlope **rehearse** first. Operator map: `GET /api/v1/tc/browser/operator-catalog`.
+- **Current focus (from manifest `current_focus`):** Browser-UI-as-API: Okta login selectors + already-auth recovery; GLVAR live login PASS; SkySlope path under re-verify after Okta harden; TD UI plans/workflows exposed in operator-catalog.
 - **Verify:** `node scripts/verify-project.mjs --project tc_service` — set `PUBLIC_BASE_URL` (and auth as the script expects) to un-skip HTTP route probes.
 - **Doc cadence:** After each shipped TC slice — append **Change Receipts**, refresh **## Handoff (Fresh AI Context)** if blockers moved, update **`docs/CONTINUITY_LOG_TC.md`**, and bump manifest `last_verified_at` when verify was run.
 
@@ -976,6 +976,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **Browser-UI-as-API pack** — harden eXp Okta login (forced `/login/login.htm`, multi-selectors, already-auth recovery, observed fields on fail); `GET /browser/operator-catalog` + `POST /browser/debug-okta`; portal catalog link; `createMLSDealScanner` alias; `access_ready` no longer requires optional Asana; `fill()` tries comma selectors + iframes. | Adam: every TX aspect working; map UI like API when no vendor key. Tip: GLVAR live PASS; SkySlope failed missing Okta username field. | ✅ | | tip after deploy |
 | 2026-07-13 | **Spam sender rules narrowed** — removed blanket `noreply` auto-spam (false-trashed Google Workspace billing). Keep ccsend/blast domains + subject patterns. | Purge marked Google payment-declined as spam. | ✅ | | tip redeploy |
 | 2026-07-13 | **TC purge-spam** — `purgeLoggedSpam` + `POST /email/purge-spam` reclassifies already-logged marketing as spam and trashes UIDs; organize single-flight lock. | Background organize hung on IMAP; attention queue still showed ccsend/CE blasts as time_sensitive. | ✅ | | tip purge-spam |
 | 2026-07-13 | **TC organize background** — `POST /email/organize` returns immediately and runs IMAP triage async (dry_run/`await:true` still sync). | Tip proxy timed out 180–300s on live organize batches. | ✅ | | tip kick + poll attention |

@@ -8,6 +8,10 @@
 
 ---
 
+## 2026-07-14 — Browser-UI-as-API
+
+Okta login hardened; operator-catalog + debug-okta shipped; GLVAR live login PASS on tip; SkySlope re-verify after deploy; Mahogany Peak tx id=1 remains first live file.
+
 ## [BUILD] Update 2026-04-20 #2 — Lane handoff hardening (no runtime code)
 
 ### Files changed
