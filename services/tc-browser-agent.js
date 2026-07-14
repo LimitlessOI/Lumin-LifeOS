@@ -220,54 +220,128 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   /**
    * After eXp Okta login, navigate to SkySlope.
    * Must use the same session returned by loginToExpOkta.
+   * Okta tiles often open a new tab — adopt the newest page when that happens.
    */
   async function navigateToSkySlope(session) {
     const screenshots = [];
+    const browser = session.browser;
+    if (!browser) throw new Error('session.browser missing — recreate session via createSession');
 
-    // Try to find SkySlope tile/link on the Okta dashboard
+    const beforePages = new Set((await browser.pages()).map((p) => p));
+
+    async function adoptNewPageIfAny(timeoutMs = 12000) {
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        const pages = await browser.pages();
+        const fresh = pages.filter((p) => !beforePages.has(p));
+        for (const p of fresh.reverse()) {
+          const u = p.url();
+          if (/skyslope|lonewolf|transaction/i.test(u) || (!u.startsWith('about:') && u !== 'chrome://newtab/')) {
+            if (typeof session.setPage === 'function') await session.setPage(p);
+            else session.page = p;
+            return p;
+          }
+        }
+        // Also prefer any existing SkySlope page even if not "new"
+        for (const p of pages) {
+          if (/skyslope\.com/i.test(p.url()) && !/sign-?in/i.test(p.url())) {
+            if (typeof session.setPage === 'function') await session.setPage(p);
+            else session.page = p;
+            return p;
+          }
+        }
+        await new Promise((r) => setTimeout(r, 400));
+      }
+      return null;
+    }
+
+    // Prefer clicking the Okta tile (SSO) while listening for a new target.
+    const targetPromise = browser.waitForTarget(
+      (t) => t.type() === 'page' && /skyslope/i.test(t.url() || ''),
+      { timeout: 15000 }
+    ).catch(() => null);
+
     const skySlopeSelectors = [
-      'a[href*="skyslope"]',
+      'a[href*="skyslope" i]',
       '[data-se*="skyslope" i]',
-      '.app-name',
+      'a[aria-label*="SkySlope" i]',
+      '.app-button a[href*="skyslope" i]',
     ];
 
     let clicked = false;
     for (const sel of skySlopeSelectors) {
-      const el = await session.page.$(sel);
+      const el = await session.page.$(sel).catch(() => null);
       if (el) {
-        const text = await session.page.evaluate(e => e.textContent, el);
-        if (!sel.includes('app-name') || /skyslope/i.test(text)) {
-          await el.click();
-          clicked = true;
-          break;
-        }
+        await el.click();
+        clicked = true;
+        break;
       }
     }
 
     if (!clicked) {
-      // Text-based search across all links/buttons
       clicked = await session.page.evaluate(() => {
-        const els = Array.from(document.querySelectorAll('a, button, [role="link"]'));
-        const el = els.find(e => /skyslope/i.test(e.textContent));
+        const els = Array.from(document.querySelectorAll('a, button, [role="link"], [role="button"], div[tabindex]'));
+        const el = els.find((e) => /skyslope/i.test(`${e.textContent || ''} ${e.getAttribute?.('aria-label') || ''}`));
         if (el) { el.click(); return true; }
         return false;
       });
     }
 
-    if (!clicked) {
-      // Direct navigation as fallback (SkySlope accepts Okta tokens in cookies)
-      await session.navigate('https://skyslope.com/sign-in');
+    let adopted = null;
+    const target = await targetPromise;
+    if (target) {
+      const p = await target.page().catch(() => null);
+      if (p) {
+        if (typeof session.setPage === 'function') await session.setPage(p);
+        else session.page = p;
+        adopted = p;
+      }
+    }
+    if (!adopted) adopted = await adoptNewPageIfAny(clicked ? 10000 : 2000);
+
+    // If still on Okta dashboard, try known SkySlope entry URLs in this session (cookies).
+    let url = session.page.url();
+    if (!/skyslope\.com/i.test(url) || /sign-?in/i.test(url)) {
+      const candidates = [
+        'https://app.skyslope.com/',
+        'https://www.skyslope.com/',
+        'https://skyslope.com/',
+      ];
+      for (const next of candidates) {
+        try {
+          await session.page.goto(next, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT_MS });
+          await session.page.waitForTimeout(1500);
+          url = session.page.url();
+          if (/skyslope\.com/i.test(url) && !/sign-?in|login/i.test(url)) break;
+          // If we landed on sign-in, try waiting for SSO redirect
+          if (/sign-?in|login/i.test(url)) {
+            await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 8000 }).catch(() => {});
+            url = session.page.url();
+            if (/skyslope\.com/i.test(url) && !/sign-?in|login/i.test(url)) break;
+          }
+        } catch {
+          /* try next */
+        }
+      }
+    } else {
+      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+      url = session.page.url();
     }
 
-    await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
-
-    const url = session.page.url();
     const sp = await screenshotPath('skyslope-loaded');
-    await session.page.screenshot({ path: sp });
+    await session.page.screenshot({ path: sp }).catch(() => {});
     screenshots.push(sp);
 
-    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] SkySlope loaded');
-    return { ok: true, url, screenshots };
+    const ok = /skyslope\.com/i.test(url) && !/sign-?in|login/i.test(url);
+    logger.info?.({ url, screenshot: sp, clicked, adopted: !!adopted, ok }, '[TC-BROWSER] SkySlope navigation finished');
+    return {
+      ok,
+      url,
+      screenshots,
+      clicked,
+      via: adopted ? 'okta_tile_new_tab' : (clicked ? 'okta_tile_same_tab' : 'direct_goto'),
+      needs_human: !ok ? 'SkySlope still on sign-in — Okta SSO tile may require MFA or app assignment' : undefined,
+    };
   }
 
   /**

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T09:41:05.141Z",
+  "generated_at": "2026-07-14T09:46:25.650Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11522,
+  "file_count": 11523,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -21627,9 +21627,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3480901,
-      "mtime": "2026-07-14T09:41:04.136Z",
-      "indexed_at": "2026-07-14T09:41:05.141Z"
+      "bytes": 3481173,
+      "mtime": "2026-07-14T09:46:16.808Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -35654,6 +35654,13 @@
       "indexed_at": "2026-07-14T09:41:02.603Z"
     },
     {
+      "path": "db/migrations/20260714_tc_browser_jobs.sql",
+      "synopsis": "Durable TC browser automation jobs (survive multi-instance Railway)",
+      "bytes": 964,
+      "mtime": "2026-07-14T09:44:40.690Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z"
+    },
+    {
       "path": "db/migrations/builderos_command_control.sql",
       "synopsis": "Database migration — builderos_command_control.sql.",
       "bytes": 1596,
@@ -36922,16 +36929,16 @@
     {
       "path": "docs/CONTINUITY_LOG_TC.md",
       "synopsis": "Continuity Log — TC Lane",
-      "bytes": 2608,
-      "mtime": "2026-07-14T09:22:01.122Z",
-      "indexed_at": "2026-07-14T09:41:02.603Z"
+      "bytes": 3017,
+      "mtime": "2026-07-14T09:45:53.901Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z"
     },
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 543277,
-      "mtime": "2026-07-14T09:22:01.122Z",
-      "indexed_at": "2026-07-14T09:41:02.603Z"
+      "bytes": 543542,
+      "mtime": "2026-07-14T09:45:57.060Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -39932,9 +39939,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service",
-      "bytes": 110975,
-      "mtime": "2026-07-14T09:41:02.259Z",
-      "indexed_at": "2026-07-14T09:41:05.141Z"
+      "bytes": 111800,
+      "mtime": "2026-07-14T09:45:51.821Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z"
     },
     {
       "path": "docs/products/TCSERVICE.md",
@@ -66690,9 +66697,9 @@
     {
       "path": "routes/tc-routes.js",
       "synopsis": "tc-routes.js",
-      "bytes": 159385,
-      "mtime": "2026-07-14T09:22:01.125Z",
-      "indexed_at": "2026-07-14T09:41:02.603Z",
+      "bytes": 164704,
+      "mtime": "2026-07-14T09:45:56.089Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -81333,9 +81340,9 @@
     {
       "path": "services/browser-agent.js",
       "synopsis": "browser-agent.js",
-      "bytes": 9624,
-      "mtime": "2026-07-14T09:22:01.125Z",
-      "indexed_at": "2026-07-14T09:41:02.603Z",
+      "bytes": 9912,
+      "mtime": "2026-07-14T09:44:28.499Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]
@@ -86787,9 +86794,9 @@
     {
       "path": "services/tc-browser-agent.js",
       "synopsis": "tc-browser-agent.js",
-      "bytes": 67733,
-      "mtime": "2026-07-14T09:28:14.664Z",
-      "indexed_at": "2026-07-14T09:41:02.603Z",
+      "bytes": 70868,
+      "mtime": "2026-07-14T09:44:28.866Z",
+      "indexed_at": "2026-07-14T09:46:25.650Z",
       "ssot": [
         "docs/products/tc-service/PRODUCT_HOME.md"
       ]

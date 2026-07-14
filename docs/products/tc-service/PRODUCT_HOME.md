@@ -11,7 +11,7 @@
 | **Constitutional law** | `docs/constitution/NORTH_STAR_SSOT.md` |
 | **Machine manifest** | `docs/products/tc-service/FILE_MANIFEST.json` |
 | **Authority boundaries** | `docs/products/AUTHORITY_BOUNDARIES.md` |
-| **Last Updated** | 2026-07-14 — Doc intake wrappers normalize dryRun object→emails[]; Okta UI login + operator-catalog. |
+| **Last Updated** | 2026-07-14 — SkySlope new-tab nav + durable `tc_browser_jobs` + async email-search. |
 
 ---
 
@@ -932,8 +932,8 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ## Agent Handoff Notes (TC lane)
 
 - **Lane ownership:** The TC conductor owns **Amendment 17**, **`docs/CONTINUITY_LOG_TC.md`**, and TC-touched code under `routes/tc-*`, `routes/mls-*`, `services/tc-*`, `services/glvar-monitor.js`, `services/mls-deal-scanner.js`, `services/email-triage.js` (when the change is TC-scoped), `public/tc/*`, and TC migrations. The LifeOS conductor owns Amendment 21 and `lifeos-*` paths. **Do not** edit the same file in both lanes without a designated owner — **HALT / rebase** per North Star Article II §2.6 ¶9 and `docs/QUICK_LAUNCH.md`.
-- **Next execute (from manifest `next_task`):** Open **6453 Mahogany Peak** (tx id `1`) in `/tc/agent-portal.html`. Creds: IMAP+GLVAR live; eXp Okta vault present — use `POST /api/v1/tc/browser/debug-okta` then `test-skyslope-login` with `dryRun:false`. Run listing→SkySlope **rehearse** first. Operator map: `GET /api/v1/tc/browser/operator-catalog`.
-- **Current focus (from manifest `current_focus`):** Browser-UI-as-API: Okta login selectors + already-auth recovery; GLVAR live login PASS; SkySlope path under re-verify after Okta harden; TD UI plans/workflows exposed in operator-catalog.
+- **Next execute (from manifest `next_task`):** Tip-verify after this ship: `POST /browser/test-skyslope-login` `{dryRun:false}` (expect `ok` or honest `needs_human`); `POST /intake/email-search` → poll `GET /browser-jobs/:id`; listing→SkySlope dry_run on tx `1` + poll. Operator map: `GET /api/v1/tc/browser/operator-catalog`.
+- **Current focus (from manifest `current_focus`):** SkySlope Okta tile/new-tab adoption; durable browser jobs across Railway instances; async email-search (no tip 502).
 - **Verify:** `node scripts/verify-project.mjs --project tc_service` — set `PUBLIC_BASE_URL` (and auth as the script expects) to un-skip HTTP route probes.
 - **Doc cadence:** After each shipped TC slice — append **Change Receipts**, refresh **## Handoff (Fresh AI Context)** if blockers moved, update **`docs/CONTINUITY_LOG_TC.md`**, and bump manifest `last_verified_at` when verify was run.
 
@@ -953,7 +953,9 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 | Inspection report spread across several inbox messages; forward PDFs to buyer agent/TC; push same set to TD | Single-email `send-attachment-package` is insufficient | **Preview:** `POST /api/v1/tc/transactions/:id/email/preview-inspection-mailbox` — **Gather:** `.../gather-inspection-attachments` — **Forward:** `.../forward-inspection-docs` with `recipient_email`, optional `narrative`, `dry_run:false` to send — **TD:** `.../upload-gathered-to-td` (requires `transaction_desk_id`). Response includes `transaction_desk_playbook` for manual e-sign routing in TD |
 | Need seller client email (Pam) without typing it | Email lives in TD or Sent mail | **`POST .../browser/td-sync-parties`** (link `transaction_desk_id` first) merges scraped mails into `parties`, or use **`sync_td_parties_first:true`** on prepare/forward. Fallback: `seller_name_hints` / Sent search — optional `requires_listing_agent_signature` + `TC_LISTING_AGENT_*` env for PDF acknowledgment pages |
 | Need Forms / e-sign tabs opened in TD from LifeOS | TD UI is not a stable API | **`POST .../browser/td-ui-plan`** with `plan: inspection_seller_signing_prep` (or `open_forms`, `open_esign`, `open_documents`) — returns step log + screenshots; operator completes recipients, Nevada forms, and coop send inside TD |
-| Run party scrape + inspection UI chain without timing out HTTP | Long Puppeteer runs | **`POST .../browser/td-workflow`** with `workflow: full_inspection_file_sync` (or `sync_parties` / `ui_inspection_prep`) — **202** + `job_id`, then **`GET /browser-jobs/:jobId`**. **`GET /td-workflows/catalog`** lists workflows |
+| Run party scrape + inspection UI chain without timing out HTTP | Long Puppeteer runs | **`POST .../browser/td-workflow`** with `workflow: full_inspection_file_sync` (or `sync_parties` / `ui_inspection_prep`) — **202** + `job_id`, then **`GET /browser-jobs/:jobId`** (DB-backed `tc_browser_jobs`). **`GET /td-workflows/catalog`** lists workflows |
+| Email-search 502 / proxy timeout | IMAP scan too long for edge | **`POST /intake/email-search`** returns **202** + `job_id` by default; poll **`GET /browser-jobs/:jobId`**. Use `{await:true}` only for short sync tests |
+| Browser job poll empty / 404 on another instance | In-memory Maps only | Jobs persist to **`tc_browser_jobs`** (migration `20260714_tc_browser_jobs.sql`); poll always hits DB fallback |
 | Keep TD forms knowledge in-system so operator does not reteach each file type | Form names and handling differ by package/template | Run **`POST .../browser/td-workflow`** with `workflow: scan_forms_catalog` to scrape visible Forms inventory and persist. Add **`include_machine_fields:true`** to scrape machine-readable controls per form (input/select/textarea schema). Read with **`GET /td/forms-knowledge`**, then store handling instructions via **`PATCH /td/forms-knowledge/:id`** |
 | Agent portal opens with no transaction context | No `?tx=` parameter was supplied | Use the intake workspace that now loads by default and run setup/scan from there |
 | SkySlope login fails | Okta session expired or credentials missing from vault/env aliases | Store/rotate `exp_okta` via `POST /api/v1/accounts/store`, or ensure `exp_okta_Username` / `exp_okta_Password` are set, then re-run readiness |
@@ -976,6 +978,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-07-14 | **SkySlope nav + durable jobs + async email-search** — `navigateToSkySlope` adopts Okta new-tab/target; `createSession` exposes `browser`/`setPage`; `tc_browser_jobs` migration + persist/load for listing sync, TD workflows, email-search; `POST /intake/email-search` **202** by default; `test-skyslope-login` returns real `ok`/`needs_human`. | Tip: SkySlope left on Okta/sign-in; multi-instance job poll empty; email-search 502 on edge timeout. | ✅ | | tip verify after redeploy |
 | 2026-07-14 | **Doc intake export alias** — `createTCDocIntake` = `createTcEmailScanAndUpload` + `findExecutedAgreements`/`runFullIntake` wrappers. | Tip email-search 500: createTCDocIntake is not a function. | ✅ | | tip after deploy |
 | 2026-07-14 | **Browser-UI-as-API pack** — harden eXp Okta login (forced `/login/login.htm`, multi-selectors, already-auth recovery, observed fields on fail); `GET /browser/operator-catalog` + `POST /browser/debug-okta`; portal catalog link; `createMLSDealScanner` alias; `access_ready` no longer requires optional Asana; `fill()` tries comma selectors + iframes. | Adam: every TX aspect working; map UI like API when no vendor key. Tip: GLVAR live PASS; SkySlope failed missing Okta username field. | ✅ | | tip `b53294c548` catalog+GLVAR+access_ready PASS; Okta false-auth from enduser in redirect_uri — fix pending ship |
 | 2026-07-13 | **Spam sender rules narrowed** — removed blanket `noreply` auto-spam (false-trashed Google Workspace billing). Keep ccsend/blast domains + subject patterns. | Purge marked Google payment-declined as spam. | ✅ | | tip redeploy |

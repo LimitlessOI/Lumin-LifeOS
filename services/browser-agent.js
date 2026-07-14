@@ -118,7 +118,7 @@ export async function probeLaunchConfigs() {
 export async function createSession({ headless = true, logger = console } = {}) {
   const browser = await puppeteer.launch(getChromiumLaunchOptions({ headless }));
 
-  const page = await browser.newPage();
+  let page = await browser.newPage();
 
   await page.setUserAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
@@ -126,12 +126,21 @@ export async function createSession({ headless = true, logger = console } = {}) 
   );
   await page.setViewport({ width: 1280, height: 800 });
 
-  if (typeof page.waitForTimeout !== "function") {
-    page.waitForTimeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  function wirePageDefaults(p) {
+    if (typeof p.waitForTimeout !== "function") {
+      p.waitForTimeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    }
+    p.setDefaultTimeout(DEFAULT_TIMEOUT);
+    p.setDefaultNavigationTimeout(DEFAULT_NAV_TIMEOUT);
   }
+  wirePageDefaults(page);
 
-  page.setDefaultTimeout(DEFAULT_TIMEOUT);
-  page.setDefaultNavigationTimeout(DEFAULT_NAV_TIMEOUT);
+  async function setPage(nextPage) {
+    if (!nextPage) throw new Error('setPage requires a page');
+    page = nextPage;
+    wirePageDefaults(page);
+    return page;
+  }
 
   async function screenshot(label = "screenshot") {
     const filename = `${Date.now()}-${label.replace(/[^a-z0-9-]/gi, "_")}.png`;
@@ -269,7 +278,11 @@ export async function createSession({ headless = true, logger = console } = {}) 
   }
 
   return {
-    page,
+    browser,
+    get page() {
+      return page;
+    },
+    setPage,
     navigate,
     fill,
     click,

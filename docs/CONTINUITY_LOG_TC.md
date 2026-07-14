@@ -8,6 +8,10 @@
 
 ---
 
+## 2026-07-14 — SkySlope new-tab + durable jobs + async email-search
+
+Closed three open TC gaps: (1) `navigateToSkySlope` adopts Okta tile new-tab/target + `session.setPage`; (2) `tc_browser_jobs` table so `GET /browser-jobs/:id` works across Railway instances; (3) `POST /intake/email-search` async **202** + poll (avoids tip 502). Next: tip-verify skyslope login, email-search job, listing dry_run tx=1.
+
 ## 2026-07-14 — Browser-UI-as-API
 
 Okta login hardened; operator-catalog + debug-okta shipped; GLVAR live login PASS on tip; SkySlope re-verify after deploy; Mahogany Peak tx id=1 remains first live file.

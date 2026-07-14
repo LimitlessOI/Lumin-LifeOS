@@ -43,12 +43,102 @@ import { classifyR4RAttachment } from '../services/tc-r4r-attachment-classify.js
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
 
-/** In-memory status for async TD → SkySlope listing sync (browser automation can exceed HTTP timeouts). */
+/** In-memory cache (fast path); Neon tc_browser_jobs is source of truth across instances. */
 const listingTdSkyslopeJobs = new Map();
 const LISTING_SYNC_JOB_TTL_MS = 2 * 60 * 60 * 1000;
 
 /** Async TD-only workflow jobs (party sync, UI chains). */
 const tdWorkflowJobs = new Map();
+
+let tcBrowserJobsSchemaReady = false;
+async function ensureTcBrowserJobsSchema(pool) {
+  if (tcBrowserJobsSchemaReady || !pool?.query) return;
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS tc_browser_jobs (
+      id UUID PRIMARY KEY,
+      kind TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'queued'
+        CHECK (status IN ('queued', 'running', 'completed', 'failed')),
+      transaction_id INTEGER,
+      request_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+      steps_json JSONB NOT NULL DEFAULT '[]'::jsonb,
+      result_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+      error TEXT,
+      dry_run BOOLEAN NOT NULL DEFAULT true,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      completed_at TIMESTAMPTZ
+    )
+  `);
+  tcBrowserJobsSchemaReady = true;
+}
+
+async function persistBrowserJob(pool, job) {
+  if (!pool?.query || !job?.id) return;
+  try {
+    await ensureTcBrowserJobsSchema(pool);
+    await pool.query(
+      `INSERT INTO tc_browser_jobs
+         (id, kind, status, transaction_id, request_json, steps_json, result_json, error, dry_run, updated_at, completed_at)
+       VALUES ($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7::jsonb,$8,$9,NOW(),$10)
+       ON CONFLICT (id) DO UPDATE SET
+         status = EXCLUDED.status,
+         steps_json = EXCLUDED.steps_json,
+         result_json = EXCLUDED.result_json,
+         error = EXCLUDED.error,
+         updated_at = NOW(),
+         completed_at = EXCLUDED.completed_at`,
+      [
+        job.id,
+        job.kind || 'unknown',
+        job.status || 'queued',
+        job.transaction_id ?? null,
+        JSON.stringify(job.request || {}),
+        JSON.stringify(job.steps || []),
+        JSON.stringify(job.result || {}),
+        job.error || null,
+        job.dry_run !== false,
+        ['completed', 'failed'].includes(job.status) ? new Date().toISOString() : null,
+      ]
+    );
+  } catch (err) {
+    // Non-fatal: memory map still works on single instance
+    console.warn?.('[TC-JOBS] persist failed', err?.message || err);
+  }
+}
+
+async function loadBrowserJob(pool, jobId) {
+  const mem = listingTdSkyslopeJobs.get(jobId) || tdWorkflowJobs.get(jobId);
+  if (mem) return mem;
+  if (!pool?.query) return null;
+  try {
+    await ensureTcBrowserJobsSchema(pool);
+    const { rows } = await pool.query(
+      `SELECT id, kind, status, transaction_id, request_json, steps_json, result_json, error, dry_run, created_at, updated_at, completed_at
+       FROM tc_browser_jobs WHERE id = $1 LIMIT 1`,
+      [jobId]
+    );
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      id: row.id,
+      kind: row.kind,
+      status: row.status,
+      transaction_id: row.transaction_id,
+      request: row.request_json || {},
+      steps: row.steps_json || [],
+      result: row.result_json || null,
+      error: row.error,
+      dry_run: row.dry_run,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      completed_at: row.completed_at,
+      from_db: true,
+    };
+  } catch {
+    return null;
+  }
+}
 
 function pruneTdWorkflowJobs() {
   const now = Date.now();
@@ -1509,6 +1599,7 @@ export function createTCRoutes(
       const jobId = crypto.randomUUID();
       const job = {
         id: jobId,
+        kind: 'td_workflow',
         type: 'td_workflow',
         transaction_id: txId,
         workflow,
@@ -1517,8 +1608,10 @@ export function createTCRoutes(
         error: null,
         result: null,
         created_at: new Date().toISOString(),
+        dry_run: true,
       };
       tdWorkflowJobs.set(jobId, job);
+      await persistBrowserJob(pool, job);
 
       res.status(202).json({
         ok: true,
@@ -1530,11 +1623,15 @@ export function createTCRoutes(
       });
 
       (async () => {
-        const j = tdWorkflowJobs.get(jobId);
+        const j = tdWorkflowJobs.get(jobId) || job;
         if (!j) return;
         j.status = 'running';
+        await persistBrowserJob(pool, j);
         try {
-          const result = await tdWorkflowRunner.runWorkflow(txId, workflow, body, (step) => j.steps.push(step));
+          const result = await tdWorkflowRunner.runWorkflow(txId, workflow, body, async (step) => {
+            j.steps.push(step);
+            await persistBrowserJob(pool, j);
+          });
           const failed = result.ok === false;
           j.status = failed ? 'failed' : 'completed';
           j.result = result;
@@ -1545,10 +1642,12 @@ export function createTCRoutes(
               (result.sync && !result.sync.ok && 'party sync failed') ||
               'workflow failed';
           }
+          await persistBrowserJob(pool, j);
         } catch (err) {
           j.status = 'failed';
           j.error = err.message;
           j.steps.push({ at: new Date().toISOString(), label: 'job_failed', error: err.message });
+          await persistBrowserJob(pool, j);
           logger.warn?.({ err: err.message, jobId, workflow }, '[TC-ROUTES] td-workflow job failed');
         }
       })();
@@ -1604,24 +1703,75 @@ export function createTCRoutes(
     }
   });
 
-  // POST /api/v1/tc/intake/email-search — just search, don't upload
+  // POST /api/v1/tc/intake/email-search — search inbox for executed agreements (async by default; await:true for sync)
   router.post('/intake/email-search', requireKey, async (req, res) => {
     try {
-      const { days = 90 } = req.body || {};
+      const { days = 90, await: awaitResult = false } = req.body || {};
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
       const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
       const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
-      const emails = await intake.findExecutedAgreements({ days });
-      res.json({
+
+      const runSearch = async () => {
+        const emails = await intake.findExecutedAgreements({ days });
+        return {
+          ok: true,
+          found: emails.length,
+          emails: emails.map((e) => ({
+            subject: e.subject,
+            from: e.from,
+            date: e.date,
+            isRPA: e.isRPA,
+            isListing: e.isListing,
+            files: (e.files || []).map((f) => ({ filename: f.filename, docType: f.docType, size: f.size })),
+          })),
+        };
+      };
+
+      if (awaitResult === true || req.body?.sync === true) {
+        return res.json(await runSearch());
+      }
+
+      const jobId = crypto.randomUUID();
+      const job = {
+        id: jobId,
+        kind: 'email_search',
+        status: 'queued',
+        steps: [],
+        error: null,
+        result: null,
+        request: { days },
+        created_at: new Date().toISOString(),
+        dry_run: true,
+      };
+      listingTdSkyslopeJobs.set(jobId, job);
+      await persistBrowserJob(pool, job);
+      res.status(202).json({
         ok: true,
-        found: emails.length,
-        emails: emails.map(e => ({
-          subject: e.subject, from: e.from, date: e.date,
-          isRPA: e.isRPA, isListing: e.isListing,
-          files: e.files.map(f => ({ filename: f.filename, docType: f.docType, size: f.size })),
-        })),
+        started: true,
+        job_id: jobId,
+        poll_url: `/api/v1/tc/browser-jobs/${jobId}`,
+        message: 'Email search started in background (avoids proxy timeout). Poll poll_url.',
+      });
+
+      setImmediate(() => {
+        (async () => {
+          const j = listingTdSkyslopeJobs.get(jobId) || job;
+          j.status = 'running';
+          await persistBrowserJob(pool, j);
+          try {
+            const result = await runSearch();
+            j.status = 'completed';
+            j.result = result;
+            await persistBrowserJob(pool, j);
+          } catch (err) {
+            j.status = 'failed';
+            j.error = err.message;
+            await persistBrowserJob(pool, j);
+            logger.warn?.({ err: err.message, jobId }, '[TC-ROUTES] email-search job failed');
+          }
+        })();
       });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] email-search error');
@@ -1844,10 +1994,12 @@ export function createTCRoutes(
       await loginResult.session?.close?.();
 
       res.json({
-        ok: true,
+        ok: !!navResult.ok,
         dryRun: false,
         skySlopeUrl: navResult.url,
-        screenshots: [...loginResult.screenshots, ...navResult.screenshots],
+        via: navResult.via,
+        needs_human: navResult.needs_human,
+        screenshots: [...(loginResult.screenshots || []), ...(navResult.screenshots || [])],
         alreadyAuthenticated: !!loginResult.alreadyAuthenticated,
       });
     } catch (err) {
@@ -1883,11 +2035,13 @@ export function createTCRoutes(
       const jobId = crypto.randomUUID();
       const job = {
         id: jobId,
+        kind: 'listing_td_skyslope',
         transaction_id: txId,
         status: 'queued',
         steps: [],
         error: null,
         result: null,
+        request: { address_search: addressSearch, force_upload: forceUpload },
         created_at: new Date().toISOString(),
         dry_run: dryRun,
       };
@@ -1904,10 +2058,13 @@ export function createTCRoutes(
           : 'Live run queued: downloads executed listing agreement and uploads to SkySlope.',
       });
 
+      await persistBrowserJob(pool, job);
+
       (async () => {
         const j = listingTdSkyslopeJobs.get(jobId);
         if (!j) return;
         j.status = 'running';
+        await persistBrowserJob(pool, j);
         const accountManager = await getAccountManager();
         const { createTCListingSkyslopeSync } = await import('../services/tc-listing-skyslope-sync.js');
         const sync = createTCListingSkyslopeSync({ pool, coordinator, accountManager, logger });
@@ -1918,12 +2075,14 @@ export function createTCRoutes(
             filenameHints,
             dryRun,
             forceUpload,
-            onStep: (step) => {
+            onStep: async (step) => {
               j.steps.push(step);
+              await persistBrowserJob(pool, j);
             },
           });
           j.status = 'completed';
           j.result = result;
+          await persistBrowserJob(pool, j);
         } catch (err) {
           j.status = 'failed';
           j.error = err.message;
@@ -1933,6 +2092,7 @@ export function createTCRoutes(
             label: 'job_failed',
             error: err.message,
           });
+          await persistBrowserJob(pool, j);
         }
       })();
     } catch (err) {
@@ -1943,7 +2103,7 @@ export function createTCRoutes(
 
   // GET /api/v1/tc/browser-jobs/:jobId — poll listing TD → SkySlope or TD workflow job
   router.get('/browser-jobs/:jobId', requireKey, async (req, res) => {
-    const job = listingTdSkyslopeJobs.get(req.params.jobId) || tdWorkflowJobs.get(req.params.jobId);
+    const job = await loadBrowserJob(pool, req.params.jobId);
     if (!job) return res.status(404).json({ ok: false, error: 'Job not found or expired' });
     res.json({ ok: true, job });
   });

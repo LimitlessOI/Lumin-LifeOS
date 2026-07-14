@@ -2,6 +2,10 @@
 
 ---
 
+## 2026-07-14 — TC SkySlope nav + durable browser jobs + async email-search
+
+Finished open TX gaps: SkySlope Okta new-tab adoption (`setPage`), DB-backed `tc_browser_jobs` for multi-instance poll, email-search returns 202 + poll. Tip verify next after redeploy.
+
 ## 2026-07-14 — TC / TX browser-UI-as-API
 
 Adam: make every TX aspect work; if no API key, map the human UI and template it like an API. Tip readiness: IMAP+GLVAR+TD+SkySlope vaults present; Chromium OK. Live GLVAR login PASS. SkySlope Okta failed on missing username field — hardened Okta login + operator-catalog + debug-okta. MLS scanner export alias fixed. access_ready no longer blocked by optional Asana.
