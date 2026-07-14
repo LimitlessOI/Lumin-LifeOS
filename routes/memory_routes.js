@@ -1,300 +1,467 @@
 /**
  * SYNOPSIS: Registers MemoryRoutes routes/handlers (routes/memory_routes.js).
  */
-import { randomUUID } from 'node:crypto';
-
-function safeJsonParse(value, fallback = null) {
-  if (value == null) return fallback;
-  if (typeof value === 'object') return value;
-  if (typeof value !== 'string') return fallback;
-  try {
-    return JSON.parse(value);
-  } catch {
-    return fallback;
-  }
-}
-
-function normalizeRows(rows) {
-  return Array.isArray(rows) ? rows : [];
-}
-
-function parseLimit(value, fallback = 50, max = 200) {
-  const n = Number.parseInt(value, 10);
-  if (!Number.isFinite(n) || n <= 0) return fallback;
-  return Math.min(n, max);
-}
-
-function getMemoryTypeFromBody(body) {
-  return body?.memory_type ?? body?.type ?? body?.category ?? 'general';
-}
-
-function getTextField(body, keys, fallback = '') {
-  for (const key of keys) {
-    const value = body?.[key];
-    if (typeof value === 'string' && value.trim()) return value.trim();
-  }
-  return fallback;
-}
-
-function createMemoryRoutesResponse(row) {
-  if (!row) return null;
-  return {
-    id: row.id,
-    memory_id: row.memory_id,
-    orchestrator_msg: row.orchestrator_msg,
-    ai_response: row.ai_response,
-    ai_member: row.ai_member,
-    key_facts: safeJsonParse(row.key_facts, row.key_facts),
-    context_metadata: safeJsonParse(row.context_metadata, row.context_metadata),
-    memory_type: row.memory_type,
-    created_at: row.created_at,
-  };
-}
-
 export function registerMemoryRoutes(app, deps) {
-  const { pool, requireKey, callCouncilMember, logger, baseUrl, commitToGitHub, commitManyToGitHub } = deps || {};
-
   if (!app || typeof app.get !== 'function' || typeof app.post !== 'function') {
     throw new Error('registerMemoryRoutes requires an Express app');
   }
-  if (!pool || typeof pool.query !== 'function') {
+  if (!deps || !deps.pool || typeof deps.pool.query !== 'function') {
     throw new Error('registerMemoryRoutes requires deps.pool');
   }
 
-  app.get('/api/memory', async (req, res) => {
-    try {
-      const limit = parseLimit(req.query?.limit, 50, 200);
-      const offset = Math.max(0, Number.parseInt(req.query?.offset, 10) || 0);
-      const memoryType = typeof req.query?.memory_type === 'string' ? req.query.memory_type.trim() : '';
-      const memoryId = typeof req.query?.memory_id === 'string' ? req.query.memory_id.trim() : '';
+  const { pool, requireKey, callCouncilMember, logger } = deps;
 
-      const where = [];
+  const log = logger || console;
+
+  const sendError = (res, status, message, details) => {
+    const payload = { error: message };
+    if (details !== undefined) payload.details = details;
+    return res.status(status).json(payload);
+  };
+
+  const parseJsonBody = (value) => {
+    if (value == null) return null;
+    if (typeof value === 'object') return value;
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return value;
+      }
+    }
+    return value;
+  };
+
+  const normalizeLimit = (value, fallback = 50, max = 200) => {
+    const n = Number.parseInt(value, 10);
+    if (!Number.isFinite(n) || n <= 0) return fallback;
+    return Math.min(n, max);
+  };
+
+  app.get('/api/memory/routes/health', async (_req, res) => {
+    try {
+      const result = await pool.query('select now() as now');
+      return res.json({ ok: true, at: result.rows?.[0]?.now ?? null });
+    } catch (error) {
+      log.error?.({ error }, 'memory routes health check failed');
+      return sendError(res, 500, 'memory routes health check failed');
+    }
+  });
+
+  app.get('/api/memory/conversation', async (req, res) => {
+    try {
+      const limit = normalizeLimit(req.query.limit, 50, 200);
+      const memoryType = req.query.memory_type || req.query.memoryType || null;
+
       const params = [];
-      let idx = 1;
-
-      if (memoryId) {
-        where.push(`memory_id = $${idx++}`);
-        params.push(memoryId);
-      }
+      let where = '';
       if (memoryType) {
-        where.push(`memory_type = $${idx++}`);
         params.push(memoryType);
+        where = `where memory_type = $${params.length}`;
       }
 
-      const sql = `
-        SELECT id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
-        FROM conversation_memory
-        ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
-        ORDER BY created_at DESC
-        LIMIT $${idx++} OFFSET $${idx++}
+      params.push(limit);
+      const q = `
+        select id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
+        from conversation_memory
+        ${where}
+        order by created_at desc
+        limit $${params.length}
       `;
-      params.push(limit, offset);
 
-      const result = await pool.query(sql, params);
-      res.json({
-        ok: true,
-        count: result.rowCount ?? normalizeRows(result.rows).length,
-        items: normalizeRows(result.rows).map(createMemoryRoutesResponse),
-      });
+      const result = await pool.query(q, params);
+      return res.json({ ok: true, items: result.rows });
     } catch (error) {
-      logger?.error?.({ err: error }, 'GET /api/memory failed');
-      res.status(500).json({ ok: false, error: 'failed_to_list_memory' });
+      log.error?.({ error }, 'failed to list conversation memory');
+      return sendError(res, 500, 'failed to list conversation memory');
     }
   });
 
-  app.get('/api/memory/:memoryId', async (req, res) => {
+  app.post('/api/memory/conversation', requireKey, async (req, res) => {
     try {
-      const memoryId = String(req.params?.memoryId || '').trim();
-      if (!memoryId) {
-        return res.status(400).json({ ok: false, error: 'memory_id_required' });
-      }
+      const {
+        memory_id = null,
+        orchestrator_msg = null,
+        ai_response = null,
+        ai_member = null,
+        key_facts = null,
+        context_metadata = null,
+        memory_type = null
+      } = req.body || {};
 
       const result = await pool.query(
         `
-          SELECT id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
-          FROM conversation_memory
-          WHERE memory_id = $1
-          ORDER BY created_at DESC
-          LIMIT 1
-        `,
-        [memoryId],
-      );
-
-      const row = result.rows?.[0] || null;
-      if (!row) {
-        return res.status(404).json({ ok: false, error: 'memory_not_found' });
-      }
-
-      res.json({ ok: true, item: createMemoryRoutesResponse(row) });
-    } catch (error) {
-      logger?.error?.({ err: error }, 'GET /api/memory/:memoryId failed');
-      res.status(500).json({ ok: false, error: 'failed_to_load_memory' });
-    }
-  });
-
-  app.post('/api/memory', requireKey, async (req, res) => {
-    try {
-      const body = req.body || {};
-      const memoryId = getTextField(body, ['memory_id'], randomUUID());
-      const memoryType = getMemoryTypeFromBody(body);
-      const orchestratorMsg = getTextField(body, ['orchestrator_msg', 'message', 'prompt', 'text']);
-      const aiMember = getTextField(body, ['ai_member', 'member', 'role']);
-      const aiResponse = getTextField(body, ['ai_response', 'response', 'output']);
-      const keyFacts = body?.key_facts ?? body?.facts ?? null;
-      const contextMetadata = body?.context_metadata ?? body?.metadata ?? null;
-
-      if (!orchestratorMsg) {
-        return res.status(400).json({ ok: false, error: 'orchestrator_msg_required' });
-      }
-
-      const result = await pool.query(
-        `
-          INSERT INTO conversation_memory (
-            memory_id,
-            orchestrator_msg,
-            ai_response,
-            ai_member,
-            key_facts,
-            context_metadata,
-            memory_type
+          insert into conversation_memory (
+            memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type
           )
-          VALUES ($1, $2, $3, $4, $5, $6, $7)
-          RETURNING id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
+          values ($1, $2, $3, $4, $5, $6, $7)
+          returning id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
         `,
         [
-          memoryId,
-          orchestratorMsg,
-          aiResponse || null,
-          aiMember || null,
-          keyFacts == null ? null : JSON.stringify(keyFacts),
-          contextMetadata == null ? null : JSON.stringify(contextMetadata),
-          memoryType,
-        ],
+          memory_id,
+          orchestrator_msg,
+          ai_response,
+          ai_member,
+          key_facts,
+          context_metadata,
+          memory_type
+        ]
       );
 
-      const row = result.rows?.[0] || null;
-      res.status(201).json({ ok: true, item: createMemoryRoutesResponse(row) });
+      return res.status(201).json({ ok: true, item: result.rows[0] });
     } catch (error) {
-      logger?.error?.({ err: error }, 'POST /api/memory failed');
-      res.status(500).json({ ok: false, error: 'failed_to_create_memory' });
+      log.error?.({ error }, 'failed to create conversation memory');
+      return sendError(res, 500, 'failed to create conversation memory');
     }
   });
 
-  app.post('/api/memory/council', requireKey, async (req, res) => {
+  app.get('/api/memory/capsules', async (req, res) => {
     try {
-      const body = req.body || {};
-      const role = getTextField(body, ['role'], 'memory');
-      const prompt = getTextField(body, ['prompt', 'input', 'question', 'message']);
-      const memoryType = getMemoryTypeFromBody(body);
+      const limit = normalizeLimit(req.query.limit, 50, 200);
+      const ownerId = req.query.owner_id || req.query.ownerId || null;
+      const status = req.query.status || null;
 
-      if (!prompt) {
-        return res.status(400).json({ ok: false, error: 'prompt_required' });
+      const clauses = [];
+      const params = [];
+
+      if (ownerId) {
+        params.push(ownerId);
+        clauses.push(`owner_id = $${params.length}`);
+      }
+      if (status) {
+        params.push(status);
+        clauses.push(`status = $${params.length}`);
       }
 
-      const aiResponse = await callCouncilMember(role, prompt, body?.opts || body?.options || undefined);
+      params.push(limit);
+      const q = `
+        select *
+        from memory_capsules
+        ${clauses.length ? `where ${clauses.join(' and ')}` : ''}
+        order by created_at desc nulls last
+        limit $${params.length}
+      `;
 
-      const inserted = await pool.query(
-        `
-          INSERT INTO conversation_memory (
-            memory_id,
-            orchestrator_msg,
-            ai_response,
-            ai_member,
-            key_facts,
-            context_metadata,
-            memory_type
-          )
-          VALUES ($1, $2, $3, $4, $5, $6, $7)
-          RETURNING id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
-        `,
-        [
-          randomUUID(),
-          prompt,
-          aiResponse,
-          role,
-          null,
-          JSON.stringify({
-            source: 'council',
-            base_url: baseUrl || null,
-          }),
-          memoryType,
-        ],
-      );
-
-      res.status(201).json({
-        ok: true,
-        ai_response: aiResponse,
-        item: createMemoryRoutesResponse(inserted.rows?.[0] || null),
-      });
+      const result = await pool.query(q, params);
+      return res.json({ ok: true, items: result.rows });
     } catch (error) {
-      logger?.error?.({ err: error }, 'POST /api/memory/council failed');
-      res.status(500).json({ ok: false, error: 'failed_to_run_memory_council' });
+      log.error?.({ error }, 'failed to list memory capsules');
+      return sendError(res, 500, 'failed to list memory capsules');
     }
   });
 
-  app.get('/api/memory/health', async (_req, res) => {
+  app.post('/api/memory/capsules', requireKey, async (req, res) => {
+    try {
+      const body = req.body || {};
+      const fields = [
+        'fact_id',
+        'title',
+        'capsule_type',
+        'truth_class',
+        'trust_level',
+        'evidence_level',
+        'sensitivity',
+        'source_type',
+        'source_ref',
+        'retrieval_permission',
+        'task_scope',
+        'retrieval_lane_ceiling',
+        'canonical_statement_id',
+        'fact_family_id',
+        'review_by',
+        'status',
+        'legacy_import_method',
+        'review_required',
+        'owner_id',
+        'data'
+      ];
+
+      const cols = [];
+      const vals = [];
+      const params = [];
+
+      for (const field of fields) {
+        if (body[field] !== undefined) {
+          cols.push(field);
+          vals.push(`$${params.length + 1}`);
+          params.push(body[field]);
+        }
+      }
+
+      if (!cols.length) {
+        return sendError(res, 400, 'no capsule fields provided');
+      }
+
+      const result = await pool.query(
+        `
+          insert into memory_capsules (${cols.join(', ')})
+          values (${vals.join(', ')})
+          returning *
+        `,
+        params
+      );
+
+      return res.status(201).json({ ok: true, item: result.rows[0] });
+    } catch (error) {
+      log.error?.({ error }, 'failed to create memory capsule');
+      return sendError(res, 500, 'failed to create memory capsule');
+    }
+  });
+
+  app.get('/api/memory/working', async (req, res) => {
+    try {
+      const limit = normalizeLimit(req.query.limit, 50, 200);
+      const sessionId = req.query.session_id || req.query.sessionId || null;
+      const taskScope = req.query.task_scope || req.query.taskScope || null;
+
+      const clauses = [];
+      const params = [];
+
+      if (sessionId) {
+        params.push(sessionId);
+        clauses.push(`session_id = $${params.length}`);
+      }
+      if (taskScope) {
+        params.push(taskScope);
+        clauses.push(`task_scope = $${params.length}`);
+      }
+
+      params.push(limit);
+      const result = await pool.query(
+        `
+          select *
+          from working_memory_entries
+          ${clauses.length ? `where ${clauses.join(' and ')}` : ''}
+          order by created_at desc
+          limit $${params.length}
+        `,
+        params
+      );
+
+      return res.json({ ok: true, items: result.rows });
+    } catch (error) {
+      log.error?.({ error }, 'failed to list working memory entries');
+      return sendError(res, 500, 'failed to list working memory entries');
+    }
+  });
+
+  app.post('/api/memory/working', requireKey, async (req, res) => {
+    try {
+      const body = req.body || {};
+      const fields = [
+        'session_id',
+        'capsule_id',
+        'task_scope',
+        'retrieval_lane',
+        'entry_content',
+        'injected_at',
+        'used_in_decision',
+        'decision_ref',
+        'promoted_to_candidate'
+      ];
+
+      const cols = [];
+      const vals = [];
+      const params = [];
+
+      for (const field of fields) {
+        if (body[field] !== undefined) {
+          cols.push(field);
+          vals.push(`$${params.length + 1}`);
+          params.push(body[field]);
+        }
+      }
+
+      if (!cols.length) {
+        return sendError(res, 400, 'no working memory fields provided');
+      }
+
+      const result = await pool.query(
+        `
+          insert into working_memory_entries (${cols.join(', ')})
+          values (${vals.join(', ')})
+          returning *
+        `,
+        params
+      );
+
+      return res.status(201).json({ ok: true, item: result.rows[0] });
+    } catch (error) {
+      log.error?.({ error }, 'failed to create working memory entry');
+      return sendError(res, 500, 'failed to create working memory entry');
+    }
+  });
+
+  app.get('/api/memory/receipts', async (req, res) => {
+    try {
+      const limit = normalizeLimit(req.query.limit, 50, 200);
+      const capsuleId = req.query.capsule_id || req.query.capsuleId || null;
+      const receiptType = req.query.receipt_type || req.query.receiptType || null;
+
+      const clauses = [];
+      const params = [];
+
+      if (capsuleId) {
+        params.push(capsuleId);
+        clauses.push(`capsule_id = $${params.length}`);
+      }
+      if (receiptType) {
+        params.push(receiptType);
+        clauses.push(`receipt_type = $${params.length}`);
+      }
+
+      params.push(limit);
+      const result = await pool.query(
+        `
+          select *
+          from memory_use_receipts
+          ${clauses.length ? `where ${clauses.join(' and ')}` : ''}
+          order by created_at desc
+          limit $${params.length}
+        `,
+        params
+      );
+
+      return res.json({ ok: true, items: result.rows });
+    } catch (error) {
+      log.error?.({ error }, 'failed to list memory use receipts');
+      return sendError(res, 500, 'failed to list memory use receipts');
+    }
+  });
+
+  app.post('/api/memory/receipts', requireKey, async (req, res) => {
+    try {
+      const body = req.body || {};
+      const fields = [
+        'capsule_id',
+        'receipt_type',
+        'use_type',
+        'decision_ref',
+        'task_scope',
+        'retrieval_lane',
+        'signal_id',
+        'source_ref',
+        'created_by'
+      ];
+
+      const cols = [];
+      const vals = [];
+      const params = [];
+
+      for (const field of fields) {
+        if (body[field] !== undefined) {
+          cols.push(field);
+          vals.push(`$${params.length + 1}`);
+          params.push(body[field]);
+        }
+      }
+
+      if (!cols.length) {
+        return sendError(res, 400, 'no receipt fields provided');
+      }
+
+      const result = await pool.query(
+        `
+          insert into memory_use_receipts (${cols.join(', ')})
+          values (${vals.join(', ')})
+          returning *
+        `,
+        params
+      );
+
+      return res.status(201).json({ ok: true, item: result.rows[0] });
+    } catch (error) {
+      log.error?.({ error }, 'failed to create memory use receipt');
+      return sendError(res, 500, 'failed to create memory use receipt');
+    }
+  });
+
+  app.get('/api/memory/snapshots', async (_req, res) => {
     try {
       const result = await pool.query(
         `
-          SELECT snapshot_at, error_count_1h, error_count_24h, build_success_rate, avg_response_ms, queue_depth, deployed_count, pending_ideas, open_bugs
-          FROM system_health_log
-          ORDER BY snapshot_at DESC
-          LIMIT 1
-        `,
+          select id, snapshot_id, snapshot_data, version, reason, created_at
+          from system_snapshots
+          order by created_at desc
+          limit 50
+        `
       );
-      res.json({ ok: true, item: result.rows?.[0] || null });
+      return res.json({ ok: true, items: result.rows });
     } catch (error) {
-      logger?.error?.({ err: error }, 'GET /api/memory/health failed');
-      res.status(500).json({ ok: false, error: 'failed_to_load_health' });
+      log.error?.({ error }, 'failed to list snapshots');
+      return sendError(res, 500, 'failed to list snapshots');
     }
   });
 
-  app.post('/api/memory/commit', requireKey, async (req, res) => {
+  app.post('/api/memory/snapshots', requireKey, async (req, res) => {
     try {
       const body = req.body || {};
-      const path = getTextField(body, ['path']);
-      const content = typeof body?.content === 'string' ? body.content : '';
-      const message = getTextField(body, ['message'], 'update memory route module');
-
-      if (!path || !content) {
-        return res.status(400).json({ ok: false, error: 'path_and_content_required' });
-      }
-
-      const result = commitToGitHub ? await commitToGitHub(path, content, message) : null;
-      res.json({ ok: true, result: result ?? null });
+      const result = await pool.query(
+        `
+          insert into system_snapshots (snapshot_data, version, reason)
+          values ($1, $2, $3)
+          returning id, snapshot_id, snapshot_data, version, reason, created_at
+        `,
+        [body.snapshot_data ?? body.snapshotData ?? null, body.version ?? null, body.reason ?? null]
+      );
+      return res.status(201).json({ ok: true, item: result.rows[0] });
     } catch (error) {
-      logger?.error?.({ err: error }, 'POST /api/memory/commit failed');
-      res.status(500).json({ ok: false, error: 'failed_to_commit_file' });
+      log.error?.({ error }, 'failed to create snapshot');
+      return sendError(res, 500, 'failed to create snapshot');
     }
   });
 
-  app.post('/api/memory/commit-many', requireKey, async (req, res) => {
+  app.post('/api/memory/council/reflect', requireKey, async (req, res) => {
+    try {
+      if (typeof callCouncilMember !== 'function') {
+        return sendError(res, 500, 'ai council hook unavailable');
+      }
+
+      const body = req.body || {};
+      const role = body.role || body.ai_member || 'memory';
+      const prompt = body.prompt || body.orchestrator_msg || body.input || '';
+      const opts = body.opts || undefined;
+
+      const response = await callCouncilMember(role, String(prompt), opts);
+
+      return res.json({
+        ok: true,
+        role,
+        response
+      });
+    } catch (error) {
+      log.error?.({ error }, 'failed to call council member');
+      return sendError(res, 500, 'failed to call council member');
+    }
+  });
+
+  app.post('/api/memory/notes', requireKey, async (req, res) => {
     try {
       const body = req.body || {};
-      const files = Array.isArray(body?.files) ? body.files : [];
-      const message = getTextField(body, ['message'], 'update memory route module');
+      const memoryType = body.memory_type || body.memoryType || 'note';
+      const aiMember = body.ai_member || body.aiMember || null;
+      const orchestratorMsg = body.orchestrator_msg ?? body.orchestratorMsg ?? null;
+      const aiResponse = body.ai_response ?? body.aiResponse ?? null;
+      const keyFacts = parseJsonBody(body.key_facts ?? body.keyFacts ?? null);
+      const contextMetadata = parseJsonBody(body.context_metadata ?? body.contextMetadata ?? null);
 
-      if (!files.length) {
-        return res.status(400).json({ ok: false, error: 'files_required' });
-      }
+      const result = await pool.query(
+        `
+          insert into conversation_memory (
+            orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type
+          )
+          values ($1, $2, $3, $4, $5, $6)
+          returning id, memory_id, orchestrator_msg, ai_response, ai_member, key_facts, context_metadata, memory_type, created_at
+        `,
+        [orchestratorMsg, aiResponse, aiMember, keyFacts, contextMetadata, memoryType]
+      );
 
-      const normalizedFiles = files
-        .filter((file) => file && typeof file.path === 'string' && typeof file.content === 'string')
-        .map((file) => ({ path: file.path, content: file.content }));
-
-      if (!normalizedFiles.length) {
-        return res.status(400).json({ ok: false, error: 'valid_files_required' });
-      }
-
-      const result = commitManyToGitHub ? await commitManyToGitHub(normalizedFiles, message) : null;
-      res.json({ ok: true, result: result ?? null });
+      return res.status(201).json({ ok: true, item: result.rows[0] });
     } catch (error) {
-      logger?.error?.({ err: error }, 'POST /api/memory/commit-many failed');
-      res.status(500).json({ ok: false, error: 'failed_to_commit_files' });
+      log.error?.({ error }, 'failed to create memory note');
+      return sendError(res, 500, 'failed to create memory note');
     }
   });
-
-  logger?.info?.({ mounted: true, routes: ['/api/memory', '/api/memory/:memoryId', '/api/memory/council', '/api/memory/health'] }, 'memory routes registered');
 }
 
 export default registerMemoryRoutes;
