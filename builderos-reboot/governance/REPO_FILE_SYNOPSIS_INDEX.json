@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T06:22:48.672Z",
+  "generated_at": "2026-07-14T06:22:57.519Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11517,
+  "file_count": 11518,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -82515,6 +82515,13 @@
       "ssot": [
         "docs/products/creative-engine/PRODUCT_HOME.md"
       ]
+    },
+    {
+      "path": "services/creative-engine/modes/graphic-design.js",
+      "synopsis": "Exports estimateGraphicDesignCost — services/creative-engine/modes/graphic-design.js.",
+      "bytes": 3988,
+      "mtime": "2026-07-14T06:22:57.519Z",
+      "indexed_at": "2026-07-14T06:22:57.519Z"
     },
     {
       "path": "services/creative-engine/modes/photo-polish.js",
