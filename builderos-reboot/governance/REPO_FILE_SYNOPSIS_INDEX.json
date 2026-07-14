@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T08:44:15.680Z",
+  "generated_at": "2026-07-14T08:45:49.147Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 11520,
   "files": [
@@ -62047,9 +62047,9 @@
     {
       "path": "mobile/README.md",
       "synopsis": "Native Universal Overlay shell (Capacitor)",
-      "bytes": 2858,
-      "mtime": "2026-07-03T21:46:43.846Z",
-      "indexed_at": "2026-07-14T06:23:47.288Z"
+      "bytes": 3072,
+      "mtime": "2026-07-14T08:44:43.462Z",
+      "indexed_at": "2026-07-14T08:45:49.147Z"
     },
     {
       "path": "mobile/www/index.html",
