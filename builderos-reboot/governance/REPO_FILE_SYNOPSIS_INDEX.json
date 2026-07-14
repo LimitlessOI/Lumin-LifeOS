@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-07-14T10:47:50.773Z",
+  "generated_at": "2026-07-14T10:57:38.144Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11523,
+  "file_count": 11524,
   "files": [
     {
       "path": ".cursor/BUGBOT.md",
@@ -39113,6 +39113,13 @@
       "indexed_at": "2026-07-14T10:47:48.600Z"
     },
     {
+      "path": "docs/products/clientcare-billing-recovery/BILLING_UI_MAP.md",
+      "synopsis": "Live ClientCare West billing UI map (tip-proved 2026-07-14)",
+      "bytes": 4819,
+      "mtime": "2026-07-14T10:57:13.113Z",
+      "indexed_at": "2026-07-14T10:57:38.144Z"
+    },
+    {
       "path": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
       "bytes": 13230,
@@ -39123,9 +39130,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 80312,
-      "mtime": "2026-07-14T10:47:07.291Z",
-      "indexed_at": "2026-07-14T10:47:48.600Z"
+      "bytes": 80705,
+      "mtime": "2026-07-14T10:57:36.877Z",
+      "indexed_at": "2026-07-14T10:57:38.144Z"
     },
     {
       "path": "docs/products/CLIENTCAREBILLINGRECOVERY.md",
